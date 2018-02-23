@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/spearbase",
+  "textures": {
+    "layer0": "runecraftory:items/spear"
+  }
+}

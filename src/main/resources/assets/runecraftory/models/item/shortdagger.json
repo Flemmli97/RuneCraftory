@@ -1,0 +1,14 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "runecraftory:items/shortDagger"
+  },
+    "overrides": [
+        {
+            "predicate": {
+                "held": 1
+            },
+            "model": "runecraftory:item/broad_sword"
+        }
+    ]
+}

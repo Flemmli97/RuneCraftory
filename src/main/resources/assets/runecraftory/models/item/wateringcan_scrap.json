@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/wateringcan",
+  "textures": {
+    "layer0": "runecraftory:items/wateringcan_scrap"
+  }
+}

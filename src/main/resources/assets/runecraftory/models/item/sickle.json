@@ -1,0 +1,195 @@
+{
+	"credit": "Made with Blockbench, a free, modern block model editor by JannisX11",
+	"elements": [
+		{
+			"name": "handle",
+			"from": [7, 0, 12],
+			"to": [9, 13, 14],
+			"faces": {
+				"north": {
+					"uv": [0, 0, 2, 15],
+					"texture": "#missing"
+				},
+				"east": {
+					"uv": [0, 0, 2, 15],
+					"texture": "#missing"
+				},
+				"south": {
+					"uv": [0, 0, 2, 15],
+					"texture": "#missing"
+				},
+				"west": {
+					"uv": [0, 0, 2, 15],
+					"texture": "#missing"
+				},
+				"up": {"uv": [0, 0, 2, 2], "texture": "#missing"},
+				"down": {"uv": [0, 0, 2, 2], "texture": "#missing"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "head",
+			"from": [7, 13, 10],
+			"to": [9, 15, 14],
+			"faces": {
+				"north": {
+					"uv": [0, 0, 6, 6],
+					"texture": "#missing"
+				},
+				"east": {
+					"uv": [0, 0, 16, 6],
+					"texture": "#missing"
+				},
+				"south": {
+					"uv": [0, 0, 6, 6],
+					"texture": "#missing"
+				},
+				"west": {
+					"uv": [0, 0, 16, 6],
+					"texture": "#missing"
+				},
+				"up": {"uv": [0, 0, 6, 16], "texture": "#missing"},
+				"down": {"uv": [0, 0, 6, 16], "texture": "#missing"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "head",
+			"from": [7, 11, 1],
+			"to": [9, 13, 4],
+			"faces": {
+				"north": {
+					"uv": [0, 0, 6, 6],
+					"texture": "#missing"
+				},
+				"east": {
+					"uv": [0, 0, 16, 6],
+					"texture": "#missing"
+				},
+				"south": {
+					"uv": [0, 0, 6, 6],
+					"texture": "#missing"
+				},
+				"west": {
+					"uv": [0, 0, 16, 6],
+					"texture": "#missing"
+				},
+				"up": {"uv": [0, 0, 6, 16], "texture": "#missing"},
+				"down": {"uv": [0, 0, 6, 16], "texture": "#missing"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "head",
+			"from": [7, 9, 1],
+			"to": [9, 11, 3],
+			"faces": {
+				"north": {
+					"uv": [0, 0, 6, 6],
+					"texture": "#missing"
+				},
+				"east": {
+					"uv": [0, 0, 16, 6],
+					"texture": "#missing"
+				},
+				"south": {
+					"uv": [0, 0, 6, 6],
+					"texture": "#missing"
+				},
+				"west": {
+					"uv": [0, 0, 16, 6],
+					"texture": "#missing"
+				},
+				"up": {"uv": [0, 0, 6, 16], "texture": "#missing"},
+				"down": {"uv": [0, 0, 6, 16], "texture": "#missing"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "head",
+			"from": [7, 15, 4],
+			"to": [9, 17, 12],
+			"faces": {
+				"north": {
+					"uv": [0, 0, 6, 6],
+					"texture": "#missing"
+				},
+				"east": {
+					"uv": [0, 0, 16, 6],
+					"texture": "#missing"
+				},
+				"south": {
+					"uv": [0, 0, 6, 6],
+					"texture": "#missing"
+				},
+				"west": {
+					"uv": [0, 0, 16, 6],
+					"texture": "#missing"
+				},
+				"up": {"uv": [0, 0, 6, 16], "texture": "#missing"},
+				"down": {"uv": [0, 0, 6, 16], "texture": "#missing"}
+			},
+			"type": "cube"
+		},
+		{
+			"name": "head",
+			"from": [7, 13, 2],
+			"to": [9, 15, 6],
+			"faces": {
+				"north": {
+					"uv": [0, 0, 6, 6],
+					"texture": "#missing"
+				},
+				"east": {
+					"uv": [0, 0, 16, 6],
+					"texture": "#missing"
+				},
+				"south": {
+					"uv": [0, 0, 6, 6],
+					"texture": "#missing"
+				},
+				"west": {
+					"uv": [0, 0, 16, 6],
+					"texture": "#missing"
+				},
+				"up": {"uv": [0, 0, 6, 16], "texture": "#missing"},
+				"down": {"uv": [0, 0, 6, 16], "texture": "#missing"}
+			},
+			"type": "cube"
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"scale": [0.8, 0.9, 0.8],
+			"translation": [0, 4, -3]
+		},
+		"thirdperson_lefthand": {
+			"scale": [0.8, 0.9, 0.8],
+			"translation": [0, 4, -3]
+		},
+		"firstperson_righthand": {
+			"scale": [0.6, 0.6, 0.5],
+			"translation": [0, 3, 0],
+			"rotation": [15, 25, 0]
+		},
+		"firstperson_lefthand": {
+			"scale": [0.6, 0.6, 0.5],
+			"rotation": [15, 25, 0],
+			"translation": [0, 3, 0]
+		},
+		"ground": {
+			"scale": [0.5, 0.5, 0.5],
+			"rotation": [31, -76, 0]
+		},
+		"fixed": {
+			"scale": [0.8, 0.8, 0.8],
+			"rotation": [0, -90, 0],
+			"translation": [0, 0, -2]
+		},
+		"gui": {
+			"scale": [0.8, 0.8, 0.8],
+			"rotation": [-75, 130, 90],
+			"translation": [-3, 0, 0]
+		}
+	}
+}
