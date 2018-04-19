@@ -5,40 +5,47 @@ import java.util.Map;
 
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
+import com.flemmli97.runecraftory.common.entity.IChargeAttack;
+import com.flemmli97.runecraftory.common.entity.ai.EntityAIGenericCharge;
 import com.flemmli97.runecraftory.common.init.ModItems;
-import com.flemmli97.runecraftory.common.lib.CalculationConstants;
-import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class EntityBeetle extends EntityMobBase{
+public class EntityBeetle extends EntityMobBase implements IChargeAttack{
 
 	private Map<ItemStack, Float>	drops = new HashMap<ItemStack, Float>();
-	public EntityBeetle(World world) {
-		this(world, CalculationConstants.baseLevel);
+	private EntityAIGenericCharge<EntityBeetle> ai = new EntityAIGenericCharge<EntityBeetle>(this, 1, true, 1);
+	public EntityBeetle(World world)
+	{
+		super(world, true, 5, 1, false);
+		this.tasks.addTask(0, ai);
+		this.drops.put(new ItemStack(ModItems.sticks, 1,2), 0.6F);
+		this.drops.put(new ItemStack(ModItems.cloth, 1,7), 0.4F);
+		this.drops.put(new ItemStack(ModItems.cloth, 1,8), 0.1F);
 	}
 	
-	public EntityBeetle(World world, int level)
+	@Override
+	public void entityInit()
 	{
-		super(world, level, true, 5, 1, false);
-		this.drops.put(new ItemStack(ModItems.sticks, 1,2), 0.6F);
+		super.entityInit();
+		this.dataManager.register(IChargeAttack.isCharging, false);
 	}
 	
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(15*CalculationConstants.DAMAGESCALE);;
-        this.getAttributeMap().getAttributeInstance(ItemStats.RFATTACK).setBaseValue(9.5);
-        this.getAttributeMap().getAttributeInstance(ItemStats.RFDEFENCE).setBaseValue(7.0);
-        this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICATT).setBaseValue(3.0);
-        this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICDEF).setBaseValue(6.0);
+		this.initiateBaseAttributes(SharedMonsterAttributes.MAX_HEALTH,125);;
+		this.initiateBaseAttributes(ItemStats.RFATTACK,18.5);
+		this.initiateBaseAttributes(ItemStats.RFDEFENCE,7.0);
+		this.initiateBaseAttributes(ItemStats.RFMAGICATT,10.0);
+		this.initiateBaseAttributes(ItemStats.RFMAGICDEF,6.0);
 	}
 
 	@Override
 	public ItemStack[] tamingItem() {
-		return new ItemStack[] {new ItemStack(ModItems.cloth, 1,0)};
+		return new ItemStack[] {new ItemStack(ModItems.sticks, 1,0)};
 	}
 
 	@Override
@@ -51,13 +58,37 @@ public class EntityBeetle extends EntityMobBase{
 		return this.drops;
 	}
 
-	@Override
+	/*@Override
 	public EnumElement entityElement() {
 		return EnumElement.NONE;
-	}
+	}*/
 
 	@Override
 	public float attackChance() {
-		return 90;
+		return 0.9F;
+	}
+	@Override
+	public int getAttackTimeFromPattern(byte pattern) {
+		return 20;
+	}
+
+	@Override
+	public int attackFromPattern() {
+		return 18;
+	}
+
+	@Override
+	public int maxAttackPatterns() {
+		return 1;
+	}
+
+	@Override
+	public boolean isCharging() {
+		return this.dataManager.get(IChargeAttack.isCharging);
+	}
+
+	@Override
+	public void setCharging(boolean charge) {
+		this.dataManager.set(IChargeAttack.isCharging, charge);
 	}
 }

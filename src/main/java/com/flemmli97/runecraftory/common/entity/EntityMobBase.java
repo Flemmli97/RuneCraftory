@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -12,20 +13,22 @@ import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IItemBase;
 import com.flemmli97.runecraftory.api.items.IRFFood;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
+import com.flemmli97.runecraftory.common.core.handler.CustomDamage.KnockBackType;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
-import com.flemmli97.runecraftory.common.entity.npc.EntityNPCBase;
 import com.flemmli97.runecraftory.common.init.ModItems;
-import com.flemmli97.runecraftory.common.lib.CalculationConstants;
+import com.flemmli97.runecraftory.common.lib.LibConstants;
+import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumStatusEffect;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Maps;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
@@ -33,7 +36,9 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -47,51 +52,55 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public abstract class EntityMobBase extends EntityCreature  implements IEntityAdvanced, IMob{
 
-    private static final DataParameter<Boolean> isTamed = EntityDataManager.<Boolean>createKey(EntityMobBase.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<String> owner = EntityDataManager.<String>createKey(EntityMobBase.class, DataSerializers.STRING);
+	private Map<IAttribute, Double> baseValues;
+    protected static final DataParameter<Boolean> isTamed = EntityDataManager.<Boolean>createKey(EntityMobBase.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<String> owner = EntityDataManager.<String>createKey(EntityMobBase.class, DataSerializers.STRING);
+    private static final DataParameter<Integer> attackTimer = EntityDataManager.<Integer>createKey(EntityMobBase.class, DataSerializers.VARINT);
+    private static final DataParameter<Byte> attackPattern = EntityDataManager.<Byte>createKey(EntityMobBase.class, DataSerializers.BYTE);
+    private static final DataParameter<Integer> level = EntityDataManager.<Integer>createKey(EntityMobBase.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> levelXP = EntityDataManager.<Integer>createKey(EntityMobBase.class, DataSerializers.VARINT);
 
 	private boolean ridable, flyingEntity;
-	private int tamingTick=-1;
-	private int level, baseXP, baseMoney, feedTimeOut;
+	protected int tamingTick=-1;
+	private int baseXP, baseMoney;
+	protected int feedTimeOut;
 	private boolean doJumping = false;
-	public int attackTimerValue, attackTimer;
+
 	private List<EnumStatusEffect> activeEffects = new ArrayList<EnumStatusEffect>();
 	
-	public EntityAINearestAttackableTarget<EntityPlayer> targetPlayer = new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class,10,true, true, new Predicate<EntityPlayer>() {
+	public EntityAINearestAttackableTarget<EntityPlayer> targetPlayer = new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class,5,true, true, new Predicate<EntityPlayer>() {
 		@Override
 		public boolean apply(EntityPlayer player) {
 			return !EntityMobBase.this.isTamed() ||player!=EntityMobBase.this.getOwner();
 		}} ) ;
-	public EntityAINearestAttackableTarget<EntityNPCBase> targetNPC = new EntityAINearestAttackableTarget<EntityNPCBase>(this, EntityNPCBase.class,10, true, true, new Predicate<EntityNPCBase>() {
+	public EntityAINearestAttackableTarget<EntityVillager> targetNPC = new EntityAINearestAttackableTarget<EntityVillager>(this, EntityVillager.class,5, true, true, new Predicate<EntityVillager>() {
 		@Override
-		public boolean apply(EntityNPCBase mob) {
+		public boolean apply(EntityVillager mob) {
 			return !EntityMobBase.this.isTamed();
 		}});
 	
-	public EntityAINearestAttackableTarget<EntityCreature> targetMobs = new EntityAINearestAttackableTarget<EntityCreature>(this, EntityCreature.class,10,true, true, new Predicate<EntityCreature>() {
+	public EntityAINearestAttackableTarget<EntityCreature> targetMobs = new EntityAINearestAttackableTarget<EntityCreature>(this, EntityCreature.class,5,true, true, new Predicate<EntityCreature>() {
 		@Override
 		public boolean apply(EntityCreature mob) {
-			boolean flag = IMob.VISIBLE_MOB_SELECTOR.apply(mob);
 			if(EntityMobBase.this.isTamed())
 			{
 				if(mob instanceof EntityMobBase && ((EntityMobBase) mob).isTamed())
 				{
-					flag=false;
+					return false;
 				}
+				return true;
 			}
 			else if(!(mob instanceof EntityMobBase && ((EntityMobBase) mob).isTamed()))
-					flag = false;
-			return flag;
+					return false;
+			return IMob.VISIBLE_MOB_SELECTOR.apply(mob);
 		}} ) ;
-	//public EntityAIGenericAttack attackAI = new EntityAIGenericAttack(this,false, 1, 10, 5, 1);
+
 	private EntityMobBase(World world) {
 		super(world);
-		//this.tasks.addTask(1, attackAI);
 		this.targetTasks.addTask(1, targetPlayer);
 		this.targetTasks.addTask(2, targetNPC);
 		this.targetTasks.addTask(3, targetMobs);
@@ -106,25 +115,23 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 	    this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 	}
 
-	public EntityMobBase(World world, int level, boolean ridable, int baseXP, int baseMoney, boolean isFlyingEntity)
+	public EntityMobBase(World world, boolean ridable, int baseXP, int baseMoney, boolean isFlyingEntity)
 	{
 		this(world);
-		this.level = level;
 		this.ridable=ridable;
 		this.baseXP=baseXP;
 		this.baseMoney=baseMoney;
 		this.flyingEntity = isFlyingEntity;
-		//TODO
 	}
 	
 	//=====Init
 
 	@Override
 	protected void applyEntityAttributes() {
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20*CalculationConstants.DAMAGESCALE);;
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE);
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20*LibConstants.DAMAGESCALE);;
+        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.2);;
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.24);;
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
         this.getAttributeMap().registerAttribute(ItemStats.RFATTACK);
         this.getAttributeMap().registerAttribute(ItemStats.RFDEFENCE);
         this.getAttributeMap().registerAttribute(ItemStats.RFMAGICATT);
@@ -137,13 +144,71 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
         super.entityInit();
         this.dataManager.register(isTamed, false);
         this.dataManager.register(owner, "");
+        this.dataManager.register(attackTimer, 0);
+        this.dataManager.register(attackPattern, (byte)0);
+        this.dataManager.register(level, LibConstants.baseLevel);
     }
 	
 	//=====IRFEntity
 	
 	@Override
 	public int level() {
-		return this.level;
+		return this.dataManager.get(level);
+	}
+	
+	public void setLevel(int level)
+	{
+		if(level>10000)
+			level=10000;
+		this.dataManager.set(EntityMobBase.level, level);
+	}
+	
+	public int getLevelXp()
+	{
+		return this.dataManager.get(levelXP);
+	}
+	
+	public void addXp(int amount)
+	{
+		int neededXP = LevelCalc.xpAmountForLevelUp(this.level());
+		int xpToNextLevel = neededXP-this.getLevelXp();
+		if(amount >= xpToNextLevel)
+		{				
+			int diff = amount-xpToNextLevel;
+			this.setLevel(this.level()+1);
+			this.onLevelUp();
+			this.addXp(diff);
+		}
+		else
+		{
+			this.dataManager.set(levelXP, amount);
+		}
+	}
+	
+	private void onLevelUp()
+	{
+		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(
+				LevelCalc.onEntityLevelUp(baseValues.get(SharedMonsterAttributes.MAX_HEALTH), this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue(), false, true));
+		this.getAttributeMap().getAttributeInstance(ItemStats.RFATTACK).setBaseValue(
+				LevelCalc.onEntityLevelUp(baseValues.get(ItemStats.RFATTACK), this.getAttributeMap().getAttributeInstance(ItemStats.RFATTACK).getAttributeValue(), false, false));
+		this.getAttributeMap().getAttributeInstance(ItemStats.RFDEFENCE).setBaseValue(
+				LevelCalc.onEntityLevelUp(baseValues.get(ItemStats.RFDEFENCE), this.getAttributeMap().getAttributeInstance(ItemStats.RFDEFENCE).getAttributeValue(), false, false));
+		this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICATT).setBaseValue(
+				LevelCalc.onEntityLevelUp(baseValues.get(ItemStats.RFMAGICATT), this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICATT).getAttributeValue(), false, false));
+		this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICDEF).setBaseValue(
+				LevelCalc.onEntityLevelUp(baseValues.get(ItemStats.RFMAGICDEF), this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICDEF).getAttributeValue(), false, false));
+		this.setHealth(this.getMaxHealth());
+	}
+	
+	@Override
+    public void notifyDataManagerChange(DataParameter<?> key)
+	{
+		if(key.equals(level))
+		{
+			if(baseValues!=null)
+				this.updateStatsToLevel();
+		}
+		super.notifyDataManagerChange(key);
 	}
 
 	@Override
@@ -220,14 +285,16 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 		this.doJumping=true;
 	}
 
+	@Override
+	public void fall(float distance, float damageMultiplier) {
+		if(!this.isFlyingEntity())
+			super.fall(distance, damageMultiplier);
+	}
+
 	//=====Client
 	@Override
 	public void handleStatusUpdate(byte id) {
-		if(id==4)
-		{
-			this.attackTimer=this.attackTimerValue;
-		}
-		else if(id==10)
+		if(id==10)
 		{
 			this.playTameEffect(true);
 		}
@@ -258,12 +325,29 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
             this.world.spawnParticle(enumparticletypes, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
         }
     }
+	
+	//to improve
+	public void setAttackTimeAndPattern(byte pattern)
+	{
+		this.dataManager.set(attackTimer, this.getAttackTimeFromPattern(pattern));
+		this.dataManager.set(attackPattern, pattern);
+	}
+	
+	public byte getAttackPattern()
+	{
+		return this.dataManager.get(attackPattern);
+	}
+	
+	public int getAttackTime()
+	{
+		return this.dataManager.get(attackTimer);
+	}
 
 	//=====NBT
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		compound.setInteger("levelMob", level);
+		compound.setInteger("levelMob", this.level());
 		compound.setBoolean("tamed", this.dataManager.get(isTamed));
 		NBTTagCompound compound2 = new NBTTagCompound(); 
 		for(EnumStatusEffect effect : this.activeEffects)
@@ -280,7 +364,7 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		if(compound.hasKey("levelMob"))
-			this.level=compound.getInteger("levelMob");
+			this.dataManager.set(level, compound.getInteger("levelMob"));
 		if(compound.hasKey("tamed"))
 			this.dataManager.set(isTamed, compound.getBoolean("tamed")); 
 		NBTTagCompound compound2 = (NBTTagCompound) compound.getTag("effects");
@@ -306,7 +390,7 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {}
 	@Override
 	public void heal(float healAmount){
-		healAmount*=CalculationConstants.DAMAGESCALE;
+		healAmount*=LibConstants.DAMAGESCALE;
 		super.heal(healAmount);
     }
 	//Interact
@@ -328,6 +412,8 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 			if(this.feedTimeOut>0)
 				feedTimeOut--;
 			super.onLivingUpdate();
+			if(this.getAttackTime()>0)
+				this.dataManager.set(attackTimer, this.getAttackTime()-1);
 		}
 	}
 
@@ -336,29 +422,35 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 		ItemStack stack = player.getHeldItemMainhand();
 		if(!stack.isEmpty() && player.isSneaking() && !this.world.isRemote)
 		{
-			if(!this.isTamed() && this.tamingTick==-1 && this.deathTime==0)
+			if(stack.getItem()==Items.GOLDEN_APPLE)
+			{
+				this.getAttributeMap().getAttributeInstance(ItemStats.RFATTACK).setBaseValue(999999);
+				return true;
+			}
+			if(stack.getItem()==ModItems.tame)
+			{
+				this.tameEntity(player);
+			}
+			else if(!this.isTamed() && this.tamingTick==-1 && this.deathTime==0)
 			{
 				boolean flag=false;
 				if(this.tamingItem()!=null)
 					for(ItemStack item : this.tamingItem())
 						if(item.getItem()== stack.getItem() && item.getMetadata()==stack.getMetadata())
 							flag=true;
-				float rightItemMultiplier = flag ? 1 : 0.3F;
+				float rightItemMultiplier = flag ? 2 : 1F;
 				if(!player.capabilities.isCreativeMode)
 					stack.shrink(1);
-				if(this.rand.nextFloat()<=this.tamingChance()*rightItemMultiplier*RFCalculations.tamingMultiplerOnLevel(this.level()))
+				if(this.rand.nextFloat()<=this.tamingChance()*rightItemMultiplier*LevelCalc.tamingMultiplerOnLevel(this.level()))
 				{
-					this.dataManager.set(isTamed, true);
-					this.setOwner(player);
-					this.navigator.clearPath();
-					this.setAttackTarget((EntityLivingBase)null);
+					this.tameEntity(player);
 				}
 				if(stack.getItem() instanceof IRFFood)
 				{
 					//heal
 				}
 				this.tamingTick=60;
-                	this.world.setEntityState(this, (byte)34);
+                this.world.setEntityState(this, (byte)34);
 			}
 			else
 			{
@@ -390,6 +482,16 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 		}
 		return false;
 	}
+	
+	protected void tameEntity(EntityPlayer owner)
+	{
+		this.dataManager.set(isTamed, true);
+		this.setOwner(owner);
+		this.navigator.clearPath();
+		this.setAttackTarget((EntityLivingBase)null);
+        this.world.setEntityState(this, (byte)10);
+
+	}
 
 	@Override
 	public boolean canBeSteered() {
@@ -400,6 +502,22 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 	public boolean canPassengerSteer() {
             return this.canBeSteered() && !this.world.isRemote;
 	}
+	@Override
+	protected void addPassenger(Entity passenger)
+    {
+		this.targetTasks.removeTask(targetPlayer);
+		this.targetTasks.removeTask(targetNPC);
+		this.targetTasks.removeTask(targetMobs);
+		super.addPassenger(passenger);
+    }
+	@Override
+	protected void removePassenger(Entity passenger)
+    {
+		this.targetTasks.addTask(1, targetPlayer);
+		this.targetTasks.addTask(2, targetNPC);
+		this.targetTasks.addTask(3, targetMobs);
+		super.removePassenger(passenger);
+    }
 	
 	@Override
     protected boolean isMovementBlocked()
@@ -444,9 +562,9 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
                     this.motionZ += (double)(0.4F * f1 );
                 }
             }
-            else
+            else if(this.doJumping)
             {
-            	//fly
+            	this.motionY=Math.min(this.motionY+=0.2F, 2);
             }
             this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
             if (this.canPassengerSteer())
@@ -460,7 +578,7 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
                 this.motionY = 0.0D;
                 this.motionZ = 0.0D;
             }
-            if (this.onGround)
+            if (this.onGround || this.isFlyingEntity())
             {
                 this.doJumping=false;
             }
@@ -496,24 +614,45 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 				if( this.attackingPlayer!=null)
 	            {
 	    				IPlayer cap = this.attackingPlayer.getCapability(PlayerCapProvider.PlayerCap, null);
-	    				cap.addXp(attackingPlayer, RFCalculations.xpFromLevel(this.baseXP(), this.level()));
-	    				cap.setMoney(attackingPlayer, cap.getMoney()+ RFCalculations.moneyFromLevel(this.baseMoney(), this.level()));
+	    				cap.addXp(attackingPlayer, LevelCalc.xpFromLevel(this.baseXP(), this.level()));
+	    				cap.setMoney(attackingPlayer, cap.getMoney()+ LevelCalc.moneyFromLevel(this.baseMoney(), this.level()));
 	            }
 			}
 		}
 	}
 
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount)
+    {
+		if(source.getTrueSource()!=null && !this.canAttackFrom(source.getTrueSource().getPosition()))
+			return false;
+		return super.attackEntityFrom(source, amount);
+	}
+	
+	private boolean canAttackFrom(BlockPos pos)
+    {
+        if (this.getMaximumHomeDistance() == -1.0F)
+        {
+            return true;
+        }
+        else
+        {
+            return this.getHomePosition().distanceSq(pos) < (double)((this.getMaximumHomeDistance()+2) * (this.getMaximumHomeDistance()+2));
+        }
+    }
 	//damage reduction from armor
 	@Override
 	protected void damageEntity(DamageSource damageSrc, float damageAmount) 
 	{
+		if(damageSrc.getTrueSource()!=null && !this.isWithinHomeDistanceFromPosition(damageSrc.getTrueSource().getPosition()))
+			return;
 		if (!this.isEntityInvulnerable(damageSrc))
         {
             damageAmount = net.minecraftforge.common.ForgeHooks.onLivingHurt(this, damageSrc, damageAmount);
             if (damageAmount <= 0) return;
             	damageAmount = this.reduceDamage(damageSrc, damageAmount);
             	if(damageSrc != DamageSource.OUT_OF_WORLD)
-	    			damageAmount*=CalculationConstants.DAMAGESCALE;
+	    			damageAmount*=LibConstants.DAMAGESCALE;
             if (damageAmount != 0.0F)
             {
                 float f1 = this.getHealth();
@@ -538,30 +677,36 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 	//status ailment etc.
 	@Override
 	public boolean attackEntityAsMob(Entity entity) {
+		return this.attackEntityAsMobWithElement(entity, EnumElement.NONE);
+	}
+	
+	public boolean attackEntityAsMobWithElement(Entity entity, EnumElement element)
+	{
 		if(entity instanceof EntityLivingBase)
 		{
 			float damage = (float)this.getEntityAttribute(ItemStats.RFATTACK).getAttributeValue();
-			boolean faintChance = this.world.rand.nextFloat()<RFCalculations.getAttributeValue(this, ItemStats.RFFAINT, (EntityLivingBase) entity, ItemStats.RFRESFAINT);
-			boolean critChance = this.world.rand.nextFloat()<RFCalculations.getAttributeValue(this, ItemStats.RFCRIT, (EntityLivingBase) entity, ItemStats.RFRESCRIT);
-			boolean knockBackChance = this.world.rand.nextFloat()<RFCalculations.getAttributeValue(this, ItemStats.RFKNOCK, (EntityLivingBase) entity, SharedMonsterAttributes.KNOCKBACK_RESISTANCE);
-			int i = knockBackChance?2:0;
+			boolean faintChance = this.world.rand.nextInt(100)<RFCalculations.getAttributeValue(this, ItemStats.RFFAINT, (EntityLivingBase) entity, ItemStats.RFRESFAINT);
+			boolean critChance = this.world.rand.nextInt(100)<RFCalculations.getAttributeValue(this, ItemStats.RFCRIT, (EntityLivingBase) entity, ItemStats.RFRESCRIT);
+			boolean knockBackChance = this.world.rand.nextInt(100)<RFCalculations.getAttributeValue(this, ItemStats.RFKNOCK, (EntityLivingBase) entity, SharedMonsterAttributes.KNOCKBACK_RESISTANCE);
+			int i = knockBackChance?3:1;
 
 	        if(!(entity instanceof IEntityBase) && !(entity instanceof EntityPlayer))
-	        		damage = RFCalculations.scaleForVanilla(damage);
+	        		damage = LevelCalc.scaleForVanilla(damage);
 	        else
 	        		damage = faintChance?Float.MAX_VALUE:damage;
 
 	        boolean ignoreArmor = faintChance||critChance;
-	        boolean flag = entity.attackEntityFrom(CustomDamage.doAttack(this, this.entityElement(), ignoreArmor?1:0), damage);
+	        CustomDamage source = CustomDamage.attack(this, element, ignoreArmor?CustomDamage.DamageType.IGNOREDEF:CustomDamage.DamageType.NORMAL, KnockBackType.BACK, i*0.5F-0.2F, 5);
+	        boolean flag = entity.attackEntityFrom(source, damage);
 	        if (flag)
 	        {
-	            if (i > 0 && entity instanceof EntityLivingBase)
+	            if (entity instanceof EntityLivingBase)
 	            {
-	                ((EntityLivingBase)entity).knockBack(this, (float)i * 0.5F, (double)MathHelper.sin(this.rotationYaw * 0.017453292F), (double)(-MathHelper.cos(this.rotationYaw * 0.017453292F)));
+                	RFCalculations.knockBack((EntityLivingBase) entity, source);
 	                this.motionX *= 0.6D;
 	                this.motionZ *= 0.6D;
 	            }
-	            float drainPercent= RFCalculations.getAttributeValue(this, ItemStats.RFDRAIN, (EntityLivingBase) entity,ItemStats.RFRESDRAIN);
+	            float drainPercent= RFCalculations.getAttributeValue(this, ItemStats.RFDRAIN, (EntityLivingBase) entity,ItemStats.RFRESDRAIN)/100F;
                 if(drainPercent>0)
                 		this.setHealth(this.getHealth() + drainPercent*damage);
                                         
@@ -602,23 +747,32 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 				}
 	}
 	
-	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+	private void updateStatsToLevel()
+	{
 		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(
-				RFCalculations.statIncreaseLevel((float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).getBaseValue()*1.5F, level, false));
+				LevelCalc.initStatIncreaseLevel(baseValues.get(SharedMonsterAttributes.MAX_HEALTH), this.level(), false, true));
 		this.getAttributeMap().getAttributeInstance(ItemStats.RFATTACK).setBaseValue(
-				RFCalculations.statIncreaseLevel((float) this.getAttributeMap().getAttributeInstance(ItemStats.RFATTACK).getBaseValue(), level, false));
+				LevelCalc.initStatIncreaseLevel(baseValues.get(ItemStats.RFATTACK), this.level(), false, false));
 		this.getAttributeMap().getAttributeInstance(ItemStats.RFDEFENCE).setBaseValue(
-				RFCalculations.statIncreaseLevel((float) this.getAttributeMap().getAttributeInstance(ItemStats.RFDEFENCE).getBaseValue(), level, false));
+				LevelCalc.initStatIncreaseLevel(baseValues.get(ItemStats.RFDEFENCE), this.level(), false, false));
 		this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICATT).setBaseValue(
-				RFCalculations.statIncreaseLevel((float) this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICATT).getBaseValue(), level, false));
+				LevelCalc.initStatIncreaseLevel(baseValues.get(ItemStats.RFMAGICATT), this.level(), false, false));
 		this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICDEF).setBaseValue(
-				RFCalculations.statIncreaseLevel((float) this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICDEF).getBaseValue(), level, false));
+				LevelCalc.initStatIncreaseLevel(baseValues.get(ItemStats.RFMAGICDEF), this.level(), false, false));
 		this.setHealth(this.getMaxHealth());
-		return livingdata;
+	}
+	
+	protected final void initiateBaseAttributes(IAttribute att, double value)
+	{
+		if(att==SharedMonsterAttributes.MAX_HEALTH)
+			value*=LibConstants.DAMAGESCALE;
+		this.getAttributeMap().getAttributeInstance(att).setBaseValue(value);
+		if(baseValues==null)
+			baseValues = Maps.newHashMap();
+		this.baseValues.put(att, value);
 	}
 
-	public void doRangedAttack(EntityLivingBase target)
-	{	
-	}
+	public abstract int getAttackTimeFromPattern(byte pattern);
+	public abstract int attackFromPattern();
+	public abstract int maxAttackPatterns();
 }

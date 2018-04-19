@@ -1,9 +1,14 @@
 package com.flemmli97.runecraftory.common.init;
 
-import com.flemmli97.runecraftory.common.items.ItemDebug;
-import com.flemmli97.runecraftory.common.items.ItemIcon;
-import com.flemmli97.runecraftory.common.items.ItemSpawnEgg;
+import com.flemmli97.runecraftory.common.items.creative.ItemDebug;
+import com.flemmli97.runecraftory.common.items.creative.ItemIcon;
+import com.flemmli97.runecraftory.common.items.creative.ItemInstaTame;
+import com.flemmli97.runecraftory.common.items.creative.ItemLevelUp;
+import com.flemmli97.runecraftory.common.items.creative.ItemSkillUp;
+import com.flemmli97.runecraftory.common.items.creative.ItemSpawnEgg;
+import com.flemmli97.runecraftory.common.items.equipment.accessoire.ItemCheapBracelet;
 import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockAccess;
+import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockBase;
 import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockCooking;
 import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockForge;
 import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockPharm;
@@ -21,6 +26,7 @@ import com.flemmli97.runecraftory.common.items.misc.ItemRecipe;
 import com.flemmli97.runecraftory.common.items.misc.ItemSticks;
 import com.flemmli97.runecraftory.common.items.misc.ItemStones;
 import com.flemmli97.runecraftory.common.items.misc.ItemStrings;
+import com.flemmli97.runecraftory.common.items.special.spells.ItemFireballCast;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolHoe;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolPetInspector;
@@ -39,6 +45,7 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumToolTier;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
@@ -49,12 +56,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class ModItems {
 
 	public static ToolMaterial mat = EnumHelper.addToolMaterial("runeCraftory_mat", 3, 0, 6, 0, 0);
-
+	
 	public static Item hoeScrap = new ItemToolHoe(EnumToolTier.SCRAP);
 	public static Item hoeIron = new ItemToolHoe(EnumToolTier.IRON);
 	public static Item hoeSilver = new ItemToolHoe(EnumToolTier.SILVER);
 	public static Item hoeGold = new ItemToolHoe(EnumToolTier.GOLD);
-	public static Item hoePlat = new ItemToolHoe(EnumToolTier.PLATINUM);
+	public static Item hoePlatinum = new ItemToolHoe(EnumToolTier.PLATINUM);
 	public static Item wateringCanScrap = new ItemToolWateringCan(EnumToolTier.SCRAP);
 	public static Item wateringCanIron = new ItemToolWateringCan(EnumToolTier.IRON);
 	public static Item wateringCanSilver = new ItemToolWateringCan(EnumToolTier.SILVER);
@@ -87,6 +94,8 @@ public class ModItems {
 	
 	public static Item leatherGlove = new ItemLeatherGlove();
 	
+	public static Item cheapBracelet = new ItemCheapBracelet();
+	
 	public static Item itemBlockForge = new ItemBlockForge();
 	public static Item itemBlockAccess = new ItemBlockAccess();
 	public static Item itemBlockCooking = new ItemBlockCooking();
@@ -106,11 +115,14 @@ public class ModItems {
 	public static Item powders =  new ItemPowders();
 	public static Item cloth =  new ItemCloths();
 	
+	public static Item fireBallSmall = new ItemFireballCast();
 	public static Item recipe = new ItemRecipe();
 	public static Item icon = new ItemIcon();
 
 	public static Item debug = new ItemDebug();
-
+	public static Item level = new ItemLevelUp();
+	public static Item skill = new ItemSkillUp();
+	public static Item tame = new ItemInstaTame();
 	public static Item spawnEgg = new ItemSpawnEgg();
 
 	@SubscribeEvent
@@ -119,7 +131,7 @@ public class ModItems {
 	    event.getRegistry().register(hoeIron);
 	    event.getRegistry().register(hoeSilver);
 	    event.getRegistry().register(hoeGold);
-	    event.getRegistry().register(hoePlat);
+	    event.getRegistry().register(hoePlatinum);
 	    event.getRegistry().register(wateringCanScrap);
 	    event.getRegistry().register(wateringCanIron);
 	    event.getRegistry().register(wateringCanSilver);
@@ -152,6 +164,8 @@ public class ModItems {
 	    
 	    event.getRegistry().register(leatherGlove);
 	    
+	    event.getRegistry().register(cheapBracelet);
+	    
 	    event.getRegistry().register(crystal);
 	    event.getRegistry().register(jewel);
 	    event.getRegistry().register(mineral);
@@ -166,6 +180,8 @@ public class ModItems {
 	    event.getRegistry().register(powders);
 	    event.getRegistry().register(cloth);
 
+	    event.getRegistry().register(fireBallSmall);
+	    
 	    event.getRegistry().register(recipe);
 	    
 	    event.getRegistry().register(itemBlockForge);
@@ -177,16 +193,19 @@ public class ModItems {
 	    event.getRegistry().register(icon);
 
 	    event.getRegistry().register(debug);
+	    event.getRegistry().register(level);
+	    event.getRegistry().register(skill);
+	    event.getRegistry().register(tame);
 	}
 	
 	@SubscribeEvent
-	public static void initModel(ModelRegistryEvent event)
+	public static final void initModel(ModelRegistryEvent event)
 	{
 		((ItemToolHoe) hoeScrap).initModel();
 		((ItemToolHoe) hoeIron).initModel();
 		((ItemToolHoe) hoeSilver).initModel();
 		((ItemToolHoe) hoeGold).initModel();
-		((ItemToolHoe) hoePlat).initModel();
+		((ItemToolHoe) hoePlatinum).initModel();
 		((ItemToolWateringCan) wateringCanScrap).initModel();
 		((ItemToolWateringCan) wateringCanIron).initModel();
 		((ItemToolWateringCan) wateringCanSilver).initModel();
@@ -233,10 +252,19 @@ public class ModItems {
 		((ItemFurs) furs).initModel();
 		((ItemPowders) powders).initModel();
 		((ItemCloths) cloth).initModel();
-		
-		((ItemRecipe) recipe).initModel();
-		
+				
 		((ItemSpawnEgg) spawnEgg).initModel();
 		((ItemIcon) icon).initModel();
+		
+		((ItemBlockBase) itemBlockAccess).initModel();
+		((ItemBlockBase) itemBlockForge).initModel();
+		((ItemBlockBase) itemBlockCooking).initModel();
+		((ItemBlockBase) itemBlockPharm).initModel();
+	}
+	
+	@SubscribeEvent
+	public static final void recipeRender(ModelBakeEvent event)
+	{
+		((ItemRecipe) recipe).initModel(event);
 	}
 }

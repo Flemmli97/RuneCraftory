@@ -5,6 +5,7 @@ bin
 .settings
 
 # forge
+lib
 run
 
 # github

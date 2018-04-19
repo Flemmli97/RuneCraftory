@@ -22,6 +22,8 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -31,7 +33,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -61,7 +63,7 @@ public class BlockMineral extends Block{
 				items.add(new ItemStack(this, 1, tier.getMeta()));
 			}
 	}
-
+	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Items.AIR;
@@ -71,6 +73,13 @@ public class BlockMineral extends Block{
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {TIER});
 	}
+	@Override
+	public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity)
+    {
+		if(state.getProperties().get(TIER)==EnumTier.DRAGONIC && entity instanceof EntityDragon)
+			return false;
+		return super.canEntityDestroy(state, world, pos, entity);
+    }
 
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player,
@@ -79,12 +88,13 @@ public class BlockMineral extends Block{
 	        return world.setBlockState(pos, Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
 		else if(player.getHeldItemMainhand().getItem() instanceof ItemToolHammer || player.getHeldItemMainhand().getItem() instanceof HammerBase)
 		{
+			if(player.getHeldItemMainhand().getItem() instanceof ItemToolHammer)
 			this.dropItem(state, world, pos, player);
 			float breakChance = 0.5F;
 			if(player.getHeldItemMainhand().getItem() instanceof ItemToolHammer)
 			{
 				ItemToolHammer item = (ItemToolHammer) player.getHeldItemMainhand().getItem();
-				breakChance-=item.getTier().getTierLevel()*0.05;
+				breakChance-=item.getTier().getTierLevel()*0.75F;
 			}
 			if(world.rand.nextFloat()<breakChance)
 			{
@@ -122,11 +132,35 @@ public class BlockMineral extends Block{
 				}
 				break;
 			case EARTH:
+				if(world.rand.nextFloat()<Math.min(addChance+0.2, 0.7))
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystal, 1, 1));
+				}
+				else if(world.rand.nextFloat()<0.25F+addChance)
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.jewel, 1, 0));
+				}
+				else
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.scrap, 1, 0));
+				}
 				break;
 			case FIRE:
+				if(world.rand.nextFloat()<Math.min(addChance+0.2, 0.7))
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystal, 1, 2));
+				}
+				else if(world.rand.nextFloat()<0.25F+addChance)
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.jewel, 1, 3));
+				}
+				else
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.scrap, 1, 0));
+				}
 				break;
 			case NONE:
-				if(world.rand.nextFloat()<addChance-0.01F*30)
+				if(world.rand.nextFloat()<addChance-skillChanceUp*40)
 				{
 					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystal, 1, 7));
 				}
@@ -142,7 +176,7 @@ public class BlockMineral extends Block{
 			case RARE:
 				if(world.rand.nextFloat()<0.05F+addChance-skillChanceUp*40)
 				{
-					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystal, 1, 7));
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystal, 1, 9));
 				}
 				else if(world.rand.nextFloat()<0.25F+addChance)
 				{
@@ -156,15 +190,15 @@ public class BlockMineral extends Block{
 			case UNCOMMON:
 				if(world.rand.nextFloat()<0.05F+addChance-skillChanceUp*40)
 				{
-					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystal, 1, 9));
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystal, 1, 7));
 				}
 				else if(world.rand.nextFloat()<0.25F+addChance)
 				{
-					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.mineral, 1, 5));
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.mineral, 1, 2));
 				}
 				else
 				{
-					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.mineral, 1, 0));
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.mineral, 1, 1));
 				}
 				break;
 			case URARE:
@@ -174,16 +208,40 @@ public class BlockMineral extends Block{
 				}
 				else if(world.rand.nextFloat()<0.25F+addChance)
 				{
-					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.mineral, 1, 7));
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.mineral, 1, 6));
 				}
 				else
 				{
-					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.mineral, 1, 6));
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.mineral, 1, 5));
 				}
 				break;
 			case WATER:
+				if(world.rand.nextFloat()<Math.min(addChance+0.2, 0.7))
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystal, 1, 0));
+				}
+				else if(world.rand.nextFloat()<0.25F+addChance)
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.jewel, 1, 1));
+				}
+				else
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.scrap, 1, 0));
+				}
 				break;
 			case WIND:
+				if(world.rand.nextFloat()<Math.min(addChance+0.2, 0.7))
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystal, 1, 3));
+				}
+				else if(world.rand.nextFloat()<0.25F+addChance)
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.jewel, 1, 2));
+				}
+				else
+				{
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.scrap, 1, 0));
+				}
 				break;
 		}
 	}
@@ -246,9 +304,21 @@ public class BlockMineral extends Block{
         		return this.meta;
         }
         
+        public static EnumTier randomNonElemental(Random rand)
+        {
+        	return values()[rand.nextInt(5)];
+        }
+        
         public static EnumTier fromMeta(int meta)
         {
         		return values()[meta];
+        }
+        
+        public static boolean isElemental(EnumTier tier)
+        {
+        	if(tier==EnumTier.FIRE || tier==EnumTier.WIND||tier==EnumTier.EARTH||tier==EnumTier.WATER)
+        		return true;
+        	return false;
         }
 		
     }

@@ -13,6 +13,7 @@ import com.flemmli97.runecraftory.common.core.network.PacketHandler;
 import com.flemmli97.runecraftory.common.core.network.PacketJump;
 import com.flemmli97.runecraftory.common.core.network.PacketUpdateClient;
 import com.flemmli97.runecraftory.common.core.network.PacketWeaponHit;
+import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumStatusEffect;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
@@ -21,6 +22,7 @@ import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.INpc;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -31,6 +33,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -96,7 +99,7 @@ public class EventHandlerCore {
 	{
 		EntityPlayer player = event.getEntityPlayer();
 
-		if(event.getTarget() instanceof EntityLivingBase && player.getHeldItemMainhand()!=ItemStack.EMPTY && player.getHeldItemMainhand().getItem() instanceof IRpUseItem)
+		if(event.getTarget() instanceof EntityLivingBase && !player.getHeldItemMainhand().isEmpty() && player.getHeldItemMainhand().getItem() instanceof IRpUseItem)
 		{
 			event.setCanceled(true);
 			IRpUseItem item = (IRpUseItem) player.getHeldItemMainhand().getItem();
@@ -112,7 +115,7 @@ public class EventHandlerCore {
 	}
 	
 	@SubscribeEvent
-	public void cancelNoDamage(LivingAttackEvent event)
+	public void livingAttackEvent(LivingAttackEvent event)
 	{
 		if(event.getEntityLiving() instanceof IEntityBase)
 		{
@@ -127,46 +130,39 @@ public class EventHandlerCore {
 		}
 	}
 	
+	@SubscribeEvent
+	public void knockBack(LivingKnockBackEvent event)
+	{
+		if(event.getAttacker()instanceof IEntityAdvanced || event.getAttacker()instanceof INpc)
+		{
+			event.setCanceled(true);
+		}
+		else if(event.getAttacker() instanceof EntityPlayer)
+		{
+			if(((EntityPlayer) event.getAttacker()).getHeldItemMainhand().getItem() instanceof IRpUseItem)
+				event.setCanceled(true);
+		}
+	}
+	
 	/**damage calculation for player, 2. part: remove hurt resistance time*/
 	@SubscribeEvent
 	public void damageCalculation(LivingHurtEvent event)
     {
-		if(event.getEntityLiving() instanceof EntityPlayer)
+		if(event.getSource().damageType.equals("rfAttack"))
 		{
-			if(event.getSource().getTrueSource() instanceof IEntityAdvanced)
+			CustomDamage source = (CustomDamage) event.getSource();
+			if(event.getEntityLiving() instanceof EntityPlayer)
 			{
 				event.setCanceled(true);
-				
 				RFCalculations.getPlayerDamageReduction((EntityPlayer) event.getEntityLiving(), event.getSource(), event.getAmount());
 			}
-			else if(event.getSource().getTrueSource() instanceof EntityPlayer)
-			{
-				ItemStack stack = ((EntityPlayer) event.getSource().getTrueSource()).getHeldItemMainhand();
-				if(stack !=ItemStack.EMPTY && stack.getItem() instanceof IRpUseItem)
-				{
-					event.setCanceled(true);
-					RFCalculations.getPlayerDamageReduction((EntityPlayer) event.getEntityLiving(), event.getSource(), event.getAmount());
-				}
-			}
-			else if(event.getSource().damageType.equals("rfExhaust"))
-			{
-				event.setCanceled(true);
-				IPlayer capSync = event.getEntityLiving().getCapability(PlayerCapProvider.PlayerCap, null);
-				capSync.damage((EntityPlayer) event.getEntityLiving(), CustomDamage.EXHAUST, event.getAmount());
-			}
+			event.getEntityLiving().hurtResistantTime=source.hurtProtection();
 		}
-		else if (event.getEntityLiving() instanceof EntityLivingBase)
+		else if(event.getSource().damageType.equals("rfExhaust") && event.getEntityLiving() instanceof EntityPlayer)
 		{
-			if(event.getSource().getTrueSource() instanceof EntityPlayer)
-			{
-				EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
-				if(player.getHeldItemMainhand().getItem() instanceof IRpUseItem)
-				{
-					event.getEntityLiving().hurtResistantTime=0;
-				}
-			}
-			else if(event.getSource().getTrueSource() instanceof IEntityAdvanced)
-				event.getEntityLiving().hurtResistantTime=0;
+			event.setCanceled(true);
+			IPlayer capSync = event.getEntityLiving().getCapability(PlayerCapProvider.PlayerCap, null);
+			capSync.damage((EntityPlayer) event.getEntityLiving(), CustomDamage.EXHAUST, event.getAmount());
 		}
     }
 	
@@ -183,7 +179,7 @@ public class EventHandlerCore {
     }
 	
 	@SubscribeEvent
-	public void applyStatusEffect(LivingUpdateEvent event)
+	public void updateLivingTick(LivingUpdateEvent event)
 	{
 		if(event.getEntityLiving() instanceof EntityPlayer)
 		{
@@ -194,8 +190,7 @@ public class EventHandlerCore {
 					effect.update();
 				}
 			IPlayerAnim anim = event.getEntityLiving().getCapability(PlayerCapProvider.PlayerAnim, null);
-			if(anim.getSpearTick()>0)
-				anim.spearTicker();
+			anim.update();
 		}
 		else if(event.getEntityLiving() instanceof IEntityAdvanced)
 		{
@@ -224,18 +219,18 @@ public class EventHandlerCore {
 	@SubscribeEvent
     public void extendedReach(PlayerInteractEvent.LeftClickEmpty event)
     {
-	    	ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-	    	if(stack!=null)
-		    	if(stack.getItem() instanceof IRpUseItem)
-		    	{
-			    	PacketHandler.sendToServer(new PacketWeaponHit());
-		    	}
+    	ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
+    	if(stack!=null)
+	    	if(stack.getItem() instanceof IRpUseItem)
+	    	{
+		    	PacketHandler.sendToServer(new PacketWeaponHit());
+	    	}
     }
 	
 	@SubscribeEvent
 	public void jump(LivingUpdateEvent e)
 	{
-		if(e.getEntityLiving() instanceof EntityPlayerSP &&	e.getEntityLiving().isRiding() && ((EntityPlayerSP)e.getEntityLiving()).movementInput.jump)
+		if(e.getEntityLiving() instanceof EntityPlayerSP &&	(e.getEntityLiving().getRidingEntity() instanceof EntityMobBase) && ((EntityPlayerSP)e.getEntityLiving()).movementInput.jump)
 		{
 			PacketHandler.sendToServer(new PacketJump());
 		}

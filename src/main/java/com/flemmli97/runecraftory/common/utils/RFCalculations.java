@@ -12,9 +12,9 @@ import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
+import com.flemmli97.runecraftory.common.core.handler.CustomDamage.KnockBackType;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
-import com.flemmli97.runecraftory.common.lib.CalculationConstants;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumStatusEffect;
 import com.google.common.base.Predicate;
@@ -36,74 +36,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 
 public class RFCalculations {
-
-	//TODO
-
-	public static int xpAmountForLevelUp(int level)
-	{
-		return level^2;
-	}
-	//TODO
-
-	public static int xpAmountForSkills(int level)
-	{
-		return level^2;
-	}
-	//TODO
-
-	public static float tamingMultiplerOnLevel(int levelDiff)
-	{
-		if(levelDiff<=0)
-			levelDiff=1;
-		float f = 1;///level;
-		return Math.min(f, 1);
-	}
-	
-	public static float scaleForVanilla(float damage)
-	{
-		if(damage<=100)
-			damage=damage*0.03F;
-		else if(damage<=1000)
-			damage=damage*0.012F+3;
-		else if(damage<=10000)
-			damage=(float) (Math.sqrt((damage-1000)/10.0F)+15);
-		else
-			damage=(float) (Math.sqrt((damage-10000)/29.7517355371900826F)+45);
-		return damage;
-	}
-	
-	//TODO
-	public static int xpFromLevel(int base, int level)
-	{
-		return base + base*level;
-	}
-	//TODO
-
-	public static int moneyFromLevel(int base, int level)
-	{
-		return Math.round(base + base*level/50.0F);
-	}
-	//TODO
-
-	public static int levelFromDistSpawn(World world, BlockPos currentPos)
-	{
-		int level = CalculationConstants.baseLevel;
-		BlockPos spawn = world.getSpawnPoint();
-		double dis =1;
-		if(world.provider.getDimension()==0)
-			dis= Math.sqrt(spawn.distanceSq(currentPos.getX(), spawn.getY(), currentPos.getZ()));
-		else
-			dis=Math.sqrt(spawn.distanceSq(currentPos.getX(), spawn.getY(), currentPos.getZ()))+200;
-			dis*=1.2;
-		return Math.round((float) (level+Math.max(1, (dis-250)*0.1F) ));
-	}
 	
 	public static List<EntityLivingBase> calculateEntitiesFromLook(EntityPlayer player, float reach, float aoe)
 	{
@@ -193,21 +130,22 @@ public class RFCalculations {
         {
             if (!target.hitByEntity(player))
             {
-            		//=====Add damage
-            		float damagePhys = cap.getStr();
-            			damagePhys+=getAttributeValue(player, ItemStats.RFATTACK, null, null);
-            		float coolDown = player.getCooldownTracker().getCooldown(stack.getItem(), 0);
-            		if(coolDown>0)
-            		{
-            			return false;
-            		}
-            		if (damagePhys > 0.0F)
+        		item.levelSkillOnHit(player);
+        		//=====Add damage
+        		float damagePhys = cap.getStr();
+        			damagePhys+=getAttributeValue(player, ItemStats.RFATTACK, null, null);
+        		float coolDown = player.getCooldownTracker().getCooldown(stack.getItem(), 0);
+        		if(coolDown>0)
+        		{
+        			return false;
+        		}
+        		if (damagePhys > 0.0F)
                 {
             			player.getCooldownTracker().setCooldown(stack.getItem(), item.itemCoolDownTicks());
             			boolean faintChance = player.world.rand.nextInt(100)<getAttributeValue(player, ItemStats.RFFAINT, target, ItemStats.RFRESFAINT);
             			boolean critChance = player.world.rand.nextInt(100)<getAttributeValue(player, ItemStats.RFCRIT, target, ItemStats.RFRESCRIT);
             			boolean knockBackChance = player.world.rand.nextInt(100)<getAttributeValue(player, ItemStats.RFKNOCK, target, SharedMonsterAttributes.KNOCKBACK_RESISTANCE);
-            			int i = knockBackChance?2:0;
+            			int i = knockBackChance?3:1;
 
                     if (player.isSprinting())
                     {
@@ -221,29 +159,25 @@ public class RFCalculations {
                     boolean ignoreArmor = critChance||faintChance;
                     if(!(target instanceof IEntityBase))
     					{
-                    		damagePhys = RFCalculations.scaleForVanilla(damagePhys);
+                    		damagePhys = LevelCalc.scaleForVanilla(damagePhys);
     					}
                     else
                     		damagePhys = faintChance?Float.MAX_VALUE:damagePhys;
-
-                    boolean flag5 = target.attackEntityFrom(CustomDamage.doAttack(player, ItemNBT.getElement(stack), ignoreArmor?1:0), damagePhys);
+                    CustomDamage source = CustomDamage.attack(player, ItemNBT.getElement(stack), ignoreArmor?CustomDamage.DamageType.IGNOREDEF:CustomDamage.DamageType.NORMAL, KnockBackType.BACK, i*0.5F-0.2F, 0);
+                    boolean flag5 = target.attackEntityFrom(source, damagePhys);
 
                     if (flag5)
                     {
                         if (i > 0)
                         {
-                            if (target instanceof EntityLivingBase)
-                            {
-                                ((EntityLivingBase)target).knockBack(player, (float)i * 0.5F, (double)MathHelper.sin(player.rotationYaw * 0.017453292F), (double)(-MathHelper.cos(player.rotationYaw * 0.017453292F)));
-                            }
-                            else
-                            {
-                                target.addVelocity((double)(-MathHelper.sin(player.rotationYaw * 0.017453292F) * (float)i * 0.5F), 0.1D, (double)(MathHelper.cos(player.rotationYaw * 0.017453292F) * (float)i * 0.5F));
-                            }
-
+                            target.addVelocity((double)(-MathHelper.sin(player.rotationYaw * 0.017453292F) * (float)i * 0.5F), 0.1D, (double)(MathHelper.cos(player.rotationYaw * 0.017453292F) * (float)i * 0.5F));
                             player.motionX *= 0.6D;
                             player.motionZ *= 0.6D;
                             player.setSprinting(false);
+                        }
+                        if (target instanceof EntityLivingBase)
+                        {
+                        	RFCalculations.knockBack(target, source);
                         }
                         float drainPercent= getAttributeValue(player, ItemStats.RFDRAIN, target,ItemStats.RFRESDRAIN);
                         if(drainPercent>0)
@@ -345,10 +279,15 @@ public class RFCalculations {
     					((IEntityAdvanced) target).addStatus(EnumStatusEffect.SEAL);
 	        if(dizzyChance)
 					target.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:nausea"), 80, 1, true, false));
-	        if(stunChance||sleepChance)
+	        if(stunChance)
 	        {
 				target.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:slowness"), 80, 4, true, false));
 				target.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:jump_boost"), 80, 1, true, false));
+	        }
+	        if(sleepChance)
+	        {
+	        	target.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:blindness"), 80, 1, true, false));
+	        	target.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("runecraftory:sleep"), 80, 1, true, false));
 	        }
 		}
 	}
@@ -359,9 +298,9 @@ public class RFCalculations {
 	 * @param att The attribute to calculate
 	 * @return
 	 */
-	public static float getAttributeValue(EntityLivingBase entity, IAttribute att, EntityLivingBase target, IAttribute resAtt)
+	public static int getAttributeValue(EntityLivingBase entity, IAttribute att, EntityLivingBase target, IAttribute resAtt)
 	{
-		float increase = 0;
+		int increase = 0;
 		if(entity instanceof EntityPlayer)
 		{
 			if(entity.getHeldItemMainhand().getItem()instanceof IRpUseItem)
@@ -396,33 +335,34 @@ public class RFCalculations {
 		}
 		if(target instanceof IEntityBase)
 		{
-			if(target.getAttributeMap().getAttributeInstance(att)!=null)
-			increase -= target.getAttributeMap().getAttributeInstance(att).getAttributeValue();
+			if(target.getAttributeMap().getAttributeInstance(resAtt)!=null)
+			increase -= target.getAttributeMap().getAttributeInstance(resAtt).getAttributeValue();
 		}
 		else if(target instanceof IRFNpc || target instanceof EntityPlayer)
 		{
 			if(target.getHeldItemMainhand().getItem()instanceof IRpUseItem)
 			{
-				if(ItemNBT.statIncrease(target.getHeldItemMainhand()).get(att)!=null)
+				if(ItemNBT.statIncrease(target.getHeldItemMainhand()).get(resAtt)!=null)
 				{
-					increase -= ItemNBT.statIncrease(target.getHeldItemMainhand()).get(att).floatValue();
+					
+					increase -= ItemNBT.statIncrease(target.getHeldItemMainhand()).get(resAtt).floatValue();
 				}
 			}
 			for(ItemStack equip : target.getArmorInventoryList())
 			{
 				if(!equip.isEmpty() && equip.getItem() instanceof IItemWearable)
 				{
-					if(ItemNBT.statIncrease(equip).get(att)!=null)
+					if(ItemNBT.statIncrease(equip).get(resAtt)!=null)
 	        			{
-						increase -= ItemNBT.statIncrease(equip).get(att).floatValue();
+						increase -= ItemNBT.statIncrease(equip).get(resAtt).floatValue();
 	        			}
 				}
 			}
 			if(!target.getHeldItemOffhand().isEmpty()&& target.getHeldItemOffhand().getItem() instanceof IItemWearable && !(target.getHeldItemOffhand().getItem() instanceof IRpUseItem))
 			{
-				if(ItemNBT.statIncrease(target.getHeldItemOffhand()).get(att)!=null)
+				if(ItemNBT.statIncrease(target.getHeldItemOffhand()).get(resAtt)!=null)
 		    		{
-					increase -= ItemNBT.statIncrease(target.getHeldItemOffhand()).get(att).floatValue();
+					increase -= ItemNBT.statIncrease(target.getHeldItemOffhand()).get(resAtt).floatValue();
 		    		}
 			}
 		}
@@ -442,12 +382,47 @@ public class RFCalculations {
 		capSync.damage(player, source, amount);
 	}
 	
-	public static float statIncreaseLevel(float baseValue, int level, boolean isBoss)
+	public static boolean attackEntity(Entity target, CustomDamage source, float amount)
 	{
-		float scale = isBoss?1.2F:0.9F;
-		float newValue = (float) (baseValue+baseValue/10.0*Math.max(1, level-10)*scale);
-		return newValue;
+		if(target instanceof EntityLivingBase)
+			knockBack((EntityLivingBase) target,  source);
+		return 	target.attackEntityFrom(source, amount);
 	}
 	
+	public static void knockBack(EntityLivingBase entity, CustomDamage source)
+	{
+		float strength=source.knockAmount();
+		double xRatio = 0;
+		double zRatio = 0;
+		double yRatio = 0;
+		if(source.getTrueSource() instanceof EntityLivingBase && source.getKnockBackType()==KnockBackType.BACK)
+		{
+			xRatio = (double)MathHelper.sin(source.getTrueSource().rotationYaw * 0.017453292F);
+			zRatio = (double)(-MathHelper.cos(source.getTrueSource().rotationYaw * 0.017453292F));
+		}
+		if(source.getKnockBackType()==KnockBackType.UP)
+			yRatio=source.knockAmount();
+		if (entity.getRNG().nextDouble() >= entity.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).getAttributeValue())
+        {
+			entity.isAirBorne = true;
+            float f = MathHelper.sqrt(xRatio * xRatio + zRatio * zRatio);
+            entity.motionX /= 2.0D;
+            entity.motionZ /= 2.0D;
+            entity.motionX -= xRatio / (double)f * (double)strength;
+            entity.motionZ -= zRatio / (double)f * (double)strength;
+
+            if (entity.onGround)
+            {
+            	entity.motionY /= 2.0D;
+            	entity.motionY += (double)strength;
+
+                if (entity.motionY > 0.4000000059604645D)
+                {
+                	entity.motionY = 0.4000000059604645D;
+                }
+            }
+            entity.motionY+=yRatio;
+        }
+	}
 }
                 

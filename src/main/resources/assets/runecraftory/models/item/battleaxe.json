@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:item/bigweapon",
-  "textures": {
-    "layer0": "runecraftory:items/battleAxe"
-  }
-}

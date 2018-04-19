@@ -7,7 +7,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class OreDictInit {
 	
-	public static void init()
+	public static final void init()
 	{
 		RuneCraftory.logger.info("Adding Oredicts");
 		OreDictionary.registerOre("ingotIron", new ItemStack(ModItems.mineral, 1, 0));

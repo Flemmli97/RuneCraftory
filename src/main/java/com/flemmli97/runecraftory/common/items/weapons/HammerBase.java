@@ -8,7 +8,9 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
+import com.flemmli97.runecraftory.common.blocks.BlockMineral;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
+import com.flemmli97.runecraftory.common.core.handler.CustomDamage.KnockBackType;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.network.PacketHandler;
@@ -19,10 +21,12 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -42,6 +46,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -49,6 +54,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class HammerBase extends ItemPickaxe implements IRpUseItem{
+
+	private int chargeXP=25;
 
 	public HammerBase(String name) {
 		super(ModItems.mat);
@@ -126,6 +133,29 @@ public abstract class HammerBase extends ItemPickaxe implements IRpUseItem{
 	}
 	
 	@Override
+	public boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving)
+    {
+		if(!world.isRemote && entityLiving instanceof EntityPlayer && state.getBlock() instanceof BlockMineral)
+		{
+			this.levelSkillOnBreak((EntityPlayer) entityLiving);
+		}
+		return super.onBlockDestroyed(stack, world, state, pos, entityLiving);
+    }
+	
+	@Override
+	public void levelSkillOnHit(EntityPlayer player)
+	{
+		IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+		cap.increaseSkill(EnumSkills.HAMMERAXE, player, 1);
+	}
+	
+	@Override
+	public void levelSkillOnBreak(EntityPlayer player)
+	{
+		IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+		cap.increaseSkill(EnumSkills.MINING, player, 1);
+	}
+	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 72000;
 	}
@@ -148,18 +178,18 @@ public abstract class HammerBase extends ItemPickaxe implements IRpUseItem{
 				{
 					PacketHandler.sendTo(new PacketWeaponAnimation(20), (EntityPlayerMP) player);
 				}
-				cap.decreaseRunePoints(player, 10);
-				cap.increaseSkill(EnumSkills.HAMMERAXE, player, 100);
 				List<EntityLivingBase> entityList = RFCalculations.calculateEntitiesFromLook(player, this.getWeaponType().getRange(), 36);
 				if(!entityList.isEmpty())
 				{
+					cap.decreaseRunePoints(player, 15);
+					cap.increaseSkill(EnumSkills.HAMMERAXE, player, this.chargeXP);
 			    		for (EntityLivingBase e: entityList)
 			    		{
 			    			float damagePhys = cap.getStr();
 			    			damagePhys+= RFCalculations.getAttributeValue(player, ItemStats.RFATTACK, null, null);
 			    			if(!(e instanceof IEntityBase))
-			    				damagePhys=RFCalculations.scaleForVanilla(damagePhys);
-	            			e.attackEntityFrom(CustomDamage.doAttack(player, EnumElement.fromName(stack.getTagCompound().getString("Element")), 0), damagePhys);
+			    				damagePhys=LevelCalc.scaleForVanilla(damagePhys);
+	            			e.attackEntityFrom(CustomDamage.attack(player, EnumElement.fromName(stack.getTagCompound().getString("Element")), CustomDamage.DamageType.NORMAL, KnockBackType.UP, 0.4F, 20), damagePhys);
 	            			e.motionY += 0.2000000059604645D;
 	            			player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
 			    		}
@@ -171,7 +201,9 @@ public abstract class HammerBase extends ItemPickaxe implements IRpUseItem{
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
-		if(handIn == EnumHand.MAIN_HAND)
+        IPlayer cap = playerIn.getCapability(PlayerCapProvider.PlayerCap, null);
+
+		if(handIn == EnumHand.MAIN_HAND && (cap.getSkillLevel(EnumSkills.HAMMERAXE)[0]>=5 || playerIn.capabilities.isCreativeMode))
 		{
 	        playerIn.setActiveHand(handIn);
 	        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);

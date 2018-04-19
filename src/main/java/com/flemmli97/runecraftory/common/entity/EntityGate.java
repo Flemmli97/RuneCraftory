@@ -12,9 +12,10 @@ import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.GateSpawning;
 import com.flemmli97.runecraftory.common.init.ModItems;
-import com.flemmli97.runecraftory.common.lib.CalculationConstants;
+import com.flemmli97.runecraftory.common.lib.LibConstants;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.google.common.base.Predicate;
 
@@ -98,7 +99,7 @@ public class EntityGate extends EntityLiving  implements IEntityBase{
 
 	@Override
 	protected void applyEntityAttributes() {
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100*CalculationConstants.DAMAGESCALE);;
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100*LibConstants.DAMAGESCALE);;
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);;
         this.getAttributeMap().registerAttribute(ItemStats.RFDEFENCE).setBaseValue(5);;
         this.getAttributeMap().registerAttribute(ItemStats.RFMAGICDEF).setBaseValue(5);;
@@ -108,7 +109,7 @@ public class EntityGate extends EntityLiving  implements IEntityBase{
     {
         super.entityInit();
         this.dataManager.register(elementType, "none");
-        this.dataManager.register(level, CalculationConstants.baseLevel);
+        this.dataManager.register(level, LibConstants.baseLevel);
     }
 	//=====NBT
 	@Override
@@ -179,19 +180,20 @@ public class EntityGate extends EntityLiving  implements IEntityBase{
 				int entityLevel = this.dataManager.get(level);
 				int levelPerc = Math.round(entityLevel*0.1F);
 				int levelRand = Math.round(entityLevel + (this.rand.nextFloat()-0.5F) * levelPerc);
-				EntityMobBase mob = (EntityMobBase) GateSpawning.entityFromString(world, this.spawnList.get(this.rand.nextInt(spawnList.size())), levelRand);
-				this.doSpawnEntity(mob, x, y, z);
+				EntityMobBase mob = (EntityMobBase) GateSpawning.entityFromString(world, this.spawnList.get(this.rand.nextInt(spawnList.size())));
+				this.doSpawnEntity(mob, x, y, z, levelRand);
 			}
 		}
 	}
 	
-	private void doSpawnEntity(EntityMobBase mob, double x, double y, double z)
+	private void doSpawnEntity(EntityMobBase mob, double x, double y, double z, int level)
 	{
 		if(mob!=null)
 		{
 			BlockPos pos = new BlockPos(x,y,z);
 			if(this.world.getBlockState(pos.down()).isSideSolid(this.world, pos, EnumFacing.UP) && this.world.isAirBlock(pos.up()) && this.world.isAirBlock(pos.up(2)))
 			{
+				mob.setLevel(level);
 				mob.setPositionAndRotation(x, y, z, world.rand.nextFloat() * 360.0F, 0);
 				if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(mob, this.world, (float)mob.posX, (float)mob.posY, (float)mob.posZ))
 				{
@@ -221,8 +223,8 @@ public class EntityGate extends EntityLiving  implements IEntityBase{
 			if( this.attackingPlayer!=null)
             {
     				IPlayer cap = this.attackingPlayer.getCapability(PlayerCapProvider.PlayerCap, null);
-    				cap.addXp(attackingPlayer, RFCalculations.xpFromLevel(this.baseXP(), this.level()));
-    				cap.setMoney(attackingPlayer, cap.getMoney()+ RFCalculations.xpFromLevel(this.baseMoney(), this.level()));
+    				cap.addXp(attackingPlayer, LevelCalc.xpFromLevel(this.baseXP(), this.level()));
+    				cap.setMoney(attackingPlayer, cap.getMoney()+ LevelCalc.xpFromLevel(this.baseMoney(), this.level()));
             }
         super.onDeathUpdate();
 	}
@@ -237,7 +239,7 @@ public class EntityGate extends EntityLiving  implements IEntityBase{
             		return;
             	damageAmount = this.reduceDamage(damageSrc, damageAmount);
             	if(damageSrc != DamageSource.OUT_OF_WORLD)
-	    			damageAmount*=CalculationConstants.DAMAGESCALE;
+	    			damageAmount*=LibConstants.DAMAGESCALE;
             if (damageAmount != 0.0F)
             {
                 float f1 = this.getHealth();
@@ -364,16 +366,16 @@ public class EntityGate extends EntityLiving  implements IEntityBase{
 				counter--;
 			}
 		}
-		this.dataManager.set(level,RFCalculations.levelFromDistSpawn(this.world, this.getPosition()));
+		this.dataManager.set(level,LevelCalc.levelFromDistSpawn(this.world, this.getPosition()));
 		this.type = this.getType(biome);
 		this.dataManager.set(elementType, this.type.getName());
 		this.posY+=1;
 		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(
-				RFCalculations.statIncreaseLevel((float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).getBaseValue(), this.dataManager.get(level), false));
+				LevelCalc.initStatIncreaseLevel((float) this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).getBaseValue(), this.dataManager.get(level), false, true));
 		this.getAttributeMap().getAttributeInstance(ItemStats.RFDEFENCE).setBaseValue(
-				RFCalculations.statIncreaseLevel((float) this.getAttributeMap().getAttributeInstance(ItemStats.RFDEFENCE).getBaseValue(), this.dataManager.get(level), false));
+				LevelCalc.initStatIncreaseLevel((float) this.getAttributeMap().getAttributeInstance(ItemStats.RFDEFENCE).getBaseValue(), this.dataManager.get(level), false, false));
 		this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICDEF).setBaseValue(
-				RFCalculations.statIncreaseLevel((float) this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICDEF).getBaseValue(), this.dataManager.get(level), false));
+				LevelCalc.initStatIncreaseLevel((float) this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICDEF).getBaseValue(), this.dataManager.get(level), false, false));
 		this.setHealth(this.getMaxHealth());
 		return livingdata;
 	}
@@ -427,7 +429,7 @@ public class EntityGate extends EntityLiving  implements IEntityBase{
 		return element;
 	}	
 	
-	@Override
+	//@Override
 	public EnumElement entityElement() {
 		return this.type;
 	}

@@ -17,4 +17,11 @@ public enum EnumCrafting {
 	{
 		return this.id;
 	}
+	
+	public static EnumCrafting fromID(int id)
+	{
+		if(id>=EnumCrafting.values().length)
+			return FORGE;
+		return EnumCrafting.values()[id];
+	}
 }

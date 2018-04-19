@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/broken_ore",
+  "textures": {
+    "0": "runecraftory:blocks/broken_ore_rare"
+  }
+}

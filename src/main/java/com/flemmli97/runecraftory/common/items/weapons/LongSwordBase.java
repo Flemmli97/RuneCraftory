@@ -9,6 +9,7 @@ import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
+import com.flemmli97.runecraftory.common.core.handler.CustomDamage.KnockBackType;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.network.PacketHandler;
@@ -19,6 +20,7 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -50,6 +52,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class LongSwordBase extends ItemSword implements IRpUseItem{
+
+	private int chargeXP = 25;
 
 	public LongSwordBase(String name) {
 		super(ModItems.mat);
@@ -128,6 +132,16 @@ public abstract class LongSwordBase extends ItemSword implements IRpUseItem{
 	}
 	
 	@Override
+	public void levelSkillOnHit(EntityPlayer player)
+	{
+		IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+		cap.increaseSkill(EnumSkills.LONGSWORD, player, 1);
+	}
+	
+	@Override
+	public void levelSkillOnBreak(EntityPlayer player){}
+	
+	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 72000;
 	}
@@ -146,11 +160,13 @@ public abstract class LongSwordBase extends ItemSword implements IRpUseItem{
 			IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
 			if((this.getMaxItemUseDuration(stack) - timeLeft)>=this.getChargeTime()[0])
 			{
-				cap.decreaseRunePoints(player, 10);
-				cap.increaseSkill(EnumSkills.LONGSWORD, player, 100);
+				cap.decreaseRunePoints(player, 15);
+				cap.increaseSkill(EnumSkills.LONGSWORD, player, this.chargeXP);
 				List<EntityLivingBase> entityList = RFCalculations.calculateEntitiesFromLook(player, this.getWeaponType().getRange()+1, 16);
 				if(!entityList.isEmpty())
 				{
+					cap.decreaseRunePoints(player, 15);
+					cap.increaseSkill(EnumSkills.LONGSWORD, player, this.chargeXP);
 					if(!player.world.isRemote && player instanceof EntityPlayerMP)
 					{
 						PacketHandler.sendTo(new PacketWeaponAnimation(30), (EntityPlayerMP) player);
@@ -160,8 +176,8 @@ public abstract class LongSwordBase extends ItemSword implements IRpUseItem{
 			    			float damagePhys = cap.getStr();
 	            			damagePhys+= RFCalculations.getAttributeValue(player, ItemStats.RFATTACK, null, null);
 			    			if(!(e instanceof IEntityBase))
-			    				damagePhys=RFCalculations.scaleForVanilla(damagePhys);
-	            			e.attackEntityFrom(CustomDamage.doAttack(player, EnumElement.fromName(stack.getTagCompound().getString("Element")), 0), damagePhys);
+			    				damagePhys=LevelCalc.scaleForVanilla(damagePhys);
+	            			e.attackEntityFrom(CustomDamage.attack(player, EnumElement.fromName(stack.getTagCompound().getString("Element")), CustomDamage.DamageType.NORMAL, KnockBackType.BACK, 0.3F, 20), damagePhys);
 	            			Vec3d dis = player.getPositionVector().subtract(e.getPositionVector());
 	            			e.knockBack(e, 1, dis.x, dis.z);
                             player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
@@ -174,7 +190,9 @@ public abstract class LongSwordBase extends ItemSword implements IRpUseItem{
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
-		if(handIn == EnumHand.MAIN_HAND)
+        IPlayer cap = playerIn.getCapability(PlayerCapProvider.PlayerCap, null);
+
+		if(handIn == EnumHand.MAIN_HAND && (cap.getSkillLevel(EnumSkills.LONGSWORD)[0]>=5 || playerIn.capabilities.isCreativeMode))
 		{
 	        playerIn.setActiveHand(handIn);
 	        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);

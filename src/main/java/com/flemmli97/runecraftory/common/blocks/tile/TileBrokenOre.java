@@ -12,6 +12,8 @@ import net.minecraft.world.World;
 public class TileBrokenOre extends TileEntity implements ITickable{
 
 	private long time;
+	public TileBrokenOre(){}
+	
 	public TileBrokenOre(World world) {
 		this.time=world.getWorldTime();
 	}

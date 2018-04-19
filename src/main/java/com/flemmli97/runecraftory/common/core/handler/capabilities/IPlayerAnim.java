@@ -1,5 +1,7 @@
 package com.flemmli97.runecraftory.common.core.handler.capabilities;
 
+import net.minecraft.util.EnumHand;
+
 public interface IPlayerAnim {
 	
 	public int animationTick();
@@ -10,9 +12,40 @@ public interface IPlayerAnim {
 	
 	public boolean canUseSpear();
 	
-	public void spearTicker();
-
 	public void startSpear();
 	
 	public int getSpearTick();
+	
+	public void disableOffHand();
+	
+	public boolean canUseOffHand();
+		
+	public EnumHand getPrevSwung();
+	
+	public void setPrevSwung(EnumHand hand);
+	
+	public void startWeaponSwing(WeaponSwing swing, int delay);
+	
+	public boolean isAtUltimate();
+	
+	public enum WeaponSwing
+	{
+		SHORT(5),
+		LONG(5),
+		SPEAR(5),
+		HAXE(5),
+		DUAL(5),
+		GLOVE(5);
+		
+		private int swingAmount;
+		WeaponSwing(int swingAmount)
+		{
+			this.swingAmount=swingAmount;
+		}
+		
+		public int getMaxSwing()
+		{
+			return this.swingAmount;
+		}
+	}
 }

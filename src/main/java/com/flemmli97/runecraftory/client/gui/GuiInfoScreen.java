@@ -6,9 +6,10 @@ import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.network.PacketHandler;
-import com.flemmli97.runecraftory.common.core.network.PacketOpenGui;
+import com.flemmli97.runecraftory.common.core.network.PacketOpenGuiContainer;
 import com.flemmli97.runecraftory.common.inventory.ContainerInfoScreen;
 import com.flemmli97.runecraftory.common.lib.LibReference;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 
 import net.minecraft.client.Minecraft;
@@ -65,7 +66,7 @@ public class GuiInfoScreen extends InventoryEffectRenderer {
 		this.drawTexturedModalRect(this.guiX, this.guiY, 15, 15, texX, texY);
 		int healthWidth = (int) (cap.getHealth()/cap.getMaxHealth()*100);
 		int runeWidth=(int) (cap.getRunePoints()/(float)cap.getMaxRunePoints()*100);
-		int exp = (int) (cap.getPlayerLevel()[1]/(float)RFCalculations.xpAmountForLevelUp(cap.getPlayerLevel()[0])*100);
+		int exp = (int) (cap.getPlayerLevel()[1]/(float)LevelCalc.xpAmountForLevelUp(cap.getPlayerLevel()[0])*100);
 		this.mc.getTextureManager().bindTexture(bars);
 		this.drawTexturedModalRect(this.guiX+118, this.guiY+23,2, 51, healthWidth, 6);
 		this.drawTexturedModalRect(this.guiX+118, this.guiY+33, 2, 58, runeWidth, 6);
@@ -78,12 +79,12 @@ public class GuiInfoScreen extends InventoryEffectRenderer {
 		this.mc.fontRenderer.drawString("Def.",this.guiX+120, this.guiY+75, 0);
 		this.mc.fontRenderer.drawString("M.Att.",this.guiX+120, this.guiY+87, 0);
 		this.mc.fontRenderer.drawString("M.Def.",this.guiX+120, this.guiY+99, 0);
-		this.drawLeftAlignedScaledString(""+cap.getMoney(), this.guiX+197, this.guiY+11, 0.6F, 0);
-		this.drawLeftAlignedScaledString(""+cap.getPlayerLevel()[0], this.guiX+216, this.guiY+46, 1, 0);
-		this.drawLeftAlignedScaledString(""+(int)Math.ceil(cap.getStr() + RFCalculations.getAttributeValue(mc.player, ItemStats.RFATTACK, null, null)), this.guiX+216, this.guiY+64, 1, 0);
-		this.drawLeftAlignedScaledString(""+(int)Math.ceil(cap.getVit()*0.5F + RFCalculations.getAttributeValue(mc.player, ItemStats.RFDEFENCE, null, null)), this.guiX+216, this.guiY+75, 1, 0);
-		this.drawLeftAlignedScaledString(""+(int)Math.ceil(cap.getIntel() + RFCalculations.getAttributeValue(mc.player, ItemStats.RFMAGICATT, null, null)), this.guiX+216, this.guiY+87, 1, 0);
-		this.drawLeftAlignedScaledString(""+(int)Math.ceil(cap.getVit()*0.5F + RFCalculations.getAttributeValue(mc.player, ItemStats.RFMAGICDEF, null, null)), this.guiX+216, this.guiY+99, 1, 0);
+		this.drawRightAlignedScaledString(""+cap.getMoney(), this.guiX+194-(mc.fontRenderer.getStringWidth(""+cap.getMoney())==6?3:0), this.guiY+11, 0.6F, 0);
+		this.drawRightAlignedScaledString(""+cap.getPlayerLevel()[0], this.guiX+216, this.guiY+46, 1, 0);
+		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getStr() + RFCalculations.getAttributeValue(mc.player, ItemStats.RFATTACK, null, null)), this.guiX+216, this.guiY+64, 1, 0);
+		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getVit()*0.5F + RFCalculations.getAttributeValue(mc.player, ItemStats.RFDEFENCE, null, null)), this.guiX+216, this.guiY+75, 1, 0);
+		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getIntel() + RFCalculations.getAttributeValue(mc.player, ItemStats.RFMAGICATT, null, null)), this.guiX+216, this.guiY+87, 1, 0);
+		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getVit()*0.5F + RFCalculations.getAttributeValue(mc.player, ItemStats.RFMAGICDEF, null, null)), this.guiX+216, this.guiY+99, 1, 0);
 	}
 		
 	@Override
@@ -103,7 +104,7 @@ public class GuiInfoScreen extends InventoryEffectRenderer {
 		GlStateManager.popMatrix();
 	}
 	
-	private void drawLeftAlignedScaledString(String string, float x, float y, float scale, int color)
+	private void drawRightAlignedScaledString(String string, float x, float y, float scale, int color)
 	{
 		GlStateManager.pushMatrix();
 		GlStateManager.scale(scale, scale, scale);
@@ -146,7 +147,7 @@ public class GuiInfoScreen extends InventoryEffectRenderer {
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if(button==this.pageButton)
 		{
-			PacketHandler.sendToServer(new PacketOpenGui(1));
+			PacketHandler.sendToServer(new PacketOpenGuiContainer(1));
 		}
 	}	
 }

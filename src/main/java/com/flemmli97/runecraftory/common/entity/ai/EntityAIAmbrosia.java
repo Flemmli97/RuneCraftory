@@ -1,182 +1,234 @@
 package com.flemmli97.runecraftory.common.entity.ai;
 
+import java.util.List;
+
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
+import com.flemmli97.runecraftory.common.entity.monster.boss.EntityAmbrosia;
+import com.flemmli97.runecraftory.common.entity.monster.boss.EntityAmbrosia.AttackAI;
+import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
+import com.google.common.base.Predicate;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.pathfinding.Path;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.World;
+import net.minecraft.entity.ai.RandomPositionGenerator;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 public class EntityAIAmbrosia extends EntityAIBase{
 
-    protected EntityMobBase attackingEntity;
-
-    protected int doAttackTime, animationDuration, attackCoolDown, followTicker;
-
-    protected double speedTowardsTarget;
-
-    /** The PathEntity of our entity. */
-    protected Path entityPathEntity;
-	protected boolean evade;
-    
-    protected int moveDelay;
-    protected double posX,posY,posZ,rangeModifier;
-	
-    /**doAttackTime is the time during animationDuration, when the entity should deal damage. Should be smaller than animationduration;
-     * duration is in tick (20 tick = 1 sec); minecraft mob default attack speed is 20 tick;
-     * default rangeModifier should be 1;
-     * for ranged=true --> rangeModifier = range*/
-	public EntityAIAmbrosia(EntityMobBase selectedEntity,boolean ranged, double speedToTarget, int animationDuration, int doAttackTime, double rangeModifier) 
-	{
-		this.attackingEntity = selectedEntity;
-		this.speedTowardsTarget = speedToTarget;  
-        this.animationDuration = animationDuration;
-        this.doAttackTime = doAttackTime;
-
-        selectedEntity.attackTimerValue=animationDuration;
-        this.setMutexBits(3);
-        this.rangeModifier = rangeModifier*rangeModifier; 
+	private EntityAmbrosia attacker;
+	private int attackTicker, attackDelay, moveDelay;
+	private AttackAI prevStatus;
+	public EntityAIAmbrosia(EntityAmbrosia entity) {
+		this.attacker=entity;
+		this.setMutexBits(3);
 	}
 
 	@Override
-	public boolean shouldExecute()
-    {
-        EntityLivingBase var1 = this.attackingEntity.getAttackTarget();
-
-        if (var1 == null)
+	public boolean shouldExecute() {
+		EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
+        if (entitylivingbase == null ||!entitylivingbase.isEntityAlive())
         {
             return false;
         }
-        else if(!var1.isEntityAlive())
-        {
-            return false;
-        }
-        else if(var1.isEntityInvulnerable(DamageSource.causeMobDamage(attackingEntity)))
-        {
-        		return false;
-        }
-        else
-        {
-            this.entityPathEntity = this.attackingEntity.getNavigator().getPathToEntityLiving(var1);
-            return this.entityPathEntity != null;
-        }
-    }
+        return true;
+	}
 	
 	@Override
 	public boolean shouldContinueExecuting()
-    {
-        EntityLivingBase var1 = this.attackingEntity.getAttackTarget();
-        return var1 == null ? false : (!var1.isEntityAlive() ? false : true);
-    }
-	
-	@Override
-	public void startExecuting()
-    {
-        this.attackingEntity.getNavigator().setPath(this.entityPathEntity, this.speedTowardsTarget);
-        this.moveDelay = 0;
-    }
-	
-	@Override
-	public void resetTask()
-    {
-        this.attackingEntity.getNavigator().clearPath();
-    }
-	
-	@Override
-	public void updateTask()
-    {
-		this.moveTowards();
-		//this.meleeAttack(); 
-		this.rangedAttack();
-    }
-	
-	//attacking pattern
-	public void meleeAttack()
-	{
-		EntityLivingBase target = this.attackingEntity.getAttackTarget();
-        double distanceToTarget = this.attackingEntity.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
-        double attackRange = rangeModifier*(double)(this.attackingEntity.width * 2.0F * this.attackingEntity.width * 2.0F + target.width);
-
-        if (distanceToTarget <= attackRange)
+    {        
+        EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
+        if (entitylivingbase == null || !entitylivingbase.isEntityAlive() || !this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase)))
         {
-	        	this.attackingEntity.getNavigator().clearPath();
-	        	if(this.attackCoolDown == 0)
-	        	{
-	        		this.attackCoolDown = this.animationDuration;
-	        		attackingEntity.attackTimerValue = animationDuration;
-	        		attackingEntity.world.setEntityState(attackingEntity, (byte)4);
-	        	}
-	        	else
+            return false;
+        }
+        return true;    
+    }
+
+	@Override
+    public void resetTask()
+    {
+        this.attacker.setStatus(AttackAI.IDDLE);
+    }
+
+	@Override
+	public void updateTask() {
+        EntityLivingBase target = this.attacker.getAttackTarget();
+        double dis = this.attacker.getDistanceSq(target);
+        this.attackTicker = Math.max(this.attackTicker - 1, 0);
+        this.moveDelay = Math.max(this.moveDelay - 1, 0);
+
+        if(this.attacker.getStatus()==AttackAI.IDDLE)
+        {
+            this.attackDelay = Math.max(this.attackDelay - 1, 0);
+            if(this.attackDelay==0 && this.attackTicker==0)
             {
-	        		attackCoolDown --;        		
-	            	if(this.attackCoolDown == this.doAttackTime)
-	            	{
-	            		this.attackingEntity.attackEntityAsMob(target);
-	            	}       		
+            		
+        			int i = this.attacker.isEnraged()?1:2;
+        			AttackAI ai = this.randomAIExcept(i);
+        			this.attacker.setStatus(ai);
+        			this.prevStatus=ai;
+        			this.moveDelay=0;
             }
         }
-        else
-		{
-			this.attackCoolDown = 0;
-		} 
+		if(this.attackTicker==0 && this.attackDelay>0)
+			this.attacker.setStatus(AttackAI.IDDLE);
+        	switch(this.attacker.getStatus())
+        	{
+			case BUTTERFLY:
+				if(dis<25 && this.moveDelay==0 && this.attackTicker==0)
+				{
+					BlockPos pos = this.randomPosAwayFrom(target, 8);
+					this.attacker.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 1.5);
+					this.moveDelay = 24 + this.attacker.getRNG().nextInt(7);
+				}
+				else if(this.attacker.getNavigator().noPath() && this.attackTicker==0)
+				{
+					this.attackTicker=this.attacker.getStatus().getDuration();
+				}
+				if(this.attackTicker>0)
+			        this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
+				if(this.attackTicker<=this.attacker.getStatus().getTime())
+				{
+					this.attacker.summonButterfly();
+					if(this.attackTicker==1)
+						this.attackDelay = 64 + this.attacker.getRNG().nextInt(12);
+				}
+				break;
+			case IDDLE:
+		        this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
+		        if(dis>64)
+	        		{
+	        			if(this.moveDelay==0)
+	        			{
+			        		this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.5);
+			            	this.moveDelay = 24 + this.attacker.getRNG().nextInt(7);
+	        			}
+	        		}
+		        else
+		        {
+			        	Vec3d rand = RandomPositionGenerator.findRandomTarget(this.attacker, 5, 4);
+	    				if(rand!=null)
+	    				{
+	    					this.attacker.getNavigator().tryMoveToXYZ(rand.x, rand.y, rand.z, 1.5);
+	    					this.moveDelay = 44 + this.attacker.getRNG().nextInt(7);
+	    				}
+		        }
+				break;
+			case KICK1:
+        		if(this.attacker.getNavigator().tryMoveToEntityLiving(target, 1) && this.moveDelay==0)
+        			this.moveDelay=60;
+				if(this.attackTicker==0 && this.moveDelay==1)
+				{
+					this.attackTicker=this.attacker.getStatus().getDuration();
+				}
+				if(this.attackTicker>0)
+			        this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
+				if(this.attackTicker!=0 && this.attackTicker % this.attacker.getStatus().getTime()==0)
+				{
+					if(dis<=this.getAttackReachSqr(target))
+						this.attacker.attackEntityAsMob(target);
+					if(this.attackTicker==this.attacker.getStatus().getTime())
+						this.attackDelay = 64 + this.attacker.getRNG().nextInt(12);
+				}
+				break;
+			case KICK2:
+        		if(this.attacker.getNavigator().tryMoveToEntityLiving(target, 1) && this.moveDelay==0)
+        			this.moveDelay=40;
+				if(this.attackTicker==0 && this.moveDelay==1)
+				{
+					this.attackTicker=this.attacker.getStatus().getDuration();
+				}
+				if(this.attackTicker>0)
+			        this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
+				if(this.attackTicker!=0 && this.attackTicker % this.attacker.getStatus().getTime()==0)
+				{
+					List<EntityLivingBase> nearby = this.attacker.world.getEntitiesWithinAABB(EntityLivingBase.class, this.attacker.getEntityBoundingBox().grow(2), new Predicate<EntityLivingBase>() {
+						@Override
+						public boolean apply(EntityLivingBase input) {
+							if(!EntityAIAmbrosia.this.attacker.isTamed())
+							{
+								if(input instanceof EntityMobBase)
+									return ((EntityMobBase)input).isTamed();
+								return !IMob.VISIBLE_MOB_SELECTOR.apply(input);
+							}
+							return input instanceof EntityMobBase?!((EntityMobBase)input).isTamed():IMob.VISIBLE_MOB_SELECTOR.apply(input);
+						}});
+					for(EntityLivingBase e : nearby)
+						this.attacker.attackEntityAsMobWithElement(e, EnumElement.EARTH);
+					this.attacker.moveRelative(0, 0, 2, 0);
+					if(this.attackTicker==this.attacker.getStatus().getTime())
+						this.attackDelay = 64 + this.attacker.getRNG().nextInt(12);
+				}
+				break;
+			case SLEEP:			
+				if(this.moveDelay==0 && this.attackTicker==0)
+				{
+					this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.5);
+					this.moveDelay = 24 + this.attacker.getRNG().nextInt(7);
+				}
+				else if(this.attackTicker==0 && this.moveDelay==1)
+				{
+					this.attackTicker=this.attacker.getStatus().getDuration();
+				}
+				if(this.attackTicker>0)
+				{
+					this.attacker.getNavigator().clearPath();
+			        this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
+				}
+				if(this.attackTicker==this.attacker.getStatus().getTime())
+				{
+					this.attacker.summonSleepBalls();
+					this.attackDelay = 64 + this.attacker.getRNG().nextInt(12);
+				}
+				break;
+			case WAVE:				
+				if(this.moveDelay==0 && this.attackTicker==0)
+				{
+					this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.2);
+					this.moveDelay = 24 + this.attacker.getRNG().nextInt(7);
+				}
+				else if(this.moveDelay ==1 && this.attackTicker==0)
+				{
+					this.attackTicker=this.attacker.getStatus().getDuration();
+				}
+				if(this.attackTicker>0)
+				{
+					this.attacker.getNavigator().clearPath();
+			        this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
+				}
+				if(this.attackTicker==this.attacker.getStatus().getTime())
+				{
+					this.attacker.summonWave(this.attackTicker);
+					this.attackDelay = 64 + this.attacker.getRNG().nextInt(12);
+				}
+				break;
+        	}
 	}
 	
-	public void rangedAttack()
+	private BlockPos randomPosAwayFrom(EntityLivingBase away, float minDis)
 	{
-		EntityLivingBase target = this.attackingEntity.getAttackTarget();
-		boolean canSee = this.attackingEntity.getEntitySenses().canSee(target);
-        double distanceToTarget = this.attackingEntity.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
-        if (distanceToTarget <= rangeModifier && canSee)
-        {
-         	if(this.attackCoolDown == 0)
-         	{
-         		this.attackCoolDown = this.animationDuration;
-         		attackingEntity.attackTimerValue = animationDuration;
-         		attackingEntity.world.setEntityState(attackingEntity, (byte)4);
-         	}
-         	else
-             {
-         		attackCoolDown --;
-         		
-             	if(this.attackCoolDown == this.doAttackTime)
-             	{
-             		attackingEntity.doRangedAttack(target);
-             	}       		
-             }
-         }
-         else
- 		{
- 			this.attackCoolDown = 0;
- 		}
+		double angle = Math.random()*Math.PI*2;
+		double x = Math.cos(angle)*minDis;
+		double z = Math.sin(angle)*minDis;
+		float min=minDis*minDis;	
+		BlockPos pos = this.attacker.getPosition().add(x, 0, z);
+		if(away.getDistanceSq(pos)>min && (!this.attacker.hasHome() || this.attacker.getDistanceSq(pos)<this.attacker.getMaximumHomeDistance()*this.attacker.getMaximumHomeDistance()))
+			return pos;
+		return this.attacker.getPosition();
 	}
 	
-	//movement pattern
-	public void moveTowards()
+	private double getAttackReachSqr(EntityLivingBase attackTarget)
+    {
+        return (double)(this.attacker.width * 2.0F * this.attacker.width * 2.0F + attackTarget.width)*2.5;
+    }
+	
+	private AttackAI randomAIExcept(int valueOffSet)
 	{
-		EntityLivingBase target = this.attackingEntity.getAttackTarget();
-        this.attackingEntity.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
-        --this.moveDelay;
-
-        if ((this.attackingEntity.getEntitySenses().canSee(target)) && this.moveDelay <= 0 && (this.posX == 0.0D && this.posY == 0.0D && this.posZ == 0.0D || this.attackingEntity.getRNG().nextFloat() < 0.05F))
-        {
-            this.posX = target.posX;
-            this.posY = target.getEntityBoundingBox().minY;
-            this.posZ = target.posZ;
-            this.moveDelay = this.attackingEntity.getRNG().nextInt(5);
-
-            if (!this.attackingEntity.getNavigator().tryMoveToEntityLiving(target, this.speedTowardsTarget))
-            {
-                this.moveDelay += 15;
-            }
-        } 
-	}
-	public void strafe()
-	{
-		
-	}
-	public void standAtDistance()
-	{
-		
+		AttackAI ai = AttackAI.values()[this.attacker.getRNG().nextInt(AttackAI.values().length-valueOffSet)+1];
+		if(ai!=this.prevStatus)
+			return ai;
+		return randomAIExcept(valueOffSet);
 	}
 }

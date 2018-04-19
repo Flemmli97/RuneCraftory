@@ -9,9 +9,11 @@ import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
+import com.flemmli97.runecraftory.common.core.handler.CustomDamage.KnockBackType;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.network.PacketHandler;
+import com.flemmli97.runecraftory.common.core.network.PacketSwingArm;
 import com.flemmli97.runecraftory.common.core.network.PacketWeaponAnimation;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.LibReference;
@@ -19,10 +21,12 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -35,6 +39,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.ActionResult;
@@ -51,12 +56,39 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class GloveBase extends ItemSword implements IRpUseItem{
 
+	private int chargeXP=25;
+
 	public GloveBase(String name) {
 		super(ModItems.mat);
         this.setMaxStackSize(1);
         this.setCreativeTab(RuneCraftory.weaponToolTab);
         this.setRegistryName(new ResourceLocation(LibReference.MODID, name));	
         this.setUnlocalizedName(this.getRegistryName().toString());
+        this.addPropertyOverride(new ResourceLocation("held"), new IItemPropertyGetter() {
+
+			@Override
+			public float apply(ItemStack stack, World world, EntityLivingBase entity) {
+				if(entity!=null)
+				{
+					if(entity.getHeldItemMainhand()==stack)
+					{
+						if(entity instanceof EntityPlayer && entity.world.isRemote)
+						{
+							if(((AbstractClientPlayer)entity).getSkinType().equals("slim"))
+								return 2;
+						}
+						return 1;
+					}
+				}
+				return 0;
+			}});
+	}
+	
+	@Override
+	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+		if(entityLiving instanceof EntityPlayer && !entityLiving.world.isRemote)
+			PacketHandler.sendTo(new PacketSwingArm(), (EntityPlayerMP) entityLiving);
+		return true;
 	}
 	
 	@Override
@@ -127,6 +159,16 @@ public abstract class GloveBase extends ItemSword implements IRpUseItem{
 	}
 	
 	@Override
+	public void levelSkillOnHit(EntityPlayer player)
+	{
+		IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+		cap.increaseSkill(EnumSkills.FIST, player, 1);
+	}
+	
+	@Override
+	public void levelSkillOnBreak(EntityPlayer player){}
+	
+	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 72000;
 	}
@@ -158,13 +200,15 @@ public abstract class GloveBase extends ItemSword implements IRpUseItem{
 				player.setVelocity((double)(f2 - f1), 0, (double)(f2 + f1));
 				if(!entityList.isEmpty())
 				{
+					cap.decreaseRunePoints(player, 15);
+					cap.increaseSkill(EnumSkills.FIST, player, this.chargeXP);
 			    		for (EntityLivingBase e: entityList)
 			    		{
 			    			float damagePhys = cap.getStr();
 			    			damagePhys+= RFCalculations.getAttributeValue(player, ItemStats.RFATTACK, null, null);
 			    			if(!(e instanceof IEntityBase))
-			    				damagePhys=RFCalculations.scaleForVanilla(damagePhys);
-	            			e.attackEntityFrom(CustomDamage.doAttack(player, EnumElement.fromName(stack.getTagCompound().getString("Element")), 0), damagePhys);
+			    				damagePhys=LevelCalc.scaleForVanilla(damagePhys);
+	            			e.attackEntityFrom(CustomDamage.attack(player, EnumElement.fromName(stack.getTagCompound().getString("Element")), CustomDamage.DamageType.NORMAL, KnockBackType.BACK, 0, 20), damagePhys);
 	            			player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
 			    		}
 				}
@@ -175,7 +219,9 @@ public abstract class GloveBase extends ItemSword implements IRpUseItem{
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
-		if(handIn == EnumHand.MAIN_HAND)
+        IPlayer cap = playerIn.getCapability(PlayerCapProvider.PlayerCap, null);
+
+		if(handIn == EnumHand.MAIN_HAND && (cap.getSkillLevel(EnumSkills.FIST)[0]>=5 || playerIn.capabilities.isCreativeMode))
 		{
 	        playerIn.setActiveHand(handIn);
 	        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);

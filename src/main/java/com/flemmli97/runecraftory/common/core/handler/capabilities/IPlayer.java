@@ -28,7 +28,7 @@ public interface IPlayer{
 	
 	public int getMaxRunePoints();
 	
-	public void decreaseRunePoints(EntityPlayer player, int amount);
+	public boolean decreaseRunePoints(EntityPlayer player, int amount);
 	
 	public void refreshRunePoints(EntityPlayer player);
 
@@ -50,17 +50,17 @@ public interface IPlayer{
 	
 	//=====Player stats
 	
-	public int getStr();
+	public float getStr();
 	
-	public void setStr(EntityPlayer player, int amount);
+	public void setStr(EntityPlayer player, float amount);
 	
-	public int getVit();
+	public float getVit();
 	
-	public void setVit(EntityPlayer player, int amount);
+	public void setVit(EntityPlayer player, float amount);
 	
-	public int getIntel();
+	public float getIntel();
 	
-	public void setIntel(EntityPlayer player, int amount);
+	public void setIntel(EntityPlayer player, float amount);
 	
 	//=====Skills
 	

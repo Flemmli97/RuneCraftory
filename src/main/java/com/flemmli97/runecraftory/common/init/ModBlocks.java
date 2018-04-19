@@ -5,9 +5,11 @@ import com.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
 import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
 import com.flemmli97.runecraftory.common.blocks.BlockCookingBench;
 import com.flemmli97.runecraftory.common.blocks.BlockForge;
+import com.flemmli97.runecraftory.common.blocks.BlockIgnore;
 import com.flemmli97.runecraftory.common.blocks.BlockMineral;
 import com.flemmli97.runecraftory.common.blocks.BlockPharmacy;
 import com.flemmli97.runecraftory.common.blocks.BlockRFFarmland;
+import com.flemmli97.runecraftory.common.blocks.BlockResearchTable;
 import com.flemmli97.runecraftory.common.blocks.BlockTileTest;
 import com.flemmli97.runecraftory.common.blocks.tile.TileAccessory;
 import com.flemmli97.runecraftory.common.blocks.tile.TileBossSpawner;
@@ -15,6 +17,7 @@ import com.flemmli97.runecraftory.common.blocks.tile.TileBrokenOre;
 import com.flemmli97.runecraftory.common.blocks.tile.TileChem;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCooking;
 import com.flemmli97.runecraftory.common.blocks.tile.TileForge;
+import com.flemmli97.runecraftory.common.blocks.tile.TileResearchTable;
 import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockWithMeta;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
@@ -41,6 +44,8 @@ public class ModBlocks {
 	public static Block brokenMineral = new BlockBrokenMineral();
 	public static Block bossSpawner = new BlockBossSpawner();
 	public static Block test = new BlockTileTest();
+	public static Block research = new BlockResearchTable();
+	public static Block ignore = new BlockIgnore();
 
 	@SubscribeEvent
 	public static final void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -53,32 +58,36 @@ public class ModBlocks {
 	    event.getRegistry().register(brokenMineral);
 	    event.getRegistry().register(bossSpawner);
 	    event.getRegistry().register(test);
+	    event.getRegistry().register(research);
+	    event.getRegistry().register(ignore);
   		GameRegistry.registerTileEntity(TileBrokenOre.class, "tile_broken_ore");
   		GameRegistry.registerTileEntity(TileBossSpawner.class, "tile_boss_spawner");
   		GameRegistry.registerTileEntity(TileForge.class, "tile_forge");
   		GameRegistry.registerTileEntity(TileAccessory.class, "tile_access");
   		GameRegistry.registerTileEntity(TileChem.class, "tile_chemitry");
   		GameRegistry.registerTileEntity(TileCooking.class, "tile_cooking");
-
+  		GameRegistry.registerTileEntity(TileResearchTable.class, "tile_research");
 	}
 	
 	@SubscribeEvent
-    public static void registerItemBlocks(final RegistryEvent.Register<Item> event) {
+    public static final void registerItemBlocks(final RegistryEvent.Register<Item> event) {
 	    event.getRegistry().register(fromBlock(farmland));
 	    event.getRegistry().register(fromBlock(bossSpawner));
 	    event.getRegistry().register(fromBlockMeta(mineral));
 	    event.getRegistry().register(fromBlockMeta(brokenMineral));
 	    event.getRegistry().register(fromBlock(test));
+	    event.getRegistry().register(fromBlock(research));
+	    event.getRegistry().register(fromBlock(ignore));
 	}
 	
-	private static ItemBlock fromBlock(Block block)
+	private static final ItemBlock fromBlock(Block block)
 	{
 		ItemBlock item = new ItemBlock(block);
 		item.setRegistryName(block.getRegistryName());
 		return item;
 	}
 	
-	private static ItemBlock fromBlockMeta(Block block)
+	private static final ItemBlock fromBlockMeta(Block block)
 	{
 		ItemBlockWithMeta item = new ItemBlockWithMeta(block);
 		item.setRegistryName(block.getRegistryName());
@@ -87,11 +96,13 @@ public class ModBlocks {
 	
 	@SubscribeEvent
 	@SideOnly(value = Side.CLIENT)
-	public static void initModel(ModelRegistryEvent event)
+	public static final void initModel(ModelRegistryEvent event)
 	{
 		((BlockRFFarmland) farmland).initModel();
 		((BlockBossSpawner) bossSpawner).initModel();
 		((BlockMineral) mineral).initModel();
 		((BlockBrokenMineral) brokenMineral).initModel();
+		((BlockResearchTable) research).initModel();
+		((BlockIgnore) ignore).initModel();
 	}
 }

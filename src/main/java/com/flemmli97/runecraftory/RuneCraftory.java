@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.flemmli97.runecraftory.common.commands.CommandStructure;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.proxy.CommonProxy;
@@ -16,6 +17,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 @Mod(modid = RuneCraftory.MODID, name = RuneCraftory.MODNAME, version = RuneCraftory.VERSION)
 public class RuneCraftory {
@@ -47,11 +49,25 @@ public class RuneCraftory {
         proxy.postInit(e);
     }
     
+    @EventHandler
+    public void serverLoad(FMLServerStartingEvent event)
+    {
+    	event.registerServerCommand(new CommandStructure());
+    }
+    
 	public static CreativeTabs weaponToolTab = new CreativeTabs("runecraftory.weaponsTools") {
 
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(ModItems.icon,1,0);
+		}
+	};
+	
+	public static CreativeTabs equipment = new CreativeTabs("runecraftory.equipment") {
+
+		@Override
+		public ItemStack getTabIconItem() {
+			return new ItemStack(ModItems.cheapBracelet,1,6);
 		}
 	};
 	
@@ -67,7 +83,7 @@ public class RuneCraftory {
 
 		@Override
 		public ItemStack getTabIconItem() {
-			return new ItemStack(ModItems.icon,1,2);
+			return new ItemStack(ModItems.itemBlockForge);
 		}
 	};
 	
@@ -75,7 +91,7 @@ public class RuneCraftory {
 
 		@Override
 		public ItemStack getTabIconItem() {
-			return new ItemStack(ModItems.icon,1,3);
+			return new ItemStack(ModItems.icon,1,2);
 		}
 	};
 	
@@ -83,7 +99,7 @@ public class RuneCraftory {
 
 		@Override
 		public ItemStack getTabIconItem() {
-			return new ItemStack(ModItems.icon,1,4);
+			return new ItemStack(ModItems.icon,1,3);
 		}
 	};
 	
@@ -91,7 +107,7 @@ public class RuneCraftory {
 
 		@Override
 		public ItemStack getTabIconItem() {
-			return new ItemStack(ModItems.icon,1,5);
+			return new ItemStack(ModItems.icon,1,4);
 		}
 	};
 }

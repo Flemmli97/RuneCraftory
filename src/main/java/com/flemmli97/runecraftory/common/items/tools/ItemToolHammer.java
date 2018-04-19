@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
+import com.flemmli97.runecraftory.common.blocks.BlockMineral;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
@@ -57,7 +58,7 @@ public class ItemToolHammer extends ItemPickaxe implements IRpUseItem{
 	private EnumToolTier tier;
 	
 	private int[] chargeRunes = new int[] {1, 5, 15, 50, 100};
-	private int[] levelXP = new int[] {5, 20, 50, 200, 500};
+	private int[] levelXP = new int[] {5, 20, 50, 100, 200};
 	public ItemToolHammer(EnumToolTier tier) {
 		super(ModItems.mat);
         this.setMaxStackSize(1);
@@ -231,6 +232,20 @@ public class ItemToolHammer extends ItemPickaxe implements IRpUseItem{
 	}
 	
 	@Override
+	public void levelSkillOnHit(EntityPlayer player)
+	{
+		IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+		cap.increaseSkill(EnumSkills.HAMMERAXE, player, 1);
+	}
+	
+	@Override
+	public void levelSkillOnBreak(EntityPlayer player)
+	{
+		IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+		cap.increaseSkill(EnumSkills.MINING, player, this.tier.getTierLevel()+1);
+	}
+	
+	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 72000;
 	}
@@ -250,6 +265,7 @@ public class ItemToolHammer extends ItemPickaxe implements IRpUseItem{
 			EntityPlayer player = (EntityPlayer) entityLiving;
 			int range = Math.min(useTimeMulti, this.tier.getTierLevel());
 			boolean flag = false;
+			IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
 			for(int x = -range; x <= range;x ++)
 				for(int y=-1;y<=1;y++)
 					for(int z = -range; z<= range;z++)
@@ -266,22 +282,20 @@ public class ItemToolHammer extends ItemPickaxe implements IRpUseItem{
 								world.setBlockState(posNew, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT), 11);
 								flag=true;
 							}
-							else if(block==ModBlocks.mineral)
+							else if(block instanceof BlockMineral)
 							{
 								for(int j = 0;j<4;j++)
 									world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, posNew.getX()+0.5, posNew.getY()+1.3, posNew.getZ()+0.5, 0, (double)0.1, 0, Block.getStateId(Blocks.DIRT.getDefaultState()));
 								block.removedByPlayer(iblockstate, world, posNew, player, true);
-								flag=true;
+								capSync.increaseSkill(EnumSkills.MINING, player, 1+this.tier.getTierLevel());
 							}
 						}
 					}
 			if(flag)
 			{
 				player.setPosition(player.posX, player.posY+0.2, player.posZ);
-				IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
 				capSync.decreaseRunePoints(player, this.chargeRunes[range]);
 				capSync.increaseSkill(EnumSkills.EARTH, player, this.levelXP[range]);
-				capSync.increaseSkill(EnumSkills.MINING, player, this.levelXP[range]);
 			}
 		}
     }

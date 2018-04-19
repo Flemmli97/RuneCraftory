@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory.common.blocks;
 import java.util.Random;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.common.blocks.tile.TileMultiBase;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
 import net.minecraft.block.Block;
@@ -15,6 +16,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -41,7 +43,8 @@ public abstract class BlockMultiBase extends BlockContainer{
 	}
 	
 	public abstract Item drop();
-	
+	public abstract boolean hasUpgrade();
+
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
     {
@@ -78,7 +81,7 @@ public abstract class BlockMultiBase extends BlockContainer{
         			newPos=newPos.offset(state.getValue(FACING).rotateY());
         		if(!player.isSneaking())
         			player.openGui(RuneCraftory.instance, LibReference.guiMaking, world, newPos.getX(), newPos.getY(), newPos.getZ());
-        		else
+        		else if(this.hasUpgrade())
         			player.openGui(RuneCraftory.instance, LibReference.guiUpgrade, world, newPos.getX(), newPos.getY(), newPos.getZ());
             return true;
         }
@@ -123,10 +126,18 @@ public abstract class BlockMultiBase extends BlockContainer{
         }
     }
 	@Override
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-    {
-        super.breakBlock(worldIn, pos, state);
-    }
+	public void breakBlock(World world, BlockPos pos, IBlockState blockstate) {
+	    TileMultiBase te = (TileMultiBase) world.getTileEntity(pos);
+	    if(te!=null)
+	    {
+	    	for(int x=0;x<te.getSizeInventory();x++)
+		    {
+	    		EntityItem item = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), te.getStackInSlot(x));
+			    world.spawnEntity(item);
+		    }
+	    }
+	    super.breakBlock(world, pos, blockstate);
+	}
 	@Override
     public IBlockState getStateFromMeta(int meta)
     {
@@ -163,6 +174,12 @@ public abstract class BlockMultiBase extends BlockContainer{
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.CUTOUT;
+    }
+	
+	@Override
+    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
+    {
+        return new ItemStack(this.drop(), 1);
     }
 
 	public static enum EnumPartType implements IStringSerializable

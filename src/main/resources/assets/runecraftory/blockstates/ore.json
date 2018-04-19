@@ -1,0 +1,14 @@
+{
+    "variants": {
+        "tier=basic": { "model": "runecraftory:basic" },
+        "tier=uncommon": { "model": "runecraftory:uncommon"},
+        "tier=rare": { "model": "runecraftory:rare"},
+        "tier=urare": { "model": "runecraftory:urare"},
+        "tier=dragonic": { "model": "runecraftory:dragonic" },
+        "tier=fire": { "model": "runecraftory:fire"},
+        "tier=water": { "model": "runecraftory:water"},
+        "tier=earth": { "model": "runecraftory:earth"},
+        "tier=wind": { "model": "runecraftory:wind"}
+
+    }
+}

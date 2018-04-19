@@ -29,10 +29,19 @@ public class ContainerUpgrade extends Container{
 			public boolean isItemValid(ItemStack stack) {
 				return tileInventory.isItemValidForSlot(7, stack);
 			}
+			@Override
+			public int getSlotStackLimit() {
+				return 1;
+			}
         });
     }
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
 		return true;
 	}	
+	@Override
+	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        return itemstack;
+	}
 }

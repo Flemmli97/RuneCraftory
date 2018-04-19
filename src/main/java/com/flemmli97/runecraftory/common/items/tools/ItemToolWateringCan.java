@@ -46,6 +46,8 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -211,6 +213,18 @@ public class ItemToolWateringCan extends ItemTool implements IRpUseItem{
 	}
 	
 	@Override
+	public void levelSkillOnHit(EntityPlayer player)
+	{
+		
+	}
+	
+	@Override
+	public void levelSkillOnBreak(EntityPlayer player)
+	{
+
+	}
+	
+	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 72000;
 	}
@@ -231,25 +245,35 @@ public class ItemToolWateringCan extends ItemTool implements IRpUseItem{
 			int range = Math.min(useTimeMulti, this.tier.getTierLevel());
 			BlockPos pos = player.getPosition().down();
 			boolean flag = false;
-			for(int x = -range; x <= range;x ++)
+			if(range==0)
 			{
-				for(int z = -range; z<= range;z++)
+				RayTraceResult result = this.rayTrace(worldIn, player, false);
+				if(result!=null && result.typeOfHit==Type.BLOCK)
 				{
-					BlockPos posNew = pos.add(x, 0, z);
-					if (player.canPlayerEdit(posNew.offset(EnumFacing.UP), EnumFacing.DOWN, itemstack))
+					this.useOnBlock(player, worldIn, result.getBlockPos(), EnumHand.MAIN_HAND, result.sideHit, (float)result.hitVec.x, (float)result.hitVec.y, (float)result.hitVec.z);
+					return;
+				}
+			}
+			else
+				for(int x = -range; x <= range;x ++)
+				{
+					for(int z = -range; z<= range;z++)
 					{
-						IBlockState iblockstate = worldIn.getBlockState(posNew);
-						Block block = iblockstate.getBlock();
-						if (block == ModBlocks.farmland)
+						BlockPos posNew = pos.add(x, 0, z);
+						if (player.canPlayerEdit(posNew.offset(EnumFacing.UP), EnumFacing.DOWN, itemstack))
 						{
-							for(int j = 0;j<4;j++)
-							worldIn.spawnParticle(EnumParticleTypes.WATER_WAKE, true, posNew.getX()+0.5, posNew.getY()+1.3, posNew.getZ()+0.5, 0, (double)0.01, 0);
-			                	worldIn.setBlockState(posNew, ModBlocks.farmland.getDefaultState().withProperty(BlockFarmland.MOISTURE, Integer.valueOf(7)), 2);
-			                flag=true;
+							IBlockState iblockstate = worldIn.getBlockState(posNew);
+							Block block = iblockstate.getBlock();
+							if (block == ModBlocks.farmland)
+							{
+								for(int j = 0;j<4;j++)
+								worldIn.spawnParticle(EnumParticleTypes.WATER_WAKE, true, posNew.getX()+0.5, posNew.getY()+1.3, posNew.getZ()+0.5, 0, (double)0.01, 0);
+				                	worldIn.setBlockState(posNew, ModBlocks.farmland.getDefaultState().withProperty(BlockFarmland.MOISTURE, Integer.valueOf(7)), 2);
+				                flag=true;
+							}
 						}
 					}
 				}
-			}
 			if(flag)
 			{
 				IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
@@ -277,49 +301,55 @@ public class ItemToolWateringCan extends ItemTool implements IRpUseItem{
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(this.tier.getTierLevel()==0)
 		{
-			EnumActionResult result = EnumActionResult.FAIL;
-			boolean flag = false;
-			if (player.canPlayerEdit(pos.offset(EnumFacing.UP), EnumFacing.DOWN, player.getHeldItem(hand)))
+			return this.useOnBlock(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+		}
+		else
+			return EnumActionResult.FAIL;
+	}
+	
+	private EnumActionResult useOnBlock(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+			EnumFacing facing, float hitX, float hitY, float hitZ)
+	{
+		EnumActionResult result = EnumActionResult.FAIL;
+		boolean flag = false;
+		if (player.canPlayerEdit(pos.offset(EnumFacing.UP), EnumFacing.DOWN, player.getHeldItem(hand)))
+		{
+			IBlockState iblockstate = worldIn.getBlockState(pos);
+			Block block = iblockstate.getBlock();
+			if (block == ModBlocks.farmland)
 			{
-				IBlockState iblockstate = worldIn.getBlockState(pos);
+				for(int j = 0;j<4;j++)
+				worldIn.spawnParticle(EnumParticleTypes.WATER_WAKE, true, pos.getX()+0.5, pos.getY()+1.3, pos.getZ()+0.5, 0, (double)0.01, 0);
+                worldIn.setBlockState(pos, ModBlocks.farmland.getDefaultState().withProperty(BlockFarmland.MOISTURE, Integer.valueOf(7)), 3);
+                flag=true;
+                result=EnumActionResult.SUCCESS;
+			}
+		}
+		if(!flag)
+		{
+			BlockPos newPos = pos.down();
+			if (player.canPlayerEdit(newPos.offset(EnumFacing.UP), EnumFacing.DOWN, player.getHeldItem(hand)))
+			{
+				IBlockState iblockstate = worldIn.getBlockState(newPos);
 				Block block = iblockstate.getBlock();
 				if (block == ModBlocks.farmland)
 				{
 					for(int j = 0;j<4;j++)
-					worldIn.spawnParticle(EnumParticleTypes.WATER_WAKE, true, pos.getX()+0.5, pos.getY()+1.3, pos.getZ()+0.5, 0, (double)0.01, 0);
-	                worldIn.setBlockState(pos, ModBlocks.farmland.getDefaultState().withProperty(BlockFarmland.MOISTURE, Integer.valueOf(7)), 3);
-	                flag=true;
-	                result=EnumActionResult.SUCCESS;
+					worldIn.spawnParticle(EnumParticleTypes.WATER_WAKE, true, pos.getX()+0.5, pos.getY()+1.2, pos.getZ()+0.5, 0, (double)0.01, 0);
+	                	worldIn.setBlockState(newPos, ModBlocks.farmland.getDefaultState().withProperty(BlockFarmland.MOISTURE, Integer.valueOf(7)), 2);
+	                	flag=true;
+	                	result=EnumActionResult.SUCCESS;
 				}
 			}
-			if(!flag)
-			{
-				BlockPos newPos = pos.down();
-				if (player.canPlayerEdit(newPos.offset(EnumFacing.UP), EnumFacing.DOWN, player.getHeldItem(hand)))
-				{
-					IBlockState iblockstate = worldIn.getBlockState(newPos);
-					Block block = iblockstate.getBlock();
-					if (block == ModBlocks.farmland)
-					{
-						for(int j = 0;j<4;j++)
-						worldIn.spawnParticle(EnumParticleTypes.WATER_WAKE, true, pos.getX()+0.5, pos.getY()+1.2, pos.getZ()+0.5, 0, (double)0.01, 0);
-		                	worldIn.setBlockState(newPos, ModBlocks.farmland.getDefaultState().withProperty(BlockFarmland.MOISTURE, Integer.valueOf(7)), 2);
-		                	flag=true;
-		                	result=EnumActionResult.SUCCESS;
-					}
-				}
-			}
-			if(result == EnumActionResult.SUCCESS)
-			{
-				IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
-				capSync.decreaseRunePoints(player, 1);
-				capSync.increaseSkill(EnumSkills.WATER, player, 1);
-				capSync.increaseSkill(EnumSkills.FARMING, player, 1);
-			}
-			return result;
 		}
-		else
-			return EnumActionResult.FAIL;
+		if(result == EnumActionResult.SUCCESS)
+		{
+			IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
+			capSync.decreaseRunePoints(player, 1);
+			capSync.increaseSkill(EnumSkills.WATER, player, 1);
+			capSync.increaseSkill(EnumSkills.FARMING, player, 1);
+		}
+		return result;
 	}
 
 	@Override

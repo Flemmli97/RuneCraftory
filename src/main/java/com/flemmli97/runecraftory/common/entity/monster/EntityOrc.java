@@ -6,8 +6,6 @@ import java.util.Map;
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.init.ModItems;
-import com.flemmli97.runecraftory.common.lib.CalculationConstants;
-import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.ItemStack;
@@ -16,25 +14,23 @@ import net.minecraft.world.World;
 public class EntityOrc extends EntityMobBase{
 
 	private Map<ItemStack, Float>	drops = new HashMap<ItemStack, Float>();
-	public EntityOrc(World world) {
-		this(world, CalculationConstants.baseLevel);
-	}
 	
-	public EntityOrc(World world, int level)
+	public EntityOrc(World world)
 	{
-		super(world, level, true, 5, 1, false);
-		this.drops.put(new ItemStack(ModItems.liquids, 1,0), 0.5F);
+		super(world, true, 5, 1, false);
 		this.drops.put(new ItemStack(ModItems.cloth, 1,0), 0.5F);
+		this.drops.put(new ItemStack(ModItems.sticks, 1,0), 0.5F);
+		this.drops.put(new ItemStack(ModItems.cheapBracelet), 0.3F);
 	}
 	
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(14*CalculationConstants.DAMAGESCALE);;
-        this.getAttributeMap().getAttributeInstance(ItemStats.RFATTACK).setBaseValue(10.5);
-        this.getAttributeMap().getAttributeInstance(ItemStats.RFDEFENCE).setBaseValue(6.5);
-        this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICATT).setBaseValue(4.0);
-        this.getAttributeMap().getAttributeInstance(ItemStats.RFMAGICDEF).setBaseValue(5.0);
+		this.initiateBaseAttributes(SharedMonsterAttributes.MAX_HEALTH,145);;
+		this.initiateBaseAttributes(ItemStats.RFATTACK,15.5);
+		this.initiateBaseAttributes(ItemStats.RFDEFENCE,10.2);
+		this.initiateBaseAttributes(ItemStats.RFMAGICATT,11.0);
+		this.initiateBaseAttributes(ItemStats.RFMAGICDEF,10.8);
 	}
 
 	@Override
@@ -52,13 +48,30 @@ public class EntityOrc extends EntityMobBase{
 		return this.drops;
 	}
 
-	@Override
+	/*@Override
 	public EnumElement entityElement() {
 		return EnumElement.NONE;
-	}
+	}*/
 
 	@Override
 	public float attackChance() {
-		return 90;
+		return 0.8F;
+	}
+	@Override
+	public int getAttackTimeFromPattern(byte pattern) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int attackFromPattern() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int maxAttackPatterns() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

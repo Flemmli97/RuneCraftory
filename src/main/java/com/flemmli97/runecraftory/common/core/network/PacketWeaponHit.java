@@ -34,6 +34,7 @@ public class PacketWeaponHit  implements IMessage{
 			if(stack.getItem() instanceof IRpUseItem)
 			{
 				IRpUseItem item = (IRpUseItem) stack.getItem();
+				item.levelSkillOnHit(player);
 		    		List<EntityLivingBase> entityList = RFCalculations.calculateEntitiesFromLook(player, item.getWeaponType().getRange(), item.getWeaponType().getAOE());
 				if(!entityList.isEmpty())
 			    		for (EntityLivingBase e: entityList)

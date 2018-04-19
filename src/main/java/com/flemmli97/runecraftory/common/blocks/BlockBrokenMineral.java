@@ -19,16 +19,21 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -42,16 +47,36 @@ public class BlockBrokenMineral extends Block implements ITileEntityProvider{
 		super(Material.ROCK);
 		this.setCreativeTab(RuneCraftory.blocks);
         this.blockSoundType = SoundType.STONE;
-        this.setResistance(5.0F);
-        this.setHardness(3.0F);
+        this.setResistance(15.0F);
+        this.setHardness(50.0F);
         this.setRegistryName(new ResourceLocation(LibReference.MODID, "broken_ore"));
 		this.setUnlocalizedName(this.getRegistryName().toString());
 		this.setTickRandomly(true);
 	}
 	
+	private AxisAlignedBB box = new AxisAlignedBB(0,0,0,1,0.125,1);
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return box;
+	}
+	
+	@Override
+    public boolean isFullCube(IBlockState state)
+    {
+        return false;
+    }
+	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Items.AIR;
+    }
+	
+	@Override
+	public boolean canEntityDestroy(IBlockState state, IBlockAccess world, BlockPos pos, Entity entity)
+    {
+		if(state.getProperties().get(TIER)==EnumTier.DRAGONIC && entity instanceof EntityDragon)
+			return false;
+		return super.canEntityDestroy(state, world, pos, entity);
     }
 	
 	@Override
@@ -86,7 +111,7 @@ public class BlockBrokenMineral extends Block implements ITileEntityProvider{
 	@Override
     public int getMetaFromState(IBlockState state)
     {
-    		return state.getValue(TIER).getMeta();
+    	return state.getValue(TIER).getMeta();
     }
 	
 	@Override
@@ -99,13 +124,26 @@ public class BlockBrokenMineral extends Block implements ITileEntityProvider{
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer()
+    {
+        return BlockRenderLayer.CUTOUT;
+    }
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+	
+	@Override
 	public int damageDropped(IBlockState state) {
 		return this.getMetaFromState(state);
 	}
 	
 	@SideOnly(Side.CLIENT)
     public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
+		for(EnumTier tier : EnumTier.values())
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), tier.getMeta(), new ModelResourceLocation(this.getRegistryName(), "inventory"));
     }
 
 	@Override

@@ -213,6 +213,31 @@ public class ItemToolSickle extends ItemTool implements IRpUseItem{
 	}
 	
 	@Override
+	public boolean onBlockDestroyed(ItemStack stack, World world, IBlockState state, BlockPos pos, EntityLivingBase entityLiving)
+    {
+		if(!world.isRemote && entityLiving instanceof EntityPlayer && this.getDestroySpeed(stack, state)==this.efficiency)
+		{
+			this.levelSkillOnBreak((EntityPlayer) entityLiving);
+		}
+		return super.onBlockDestroyed(stack, world, state, pos, entityLiving);
+    }
+	
+	@Override
+	public void levelSkillOnHit(EntityPlayer player)
+	{
+		
+	}
+	
+	@Override
+	public void levelSkillOnBreak(EntityPlayer player)
+	{
+		IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+		cap.decreaseRunePoints(player, this.chargeRunes[0]);
+		cap.increaseSkill(EnumSkills.WIND, player, this.tier.getTierLevel()+1);
+		cap.increaseSkill(EnumSkills.FARMING, player, this.tier.getTierLevel()+1);
+	}
+	
+	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 72000;
 	}

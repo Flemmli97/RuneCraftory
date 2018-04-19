@@ -6,10 +6,11 @@ import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.network.PacketHandler;
-import com.flemmli97.runecraftory.common.core.network.PacketOpenGui;
+import com.flemmli97.runecraftory.common.core.network.PacketOpenGuiContainer;
 import com.flemmli97.runecraftory.common.inventory.ContainerInfoScreenSub;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 
 import net.minecraft.client.Minecraft;
@@ -71,34 +72,21 @@ public class GuiInfoScreenSub extends InventoryEffectRenderer {
 		this.drawTexturedModalRect(this.guiX, this.guiY, 15, 15, texX, texY);
 		int healthWidth = (int) (cap.getHealth()/cap.getMaxHealth()*100);
 		int runeWidth=(int) (cap.getRunePoints()/(float)cap.getMaxRunePoints()*100);
-		int exp = (int) (cap.getPlayerLevel()[1]/(float)RFCalculations.xpAmountForLevelUp(cap.getPlayerLevel()[0])*100);
+		int exp = (int) (cap.getPlayerLevel()[1]/(float)LevelCalc.xpAmountForLevelUp(cap.getPlayerLevel()[0])*100);
 		this.mc.getTextureManager().bindTexture(bars);
 		this.drawTexturedModalRect(this.guiX+118, this.guiY+23,2, 51, healthWidth, 6);
 		this.drawTexturedModalRect(this.guiX+118, this.guiY+33, 2, 58, runeWidth, 6);
 		this.drawTexturedModalRect(this.guiX+118, this.guiY+44, 2, 66, exp, 12);
-
-		this.drawCenteredScaledString((int)cap.getHealth() + "/" + (int) cap.getMaxHealth(),this.guiX+173, this.guiY+23.5F,0.7F, 0xffffff);
-		this.drawCenteredScaledString((int)cap.getRunePoints() + "/" + (int) cap.getMaxRunePoints(),this.guiX+173, this.guiY+34,0.7F, 0xffffff);
-		this.mc.fontRenderer.drawString("Level",this.guiX+120, this.guiY+46, 0);
-		this.mc.fontRenderer.drawString("Att.",this.guiX+120, this.guiY+63, 0);
-		this.mc.fontRenderer.drawString("Def.",this.guiX+120, this.guiY+75, 0);
-		this.mc.fontRenderer.drawString("M.Att.",this.guiX+120, this.guiY+87, 0);
-		this.mc.fontRenderer.drawString("M.Def.",this.guiX+120, this.guiY+99, 0);
-		this.drawRightAlignedScaledString(""+cap.getMoney(), this.guiX+197, this.guiY+11, 0.6F, 0);
-		this.drawRightAlignedScaledString(""+cap.getPlayerLevel()[0], this.guiX+216, this.guiY+46, 1, 0);
-		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getStr() + RFCalculations.getAttributeValue(mc.player, ItemStats.RFATTACK, null, null)), this.guiX+216, this.guiY+64, 1, 0);
-		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getVit()*0.5F + RFCalculations.getAttributeValue(mc.player, ItemStats.RFDEFENCE, null, null)), this.guiX+216, this.guiY+75, 1, 0);
-		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getIntel() + RFCalculations.getAttributeValue(mc.player, ItemStats.RFMAGICATT, null, null)), this.guiX+216, this.guiY+87, 1, 0);
-		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getVit()*0.5F + RFCalculations.getAttributeValue(mc.player, ItemStats.RFMAGICDEF, null, null)), this.guiX+216, this.guiY+99, 1, 0);
 		if(this.page==2)
 		{
 			for(int i =0; i <5; i++)
 			{
 				EnumSkills skill = EnumSkills.values()[i+27];
+				int skillXP = (int) (cap.getSkillLevel(skill)[1]/(float)LevelCalc.xpAmountForSkills(cap.getSkillLevel(skill)[0])*96);
+				this.mc.getTextureManager().bindTexture(bars);
+				this.drawTexturedModalRect(this.guiX+10, this.guiY+125+13*i, 2, 80, skillXP, 9);
 				this.mc.fontRenderer.drawString(skill.getIdentifier(),this.guiX+11, this.guiY+126+13*i, 0xffffff);
 				this.drawRightAlignedScaledString(""+cap.getSkillLevel(skill)[0], this.guiX+105, this.guiY+126+13*i, 1, 0xffffff);
-				int skillXP = (int) (cap.getSkillLevel(skill)[1]/(float)RFCalculations.xpAmountForSkills(cap.getSkillLevel(skill)[0])*96);
-				this.drawTexturedModalRect(this.guiX+11, this.guiY+126+13*i, 2, 66, skillXP, 12);
 			}
 		}
 		else
@@ -106,20 +94,35 @@ public class GuiInfoScreenSub extends InventoryEffectRenderer {
 			for(int i =0; i <7; i++)
 			{
 				EnumSkills skill = EnumSkills.values()[i+this.page*14];
+				int skillXP = (int) (cap.getSkillLevel(skill)[1]/(float)LevelCalc.xpAmountForSkills(cap.getSkillLevel(skill)[0])*96);
+				this.mc.getTextureManager().bindTexture(bars);
+				this.drawTexturedModalRect(this.guiX+10, this.guiY+125+13*i, 2, 80, skillXP, 9);
 				this.mc.fontRenderer.drawString(skill.getIdentifier(),this.guiX+11, this.guiY+126+13*i, 0xffffff);
 				this.drawRightAlignedScaledString(""+cap.getSkillLevel(skill)[0], this.guiX+105, this.guiY+126+13*i, 1, 0xffffff);
-				int skillXP = (int) (cap.getSkillLevel(skill)[1]/(float)RFCalculations.xpAmountForSkills(cap.getSkillLevel(skill)[0])*96);
-				this.drawTexturedModalRect(this.guiX+11, this.guiY+126+13*i, 2, 66, skillXP, 12);
 			}
 			for(int i =0; i <7; i++)
 			{
 				EnumSkills skill = EnumSkills.values()[i+7+this.page*14];
+				int skillXP = (int) (cap.getSkillLevel(skill)[1]/(float)LevelCalc.xpAmountForSkills(cap.getSkillLevel(skill)[0])*96);
+				this.mc.getTextureManager().bindTexture(bars);
+				this.drawTexturedModalRect(this.guiX+120, this.guiY+125+13*i, 2, 80, skillXP, 9);
 				this.mc.fontRenderer.drawString(skill.getIdentifier(),this.guiX+121, this.guiY+126+13*i, 0xffffff);
 				this.drawRightAlignedScaledString(""+cap.getSkillLevel(skill)[0], this.guiX+215, this.guiY+126+13*i, 1, 0xffffff);
-				int skillXP = (int) (cap.getSkillLevel(skill)[1]/(float)RFCalculations.xpAmountForSkills(cap.getSkillLevel(skill)[0])*96);
-				this.drawTexturedModalRect(this.guiX+121, this.guiY+126+13*i, 2, 66, skillXP, 12);
 			}
 		}
+		this.drawCenteredScaledString((int)cap.getHealth() + "/" + (int) cap.getMaxHealth(),this.guiX+173, this.guiY+23.5F,0.7F, 0xffffff);
+		this.drawCenteredScaledString((int)cap.getRunePoints() + "/" + (int) cap.getMaxRunePoints(),this.guiX+173, this.guiY+34,0.7F, 0xffffff);
+		this.mc.fontRenderer.drawString("Level",this.guiX+120, this.guiY+46, 0);
+		this.mc.fontRenderer.drawString("Att.",this.guiX+120, this.guiY+63, 0);
+		this.mc.fontRenderer.drawString("Def.",this.guiX+120, this.guiY+75, 0);
+		this.mc.fontRenderer.drawString("M.Att.",this.guiX+120, this.guiY+87, 0);
+		this.mc.fontRenderer.drawString("M.Def.",this.guiX+120, this.guiY+99, 0);
+		this.drawRightAlignedScaledString(""+cap.getMoney(), this.guiX+194-(mc.fontRenderer.getStringWidth(""+cap.getMoney())==6?3:0), this.guiY+11, 0.6F, 0);
+		this.drawRightAlignedScaledString(""+cap.getPlayerLevel()[0], this.guiX+216, this.guiY+46, 1, 0);
+		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getStr() + RFCalculations.getAttributeValue(mc.player, ItemStats.RFATTACK, null, null)), this.guiX+216, this.guiY+64, 1, 0);
+		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getVit()*0.5F + RFCalculations.getAttributeValue(mc.player, ItemStats.RFDEFENCE, null, null)), this.guiX+216, this.guiY+75, 1, 0);
+		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getIntel() + RFCalculations.getAttributeValue(mc.player, ItemStats.RFMAGICATT, null, null)), this.guiX+216, this.guiY+87, 1, 0);
+		this.drawRightAlignedScaledString(""+(int)Math.ceil(cap.getVit()*0.5F + RFCalculations.getAttributeValue(mc.player, ItemStats.RFMAGICDEF, null, null)), this.guiX+216, this.guiY+99, 1, 0);
 	}
 	
 	@Override
@@ -180,7 +183,7 @@ public class GuiInfoScreenSub extends InventoryEffectRenderer {
 		{
 			if(this.page==0)
 			{
-				PacketHandler.sendToServer(new PacketOpenGui(LibReference.guiInfo1));
+				PacketHandler.sendToServer(new PacketOpenGuiContainer(LibReference.guiInfo1));
 			}
 			else 
 			{

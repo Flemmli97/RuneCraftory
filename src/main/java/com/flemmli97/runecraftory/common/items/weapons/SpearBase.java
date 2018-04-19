@@ -9,6 +9,7 @@ import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
+import com.flemmli97.runecraftory.common.core.handler.CustomDamage.KnockBackType;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayerAnim;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
@@ -20,6 +21,7 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -51,7 +53,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class SpearBase extends ItemSword implements IRpUseItem{
 
-	private int[] levelXP = new int[] {20, 100};
+	private int chargeXP = 25;
 	
 	public SpearBase(String name) {
 		super(ModItems.mat);
@@ -129,6 +131,16 @@ public abstract class SpearBase extends ItemSword implements IRpUseItem{
 	}
 	
 	@Override
+	public void levelSkillOnHit(EntityPlayer player)
+	{
+		IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+		cap.increaseSkill(EnumSkills.SPEAR, player, 1);
+	}
+	
+	@Override
+	public void levelSkillOnBreak(EntityPlayer player){}
+	
+	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 72000;
 	}
@@ -164,19 +176,19 @@ public abstract class SpearBase extends ItemSword implements IRpUseItem{
 		{
 			PacketHandler.sendTo(new PacketWeaponAnimation(60), (EntityPlayerMP) player);
 		}
-		cap.increaseSkill(EnumSkills.SPEAR, player, levelXP[0]);
 		List<EntityLivingBase> entityList = RFCalculations.calculateEntitiesFromLook(player, this.getWeaponType().getRange(), 1);
 		if(!entityList.isEmpty())
 		{
+			cap.decreaseRunePoints(player, 15);
+
+			cap.increaseSkill(EnumSkills.SPEAR, player, this.chargeXP);
 	    		for (EntityLivingBase e: entityList)
 	    		{
 	    			float damagePhys = cap.getStr();
     				damagePhys+= RFCalculations.getAttributeValue(player, ItemStats.RFATTACK, null, null);
 	    			if(!(e instanceof IEntityBase))
-	    				damagePhys=RFCalculations.scaleForVanilla(damagePhys);
-        			e.attackEntityFrom(CustomDamage.doAttack(player, EnumElement.fromName(stack.getTagCompound().getString("Element")), 0), damagePhys);
-        			e.knockBack(player, 0.2F, e.motionX/2, e.motionZ/2);
-
+	    				damagePhys=LevelCalc.scaleForVanilla(damagePhys);
+        			e.attackEntityFrom(CustomDamage.attack(player, EnumElement.fromName(stack.getTagCompound().getString("Element")), CustomDamage.DamageType.NORMAL, KnockBackType.BACK, 0, 0), damagePhys);
         			player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0F, 1.0F);
 	    		}
 		}
@@ -185,7 +197,9 @@ public abstract class SpearBase extends ItemSword implements IRpUseItem{
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
-		if(handIn == EnumHand.MAIN_HAND)
+        IPlayer cap = playerIn.getCapability(PlayerCapProvider.PlayerCap, null);
+
+		if(handIn == EnumHand.MAIN_HAND && (cap.getSkillLevel(EnumSkills.SPEAR)[0]>=5 || playerIn.capabilities.isCreativeMode))
 		{
 	        playerIn.setActiveHand(handIn);
 	        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);

@@ -44,6 +44,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -211,6 +213,12 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem{
 	}
 	
 	@Override
+	public void levelSkillOnHit(EntityPlayer player){}
+	
+	@Override
+	public void levelSkillOnBreak(EntityPlayer player){}
+	
+	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 72000;
 	}
@@ -231,47 +239,57 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem{
 			int range = Math.min(useTimeMulti, this.tier.getTierLevel());
 			BlockPos pos = player.getPosition().down();
 			boolean flag = false;
-			for(int x = -range; x <= range;x ++)
+			if(range==0)
 			{
-				for(int z = -range; z<= range;z++)
+				RayTraceResult result = this.rayTrace(worldIn, player, false);
+				if(result!=null && result.typeOfHit==Type.BLOCK)
 				{
-					BlockPos posNew = pos.add(x, 0, z);
-					if (player.canPlayerEdit(posNew.offset(EnumFacing.UP), EnumFacing.DOWN, itemstack))
+					this.useOnBlock(player, worldIn, result.getBlockPos(), EnumHand.MAIN_HAND, result.sideHit, (float)result.hitVec.x, (float)result.hitVec.y, (float)result.hitVec.z);
+					return;
+				}
+			}
+			else
+				for(int x = -range; x <= range;x ++)
+				{
+					for(int z = -range; z<= range;z++)
 					{
-						int hook = net.minecraftforge.event.ForgeEventFactory.onHoeUse(itemstack, player, worldIn, pos);	
-						if (hook==0)
+						BlockPos posNew = pos.add(x, 0, z);
+						if (player.canPlayerEdit(posNew.offset(EnumFacing.UP), EnumFacing.DOWN, itemstack))
 						{
-							IBlockState iblockstate = worldIn.getBlockState(posNew);
-							Block block = iblockstate.getBlock();
-							if (worldIn.isAirBlock(posNew.up()))
+							int hook = net.minecraftforge.event.ForgeEventFactory.onHoeUse(itemstack, player, worldIn, pos);	
+							if (hook==0)
 							{
-								IBlockState farmland = ModBlocks.farmland.getDefaultState();
-								if (block == Blocks.GRASS || block == Blocks.GRASS_PATH)
+								IBlockState iblockstate = worldIn.getBlockState(posNew);
+								Block block = iblockstate.getBlock();
+								if (worldIn.isAirBlock(posNew.up()))
 								{
-									this.setBlock(itemstack, player, worldIn, posNew, farmland);
-									flag=true;
-								}
-								else if (block == Blocks.DIRT)
-								{
-									switch ((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT))
+									IBlockState farmland = ModBlocks.farmland.getDefaultState();
+									if (block == Blocks.GRASS || block == Blocks.GRASS_PATH)
 									{
-										case DIRT:
-											flag=true;
-											this.setBlock(itemstack, player, worldIn, posNew, farmland);											
-											break;
-										case COARSE_DIRT:
-											flag=true;
-											this.setBlock(itemstack, player, worldIn, posNew, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));		                        				
-											break;
-										default:
-											break;
+										this.setBlock(itemstack, player, worldIn, posNew, farmland);
+										flag=true;
+									}
+									else if (block == Blocks.DIRT)
+									{
+										switch ((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT))
+										{
+											case DIRT:
+												flag=true;
+												this.setBlock(itemstack, player, worldIn, posNew, farmland);											
+												break;
+											case COARSE_DIRT:
+												flag=true;
+												this.setBlock(itemstack, player, worldIn, posNew, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));		                        				
+												break;
+											default:
+												break;
+										}
 									}
 								}
 							}
 						}
 					}
 				}
-			}
 			if(flag)
 			{
 				IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
@@ -299,52 +317,58 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem{
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(this.tier.getTierLevel()==0)
 		{
-			ItemStack itemstack = player.getHeldItem(hand);
-			EnumActionResult result = EnumActionResult.PASS;
-	        if(player.canPlayerEdit(pos.offset(facing), facing, itemstack))
-	        {
-	            int hook = net.minecraftforge.event.ForgeEventFactory.onHoeUse(itemstack, player, worldIn, pos);
-	            if (hook != 0) return hook > 0 ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
-
-	            IBlockState iblockstate = worldIn.getBlockState(pos);
-	            Block block = iblockstate.getBlock();
-
-	            if (facing != EnumFacing.DOWN && worldIn.isAirBlock(pos.up()))
-	            {
-					IBlockState farmland = ModBlocks.farmland.getDefaultState();
-
-	                if (block == Blocks.GRASS || block == Blocks.GRASS_PATH)
-	                {
-	                    this.setBlock(itemstack, player, worldIn, pos, farmland);
-	                    result = EnumActionResult.SUCCESS;
-	                }
-	                else if (block == Blocks.DIRT)
-	                {
-	                    switch ((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT))
-	                    {
-	                        case DIRT:
-	                            this.setBlock(itemstack, player, worldIn, pos, farmland);
-	                            result = EnumActionResult.SUCCESS;
-	                        case COARSE_DIRT:
-	                            this.setBlock(itemstack, player, worldIn, pos, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));
-	                            result = EnumActionResult.SUCCESS;
-						default:
-							break;
-	                    }
-	                }
-	            	}
-				if(result == EnumActionResult.SUCCESS)
-				{
-					IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
-					capSync.decreaseRunePoints(player, 1);
-					capSync.increaseSkill(EnumSkills.EARTH, player, 2);
-					capSync.increaseSkill(EnumSkills.FARMING, player, 2);
-				}
-	        }
-			return result;
+			return this.useOnBlock(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 		}
 		else
 			return EnumActionResult.PASS;
+	}
+	
+	private EnumActionResult useOnBlock(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+			EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack itemstack = player.getHeldItem(hand);
+		EnumActionResult result = EnumActionResult.PASS;
+        if(player.canPlayerEdit(pos.offset(facing), facing, itemstack))
+        {
+            int hook = net.minecraftforge.event.ForgeEventFactory.onHoeUse(itemstack, player, worldIn, pos);
+            if (hook != 0) return hook > 0 ? EnumActionResult.SUCCESS : EnumActionResult.FAIL;
+
+            IBlockState iblockstate = worldIn.getBlockState(pos);
+            Block block = iblockstate.getBlock();
+
+            if (facing != EnumFacing.DOWN && worldIn.isAirBlock(pos.up()))
+            {
+				IBlockState farmland = ModBlocks.farmland.getDefaultState();
+
+                if (block == Blocks.GRASS || block == Blocks.GRASS_PATH)
+                {
+                    this.setBlock(itemstack, player, worldIn, pos, farmland);
+                    result = EnumActionResult.SUCCESS;
+                }
+                else if (block == Blocks.DIRT)
+                {
+                	System.out.println((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT));
+                    switch ((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT))
+                    {
+                        case DIRT:
+                            this.setBlock(itemstack, player, worldIn, pos, farmland);
+                            result = EnumActionResult.SUCCESS;
+                        case COARSE_DIRT:
+                            this.setBlock(itemstack, player, worldIn, pos, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));
+                            result = EnumActionResult.SUCCESS;
+                        case PODZOL:
+                        	break;                
+                    }
+                }
+            }
+			if(result == EnumActionResult.SUCCESS)
+			{
+				IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
+				capSync.decreaseRunePoints(player, 1);
+				capSync.increaseSkill(EnumSkills.EARTH, player, 2);
+				capSync.increaseSkill(EnumSkills.FARMING, player, 2);
+			}
+        }
+        return result;
 	}
 
 	@Override

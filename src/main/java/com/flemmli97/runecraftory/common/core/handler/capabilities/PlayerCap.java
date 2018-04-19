@@ -16,27 +16,30 @@ import com.flemmli97.runecraftory.common.core.network.PacketPlayerStats;
 import com.flemmli97.runecraftory.common.core.network.PacketRunePoints;
 import com.flemmli97.runecraftory.common.core.network.PacketSkills;
 import com.flemmli97.runecraftory.common.core.network.PacketStatus;
+import com.flemmli97.runecraftory.common.core.network.PacketUpdateClient;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumStatusEffect;
-import com.flemmli97.runecraftory.common.utils.RFCalculations;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
 
 public class PlayerCap implements IPlayer  {
 
 	//max runpoints possible: 2883
 	private int money=0;
-	private int runePointsMax=30;
+	private int runePointsMax=56;
 	private float healthMax=25;
 	private float health=healthMax;
-	private int runePoints = 30;
-	private int str = 5;
-	private int vit = 5;
-	private int intel = 5;
+	private int runePoints = runePointsMax;
+	private float str = 5;
+	private float vit = 4;
+	private float intel = 5;
 	/** first number is level, second is the xp a.k.a. percent to next level*/
 	private int[] level = new int[] {1,0};
 	private Map<EnumSkills, int[]> skillMap = new HashMap<EnumSkills, int[]>();
@@ -123,23 +126,29 @@ public class PlayerCap implements IPlayer  {
 	}
 
 	@Override
-	public void decreaseRunePoints(EntityPlayer player, int amount) {
+	public boolean decreaseRunePoints(EntityPlayer player, int amount) {
 		if(!player.capabilities.isCreativeMode)
 		{
-			if(this.runePoints>=amount)
-				this.runePoints-=amount;
-			else
+			if(this.runePointsMax>=amount)
 			{
-				int diff =  amount - this.runePoints;
-				this.runePoints=0;
+				if(this.runePoints>=amount)
+					this.runePoints-=amount;
+				else
+				{
+					int diff =  amount - this.runePoints;
+					this.runePoints=0;
+					if(!player.world.isRemote && player instanceof EntityPlayerMP)
+						player.attackEntityFrom(CustomDamage.EXHAUST, diff*2);
+				}
 				if(!player.world.isRemote && player instanceof EntityPlayerMP)
-					player.attackEntityFrom(CustomDamage.EXHAUST, diff*2);
+				{
+					PacketHandler.sendTo(new PacketRunePoints(this), (EntityPlayerMP) player);
+				}
+				return true;
 			}
-			if(!player.world.isRemote && player instanceof EntityPlayerMP)
-			{
-				PacketHandler.sendTo(new PacketRunePoints(this), (EntityPlayerMP) player);
-			}
+			return false;
 		}
+		return true;
 	}
 	
 	@Override
@@ -205,24 +214,37 @@ public class PlayerCap implements IPlayer  {
 	{
 		if(!player.capabilities.isCreativeMode)
 		{
-			int neededXP = RFCalculations.xpAmountForLevelUp(this.level[0]);
+			int neededXP = LevelCalc.xpAmountForLevelUp(this.level[0]);
 			int xpToNextLevel = neededXP-this.level[1];
 			if(amount >= xpToNextLevel)
 			{				
 				int diff = amount-xpToNextLevel;
 				this.level[0]+=1;
-				System.out.println("diff " + diff);
+				this.level[1]=0;
+				this.onLevelUp();
+				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1);
 				this.addXp(player, diff);
 			}
 			else
 			{
-				this.level[1]=amount;
+				this.level[1]+=amount;
 			}
 			if(!player.world.isRemote && player instanceof EntityPlayerMP)
 			{
-				PacketHandler.sendTo(new PacketPlayerLevel(this), (EntityPlayerMP) player);
+				PacketHandler.sendTo(new PacketUpdateClient(this), (EntityPlayerMP) player);
 			}
 		}
+	}
+	
+	private void onLevelUp()
+	{
+		this.healthMax+=10;
+		this.runePointsMax+=5;
+		this.health=Math.min(this.health+10, this.healthMax);
+		this.runePoints=Math.min(this.runePoints+5, this.runePoints);
+		this.str+=2;
+		this.vit+=2;
+		this.intel+=2;
 	}
 
 	@Override
@@ -236,12 +258,12 @@ public class PlayerCap implements IPlayer  {
 	}
 
 	@Override
-	public int getStr() {
+	public float getStr() {
 		return this.str;
 	}
 
 	@Override
-	public void setStr(EntityPlayer player, int amount) {
+	public void setStr(EntityPlayer player, float amount) {
 		this.str+=amount;
 		if(!player.world.isRemote && player instanceof EntityPlayerMP)
 		{
@@ -250,12 +272,12 @@ public class PlayerCap implements IPlayer  {
 	}
 
 	@Override
-	public int getVit() {
+	public float getVit() {
 		return this.vit;
 	}
 
 	@Override
-	public void setVit(EntityPlayer player, int amount) {
+	public void setVit(EntityPlayer player, float amount) {
 		this.vit+=amount;
 		if(!player.world.isRemote && player instanceof EntityPlayerMP)
 		{
@@ -264,12 +286,12 @@ public class PlayerCap implements IPlayer  {
 	}
 
 	@Override
-	public int getIntel() {
+	public float getIntel() {
 		return this.intel;
 	}
 
 	@Override
-	public void setIntel(EntityPlayer player, int amount) {
+	public void setIntel(EntityPlayer player, float amount) {
 		this.intel+=amount;
 		if(!player.world.isRemote && player instanceof EntityPlayerMP)
 		{
@@ -293,26 +315,40 @@ public class PlayerCap implements IPlayer  {
 	}
 	
 	@Override
-	public void increaseSkill(EnumSkills skill, EntityPlayer player, int percent)
+	public void increaseSkill(EnumSkills skill, EntityPlayer player, int amount)
 	{
-		if(player.capabilities.isCreativeMode)
+		if(!player.capabilities.isCreativeMode)
 		{
-			int neededXP = RFCalculations.xpAmountForSkills(this.skillMap.get(skill)[0]);
-			if(percent >= neededXP)
+			
+			int neededXP = LevelCalc.xpAmountForSkills(this.skillMap.get(skill)[0]);
+			int xpToNextLevel = neededXP-this.skillMap.get(skill)[1];
+			if(amount >= xpToNextLevel)
 			{
-				int diff = neededXP-percent;
+				int diff = amount-xpToNextLevel;
 				this.skillMap.get(skill)[0]+=1;
-				this.addXp(player, diff);
+				this.skillMap.get(skill)[1]=0;
+				this.onSkillLevelUp(skill);
+				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.7F, 1);
+				this.increaseSkill(skill, player, diff);
 			}
 			else
 			{
-				this.skillMap.get(skill)[1]+=percent;
+				this.skillMap.get(skill)[1]+=amount;
 			}
 			if(!player.world.isRemote && player instanceof EntityPlayerMP)
 			{
-				PacketHandler.sendTo(new PacketSkills(this, skill), (EntityPlayerMP) player);
+				PacketHandler.sendTo(new PacketUpdateClient(this), (EntityPlayerMP) player);
 			}
 		}
+	}
+	
+	private void onSkillLevelUp(EnumSkills skill)
+	{
+		this.healthMax+=skill.getHealthIncrease();
+		this.runePointsMax+=skill.getRPIncrease();
+		this.str+=skill.getStrIncrease();
+		this.vit+=skill.getVitIncrease();
+		this.intel+=skill.getIntelIncrease();
 	}
 
 	@Override
@@ -325,9 +361,9 @@ public class PlayerCap implements IPlayer  {
 		this.health=nbt.getFloat("health");
 		this.healthMax=nbt.getFloat("healthMax");
 		this.money = nbt.getInteger("money");
-		this.str = nbt.getInteger("strength");
-		this.vit = nbt.getInteger("vitality");
-		this.intel = nbt.getInteger("intelligence");
+		this.str = nbt.getFloat("strength");
+		this.vit = nbt.getFloat("vitality");
+		this.intel = nbt.getFloat("intelligence");
 		this.level = nbt.getIntArray("level");
 		NBTTagCompound compound = (NBTTagCompound) nbt.getTag("skills");
 		for(EnumSkills skill: EnumSkills.values())
@@ -339,6 +375,11 @@ public class PlayerCap implements IPlayer  {
 		for(String effectNames : compound2.getKeySet())
 		{
 			this.activeEffects.add(EnumStatusEffect.fromName(compound.getString(effectNames)));
+		}
+		if(nbt.hasKey("inventory"))
+		{
+			NBTTagCompound compound3 = (NBTTagCompound) nbt.getTag("inventory");
+			this.spells.readFromNBT(compound3);
 		}
 	}
 
@@ -354,9 +395,9 @@ public class PlayerCap implements IPlayer  {
 		nbt.setInteger("maxRunePoints", runePointsMax);
 		nbt.setFloat("healthMax", healthMax);
 		nbt.setInteger("money", this.money);
-		nbt.setInteger("strength", this.str);
-		nbt.setInteger("vitality", this.vit);
-		nbt.setInteger("intelligence", this.intel);
+		nbt.setFloat("strength", this.str);
+		nbt.setFloat("vitality", this.vit);
+		nbt.setFloat("intelligence", this.intel);
 		nbt.setIntArray("level", this.level);
 		NBTTagCompound compound = new NBTTagCompound(); 
 		for(EnumSkills skill: EnumSkills.values())
@@ -370,6 +411,9 @@ public class PlayerCap implements IPlayer  {
 			compound2.setString(effect.getName(), effect.getName());
 		}
 		nbt.setTag("effects", compound2);
+		NBTTagCompound compound3 = new NBTTagCompound(); 
+		this.spells.writeToNBT(compound3);
+		nbt.setTag("inventory", compound3);
 		return nbt;
 	}
 	
