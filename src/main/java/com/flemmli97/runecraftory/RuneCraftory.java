@@ -80,7 +80,6 @@ public class RuneCraftory {
 	};
 	
 	public static CreativeTabs blocks = new CreativeTabs("runecraftory.blocks") {
-
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(ModItems.itemBlockForge);
