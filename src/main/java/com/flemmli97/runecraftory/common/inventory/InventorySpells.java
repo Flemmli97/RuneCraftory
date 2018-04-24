@@ -2,6 +2,8 @@ package com.flemmli97.runecraftory.common.inventory;
 
 import com.flemmli97.runecraftory.api.items.ISpells;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -137,7 +139,30 @@ public class InventorySpells implements IInventory{
 	public void useSkill(EntityPlayer player, int index)
 	{
 		ItemStack stack = this.getStackInSlot(index);
-		if(stack.getItem() instanceof ISpells)
-			((ISpells)stack.getItem()).use(player.world, player);
+		if(stack.getItem() instanceof ISpells && player.getCooldownTracker().getCooldown(stack.getItem(), 0)<=0)
+			((ISpells)stack.getItem()).use(player.world, player, stack);
+	}
+	
+	public void dropItemsAt(EntityLivingBase entity)
+	{
+		if(!entity.world.isRemote)
+		{
+			for(ItemStack stack : this.inventory)
+			{
+				EntityItem item = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, stack);
+				item.setPickupDelay(0);
+				entity.world.spawnEntity(item);
+			}
+		}
+		this.inventory.clear();
+	}
+	
+	public void update(EntityPlayer player)
+	{
+		for(ItemStack stack : this.inventory)
+		{
+			if(stack.getItem() instanceof ISpells)
+			((ISpells)stack.getItem()).update(stack, player);
+		}
 	}
 }

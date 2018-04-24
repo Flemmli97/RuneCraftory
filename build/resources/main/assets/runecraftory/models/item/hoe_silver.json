@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:item/hoe",
-  "textures": {
-    "tex": "runecraftory:items/hoe_silver"
-  }
-}

@@ -222,7 +222,7 @@ public class PlayerCap implements IPlayer  {
 				this.level[0]+=1;
 				this.level[1]=0;
 				this.onLevelUp();
-				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1);
+				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2F, 1);
 				this.addXp(player, diff);
 			}
 			else
@@ -328,7 +328,7 @@ public class PlayerCap implements IPlayer  {
 				this.skillMap.get(skill)[0]+=1;
 				this.skillMap.get(skill)[1]=0;
 				this.onSkillLevelUp(skill);
-				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.7F, 1);
+				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2F, 1);
 				this.increaseSkill(skill, player, diff);
 			}
 			else
@@ -345,7 +345,9 @@ public class PlayerCap implements IPlayer  {
 	private void onSkillLevelUp(EnumSkills skill)
 	{
 		this.healthMax+=skill.getHealthIncrease();
+		this.health+=skill.getHealthIncrease();
 		this.runePointsMax+=skill.getRPIncrease();
+		this.runePoints+=skill.getRPIncrease();
 		this.str+=skill.getStrIncrease();
 		this.vit+=skill.getVitIncrease();
 		this.intel+=skill.getIntelIncrease();

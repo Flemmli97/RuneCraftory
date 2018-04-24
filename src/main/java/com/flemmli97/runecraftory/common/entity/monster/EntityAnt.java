@@ -23,7 +23,7 @@ public class EntityAnt extends EntityMobBase{
 		this.drops.put(new ItemStack(ModItems.cloth, 1,7), 0.4F);
 		this.drops.put(new ItemStack(ModItems.cloth, 1,8), 0.1F);
 
-		this.tasks.addTask(0, attack);
+		this.tasks.addTask(2, attack);
 	}
 
 	@Override

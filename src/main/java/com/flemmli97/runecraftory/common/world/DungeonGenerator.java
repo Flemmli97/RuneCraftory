@@ -1,7 +1,9 @@
 package com.flemmli97.runecraftory.common.world;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+
+import com.google.common.collect.Maps;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
@@ -10,17 +12,11 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 
 public class DungeonGenerator implements IWorldGenerator{
 
-	private static HashMap<String, Structure> gens = new HashMap<String, Structure>();
-	
+	private static Map<String, Structure> gens = Maps.newHashMap();
+
 	public static void addStructureGen(Structure structure)
 	{
-		if(!gens.containsKey(structure.structureName()))
-			gens.put(structure.structureName(), structure);
-	}
-
-	public static Structure fromID(String name)
-	{
-		return gens.get(name);
+		gens.put(structure.structureName(), structure);
 	}
 	
 	@Override
@@ -28,7 +24,8 @@ public class DungeonGenerator implements IWorldGenerator{
 			IChunkProvider chunkProvider) {
 		for(String s : gens.keySet())
 		{
-			gens.get(s).generate(world, chunkX, chunkZ, random);
+			gens.get(s).start(world, chunkX, chunkZ, random);
+			gens.get(s).gen(world);
 		}
 	}
 	

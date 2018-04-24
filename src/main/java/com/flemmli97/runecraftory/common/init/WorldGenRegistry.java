@@ -15,8 +15,8 @@ public class WorldGenRegistry {
 		RuneCraftory.logger.info("Register worldgen");
         GameRegistry.registerWorldGenerator(new MineralGenerator(25), 3);
         GameRegistry.registerWorldGenerator(new DungeonGenerator(), 15);
-        DungeonGenerator.addStructureGen(new Structure("AmbrosiaForest", 2, false, 0,-4, Type.FOREST, Type.LUSH));
+        DungeonGenerator.addStructureGen(new Structure("AmbrosiaForest", 50, false, 0, -4, Type.FOREST));
 		RuneCraftory.logger.info("Finished registering worldgen");
-
 	}
+
 }

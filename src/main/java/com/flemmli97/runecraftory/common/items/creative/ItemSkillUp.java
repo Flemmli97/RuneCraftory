@@ -29,7 +29,7 @@ public class ItemSkillUp extends Item{
 		{
 			IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
 			for(EnumSkills skill : EnumSkills.values())
-				capSync.increaseSkill(skill, player, LevelCalc.xpAmountForSkills(capSync.getSkillLevel(skill)[0]));
+				capSync.increaseSkill(skill, player, LevelCalc.xpAmountForSkills(capSync.getSkillLevel(skill)[0])/2);
 		}
 		return super.onItemRightClick(world, player, handIn);
 	}

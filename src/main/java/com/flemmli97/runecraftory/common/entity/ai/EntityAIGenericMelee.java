@@ -38,7 +38,7 @@ public class EntityAIGenericMelee extends EntityAIBase
     {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
-        if (entitylivingbase == null ||!entitylivingbase.isEntityAlive())
+        if (entitylivingbase == null ||!entitylivingbase.isEntityAlive()||!this.isTargetInsideHome(entitylivingbase))
         {
             return false;
         }
@@ -70,11 +70,27 @@ public class EntityAIGenericMelee extends EntityAIBase
         {
             return false;
         }
+        else if(!this.isTargetInsideHome(entitylivingbase))
+        {
+        	return false;
+        }
         else if (!this.longMemory)
         {
             return !this.attacker.getNavigator().noPath();
         }
         return true;
+    }
+    
+    private boolean isTargetInsideHome(EntityLivingBase target)
+    {
+    	 if (this.attacker.getMaximumHomeDistance() == -1.0F)
+         {
+             return true;
+         }
+    	 else
+         {
+             return target.getPosition().distanceSq(this.attacker.getHomePosition())<(this.attacker.getMaximumHomeDistance()*this.attacker.getMaximumHomeDistance());
+         }
     }
 
     @Override

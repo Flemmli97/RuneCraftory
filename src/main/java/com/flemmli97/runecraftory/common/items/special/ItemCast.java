@@ -3,7 +3,6 @@ package com.flemmli97.runecraftory.common.items.special;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.items.ISpells;
 import com.flemmli97.runecraftory.common.lib.LibReference;
-import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,10 +28,7 @@ public abstract class ItemCast extends Item implements ISpells{
 	}
 	
 	@Override
-	public void levelSkill(EntityPlayer player, int amount, EnumSkills skill) {
-		
-	}
-
+	public void update(ItemStack stack, EntityPlayer player) {}
 	@Override
 	public int getUpgradeDifficulty() {
 		return 0;
@@ -40,8 +36,12 @@ public abstract class ItemCast extends Item implements ISpells{
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		
-		return this.use(world, player) ? new ActionResult<ItemStack>(EnumActionResult.SUCCESS, player.getHeldItem(hand)):new ActionResult<ItemStack>(EnumActionResult.FAIL, player.getHeldItem(hand));
+		if(player.getCooldownTracker().getCooldown(this, 0)<=0 && this.use(world, player, player.getHeldItem(hand)))
+		{
+			this.levelSkill(player);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+		}
+		return new ActionResult<ItemStack>(EnumActionResult.FAIL, player.getHeldItem(hand));
 	}
 	
 	@SideOnly(Side.CLIENT)

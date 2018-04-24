@@ -7,7 +7,6 @@ import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayerAnim;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.network.PacketHandler;
 import com.flemmli97.runecraftory.common.core.network.PacketJump;
@@ -31,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
@@ -183,14 +183,15 @@ public class EventHandlerCore {
 	{
 		if(event.getEntityLiving() instanceof EntityPlayer)
 		{
-			IPlayer capSync = event.getEntityLiving().getCapability(PlayerCapProvider.PlayerCap, null);
+			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+			IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
 			if(!capSync.getActiveStatus().isEmpty())
 				for(EnumStatusEffect effect : capSync.getActiveStatus())
 				{
 					effect.update();
 				}
-			IPlayerAnim anim = event.getEntityLiving().getCapability(PlayerCapProvider.PlayerAnim, null);
-			anim.update();
+			player.getCapability(PlayerCapProvider.PlayerAnim, null).update();
+			capSync.getInv().update(player);
 		}
 		else if(event.getEntityLiving() instanceof IEntityAdvanced)
 		{
@@ -198,6 +199,21 @@ public class EventHandlerCore {
 			for(EnumStatusEffect effect : ((IEntityAdvanced) event.getEntityLiving()).getActiveStatus())
 			{
 				effect.update();
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public void playerDeath(LivingDeathEvent event)
+	{
+		if(event.getEntityLiving() instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+			IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
+			capSync.getInv().dropItemsAt(player);
+			if(!player.world.isRemote)
+			{
+				PacketHandler.sendTo(new PacketUpdateClient(capSync), (EntityPlayerMP) player);
 			}
 		}
 	}
@@ -213,6 +229,10 @@ public class EventHandlerCore {
 			NBTTagCompound oldNBT = new NBTTagCompound();
 			capSync.writeToNBT(oldNBT, true);
 			event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null).readFromNBT(oldNBT);
+			if(!event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP)
+			{
+				PacketHandler.sendTo(new PacketUpdateClient(event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null)), (EntityPlayerMP) event.getEntityPlayer());
+			}
 		}
 	}
 	

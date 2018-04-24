@@ -108,11 +108,11 @@ public abstract class EntityMobBase extends EntityCreature  implements IEntityAd
 	
 	@Override
 	protected void initEntityAI() {
+        this.tasks.addTask(0, new EntityAIMoveTowardsRestriction(this, 1.0D));
 	    this.tasks.addTask(2, new EntityAIWander(this, 1.0D));
 	    this.tasks.addTask(3, new EntityAISwimming(this));
-        this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 1.0D));
-	    this.tasks.addTask(5, new EntityAILookIdle(this));
-	    this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+	    this.tasks.addTask(4, new EntityAILookIdle(this));
+	    this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 	}
 
 	public EntityMobBase(World world, boolean ridable, int baseXP, int baseMoney, boolean isFlyingEntity)

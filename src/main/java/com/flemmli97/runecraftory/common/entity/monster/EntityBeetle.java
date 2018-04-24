@@ -20,7 +20,7 @@ public class EntityBeetle extends EntityMobBase implements IChargeAttack{
 	public EntityBeetle(World world)
 	{
 		super(world, true, 5, 1, false);
-		this.tasks.addTask(0, ai);
+		this.tasks.addTask(2, ai);
 		this.drops.put(new ItemStack(ModItems.sticks, 1,2), 0.6F);
 		this.drops.put(new ItemStack(ModItems.cloth, 1,7), 0.4F);
 		this.drops.put(new ItemStack(ModItems.cloth, 1,8), 0.1F);

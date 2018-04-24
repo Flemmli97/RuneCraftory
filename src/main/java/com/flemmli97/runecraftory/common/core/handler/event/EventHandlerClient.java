@@ -89,7 +89,7 @@ public class EventHandlerClient{
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
-	public void keyEvent(RenderSpecificHandEvent event)
+	public void renderDualFirst(RenderSpecificHandEvent event)
 	{
 		ItemStack stackMain = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
 		if(stackMain.getItem() instanceof DualBladeBase || stackMain.getItem() instanceof GloveBase)

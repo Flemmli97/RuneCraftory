@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.compat.waila;
 
 import java.util.List;
 
+import com.flemmli97.runecraftory.common.core.handler.ConfigHandler;
 import com.flemmli97.runecraftory.common.entity.EntityGate;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.LibConstants;
@@ -31,7 +32,7 @@ public class GateStatsWaila implements IWailaEntityProvider{
 		if(entity instanceof EntityGate)
 		{
 			currenttip.clear();
-			if(accessor.getPlayer().getHeldItemMainhand().getItem()==ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode)
+			if(accessor.getPlayer().getHeldItemMainhand().getItem()==ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode || ConfigHandler.debugMode)
 			{
 				EntityGate mob = (EntityGate) entity;
 				for(IAttributeInstance a : mob.getAttributeMap().getAllAttributes())

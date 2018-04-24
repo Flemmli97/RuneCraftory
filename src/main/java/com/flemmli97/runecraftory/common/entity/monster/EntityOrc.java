@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
+import com.flemmli97.runecraftory.common.entity.ai.EntityAIGenericMelee;
 import com.flemmli97.runecraftory.common.init.ModItems;
 
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -14,13 +15,15 @@ import net.minecraft.world.World;
 public class EntityOrc extends EntityMobBase{
 
 	private Map<ItemStack, Float>	drops = new HashMap<ItemStack, Float>();
-	
+	public EntityAIGenericMelee attack = new EntityAIGenericMelee(this, 1, true, 1);
+
 	public EntityOrc(World world)
 	{
 		super(world, true, 5, 1, false);
 		this.drops.put(new ItemStack(ModItems.cloth, 1,0), 0.5F);
 		this.drops.put(new ItemStack(ModItems.sticks, 1,0), 0.5F);
 		this.drops.put(new ItemStack(ModItems.cheapBracelet), 0.3F);
+		this.tasks.addTask(2, attack);
 	}
 	
 	@Override
@@ -59,19 +62,16 @@ public class EntityOrc extends EntityMobBase{
 	}
 	@Override
 	public int getAttackTimeFromPattern(byte pattern) {
-		// TODO Auto-generated method stub
-		return 0;
+		return 20;
 	}
 
 	@Override
 	public int attackFromPattern() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 20;
 	}
 
 	@Override
 	public int maxAttackPatterns() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 }

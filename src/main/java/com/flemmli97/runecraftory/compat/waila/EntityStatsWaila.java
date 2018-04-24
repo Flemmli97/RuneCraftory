@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.compat.waila;
 
 import java.util.List;
 
+import com.flemmli97.runecraftory.common.core.handler.ConfigHandler;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.LibConstants;
@@ -31,7 +32,7 @@ public class EntityStatsWaila implements IWailaEntityProvider{
 		if(entity instanceof EntityMobBase)
 		{
 			currenttip.clear();
-			if(accessor.getPlayer().getHeldItemMainhand().getItem()==ModItems.debug|| accessor.getPlayer().capabilities.isCreativeMode)
+			if(accessor.getPlayer().getHeldItemMainhand().getItem()==ModItems.debug|| accessor.getPlayer().capabilities.isCreativeMode || ConfigHandler.debugMode)
 			{
 				EntityMobBase mob = (EntityMobBase) entity;
 				for(IAttributeInstance a : mob.getAttributeMap().getAllAttributes())

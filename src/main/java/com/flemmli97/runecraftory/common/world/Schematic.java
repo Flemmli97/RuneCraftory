@@ -14,13 +14,13 @@ import net.minecraft.block.BlockStructure;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.template.Template;
 
 public class Schematic {
@@ -78,78 +78,106 @@ public class Schematic {
 		return state;
 	}
 	
-
-	public void generate(World world, BlockPos blockpos, Rotation rot, Mirror mirror, Object object) {
-		this.generate(world, new PlacementProperties(blockpos, rot, mirror, ""), null);
-	}
-	
 	/**
-	 * Tries to start generating a structure. Ignores structureblocks
+	 * Generates this schematic. Ignores structureblocks
 	 * @param world	World
 	 * @param pos The position of the structure
 	 * @param rot Rotation
 	 * @param mirror Mirror
 	 * @param restriction Restrict structure to the aabb
 	 */
-	public synchronized void generate(World world, PlacementProperties props, @Nullable AxisAlignedBB restriction)
-	{
+	public void generate(World world, BlockPos pos, Rotation rot, Mirror mirror, @Nullable StructureBoundingBox restriction, boolean replaceGroundBelow) {
 		for(int z = 0; z < this.length; z++)
 			for(int x = 0; x < this.width; x++)
 				for(int y = 0; y < this.height; y++)
 				{
 					Position schemPos = new Position(x,y,z);
-					BlockPos place = transformedBlockPos(schemPos, props.mirror(), props.rot()).add(props.getOrigin());
-					if(restriction ==null || restriction.contains(new Vec3d(place)))
+					BlockPos place = transformedBlockPos(schemPos, mirror, rot).add(pos);
+					if(restriction ==null || restriction.isVecInside(new Vec3i(place.getX(),place.getY(),place.getZ())))
 					{
-						//check if setting a block there will cause a new chunk to generate. to prevent cascading worldgen lag
-							if(this.isNeighborChunkLoaded(world, place, props.getUnfinishedChunks()))
+						IBlockState state = this.posBlockMapping.get(schemPos);
+						if(state!=null && !(state.getBlock() instanceof BlockStructure))
+						{
+							world.setBlockState(place, state.withMirror(mirror).withRotation(rot), 18);
+							if(replaceGroundBelow && y == 0)
 							{
-								IBlockState state = this.posBlockMapping.get(schemPos);
-								if(state!=null && !(state.getBlock() instanceof BlockStructure))
+								Biome biome =world.getBiome(place);
+								replaceAirAndLiquidDownwards(world, biome.fillerBlock, place.down());
+							}
+						}
+						if(this.posTileMapping.containsKey(schemPos))
+						{
+							TileEntity tile = world.getTileEntity(place);
+							if(tile!=null)
+							{
+								NBTTagCompound tileNBT = this.posTileMapping.get(schemPos);
+								tileNBT.setInteger("x", place.getX());
+	                            tileNBT.setInteger("y", place.getY());
+	                            tileNBT.setInteger("z", place.getZ());
+								tile.readFromNBT(tileNBT);
+								tile.mirror(mirror);
+								tile.rotate(rot);
+								tile.markDirty();
+								if(tile instanceof TileBossSpawner)
 								{
-									world.setBlockState(place, state.withMirror(props.mirror()).withRotation(props.rot()), 18);
-								}
-								if(this.posTileMapping.containsKey(schemPos))
-								{
-									TileEntity tile = world.getTileEntity(place);
-									if(tile!=null)
-									{
-										NBTTagCompound tileNBT = this.posTileMapping.get(schemPos);
-										tileNBT.setInteger("x", place.getX());
-			                            tileNBT.setInteger("y", place.getY());
-			                            tileNBT.setInteger("z", place.getZ());
-										tile.readFromNBT(tileNBT);
-										tile.mirror(props.mirror());
-										tile.rotate(props.rot());
-										tile.markDirty();
-										if(tile instanceof TileBossSpawner)
-										{
-											((TileBossSpawner)tile).spawnEntity();
-										}
-									}
+									((TileBossSpawner)tile).spawnEntity();
 								}
 							}
+						}
 					}
 				}		
 	}
 	
-	private boolean isNeighborChunkLoaded(World world, BlockPos pos, List<Position> list)
+	public void generate(World world, PlacementProperties props, @Nullable StructureBoundingBox restriction, boolean replaceGroundBelow)
+	{
+		this.generate(world, props.getOrigin(), props.rot(), props.mirror(), restriction, replaceGroundBelow);
+	}
+	
+	public void generate(World world, BlockPos pos, Rotation rot, Mirror mirror, @Nullable StructureBoundingBox restriction) {
+		this.generate(world, pos, rot, mirror, restriction, false);
+	}
+		
+	
+	private static void replaceAirAndLiquidDownwards(World worldIn, IBlockState blockstateIn, BlockPos pos)
+    {
+        while ((worldIn.getBlockState(pos).getMaterial().isReplaceable()||worldIn.isAirBlock(pos) || worldIn.getBlockState(pos).getMaterial().isLiquid()) && pos.getY() > 1)
+        {
+            worldIn.setBlockState(pos, blockstateIn, 2);
+            pos=pos.down();
+        }
+    }
+	
+	/*private boolean isNeighborChunkLoaded(World world, BlockPos pos, List<Position> list)
 	{
 		BlockPos west = pos.offset(EnumFacing.WEST);
 		BlockPos north = pos.offset(EnumFacing.NORTH);
 		BlockPos east = pos.offset(EnumFacing.EAST);
 		BlockPos south = pos.offset(EnumFacing.SOUTH);
-		boolean flagPos = world.isChunkGeneratedAt(pos.getX()>>4, pos.getZ()>>4);
-		boolean flagNorth = world.isChunkGeneratedAt(north.getX()>>4, north.getZ()>>4);
-		boolean flagWest = world.isChunkGeneratedAt(west.getX()>>4, west.getZ()>>4);
-		boolean flagSouth = world.isChunkGeneratedAt(south.getX()>>4, south.getZ()>>4);
-		boolean flagEast = world.isChunkGeneratedAt(east.getX()>>4, east.getZ()>>4);
+		boolean flagPos = world.getChunkProvider().getLoadedChunk(pos.getX()>>4, pos.getZ()>>4)!=null;
+		boolean flagNorth = world.getChunkProvider().getLoadedChunk(north.getX()>>4, north.getZ()>>4)!=null;
+		boolean flagWest = world.getChunkProvider().getLoadedChunk(west.getX()>>4, west.getZ()>>4)!=null;
+		boolean flagSouth = world.getChunkProvider().getLoadedChunk(south.getX()>>4, south.getZ()>>4)!=null;
+		boolean flagEast = world.getChunkProvider().getLoadedChunk(east.getX()>>4, east.getZ()>>4)!=null;
+		if(!flagPos)
+			list.add(new Position(pos.getX()>>4, 0, pos.getZ()>>4));
+		if(!flagNorth)
+			list.add(new Position(north.getX()>>4, 0, north.getZ()>>4));
+		if(!flagWest)
+			list.add(new Position(west.getX()>>4, 0, west.getZ()>>4));
+		if(!flagSouth)
+			list.add(new Position(south.getX()>>4, 0, south.getZ()>>4));
+		if(!flagEast)
+			list.add(new Position(east.getX()>>4, 0, east.getZ()>>4));
 		return flagPos&&flagNorth&&flagWest&& flagSouth&& flagEast;
-	}
+	}*/
 	/**
 	 * From net.minecraft.world.gen.structure.template.Template
 	 */
-    public static BlockPos transformedBlockPos(Position pos, Mirror mirrorIn, Rotation rotationIn)
+	public static BlockPos transformedBlockPos(Position pos, Mirror mirrorIn, Rotation rotationIn)
+    {
+		return transformedBlockPos(new BlockPos(pos.getX(), pos.getY(), pos.getZ()), mirrorIn, rotationIn);
+    }
+    public static BlockPos transformedBlockPos(BlockPos pos, Mirror mirrorIn, Rotation rotationIn)
     {
         int i = pos.getX();
         int j = pos.getY();

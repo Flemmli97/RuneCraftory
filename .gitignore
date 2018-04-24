@@ -3,6 +3,7 @@ bin
 .classpath
 .project
 .settings
+build
 
 # forge
 lib

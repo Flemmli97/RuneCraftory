@@ -1,26 +1,29 @@
 package com.flemmli97.runecraftory.common.world;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.utils.Position;
+import com.google.common.collect.Sets;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagIntArray;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.common.util.Constants;
 
 public class Structure {
 	
@@ -28,9 +31,9 @@ public class Structure {
 	private boolean underGround;
 	private int dimID, freq, yOffset;
 	private String name;
-	
+	private boolean initialized=false;
 	private ArrayList<Type> biomeTypes = new ArrayList<Type>();
-    protected Map<Position, PlacementProperties> structureMap = new HashMap<Position, PlacementProperties>();
+    private Set<PlacementProperties> structures = Sets.newHashSet();
 	public Structure(String file, int frequency, boolean underGround, int dimID, int yOffset, Type... biomeTypes)
 	{
 		this.name=file;
@@ -48,77 +51,8 @@ public class Structure {
 		return this.name;
 	}
 	
-	public void generate(World world, int chunkX, int chunkZ, Random random)
-	{
-		Position p = new Position(chunkX, 0, chunkZ);
-		StructureData data = StructureData.get(world);
-		if(!data.hasPosition(p))
-		{
-			if(world.provider.getDimension() ==this.dimID || world.provider.getDimension()==LibReference.dimID)
-			{
-				if(random.nextInt(this.freq)==0)
-				{
-					int x = chunkX * 16 + random.nextInt(8)+8;
-					int z = chunkZ * 16 + random.nextInt(8)+8;
-					int y = random.nextInt(20)+20;
-					Rotation rot = Rotation.values()[random.nextInt(Rotation.values().length)];
-					Mirror mirror = Mirror.values()[random.nextInt(Mirror.values().length)];
-					BlockPos pos = this.underGround?new BlockPos(x,y,z):this.calculateGroundHeight(world, new BlockPos(x,255,z)).add(0, this.yOffset, 0);
-					int chunkMinY = world.getChunkFromChunkCoords(chunkX, chunkZ).getLowestHeight();
-					if(this.underGround || Math.abs(pos.getY()-chunkMinY)<this.yOffset)
-						for(Type type : this.biomeTypes)
-						{
-							if(BiomeDictionary.hasType(world.getBiome(pos), type))
-							{
-								PlacementProperties props =  new PlacementProperties(pos, rot, mirror, this.name);
-								this.schematic.generate(world, props, null);
-								props.getUnfinishedChunks().forEach(position->this.structureMap.put(position, props));
-								data.put(p, props);
-								return;
-							}
-						}
-				}
-			}
-		}
-		else if(this.structureMap.containsKey(p))
-		{
-			PlacementProperties prop = this.structureMap.get(p);
-			prop.getUnfinishedChunks().remove(p);
-			this.structureMap.remove(p);
-			this.schematic.generate(world, prop, new AxisAlignedBB(chunkX*16, 0, chunkZ*16, chunkX*16+16, 255, chunkZ*16+16));
-		}
-	}
-	
-	private BlockPos calculateGroundHeight(World world, BlockPos pos)
-	{
-		Biome biome = world.getBiome(pos);
-		IBlockState state = biome.topBlock;
-		//checking for trees since they turn grass into dirt
-		boolean grass = state.getBlock()==Blocks.GRASS;
-		while(pos.getY()>1)
-		{
-			IBlockState check = world.getBlockState(pos);
-			if(((grass && check.getBlock()==Blocks.DIRT) || check.getBlock()==state.getBlock()) && (world.getBlockState(pos.up()).getMaterial()==Material.AIR ||world.getBlockState(pos.up()).getMaterial().isReplaceable()))
-			{			
-				return pos;
-			}
-			pos = pos.down();
-		}
-		return pos;
-	}
-	
-	public void generate(World world, int chunkX, int chunkZ)
-	{
-		for(Position p : this.structureMap.keySet())
-		{
-			if(new Position(chunkX, 0, chunkZ).equals(p))
-			{
-				this.structureMap.remove(p);
-			}
-		}
-	}
-
-	/*public void generate(World world, int chunkX, int chunkZ, Random random)
+	//Sets up structure pos and properties
+	public synchronized void start(World world, int chunkX, int chunkZ, Random random)
 	{
 		Position p = new Position(chunkX, 0, chunkZ);
 		StructureData data = StructureData.get(world);
@@ -130,61 +64,108 @@ public class Structure {
 				{
 					int x = chunkX * 16 + random.nextInt(16)+8;
 					int z = chunkZ * 16 + random.nextInt(16)+8;
-					//start building a structure
 					int y = random.nextInt(20)+20;
 					Rotation rot = Rotation.values()[random.nextInt(Rotation.values().length)];
 					Mirror mirror = Mirror.values()[random.nextInt(Mirror.values().length)];
-					BlockPos pos = this.underGround?new BlockPos(x,y,z):world.getHeight(new BlockPos(x,y,z)).add(0, this.yOffset, 0);
-					world.getChunkFromChunkCoords(chunkX, chunkZ).getLowestHeight();
-					Ints.max(world.getChunkFromChunkCoords(chunkX, chunkZ).getHeightMap());
-					for(Type type : this.biomeTypes)
-					{
-						if(BiomeDictionary.hasType(world.getBiome(pos), type))
+					BlockPos pos = this.underGround?new BlockPos(x,y,z):this.calculateGroundHeight(world, new BlockPos(x,255,z)).add(0, this.yOffset, 0);
+					if(this.canSpawnAt(world, pos))
+						for(Type type : this.biomeTypes)
 						{
-							List<Position> list = schematic.generate(world, pos, rot, mirror, null);
-							//for(Position chunk : list)
-							//	data.put(chunk, new PlacementProperties(pos, rot, mirror, this.name));
-							return;
+							if(BiomeDictionary.hasType(world.getBiome(pos), type))
+							{
+								PlacementProperties props =  new PlacementProperties(pos, rot, mirror, this.name);
+								BlockPos corner = Schematic.transformedBlockPos(new Position(this.schematic.getWidth(), this.schematic.getLength(), this.schematic.getLength()), mirror, rot).add(pos);
+								props.getUnfinishedChunks().addAll(Structure.getStructureChunks(new StructureBoundingBox(Math.min(pos.getX(), corner.getX()), pos.getY(), Math.min(pos.getZ(), corner.getZ()),Math.max(pos.getX(), corner.getX()), corner.getY(), Math.max(pos.getZ(), corner.getZ()))));//this.schematic.generate(world, props, null);
+								this.structures.add(props);
+								data.put(p, props);
+								return;
+							}
 						}
-					}
 				}
-			}	
+			}
 		}
-		else
+	}
+	
+	private boolean canSpawnAt(World world, BlockPos pos)
+	{
+		if(this.underGround)
+			return true;
+		int chunkMinY = world.getChunkFromBlockCoords(pos).getLowestHeight();
+		return (pos.getY()-chunkMinY)>this.yOffset;
+	}
+	
+	//Actually generates the structure
+	public synchronized void gen(World world)
+	{
+		this.getData(world);
+		Iterator<PlacementProperties> it = this.structures.iterator();
+		while(it.hasNext())
 		{
-			//continue building the a structure in case the chunk wasn't fully loaded.
-			PlacementProperties prop = data.read(p);
-			schematic.generate(world, prop.getOrigin(), prop.rot(), prop.mirror(), new AxisAlignedBB(chunkX*16, 0, chunkZ*16, chunkX*16+16, 255, chunkZ*16+16).grow(2, 0, 2));
+			PlacementProperties prop = it.next();
+			List<Position> list = new ArrayList<Position>();
+			for(int i = 0; i < prop.getUnfinishedChunks().size(); i++)
+			{
+				Position pos = prop.getUnfinishedChunks().get(i);
+				if(world.getChunkProvider().getLoadedChunk(pos.getX(), pos.getZ())!=null)
+				{
+					this.schematic.generate(world, prop, new StructureBoundingBox(pos.getX()*16, pos.getZ()*16, pos.getX()*16+15, pos.getZ()*16+15), true);
+					list.add(pos);
+				}
+			}
+			prop.getUnfinishedChunks().removeAll(list);
+			if(prop.isFinished())
+				it.remove();
 		}
-	}*/
-	/*private AxisAlignedBB fromPos(int chunkX, int chunkZ)
+	}
+	private BlockPos calculateGroundHeight(World world, BlockPos pos)
 	{
-		int i = chunkX * 16;
-        int j = chunkZ * 16;
-		return new AxisAlignedBB(i, 0, j, i+15, 255, j+15);
-	}*/
-	/*public BlockPos offSetToMid(BlockPos pos, PlacementProperties props)
-	{
+		Biome biome = world.getBiome(pos);
+		IBlockState state = biome.topBlock;
+		while(pos.getY()>1)
+		{
+			IBlockState check = world.getBlockState(pos);
+			if(check.getBlock()==state.getBlock() && (world.getBlockState(pos.up()).getMaterial()==Material.AIR ||world.getBlockState(pos.up()).getMaterial().isReplaceable()))
+			{			
+				return pos;
+			}
+			pos = pos.down();
+		}
 		return pos;
 	}
 	
-	public List<Position> calculateChunksFromStructure(PlacementProperties props)
+	public void getData(World world)
+	{
+		if(!this.initialized)
+		{
+			StructureData data = StructureData.get(world);
+			for(Position p : data.positions())
+			{
+				PlacementProperties props = data.read(p);
+				if(props.getIdentifier().equals(this.name) && !props.isFinished())
+					this.structures.add(props);
+			}
+			this.initialized=true;
+		}
+	}
+	public static List<Position> getStructureChunks(StructureBoundingBox bb)
 	{
 		List<Position> list = new ArrayList<Position>();
-		//Position originChunk = props.getOrigin().getX()
-		int chunkWidth = this.schematic.getWidth()>>4;
-		int chunkLength = this.schematic.getLength()>>4;
-		for(int x = 0; x <= chunkWidth; x++)
-			for(int z = 0; z <= chunkLength; z++)
-				{
-					BlockPos pos = Schematic.transformedBlockPos(new Position(x, 0, z), props.mirror(), props.rot());
-					System.out.println(pos);
-					Position chunk = new Position((props.getOrigin().getX()>>4)+pos.getX(), 0, (props.getOrigin().getZ()>>4)+pos.getZ());
-					if(!list.contains(chunk))
-						list.add(chunk);
-				}
+		if (bb.maxY >= 0 && bb.minY < 256)
+        {
+            bb.minX = bb.minX >> 4;
+            bb.minZ = bb.minZ >> 4;
+            bb.maxX = bb.maxX >> 4;
+            bb.maxZ = bb.maxZ >> 4;
+            for (int chunkX = bb.minX; chunkX <= bb.maxX; ++chunkX)
+            {
+                for (int chunkZ = bb.minZ; chunkZ <= bb.maxZ; ++chunkZ)
+                {
+                	list.add(new Position(chunkX,0,chunkZ));
+                }
+            }
+        }
 		return list;
-	}*/
+	}
 	
 	public static class PlacementProperties
 	{
@@ -192,6 +173,7 @@ public class Structure {
 		private String schematic;
 		private Rotation rotation;
 		private Mirror mirror;
+		/** A list of chunks, where it still needs to generate*/
 		private List<Position> unfinishedChunks=new ArrayList<Position>();
 		
 		public PlacementProperties(NBTTagCompound nbt)
@@ -243,6 +225,8 @@ public class Structure {
 			this.rotation=Rotation.values()[nbt.getInteger("Rotation")];
 			this.mirror=Mirror.values()[nbt.getInteger("Mirror")];
 			this.schematic=nbt.getString("Structure");
+			NBTTagList list = nbt.getTagList("Unfinished", Constants.NBT.TAG_INT_ARRAY);
+			list.forEach(tag->this.unfinishedChunks.add(new Position(((NBTTagIntArray)tag).getIntArray()[0], 0, ((NBTTagIntArray)tag).getIntArray()[1])));
 		}
 		
 		public NBTTagCompound writeToNBT()
@@ -254,6 +238,9 @@ public class Structure {
 			nbt.setInteger("Rotation", this.rotation.ordinal());
 			nbt.setInteger("Mirror", this.mirror.ordinal());
 			nbt.setString("Structure", this.schematic);
+			NBTTagList list = new NBTTagList();
+			unfinishedChunks.forEach(p->list.appendTag(new NBTTagIntArray(new int[] {p.getX(), p.getZ()})));
+			nbt.setTag("Unfinished", list);
 			return nbt;
 		}
 		

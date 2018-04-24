@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.world;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.flemmli97.runecraftory.common.utils.Position;
 import com.flemmli97.runecraftory.common.world.Structure.PlacementProperties;
@@ -47,6 +48,11 @@ public class StructureData extends WorldSavedData{
 	{
 		this.structureMap.put(pos, props);
 		this.markDirty();
+	}
+	
+	public Set<Position> positions()
+	{
+		return this.structureMap.keySet();
 	}
 	
 	public PlacementProperties read(Position pos)

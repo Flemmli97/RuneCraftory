@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:item/fist_s",
-  "textures": {
-    "0": "runecraftory:items/leather_glove_held"
-  }
-}

@@ -11,6 +11,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 public class ConfigHandler {
 	
+	//General
+	public static boolean debugMode;
+	
 	//Crops
 	
 	//Equipment + Player
@@ -32,7 +35,7 @@ public class ConfigHandler {
 	}
 	private static void mainConfig(Configuration config) {
 		config.load();
-		
+		debugMode = config.getBoolean("Debug Mode", "general", false, "");
 		config.save();
 	}
 	

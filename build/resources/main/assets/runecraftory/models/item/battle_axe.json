@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:item/axe_mid",
-  "textures": {
-    "layer0": "runecraftory:items/battle_axe"
-  }
-}

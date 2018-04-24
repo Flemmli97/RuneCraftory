@@ -61,11 +61,12 @@ public class LevelCalc {
 		if(world.provider.getDimension()==0)
 			dis= Math.sqrt(spawn.distanceSq(currentPos.getX(), spawn.getY(), currentPos.getZ()));
 		else
+		{
 			dis=Math.sqrt(spawn.distanceSq(currentPos.getX(), spawn.getY(), currentPos.getZ()))+200;
 			dis*=1.2;
-		return Math.round((float) (level+Math.max(1, (dis-250)*0.1F) ));
+		}
+		return Math.round((float) (level+Math.max(0, (dis-250)*0.1F) ));
 	}
-	
 	
 	public static double initStatIncreaseLevel(double baseValue, int level, boolean isBoss, boolean isHealth)
 	{

@@ -384,8 +384,8 @@ public class RFCalculations {
 	
 	public static boolean attackEntity(Entity target, CustomDamage source, float amount)
 	{
-		if(target instanceof EntityLivingBase)
-			knockBack((EntityLivingBase) target,  source);
+		//if(target instanceof EntityLivingBase)
+			//knockBack((EntityLivingBase) target,  source);
 		return 	target.attackEntityFrom(source, amount);
 	}
 	

@@ -28,24 +28,23 @@ public class GuiSpellHotbar extends Gui{
     {
         if (this.mc.getRenderViewEntity() instanceof EntityPlayer && !this.mc.playerController.isSpectator())
         {
-    			InventorySpells inv = this.mc.player.getCapability(PlayerCapProvider.PlayerCap, null).getInv();
+    		InventorySpells inv = this.mc.player.getCapability(PlayerCapProvider.PlayerCap, null).getInv();
             EntityPlayer entityplayer = (EntityPlayer)this.mc.getRenderViewEntity();
-
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.mc.getTextureManager().bindTexture(WIDGETS_TEX_PATH);
             int i = sr.getScaledWidth() / 2;
             for(int a = 0; a < 2; a++)
-            		this.drawTexturedModalRect(i + 104+29*a, sr.getScaledHeight() - 47, 53, 22, 29, 24);
+            		this.drawTexturedModalRect(i + 114+29*a, sr.getScaledHeight() - 47, 24, 23, 22, 22);
             for(int a = 0; a < 2; a++)
-        			this.drawTexturedModalRect(i + 104+29*a, sr.getScaledHeight() - 23, 53, 22, 29, 24);
+        			this.drawTexturedModalRect(i + 114+29*a, sr.getScaledHeight() - 23, 24, 23, 22, 22);
             GlStateManager.enableRescaleNormal();
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             RenderHelper.enableGUIStandardItemLighting();
             for(int a = 0; a < 2; a++)
-            		this.renderHotbarItem(i + 114+29*a, sr.getScaledHeight() - 47, partialTicks, entityplayer, inv.getStackInSlot(a));
+            		this.renderHotbarItem(i + 117+29*a, sr.getScaledHeight() - 44, partialTicks, entityplayer, inv.getStackInSlot(a));
             for(int a = 0; a < 2; a++)
-        			this.renderHotbarItem(i + 114+29*a, sr.getScaledHeight() - 23, partialTicks, entityplayer, inv.getStackInSlot(a+2));
+        			this.renderHotbarItem(i + 117+29*a, sr.getScaledHeight() - 20, partialTicks, entityplayer, inv.getStackInSlot(a+2));
             RenderHelper.disableStandardItemLighting();
             GlStateManager.disableRescaleNormal();
             GlStateManager.disableBlend();

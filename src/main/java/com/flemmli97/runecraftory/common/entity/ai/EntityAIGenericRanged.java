@@ -46,7 +46,22 @@ public class EntityAIGenericRanged<T extends EntityMobBase & IRangedMob> extends
         {
             return false;
         }
+        else if(!this.isTargetInsideHome(entitylivingbase))
+        	return false;
         return true;    
+    }
+    
+    private boolean isTargetInsideHome(EntityLivingBase target)
+    {
+    	 if (this.attacker.getMaximumHomeDistance() == -1.0F)
+         {
+             return true;
+         }
+    	 else
+         {
+             return target.getPosition().distanceSq(this.attacker.getHomePosition())<
+            		 (Math.max(this.attacker.getMaximumHomeDistance(),this.maxAttackDistance)*Math.max(this.attacker.getMaximumHomeDistance(),this.maxAttackDistance));
+         }
     }
 
     public void startExecuting()

@@ -39,7 +39,7 @@ public class EntityWooly extends EntityMobBase implements IShearable{
 		this.setSize(0.6F, 1.3F);
 		this.drops.put(new ItemStack(ModItems.furs, 1,0), 0.5F);
 		this.drops.put(new ItemStack(Items.SHEARS), 0.15F);
-		this.tasks.addTask(0, attack);
+		this.tasks.addTask(2, attack);
 	}
 	
 	@Override

@@ -103,7 +103,7 @@ public class EntityAmbrosiaWave extends Entity{
 			this.setDead();
 		if(this.getRadius()<=5)
 			this.increaseRadius();
-        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(this.getRadius()), this.pred);
+        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(this.getRadius(), 1, this.getRadius()), this.pred);
         for(EntityLivingBase e : list)
         {
         		if(!e.equals(this.owner))

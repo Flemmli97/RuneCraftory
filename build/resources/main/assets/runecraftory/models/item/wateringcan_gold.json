@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:item/wateringcan",
-  "textures": {
-    "0": "runecraftory:items/wateringcan_gold"
-  }
-}
