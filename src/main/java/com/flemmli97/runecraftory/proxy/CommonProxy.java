@@ -2,15 +2,15 @@ package com.flemmli97.runecraftory.proxy;
 
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.client.gui.GuiHandler;
-import com.flemmli97.runecraftory.common.core.handler.ConfigHandler;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayerAnim;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerAnim;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerAnimNetwork;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCap;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapNetwork;
+import com.flemmli97.runecraftory.common.core.handler.config.ConfigHandler;
+import com.flemmli97.runecraftory.common.core.handler.config.IntegrationConfig;
 import com.flemmli97.runecraftory.common.core.handler.event.EventHandlerClient;
 import com.flemmli97.runecraftory.common.core.handler.event.EventHandlerCore;
 import com.flemmli97.runecraftory.common.core.handler.event.EventHandlerSounds;
@@ -35,30 +35,29 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class CommonProxy {
 
     public void preInit(FMLPreInitializationEvent e) {
-    		PacketHandler.registerPackets();
-    		ConfigHandler.initConfig(e);
-    		ModEntities.init();
-    		if (Loader.isModLoaded("waila"))
-    		{
-    			FMLInterModComms.sendMessage("waila", "register", "com.flemmli97.runecraftory.compat.waila.WailaRegister.init");
-    		}
+		PacketHandler.registerPackets();
+		ModEntities.init();
+		ConfigHandler.initConfigMain(e);
     }
     
     public void init(FMLInitializationEvent e) {
-    		CapabilityManager.INSTANCE.register(IPlayer.class, new PlayerCapNetwork(), PlayerCap::new);
-    		CapabilityManager.INSTANCE.register(IPlayerAnim.class, new PlayerAnimNetwork(), PlayerAnim::new);
+    	CapabilityManager.INSTANCE.register(IPlayer.class, new PlayerCapNetwork(), PlayerCap::new);
+    	CapabilityManager.INSTANCE.register(IPlayerAnim.class, new PlayerAnimNetwork(), PlayerAnim::new);
 
         MinecraftForge.EVENT_BUS.register(new EventHandlerCore());
         MinecraftForge.EVENT_BUS.register(new EventHandlerClient());
         MinecraftForge.EVENT_BUS.register(new EventHandlerSounds());
         NetworkRegistry.INSTANCE.registerGuiHandler(RuneCraftory.instance, new GuiHandler());
+    	OreDictInit.init();
+    	WorldGenRegistry.init();
+		if (Loader.isModLoaded("waila") && IntegrationConfig.waila)
+		{
+			FMLInterModComms.sendMessage("waila", "register", "com.flemmli97.runecraftory.compat.waila.WailaRegister.init");
+		}
     }
 
     public void postInit(FMLPostInitializationEvent e) {
-    		ModEntities.registerMobSpawn();
-    		OreDictInit.init();
-    		ItemStats.registerAttributes();
-    		WorldGenRegistry.init();
+    	ModEntities.registerMobSpawn();
     }
     
     public IThreadListener getListener(MessageContext ctx) {

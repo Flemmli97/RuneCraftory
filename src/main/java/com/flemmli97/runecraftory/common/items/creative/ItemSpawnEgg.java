@@ -10,6 +10,7 @@ import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.init.EntitySpawnEggList;
 import com.flemmli97.runecraftory.common.init.GateSpawning;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
 import net.minecraft.block.BlockFence;
@@ -44,7 +45,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSpawnEgg extends Item{
+public class ItemSpawnEgg extends Item implements IModelRegister{
 	
 	public ItemSpawnEgg()
 	{

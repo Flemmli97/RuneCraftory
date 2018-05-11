@@ -24,7 +24,6 @@ import com.flemmli97.runecraftory.common.lib.LibReference;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -56,10 +55,7 @@ public class ModEntities {
 		for(Biome biome : Biome.REGISTRY)
 			EntityRegistry.addSpawn(EntityGate.class, 50, 1, 2, EnumCreatureType.MONSTER, biome);
 		RuneCraftory.logger.info("Registering gate spawns");
-		GateSpawning.addToBiomeType(EntityWooly.class,  Type.PLAINS, Type.BEACH, Type.CONIFEROUS, Type.FOREST, Type.HILLS, Type.MAGICAL, Type.MOUNTAIN, Type.SAVANNA);
-		GateSpawning.addToBiomeType(EntityOrc.class, Type.PLAINS, Type.BEACH, Type.CONIFEROUS, Type.FOREST, Type.HILLS, Type.MAGICAL, Type.MOUNTAIN, Type.SAVANNA);
-		GateSpawning.addToBiomeType(EntityAnt.class, Type.PLAINS, Type.CONIFEROUS, Type.FOREST, Type.HILLS, Type.SAVANNA, Type.LUSH);
-		GateSpawning.addToBiomeType(EntityBeetle.class, Type.PLAINS, Type.FOREST, Type.HILLS, Type.LUSH);
+		GateSpawning.initGateSpawnings();
 		RuneCraftory.logger.info("Finished registering gate spawns");
 	}
 	

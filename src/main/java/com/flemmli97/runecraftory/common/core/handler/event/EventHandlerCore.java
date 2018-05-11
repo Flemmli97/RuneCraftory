@@ -8,38 +8,66 @@ import com.flemmli97.runecraftory.api.items.IRpUseItem;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.core.handler.quests.IObjective;
+import com.flemmli97.runecraftory.common.core.handler.quests.ObjectiveKill;
+import com.flemmli97.runecraftory.common.core.handler.quests.QuestMission;
+import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler;
+import com.flemmli97.runecraftory.common.core.handler.time.DailyBlockTickHandler;
+import com.flemmli97.runecraftory.common.core.network.PacketCalendar;
 import com.flemmli97.runecraftory.common.core.network.PacketHandler;
 import com.flemmli97.runecraftory.common.core.network.PacketJump;
 import com.flemmli97.runecraftory.common.core.network.PacketUpdateClient;
 import com.flemmli97.runecraftory.common.core.network.PacketWeaponHit;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
+import com.flemmli97.runecraftory.common.init.ModBlocks;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumStatusEffect;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockDirt;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
+import net.minecraftforge.event.entity.player.UseHoeEvent;
+import net.minecraftforge.event.world.BlockEvent.CropGrowEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * 
@@ -70,6 +98,8 @@ public class EventHandlerCore {
 			IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
 			if(capSync!=null)
 				PacketHandler.sendTo(new PacketUpdateClient(capSync), (EntityPlayerMP) player);
+			PacketHandler.sendTo(new PacketCalendar(CalendarHandler.get(event.player.world)), (EntityPlayerMP) player);
+
 		}
 		NBTTagCompound playerData = event.player.getEntityData();
 		NBTTagCompound persistent = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
@@ -190,8 +220,11 @@ public class EventHandlerCore {
 				{
 					effect.update();
 				}
-			player.getCapability(PlayerCapProvider.PlayerAnim, null).update();
+			player.getCapability(PlayerCapProvider.PlayerAnim, null).update(player);
 			capSync.getInv().update(player);
+			//Disables hunger and natural regen
+			player.getFoodStats().setFoodLevel(7);
+			player.getFoodStats().setFoodSaturationLevel(1);;
 		}
 		else if(event.getEntityLiving() instanceof IEntityAdvanced)
 		{
@@ -248,6 +281,22 @@ public class EventHandlerCore {
     }
 	
 	@SubscribeEvent
+	public void daily(ServerTickEvent e)
+	{
+		if(e.phase==TickEvent.Phase.END)
+		{
+			World[] worlds = FMLCommonHandler.instance().getMinecraftServerInstance().worlds;
+			if(worlds[0].getWorldTime()%24000==1)
+			{
+				for(World world : worlds)
+					DailyBlockTickHandler.instance((WorldServer) world).update(world);
+				CalendarHandler.get(worlds[0]).increaseDay();
+			}
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
 	public void jump(LivingUpdateEvent e)
 	{
 		if(e.getEntityLiving() instanceof EntityPlayerSP &&	(e.getEntityLiving().getRidingEntity() instanceof EntityMobBase) && ((EntityPlayerSP)e.getEntityLiving()).movementInput.jump)
@@ -255,4 +304,75 @@ public class EventHandlerCore {
 			PacketHandler.sendToServer(new PacketJump());
 		}
 	}
+	
+	@SubscribeEvent
+	public void objKill(LivingDeathEvent event) {
+		if (event.getSource().getTrueSource() instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
+			IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+			QuestMission quest = cap.currentMission();
+			if(quest!=null && quest.questObjective() instanceof ObjectiveKill)
+			{
+				IObjective obj =cap.currentMission().questObjective();
+				if(EntityList.isMatchingName(event.getEntityLiving(), new ResourceLocation(obj.objGoalID())))
+				{
+					obj.updateProgress(player);
+				}
+			}
+		}
+	}
+	@SubscribeEvent
+	public void disableVanillaCrop(CropGrowEvent.Pre event)
+	{
+		event.setCanceled(true);
+	}
+	
+	//Convert food heals to rp heals
+	@SubscribeEvent
+	public void foodHandling(LivingEntityUseItemEvent.Finish event)
+	{
+		if(event.getItem().getItem() instanceof ItemFood)
+		{
+			
+		}
+	}
+	
+	//Bonemeal as fertilizer for soil, not crops
+	@SubscribeEvent
+	public void boneMealHandling(BonemealEvent event)
+	{
+
+	}
+	
+	@SubscribeEvent
+	public void disableVanillaTilling(UseHoeEvent event)
+	{
+		IBlockState iblockstate = event.getWorld().getBlockState(event.getPos());
+        Block block = iblockstate.getBlock();
+        if (event.getWorld().isAirBlock(event.getPos().up()) && block==Blocks.DIRT)
+        {
+			event.setResult(Result.DENY);
+			switch ((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT))
+			{
+				case DIRT:
+					this.setBlock(event.getCurrent(), event.getEntityPlayer(), event.getWorld(), event.getPos(), ModBlocks.farmland.getDefaultState());
+					break;
+				case COARSE_DIRT:
+					this.setBlock(event.getCurrent(), event.getEntityPlayer(), event.getWorld(), event.getPos(), Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));
+					break;
+				default:
+					break;
+			}
+		}
+	}
+    protected void setBlock(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, IBlockState state)
+    {
+        worldIn.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+        if (!worldIn.isRemote)
+        {
+            worldIn.setBlockState(pos, state, 11);
+            stack.damageItem(1, player);
+        }
+    }
 }

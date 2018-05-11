@@ -29,9 +29,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -54,6 +56,12 @@ public class BlockMineral extends Block{
         this.setRegistryName(new ResourceLocation(LibReference.MODID, "ore"));
 		this.setUnlocalizedName(this.getRegistryName().toString());
 	}
+	
+	private AxisAlignedBB box = new AxisAlignedBB(0,0,0,1,0.875,1);
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return box;
+	}
 
 	@Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
@@ -68,6 +76,24 @@ public class BlockMineral extends Block{
     {
         return Items.AIR;
     }
+	
+	@Override
+    public boolean isFullCube(IBlockState state)
+    {
+        return false;
+    }
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer()
+    {
+        return BlockRenderLayer.CUTOUT;
+    }
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
@@ -271,7 +297,7 @@ public class BlockMineral extends Block{
 	@Override
     public int getMetaFromState(IBlockState state)
     {
-    		return state.getValue(TIER).getMeta();
+		return state.getValue(TIER).getMeta();
     }
 
 	@Override
@@ -281,7 +307,8 @@ public class BlockMineral extends Block{
 
 	@SideOnly(Side.CLIENT)
     public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
+		for(EnumTier tier : EnumTier.values())
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), tier.getMeta(), new ModelResourceLocation(this.getRegistryName()+"_"+tier.getName(), "inventory"));
     }
 	
 	public static enum EnumTier implements IStringSerializable

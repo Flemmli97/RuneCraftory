@@ -150,10 +150,21 @@ runecraftory:cloth_insect.name=Insect Carapace
 runecraftory:cloth_pretty.name=Pretty Carapace
 runecraftory:cloth_ancient.name=Ancient Orc Cloth
 
+runecraftory:seed_turnip.name=Turnip Seeds
+runecraftory:crop_turnip.name=Turnip
+runecraftory:seed_turnip_pink.name=Pink Turnip Seeds
+runecraftory:crop_turnip_pink.name=Pink Turnip
+runecraftory:seed_cabbage.name=Cabbage Seeds
+runecraftory:crop_cabbage.name=Cabbage
+runecraftory:seed_pink_melon.name=Pink Melon Seeds
+runecraftory:crop_pink_melon.name=Pink Melon
+
 runecraftory:block_forge.name=Forge
 runecraftory:block_access.name=Accessory Workbench
 runecraftory:block_cooking.name=Cooking Table
 runecraftory:block_pharm.name=Pharmacy
+
+runecraftory:fireball.name=Small Fireball
 
 runecraftory:spawn_egg.name=Spawn
 
@@ -178,7 +189,7 @@ tile.runecraftory:broken_ore.7.name=Broken Earth Mineral
 tile.runecraftory:broken_ore.8.name=Broken Wind Mineral
 tile.runecraftory:research_table.name=Research Table
 tile.runecraftory:bossspawner.name=Boss Spawner
-
+tile.runecraftory.black_board.name=Quest Box
 attribute.water=Attribute: Water
 attribute.earth=Attribute: Earth
 attribute.wind=Attribute: Wind
@@ -191,6 +202,9 @@ level=Level
 buy=Buy
 sell=Sell
 money=Money
+season=Season
+growth=Growth
+harvested=Harvest Amount
 
 sleep=Sleep
 

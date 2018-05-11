@@ -67,7 +67,7 @@ public class RuneCraftory {
 
 		@Override
 		public ItemStack getTabIconItem() {
-			return new ItemStack(ModItems.cheapBracelet,1,6);
+			return new ItemStack(ModItems.cheapBracelet);
 		}
 	};
 	
@@ -75,7 +75,7 @@ public class RuneCraftory {
 
 		@Override
 		public ItemStack getTabIconItem() {
-			return new ItemStack(ModItems.icon,1,1);
+			return new ItemStack(ModItems.mineral);
 		}
 	};
 	
@@ -90,7 +90,7 @@ public class RuneCraftory {
 
 		@Override
 		public ItemStack getTabIconItem() {
-			return new ItemStack(ModItems.icon,1,2);
+			return new ItemStack(ModItems.icon,1,1);
 		}
 	};
 	
@@ -98,7 +98,7 @@ public class RuneCraftory {
 
 		@Override
 		public ItemStack getTabIconItem() {
-			return new ItemStack(ModItems.icon,1,3);
+			return new ItemStack(ModItems.turnipSeeds);
 		}
 	};
 	
@@ -106,7 +106,7 @@ public class RuneCraftory {
 
 		@Override
 		public ItemStack getTabIconItem() {
-			return new ItemStack(ModItems.icon,1,4);
+			return new ItemStack(ModItems.icon,1,2);
 		}
 	};
 }

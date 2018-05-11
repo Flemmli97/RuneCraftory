@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.api.entities;
 
 import java.util.List;
+import java.util.Map;
 
 import com.flemmli97.runecraftory.common.lib.enums.EnumStatusEffect;
 
@@ -10,6 +11,8 @@ import net.minecraft.item.ItemStack;
 public interface IEntityAdvanced extends IEntityBase{
 	
 	public ItemStack[] tamingItem();
+	
+	public Map<ItemStack, Integer> dailyDrops();
 	
 	public float tamingChance();
 	
@@ -33,6 +36,6 @@ public interface IEntityAdvanced extends IEntityBase{
 	
 	public float attackChance();
 	
-	//friendship value TODO
+	//TODO: friendship value 
 
 }

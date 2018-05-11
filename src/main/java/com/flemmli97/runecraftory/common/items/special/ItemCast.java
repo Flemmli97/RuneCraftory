@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.items.special;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.items.ISpells;
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -17,7 +18,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class ItemCast extends Item implements ISpells{
+public abstract class ItemCast extends Item implements ISpells, IModelRegister{
 	
 	public ItemCast(String name) {
 		super();
@@ -25,6 +26,16 @@ public abstract class ItemCast extends Item implements ISpells{
         this.setCreativeTab(RuneCraftory.cast);
         this.setRegistryName(new ResourceLocation(LibReference.MODID, name));	
         this.setUnlocalizedName(this.getRegistryName().toString());
+	}
+	
+	@Override
+	public String getUnlocalizedName() {
+		return this.getRegistryName().toString();
+	}
+	
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+		return this.getRegistryName().toString();
 	}
 	
 	@Override

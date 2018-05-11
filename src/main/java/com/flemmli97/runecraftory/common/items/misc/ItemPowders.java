@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.items.misc;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.items.IItemBase;
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -15,7 +16,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemPowders extends Item implements IItemBase{
+public class ItemPowders extends Item implements IItemBase, IModelRegister{
 	
 	private String[] powders = new String[] {"spore", "poison", "holy","dust","elixier","gunpowder", "root", "magic_p", "mysterious", "magic","earth","fire","water","turnip","melody"};
 

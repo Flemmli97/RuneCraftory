@@ -1,54 +1,18 @@
 package com.flemmli97.runecraftory.common.entity.monster;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.entity.ai.EntityAIGenericMelee;
-import com.flemmli97.runecraftory.common.init.ModItems;
 
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class EntityAnt extends EntityMobBase{
 
-	private Map<ItemStack, Float>drops = new HashMap<ItemStack, Float>();
 	public EntityAIGenericMelee attack = new EntityAIGenericMelee(this, 1, true, 1);
 
 	public EntityAnt(World world) {
-		super(world, false, 4, 2, false);
+		super(world);
 		this.setSize(0.6F, 0.45F);
-		this.drops.put(new ItemStack(ModItems.cloth, 1,7), 0.4F);
-		this.drops.put(new ItemStack(ModItems.cloth, 1,8), 0.1F);
-
 		this.tasks.addTask(2, attack);
-	}
-
-	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.initiateBaseAttributes(SharedMonsterAttributes.MAX_HEALTH,112);;
-		this.initiateBaseAttributes(ItemStats.RFATTACK,13.5);
-		this.initiateBaseAttributes(ItemStats.RFDEFENCE,10.5);
-		this.initiateBaseAttributes(ItemStats.RFMAGICATT,9.0);
-		this.initiateBaseAttributes(ItemStats.RFMAGICDEF,9.2);
-	}
-	
-	@Override
-	public ItemStack[] tamingItem() {
-		return new ItemStack[] {new ItemStack(ModItems.cloth, 1,7)};
-	}
-
-	@Override
-	public float tamingChance() {
-		return 0.75F;
-	}
-
-	@Override
-	public Map<ItemStack, Float> getDrops() {
-		return this.drops;
 	}
 
 	/*@Override

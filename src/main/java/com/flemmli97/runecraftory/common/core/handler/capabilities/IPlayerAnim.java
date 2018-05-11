@@ -1,5 +1,8 @@
 package com.flemmli97.runecraftory.common.core.handler.capabilities;
 
+import com.flemmli97.runecraftory.client.render.ArmPosePlus;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 
 public interface IPlayerAnim {
@@ -8,7 +11,7 @@ public interface IPlayerAnim {
 	
 	public void startAnimation(int tick);
 	
-	public void update();
+	public void update(EntityPlayer player);
 	
 	public boolean canUseSpear();
 	
@@ -27,6 +30,10 @@ public interface IPlayerAnim {
 	public void startWeaponSwing(WeaponSwing swing, int delay);
 	
 	public boolean isAtUltimate();
+	
+	public ArmPosePlus currentArmPose();
+	
+	public void setArmPose(ArmPosePlus armPose);
 	
 	public enum WeaponSwing
 	{

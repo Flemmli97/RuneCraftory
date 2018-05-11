@@ -8,6 +8,7 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
+import com.flemmli97.runecraftory.client.render.EnumToolCharge;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage.KnockBackType;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
@@ -16,6 +17,7 @@ import com.flemmli97.runecraftory.common.core.network.PacketHandler;
 import com.flemmli97.runecraftory.common.core.network.PacketSwingArm;
 import com.flemmli97.runecraftory.common.core.network.PacketWeaponAnimation;
 import com.flemmli97.runecraftory.common.init.ModItems;
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
@@ -47,14 +49,14 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class GloveBase extends ItemSword implements IRpUseItem{
+public abstract class GloveBase extends ItemSword implements IRpUseItem, IModelRegister{
 
 	private int chargeXP=25;
 
@@ -176,7 +178,13 @@ public abstract class GloveBase extends ItemSword implements IRpUseItem{
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack)
     {
-        return EnumAction.BLOCK;
+        return EnumAction.BOW;
+    }
+	
+	@Override
+	public EnumToolCharge chargeType(ItemStack stack)
+    {
+        return EnumToolCharge.CHARGEFIST;
     }
 	
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
@@ -193,11 +201,14 @@ public abstract class GloveBase extends ItemSword implements IRpUseItem{
 				}
 				cap.decreaseRunePoints(player, 10);
 				cap.increaseSkill(EnumSkills.FIST, player, 100);
-
-				float f1 = MathHelper.sin(player.rotationYaw * 0.017453292F);
-	            float f2 = MathHelper.cos(player.rotationYaw * 0.017453292F);
+				Vec3d look = player.getLookVec();
+				float scale = 5;
+				if(!player.onGround)
+					scale=0.7F;
+				Vec3d move = new Vec3d(look.x, 0, look.z).normalize().scale(scale);
 				List<EntityLivingBase> entityList = RFCalculations.calculateEntitiesFromLook(player, 10, 10);
-				player.setVelocity((double)(f2 - f1), 0, (double)(f2 + f1));
+				player.motionX= move.x;
+				player.motionZ=move.z;
 				if(!entityList.isEmpty())
 				{
 					cap.decreaseRunePoints(player, 15);

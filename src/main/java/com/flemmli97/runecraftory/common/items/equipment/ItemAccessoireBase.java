@@ -7,6 +7,7 @@ import org.lwjgl.input.Keyboard;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IItemWearable;
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 
@@ -25,7 +26,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class ItemAccessoireBase extends ItemArmor implements IItemWearable{
+public abstract class ItemAccessoireBase extends ItemArmor implements IItemWearable, IModelRegister{
 
 	public ItemAccessoireBase(ArmorMaterial mat, String name) {
 		super(mat, 0, EntityEquipmentSlot.LEGS);

@@ -1,10 +1,10 @@
 package com.flemmli97.runecraftory.common.lib;
 
-public class LibReference {
+public final class LibReference {
 
 	public static final String MODID = "runecraftory";
     public static final String MODNAME = "Rune Craftory";
-    public static final String VERSION = "a0.1.0 [1.10.2]";
+    public static final String VERSION = "a0.2.0 [1.12.2]";
 	public static int dimID = 0;
 	
 	public static final int guiInfo1 = 0;

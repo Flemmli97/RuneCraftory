@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.items.itemblocks;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.blocks.BlockMultiBase;
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -20,7 +21,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBlockBase extends Item {
+public class ItemBlockBase extends Item implements IModelRegister{
 	
 	private BlockMultiBase savedBlock;
 	public ItemBlockBase(BlockMultiBase savedBlock)

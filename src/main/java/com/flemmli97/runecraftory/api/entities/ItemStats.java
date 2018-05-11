@@ -67,7 +67,7 @@ public class ItemStats extends RangedAttribute{
     		return this.order;
     }
     
-    public static void registerAttributes()
+    static
     {
     		for(Field field : ItemStats.class.getFields())
     		{

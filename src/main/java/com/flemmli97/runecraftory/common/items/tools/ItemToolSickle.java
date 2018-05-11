@@ -8,9 +8,11 @@ import org.lwjgl.input.Keyboard;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
+import com.flemmli97.runecraftory.client.render.EnumToolCharge;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.ModItems;
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
@@ -51,7 +53,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemToolSickle extends ItemTool implements IRpUseItem{
+public class ItemToolSickle extends ItemTool implements IRpUseItem, IModelRegister{
 
     private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.YELLOW_FLOWER, Blocks.SAPLING, Blocks.LEAVES, Blocks.LEAVES2, Blocks.TALLGRASS, Blocks.CACTUS, Blocks.CHORUS_FLOWER, Blocks.CHORUS_PLANT, Blocks.DEADBUSH, Blocks.DOUBLE_PLANT, Blocks.MELON_BLOCK, Blocks.PUMPKIN, Blocks.RED_FLOWER, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.RED_MUSHROOM_BLOCK, Blocks.REEDS, Blocks.VINE, Blocks.WATERLILY);
 	private int[] chargeRunes = new int[] {1, 5, 15, 50, 100};
@@ -62,7 +64,7 @@ public class ItemToolSickle extends ItemTool implements IRpUseItem{
 		super(ModItems.mat, EFFECTIVE_ON);
         this.setMaxStackSize(1);
         this.setCreativeTab(RuneCraftory.weaponToolTab);
-        this.setRegistryName(new ResourceLocation(LibReference.MODID, "sickle_" + tier.getName()));	
+        this.setRegistryName(new ResourceLocation(LibReference.MODID, "sickle_"+tier.getName()));	
         this.setUnlocalizedName(this.getRegistryName().toString());
 		this.tier = tier;
 	}
@@ -246,6 +248,12 @@ public class ItemToolSickle extends ItemTool implements IRpUseItem{
 	public EnumAction getItemUseAction(ItemStack stack)
     {
         return EnumAction.BOW;
+    }
+		
+	@Override
+	public EnumToolCharge chargeType(ItemStack stack)
+    {
+        return EnumToolCharge.CHARGESICKLE;
     }
 	
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)

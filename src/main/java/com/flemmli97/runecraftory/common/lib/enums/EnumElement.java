@@ -11,8 +11,8 @@ public enum EnumElement {
 	WIND("green", "wind"),
 	FIRE("dark_red", "fire"),
 	LIGHT("white", "light"),
-	DARK("purple", "dark"),
-	LOVE("pink" , "love");
+	DARK("dark_purple", "dark"),
+	LOVE("red" , "love");
 	
 	private String name;
 	private String color;
@@ -37,6 +37,22 @@ public enum EnumElement {
 	public static EnumElement fromName(String name)
 	{
 		return map.get(name);
+	}
+	
+	public static EnumElement opposing(EnumElement element)
+	{
+		switch(element)
+		{
+			case DARK: return EnumElement.LIGHT;
+			case EARTH: return EnumElement.WIND;
+			case FIRE: return EnumElement.WATER;
+			case LIGHT: return EnumElement.DARK;
+			case LOVE: return EnumElement.NONE;
+			case NONE: return EnumElement.LOVE;
+			case WATER: return EnumElement.FIRE;
+			case WIND: return EnumElement.EARTH;
+		}
+		return EnumElement.NONE;
 	}
 	
 	static

@@ -126,6 +126,9 @@ public class ItemNBT {
 	public static void initItemNBT(ItemStack stack, NBTTagCompound nbt)
 	{
 		if(nbt!=null)
+		{
+			//NBTTagCompound compound = new NBTTagCompound();
+			//compound.setTag(LibReference.MODID, nbt);
 			if(stack.hasTagCompound())
 			{
 				NBTTagCompound stackCompound = stack.getTagCompound();
@@ -134,5 +137,13 @@ public class ItemNBT {
 			}
 			else
 				stack.setTagCompound(nbt);
+		}
 	}
+	
+	/*public static NBTTagCompound getItemNBT(ItemStack stack)
+	{
+		if(!stack.hasTagCompound())
+			initItemNBT(stack, ((IItemBase)stack.getItem()).defaultNBTStats(stack));
+		return stack.getTagCompound().getCompoundTag(LibReference.MODID);
+	}*/
 }

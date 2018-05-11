@@ -5,8 +5,10 @@ import java.util.Collection;
 import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
 import com.flemmli97.runecraftory.common.core.handler.crafting.RecipeSextuple;
+import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.items.misc.ItemRecipe;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
+import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 
@@ -108,12 +110,14 @@ public abstract class TileMultiBase extends TileEntity implements IInventory{
 			else
 				return false;
 		else if(index==7)
-			if(stack.getItem() instanceof IItemWearable)
+			if(validItem(stack))
 				return true;
 			else 
 				return false;
 		return true;
 	}
+	
+	protected abstract boolean validItem(ItemStack stack);
 
 	@Override
 	public int getField(int id) {return 0;}
@@ -173,6 +177,23 @@ public abstract class TileMultiBase extends TileEntity implements IInventory{
 			if(ItemNBT.addItemLevel(toUpgrade))
 			{
 				ItemNBT.addUpgradeItem(toUpgrade, upgrade);
+				if(upgrade.getItem()==ModItems.crystal)
+				{
+					if(upgrade.getMetadata()==0)
+						ItemNBT.setElement(EnumElement.WATER, toUpgrade);
+					else if(upgrade.getMetadata()==1)
+						ItemNBT.setElement(EnumElement.EARTH, toUpgrade);
+					else if(upgrade.getMetadata()==2)
+						ItemNBT.setElement(EnumElement.FIRE, toUpgrade);
+					else if(upgrade.getMetadata()==3)
+						ItemNBT.setElement(EnumElement.WIND, toUpgrade);
+					else if(upgrade.getMetadata()==4)
+						ItemNBT.setElement(EnumElement.LIGHT, toUpgrade);
+					else if(upgrade.getMetadata()==5)
+						ItemNBT.setElement(EnumElement.DARK, toUpgrade);
+					else if(upgrade.getMetadata()==6)
+						ItemNBT.setElement(EnumElement.LOVE, toUpgrade);
+				}
 				this.inventory.get(8).shrink(1);
 				player.world.playSound(null, player.getPosition(),SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1, 1);
 			}

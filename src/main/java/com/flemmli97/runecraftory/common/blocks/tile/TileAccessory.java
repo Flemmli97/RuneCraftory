@@ -1,6 +1,10 @@
 package com.flemmli97.runecraftory.common.blocks.tile;
 
+import com.flemmli97.runecraftory.api.items.IItemWearable;
+import com.flemmli97.runecraftory.api.items.IRpUseItem;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
+
+import net.minecraft.item.ItemStack;
 
 public class TileAccessory extends TileMultiBase{
 
@@ -11,5 +15,11 @@ public class TileAccessory extends TileMultiBase{
 	@Override
 	public String getName() {
 		return "tile.accessory";
+	}
+
+	@Override
+	protected boolean validItem(ItemStack stack) {
+		return stack.getItem() instanceof IItemWearable && !(stack.getItem() instanceof IRpUseItem);
+
 	}
 }

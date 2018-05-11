@@ -34,17 +34,20 @@ public class EntityFireBall extends EntityThrowable{
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if(result.typeOfHit==RayTraceResult.Type.ENTITY && result.entityHit!=null && !this.world.isRemote)
+		if(result.typeOfHit==RayTraceResult.Type.ENTITY && result.entityHit!=null)
 		{
-			float dmg = 0;
-			if(this.getThrower() instanceof EntityPlayer)
+			if(!this.world.isRemote)
 			{
-				IPlayer cap = this.getThrower().getCapability(PlayerCapProvider.PlayerCap, null);
-				dmg+=cap.getIntel();
+				float dmg = 0;
+				if(this.getThrower() instanceof EntityPlayer)
+				{
+					IPlayer cap = this.getThrower().getCapability(PlayerCapProvider.PlayerCap, null);
+					dmg+=cap.getIntel();
+				}
+				RFCalculations.attackEntity(result.entityHit, 
+						CustomDamage.attack(this.getThrower(), EnumElement.FIRE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0, 5), 
+						dmg+RFCalculations.getAttributeValue(this.getThrower(), ItemStats.RFMAGICATT, null, null));
 			}
-			RFCalculations.attackEntity(result.entityHit, 
-					CustomDamage.attack(this.getThrower(), EnumElement.FIRE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0, 5), 
-					dmg+RFCalculations.getAttributeValue(this.getThrower(), ItemStats.RFMAGICATT, null, null));
 			this.world.playSound(null, result.entityHit.getPosition(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1, 1);
 			this.setDead();
 		}

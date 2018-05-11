@@ -1,18 +1,12 @@
 package com.flemmli97.runecraftory.common.entity.monster;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.entity.ai.EntityAIGenericMelee;
-import com.flemmli97.runecraftory.common.init.ModItems;
 
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,31 +19,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class EntityWooly extends EntityMobBase implements IShearable{
 
-	private Map<ItemStack, Float> drops = new HashMap<ItemStack, Float>();
     private static final DataParameter<Boolean> SHEARED = EntityDataManager.<Boolean>createKey(EntityWooly.class, DataSerializers.BOOLEAN);
     private int shearTick;
 	public EntityAIGenericMelee attack = new EntityAIGenericMelee(this, 1, true, 1);
 	public EntityWooly(World world)
 	{
-		super(world, true, 3, 1, false);
+		super(world);
 		this.setSize(0.6F, 1.3F);
-		this.drops.put(new ItemStack(ModItems.furs, 1,0), 0.5F);
-		this.drops.put(new ItemStack(Items.SHEARS), 0.15F);
 		this.tasks.addTask(2, attack);
-	}
-	
-	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.initiateBaseAttributes(SharedMonsterAttributes.MAX_HEALTH, 166);
-		this.initiateBaseAttributes(ItemStats.RFATTACK, 14);
-		this.initiateBaseAttributes(ItemStats.RFDEFENCE, 9);
-		this.initiateBaseAttributes(ItemStats.RFMAGICATT, 12);
-		this.initiateBaseAttributes(ItemStats.RFMAGICDEF, 9);
 	}
 	
 	@Override
@@ -58,12 +38,6 @@ public class EntityWooly extends EntityMobBase implements IShearable{
 		super.entityInit();
 		this.dataManager.register(SHEARED, false);
     }
-
-	@Override
-	public ItemStack[] tamingItem() {
-		return new ItemStack[] {new ItemStack(ModItems.furs, 1,0),new ItemStack(ModItems.furs, 1,0),
-				new ItemStack(ModItems.furs, 1,2),new ItemStack(ModItems.furs, 1,5), new ItemStack(Blocks.WOOL, 1,OreDictionary.WILDCARD_VALUE)};
-	}
 	
 	@Override
 	public void onLivingUpdate()
@@ -72,15 +46,6 @@ public class EntityWooly extends EntityMobBase implements IShearable{
 		this.shearTick= Math.max(this.shearTick--, 0);
 		if(this.shearTick==1)
 			this.setSheared(false);
-	}
-	@Override
-	public float tamingChance() {
-		return 0.9F;
-	}
-
-	@Override
-	public Map<ItemStack, Float> getDrops() {
-		return this.drops;
 	}
 
 	@Override
@@ -110,7 +75,7 @@ public class EntityWooly extends EntityMobBase implements IShearable{
 
 	@Override
 	public float attackChance() {
-		return this.dataManager.get(SHEARED) ? 0.7F : 0.1F;
+		return this.dataManager.get(SHEARED) ? 0.7F : 0.01F;
 	}
 
 	@Override

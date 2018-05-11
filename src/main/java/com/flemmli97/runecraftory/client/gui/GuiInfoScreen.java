@@ -64,7 +64,7 @@ public class GuiInfoScreen extends InventoryEffectRenderer {
 		GuiInventory.drawEntityOnScreen(this.guiX +57, this.guiY +75, 29, mouseXNew, mouseYNew, mc.player);
 		this.mc.getTextureManager().bindTexture(texturepath);
 		this.drawTexturedModalRect(this.guiX, this.guiY, 15, 15, texX, texY);
-		int healthWidth = (int) (cap.getHealth()/cap.getMaxHealth()*100);
+		int healthWidth = (int) ((cap.getHealth()+mc.player.getHealth())/(cap.getMaxHealth()+mc.player.getMaxHealth()) *100);
 		int runeWidth=(int) (cap.getRunePoints()/(float)cap.getMaxRunePoints()*100);
 		int exp = (int) (cap.getPlayerLevel()[1]/(float)LevelCalc.xpAmountForLevelUp(cap.getPlayerLevel()[0])*100);
 		this.mc.getTextureManager().bindTexture(bars);
@@ -72,7 +72,7 @@ public class GuiInfoScreen extends InventoryEffectRenderer {
 		this.drawTexturedModalRect(this.guiX+118, this.guiY+33, 2, 58, runeWidth, 6);
 		this.drawTexturedModalRect(this.guiX+118, this.guiY+44, 2, 66, exp, 12);
 
-		this.drawCenteredScaledString((int)cap.getHealth() + "/" + (int) cap.getMaxHealth(),this.guiX+173, this.guiY+23.5F,0.7F, 0xffffff);
+		this.drawCenteredScaledString((int)(cap.getHealth()+mc.player.getHealth()) + "/" + (int) (cap.getMaxHealth()+mc.player.getMaxHealth()),this.guiX+173, this.guiY+23.5F,0.7F, 0xffffff);
 		this.drawCenteredScaledString((int)cap.getRunePoints() + "/" + (int) cap.getMaxRunePoints(),this.guiX+173, this.guiY+34,0.7F, 0xffffff);
 		this.mc.fontRenderer.drawString("Level",this.guiX+120, this.guiY+46, 0);
 		this.mc.fontRenderer.drawString("Att.",this.guiX+120, this.guiY+63, 0);

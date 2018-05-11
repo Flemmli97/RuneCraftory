@@ -20,7 +20,7 @@ public class TileBrokenOre extends TileEntity implements ITickable{
 
 	@Override
 	public void update() {
-		if(Math.abs(this.world.getWorldTime()/24000 - this.time/24000)>=1)
+		if(Math.abs(this.world.getWorldTime()/24000 - this.time/24000)>=1 || this.world.getWorldTime()%24000==1)
 		{
 			this.world.setBlockState(pos, ModBlocks.mineral.getDefaultState().withProperty(BlockMineral.TIER, this.world.getBlockState(this.pos).getValue(BlockBrokenMineral.TIER)));
 		}

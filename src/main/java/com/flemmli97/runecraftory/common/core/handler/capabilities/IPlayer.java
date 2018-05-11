@@ -2,6 +2,9 @@ package com.flemmli97.runecraftory.common.core.handler.capabilities;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.flemmli97.runecraftory.common.core.handler.quests.QuestMission;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumStatusEffect;
@@ -90,4 +93,11 @@ public interface IPlayer{
 	
 	public void cureEffect(EntityPlayer player, EnumStatusEffect status);
 	
+	//Quest
+	@Nullable
+	public QuestMission currentMission();
+	
+	public boolean acceptMission(QuestMission quest);
+	
+	public boolean finishMission(EntityPlayer player);
 }

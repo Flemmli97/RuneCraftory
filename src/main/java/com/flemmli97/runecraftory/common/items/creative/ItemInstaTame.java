@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.common.items.creative;
 
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -9,7 +10,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemInstaTame extends Item{
+public class ItemInstaTame extends Item implements IModelRegister{
 	public ItemInstaTame()
     {
 		super();

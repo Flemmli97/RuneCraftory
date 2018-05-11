@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -35,10 +36,12 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.EnumDifficulty;
 
 public class RFCalculations {
 	
@@ -165,7 +168,7 @@ public class RFCalculations {
                     		damagePhys = faintChance?Float.MAX_VALUE:damagePhys;
                     CustomDamage source = CustomDamage.attack(player, ItemNBT.getElement(stack), ignoreArmor?CustomDamage.DamageType.IGNOREDEF:CustomDamage.DamageType.NORMAL, KnockBackType.BACK, i*0.5F-0.2F, 0);
                     boolean flag5 = target.attackEntityFrom(source, damagePhys);
-
+                    spawnElementalParticle(target, source.getElement());
                     if (flag5)
                     {
                         if (i > 0)
@@ -177,7 +180,7 @@ public class RFCalculations {
                         }
                         if (target instanceof EntityLivingBase)
                         {
-                        	RFCalculations.knockBack(target, source);
+                        	knockBack(target, source);
                         }
                         float drainPercent= getAttributeValue(player, ItemStats.RFDRAIN, target,ItemStats.RFRESDRAIN);
                         if(drainPercent>0)
@@ -222,10 +225,7 @@ public class RFCalculations {
                             net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem(player, beforeHitCopy, EnumHand.MAIN_HAND);
                             player.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
                         }
-                        if (!(target instanceof IEntityBase) && ItemNBT.getElement(stack)==EnumElement.FIRE && !target.isBurning())
-                        {
-                            target.setFire(8);
-                        }
+                        applyAddEffect(ItemNBT.getElement(stack), target);
                         player.addExhaustion(0.1F);
                     }
                     else
@@ -237,6 +237,15 @@ public class RFCalculations {
             }
         }
 		return false;
+	}
+	
+	public static void applyAddEffect(EnumElement element, EntityLivingBase target)
+	{
+		if (!(target instanceof IEntityBase))
+		{
+			if(element==EnumElement.FIRE && !target.isBurning())
+				target.setFire(2);
+        }
 	}
 	
 	public static void applyStatusEffects(EntityLivingBase attackingEntity, EntityLivingBase target)
@@ -382,11 +391,84 @@ public class RFCalculations {
 		capSync.damage(player, source, amount);
 	}
 	
+	public static float elementalReduction(EntityLivingBase entity, DamageSource source, float amount)
+	{
+		if(source instanceof CustomDamage && ((CustomDamage)source).getElement()!=EnumElement.NONE)
+		{
+			EnumElement element = ((CustomDamage)source).getElement();
+			int percent  = 0;
+			switch(element)
+			{
+				case DARK: percent  = getAttributeValue(entity, ItemStats.RFRESDARK, null, null);
+					break;
+				case EARTH: percent  = getAttributeValue(entity, ItemStats.RFRESEARTH, null, null);
+					break;
+				case FIRE: percent  = getAttributeValue(entity, ItemStats.RFRESFIRE, null, null);
+					break;
+				case LIGHT: percent  = getAttributeValue(entity, ItemStats.RFRESLIGHT, null, null);
+					break;
+				case LOVE: percent  = getAttributeValue(entity, ItemStats.RFRESLOVE, null, null);
+					break;
+				case WATER: percent  = getAttributeValue(entity, ItemStats.RFRESWATER, null, null);
+					break;
+				case WIND: percent  = getAttributeValue(entity, ItemStats.RFRESWIND, null, null);
+					break;
+				default:
+					break;
+			}
+			if(percent<0)
+				amount*=1+Math.abs(percent)/100F;
+			else if(percent>100)
+				amount*=-((percent-100)/100F);
+			else
+				amount*=1-percent/100F;
+		}
+		return amount;
+	}
+	
 	public static boolean attackEntity(Entity target, CustomDamage source, float amount)
 	{
 		//if(target instanceof EntityLivingBase)
 			//knockBack((EntityLivingBase) target,  source);
+		if(target.world.getDifficulty()==EnumDifficulty.PEACEFUL)
+			return false;
+		spawnElementalParticle(target, source.getElement());
 		return 	target.attackEntityFrom(source, amount);
+	}
+	
+	public static void spawnElementalParticle(Entity target, EnumElement element)
+	{
+		if(target.world.isRemote)
+		{
+			int color = 0xffffff;
+			switch(element)
+			{
+				case DARK: color = 0x1b133f;
+					break;
+				case EARTH: color = 0x8c680f;
+					break;
+				case FIRE: color = 0xc40707;
+					break;
+				case LIGHT: color = 0xffff47;
+					break;
+				case LOVE: color=0xf783da;
+					break;
+				case NONE: 
+					break;
+				case WATER: color = 0x2a6fdd;
+					break;
+				case WIND: color = 0x21a51a;
+					break;
+			}
+			double r = (double)(color >> 16 & 255) / 255.0D;
+            double g = (double)(color >> 8 & 255) / 255.0D;
+            double b = (double)(color >> 0 & 255) / 255.0D;
+            Random rand = new Random();
+			for(int i = 0; i < 30; i++)
+			{
+				target.world.spawnParticle(EnumParticleTypes.SPELL_MOB,  target.posX + (rand.nextDouble() - 0.5D) * (double)target.width, target.posY+0.3 + rand.nextDouble() * (double)target.height, target.posZ + (rand.nextDouble() - 0.5D) * (double)target.width, r, g, b);
+			}
+		}
 	}
 	
 	public static void knockBack(EntityLivingBase entity, CustomDamage source)

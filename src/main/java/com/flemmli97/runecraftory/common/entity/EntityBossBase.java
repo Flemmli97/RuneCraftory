@@ -29,9 +29,8 @@ public abstract class EntityBossBase extends EntityMobBase{
     private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.GREEN, BossInfo.Overlay.PROGRESS));
     private static final DataParameter<Boolean> enraged = EntityDataManager.<Boolean>createKey(EntityMobBase.class, DataSerializers.BOOLEAN);
 
-	protected EntityBossBase(World world, boolean ridable, int baseXP, int baseMoney,
-			boolean isFlyingEntity) {
-		super(world, ridable, baseXP, baseMoney, isFlyingEntity);
+	protected EntityBossBase(World world) {
+		super(world);
 	}
 	
 	@Override
@@ -186,6 +185,7 @@ public abstract class EntityBossBase extends EntityMobBase{
     public void removeTrackingPlayer(EntityPlayerMP player)
     {
         super.removeTrackingPlayer(player);
+        this.bossInfo.removePlayer(player);
     }
 
     //========Unused for bosses, since they have their customized own ai
@@ -209,7 +209,7 @@ public abstract class EntityBossBase extends EntityMobBase{
         this.isDead = true;
         for (EntityPlayerMP entityplayermp1 : Sets.newHashSet(this.bossInfo.getPlayers()))
         {
-            this.bossInfo.removePlayer(entityplayermp1);
+            this.removeTrackingPlayer(entityplayermp1);
         }
     }
 }

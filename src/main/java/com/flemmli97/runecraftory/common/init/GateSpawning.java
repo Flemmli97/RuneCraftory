@@ -1,9 +1,12 @@
 package com.flemmli97.runecraftory.common.init;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
+import com.flemmli97.runecraftory.common.init.defaultval.EntityDefaultSpawns;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -13,22 +16,52 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
 
 public class GateSpawning {
 	
 	private static Multimap<Biome, String> spawningMappingBiome = ArrayListMultimap.create();
-
-	public static final void addToBiomeType(Class<?extends EntityMobBase> clss, Type... biomeType)
+	
+	public static final void initGateSpawnings()
 	{
-		for(Biome biome : Biome.REGISTRY)
+		for(Class<?extends EntityMobBase> clss : EntityDefaultSpawns.classTypeMap.keys())
+			addToBiomeType(clss, EntityDefaultSpawns.classTypeMap.get(clss));
+		for(Class<?extends EntityMobBase> clss : EntityDefaultSpawns.classBiomeMap.keys())
+			addToBiome(clss, EntityDefaultSpawns.classBiomeMap.get(clss));
+	}
+
+	public static void addToBiome(Class<? extends EntityMobBase> clss, Collection<String> biomeNames) {
+		for(String biomeName:biomeNames)
 		{
-			for(int i = 0; i <biomeType.length; i++)
+			Iterator<Biome> it = Biome.REGISTRY.iterator();
+			while(it.hasNext())
 			{
-				if(BiomeDictionary.getTypes(biome).contains(biomeType[i]))
+				Biome biome = it.next();
+				if(biomeName.equals(biome.getBiomeName().trim()))
 				{
 					spawningMappingBiome.put(biome, nameFromClass(clss));
+					break;
 				}
+			}
+		}
+	}
+
+	public static void addToBiomeType(Class<? extends EntityMobBase> clss, Collection<String> biomeTypes) {
+		for(String typeName:biomeTypes)
+		{
+			for(Biome biome : BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(typeName)))
+			{
+				spawningMappingBiome.put(biome, nameFromClass(clss));
+			}
+		}
+	}
+
+	public static final void addToBiomeType(Class<?extends EntityMobBase> clss, BiomeDictionary.Type... biomeType)
+	{
+		for(int i = 0; i <biomeType.length; i++)
+		{
+			for(Biome biome : BiomeDictionary.getBiomes(biomeType[i]))
+			{					
+				spawningMappingBiome.put(biome, nameFromClass(clss));
 			}
 		}
 	}

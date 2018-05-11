@@ -1,0 +1,8 @@
+{
+  "parent": "runecraftory:block/ore",
+  "textures": {
+    "0": "runecraftory:blocks/ore_wind_low",
+    "1": "runecraftory:blocks/ore_wind_up",
+    "particle": "runecraftory:blocks/ore_wind_low"
+  }
+}

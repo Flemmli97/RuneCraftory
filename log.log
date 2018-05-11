@@ -1,44 +1,44 @@
-[15:06:22] [main/INFO] [GradleStart]: Extra: []
-[15:06:22] [main/INFO] [GradleStart]: Running with arguments: [--userProperties, {}, --assetsDir, /Users/kevin/.gradle/caches/minecraft/assets, --assetIndex, 1.12, --accessToken{REDACTED}, --version, 1.12.2, --tweakClass, net.minecraftforge.fml.common.launcher.FMLTweaker, --tweakClass, net.minecraftforge.gradle.tweakers.CoremodTweaker]
-[15:06:22] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLTweaker
-[15:06:22] [main/INFO] [LaunchWrapper]: Using primary tweak class name net.minecraftforge.fml.common.launcher.FMLTweaker
-[15:06:22] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.gradle.tweakers.CoremodTweaker
-[15:06:22] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLTweaker
-[15:06:22] [main/INFO] [FML]: Forge Mod Loader version 14.23.1.2590 for Minecraft 1.12.2 loading
-[15:06:22] [main/INFO] [FML]: Java is Java HotSpot(TM) 64-Bit Server VM, version 1.8.0_162, running on Mac OS X:x86_64:10.13.4, installed at /Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home/jre
-[15:06:22] [main/INFO] [FML]: Managed to load a deobfuscated Minecraft name- we are in a deobfuscated environment. Skipping runtime deobfuscation
-[15:06:22] [main/INFO] [FML]: Ignoring missing certificate for coremod FMLCorePlugin (net.minecraftforge.fml.relauncher.FMLCorePlugin), we are in deobf and it's a forge core plugin
-[15:06:22] [main/INFO] [FML]: Ignoring missing certificate for coremod FMLForgePlugin (net.minecraftforge.classloading.FMLForgePlugin), we are in deobf and it's a forge core plugin
-[15:06:22] [main/INFO] [FML]: Found a command line coremod : com.flemmli97.runecraftory.asm.ASMLoader
-[15:06:22] [main/INFO] [FML]: Ignoring missing certificate for coremod RuneCraftory/ASMLoader (com.flemmli97.runecraftory.asm.ASMLoader), as this is probably a dev workspace
-[15:06:22] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.gradle.tweakers.CoremodTweaker
-[15:06:22] [main/INFO] [GradleStart]: Injecting location in coremod net.minecraftforge.fml.relauncher.FMLCorePlugin
-[15:06:22] [main/INFO] [GradleStart]: Injecting location in coremod net.minecraftforge.classloading.FMLForgePlugin
-[15:06:22] [main/INFO] [GradleStart]: Injecting location in coremod com.flemmli97.runecraftory.asm.ASMLoader
-[15:06:22] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
-[15:06:22] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
-[15:06:22] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.gradle.tweakers.AccessTransformerTweaker
-[15:06:22] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
-[15:06:22] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
-[15:06:22] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
-[15:06:25] [main/ERROR] [FML]: FML appears to be missing any signature data. This is not a good thing
-[15:06:25] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
-[15:06:25] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
-[15:06:25] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
-[15:06:26] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.gradle.tweakers.AccessTransformerTweaker
-[15:06:26] [main/INFO] [GradleStart]: Remapping AccessTransformer rules...
-[15:06:26] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.TerminalTweaker
-[15:06:26] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.TerminalTweaker
-[15:06:26] [main/INFO] [LaunchWrapper]: Launching wrapped minecraft {net.minecraft.client.main.Main}
-[15:06:27] [main/INFO]: Setting user: Player276
-[15:06:34] [main/INFO]: LWJGL Version: 2.9.2
-[15:06:35] [main/INFO] [FML]: -- System Details --
+[20:14:54] [main/INFO] [GradleStart]: Extra: []
+[20:14:54] [main/INFO] [GradleStart]: Running with arguments: [--userProperties, {}, --assetsDir, /Users/kevin/.gradle/caches/minecraft/assets, --assetIndex, 1.12, --accessToken{REDACTED}, --version, 1.12.2, --tweakClass, net.minecraftforge.fml.common.launcher.FMLTweaker, --tweakClass, net.minecraftforge.gradle.tweakers.CoremodTweaker]
+[20:14:54] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLTweaker
+[20:14:54] [main/INFO] [LaunchWrapper]: Using primary tweak class name net.minecraftforge.fml.common.launcher.FMLTweaker
+[20:14:54] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.gradle.tweakers.CoremodTweaker
+[20:14:54] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLTweaker
+[20:14:54] [main/INFO] [FML]: Forge Mod Loader version 14.23.1.2590 for Minecraft 1.12.2 loading
+[20:14:54] [main/INFO] [FML]: Java is Java HotSpot(TM) 64-Bit Server VM, version 1.8.0_162, running on Mac OS X:x86_64:10.13.4, installed at /Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home/jre
+[20:14:54] [main/INFO] [FML]: Managed to load a deobfuscated Minecraft name- we are in a deobfuscated environment. Skipping runtime deobfuscation
+[20:14:54] [main/INFO] [FML]: Ignoring missing certificate for coremod FMLCorePlugin (net.minecraftforge.fml.relauncher.FMLCorePlugin), we are in deobf and it's a forge core plugin
+[20:14:54] [main/INFO] [FML]: Ignoring missing certificate for coremod FMLForgePlugin (net.minecraftforge.classloading.FMLForgePlugin), we are in deobf and it's a forge core plugin
+[20:14:54] [main/INFO] [FML]: Found a command line coremod : com.flemmli97.runecraftory.asm.ASMLoader
+[20:14:54] [main/INFO] [FML]: Ignoring missing certificate for coremod RuneCraftory/ASMLoader (com.flemmli97.runecraftory.asm.ASMLoader), as this is probably a dev workspace
+[20:14:54] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.gradle.tweakers.CoremodTweaker
+[20:14:54] [main/INFO] [GradleStart]: Injecting location in coremod net.minecraftforge.fml.relauncher.FMLCorePlugin
+[20:14:54] [main/INFO] [GradleStart]: Injecting location in coremod net.minecraftforge.classloading.FMLForgePlugin
+[20:14:54] [main/INFO] [GradleStart]: Injecting location in coremod com.flemmli97.runecraftory.asm.ASMLoader
+[20:14:54] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[20:14:54] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[20:14:54] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.gradle.tweakers.AccessTransformerTweaker
+[20:14:54] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[20:14:54] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLInjectionAndSortingTweaker
+[20:14:54] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[20:14:58] [main/ERROR] [FML]: FML appears to be missing any signature data. This is not a good thing
+[20:14:58] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[20:14:58] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.relauncher.CoreModManager$FMLPluginWrapper
+[20:14:58] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.FMLDeobfTweaker
+[20:14:59] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.gradle.tweakers.AccessTransformerTweaker
+[20:14:59] [main/INFO] [GradleStart]: Remapping AccessTransformer rules...
+[20:14:59] [main/INFO] [LaunchWrapper]: Loading tweak class name net.minecraftforge.fml.common.launcher.TerminalTweaker
+[20:14:59] [main/INFO] [LaunchWrapper]: Calling tweak class net.minecraftforge.fml.common.launcher.TerminalTweaker
+[20:14:59] [main/INFO] [LaunchWrapper]: Launching wrapped minecraft {net.minecraft.client.main.Main}
+[20:15:00] [main/INFO]: Setting user: Player394
+[20:15:07] [main/INFO]: LWJGL Version: 2.9.2
+[20:15:08] [main/INFO] [FML]: -- System Details --
 Details:
 	Minecraft Version: 1.12.2
 	Operating System: Mac OS X (x86_64) version 10.13.4
 	Java Version: 1.8.0_162, Oracle Corporation
 	Java VM Version: Java HotSpot(TM) 64-Bit Server VM (mixed mode), Oracle Corporation
-	Memory: 154371080 bytes (147 MB) / 428343296 bytes (408 MB) up to 954728448 bytes (910 MB)
+	Memory: 80129312 bytes (76 MB) / 429916160 bytes (410 MB) up to 954728448 bytes (910 MB)
 	JVM Flags: 0 total; 
 	IntCache: cache: 0, tcache: 0, allocated: 0, tallocated: 0
 	FML: 
@@ -46,63 +46,514 @@ Details:
 RuneCraftory/ASMLoader (unknown)
   com.flemmli97.runecraftory.asm.ASMTransformer
 	GL info: ' Vendor: 'Intel Inc.' Version: '2.1 INTEL-10.32.48' Renderer: 'Intel(R) HD Graphics 6000'
-[15:06:35] [main/INFO] [FML]: MinecraftForge v14.23.1.2590 Initialized
-[15:06:35] [main/INFO] [FML]: Starts to replace vanilla recipe ingredients with ore ingredients.
-[15:06:35] [main/INFO] [FML]: Replaced 1036 ore ingredients
-[15:06:36] [main/INFO] [FML]: Found 0 mods from the command line. Injecting into mod discoverer
-[15:06:36] [main/INFO] [FML]: Searching /Users/kevin/Documents/Minecraft modding/Eclipse Workspace/Rune Factory/Rune Factory Mod 1.12.2/run/mods for mods
-[15:06:37] [main/WARN] [betterbuilderswands]: Mod betterbuilderswands is missing the required element 'version' and a version.properties file could not be found. Falling back to metadata version 0.11.1
-[15:06:38] [Thread-3/INFO] [FML]: Using alternative sync timing : 200 frames of Display.update took 1025492398 nanos
-[15:06:38] [main/INFO] [FML]: Forge Mod Loader has identified 14 mods to load
-[15:06:38] [main/INFO] [FML]: Attempting connection with missing mods [minecraft, mcp, FML, forge, runecraftory, waila, actuallyadditions, betterbuilderswands, ichunutil, jei, nbttooltip, oreexcavation, tabula, worldedit] at CLIENT
-[15:06:38] [main/INFO] [FML]: Attempting connection with missing mods [minecraft, mcp, FML, forge, runecraftory, waila, actuallyadditions, betterbuilderswands, ichunutil, jei, nbttooltip, oreexcavation, tabula, worldedit] at SERVER
-[15:06:41] [main/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Rune Craftory, FMLFileResourcePack:Waila, FMLFileResourcePack:Actually Additions, FMLFileResourcePack:Better Builder's Wands, FMLFileResourcePack:iChunUtil, FMLFileResourcePack:Just Enough Items, FMLFileResourcePack:NBT Tooltip mod, FMLFileResourcePack:OreExcavation, FMLFileResourcePack:Tabula, FMLFileResourcePack:WorldEdit
-[15:06:42] [main/INFO] [FML]: Processing ObjectHolder annotations
-[15:06:42] [main/INFO] [FML]: Found 1168 ObjectHolder annotations
-[15:06:42] [main/INFO] [FML]: Identifying ItemStackHolder annotations
-[15:06:42] [main/INFO] [FML]: Found 0 ItemStackHolder annotations
-[15:06:42] [main/INFO] [FML]: Configured a dormant chunk cache size of 0
-[15:06:42] [Forge Version Check/INFO] [ForgeVersionCheck]: [forge] Starting version check at http://files.minecraftforge.net/maven/net/minecraftforge/forge/promotions_slim.json
-[15:06:42] [Forge Version Check/INFO] [ForgeVersionCheck]: [forge] Found status: OUTDATED Target: 14.23.3.2655
-[15:06:42] [Forge Version Check/INFO] [ForgeVersionCheck]: [nbttooltip] Starting version check at http://zabi.altervista.org/minecraft/nbttooltip/update.json
-[15:06:42] [Forge Version Check/INFO] [ForgeVersionCheck]: [nbttooltip] Found status: BETA Target: null
-[15:06:43] [main/INFO] [Actually Additions]: Starting PreInitialization Phase...
-[15:06:43] [main/INFO] [Actually Additions]: Grabbing Configurations...
-[15:06:43] [main/INFO] [Actually Additions]: Initializing Tool Materials...
-[15:06:43] [main/INFO] [Actually Additions]: Initializing Armor Materials...
-[15:06:43] [main/INFO] [Actually Additions]: Initializing Update Checker...
-[15:06:43] [Actually Additions Update Checker/INFO] [Actually Additions]: Starting Update Check...
-[15:06:43] [main/INFO] [Actually Additions]: PreInitializing ClientProxy...
-[15:06:44] [main/INFO] [Actually Additions]: PreInitialization Finished.
-[15:06:44] [main/ERROR] [betterbuilderswands]: No Method Block.getStackedBlock(int)!
-[15:06:45] [main/INFO] [Actually Additions]: Initializing Blocks...
-[15:06:46] [main/INFO] [FML]: Applying holder lookups
-[15:06:46] [main/INFO] [FML]: Holder lookups applied
-[15:06:46] [main/INFO] [Actually Additions]: Initializing Items...
-[15:06:46] [main/INFO] [Actually Additions]: Initializing OreDictionary Entries...
-[15:06:46] [main/INFO] [FML]: Applying holder lookups
-[15:06:46] [main/INFO] [FML]: Holder lookups applied
-[15:06:47] [Actually Additions Update Checker/INFO] [Actually Additions]: Update Check done!
-[15:06:47] [main/INFO] [Actually Additions]: Initializing Village Addons...
-[15:06:47] [Actually Additions Update Checker/INFO] [Actually Additions]: There is an Update for Actually Additions available!
-[15:06:47] [Actually Additions Update Checker/INFO] [Actually Additions]: Current Version: 1.12.2-r126, newest Version: 1.12.2-r134!
-[15:06:47] [Actually Additions Update Checker/INFO] [Actually Additions]: View the Changelog at http://ellpeck.de/actaddchangelog
-[15:06:47] [Actually Additions Update Checker/INFO] [Actually Additions]: Download at http://ellpeck.de/actadddownload
-[15:06:47] [main/INFO] [FML]: Applying holder lookups
-[15:06:47] [main/INFO] [FML]: Holder lookups applied
-[15:06:47] [main/INFO] [FML]: Applying holder lookups
-[15:06:47] [main/INFO] [FML]: Holder lookups applied
-[15:06:47] [main/INFO] [FML]: Injecting itemstacks
-[15:06:47] [main/INFO] [FML]: Itemstack injection complete
-[15:06:50] [Sound Library Loader/INFO]: Starting up SoundSystem...
-[15:06:50] [Thread-5/INFO]: Initializing LWJGL OpenAL
-[15:06:50] [Thread-5/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
-[15:06:50] [Thread-5/INFO]: OpenAL initialized.
-[15:06:50] [Sound Library Loader/INFO]: Sound engine started
-[15:06:56] [main/INFO] [FML]: Max texture size: 16384
-[15:06:57] [main/INFO]: Created: 1024x512 textures-atlas
-[15:06:59] [main/ERROR] [FML]: Exception loading model for variant runecraftory:chemistry#facing=east,part=right for blockstate "runecraftory:chemistry[facing=east,part=right]"
-net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:chemistry#facing=east,part=right with loader VariantLoader.INSTANCE, skipping
+[20:15:08] [main/INFO] [FML]: MinecraftForge v14.23.1.2590 Initialized
+[20:15:08] [main/INFO] [FML]: Starts to replace vanilla recipe ingredients with ore ingredients.
+[20:15:08] [main/INFO] [FML]: Replaced 1036 ore ingredients
+[20:15:09] [main/INFO] [FML]: Found 0 mods from the command line. Injecting into mod discoverer
+[20:15:09] [main/INFO] [FML]: Searching /Users/kevin/Documents/Minecraft modding/Eclipse Workspace/Rune Factory/Rune Factory Mod 1.12.2/run/mods for mods
+[20:15:11] [Thread-3/INFO] [FML]: Using sync timing. 200 frames of Display.update took 155602254 nanos
+[20:15:11] [main/WARN] [betterbuilderswands]: Mod betterbuilderswands is missing the required element 'version' and a version.properties file could not be found. Falling back to metadata version 0.11.1
+[20:15:11] [main/INFO] [FML]: Forge Mod Loader has identified 14 mods to load
+[20:15:12] [main/INFO] [FML]: Attempting connection with missing mods [minecraft, mcp, FML, forge, runecraftory, waila, actuallyadditions, betterbuilderswands, ichunutil, jei, nbttooltip, oreexcavation, tabula, worldedit] at CLIENT
+[20:15:12] [main/INFO] [FML]: Attempting connection with missing mods [minecraft, mcp, FML, forge, runecraftory, waila, actuallyadditions, betterbuilderswands, ichunutil, jei, nbttooltip, oreexcavation, tabula, worldedit] at SERVER
+[20:15:15] [main/INFO]: Reloading ResourceManager: Default, FMLFileResourcePack:Forge Mod Loader, FMLFileResourcePack:Minecraft Forge, FMLFileResourcePack:Rune Craftory, FMLFileResourcePack:Waila, FMLFileResourcePack:Actually Additions, FMLFileResourcePack:Better Builder's Wands, FMLFileResourcePack:iChunUtil, FMLFileResourcePack:Just Enough Items, FMLFileResourcePack:NBT Tooltip mod, FMLFileResourcePack:OreExcavation, FMLFileResourcePack:Tabula, FMLFileResourcePack:WorldEdit
+[20:15:15] [main/INFO] [FML]: Processing ObjectHolder annotations
+[20:15:15] [main/INFO] [FML]: Found 1168 ObjectHolder annotations
+[20:15:15] [main/INFO] [FML]: Identifying ItemStackHolder annotations
+[20:15:15] [main/INFO] [FML]: Found 0 ItemStackHolder annotations
+[20:15:15] [main/INFO] [FML]: Configured a dormant chunk cache size of 0
+[20:15:15] [Forge Version Check/INFO] [ForgeVersionCheck]: [nbttooltip] Starting version check at http://zabi.altervista.org/minecraft/nbttooltip/update.json
+[20:15:15] [Forge Version Check/INFO] [ForgeVersionCheck]: [nbttooltip] Found status: BETA Target: null
+[20:15:15] [Forge Version Check/INFO] [ForgeVersionCheck]: [forge] Starting version check at http://files.minecraftforge.net/maven/net/minecraftforge/forge/promotions_slim.json
+[20:15:16] [Forge Version Check/INFO] [ForgeVersionCheck]: [forge] Found status: OUTDATED Target: 14.23.3.2655
+[20:15:16] [main/INFO] [Actually Additions]: Starting PreInitialization Phase...
+[20:15:16] [main/INFO] [Actually Additions]: Grabbing Configurations...
+[20:15:16] [main/INFO] [Actually Additions]: Initializing Tool Materials...
+[20:15:16] [main/INFO] [Actually Additions]: Initializing Armor Materials...
+[20:15:16] [main/INFO] [Actually Additions]: Initializing Update Checker...
+[20:15:16] [Actually Additions Update Checker/INFO] [Actually Additions]: Starting Update Check...
+[20:15:16] [main/INFO] [Actually Additions]: PreInitializing ClientProxy...
+[20:15:16] [main/INFO] [Actually Additions]: PreInitialization Finished.
+[20:15:17] [main/ERROR] [betterbuilderswands]: No Method Block.getStackedBlock(int)!
+[20:15:17] [main/INFO] [STDOUT]: [com.flemmli97.runecraftory.asm.ASMTransformer:debug:192]: [RuneCraftoy/ASM]: Patching ModelBiped
+[20:15:17] [main/INFO] [STDOUT]: [com.flemmli97.runecraftory.asm.ASMTransformer:debug:192]: [RuneCraftoy/ASM]: Patching RenderPlayer
+[20:15:17] [Actually Additions Update Checker/INFO] [Actually Additions]: Update Check done!
+[20:15:17] [Actually Additions Update Checker/INFO] [Actually Additions]: There is an Update for Actually Additions available!
+[20:15:17] [Actually Additions Update Checker/INFO] [Actually Additions]: Current Version: 1.12.2-r126, newest Version: 1.12.2-r135!
+[20:15:17] [Actually Additions Update Checker/INFO] [Actually Additions]: View the Changelog at http://ellpeck.de/actaddchangelog
+[20:15:17] [Actually Additions Update Checker/INFO] [Actually Additions]: Download at http://ellpeck.de/actadddownload
+[20:15:18] [main/INFO] [Actually Additions]: Initializing Blocks...
+[20:15:19] [main/INFO] [FML]: Applying holder lookups
+[20:15:19] [main/INFO] [FML]: Holder lookups applied
+[20:15:19] [main/INFO] [Actually Additions]: Initializing Items...
+[20:15:19] [main/INFO] [Actually Additions]: Initializing OreDictionary Entries...
+[20:15:19] [main/INFO] [FML]: Applying holder lookups
+[20:15:19] [main/INFO] [FML]: Holder lookups applied
+[20:15:19] [main/INFO] [Actually Additions]: Initializing Village Addons...
+[20:15:20] [main/INFO] [FML]: Applying holder lookups
+[20:15:20] [main/INFO] [FML]: Holder lookups applied
+[20:15:20] [main/INFO] [FML]: Applying holder lookups
+[20:15:20] [main/INFO] [FML]: Holder lookups applied
+[20:15:20] [main/INFO] [FML]: Injecting itemstacks
+[20:15:20] [main/INFO] [FML]: Itemstack injection complete
+[20:15:22] [Sound Library Loader/INFO]: Starting up SoundSystem...
+[20:15:23] [Thread-5/INFO]: Initializing LWJGL OpenAL
+[20:15:23] [Thread-5/INFO]: (The LWJGL binding of OpenAL.  For more information, see http://www.lwjgl.org)
+[20:15:23] [Thread-5/INFO]: OpenAL initialized.
+[20:15:23] [Sound Library Loader/INFO]: Sound engine started
+[20:15:29] [main/ERROR] [FML]: Could not load vanilla model parent 'runecraftory:block/ore_basic' for 'net.minecraft.client.renderer.block.model.ModelBlock@4bc62244
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:block/ore_basic with loader VanillaLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModelOrLogError(ModelLoaderRegistry.java:203) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaModelWrapper.getTextures(ModelLoader.java:396) [ModelLoader$VanillaModelWrapper.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:163) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) [ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.io.FileNotFoundException: runecraftory:models/block/ore_basic.json
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 23 more
+[20:15:29] [main/ERROR] [FML]: Could not load vanilla model parent 'runecraftory:block/ore_rare' for 'net.minecraft.client.renderer.block.model.ModelBlock@6b566462
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:block/ore_rare with loader VanillaLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModelOrLogError(ModelLoaderRegistry.java:203) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaModelWrapper.getTextures(ModelLoader.java:396) [ModelLoader$VanillaModelWrapper.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:163) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) [ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.io.FileNotFoundException: runecraftory:models/block/ore_rare.json
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 23 more
+[20:15:29] [main/ERROR] [FML]: Could not load vanilla model parent 'runecraftory:block/ore_uncommon' for 'net.minecraft.client.renderer.block.model.ModelBlock@14e2e4e2
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:block/ore_uncommon with loader VanillaLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModelOrLogError(ModelLoaderRegistry.java:203) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaModelWrapper.getTextures(ModelLoader.java:396) [ModelLoader$VanillaModelWrapper.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:163) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) [ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.io.FileNotFoundException: runecraftory:models/block/ore_uncommon.json
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 23 more
+[20:15:29] [main/ERROR] [FML]: Could not load vanilla model parent 'runecraftory:block/ore_fire' for 'net.minecraft.client.renderer.block.model.ModelBlock@3f1e218c
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:block/ore_fire with loader VanillaLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModelOrLogError(ModelLoaderRegistry.java:203) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaModelWrapper.getTextures(ModelLoader.java:396) [ModelLoader$VanillaModelWrapper.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:163) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) [ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.io.FileNotFoundException: runecraftory:models/block/ore_fire.json
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 23 more
+[20:15:29] [main/ERROR] [FML]: Could not load vanilla model parent 'runecraftory:block/ore_earth' for 'net.minecraft.client.renderer.block.model.ModelBlock@7e88af98
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:block/ore_earth with loader VanillaLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModelOrLogError(ModelLoaderRegistry.java:203) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaModelWrapper.getTextures(ModelLoader.java:396) [ModelLoader$VanillaModelWrapper.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:163) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) [ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.io.FileNotFoundException: runecraftory:models/block/ore_earth.json
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 23 more
+[20:15:29] [main/ERROR] [FML]: Could not load vanilla model parent 'runecraftory:block/ore_dragonic' for 'net.minecraft.client.renderer.block.model.ModelBlock@4efa7f30
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:block/ore_dragonic with loader VanillaLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModelOrLogError(ModelLoaderRegistry.java:203) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaModelWrapper.getTextures(ModelLoader.java:396) [ModelLoader$VanillaModelWrapper.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:163) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) [ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.io.FileNotFoundException: runecraftory:models/block/ore_dragonic.json
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 23 more
+[20:15:29] [main/ERROR] [FML]: Could not load vanilla model parent 'runecraftory:block/ore_water' for 'net.minecraft.client.renderer.block.model.ModelBlock@7cfb8bf0
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:block/ore_water with loader VanillaLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModelOrLogError(ModelLoaderRegistry.java:203) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaModelWrapper.getTextures(ModelLoader.java:396) [ModelLoader$VanillaModelWrapper.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:163) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) [ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.io.FileNotFoundException: runecraftory:models/block/ore_water.json
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 23 more
+[20:15:29] [main/ERROR] [FML]: Could not load vanilla model parent 'runecraftory:block/ore_urare' for 'net.minecraft.client.renderer.block.model.ModelBlock@3701ad6f
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:block/ore_urare with loader VanillaLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModelOrLogError(ModelLoaderRegistry.java:203) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaModelWrapper.getTextures(ModelLoader.java:396) [ModelLoader$VanillaModelWrapper.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:163) [ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) [ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) [ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.io.FileNotFoundException: runecraftory:models/block/ore_urare.json
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 23 more
+[20:15:29] [main/INFO] [FML]: Max texture size: 16384
+[20:15:31] [main/INFO]: Created: 1024x512 textures-atlas
+[20:15:33] [main/ERROR] [FML]: Exception loading model for variant runecraftory:stones_truth#inventory for item "runecraftory:stones", normal location exception: 
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:item/stones_truth with loader VanillaLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.io.FileNotFoundException: runecraftory:models/item/stones_truth.json
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 20 more
+[20:15:33] [main/ERROR] [FML]: Exception loading model for variant runecraftory:stones_truth#inventory for item "runecraftory:stones", blockstate location exception: 
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:stones_truth#inventory with loader VariantLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:313) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: net.minecraft.client.renderer.block.model.ModelBlockDefinition$MissingVariantException
+	at net.minecraft.client.renderer.block.model.ModelBlockDefinition.getVariant(ModelBlockDefinition.java:83) ~[ModelBlockDefinition.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VariantLoader.loadModel(ModelLoader.java:1180) ~[ModelLoader$VariantLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 20 more
+[20:15:33] [main/ERROR] [FML]: Exception loading model for variant runecraftory:strings_yarn#inventory for item "runecraftory:strings", normal location exception: 
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:item/strings_yarn with loader VanillaLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.io.FileNotFoundException: runecraftory:models/item/strings_yarn.json
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 20 more
+[20:15:33] [main/ERROR] [FML]: Exception loading model for variant runecraftory:strings_yarn#inventory for item "runecraftory:strings", blockstate location exception: 
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:strings_yarn#inventory with loader VariantLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:313) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: net.minecraft.client.renderer.block.model.ModelBlockDefinition$MissingVariantException
+	at net.minecraft.client.renderer.block.model.ModelBlockDefinition.getVariant(ModelBlockDefinition.java:83) ~[ModelBlockDefinition.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VariantLoader.loadModel(ModelLoader.java:1180) ~[ModelLoader$VariantLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 20 more
+[20:15:33] [main/ERROR] [FML]: Exception loading model for variant runecraftory:stones_tiny#inventory for item "runecraftory:stones", normal location exception: 
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:item/stones_tiny with loader VanillaLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: java.io.FileNotFoundException: runecraftory:models/item/stones_tiny.json
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 20 more
+[20:15:33] [main/ERROR] [FML]: Exception loading model for variant runecraftory:stones_tiny#inventory for item "runecraftory:stones", blockstate location exception: 
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:stones_tiny#inventory with loader VariantLoader.INSTANCE, skipping
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
+	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:313) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) ~[ModelBakery.class:?]
+	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) ~[ModelLoader.class:?]
+	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+Caused by: net.minecraft.client.renderer.block.model.ModelBlockDefinition$MissingVariantException
+	at net.minecraft.client.renderer.block.model.ModelBlockDefinition.getVariant(ModelBlockDefinition.java:83) ~[ModelBlockDefinition.class:?]
+	at net.minecraftforge.client.model.ModelLoader$VariantLoader.loadModel(ModelLoader.java:1180) ~[ModelLoader$VariantLoader.class:?]
+	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
+	... 20 more
+[20:15:33] [main/ERROR] [FML]: Exception loading model for variant runecraftory:chemistry#facing=west,part=left for blockstate "runecraftory:chemistry[facing=west,part=left]"
+net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:chemistry#facing=west,part=left with loader VariantLoader.INSTANCE, skipping
 	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
 	at net.minecraftforge.client.model.ModelLoader.registerVariant(ModelLoader.java:239) ~[ModelLoader.class:?]
 	at net.minecraft.client.renderer.block.model.ModelBakery.loadBlock(ModelBakery.java:153) ~[ModelBakery.class:?]
@@ -130,7 +581,7 @@ Caused by: net.minecraft.client.renderer.block.model.ModelBlockDefinition$Missin
 	at net.minecraftforge.client.model.ModelLoader$VariantLoader.loadModel(ModelLoader.java:1180) ~[ModelLoader$VariantLoader.class:?]
 	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
 	... 21 more
-[15:06:59] [main/ERROR] [FML]: Exception loading blockstate for the variant runecraftory:chemistry#facing=east,part=right: 
+[20:15:33] [main/ERROR] [FML]: Exception loading blockstate for the variant runecraftory:chemistry#facing=west,part=left: 
 java.lang.Exception: Could not load model definition for variant runecraftory:chemistry
 	at net.minecraftforge.client.model.ModelLoader.getModelBlockDefinition(ModelLoader.java:272) ~[ModelLoader.class:?]
 	at net.minecraft.client.renderer.block.model.ModelBakery.loadBlock(ModelBakery.java:121) ~[ModelBakery.class:?]
@@ -165,291 +616,132 @@ Caused by: java.io.FileNotFoundException: runecraftory:blockstates/chemistry.jso
 	at net.minecraft.client.renderer.block.model.ModelBakery.getModelBlockDefinition(ModelBakery.java:208) ~[ModelBakery.class:?]
 	at net.minecraftforge.client.model.ModelLoader.getModelBlockDefinition(ModelLoader.java:268) ~[ModelLoader.class:?]
 	... 20 more
-[15:06:59] [main/ERROR] [FML]: Exception loading model for variant runecraftory:stones_truth#inventory for item "runecraftory:stones", normal location exception: 
-net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:item/stones_truth with loader VanillaLoader.INSTANCE, skipping
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
-	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) ~[ModelLoader.class:?]
-	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) ~[ModelBakery.class:?]
-	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) ~[ModelLoader.class:?]
-	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
-	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
-	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
-	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
-	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
-	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
-	at GradleStart.main(GradleStart.java:25) [start/:?]
-Caused by: java.io.FileNotFoundException: runecraftory:models/item/stones_truth.json
-	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
-	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
-	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
-	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
-	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
-	... 20 more
-[15:06:59] [main/ERROR] [FML]: Exception loading model for variant runecraftory:stones_truth#inventory for item "runecraftory:stones", blockstate location exception: 
-net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:stones_truth#inventory with loader VariantLoader.INSTANCE, skipping
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
-	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:313) ~[ModelLoader.class:?]
-	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) ~[ModelBakery.class:?]
-	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) ~[ModelLoader.class:?]
-	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
-	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
-	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
-	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
-	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
-	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
-	at GradleStart.main(GradleStart.java:25) [start/:?]
-Caused by: net.minecraft.client.renderer.block.model.ModelBlockDefinition$MissingVariantException
-	at net.minecraft.client.renderer.block.model.ModelBlockDefinition.getVariant(ModelBlockDefinition.java:83) ~[ModelBlockDefinition.class:?]
-	at net.minecraftforge.client.model.ModelLoader$VariantLoader.loadModel(ModelLoader.java:1180) ~[ModelLoader$VariantLoader.class:?]
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
-	... 20 more
-[15:06:59] [main/ERROR] [FML]: Exception loading model for variant runecraftory:strings_yarn#inventory for item "runecraftory:strings", normal location exception: 
-net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:item/strings_yarn with loader VanillaLoader.INSTANCE, skipping
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
-	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:305) ~[ModelLoader.class:?]
-	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) ~[ModelBakery.class:?]
-	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) ~[ModelLoader.class:?]
-	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
-	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
-	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
-	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
-	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
-	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
-	at GradleStart.main(GradleStart.java:25) [start/:?]
-Caused by: java.io.FileNotFoundException: runecraftory:models/item/strings_yarn.json
-	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
-	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
-	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
-	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
-	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
-	... 20 more
-[15:06:59] [main/ERROR] [FML]: Exception loading model for variant runecraftory:strings_yarn#inventory for item "runecraftory:strings", blockstate location exception: 
-net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:strings_yarn#inventory with loader VariantLoader.INSTANCE, skipping
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
-	at net.minecraftforge.client.model.ModelLoader.loadItemModels(ModelLoader.java:313) ~[ModelLoader.class:?]
-	at net.minecraft.client.renderer.block.model.ModelBakery.loadVariantItemModels(ModelBakery.java:175) ~[ModelBakery.class:?]
-	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:164) ~[ModelLoader.class:?]
-	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
-	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
-	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
-	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
-	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
-	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
-	at GradleStart.main(GradleStart.java:25) [start/:?]
-Caused by: net.minecraft.client.renderer.block.model.ModelBlockDefinition$MissingVariantException
-	at net.minecraft.client.renderer.block.model.ModelBlockDefinition.getVariant(ModelBlockDefinition.java:83) ~[ModelBlockDefinition.class:?]
-	at net.minecraftforge.client.model.ModelLoader$VariantLoader.loadModel(ModelLoader.java:1180) ~[ModelLoader$VariantLoader.class:?]
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
-	... 20 more
-[15:06:59] [main/ERROR] [FML]: Exception loading model for variant runecraftory:ore#tier=dragonic for blockstate "runecraftory:ore[tier=dragonic]"
-net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:ore#tier=dragonic with loader VariantLoader.INSTANCE, skipping
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
-	at net.minecraftforge.client.model.ModelLoader.registerVariant(ModelLoader.java:239) ~[ModelLoader.class:?]
-	at net.minecraft.client.renderer.block.model.ModelBakery.loadBlock(ModelBakery.java:153) ~[ModelBakery.class:?]
-	at net.minecraftforge.client.model.ModelLoader.loadBlocks(ModelLoader.java:227) ~[ModelLoader.class:?]
-	at net.minecraftforge.client.model.ModelLoader.setupModelRegistry(ModelLoader.java:163) ~[ModelLoader.class:?]
-	at net.minecraft.client.renderer.block.model.ModelManager.onResourceManagerReload(ModelManager.java:28) [ModelManager.class:?]
-	at net.minecraft.client.resources.SimpleReloadableResourceManager.registerReloadListener(SimpleReloadableResourceManager.java:121) [SimpleReloadableResourceManager.class:?]
-	at net.minecraft.client.Minecraft.init(Minecraft.java:559) [Minecraft.class:?]
-	at net.minecraft.client.Minecraft.run(Minecraft.java:421) [Minecraft.class:?]
-	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
-	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
-	at GradleStart.main(GradleStart.java:25) [start/:?]
-Caused by: net.minecraftforge.client.model.ModelLoaderRegistry$LoaderException: Exception loading model runecraftory:block/dragonic with loader VanillaLoader.INSTANCE, skipping
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:153) ~[ModelLoaderRegistry.class:?]
-	at net.minecraftforge.client.model.ModelLoader$WeightedRandomModel.<init>(ModelLoader.java:668) ~[ModelLoader$WeightedRandomModel.class:?]
-	at net.minecraftforge.client.model.ModelLoader$VariantLoader.loadModel(ModelLoader.java:1181) ~[ModelLoader$VariantLoader.class:?]
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
-	... 21 more
-Caused by: java.io.FileNotFoundException: runecraftory:models/block/dragonic.json
-	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
-	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
-	at net.minecraft.client.renderer.block.model.ModelBakery.loadModel(ModelBakery.java:334) ~[ModelBakery.class:?]
-	at net.minecraftforge.client.model.ModelLoader.access$1600(ModelLoader.java:130) ~[ModelLoader.class:?]
-	at net.minecraftforge.client.model.ModelLoader$VanillaLoader.loadModel(ModelLoader.java:871) ~[ModelLoader$VanillaLoader.class:?]
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
-	at net.minecraftforge.client.model.ModelLoader$WeightedRandomModel.<init>(ModelLoader.java:668) ~[ModelLoader$WeightedRandomModel.class:?]
-	at net.minecraftforge.client.model.ModelLoader$VariantLoader.loadModel(ModelLoader.java:1181) ~[ModelLoader$VariantLoader.class:?]
-	at net.minecraftforge.client.model.ModelLoaderRegistry.getModel(ModelLoaderRegistry.java:149) ~[ModelLoaderRegistry.class:?]
-	... 21 more
-[15:06:59] [main/FATAL] [FML]: Suppressed additional 85 model loading errors for domain runecraftory
-[15:07:01] [main/INFO] [RuneCraftory]: Registering crafting
-[15:07:01] [main/INFO] [RuneCraftory]: Finished crafting-registry
-[15:07:01] [main/INFO] [Actually Additions]: Initializing Crafting Recipes...
-[15:07:01] [main/INFO] [FML]: Applying holder lookups
-[15:07:01] [main/INFO] [FML]: Holder lookups applied
-[15:07:01] [main/INFO] [Actually Additions]: Starting Initialization Phase...
-[15:07:01] [main/INFO] [Actually Additions]: Initializing GuiHandler...
-[15:07:01] [main/INFO] [Actually Additions]: Registering World Generator...
-[15:07:01] [main/INFO] [Actually Additions]: Registering TileEntities...
-[15:07:01] [main/INFO] [Actually Additions]: Initializing Entities...
-[15:07:01] [main/INFO] [Actually Additions]: Initializing ClientProxy...
-[15:07:01] [main/INFO] [Actually Additions]: Initialization Finished.
-[15:07:01] [main/INFO] [FML]: Injecting itemstacks
-[15:07:01] [main/INFO] [FML]: Itemstack injection complete
-[15:07:01] [main/INFO] [RuneCraftory]: Registering gate spawns
-[15:07:02] [main/INFO] [RuneCraftory]: Finished registering gate spawns
-[15:07:02] [main/INFO] [RuneCraftory]: Adding Oredicts
-[15:07:02] [main/INFO] [RuneCraftory]: Register worldgen
-[15:07:02] [main/INFO] [RuneCraftory]: Finished registering worldgen
-[15:07:02] [main/INFO] [Actually Additions]: Starting PostInitialization Phase...
-[15:07:02] [main/INFO] [Actually Additions]: Initializing Crusher Recipes...
-[15:07:02] [main/INFO] [Actually Additions]: Added 16 Crusher Recipes automatically: [1xtile.oreGold@0 -> 2xitem.actuallyadditions.item_dust@1, 1xtile.oreDiamond@0 -> 2xitem.actuallyadditions.item_dust@2, 1xtile.oreEmerald@0 -> 2xitem.actuallyadditions.item_dust@3, 1xitem.ingotIron@0 -> 1xitem.actuallyadditions.item_dust@0, 1xrunecraftory:mineral@0 -> 1xitem.actuallyadditions.item_dust@0, 1xitem.ingotGold@0 -> 1xitem.actuallyadditions.item_dust@1, 1xrunecraftory:mineral@3 -> 1xitem.actuallyadditions.item_dust@1, 1xitem.diamond@0 -> 1xitem.actuallyadditions.item_dust@2, 1xrunecraftory:jewel@5 -> 1xitem.actuallyadditions.item_dust@2, 1xitem.emerald@0 -> 1xitem.actuallyadditions.item_dust@3, 1xrunecraftory:jewel@2 -> 1xitem.actuallyadditions.item_dust@3, 1xitem.netherquartz@0 -> 1xitem.actuallyadditions.item_dust@5, 1xitem.prismarineShard@0 -> 1xitem.prismarineCrystals@0, 1xitem.dyePowder@4 -> 1xitem.actuallyadditions.item_dust@4, 1xtile.actuallyadditions.block_misc@3 -> 2xitem.actuallyadditions.item_dust@7, 1xitem.actuallyadditions.item_misc@5 -> 1xitem.actuallyadditions.item_dust@7]
-[15:07:02] [main/WARN] [Actually Additions]: Couldn't add 16 Crusher Recipes automatically, either because the inputs were missing outputs, or because they exist already: [oreGold, oreIron, oreLapis, oreDiamond, oreRedstone, oreEmerald, oreQuartz, oreCoal, oreQuartzBlack, ingotBronze, ingotSilver, ingotPlatinum, gemAmethyst, gemAquamarine, gemRuby, gemSapphire]
-[15:07:02] [main/INFO] [Actually Additions]: Registered a total of 105 booklet chapters, where 296 out of 414 booklet pages contain information about items or fluids!
-[15:07:02] [main/INFO] [Actually Additions]: PostInitializing ClientProxy...
-[15:07:02] [Actually Additions Special Fetcher/INFO] [Actually Additions]: Fetching Special People Stuff...
-[15:07:02] [main/INFO] [Actually Additions]: PostInitialization Finished.
-[15:07:02] [main/INFO] [betterbuilderswands]: Added 'minecraft:lapis_ore/0=>1*minecraft:lapis_ore/4=>minecraft:lapis_ore/0' to mapping
-[15:07:02] [main/INFO] [betterbuilderswands]: Added 'minecraft:lit_redstone_ore/0=>1*minecraft:redstone_ore/0=>minecraft:lit_redstone_ore/0' to mapping
-[15:07:02] [main/INFO] [betterbuilderswands]: Added 'minecraft:grass/0=>1*minecraft:grass/0=>minecraft:grass/0' to mapping
-[15:07:02] [main/INFO] [betterbuilderswands]: Added 'minecraft:grass/0=>1*minecraft:dirt/0=>minecraft:dirt/0' to mapping
-[15:07:02] [main/INFO] [betterbuilderswands]: Added 'minecraft:dirt/1=>1*minecraft:dirt/1=>minecraft:dirt/1' to mapping
-[15:07:02] [main/INFO] [betterbuilderswands]: Added 'minecraft:dirt/1=>1*minecraft:dirt/0=>minecraft:dirt/0' to mapping
-[15:07:02] [main/INFO] [betterbuilderswands]: Added 'minecraft:dirt/2=>1*minecraft:dirt/2=>minecraft:dirt/2' to mapping
-[15:07:02] [main/INFO] [betterbuilderswands]: Added 'minecraft:dirt/2=>1*minecraft:dirt/0=>minecraft:dirt/0' to mapping
-[15:07:02] [main/INFO] [iChunUtil]: =============================================================
-[15:07:02] [main/INFO] [iChunUtil]: By using iChunUtil you therefore agree to the EULA of the mod. It may be found in the jar file of the mod. The latest version will be available on iChun's website or on GitHub.
-[15:07:02] [main/INFO] [iChunUtil]: You can disable this console message by going to the iChunUtil config and setting the "eulaAcknowledged" config to "true" (no quotes).
-[15:07:02] [main/INFO] [iChunUtil]: =============================================================
-[15:07:02] [Actually Additions Special Fetcher/INFO] [Actually Additions]: Fetching Special People Stuff done!
-[15:07:03] [main/INFO] [worldedit]: WorldEdit for Forge (version 6.1.8) is loaded
-[15:07:03] [main/INFO] [Waila]: Starting Waila...
-[15:07:03] [main/INFO] [Waila]: Gathering annotated plugins...
-[15:07:03] [main/INFO] [Waila]: Gathering wrapped IMC plugins...
-[15:07:03] [main/INFO] [Waila]: Registering plugins...
-[15:07:03] [main/INFO] [Waila]: Registering plugin at mcp.mobius.waila.addons.core.PluginCore
-[15:07:03] [main/INFO] [Waila]: Registering plugin at mcp.mobius.waila.addons.capability.PluginCapability
-[15:07:03] [main/INFO] [Waila]: Registering plugin at mcp.mobius.waila.addons.minecraft.PluginMinecraft
-[15:07:03] [main/INFO] [Waila]: Registering plugin at com.flemmli97.runecraftory.compat.waila.WailaRegister
-[15:07:03] [main/INFO] [Waila]: Starting Waila took 100.8 ms
-[15:07:03] [main/INFO] [jei]: Starting JEI...
-[15:07:03] [main/INFO] [jei]: Registering recipe categories...
-[15:07:03] [main/INFO] [jei]: Registering recipe categories took 49.55 ms
-[15:07:03] [main/INFO] [jei]: Registering mod plugins...
-[15:07:04] [main/INFO] [jei]: Registering mod plugins took 466.3 ms
-[15:07:04] [main/INFO] [jei]: Building recipe registry...
-[15:07:04] [main/INFO] [jei]: Building recipe registry took 308.1 ms
-[15:07:04] [main/INFO] [jei]: Building ingredient list...
-[15:07:04] [main/INFO] [jei]: Building ingredient list took 45.73 ms
-[15:07:04] [main/INFO] [jei]: Building ingredient filter...
-[15:07:04] [main/INFO] [jei]: Building ingredient filter took 337.2 ms
-[15:07:04] [main/INFO] [jei]: Building runtime...
-[15:07:05] [main/INFO] [jei]: Building runtime took 189.7 ms
-[15:07:05] [main/INFO] [jei]: Starting JEI took 1.775 s
-[15:07:05] [main/INFO] [FML]: Forge Mod Loader has successfully loaded 14 mods
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]: +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]: The following texture errors were found.
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]: ==================================================
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:   DOMAIN runecraftory
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]: --------------------------------------------------
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:   domain runecraftory is missing 10 textures
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:     domain runecraftory has 1 location:
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:       unknown resourcepack type net.minecraft.client.resources.LegacyV2Adapter : FMLFileResourcePack:Rune Craftory
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]: -------------------------
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:     The missing resources for domain runecraftory are:
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_water.png
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_rare.png
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_fire.png
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_urare.png
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_dragonic.png
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/ore_wind.png
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_earth.png
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_basic.png
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_uncommon.png
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_wind.png
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]: -------------------------
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]:     No other errors exist for domain runecraftory
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]: ==================================================
-[15:07:07] [main/ERROR] [TEXTURE ERRORS]: +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
-[15:07:08] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
-[15:07:14] [Server thread/INFO]: Starting integrated minecraft server version 1.12.2
-[15:07:14] [Server thread/INFO]: Generating keypair
-[15:07:15] [Server thread/INFO] [FML]: Injecting existing registry data into this server instance
-[15:07:16] [Server thread/INFO] [FML]: Applying holder lookups
-[15:07:16] [Server thread/INFO] [FML]: Holder lookups applied
-[15:07:16] [Server thread/INFO] [FML]: Loading dimension 0 (New World) (net.minecraft.server.integrated.IntegratedServer@35fbc0f2)
-[15:07:17] [Server thread/INFO]: Loaded 488 advancements
-[15:07:17] [Server thread/INFO] [FML]: Loading dimension 1 (New World) (net.minecraft.server.integrated.IntegratedServer@35fbc0f2)
-[15:07:17] [Server thread/INFO] [FML]: Loading dimension -1 (New World) (net.minecraft.server.integrated.IntegratedServer@35fbc0f2)
-[15:07:17] [Server thread/INFO]: Preparing start region for level 0
-[15:07:18] [Server thread/INFO]: Preparing spawn area: 8%
-[15:07:19] [Server thread/INFO]: Preparing spawn area: 41%
-[15:07:20] [Server thread/INFO]: Preparing spawn area: 75%
-[15:07:21] [Server thread/INFO] [Actually Additions]: Successfully loaded WorldData!
-[15:07:21] [Server thread/INFO]: Changing view distance to 12, from 10
-[15:07:23] [main/INFO] [Actually Additions]: Unloaded WorldData!
-[15:07:23] [Netty Local Client IO #0/INFO] [FML]: Server protocol version 2
-[15:07:23] [Netty Server IO #1/INFO] [FML]: Client protocol version 2
-[15:07:23] [Netty Server IO #1/INFO] [FML]: Client attempting to join with 14 mods : minecraft@1.12.2,tabula@7.0.0,FML@8.0.99.99,worldedit@6.1.8,betterbuilderswands@0.11.1,waila@1.8.24,jei@4.8.5.139,ichunutil@7.1.4,runecraftory@a0.1.0 [1.10.2],forge@14.23.1.2590,nbttooltip@0.5,actuallyadditions@1.12.2-r126,mcp@9.42,oreexcavation@1.4.109
-[15:07:23] [Netty Local Client IO #0/INFO] [FML]: [Netty Local Client IO #0] Client side modded connection established
-[15:07:23] [Server thread/INFO] [FML]: [Server thread] Server side modded connection established
-[15:07:23] [Server thread/INFO]: Player276[local:E:da4376d0] logged in with entity id 544 at (-69.37370873871033, 61.0, 191.90455388405306)
-[15:07:23] [Server thread/INFO]: Player276 joined the game
-[15:07:24] [Server thread/INFO] [Waila]: Player EntityPlayerMP['Player276'/544, l='New World', x=-69.37, y=61.00, z=191.90] connected. Sending ping
-[15:07:24] [Server thread/INFO] [Actually Additions]: Successfully loaded WorldData!
-[15:07:24] [Server thread/INFO] [Actually Additions]: Sending Player Data to player Player276 with UUID 157dadc9-e980-331f-9b9a-60b0f155ef62.
-[15:07:26] [Netty Local Client IO #0/INFO] [Waila]: Received server authentication msg. Remote sync will be activated
-[15:07:26] [Server thread/INFO]: Saving and pausing game...
-[15:07:26] [Server thread/INFO]: Saving chunks for level 'New World'/overworld
-[15:07:26] [main/INFO] [Actually Additions]: Receiving (new or changed) Player Data for player Player276.
-[15:07:28] [Server thread/INFO]: Saving chunks for level 'New World'/the_nether
-[15:07:28] [Server thread/INFO]: Saving chunks for level 'New World'/the_end
-[15:07:28] [main/INFO]: Loaded 9 advancements
-[15:07:28] [Server thread/WARN]: Can't keep up! Did the system time change, or is the server overloaded? Running 4739ms behind, skipping 94 tick(s)
-[15:07:29] [pool-2-thread-1/WARN]: Couldn't look up profile properties for com.mojang.authlib.GameProfile@77e786a2[id=157dadc9-e980-331f-9b9a-60b0f155ef62,name=Player276,properties={},legacy=false]
+[20:15:33] [main/FATAL] [FML]: Suppressed additional 107 model loading errors for domain runecraftory
+[20:15:33] [main/INFO] [STDOUT]: [com.flemmli97.runecraftory.asm.ASMTransformer:debug:192]: [RuneCraftoy/ASM]: Patching RenderItem
+[20:15:33] [main/INFO] [STDOUT]: [com.flemmli97.runecraftory.asm.ASMTransformer:debug:192]: [RuneCraftoy/ASM]: Patching LayerHeldItem
+[20:15:36] [main/INFO] [RuneCraftory]: Registering crafting
+[20:15:36] [main/INFO] [RuneCraftory]: Finished crafting-registry
+[20:15:36] [main/INFO] [Actually Additions]: Initializing Crafting Recipes...
+[20:15:36] [main/INFO] [FML]: Applying holder lookups
+[20:15:36] [main/INFO] [FML]: Holder lookups applied
+[20:15:36] [main/INFO] [RuneCraftory]: Adding Oredicts
+[20:15:36] [main/INFO] [RuneCraftory]: Register worldgen
+[20:15:36] [main/INFO] [RuneCraftory]: Finished registering worldgen
+[20:15:36] [main/INFO] [Actually Additions]: Starting Initialization Phase...
+[20:15:36] [main/INFO] [Actually Additions]: Initializing GuiHandler...
+[20:15:36] [main/INFO] [Actually Additions]: Registering World Generator...
+[20:15:36] [main/INFO] [Actually Additions]: Registering TileEntities...
+[20:15:36] [main/INFO] [Actually Additions]: Initializing Entities...
+[20:15:36] [main/INFO] [Actually Additions]: Initializing ClientProxy...
+[20:15:36] [main/INFO] [Actually Additions]: Initialization Finished.
+[20:15:36] [main/INFO] [FML]: Injecting itemstacks
+[20:15:36] [main/INFO] [FML]: Itemstack injection complete
+[20:15:36] [main/INFO] [RuneCraftory]: Registering gate spawns
+[20:15:36] [main/INFO] [RuneCraftory]: Finished registering gate spawns
+[20:15:37] [main/INFO] [Actually Additions]: Starting PostInitialization Phase...
+[20:15:37] [main/INFO] [Actually Additions]: Initializing Crusher Recipes...
+[20:15:37] [main/INFO] [Actually Additions]: Added 16 Crusher Recipes automatically: [1xtile.oreGold@0 -> 2xitem.actuallyadditions.item_dust@1, 1xtile.oreDiamond@0 -> 2xitem.actuallyadditions.item_dust@2, 1xtile.oreEmerald@0 -> 2xitem.actuallyadditions.item_dust@3, 1xitem.ingotIron@0 -> 1xitem.actuallyadditions.item_dust@0, 1xrunecraftory:mineral@0 -> 1xitem.actuallyadditions.item_dust@0, 1xitem.ingotGold@0 -> 1xitem.actuallyadditions.item_dust@1, 1xrunecraftory:mineral@3 -> 1xitem.actuallyadditions.item_dust@1, 1xitem.diamond@0 -> 1xitem.actuallyadditions.item_dust@2, 1xrunecraftory:jewel@5 -> 1xitem.actuallyadditions.item_dust@2, 1xitem.emerald@0 -> 1xitem.actuallyadditions.item_dust@3, 1xrunecraftory:jewel@2 -> 1xitem.actuallyadditions.item_dust@3, 1xitem.netherquartz@0 -> 1xitem.actuallyadditions.item_dust@5, 1xitem.prismarineShard@0 -> 1xitem.prismarineCrystals@0, 1xitem.dyePowder@4 -> 1xitem.actuallyadditions.item_dust@4, 1xtile.actuallyadditions.block_misc@3 -> 2xitem.actuallyadditions.item_dust@7, 1xitem.actuallyadditions.item_misc@5 -> 1xitem.actuallyadditions.item_dust@7]
+[20:15:37] [main/WARN] [Actually Additions]: Couldn't add 16 Crusher Recipes automatically, either because the inputs were missing outputs, or because they exist already: [oreGold, oreIron, oreLapis, oreDiamond, oreRedstone, oreEmerald, oreQuartz, oreCoal, oreQuartzBlack, ingotBronze, ingotSilver, ingotPlatinum, gemAmethyst, gemAquamarine, gemRuby, gemSapphire]
+[20:15:37] [main/INFO] [Actually Additions]: Registered a total of 105 booklet chapters, where 296 out of 414 booklet pages contain information about items or fluids!
+[20:15:37] [main/INFO] [Actually Additions]: PostInitializing ClientProxy...
+[20:15:37] [Actually Additions Special Fetcher/INFO] [Actually Additions]: Fetching Special People Stuff...
+[20:15:37] [main/INFO] [Actually Additions]: PostInitialization Finished.
+[20:15:37] [main/INFO] [betterbuilderswands]: Added 'minecraft:lapis_ore/0=>1*minecraft:lapis_ore/4=>minecraft:lapis_ore/0' to mapping
+[20:15:37] [main/INFO] [betterbuilderswands]: Added 'minecraft:lit_redstone_ore/0=>1*minecraft:redstone_ore/0=>minecraft:lit_redstone_ore/0' to mapping
+[20:15:37] [main/INFO] [betterbuilderswands]: Added 'minecraft:grass/0=>1*minecraft:grass/0=>minecraft:grass/0' to mapping
+[20:15:37] [main/INFO] [betterbuilderswands]: Added 'minecraft:grass/0=>1*minecraft:dirt/0=>minecraft:dirt/0' to mapping
+[20:15:37] [main/INFO] [betterbuilderswands]: Added 'minecraft:dirt/1=>1*minecraft:dirt/1=>minecraft:dirt/1' to mapping
+[20:15:37] [main/INFO] [betterbuilderswands]: Added 'minecraft:dirt/1=>1*minecraft:dirt/0=>minecraft:dirt/0' to mapping
+[20:15:37] [main/INFO] [betterbuilderswands]: Added 'minecraft:dirt/2=>1*minecraft:dirt/2=>minecraft:dirt/2' to mapping
+[20:15:37] [main/INFO] [betterbuilderswands]: Added 'minecraft:dirt/2=>1*minecraft:dirt/0=>minecraft:dirt/0' to mapping
+[20:15:37] [main/INFO] [iChunUtil]: =============================================================
+[20:15:37] [main/INFO] [iChunUtil]: By using iChunUtil you therefore agree to the EULA of the mod. It may be found in the jar file of the mod. The latest version will be available on iChun's website or on GitHub.
+[20:15:37] [main/INFO] [iChunUtil]: You can disable this console message by going to the iChunUtil config and setting the "eulaAcknowledged" config to "true" (no quotes).
+[20:15:37] [main/INFO] [iChunUtil]: =============================================================
+[20:15:37] [Actually Additions Special Fetcher/INFO] [Actually Additions]: Fetching Special People Stuff done!
+[20:15:37] [main/INFO] [worldedit]: WorldEdit for Forge (version 6.1.8) is loaded
+[20:15:37] [main/INFO] [Waila]: Starting Waila...
+[20:15:37] [main/INFO] [Waila]: Gathering annotated plugins...
+[20:15:37] [main/INFO] [Waila]: Gathering wrapped IMC plugins...
+[20:15:37] [main/INFO] [Waila]: Registering plugins...
+[20:15:37] [main/INFO] [Waila]: Registering plugin at mcp.mobius.waila.addons.core.PluginCore
+[20:15:37] [main/INFO] [Waila]: Registering plugin at mcp.mobius.waila.addons.minecraft.PluginMinecraft
+[20:15:37] [main/INFO] [Waila]: Registering plugin at com.flemmli97.runecraftory.compat.waila.WailaRegister
+[20:15:37] [main/INFO] [Waila]: Registering plugin at mcp.mobius.waila.addons.capability.PluginCapability
+[20:15:37] [main/INFO] [Waila]: Starting Waila took 101.4 ms
+[20:15:37] [main/INFO] [jei]: Starting JEI...
+[20:15:38] [main/INFO] [jei]: Registering recipe categories...
+[20:15:38] [main/INFO] [jei]: Registering recipe categories took 58.34 ms
+[20:15:38] [main/INFO] [jei]: Registering mod plugins...
+[20:15:38] [main/INFO] [jei]: Registering mod plugins took 446.1 ms
+[20:15:38] [main/INFO] [jei]: Building recipe registry...
+[20:15:38] [main/INFO] [jei]: Building recipe registry took 252.6 ms
+[20:15:38] [main/INFO] [jei]: Building ingredient list...
+[20:15:39] [main/INFO] [jei]: Building ingredient list took 49.68 ms
+[20:15:39] [main/INFO] [jei]: Building ingredient filter...
+[20:15:39] [main/INFO] [jei]: Building ingredient filter took 370.9 ms
+[20:15:39] [main/INFO] [jei]: Building runtime...
+[20:15:39] [main/INFO] [jei]: Building runtime took 124.1 ms
+[20:15:39] [main/INFO] [jei]: Starting JEI took 1.651 s
+[20:15:40] [main/INFO] [FML]: Forge Mod Loader has successfully loaded 14 mods
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]: +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]: The following texture errors were found.
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]: ==================================================
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:   DOMAIN runecraftory
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]: --------------------------------------------------
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:   domain runecraftory is missing 11 textures
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:     domain runecraftory has 1 location:
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       unknown resourcepack type net.minecraft.client.resources.LegacyV2Adapter : FMLFileResourcePack:Rune Craftory
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]: -------------------------
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:     The missing resources for domain runecraftory are:
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_water.png
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/ore_wind_low.png
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/ore_wind_up.png
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_rare.png
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_fire.png
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_urare.png
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_dragonic.png
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_earth.png
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_basic.png
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_uncommon.png
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:       textures/blocks/broken_ore_wind.png
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]: -------------------------
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]:     No other errors exist for domain runecraftory
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]: ==================================================
+[20:15:41] [main/ERROR] [TEXTURE ERRORS]: +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
+[20:15:41] [Realms Notification Availability checker #1/INFO]: Could not authorize you against Realms server: Invalid session id
+[20:15:53] [Server thread/INFO]: Starting integrated minecraft server version 1.12.2
+[20:15:53] [Server thread/INFO]: Generating keypair
+[20:15:55] [Server thread/INFO] [FML]: Injecting existing registry data into this server instance
+[20:15:55] [Server thread/INFO] [FML]: Applying holder lookups
+[20:15:55] [Server thread/INFO] [FML]: Holder lookups applied
+[20:15:55] [Server thread/INFO] [FML]: Loading dimension 0 (Copy of Build) (net.minecraft.server.integrated.IntegratedServer@2c95f18b)
+[20:15:56] [Server thread/INFO]: Loaded 488 advancements
+[20:15:56] [Server thread/INFO] [FML]: Loading dimension 1 (Copy of Build) (net.minecraft.server.integrated.IntegratedServer@2c95f18b)
+[20:15:56] [Server thread/INFO] [FML]: Loading dimension -1 (Copy of Build) (net.minecraft.server.integrated.IntegratedServer@2c95f18b)
+[20:15:56] [Server thread/INFO]: Preparing start region for level 0
+[20:15:57] [Server thread/INFO]: Preparing spawn area: 36%
+[20:15:58] [Server thread/INFO]: Preparing spawn area: 75%
+[20:15:59] [Server thread/INFO] [Actually Additions]: Successfully loaded WorldData!
+[20:15:59] [Server thread/INFO]: Changing view distance to 12, from 10
+[20:16:00] [main/INFO] [Actually Additions]: Unloaded WorldData!
+[20:16:01] [Netty Local Client IO #0/INFO] [FML]: Server protocol version 2
+[20:16:01] [Netty Server IO #1/INFO] [FML]: Client protocol version 2
+[20:16:01] [Netty Server IO #1/INFO] [FML]: Client attempting to join with 14 mods : minecraft@1.12.2,tabula@7.0.0,FML@8.0.99.99,worldedit@6.1.8,betterbuilderswands@0.11.1,waila@1.8.24,jei@4.8.5.139,ichunutil@7.1.4,runecraftory@a0.2.0 [1.12.2],forge@14.23.1.2590,nbttooltip@0.5,actuallyadditions@1.12.2-r126,mcp@9.42,oreexcavation@1.4.109
+[20:16:01] [Netty Local Client IO #0/INFO] [FML]: [Netty Local Client IO #0] Client side modded connection established
+[20:16:01] [Server thread/INFO] [FML]: [Server thread] Server side modded connection established
+[20:16:01] [Server thread/INFO]: Player394[local:E:fbfb595d] logged in with entity id 229 at (1028.385707589911, 55.918604518476286, -1545.27707233573)
+[20:16:01] [Server thread/INFO]: Player394 joined the game
+[20:16:01] [Server thread/INFO] [Waila]: Player EntityPlayerMP['Player394'/229, l='Copy of Build', x=1028.39, y=55.92, z=-1545.28] connected. Sending ping
+[20:16:01] [Server thread/INFO] [Actually Additions]: Successfully loaded WorldData!
+[20:16:01] [Server thread/INFO] [Actually Additions]: Sending Player Data to player Player394 with UUID 9662db8b-9062-3256-9f5d-83caa676c3d7.
+[20:16:04] [Server thread/INFO]: Saving and pausing game...
+[20:16:04] [Server thread/INFO]: Saving chunks for level 'Copy of Build'/overworld
+[20:16:04] [Netty Local Client IO #0/INFO] [Waila]: Received server authentication msg. Remote sync will be activated
+[20:16:04] [Server thread/INFO]: Saving chunks for level 'Copy of Build'/the_nether
+[20:16:04] [Server thread/INFO]: Saving chunks for level 'Copy of Build'/the_end
+[20:16:04] [Server thread/WARN]: Can't keep up! Did the system time change, or is the server overloaded? Running 2068ms behind, skipping 41 tick(s)
+[20:16:04] [pool-2-thread-1/WARN]: Couldn't look up profile properties for com.mojang.authlib.GameProfile@2787ae85[id=9662db8b-9062-3256-9f5d-83caa676c3d7,name=Player394,properties={},legacy=false]
 com.mojang.authlib.exceptions.AuthenticationException: The client has sent too many requests within a certain amount of time
 	at com.mojang.authlib.yggdrasil.YggdrasilAuthenticationService.makeRequest(YggdrasilAuthenticationService.java:79) ~[YggdrasilAuthenticationService.class:?]
 	at com.mojang.authlib.yggdrasil.YggdrasilMinecraftSessionService.fillGameProfile(YggdrasilMinecraftSessionService.java:180) [YggdrasilMinecraftSessionService.class:?]
@@ -471,7 +763,8 @@ com.mojang.authlib.exceptions.AuthenticationException: The client has sent too m
 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149) [?:1.8.0_162]
 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624) [?:1.8.0_162]
 	at java.lang.Thread.run(Thread.java:748) [?:1.8.0_162]
-[15:07:35] [main/WARN]: Failed to load texture: runecraftory:textures/entity/monsters/beetle.png
+[20:16:04] [main/INFO] [Actually Additions]: Receiving (new or changed) Player Data for player Player394.
+[20:16:05] [main/WARN]: Failed to load texture: runecraftory:textures/entity/monsters/beetle.png
 java.io.FileNotFoundException: runecraftory:textures/entity/monsters/beetle.png
 	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
 	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
@@ -505,41 +798,7 @@ java.io.FileNotFoundException: runecraftory:textures/entity/monsters/beetle.png
 	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
 	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
 	at GradleStart.main(GradleStart.java:25) [start/:?]
-[15:07:36] [main/WARN]: Failed to load texture: runecraftory:textures/entity/monsters/ant.png
-java.io.FileNotFoundException: runecraftory:textures/entity/monsters/ant.png
-	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
-	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
-	at net.minecraft.client.renderer.texture.SimpleTexture.loadTexture(SimpleTexture.java:34) ~[SimpleTexture.class:?]
-	at net.minecraft.client.renderer.texture.TextureManager.loadTexture(TextureManager.java:69) [TextureManager.class:?]
-	at net.minecraft.client.renderer.texture.TextureManager.bindTexture(TextureManager.java:44) [TextureManager.class:?]
-	at net.minecraft.client.renderer.entity.Render.bindTexture(Render.java:130) [Render.class:?]
-	at net.minecraft.client.renderer.entity.Render.bindEntityTexture(Render.java:123) [Render.class:?]
-	at net.minecraft.client.renderer.entity.RenderLivingBase.renderModel(RenderLivingBase.java:251) [RenderLivingBase.class:?]
-	at net.minecraft.client.renderer.entity.RenderLivingBase.doRender(RenderLivingBase.java:183) [RenderLivingBase.class:?]
-	at net.minecraft.client.renderer.entity.RenderLiving.doRender(RenderLiving.java:51) [RenderLiving.class:?]
-	at net.minecraft.client.renderer.entity.RenderLiving.doRender(RenderLiving.java:16) [RenderLiving.class:?]
-	at net.minecraft.client.renderer.entity.RenderManager.renderEntity(RenderManager.java:390) [RenderManager.class:?]
-	at net.minecraft.client.renderer.entity.RenderManager.renderEntityStatic(RenderManager.java:374) [RenderManager.class:?]
-	at net.minecraft.client.renderer.RenderGlobal.renderEntities(RenderGlobal.java:655) [RenderGlobal.class:?]
-	at net.minecraft.client.renderer.EntityRenderer.renderWorldPass(EntityRenderer.java:1398) [EntityRenderer.class:?]
-	at net.minecraft.client.renderer.EntityRenderer.renderWorld(EntityRenderer.java:1312) [EntityRenderer.class:?]
-	at net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(EntityRenderer.java:1115) [EntityRenderer.class:?]
-	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1207) [Minecraft.class:?]
-	at net.minecraft.client.Minecraft.run(Minecraft.java:441) [Minecraft.class:?]
-	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
-	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
-	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
-	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
-	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
-	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
-	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
-	at GradleStart.main(GradleStart.java:25) [start/:?]
-[15:07:38] [main/WARN]: Failed to load texture: runecraftory:textures/entity/monsters/orc.png
+[20:16:05] [main/WARN]: Failed to load texture: runecraftory:textures/entity/monsters/orc.png
 java.io.FileNotFoundException: runecraftory:textures/entity/monsters/orc.png
 	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
 	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
@@ -573,22 +832,559 @@ java.io.FileNotFoundException: runecraftory:textures/entity/monsters/orc.png
 	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
 	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
 	at GradleStart.main(GradleStart.java:25) [start/:?]
-[15:07:40] [main/INFO]: Loaded 18 advancements
-[15:07:48] [main/INFO]: [CHAT] There is an Update for Actually Additions available!
-[15:07:48] [main/INFO]: [CHAT] Current Version: 1.12.2-r126, newest Version: 1.12.2-r134
-[15:07:48] [main/INFO]: [CHAT] [Click for Changelog] [Click for Download]
-[15:07:58] [main/INFO]: Stopping!
-[15:07:58] [Server thread/INFO]: Stopping server
-[15:07:58] [Server thread/INFO]: Saving players
-[15:07:58] [Server thread/INFO]: Saving worlds
-[15:07:58] [Server thread/INFO]: Saving chunks for level 'New World'/overworld
-[15:07:59] [Server thread/INFO]: Saving chunks for level 'New World'/the_nether
-[15:07:59] [Server thread/INFO]: Saving chunks for level 'New World'/the_end
-[15:08:00] [Server thread/INFO] [FML]: Unloading dimension 0
-[15:08:00] [Server thread/INFO] [FML]: Unloading dimension -1
-[15:08:00] [Server thread/INFO] [FML]: Unloading dimension 1
-[15:08:00] [Server thread/INFO] [FML]: Applying holder lookups
-[15:08:00] [Server thread/INFO] [FML]: Holder lookups applied
-[15:08:00] [Server thread/INFO] [Actually Additions]: Unloaded WorldData!
-[15:08:00] [main/INFO]: SoundSystem shutting down...
-[15:08:00] [main/WARN]: Author: Paul Lamb, www.paulscode.com
+[20:16:05] [main/WARN]: Failed to load texture: runecraftory:textures/entity/monsters/ambrosia.png
+java.io.FileNotFoundException: runecraftory:textures/entity/monsters/ambrosia.png
+	at net.minecraft.client.resources.FallbackResourceManager.getResource(FallbackResourceManager.java:69) ~[FallbackResourceManager.class:?]
+	at net.minecraft.client.resources.SimpleReloadableResourceManager.getResource(SimpleReloadableResourceManager.java:65) ~[SimpleReloadableResourceManager.class:?]
+	at net.minecraft.client.renderer.texture.SimpleTexture.loadTexture(SimpleTexture.java:34) ~[SimpleTexture.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.loadTexture(TextureManager.java:69) [TextureManager.class:?]
+	at net.minecraft.client.renderer.texture.TextureManager.bindTexture(TextureManager.java:44) [TextureManager.class:?]
+	at net.minecraft.client.renderer.entity.Render.bindTexture(Render.java:130) [Render.class:?]
+	at net.minecraft.client.renderer.entity.Render.bindEntityTexture(Render.java:123) [Render.class:?]
+	at net.minecraft.client.renderer.entity.RenderLivingBase.renderModel(RenderLivingBase.java:251) [RenderLivingBase.class:?]
+	at net.minecraft.client.renderer.entity.RenderLivingBase.doRender(RenderLivingBase.java:183) [RenderLivingBase.class:?]
+	at net.minecraft.client.renderer.entity.RenderLiving.doRender(RenderLiving.java:51) [RenderLiving.class:?]
+	at net.minecraft.client.renderer.entity.RenderLiving.doRender(RenderLiving.java:16) [RenderLiving.class:?]
+	at net.minecraft.client.renderer.entity.RenderManager.renderEntity(RenderManager.java:390) [RenderManager.class:?]
+	at net.minecraft.client.renderer.entity.RenderManager.renderEntityStatic(RenderManager.java:374) [RenderManager.class:?]
+	at net.minecraft.client.renderer.RenderGlobal.renderEntities(RenderGlobal.java:655) [RenderGlobal.class:?]
+	at net.minecraft.client.renderer.EntityRenderer.renderWorldPass(EntityRenderer.java:1398) [EntityRenderer.class:?]
+	at net.minecraft.client.renderer.EntityRenderer.renderWorld(EntityRenderer.java:1312) [EntityRenderer.class:?]
+	at net.minecraft.client.renderer.EntityRenderer.updateCameraAndRender(EntityRenderer.java:1115) [EntityRenderer.class:?]
+	at net.minecraft.client.Minecraft.runGameLoop(Minecraft.java:1207) [Minecraft.class:?]
+	at net.minecraft.client.Minecraft.run(Minecraft.java:441) [Minecraft.class:?]
+	at net.minecraft.client.main.Main.main(Main.java:118) [Main.class:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraft.launchwrapper.Launch.launch(Launch.java:135) [launchwrapper-1.12.jar:?]
+	at net.minecraft.launchwrapper.Launch.main(Launch.java:28) [launchwrapper-1.12.jar:?]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[?:1.8.0_162]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[?:1.8.0_162]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_162]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_162]
+	at net.minecraftforge.gradle.GradleStartCommon.launch(GradleStartCommon.java:97) [start/:?]
+	at GradleStart.main(GradleStart.java:25) [start/:?]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ambrosia]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ambrosia]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ambrosia]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [main/INFO]: [CHAT] Killed Ambrosia
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [main/INFO]: [CHAT] Killed Ambrosia
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ambrosia]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Ambrosia
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO]: [Player394: Killed item.runecraftory:sticks_stick]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO]: [Player394: Killed item.runecraftory:crystal_fire]
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed Ambrosia
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ambrosia]
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@2
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Beetle]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ambrosia]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ambrosia]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@8
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@7
+[20:16:14] [Server thread/INFO]: [Player394: Killed Ant]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:furs@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Wooly]
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:sticks@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cheap_bracelet@0
+[20:16:14] [Server thread/INFO] [STDOUT]: [com.flemmli97.runecraftory.common.entity.EntityMobBase:dropLoot:796]: 1xrunecraftory:cloth@0
+[20:16:14] [Server thread/INFO]: [Player394: Killed Orc]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [Server thread/INFO]: [Player394: Killed Gate]
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed item.runecraftory:sticks_stick
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed item.runecraftory:crystal_fire
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Ambrosia
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Beetle
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Ambrosia
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Ambrosia
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Ant
+[20:16:14] [main/INFO]: [CHAT] Killed Wooly
+[20:16:14] [main/INFO]: [CHAT] Killed Orc
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:14] [main/INFO]: [CHAT] Killed Gate
+[20:16:24] [main/INFO]: [CHAT] There is an Update for Actually Additions available!
+[20:16:24] [main/INFO]: [CHAT] Current Version: 1.12.2-r126, newest Version: 1.12.2-r135
+[20:16:24] [main/INFO]: [CHAT] [Click for Changelog] [Click for Download]
+[20:16:38] [main/INFO]: Stopping!
+[20:16:38] [Server thread/INFO]: Stopping server
+[20:16:38] [Server thread/INFO]: Saving players
+[20:16:38] [Server thread/INFO]: Saving worlds
+[20:16:38] [Server thread/INFO]: Saving chunks for level 'Copy of Build'/overworld
+[20:16:38] [Server thread/INFO]: Saving chunks for level 'Copy of Build'/the_nether
+[20:16:38] [Server thread/INFO]: Saving chunks for level 'Copy of Build'/the_end
+[20:16:38] [Server thread/INFO] [FML]: Unloading dimension 0
+[20:16:38] [Server thread/INFO] [FML]: Unloading dimension -1
+[20:16:38] [Server thread/INFO] [FML]: Unloading dimension 1
+[20:16:39] [Server thread/INFO] [FML]: Applying holder lookups
+[20:16:39] [Server thread/INFO] [FML]: Holder lookups applied
+[20:16:39] [Server thread/INFO] [Actually Additions]: Unloaded WorldData!
+[20:16:39] [main/INFO]: SoundSystem shutting down...
+[20:16:39] [main/WARN]: Author: Paul Lamb, www.paulscode.com

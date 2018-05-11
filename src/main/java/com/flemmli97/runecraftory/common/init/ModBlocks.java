@@ -9,21 +9,27 @@ import com.flemmli97.runecraftory.common.blocks.BlockIgnore;
 import com.flemmli97.runecraftory.common.blocks.BlockMineral;
 import com.flemmli97.runecraftory.common.blocks.BlockPharmacy;
 import com.flemmli97.runecraftory.common.blocks.BlockRFFarmland;
+import com.flemmli97.runecraftory.common.blocks.BlockRequestBoard;
 import com.flemmli97.runecraftory.common.blocks.BlockResearchTable;
 import com.flemmli97.runecraftory.common.blocks.BlockTileTest;
+import com.flemmli97.runecraftory.common.blocks.crops.BlockCropBase;
 import com.flemmli97.runecraftory.common.blocks.tile.TileAccessory;
 import com.flemmli97.runecraftory.common.blocks.tile.TileBossSpawner;
 import com.flemmli97.runecraftory.common.blocks.tile.TileBrokenOre;
 import com.flemmli97.runecraftory.common.blocks.tile.TileChem;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCooking;
+import com.flemmli97.runecraftory.common.blocks.tile.TileCrop;
+import com.flemmli97.runecraftory.common.blocks.tile.TileFarmland;
 import com.flemmli97.runecraftory.common.blocks.tile.TileForge;
 import com.flemmli97.runecraftory.common.blocks.tile.TileResearchTable;
 import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockWithMeta;
+import com.flemmli97.runecraftory.common.lib.LibCropOreDictionary;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -35,17 +41,24 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @Mod.EventBusSubscriber(modid = LibReference.MODID)
 public class ModBlocks {
 	
-	public static Block forge = new BlockForge();
-	public static Block cooking = new BlockCookingBench();
-	public static Block pharm = new BlockPharmacy();
-	public static Block accessory = new BlockAccessoryCrafter();
-	public static Block farmland = new BlockRFFarmland();
-	public static Block mineral = new BlockMineral();
-	public static Block brokenMineral = new BlockBrokenMineral();
-	public static Block bossSpawner = new BlockBossSpawner();
-	public static Block test = new BlockTileTest();
-	public static Block research = new BlockResearchTable();
-	public static Block ignore = new BlockIgnore();
+	public static final Block forge = new BlockForge();
+	public static final Block cooking = new BlockCookingBench();
+	public static final Block pharm = new BlockPharmacy();
+	public static final Block accessory = new BlockAccessoryCrafter();
+	public static final Block farmland = new BlockRFFarmland();
+	public static final Block mineral = new BlockMineral();
+	public static final Block brokenMineral = new BlockBrokenMineral();
+	public static final Block bossSpawner = new BlockBossSpawner();
+	public static final Block test = new BlockTileTest();
+	public static final Block research = new BlockResearchTable();
+	public static final Block ignore = new BlockIgnore();
+	public static final Block board = new BlockRequestBoard();
+	
+	//Crops
+	public static final Block turnip = new BlockCropBase("turnip", LibCropOreDictionary.TURNIP);
+	public static final Block turnipPink = new BlockCropBase("turnip_pink", LibCropOreDictionary.PINKTURNIP);
+	public static final Block cabbage = new BlockCropBase("cabbage", LibCropOreDictionary.CABBAGE);
+	public static final Block pinkMelon = new BlockCropBase("pink_melon", LibCropOreDictionary.PINKMELON);
 
 	@SubscribeEvent
 	public static final void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -60,13 +73,22 @@ public class ModBlocks {
 	    event.getRegistry().register(test);
 	    event.getRegistry().register(research);
 	    event.getRegistry().register(ignore);
+	    event.getRegistry().register(board);
   		GameRegistry.registerTileEntity(TileBrokenOre.class, "tile_broken_ore");
+  		GameRegistry.registerTileEntity(TileFarmland.class, "tile_farmland");
+  		GameRegistry.registerTileEntity(TileCrop.class, "tile_crop");
   		GameRegistry.registerTileEntity(TileBossSpawner.class, "tile_boss_spawner");
   		GameRegistry.registerTileEntity(TileForge.class, "tile_forge");
   		GameRegistry.registerTileEntity(TileAccessory.class, "tile_access");
   		GameRegistry.registerTileEntity(TileChem.class, "tile_chemitry");
   		GameRegistry.registerTileEntity(TileCooking.class, "tile_cooking");
   		GameRegistry.registerTileEntity(TileResearchTable.class, "tile_research");
+  		
+  		event.getRegistry().register(turnip);
+  		event.getRegistry().register(turnipPink);
+  		event.getRegistry().register(cabbage);
+  		event.getRegistry().register(pinkMelon);
+  		event.getRegistry().getValue(new ResourceLocation("minecraft:farmland")).setTickRandomly(false);
 	}
 	
 	@SubscribeEvent
@@ -78,6 +100,7 @@ public class ModBlocks {
 	    event.getRegistry().register(fromBlock(test));
 	    event.getRegistry().register(fromBlock(research));
 	    event.getRegistry().register(fromBlock(ignore));
+	    event.getRegistry().register(fromBlock(board));
 	}
 	
 	private static final ItemBlock fromBlock(Block block)
@@ -104,5 +127,6 @@ public class ModBlocks {
 		((BlockBrokenMineral) brokenMineral).initModel();
 		((BlockResearchTable) research).initModel();
 		((BlockIgnore) ignore).initModel();
+		((BlockRequestBoard) board).initModel();
 	}
 }

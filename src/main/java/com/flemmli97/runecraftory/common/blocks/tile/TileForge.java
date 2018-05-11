@@ -1,6 +1,9 @@
 package com.flemmli97.runecraftory.common.blocks.tile;
 
+import com.flemmli97.runecraftory.api.items.IRpUseItem;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
+
+import net.minecraft.item.ItemStack;
 
 public class TileForge extends TileMultiBase{
 
@@ -11,5 +14,10 @@ public class TileForge extends TileMultiBase{
 	@Override
 	public String getName() {
 		return "tile.forge";
+	}
+
+	@Override
+	protected boolean validItem(ItemStack stack) {
+		return stack.getItem() instanceof IRpUseItem;
 	}
 }

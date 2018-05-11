@@ -99,8 +99,9 @@ public class EntityGate extends EntityLiving  implements IEntityBase{
 
 	@Override
 	protected void applyEntityAttributes() {
-		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100*LibConstants.DAMAGESCALE);;
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);;
+		super.applyEntityAttributes();
+		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100*LibConstants.DAMAGESCALE);;
+        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);;
         this.getAttributeMap().registerAttribute(ItemStats.RFDEFENCE).setBaseValue(5);;
         this.getAttributeMap().registerAttribute(ItemStats.RFMAGICDEF).setBaseValue(5);;
 	}
@@ -156,7 +157,7 @@ public class EntityGate extends EntityLiving  implements IEntityBase{
 	//=====Spawning Logic
 	@Override
 	public void onLivingUpdate() {
-		if(this.rand.nextInt(100)<1)
+		if(this.rand.nextInt(100)<1 && this.world.getDifficulty()!=EnumDifficulty.PEACEFUL)
 		{
 			this.spawnMobs();
 		}

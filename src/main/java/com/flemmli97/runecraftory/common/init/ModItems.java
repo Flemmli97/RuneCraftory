@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.common.init;
 
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.items.creative.ItemDebug;
 import com.flemmli97.runecraftory.common.items.creative.ItemIcon;
 import com.flemmli97.runecraftory.common.items.creative.ItemInstaTame;
@@ -7,11 +8,12 @@ import com.flemmli97.runecraftory.common.items.creative.ItemLevelUp;
 import com.flemmli97.runecraftory.common.items.creative.ItemSkillUp;
 import com.flemmli97.runecraftory.common.items.creative.ItemSpawnEgg;
 import com.flemmli97.runecraftory.common.items.equipment.accessoire.ItemCheapBracelet;
+import com.flemmli97.runecraftory.common.items.food.ItemCrops;
 import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockAccess;
-import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockBase;
 import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockCooking;
 import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockForge;
 import com.flemmli97.runecraftory.common.items.itemblocks.ItemBlockPharm;
+import com.flemmli97.runecraftory.common.items.itemblocks.ItemCropSeed;
 import com.flemmli97.runecraftory.common.items.misc.ItemBones;
 import com.flemmli97.runecraftory.common.items.misc.ItemCloths;
 import com.flemmli97.runecraftory.common.items.misc.ItemCrystals;
@@ -40,6 +42,7 @@ import com.flemmli97.runecraftory.common.items.weapons.haxe.ItemBattleScythe;
 import com.flemmli97.runecraftory.common.items.weapons.longsword.ItemClaymore;
 import com.flemmli97.runecraftory.common.items.weapons.shortsword.ItemBroadSword;
 import com.flemmli97.runecraftory.common.items.weapons.spear.ItemSpear;
+import com.flemmli97.runecraftory.common.lib.LibCropOreDictionary;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumToolTier;
 
@@ -51,217 +54,172 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod.EventBusSubscriber(modid = LibReference.MODID)
 public class ModItems {
 
-	public static ToolMaterial mat = EnumHelper.addToolMaterial("runeCraftory_mat", 3, 0, 6, 0, 0);
+	public static final ToolMaterial mat = EnumHelper.addToolMaterial("runeCraftory_mat", 3, 0, 6, 0, 0);
 	
-	public static Item hoeScrap = new ItemToolHoe(EnumToolTier.SCRAP);
-	public static Item hoeIron = new ItemToolHoe(EnumToolTier.IRON);
-	public static Item hoeSilver = new ItemToolHoe(EnumToolTier.SILVER);
-	public static Item hoeGold = new ItemToolHoe(EnumToolTier.GOLD);
-	public static Item hoePlatinum = new ItemToolHoe(EnumToolTier.PLATINUM);
-	public static Item wateringCanScrap = new ItemToolWateringCan(EnumToolTier.SCRAP);
-	public static Item wateringCanIron = new ItemToolWateringCan(EnumToolTier.IRON);
-	public static Item wateringCanSilver = new ItemToolWateringCan(EnumToolTier.SILVER);
-	public static Item wateringCanGold = new ItemToolWateringCan(EnumToolTier.GOLD);
-	public static Item wateringCanPlatinum = new ItemToolWateringCan(EnumToolTier.PLATINUM);
-	public static Item sickleScrap = new ItemToolSickle(EnumToolTier.SCRAP);
-	public static Item sickleIron = new ItemToolSickle(EnumToolTier.IRON);
-	public static Item sickleSilver = new ItemToolSickle(EnumToolTier.SILVER);
-	public static Item sickleGold = new ItemToolSickle(EnumToolTier.GOLD);
-	public static Item sicklePlatinum = new ItemToolSickle(EnumToolTier.PLATINUM);
-	public static Item hammerScrap = new ItemToolHammer(EnumToolTier.SCRAP);
-	public static Item hammerIron = new ItemToolHammer(EnumToolTier.IRON);
-	public static Item hammerSilver = new ItemToolHammer(EnumToolTier.SILVER);
-	public static Item hammerGold = new ItemToolHammer(EnumToolTier.GOLD);
-	public static Item hammerPlatinum = new ItemToolHammer(EnumToolTier.PLATINUM);
-	public static Item inspector = new ItemToolPetInspector();
+	public static final Item hoeScrap = new ItemToolHoe(EnumToolTier.SCRAP);
+	public static final Item hoeIron = new ItemToolHoe(EnumToolTier.IRON);
+	public static final Item hoeSilver = new ItemToolHoe(EnumToolTier.SILVER);
+	public static final Item hoeGold = new ItemToolHoe(EnumToolTier.GOLD);
+	public static final Item hoePlatinum = new ItemToolHoe(EnumToolTier.PLATINUM);
+	public static final Item wateringCanScrap = new ItemToolWateringCan(EnumToolTier.SCRAP);
+	public static final Item wateringCanIron = new ItemToolWateringCan(EnumToolTier.IRON);
+	public static final Item wateringCanSilver = new ItemToolWateringCan(EnumToolTier.SILVER);
+	public static final Item wateringCanGold = new ItemToolWateringCan(EnumToolTier.GOLD);
+	public static final Item wateringCanPlatinum = new ItemToolWateringCan(EnumToolTier.PLATINUM);
+	public static final Item sickleScrap = new ItemToolSickle(EnumToolTier.SCRAP);
+	public static final Item sickleIron = new ItemToolSickle(EnumToolTier.IRON);
+	public static final Item sickleSilver = new ItemToolSickle(EnumToolTier.SILVER);
+	public static final Item sickleGold = new ItemToolSickle(EnumToolTier.GOLD);
+	public static final Item sicklePlatinum = new ItemToolSickle(EnumToolTier.PLATINUM);
+	public static final Item hammerScrap = new ItemToolHammer(EnumToolTier.SCRAP);
+	public static final Item hammerIron = new ItemToolHammer(EnumToolTier.IRON);
+	public static final Item hammerSilver = new ItemToolHammer(EnumToolTier.SILVER);
+	public static final Item hammerGold = new ItemToolHammer(EnumToolTier.GOLD);
+	public static final Item hammerPlatinum = new ItemToolHammer(EnumToolTier.PLATINUM);
+	public static final Item inspector = new ItemToolPetInspector();
 	
-	public static Item broadSword=new ItemBroadSword();
+	public static final Item[] TOOLS = new Item[] {hoeScrap, hoeIron, hoeSilver, hoeGold, hoePlatinum, 
+			wateringCanScrap, wateringCanIron, wateringCanSilver, wateringCanGold, wateringCanPlatinum, 
+			sickleScrap, sickleIron, sickleSilver, sickleGold, sicklePlatinum,
+			hammerScrap, hammerIron, hammerSilver, hammerGold, hammerPlatinum, inspector};
 	
-	public static Item claymore = new ItemClaymore();
+	public static final Item broadSword=new ItemBroadSword();
 	
-	public static Item spear = new ItemSpear();
+	public static final Item claymore = new ItemClaymore();
 	
-	public static Item battleAxe = new ItemBattleAxe();
-	public static Item battleScythe = new ItemBattleScythe();
+	public static final Item spear = new ItemSpear();
 	
-	public static Item battleHammer = new ItemBattleHammer();
+	public static final Item battleAxe = new ItemBattleAxe();
+	public static final Item battleScythe = new ItemBattleScythe();
 	
-	public static Item dagger = new ItemShortDagger();
+	public static final Item battleHammer = new ItemBattleHammer();
 	
-	public static Item leatherGlove = new ItemLeatherGlove();
+	public static final Item dagger = new ItemShortDagger();
 	
-	public static Item cheapBracelet = new ItemCheapBracelet();
+	public static final Item leatherGlove = new ItemLeatherGlove();
 	
-	public static Item itemBlockForge = new ItemBlockForge();
-	public static Item itemBlockAccess = new ItemBlockAccess();
-	public static Item itemBlockCooking = new ItemBlockCooking();
-	public static Item itemBlockPharm = new ItemBlockPharm();
+	public static final Item[] WEAPONS = new Item[] {
+			broadSword,
+			claymore,
+			spear,
+			battleAxe, battleScythe,
+			battleHammer,
+			dagger,
+			leatherGlove};
 	
-	public static Item crystal = new ItemCrystals();
-	public static Item jewel = new ItemJewels();
-	public static Item mineral = new ItemMinerals();
-	public static Item scrap = new ItemMineralScrap();
-	public static Item sticks = new ItemSticks();
-	public static Item liquids = new ItemLiquids();
-	public static Item feathers = new ItemFeathers();
-	public static Item bones = new ItemBones();
-	public static Item stones = new ItemStones();
-	public static Item strings = new ItemStrings();
-	public static Item furs = new ItemFurs();
-	public static Item powders =  new ItemPowders();
-	public static Item cloth =  new ItemCloths();
+	public static final Item cheapBracelet = new ItemCheapBracelet();
 	
-	public static Item fireBallSmall = new ItemFireballCast();
-	public static Item recipe = new ItemRecipe();
-	public static Item icon = new ItemIcon();
+	public static final Item[] ARMOR = new Item[] {cheapBracelet};
+	
+	public static final Item itemBlockForge = new ItemBlockForge();
+	public static final Item itemBlockAccess = new ItemBlockAccess();
+	public static final Item itemBlockCooking = new ItemBlockCooking();
+	public static final Item itemBlockPharm = new ItemBlockPharm();
+	
+	public static final Item[] ITEMBLOCKS = new Item[] {itemBlockForge, itemBlockAccess, itemBlockCooking, itemBlockPharm};
+	
+	public static final Item crystal = new ItemCrystals();
+	public static final Item jewel = new ItemJewels();
+	public static final Item mineral = new ItemMinerals();
+	public static final Item scrap = new ItemMineralScrap();
+	public static final Item sticks = new ItemSticks();
+	public static final Item liquids = new ItemLiquids();
+	public static final Item feathers = new ItemFeathers();
+	public static final Item bones = new ItemBones();
+	public static final Item stones = new ItemStones();
+	public static final Item strings = new ItemStrings();
+	public static final Item furs = new ItemFurs();
+	public static final Item powders =  new ItemPowders();
+	public static final Item cloth =  new ItemCloths();
+	
+	public static final Item[] MATERIALS = new Item[] {crystal, jewel, mineral, scrap, sticks, liquids, feathers, bones, stones, strings, furs, powders, cloth};
+	
+	public static final Item fireBallSmall = new ItemFireballCast();
+	
+	public static final Item[] SPELLS = new Item[] {fireBallSmall};
+	
+	public static final Item recipe = new ItemRecipe();
+	
+	public static final Item icon = new ItemIcon();
+	public static final Item debug = new ItemDebug();
+	public static final Item level = new ItemLevelUp();
+	public static final Item skill = new ItemSkillUp();
+	public static final Item tame = new ItemInstaTame();
+	public static final Item spawnEgg = new ItemSpawnEgg();
+	
+	public static final Item[] CREATIVE = new Item[] {icon, debug, level, skill, tame, spawnEgg};
 
-	public static Item debug = new ItemDebug();
-	public static Item level = new ItemLevelUp();
-	public static Item skill = new ItemSkillUp();
-	public static Item tame = new ItemInstaTame();
-	public static Item spawnEgg = new ItemSpawnEgg();
+	//Crop items
+	public static final Item turnip = new ItemCrops("turnip", 10, 5, LibCropOreDictionary.TURNIP);
+	public static final Item turnipSeeds = new ItemCropSeed("turnip", LibCropOreDictionary.TURNIP);
+	
+	public static final Item turnipPink = new ItemCrops("turnip_pink", 15, 7, LibCropOreDictionary.PINKTURNIP);
+	public static final Item turnipPinkSeeds = new ItemCropSeed("turnip_pink", LibCropOreDictionary.PINKTURNIP);
+	
+	public static final Item cabbage = new ItemCrops("cabbage", 22, 0, LibCropOreDictionary.CABBAGE);
+	public static final Item cabbageSeeds = new ItemCropSeed("cabbage", LibCropOreDictionary.CABBAGE);
+	
+	public static final Item pinkMelon = new ItemCrops("pink_melon", 11, 14, LibCropOreDictionary.PINKMELON);
+	public static final Item pinkMelonSeeds = new ItemCropSeed("pink_melon", LibCropOreDictionary.PINKMELON);
+	
+	public static final Item[] CROPS = new Item[] {turnip, turnipPink, cabbage, pinkMelon};
+	public static final Item[] CROPSEEDS = new Item[] {turnipSeeds, turnipPinkSeeds, cabbageSeeds, pinkMelonSeeds};
 
 	@SubscribeEvent
 	public static final void registerItems(RegistryEvent.Register<Item> event) {
-	    event.getRegistry().register(hoeScrap);
-	    event.getRegistry().register(hoeIron);
-	    event.getRegistry().register(hoeSilver);
-	    event.getRegistry().register(hoeGold);
-	    event.getRegistry().register(hoePlatinum);
-	    event.getRegistry().register(wateringCanScrap);
-	    event.getRegistry().register(wateringCanIron);
-	    event.getRegistry().register(wateringCanSilver);
-	    event.getRegistry().register(wateringCanGold);
-	    event.getRegistry().register(wateringCanPlatinum);
-	    event.getRegistry().register(sickleScrap);
-	    event.getRegistry().register(sickleIron);
-	    event.getRegistry().register(sickleSilver);
-	    event.getRegistry().register(sickleGold);
-	    event.getRegistry().register(sicklePlatinum);
-	    event.getRegistry().register(hammerScrap);
-	    event.getRegistry().register(hammerIron);
-	    event.getRegistry().register(hammerSilver);
-	    event.getRegistry().register(hammerGold);
-	    event.getRegistry().register(hammerPlatinum);
-	    event.getRegistry().register(inspector);
-
-	    event.getRegistry().register(broadSword);
-
-	    event.getRegistry().register(claymore);
-
-	    event.getRegistry().register(spear);
-	    
-	    event.getRegistry().register(battleAxe);
-	    event.getRegistry().register(battleScythe);
-	    
-	    event.getRegistry().register(battleHammer);
-	    
-	    event.getRegistry().register(dagger);
-	    
-	    event.getRegistry().register(leatherGlove);
-	    
-	    event.getRegistry().register(cheapBracelet);
-	    
-	    event.getRegistry().register(crystal);
-	    event.getRegistry().register(jewel);
-	    event.getRegistry().register(mineral);
-	    event.getRegistry().register(scrap);
-	    event.getRegistry().register(sticks);
-	    event.getRegistry().register(liquids);
-	    event.getRegistry().register(feathers);
-	    event.getRegistry().register(bones);
-	    event.getRegistry().register(stones);
-	    event.getRegistry().register(strings);
-	    event.getRegistry().register(furs);
-	    event.getRegistry().register(powders);
-	    event.getRegistry().register(cloth);
-
-	    event.getRegistry().register(fireBallSmall);
+		for(Item item : TOOLS)
+			event.getRegistry().register(item);
+	    for(Item item : WEAPONS)
+	    	event.getRegistry().register(item);
+	    for(Item item : ARMOR)
+	    	event.getRegistry().register(item);
+	    for(Item item : ITEMBLOCKS)
+	    	event.getRegistry().register(item);
+	    for(Item item : MATERIALS)
+	    	event.getRegistry().register(item);
+	    for(Item item : SPELLS)
+	    	event.getRegistry().register(item);
+	    for(Item item : CROPS)
+	    	event.getRegistry().register(item);
+	    for(Item item : CROPSEEDS)
+	    	event.getRegistry().register(item);
+	    for(Item item : CREATIVE)
+	    	event.getRegistry().register(item);
 	    
 	    event.getRegistry().register(recipe);
-	    
-	    event.getRegistry().register(itemBlockForge);
-	    event.getRegistry().register(itemBlockAccess);
-	    event.getRegistry().register(itemBlockCooking);
-	    event.getRegistry().register(itemBlockPharm);
-	    
-	    event.getRegistry().register(spawnEgg);
-	    event.getRegistry().register(icon);
-
-	    event.getRegistry().register(debug);
-	    event.getRegistry().register(level);
-	    event.getRegistry().register(skill);
-	    event.getRegistry().register(tame);
 	}
 	
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static final void initModel(ModelRegistryEvent event)
 	{
-		((ItemToolHoe) hoeScrap).initModel();
-		((ItemToolHoe) hoeIron).initModel();
-		((ItemToolHoe) hoeSilver).initModel();
-		((ItemToolHoe) hoeGold).initModel();
-		((ItemToolHoe) hoePlatinum).initModel();
-		((ItemToolWateringCan) wateringCanScrap).initModel();
-		((ItemToolWateringCan) wateringCanIron).initModel();
-		((ItemToolWateringCan) wateringCanSilver).initModel();
-		((ItemToolWateringCan) wateringCanGold).initModel();
-		((ItemToolWateringCan) wateringCanPlatinum).initModel();
-		((ItemToolSickle) sickleScrap).initModel();
-		((ItemToolSickle) sickleIron).initModel();
-		((ItemToolSickle) sickleSilver).initModel();
-		((ItemToolSickle) sickleGold).initModel();
-		((ItemToolSickle) sicklePlatinum).initModel();
-		((ItemToolHammer) hammerScrap).initModel();
-		((ItemToolHammer) hammerIron).initModel();
-		((ItemToolHammer) hammerSilver).initModel();
-		((ItemToolHammer) hammerGold).initModel();
-		((ItemToolHammer) hammerPlatinum).initModel();
-		
-	    ((ItemBroadSword) broadSword).initModel();
+		for(Item item : TOOLS)
+			((IModelRegister)item).initModel();
+		for(Item item : WEAPONS)
+			((IModelRegister)item).initModel();
+		for(Item item : ARMOR)
+			((IModelRegister)item).initModel();
+		for(Item item : ITEMBLOCKS)
+			((IModelRegister)item).initModel();
+		for(Item item : MATERIALS)
+			((IModelRegister)item).initModel();
+		for(Item item : SPELLS)
+			((IModelRegister)item).initModel();
+		for(Item item : CREATIVE)
+			((IModelRegister)item).initModel();
+	    for(Item item : CROPS)
+			((IModelRegister)item).initModel();
+	    for(Item item : CROPSEEDS)
+			((IModelRegister)item).initModel();
 
-	    ((ItemClaymore) claymore).initModel();
-
-	    ((ItemSpear) spear).initModel();
-	    
-	    ((ItemBattleAxe) battleAxe).initModel();
-	    ((ItemBattleScythe) battleScythe).initModel();
-	    
-	    ((ItemBattleHammer) battleHammer).initModel();
-	    
-	    ((ItemShortDagger) dagger).initModel();
-	    
-	    ((ItemLeatherGlove) leatherGlove).initModel();
-	    
-		((ItemToolPetInspector) inspector).initModel();
-		
-		((ItemCrystals) crystal).initModel();
-		((ItemJewels) jewel).initModel();
-		((ItemMinerals) mineral).initModel();
-		((ItemMineralScrap) scrap).initModel();
-		((ItemSticks) sticks).initModel();
-		((ItemLiquids) liquids).initModel();
-		((ItemFeathers) feathers).initModel();
-		((ItemBones)bones).initModel();
-		((ItemStones)stones).initModel();
-		((ItemStrings)strings).initModel();
-		((ItemFurs) furs).initModel();
-		((ItemPowders) powders).initModel();
-		((ItemCloths) cloth).initModel();
-				
-		((ItemSpawnEgg) spawnEgg).initModel();
-		((ItemIcon) icon).initModel();
-		
-		((ItemBlockBase) itemBlockAccess).initModel();
-		((ItemBlockBase) itemBlockForge).initModel();
-		((ItemBlockBase) itemBlockCooking).initModel();
-		((ItemBlockBase) itemBlockPharm).initModel();
 	}
-	
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static final void recipeRender(ModelBakeEvent event)
 	{

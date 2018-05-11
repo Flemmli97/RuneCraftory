@@ -34,6 +34,14 @@ public class EventHandlerClient{
 	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
+	public void renderRunePoints(RenderGameOverlayEvent.Pre event)
+	{				
+		if(event.getType()==ElementType.FOOD||event.getType()==ElementType.HEALTH)event.setCanceled(true);;
+
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
 	public void renderRunePoints(RenderGameOverlayEvent.Post event)
 	{				
 		if (event.isCancelable())return;
@@ -86,6 +94,16 @@ public class EventHandlerClient{
 			PacketHandler.sendToServer(new PacketCastSpell(3));
         }
     }
+	/*@SubscribeEvent
+	public void player(RenderPlayerEvent.Pre event)
+	{
+		if(shouldReplace(event.getEntityPlayer()))
+		{
+			event.setCanceled(true);
+	        float f = event.getEntityPlayer().prevRotationYaw + (event.getEntityPlayer().rotationYaw - event.getEntityPlayer().prevRotationYaw) * event.getPartialRenderTick();
+			RenderPlayerNew.instance((AbstractClientPlayer) event.getEntityPlayer()).doRender((AbstractClientPlayer) event.getEntityPlayer(), event.getX(), event.getY(), event.getZ(), f, event.getPartialRenderTick());
+		}
+	}*/
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -101,4 +119,9 @@ public class EventHandlerClient{
 			}
 		}
 	}
+	
+	/*private static boolean shouldReplace(EntityPlayer player)
+	{
+		return player.getHeldItemMainhand().getItem() instanceof IRpUseItem;
+	}*/
 }

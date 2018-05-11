@@ -74,8 +74,7 @@ public class LevelCalc {
 		double newValue = baseValue+baseValue/2.0*Math.max(0, level-LibConstants.baseLevel)*scale;
 		if(isHealth)
 		{
-			int dec = (int) (newValue/LibConstants.DAMAGESCALE);
-			newValue = dec*LibConstants.DAMAGESCALE;
+			newValue = baseValue*LibConstants.DAMAGESCALE;
 		}
 		else
 		{

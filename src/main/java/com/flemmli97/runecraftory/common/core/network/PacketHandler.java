@@ -34,7 +34,7 @@ public class PacketHandler {
 		dispatcher.registerMessage(PacketDisableInteraction.Handler.class, PacketDisableInteraction.class, 15, Side.CLIENT);
 		dispatcher.registerMessage(PacketCastSpell.Handler.class, PacketCastSpell.class, 16, Side.SERVER);
 		dispatcher.registerMessage(PacketSwingArm.Handler.class, PacketSwingArm.class, 17, Side.CLIENT);
-
+		dispatcher.registerMessage(PacketCalendar.Handler.class, PacketCalendar.class, 18, Side.CLIENT);
 	}
 	
 	public static final void sendTo(IMessage message, EntityPlayerMP player) {

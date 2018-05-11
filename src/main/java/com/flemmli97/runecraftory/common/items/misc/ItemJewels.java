@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.items.misc;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.items.IItemBase;
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 
@@ -16,7 +17,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemJewels extends Item implements IItemBase{
+public class ItemJewels extends Item implements IItemBase, IModelRegister{
 	
 	private String[] jewels = new String[] {"amethyst", "aquamarine", "emerald","ruby","sapphire","diamond","red","green","blue","yellow","crystal"};
 

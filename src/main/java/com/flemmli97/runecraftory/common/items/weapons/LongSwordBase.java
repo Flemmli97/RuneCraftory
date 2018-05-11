@@ -8,6 +8,7 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
+import com.flemmli97.runecraftory.client.render.EnumToolCharge;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage.KnockBackType;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
@@ -15,6 +16,7 @@ import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProv
 import com.flemmli97.runecraftory.common.core.network.PacketHandler;
 import com.flemmli97.runecraftory.common.core.network.PacketWeaponAnimation;
 import com.flemmli97.runecraftory.common.init.ModItems;
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
@@ -51,7 +53,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class LongSwordBase extends ItemSword implements IRpUseItem{
+public abstract class LongSwordBase extends ItemSword implements IRpUseItem, IModelRegister{
 
 	private int chargeXP = 25;
 
@@ -149,7 +151,13 @@ public abstract class LongSwordBase extends ItemSword implements IRpUseItem{
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack)
     {
-        return EnumAction.BLOCK;
+        return EnumAction.BOW;
+    }
+	
+	@Override
+	public EnumToolCharge chargeType(ItemStack stack)
+    {
+        return EnumToolCharge.CHARGELONG;
     }
 	
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)

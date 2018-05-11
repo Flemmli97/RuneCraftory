@@ -7,10 +7,12 @@ import org.lwjgl.input.Keyboard;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
+import com.flemmli97.runecraftory.client.render.EnumToolCharge;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
 import com.flemmli97.runecraftory.common.init.ModItems;
+import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
@@ -52,7 +54,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemToolHoe extends ItemHoe implements IRpUseItem{
+public class ItemToolHoe extends ItemHoe implements IRpUseItem, IModelRegister{
 
 	private EnumToolTier tier;
 	private int[] levelXP = new int[] {5, 20, 50, 200, 500};
@@ -62,7 +64,7 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem{
 		super(ModItems.mat);
         this.setMaxStackSize(1);
         this.setCreativeTab(RuneCraftory.weaponToolTab);
-        this.setRegistryName(new ResourceLocation(LibReference.MODID, "hoe_" + tier.getName()));	
+        this.setRegistryName(new ResourceLocation(LibReference.MODID, "hoe_"+tier.getName()));	
         this.setUnlocalizedName(this.getRegistryName().toString());
 		this.tier = tier;
 	}
@@ -229,6 +231,12 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem{
         return EnumAction.BOW;
     }
 	
+	@Override
+	public EnumToolCharge chargeType(ItemStack stack)
+    {
+        return EnumToolCharge.CHARGEUPTOOL;
+    }
+	
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
     {
 		if(entityLiving instanceof EntityPlayer && this.tier.getTierLevel()!=0)
@@ -244,7 +252,7 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem{
 				RayTraceResult result = this.rayTrace(worldIn, player, false);
 				if(result!=null && result.typeOfHit==Type.BLOCK)
 				{
-					this.useOnBlock(player, worldIn, result.getBlockPos(), EnumHand.MAIN_HAND, result.sideHit, (float)result.hitVec.x, (float)result.hitVec.y, (float)result.hitVec.z);
+					this.useOnBlock(player, worldIn, result.getBlockPos(), EnumHand.MAIN_HAND, result.sideHit);
 					return;
 				}
 			}
@@ -317,14 +325,14 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem{
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(this.tier.getTierLevel()==0)
 		{
-			return this.useOnBlock(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+			return this.useOnBlock(player, worldIn, pos, hand, facing);
 		}
 		else
 			return EnumActionResult.PASS;
 	}
 	
 	private EnumActionResult useOnBlock(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
+			EnumFacing facing) {
 		ItemStack itemstack = player.getHeldItem(hand);
 		EnumActionResult result = EnumActionResult.PASS;
         if(player.canPlayerEdit(pos.offset(facing), facing, itemstack))
@@ -346,16 +354,17 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem{
                 }
                 else if (block == Blocks.DIRT)
                 {
-                	System.out.println((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT));
                     switch ((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT))
                     {
                         case DIRT:
                             this.setBlock(itemstack, player, worldIn, pos, farmland);
                             result = EnumActionResult.SUCCESS;
+                            break;
                         case COARSE_DIRT:
                             this.setBlock(itemstack, player, worldIn, pos, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));
                             result = EnumActionResult.SUCCESS;
-                        case PODZOL:
+                            break;
+                        default:
                         	break;                
                     }
                 }

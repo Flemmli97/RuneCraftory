@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.lib;
 
-public class OreDictItemStats {
+public final class OreDictItemStats {
 
 	//turnip, potato, radish, spinach, carrot, pumpkin, corn, eggplant, cabbage, onion, cucumber, tomato, yam, leek, strawberry, pineapple
 	//iron, bronze, silver, gold, platinum

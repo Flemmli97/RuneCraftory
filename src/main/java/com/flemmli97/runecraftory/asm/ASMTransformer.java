@@ -3,8 +3,6 @@ package com.flemmli97.runecraftory.asm;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
@@ -24,7 +22,7 @@ public class ASMTransformer implements IClassTransformer{
 
 	private static Map<String, Transform> patches = Maps.newHashMap();
 	private static Map<String, Method> classMethod = Maps.newHashMap();
-	private static Logger logger = LogManager.getLogger("RuneCraftory/ASM");
+
 	static
 	{
 		patches.put("net.minecraft.client.renderer.entity.layers.LayerHeldItem", layerHeldItem());
@@ -38,6 +36,10 @@ public class ASMTransformer implements IClassTransformer{
 		patches.put("net.minecraft.client.renderer.entity.RenderPlayer", patchingRenderPlayer());
 		classMethod.put("net.minecraft.client.renderer.entity.RenderPlayer", 
 				new Method("setModelVisibilities","func_177137_d","d", "(Lnet/minecraft/client/entity/AbstractClientPlayer;)V", "(L"+"bua"+";)V"));
+		
+		patches.put("net.minecraft.client.model.ModelBiped", patchingModelBiped());
+		classMethod.put("net.minecraft.client.model.ModelBiped", 
+				new Method("setRotationAngles","func_78087_a","a", "(FFFFFFLnet/minecraft/entity/Entity;)V", "(FFFFFF"+"bpt"+";)V"));
 	}
 	
 	@Override
@@ -150,6 +152,36 @@ public class ASMTransformer implements IClassTransformer{
 		return t;
 	}
 	
+	private static Transform patchingModelBiped()
+	{
+		Transform t = new Transform() {
+			@Override
+			public void apply(ClassNode clss, MethodNode method) {
+					debug("Patching ModelBiped");
+					Iterator<AbstractInsnNode> it = method.instructions.iterator();
+					AbstractInsnNode node = null;
+					while(it.hasNext())
+					{
+						node = it.next();
+						if(node.getOpcode()==Opcodes.RETURN)
+							break;
+					}
+					InsnList inject = new InsnList();
+					inject.add(new VarInsnNode(Opcodes.ALOAD, 0));
+					inject.add(new VarInsnNode(Opcodes.FLOAD, 1));
+					inject.add(new VarInsnNode(Opcodes.FLOAD, 2));
+					inject.add(new VarInsnNode(Opcodes.FLOAD, 3));
+					inject.add(new VarInsnNode(Opcodes.FLOAD, 4));
+					inject.add(new VarInsnNode(Opcodes.FLOAD, 5));
+					inject.add(new VarInsnNode(Opcodes.FLOAD, 6));
+					inject.add(new VarInsnNode(Opcodes.ALOAD, 7));
+					inject.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "com/flemmli97/runecraftory/asm/ASMMethods", "modelBiped", 
+					"(Lnet/minecraft/client/model/ModelBiped;FFFFFFLnet/minecraft/entity/Entity;)V", false));
+					method.instructions.insertBefore(node, inject);
+			}};
+		return t;
+	}
+	
 	private interface Transform
 	{
 		public void apply(ClassNode clss, MethodNode method);
@@ -157,7 +189,7 @@ public class ASMTransformer implements IClassTransformer{
 	
 	static void debug(String debug)
 	{
-		logger.debug("[RuneCraftoy/ASM]: " + debug);
+		System.out.println("[RuneCraftoy/ASM]: " + debug);
 	}
 
 	private static class Method

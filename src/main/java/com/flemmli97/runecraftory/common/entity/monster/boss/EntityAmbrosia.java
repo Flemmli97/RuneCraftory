@@ -1,61 +1,32 @@
 package com.flemmli97.runecraftory.common.entity.monster.boss;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.flemmli97.runecraftory.api.entities.ItemStats;
 import com.flemmli97.runecraftory.common.entity.EntityBossBase;
 import com.flemmli97.runecraftory.common.entity.ai.EntityAIAmbrosia;
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityAmbrosiaSleep;
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityAmbrosiaWave;
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityButterfly;
-import com.flemmli97.runecraftory.common.init.ModItems;
 
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityAmbrosia extends EntityBossBase{
 
-	private Map<ItemStack, Float>drops = new HashMap<ItemStack, Float>();
 	private AttackAI status = AttackAI.IDDLE;
 	public EntityAmbrosia(World world) {
-		super(world, true, 10, 12, true);
+		super(world);
 		this.tasks.addTask(1, new EntityAIAmbrosia(this));
-		this.drops.put(new ItemStack(ModItems.strings, 1,2),0.5F);
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.initiateBaseAttributes(SharedMonsterAttributes.MAX_HEALTH,186);
         this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.34);;
-		this.initiateBaseAttributes(ItemStats.RFATTACK,21.5);
-		this.initiateBaseAttributes(ItemStats.RFDEFENCE,13.5);
-		this.initiateBaseAttributes(ItemStats.RFMAGICATT,18.3);
-		this.initiateBaseAttributes(ItemStats.RFMAGICDEF,14.2);
-	}
-	
-	@Override
-	public ItemStack[] tamingItem() {
-		// big toyherb
-		return null;
-	}
-
-	@Override
-	public float tamingChance() {
-		return 0.35F;
 	}
 
 	@Override
 	public float attackChance() {
 		return 100;
-	}
-
-	@Override
-	public Map<ItemStack, Float> getDrops() {
-		return drops;
 	}
 
 	/*@Override

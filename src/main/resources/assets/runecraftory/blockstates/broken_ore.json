@@ -8,8 +8,6 @@
         "tier=fire": { "model": "runecraftory:broken_ore_fire"},
         "tier=water": { "model": "runecraftory:broken_ore_water"},
         "tier=earth": { "model": "runecraftory:broken_ore_earth"},
-        "tier=wind": { "model": "runecraftory:broken_ore_wind"},
-	"inventory": {"model": "runecraftory:broken_ore"}
-
+	"tier=wind": { "model": "runecraftory:broken_ore_wind"}
     }
 }

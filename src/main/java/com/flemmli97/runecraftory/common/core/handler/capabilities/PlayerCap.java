@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
+import com.flemmli97.runecraftory.common.core.handler.quests.QuestMission;
 import com.flemmli97.runecraftory.common.core.network.PacketHandler;
 import com.flemmli97.runecraftory.common.core.network.PacketHealth;
 import com.flemmli97.runecraftory.common.core.network.PacketMaxHealth;
@@ -20,11 +21,13 @@ import com.flemmli97.runecraftory.common.core.network.PacketUpdateClient;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumStatusEffect;
+import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
@@ -34,7 +37,7 @@ public class PlayerCap implements IPlayer  {
 	//max runpoints possible: 2883
 	private int money=0;
 	private int runePointsMax=56;
-	private float healthMax=25;
+	private float healthMax=5;
 	private float health=healthMax;
 	private int runePoints = runePointsMax;
 	private float str = 5;
@@ -43,15 +46,15 @@ public class PlayerCap implements IPlayer  {
 	/** first number is level, second is the xp a.k.a. percent to next level*/
 	private int[] level = new int[] {1,0};
 	private Map<EnumSkills, int[]> skillMap = new HashMap<EnumSkills, int[]>();
-	private InventorySpells spells;
+	private InventorySpells spells=new InventorySpells();
 	private List<EnumStatusEffect> activeEffects = new ArrayList<EnumStatusEffect>();
-
+	private QuestMission quest;
+	
 	public PlayerCap()
 	{
 		for(EnumSkills skill: EnumSkills.values())
 		{
 			this.skillMap.put(skill, new int[] {1,0});
-			spells = new InventorySpells();
 		}
 	}
 	@Override
@@ -86,12 +89,17 @@ public class PlayerCap implements IPlayer  {
 	@Override
 	public void damage(EntityPlayer player,DamageSource source, float amount)
 	{
-		this.health-=amount;
-		player.getCombatTracker().trackDamage(source, this.health, amount);
-		if(this.health<0 && !player.world.isRemote)
+		if(this.health<=0)
+			player.setHealth(player.getHealth()-amount);
+		else if(amount>=this.health)
 		{
-            player.setHealth(0);
+			float diff = amount-this.health;
+			this.health=0;
+			this.damage(player, source, diff);
 		}
+		else
+			this.health-=amount;
+		player.getCombatTracker().trackDamage(source, this.health, amount);
 		if(!player.world.isRemote && player instanceof EntityPlayerMP)
 		{
 			PacketHandler.sendTo(new PacketHealth(this), (EntityPlayerMP) player);
@@ -383,6 +391,8 @@ public class PlayerCap implements IPlayer  {
 			NBTTagCompound compound3 = (NBTTagCompound) nbt.getTag("inventory");
 			this.spells.readFromNBT(compound3);
 		}
+		if(nbt.hasKey("Quest"))
+			this.quest=new QuestMission(nbt.getCompoundTag("Quest"));
 	}
 
 	@Override
@@ -416,6 +426,8 @@ public class PlayerCap implements IPlayer  {
 		NBTTagCompound compound3 = new NBTTagCompound(); 
 		this.spells.writeToNBT(compound3);
 		nbt.setTag("inventory", compound3);
+		if(this.quest!=null)
+			nbt.setTag("Quest", this.quest.writeToNBT(new NBTTagCompound()));
 		return nbt;
 	}
 	
@@ -463,5 +475,35 @@ public class PlayerCap implements IPlayer  {
 		{
 			PacketHandler.sendTo(new PacketStatus(this), (EntityPlayerMP) player);
 		}
+	}
+	
+	public QuestMission currentMission()
+	{
+		return quest;
+	}
+	
+	public boolean acceptMission(QuestMission quest)
+	{
+		if(this.quest==null)
+		{
+			this.quest=quest;
+			return true;
+		}
+		return false;		
+	}
+	
+	public boolean finishMission(EntityPlayer player)
+	{
+		if(this.quest!=null && this.quest.questObjective().isFinished())
+		{
+			for(ItemStack stack : this.quest.questObjective().rewards())
+			{
+				ItemUtils.spawnItemAtEntity(player, stack);
+			}
+			this.setMoney(player, this.getMoney()+this.quest.questObjective().moneyReward());
+			this.quest=null;
+			return true;
+		}
+		return false;
 	}
 }

@@ -51,7 +51,6 @@ public class BlockBrokenMineral extends Block implements ITileEntityProvider{
         this.setHardness(50.0F);
         this.setRegistryName(new ResourceLocation(LibReference.MODID, "broken_ore"));
 		this.setUnlocalizedName(this.getRegistryName().toString());
-		this.setTickRandomly(true);
 	}
 	
 	private AxisAlignedBB box = new AxisAlignedBB(0,0,0,1,0.125,1);
@@ -143,7 +142,7 @@ public class BlockBrokenMineral extends Block implements ITileEntityProvider{
 	@SideOnly(Side.CLIENT)
     public void initModel() {
 		for(EnumTier tier : EnumTier.values())
-			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), tier.getMeta(), new ModelResourceLocation(this.getRegistryName(), "inventory"));
+			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), tier.getMeta(), new ModelResourceLocation(this.getRegistryName()+"_"+tier.getName(), "inventory"));
     }
 
 	@Override

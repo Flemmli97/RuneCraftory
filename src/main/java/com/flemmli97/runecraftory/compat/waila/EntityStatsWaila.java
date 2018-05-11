@@ -2,7 +2,7 @@ package com.flemmli97.runecraftory.compat.waila;
 
 import java.util.List;
 
-import com.flemmli97.runecraftory.common.core.handler.ConfigHandler;
+import com.flemmli97.runecraftory.common.core.handler.config.ConfigHandler;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.LibConstants;
