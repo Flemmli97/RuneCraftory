@@ -23,7 +23,6 @@ compileJava {
 minecraft {
     version = "1.12.2-14.23.1.2590"
     runDir = "run"
-    //coreMod = "com.flemmli97.runecraftory.asm.ASMLoader"
 
     mappings = "snapshot_20171003"
     makeObfSourceJar = false
