@@ -13,12 +13,13 @@ public class TileCrop extends TileEntity{
 
 	public TileCrop() {}
 	private boolean isGiant=false;
-	private int age;
+	private float age;
 	private long lastGrowth=0;
 	private float level;
+	private boolean withered;
 	public int age()
 	{
-		return this.age;
+		return Math.round(this.age);
 	}
 	
 	public int level()
@@ -48,12 +49,28 @@ public class TileCrop extends TileEntity{
 	
     public void growCrop(World world, BlockPos pos, IBlockState state, float speed, float level, float seasonModifier)
     {
-    	this.age+=speed*seasonModifier;
     	Block block = state.getBlock();
+    	this.age+=speed*seasonModifier;
+
 		if(block instanceof BlockCropBase)
-			world.setBlockState(pos, state.withProperty(BlockCropBase.STATUS, (this.age*3)/((BlockCropBase)block).matureDays()));
+		{
+			this.age=Math.min(((BlockCropBase) block).matureDays(), this.age);
+			world.setBlockState(pos, state.withProperty(BlockCropBase.STATUS, (Math.round(this.age)*3)/((BlockCropBase)block).matureDays()));
+		}
     	this.markDirty();
     }
+    
+    public void setWithered()
+    {
+    	this.withered=true;
+    	//this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).withMirror(mirrorIn))
+    }
+    
+    public boolean isWithered()
+    {
+    	return this.withered;
+    }
+    
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
     {
@@ -70,7 +87,7 @@ public class TileCrop extends TileEntity{
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setInteger("Age", this.age);
+		compound.setFloat("Age", Math.round(this.age));
 		compound.setBoolean("Giant", this.isGiant);
 		return compound;
 	}

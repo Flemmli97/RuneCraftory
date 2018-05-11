@@ -21,7 +21,6 @@ public class TileFarmland extends TileEntity implements IDailyTickable{
 	private float level;
 	public TileFarmland()
 	{
-
 	}
 	
 	public TileFarmland(World world)
@@ -86,7 +85,7 @@ public class TileFarmland extends TileEntity implements IDailyTickable{
 	
 	public void applyLevelFertilizer(float amount)
 	{
-		this.level=Math.min(2, this.level+amount);
+		this.level=Math.min(2, (this.level+amount));
 		this.markDirty();
 	}
 	
@@ -113,12 +112,20 @@ public class TileFarmland extends TileEntity implements IDailyTickable{
 					tile.growCrop(world, cropPos, cropState, this.growthMultiplier, this.level, season);
 			}
             net.minecraftforge.common.ForgeHooks.onCropsGrowPost(world, cropPos, state, world.getBlockState(cropPos));
-            if(world.rand.nextInt(2)==0)
-            	this.growthMultiplier-=Math.max(this.growthMultiplier-0.1F, 0.1F);
-            this.health--;
-            this.level-=0.01F;
 		}
+        if(world.rand.nextInt(2)==0)
+        {
+        	this.growthMultiplier=Math.max(this.growthMultiplier-0.1F, 0.1F);
+        }
+        this.health--;
+        this.level-=0.01F;
 		this.markDirty();
 	}
+	
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
+    {
+        return oldState.getBlock() != newSate.getBlock();
+    }
 
 }

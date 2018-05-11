@@ -34,6 +34,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemHoe;
@@ -45,6 +46,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -252,7 +254,7 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem, IModelRegister{
 				RayTraceResult result = this.rayTrace(worldIn, player, false);
 				if(result!=null && result.typeOfHit==Type.BLOCK)
 				{
-					this.useOnBlock(player, worldIn, result.getBlockPos(), EnumHand.MAIN_HAND, result.sideHit);
+					useOnBlock(player, worldIn, result.getBlockPos(), itemstack, result.sideHit);
 					return;
 				}
 			}
@@ -274,7 +276,7 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem, IModelRegister{
 									IBlockState farmland = ModBlocks.farmland.getDefaultState();
 									if (block == Blocks.GRASS || block == Blocks.GRASS_PATH)
 									{
-										this.setBlock(itemstack, player, worldIn, posNew, farmland);
+										setBlockHoeUse(itemstack, player, worldIn, posNew, farmland);
 										flag=true;
 									}
 									else if (block == Blocks.DIRT)
@@ -283,11 +285,11 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem, IModelRegister{
 										{
 											case DIRT:
 												flag=true;
-												this.setBlock(itemstack, player, worldIn, posNew, farmland);											
+												setBlockHoeUse(itemstack, player, worldIn, posNew, farmland);											
 												break;
 											case COARSE_DIRT:
 												flag=true;
-												this.setBlock(itemstack, player, worldIn, posNew, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));		                        				
+												setBlockHoeUse(itemstack, player, worldIn, posNew, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));		                        				
 												break;
 											default:
 												break;
@@ -325,15 +327,14 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem, IModelRegister{
 			EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(this.tier.getTierLevel()==0)
 		{
-			return this.useOnBlock(player, worldIn, pos, hand, facing);
+			return useOnBlock(player, worldIn, pos, player.getHeldItem(hand), facing);
 		}
 		else
 			return EnumActionResult.PASS;
 	}
 	
-	private EnumActionResult useOnBlock(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
+	public static EnumActionResult useOnBlock(EntityPlayer player, World worldIn, BlockPos pos, ItemStack itemstack,
 			EnumFacing facing) {
-		ItemStack itemstack = player.getHeldItem(hand);
 		EnumActionResult result = EnumActionResult.PASS;
         if(player.canPlayerEdit(pos.offset(facing), facing, itemstack))
         {
@@ -349,7 +350,7 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem, IModelRegister{
 
                 if (block == Blocks.GRASS || block == Blocks.GRASS_PATH)
                 {
-                    this.setBlock(itemstack, player, worldIn, pos, farmland);
+                    setBlockHoeUse(itemstack, player, worldIn, pos, farmland);
                     result = EnumActionResult.SUCCESS;
                 }
                 else if (block == Blocks.DIRT)
@@ -357,11 +358,11 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem, IModelRegister{
                     switch ((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT))
                     {
                         case DIRT:
-                            this.setBlock(itemstack, player, worldIn, pos, farmland);
+                            setBlockHoeUse(itemstack, player, worldIn, pos, farmland);
                             result = EnumActionResult.SUCCESS;
                             break;
                         case COARSE_DIRT:
-                            this.setBlock(itemstack, player, worldIn, pos, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));
+                            setBlockHoeUse(itemstack, player, worldIn, pos, Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));
                             result = EnumActionResult.SUCCESS;
                             break;
                         default:
@@ -379,6 +380,17 @@ public class ItemToolHoe extends ItemHoe implements IRpUseItem, IModelRegister{
         }
         return result;
 	}
+	
+    public static void setBlockHoeUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, IBlockState state)
+    {
+        worldIn.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+        if (!worldIn.isRemote)
+        {
+            worldIn.setBlockState(pos, state, 11);
+            stack.damageItem(1, player);
+        }
+    }
 
 	@Override
 	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {

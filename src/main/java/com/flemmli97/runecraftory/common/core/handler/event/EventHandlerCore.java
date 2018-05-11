@@ -5,6 +5,7 @@ import java.util.List;
 import com.flemmli97.runecraftory.api.entities.IEntityAdvanced;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.items.IRpUseItem;
+import com.flemmli97.runecraftory.common.blocks.tile.TileFarmland;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
@@ -25,9 +26,7 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumStatusEffect;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirt;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.IGrowable;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -35,16 +34,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -58,7 +55,6 @@ import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
-import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.world.BlockEvent.CropGrowEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
@@ -324,7 +320,12 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	public void disableVanillaCrop(CropGrowEvent.Pre event)
 	{
-		event.setCanceled(true);
+		if(event.getState().getBlock() instanceof IGrowable && event.getState().getBlock() instanceof IPlantable)
+		{
+			IPlantable growable = (IPlantable) event.getState().getBlock();
+			if(growable.getPlantType(event.getWorld(), event.getPos())==EnumPlantType.Crop)
+				event.setResult(Result.DENY);
+		}
 	}
 	
 	//Convert food heals to rp heals
@@ -341,38 +342,23 @@ public class EventHandlerCore {
 	@SubscribeEvent
 	public void boneMealHandling(BonemealEvent event)
 	{
-
-	}
-	
-	@SubscribeEvent
-	public void disableVanillaTilling(UseHoeEvent event)
-	{
-		IBlockState iblockstate = event.getWorld().getBlockState(event.getPos());
-        Block block = iblockstate.getBlock();
-        if (event.getWorld().isAirBlock(event.getPos().up()) && block==Blocks.DIRT)
-        {
-			event.setResult(Result.DENY);
-			switch ((BlockDirt.DirtType)iblockstate.getValue(BlockDirt.VARIANT))
+		if(event.getBlock().getBlock()==ModBlocks.farmland)
+		{
+			TileFarmland tile = (TileFarmland) event.getWorld().getTileEntity(event.getPos());
+			if(tile!=null)
 			{
-				case DIRT:
-					this.setBlock(event.getCurrent(), event.getEntityPlayer(), event.getWorld(), event.getPos(), ModBlocks.farmland.getDefaultState());
-					break;
-				case COARSE_DIRT:
-					this.setBlock(event.getCurrent(), event.getEntityPlayer(), event.getWorld(), event.getPos(), Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.DIRT));
-					break;
-				default:
-					break;
+				tile.applyGrowthFertilizer(0.2F);
+				event.setResult(Result.ALLOW);
+			}
+		}
+		else if(event.getWorld().getBlockState(event.getPos().down()).getBlock()==ModBlocks.farmland)
+		{
+			TileFarmland tile = (TileFarmland) event.getWorld().getTileEntity(event.getPos().down());
+			if(tile!=null)
+			{
+				tile.applyGrowthFertilizer(0.2F);
+				event.setResult(Result.ALLOW);
 			}
 		}
 	}
-    protected void setBlock(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, IBlockState state)
-    {
-        worldIn.playSound(player, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0F, 1.0F);
-
-        if (!worldIn.isRemote)
-        {
-            worldIn.setBlockState(pos, state, 11);
-            stack.damageItem(1, player);
-        }
-    }
 }

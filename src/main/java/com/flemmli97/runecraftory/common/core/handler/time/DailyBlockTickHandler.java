@@ -50,10 +50,12 @@ public class DailyBlockTickHandler extends WorldSavedData{
 		for(BlockPos pos : dailyTickBlocks)
 		{
 			if(world.isBlockLoaded(pos))
+			{
 				if(world.getTileEntity(pos)!=null && world.getTileEntity(pos) instanceof IDailyTickable)
 				{
 					((IDailyTickable)world.getTileEntity(pos)).dailyUpdate(world, pos, world.getBlockState(pos));
 				}
+			}
 		}
 	}
 	@Override
