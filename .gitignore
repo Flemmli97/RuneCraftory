@@ -8,7 +8,6 @@ build
 # forge
 libs
 run
-log.log
 
 # github
 .git
