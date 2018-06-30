@@ -5,11 +5,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * 
- *
+ * Called each day. (Probably better than ticking tiles, or not). Unused for now
  */
-public interface IDailyTickable {
-
-	//**TODO way to register it do dailyblocktickhandler
-	public void dailyUpdate(World world, BlockPos pos, IBlockState state);
+public interface IDailyTickable
+{
+    void dailyUpdate(World world, BlockPos pos, IBlockState state);
 }

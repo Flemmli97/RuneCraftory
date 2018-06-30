@@ -46,7 +46,7 @@ public class BlockResearchTable extends BlockContainer{
         }
         else
         {
-        		player.openGui(RuneCraftory.instance, LibReference.guiResearch, world, pos.getX(), pos.getY(), pos.getZ());
+    		player.openGui(RuneCraftory.instance, LibReference.guiResearch, world, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }
 	}

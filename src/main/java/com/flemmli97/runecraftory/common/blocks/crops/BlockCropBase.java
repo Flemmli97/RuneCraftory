@@ -4,9 +4,9 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.flemmli97.runecraftory.api.items.CropProperties;
+import com.flemmli97.runecraftory.api.mappings.CropMap;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrop;
-import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler.EnumSeason;
-import com.flemmli97.runecraftory.common.init.defaultval.CropMap;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
 import net.minecraft.block.BlockBush;
@@ -71,10 +71,16 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
 		TileCrop tile = (TileCrop) world.getTileEntity(pos);
-		if(tile.age()>=this.matureDays() && player.getHeldItem(hand).isEmpty())
+		if(tile.age()>=this.properties().growth() && player.getHeldItem(hand).isEmpty())
 		{
 			this.dropBlockAsItem(world, pos, state, 0);
-			world.setBlockToAir(pos);
+			if(this.properties().regrowable())
+			{
+				tile.resetAge();
+				world.setBlockState(pos, state.withProperty(STATUS, 0));
+			}
+			else
+				world.setBlockToAir(pos);
 			return true;
 		}
 		return false;
@@ -91,19 +97,9 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
         return CROPS_AABB[0];
     }
 	
-	public EnumSeason bestSeason()
+	public CropProperties properties()
 	{
-		return CropMap.getProperties(this.crop).bestSeason();
-	}
-	
-	public int matureDays()
-	{
-		return CropMap.getProperties(this.crop).growth();
-	}
-	
-	public int maxDrops()
-	{
-		return CropMap.getProperties(this.crop).maxDrops();
+		return CropMap.getProperties(CropMap.seedFromString(this.crop).getRegistryName());
 	}
 
 	@Override
@@ -124,9 +120,9 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
     {
     	TileCrop tile = (TileCrop) world.getTileEntity(pos);
     	int age = tile.age();
-        if (age >= this.matureDays())
+        if (age >= this.properties().growth())
         {          
-            drops.add(new ItemStack(CropMap.cropFromString(this.crop), this.maxDrops()));
+            drops.add(new ItemStack(CropMap.cropFromString(this.crop), this.properties().maxDrops()));
         }
     }
     @Override

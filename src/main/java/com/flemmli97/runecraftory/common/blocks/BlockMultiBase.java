@@ -76,13 +76,13 @@ public abstract class BlockMultiBase extends BlockContainer{
         }
         else
         {
-        		BlockPos newPos = pos;
-        		if(state.getValue(PART)==EnumPartType.RIGHT)
-        			newPos=newPos.offset(state.getValue(FACING).rotateY());
-        		if(!player.isSneaking())
-        			player.openGui(RuneCraftory.instance, LibReference.guiMaking, world, newPos.getX(), newPos.getY(), newPos.getZ());
-        		else if(this.hasUpgrade())
-        			player.openGui(RuneCraftory.instance, LibReference.guiUpgrade, world, newPos.getX(), newPos.getY(), newPos.getZ());
+    		BlockPos newPos = pos;
+    		if(state.getValue(PART)==EnumPartType.RIGHT)
+    			newPos=newPos.offset(state.getValue(FACING).rotateY());
+    		if(!player.isSneaking())
+    			player.openGui(RuneCraftory.instance, LibReference.guiMaking, world, newPos.getX(), newPos.getY(), newPos.getZ());
+    		else if(this.hasUpgrade())
+    			player.openGui(RuneCraftory.instance, LibReference.guiUpgrade, world, newPos.getX(), newPos.getY(), newPos.getZ());
             return true;
         }
 	}

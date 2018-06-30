@@ -2,7 +2,7 @@ package com.flemmli97.runecraftory.client.render;
 
 import org.apache.logging.log4j.LogManager;
 
-import com.flemmli97.runecraftory.api.items.IRpUseItem;
+import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.client.models.ModelPlayerImproved;
 import com.flemmli97.runecraftory.common.items.weapons.DualBladeBase;
 import com.flemmli97.runecraftory.common.items.weapons.GloveBase;
@@ -252,13 +252,13 @@ public class RenderPlayerNew extends RenderPlayer
 
                 if (clientPlayer.getItemInUseCount() > 0)
                 {
-            		if(itemstack.getItem() instanceof IRpUseItem)
+            		if(itemstack.getItem() instanceof IChargeable)
             		{
             	        if (itemstack.getItem() instanceof DualBladeBase || itemstack.getItem() instanceof GloveBase)
             	        {
             	        	modelbiped$armpose1=ModelBiped.ArmPose.ITEM;
             	        }
-            	        EnumToolCharge action = ((IRpUseItem)itemstack.getItem()).chargeType(itemstack);
+            	        EnumToolCharge action = ((IChargeable)itemstack.getItem()).chargeType(itemstack);
             	        switch(action)
     	                {
     						case CHARGECAN:modelplayer.armPose=ArmPosePlus.CHARGECAN;
@@ -279,6 +279,8 @@ public class RenderPlayerNew extends RenderPlayer
     							break;
     						case CHARGEUPWEAPON:modelplayer.armPose=ArmPosePlus.CHARGEUPWEAPON;
     							break;
+							case CHARGESEEDS:
+								break;
     	                }
             		}
                 	else

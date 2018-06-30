@@ -13,7 +13,7 @@ import net.minecraft.world.storage.MapStorage;
 import net.minecraft.world.storage.WorldSavedData;
 
 /**
- * Does not get saved to disk
+ * Does not get saved to disk. Unused for now
  */
 public class DailyBlockTickHandler extends WorldSavedData{
 

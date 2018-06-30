@@ -6,8 +6,9 @@ bin
 build
 
 # forge
-lib
+libs
 run
+log.log
 
 # github
 .git

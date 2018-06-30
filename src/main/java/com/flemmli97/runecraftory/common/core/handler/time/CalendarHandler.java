@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.core.handler.time;
 
-import com.flemmli97.runecraftory.common.core.network.PacketCalendar;
-import com.flemmli97.runecraftory.common.core.network.PacketHandler;
+import com.flemmli97.runecraftory.common.network.PacketCalendar;
+import com.flemmli97.runecraftory.common.network.PacketHandler;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;

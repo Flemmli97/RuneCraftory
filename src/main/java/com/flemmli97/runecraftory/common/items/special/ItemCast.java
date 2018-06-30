@@ -40,10 +40,6 @@ public abstract class ItemCast extends Item implements ISpells, IModelRegister{
 	
 	@Override
 	public void update(ItemStack stack, EntityPlayer player) {}
-	@Override
-	public int getUpgradeDifficulty() {
-		return 0;
-	}
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {

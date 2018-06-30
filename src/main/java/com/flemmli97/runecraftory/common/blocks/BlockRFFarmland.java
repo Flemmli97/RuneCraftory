@@ -3,6 +3,8 @@ package com.flemmli97.runecraftory.common.blocks;
 import com.flemmli97.runecraftory.common.blocks.tile.TileFarmland;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -19,6 +21,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -34,7 +37,8 @@ public class BlockRFFarmland extends BlockFarmland implements ITileEntityProvide
         this.setUnlocalizedName(this.getRegistryName().toString());
 	}
 	
-	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable)
+	@Override
+	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable)
     {
         EnumPlantType plantType = plantable.getPlantType(world, pos.offset(direction));
         return plantType==EnumPlantType.Crop;
@@ -43,6 +47,25 @@ public class BlockRFFarmland extends BlockFarmland implements ITileEntityProvide
 	public void onFallenUpon(World worldIn, BlockPos pos, Entity entityIn, float fallDistance)
     {
 		entityIn.fall(fallDistance, 1.0F);
+    }
+	
+	//Reset farmland growth age for normal crops
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos)
+    {
+		IBlockState up = world.getBlockState(pos.up());
+		TileFarmland tile = (TileFarmland) world.getTileEntity(pos);
+		if(tile!=null)
+		{
+			if(!(up.getBlock() instanceof BlockCrops))
+				tile.resetGrowth();
+			else
+			{
+				if(up.getValue(BlockCrops.AGE)==0 && tile.age()!=0)
+					tile.resetGrowth();
+			}
+		}
+		super.neighborChanged(state, world, pos, blockIn, fromPos);
     }
 	
 	@Override

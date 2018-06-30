@@ -1,6 +1,5 @@
 package com.flemmli97.runecraftory.common.core.handler.quests;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.resources.I18n;
@@ -19,20 +18,19 @@ public class ObjectiveKill implements IObjective{
 
 	private String mob;
 	private int amount, progress, money;
-	private List<ItemStack> rewards = new ArrayList<ItemStack>();
+	private List<ItemStack> rewards;
 	
 	public ObjectiveKill()
 	{
 
 	}
 	
-	public ObjectiveKill(Class<? extends EntityCreature> mob, int amount, int money, ItemStack... rewards)
+	public ObjectiveKill(Class<? extends EntityCreature> mob, int amount, int money, List<ItemStack> stack2)
 	{
 		this.mob=EntityList.getKey(mob).toString();
 		this.amount=amount;
 		this.money=money;
-		for(ItemStack stack : rewards)
-			this.rewards.add(stack);
+		this.rewards=stack2;
 	}
 	@Override
 	public String objGoalID()
@@ -43,7 +41,7 @@ public class ObjectiveKill implements IObjective{
 	public void updateProgress(EntityPlayer player) {
 		this.progress++;
 		if(this.progress==this.amount)
-			player.sendMessage(new TextComponentString(TextFormatting.GOLD + "Quest complete"));
+			player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + "Quest complete"), true);
 	}
 	@Override
 	public boolean isFinished()

@@ -6,31 +6,26 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.Name;
 
-@MCVersion(value="1.12.2")
-@Name(value="RuneCraftory/ASMLoader")
-public class ASMLoader implements IFMLLoadingPlugin{
-
-	@Override
-	public String[] getASMTransformerClass() {
-		return new String[]{ASMTransformer.class.getName()};	}
-
-	@Override
-	public String getModContainerClass() {
-		return null;
-	}
-
-	@Override
-	public String getSetupClass() {
-		return null;
-	}
-
-	@Override
-	public void injectData(Map<String, Object> data) {
-	}
-
-	@Override
-	public String getAccessTransformerClass() {
-		return null;
-	}
-
+@MCVersion("1.12.2")
+@Name("RuneCraftory/ASMLoader")
+public class ASMLoader implements IFMLLoadingPlugin
+{
+    public String[] getASMTransformerClass() {
+        return new String[] { ASMTransformer.class.getName() };
+    }
+    
+    public String getModContainerClass() {
+        return null;
+    }
+    
+    public String getSetupClass() {
+        return null;
+    }
+    
+    public void injectData(Map<String, Object> data) {
+    }
+    
+    public String getAccessTransformerClass() {
+        return null;
+    }
 }

@@ -3,8 +3,8 @@ package com.flemmli97.runecraftory.common.blocks;
 import java.util.Random;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
@@ -134,7 +134,7 @@ public class BlockMineral extends Block{
 	
 	private void dropItem(IBlockState state, World world, BlockPos pos, EntityPlayer player)
 	{
-		IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+		IPlayer cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
 		float addChance = cap.getSkillLevel(EnumSkills.MINING)[0]*skillChanceUp;
 		if(player.getHeldItemMainhand().getItem() instanceof ItemToolHammer)
 		{

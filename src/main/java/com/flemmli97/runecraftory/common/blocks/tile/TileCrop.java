@@ -22,6 +22,12 @@ public class TileCrop extends TileEntity{
 		return Math.round(this.age);
 	}
 	
+	public void resetAge()
+	{
+		this.age=0;
+		this.markDirty();
+	}
+	
 	public int level()
 	{
 		return (int) this.level;
@@ -39,7 +45,7 @@ public class TileCrop extends TileEntity{
 	
 	public boolean isFullyGrown(BlockCropBase block)
 	{
-		return this.age>=block.matureDays();
+		return this.age>=block.properties().growth();
 	}
 	
 	public boolean canGrow()
@@ -54,8 +60,8 @@ public class TileCrop extends TileEntity{
 
 		if(block instanceof BlockCropBase)
 		{
-			this.age=Math.min(((BlockCropBase) block).matureDays(), this.age);
-			world.setBlockState(pos, state.withProperty(BlockCropBase.STATUS, (Math.round(this.age)*3)/((BlockCropBase)block).matureDays()));
+			this.age=Math.min(((BlockCropBase) block).properties().growth(), this.age);
+			world.setBlockState(pos, state.withProperty(BlockCropBase.STATUS, (Math.round(this.age)*3)/((BlockCropBase)block).properties().growth()));
 		}
     	this.markDirty();
     }

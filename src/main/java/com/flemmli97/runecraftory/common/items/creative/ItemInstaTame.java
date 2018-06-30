@@ -16,7 +16,6 @@ public class ItemInstaTame extends Item implements IModelRegister{
 		super();
 		this.setRegistryName(new ResourceLocation(LibReference.MODID, "insta_tame"));
 		this.setUnlocalizedName(this.getRegistryName().toString());
-    	this.setHasSubtypes(true);
     }
 	
 	@SideOnly(Side.CLIENT)

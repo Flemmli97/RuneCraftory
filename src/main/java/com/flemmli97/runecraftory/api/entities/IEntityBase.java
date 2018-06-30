@@ -4,15 +4,13 @@ import java.util.Map;
 
 import net.minecraft.item.ItemStack;
 
-public interface IEntityBase {
-	
+public interface IEntityBase
+{
 	public int level();
-				
+    
 	public Map<ItemStack, Float> getDrops();
-		
+    
 	public int baseXP();
-	
+    
 	public int baseMoney();
-	
-	//public EnumElement entityElement();
 }

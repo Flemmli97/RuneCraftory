@@ -1,13 +1,11 @@
 package com.flemmli97.runecraftory.common.core.handler.capabilities;
 
-import java.util.List;
-
 import javax.annotation.Nullable;
 
 import com.flemmli97.runecraftory.common.core.handler.quests.QuestMission;
+import com.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
-import com.flemmli97.runecraftory.common.lib.enums.EnumStatusEffect;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,7 +31,7 @@ public interface IPlayer{
 	
 	public boolean decreaseRunePoints(EntityPlayer player, int amount);
 	
-	public void refreshRunePoints(EntityPlayer player);
+	public void refreshRunePoints(EntityPlayer player, int amount);
 
 	public void setRunePoints(EntityPlayer player, int amount);
 	
@@ -69,9 +67,9 @@ public interface IPlayer{
 	
 	public int[] getSkillLevel(EnumSkills skill);
 	
-	public void setSkillLevel(EnumSkills skill, EntityPlayer player, int level, int percent);
+	public void setSkillLevel(EnumSkills skill, EntityPlayer player, int level, int xp);
 	
-	public void increaseSkill(EnumSkills skill, EntityPlayer player, int percent);
+	public void increaseSkill(EnumSkills skill, EntityPlayer player, int xp);
 	
 	//=====NBT 
 	
@@ -83,15 +81,7 @@ public interface IPlayer{
 	
 	public InventorySpells getInv();
 	
-	//=====Status
-	
-	public List<EnumStatusEffect> getActiveStatus();
-	
-	public void addStatus(EntityPlayer player, EnumStatusEffect status);
-	
-	public void clearEffect(EntityPlayer player);
-	
-	public void cureEffect(EntityPlayer player, EnumStatusEffect status);
+	public InventoryShippingBin getShippingInv();
 	
 	//Quest
 	@Nullable

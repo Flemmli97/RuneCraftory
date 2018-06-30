@@ -1,6 +1,5 @@
 package com.flemmli97.runecraftory.common.init;
 
-import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
 import com.flemmli97.runecraftory.common.core.handler.crafting.RecipeSextuple;
 import com.flemmli97.runecraftory.common.lib.LibReference;
@@ -48,7 +47,7 @@ public class CraftingRegistry {
 	}
 	@SubscribeEvent
 	public static final void registerRecipe(RegistryEvent.Register<IRecipe> event) {
-		RuneCraftory.logger.info("Registering crafting");
+		LibReference.logger.info("Registering crafting");
 		init();
 		event.getRegistry().register(new ShapedOreRecipe(new ResourceLocation(LibReference.MODID, "research_table"), new ItemStack(ModBlocks.research),
 				new Object[] {"WPW", "IBI", "WPW", 
@@ -77,6 +76,6 @@ public class CraftingRegistry {
 				'C', new ItemStack(ModItems.cloth, 1, OreDictionary.WILDCARD_VALUE),
 				'B', "workbench",
 				'F', "plankWood"}).setRegistryName(new ResourceLocation(LibReference.MODID, "pharmacy")));*/
-		RuneCraftory.logger.info("Finished crafting-registry");
+		LibReference.logger.info("Finished crafting-registry");
 	}
 }

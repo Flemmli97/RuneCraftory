@@ -16,7 +16,7 @@ public class ItemIcon extends Item implements IModelRegister{
 		super();
 		this.setRegistryName(new ResourceLocation(LibReference.MODID, "icon"));
 		this.setUnlocalizedName(this.getRegistryName().toString());
-    		this.setHasSubtypes(true);
+		this.setHasSubtypes(true);
     }
 	
 	@SideOnly(Side.CLIENT)

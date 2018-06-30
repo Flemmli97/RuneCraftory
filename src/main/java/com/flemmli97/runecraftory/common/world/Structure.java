@@ -51,6 +51,16 @@ public class Structure {
 		return this.name;
 	}
 	
+	public int frequency()
+	{
+		return this.freq;
+	}
+	
+	public void setFrequency(int freq)
+	{
+		this.freq=freq;
+	}
+	
 	//Sets up structure pos and properties
 	public synchronized void start(World world, int chunkX, int chunkZ, Random random)
 	{
@@ -58,7 +68,7 @@ public class Structure {
 		StructureData data = StructureData.get(world);
 		if(!data.hasPosition(p))
 		{
-			if(world.provider.getDimension() ==this.dimID || world.provider.getDimension()==LibReference.dimID)
+			if(this.freq>0 &&(world.provider.getDimension() ==this.dimID || world.provider.getDimension()==LibReference.dimID))
 			{
 				if(random.nextInt(this.freq)==0)
 				{

@@ -1,12 +1,13 @@
 package com.flemmli97.runecraftory.common.blocks;
 
+import java.util.LinkedList;
+
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.quests.ObjectiveKill;
 import com.flemmli97.runecraftory.common.core.handler.quests.QuestMission;
 import com.flemmli97.runecraftory.common.entity.monster.EntityWooly;
-import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
 import net.minecraft.block.Block;
@@ -56,10 +57,10 @@ public class BlockRequestBoard extends Block{
 			return true;
 		if(!world.isRemote)
 		{
-			IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
-			QuestMission q = new QuestMission(new ObjectiveKill(EntityWooly.class, 3, 5, new ItemStack(ModItems.mineral)), null);
+			IPlayer cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+			QuestMission q = new QuestMission(new ObjectiveKill(EntityWooly.class, 3, 5, new LinkedList<ItemStack>()), null);
 			if(cap.acceptMission(q))
-				player.sendMessage(new TextComponentString(TextFormatting.GOLD + q.questAcceptMsg()));
+				player.sendStatusMessage(new TextComponentString(TextFormatting.GOLD + q.questAcceptMsg()), true);
 			else
 			{
 				if(cap.currentMission().questObjective().isFinished())

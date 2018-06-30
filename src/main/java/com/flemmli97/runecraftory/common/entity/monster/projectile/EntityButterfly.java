@@ -1,63 +1,50 @@
 package com.flemmli97.runecraftory.common.entity.monster.projectile;
 
-import com.flemmli97.runecraftory.api.entities.ItemStats;
-import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
-import com.flemmli97.runecraftory.common.core.handler.CustomDamage.KnockBackType;
-import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
-import com.flemmli97.runecraftory.common.utils.RFCalculations;
+import net.minecraft.entity.projectile.*;
+import net.minecraft.world.*;
+import net.minecraft.entity.*;
+import net.minecraft.util.math.*;
+import com.flemmli97.runecraftory.common.lib.enums.*;
+import com.flemmli97.runecraftory.common.core.handler.*;
+import com.flemmli97.runecraftory.api.items.*;
+import com.flemmli97.runecraftory.common.utils.*;
+import net.minecraft.entity.ai.attributes.*;
+import net.minecraft.potion.*;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.World;
-
-public class EntityButterfly extends EntityThrowable{
-
-	private int livingTick;
-	public EntityButterfly(World worldIn)
-    {
+public class EntityButterfly extends EntityThrowable
+{
+    private int livingTick;
+    
+    public EntityButterfly(final World worldIn) {
         super(worldIn);
-        this.setSize(0.2F, 0.2F);
+        this.setSize(0.2f, 0.2f);
     }
-
-    public EntityButterfly(World worldIn, double x, double y, double z)
-    {
+    
+    public EntityButterfly(final World worldIn, final double x, final double y, final double z) {
         super(worldIn, x, y, z);
     }
-
-    public EntityButterfly(World worldIn, EntityLivingBase throwerIn)
-    {
+    
+    public EntityButterfly(final World worldIn, final EntityLivingBase throwerIn) {
         super(worldIn, throwerIn);
     }
     
+    public void onUpdate() {
+        ++this.livingTick;
+        if (this.livingTick > 100) {
+            this.setDead();
+        }
+        super.onUpdate();
+    }
     
-
-    @Override
-	public void onUpdate() {
-		this.livingTick++;
-		if(this.livingTick>100)
-			this.setDead();
-		super.onUpdate();
-	}
-
-	//drain method missing
-	@Override
-	protected void onImpact(RayTraceResult result) {
-		if(result.entityHit!=null && !this.world.isRemote)
-		{
-			if(result.entityHit!=this.getThrower() && result.entityHit instanceof EntityLivingBase)
-			{
-				if(RFCalculations.attackEntity(result.entityHit, CustomDamage.attack(this.getThrower(), EnumElement.NONE, CustomDamage.DamageType.NORMAL, KnockBackType.BACK, 0, 10), RFCalculations.getAttributeValue(this.getThrower(), ItemStats.RFMAGICATT, null, null)/6.0F));
-					((EntityLivingBase)result.entityHit).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:slowness"), 60, 3));
-				this.setDead();
-			}
-		}
-	}
-	
-	@Override
-	protected float getGravityVelocity() {
-		return 0;
-	}
+    protected void onImpact(final RayTraceResult result) {
+        if (result.entityHit != null && !this.world.isRemote && result.entityHit != this.getThrower() && result.entityHit instanceof EntityLivingBase) {
+            if (RFCalculations.attackEntity(result.entityHit, CustomDamage.attack(this.getThrower(), EnumElement.NONE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 10), RFCalculations.getAttributeValue(this.getThrower(), (IAttribute)ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {}
+            ((EntityLivingBase)result.entityHit).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:slowness"), 60, 3));
+            this.setDead();
+        }
+    }
+    
+    protected float getGravityVelocity() {
+        return 0.0f;
+    }
 }

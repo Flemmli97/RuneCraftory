@@ -56,7 +56,7 @@ public class CommandStructure implements ICommand{
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length<1)
         {
-			((EntityPlayer)sender.getCommandSenderEntity()).sendMessage(new TextComponentString(TextFormatting.RED + "Usage: /" + this.getUsage(sender)));
+			((EntityPlayer)sender.getCommandSenderEntity()).sendStatusMessage(new TextComponentString(TextFormatting.RED + "Usage: /" + this.getUsage(sender)), false);
 			return;
         }
 		try

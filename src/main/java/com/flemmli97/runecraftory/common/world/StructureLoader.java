@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.utils.Position;
 
 import net.minecraft.block.state.IBlockState;
@@ -30,7 +30,7 @@ public class StructureLoader {
 		}
 		catch(FileNotFoundException e)
 		{
-			RuneCraftory.logger.error("Error reading file " + fileName, e);
+			LibReference.logger.error("Error reading file " + fileName, e);
 		}
 		return null;
 	}
@@ -89,7 +89,7 @@ public class StructureLoader {
 			return loadFromNBT(nbt);
 		} 
 		catch (IOException e) {
-			RuneCraftory.logger.error("Error reading nbt file", e);
+			LibReference.logger.error("Error reading nbt file", e);
 			return null;
 		}
 	}

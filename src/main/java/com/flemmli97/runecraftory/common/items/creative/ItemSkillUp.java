@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.items.creative;
 
+import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
@@ -32,7 +32,7 @@ public class ItemSkillUp extends Item implements IModelRegister{
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand handIn) {
 		if(!world.isRemote)
 		{
-			IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
+			IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
 			for(EnumSkills skill : EnumSkills.values())
 				capSync.increaseSkill(skill, player, LevelCalc.xpAmountForSkills(capSync.getSkillLevel(skill)[0])/2);
 		}

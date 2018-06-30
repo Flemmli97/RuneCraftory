@@ -1,27 +1,19 @@
 package com.flemmli97.runecraftory.common.items.itemblocks;
 
-import java.util.List;
-
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.api.items.IItemBase;
-import com.flemmli97.runecraftory.common.blocks.crops.BlockCropBase;
+import com.flemmli97.runecraftory.api.mappings.CropMap;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
-import com.flemmli97.runecraftory.common.init.defaultval.CropMap;
 import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
-import com.flemmli97.runecraftory.common.utils.ItemNBT;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -30,7 +22,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -39,10 +30,10 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemCropSeed extends Item implements IPlantable, IItemBase, IModelRegister{
+public class ItemCropSeed extends Item implements IPlantable, IModelRegister{
 
 	private String crop;
-	private BlockCropBase cropBlock;
+
 	public ItemCropSeed(String name, String cropOreDictName)
 	{
 		this.crop=cropOreDictName;
@@ -63,21 +54,6 @@ public class ItemCropSeed extends Item implements IPlantable, IItemBase, IModelR
 	}
 	
 	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if(this.cropBlock==null)
-			this.cropBlock=CropMap.plantFromString(this.crop);
-		tooltip.add(I18n.format("season") + ": " + TextFormatting.getValueByName(this.cropBlock.bestSeason().getColor())+this.cropBlock.bestSeason().formattingText());
-		tooltip.add(I18n.format("growth")+ ": " + this.cropBlock.matureDays()+"  " + I18n.format("harvested")+": "+ this.cropBlock.maxDrops());
-		if(stack.hasTagCompound())
-		{
-			if(this.getBuyPrice(stack)>0)
-				tooltip.add(I18n.format("level")+ ": " + ItemNBT.itemLevel(stack) +"  "+ I18n.format("buy") +": " + this.getBuyPrice(stack) + "  "+ I18n.format("sell")+": "+this.getSellPrice(stack));
-			else
-				tooltip.add(I18n.format("level")+ ": " + ItemNBT.itemLevel(stack)+ "  "+ I18n.format("sell")+": "+this.getSellPrice(stack));
-		}
-	}
-	
-	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft)
     {
 		if(entityLiving instanceof EntityPlayer && stack.getCount()!=1)
@@ -93,7 +69,7 @@ public class ItemCropSeed extends Item implements IPlantable, IItemBase, IModelR
 	        	if(player.canPlayerEdit(pos.offset(result.sideHit), result.sideHit, stack) && 
 	        		state.getBlock().canSustainPlant(state, world, pos, EnumFacing.UP, this) && world.isAirBlock(pos.up()))
 	        	{
-					IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
+					IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
 					capSync.increaseSkill(EnumSkills.FARMING, player, 1);
 					world.setBlockState(pos.up(), CropMap.plantFromString(this.crop).getDefaultState(), 11);
 					if(!creative)
@@ -164,31 +140,6 @@ public class ItemCropSeed extends Item implements IPlantable, IItemBase, IModelR
     {
         return 72000;
     }
-	
-
-	@Override
-	public int getBuyPrice(ItemStack stack) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getSellPrice(ItemStack stack) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getUpgradeDifficulty() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public NBTTagCompound defaultNBTStats(ItemStack stack) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	@SideOnly(Side.CLIENT)
 	public void initModel() {

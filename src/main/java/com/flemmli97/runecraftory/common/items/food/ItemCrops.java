@@ -1,10 +1,9 @@
 package com.flemmli97.runecraftory.common.items.food;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.api.items.IRFFood;
+import com.flemmli97.runecraftory.api.mappings.CropMap;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
-import com.flemmli97.runecraftory.common.init.defaultval.CropMap;
 import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
@@ -12,7 +11,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -21,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 /**
  * If metadata = 1 -> Giant crop
  */
-public class ItemCrops extends ItemFood implements IRFFood, IModelRegister{
+public class ItemCrops extends ItemFood implements IModelRegister{
 
 	private int hp, rp;
 	private String oreDict;
@@ -50,32 +48,12 @@ public class ItemCrops extends ItemFood implements IRFFood, IModelRegister{
 	public String getUnlocalizedName(ItemStack stack) {
 		return this.getRegistryName().toString();
 	}
-
-	@Override
-	public int getBuyPrice(ItemStack stack) {
-		return 0;
-	}
-
-	@Override
-	public int getSellPrice(ItemStack stack) {
-		return 0;
-	}
-
-	@Override
-	public int getUpgradeDifficulty() {
-		return 0;
-	}
-
-	@Override
-	public NBTTagCompound defaultNBTStats(ItemStack stack) {
-		return null;
-	}
 	
 	@Override
     protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player)
     {
     	super.onFoodEaten(stack, worldIn, player);
-    	IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+    	IPlayer cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
     	cap.setRunePoints(player, cap.getRunePoints()+this.rp);
     	cap.regenHealth(player, this.hp);
     }

@@ -105,6 +105,7 @@ public class CustomDamage extends EntityDamageSource{
     public enum KnockBackType
     {
 		BACK,
-		UP;
+		UP,
+		VANILLA;
     }
 }

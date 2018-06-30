@@ -1,15 +1,13 @@
 package com.flemmli97.runecraftory.common.blocks.tile;
 
 import com.flemmli97.runecraftory.api.blocks.IHerb;
-import com.flemmli97.runecraftory.api.items.IItemBase;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.items.misc.ItemMinerals;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
-import com.flemmli97.runecraftory.common.utils.ItemNBT;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -149,7 +147,7 @@ public class TileResearchTable extends TileEntity implements IInventory{
 	public void recipe(EntityPlayer player, int levelMin, int levelMax)
 	{
 		boolean hasPaper = false;
-		IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
+		IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
 
 		for(ItemStack stack : OreDictionary.getOres("paper"))
 		{
@@ -202,8 +200,6 @@ public class TileResearchTable extends TileEntity implements IInventory{
 		stack.setTagCompound(new NBTTagCompound());
 		stack.getTagCompound().setString("Recipe", CraftingHandler.randomRecipeToExclude(type,levelMin, levelMax));
 		stack.setItemDamage(type.getID());
-		if(stack.getItem() instanceof IItemBase)
-			ItemNBT.initItemNBT(stack, ((IItemBase)stack.getItem()).defaultNBTStats(stack));
 		this.inventory.set(3, stack);
 		for(int i = 0; i < this.inventory.size()-1; i++)
 			this.inventory.get(i).shrink(1);

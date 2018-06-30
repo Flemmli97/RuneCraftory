@@ -189,7 +189,11 @@ tile.runecraftory:broken_ore.7.name=Broken Earth Mineral
 tile.runecraftory:broken_ore.8.name=Broken Wind Mineral
 tile.runecraftory:research_table.name=Research Table
 tile.runecraftory:bossspawner.name=Boss Spawner
-tile.runecraftory.black_board.name=Quest Box
+tile.runecraftory:black_board.name=Quest Box
+tile.runecraftory:shipping_bin.name=Shipping Bin
+
+container.shippingbin=Shipping Bin
+
 attribute.water=Attribute: Water
 attribute.earth=Attribute: Earth
 attribute.wind=Attribute: Wind
@@ -198,9 +202,11 @@ attribute.light=Attribute: Light
 attribute.dark=Attribute: Dark
 attribute.love=Attribute: Love
 
-level=Level
-buy=Buy
-sell=Sell
+item.level=Level
+item.buy=Buy
+item.sell=Sell
+item.equipped=When equipped
+item.upgrade=Upgrade
 money=Money
 season=Season
 growth=Growth

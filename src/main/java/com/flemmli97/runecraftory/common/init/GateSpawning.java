@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.flemmli97.runecraftory.api.mappings.EntitySpawnMap;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
-import com.flemmli97.runecraftory.common.init.defaultval.EntityDefaultSpawns;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -23,10 +23,12 @@ public class GateSpawning {
 	
 	public static final void initGateSpawnings()
 	{
-		for(Class<?extends EntityMobBase> clss : EntityDefaultSpawns.classTypeMap.keys())
-			addToBiomeType(clss, EntityDefaultSpawns.classTypeMap.get(clss));
-		for(Class<?extends EntityMobBase> clss : EntityDefaultSpawns.classBiomeMap.keys())
-			addToBiome(clss, EntityDefaultSpawns.classBiomeMap.get(clss));
+		for(Class<?extends EntityMobBase> clss : EntitySpawnMap.classTypeMap.keys())
+		{
+			addToBiomeType(clss, EntitySpawnMap.classTypeMap.get(clss));
+		}
+		for(Class<?extends EntityMobBase> clss : EntitySpawnMap.classBiomeMap.keys())
+			addToBiome(clss, EntitySpawnMap.classBiomeMap.get(clss));
 	}
 
 	public static void addToBiome(Class<? extends EntityMobBase> clss, Collection<String> biomeNames) {

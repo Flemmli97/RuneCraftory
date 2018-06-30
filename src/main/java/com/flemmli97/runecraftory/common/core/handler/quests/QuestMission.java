@@ -2,8 +2,8 @@ package com.flemmli97.runecraftory.common.core.handler.quests;
 
 import javax.annotation.Nullable;
 
-import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.entity.npc.EntityNPCBase;
+import com.flemmli97.runecraftory.common.lib.LibReference;
 
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -56,7 +56,7 @@ public class QuestMission {
 			obj.readFromNBT(compound.getCompoundTag("Objective"));
 			this.obj=obj;
 		} catch (InstantiationException | IllegalAccessException e) {
-			RuneCraftory.logger.error("Error reading mission from nbt");
+			LibReference.logger.error("Error reading mission from nbt");
 		}
 	}
 	

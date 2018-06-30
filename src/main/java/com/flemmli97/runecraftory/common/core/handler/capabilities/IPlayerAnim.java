@@ -34,7 +34,9 @@ public interface IPlayerAnim {
 	public ArmPosePlus currentArmPose();
 	
 	public void setArmPose(ArmPosePlus armPose);
-	
+
+	public boolean startGlove(EntityPlayer player);
+
 	public enum WeaponSwing
 	{
 		SHORT(5),

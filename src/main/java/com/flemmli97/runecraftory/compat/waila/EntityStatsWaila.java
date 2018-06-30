@@ -13,65 +13,68 @@ import mcp.mobius.waila.api.IWailaEntityProvider;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class EntityStatsWaila implements IWailaEntityProvider{
-
+public class EntityStatsWaila implements IWailaEntityProvider
+{
 	@Override
-	public NBTTagCompound getNBTData(EntityPlayerMP player, Entity ent, NBTTagCompound tag, World world) {
-		return tag;
-	}
-
+    public NBTTagCompound getNBTData(EntityPlayerMP player, Entity ent, NBTTagCompound tag, World world) {
+        return tag;
+    }
+    
 	@Override
-	public List<String> getWailaBody(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor,
-			IWailaConfigHandler config) {
-		if(entity instanceof EntityMobBase)
-		{
-			currenttip.clear();
-			if(accessor.getPlayer().getHeldItemMainhand().getItem()==ModItems.debug|| accessor.getPlayer().capabilities.isCreativeMode || ConfigHandler.debugMode)
-			{
-				EntityMobBase mob = (EntityMobBase) entity;
-				for(IAttributeInstance a : mob.getAttributeMap().getAllAttributes())
-				{
-					if(a.getAttribute().getClass()==RangedAttribute.class)
-					{
-						if(a.getAttribute()==SharedMonsterAttributes.MAX_HEALTH)
-							currenttip.add("Health: " + Math.round(mob.getHealth()/LibConstants.DAMAGESCALE) + " / " + Math.round(a.getAttributeValue()/LibConstants.DAMAGESCALE));
-					}
-					else
-						currenttip.add(I18n.format(a.getAttribute().getName()) + ": " + a.getAttributeValue());
-				}
-			}
-		}
-		return currenttip;
-	}
-
-	@Override
-	public List<String> getWailaHead(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor,
-			IWailaConfigHandler config) {
-		if(entity instanceof EntityMobBase)
-		{
-			if(accessor.getPlayer().getHeldItemMainhand().getItem()==ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode)
-			{
-				currenttip.set(0, currenttip.get(0) + " (Level: " + ((EntityMobBase)entity).level() + ")");
-			}
-		}
-		return currenttip;
-	}
-
-	@Override
-	public Entity getWailaOverride(IWailaEntityAccessor accessor, IWailaConfigHandler config) {
-		return null;
-	}
-
-	@Override
-	public List<String> getWailaTail(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor,
-			IWailaConfigHandler config) {
-		return null;
-	}
-
+    public List<String> getWailaBody(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor, IWailaConfigHandler config) {
+        if (entity instanceof EntityMobBase) 
+        {
+            currenttip.clear();
+            if (accessor.getPlayer().getHeldItemMainhand().getItem() == ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode || ConfigHandler.debugMode) 
+            {
+                EntityMobBase mob = (EntityMobBase)entity;
+                for (IAttributeInstance a : mob.getAttributeMap().getAllAttributes()) {
+                    if (a.getAttribute().getClass() == RangedAttribute.class) 
+                    {
+                        if (a.getAttribute() == SharedMonsterAttributes.MAX_HEALTH) 
+                        	currenttip.add("Health: " + (int)Math.round(mob.getHealth() / LibConstants.DAMAGESCALE) + " / " + (int)Math.round(a.getAttributeValue() / LibConstants.DAMAGESCALE));
+                    }
+                    else 
+                    {
+                        currenttip.add(I18n.format(a.getAttribute().getName(), new Object[0]) + ": " + (int)a.getAttributeValue());
+                    }
+                }
+            }
+            if (ConfigHandler.debugMode) 
+            {
+                EntityMobBase mob = (EntityMobBase)entity;
+                for (IAttribute a2 : mob.mobGene().keySet()) 
+                {
+                    currenttip.add(I18n.format("IV: " + a2.getName(), new Object[0]) + ": " + mob.mobGene().get(a2));
+                }
+            }
+        }
+        return currenttip;
+    }
+    
+    @Override
+    public List<String> getWailaHead(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor, IWailaConfigHandler config) {
+        if (entity instanceof EntityMobBase && (accessor.getPlayer().getHeldItemMainhand().getItem() == ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode||ConfigHandler.debugMode)) 
+        {
+            currenttip.set(0, currenttip.get(0) + " (Level: " + ((EntityMobBase)entity).level() + ")");
+        }
+        return currenttip;
+    }
+    
+    @Override
+    public Entity getWailaOverride(IWailaEntityAccessor accessor, IWailaConfigHandler config) {
+        return null;
+    }
+    
+    @Override
+    public List<String> getWailaTail(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor, IWailaConfigHandler config) {
+        return null;
+    }
 }

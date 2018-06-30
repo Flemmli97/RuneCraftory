@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.core.handler.event;
 
-import com.flemmli97.runecraftory.api.items.IRpUseItem;
+import com.flemmli97.runecraftory.api.items.IChargeable;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EventHandlerSounds {
 
+	//TODO redo this for more dynamic modifs
 	@SubscribeEvent
 	public void chargeSound(LivingEntityUseItemEvent.Tick event)
 	{
@@ -17,9 +18,9 @@ public class EventHandlerSounds {
 		{
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 			ItemStack held = event.getItem();
-			if(held!=null && held.getItem() instanceof IRpUseItem)
+			if(held!=null && held.getItem() instanceof IChargeable)
 			{
-				IRpUseItem item = (IRpUseItem) held.getItem();
+				IChargeable item = (IChargeable) held.getItem();
 				if(item.getChargeTime()[0]>0)
 				{
 					int duration = held.getMaxItemUseDuration() - event.getDuration();

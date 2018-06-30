@@ -5,38 +5,32 @@ import com.flemmli97.runecraftory.common.entity.ai.EntityAIGenericMelee;
 
 import net.minecraft.world.World;
 
-public class EntityAnt extends EntityMobBase{
-
-	public EntityAIGenericMelee attack = new EntityAIGenericMelee(this, 1, true, 1);
-
-	public EntityAnt(World world) {
-		super(world);
-		this.setSize(0.6F, 0.45F);
-		this.tasks.addTask(2, attack);
-	}
-
-	/*@Override
-	public EnumElement entityElement() {
-		return EnumElement.NONE;
-	}*/
-
-	@Override
-	public float attackChance() {
-		return 0.6F;
-	}
-
-	@Override
-	public int getAttackTimeFromPattern(byte pattern) {
-		return 10;
-	}
-
-	@Override
-	public int attackFromPattern() {
-		return 7;
-	}
-
-	@Override
-	public int maxAttackPatterns() {
-		return 1;
-	}
+public class EntityAnt extends EntityMobBase
+{
+    public EntityAIGenericMelee attack = new EntityAIGenericMelee(this, 1.0, true, 1.0f);
+    
+    public EntityAnt(World world) {
+        super(world);
+        this.setSize(0.6f, 0.45f);
+        this.tasks.addTask(2, this.attack);
+    }
+    
+    public float attackChance() {
+        return 0.6f;
+    }
+    
+    @Override
+    public int getAttackTimeFromPattern(byte pattern) {
+        return 10;
+    }
+    
+    @Override
+    public int attackFromPattern() {
+        return 7;
+    }
+    
+    @Override
+    public int maxAttackPatterns() {
+        return 1;
+    }
 }

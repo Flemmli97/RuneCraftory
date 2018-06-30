@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.init;
 
 import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.items.creative.ItemDebug;
+import com.flemmli97.runecraftory.common.items.creative.ItemEntityLevelUp;
 import com.flemmli97.runecraftory.common.items.creative.ItemIcon;
 import com.flemmli97.runecraftory.common.items.creative.ItemInstaTame;
 import com.flemmli97.runecraftory.common.items.creative.ItemLevelUp;
@@ -42,7 +43,7 @@ import com.flemmli97.runecraftory.common.items.weapons.haxe.ItemBattleScythe;
 import com.flemmli97.runecraftory.common.items.weapons.longsword.ItemClaymore;
 import com.flemmli97.runecraftory.common.items.weapons.shortsword.ItemBroadSword;
 import com.flemmli97.runecraftory.common.items.weapons.spear.ItemSpear;
-import com.flemmli97.runecraftory.common.lib.LibCropOreDictionary;
+import com.flemmli97.runecraftory.common.lib.LibOreDictionary;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumToolTier;
 
@@ -84,11 +85,6 @@ public class ModItems {
 	public static final Item hammerPlatinum = new ItemToolHammer(EnumToolTier.PLATINUM);
 	public static final Item inspector = new ItemToolPetInspector();
 	
-	public static final Item[] TOOLS = new Item[] {hoeScrap, hoeIron, hoeSilver, hoeGold, hoePlatinum, 
-			wateringCanScrap, wateringCanIron, wateringCanSilver, wateringCanGold, wateringCanPlatinum, 
-			sickleScrap, sickleIron, sickleSilver, sickleGold, sicklePlatinum,
-			hammerScrap, hammerIron, hammerSilver, hammerGold, hammerPlatinum, inspector};
-	
 	public static final Item broadSword=new ItemBroadSword();
 	
 	public static final Item claymore = new ItemClaymore();
@@ -104,26 +100,13 @@ public class ModItems {
 	
 	public static final Item leatherGlove = new ItemLeatherGlove();
 	
-	public static final Item[] WEAPONS = new Item[] {
-			broadSword,
-			claymore,
-			spear,
-			battleAxe, battleScythe,
-			battleHammer,
-			dagger,
-			leatherGlove};
-	
 	public static final Item cheapBracelet = new ItemCheapBracelet();
-	
-	public static final Item[] ARMOR = new Item[] {cheapBracelet};
-	
+		
 	public static final Item itemBlockForge = new ItemBlockForge();
 	public static final Item itemBlockAccess = new ItemBlockAccess();
 	public static final Item itemBlockCooking = new ItemBlockCooking();
 	public static final Item itemBlockPharm = new ItemBlockPharm();
-	
-	public static final Item[] ITEMBLOCKS = new Item[] {itemBlockForge, itemBlockAccess, itemBlockCooking, itemBlockPharm};
-	
+		
 	public static final Item crystal = new ItemCrystals();
 	public static final Item jewel = new ItemJewels();
 	public static final Item mineral = new ItemMinerals();
@@ -137,12 +120,9 @@ public class ModItems {
 	public static final Item furs = new ItemFurs();
 	public static final Item powders =  new ItemPowders();
 	public static final Item cloth =  new ItemCloths();
-	
-	public static final Item[] MATERIALS = new Item[] {crystal, jewel, mineral, scrap, sticks, liquids, feathers, bones, stones, strings, furs, powders, cloth};
-	
+		
 	public static final Item fireBallSmall = new ItemFireballCast();
 	
-	public static final Item[] SPELLS = new Item[] {fireBallSmall};
 	
 	public static final Item recipe = new ItemRecipe();
 	
@@ -152,22 +132,44 @@ public class ModItems {
 	public static final Item skill = new ItemSkillUp();
 	public static final Item tame = new ItemInstaTame();
 	public static final Item spawnEgg = new ItemSpawnEgg();
+	public static final Item entityLevel = new ItemEntityLevelUp();
 	
-	public static final Item[] CREATIVE = new Item[] {icon, debug, level, skill, tame, spawnEgg};
-
 	//Crop items
-	public static final Item turnip = new ItemCrops("turnip", 10, 5, LibCropOreDictionary.TURNIP);
-	public static final Item turnipSeeds = new ItemCropSeed("turnip", LibCropOreDictionary.TURNIP);
+	public static final Item turnip = new ItemCrops("turnip", 10, 5, LibOreDictionary.TURNIP);
+	public static final Item turnipSeeds = new ItemCropSeed("turnip", LibOreDictionary.TURNIP);
 	
-	public static final Item turnipPink = new ItemCrops("turnip_pink", 15, 7, LibCropOreDictionary.PINKTURNIP);
-	public static final Item turnipPinkSeeds = new ItemCropSeed("turnip_pink", LibCropOreDictionary.PINKTURNIP);
+	public static final Item turnipPink = new ItemCrops("turnip_pink", 15, 7, LibOreDictionary.PINKTURNIP);
+	public static final Item turnipPinkSeeds = new ItemCropSeed("turnip_pink", LibOreDictionary.PINKTURNIP);
 	
-	public static final Item cabbage = new ItemCrops("cabbage", 22, 0, LibCropOreDictionary.CABBAGE);
-	public static final Item cabbageSeeds = new ItemCropSeed("cabbage", LibCropOreDictionary.CABBAGE);
+	public static final Item cabbage = new ItemCrops("cabbage", 22, 0, LibOreDictionary.CABBAGE);
+	public static final Item cabbageSeeds = new ItemCropSeed("cabbage", LibOreDictionary.CABBAGE);
 	
-	public static final Item pinkMelon = new ItemCrops("pink_melon", 11, 14, LibCropOreDictionary.PINKMELON);
-	public static final Item pinkMelonSeeds = new ItemCropSeed("pink_melon", LibCropOreDictionary.PINKMELON);
+	public static final Item pinkMelon = new ItemCrops("pink_melon", 11, 14, LibOreDictionary.PINKMELON);
+	public static final Item pinkMelonSeeds = new ItemCropSeed("pink_melon", LibOreDictionary.PINKMELON);
 	
+	public static final Item[] TOOLS = new Item[] {hoeScrap, hoeIron, hoeSilver, hoeGold, hoePlatinum, 
+			wateringCanScrap, wateringCanIron, wateringCanSilver, wateringCanGold, wateringCanPlatinum, 
+			sickleScrap, sickleIron, sickleSilver, sickleGold, sicklePlatinum,
+			hammerScrap, hammerIron, hammerSilver, hammerGold, hammerPlatinum, inspector};
+	
+	public static final Item[] WEAPONS = new Item[] {
+			broadSword,
+			claymore,
+			spear,
+			battleAxe, battleScythe,
+			battleHammer,
+			dagger,
+			leatherGlove};
+	public static final Item[] ARMOR = new Item[] {cheapBracelet};
+
+	public static final Item[] ITEMBLOCKS = new Item[] {itemBlockForge, itemBlockAccess, itemBlockCooking, itemBlockPharm};
+
+	public static final Item[] MATERIALS = new Item[] {crystal, jewel, mineral, scrap, sticks, liquids, feathers, bones, stones, strings, furs, powders, cloth};
+
+	public static final Item[] SPELLS = new Item[] {fireBallSmall};
+
+	public static final Item[] CREATIVE = new Item[] {icon, debug, level, skill, tame, spawnEgg, entityLevel};
+
 	public static final Item[] CROPS = new Item[] {turnip, turnipPink, cabbage, pinkMelon};
 	public static final Item[] CROPSEEDS = new Item[] {turnipSeeds, turnipPinkSeeds, cabbageSeeds, pinkMelonSeeds};
 
@@ -200,24 +202,30 @@ public class ModItems {
 	public static final void initModel(ModelRegistryEvent event)
 	{
 		for(Item item : TOOLS)
-			((IModelRegister)item).initModel();
+			registerDefaultModel(item);
 		for(Item item : WEAPONS)
-			((IModelRegister)item).initModel();
+			registerDefaultModel(item);
 		for(Item item : ARMOR)
-			((IModelRegister)item).initModel();
+			registerDefaultModel(item);
 		for(Item item : ITEMBLOCKS)
-			((IModelRegister)item).initModel();
+			registerDefaultModel(item);
 		for(Item item : MATERIALS)
-			((IModelRegister)item).initModel();
+			registerDefaultModel(item);
 		for(Item item : SPELLS)
-			((IModelRegister)item).initModel();
+			registerDefaultModel(item);
 		for(Item item : CREATIVE)
-			((IModelRegister)item).initModel();
+			registerDefaultModel(item);
 	    for(Item item : CROPS)
-			((IModelRegister)item).initModel();
+			registerDefaultModel(item);
 	    for(Item item : CROPSEEDS)
-			((IModelRegister)item).initModel();
+			registerDefaultModel(item);
 
+	}
+	
+	private static final void registerDefaultModel(Item item)
+	{
+		if(item instanceof IModelRegister)
+			((IModelRegister)item).initModel();
 	}
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent

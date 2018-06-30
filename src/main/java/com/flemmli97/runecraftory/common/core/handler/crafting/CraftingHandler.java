@@ -1,25 +1,17 @@
 package com.flemmli97.runecraftory.common.core.handler.crafting;
 
-import java.util.Collection;
-import java.util.Random;
+import com.flemmli97.runecraftory.common.lib.enums.*;
+import java.util.*;
+import com.google.common.collect.*;
 
-import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
-public class CraftingHandler {
-	
-	//OLDs
-	//private static final Multimap<String, RecipeSextuple> recipesForge = ArrayListMultimap.create();
-	//private static final SortedSetMultimap<String, RecipeSextuple> recipesPharma =  new LinkedHashMap<String, RecipeSextuple>();
-	//private static final SortedSetMultimap<String, RecipeSextuple> recipesCooking =  new LinkedHashMap<String, RecipeSextuple>();
-
-	private static final Multimap<String, RecipeSextuple> recipesForge = ArrayListMultimap.create();
-	private static final Multimap<String, RecipeSextuple> recipesArmor = ArrayListMultimap.create();
-	private static final Multimap<String, RecipeSextuple> recipesPharma = ArrayListMultimap.create();
-	private static final Multimap<String, RecipeSextuple> recipesCooking = ArrayListMultimap.create();
-
-	public static void addRecipe(EnumCrafting type, RecipeSextuple recipe)
+public class CraftingHandler
+{
+    private static final Multimap<String, RecipeSextuple> recipesForge = ArrayListMultimap.create();
+    private static final Multimap<String, RecipeSextuple> recipesArmor = ArrayListMultimap.create();
+    private static final Multimap<String, RecipeSextuple> recipesPharma = ArrayListMultimap.create();
+    private static final Multimap<String, RecipeSextuple> recipesCooking = ArrayListMultimap.create();
+    
+    public static void addRecipe(EnumCrafting type, RecipeSextuple recipe)
 	{
 		String recipeID = recipe.getCraftingOutput().getItem().getRegistryName().toString();
 		switch(type)
@@ -39,6 +31,25 @@ public class CraftingHandler {
 		}
 	}
 	
+	public static void removeRecipe(EnumCrafting type, String recipeName)
+	{
+		switch(type)
+		{
+		case ARMOR:	
+			recipesArmor.removeAll(recipeName);
+			break;
+		case COOKING:
+			recipesCooking.removeAll(recipeName);
+			break;
+		case FORGE:
+			recipesForge.removeAll(recipeName);
+			break;
+		case PHARMA:
+			recipesPharma.removeAll(recipeName);
+			break;	
+		}
+	}
+    
 	public static Collection<RecipeSextuple> getRecipeFromID(EnumCrafting type, String recipeID)
 	{		
 		switch(type)
@@ -54,7 +65,7 @@ public class CraftingHandler {
 		}
 		return null;
 	}
-	
+    
 	private static String randomRecipe(EnumCrafting type)
 	{
 		switch(type)
@@ -109,6 +120,5 @@ public class CraftingHandler {
 		if(flag)
 			return s;
 		return randomRecipeToExclude(type, levelMin, levelMax);
-		//return "failed";
 	}
 }
