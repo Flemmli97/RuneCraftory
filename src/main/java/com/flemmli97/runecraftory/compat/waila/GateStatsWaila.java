@@ -1,17 +1,22 @@
 package com.flemmli97.runecraftory.compat.waila;
 
-import net.minecraft.entity.player.*;
-import net.minecraft.nbt.*;
-import net.minecraft.world.*;
-import mcp.mobius.waila.api.*;
-import com.flemmli97.runecraftory.common.entity.*;
-import com.flemmli97.runecraftory.common.init.*;
-import com.flemmli97.runecraftory.common.core.handler.config.*;
-import net.minecraft.entity.ai.attributes.*;
-import net.minecraft.entity.*;
-import com.flemmli97.runecraftory.common.lib.*;
-import net.minecraft.client.resources.*;
-import java.util.*;
+import java.util.List;
+
+import com.flemmli97.runecraftory.common.core.handler.config.ConfigHandler;
+import com.flemmli97.runecraftory.common.entity.EntityGate;
+import com.flemmli97.runecraftory.common.init.ModItems;
+
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaEntityAccessor;
+import mcp.mobius.waila.api.IWailaEntityProvider;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 
 public class GateStatsWaila implements IWailaEntityProvider
 {
@@ -25,7 +30,7 @@ public class GateStatsWaila implements IWailaEntityProvider
         if (entity instanceof EntityGate) 
         {
             currenttip.clear();
-            if (accessor.getPlayer().getHeldItemMainhand().getItem() == ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode || ConfigHandler.debugMode) 
+            if (accessor.getPlayer().getHeldItemMainhand().getItem() == ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode || ConfigHandler.MainConfig.debugMode) 
             {
                 EntityGate mob = (EntityGate)entity;
                 for (IAttributeInstance a : mob.getAttributeMap().getAllAttributes()) 
@@ -33,7 +38,7 @@ public class GateStatsWaila implements IWailaEntityProvider
                     if (a.getAttribute().getClass() == RangedAttribute.class) 
                     {
                         if (a.getAttribute() == SharedMonsterAttributes.MAX_HEALTH) 
-                        	currenttip.add("Health: " + Math.round(mob.getHealth() / LibConstants.DAMAGESCALE) + " / " + Math.round(a.getAttributeValue() / LibConstants.DAMAGESCALE));
+                        	currenttip.add("Health: " + mob.getHealth() + " / " + mob.getMaxHealth());
                     }
                     else 
                     {
@@ -47,7 +52,7 @@ public class GateStatsWaila implements IWailaEntityProvider
     
     @Override
     public List<String> getWailaHead(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor, IWailaConfigHandler config) {
-        if (entity instanceof EntityGate && (accessor.getPlayer().getHeldItemMainhand().getItem() == ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode||ConfigHandler.debugMode)) 
+        if (entity instanceof EntityGate && (accessor.getPlayer().getHeldItemMainhand().getItem() == ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode||ConfigHandler.MainConfig.debugMode)) 
         {
             currenttip.set(0, currenttip.get(0) + " (Level: " + ((EntityGate)entity).level() + ")");
         }

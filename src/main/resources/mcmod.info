@@ -1,0 +1,12 @@
+[{
+  "modid": "runecraftory",
+  "name": "Runecraftory",
+  "description": "Runecraftory - A Minecrafty Harvest Moon",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/Flemmli97/RuneCraftory",
+  "updateJSON": "",
+  "authorList": ["Flemmli97"],
+  "credits": "",
+  "logoFile": ""
+}]

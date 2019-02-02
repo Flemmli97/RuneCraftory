@@ -2,14 +2,12 @@ package com.flemmli97.runecraftory.common.items.itemblocks;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.mappings.CropMap;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
-import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,13 +22,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemCropSeed extends Item implements IPlantable, IModelRegister{
+public class ItemCropSeed extends Item implements IPlantable{
 
 	private String crop;
 
@@ -41,16 +36,6 @@ public class ItemCropSeed extends Item implements IPlantable, IModelRegister{
 		this.setRegistryName(new ResourceLocation(LibReference.MODID, "seed_"+name));
         this.setUnlocalizedName(this.getRegistryName().toString());
         CropMap.addSeed(cropOreDictName, this);
-	}
-	
-	@Override
-	public String getUnlocalizedName() {
-		return this.getRegistryName().toString();
-	}
-	
-	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		return this.getRegistryName().toString();
 	}
 	
 	@Override
@@ -69,7 +54,7 @@ public class ItemCropSeed extends Item implements IPlantable, IModelRegister{
 	        	if(player.canPlayerEdit(pos.offset(result.sideHit), result.sideHit, stack) && 
 	        		state.getBlock().canSustainPlant(state, world, pos, EnumFacing.UP, this) && world.isAirBlock(pos.up()))
 	        	{
-					IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+					IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
 					capSync.increaseSkill(EnumSkills.FARMING, player, 1);
 					world.setBlockState(pos.up(), CropMap.plantFromString(this.crop).getDefaultState(), 11);
 					if(!creative)
@@ -140,9 +125,4 @@ public class ItemCropSeed extends Item implements IPlantable, IModelRegister{
     {
         return 72000;
     }
-	
-	@SideOnly(Side.CLIENT)
-	public void initModel() {
-			ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));		
-	}
 }

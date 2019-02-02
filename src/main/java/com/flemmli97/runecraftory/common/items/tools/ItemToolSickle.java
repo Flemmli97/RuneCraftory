@@ -6,23 +6,19 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.client.render.EnumToolCharge;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.ModItems;
-import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumToolTier;
 import com.flemmli97.runecraftory.common.lib.enums.EnumWeaponType;
-import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -30,22 +26,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemToolSickle extends ItemTool implements IItemUsable, IModelRegister, IChargeable
+public class ItemToolSickle extends ItemTool implements IItemUsable, IChargeable
 {
     private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(new Block[] { Blocks.YELLOW_FLOWER, Blocks.SAPLING, Blocks.LEAVES, Blocks.LEAVES2, Blocks.TALLGRASS, Blocks.CACTUS, Blocks.CHORUS_FLOWER, Blocks.CHORUS_PLANT, Blocks.DEADBUSH, Blocks.DOUBLE_PLANT, Blocks.MELON_BLOCK, Blocks.PUMPKIN, Blocks.RED_FLOWER, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.RED_MUSHROOM_BLOCK, Blocks.REEDS, Blocks.VINE, Blocks.WATERLILY });
 
@@ -70,25 +61,6 @@ public class ItemToolSickle extends ItemTool implements IItemUsable, IModelRegis
     @Override
     public EnumWeaponType getWeaponType() {
         return EnumWeaponType.FARM;
-    }
-
-    @Override
-    public String getUnlocalizedName() {
-        return this.getRegistryName().toString();
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return this.getRegistryName().toString();
-    }
-
-    @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
-            ItemStack stack = new ItemStack(this);
-            ItemNBT.initNBT(stack);
-            items.add(stack);
-        }
     }
 
     @Override
@@ -119,7 +91,7 @@ public class ItemToolSickle extends ItemTool implements IItemUsable, IModelRegis
 
     @Override
     public void levelSkillOnBreak(EntityPlayer player) {
-        IPlayer cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+        IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
         cap.decreaseRunePoints(player, this.chargeRunes[0]);
         cap.increaseSkill(EnumSkills.WIND, player, this.tier.getTierLevel() + 1);
         cap.increaseSkill(EnumSkills.FARMING, player, this.tier.getTierLevel() + 1);
@@ -163,7 +135,7 @@ public class ItemToolSickle extends ItemTool implements IItemUsable, IModelRegis
                 }
             }
             if (flag) {
-                IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+                IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
                 capSync.decreaseRunePoints(player, this.chargeRunes[range]);
                 capSync.increaseSkill(EnumSkills.WIND, player, this.levelXP[range]);
                 capSync.increaseSkill(EnumSkills.FARMING, player, this.levelXP[range]);
@@ -194,7 +166,7 @@ public class ItemToolSickle extends ItemTool implements IItemUsable, IModelRegis
                 }
             }
             if (result == EnumActionResult.SUCCESS) {
-                IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+                IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
                 capSync.decreaseRunePoints(player, 1);
                 capSync.increaseSkill(EnumSkills.WIND, player, 1);
                 capSync.increaseSkill(EnumSkills.FARMING, player, 1);
@@ -207,10 +179,5 @@ public class ItemToolSickle extends ItemTool implements IItemUsable, IModelRegis
     @Override
     public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
         return HashMultimap.<String, AttributeModifier>create();
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation((Item)this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
     }
 }

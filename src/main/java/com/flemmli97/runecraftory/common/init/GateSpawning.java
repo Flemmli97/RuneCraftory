@@ -2,10 +2,8 @@ package com.flemmli97.runecraftory.common.init;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
-import com.flemmli97.runecraftory.api.mappings.EntitySpawnMap;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -19,87 +17,68 @@ import net.minecraftforge.common.BiomeDictionary;
 
 public class GateSpawning {
 	
-	private static Multimap<Biome, String> spawningMappingBiome = ArrayListMultimap.create();
-	
-	public static final void initGateSpawnings()
-	{
-		for(Class<?extends EntityMobBase> clss : EntitySpawnMap.classTypeMap.keys())
-		{
-			addToBiomeType(clss, EntitySpawnMap.classTypeMap.get(clss));
-		}
-		for(Class<?extends EntityMobBase> clss : EntitySpawnMap.classBiomeMap.keys())
-			addToBiome(clss, EntitySpawnMap.classBiomeMap.get(clss));
-	}
+	private static Multimap<Biome, ResourceLocation> spawningMappingBiome = ArrayListMultimap.create();
 
-	public static void addToBiome(Class<? extends EntityMobBase> clss, Collection<String> biomeNames) {
+	public static void addToBiome(ResourceLocation res, Collection<String> biomeNames) {
 		for(String biomeName:biomeNames)
 		{
-			Iterator<Biome> it = Biome.REGISTRY.iterator();
-			while(it.hasNext())
-			{
-				Biome biome = it.next();
-				if(biomeName.equals(biome.getBiomeName().trim()))
-				{
-					spawningMappingBiome.put(biome, nameFromClass(clss));
-					break;
-				}
-			}
+			Biome biome = Biome.REGISTRY.getObject(new ResourceLocation(biomeName));
+			if(biome!=null)
+				spawningMappingBiome.put(biome, res);
 		}
 	}
 
-	public static void addToBiomeType(Class<? extends EntityMobBase> clss, Collection<String> biomeTypes) {
+	public static void addToBiomeType(ResourceLocation res, Collection<String> biomeTypes) {
 		for(String typeName:biomeTypes)
 		{
 			for(Biome biome : BiomeDictionary.getBiomes(BiomeDictionary.Type.getType(typeName)))
 			{
-				spawningMappingBiome.put(biome, nameFromClass(clss));
+				spawningMappingBiome.put(biome, res);
 			}
 		}
 	}
 
-	public static final void addToBiomeType(Class<?extends EntityMobBase> clss, BiomeDictionary.Type... biomeType)
+	public static final void addToBiomeType(ResourceLocation res, BiomeDictionary.Type... biomeType)
 	{
 		for(int i = 0; i <biomeType.length; i++)
 		{
 			for(Biome biome : BiomeDictionary.getBiomes(biomeType[i]))
 			{					
-				spawningMappingBiome.put(biome, nameFromClass(clss));
+				spawningMappingBiome.put(biome, res);
 			}
 		}
 	}
 
-	public static final void addToBiome(Class<?extends EntityMobBase> clss, Biome... biome)
+	public static final void addToBiome(ResourceLocation res, Biome... biome)
 	{
 		for(int i = 0; i <biome.length; i++)
 		{
-			spawningMappingBiome.put(biome[i], nameFromClass(clss));
+			spawningMappingBiome.put(biome[i], res);
 		}
 	}
 
-	public static final List<String> getSpawningListFromBiome(Biome biome)
+	public static final List<ResourceLocation> getSpawningListFromBiome(Biome biome)
 	{
-		List<String> list = new ArrayList<String>(spawningMappingBiome.get(biome));
-		return list;
+		return new ArrayList<ResourceLocation>(spawningMappingBiome.get(biome));
 	}
 	
-	public static final String nameFromClass(Class<?extends EntityMobBase> living)
+	public static final ResourceLocation nameFromClass(Class<?extends EntityMobBase> living)
 	{
-		ResourceLocation loc = EntityList.getKey(living);
-		return loc.toString();
+		return EntityList.getKey(living);
 	}
 	
-	public static final EntityMobBase entityFromString(World world, String entity)
+	public static final EntityMobBase entityFromString(World world, ResourceLocation entity)
 	{
-    		try 
+		try 
         {
-    			Entity e = EntityList.createEntityByIDFromName(new ResourceLocation(entity), world);
-    			if(e instanceof EntityMobBase)
-    				return (EntityMobBase) e;
-    			return null;
-    		}  
+			Entity e = EntityList.createEntityByIDFromName(entity, world);
+			if(e instanceof EntityMobBase)
+				return (EntityMobBase) e;
+			return null;
+    	}  
         catch (Exception exc)
         {
-        		return null;
+    		return null;
         }	
 	}
 }

@@ -109,8 +109,8 @@ public class EntityAIGenericRanged<T extends EntityMobBase & IRangedMob> extends
     }
     
     protected void checkAndPerformAttack(EntityLivingBase target, double dis) {
-        this.attackTick = Math.max(this.attackTick - 1, 0);
-        this.meleeTick = Math.max(this.meleeTick - 1, 0);
+        this.attackTick = Math.max(--this.attackTick, 0);
+        this.meleeTick = Math.max(--this.meleeTick, 0);
         double reach = this.maxAttackDistance;
         double melee = this.getAttackReachSqr(target);
         if (dis <= melee) {

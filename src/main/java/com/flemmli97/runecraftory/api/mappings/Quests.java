@@ -4,8 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import com.flemmli97.runecraftory.api.items.ItemProperties;
 import com.flemmli97.runecraftory.common.core.handler.quests.ObjectiveKill;
+import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.google.common.collect.Lists;
 
 import net.minecraft.entity.Entity;
@@ -17,9 +17,9 @@ import net.minecraft.util.ResourceLocation;
 
 public class Quests
 {
-    private static final List<ItemProperties> tier1 = Lists.newArrayList();
-    private static final List<ItemProperties> tier2 = Lists.newArrayList();
-    private static final List<ItemProperties> tier3 = Lists.newArrayList();
+    private static final List<SimpleItemStackWrapper> tier1 = Lists.newArrayList();
+    private static final List<SimpleItemStackWrapper> tier2 = Lists.newArrayList();
+    private static final List<SimpleItemStackWrapper> tier3 = Lists.newArrayList();
     private static final List<String> killObjectives = Lists.newArrayList();
     private static final List<String> harvestObjectives = Lists.newArrayList();
     private static final List<String> bringObjectives = Lists.newArrayList();
@@ -58,16 +58,16 @@ public class Quests
         switch (tier) 
         {
             case 0:
-                ItemProperties[] props = Quests.tier1.toArray(new ItemProperties[0]);
-                list.add(props[rand.nextInt(props.length)].getItemStack());
+                SimpleItemStackWrapper[] props = Quests.tier1.toArray(new SimpleItemStackWrapper[0]);
+                list.add(props[rand.nextInt(props.length)].getStack());
                 break;
             case 1:
-                ItemProperties[] props2 = Quests.tier2.toArray(new ItemProperties[0]);
-                list.add(props2[rand.nextInt(props2.length)].getItemStack());
+                SimpleItemStackWrapper[] props2 = Quests.tier2.toArray(new SimpleItemStackWrapper[0]);
+                list.add(props2[rand.nextInt(props2.length)].getStack());
                 break;
             case 2:
-                ItemProperties[] props3 = Quests.tier3.toArray(new ItemProperties[0]);
-                list.add(props3[rand.nextInt(props3.length)].getItemStack());
+                SimpleItemStackWrapper[] props3 = Quests.tier3.toArray(new SimpleItemStackWrapper[0]);
+                list.add(props3[rand.nextInt(props3.length)].getStack());
                 break;
         }
     }

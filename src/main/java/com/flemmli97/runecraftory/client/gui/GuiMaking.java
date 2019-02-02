@@ -13,6 +13,7 @@ import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
 import com.flemmli97.runecraftory.common.network.PacketCrafting;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
+import com.google.common.collect.Lists;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -44,7 +45,7 @@ public class GuiMaking extends GuiContainer
     private TileMultiBase tileInv;
     private Random rand = new Random();
     
-    private ArrayList<ArrayList<ItemStack>> renderRecipes = new ArrayList<ArrayList<ItemStack>>();
+    private ArrayList<ArrayList<ItemStack>> renderRecipes = Lists.newArrayList();
     private int ticker;
     private int[] dmg = new int[6];
     private ItemStack pre = ItemStack.EMPTY;
@@ -52,6 +53,9 @@ public class GuiMaking extends GuiContainer
     public GuiMaking(EnumCrafting type, IInventory playerInv, TileMultiBase tileInv) {
         super(new ContainerMaking(playerInv, tileInv));
         this.tileInv = tileInv;
+        this.type=tileInv.type();
+        for(int i = 0; i < 6; i ++)
+        	this.renderRecipes.add(new ArrayList<ItemStack>());
     }
 
     @Override
@@ -113,10 +117,8 @@ public class GuiMaking extends GuiContainer
     }
     
     private void updateRenderList(ItemStack recipeItem) {
-        for (int i = 0; i < this.renderRecipes.size(); ++i) 
-        {
-            this.renderRecipes.clear();
-        }
+    	for(ArrayList<ItemStack> slotItems : this.renderRecipes)
+    		slotItems.clear();
         this.pre = recipeItem.copy();
         this.ticker = 0;
         this.dmg = new int[6];
@@ -125,7 +127,6 @@ public class GuiMaking extends GuiContainer
             NonNullList<Object> ing = r.getRecipeItems();
             for (int j = 0; j < ing.size(); ++j) 
             {
-                //this.renderRecipes.add(new ArrayList<ItemStack>());
                 Object o = ing.get(j);
                 if (o instanceof ItemStack) 
                 {

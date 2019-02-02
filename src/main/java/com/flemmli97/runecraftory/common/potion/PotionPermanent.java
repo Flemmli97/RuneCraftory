@@ -20,6 +20,7 @@ public class PotionPermanent extends Potion
         this.setRegistryName(new ResourceLocation(LibReference.MODID, name));
     }
     
+    @Override
     public List<ItemStack> getCurativeItems() {
         return new ArrayList<ItemStack>();
     }
@@ -27,16 +28,16 @@ public class PotionPermanent extends Potion
     protected void setTickDelay(int value) {
         this.tickDelay = value;
     }
-    
+    @Override
     public boolean isReady(int duration, int amplifier) {
         return duration % this.tickDelay == 0;
     }
-    
+    @Override
     public void performEffect(EntityLivingBase livingbase, int amplifier) {
         livingbase.removePotionEffect(this);
         livingbase.addPotionEffect(new PotionEffect(this, 2 * this.tickDelay - 1));
     }
-    
+    @Override
     public boolean shouldRender(PotionEffect effect) {
         return false;
     }

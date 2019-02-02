@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 
@@ -47,11 +47,7 @@ public class PacketSkills  implements IMessage{
         	EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
         if(player!=null)
 		{
-			IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
-			if(capSync != null)
-		    {
-				capSync.setSkillLevel(msg.skill, player, msg.skillLevel[0], msg.skillLevel[1]);			     	
-		    }					
+			player.getCapability(PlayerCapProvider.PlayerCap, null).setSkillLevel(msg.skill, player, msg.skillLevel[0], msg.skillLevel[1]);			     	
 		}	
             return null;
         }

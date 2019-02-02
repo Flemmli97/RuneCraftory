@@ -3,7 +3,7 @@ package com.flemmli97.runecraftory.client.gui;
 import com.flemmli97.runecraftory.api.entities.IShop;
 import com.flemmli97.runecraftory.common.blocks.tile.TileMultiBase;
 import com.flemmli97.runecraftory.common.blocks.tile.TileResearchTable;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.inventory.ContainerInfoScreen;
 import com.flemmli97.runecraftory.common.inventory.ContainerInfoScreenSub;
 import com.flemmli97.runecraftory.common.inventory.ContainerMaking;
@@ -57,10 +57,7 @@ public class GuiHandler implements IGuiHandler
         }
         else if (ID == LibReference.guiShipping) 
         {
-            if (player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null) != null) 
-            {
-                return new ContainerChest(player.inventory, player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null).getShippingInv(), player);
-            }
+            return new ContainerChest(player.inventory, player.getCapability(PlayerCapProvider.PlayerCap, null).getShippingInv(), player);
         }
         else if (ID == LibReference.guiShop) 
         {
@@ -105,10 +102,7 @@ public class GuiHandler implements IGuiHandler
         }
         else if (ID == LibReference.guiShipping) 
         {
-            if (player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null) != null) 
-            {
-                return new GuiChest(player.inventory, (player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null)).getShippingInv());
-            }
+            return new GuiChest(player.inventory, (player.getCapability(PlayerCapProvider.PlayerCap, null)).getShippingInv());
         }
         else if (ID == LibReference.guiShop) 
         {

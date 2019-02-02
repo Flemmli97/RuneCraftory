@@ -1,5 +1,7 @@
 package com.flemmli97.runecraftory.common.core.handler;
 
+import javax.annotation.Nullable;
+
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 
 import net.minecraft.client.resources.I18n;
@@ -21,7 +23,7 @@ public class CustomDamage extends EntityDamageSource{
 	private Entity sourceEntity;
 	private float knockAmount;
 	private int protection;
-	public CustomDamage(EntityLivingBase attacker, EnumElement element, KnockBackType knock, float knockBackAmount, int hurtTimeProtection) {
+	public CustomDamage(@Nullable EntityLivingBase attacker, EnumElement element, KnockBackType knock, float knockBackAmount, int hurtTimeProtection) {
 		super("rfAttack", attacker);
 		this.element=element;
 		this.knock=knock;
@@ -72,7 +74,7 @@ public class CustomDamage extends EntityDamageSource{
     		}
     }
     
-    public static final CustomDamage attack(EntityLivingBase attacker, EnumElement element, DamageType type, KnockBackType knock, float knockBackAmount, int hurtTimeProtection)
+    public static final CustomDamage attack(@Nullable EntityLivingBase attacker, EnumElement element, DamageType type, KnockBackType knock, float knockBackAmount, int hurtTimeProtection)
     {
 		CustomDamage source = new CustomDamage(attacker, element, knock, knockBackAmount, hurtTimeProtection);
 		switch(type)

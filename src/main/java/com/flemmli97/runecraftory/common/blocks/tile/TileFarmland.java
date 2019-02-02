@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 public class TileFarmland extends TileEntity implements IDailyTickable, ITickable{
 
 	private float growthMultiplier=1;
+	private boolean growGiant;
 	private int health=255;
 	private float level;
 
@@ -60,21 +61,18 @@ public class TileFarmland extends TileEntity implements IDailyTickable, ITickabl
         this.growthMultiplier=compound.getFloat("Growth");
         this.level=compound.getFloat("Level");
         this.age=compound.getFloat("Age");
-        
+        this.growGiant=compound.getBoolean("Giant");
         //Looks up the last time this tile was saved.
         long saveTime = compound.getLong("SaveTime");
         if(this.world!=null && !this.world.isRemote)
         {
     		long diff = this.world.getWorldTime()-saveTime;
-    		//Update this tile for the day past after it was saved to disk
     		while(diff>24000)
     		{
     			this.dailyUpdate(this.world, this.pos, this.world.getBlockState(this.pos));
     			diff-=24000;
     		}
         }
-		//if(this.world instanceof WorldServer)
-		//	DailyBlockTickHandler.instance((WorldServer) this.world).add(this.pos);
     }
 	
 	public NBTTagCompound writeToNBT(NBTTagCompound compound)
@@ -84,6 +82,7 @@ public class TileFarmland extends TileEntity implements IDailyTickable, ITickabl
 		compound.setFloat("Level", this.level);
 		compound.setFloat("Growth", this.growthMultiplier);
 		compound.setFloat("Age", this.age);
+		compound.setBoolean("Giant", this.growGiant);
 		compound.setLong("SaveTime", this.world.getWorldTime());
         return compound;
     }
@@ -103,6 +102,11 @@ public class TileFarmland extends TileEntity implements IDailyTickable, ITickabl
 		return this.growthMultiplier;
 	}
 	
+	public boolean growGiant()
+	{
+		return this.growGiant;
+	}
+	
 	public void applyGrowthFertilizer(float amount)
 	{
 		this.growthMultiplier=Math.min(5, this.growthMultiplier+amount);
@@ -112,6 +116,18 @@ public class TileFarmland extends TileEntity implements IDailyTickable, ITickabl
 	public void applyLevelFertilizer(float amount)
 	{
 		this.level=Math.min(2, (this.level+amount));
+		this.markDirty();
+	}
+	
+	public void applyHealth(int amount)
+	{
+		this.health=Math.min(255, this.health+amount);
+		this.markDirty();
+	}
+	
+	public void applySizeFertilizer(boolean growGiant)
+	{
+		this.growGiant=growGiant;
 		this.markDirty();
 	}
 	
@@ -129,7 +145,7 @@ public class TileFarmland extends TileEntity implements IDailyTickable, ITickabl
 				//Let the crop tile entity handle growth
 				BlockCropBase crop = (BlockCropBase) cropState.getBlock();
 				TileCrop tile = (TileCrop) world.getTileEntity(cropPos);
-				float season = CalendarHandler.get(world).currentSeason() == crop.properties().bestSeason() ? 1.5F:1;
+				float season = crop.properties().seasonMultiplier(CalendarHandler.get(world).currentSeason());
 				float runeyBonus = WeatherData.get(world).currentWeather()==EnumWeather.RUNEY?7:1;
 				if(!tile.isFullyGrown(crop))
 					tile.growCrop(world, cropPos, cropState, this.growthMultiplier*runeyBonus, this.level, season);
@@ -139,10 +155,10 @@ public class TileFarmland extends TileEntity implements IDailyTickable, ITickabl
 			else if(cropState.getBlock() instanceof BlockCrops)
 			{
 				BlockCrops crop = (BlockCrops) cropState.getBlock();
-				CropProperties props=CropMap.getProperties(crop.getItem(this.world, cropPos, cropState).getItem().getRegistryName());
+				CropProperties props=CropMap.getProperties(crop.getItem(this.world, cropPos, cropState));
 				if(props!=null)
 				{
-					float season = CalendarHandler.get(world).currentSeason() == props.bestSeason() ? 1.5F:1;
+					float season = props.seasonMultiplier(CalendarHandler.get(world).currentSeason());
 					float runeyBonus = WeatherData.get(world).currentWeather()==EnumWeather.RUNEY?7:1;
 					float speed = this.growthMultiplier*season*runeyBonus;
 			    	this.age+=Math.min(props.growth(),speed);

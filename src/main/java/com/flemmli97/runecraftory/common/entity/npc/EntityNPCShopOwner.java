@@ -11,17 +11,20 @@ import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.common.network.PacketUpdateShopItems;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public class EntityNPCShopOwner extends EntityNPCBase implements IShop
 {
@@ -36,7 +39,6 @@ public class EntityNPCShopOwner extends EntityNPCBase implements IShop
         super(world);
         if (!world.isRemote) {
             this.setProfession(profession);
-            this.generateRandomShopItems();
         }
     }
     
@@ -51,6 +53,7 @@ public class EntityNPCShopOwner extends EntityNPCBase implements IShop
     
     public void setProfession(EnumShop profession) {
         this.dataManager.set(EntityNPCShopOwner.SHOPTYPE, profession.ordinal());
+        this.generateRandomShopItems();
     }
     
     @Override
@@ -62,25 +65,45 @@ public class EntityNPCShopOwner extends EntityNPCBase implements IShop
     public EntityNPCShopOwner shopOwner() {
         return this;
     }
-    
+    @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (RFCalculations.canUpdateDaily(this.world)) {
             this.generateRandomShopItems();
         }
     }
-    
+    @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
-        compound.setTag("Shop", (NBTBase)ItemStackHelper.saveAllItems(new NBTTagCompound(), this.shopItems));
+        compound.setTag("Shop", ItemStackHelper.saveAllItems(new NBTTagCompound(), this.shopItems));
     }
-    
+    @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
         if (compound.hasKey("Shop")) {
             ItemStackHelper.loadAllItems(compound.getCompoundTag("Shop"), this.shopItems);
         }
-        PacketHandler.sendToAll(new PacketUpdateShopItems(this.getEntityId(), this.shopItems));
+        PacketHandler.sendToAll(new PacketUpdateShopItems(this, this.shopItems));
+    }
+    
+    @Override
+    public void writeSpawnData(ByteBuf buffer) {
+    	NBTTagCompound compound = new NBTTagCompound();
+        NBTTagList tagList = new NBTTagList();
+        for (ItemStack stack : this.shopItems) {
+            tagList.appendTag(stack.writeToNBT(new NBTTagCompound()));
+        }
+        compound.setTag("Items", tagList);
+        ByteBufUtils.writeTag(buffer, compound);
+    }
+
+    @Override
+    public void readSpawnData(ByteBuf additionalData) {
+    	NBTTagCompound compound = ByteBufUtils.readTag(additionalData);
+        NBTTagList list = compound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < list.tagCount(); ++i) {
+            this.shopItems.add(new ItemStack(list.getCompoundTagAt(i)));
+        }
     }
     
     public void generateRandomShopItems() 
@@ -95,7 +118,8 @@ public class EntityNPCShopOwner extends EntityNPCBase implements IShop
                 this.shopItems.add(stack);
             }
         }
-        PacketHandler.sendToAll(new PacketUpdateShopItems(this.getEntityId(), this.shopItems));
+        if(!this.world.isRemote)
+        	PacketHandler.sendToAll(new PacketUpdateShopItems(this, this.shopItems));
     }
     
     @Override
@@ -125,7 +149,7 @@ public class EntityNPCShopOwner extends EntityNPCBase implements IShop
     
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        if (player.world.isRemote) {
+        if (this.world.isRemote) {
             return true;
         }
         player.openGui(RuneCraftory.instance, LibReference.guiShop, this.world, this.getEntityId(), 0, 0);

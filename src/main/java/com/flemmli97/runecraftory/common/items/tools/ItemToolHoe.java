@@ -4,16 +4,14 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.client.render.EnumToolCharge;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
 import com.flemmli97.runecraftory.common.init.ModItems;
-import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumToolTier;
 import com.flemmli97.runecraftory.common.lib.enums.EnumWeaponType;
-import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -21,8 +19,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockDirt.DirtType;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -37,18 +33,14 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemToolHoe extends ItemHoe implements IItemUsable, IModelRegister, IChargeable
+public class ItemToolHoe extends ItemHoe implements IItemUsable, IChargeable
 {
     private EnumToolTier tier;
     private int[] levelXP = new int[] { 5, 20, 50, 200, 500 };
@@ -71,25 +63,6 @@ public class ItemToolHoe extends ItemHoe implements IItemUsable, IModelRegister,
     @Override
     public EnumWeaponType getWeaponType() {
         return EnumWeaponType.FARM;
-    }
-    
-    @Override
-    public String getUnlocalizedName() {
-        return this.getRegistryName().toString();
-    }
-    
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return this.getRegistryName().toString();
-    }
-    
-    @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
-            ItemStack stack = new ItemStack(this);
-            ItemNBT.initNBT(stack);
-            items.add(stack);
-        }
     }
     
     @Override
@@ -191,7 +164,7 @@ public class ItemToolHoe extends ItemHoe implements IItemUsable, IModelRegister,
                 }
             }
             if (flag) {
-                IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+                IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
                 capSync.decreaseRunePoints(player, this.chargeRunes[range]);
                 capSync.increaseSkill(EnumSkills.EARTH, player, this.levelXP[range]);
                 capSync.increaseSkill(EnumSkills.FARMING, player, this.levelXP[range]);
@@ -249,7 +222,7 @@ public class ItemToolHoe extends ItemHoe implements IItemUsable, IModelRegister,
                 }
             }
             if (result == EnumActionResult.SUCCESS) {
-                IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+                IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
                 capSync.decreaseRunePoints(player, 1);
                 capSync.increaseSkill(EnumSkills.EARTH, player, 2);
                 capSync.increaseSkill(EnumSkills.FARMING, player, 2);
@@ -269,10 +242,5 @@ public class ItemToolHoe extends ItemHoe implements IItemUsable, IModelRegister,
     @Override
     public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
         return HashMultimap.<String, AttributeModifier>create();
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
     }
 }

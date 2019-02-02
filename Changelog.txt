@@ -1,0 +1,33 @@
+Runecraftory a0.3.0
+================
+- Json config for crops and item prices added:
+- Crops not from this mod are now modifiable (season, growth time etc.). With no modification crops will grow as long as their defined maxAge (which for vanilla is 7) in days.
+- Items can now have added/modified sell and buy prices
+- Charge and aoe attack fixed 
+- Shipping bin added which will give players money everyday (Inventory is global)
+- Mobs now have "genes" to add a little variety in their stats. Attack, defence and hp are affected by it.
+- Changed weather to only update at certain times. Added runey weather: crops get a x7 growth bonus at that day. (Renderer not added so for now visually theres no difference between it and a sunny day)
+- Changed farmland to ticking tiles since i didnt notice a performance drop
+- Status effect added:
+    Poison: slowly reduces hp till 1
+    Cold: slowly reduces rp 
+    Fatigue: increased rp usage for everything
+    Paralysis: disables running and slows entity
+    Seal: for now does nothing. For future: disables usage of spells and runeskills
+- Reworked the sleep status effect for both player and entities
+- Working fertilizer added
+- Working medic items added
+- Changed items to not use metadata anymore
+- Fixed crafting recipes crash
+- Fixed new spawned shop npc not showing stuff
+- Dynamic food gain system implemented
+- Removed asm as thats now part of TenshiLib
+- Added thunderbolt ruins
+- Added all items (though most are dummy items). Now i am over 1000 items 
+- Moved lots of code tenshilib
+- Improved build script
+- Improved configs
+- Added (some) textures
+- Added dummy default configs for all items
+- Oredicted all items
+- Added plants to world gen

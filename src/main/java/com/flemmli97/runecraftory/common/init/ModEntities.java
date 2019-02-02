@@ -18,6 +18,7 @@ import com.flemmli97.runecraftory.common.entity.monster.EntityBeetle;
 import com.flemmli97.runecraftory.common.entity.monster.EntityOrc;
 import com.flemmli97.runecraftory.common.entity.monster.EntityWooly;
 import com.flemmli97.runecraftory.common.entity.monster.boss.EntityAmbrosia;
+import com.flemmli97.runecraftory.common.entity.monster.boss.EntityThunderbolt;
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityAmbrosiaSleep;
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityAmbrosiaWave;
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityButterfly;
@@ -39,29 +40,27 @@ public class ModEntities
     public static final void init() {
         int id = 0;
         LibReference.logger.info("Registering entities");
-        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "gate"), EntityGate.class, "gate", id++, (Object)RuneCraftory.instance, 64, 3, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "wooly"), EntityWooly.class, "wooly", id++, (Object)RuneCraftory.instance, 64, 3, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "orc"), EntityOrc.class, "orc", id++, (Object)RuneCraftory.instance, 64, 3, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ant"), EntityAnt.class, "ant", id++, (Object)RuneCraftory.instance, 64, 3, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "beetle"), EntityBeetle.class, "beetle", id++, (Object)RuneCraftory.instance, 64, 3, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ambrosia"), EntityAmbrosia.class, "ambrosia", id++, (Object)RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "gate"), EntityGate.class, "gate", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "wooly"), EntityWooly.class, "wooly", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "orc"), EntityOrc.class, "orc", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ant"), EntityAnt.class, "ant", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "beetle"), EntityBeetle.class, "beetle", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ambrosia"), EntityAmbrosia.class, "ambrosia", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "thunderbolt"), EntityThunderbolt.class, "thunderbolt", id++, RuneCraftory.instance, 64, 3, true);
+
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "shop_npc"), EntityNPCShopOwner.class, "shop_npc", id++, RuneCraftory.instance, 64, 6, true);
         
-        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "shop_npc"), EntityNPCShopOwner.class, "shop_npc", id++, (Object)RuneCraftory.instance, 64, 6, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "butterfly"), EntityButterfly.class, "butterfly", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ambrosiaSleep"), EntityAmbrosiaSleep.class, "ambrosiaSleep", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ambrosiaWave"), EntityAmbrosiaWave.class, "ambrosiaWave", id++, RuneCraftory.instance, 64, 3, true);
         
-        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "butterfly"), EntityButterfly.class, "butterfly", id++, (Object)RuneCraftory.instance, 64, 3, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ambrosiaSleep"), EntityAmbrosiaSleep.class, "ambrosiaSleep", id++, (Object)RuneCraftory.instance, 64, 3, true);
-        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ambrosiaWave"), EntityAmbrosiaWave.class, "ambrosiaWave", id++, (Object)RuneCraftory.instance, 64, 3, true);
-        
-        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "fireball_small"), EntityFireBall.class, "fireball_small", id++, (Object)RuneCraftory.instance, 64, 6, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "fireball_small"), EntityFireBall.class, "fireball_small", id++, RuneCraftory.instance, 64, 6, true);
     }
     
     public static final void registerMobSpawn() {
         for (final Biome biome : Biome.REGISTRY) {
-            EntityRegistry.addSpawn(EntityGate.class, 50, 1, 2, EnumCreatureType.MONSTER, new Biome[] { biome });
+            EntityRegistry.addSpawn(EntityGate.class, 50, 1, 2, EnumCreatureType.MONSTER, biome);
         }
-        LibReference.logger.info("Registering gate spawns");
-        GateSpawning.initGateSpawnings();
-        LibReference.logger.info("Finished registering gate spawns");
     }
     
     @SideOnly(Side.CLIENT)
@@ -72,6 +71,7 @@ public class ModEntities
         RenderingRegistry.registerEntityRenderingHandler(EntityAnt.class, RenderAnt::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityBeetle.class, RenderBeetle::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityAmbrosia.class, RenderAmbrosia::new);
+        
         RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, RenderButterfly::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityFireBall.class, RenderFireball::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityNPCShopOwner.class, new IRenderFactory<EntityNPCShopOwner>() 

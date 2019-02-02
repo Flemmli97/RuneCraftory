@@ -8,6 +8,7 @@ build
 # forge
 libs
 run
+lib
 
 # github
 .git

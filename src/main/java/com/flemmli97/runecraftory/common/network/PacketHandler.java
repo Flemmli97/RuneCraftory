@@ -24,7 +24,6 @@ public class PacketHandler
         PacketHandler.dispatcher.registerMessage(PacketPlayerLevel.Handler.class, PacketPlayerLevel.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketPlayerStats.Handler.class, PacketPlayerStats.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketSkills.Handler.class, PacketSkills.class, id++, Side.CLIENT);
-        PacketHandler.dispatcher.registerMessage(PacketWeaponHit.Handler.class, PacketWeaponHit.class, id++, Side.SERVER);
         PacketHandler.dispatcher.registerMessage(PacketJump.Handler.class, PacketJump.class, id++, Side.SERVER);
         PacketHandler.dispatcher.registerMessage(PacketWeaponAnimation.Handler.class, PacketWeaponAnimation.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketOpenGuiContainer.Handler.class, PacketOpenGuiContainer.class, id++, Side.SERVER);
@@ -36,6 +35,9 @@ public class PacketHandler
         PacketHandler.dispatcher.registerMessage(PacketBuy.Handler.class, PacketBuy.class, id++, Side.SERVER);
         PacketHandler.dispatcher.registerMessage(PacketShopResult.Handler.class, PacketShopResult.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketUpdateShopItems.Handler.class, PacketUpdateShopItems.class, id++, Side.CLIENT);
+        PacketHandler.dispatcher.registerMessage(PacketUpdateEquipmentStat.Handler.class, PacketUpdateEquipmentStat.class, id++, Side.CLIENT);
+        PacketHandler.dispatcher.registerMessage(PacketFoodUpdate.Handler.class, PacketFoodUpdate.class, id++, Side.CLIENT);
+        PacketHandler.dispatcher.registerMessage(PacketFoodUpdateEntity.Handler.class, PacketFoodUpdateEntity.class, id++, Side.CLIENT);
     }
     
     public static final void sendTo(final IMessage message, final EntityPlayerMP player) {

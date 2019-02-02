@@ -1,11 +1,11 @@
 package com.flemmli97.runecraftory.compat.waila;
 
 import java.util.List;
+import java.util.Map.Entry;
 
 import com.flemmli97.runecraftory.common.core.handler.config.ConfigHandler;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.init.ModItems;
-import com.flemmli97.runecraftory.common.lib.LibConstants;
 
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaEntityAccessor;
@@ -32,14 +32,14 @@ public class EntityStatsWaila implements IWailaEntityProvider
         if (entity instanceof EntityMobBase) 
         {
             currenttip.clear();
-            if (accessor.getPlayer().getHeldItemMainhand().getItem() == ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode || ConfigHandler.debugMode) 
+            if (accessor.getPlayer().getHeldItemMainhand().getItem() == ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode || ConfigHandler.MainConfig.debugMode) 
             {
                 EntityMobBase mob = (EntityMobBase)entity;
                 for (IAttributeInstance a : mob.getAttributeMap().getAllAttributes()) {
                     if (a.getAttribute().getClass() == RangedAttribute.class) 
                     {
                         if (a.getAttribute() == SharedMonsterAttributes.MAX_HEALTH) 
-                        	currenttip.add("Health: " + (int)Math.round(mob.getHealth() / LibConstants.DAMAGESCALE) + " / " + (int)Math.round(a.getAttributeValue() / LibConstants.DAMAGESCALE));
+                        	currenttip.add("Health: " + mob.getHealth() + " / " + mob.getMaxHealth());
                     }
                     else 
                     {
@@ -47,12 +47,12 @@ public class EntityStatsWaila implements IWailaEntityProvider
                     }
                 }
             }
-            if (ConfigHandler.debugMode) 
+            if (ConfigHandler.MainConfig.debugMode) 
             {
                 EntityMobBase mob = (EntityMobBase)entity;
-                for (IAttribute a2 : mob.mobGene().keySet()) 
+                for (Entry<IAttribute, Float> entry : mob.mobGene().entrySet()) 
                 {
-                    currenttip.add(I18n.format("IV: " + a2.getName(), new Object[0]) + ": " + mob.mobGene().get(a2));
+                    currenttip.add(I18n.format("IV: " + entry.getKey().getName(), new Object[0]) + ": " + entry.getValue());
                 }
             }
         }
@@ -61,7 +61,7 @@ public class EntityStatsWaila implements IWailaEntityProvider
     
     @Override
     public List<String> getWailaHead(Entity entity, List<String> currenttip, IWailaEntityAccessor accessor, IWailaConfigHandler config) {
-        if (entity instanceof EntityMobBase && (accessor.getPlayer().getHeldItemMainhand().getItem() == ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode||ConfigHandler.debugMode)) 
+        if (entity instanceof EntityMobBase && (accessor.getPlayer().getHeldItemMainhand().getItem() == ModItems.debug || accessor.getPlayer().capabilities.isCreativeMode||ConfigHandler.MainConfig.debugMode)) 
         {
             currenttip.set(0, currenttip.get(0) + " (Level: " + ((EntityMobBase)entity).level() + ")");
         }

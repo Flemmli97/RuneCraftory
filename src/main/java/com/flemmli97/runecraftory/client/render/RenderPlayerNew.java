@@ -4,8 +4,8 @@ import org.apache.logging.log4j.LogManager;
 
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.client.models.ModelPlayerImproved;
-import com.flemmli97.runecraftory.common.items.weapons.DualBladeBase;
-import com.flemmli97.runecraftory.common.items.weapons.GloveBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -254,7 +254,7 @@ public class RenderPlayerNew extends RenderPlayer
                 {
             		if(itemstack.getItem() instanceof IChargeable)
             		{
-            	        if (itemstack.getItem() instanceof DualBladeBase || itemstack.getItem() instanceof GloveBase)
+            	        if (itemstack.getItem() instanceof ItemDualBladeBase || itemstack.getItem() instanceof ItemGloveBase)
             	        {
             	        	modelbiped$armpose1=ModelBiped.ArmPose.ITEM;
             	        }

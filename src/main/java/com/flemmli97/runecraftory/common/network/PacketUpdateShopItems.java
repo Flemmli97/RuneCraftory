@@ -7,10 +7,10 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -23,29 +23,30 @@ public class PacketUpdateShopItems implements IMessage
     
     public PacketUpdateShopItems() {}
     
-    public PacketUpdateShopItems(int entityID, NonNullList<ItemStack> shopItems) {
-        this.list = NonNullList.create();
-        this.entityID = entityID;
+    public PacketUpdateShopItems(Entity entity, NonNullList<ItemStack> shopItems) {
+        this.entityID = entity.getEntityId();
         this.list = shopItems;
     }
     
+    @Override
     public void fromBytes(ByteBuf buf) {
         NBTTagCompound compound = ByteBufUtils.readTag(buf);
-        NBTTagList list = compound.getTagList("Items", 10);
+        NBTTagList list = compound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
         for (int i = 0; i < list.tagCount(); ++i) {
             this.list.add(new ItemStack(list.getCompoundTagAt(i)));
         }
-        this.entityID = compound.getInteger("entityID");
+        this.entityID = compound.getInteger("EntityID");
     }
     
+    @Override
     public void toBytes(ByteBuf buf) {
         NBTTagCompound compound = new NBTTagCompound();
         NBTTagList tagList = new NBTTagList();
         for (ItemStack stack : this.list) {
-            tagList.appendTag((NBTBase)stack.writeToNBT(new NBTTagCompound()));
+            tagList.appendTag(stack.writeToNBT(new NBTTagCompound()));
         }
-        compound.setTag("Items", (NBTBase)tagList);
-        compound.setInteger("entityID", this.entityID);
+        compound.setTag("Items", tagList);
+        compound.setInteger("EntityID", this.entityID);
         ByteBufUtils.writeTag(buf, compound);
     }
     

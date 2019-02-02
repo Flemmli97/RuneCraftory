@@ -7,7 +7,6 @@ import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityAmbrosi
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityButterfly;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.DamageSource;
@@ -29,6 +28,7 @@ public class EntityAmbrosia extends EntityBossBase
         this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.34);
     }
     
+    @Override
     public float attackChance() {
         return 100.0f;
     }
@@ -42,8 +42,8 @@ public class EntityAmbrosia extends EntityBossBase
         for (int i = 0; i < 2; ++i) {
             if (!this.world.isRemote) {
                 EntityButterfly fly = new EntityButterfly(this.world, (EntityLivingBase)this);
-                fly.shoot((Entity)this, this.rotationPitch, this.rotationYawHead, 0.0f, 0.3f, 15.0f);
-                this.world.spawnEntity((Entity)fly);
+                fly.shoot(this, this.rotationPitch, this.rotationYawHead, 0.0f, 0.3f, 15.0f);
+                this.world.spawnEntity(fly);
             }
         }
     }
@@ -51,7 +51,7 @@ public class EntityAmbrosia extends EntityBossBase
     public void summonWave(int duration) {
         if (!this.world.isRemote) {
             EntityAmbrosiaWave wave = new EntityAmbrosiaWave(this.world, this, duration);
-            this.world.spawnEntity((Entity)wave);
+            this.world.spawnEntity(wave);
         }
     }
     
@@ -63,7 +63,7 @@ public class EntityAmbrosia extends EntityBossBase
                 double z = Math.sin(angle) * 1.3;
                 EntityAmbrosiaSleep wave = new EntityAmbrosiaSleep(this.world, this);
                 wave.setPosition(this.posX + x, this.posY + 0.4, this.posZ + z);
-                this.world.spawnEntity((Entity)wave);
+                this.world.spawnEntity(wave);
             }
         }
     }
@@ -82,10 +82,15 @@ public class EntityAmbrosia extends EntityBossBase
     public enum AttackAI
     {
         IDDLE(0, 0), 
+        //Tries kicking target 3 times in a row
         KICK1(36, 12), 
+        //Sends a wave of hp-draining(hard) butterflies at target
         BUTTERFLY(85, 80), 
+        //Shockwave kind of attack surrounding ambrosia
         WAVE(125, 120), 
-        SLEEP(12, 10), 
+        //Sleep balls
+        SLEEP(12, 10),
+        //2 spinning kick changing direction between them. also scatters earth damage pollen while doing it
         KICK2(36, 12);
         
         private int duration;

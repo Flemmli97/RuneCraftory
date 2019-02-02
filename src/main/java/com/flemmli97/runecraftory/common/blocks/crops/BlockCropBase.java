@@ -8,6 +8,7 @@ import com.flemmli97.runecraftory.api.items.CropProperties;
 import com.flemmli97.runecraftory.api.mappings.CropMap;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrop;
 import com.flemmli97.runecraftory.common.lib.LibReference;
+import com.flemmli97.runecraftory.common.utils.ItemUtils;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
@@ -67,7 +68,7 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
     {
     	return state.getValue(STATUS);
     }
-	
+	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
 		TileCrop tile = (TileCrop) world.getTileEntity(pos);
@@ -99,7 +100,7 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
 	
 	public CropProperties properties()
 	{
-		return CropMap.getProperties(CropMap.seedFromString(this.crop).getRegistryName());
+		return CropMap.getProperties(new ItemStack(CropMap.seedFromString(this.crop)), true);
 	}
 
 	@Override
@@ -122,13 +123,10 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
     	int age = tile.age();
         if (age >= this.properties().growth())
         {          
-            drops.add(new ItemStack(CropMap.cropFromString(this.crop), this.properties().maxDrops()));
+        	ItemStack stack = tile.isGiant()?new ItemStack(CropMap.giantCropFromString(this.crop), this.properties().maxDrops()):new ItemStack(CropMap.cropFromString(this.crop), this.properties().maxDrops());
+            tile.postProcess();
+        	drops.add(ItemUtils.getLeveledItem(stack, tile.level()));
         }
-    }
-    @Override
-    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
-    {
-        super.dropBlockAsItemWithChance(worldIn, pos, state, chance, fortune);
     }
     
     @Override
@@ -172,9 +170,9 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
     }
     
 	@Override
-    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
+    public ItemStack getItem(World world, BlockPos pos, IBlockState state)
     {
-        return new ItemStack(CropMap.cropFromString(this.crop), 1);
+        return ItemUtils.getLeveledItem(new ItemStack(CropMap.cropFromString(this.crop), 1), 1);
     }
 
 	@Override

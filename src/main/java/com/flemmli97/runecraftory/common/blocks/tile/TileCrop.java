@@ -17,6 +17,8 @@ public class TileCrop extends TileEntity{
 	private long lastGrowth=0;
 	private float level;
 	private boolean withered;
+	private BlockPos[] nearbyGiant;
+	
 	public int age()
 	{
 		return Math.round(this.age);
@@ -81,6 +83,11 @@ public class TileCrop extends TileEntity{
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
     {
         return oldState.getBlock() != newSate.getBlock();
+    }
+    
+    public void postProcess()
+    {
+    	
     }
 
 	@Override

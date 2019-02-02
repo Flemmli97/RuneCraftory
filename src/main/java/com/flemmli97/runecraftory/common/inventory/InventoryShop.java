@@ -150,10 +150,7 @@ public class InventoryShop implements IInventory
     }
     
     public void prev() {
-        int n = 0;
-        int index = this.index - 1;
-        this.index = index;
-        this.index = Math.max(n, index);
+        this.index = Math.max(0, --this.index);
         this.updateInv();
     }
     

@@ -58,7 +58,7 @@ public class EntityAmbrosiaSleep extends Entity
             }
             catch (Throwable var2) {
                 this.owner = null;
-                LibReference.logger.error("Error loading EntityAmbrosiaWave owner uuid: " + compound.getString("owner"));
+                LibReference.logger.error("Error loading EntityAmbrosiaWave owner uuid: {}", compound.getString("owner"));
             }
         }
     }

@@ -1,14 +1,16 @@
 package com.flemmli97.runecraftory.common.utils;
 
 import com.flemmli97.runecraftory.api.items.ItemStat;
+import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
 import com.flemmli97.runecraftory.api.mappings.ItemStatMap;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.enums.EnumShopResult;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -16,6 +18,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class ItemUtils
@@ -46,14 +49,18 @@ public class ItemUtils
     
     public static void spawnLeveledItem(EntityLivingBase entity, ItemStack stack, int level) {
         if (!entity.world.isRemote) {
-            NBTTagCompound compound = ItemNBT.getItemNBT(stack);
-            if (compound != null) {
-                compound.setInteger("ItemLevel", level);
-            }
-            EntityItem item = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, stack);
+            EntityItem item = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, getLeveledItem(stack, level));
             item.setPickupDelay(0);
             entity.world.spawnEntity((Entity)item);
         }
+    }
+    
+    public static ItemStack getLeveledItem(ItemStack stack, int level) {
+    	NBTTagCompound compound = ItemNBT.getItemNBT(stack);
+        if (compound != null) {
+            compound.setInteger("ItemLevel", MathHelper.clamp(level, 1, 10));
+        }
+        return stack;
     }
     
     public static int getSellPrice(ItemStack stack) {
@@ -73,24 +80,20 @@ public class ItemUtils
     }
     
     public static EnumShopResult buyItem(EntityPlayer player, ItemStack stack) {
-        IPlayer cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
-        if(cap!=null)
-        {
-	        if (!hasSpace(player, stack)) {
-	            return EnumShopResult.NOSPACE;
-	        }
-	        int price = getBuyPrice(stack) * stack.getCount();
-	        if (cap.useMoney(player, price)) {
-	            player.playSound(SoundEvents.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
-	            while (stack.getCount() > 0) {
-	                ItemStack copy = stack.copy();
-	                int count = (stack.getCount() > stack.getMaxStackSize()) ? stack.getMaxStackSize() : stack.getCount();
-	                copy.setCount(count);
-	                spawnItemAtEntity((EntityLivingBase)player, copy);
-	                stack.setCount(stack.getCount() - count);
-	            }
-	            return EnumShopResult.SUCCESS;
-	        }
+        if (!hasSpace(player, stack)) {
+            return EnumShopResult.NOSPACE;
+        }
+        int price = getBuyPrice(stack) * stack.getCount();
+        if (player.getCapability(PlayerCapProvider.PlayerCap, null).useMoney(player, price)) {
+            player.playSound(SoundEvents.ENTITY_VILLAGER_YES, 1.0f, 1.0f);
+            while (stack.getCount() > 0) {
+                ItemStack copy = stack.copy();
+                int count = (stack.getCount() > stack.getMaxStackSize()) ? stack.getMaxStackSize() : stack.getCount();
+                copy.setCount(count);
+                spawnItemAtEntity((EntityLivingBase)player, copy);
+                stack.setCount(stack.getCount() - count);
+            }
+            return EnumShopResult.SUCCESS;
         }
         return EnumShopResult.NOMONEY;
     }
@@ -123,6 +126,16 @@ public class ItemUtils
             }
         }
         return stack.getCount() <= 0;
+    }
+    
+    public static IAttribute getAttFromName(String s)
+    {
+    	if(s.equals(SharedMonsterAttributes.MAX_HEALTH.getName()))
+    		return SharedMonsterAttributes.MAX_HEALTH;
+    	IAttribute att = ItemStatAttributes.ATTRIBUTESTRINGMAP.get(s);
+    	if(att!=null)
+    		return att;
+    	throw new NullPointerException("Faulty attribute name " + s);
     }
     
     public static boolean areItemsStackable(ItemStack stack1, ItemStack stack2) 

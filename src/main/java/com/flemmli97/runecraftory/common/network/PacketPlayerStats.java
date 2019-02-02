@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 
 import io.netty.buffer.ByteBuf;
@@ -51,13 +51,10 @@ public class PacketPlayerStats  implements IMessage{
         	EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
         if(player!=null)
 		{
-			IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
-			if(capSync != null)
-		    {
-				capSync.setIntel(player, msg.intel);
-				capSync.setStr(player, msg.str);
-				capSync.setVit(player, msg.vit);
-		    }					
+			IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
+			capSync.setIntel(player, msg.intel);
+			capSync.setStr(player, msg.str);
+			capSync.setVit(player, msg.vit);
 		}	
             return null;
         }

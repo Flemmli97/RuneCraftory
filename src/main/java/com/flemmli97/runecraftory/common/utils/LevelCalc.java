@@ -68,20 +68,13 @@ public class LevelCalc
         return Math.round((float)(level + Math.max(0.0, (dis - 250.0) * 0.10000000149011612)));
     }
     
-    public static double initStatIncreaseLevel(double baseValue, int level, boolean isBoss, boolean isHealth, float modifier) {
+    public static double initStatIncreaseLevel(double baseValue, int level, boolean isBoss, float modifier) {
         float scale = isBoss ? 1.2f : 1.0f;
-        double newValue = baseValue + baseValue / 10.0 * Math.max(0, level - LibConstants.baseLevel) * scale * modifier;
-        if (isHealth) {
-            newValue *= LibConstants.DAMAGESCALE;
-        }
-        return newValue;
+        return baseValue + baseValue / 10.0 * Math.max(0, level - LibConstants.baseLevel) * scale * modifier;
     }
     
-    public static double onEntityLevelUp(double baseValue, double currentValue, boolean isBoss, boolean isHealth, float modifier) {
+    public static double onEntityLevelUp(double baseValue, double currentValue, boolean isBoss, float modifier) {
         float scale = isBoss ? 1.2f : 1.0f;
-        if (isHealth) {
-            baseValue *= LibConstants.DAMAGESCALE;
-        }
         return currentValue + baseValue / 10.0 * scale * modifier;
     }
     

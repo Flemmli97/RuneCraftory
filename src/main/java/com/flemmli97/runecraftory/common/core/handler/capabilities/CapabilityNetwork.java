@@ -19,15 +19,4 @@ public class CapabilityNetwork
             instance.readFromNBT((NBTTagCompound)nbt);
         }
     }
-    
-    public static class PlayerAnimNetwork implements Capability.IStorage<IPlayerAnim>
-    {
-        public NBTBase writeNBT(Capability<IPlayerAnim> capability, IPlayerAnim instance, EnumFacing side) {
-            NBTTagCompound compound = new NBTTagCompound();
-            return compound;
-        }
-        
-        public void readNBT(Capability<IPlayerAnim> capability, IPlayerAnim instance, EnumFacing side, NBTBase nbt) {
-        }
-    }
 }

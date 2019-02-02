@@ -1,10 +1,10 @@
 package com.flemmli97.runecraftory.common.utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Nullable;
 
@@ -15,6 +15,7 @@ import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
 import com.flemmli97.runecraftory.api.mappings.ItemStatMap;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -29,6 +30,7 @@ import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.Constants;
 
 public class ItemNBT
 {
@@ -54,9 +56,9 @@ public class ItemNBT
         return false;
     }
     
-    public static Map<ItemStatAttributes, Integer> statIncrease(ItemStack stack) 
+    public static Map<IAttribute, Integer> statIncrease(ItemStack stack) 
     {
-        Map<ItemStatAttributes, Integer> map = new HashMap<ItemStatAttributes, Integer>();
+        Map<IAttribute, Integer> map = Maps.newLinkedHashMap();
         if (stack.getItem() instanceof IItemUsable) 
         {
             NBTTagCompound compound = getItemNBT(stack);
@@ -66,6 +68,7 @@ public class ItemNBT
                 List<ItemStatAttributes> ordered = new LinkedList<ItemStatAttributes>();
                 for (String attName : tag.getKeySet()) 
                 {
+                	//No check for health since not allowed
                     ordered.add(ItemStatAttributes.ATTRIBUTESTRINGMAP.get(attName));
                 }
                 ordered.sort(new ItemStatAttributes.Sort());
@@ -80,22 +83,13 @@ public class ItemNBT
             ItemStat stat = ItemStatMap.get(stack);
             if (stat != null) 
             {
-                List<ItemStatAttributes> ordered2 = new LinkedList<ItemStatAttributes>();
-                for (ItemStatAttributes att2 : stat.itemStats().keySet()) 
-                {
-                    ordered2.add(att2);
-                }
-                ordered2.sort(new ItemStatAttributes.Sort());
-                for (ItemStatAttributes att2 : ordered2) 
-                {
-                    map.put(att2, stat.itemStats().get(att2));
-                }
+            	return stat.itemStats();
             }
         }
         return map;
     }
     
-    public static void updateStatIncrease(ItemStatAttributes attribute, int amount, NBTTagCompound tag) 
+    public static void updateStatIncrease(IAttribute attribute, int amount, NBTTagCompound tag) 
     {
         int oldValue = tag.getCompoundTag("ItemStats").getInteger(attribute.getName());
         tag.getCompoundTag("ItemStats").setInteger(attribute.getName(), oldValue += amount);
@@ -133,7 +127,7 @@ public class ItemNBT
         List<ItemStack> list = new ArrayList<ItemStack>();
         if (tag != null) 
         {
-            NBTTagList nbtList = tag.getTagList("Upgrades", 10);
+            NBTTagList nbtList = tag.getTagList("Upgrades", Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < nbtList.tagCount(); ++i) 
             {
                 NBTTagCompound nbttagcompound = nbtList.getCompoundTagAt(i);
@@ -150,7 +144,7 @@ public class ItemNBT
         {
             float efficiency = 1.0f;
             float similar = 1.0f;
-            NBTTagList nbtList = tag.getTagList("Upgrades", 10);
+            NBTTagList nbtList = tag.getTagList("Upgrades", Constants.NBT.TAG_COMPOUND);
             NBTTagCompound nbttagcompound = new NBTTagCompound();
             //Searches for items, which are already applied to the itemstack. Reduces the efficiency for each identical item found.
             if (nbtList.tagCount() > 0) {
@@ -164,17 +158,16 @@ public class ItemNBT
                     }
                 }
             }
-            System.out.println(efficiency);
             nbtList.appendTag(writeItemNBTRaw(stackToAdd, nbttagcompound));
             tag.setTag("Upgrades", nbtList);
-            if (!(stackToAdd.getItem() instanceof IItemUsable)) 
+            if (!(stackToAdd.getItem() instanceof IItemWearable)) 
             {
                 ItemStat stat = ItemStatMap.get(stackToAdd);
                 if (stat != null) 
                 {
-                    for (ItemStatAttributes att : stat.itemStats().keySet()) 
+                    for (Entry<IAttribute, Integer> entry : stat.itemStats().entrySet()) 
                     {
-                        updateStatIncrease(att, Math.round(stat.itemStats().get(att) * efficiency), tag);
+                        updateStatIncrease(entry.getKey(), Math.round(entry.getValue() * efficiency), tag);
                     }
                 }
             }
@@ -184,7 +177,7 @@ public class ItemNBT
     /**
      * Only writes item and meta to nbt.
      */
-    private static NBTTagCompound writeItemNBTRaw(ItemStack stack, NBTTagCompound nbt) 
+    public static NBTTagCompound writeItemNBTRaw(ItemStack stack, NBTTagCompound nbt) 
     {
         ResourceLocation resourcelocation = Item.REGISTRY.getNameForObject(stack.getItem());
         nbt.setString("id", (resourcelocation == null) ? "minecraft:air" : resourcelocation.toString());
@@ -209,37 +202,44 @@ public class ItemNBT
     
     public static boolean initNBT(ItemStack stack) 
     {
-        ItemStat stat = ItemStatMap.get(stack);
-        if (stat != null) 
-        {
-            NBTTagCompound stackTag = stack.getTagCompound();
-            if (stackTag == null) 
-            {
-                stackTag = new NBTTagCompound();
-            }
-            NBTTagCompound compound = new NBTTagCompound();
-            compound.setInteger("ItemLevel", 1);
-            if (stack.getItem() instanceof IItemWearable) 
-            {
-                compound.setTag("Upgrades", new NBTTagList());
-                NBTTagCompound stats = new NBTTagCompound();
-                for (IAttribute att : stat.itemStats().keySet()) 
-                {
-                    stats.setInteger(att.getName(), (int)stat.itemStats().get(att));
-                }
-                compound.setTag("ItemStats", stats);
-                if (stack.getItem() instanceof IItemUsable) 
-                {
-                    compound.setString("Element", stat.element().getName());
-                }
-            }
-            stackTag.setTag(LibReference.MODID, compound);
-            stack.setTagCompound(stackTag);
-            return true;
-        }
-        return false;
+        return initNBT(stack, false);
     }
     
+    public static boolean initNBT(ItemStack stack, boolean forced) 
+    {
+    	 ItemStat stat = ItemStatMap.get(stack);
+         if (stat != null || forced) 
+         {
+             NBTTagCompound stackTag = stack.getTagCompound();
+             if (stackTag == null) 
+             {
+                 stackTag = new NBTTagCompound();
+             }
+             NBTTagCompound compound = new NBTTagCompound();
+             compound.setInteger("ItemLevel", 1);
+             if (stack.getItem() instanceof IItemWearable) 
+             {
+                 compound.setTag("Upgrades", new NBTTagList());
+                 if(stat!=null)
+                 {
+	                 NBTTagCompound stats = new NBTTagCompound();
+	                 for (Entry<IAttribute, Integer> entry : stat.itemStats().entrySet()) 
+	                 {
+	                     stats.setInteger(entry.getKey().getName(), entry.getValue());
+	                 }
+	                 compound.setTag("ItemStats", stats);
+	                 if (stack.getItem() instanceof IItemUsable) 
+	                 {
+	                     compound.setString("Element", stat.element().getName());
+	                 }
+                 }
+             }
+             stackTag.setTag(LibReference.MODID, compound);
+             stack.setTagCompound(stackTag);
+             return true;
+         }
+         return false;
+    }
     /**
      * From Forges CraftingHandler, but returns the itemstacks stackTagCompound
      */

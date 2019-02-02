@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.lwjgl.input.Mouse;
 
 import com.flemmli97.runecraftory.api.entities.IShop;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.inventory.ContainerShop;
 import com.flemmli97.runecraftory.common.lib.LibReference;
@@ -58,14 +58,11 @@ public class GuiShop extends GuiContainer
         this.rightDelay = 25;
         this.shop = shop;
         this.playerInv = player.inventory;
-        this.cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+        this.cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        if (this.cap == null) {
-            return;
-        }
         this.mc.getTextureManager().bindTexture(texturepath);
         this.drawTexturedModalRect(this.guiX, this.guiY, 0, 0, 256, 256);
         drawEntityOnScreen(this.guiX + 209, this.guiY + 175, 60, this.guiX + 209 - mouseX, this.guiY + 175 - 100 - mouseY, (EntityLivingBase)this.shop.shopOwner());
@@ -89,10 +86,7 @@ public class GuiShop extends GuiContainer
         boolean shopSlot = this.isShopSlot();
         this.leftClick = (Mouse.isButtonDown(0) && shopSlot);
         this.rightClick = (Mouse.isButtonDown(1) && shopSlot);
-        int n = 0;
-        int clickDelay = this.clickDelay - 1;
-        this.clickDelay = clickDelay;
-        this.clickDelay = Math.max(n, clickDelay);
+        this.clickDelay = Math.max(0, --this.clickDelay);
         if (this.leftClick) {
             this.rightDelay = 25;
             if (this.clickDelay == 0 && (this.leftDelay == 0 || this.leftDelay == 25)) {

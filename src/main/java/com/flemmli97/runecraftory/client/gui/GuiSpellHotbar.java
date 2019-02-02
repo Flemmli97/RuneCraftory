@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.client.gui;
 
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
 
 import net.minecraft.client.Minecraft;
@@ -31,7 +31,7 @@ public class GuiSpellHotbar extends Gui
     {
         if (this.mc.getRenderViewEntity() instanceof EntityPlayer && !this.mc.playerController.isSpectator()) 
         {
-            InventorySpells inv = this.mc.player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null).getInv();
+            InventorySpells inv = this.mc.player.getCapability(PlayerCapProvider.PlayerCap, null).getInv();
             EntityPlayer entityplayer = (EntityPlayer)this.mc.getRenderViewEntity();
             GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
             this.mc.getTextureManager().bindTexture(WIDGETS_TEX_PATH);

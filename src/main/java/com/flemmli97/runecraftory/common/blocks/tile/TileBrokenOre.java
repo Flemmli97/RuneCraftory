@@ -1,9 +1,9 @@
 package com.flemmli97.runecraftory.common.blocks.tile;
 
 import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
-import com.flemmli97.runecraftory.common.blocks.BlockMineral;
-import com.flemmli97.runecraftory.common.init.ModBlocks;
+import com.flemmli97.runecraftory.common.utils.MineralBlockConverter;
 
+import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -22,7 +22,12 @@ public class TileBrokenOre extends TileEntity implements ITickable{
 	public void update() {
 		if(Math.abs(this.world.getWorldTime()/24000 - this.time/24000)>=1 || this.world.getWorldTime()%24000==1)
 		{
-			this.world.setBlockState(pos, ModBlocks.mineral.getDefaultState().withProperty(BlockMineral.TIER, this.world.getBlockState(this.pos).getValue(BlockBrokenMineral.TIER)));
+			Block block = this.world.getBlockState(this.pos).getBlock();
+			if(block instanceof BlockBrokenMineral)
+			{
+				BlockBrokenMineral mineral = (BlockBrokenMineral) block;
+				this.world.setBlockState(pos, MineralBlockConverter.getRestoredState(mineral.getTier()));
+			}
 		}
 	}
 

@@ -1,0 +1,48 @@
+{
+  "runecraftory:wooly": {
+    "biomes": [],
+    "biomeTypes": [
+      "PLAINS",
+      "BEACH",
+      "CONIFEROUS",
+      "FOREST",
+      "HILLS",
+      "MAGICAL",
+      "MOUNTAIN",
+      "SAVANNA"
+    ]
+  },
+  "runecraftory:orc": {
+    "biomes": [],
+    "biomeTypes": [
+      "PLAINS",
+      "BEACH",
+      "CONIFEROUS",
+      "FOREST",
+      "HILLS",
+      "MAGICAL",
+      "MOUNTAIN",
+      "SAVANNA"
+    ]
+  },
+  "runecraftory:ant": {
+    "biomes": [],
+    "biomeTypes": [
+      "PLAINS",
+      "CONIFEROUS",
+      "FOREST",
+      "HILLS",
+      "SAVANNA",
+      "LUSH"
+    ]
+  },
+  "runecraftory:beetle": {
+    "biomes": [],
+    "biomeTypes": [
+      "PLAINS",
+      "FOREST",
+      "HILLS",
+      "LUSH"
+    ]
+  }
+}

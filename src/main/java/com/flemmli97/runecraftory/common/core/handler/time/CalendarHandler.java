@@ -90,10 +90,10 @@ public class CalendarHandler extends WorldSavedData{
 	
 	public static enum EnumSeason
 	{
-		SPRING("red", "Spring"),
-		SUMMER("dark_green", "Summer"),
-		FALL("gold", "Fall"),
-		WINTER("white", "Winter");
+		SPRING("red", "season.spring"),
+		SUMMER("dark_green", "season.summer"),
+		FALL("gold", "season.fall"),
+		WINTER("blue", "season.winter");
 		private String color, id;
 		EnumSeason(String color, String id)
 		{

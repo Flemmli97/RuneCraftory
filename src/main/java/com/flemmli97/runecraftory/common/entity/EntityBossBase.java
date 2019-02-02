@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -50,6 +51,25 @@ public abstract class EntityBossBase extends EntityMobBase
             this.updateplayers();
             this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
         }
+    }
+    
+    @Override
+    protected void damageEntity(DamageSource damageSrc, float damageAmount) {
+    	super.damageEntity(damageSrc, damageAmount);
+    	if(this.getHealth()/this.getMaxHealth()<0.5)
+    		this.setEnraged(true);
+    }
+    
+    @Override
+    public void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        compound.setBoolean("Enraged", this.isEnraged());
+    }
+
+    @Override
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        this.setEnraged(compound.getBoolean("Enraged"));
     }
     
     @Override

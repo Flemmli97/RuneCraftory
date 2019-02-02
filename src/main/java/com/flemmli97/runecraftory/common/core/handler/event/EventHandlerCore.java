@@ -5,13 +5,15 @@ import java.util.List;
 import com.flemmli97.runecraftory.api.entities.IEntityAdvanced;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.items.CropProperties;
+import com.flemmli97.runecraftory.api.items.FoodProperties;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.api.mappings.CropMap;
+import com.flemmli97.runecraftory.api.mappings.ItemFoodMap;
 import com.flemmli97.runecraftory.common.blocks.tile.TileFarmland;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayerAnim;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.core.handler.config.ConfigHandler;
 import com.flemmli97.runecraftory.common.core.handler.quests.IObjective;
 import com.flemmli97.runecraftory.common.core.handler.quests.ObjectiveKill;
 import com.flemmli97.runecraftory.common.core.handler.quests.QuestMission;
@@ -20,16 +22,19 @@ import com.flemmli97.runecraftory.common.core.handler.time.WeatherData;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.entity.ai.EntityAIDisable;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
+import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.init.PotionRegistry;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.network.PacketCalendar;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.common.network.PacketJump;
 import com.flemmli97.runecraftory.common.network.PacketUpdateClient;
-import com.flemmli97.runecraftory.common.network.PacketWeaponHit;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
+import com.flemmli97.tenshilib.common.config.ConfigUtils.LoadState;
+import com.flemmli97.tenshilib.common.events.AOEAttackEvent;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
@@ -41,10 +46,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -58,6 +68,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
@@ -68,6 +79,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -80,16 +92,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EventHandlerCore
 {
     public static final ResourceLocation PlayerCap = new ResourceLocation(LibReference.MODID, "playerCap");
-    public static final ResourceLocation PlayerAnim = new ResourceLocation(LibReference.MODID, "playerAnim");
     
     @SubscribeEvent
     public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof EntityPlayer) 
         {
-            event.addCapability(EventHandlerCore.PlayerCap, new CapabilityProvider.PlayerCapProvider());
-            event.addCapability(EventHandlerCore.PlayerAnim, new CapabilityProvider.PlayerCapProvider());
+            event.addCapability(EventHandlerCore.PlayerCap, new PlayerCapProvider());
         }
     }
+    
+	@SubscribeEvent
+	public void config(OnConfigChangedEvent event)
+	{
+		if(event.getModID().equals(LibReference.MODID))
+			ConfigHandler.load(LoadState.SYNC);
+	}
     
     @SubscribeEvent
     public void loot(LootTableLoadEvent event) 
@@ -105,7 +122,7 @@ public class EventHandlerCore
         if (event.player instanceof EntityPlayerMP) 
         {
             EntityPlayer player = event.player;
-            IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+            IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
             if (capSync != null) 
                 PacketHandler.sendTo(new PacketUpdateClient(capSync), (EntityPlayerMP)player);
             PacketHandler.sendTo(new PacketCalendar(CalendarHandler.get(event.player.world)), (EntityPlayerMP)player);
@@ -127,11 +144,7 @@ public class EventHandlerCore
             if (event.getEntity() instanceof EntityPlayerMP) 
             {
                 EntityPlayer player = (EntityPlayer)event.getEntity();
-                IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
-                if (capSync != null) 
-                {
-                    PacketHandler.sendTo(new PacketUpdateClient(capSync), (EntityPlayerMP)player);
-                }
+                PacketHandler.sendTo(new PacketUpdateClient(player.getCapability(PlayerCapProvider.PlayerCap, null)), (EntityPlayerMP)player);
             }
             else if (event.getEntity() instanceof EntityLiving) 
             {
@@ -151,28 +164,22 @@ public class EventHandlerCore
         if (event.getTarget() instanceof EntityLivingBase && player.getHeldItemMainhand().getItem() instanceof IItemUsable) 
         {
             event.setCanceled(true);
-            IItemUsable item = (IItemUsable)player.getHeldItemMainhand().getItem();
-            List<EntityLivingBase> entityList = RFCalculations.calculateEntitiesFromLook(player, item.getWeaponType().getRange(), item.getWeaponType().getAOE());
-            if (!entityList.isEmpty()) 
-            {
-                for (int i = 0; i < entityList.size(); ++i) 
-                {
-                    RFCalculations.doPlayerAttack(player, entityList.get(i), i == entityList.size() - 1, true, i == entityList.size() - 1);
-                }
-            }
-            else 
-            {
-                RFCalculations.doPlayerAttack(player, (EntityLivingBase)event.getTarget(), true, true, true);
-            }
+        	RFCalculations.doPlayerAttack(player, (EntityLivingBase)event.getTarget(), true, true, true);
         }
     }
     
     @SubscribeEvent
-    public void extendedReach(PlayerInteractEvent.LeftClickEmpty event) {
-        ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
-        if (stack != null && stack.getItem() instanceof IItemUsable) 
+    public void playerAttack(AOEAttackEvent event) 
+    {
+    	EntityPlayer player = event.getEntityPlayer();
+        if (player.getHeldItemMainhand().getItem() instanceof IItemUsable) 
         {
-            PacketHandler.sendToServer(new PacketWeaponHit());
+            event.setCanceled(true);
+            List<EntityLivingBase> entityList = event.attackList();
+            for (int i = 0; i < entityList.size(); ++i) 
+            {
+                RFCalculations.doPlayerAttack(player, entityList.get(i), i == entityList.size() - 1, true, i == entityList.size() - 1);
+            }
         }
     }
     
@@ -208,6 +215,16 @@ public class EventHandlerCore
         }
     }
     
+    @SubscribeEvent
+    public void updateEquipment(LivingEquipmentChangeEvent event)
+    {
+    	if(event.getEntityLiving() instanceof EntityPlayer)
+    	{
+        	IPlayer cap = event.getEntityLiving().getCapability(PlayerCapProvider.PlayerCap, null);
+        	cap.updateEquipmentStats((EntityPlayer) event.getEntityLiving(), event.getSlot());
+    	}
+    }
+    
     /**
      * Reroutes appropriate damage sources to this mods calculation (for players)
      */
@@ -226,7 +243,7 @@ public class EventHandlerCore
         else if (event.getSource().damageType.equals("rfExhaust") && event.getEntityLiving() instanceof EntityPlayer) 
         {
             event.setCanceled(true);
-            IPlayer capSync = event.getEntityLiving().getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+            IPlayer capSync = event.getEntityLiving().getCapability(PlayerCapProvider.PlayerCap, null);
             capSync.damage((EntityPlayer)event.getEntityLiving(), CustomDamage.EXHAUST, event.getAmount());
         }
     }
@@ -238,7 +255,7 @@ public class EventHandlerCore
         {
             float oldDamage = event.getAmount();
             event.setAmount(0.0f);
-            IPlayer capSync = event.getEntityLiving().getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+            IPlayer capSync = event.getEntityLiving().getCapability(PlayerCapProvider.PlayerCap, null);
             float damage = capSync.getMaxHealth() / event.getEntityLiving().getMaxHealth() * oldDamage;
             capSync.damage((EntityPlayer)event.getEntityLiving(), event.getSource(), damage);
         }
@@ -248,7 +265,7 @@ public class EventHandlerCore
     public void refreshRunePoints(PlayerWakeUpEvent event) {
         if (event.getEntityPlayer() != null) 
         {
-            IPlayer capSync = event.getEntityPlayer().getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+            IPlayer capSync = event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null);
             capSync.refreshRunePoints(event.getEntityPlayer(), capSync.getMaxRunePoints());
             capSync.setHealth(event.getEntityPlayer(), capSync.getMaxHealth());
             event.getEntityPlayer().clearActivePotions();
@@ -263,20 +280,61 @@ public class EventHandlerCore
     {
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer)event.getEntityLiving();
-            IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
-            ((IPlayerAnim)player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerAnim, null)).update(player);
+            IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
+            capSync.update(player);
             capSync.getInv().update(player);
             int food = player.isPotionActive(PotionRegistry.paralysis) ? 3 : 7;
             player.getFoodStats().setFoodLevel(food);
+            if(player.isPotionActive(MobEffects.HUNGER))
+            {
+            	player.removePotionEffect(MobEffects.HUNGER);
+            	player.addPotionEffect(new PotionEffect(PotionRegistry.poison, 600, 1));
+            }
         }
     }
     
     @SubscribeEvent
     public void playerDeath(LivingDeathEvent event) 
     {
+    	if(!event.getSource().canHarmInCreative())
+    	{
+    		ItemStack prevent=null;
+    		for(ItemStack stack : event.getEntityLiving().getEquipmentAndArmor())
+    		{
+    			if(stack.getItem()==ModItems.lawn)
+    			{
+    				prevent=stack;
+    				break;
+    			}
+    		}
+    		if(prevent==null && event.getEntityLiving() instanceof EntityPlayer)
+    		{
+                EntityPlayer player = (EntityPlayer)event.getEntityLiving();
+                for(ItemStack stack : player.inventory.mainInventory)
+        		{
+                	if(stack.getItem()==ModItems.lawn)
+        			{
+        				prevent=stack;
+                		break;
+        			}
+        		}
+    		}
+    		if(prevent!=null)
+    		{
+    			if (event.getEntityLiving() instanceof EntityPlayerMP)
+                {
+                    EntityPlayerMP entityplayermp = (EntityPlayerMP)event.getEntityLiving();
+                    entityplayermp.addStat(StatList.getObjectUseStats(Items.TOTEM_OF_UNDYING));
+                    CriteriaTriggers.CONSUME_ITEM.trigger(entityplayermp, prevent);
+                }
+    			event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth()*0.33f);
+    			event.getEntityLiving().clearActivePotions();
+    			event.getEntityLiving().world.setEntityState(event.getEntityLiving(), (byte)35);
+    		}
+    	}
         if (event.getEntityLiving() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer)event.getEntityLiving();
-            IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+            IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
             capSync.getInv().dropItemsAt((EntityLivingBase)player);
             if (!player.world.isRemote) {
                 PacketHandler.sendTo(new PacketUpdateClient(capSync), (EntityPlayerMP)player);
@@ -289,13 +347,13 @@ public class EventHandlerCore
     {
         if (event.isWasDeath()) 
         {
-            IPlayer capSync = event.getOriginal().getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+            IPlayer capSync = event.getOriginal().getCapability(PlayerCapProvider.PlayerCap, null);
             capSync.useMoney(event.getOriginal(), (int)(capSync.getMoney() * 0.2));
             NBTTagCompound oldNBT = new NBTTagCompound();
             capSync.writeToNBT(oldNBT, true);
-            event.getEntityPlayer().getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null).readFromNBT(oldNBT);
+            event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null).readFromNBT(oldNBT);
             if (!event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP) {
-                PacketHandler.sendTo(new PacketUpdateClient(event.getEntityPlayer().getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null)), (EntityPlayerMP)event.getEntityPlayer());
+                PacketHandler.sendTo(new PacketUpdateClient(event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null)), (EntityPlayerMP)event.getEntityPlayer());
             }
         }
     }
@@ -314,21 +372,14 @@ public class EventHandlerCore
             BlockCrops crop = (BlockCrops)state.getBlock();
             if (crop.isMaxAge(state)) 
             {
-                CropProperties props = CropMap.getProperties(crop.getItem(player.world, event.getPos(), state).getItem().getRegistryName());
+                CropProperties props = CropMap.getProperties(crop.getItem(player.world, event.getPos(), state));
                 if (!player.world.isRemote) 
                 {
                     crop.harvestBlock(player.world, player, event.getPos(), state, (TileEntity)null, ItemStack.EMPTY);
                 }
-                if (props != null) 
+                if (props != null && props.regrowable()) 
                 {
-                    if (props.regrowable()) 
-                    {
-                        player.world.setBlockState(event.getPos(), crop.withAge(0), 2);
-                    }
-                    else 
-                    {
-                        player.world.setBlockToAir(event.getPos());
-                    }
+                    player.world.setBlockState(event.getPos(), crop.withAge(0), 2);
                 }
                 else 
                 {
@@ -351,16 +402,14 @@ public class EventHandlerCore
         if (state.getBlock() instanceof BlockCrops) 
         {
             BlockCrops crop = (BlockCrops)state.getBlock();
-            int amount = 1;
-            CropProperties props = CropMap.getProperties(crop.getItem(event.getWorld(), event.getPos(), state).getItem().getRegistryName());
+            CropProperties props = CropMap.getProperties(crop.getItem(event.getWorld(), event.getPos(), state));
             if (props != null) 
             {
-                amount = props.maxDrops();
-            }
-            event.getDrops().clear();
-            if (crop.isMaxAge(state)) 
-            {
-                event.getDrops().add(new ItemStack(crop.getItemDropped(state, event.getWorld().rand, 0), amount, crop.damageDropped(state)));
+                event.getDrops().clear();
+                if (crop.isMaxAge(state)) 
+                {
+                    event.getDrops().add(new ItemStack(crop.getItemDropped(state, event.getWorld().rand, 0), props.maxDrops(), crop.damageDropped(state)));
+                }
             }
         }
     }
@@ -381,7 +430,7 @@ public class EventHandlerCore
                     //DailyBlockTickHandler.instance((WorldServer)world).update(world);
                     for (EntityPlayer player : world.playerEntities) 
                     {
-                        player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null).getShippingInv().shipItems(player);
+                        player.getCapability(PlayerCapProvider.PlayerCap, null).getShippingInv().shipItems(player);
                     }
                 }
                 CalendarHandler.get(worlds[0]).increaseDay();           
@@ -405,7 +454,7 @@ public class EventHandlerCore
         if (event.getSource().getTrueSource() instanceof EntityPlayer) 
         {
             EntityPlayer player = (EntityPlayer)event.getSource().getTrueSource();
-            IPlayer cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+            IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
             QuestMission quest = cap.currentMission();
             if (quest != null && quest.questObjective() instanceof ObjectiveKill) 
             {
@@ -431,15 +480,58 @@ public class EventHandlerCore
         }
     }
     
+	
+	@SubscribeEvent
+	public void test(PlayerInteractEvent.LeftClickBlock event)
+	{
+		//event.setCanceled(true);
+	}
+	
+	@SubscribeEvent
+	public void test(PlayerInteractEvent.RightClickBlock event)
+	{
+		//event.getEntityPlayer().capabilities.allowEdit=false;
+	
+	}
+    
     /**
      * Food handling. Modifies benefits from eating food (Hp, rp gain etc.)
      */
     @SubscribeEvent
     public void foodHandling(LivingEntityUseItemEvent.Finish event)
     {
-        if (event.getItem().getItem() instanceof ItemFood) 
+        if (event.getItem().getItem() instanceof ItemFood && !event.getEntityLiving().world.isRemote) 
         {
-        	
+        	FoodProperties prop = ItemFoodMap.get(event.getItem());
+        	if(prop==null)
+        		return;
+    		EntityLivingBase e = event.getEntityLiving();
+    		if(e instanceof EntityPlayer)
+    		{
+    			EntityPlayer player = (EntityPlayer) e;
+                player.getCooldownTracker().setCooldown(event.getItem().getItem(), 3);
+	        	IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
+	        	cap.applyFoodEffect(player, prop.effects(), prop.effectsMultiplier(), prop.duration());
+	        	cap.regenHealth(player, prop.getHPGain());
+	        	cap.refreshRunePoints(player, cap.getRunePoints()+prop.getRPRegen());
+	        	cap.regenHealth(player, cap.getMaxHealth()*prop.getHpPercentGain()*0.01F);
+	        	cap.refreshRunePoints(player, (int) (cap.getRunePoints()+cap.getMaxRunePoints()*prop.getRpPercentRegen()*0.01));
+    		}
+    		else if(e instanceof IEntityBase)
+    		{
+   				 ((IEntityBase)e).applyFoodEffect(event.getItem());
+    		}
+    		if(prop.potionHeals()!=null)
+    			for(String s : prop.potionHeals())
+    			{
+    				event.getEntityLiving().removePotionEffect(Potion.getPotionFromResourceLocation(s));
+    			}
+    		if(prop.potionApply()!=null)
+    			for(String s : prop.potionApply())
+    			{
+    				String[] sub = s.split(";");
+    				event.getEntityLiving().addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation(sub[0]), sub.length<2?600:Integer.parseInt(sub[1]), sub.length<3?1:Integer.parseInt(sub[2])));
+    			}
         }
     }
     

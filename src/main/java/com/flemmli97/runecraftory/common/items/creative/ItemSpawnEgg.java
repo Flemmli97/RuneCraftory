@@ -10,16 +10,15 @@ import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.init.EntitySpawnEggList;
 import com.flemmli97.runecraftory.common.init.GateSpawning;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
-import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -41,11 +40,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSpawnEgg extends Item implements IModelRegister{
+public class ItemSpawnEgg extends Item{
 	
 	public ItemSpawnEgg()
 	{
@@ -54,26 +50,16 @@ public class ItemSpawnEgg extends Item implements IModelRegister{
 		this.setRegistryName(new ResourceLocation(LibReference.MODID, "spawn_egg"));
 		this.setUnlocalizedName(this.getRegistryName().toString());
 	}
-
-	@Override
-	public String getUnlocalizedName() {
-		return this.getRegistryName().toString();
-	}
-	
-	@Override
-	public String getUnlocalizedName(ItemStack stack) {
-		return this.getRegistryName().toString();
-	}
 	
 	@Override
 	public String getItemStackDisplayName(ItemStack stack)
     {
         String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
-		String entityName = getEntityIdFromItem(stack);
+        ResourceLocation entityName = getEntityIdFromItem(stack);
 
         if (entityName != null)
         {
-            s = s + " " + I18n.format("entity." + entityName.replaceAll("runecraftory:", "")  + ".name");
+            s = s + " " + I18n.format("entity." + entityName.toString().replaceAll("runecraftory:", "")  + ".name");
         }
 
         return s;
@@ -112,7 +98,7 @@ public class ItemSpawnEgg extends Item implements IModelRegister{
                 if (tileentity instanceof TileEntityMobSpawner)
                 {
                     MobSpawnerBaseLogic mobspawnerbaselogic = ((TileEntityMobSpawner)tileentity).getSpawnerBaseLogic();
-                    mobspawnerbaselogic.setEntityId(new ResourceLocation(getEntityIdFromItem(player.getHeldItem(hand))));
+                    mobspawnerbaselogic.setEntityId(getEntityIdFromItem(player.getHeldItem(hand)));
                     tileentity.markDirty();
                     world.notifyBlockUpdate(pos, iblockstate, iblockstate, 3);
 
@@ -224,19 +210,18 @@ public class ItemSpawnEgg extends Item implements IModelRegister{
     }
 
     @Nullable
-
-    public static EntityMobBase spawnCreature(String entityName, World world, double x, double y, double z, int level)
+    public static EntityMobBase spawnCreature(ResourceLocation entityName, World world, double x, double y, double z, int level)
     {
-    		EntityMobBase entityliving = GateSpawning.entityFromString(world, entityName);
+		EntityMobBase entityliving = GateSpawning.entityFromString(world, entityName);
         if (!world.isRemote)
         {
-        		entityliving.setLevel(level);
-        		entityliving.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
-            entityliving.rotationYawHead = entityliving.rotationYaw;
-            entityliving.renderYawOffset = entityliving.rotationYaw;
-            entityliving.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entityliving)), (IEntityLivingData)null);
-            world.spawnEntity(entityliving);
-            entityliving.playLivingSound();
+    		entityliving.setLevel(level);
+    		entityliving.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
+	        entityliving.rotationYawHead = entityliving.rotationYaw;
+	        entityliving.renderYawOffset = entityliving.rotationYaw;
+	        entityliving.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(entityliving)), (IEntityLivingData)null);
+	        world.spawnEntity(entityliving);
+	        entityliving.playLivingSound();
         }
         return entityliving;
     }
@@ -244,13 +229,13 @@ public class ItemSpawnEgg extends Item implements IModelRegister{
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-    		if(tab==RuneCraftory.monsters)
-	        for (EntitySpawnEggList.EntityEggInfo eggEntity  : EntitySpawnEggList.entityEggs.values())
-	        {            
-	        		ItemStack stack = new ItemStack(this, 1);
-	        		applyEntityIdToItemStack(stack, eggEntity.spawnedID);
-	        		items.add(stack);
-	        }
+		if(tab==RuneCraftory.monsters)
+        for (EntityList.EntityEggInfo eggEntity  : EntitySpawnEggList.entityEggs.values())
+        {            
+    		ItemStack stack = new ItemStack(this, 1);
+    		applyEntityIdToItemStack(stack, eggEntity.spawnedID);
+    		items.add(stack);
+        }
     }
 
     public static void applyEntityIdToItemStack(ItemStack stack, ResourceLocation entityId)
@@ -261,19 +246,14 @@ public class ItemSpawnEgg extends Item implements IModelRegister{
     }
 
     @Nullable
-    public static String getEntityIdFromItem(ItemStack stack)
+    public static ResourceLocation getEntityIdFromItem(ItemStack stack)
     {
         NBTTagCompound nbttagcompound = stack.getTagCompound();
 
         if (nbttagcompound != null && nbttagcompound.hasKey("entity"))
         {
-            return nbttagcompound.getString("entity");
+            return new ResourceLocation(nbttagcompound.getString("entity"));
         }
         return null;
     }
-       
-	 @SideOnly(Side.CLIENT)
-	    public void initModel() {
-	        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
-	    }
 }

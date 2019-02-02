@@ -39,7 +39,7 @@ public class RecipeSextuple
         }
         else 
         {
-            LibReference.logger.error("Invalid recipe: length: " + ing.length);
+            LibReference.logger.error("Invalid recipe: length {}", ing.length);
         }
     }
     

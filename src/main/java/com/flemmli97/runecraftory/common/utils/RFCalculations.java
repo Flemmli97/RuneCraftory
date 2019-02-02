@@ -1,10 +1,6 @@
 package com.flemmli97.runecraftory.common.utils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-
-import javax.annotation.Nullable;
 
 import com.flemmli97.runecraftory.api.entities.IEntityAdvanced;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
@@ -13,13 +9,12 @@ import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.init.PotionRegistry;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
+import com.flemmli97.tenshilib.api.item.IAOEWeapon;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -28,18 +23,16 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -56,89 +49,6 @@ public class RFCalculations
     }
     
     /**
-     * Raytracing entities
-     */
-    public static List<EntityLivingBase> calculateEntitiesFromLook(EntityPlayer player, float reach, float aoe) 
-    {
-        List<EntityLivingBase> theList = new ArrayList<EntityLivingBase>();
-        for (EntityLivingBase nearby : player.world.getEntitiesWithinAABB(EntityLivingBase.class, player.getEntityBoundingBox().grow(reach))) 
-        {
-            if (nearby != player && nearby.canBeCollidedWith() && player.canEntityBeSeen(nearby) && 
-            		(aoe > 27.0f || isTargetInFrontOf(player, nearby, aoe * 10.0f)) && 
-            		!theList.contains(nearby) && !nearby.isOnSameTeam(player) && nearby.getDistance(player) <= reach) 
-            {
-                theList.add(nearby);
-            }
-        }
-        return theList;
-    }
-    
-    public static boolean isTargetInFrontOf(EntityLivingBase player, EntityLivingBase target, float fov) 
-    {
-        double dx = target.posX - player.posX;
-        double dz = target.posZ - player.posZ;
-        double dy = target.posY + target.height / 2.0f;
-        double dis = player.getPositionEyes(1.0f).squareDistanceTo(target.posX, dy, target.posZ);
-        double heightDif = player.posY + player.getEyeHeight() - dy;
-        if (heightDif == 0.0)
-            heightDif = 0.001;
-        if (dx == 0.0 && dz == 0.0)
-            dx = 0.001;
-        while (player.rotationYaw > 360.0f) {
-            player.rotationYaw -= 360.0f;
-        }
-        while (player.rotationYaw < -360.0f) {
-            player.rotationYaw += 360.0f;
-        }
-        float yaw = (float)(Math.atan2(dz, dx) * 180.0 / 3.141592653589793) - player.rotationYaw;
-        yaw -= 90.0f;
-        float pitchFov = (float)(Math.asin(heightDif / dis) * 180.0 / 3.141592653589793);
-        pitchFov -= 32.0f;
-        while (yaw < -180.0f) {
-            yaw += 360.0f;
-        }
-        while (yaw >= 180.0f) {
-            yaw -= 360.0f;
-        }
-        return yaw < fov && yaw > -fov && (player.rotationPitch >= 0.0f || pitchFov < player.rotationPitch);
-    }
-    
-    @Nullable
-    public static EntityLivingBase calculateSingleEntityFromLook(EntityPlayer player, float reach) {
-        EntityLivingBase result = null;
-        if (player.world != null) 
-        {
-            Vec3d posVec = player.getPositionEyes(1.0f);
-            Vec3d look = player.getLook(1.0f);
-            Vec3d rangeVec = posVec.addVector(look.x * reach, look.y * reach, look.z * reach);
-            List<EntityLivingBase> list = player.world.getEntitiesWithinAABB(EntityLivingBase.class, player.getEntityBoundingBox().expand(look.x * reach, look.y * reach, look.z * reach).expand(1.0, 1.0, 1.0), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<EntityLivingBase>() {
-                public boolean apply(EntityLivingBase entity) {
-                    return entity != null && entity.canBeCollidedWith() && entity != player;
-                }
-            }));
-            for (int i = 0; i < list.size(); ++i) 
-            {
-                EntityLivingBase entity1 = list.get(i);
-                AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(entity1.getCollisionBorderSize());
-                RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(posVec, rangeVec);
-                if (raytraceresult != null) 
-                {
-                    double d3 = posVec.distanceTo(raytraceresult.hitVec);
-                    if (d3 < reach) 
-                    {
-                        result = entity1;
-                    }
-                }
-            }
-            if (result != null) 
-            {
-                return result;
-            }
-        }
-        return result;
-    }
-    
-    /**
      * The player attack
      * @param player the attacking player
      * @param target the target
@@ -148,13 +58,12 @@ public class RFCalculations
      */
     public static boolean doPlayerAttack(EntityPlayer player, EntityLivingBase target, boolean resetCooldown, boolean playSound, boolean levelSkill) 
     {
-        IPlayer cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+        IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
         ItemStack stack = player.getHeldItemMainhand();
         IItemUsable item = (IItemUsable)stack.getItem();
         if (target.canBeAttackedWithItem() && !target.hitByEntity(player)) {
         	//Gather damage from player
-            float damagePhys = cap.getStr();
-            damagePhys += getAttributeValue(player, ItemStatAttributes.RFATTACK, null, null);
+            float damagePhys = getAttributeValue(player, ItemStatAttributes.RFATTACK, null, null);
             float coolDown = player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f);
             //If cooldown isnt finished disable further processing. 
             if (coolDown > 0.0f) {
@@ -212,21 +121,21 @@ public class RFCalculations
                         {
                             player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0f, 1.0f);
                         }
-                        player.onCriticalHit((Entity)target);
-                        player.onEnchantmentCritical((Entity)target);
+                        player.onCriticalHit(target);
+                        player.onEnchantmentCritical(target);
                     }
-                    else if (item.getWeaponType().getAOE() == 0.0f && playSound) 
+                    else if (stack.getItem() instanceof IAOEWeapon && ((IAOEWeapon)stack.getItem()).getFOV() == 0.0f && playSound) 
                     {
-                        player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0f, 1.0f);
+                        player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0f, 1.0f);
                     }
                     else if (playSound) 
                     {
-                        player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0f, 1.0f);
+                        player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0f, 1.0f);
                     }
                 }
                 else if (playSound) 
                 {
-                    player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, player.getSoundCategory(), 1.0f, 1.0f);
+                    player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, player.getSoundCategory(), 1.0f, 1.0f);
                 }
                 return true;
             }
@@ -320,31 +229,16 @@ public class RFCalculations
         int increase = 0;
         if (entity instanceof EntityPlayer) 
         {
-            if (entity.getHeldItemMainhand().getItem() instanceof IItemUsable && ItemNBT.statIncrease(entity.getHeldItemMainhand()).get(att) != null) {
-                increase += ItemNBT.statIncrease(entity.getHeldItemMainhand()).get(att);
-            }
-            for (ItemStack equip : entity.getArmorInventoryList()) 
-            {
-                if (!equip.isEmpty() && equip.getItem() instanceof IItemWearable && ItemNBT.statIncrease(equip).get(att) != null) 
-                {
-                    increase += ItemNBT.statIncrease(equip).get(att);
-                }
-            }
-            if (entity.getHeldItemOffhand().getItem() instanceof IItemWearable && !(entity.getHeldItemOffhand().getItem() instanceof IItemUsable) && ItemNBT.statIncrease(entity.getHeldItemOffhand()).get(att) != null) 
-            {
-                increase += ItemNBT.statIncrease(entity.getHeldItemOffhand()).get(att);
-            }
+        	IPlayer cap = entity.getCapability(PlayerCapProvider.PlayerCap, null);
+        	increase+=cap.getAttributeValue(att);
         }
         else if (entity instanceof IEntityBase && entity.getAttributeMap().getAttributeInstance(att) != null) 
         {
             increase += (int)entity.getAttributeMap().getAttributeInstance(att).getAttributeValue();
         }
-        if (target instanceof IEntityBase) 
+        if (target instanceof IEntityBase && target.getAttributeMap().getAttributeInstance(resAtt) != null) 
         {
-            if (target.getAttributeMap().getAttributeInstance(resAtt) != null) 
-            {
-                increase -= (int)target.getAttributeMap().getAttributeInstance(resAtt).getAttributeValue();
-            }
+            increase -= (int)target.getAttributeMap().getAttributeInstance(resAtt).getAttributeValue();
         }
         else if (target instanceof IRFNpc || target instanceof EntityPlayer) 
         {
@@ -370,16 +264,22 @@ public class RFCalculations
     public static void getPlayerDamageReduction(EntityPlayer player, DamageSource source, float amount) 
     {
         float reduce = 0.0f;
-        IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
-        if (!source.isDamageAbsolute() && !source.isUnblockable()) 
+        IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
+        if (!source.isDamageAbsolute()) 
         {
-            if (source.isMagicDamage()) 
+        	if(!source.isUnblockable())
+        	{
+	            if (source.isMagicDamage()) 
+	                reduce = getAttributeValue(player, ItemStatAttributes.RFMAGICDEF, null, null);
+	            else 
+	                reduce = getAttributeValue(player, ItemStatAttributes.RFDEFENCE, null, null);
+        	}
+            if (player.isPotionActive(MobEffects.RESISTANCE) && source != DamageSource.OUT_OF_WORLD)
             {
-                reduce = capSync.getVit() * 0.5f + getAttributeValue(player, ItemStatAttributes.RFMAGICDEF, null, null);
-            }
-            else 
-            {
-                reduce = capSync.getVit() * 0.5f + getAttributeValue(player, ItemStatAttributes.RFDEFENCE, null, null);
+                int i = (player.getActivePotionEffect(MobEffects.RESISTANCE).getAmplifier() + 1) * 5;
+                int j = 25 - i;
+                float f = amount * (float)j;
+                amount = f / 25.0F;
             }
         }
         amount = Math.max(0.0f, amount - reduce);

@@ -7,8 +7,6 @@ import com.flemmli97.runecraftory.common.entity.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.google.common.base.Predicate;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -36,7 +34,7 @@ public class EntityAIAmbrosia extends EntityAIBase
     
     public boolean shouldContinueExecuting() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
-        return entitylivingbase != null && entitylivingbase.isEntityAlive() && this.attacker.isWithinHomeDistanceFromPosition(new BlockPos((Entity)entitylivingbase));
+        return entitylivingbase != null && entitylivingbase.isEntityAlive() && this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase));
     }
     
     public void resetTask() {
@@ -45,8 +43,8 @@ public class EntityAIAmbrosia extends EntityAIBase
     
     public void updateTask() {
         EntityLivingBase target = this.attacker.getAttackTarget();
-        double dis = this.attacker.getDistanceSq((Entity)target);
-        this.attackTicker = Math.max(this.attackTicker - 1, 0);
+        double dis = this.attacker.getDistanceSq(target);
+        this.attackTicker = Math.max(--this.attackTicker, 0);
         this.moveDelay = Math.max(this.moveDelay - 1, 0);
         if (this.attacker.getStatus() == EntityAmbrosia.AttackAI.IDDLE) {
             this.attackDelay = Math.max(this.attackDelay - 1, 0);
@@ -65,73 +63,74 @@ public class EntityAIAmbrosia extends EntityAIBase
             case BUTTERFLY: {
                 if (dis < 25.0 && this.moveDelay == 0 && this.attackTicker == 0) {
                     BlockPos pos = this.randomPosAwayFrom(target, 8.0f);
-                    this.attacker.getNavigator().tryMoveToXYZ((double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), 1.5);
+                    this.attacker.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 1.5);
                     this.moveDelay = 24 + this.attacker.getRNG().nextInt(7);
                 }
                 else if (this.attacker.getNavigator().noPath() && this.attackTicker == 0) {
                     this.attackTicker = this.attacker.getStatus().getDuration();
                 }
                 if (this.attackTicker > 0) {
-                    this.attacker.getLookHelper().setLookPositionWithEntity((Entity)target, 30.0f, 30.0f);
+                    this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
                 }
                 if (this.attackTicker > this.attacker.getStatus().getTime()) {
                     break;
                 }
                 this.attacker.summonButterfly();
                 if (this.attackTicker == 1) {
-                    this.attackDelay = 64 + this.attacker.getRNG().nextInt(12);
+                    this.attackDelay = 44 + this.attacker.getRNG().nextInt(12);
                     break;
                 }
                 break;
             }
             case IDDLE: {
-                this.attacker.getLookHelper().setLookPositionWithEntity((Entity)target, 30.0f, 30.0f);
+                this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
                 if (dis <= 64.0) {
-                    Vec3d rand = RandomPositionGenerator.findRandomTarget((EntityCreature)this.attacker, 5, 4);
+                    Vec3d rand = RandomPositionGenerator.findRandomTarget(this.attacker, 5, 4);
                     if (rand != null) {
                         this.attacker.getNavigator().tryMoveToXYZ(rand.x, rand.y, rand.z, 1.5);
-                        this.moveDelay = 44 + this.attacker.getRNG().nextInt(7);
+                        this.moveDelay = 24 + this.attacker.getRNG().nextInt(7);
                     }
                     break;
                 }
                 if (this.moveDelay == 0) {
-                    this.attacker.getNavigator().tryMoveToEntityLiving((Entity)target, 1.5);
+                    this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.5);
                     this.moveDelay = 24 + this.attacker.getRNG().nextInt(7);
                     break;
                 }
                 break;
             }
             case KICK1: {
-                if (this.attacker.getNavigator().tryMoveToEntityLiving((Entity)target, 1.0) && this.moveDelay == 0) {
+                if (this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.0) && this.moveDelay == 0) {
                     this.moveDelay = 60;
                 }
                 if (this.attackTicker == 0 && this.moveDelay == 1) {
                     this.attackTicker = this.attacker.getStatus().getDuration();
                 }
                 if (this.attackTicker > 0) {
-                    this.attacker.getLookHelper().setLookPositionWithEntity((Entity)target, 30.0f, 30.0f);
+                    this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
                 }
                 if (this.attackTicker == 0 || this.attackTicker % this.attacker.getStatus().getTime() != 0) {
                     break;
                 }
                 if (dis <= this.getAttackReachSqr(target)) {
-                    this.attacker.attackEntityAsMob((Entity)target);
+                    this.attacker.attackEntityAsMob(target);
                 }
                 if (this.attackTicker == this.attacker.getStatus().getTime()) {
-                    this.attackDelay = 64 + this.attacker.getRNG().nextInt(12);
+                    this.attackDelay = 44 + this.attacker.getRNG().nextInt(12);
                     break;
                 }
                 break;
             }
+            //Needs rework
             case KICK2: {
-                if (this.attacker.getNavigator().tryMoveToEntityLiving((Entity)target, 1.0) && this.moveDelay == 0) {
+                if (this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.0) && this.moveDelay == 0) {
                     this.moveDelay = 40;
                 }
                 if (this.attackTicker == 0 && this.moveDelay == 1) {
                     this.attackTicker = this.attacker.getStatus().getDuration();
                 }
                 if (this.attackTicker > 0) {
-                    this.attacker.getLookHelper().setLookPositionWithEntity((Entity)target, 30.0f, 30.0f);
+                    this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
                 }
                 if (this.attackTicker != 0 && this.attackTicker % this.attacker.getStatus().getTime() == 0) {
                     List<EntityLivingBase> nearby = this.attacker.world.getEntitiesWithinAABB(EntityLivingBase.class, this.attacker.getEntityBoundingBox().grow(2.0), new Predicate<EntityLivingBase>() {
@@ -146,11 +145,11 @@ public class EntityAIAmbrosia extends EntityAIBase
                         }
                     });
                     for (EntityLivingBase e : nearby) {
-                        this.attacker.attackEntityAsMobWithElement((Entity)e, EnumElement.EARTH);
+                        this.attacker.attackEntityAsMobWithElement(e, EnumElement.EARTH);
                     }
                     this.attacker.moveRelative(0.0f, 0.0f, 2.0f, 0.0f);
                     if (this.attackTicker == this.attacker.getStatus().getTime()) {
-                        this.attackDelay = 64 + this.attacker.getRNG().nextInt(12);
+                        this.attackDelay = 44 + this.attacker.getRNG().nextInt(12);
                     }
                     break;
                 }
@@ -158,7 +157,7 @@ public class EntityAIAmbrosia extends EntityAIBase
             }
             case SLEEP: {
                 if (this.moveDelay == 0 && this.attackTicker == 0) {
-                    this.attacker.getNavigator().tryMoveToEntityLiving((Entity)target, 1.5);
+                    this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.5);
                     this.moveDelay = 24 + this.attacker.getRNG().nextInt(7);
                 }
                 else if (this.attackTicker == 0 && this.moveDelay == 1) {
@@ -166,18 +165,18 @@ public class EntityAIAmbrosia extends EntityAIBase
                 }
                 if (this.attackTicker > 0) {
                     this.attacker.getNavigator().clearPath();
-                    this.attacker.getLookHelper().setLookPositionWithEntity((Entity)target, 30.0f, 30.0f);
+                    this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
                 }
                 if (this.attackTicker == this.attacker.getStatus().getTime()) {
                     this.attacker.summonSleepBalls();
-                    this.attackDelay = 64 + this.attacker.getRNG().nextInt(12);
+                    this.attackDelay = 44 + this.attacker.getRNG().nextInt(12);
                     break;
                 }
                 break;
             }
             case WAVE: {
                 if (this.moveDelay == 0 && this.attackTicker == 0) {
-                    this.attacker.getNavigator().tryMoveToEntityLiving((Entity)target, 1.2);
+                    this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.2);
                     this.moveDelay = 24 + this.attacker.getRNG().nextInt(7);
                 }
                 else if (this.moveDelay == 1 && this.attackTicker == 0) {
@@ -185,11 +184,11 @@ public class EntityAIAmbrosia extends EntityAIBase
                 }
                 if (this.attackTicker > 0) {
                     this.attacker.getNavigator().clearPath();
-                    this.attacker.getLookHelper().setLookPositionWithEntity((Entity)target, 30.0f, 30.0f);
+                    this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
                 }
                 if (this.attackTicker == this.attacker.getStatus().getTime()) {
                     this.attacker.summonWave(this.attackTicker);
-                    this.attackDelay = 64 + this.attacker.getRNG().nextInt(12);
+                    this.attackDelay = 44 + this.attacker.getRNG().nextInt(12);
                     break;
                 }
                 break;

@@ -1,15 +1,16 @@
 package com.flemmli97.runecraftory.common.entity.monster.projectile;
 
-import net.minecraft.entity.projectile.*;
-import net.minecraft.world.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.*;
-import com.flemmli97.runecraftory.common.lib.enums.*;
-import com.flemmli97.runecraftory.common.core.handler.*;
-import com.flemmli97.runecraftory.api.items.*;
-import com.flemmli97.runecraftory.common.utils.*;
-import net.minecraft.entity.ai.attributes.*;
-import net.minecraft.potion.*;
+import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
+import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
+import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
+import com.flemmli97.runecraftory.common.utils.RFCalculations;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.World;
 
 public class EntityButterfly extends EntityThrowable
 {
@@ -38,7 +39,7 @@ public class EntityButterfly extends EntityThrowable
     
     protected void onImpact(final RayTraceResult result) {
         if (result.entityHit != null && !this.world.isRemote && result.entityHit != this.getThrower() && result.entityHit instanceof EntityLivingBase) {
-            if (RFCalculations.attackEntity(result.entityHit, CustomDamage.attack(this.getThrower(), EnumElement.NONE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 10), RFCalculations.getAttributeValue(this.getThrower(), (IAttribute)ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {}
+            if (RFCalculations.attackEntity(result.entityHit, CustomDamage.attack(this.getThrower(), EnumElement.NONE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 10), RFCalculations.getAttributeValue(this.getThrower(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {}
             ((EntityLivingBase)result.entityHit).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:slowness"), 60, 3));
             this.setDead();
         }

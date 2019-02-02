@@ -35,16 +35,6 @@ public class ItemRecipe extends Item
     }
     
     @Override
-    public String getUnlocalizedName() {
-        return this.getRegistryName().toString();
-    }
-    
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return this.getUnlocalizedName();
-    }
-    
-    @Override
     public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         if (stack.hasTagCompound() && Keyboard.isKeyDown(42)) {
             String itemName = "";

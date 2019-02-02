@@ -1,11 +1,10 @@
 package com.flemmli97.runecraftory.common.blocks.tile;
 
-import com.flemmli97.runecraftory.api.blocks.IHerb;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
 import com.flemmli97.runecraftory.common.init.ModItems;
-import com.flemmli97.runecraftory.common.items.misc.ItemMinerals;
+import com.flemmli97.runecraftory.common.lib.LibOreDictionary;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 
@@ -14,7 +13,6 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -147,7 +145,7 @@ public class TileResearchTable extends TileEntity implements IInventory{
 	public void recipe(EntityPlayer player, int levelMin, int levelMax)
 	{
 		boolean hasPaper = false;
-		IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+		IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
 
 		for(ItemStack stack : OreDictionary.getOres("paper"))
 		{
@@ -160,7 +158,7 @@ public class TileResearchTable extends TileEntity implements IInventory{
 		if(this.inventory.get(1).getItem()==Items.BREAD && hasPaper && this.inventory.get(3).isEmpty())
 		{
 			
-			for(ItemStack stack : OreDictionary.getOres("gemDiamond"))
+			for(ItemStack stack : OreDictionary.getOres(LibOreDictionary.DIAMOND))
 			{
 				if(OreDictionary.itemMatches(this.inventory.get(0), stack, false))
 				{
@@ -174,19 +172,36 @@ public class TileResearchTable extends TileEntity implements IInventory{
 					return;
 				}
 			}
-			if(this.inventory.get(0).getItem() instanceof ItemMinerals)
-				if(capSync.getSkillLevel(EnumSkills.CRAFTING)[0]>levelMax-10)
-				;//this.getRandomRecipe(player, EnumCrafting.ARMOR, levelMin, levelMax);
-				else
-					player.world.playSound(null, getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
-			else if(this.inventory.get(0).getItem() instanceof ItemFood && ((ItemFood)this.inventory.get(0).getItem()).getHealAmount(this.inventory.get(0))>=3)
+			for(ItemStack stack : OreDictionary.getOres(LibOreDictionary.MINERALS))
+			{
+				if(OreDictionary.itemMatches(this.inventory.get(0), stack, false))
+				{
+					if(capSync.getSkillLevel(EnumSkills.CRAFTING)[0]>levelMax-10)
+						;//this.getRandomRecipe(player, EnumCrafting.ARMOR, levelMin, levelMax);
+					else
+						player.world.playSound(null, getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
+					return;
+				}
+			}
+			for(ItemStack stack : OreDictionary.getOres(LibOreDictionary.listAllherb))
+			{
+				if(OreDictionary.itemMatches(this.inventory.get(0), stack, false))
+				{
+					if(capSync.getSkillLevel(EnumSkills.CHEMISTRY)[0]>levelMax-10)
+						;//this.getRandomRecipe(player, EnumCrafting.PHARMA, levelMin, levelMax);
+					else
+						player.world.playSound(null, getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
+					return;
+				}
+			}
+			if(this.inventory.get(0).getItem() instanceof ItemFood && ((ItemFood)this.inventory.get(0).getItem()).getHealAmount(this.inventory.get(0))>=3)
 				if(capSync.getSkillLevel(EnumSkills.COOKING)[0]>levelMax-10)
-				;//this.getRandomRecipe(player, EnumCrafting.COOKING, levelMin, levelMax);
+					;//this.getRandomRecipe(player, EnumCrafting.COOKING, levelMin, levelMax);
 				else
 					player.world.playSound(null, getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
-			else if(this.inventory.get(0).getItem() instanceof ItemBlock && ((ItemBlock)this.inventory.get(0).getItem()).getBlock() instanceof IHerb)
+			else if(OreDictionary.getOres(LibOreDictionary.MINERALS).contains(this.inventory.get(0)))
 				if(capSync.getSkillLevel(EnumSkills.CHEMISTRY)[0]>levelMax-10)
-				;//this.getRandomRecipe(player, EnumCrafting.PHARMA, levelMin, levelMax);
+					;//this.getRandomRecipe(player, EnumCrafting.PHARMA, levelMin, levelMax);
 				else
 					player.world.playSound(null, getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
 		}

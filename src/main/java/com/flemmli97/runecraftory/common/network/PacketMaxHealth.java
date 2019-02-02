@@ -1,8 +1,7 @@
 package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,9 +14,9 @@ public class PacketMaxHealth  implements IMessage{
 	public float healthMax;	
 	public PacketMaxHealth(){}
 	
-	public PacketMaxHealth(IPlayer playerCap)
+	public PacketMaxHealth(float hp)
 	{
-		this.healthMax = playerCap.getMaxHealth();
+		this.healthMax = hp;
 	}
 	
 	@Override
@@ -37,11 +36,7 @@ public class PacketMaxHealth  implements IMessage{
         	EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
         if(player!=null)
 		{
-			IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
-			if(capSync != null)
-		    {
-				capSync.setMaxHealth(player, msg.healthMax);;				     	
-		    }					
+			player.getCapability(PlayerCapProvider.PlayerCap, null).setMaxHealth(player, msg.healthMax);;				     	
 		}	
             return null;
         }

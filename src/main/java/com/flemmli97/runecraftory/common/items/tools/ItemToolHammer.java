@@ -5,15 +5,14 @@ import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.client.render.EnumToolCharge;
 import com.flemmli97.runecraftory.common.blocks.BlockMineral;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
 import com.flemmli97.runecraftory.common.init.ModItems;
-import com.flemmli97.runecraftory.common.items.IModelRegister;
+import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumToolTier;
 import com.flemmli97.runecraftory.common.lib.enums.EnumWeaponType;
-import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
@@ -21,8 +20,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrassPath;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -39,18 +36,14 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemToolHammer extends ItemPickaxe implements IItemUsable, IModelRegister, IChargeable
+public class ItemToolHammer extends ItemPickaxe implements IItemUsable, IChargeable
 {
     private EnumToolTier tier;
     private static AxisAlignedBB farmlandTop = new AxisAlignedBB(0.0, 0.9375, 0.0, 1.0, 1.0, 1.0);
@@ -61,7 +54,7 @@ public class ItemToolHammer extends ItemPickaxe implements IItemUsable, IModelRe
         super(ModItems.mat);
         this.setMaxStackSize(1);
         this.setCreativeTab(RuneCraftory.weaponToolTab);
-        this.setRegistryName(new ResourceLocation("runecraftory", "hammer_" + tier.getName()));
+        this.setRegistryName(new ResourceLocation(LibReference.MODID, "hammer_" + tier.getName()));
         this.setUnlocalizedName(this.getRegistryName().toString());
         this.tier = tier;
     }
@@ -76,27 +69,8 @@ public class ItemToolHammer extends ItemPickaxe implements IItemUsable, IModelRe
         return EnumWeaponType.FARM;
     }
 
-    @Override
-    public String getUnlocalizedName() {
-        return this.getRegistryName().toString();
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return this.getRegistryName().toString();
-    }
-
     public EnumToolTier getTier() {
         return this.tier;
-    }
-
-    @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
-            ItemStack stack = new ItemStack(this);
-            ItemNBT.initNBT(stack);
-            items.add(stack);
-        }
     }
 
     @Override
@@ -115,13 +89,13 @@ public class ItemToolHammer extends ItemPickaxe implements IItemUsable, IModelRe
 
     @Override
     public void levelSkillOnHit(EntityPlayer player) {
-        IPlayer cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+        IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
         cap.increaseSkill(EnumSkills.HAMMERAXE, player, 1);
     }
 
     @Override
     public void levelSkillOnBreak(EntityPlayer player) {
-        IPlayer cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+        IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
         cap.increaseSkill(EnumSkills.MINING, player, this.tier.getTierLevel() + 1);
     }
 
@@ -137,7 +111,7 @@ public class ItemToolHammer extends ItemPickaxe implements IItemUsable, IModelRe
 
     @Override
     public EnumToolCharge chargeType(ItemStack stack) {
-        return EnumToolCharge.CHARGEUPTOOL;
+        return EnumToolCharge.CHARGEUPWEAPON;
     }
 
     @Override
@@ -149,7 +123,7 @@ public class ItemToolHammer extends ItemPickaxe implements IItemUsable, IModelRe
             EntityPlayer player = (EntityPlayer)entityLiving;
             int range = Math.min(useTimeMulti, this.tier.getTierLevel());
             boolean flag = false;
-            IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+            IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
             if (range == 0) {
                 RayTraceResult result = this.rayTrace(world, player, false);
                 if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -222,7 +196,7 @@ public class ItemToolHammer extends ItemPickaxe implements IItemUsable, IModelRe
                 if (player.getPosition() == pos.up()) {
                     player.setPosition(player.posX, player.posY + 0.0625, player.posZ);
                 }
-                IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+                IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
                 capSync.decreaseRunePoints(player, 1);
                 capSync.increaseSkill(EnumSkills.EARTH, player, 1);
                 capSync.increaseSkill(EnumSkills.MINING, player, 1);
@@ -257,10 +231,5 @@ public class ItemToolHammer extends ItemPickaxe implements IItemUsable, IModelRe
     @Override
     public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
         return HashMultimap.<String, AttributeModifier>create();
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
     }
 }

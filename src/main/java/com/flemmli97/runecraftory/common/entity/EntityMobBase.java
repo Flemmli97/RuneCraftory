@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.entity;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -9,24 +9,26 @@ import javax.annotation.Nullable;
 import com.flemmli97.runecraftory.api.entities.EntityProperties;
 import com.flemmli97.runecraftory.api.entities.IEntityAdvanced;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
-import com.flemmli97.runecraftory.api.items.ItemProperties;
+import com.flemmli97.runecraftory.api.items.FoodProperties;
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
 import com.flemmli97.runecraftory.api.mappings.EntityStatMap;
+import com.flemmli97.runecraftory.api.mappings.ItemFoodMap;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.EntitySpawnEggList;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.items.creative.ItemSpawnEgg;
 import com.flemmli97.runecraftory.common.lib.LibConstants;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.network.PacketEntityLevelUp;
+import com.flemmli97.runecraftory.common.network.PacketFoodUpdateEntity;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
+import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import io.netty.buffer.ByteBuf;
@@ -42,16 +44,17 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -59,6 +62,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -69,6 +73,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 public abstract class EntityMobBase extends EntityCreature implements IEntityAdvanced, IMob, IEntityAdditionalSpawnData
@@ -80,12 +86,15 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     private static final DataParameter<Byte> attackPattern = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> mobLevel = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> levelXP = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.VARINT);
+    private static final UUID foodUUID = UUID.fromString("87A55C28-8C8C-4BFF-AF5F-9972A38CCD9D");
+    private static final UUID foodUUIDMulti = UUID.fromString("A05442AC-381B-49DF-B0FA-0136B454157B");
     
     protected int tamingTick = -1;
+    
     protected int feedTimeOut;
     private boolean doJumping = false;
     private EntityProperties prop;
-    
+    private int foodBuffTick;
     public EntityAINearestAttackableTarget<EntityPlayer> targetPlayer = new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 5, true, true, new Predicate<EntityPlayer>() {
         public boolean apply(EntityPlayer player) {
             return !EntityMobBase.this.isTamed() || player != EntityMobBase.this.getOwner();
@@ -108,7 +117,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     
     private Map<ItemStack, Float> drops = Maps.newHashMap();
 	private Map<ItemStack, Integer> dailyDrops = Maps.newHashMap();
-	private List<ItemStack> tamingItem = Lists.newArrayList();
+	private NonNullList<ItemStack> tamingItem = NonNullList.create();
 	
     public EntityMobBase(World world) {
         super(world);
@@ -119,14 +128,12 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
             throw new NullPointerException("Default stats of " + this.getClass() + " not registered");
         }
         
-        for(ItemProperties itemProp : this.prop.drops().keySet())
-		{
-			this.drops.put(itemProp.getItemStack(), this.prop.drops().get(itemProp));
-		}
-		for(ItemProperties itemProp : this.prop.dailyDrops().keySet())
-			this.dailyDrops.put(itemProp.getItemStack(), this.prop.dailyDrops().get(itemProp));
-		for(ItemProperties itemProp : this.prop.getTamingItem())
-			this.tamingItem.add(itemProp.getItemStack());
+        for(Entry<SimpleItemStackWrapper, Float> entry : this.prop.drops().entrySet())
+			this.drops.put(entry.getKey().getStack(), entry.getValue());
+		for(Entry<SimpleItemStackWrapper, Integer> entry : this.prop.dailyDrops().entrySet())
+			this.dailyDrops.put(entry.getKey().getStack(), entry.getValue());
+		for(SimpleItemStackWrapper itemProp : this.prop.getTamingItem())
+			this.tamingItem.add(itemProp.getStack());
 		
         this.genes.put(SharedMonsterAttributes.MAX_HEALTH, 1.1f - world.rand.nextFloat() * 0.2f);
         this.genes.put(ItemStatAttributes.RFATTACK, 1.1f - world.rand.nextFloat() * 0.2f);
@@ -152,10 +159,11 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 
     @Override
     protected void applyEntityAttributes() {
-        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0 * LibConstants.DAMAGESCALE);
+        this.getAttributeMap().registerAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.2);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.24);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0);
+        this.getAttributeMap().registerAttribute(SWIM_SPEED);
         this.getAttributeMap().registerAttribute(ItemStatAttributes.RFATTACK);
         this.getAttributeMap().registerAttribute(ItemStatAttributes.RFDEFENCE);
         this.getAttributeMap().registerAttribute(ItemStatAttributes.RFMAGICATT);
@@ -199,7 +207,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
             if (LevelCalc.shouldStatIncreaseWithLevel(att.getAttribute())) 
             {
                 double oldValue = this.getAttributeMap().getAttributeInstance(att.getAttribute()).getBaseValue();
-                this.getAttributeMap().getAttributeInstance(att.getAttribute()).setBaseValue(LevelCalc.onEntityLevelUp(this.prop.getBaseValues().get(att.getAttribute()), oldValue, this instanceof EntityBossBase, att.getAttribute() == SharedMonsterAttributes.MAX_HEALTH, this.genes.containsKey(att.getAttribute()) ? ((float)this.genes.get(att.getAttribute())) : 1.0f));
+                this.getAttributeMap().getAttributeInstance(att.getAttribute()).setBaseValue(LevelCalc.onEntityLevelUp(this.prop.getBaseValues().get(att.getAttribute()), oldValue, this instanceof EntityBossBase, this.genes.containsKey(att.getAttribute()) ? ((float)this.genes.get(att.getAttribute())) : 1.0f));
                 if (att.getAttribute() == SharedMonsterAttributes.MAX_HEALTH) {
                     this.setHealth(this.getHealth() + (float)(this.getMaxHealth() - oldValue));
                 }
@@ -259,8 +267,8 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     }
 
     @Override
-    public ItemStack[] tamingItem() {
-        return this.tamingItem.toArray(new ItemStack[0]);
+    public NonNullList<ItemStack> tamingItem() {
+        return this.tamingItem;
     }
 
     @Override
@@ -320,7 +328,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
             this.playTameEffect(false);
         }
         else if (id == 34) {
-            this.tamingTick = 60;
+            this.tamingTick = 120;
         }
         super.handleStatusUpdate(id);
     }
@@ -357,13 +365,14 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         compound.setInteger("MobLevel", this.level());
         compound.setBoolean("Tamed", this.isTamed());
         NBTTagCompound nbtGene = new NBTTagCompound();
-        for (IAttribute att : this.genes.keySet()) {
-            nbtGene.setFloat(att.getName(), (float)this.genes.get(att));
+        for (Entry<IAttribute, Float> entry : this.genes.entrySet()) {
+            nbtGene.setFloat(entry.getKey().getName(), entry.getValue());
         }
-        compound.setTag("Genes", (NBTBase)nbtGene);
+        compound.setTag("Genes", nbtGene);
         compound.setBoolean("Out", this.dead);
         compound.setInteger("FeedTime", this.feedTimeOut);
         compound.setIntArray("Home", new int[] { this.getHomePosition().getX(), this.getHomePosition().getY(), this.getHomePosition().getZ(), (int)this.getMaximumHomeDistance() });
+        compound.setInteger("FoodBuffTick", this.foodBuffTick);
     }
 
     @Override
@@ -377,14 +386,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         }
         NBTTagCompound nbtGenes = compound.getCompoundTag("Genes");
         for (String s : nbtGenes.getKeySet()) {
-            IAttribute att;
-            if (s.equals(SharedMonsterAttributes.MAX_HEALTH.getName())) {
-                att = SharedMonsterAttributes.MAX_HEALTH;
-            }
-            else {
-                att = ItemStatAttributes.ATTRIBUTESTRINGMAP.get(s);
-            }
-            this.genes.put(att, nbtGenes.getFloat(s));
+            this.genes.put(ItemUtils.getAttFromName(s), nbtGenes.getFloat(s));
         }
         this.feedTimeOut = compound.getInteger("FeedTime");
         if (compound.hasKey("Home")) {
@@ -392,6 +394,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
             this.setHomePosAndDistance(new BlockPos(home[0], home[1], home[2]), home[3]);
         }
         this.dead = compound.getBoolean("Out");
+        this.foodBuffTick=compound.getInteger("FoodBuffTick");
     }
 
     //=====Disable/Tweak vanilla
@@ -403,12 +406,6 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 
     @Override
     public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
-    }
-
-    @Override
-    public void heal(float healAmount) {
-        healAmount *= (float)LibConstants.DAMAGESCALE;
-        super.heal(healAmount);
     }
     
     //=====Interact
@@ -434,6 +431,11 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
             if (this.getAttackTime() > 0) {
                 this.dataManager.set(attackTimer, (this.getAttackTime() - 1));
             }
+            this.foodBuffTick=Math.max(-1, --this.foodBuffTick);
+            if(this.foodBuffTick==0)
+            {
+            	this.removeFoodEffect();
+            }
         }
     }
 
@@ -451,8 +453,10 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     @Override
     protected boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItemMainhand();
-		if(!stack.isEmpty() && player.isSneaking() && !this.world.isRemote)
+		if(!stack.isEmpty() && player.isSneaking())
 		{
+			if(this.world.isRemote)
+				return true;
 			if(stack.getItem()==ModItems.tame)
 			{
 				this.tameEntity(player);
@@ -473,9 +477,9 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 				}
 				if(stack.getItem() instanceof ItemFood)
 				{
-					//heal
+					this.applyFoodEffect(stack);
 				}
-				this.tamingTick=60;
+				this.tamingTick=100;
                 this.world.setEntityState(this, (byte)34);
 			}
 			else
@@ -493,11 +497,9 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 				}
 				else if(feedTimeOut<=0 && stack.getItem() instanceof ItemFood)
 				{
-					//food effect
-					
+					this.applyFoodEffect(stack);
 					this.feedTimeOut=24000;
 				}
-				
 			}
 			return true;
 		}
@@ -626,7 +628,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
             super.onDeathUpdate();
             if (this.deathTime == 5 && this.attackingPlayer != null) 
             {
-                IPlayer cap = this.attackingPlayer.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+                IPlayer cap = this.attackingPlayer.getCapability(PlayerCapProvider.PlayerCap, null);
                 cap.addXp(this.attackingPlayer, LevelCalc.xpFromLevel(this.baseXP(), this.level()));
                 cap.setMoney(this.attackingPlayer, cap.getMoney() + LevelCalc.moneyFromLevel(this.baseMoney(), this.level()));
             }
@@ -657,10 +659,6 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
                 return;
             }
             damageAmount = this.reduceDamage(damageSrc, damageAmount);
-            if (damageSrc != DamageSource.OUT_OF_WORLD) 
-            {
-                damageAmount *= (float)LibConstants.DAMAGESCALE;
-            }
             if (damageAmount != 0.0f) {
                 float f1 = this.getHealth();
                 this.setHealth(f1 - damageAmount);
@@ -672,14 +670,21 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     protected float reduceDamage(DamageSource damageSrc, float damageAmount) {
         float reduce = 0.0f;
         RFCalculations.elementalReduction(this, damageSrc, damageAmount);
-        if (!damageSrc.isDamageAbsolute() && !damageSrc.isUnblockable()) 
+        if (!damageSrc.isDamageAbsolute()) 
         {
-            if (damageSrc.isMagicDamage()) 
+        	if(!damageSrc.isUnblockable())
+        	{
+	            if (damageSrc.isMagicDamage()) 
+	                reduce = (float)this.getEntityAttribute(ItemStatAttributes.RFMAGICDEF).getAttributeValue();
+	            else
+	                reduce = (float)this.getEntityAttribute(ItemStatAttributes.RFDEFENCE).getAttributeValue();
+        	}
+            if (this.isPotionActive(MobEffects.RESISTANCE) && damageSrc != DamageSource.OUT_OF_WORLD)
             {
-                reduce = (float)this.getEntityAttribute(ItemStatAttributes.RFMAGICDEF).getAttributeValue();
-            }
-            else {
-                reduce = (float)this.getEntityAttribute(ItemStatAttributes.RFDEFENCE).getAttributeValue();
+                int i = (this.getActivePotionEffect(MobEffects.RESISTANCE).getAmplifier() + 1) * 5;
+                int j = 25 - i;
+                float f = damageAmount * (float)j;
+                damageAmount = f / 25.0F;
             }
         }
         return Math.max(0.0f, damageAmount - reduce);
@@ -749,7 +754,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     {
         if (!this.isTamed() && this.getDrops() != null) 
         {
-            for (ItemStack item : this.getDrops().keySet()) 
+            for (Entry<ItemStack, Float> entry : this.getDrops().entrySet()) 
             {
                 int max = 0;
                 float luck = 0.0f;
@@ -762,9 +767,9 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
                     luck -= 0.8;
                     --max;
                 }
-                while (this.rand.nextFloat() < this.getDrops().get(item) + Math.max(luck - 0.25f, -0.2f) && max < 2) 
+                while (this.rand.nextFloat() < entry.getValue() + Math.max(luck - 0.25f, -0.2f) && max < 2) 
                 {
-                    ItemUtils.spawnLeveledItem((EntityLivingBase)this, item.copy(), 1 + this.rand.nextInt(10));
+                    ItemUtils.spawnLeveledItem((EntityLivingBase)this, entry.getKey().copy(), 1 + this.rand.nextInt(10));
                     ++max;
                 }
             }
@@ -778,7 +783,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
             double leveledValue = this.prop.getBaseValues().get(att);
             if (LevelCalc.shouldStatIncreaseWithLevel(att)) 
             {
-                leveledValue = LevelCalc.initStatIncreaseLevel(this.prop.getBaseValues().get(att), this.level(), this instanceof EntityBossBase, att.equals(SharedMonsterAttributes.MAX_HEALTH), this.genes.containsKey(att) ? ((float)this.genes.get(att)) : 1.0f);
+                leveledValue = LevelCalc.initStatIncreaseLevel(this.prop.getBaseValues().get(att), this.level(), this instanceof EntityBossBase, this.genes.containsKey(att) ? ((float)this.genes.get(att)) : 1.0f);
             }
             if (this.getAttributeMap().getAttributeInstance(att) == null) 
             {
@@ -802,10 +807,10 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     public void writeSpawnData(ByteBuf buffer) {
         NBTTagCompound compound = new NBTTagCompound();
         NBTTagCompound nbtGene = new NBTTagCompound();
-        for (IAttribute att : this.genes.keySet()) {
-            nbtGene.setFloat(att.getName(), (float)this.genes.get(att));
+        for (Entry<IAttribute, Float> entry : this.genes.entrySet()) {
+            nbtGene.setFloat(entry.getKey().getName(), entry.getValue());
         }
-        compound.setTag("Genes", (NBTBase)nbtGene);
+        compound.setTag("Genes", nbtGene);
         compound.setInteger("Level", this.level());
         ByteBufUtils.writeTag(buffer, compound);
     }
@@ -815,15 +820,68 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         NBTTagCompound compound = ByteBufUtils.readTag(additionalData);
         NBTTagCompound nbtGenes = compound.getCompoundTag("Genes");
         for (String s : nbtGenes.getKeySet()) {
-            IAttribute att;
-            if (s.equals(SharedMonsterAttributes.MAX_HEALTH.getName())) {
-                att = SharedMonsterAttributes.MAX_HEALTH;
-            }
-            else {
-                att = ItemStatAttributes.ATTRIBUTESTRINGMAP.get(s);
-            }
-            this.genes.put(att, nbtGenes.getFloat(s));
+            this.genes.put(ItemUtils.getAttFromName(s), nbtGenes.getFloat(s));
         }
         this.setLevel(compound.getInteger("Level"));
     }
+
+    @Override
+	public void applyFoodEffect(ItemStack stack)
+	{
+    	this.removeFoodEffect();
+    	FoodProperties food = ItemFoodMap.get(stack);
+    	if(food==null)
+    		return;
+		for(Entry<IAttribute, Float> entry : food.effectsMultiplier().entrySet())
+		{
+			if(this.getAttributeMap().getAttributeInstance(entry.getKey())==null)
+				this.getAttributeMap().registerAttribute(entry.getKey());
+			double base = this.getAttributeMap().getAttributeInstance(entry.getKey()).getBaseValue();
+			this.getAttributeMap().getAttributeInstance(entry.getKey()).applyModifier(new AttributeModifier(foodUUIDMulti, "foodBuffMulti "+entry.getKey().getName(), base*entry.getValue(), 0));
+		}
+		for(Entry<IAttribute, Integer> entry : food.effects().entrySet())
+		{
+			if(this.getAttributeMap().getAttributeInstance(entry.getKey())==null)
+				this.getAttributeMap().registerAttribute(entry.getKey());
+			this.getAttributeMap().getAttributeInstance(entry.getKey()).applyModifier(new AttributeModifier(foodUUID, "foodBuff "+entry.getKey().getName(), entry.getValue(), 0));
+		}
+		this.foodBuffTick=food.duration();
+		if(!this.world.isRemote)
+		{
+			this.heal(food.getHPGain());
+			this.heal(this.getMaxHealth()*food.getHpPercentGain()*0.01F);
+			PacketHandler.sendToAll(new PacketFoodUpdateEntity(this, food.effects(), food.effectsMultiplier(), food.duration()));
+		}
+	}
+    
+    @SideOnly(Side.CLIENT)
+    @Override
+	public void applyFoodEffect(Map<IAttribute, Integer> stats, Map<IAttribute, Float> multi, int duration)
+	{
+		this.removeFoodEffect();
+		for(Entry<IAttribute, Float> entry : multi.entrySet())
+		{
+			if(this.getAttributeMap().getAttributeInstance(entry.getKey())==null)
+				this.getAttributeMap().registerAttribute(entry.getKey());
+			double base = this.getAttributeMap().getAttributeInstance(entry.getKey()).getBaseValue();
+			this.getAttributeMap().getAttributeInstance(entry.getKey()).applyModifier(new AttributeModifier(foodUUIDMulti, "foodBuffMulti "+entry.getKey().getName(), base*entry.getValue(), 0));
+		}
+		for(Entry<IAttribute, Integer> entry : stats.entrySet())
+		{
+			if(this.getAttributeMap().getAttributeInstance(entry.getKey())==null)
+				this.getAttributeMap().registerAttribute(entry.getKey());
+			this.getAttributeMap().getAttributeInstance(entry.getKey()).applyModifier(new AttributeModifier(foodUUID, "foodBuff "+entry.getKey().getName(), entry.getValue(), 0));
+		}
+		this.foodBuffTick=duration;
+	}
+    
+    @Override
+   	public void removeFoodEffect()
+   	{
+    	for(IAttributeInstance ins : this.getAttributeMap().getAllAttributes())
+    	{
+    		ins.removeModifier(foodUUID);
+    		ins.removeModifier(foodUUIDMulti);
+    	}
+   	}
 }

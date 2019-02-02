@@ -91,7 +91,7 @@ public class EntityAIGenericMelee extends EntityAIBase
     }
     
     protected void checkAndPerformAttack(EntityLivingBase target, double dis) {
-        this.attackTick = Math.max(this.attackTick - 1, 0);
+        this.attackTick = Math.max(--this.attackTick, 0);
         double d0 = this.getAttackReachSqr(target);
         if (dis <= d0) {
             if (this.attackTick <= 0) {

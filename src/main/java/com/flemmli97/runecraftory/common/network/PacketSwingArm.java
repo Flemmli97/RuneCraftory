@@ -1,8 +1,8 @@
 package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayerAnim;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,7 +31,7 @@ public class PacketSwingArm  implements IMessage{
         	EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
         if(player!=null)
 		{
-    		IPlayerAnim anim = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerAnim, null);
+    		IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
     		int i = 0;
     		if (player.isPotionActive(MobEffects.HASTE))
             {
@@ -43,10 +43,10 @@ public class PacketSwingArm  implements IMessage{
             }
             if (!player.isSwingInProgress || player.swingProgressInt >= i / 2 || player.swingProgressInt < 0)
             {
-            		player.swingProgressInt = -1;
-            		player.isSwingInProgress = true;
-            		player.swingingHand = anim.getPrevSwung()==EnumHand.MAIN_HAND?EnumHand.OFF_HAND:EnumHand.MAIN_HAND;
-            		anim.setPrevSwung(player.swingingHand);
+        		player.swingProgressInt = -1;
+        		player.isSwingInProgress = true;
+        		player.swingingHand = cap.getPrevSwung()==EnumHand.MAIN_HAND?EnumHand.OFF_HAND:EnumHand.MAIN_HAND;
+        		cap.setPrevSwung(player.swingingHand);
             }					
 		}	
             return null;

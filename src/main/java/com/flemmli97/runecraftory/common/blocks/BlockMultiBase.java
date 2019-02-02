@@ -105,12 +105,6 @@ public abstract class BlockMultiBase extends BlockContainer{
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {FACING, PART});
 	}
-	
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
-    {
-        this.onBlockHarvested(world, pos, state, player);
-        return world.setBlockState(pos, net.minecraft.init.Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
-    }
     
 	@Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune)

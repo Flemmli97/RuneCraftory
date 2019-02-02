@@ -3,7 +3,7 @@ package com.flemmli97.runecraftory.client.gui;
 import java.io.IOException;
 
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.inventory.ContainerInfoScreen;
 import com.flemmli97.runecraftory.common.lib.LibReference;
@@ -17,8 +17,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.InventoryEffectRenderer;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -40,7 +38,7 @@ public class GuiInfoScreen extends InventoryEffectRenderer
     public GuiInfoScreen(Minecraft mc) {
         super(new ContainerInfoScreen(mc.player));
         this.mc = mc;
-        this.cap = this.mc.player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+        this.cap = this.mc.player.getCapability(PlayerCapProvider.PlayerCap, null);
     }
     
     @Override
@@ -61,15 +59,12 @@ public class GuiInfoScreen extends InventoryEffectRenderer
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) 
     {
-        if (this.cap == null) {
-            return;
-        }
-        GuiInventory.drawEntityOnScreen(this.guiX + 58, this.guiY + 76, 29, (float)(this.guiX + 58 - mouseX), (float)(this.guiY + 76 - 50 - mouseY), (EntityLivingBase)this.mc.player);
+        GuiInventory.drawEntityOnScreen(this.guiX + 58, this.guiY + 76, 29, (float)(this.guiX + 58 - mouseX), (float)(this.guiY + 76 - 50 - mouseY), this.mc.player);
         this.mc.getTextureManager().bindTexture(texturepath);
         this.drawTexturedModalRect(this.guiX, this.guiY, 15, 15, 224, 224);
-        int healthWidth = (int)((this.cap.getHealth() + this.mc.player.getHealth()) / (this.cap.getMaxHealth() + this.mc.player.getMaxHealth()) * 100.0f);
-        int runeWidth = (int)(this.cap.getRunePoints() / this.cap.getMaxRunePoints() * 100.0f);
-        int exp = (int)(this.cap.getPlayerLevel()[1] / LevelCalc.xpAmountForLevelUp(this.cap.getPlayerLevel()[0]) * 100.0f);
+        int healthWidth = (int)((this.cap.getHealth()) / (this.cap.getMaxHealth()) * 100.0f);
+        int runeWidth = (int)(this.cap.getRunePoints() / (float)this.cap.getMaxRunePoints() * 100.0f);
+        int exp = (int)(this.cap.getPlayerLevel()[1] / (float)LevelCalc.xpAmountForLevelUp(this.cap.getPlayerLevel()[0]) * 100.0f);
         this.mc.getTextureManager().bindTexture(bars);
         this.drawTexturedModalRect(this.guiX + 118, this.guiY + 23, 2, 51, healthWidth, 6);
         this.drawTexturedModalRect(this.guiX + 118, this.guiY + 33, 2, 58, runeWidth, 6);
@@ -83,10 +78,10 @@ public class GuiInfoScreen extends InventoryEffectRenderer
         this.mc.fontRenderer.drawString("M.Def.", this.guiX + 120, this.guiY + 99, 0);
         this.drawRightAlignedScaledString("" + this.cap.getMoney(), this.guiX + 194 - ((this.mc.fontRenderer.getStringWidth("" + this.cap.getMoney()) == 6) ? 3 : 0), this.guiY + 11, 0.6f, 0);
         this.drawRightAlignedScaledString("" + this.cap.getPlayerLevel()[0], this.guiX + 216, this.guiY + 46, 1.0f, 0);
-        this.drawRightAlignedScaledString("" + (int)Math.ceil(this.cap.getStr() + RFCalculations.getAttributeValue((EntityLivingBase)this.mc.player, (IAttribute)ItemStatAttributes.RFATTACK, null, null)), this.guiX + 216, this.guiY + 64, 1.0f, 0);
-        this.drawRightAlignedScaledString("" + (int)Math.ceil(this.cap.getVit() * 0.5f + RFCalculations.getAttributeValue((EntityLivingBase)this.mc.player, (IAttribute)ItemStatAttributes.RFDEFENCE, null, null)), this.guiX + 216, this.guiY + 75, 1.0f, 0);
-        this.drawRightAlignedScaledString("" + (int)Math.ceil(this.cap.getIntel() + RFCalculations.getAttributeValue((EntityLivingBase)this.mc.player, (IAttribute)ItemStatAttributes.RFMAGICATT, null, null)), this.guiX + 216, this.guiY + 87, 1.0f, 0);
-        this.drawRightAlignedScaledString("" + (int)Math.ceil(this.cap.getVit() * 0.5f + RFCalculations.getAttributeValue((EntityLivingBase)this.mc.player, (IAttribute)ItemStatAttributes.RFMAGICDEF, null, null)), this.guiX + 216, this.guiY + 99, 1.0f, 0);
+        this.drawRightAlignedScaledString("" + RFCalculations.getAttributeValue(this.mc.player, ItemStatAttributes.RFATTACK, null, null), this.guiX + 216, this.guiY + 64, 1.0f, 0);
+        this.drawRightAlignedScaledString("" + RFCalculations.getAttributeValue(this.mc.player, ItemStatAttributes.RFDEFENCE, null, null), this.guiX + 216, this.guiY + 75, 1.0f, 0);
+        this.drawRightAlignedScaledString("" + RFCalculations.getAttributeValue(this.mc.player, ItemStatAttributes.RFMAGICATT, null, null), this.guiX + 216, this.guiY + 87, 1.0f, 0);
+        this.drawRightAlignedScaledString("" + RFCalculations.getAttributeValue(this.mc.player, ItemStatAttributes.RFMAGICDEF, null, null), this.guiX + 216, this.guiY + 99, 1.0f, 0);
     }
 
     @Override

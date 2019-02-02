@@ -8,9 +8,9 @@ import javax.annotation.Nullable;
 
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
-import com.flemmli97.runecraftory.common.core.handler.config.MobConfig;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.core.handler.config.ConfigHandler;
 import com.flemmli97.runecraftory.common.init.GateSpawning;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.LibConstants;
@@ -21,10 +21,12 @@ import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Biomes;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -37,11 +39,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -52,7 +54,7 @@ public class EntityGate extends EntityLiving implements IEntityBase
 {
     private int baseXP = 10;
     private int baseMoney = 4;
-    private List<String> spawnList = new ArrayList<String>();
+    private List<ResourceLocation> spawnList = new ArrayList<ResourceLocation>();
     private EnumElement type = EnumElement.NONE;
     public int rotate;
     private static final DataParameter<String> elementType = EntityDataManager.createKey(EntityGate.class, DataSerializers.STRING);
@@ -98,8 +100,8 @@ public class EntityGate extends EntityLiving implements IEntityBase
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0);
-        this.getAttributeMap().registerAttribute(ItemStatAttributes.RFDEFENCE).setBaseValue(MobConfig.gateDef);
-        this.getAttributeMap().registerAttribute(ItemStatAttributes.RFMAGICDEF).setBaseValue(MobConfig.gateHealth);
+        this.getAttributeMap().registerAttribute(ItemStatAttributes.RFDEFENCE).setBaseValue(ConfigHandler.MobConfigs.gateDef);
+        this.getAttributeMap().registerAttribute(ItemStatAttributes.RFMAGICDEF).setBaseValue(ConfigHandler.MobConfigs.gateHealth);
     }
 
     @Override
@@ -114,7 +116,7 @@ public class EntityGate extends EntityLiving implements IEntityBase
         super.writeEntityToNBT(compound);
         compound.setInteger("levelMob", (int)this.dataManager.get(level));
         for (int i = 0; i < this.spawnList.size(); ++i) {
-            compound.setString("spawnList[" + i + "]", (String)this.spawnList.get(i));
+            compound.setString("spawnList[" + i + "]", this.spawnList.get(i).toString());
         }
         compound.setInteger("size", this.spawnList.size());
         compound.setString("element", this.type.getName());
@@ -127,7 +129,7 @@ public class EntityGate extends EntityLiving implements IEntityBase
             this.dataManager.set(level, compound.getInteger("levelMob"));
         }
         for (int i = 0; i < compound.getInteger("size"); ++i) {
-            this.spawnList.add(compound.getString("spawnList[" + i + "]"));
+            this.spawnList.add(new ResourceLocation(compound.getString("spawnList[" + i + "]")));
         }
         for (EnumElement element : EnumElement.values()) {
             if (element.getName().equals(compound.getString("element"))) {
@@ -162,55 +164,50 @@ public class EntityGate extends EntityLiving implements IEntityBase
 
     @Override
     public void onLivingUpdate() {
-        if (this.rand.nextInt(100) < 1 && this.world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+        if (this.rand.nextInt(ConfigHandler.MobConfigs.maxTimeout) == 0 && this.world.getDifficulty() != EnumDifficulty.PEACEFUL && !this.world.isRemote) {
             this.spawnMobs();
         }
     }
     
     private void spawnMobs() {
-        if (this.spawnList != null && !this.spawnList.isEmpty()) {
+        if (!this.spawnList.isEmpty()) {
             int randAmount = this.rand.nextInt(4) + 1;
             List<Entity> nearby = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(12.0), new Predicate<Entity>() {
                 public boolean apply(Entity entity) {
-                    return entity instanceof IEntityBase && !(entity instanceof EntityGate);
+                    return EntityGate.this.spawnList.contains(EntityList.getKey(entity));
                 }
             });
             if (nearby.size() <= 6) 
             {
-                for (int amount = 0; amount < randAmount; ++amount) {
+                for (int amount = 0; amount < randAmount; ++amount) 
+                {
                     double x = this.posX + this.rand.nextInt(9) - 4.0;
                     double y = this.posY + this.rand.nextInt(2) - 1.0;
                     double z = this.posZ + this.rand.nextInt(9) - 4.0;
-                    int entityLevel = (int)this.dataManager.get(level);
-                    int levelPerc = Math.round(entityLevel * 0.1f);
-                    int levelRand = Math.round(entityLevel + (this.rand.nextFloat() - 0.5f) * levelPerc);
+                    int entityLevel = this.dataManager.get(level);
+                    int levelRand = Math.round(this.dataManager.get(level) + (this.rand.nextFloat() - 0.5f) * Math.round(entityLevel * 0.1f));
                     EntityMobBase mob = GateSpawning.entityFromString(this.world, this.spawnList.get(this.rand.nextInt(this.spawnList.size())));
-                    this.doSpawnEntity(mob, x, y, z, levelRand);
-                }
-            }
-        }
-    }
-    
-    private void doSpawnEntity(EntityMobBase mob, double x, double y, double z, int level) {
-        if (mob != null) {
-            BlockPos pos = new BlockPos(x, y, z);
-            if (this.world.getBlockState(pos.down()).isSideSolid((IBlockAccess)this.world, pos, EnumFacing.UP) && this.world.isAirBlock(pos.up()) && this.world.isAirBlock(pos.up(2))) {
-                mob.setLevel(level);
-                mob.setPositionAndRotation(x, y, z, this.world.rand.nextFloat() * 360.0f, 0.0f);
-                if (!ForgeEventFactory.doSpecialSpawn((EntityLiving)mob, this.world, (float)mob.posX, (float)mob.posY, (float)mob.posZ)) {
-                    mob.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos((Entity)mob)), (IEntityLivingData)null);
-                    mob.setHomePosAndDistance(this.getPosition(), 16);
-                    if (!this.world.isRemote) {
-                        this.world.spawnEntity((Entity)mob);
-                    }
-                    if (this.world.isRemote) {
-                        mob.spawnExplosionParticle();
+                    if (mob != null) 
+                    {
+                        BlockPos pos = new BlockPos(x, y, z);
+                        if (this.world.getBlockState(pos.down()).isSideSolid(this.world, pos, EnumFacing.UP)) 
+                        {
+                            mob.setLevel(levelRand);
+                            mob.setPositionAndRotation(x, y, z, this.world.rand.nextFloat() * 360.0f, 0.0f);
+                            if (ForgeEventFactory.canEntitySpawnSpawner(mob, this.world, (float)mob.posX, (float)mob.posY, (float)mob.posZ, null)) 
+                            {
+                                mob.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(mob)), null);
+                                mob.setHomePosAndDistance(this.getPosition(), 16);
+                                this.world.spawnEntity(mob);
+                                mob.spawnExplosionParticle();
+                            }
+                        }
                     }
                 }
             }
         }
     }
-
+   
     @Override
     public boolean getCanSpawnHere() {
         return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && super.getCanSpawnHere() && this.world.getEntitiesWithinAABB(EntityGate.class, this.getEntityBoundingBox().grow(48.0)).size() < 2;
@@ -220,7 +217,7 @@ public class EntityGate extends EntityLiving implements IEntityBase
     protected void onDeathUpdate() {
         ++this.deathTime;
         if (this.deathTime == 5 && this.attackingPlayer != null) {
-            IPlayer cap = this.attackingPlayer.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+            IPlayer cap = this.attackingPlayer.getCapability(PlayerCapProvider.PlayerCap, null);
             cap.addXp(this.attackingPlayer, LevelCalc.xpFromLevel(this.baseXP(), this.level()));
             cap.setMoney(this.attackingPlayer, cap.getMoney() + LevelCalc.xpFromLevel(this.baseMoney(), this.level()));
         }
@@ -235,9 +232,6 @@ public class EntityGate extends EntityLiving implements IEntityBase
                 return;
             }
             damageAmount = this.reduceDamage(damageSrc, damageAmount);
-            if (damageSrc != DamageSource.OUT_OF_WORLD) {
-                damageAmount *= (float)LibConstants.DAMAGESCALE;
-            }
             if (damageAmount != 0.0f) {
                 float f1 = this.getHealth();
                 this.setHealth(f1 - damageAmount);
@@ -276,37 +270,37 @@ public class EntityGate extends EntityLiving implements IEntityBase
         switch (this.type) {
             case DARK: 	
             	maxDrop = 2;
-    			drop = new ItemStack(ModItems.crystal, 1, 5);
+    			drop = new ItemStack(ModItems.crystalDark);
     			dropChance = 0.1F;
                 break;
             case EARTH:
                 maxDrop = 2;
-    			drop = new ItemStack(ModItems.crystal, 1, 1);
+    			drop = new ItemStack(ModItems.crystalEarth);
     			dropChance = 0.25F;
                 break;
             case FIRE:
                 maxDrop = 2;
-    			drop = new ItemStack(ModItems.crystal, 1, 2);
+    			drop = new ItemStack(ModItems.crystalFire);
     			dropChance = 0.25F;
                 break;
             case LIGHT:
                 maxDrop = 2;
-    			drop = new ItemStack(ModItems.crystal, 1, 4);
+    			drop = new ItemStack(ModItems.crystalLight);
     			dropChance = 0.1F;
                 break;
             case LOVE:
                 maxDrop = 1;
-    			drop = new ItemStack(ModItems.crystal, 1, 6);
+    			drop = new ItemStack(ModItems.crystalLove);
     			dropChance = 0.05F;
     			break;            
     		case WATER:
                 maxDrop = 2;
-    			drop = new ItemStack(ModItems.crystal, 1, 0);
+    			drop = new ItemStack(ModItems.crystalWater);
     			dropChance = 0.3F;
                 break;
             case WIND:
                 maxDrop = 2;
-    			drop = new ItemStack(ModItems.crystal, 1, 3);
+    			drop = new ItemStack(ModItems.crystalWind);
     			dropChance = 0.3F;
                 break;
 			case NONE:
@@ -343,18 +337,18 @@ public class EntityGate extends EntityLiving implements IEntityBase
     }
 
     private void updateStatsToLevel() {
-        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(LevelCalc.initStatIncreaseLevel(MobConfig.gateHealth, this.level(), false, true, 1.1f - this.world.rand.nextFloat() * 0.2f));
-        this.getAttributeMap().getAttributeInstance(ItemStatAttributes.RFDEFENCE).setBaseValue(LevelCalc.initStatIncreaseLevel(MobConfig.gateDef, this.level(), false, false, 1.1f - this.world.rand.nextFloat() * 0.2f));
-        this.getAttributeMap().getAttributeInstance(ItemStatAttributes.RFMAGICDEF).setBaseValue(LevelCalc.initStatIncreaseLevel(MobConfig.gateMDef, this.level(), false, false, 1.1f - this.world.rand.nextFloat() * 0.2f));
+        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(LevelCalc.initStatIncreaseLevel(ConfigHandler.MobConfigs.gateHealth, this.level(), false, 1.1f - this.world.rand.nextFloat() * 0.2f));
+        this.getAttributeMap().getAttributeInstance(ItemStatAttributes.RFDEFENCE).setBaseValue(LevelCalc.initStatIncreaseLevel(ConfigHandler.MobConfigs.gateDef, this.level(), false, 1.1f - this.world.rand.nextFloat() * 0.2f));
+        this.getAttributeMap().getAttributeInstance(ItemStatAttributes.RFMAGICDEF).setBaseValue(LevelCalc.initStatIncreaseLevel(ConfigHandler.MobConfigs.gateMDef, this.level(), false, 1.1f - this.world.rand.nextFloat() * 0.2f));
         this.setHealth(this.getMaxHealth());
     }
 
     @Override
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
         Biome biome = this.world.getBiome(this.getPosition());
-        List<String> list = GateSpawning.getSpawningListFromBiome(biome);
+        List<ResourceLocation> list = GateSpawning.getSpawningListFromBiome(biome);
         for (int counter = (list.size() < 3) ? list.size() : 3; counter > 0; --counter) {
-            String randEnt = GateSpawning.getSpawningListFromBiome(biome).get(this.rand.nextInt(GateSpawning.getSpawningListFromBiome(biome).size()));
+        	ResourceLocation randEnt = GateSpawning.getSpawningListFromBiome(biome).get(this.rand.nextInt(GateSpawning.getSpawningListFromBiome(biome).size()));
             if (!this.spawnList.contains(randEnt)) {
                 this.spawnList.add(randEnt);
             }
@@ -412,4 +406,13 @@ public class EntityGate extends EntityLiving implements IEntityBase
     public EnumElement entityElement() {
         return this.type;
     }
+
+	@Override
+	public void applyFoodEffect(ItemStack stack) {}
+
+	@Override
+	public void removeFoodEffect() { }
+
+	@Override
+	public void applyFoodEffect(Map<IAttribute, Integer> stats, Map<IAttribute, Float> multi, int duration) {}
 }

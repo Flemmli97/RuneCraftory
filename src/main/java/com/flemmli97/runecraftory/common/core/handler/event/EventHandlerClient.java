@@ -2,23 +2,26 @@ package com.flemmli97.runecraftory.common.core.handler.event;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import com.flemmli97.runecraftory.api.items.CropProperties;
+import com.flemmli97.runecraftory.api.items.FoodProperties;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.api.items.IItemWearable;
-import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
 import com.flemmli97.runecraftory.api.mappings.CropMap;
+import com.flemmli97.runecraftory.api.mappings.ItemFoodMap;
 import com.flemmli97.runecraftory.api.mappings.ItemStatMap;
 import com.flemmli97.runecraftory.client.gui.ButtonSkill;
 import com.flemmli97.runecraftory.client.gui.GuiBars;
 import com.flemmli97.runecraftory.client.gui.GuiInfoScreen;
 import com.flemmli97.runecraftory.client.gui.GuiInfoScreenSub;
 import com.flemmli97.runecraftory.client.gui.GuiSpellHotbar;
-import com.flemmli97.runecraftory.common.items.weapons.DualBladeBase;
-import com.flemmli97.runecraftory.common.items.weapons.GloveBase;
+import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler.EnumSeason;
+import com.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.network.PacketCastSpell;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
@@ -33,6 +36,8 @@ import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
@@ -126,7 +131,7 @@ public class EventHandlerClient
     @SubscribeEvent
     public void renderDualFirst(RenderSpecificHandEvent event) {
         ItemStack stackMain = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
-        if ((stackMain.getItem() instanceof DualBladeBase || stackMain.getItem() instanceof GloveBase) && event.getHand() == EnumHand.OFF_HAND) {
+        if ((stackMain.getItem() instanceof ItemDualBladeBase || stackMain.getItem() instanceof ItemGloveBase) && event.getHand() == EnumHand.OFF_HAND) {
             event.setCanceled(true);
             Minecraft.getMinecraft().getItemRenderer().renderItemInFirstPerson(Minecraft.getMinecraft().player, event.getPartialTicks(), event.getInterpolatedPitch(), EnumHand.OFF_HAND, event.getSwingProgress(), stackMain, event.getEquipProgress());
         }
@@ -201,11 +206,56 @@ public class EventHandlerClient
     
     private void injectAdditionalTooltip(ItemStack stack, List<String> tooltip)
     {
-        CropProperties props = CropMap.getProperties(stack.getItem().getRegistryName());
+        CropProperties props = CropMap.getProperties(stack);
         if (props != null) 
         {
-            tooltip.add(I18n.format("season") + ": " + TextFormatting.getValueByName(props.bestSeason().getColor()) + props.bestSeason().formattingText());
+        	String season = "";
+        	if(!props.bestSeasons().isEmpty())
+        	{
+        		season+=I18n.format("season.best") + ": ";
+        		int i = 0;
+        		for(EnumSeason seas : props.bestSeasons())
+        		{
+        			season+=(i!=0?"/":"")+TextFormatting.getValueByName(seas.getColor()) + I18n.format(seas.formattingText());
+        			i++;
+        		}
+        	}      	
+        	if(!props.badSeasons().isEmpty())
+        	{
+        		String sub = I18n.format("season.bad") + ": ";
+        		int i = 0;
+        		for(EnumSeason seas : props.badSeasons())
+        			if(!props.bestSeasons().contains(seas))
+        			{
+        				sub+=(i!=0?"/":"")+TextFormatting.getValueByName(seas.getColor()) + I18n.format(seas.formattingText());
+        				i++;
+        			}
+        		if(!sub.isEmpty())
+        			season+="  "+sub;
+        	}
+        	tooltip.add(season);
             tooltip.add(I18n.format("growth") + ": " + props.growth() + "  " + I18n.format("harvested") + ": " + props.maxDrops());
+        }
+        boolean shift = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+        if(shift && stack.getItem() instanceof ItemFood)
+        {
+            FoodProperties food = ItemFoodMap.get(stack);
+            if(food!=null)
+            {
+                tooltip.add(I18n.format("item.eaten"));
+                String hp = (food.getHPGain()!=0?"HP "+food.getHPGain():"");
+                String hpPerc = (food.getHpPercentGain()!=0?"HP "+ food.getHpPercentGain()+"%":"");
+                String rp = (food.getRPRegen()!=0?"RP "+ food.getRPRegen():"");
+                String rpPerc = (food.getRpPercentRegen()!=0?"RP "+ food.getRpPercentRegen()+"%":"");
+                
+                tooltip.add(" " + hp + " "  + hpPerc +  " "  + rp +  " "  + rpPerc);
+                for (Entry<IAttribute, Integer> entry : food.effects().entrySet()) {
+                    tooltip.add(" " + I18n.format(entry.getKey().getName()) + ": " + entry.getValue());
+                }
+                for (Entry<IAttribute, Float> entry : food.effectsMultiplier().entrySet()) {
+                    tooltip.add(" " + I18n.format(entry.getKey().getName()) + ": " + (int)(100*entry.getValue())+"%");
+                }
+            }
         }
         if (ItemStatMap.get(stack) != null) 
         {
@@ -228,15 +278,15 @@ public class EventHandlerClient
                 {
                     tooltip.add(I18n.format("item.level") + ": " + tag.getInteger("ItemLevel") + "  " + I18n.format("item.sell") + ": " + ItemUtils.getSellPrice(stack));
                 }
-                if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) 
+                if (shift) 
                 {
-                    Map<ItemStatAttributes, Integer> stats = ItemNBT.statIncrease(stack);
+                    Map<IAttribute, Integer> stats = ItemNBT.statIncrease(stack);
                     if (!stats.isEmpty()) {
                         String prefix = (stack.getItem() instanceof IItemWearable) ? "item.equipped" : "item.upgrade";
                         tooltip.add(I18n.format(prefix));
                     }
-                    for (ItemStatAttributes att : stats.keySet()) {
-                        tooltip.add(" " + I18n.format(att.getName()) + ": " + ItemNBT.statIncrease(stack).get(att));
+                    for (Entry<IAttribute, Integer> entry : stats.entrySet()) {
+                        tooltip.add(" " + I18n.format(entry.getKey().getName()) + ": " + entry.getValue());
                     }
                 }
             }

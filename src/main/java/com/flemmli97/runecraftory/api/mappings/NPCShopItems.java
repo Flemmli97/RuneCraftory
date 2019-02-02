@@ -25,16 +25,7 @@ public class NPCShopItems
     {
         NonNullList<ItemStack> list = NonNullList.create();
         for (Item item : items) 
-        {
-            if (item.getHasSubtypes()) 
-            {
-                item.getSubItems(item.getCreativeTab(), list);
-            }
-            else 
-            {
-                list.add(new ItemStack(item));
-            }
-        }
+            list.add(new ItemStack(item));
         return list;
     }
     
@@ -91,6 +82,7 @@ public class NPCShopItems
         NPCShopItems.WEAPON.addAll(allItems(ModItems.TOOLS));
         NPCShopItems.WEAPON.addAll(allItems(ModItems.WEAPONS));
         
+
         NPCShopItems.RANDOM.addAll(allItems(ModItems.MATERIALS));
     }
 }

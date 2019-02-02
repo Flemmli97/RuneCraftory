@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 
 import io.netty.buffer.ByteBuf;
@@ -42,11 +42,7 @@ public class PacketPlayerLevel  implements IMessage{
         	EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
         if(player!=null)
 		{
-			IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
-			if(capSync != null)
-		    {
-				capSync.setPlayerLevel(player, msg.level[0], msg.level[1]);				     	
-		    }					
+			player.getCapability(PlayerCapProvider.PlayerCap, null).setPlayerLevel(player, msg.level[0], msg.level[1]);				     	
 		}	
             return null;
         }

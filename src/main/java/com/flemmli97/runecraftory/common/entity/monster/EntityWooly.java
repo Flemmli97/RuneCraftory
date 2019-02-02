@@ -42,7 +42,7 @@ public class EntityWooly extends EntityMobBase implements IShearable
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        this.shearTick = Math.max(this.shearTick--, 0);
+        this.shearTick = Math.max(--this.shearTick, 0);
         if (this.shearTick == 1) {
             this.setSheared(false);
         }

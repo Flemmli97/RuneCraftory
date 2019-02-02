@@ -177,23 +177,20 @@ public abstract class TileMultiBase extends TileEntity implements IInventory{
 			if(ItemNBT.addItemLevel(toUpgrade))
 			{
 				ItemNBT.addUpgradeItem(toUpgrade, upgrade);
-				if(upgrade.getItem()==ModItems.crystal)
-				{
-					if(upgrade.getMetadata()==0)
-						ItemNBT.setElement(EnumElement.WATER, toUpgrade);
-					else if(upgrade.getMetadata()==1)
-						ItemNBT.setElement(EnumElement.EARTH, toUpgrade);
-					else if(upgrade.getMetadata()==2)
-						ItemNBT.setElement(EnumElement.FIRE, toUpgrade);
-					else if(upgrade.getMetadata()==3)
-						ItemNBT.setElement(EnumElement.WIND, toUpgrade);
-					else if(upgrade.getMetadata()==4)
-						ItemNBT.setElement(EnumElement.LIGHT, toUpgrade);
-					else if(upgrade.getMetadata()==5)
-						ItemNBT.setElement(EnumElement.DARK, toUpgrade);
-					else if(upgrade.getMetadata()==6)
-						ItemNBT.setElement(EnumElement.LOVE, toUpgrade);
-				}
+				if(upgrade.getItem()==ModItems.crystalWater)
+					ItemNBT.setElement(EnumElement.WATER, toUpgrade);
+				else if(upgrade.getItem()==ModItems.crystalEarth)
+					ItemNBT.setElement(EnumElement.EARTH, toUpgrade);
+				else if(upgrade.getItem()==ModItems.crystalFire)
+					ItemNBT.setElement(EnumElement.FIRE, toUpgrade);
+				else if(upgrade.getItem()==ModItems.crystalWind)
+					ItemNBT.setElement(EnumElement.WIND, toUpgrade);
+				else if(upgrade.getItem()==ModItems.crystalLight)
+					ItemNBT.setElement(EnumElement.LIGHT, toUpgrade);
+				else if(upgrade.getItem()==ModItems.crystalDark)
+					ItemNBT.setElement(EnumElement.DARK, toUpgrade);
+				else if(upgrade.getItem()==ModItems.crystalLove)
+					ItemNBT.setElement(EnumElement.LOVE, toUpgrade);
 				this.inventory.get(8).shrink(1);
 				player.world.playSound(null, player.getPosition(),SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1, 1);
 			}

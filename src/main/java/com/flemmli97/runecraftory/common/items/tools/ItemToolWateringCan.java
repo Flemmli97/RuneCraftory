@@ -4,11 +4,10 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.client.render.EnumToolCharge;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
 import com.flemmli97.runecraftory.common.init.ModItems;
-import com.flemmli97.runecraftory.common.items.IModelRegister;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumToolTier;
@@ -21,8 +20,6 @@ import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -31,7 +28,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.util.ActionResult;
@@ -39,17 +35,13 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemToolWateringCan extends ItemTool implements IItemUsable, IModelRegister, IChargeable
+public class ItemToolWateringCan extends ItemTool implements IItemUsable, IChargeable
 {
 	private EnumToolTier tier;
 	private int[] levelXP = new int[] {5, 20, 50, 200, 500};
@@ -68,7 +60,7 @@ public class ItemToolWateringCan extends ItemTool implements IItemUsable, IModel
     @Override
     public double getDurabilityForDisplay(ItemStack stack) {
         if (!stack.hasTagCompound()) {
-            ItemNBT.initNBT(stack);
+            ItemNBT.initNBT(stack, true);
         }
         return 1.0f - stack.getTagCompound().getInteger("Water") / this.waterVol[this.tier.getTierLevel()];
     }
@@ -86,28 +78,6 @@ public class ItemToolWateringCan extends ItemTool implements IItemUsable, IModel
     @Override
     public EnumWeaponType getWeaponType() {
         return EnumWeaponType.FARM;
-    }
-
-    @Override
-    public String getUnlocalizedName() {
-        return this.getRegistryName().toString();
-    }
-
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return this.getRegistryName().toString();
-    }
-
-    @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
-            ItemStack stack = new ItemStack((Item)this);
-            ItemNBT.initNBT(stack);
-            if (stack.hasTagCompound()) {
-                stack.getTagCompound().setInteger("Water", 0);
-            }
-            items.add(stack);
-        }
     }
 
     @Override
@@ -176,7 +146,7 @@ public class ItemToolWateringCan extends ItemTool implements IItemUsable, IModel
                 }
             }
             if (flag) {
-                IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+                IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
                 capSync.decreaseRunePoints(player, this.chargeRunes[range]);
                 capSync.increaseSkill(EnumSkills.WATER, player, this.levelXP[range]);
                 capSync.increaseSkill(EnumSkills.FARMING, player, this.levelXP[range]);
@@ -185,10 +155,20 @@ public class ItemToolWateringCan extends ItemTool implements IItemUsable, IModel
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
-        if (handIn == EnumHand.MAIN_HAND && this.tier.getTierLevel() != 0) {
-            playerIn.setActiveHand(handIn);
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    	RayTraceResult ray = this.rayTrace(world, player, true);
+        ItemStack itemstack = player.getHeldItem(hand);
+        if (ray != null && ray.typeOfHit == RayTraceResult.Type.BLOCK && world.getBlockState(ray.getBlockPos()).getBlock() == Blocks.WATER && !hasFullWater(itemstack)) {
+        	if (!itemstack.hasTagCompound()) {
+                ItemNBT.initNBT(itemstack);
+            }
+        	itemstack.getTagCompound().setInteger("Water", this.waterVol[this.tier.getTierLevel()]);
+            world.setBlockState(ray.getBlockPos(), Blocks.AIR.getDefaultState(), 3);
+            player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0f, 1.0f);
+            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+        }
+        if (hand == EnumHand.MAIN_HAND && this.tier.getTierLevel() != 0) {
+            player.setActiveHand(hand);
             return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
         }
         return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
@@ -213,19 +193,6 @@ public class ItemToolWateringCan extends ItemTool implements IItemUsable, IModel
                 flag = true;
                 result = EnumActionResult.SUCCESS;
             }
-            else {
-                RayTraceResult ray = this.rayTrace(world, player, true);
-                if (ray != null && ray.typeOfHit == RayTraceResult.Type.BLOCK && world.getBlockState(ray.getBlockPos()).getBlock() == Blocks.WATER) {
-                    if (!stack.hasTagCompound()) {
-                        ItemNBT.initNBT(stack);
-                    }
-                    stack.getTagCompound().setInteger("Water", this.waterVol[this.tier.getTierLevel()]);
-                    flag = true;
-                    world.setBlockState(ray.getBlockPos(), Blocks.AIR.getDefaultState(), 11);
-                    player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0f, 1.0f);
-                    result = EnumActionResult.SUCCESS;
-                }
-            }
         }
         if (!flag) {
             BlockPos newPos = pos.down();
@@ -237,7 +204,7 @@ public class ItemToolWateringCan extends ItemTool implements IItemUsable, IModel
             }
         }
         if (used) {
-            IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+            IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
             capSync.decreaseRunePoints(player, 1);
             capSync.increaseSkill(EnumSkills.WATER, player, 1);
             capSync.increaseSkill(EnumSkills.FARMING, player, 1);
@@ -269,14 +236,17 @@ public class ItemToolWateringCan extends ItemTool implements IItemUsable, IModel
         }
         return false;
     }
+    
+    private boolean hasFullWater(ItemStack stack)
+    {
+    	if (!stack.hasTagCompound()) {
+            ItemNBT.initNBT(stack);
+        }
+    	return stack.getTagCompound().getInteger("Water") == this.waterVol[this.tier.getTierLevel()];
+    }
 
     @Override
     public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
         return HashMultimap.<String, AttributeModifier>create();
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation((Item)this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
     }
 }

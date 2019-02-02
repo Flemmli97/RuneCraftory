@@ -1,8 +1,7 @@
 package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,9 +14,9 @@ public class PacketMaxRunePoints  implements IMessage{
 	public int runePointsMax;	
 	public PacketMaxRunePoints(){}
 	
-	public PacketMaxRunePoints(IPlayer playerCap)
+	public PacketMaxRunePoints(int rp)
 	{
-		this.runePointsMax = playerCap.getMaxRunePoints();
+		this.runePointsMax = rp;
 	}
 	
 	@Override
@@ -37,11 +36,7 @@ public class PacketMaxRunePoints  implements IMessage{
         	EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
         if(player!=null)
 		{
-			IPlayer capSync = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
-			if(capSync != null)
-		    {
-				capSync.setMaxRunePoints(player, msg.runePointsMax);	     	
-		    }					
+			player.getCapability(PlayerCapProvider.PlayerCap, null).setMaxRunePoints(player, msg.runePointsMax);	     	
 		}	
             return null;
         }

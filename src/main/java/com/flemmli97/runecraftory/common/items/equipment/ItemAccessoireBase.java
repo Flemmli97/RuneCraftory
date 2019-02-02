@@ -4,58 +4,42 @@ import javax.annotation.Nullable;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.items.IItemWearable;
-import com.flemmli97.runecraftory.common.items.IModelRegister;
-import com.flemmli97.runecraftory.common.utils.ItemNBT;
+import com.flemmli97.runecraftory.common.init.ModItems;
+import com.flemmli97.runecraftory.common.lib.LibReference;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class ItemAccessoireBase extends ItemArmor implements IItemWearable, IModelRegister
+public class ItemAccessoireBase extends ItemArmor implements IItemWearable
 {
     private static final String armorModelPath = "runecraftory:textures/models/armor/";
+    
+    public ItemAccessoireBase(String name) {
+        this(ModItems.chain, name);
+    }
     
     public ItemAccessoireBase(ItemArmor.ArmorMaterial mat, String name) {
         super(mat, 0, EntityEquipmentSlot.LEGS);
         this.setMaxStackSize(1);
         this.setCreativeTab(RuneCraftory.equipment);
-        this.setRegistryName(new ResourceLocation("runecraftory", name));
+        this.setRegistryName(new ResourceLocation(LibReference.MODID, name));
         this.setUnlocalizedName(this.getRegistryName().toString());
     }
     
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return false;
-    }
-    
-    @Override
-    public String getUnlocalizedName() {
-        return this.getRegistryName().toString();
-    }
-    
-    @Override
-    public String getUnlocalizedName(ItemStack stack) {
-        return this.getRegistryName().toString();
-    }
-    
-    @Override
-    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-        if (this.isInCreativeTab(tab)) {
-            ItemStack stack = new ItemStack(this);
-            ItemNBT.initNBT(stack);
-            items.add(stack);
-        }
     }
     
     @Nullable
@@ -68,11 +52,13 @@ public abstract class ItemAccessoireBase extends ItemArmor implements IItemWeara
     @Nullable
     @Override
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        return null;
+        _default.setVisible(false);
+        return _default;
     }
     
-    @SideOnly(Side.CLIENT)
-    public void initModel() {
-        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(this.getRegistryName(), "inventory"));
+    @Override
+    public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot)
+    {
+        return HashMultimap.create();
     }
 }

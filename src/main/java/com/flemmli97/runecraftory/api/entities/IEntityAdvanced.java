@@ -4,10 +4,11 @@ import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 
 public interface IEntityAdvanced extends IEntityBase
 {
-    public ItemStack[] tamingItem();
+    public NonNullList<ItemStack> tamingItem();
     
     public  Map<ItemStack, Integer> dailyDrops();
     

@@ -2,7 +2,7 @@ package com.flemmli97.runecraftory.common.inventory;
 
 import javax.annotation.Nullable;
 
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -23,7 +23,7 @@ public class ContainerInfoScreenSub extends Container
     
     public ContainerInfoScreenSub(EntityPlayer player) {
         InventoryPlayer playerInventory = player.inventory;
-        InventorySpells playerSpells = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null).getInv();
+        InventorySpells playerSpells = player.getCapability(PlayerCapProvider.PlayerCap, null).getInv();
         for (int k = 0; k < 4; ++k) {
             EntityEquipmentSlot entityequipmentslot = ContainerInfoScreenSub.VALID_EQUIPMENT_SLOTS[k];
             this.addSlotToContainer(new Slot(playerInventory, 36 + (3 - k), -6, -12 + k * 18) {

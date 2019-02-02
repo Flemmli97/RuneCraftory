@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.fluids.blocks;
 
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.fluids.FluidHotSpring;
 import com.flemmli97.runecraftory.common.lib.LibReference;
@@ -26,7 +26,7 @@ public class BlockHotSpring extends BlockFluidClassic
     public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
         if (entity instanceof EntityPlayer && entity.ticksExisted % 15 == 0) {
             EntityPlayer player = (EntityPlayer)entity;
-            IPlayer cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+            IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
             cap.regenHealth(player, cap.getMaxHealth() * 0.01f);
             cap.refreshRunePoints(player, Math.min(cap.getMaxRunePoints(), (int)Math.max(1.0f, cap.getMaxRunePoints() * 0.01f)));
             cap.increaseSkill(EnumSkills.BATH, player, 1);

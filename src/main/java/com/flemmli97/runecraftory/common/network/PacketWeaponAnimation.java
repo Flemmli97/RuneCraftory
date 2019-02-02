@@ -1,8 +1,7 @@
 package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayerAnim;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -37,11 +36,7 @@ public class PacketWeaponAnimation  implements IMessage{
         	EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
         if(player!=null)
 		{
-			IPlayerAnim anim = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerAnim, null);
-			if(anim != null)
-		    {
-				anim.startAnimation(msg.tick);	     	
-		    }					
+			player.getCapability(PlayerCapProvider.PlayerCap, null).startAnimation(msg.tick);	     	
 		}	
             return null;
         }

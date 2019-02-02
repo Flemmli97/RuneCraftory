@@ -18,7 +18,7 @@ public class EntityAIGenericCharge extends EntityAIGenericMelee
     public void updateTask() {
         EntityLivingBase target = this.attacker.getAttackTarget();
         EntityChargeable entity = (EntityChargeable)this.attacker;
-        this.chargeDelay = Math.max(this.chargeDelay--, 0);
+        this.chargeDelay = Math.max(--this.chargeDelay, 0);
         this.attacker.getLookHelper().setLookPositionWithEntity((Entity)target, 30.0f, 30.0f);
         double dis = this.attacker.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
         if (this.chargeDelay <= 0 && dis >= 25.0 && this.attacker.getRNG().nextFloat() < 0.4f && !entity.isCharging()) {

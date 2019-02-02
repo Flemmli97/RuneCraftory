@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.inventory;
 
-import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityProvider;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 
@@ -48,7 +48,7 @@ public class InventoryShippingBin extends InventoryBasic
     }
     
     public void shipItems(EntityPlayer player) {
-        IPlayer cap = player.getCapability(CapabilityProvider.PlayerCapProvider.PlayerCap, null);
+        IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
         int money = 0;
         for (int i = 0; i < this.getSizeInventory(); ++i) {
             money += ItemUtils.getSellPrice(this.getStackInSlot(i)) * this.getStackInSlot(i).getCount();
