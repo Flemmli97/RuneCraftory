@@ -6,7 +6,6 @@ import com.flemmli97.runecraftory.api.entities.IEntityAdvanced;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.entities.IRFNpc;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
-import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
@@ -73,9 +72,9 @@ public class RFCalculations
                 if (resetCooldown) {
                     player.getCooldownTracker().setCooldown(stack.getItem(), item.itemCoolDownTicks());
                 }
-                boolean faintChance = player.world.rand.nextInt(100) < getAttributeValue((EntityLivingBase)player, ItemStatAttributes.RFFAINT, target, ItemStatAttributes.RFRESFAINT);
-                boolean critChance = player.world.rand.nextInt(100) < getAttributeValue((EntityLivingBase)player, ItemStatAttributes.RFCRIT, target, ItemStatAttributes.RFRESCRIT);
-                boolean knockBackChance = player.world.rand.nextInt(100) < getAttributeValue((EntityLivingBase)player, ItemStatAttributes.RFKNOCK, target, SharedMonsterAttributes.KNOCKBACK_RESISTANCE);
+                boolean faintChance = player.world.rand.nextInt(100) < getAttributeValue(player, ItemStatAttributes.RFFAINT, target, ItemStatAttributes.RFRESFAINT);
+                boolean critChance = player.world.rand.nextInt(100) < getAttributeValue(player, ItemStatAttributes.RFCRIT, target, ItemStatAttributes.RFRESCRIT);
+                boolean knockBackChance = player.world.rand.nextInt(100) < getAttributeValue(player, ItemStatAttributes.RFKNOCK, target, SharedMonsterAttributes.KNOCKBACK_RESISTANCE);
                 int i = knockBackChance ? 2 : 1;
                 if (player.isSprinting()) {
                     player.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundCategory(), 1.0f, 1.0f);
@@ -109,7 +108,7 @@ public class RFCalculations
                         player.setSprinting(false);
                     }
                     if (target instanceof EntityPlayerMP && target.velocityChanged) {
-                        ((EntityPlayerMP)target).connection.sendPacket(new SPacketEntityVelocity((Entity)target));
+                        ((EntityPlayerMP)target).connection.sendPacket(new SPacketEntityVelocity(target));
                         target.velocityChanged = false;
                         target.motionX = d1;
                         target.motionY = d2;
@@ -154,15 +153,15 @@ public class RFCalculations
             	//Using custom knockback
                 knockBack(target, source);
             }
-            float drainPercent = getAttributeValue(player, ItemStatAttributes.RFDRAIN, target, ItemStatAttributes.RFRESDRAIN);
-            if (drainPercent > 0.0f) 
+            int drainPercent = getAttributeValue(player, ItemStatAttributes.RFDRAIN, target, ItemStatAttributes.RFRESDRAIN);
+            if (drainPercent > 0f) 
             {
                 cap.regenHealth(player, drainPercent * damagePhys);
             }
-            applyStatusEffects((EntityLivingBase)player, target);
-            player.setLastAttackedEntity((Entity)target);
+            applyStatusEffects(player, target);
+            player.setLastAttackedEntity(target);
             if (target instanceof EntityLivingBase) {
-                EnchantmentHelper.applyThornEnchantments(target, (Entity)player);
+                EnchantmentHelper.applyThornEnchantments(target, player);
             }
             ItemStack beforeHitCopy = stack.copy();
             stack.hitEntity(target, player);
@@ -184,6 +183,7 @@ public class RFCalculations
         }
     }
     
+    //TODO: Need to look more into stun and dizzy
     public static void applyStatusEffects(EntityLivingBase attackingEntity, EntityLivingBase target) 
     {
         if (target instanceof EntityPlayer || target instanceof IEntityAdvanced) {
@@ -232,40 +232,35 @@ public class RFCalculations
         	IPlayer cap = entity.getCapability(PlayerCapProvider.PlayerCap, null);
         	increase+=cap.getAttributeValue(att);
         }
+        else if(entity instanceof IRFNpc)
+        {
+        	increase+=((IRFNpc)entity).getAttributeValue(att);
+        }
         else if (entity instanceof IEntityBase && entity.getAttributeMap().getAttributeInstance(att) != null) 
         {
             increase += (int)entity.getAttributeMap().getAttributeInstance(att).getAttributeValue();
         }
+        
         if (target instanceof IEntityBase && target.getAttributeMap().getAttributeInstance(resAtt) != null) 
         {
             increase -= (int)target.getAttributeMap().getAttributeInstance(resAtt).getAttributeValue();
         }
-        else if (target instanceof IRFNpc || target instanceof EntityPlayer) 
+        else if(target instanceof IRFNpc)
         {
-            if (target.getHeldItemMainhand().getItem() instanceof IItemUsable && ItemNBT.statIncrease(target.getHeldItemMainhand()).get(resAtt) != null) 
-            {
-                increase -= ItemNBT.statIncrease(target.getHeldItemMainhand()).get(resAtt);
-            }
-            for (ItemStack equip : target.getArmorInventoryList()) 
-            {
-                if (!equip.isEmpty() && equip.getItem() instanceof IItemWearable && ItemNBT.statIncrease(equip).get(resAtt) != null) 
-                {
-                    increase -= ItemNBT.statIncrease(equip).get(resAtt);
-                }
-            }
-            if (!target.getHeldItemOffhand().isEmpty() && target.getHeldItemOffhand().getItem() instanceof IItemWearable && !(target.getHeldItemOffhand().getItem() instanceof IItemUsable) && ItemNBT.statIncrease(target.getHeldItemOffhand()).get(resAtt) != null) 
-            {
-                increase -= ItemNBT.statIncrease(target.getHeldItemOffhand()).get(resAtt);
-            }
+        	increase-=((IRFNpc)target).getAttributeValue(att);
+        }
+        else if(target instanceof EntityPlayer) 
+        {
+        	IPlayer cap = target.getCapability(PlayerCapProvider.PlayerCap, null);
+        	increase-=cap.getAttributeValue(att);
         }
         return increase;
     }
     
-    public static void getPlayerDamageReduction(EntityPlayer player, DamageSource source, float amount) 
+    public static float getPlayerDamageAfterReduction(EntityPlayer player, DamageSource source, float amount) 
     {
         float reduce = 0.0f;
-        IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
-        if (!source.isDamageAbsolute()) 
+        if (!source.isDamageAbsolute())
         {
         	if(!source.isUnblockable())
         	{
@@ -282,8 +277,7 @@ public class RFCalculations
                 amount = f / 25.0F;
             }
         }
-        amount = Math.max(0.0f, amount - reduce);
-        capSync.damage(player, source, amount);
+        return Math.max(0.0f, amount - reduce);
     }
     
     public static float elementalReduction(EntityLivingBase entity, DamageSource source, float amount) 
@@ -334,7 +328,7 @@ public class RFCalculations
     public static boolean attackEntity(Entity target, CustomDamage source, float amount) 
     {
         if (target instanceof EntityLivingBase) {
-            knockBack((EntityLivingBase)target, source);
+            knockBack((EntityLivingBase) target, source);
         }
         if (target.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             return false;

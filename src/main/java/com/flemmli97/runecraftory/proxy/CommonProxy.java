@@ -47,6 +47,7 @@ public class CommonProxy
         OreDictInit.init();
         WorldGenRegistry.init();
         if (Loader.isModLoaded("waila") && ConfigHandler.MainConfig.waila) {
+        	LibReference.logger.debug("Registering waila compat");
             FMLInterModComms.sendMessage("waila", "register", "com.flemmli97.runecraftory.compat.waila.WailaRegister.init");
         }
     }

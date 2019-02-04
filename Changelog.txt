@@ -31,3 +31,7 @@ Runecraftory a0.3.0
 - Added dummy default configs for all items
 - Oredicted all items
 - Added plants to world gen
+- Finished default configs for crops
+- Removed custom health handling and changed it back to vanilla
+- Finished the lang file
+- Quest system added with configs

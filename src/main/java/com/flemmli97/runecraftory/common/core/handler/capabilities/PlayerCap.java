@@ -12,11 +12,10 @@ import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
 import com.flemmli97.runecraftory.common.core.handler.quests.QuestMission;
 import com.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
+import com.flemmli97.runecraftory.common.lib.LibConstants;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.network.PacketFoodUpdate;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
-import com.flemmli97.runecraftory.common.network.PacketHealth;
-import com.flemmli97.runecraftory.common.network.PacketMaxHealth;
 import com.flemmli97.runecraftory.common.network.PacketMaxRunePoints;
 import com.flemmli97.runecraftory.common.network.PacketMoney;
 import com.flemmli97.runecraftory.common.network.PacketPlayerLevel;
@@ -34,14 +33,15 @@ import com.google.common.collect.Maps;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
@@ -52,8 +52,6 @@ public class PlayerCap implements IPlayer
 	//max runepoints possible: 2883
 	private int money=0;
 	private int runePointsMax=56;
-	private float healthMax=25;
-	private float health=healthMax;
 	private int runePoints = runePointsMax;
 	private float str = 5;
 	private float vit = 4;
@@ -102,54 +100,33 @@ public class PlayerCap implements IPlayer
 	}
     
     @Override
-    public float getHealth() {
-        return this.health;
+    public float getHealth(EntityPlayer player) {
+        return player.getHealth();
     }
     
     @Override
     public void setHealth(EntityPlayer player, float amount) {
-        if (amount > this.getMaxHealth()) {
-            this.health = this.getMaxHealth();
+        if (amount > this.getMaxHealth(player)) {
+            amount = this.getMaxHealth(player);
         }
-        else {
-            this.health = amount;
-        }
-        if (!player.world.isRemote && player instanceof EntityPlayerMP) {
-            PacketHandler.sendTo(new PacketHealth(this), (EntityPlayerMP)player);
-        }
+        player.setHealth(amount);
     }
     
     @Override
     public void regenHealth(EntityPlayer player, float amount) {
-        this.health = Math.min(this.getMaxHealth(), this.health + amount);
-        if (!player.world.isRemote && player instanceof EntityPlayerMP) {
-            PacketHandler.sendTo(new PacketHealth(this), (EntityPlayerMP)player);
-        }
+        this.setHealth(player, amount+this.getHealth(player));
     }
     
     @Override
-    public void damage(EntityPlayer player, DamageSource source, float amount) {
-        player.getCombatTracker().trackDamage(source, this.health, amount);
-        this.health -= amount;
-        if (this.health <= 0.0f) {
-            player.setHealth(0.0f);
-        }
-        if (!player.world.isRemote && player instanceof EntityPlayerMP) {
-            PacketHandler.sendTo(new PacketHealth(this), (EntityPlayerMP)player);
-        }
-    }
-    
-    @Override
-    public float getMaxHealth() {
-        return this.healthMax+(this.foodBuffs.containsKey(SharedMonsterAttributes.MAX_HEALTH)?this.foodBuffs.get(SharedMonsterAttributes.MAX_HEALTH):0);
+    public float getMaxHealth(EntityPlayer player) {
+        return player.getMaxHealth()+(this.foodBuffs.containsKey(SharedMonsterAttributes.MAX_HEALTH)?this.foodBuffs.get(SharedMonsterAttributes.MAX_HEALTH):0);
     }
     
     @Override
     public void setMaxHealth(EntityPlayer player, float amount) {
-        this.healthMax = amount;
-        if (!player.world.isRemote && player instanceof EntityPlayerMP) {
-            PacketHandler.sendTo(new PacketMaxHealth(this.healthMax), (EntityPlayerMP)player);
-        }
+    	IAttributeInstance health = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+    	health.removeModifier(LibConstants.maxHealthModifier);
+    	health.applyModifier(new AttributeModifier(LibConstants.maxHealthModifier, "rf.hpModifier", amount-health.getBaseValue(), 0));
     }
     
     @Override
@@ -239,7 +216,7 @@ public class PlayerCap implements IPlayer
     
     @Override
     public void addXp(EntityPlayer player, int amount) {
-        if (!player.capabilities.isCreativeMode) 
+        //if (!player.capabilities.isCreativeMode) 
         {
             int neededXP = LevelCalc.xpAmountForLevelUp(this.level[0]);
             int xpToNextLevel = neededXP - this.level[1];
@@ -248,7 +225,7 @@ public class PlayerCap implements IPlayer
                 int diff = amount - xpToNextLevel;
                 this.level[0]+=1;
                 this.level[1] = 0;
-                this.onLevelUp();
+                this.onLevelUp(player);
                 player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2f, 1.0f);
                 this.addXp(player, diff);
             }
@@ -262,10 +239,10 @@ public class PlayerCap implements IPlayer
         }
     }
     
-    private void onLevelUp() {
-        this.healthMax += 10.0f;
+    private void onLevelUp(EntityPlayer player) {
+    	this.setMaxHealth(player, this.getMaxHealth(player)+10);
+        this.regenHealth(player, 10);
         this.runePointsMax += 5;
-        this.health = Math.min(this.health + 10.0f, this.healthMax);
         this.runePoints = Math.min(this.runePoints + 5, this.runePoints);
         this.str += 2.0f;
         this.vit += 2.0f;
@@ -383,7 +360,7 @@ public class PlayerCap implements IPlayer
     
     @Override
     public void increaseSkill(EnumSkills skill, EntityPlayer player, int xp) {
-        if (!player.capabilities.isCreativeMode) 
+        //if (!player.capabilities.isCreativeMode) 
         {
             int neededXP = LevelCalc.xpAmountForSkills(this.skillMap.get(skill)[0]);
             int xpToNextLevel = neededXP - this.skillMap.get(skill)[1];
@@ -392,7 +369,7 @@ public class PlayerCap implements IPlayer
                 int diff = xp - xpToNextLevel;
                 this.skillMap.get(skill)[0]+=1;
                 this.skillMap.get(skill)[1] = 0;
-                this.onSkillLevelUp(skill);
+                this.onSkillLevelUp(skill, player);
                 player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2f, 1.0f);
                 this.increaseSkill(skill, player, diff);
             }
@@ -406,9 +383,9 @@ public class PlayerCap implements IPlayer
         }
     }
     
-    private void onSkillLevelUp(EnumSkills skill) {
-        this.healthMax += skill.getHealthIncrease();
-        this.health += skill.getHealthIncrease();
+    private void onSkillLevelUp(EnumSkills skill, EntityPlayer player) {
+        this.setMaxHealth(player, this.getHealth(player)+skill.getHealthIncrease());
+        this.regenHealth(player, skill.getHealthIncrease());
         this.runePointsMax += skill.getRPIncrease();
         this.runePoints += skill.getRPIncrease();
         this.str += skill.getStrIncrease();
@@ -433,7 +410,7 @@ public class PlayerCap implements IPlayer
     
     @Override
     public boolean acceptMission(QuestMission quest) {
-        if (this.quest == null) {
+        if (this.quest == null && quest.questObjective()!=null) {
             this.quest = quest;
             return true;
         }
@@ -442,8 +419,10 @@ public class PlayerCap implements IPlayer
     
     @Override
     public boolean finishMission(EntityPlayer player) {
-        if (this.quest != null && this.quest.questObjective().isFinished()) {
+        if (this.quest != null && this.quest.questObjective().isFinished()) 
+        {
             for (ItemStack stack : this.quest.questObjective().rewards()) {
+            	System.out.println(stack);
                 ItemUtils.spawnItemAtEntity(player, stack);
             }
             this.setMoney(player, this.getMoney() + this.quest.questObjective().moneyReward());
@@ -455,7 +434,7 @@ public class PlayerCap implements IPlayer
     
     
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
+    public void readFromNBT(NBTTagCompound nbt, EntityPlayer player) {
         this.runePointsMax = nbt.getInteger("MaxRunePoints");
         if (nbt.hasKey("RunePoints")) {
             this.runePoints = nbt.getInteger("RunePoints");
@@ -463,8 +442,12 @@ public class PlayerCap implements IPlayer
         else {
             this.runePoints = this.runePointsMax;
         }
-        this.health = nbt.getFloat("Health");
-        this.healthMax = nbt.getFloat("HealthMax");
+        if(nbt.hasKey("DeathHP") && player!=null)
+        {
+        	float f = nbt.getFloat("DeathHP");
+        	if(f>0)
+        		this.setHealth(player, f);
+        }
         this.money = nbt.getInteger("Money");
         this.str = nbt.getFloat("Strength");
         this.vit = nbt.getFloat("Vitality");
@@ -494,16 +477,15 @@ public class PlayerCap implements IPlayer
     }
     
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt, boolean forDeath) {
-        if (!forDeath) {
-            nbt.setFloat("Health", this.health);
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt, EntityPlayer player) {
+        if (player==null) {
             nbt.setInteger("RunePoints", this.runePoints);
         }
         else {
-            nbt.setFloat("Health", this.healthMax / 2.0f);
+            nbt.setFloat("DeathHP", player.getMaxHealth() / 2.0f);
+            nbt.setInteger("RunePoints", (int) (this.runePointsMax*0.3));
         }
         nbt.setInteger("MaxRunePoints", this.runePointsMax);
-        nbt.setFloat("HealthMax", this.healthMax);
         nbt.setInteger("Money", this.money);
         nbt.setFloat("Strength", this.str);
         nbt.setFloat("Vitality", this.vit);
@@ -538,7 +520,7 @@ public class PlayerCap implements IPlayer
 		{
 			int i = 0;
 			if(att==SharedMonsterAttributes.MAX_HEALTH)
-				i+=this.healthMax*gainMulti.get(att);
+				i+=this.getMaxHealth(player)*gainMulti.get(att);
 			else if(att==ItemStatAttributes.RPMAX)
 				i+=this.runePointsMax*gainMulti.get(att);
 			else if(att==ItemStatAttributes.RFATTACK)

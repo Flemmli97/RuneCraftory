@@ -14,7 +14,6 @@ import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.config.ConfigHandler;
-import com.flemmli97.runecraftory.common.core.handler.quests.IObjective;
 import com.flemmli97.runecraftory.common.core.handler.quests.ObjectiveKill;
 import com.flemmli97.runecraftory.common.core.handler.quests.QuestMission;
 import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler;
@@ -40,7 +39,6 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
@@ -48,6 +46,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,6 +56,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.EnumPlantType;
@@ -65,7 +65,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
-import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -92,7 +91,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EventHandlerCore
 {
     public static final ResourceLocation PlayerCap = new ResourceLocation(LibReference.MODID, "playerCap");
-    
+
     @SubscribeEvent
     public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof EntityPlayer) 
@@ -126,13 +125,15 @@ public class EventHandlerCore
             if (capSync != null) 
                 PacketHandler.sendTo(new PacketUpdateClient(capSync), (EntityPlayerMP)player);
             PacketHandler.sendTo(new PacketCalendar(CalendarHandler.get(event.player.world)), (EntityPlayerMP)player);
-        }
-        NBTTagCompound playerData = event.player.getEntityData();
-        NBTTagCompound persistent = event.player.getEntityData().getCompoundTag("PlayerPersisted");
-        if (!persistent.getBoolean("runecraftory:starterItems")) {
-            ItemUtils.starterItems(event.player);
-            persistent.setBoolean("runecraftory:starterItems", true);
-            playerData.setTag("PlayerPersisted", persistent);
+            NBTTagCompound playerData = event.player.getEntityData();
+            NBTTagCompound persistent = event.player.getEntityData().getCompoundTag("PlayerPersisted");
+            if (!persistent.getBoolean("runecraftory:starterItems")) {
+                ItemUtils.starterItems(event.player);
+                persistent.setBoolean("runecraftory:starterItems", true);
+                playerData.setTag("PlayerPersisted", persistent);
+                capSync.setMaxHealth(player, 25);
+                capSync.regenHealth(player, capSync.getMaxHealth(player));
+            }
         }
     }
     
@@ -230,34 +231,14 @@ public class EventHandlerCore
      */
     @SubscribeEvent
     public void damageCalculation(LivingHurtEvent event) {
-        if (event.getSource().damageType.equals("rfAttack")) 
+        if (event.getSource() instanceof CustomDamage) 
         {
             CustomDamage source = (CustomDamage)event.getSource();
             if (event.getEntityLiving() instanceof EntityPlayer) 
             {
-                event.setCanceled(true);
-                RFCalculations.getPlayerDamageReduction((EntityPlayer)event.getEntityLiving(), event.getSource(), event.getAmount());
+            	event.setAmount(RFCalculations.getPlayerDamageAfterReduction((EntityPlayer)event.getEntityLiving(), event.getSource(), event.getAmount()));
             }
             event.getEntityLiving().hurtResistantTime = source.hurtProtection();
-        }
-        else if (event.getSource().damageType.equals("rfExhaust") && event.getEntityLiving() instanceof EntityPlayer) 
-        {
-            event.setCanceled(true);
-            IPlayer capSync = event.getEntityLiving().getCapability(PlayerCapProvider.PlayerCap, null);
-            capSync.damage((EntityPlayer)event.getEntityLiving(), CustomDamage.EXHAUST, event.getAmount());
-        }
-    }
-    
-    @SubscribeEvent
-    public void damageCalculation(LivingDamageEvent event) 
-    {
-        if (event.getEntityLiving() instanceof EntityPlayer) 
-        {
-            float oldDamage = event.getAmount();
-            event.setAmount(0.0f);
-            IPlayer capSync = event.getEntityLiving().getCapability(PlayerCapProvider.PlayerCap, null);
-            float damage = capSync.getMaxHealth() / event.getEntityLiving().getMaxHealth() * oldDamage;
-            capSync.damage((EntityPlayer)event.getEntityLiving(), event.getSource(), damage);
         }
     }
     
@@ -267,7 +248,8 @@ public class EventHandlerCore
         {
             IPlayer capSync = event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null);
             capSync.refreshRunePoints(event.getEntityPlayer(), capSync.getMaxRunePoints());
-            capSync.setHealth(event.getEntityPlayer(), capSync.getMaxHealth());
+            capSync.removeFoodEffect(event.getEntityPlayer());
+            event.getEntityPlayer().heal(event.getEntityPlayer().getMaxHealth());
             event.getEntityPlayer().clearActivePotions();
         }
     }
@@ -330,6 +312,7 @@ public class EventHandlerCore
     			event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth()*0.33f);
     			event.getEntityLiving().clearActivePotions();
     			event.getEntityLiving().world.setEntityState(event.getEntityLiving(), (byte)35);
+    			return;
     		}
     	}
         if (event.getEntityLiving() instanceof EntityPlayer) {
@@ -350,8 +333,8 @@ public class EventHandlerCore
             IPlayer capSync = event.getOriginal().getCapability(PlayerCapProvider.PlayerCap, null);
             capSync.useMoney(event.getOriginal(), (int)(capSync.getMoney() * 0.2));
             NBTTagCompound oldNBT = new NBTTagCompound();
-            capSync.writeToNBT(oldNBT, true);
-            event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null).readFromNBT(oldNBT);
+            capSync.writeToNBT(oldNBT, event.getOriginal());
+            event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null).readFromNBT(oldNBT, event.getEntityPlayer());
             if (!event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP) {
                 PacketHandler.sendTo(new PacketUpdateClient(event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null)), (EntityPlayerMP)event.getEntityPlayer());
             }
@@ -458,11 +441,10 @@ public class EventHandlerCore
             QuestMission quest = cap.currentMission();
             if (quest != null && quest.questObjective() instanceof ObjectiveKill) 
             {
-                IObjective obj = cap.currentMission().questObjective();
-                if (EntityList.isMatchingName((Entity)event.getEntityLiving(), new ResourceLocation(obj.objGoalID()))) 
-                {
-                    obj.updateProgress(player);
-                }
+            	ObjectiveKill obj = (ObjectiveKill) cap.currentMission().questObjective();
+            	obj.updateProgress(player, event.getEntityLiving());
+            	if(obj.isFinished())
+            		player.world.playSound(null,player.getPosition(), SoundEvents.BLOCK_NOTE_BELL,SoundCategory.PLAYERS, 1, 1);
             }
         }
     }
@@ -514,7 +496,7 @@ public class EventHandlerCore
 	        	cap.applyFoodEffect(player, prop.effects(), prop.effectsMultiplier(), prop.duration());
 	        	cap.regenHealth(player, prop.getHPGain());
 	        	cap.refreshRunePoints(player, cap.getRunePoints()+prop.getRPRegen());
-	        	cap.regenHealth(player, cap.getMaxHealth()*prop.getHpPercentGain()*0.01F);
+	        	cap.regenHealth(player, cap.getMaxHealth(player)*prop.getHpPercentGain()*0.01F);
 	        	cap.refreshRunePoints(player, (int) (cap.getRunePoints()+cap.getMaxRunePoints()*prop.getRpPercentRegen()*0.01));
     		}
     		else if(e instanceof IEntityBase)

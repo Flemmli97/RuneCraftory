@@ -4,11 +4,13 @@ import javax.annotation.Nullable;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.items.IItemWearable;
+import com.flemmli97.runecraftory.client.models.ModelAccessory;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
@@ -24,6 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemAccessoireBase extends ItemArmor implements IItemWearable
 {
     private static final String armorModelPath = "runecraftory:textures/models/armor/";
+    private EntityEquipmentSlot type = EntityEquipmentSlot.LEGS;
     
     public ItemAccessoireBase(String name) {
         this(ModItems.chain, name);
@@ -35,6 +38,17 @@ public class ItemAccessoireBase extends ItemArmor implements IItemWearable
         this.setCreativeTab(RuneCraftory.equipment);
         this.setRegistryName(new ResourceLocation(LibReference.MODID, name));
         this.setUnlocalizedName(this.getRegistryName().toString());
+    }
+    
+    public ItemAccessoireBase setModelType(EntityEquipmentSlot type)
+    {
+    	this.type=type;
+    	return this;
+    }
+    
+    public EntityEquipmentSlot modelType()
+    {
+    	return this.type;
     }
     
     @Override
@@ -52,13 +66,18 @@ public class ItemAccessoireBase extends ItemArmor implements IItemWearable
     @Nullable
     @Override
     public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-        _default.setVisible(false);
-        return _default;
+    	return ModelAccessory.model.setItem(this);
     }
     
     @Override
     public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot)
     {
         return HashMultimap.create();
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public ModelBase customModel()
+    {
+    	return null;
     }
 }

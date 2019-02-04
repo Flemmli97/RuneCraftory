@@ -2506,11 +2506,11 @@
 		"itemStats": {}
 	},
 	"runecraftory:hammer_scrap": {
-		"buyPrice": 1,
-		"sellPrice": 1,
+		"buyPrice": 1500,
+		"sellPrice": 13,
 		"upgradeDifficulty": -1,
 		"element": "NONE",
-		"itemStats": {}
+		"itemStats": {"rf.attack":3,"rf.diz":5,"rf.crit":-3,"rf.stun":20}
 	},
 	"runecraftory:hammer_iron": {
 		"buyPrice": 1,
@@ -2639,18 +2639,18 @@
 		"itemStats": {}
 	},
 	"runecraftory:broad_sword": {
-		"buyPrice": 1,
-		"sellPrice": 1,
+		"buyPrice": 90,
+		"sellPrice": 23,
 		"upgradeDifficulty": -1,
 		"element": "NONE",
-		"itemStats": {}
+		"itemStats": {"rf.attack":5,"rf.diz":6}
 	},
 	"runecraftory:steel_sword": {
-		"buyPrice": 1,
-		"sellPrice": 1,
+		"buyPrice": 1210,
+		"sellPrice": 42,
 		"upgradeDifficulty": -1,
 		"element": "NONE",
-		"itemStats": {}
+		"itemStats": {"rf.attack":29,"rf.diz":6}
 	},
 	"runecraftory:steel_sword_plus": {
 		"buyPrice": 1,
@@ -6327,7 +6327,7 @@
 		"element": "NONE",
 		"itemStats": {}
 	},
-	"runecraftory:shard_stone": {
+	"runecraftory:shade_stone": {
 		"buyPrice": 1,
 		"sellPrice": 1,
 		"upgradeDifficulty": -1,

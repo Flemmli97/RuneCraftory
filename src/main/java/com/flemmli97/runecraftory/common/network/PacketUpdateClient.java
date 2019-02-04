@@ -19,7 +19,7 @@ public class PacketUpdateClient  implements IMessage{
 	
 	public PacketUpdateClient(IPlayer playerCap)
 	{
-		playerCap.writeToNBT(compound, false);
+		playerCap.writeToNBT(this.compound, null);
 	}
 	
 	@Override
@@ -29,7 +29,7 @@ public class PacketUpdateClient  implements IMessage{
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		ByteBufUtils.writeTag(buf, compound);
+		ByteBufUtils.writeTag(buf, this.compound);
 	}
 	
 	public static class Handler implements IMessageHandler<PacketUpdateClient, IMessage> {
@@ -39,7 +39,7 @@ public class PacketUpdateClient  implements IMessage{
         	EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
         if(player!=null)
 		{
-			player.getCapability(PlayerCapProvider.PlayerCap, null).readFromNBT(msg.compound);		     	
+			player.getCapability(PlayerCapProvider.PlayerCap, null).readFromNBT(msg.compound, null);		     	
 		}	
             return null;
         }

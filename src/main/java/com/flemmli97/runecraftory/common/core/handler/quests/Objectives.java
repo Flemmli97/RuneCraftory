@@ -6,21 +6,21 @@ import com.google.common.collect.Maps;
 
 public class Objectives {
 
-	private static final Map<String, Class<? extends IObjective>> nameObjectives = Maps.newHashMap();
-	private static final Map<Class<? extends IObjective>, String> objectivesName = Maps.newHashMap();
+	private static final Map<String, Class<? extends IObjective<?>>> nameObjectives = Maps.newHashMap();
+	private static final Map<Class<? extends IObjective<?>>, String> objectivesName = Maps.newHashMap();
 
-	public static void registerObjectiveType(String name, Class<? extends IObjective> clss)
+	public static void registerObjectiveType(String name, Class<? extends IObjective<?>> clss)
 	{
 		nameObjectives.put(name, clss);
 		objectivesName.put(clss, name);
 	}
 	
-	public static Class<? extends IObjective> getObjective(String name)
+	public static Class<? extends IObjective<?>> getObjective(String name)
 	{
 		return nameObjectives.get(name);
 	}
 	
-	public static String getName(Class<? extends IObjective> name)
+	public static String getName(Class<? extends IObjective<?>> name)
 	{
 		return objectivesName.get(name);
 	}

@@ -10,16 +10,16 @@ import net.minecraft.nbt.NBTTagCompound;
 /**
  * Class implementing this needs to have an empty constructor
  */
-public interface IObjective {	
+public interface IObjective<T> {	
 
-	public void updateProgress(EntityPlayer player);
+	public void updateProgress(EntityPlayer player, T t);
 	
 	/**
 	 * String for comparing if a trigger matches this goal. E.g. for items: their registryname + meta or something
 	 */
-	public String objGoalID();
+	public boolean matches(T t);
 	
-	public int currentProgress();
+	public String currentProgress();
 	
 	public List<ItemStack> rewards();
 	
@@ -32,4 +32,30 @@ public interface IObjective {
 	public boolean isFinished();
 	
 	public String objDesc();
+	
+	public String rewardDesc();
+	
+	public ObjectiveType type();
+	
+	@SuppressWarnings("unchecked")
+	public default IObjective<T> copy()
+	{
+		IObjective<T> obj;
+		try {
+			obj = this.getClass().newInstance();
+			obj.readFromNBT(this.writeToNBT(new NBTTagCompound()));
+			return obj;
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static enum ObjectiveType
+	{
+		KILL,
+		BRING,
+		SHIP,
+		HARVEST;
+	}
 }

@@ -14,20 +14,17 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 
 public interface IPlayer{
 		
-	public float getHealth();
+	public float getHealth(EntityPlayer player);
 	
 	public void setHealth(EntityPlayer player, float amount);
 	
 	public void regenHealth(EntityPlayer player, float amount);
-	
-	public void damage(EntityPlayer player,DamageSource source, float amount);
-	
-	public float getMaxHealth();
+		
+	public float getMaxHealth(EntityPlayer player);
 	
 	public void setMaxHealth(EntityPlayer player, float amount);
 	
@@ -92,9 +89,15 @@ public interface IPlayer{
 	
 	//=====NBT 
 	
-	public void readFromNBT(NBTTagCompound nbt);
+	/**
+	 * @param player Used during death
+	 */
+	public void readFromNBT(NBTTagCompound nbt, EntityPlayer player);
 	
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt, boolean forDeath);
+	/**
+	 * @param player Used during death
+	 */
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt, EntityPlayer player);
 	
 	//=====Inventory
 	

@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.compat.waila;
 
 import java.util.List;
 
+import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
 import com.flemmli97.runecraftory.common.core.handler.config.ConfigHandler;
 import com.flemmli97.runecraftory.common.entity.EntityGate;
 import com.flemmli97.runecraftory.common.init.ModItems;
@@ -13,7 +14,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -35,15 +35,10 @@ public class GateStatsWaila implements IWailaEntityProvider
                 EntityGate mob = (EntityGate)entity;
                 for (IAttributeInstance a : mob.getAttributeMap().getAllAttributes()) 
                 {
-                    if (a.getAttribute().getClass() == RangedAttribute.class) 
-                    {
-                        if (a.getAttribute() == SharedMonsterAttributes.MAX_HEALTH) 
-                        	currenttip.add("Health: " + mob.getHealth() + " / " + mob.getMaxHealth());
-                    }
-                    else 
-                    {
-                        currenttip.add(I18n.format(a.getAttribute().getName()) + ": " + a.getAttributeValue());
-                    }
+                    if (a.getAttribute() == SharedMonsterAttributes.MAX_HEALTH) 
+                    	currenttip.add("Health: " + mob.getHealth() + " / " + mob.getMaxHealth());
+                    else if(a.getAttribute() instanceof ItemStatAttributes)
+                    	currenttip.add(I18n.format(a.getAttribute().getName()) + ": " + a.getAttributeValue());
                 }
             }
         }

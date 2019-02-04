@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class QuestMission {
 	
-	private IObjective obj;
+	private IObjective<?> obj;
 	private String ownerUUID;
 	private String ownerName;
 	public QuestMission(NBTTagCompound compound)
@@ -17,7 +17,7 @@ public class QuestMission {
 		this.readFromNBT(compound);
 	}
 	
-	public QuestMission(IObjective obj, @Nullable EntityNPCBase questOwner)
+	public QuestMission(IObjective<?> obj, @Nullable EntityNPCBase questOwner)
 	{
 		this.obj=obj;
 		if(questOwner!=null)
@@ -42,7 +42,7 @@ public class QuestMission {
 		return this.ownerName;
 	}
 	
-	public IObjective questObjective()
+	public IObjective<?> questObjective()
 	{
 		return this.obj;
 	}
@@ -52,7 +52,7 @@ public class QuestMission {
 		this.ownerUUID=compound.getString("OwnerUUID");
 		this.ownerName=compound.getString("OwnerName");
 		try {
-			IObjective obj = Objectives.getObjective(compound.getString("ObjectiveName")).newInstance();
+			IObjective<?> obj = Objectives.getObjective(compound.getString("ObjectiveName")).newInstance();
 			obj.readFromNBT(compound.getCompoundTag("Objective"));
 			this.obj=obj;
 		} catch (InstantiationException | IllegalAccessException e) {
@@ -60,9 +60,10 @@ public class QuestMission {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public NBTTagCompound writeToNBT(NBTTagCompound compound)
 	{
-		compound.setString("ObjectiveName", Objectives.getName(this.obj.getClass()));
+		compound.setString("ObjectiveName", Objectives.getName((Class<? extends IObjective<?>>) this.obj.getClass()));
 		compound.setTag("Objective", this.obj.writeToNBT(new NBTTagCompound()));
 		if(this.ownerUUID!=null)
 			compound.setString("OwnerUUID", this.ownerUUID);

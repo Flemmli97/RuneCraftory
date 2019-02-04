@@ -4,7 +4,7 @@ import java.util.Random;
 
 import com.flemmli97.runecraftory.api.mappings.CropMap;
 import com.flemmli97.runecraftory.common.lib.LibReference;
-import com.flemmli97.runecraftory.common.utils.ItemUtils;
+import com.flemmli97.runecraftory.common.utils.ItemNBT;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
@@ -51,7 +51,7 @@ public class BlockHerb extends BlockBush{
     public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
     {        
 		Random random = new Random();
-        drops.add(ItemUtils.getLeveledItem(new ItemStack(this.drop()), MathHelper.clamp(random.nextInt(5)+random.nextInt(4)+random.nextInt(3)+random.nextInt(2), 1, 10)));
+        drops.add(ItemNBT.getLeveledItem(new ItemStack(this.drop()), MathHelper.clamp(random.nextInt(5)+random.nextInt(4)+random.nextInt(3)+random.nextInt(2), 1, 10)));
     }
 	
 	@Override

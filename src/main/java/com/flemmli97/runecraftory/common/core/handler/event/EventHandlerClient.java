@@ -209,16 +209,16 @@ public class EventHandlerClient
         CropProperties props = CropMap.getProperties(stack);
         if (props != null) 
         {
-        	String season = "";
         	if(!props.bestSeasons().isEmpty())
         	{
-        		season+=I18n.format("season.best") + ": ";
+        		String season=I18n.format("season.best") + ": ";
         		int i = 0;
         		for(EnumSeason seas : props.bestSeasons())
         		{
-        			season+=(i!=0?"/":"")+TextFormatting.getValueByName(seas.getColor()) + I18n.format(seas.formattingText());
+        			season+=(i!=0?TextFormatting.RESET+"/":"")+TextFormatting.getValueByName(seas.getColor()) + I18n.format(seas.formattingText());
         			i++;
         		}
+            	tooltip.add(season);
         	}      	
         	if(!props.badSeasons().isEmpty())
         	{
@@ -230,10 +230,9 @@ public class EventHandlerClient
         				sub+=(i!=0?"/":"")+TextFormatting.getValueByName(seas.getColor()) + I18n.format(seas.formattingText());
         				i++;
         			}
-        		if(!sub.isEmpty())
-        			season+="  "+sub;
+        		if(i!=0)
+        			tooltip.add(sub);
         	}
-        	tooltip.add(season);
             tooltip.add(I18n.format("growth") + ": " + props.growth() + "  " + I18n.format("harvested") + ": " + props.maxDrops());
         }
         boolean shift = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);

@@ -27,7 +27,7 @@ public class ItemLevelUp extends Item{
 		if(!world.isRemote)
 		{
 			IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
-			capSync.addXp(player, LevelCalc.xpAmountForLevelUp(capSync.getPlayerLevel()[0])/2);
+			capSync.addXp(player, LevelCalc.xpAmountForLevelUp(capSync.getPlayerLevel()[0])-capSync.getPlayerLevel()[1]);
 		}
 		return super.onItemRightClick(world, player, handIn);
 	}

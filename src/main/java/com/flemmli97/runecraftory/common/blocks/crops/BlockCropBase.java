@@ -8,7 +8,7 @@ import com.flemmli97.runecraftory.api.items.CropProperties;
 import com.flemmli97.runecraftory.api.mappings.CropMap;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrop;
 import com.flemmli97.runecraftory.common.lib.LibReference;
-import com.flemmli97.runecraftory.common.utils.ItemUtils;
+import com.flemmli97.runecraftory.common.utils.ItemNBT;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
@@ -125,7 +125,7 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
         {          
         	ItemStack stack = tile.isGiant()?new ItemStack(CropMap.giantCropFromString(this.crop), this.properties().maxDrops()):new ItemStack(CropMap.cropFromString(this.crop), this.properties().maxDrops());
             tile.postProcess();
-        	drops.add(ItemUtils.getLeveledItem(stack, tile.level()));
+        	drops.add(ItemNBT.getLeveledItem(stack, tile.level()));
         }
     }
     
@@ -172,7 +172,7 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
 	@Override
     public ItemStack getItem(World world, BlockPos pos, IBlockState state)
     {
-        return ItemUtils.getLeveledItem(new ItemStack(CropMap.cropFromString(this.crop), 1), 1);
+        return ItemNBT.getLeveledItem(new ItemStack(CropMap.cropFromString(this.crop), 1), 1);
     }
 
 	@Override

@@ -9,7 +9,6 @@ import com.flemmli97.tenshilib.api.block.ITileEntityInitialPlaced;
 import com.flemmli97.tenshilib.common.world.structure.StructureBase;
 import com.flemmli97.tenshilib.common.world.structure.StructureMap;
 
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -68,8 +67,8 @@ public class TileBossSpawner extends TileEntity implements ITickable, ITileEntit
 		        mob.setLevel(LevelCalc.levelFromDistSpawn(world, pos));
 		        mob.setLocationAndAngles(this.pos.getX()+0.5, this.pos.getY()+5, this.pos.getZ()+0.5, world.rand.nextFloat() * 360.0F, 0.0F);
 				mob.setHomePosAndDistance(this.pos, 16);
-		        mob.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(mob)), (IEntityLivingData)null);
-		        world.spawnEntity(mob);
+		        mob.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(mob)), null);
+		        this.world.spawnEntity(mob);
 			}
 		}
 	}

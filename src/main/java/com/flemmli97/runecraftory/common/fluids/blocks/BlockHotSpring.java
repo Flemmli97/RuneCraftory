@@ -27,7 +27,7 @@ public class BlockHotSpring extends BlockFluidClassic
         if (entity instanceof EntityPlayer && entity.ticksExisted % 15 == 0) {
             EntityPlayer player = (EntityPlayer)entity;
             IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
-            cap.regenHealth(player, cap.getMaxHealth() * 0.01f);
+            cap.regenHealth(player, cap.getMaxHealth(player) * 0.01f);
             cap.refreshRunePoints(player, Math.min(cap.getMaxRunePoints(), (int)Math.max(1.0f, cap.getMaxRunePoints() * 0.01f)));
             cap.increaseSkill(EnumSkills.BATH, player, 1);
         }

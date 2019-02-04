@@ -37,8 +37,8 @@ public class GuiBars extends Gui
         CalendarHandler.EnumSeason season = calendar.currentSeason();
         this.mc.getTextureManager().bindTexture(texturepath);
         this.drawTexturedModalRect(xPos, yPos, 0, 0, 96, 29);
-        int healthWidth = (int)(cap.getHealth() / cap.getMaxHealth() * 75.0f);
-        int runePointsWidth = (int)(cap.getRunePoints() / (float)cap.getMaxRunePoints() * 75.0f);
+        int healthWidth = Math.min(75, (int)(cap.getHealth(this.mc.player) / cap.getMaxHealth(this.mc.player) * 75.0f));
+        int runePointsWidth = Math.min(75, (int)(cap.getRunePoints() / (float)cap.getMaxRunePoints() * 75.0f));
         this.drawTexturedModalRect(xPos + 18, yPos + 3, 18, 30, healthWidth, 9);
         this.drawTexturedModalRect(xPos + 18, yPos + 17, 18, 40, runePointsWidth, 9);
         this.drawCenteredString(this.mc.fontRenderer, TextFormatting.getValueByName(season.getColor()) + I18n.format(season.formattingText()) + " " + calendar.date() + " " + calendar.currentDay().text(), 50, 50, 0);

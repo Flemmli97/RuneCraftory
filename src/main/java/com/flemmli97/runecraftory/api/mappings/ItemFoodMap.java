@@ -27,7 +27,7 @@ public class ItemFoodMap {
         if (prop != null) {
             return prop;
         }
-        return stats.get(new SimpleItemStackWrapper(stack.getItem()).setIgnoreAmount());
+        return stats.get(new SimpleItemStackWrapper(stack).setIgnoreAmount());
     }
     
     public static int configuredFood()

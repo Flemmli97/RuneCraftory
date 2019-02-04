@@ -56,7 +56,6 @@ import com.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import com.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import com.flemmli97.runecraftory.common.items.weapons.shortsword.ItemSeedSword;
 import com.flemmli97.runecraftory.common.lib.LibOreDictionary;
-import com.flemmli97.runecraftory.common.lib.LibPotions;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumToolTier;
@@ -64,6 +63,7 @@ import com.flemmli97.tenshilib.common.javahelper.ArrayUtils;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor;
@@ -406,7 +406,7 @@ public class ModItems {
 	public static final Item powerGloves = new ItemAccessoireBase("power_gloves");
 	public static final Item earrings = new ItemAccessoireBase("earrings");
 	public static final Item witchEarrings = new ItemAccessoireBase("witch_earrings");
-	public static final Item magicEarrings = new ItemAccessoireBase("magic_earrings");
+	public static final Item magicEarrings = new ItemAccessoireBase("magic_earrings").setModelType(EntityEquipmentSlot.HEAD);
 	public static final Item charm = new ItemAccessoireBase("charm");
 	public static final Item holyAmulet = new ItemAccessoireBase("holy_amulet");
 	public static final Item rosary = new ItemAccessoireBase("rosary");
@@ -682,7 +682,7 @@ public class ModItems {
 	public static final Item invisStone = new ItemMaterial("invisible_stone");
 	public static final Item lightOre = new ItemMaterial("light_ore");
 	public static final Item runeSphereShard = new ItemMaterial("rune_sphere_shard");
-	public static final Item shadeStone = new ItemMaterial("shard_stone");
+	public static final Item shadeStone = new ItemMaterial("shade_stone");
 	public static final Item racoonLeaf = new ItemMaterial("racoon_leaf");
 	public static final Item icyNose = new ItemMaterial("icy_nose");
 	public static final Item bigBirdsComb = new ItemMaterial("big_birds_comb");
@@ -699,17 +699,17 @@ public class ModItems {
 	public static final Item lawn = new ItemMaterial("ayngondaia_lawn");
 
 	//Recovery and stuff
-	public static final Item roundoff = new ItemMedicine("roundoff", 300, false, LibPotions.SEAL);
-	public static final Item paraGone = new ItemMedicine("para_gone", 500, false, LibPotions.PARALYSIS);
-	public static final Item coldMed = new ItemMedicine("cold_medicine", 1000, false, LibPotions.COLD);
-	public static final Item antidote = new ItemMedicine("antidote_potion", 1500, false, LibPotions.POISON);
-	public static final Item recoveryPotion = new ItemMedicine("recovery_potion", 150, false);
-	public static final Item healingPotion = new ItemMedicine("healing_potion", 800, false);
-	public static final Item mysteryPotion = new ItemMedicine("mystery_potion", 3000, false);
-	public static final Item magicalPotion = new ItemMedicine("magical_potion", 50, true);
-	public static final Item invinciroid = new ItemMedicine("invinciroid", 50, true);
-	public static final Item lovePotion = new ItemMedicine("love_potion", 50, true);
-	public static final Item formuade = new ItemMedicine("formuade", 50, true);
+	public static final Item roundoff = new ItemMedicine("roundoff");
+	public static final Item paraGone = new ItemMedicine("para_gone");
+	public static final Item coldMed = new ItemMedicine("cold_medicine");
+	public static final Item antidote = new ItemMedicine("antidote_potion");
+	public static final Item recoveryPotion = new ItemMedicine("recovery_potion");
+	public static final Item healingPotion = new ItemMedicine("healing_potion");
+	public static final Item mysteryPotion = new ItemMedicine("mystery_potion");
+	public static final Item magicalPotion = new ItemMedicine("magical_potion");
+	public static final Item invinciroid = new ItemMedicine("invinciroid");
+	public static final Item lovePotion = new ItemMedicine("love_potion");
+	public static final Item formuade = new ItemMedicine("formuade");
 	public static final Item leveliser = new ItemStatIncrease("leveliser", Stat.LEVEL);
 	public static final Item heartDrink = new ItemStatIncrease("heart_drink", Stat.HP);
 	public static final Item vitalGummi = new ItemStatIncrease("vital_gummi", Stat.VIT);

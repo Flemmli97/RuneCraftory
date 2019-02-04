@@ -30,6 +30,7 @@ import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 
 public class ItemNBT
@@ -49,11 +50,19 @@ public class ItemNBT
             NBTTagCompound tag = getItemNBT(stack);
             if (tag != null) 
             {
-                tag.setInteger("ItemLevel", tag.getInteger("ItemLevel") + 1);
+                tag.setInteger("ItemLevel", MathHelper.clamp(tag.getInteger("ItemLevel") + 1, 1, 10));
                 return true;
             }
         }
         return false;
+    }
+    
+    public static ItemStack getLeveledItem(ItemStack stack, int level) {
+    	NBTTagCompound compound = ItemNBT.getItemNBT(stack);
+        if (compound != null) {
+            compound.setInteger("ItemLevel", MathHelper.clamp(level, 1, 10));
+        }
+        return stack;
     }
     
     public static Map<IAttribute, Integer> statIncrease(ItemStack stack) 
@@ -68,8 +77,9 @@ public class ItemNBT
                 List<ItemStatAttributes> ordered = new LinkedList<ItemStatAttributes>();
                 for (String attName : tag.getKeySet()) 
                 {
-                	//No check for health since not allowed
-                    ordered.add(ItemStatAttributes.ATTRIBUTESTRINGMAP.get(attName));
+                	ItemStatAttributes att = ItemStatAttributes.ATTRIBUTESTRINGMAP.get(attName);
+                	if(att!=null)
+                		ordered.add(att);
                 }
                 ordered.sort(new ItemStatAttributes.Sort());
                 for (ItemStatAttributes att : ordered) 
@@ -253,7 +263,7 @@ public class ItemNBT
                 NBTTagCompound nbt;
                 if (element.isJsonObject()) 
                 {
-                    nbt = JsonToNBT.getTagFromJson(ItemNBT.GSON.toJson(element));
+                    nbt = JsonToNBT.getTagFromJson(element.toString());
                 }
                 else 
                 {

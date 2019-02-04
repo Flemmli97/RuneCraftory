@@ -42,7 +42,7 @@ public class ItemStatIncrease extends ItemFood{
 		IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
 		switch(this.stat)
 		{
-			case HP: cap.setMaxHealth(player, cap.getMaxHealth()+10);
+			case HP: cap.setMaxHealth(player, cap.getMaxHealth(player)+10);
 				break;
 			case INT: cap.setIntel(player, cap.getIntel()+1);
 				break;

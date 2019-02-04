@@ -49,18 +49,10 @@ public class ItemUtils
     
     public static void spawnLeveledItem(EntityLivingBase entity, ItemStack stack, int level) {
         if (!entity.world.isRemote) {
-            EntityItem item = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, getLeveledItem(stack, level));
+            EntityItem item = new EntityItem(entity.world, entity.posX, entity.posY, entity.posZ, ItemNBT.getLeveledItem(stack, level));
             item.setPickupDelay(0);
             entity.world.spawnEntity((Entity)item);
         }
-    }
-    
-    public static ItemStack getLeveledItem(ItemStack stack, int level) {
-    	NBTTagCompound compound = ItemNBT.getItemNBT(stack);
-        if (compound != null) {
-            compound.setInteger("ItemLevel", MathHelper.clamp(level, 1, 10));
-        }
-        return stack;
     }
     
     public static int getSellPrice(ItemStack stack) {

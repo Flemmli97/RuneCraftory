@@ -637,11 +637,11 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        return (source.getTrueSource() == null || this.canAttackFrom(source.getTrueSource().getPosition())) && super.attackEntityFrom(source, amount);
+        return (source.getTrueSource() == null|| this.canAttackFrom(source.getTrueSource().getPosition())) && super.attackEntityFrom(source, amount);
     }
     
     private boolean canAttackFrom(BlockPos pos) {
-        return this.getMaximumHomeDistance() == -1.0f || this.getHomePosition().distanceSq((Vec3i)pos) < (this.getMaximumHomeDistance() + 2.0f) * (this.getMaximumHomeDistance() + 2.0f);
+        return this.getMaximumHomeDistance() == -1.0f || this.getHomePosition().distanceSq((Vec3i)pos) < (this.getMaximumHomeDistance() + 5.0f) * (this.getMaximumHomeDistance() + 5.0f);
     }
 
     //Damage reduction

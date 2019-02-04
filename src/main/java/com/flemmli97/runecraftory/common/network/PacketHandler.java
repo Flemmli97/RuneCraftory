@@ -16,8 +16,6 @@ public class PacketHandler
     public static final void registerPackets() {
         int id = 0;
         PacketHandler.dispatcher.registerMessage(PacketUpdateClient.Handler.class, PacketUpdateClient.class, id++, Side.CLIENT);
-        PacketHandler.dispatcher.registerMessage(PacketHealth.Handler.class, PacketHealth.class, id++, Side.CLIENT);
-        PacketHandler.dispatcher.registerMessage(PacketMaxHealth.Handler.class, PacketMaxHealth.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketRunePoints.Handler.class, PacketRunePoints.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketMaxRunePoints.Handler.class, PacketMaxRunePoints.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketMoney.Handler.class, PacketMoney.class, id++, Side.CLIENT);

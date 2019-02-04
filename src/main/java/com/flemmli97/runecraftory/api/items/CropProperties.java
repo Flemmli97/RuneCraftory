@@ -1,21 +1,21 @@
 package com.flemmli97.runecraftory.api.items;
 
+import java.util.EnumSet;
 import java.util.Set;
 
 import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler;
 import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler.EnumSeason;
-import com.google.common.collect.Sets;
 
 public class CropProperties
 {
-    private Set<CalendarHandler.EnumSeason> bestSeason = Sets.newHashSet();
-    private Set<CalendarHandler.EnumSeason> badSeason = Sets.newHashSet();
+    private EnumSet<CalendarHandler.EnumSeason> bestSeason = EnumSet.noneOf(CalendarHandler.EnumSeason.class);
+    private EnumSet<CalendarHandler.EnumSeason> badSeason = EnumSet.noneOf(CalendarHandler.EnumSeason.class);
 
     private int growth;
     private int maxDrops;
     private boolean regrowable;
     
-    public CropProperties(Set<CalendarHandler.EnumSeason> season, Set<CalendarHandler.EnumSeason> badseason, int growth, int maxDrops, boolean regrowable) 
+    public CropProperties(EnumSet<CalendarHandler.EnumSeason> season, EnumSet<CalendarHandler.EnumSeason> badseason, int growth, int maxDrops, boolean regrowable) 
     {
         this.bestSeason = season;
         this.growth = growth;

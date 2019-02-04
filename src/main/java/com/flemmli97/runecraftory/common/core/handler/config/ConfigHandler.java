@@ -3,14 +3,12 @@ package com.flemmli97.runecraftory.common.core.handler.config;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
@@ -24,8 +22,14 @@ import com.flemmli97.runecraftory.api.mappings.CropMap;
 import com.flemmli97.runecraftory.api.mappings.EntityStatMap;
 import com.flemmli97.runecraftory.api.mappings.ItemFoodMap;
 import com.flemmli97.runecraftory.api.mappings.ItemStatMap;
+import com.flemmli97.runecraftory.api.mappings.Quests;
 import com.flemmli97.runecraftory.common.init.GateSpawning;
+import com.flemmli97.runecraftory.common.init.ModBlocks;
 import com.flemmli97.runecraftory.common.lib.LibReference;
+import com.flemmli97.runecraftory.common.utils.MapWrapper;
+import com.flemmli97.runecraftory.common.world.HerbGenerator;
+import com.flemmli97.runecraftory.common.world.HerbGenerator.HerbEntry;
+import com.flemmli97.tenshilib.api.config.ExtendedItemStackWrapper;
 import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.flemmli97.tenshilib.common.config.ConfigUtils;
 import com.flemmli97.tenshilib.common.config.ConfigUtils.LoadState;
@@ -43,14 +47,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonWriter;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.storage.loot.RandomValueRange;
+import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.Configuration;
@@ -62,6 +70,10 @@ public class ConfigHandler {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping()
     		.registerTypeHierarchyAdapter(IAttribute.class, new JsonAdapaters.AttributeAdapter())
+    		.registerTypeAdapter(RandomValueRange.class, new RandomValueRange.Serializer())
+			.registerTypeHierarchyAdapter(LootFunction.class, new LootFunctionManager.Serializer())
+			.registerTypeAdapter(ExtendedItemStackWrapper.class, new ExtendedItemStackWrapper.Serializer())
+			.registerTypeAdapter(ResourceLocation.class, new JsonAdapaters.ResourceLocAdapter())
     		.enableComplexMapKeySerialization().serializeNulls().create();
 
 	public static Configuration mainConfig;
@@ -122,10 +134,10 @@ public class ConfigHandler {
 		
 		public static int mineralRarity;
 	    
-		public static boolean waila;
-		public static boolean jei;
-		public static boolean harvestCraft;
-		public static boolean seasons;
+		public static boolean waila=true;
+		public static boolean jei=true;
+		public static boolean harvestCraft=true;
+		public static boolean seasons=true;
 		
 		private static void load(File configDir) {
 			if(mainConfig==null)
@@ -274,10 +286,29 @@ public class ConfigHandler {
 	{
 		public static int mineralRate = 25;
 
-		public static Structure ambrosiaForest=new Structure(new ResourceLocation(LibReference.MODID, "ambrosia_forest"), null,  100, 100, 1, LocationType.GROUND, GenerationType.REPLACEBELOW,new int[] {0}, -1, true).addBiomeType(Sets.newHashSet(Type.FOREST));
-		public static Structure thunderboltRuins=new Structure(new ResourceLocation(LibReference.MODID, "thunderbolt_ruins"), null, 400, 150, 1, LocationType.GROUND, GenerationType.FLOATING,new int[] {0}, -2, true).addBiome(Sets.newHashSet(Biomes.DEEP_OCEAN));
+		public static Structure ambrosiaForest=new Structure(new ResourceLocation(LibReference.MODID, "ambrosia_forest"), null, 400, 100, 1, LocationType.GROUND, GenerationType.REPLACEBELOW,new int[] {0}, -4, true).addBiomeType(Sets.newHashSet(Type.FOREST));
+		public static Structure thunderboltRuins=new Structure(new ResourceLocation(LibReference.MODID, "thunderbolt_ruins"), null, 800, 150, 1, LocationType.GROUND, GenerationType.FLOATING,new int[] {0}, -2, true).addBiome(Sets.newHashSet(Biomes.DEEP_OCEAN));
 	    
-		private static final String[] weed = new String[] {};
+		private static final Map<Block,String[]> defaultVals = new MapWrapper<Block,String[]>()
+				.mapWrapperAdd(ModBlocks.mushroom, new String[] {})
+				.mapWrapperAdd(ModBlocks.monarchMushroom, new String[] {})
+				.mapWrapperAdd(ModBlocks.weeds, new String[] {})
+				.mapWrapperAdd(ModBlocks.elliLeaves, new String[] {})
+				.mapWrapperAdd(ModBlocks.witheredGrass, new String[] {"PLAINS,25,4,2"})
+				.mapWrapperAdd(ModBlocks.weeds, new String[] {"PLAINS,30,6,5"})
+				.mapWrapperAdd(ModBlocks.whiteGrass, new String[] {"SNOWY,10,4,3"})
+				.mapWrapperAdd(ModBlocks.indigoGrass, new String[] {})
+				.mapWrapperAdd(ModBlocks.purpleGrass, new String[] {})
+				.mapWrapperAdd(ModBlocks.greenGrass, new String[] {})
+				.mapWrapperAdd(ModBlocks.blueGrass, new String[] {})
+				.mapWrapperAdd(ModBlocks.yellowGrass, new String[] {})
+				.mapWrapperAdd(ModBlocks.redGrass, new String[] {})
+				.mapWrapperAdd(ModBlocks.orangeGrass, new String[] {})
+				.mapWrapperAdd(ModBlocks.blackGrass, new String[] {})
+				.mapWrapperAdd(ModBlocks.antidoteGrass, new String[] {})
+				.mapWrapperAdd(ModBlocks.medicinalHerb, new String[] {})
+				.mapWrapperAdd(ModBlocks.bambooSprout, new String[] {});
+
 		private static void load(File configDir, boolean register)
 	    {
 			if(generationConfig==null)
@@ -293,9 +324,26 @@ public class ConfigHandler {
 			mineralRate = generationConfig.get("structures", "Mineral Rate", mineralRate, "prop").getInt();
 			ambrosiaForest.config(generationConfig, "structures");
 			thunderboltRuins.config(generationConfig, "structures");
-			ConfigCategory cat = generationConfig.getCategory("herbs");
-			for(String s : generationConfig.getStringList("weed", "herbs", weed, ""))
-				;
+			HerbGenerator.clear();
+			defaultVals.forEach((block,strArr)->
+			{
+				for(String s : generationConfig.getStringList(block.getRegistryName().toString(), "herbs", strArr, "Syntax: (BIOME/BIOME TYPE,weight,maxTries,maxAmount"))
+				{
+					String[] sub = s.split(",");
+					if(sub.length<4)
+						throw new ConfigError("Couldnt parse string " + s);
+					Biome biome = Biome.REGISTRY.getObject(new ResourceLocation(sub[0]));
+					HerbEntry herb = new HerbEntry(block, Integer.parseInt(sub[1]), Integer.parseInt(sub[2]), Integer.parseInt(sub[3]));
+					if(biome!=null)
+						HerbGenerator.add(biome, herb);
+					else
+					{
+						BiomeDictionary.Type type = BiomeDictionary.Type.getType(sub[0]);
+						for(Biome biome2 : BiomeDictionary.getBiomes(type))
+							HerbGenerator.add(biome2, herb);
+					}
+				}
+			});
 			generationConfig.save();
 	    }
 	}
@@ -386,6 +434,9 @@ public class ConfigHandler {
 			copyDefaultConfigs(def, "DefaultQuests.json");
 			if(questConfig==null)
 				questConfig = new JsonConfig<JsonObject>(new File(configDir, "quests.json"), JsonObject.class, def).setGson(GSON);
+			LibReference.logger.info("Loading quests");
+			JsonObject obj = questConfig.getElement();
+			Quests.loadQuests(GSON, obj);
 			questConfig.save();
 	    }
 	}
@@ -428,17 +479,47 @@ public class ConfigHandler {
 
 	private static void test(File configDir)
 	{
-		/*try {
-            File test = new File(configDir.getParent(), "java.json");
+		try
+		{
+			/*File def = new File(defFolder, "DefaultFoodStats.json");
+			copyDefaultConfigs(def, "DefaultFoodStats.json");
+			if(foodStatConfig==null)
+				foodStatConfig = new JsonConfig<JsonObject>(new File(configDir, "food_stats.json"), JsonObject.class, def).setGson(GSON);
+			LibReference.logger.info("Configuring foodstats");
+			JsonObject obj = foodStatConfig.getElement();
+			if (obj != null) 
+            {
+				Map<String, JsonElement> res = Maps.newHashMap();
+				obj.entrySet().forEach(entry->
+				{
+					String string = entry.getKey();
+					if(string.contains(":"))
+						res.put(string, entry.getValue());
+					else
+						OreDictionary.getOres(string).forEach(stack->{
+							ItemFoodMap.add(new SimpleItemStackWrapper(stack).setIgnoreAmount(), GSON.fromJson(entry.getValue(), FoodProperties.class));
+						});
+				});
+				res.forEach((string, el)->
+				{
+					ItemFoodMap.add(new SimpleItemStackWrapper(string).setIgnoreAmount(), GSON.fromJson(el, FoodProperties.class));
+				});
+            }
+	        LibReference.logger.info("Configured stats for {} food items", ItemFoodMap.configuredFood());
+	        foodStatConfig.save();*/
+		}
+		catch(Exception e)
+		{
+			
+		}
+	}
+	
+	public static class ConfigError extends RuntimeException
+	{
+		private static final long serialVersionUID = 1L;
 
-			Set<String> set = Sets.newHashSet();
-			set.add("beresb");
-			set.add("ergsrg");
-            JsonWriter json = GSON.newJsonWriter(new FileWriter(test));
-            GSON.toJson(set, Set.class, json);
-            json.close();
-		} catch (JsonIOException | IOException | IllegalArgumentException e1) {
-			e1.printStackTrace();
-		}*/
+		public ConfigError(String message) {
+	        super(message);
+	    }
 	}
 }

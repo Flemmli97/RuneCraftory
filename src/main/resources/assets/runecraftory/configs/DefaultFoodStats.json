@@ -2013,13 +2013,13 @@
     "potionRemove": []
   },
   "foodFriedVeggies": {
-    "hpRegen": 5,
-    "rpRegen": 10,
-    "hpRegenPercent": 0,
+    "hpRegen": 5000,
+    "rpRegen": 1000,
+    "hpRegenPercent": 0.71,
     "rpRegenPercent": 0,
-    "duration": 50,
-    "effects": {},
-    "effectsPercent": {},
+    "duration": 600,
+    "effects": {"generic.maxHealth":800,"rf.attack":50,"rf.defence":25,"rf.magicDef":25,"rf.magicAtt":50},
+    "effectsPercent": {"generic.maxHealth":0.03,"rf.attack":0.03,"rf.defence":0.015,"rf.magicDef":0.015,"rf.magicAtt":0.03},
     "potionApply": [],
     "potionRemove": []
   },

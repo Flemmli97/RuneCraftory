@@ -1,17 +1,18 @@
 package com.flemmli97.runecraftory.api.mappings;
 
+import java.util.EnumSet;
 import java.util.Map;
 
 import javax.annotation.Nullable;
 
 import com.flemmli97.runecraftory.api.items.CropProperties;
 import com.flemmli97.runecraftory.common.blocks.crops.BlockCropBase;
+import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler;
 import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler.EnumSeason;
 import com.flemmli97.runecraftory.common.items.consumables.ItemCrops;
 import com.flemmli97.runecraftory.common.items.itemblocks.ItemCropSeed;
 import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,7 +32,7 @@ public class CropMap
      */
     private static final Map<SimpleItemStackWrapper, CropProperties> cropProperties  = Maps.newHashMap();
     
-    private static final CropProperties def = new CropProperties(Sets.newHashSet(EnumSeason.SPRING), Sets.newHashSet(), 7, 2, false);
+    private static final CropProperties def = new CropProperties(EnumSet.of(EnumSeason.SPRING), EnumSet.noneOf(CalendarHandler.EnumSeason.class), 7, 2, false);
     
     private static int count = 0;
         

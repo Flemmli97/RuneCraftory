@@ -11,12 +11,12 @@ public class CapabilityNetwork
     {
         public NBTBase writeNBT(Capability<IPlayer> capability, IPlayer instance, EnumFacing side) {
             NBTTagCompound compound = new NBTTagCompound();
-            instance.writeToNBT(compound, false);
+            instance.writeToNBT(compound, null);
             return compound;
         }
         
         public void readNBT(Capability<IPlayer> capability, IPlayer instance, EnumFacing side, NBTBase nbt) {
-            instance.readFromNBT((NBTTagCompound)nbt);
+            instance.readFromNBT((NBTTagCompound)nbt, null);
         }
     }
 }
