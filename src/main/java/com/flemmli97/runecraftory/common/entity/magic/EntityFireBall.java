@@ -7,7 +7,6 @@ import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.flemmli97.tenshilib.common.entity.EntityProjectile;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.RayTraceResult;
@@ -32,11 +31,11 @@ public class EntityFireBall extends EntityProjectile
             if (!this.world.isRemote) {
                 RFCalculations.attackEntity(result.entityHit, CustomDamage.attack(this.getShooter(), EnumElement.FIRE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 5), RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null));
             }
-            this.world.playSound((EntityPlayer)null, result.entityHit.getPosition(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            this.world.playSound(null, result.entityHit.getPosition(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, 1.0f);
             this.setDead();
         }
         else if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-            this.world.playSound((EntityPlayer)null, result.hitVec.x, result.hitVec.y, result.hitVec.z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            this.world.playSound(null, result.hitVec.x, result.hitVec.y, result.hitVec.z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, 1.0f);
             this.setDead();
         }
     }

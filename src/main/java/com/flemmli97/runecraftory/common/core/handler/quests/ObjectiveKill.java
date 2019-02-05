@@ -74,8 +74,6 @@ public class ObjectiveKill implements IObjective<EntityLivingBase>{
 
 	@Override
 	public List<ItemStack> rewards() {
-		System.out.println(this.rewards);
-
 		return this.rewards;
 	}
 

@@ -215,7 +215,7 @@ public class EventHandlerClient
         		int i = 0;
         		for(EnumSeason seas : props.bestSeasons())
         		{
-        			season+=(i!=0?TextFormatting.RESET+"/":"")+TextFormatting.getValueByName(seas.getColor()) + I18n.format(seas.formattingText());
+        			season+=(i!=0?TextFormatting.GRAY+"/":"")+TextFormatting.getValueByName(seas.getColor()) + I18n.format(seas.formattingText());
         			i++;
         		}
             	tooltip.add(season);
@@ -227,7 +227,7 @@ public class EventHandlerClient
         		for(EnumSeason seas : props.badSeasons())
         			if(!props.bestSeasons().contains(seas))
         			{
-        				sub+=(i!=0?"/":"")+TextFormatting.getValueByName(seas.getColor()) + I18n.format(seas.formattingText());
+        				sub+=(i!=0?TextFormatting.GRAY+"/":"")+TextFormatting.getValueByName(seas.getColor()) + I18n.format(seas.formattingText());
         				i++;
         			}
         		if(i!=0)

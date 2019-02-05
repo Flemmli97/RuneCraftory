@@ -28,6 +28,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
@@ -35,8 +36,7 @@ import net.minecraftforge.common.EnumPlantType;
 public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityProvider{
 	
     private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[] {new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
-    /**Purely for rendering without creating a custom IModel*/
-    public static final PropertyInteger STATUS = PropertyInteger.create("status", 0, 4);
+    public static final PropertyInteger STATUS = PropertyInteger.create("status", 0, 3);
 
     private String crop;
 	public BlockCropBase(String name, String oreDictName)
@@ -55,19 +55,29 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {STATUS});
 	}
-	/**
-	 * 
-	 */
+	
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
+    {
+		TileEntity tile = world.getTileEntity(pos);
+		int age = 0;
+		if(tile instanceof TileCrop)
+			age=(int) (((TileCrop)tile).age()*3 / (float)this.properties().growth());
+        return state.withProperty(BlockCropBase.STATUS, MathHelper.clamp(age, 0, 3));
+    }
+	
 	@Override
     public IBlockState getStateFromMeta(int meta)
     {
-        return this.getDefaultState().withProperty(STATUS, meta);
+        return this.getDefaultState();
     }
+	
 	@Override
     public int getMetaFromState(IBlockState state)
     {
-    	return state.getValue(STATUS);
+    	return 0;
     }
+	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
@@ -95,7 +105,8 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
-        return CROPS_AABB[0];
+		
+        return CROPS_AABB[this.getActualState(state, source, pos).getValue(STATUS)];
     }
 	
 	public CropProperties properties()

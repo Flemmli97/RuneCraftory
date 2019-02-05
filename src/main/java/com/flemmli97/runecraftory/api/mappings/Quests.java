@@ -89,7 +89,6 @@ public class Quests
     			for(LootFunction f : val.getFunctions())
     				f.apply(stack, rand, ctx);
     		reward.add(stack);
-    		
     	}
     	if(!entities.isEmpty())
     		return new ObjectiveKill(entities, money, reward);

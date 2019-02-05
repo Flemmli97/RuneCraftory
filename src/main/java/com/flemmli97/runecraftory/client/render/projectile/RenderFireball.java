@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderFireball<T extends EntityFireBall> extends RenderTexture<T>{
 
-	private ResourceLocation tex = new ResourceLocation(LibReference.MODID, "textures/entity/projectile/fireball.png");
+	private static final ResourceLocation tex = new ResourceLocation(LibReference.MODID, "textures/entity/projectile/fireball.png");
 	
 	public RenderFireball(RenderManager renderManager) {
 		super(renderManager, 1, 1);
@@ -18,5 +18,11 @@ public class RenderFireball<T extends EntityFireBall> extends RenderTexture<T>{
 	@Override
 	protected ResourceLocation getEntityTexture(EntityFireBall entity) {
 		return tex;
+	}
+	
+	@Override
+	public int animationFrames()
+	{
+		return 6;
 	}
 }

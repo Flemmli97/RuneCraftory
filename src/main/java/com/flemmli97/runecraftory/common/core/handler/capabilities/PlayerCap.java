@@ -422,7 +422,6 @@ public class PlayerCap implements IPlayer
         if (this.quest != null && this.quest.questObjective().isFinished()) 
         {
             for (ItemStack stack : this.quest.questObjective().rewards()) {
-            	System.out.println(stack);
                 ItemUtils.spawnItemAtEntity(player, stack);
             }
             this.setMoney(player, this.getMoney() + this.quest.questObjective().moneyReward());

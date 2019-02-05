@@ -11,8 +11,10 @@ import com.flemmli97.runecraftory.client.render.monsters.RenderOrc;
 import com.flemmli97.runecraftory.client.render.monsters.RenderWooly;
 import com.flemmli97.runecraftory.client.render.projectile.RenderButterfly;
 import com.flemmli97.runecraftory.client.render.projectile.RenderFireball;
+import com.flemmli97.runecraftory.client.render.projectile.RenderWaterLaser;
 import com.flemmli97.runecraftory.common.entity.EntityGate;
 import com.flemmli97.runecraftory.common.entity.magic.EntityFireBall;
+import com.flemmli97.runecraftory.common.entity.magic.EntityWaterLaser;
 import com.flemmli97.runecraftory.common.entity.monster.EntityAnt;
 import com.flemmli97.runecraftory.common.entity.monster.EntityBeetle;
 import com.flemmli97.runecraftory.common.entity.monster.EntityOrc;
@@ -55,6 +57,7 @@ public class ModEntities
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ambrosiaWave"), EntityAmbrosiaWave.class, "ambrosiaWave", id++, RuneCraftory.instance, 64, 3, true);
         
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "fireball_small"), EntityFireBall.class, "fireball_small", id++, RuneCraftory.instance, 64, 6, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "water_laser"), EntityWaterLaser.class, "water_laser", id++, RuneCraftory.instance, 64, 6, true);
     }
     
     public static final void registerMobSpawn() {
@@ -74,6 +77,7 @@ public class ModEntities
         
         RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, RenderButterfly::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityFireBall.class, RenderFireball::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityWaterLaser.class, RenderWaterLaser::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityNPCShopOwner.class, new IRenderFactory<EntityNPCShopOwner>() 
         {
             public RenderNPCBase<? super EntityNPCShopOwner> createRenderFor(RenderManager manager) {

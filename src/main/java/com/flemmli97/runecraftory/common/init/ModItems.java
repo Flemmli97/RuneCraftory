@@ -37,6 +37,7 @@ import com.flemmli97.runecraftory.common.items.misc.ItemSizeFertilizer;
 import com.flemmli97.runecraftory.common.items.misc.ItemWettablePowder;
 import com.flemmli97.runecraftory.common.items.special.spells.ItemEmptySkill;
 import com.flemmli97.runecraftory.common.items.special.spells.ItemFireballCast;
+import com.flemmli97.runecraftory.common.items.special.spells.ItemWaterLaserCast;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolBrush;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
@@ -729,7 +730,7 @@ public class ModItems {
 	public static final Item fireBallSmall = new ItemFireballCast();
 	public static final Item fireBallBig = new ItemEmptySkill("fireball_big");
 	public static final Item explosion = new ItemEmptySkill("explosion");
-	public static final Item waterLaser = new ItemEmptySkill("water_laser");
+	public static final Item waterLaser = new ItemWaterLaserCast();
 	public static final Item parallelLaser = new ItemEmptySkill("parallel_laser");
 	public static final Item deltaLaser = new ItemEmptySkill("delta_laser");
 	public static final Item screwRock = new ItemEmptySkill("screw_rock");

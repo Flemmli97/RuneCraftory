@@ -5,6 +5,8 @@ import com.flemmli97.runecraftory.common.blocks.crops.BlockCropBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,7 +23,7 @@ public class TileCrop extends TileEntity{
 	
 	public int age()
 	{
-		return Math.round(this.age);
+		return (int) this.age;
 	}
 	
 	public void resetAge()
@@ -63,8 +65,8 @@ public class TileCrop extends TileEntity{
 		if(block instanceof BlockCropBase)
 		{
 			this.age=Math.min(((BlockCropBase) block).properties().growth(), this.age);
-			world.setBlockState(pos, state.withProperty(BlockCropBase.STATUS, (Math.round(this.age)*3)/((BlockCropBase)block).properties().growth()));
 		}
+		this.world.notifyBlockUpdate(pos, state, state, 2);
     	this.markDirty();
     }
     
@@ -89,21 +91,41 @@ public class TileCrop extends TileEntity{
     {
     	
     }
+    
+	
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(this.pos, 0, this.getUpdateTag());
+	}
+	
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) 
+	{
+		this.readFromNBT(pkt.getNbtCompound());
+		this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(this.pos), this.getWorld().getBlockState(this.pos), 3);
+	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		this.age=compound.getInteger("Age");
+		this.age=compound.getFloat("Age");
 		this.isGiant=compound.getBoolean("Giant");
+		this.level=compound.getFloat("Level");
+		this.withered=compound.getBoolean("Withered");
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setFloat("Age", Math.round(this.age));
+		compound.setFloat("Age", this.age);
 		compound.setBoolean("Giant", this.isGiant);
+		compound.setFloat("Level", this.level);
+		compound.setBoolean("Withered", this.withered);
 		return compound;
 	}
-    
-    
 }
