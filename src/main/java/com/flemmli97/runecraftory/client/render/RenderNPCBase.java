@@ -17,7 +17,8 @@ public class RenderNPCBase<T extends EntityNPCBase> extends RenderLiving<T>
     public RenderNPCBase(RenderManager renderManager, ModelBase model) {
         super(renderManager, model, 0.0f);
     }
-    
+
+    @Override
     protected ResourceLocation getEntityTexture(T entity) {
         return this.tex;
     }

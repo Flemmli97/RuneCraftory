@@ -51,7 +51,8 @@ public class EntityAmbrosiaWave extends Entity
         this(world, caster, maxTick);
         this.pred = exclude;
     }
-    
+
+    @Override
     protected void entityInit() {
         this.dataManager.register(radius, 0.1f);
     }
@@ -63,7 +64,8 @@ public class EntityAmbrosiaWave extends Entity
     public void increaseRadius() {
         this.dataManager.set(radius, (this.getRadius() + 0.13f));
     }
-    
+
+    @Override
     protected void readEntityFromNBT(NBTTagCompound compound) {
         this.livingTick = compound.getInteger("livingTick");
         this.maxTick = compound.getInteger("maxTick");
@@ -81,7 +83,8 @@ public class EntityAmbrosiaWave extends Entity
             }
         }
     }
-    
+
+    @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {
         compound.setInteger("livingTick", this.livingTick);
         compound.setInteger("maxTick", this.maxTick);
@@ -90,7 +93,8 @@ public class EntityAmbrosiaWave extends Entity
             compound.setString("owner", this.owner.getCachedUniqueIdString());
         }
     }
-    
+
+    @Override
     public void onUpdate() {
         ++this.livingTick;
         if (!this.world.isRemote && (this.livingTick > this.maxTick || (this.owner != null && !this.owner.isEntityAlive()))) {

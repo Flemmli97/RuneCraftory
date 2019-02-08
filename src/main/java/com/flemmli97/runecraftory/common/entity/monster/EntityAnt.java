@@ -15,7 +15,8 @@ public class EntityAnt extends EntityMobBase
         this.tasks.addTask(2, this.attack);
     }
     
-    public float attackChance() {
+    @Override
+	public float attackChance() {
         return 0.6f;
     }
     

@@ -26,11 +26,10 @@ public class EntityFireBall extends EntityProjectile
         super(worldIn, throwerIn);
     }
     
-    protected void onImpact(RayTraceResult result) {
+    @Override
+	protected void onImpact(RayTraceResult result) {
         if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null) {
-            if (!this.world.isRemote) {
-                RFCalculations.attackEntity(result.entityHit, CustomDamage.attack(this.getShooter(), EnumElement.FIRE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 5), RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null));
-            }
+            RFCalculations.attackEntity(result.entityHit, CustomDamage.attack(this.getShooter(), EnumElement.FIRE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 5), RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null));
             this.world.playSound(null, result.entityHit.getPosition(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, 1.0f);
             this.setDead();
         }
@@ -40,7 +39,8 @@ public class EntityFireBall extends EntityProjectile
         }
     }
     
-    protected float getGravityVelocity() {
+    @Override
+	protected float getGravityVelocity() {
         return 0.005f;
     }
 }

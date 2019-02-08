@@ -13,7 +13,8 @@ public class EntityOrc extends EntityMobBase
         super(world);
         this.tasks.addTask(2, this.attack);
     }
-    
+
+    @Override
     public float attackChance() {
         return 0.8f;
     }

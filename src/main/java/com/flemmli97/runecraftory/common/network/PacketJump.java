@@ -11,14 +11,18 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketJump implements IMessage
 {
+
+    @Override
     public void fromBytes(final ByteBuf buf) {
     }
-    
+
+    @Override
     public void toBytes(final ByteBuf buf) {
     }
     
     public static class Handler implements IMessageHandler<PacketJump, IMessage>
     {
+        @Override
         public IMessage onMessage(final PacketJump msg, final MessageContext ctx) {
             final EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
             if (player != null && player.isRiding() && player.getRidingEntity() instanceof EntityMobBase) {

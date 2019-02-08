@@ -30,67 +30,57 @@ public class BlockIgnore extends Block
 		this.setUnlocalizedName(this.getRegistryName().toString());
     }
 
-    /**
-     * The type of render function called. MODEL for mixed tesr and static model, MODELBLOCK_ANIMATED for TESR-only,
-     * LIQUID for vanilla liquids, INVISIBLE to skip all rendering
-     */
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;
     }
 
+    @Override
     @Nullable
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
     {
         return NULL_AABB;
     }
 
+    @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
         return STRUCTURE_VOID_AABB;
     }
 
-    /**
-     * Used to determine ambient occlusion and culling when rebuilding chunks for render
-     */
+    @Override
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
-
+    
+    @Override
     public boolean isFullCube(IBlockState state)
     {
         return false;
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public float getAmbientOcclusionLightValue(IBlockState state)
     {
         return 1.0F;
     }
 
-    /**
-     * Spawns this Block's drops into the World as EntityItems.
-     */
-    public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
+    @Override
+	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune)
     {
     }
 
-    public EnumPushReaction getMobilityFlag(IBlockState state)
+    @Override
+	public EnumPushReaction getMobilityFlag(IBlockState state)
     {
         return EnumPushReaction.DESTROY;
     }
 
-    /**
-     * Get the geometry of the queried face at the given position and state. This is used to decide whether things like
-     * buttons are allowed to be placed on the face, or how glass panes connect to the face, among other things.
-     * <p>
-     * Common values are {@code SOLID}, which is the default, and {@code UNDEFINED}, which represents something that
-     * does not fit the other descriptions and will generally cause other things not to connect to the face.
-     * 
-     * @return an approximation of the form of the given face
-     */
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
+    @Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
     {
         return BlockFaceShape.UNDEFINED;
     }

@@ -26,6 +26,8 @@ minecraft {
 
     mappings = mcp_mapping
     makeObfSourceJar = false
+    replace 'tenshilib', "tenshilib@[${tenshilib_version},)"
+    replaceIn versionfile
     replace '${@VERSION}', modversion
     replaceIn versionfile
 }
@@ -55,7 +57,7 @@ jar {
 
 dependencies {
   deobfCompile waila_dep
-  compile tenshilib_dep
+  deobfCompile "tenshilib:TenshiLib:1.12.2:${tenshilib_version}"
   compile crafttweaker_dep
 }
 

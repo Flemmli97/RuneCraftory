@@ -15,7 +15,8 @@ public class CapabilityNetwork
             return compound;
         }
         
-        public void readNBT(Capability<IPlayer> capability, IPlayer instance, EnumFacing side, NBTBase nbt) {
+        @Override
+		public void readNBT(Capability<IPlayer> capability, IPlayer instance, EnumFacing side, NBTBase nbt) {
             instance.readFromNBT((NBTTagCompound)nbt, null);
         }
     }

@@ -63,7 +63,8 @@ public class GuiResearch extends GuiContainer
         return this.guiY;
     }
     
-    public int getXSize() {
+    @Override
+	public int getXSize() {
         return this.texX;
     }
 

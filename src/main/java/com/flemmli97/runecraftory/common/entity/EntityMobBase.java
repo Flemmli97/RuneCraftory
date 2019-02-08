@@ -96,17 +96,20 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     private EntityProperties prop;
     private int foodBuffTick;
     public EntityAINearestAttackableTarget<EntityPlayer> targetPlayer = new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 5, true, true, new Predicate<EntityPlayer>() {
-        public boolean apply(EntityPlayer player) {
+        @Override
+		public boolean apply(EntityPlayer player) {
             return !EntityMobBase.this.isTamed() || player != EntityMobBase.this.getOwner();
         }
     });
     public EntityAINearestAttackableTarget<EntityVillager> targetNPC = new EntityAINearestAttackableTarget<EntityVillager>(this, EntityVillager.class, 5, true, true, new Predicate<EntityVillager>() {
-        public boolean apply(EntityVillager mob) {
+        @Override
+		public boolean apply(EntityVillager mob) {
             return !EntityMobBase.this.isTamed();
         }
     });;
     public EntityAINearestAttackableTarget<EntityCreature> targetMobs = new EntityAINearestAttackableTarget<EntityCreature>(this, EntityCreature.class, 5, true, true, new Predicate<EntityCreature>() {
-        public boolean apply(EntityCreature mob) {
+        @Override
+		public boolean apply(EntityCreature mob) {
             if (EntityMobBase.this.isTamed()) {
                 return !(mob instanceof EntityMobBase) || !((EntityMobBase)mob).isTamed();
             }
@@ -410,7 +413,8 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     
     //=====Interact
     
-    public void onLivingUpdate() {
+    @Override
+	public void onLivingUpdate() {
         if (!this.dead) {
             if (this.tamingTick > 0) {
                 --this.tamingTick;

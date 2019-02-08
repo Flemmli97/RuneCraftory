@@ -27,20 +27,24 @@ public class EntityAIAmbrosia extends EntityAIBase
         this.setMutexBits(3);
     }
     
+    @Override
     public boolean shouldExecute() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         return entitylivingbase != null && entitylivingbase.isEntityAlive();
     }
     
+    @Override
     public boolean shouldContinueExecuting() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         return entitylivingbase != null && entitylivingbase.isEntityAlive() && this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(entitylivingbase));
     }
     
+    @Override
     public void resetTask() {
         this.attacker.setStatus(EntityAmbrosia.AttackAI.IDDLE);
     }
-    
+
+    @Override
     public void updateTask() {
         EntityLivingBase target = this.attacker.getAttackTarget();
         double dis = this.attacker.getDistanceSq(target);
@@ -134,7 +138,8 @@ public class EntityAIAmbrosia extends EntityAIBase
                 }
                 if (this.attackTicker != 0 && this.attackTicker % this.attacker.getStatus().getTime() == 0) {
                     List<EntityLivingBase> nearby = this.attacker.world.getEntitiesWithinAABB(EntityLivingBase.class, this.attacker.getEntityBoundingBox().grow(2.0), new Predicate<EntityLivingBase>() {
-                        public boolean apply(EntityLivingBase input) {
+                        @Override
+						public boolean apply(EntityLivingBase input) {
                             if (EntityAIAmbrosia.this.attacker.isTamed()) {
                                 return (input instanceof EntityMobBase) ? (!((EntityMobBase)input).isTamed()) : IMob.VISIBLE_MOB_SELECTOR.apply(input);
                             }

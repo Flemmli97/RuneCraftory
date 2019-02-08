@@ -32,11 +32,13 @@ public class EntityAIGenericRanged<T extends EntityMobBase & IRangedMob> extends
         this.setMutexBits(3);
     }
     
-    public boolean shouldExecute() {
+    @Override
+	public boolean shouldExecute() {
         return this.attacker.getAttackTarget() != null && this.attacker.isEntityAlive();
     }
     
-    public boolean shouldContinueExecuting() {
+    @Override
+	public boolean shouldContinueExecuting() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         return entitylivingbase != null && entitylivingbase.isEntityAlive() && !this.attacker.getNavigator().noPath() && this.attacker.isWithinHomeDistanceFromPosition(new BlockPos((Entity)entitylivingbase)) && this.isTargetInsideHome(entitylivingbase);
     }
@@ -45,15 +47,18 @@ public class EntityAIGenericRanged<T extends EntityMobBase & IRangedMob> extends
         return this.attacker.getMaximumHomeDistance() == -1.0f || target.getPosition().distanceSq((Vec3i)this.attacker.getHomePosition()) < Math.max(this.attacker.getMaximumHomeDistance(), this.maxAttackDistance) * Math.max(this.attacker.getMaximumHomeDistance(), this.maxAttackDistance);
     }
     
-    public void startExecuting() {
+    @Override
+	public void startExecuting() {
         super.startExecuting();
     }
     
-    public void resetTask() {
+    @Override
+	public void resetTask() {
         super.resetTask();
     }
     
-    public void updateTask() {
+    @Override
+	public void updateTask() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         double dis = this.attacker.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
         boolean canSee = this.attacker.getEntitySenses().canSee((Entity)entitylivingbase);

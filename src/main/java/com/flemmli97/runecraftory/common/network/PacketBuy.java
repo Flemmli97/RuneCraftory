@@ -28,19 +28,22 @@ public class PacketBuy implements IMessage
         this.amount = stack.getCount();
     }
     
-    public void fromBytes(ByteBuf buf) {
+    @Override
+	public void fromBytes(ByteBuf buf) {
         this.amount = buf.readInt();
         this.item = ByteBufUtils.readItemStack(buf);
     }
     
-    public void toBytes(ByteBuf buf) {
+    @Override
+	public void toBytes(ByteBuf buf) {
         buf.writeInt(this.amount);
         ByteBufUtils.writeItemStack(buf, this.item);
     }
     
     public static class Handler implements IMessageHandler<PacketBuy, IMessage>
     {
-        public IMessage onMessage(PacketBuy msg, MessageContext ctx) {
+        @Override
+		public IMessage onMessage(PacketBuy msg, MessageContext ctx) {
             EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
             if (player != null && player instanceof EntityPlayerMP) 
             {

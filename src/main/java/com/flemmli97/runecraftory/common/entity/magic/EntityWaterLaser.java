@@ -58,10 +58,8 @@ public class EntityWaterLaser extends EntityBeam{
 	@Override
 	protected void onImpact(RayTraceResult result) 
 	{
-        if (!this.world.isRemote) {
-            RFCalculations.attackEntity(result.entityHit, CustomDamage.attack(this.getShooter(), EnumElement.WATER, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 5), RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null));
-            result.entityHit.hurtResistantTime=20;
-        }
+        RFCalculations.attackEntity(result.entityHit, CustomDamage.attack(this.getShooter(), EnumElement.WATER, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 5), RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null));
+        result.entityHit.hurtResistantTime=19;
 	}
 
 }

@@ -17,21 +17,25 @@ public class ContainerUpgrade extends Container
         }
         this.addSlotToContainer(new Slot(tileInventory, 8, 56, 35));
         this.addSlotToContainer(new Slot(tileInventory, 7, 20, 35) {
-            public boolean isItemValid(final ItemStack stack) {
+            @Override
+			public boolean isItemValid(final ItemStack stack) {
                 return tileInventory.isItemValidForSlot(7, stack);
             }
             
-            public int getSlotStackLimit() {
+            @Override
+			public int getSlotStackLimit() {
                 return 1;
             }
         });
     }
     
-    public boolean canInteractWith(final EntityPlayer playerIn) {
+    @Override
+	public boolean canInteractWith(final EntityPlayer playerIn) {
         return true;
     }
     
-    public ItemStack transferStackInSlot(final EntityPlayer playerIn, final int index) {
+    @Override
+	public ItemStack transferStackInSlot(final EntityPlayer playerIn, final int index) {
         final ItemStack itemstack = ItemStack.EMPTY;
         return itemstack;
     }

@@ -15,18 +15,22 @@ public class EntityAIDisable extends EntityAIBase
         this.entity = entity;
     }
     
-    public boolean shouldExecute() {
+    @Override
+	public boolean shouldExecute() {
         return EntityUtils.isEntityDisabled((EntityLivingBase)this.entity);
     }
     
-    public boolean shouldContinueExecuting() {
+    @Override
+	public boolean shouldContinueExecuting() {
         return EntityUtils.isEntityDisabled((EntityLivingBase)this.entity);
     }
     
-    public void resetTask() {
+    @Override
+	public void resetTask() {
     }
     
-    public boolean isInterruptible() {
+    @Override
+	public boolean isInterruptible() {
         return false;
     }
 }

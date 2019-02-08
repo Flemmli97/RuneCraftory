@@ -27,19 +27,23 @@ public class ContainerInfoScreenSub extends Container
         for (int k = 0; k < 4; ++k) {
             EntityEquipmentSlot entityequipmentslot = ContainerInfoScreenSub.VALID_EQUIPMENT_SLOTS[k];
             this.addSlotToContainer(new Slot(playerInventory, 36 + (3 - k), -6, -12 + k * 18) {
-                public int getSlotStackLimit() {
+                @Override
+				public int getSlotStackLimit() {
                     return 1;
                 }
-                
+
+                @Override
                 public boolean isItemValid(ItemStack stack) {
                     return stack.getItem().isValidArmor(stack, entityequipmentslot, (Entity)player);
                 }
-                
+
+                @Override
                 public boolean canTakeStack(EntityPlayer playerIn) {
                     ItemStack itemstack = this.getStack();
                     return (itemstack.isEmpty() || playerIn.isCreative() || !EnchantmentHelper.hasBindingCurse(itemstack)) && super.canTakeStack(playerIn);
                 }
-                
+
+                @Override
                 @Nullable
                 @SideOnly(Side.CLIENT)
                 public String getSlotTexture() {
@@ -49,28 +53,33 @@ public class ContainerInfoScreenSub extends Container
         }
         for (int m = 0; m < 4; ++m) {
             this.addSlotToContainer(new Slot(playerSpells, m, 64, -12 + m * 18) {
-                public boolean isItemValid(ItemStack stack) {
+                @Override
+				public boolean isItemValid(ItemStack stack) {
                     return playerSpells.isItemValidForSlot(this.getSlotIndex(), stack);
                 }
             });
         }
         this.addSlotToContainer(new Slot(playerInventory, 40, 29, 60) {
-            @Nullable
+            @Override
+			@Nullable
             @SideOnly(Side.CLIENT)
             public String getSlotTexture() {
                 return "minecraft:items/empty_armor_slot_shield";
             }
         });
     }
-    
+
+    @Override
     public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player) {
         return ItemStack.EMPTY;
     }
-    
+
+    @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
         return true;
     }
-    
+
+    @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         return ItemStack.EMPTY;
     }

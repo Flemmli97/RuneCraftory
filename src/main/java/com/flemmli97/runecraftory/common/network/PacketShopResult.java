@@ -20,16 +20,19 @@ public class PacketShopResult implements IMessage
         this.text = displayText;
     }
     
+    @Override
     public void fromBytes(ByteBuf buf) {
         this.text = ByteBufUtils.readUTF8String(buf);
     }
     
+    @Override
     public void toBytes(ByteBuf buf) {
         ByteBufUtils.writeUTF8String(buf, this.text);
     }
     
     public static class Handler implements IMessageHandler<PacketShopResult, IMessage>
     {
+    	@Override
         public IMessage onMessage(PacketShopResult msg, MessageContext ctx) {
             EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
             if (player != null) {

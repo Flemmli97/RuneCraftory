@@ -131,7 +131,8 @@ public class ModelNPCBase extends ModelBiped
         this.npcBodyOverlay.addChild(this.npcLeftLegUpOverlay);
     }
     
-    public void render(final Entity entity, final float f0, final float f1, final float f2, final float f3, final float f4, final float scale) {
+    @Override
+	public void render(final Entity entity, final float f0, final float f1, final float f2, final float f3, final float f4, final float scale) {
         this.setRotationAngles(f0, f1, f2, f3, f4, scale, entity);
         this.npcBody.render(scale);
         GL11.glEnable(3042);
@@ -140,7 +141,8 @@ public class ModelNPCBase extends ModelBiped
         GL11.glDisable(3042);
     }
     
-    public void setRotationAngles(final float f1, final float f2, final float f3, final float f4, final float f5, final float f6, final Entity entity) {
+    @Override
+	public void setRotationAngles(final float f1, final float f2, final float f3, final float f4, final float f5, final float f6, final Entity entity) {
         this.setRotationAnglesPre(f1, f2, f3, f4, f5, f6, entity);
         this.syncOverlay();
     }
@@ -259,11 +261,13 @@ public class ModelNPCBase extends ModelBiped
         this.syncOverlay();
     }
     
-    public void setLivingAnimations(final EntityLivingBase livingBase, final float armSwingTime, final float armSwingReach, final float partialTick) {
+    @Override
+	public void setLivingAnimations(final EntityLivingBase livingBase, final float armSwingTime, final float armSwingReach, final float partialTick) {
         super.setLivingAnimations(livingBase, armSwingTime, armSwingReach, partialTick);
     }
     
-    public void postRenderArm(final float scale, final EnumHandSide side) {
+    @Override
+	public void postRenderArm(final float scale, final EnumHandSide side) {
         if (side == EnumHandSide.LEFT) {
             this.npcLeftArmUp.postRender(scale);
             this.npcLeftArmJoint.postRender(0.0f);

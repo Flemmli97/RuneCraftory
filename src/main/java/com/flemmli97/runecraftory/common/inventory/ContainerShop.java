@@ -22,22 +22,26 @@ public class ContainerShop extends Container
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 5; ++j) {
                 this.addSlotToContainer(new Slot(this.invShop, j + i * 5, -8 + j * 27, -4 + i * 21) {
-                    public boolean isItemValid(ItemStack stack) {
+                    @Override
+					public boolean isItemValid(ItemStack stack) {
                         return false;
                     }
                     
-                    public boolean canTakeStack(EntityPlayer playerIn) {
+                    @Override
+					public boolean canTakeStack(EntityPlayer playerIn) {
                         return false;
                     }
                 });
             }
         }
         this.addSlotToContainer(new Slot(this.invShop, 25, 180, 109) {
-            public boolean isItemValid(ItemStack stack) {
+            @Override
+			public boolean isItemValid(ItemStack stack) {
                 return false;
             }
             
-            public boolean canTakeStack(EntityPlayer playerIn) {
+            @Override
+			public boolean canTakeStack(EntityPlayer playerIn) {
                 return false;
             }
         });
@@ -50,7 +54,8 @@ public class ContainerShop extends Container
             this.addSlotToContainer(new Slot(playerInventory, k, -8 + k * 18, 167));
         }
     }
-    
+
+    @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
         return true;
     }
@@ -62,7 +67,8 @@ public class ContainerShop extends Container
     public IShop shopInstance() {
         return this.shop;
     }
-    
+
+    @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         if (index <= 25) {
             return ItemStack.EMPTY;
@@ -90,7 +96,8 @@ public class ContainerShop extends Container
         }
         return itemstack;
     }
-    
+
+    @Override
     public ItemStack slotClick(int slotId, int dragType, ClickType clickType, EntityPlayer player) {
         if (slotId > 24 || slotId < 0) {
             return super.slotClick(slotId, dragType, clickType, player);

@@ -23,7 +23,8 @@ public class BlockHotSpring extends BlockFluidClassic
         this.setRegistryName(new ResourceLocation(LibReference.MODID, "hot_spring"));
     }
     
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    @Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
         if (entity instanceof EntityPlayer && entity.ticksExisted % 15 == 0) {
             EntityPlayer player = (EntityPlayer)entity;
             IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);

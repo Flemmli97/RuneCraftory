@@ -55,7 +55,8 @@ public class CustomDamage extends EntityDamageSource{
     {
     	return this.protection;
     }
-    
+
+    @Override
     public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn)
     {
     		if(this.damageSourceEntity!=null)

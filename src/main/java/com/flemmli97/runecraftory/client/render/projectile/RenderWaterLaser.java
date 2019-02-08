@@ -18,12 +18,12 @@ public class RenderWaterLaser extends RenderBeam<EntityWaterLaser>{
 	}
 
 	@Override
-	public Pair<ResourceLocation, Integer> startTexture(EntityWaterLaser entity) {
+	public Pair<ResourceLocation, Float> startTexture(EntityWaterLaser entity) {
 		return null;
 	}
 
 	@Override
-	public Pair<ResourceLocation, Integer> endTexture(EntityWaterLaser entity) {
+	public Pair<ResourceLocation, Float> endTexture(EntityWaterLaser entity) {
 		return null;
 	}
 
@@ -33,7 +33,7 @@ public class RenderWaterLaser extends RenderBeam<EntityWaterLaser>{
 	}
 
 	@Override
-	public int animationFrames()
+	public int animationFrames(BeamPart part)
 	{
 		return 8;
 	}

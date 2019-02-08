@@ -61,7 +61,8 @@ public class ItemRecipe extends Item
     @SideOnly(Side.CLIENT)
     public void initModel(ModelBakeEvent event) {
         ModelLoader.setCustomMeshDefinition(this, new ItemMeshDefinition() {
-            public ModelResourceLocation getModelLocation(ItemStack stack) {
+            @Override
+			public ModelResourceLocation getModelLocation(ItemStack stack) {
                 return new ModelResourceLocation(ItemRecipe.this.getRegistryName(), "inventory");
             }
         });

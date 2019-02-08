@@ -22,20 +22,24 @@ public class ContainerMaking extends Container
             this.addSlotToContainer(new Slot(tileInventory, i + 4, 20 + i * 18, 44));
         }
         this.addSlotToContainer(new Slot(tileInventory, 0, 83, 35) {
-            public boolean isItemValid(ItemStack stack) {
+            @Override
+			public boolean isItemValid(ItemStack stack) {
                 return tileInventory.isItemValidForSlot(0, stack);
             }
             
-            public int getSlotStackLimit() {
+            @Override
+			public int getSlotStackLimit() {
                 return 1;
             }
         });
     }
-    
+
+    @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
         return true;
     }
-    
+
+    @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         return itemstack;

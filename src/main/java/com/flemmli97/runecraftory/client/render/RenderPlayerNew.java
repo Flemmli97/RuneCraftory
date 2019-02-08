@@ -67,7 +67,8 @@ public class RenderPlayerNew extends RenderPlayer
 			return instance;
 		}
 	}
-	
+
+    @Override
     public void doRender(AbstractClientPlayer entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
         //if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderPlayerEvent.Pre(entity, this, partialTicks, x, y, z))) return;

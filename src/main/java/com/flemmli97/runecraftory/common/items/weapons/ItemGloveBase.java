@@ -44,7 +44,8 @@ public class ItemGloveBase extends ItemSword implements IItemUsable, IChargeable
         this.setRegistryName(new ResourceLocation(LibReference.MODID, name));
         this.setUnlocalizedName(this.getRegistryName().toString());
         this.addPropertyOverride(new ResourceLocation("held"), (IItemPropertyGetter)new IItemPropertyGetter() {
-            public float apply(ItemStack stack, World world, EntityLivingBase entity) {
+            @Override
+			public float apply(ItemStack stack, World world, EntityLivingBase entity) {
                 if (world == null || entity==null || entity.getHeldItemMainhand() != stack) {
                     return 0.0f;
                 }

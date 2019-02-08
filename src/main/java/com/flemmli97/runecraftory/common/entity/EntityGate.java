@@ -173,7 +173,8 @@ public class EntityGate extends EntityLiving implements IEntityBase
         if (!this.spawnList.isEmpty()) {
             int randAmount = this.rand.nextInt(4) + 1;
             List<Entity> nearby = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(12.0), new Predicate<Entity>() {
-                public boolean apply(Entity entity) {
+                @Override
+				public boolean apply(Entity entity) {
                     return EntityGate.this.spawnList.contains(EntityList.getKey(entity));
                 }
             });

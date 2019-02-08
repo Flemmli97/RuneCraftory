@@ -56,7 +56,8 @@ public class ItemDualBladeBase extends ItemSword implements IItemUsable, ICharge
         this.setRegistryName(new ResourceLocation(LibReference.MODID, name));
         this.setUnlocalizedName(this.getRegistryName().toString());
         this.addPropertyOverride(new ResourceLocation("held"), (IItemPropertyGetter)new IItemPropertyGetter() {
-            public float apply(ItemStack stack, World world, EntityLivingBase entity) {
+            @Override
+			public float apply(ItemStack stack, World world, EntityLivingBase entity) {
                 if (entity != null && entity.getHeldItemMainhand() == stack) {
                     return 1.0f;
                 }

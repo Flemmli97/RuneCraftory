@@ -14,11 +14,13 @@ public class EntityBeetle extends EntityChargeable
         this.tasks.addTask(2, this.ai);
     }
     
+    @Override
     public void entityInit() {
         super.entityInit();
         this.dataManager.register(EntityChargeable.isCharging, false);
     }
     
+    @Override
     public float attackChance() {
         return 0.9f;
     }

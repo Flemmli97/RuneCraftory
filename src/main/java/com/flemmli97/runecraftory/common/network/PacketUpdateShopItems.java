@@ -52,7 +52,8 @@ public class PacketUpdateShopItems implements IMessage
     
     public static class Handler implements IMessageHandler<PacketUpdateShopItems, IMessage>
     {
-        public IMessage onMessage(PacketUpdateShopItems msg, MessageContext ctx) {
+        @Override
+		public IMessage onMessage(PacketUpdateShopItems msg, MessageContext ctx) {
             EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
             if (player != null) {
                 Entity entity = player.world.getEntityByID(msg.entityID);

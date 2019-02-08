@@ -42,7 +42,8 @@ public class EntityNPCShopOwner extends EntityNPCBase implements IShop
         }
     }
     
-    public void entityInit() {
+    @Override
+	public void entityInit() {
         super.entityInit();
         this.dataManager.register(SHOPTYPE, EnumShop.GENERAL.ordinal());
     }

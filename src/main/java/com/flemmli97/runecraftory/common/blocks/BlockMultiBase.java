@@ -190,11 +190,13 @@ public abstract class BlockMultiBase extends BlockContainer{
             this.meta = meta;
         }
 
+        @Override
         public String toString()
         {
             return this.name;
         }
 
+        @Override
         public String getName()
         {
             return this.name;

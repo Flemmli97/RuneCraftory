@@ -80,6 +80,7 @@ public class ModEntities
         RenderingRegistry.registerEntityRenderingHandler(EntityWaterLaser.class, RenderWaterLaser::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityNPCShopOwner.class, new IRenderFactory<EntityNPCShopOwner>() 
         {
+            @Override
             public RenderNPCBase<? super EntityNPCShopOwner> createRenderFor(RenderManager manager) {
                 return new RenderNPCBase<EntityNPCShopOwner>(manager, new ModelNPCBase());
             }

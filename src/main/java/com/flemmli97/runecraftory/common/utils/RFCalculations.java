@@ -330,7 +330,7 @@ public class RFCalculations
         if (target instanceof EntityLivingBase) {
             knockBack((EntityLivingBase) target, source);
         }
-        if (target.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+        if (!(source.getTrueSource() instanceof EntityPlayer) && target.world.getDifficulty() == EnumDifficulty.PEACEFUL && target instanceof EntityPlayer) {
             return false;
         }
         spawnElementalParticle(target, source.getElement());

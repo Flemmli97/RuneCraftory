@@ -43,10 +43,12 @@ public class EntityAmbrosiaSleep extends Entity
         this(world, caster);
         this.pred = exclude;
     }
-    
+
+    @Override
     protected void entityInit() {
     }
-    
+
+    @Override
     protected void readEntityFromNBT(NBTTagCompound compound) {
         this.livingTick = compound.getInteger("livingTick");
         if (this.world instanceof WorldServer) {
@@ -62,14 +64,16 @@ public class EntityAmbrosiaSleep extends Entity
             }
         }
     }
-    
+
+    @Override
     protected void writeEntityToNBT(NBTTagCompound compound) {
         compound.setInteger("livingTick", this.livingTick);
         if (this.owner != null) {
             compound.setString("owner", this.owner.getCachedUniqueIdString());
         }
     }
-    
+
+    @Override
     public void onUpdate() {
         ++this.livingTick;
         if (this.livingTick > 90) {

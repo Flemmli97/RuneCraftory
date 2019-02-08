@@ -76,7 +76,8 @@ public class EntityAmbrosia extends EntityBossBase
         this.status = status;
     }
     
-    protected void playStepSound(BlockPos pos, Block blockIn) {
+    @Override
+	protected void playStepSound(BlockPos pos, Block blockIn) {
     }
     
     public enum AttackAI

@@ -32,7 +32,8 @@ public class EntityAIGenericMelee extends EntityAIBase
         this.setMutexBits(3);
     }
     
-    public boolean shouldExecute() {
+    @Override
+	public boolean shouldExecute() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         if (entitylivingbase == null || !entitylivingbase.isEntityAlive() || !this.isTargetInsideHome(entitylivingbase)) {
             return false;
@@ -41,7 +42,8 @@ public class EntityAIGenericMelee extends EntityAIBase
         return this.path != null || this.getAttackReachSqr(entitylivingbase) >= this.attacker.getDistanceSq(entitylivingbase.posX, entitylivingbase.getEntityBoundingBox().minY, entitylivingbase.posZ);
     }
     
-    public boolean shouldContinueExecuting() {
+    @Override
+	public boolean shouldContinueExecuting() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         return entitylivingbase != null && entitylivingbase.isEntityAlive() && this.attacker.isWithinHomeDistanceFromPosition(new BlockPos((Entity)entitylivingbase)) && this.isTargetInsideHome(entitylivingbase) && (this.longMemory || !this.attacker.getNavigator().noPath());
     }
@@ -50,12 +52,14 @@ public class EntityAIGenericMelee extends EntityAIBase
         return this.attacker.getMaximumHomeDistance() == -1.0f || target.getPosition().distanceSq((Vec3i)this.attacker.getHomePosition()) < this.attacker.getMaximumHomeDistance() * this.attacker.getMaximumHomeDistance();
     }
     
-    public void startExecuting() {
+    @Override
+	public void startExecuting() {
         this.attacker.getNavigator().setPath(this.path, this.speedTowardsTarget);
         this.delayCounter = 0;
     }
     
-    public void resetTask() {
+    @Override
+	public void resetTask() {
         EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
         if (entitylivingbase instanceof EntityPlayer && (((EntityPlayer)entitylivingbase).isSpectator() || ((EntityPlayer)entitylivingbase).isCreative())) {
             this.attacker.setAttackTarget((EntityLivingBase)null);

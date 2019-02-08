@@ -97,7 +97,8 @@ public class EntityWooly extends EntityMobBase implements IShearable
         this.dataManager.set(EntityWooly.SHEARED, flag);
     }
     
-    public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
+    @Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
         return !this.isSheared();
     }
 
