@@ -1,9 +1,9 @@
 package com.flemmli97.runecraftory.client.gui;
 
-import com.flemmli97.runecraftory.api.entities.IShop;
 import com.flemmli97.runecraftory.common.blocks.tile.TileMultiBase;
 import com.flemmli97.runecraftory.common.blocks.tile.TileResearchTable;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.entity.npc.EntityNPCShopOwner;
 import com.flemmli97.runecraftory.common.inventory.ContainerInfoScreen;
 import com.flemmli97.runecraftory.common.inventory.ContainerInfoScreenSub;
 import com.flemmli97.runecraftory.common.inventory.ContainerMaking;
@@ -62,9 +62,9 @@ public class GuiHandler implements IGuiHandler
         else if (ID == LibReference.guiShop) 
         {
             Entity e = player.world.getEntityByID(x);
-            if (e instanceof IShop) 
+            if (e instanceof EntityNPCShopOwner) 
             {
-                return new ContainerShop(player.inventory, (IShop)e);
+                return new ContainerShop(player, (EntityNPCShopOwner)e);
             }
         }
         return null;
@@ -107,9 +107,9 @@ public class GuiHandler implements IGuiHandler
         else if (ID == LibReference.guiShop) 
         {
             Entity e = player.world.getEntityByID(x);
-            if (e instanceof IShop) 
+            if (e instanceof EntityNPCShopOwner) 
             {
-                return new GuiShop(player, (IShop)e);
+                return new GuiShop(player, (EntityNPCShopOwner)e);
             }   
         }
         return null;

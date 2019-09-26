@@ -54,7 +54,7 @@ public class PacketBuy implements IMessage
                 {
                     ContainerShop shop = (ContainerShop)container;
                     EnumShopResult result = ItemUtils.buyItem(player, stack);  
-                    PacketHandler.sendTo(new PacketShopResult(shop.shopInstance().purchase(result)), (EntityPlayerMP)player);
+                    PacketHandler.sendTo(new PacketShopResult(shop.shopOwner().purchase(result)), (EntityPlayerMP)player);
                     if (result == EnumShopResult.SUCCESS) 
                     {
                         shop.resetSlot();

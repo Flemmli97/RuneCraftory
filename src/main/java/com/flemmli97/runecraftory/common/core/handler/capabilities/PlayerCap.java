@@ -1,11 +1,14 @@
 package com.flemmli97.runecraftory.common.core.handler.capabilities;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
+import com.flemmli97.runecraftory.api.mappings.NPCShopItems;
 import com.flemmli97.runecraftory.client.render.ArmPosePlus;
 import com.flemmli97.runecraftory.client.render.EnumToolCharge;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
@@ -13,6 +16,7 @@ import com.flemmli97.runecraftory.common.core.handler.quests.QuestMission;
 import com.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
 import com.flemmli97.runecraftory.common.lib.LibConstants;
+import com.flemmli97.runecraftory.common.lib.enums.EnumShop;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.network.PacketFoodUpdate;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
@@ -24,12 +28,15 @@ import com.flemmli97.runecraftory.common.network.PacketRunePoints;
 import com.flemmli97.runecraftory.common.network.PacketSkills;
 import com.flemmli97.runecraftory.common.network.PacketUpdateClient;
 import com.flemmli97.runecraftory.common.network.PacketUpdateEquipmentStat;
+import com.flemmli97.runecraftory.common.network.PacketUpdateShippingItem;
+import com.flemmli97.runecraftory.common.network.PacketUpdateShopItems;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -40,9 +47,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.util.Constants;
@@ -62,7 +71,11 @@ public class PlayerCap implements IPlayer
 	private Map<IAttribute, Integer> feetBonus = Maps.newHashMap();
 	private Map<IAttribute, Integer> mainHandBonus = Maps.newHashMap();
 	private Map<IAttribute, Integer> offHandBonus = Maps.newHashMap();
-
+	
+	private Set<Item> shippedItems = Sets.newLinkedHashSet();
+	private Map<EnumShop,NonNullList<ItemStack>> shopItems= Maps.newHashMap();
+	private long lastUpdated;
+	
 	/** first number is level, second is the xp a.k.a. percent to next level*/
 	private int[] level = new int[] {1,0};
 	
@@ -433,6 +446,46 @@ public class PlayerCap implements IPlayer
     
     
     @Override
+	public void refreshShop(EntityPlayer player)
+    {
+    	if(!player.world.isRemote)
+	    	for(EnumShop profession : EnumShop.values())
+	    	{
+		    	List<ItemStack> list = NPCShopItems.getShopList(profession);
+		    	NonNullList<ItemStack> shop = NonNullList.create();
+		        for (float chance = 2.0f; player.world.rand.nextFloat() < chance; chance -= 0.1f) 
+		        {
+		            ItemStack stack = list.get(player.world.rand.nextInt(list.size()));
+		            if (!shop.contains(stack) && this.shippedItems.contains(stack.getItem())) 
+		            	shop.add(stack);
+		        }
+		        this.shopItems.put(profession, shop);
+		        PacketHandler.sendTo(new PacketUpdateShopItems(profession, shop), (EntityPlayerMP) player);
+	    	}
+    }
+	
+	@Override
+	public void setShop(EntityPlayer player, EnumShop shop, NonNullList<ItemStack> items)
+	{
+		if(player.world.isRemote)
+			this.shopItems.put(shop, items);
+	}
+	
+	@Override
+	public NonNullList<ItemStack> getShop(EnumShop shop)
+	{
+		return this.shopItems.getOrDefault(shop, NonNullList.withSize(0, ItemStack.EMPTY));
+	}
+	
+	@Override
+	public void addShippingItem(EntityPlayer player, Item item)
+	{
+		this.shippedItems.add(item);
+		if(!player.world.isRemote)
+	        PacketHandler.sendTo(new PacketUpdateShippingItem(item), (EntityPlayerMP) player);
+	}
+	
+    @Override
     public void readFromNBT(NBTTagCompound nbt, EntityPlayer player) {
         this.runePointsMax = nbt.getInteger("MaxRunePoints");
         if (nbt.hasKey("RunePoints")) {
@@ -604,6 +657,12 @@ public class PlayerCap implements IPlayer
     
     @Override
     public void update(EntityPlayer player) {
+    	if (RFCalculations.canUpdateDaily(player.world) || Math.abs(player.world.getWorldTime()/24000 - this.lastUpdated/24000)>=1) 
+    	{
+    		this.getShippingInv().shipItems(player);
+    		this.refreshShop(player);
+    		this.lastUpdated=player.world.getWorldTime();
+    	}
         this.ticker = Math.max(--this.ticker, 0);
         this.foodDuration = Math.max(--this.foodDuration, -1);
         if(this.foodDuration==0)

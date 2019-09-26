@@ -35,6 +35,7 @@ public class PacketHandler
         PacketHandler.dispatcher.registerMessage(PacketUpdateEquipmentStat.Handler.class, PacketUpdateEquipmentStat.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketFoodUpdate.Handler.class, PacketFoodUpdate.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketFoodUpdateEntity.Handler.class, PacketFoodUpdateEntity.class, id++, Side.CLIENT);
+        PacketHandler.dispatcher.registerMessage(PacketUpdateShippingItem.Handler.class, PacketUpdateShippingItem.class, id++, Side.CLIENT);
     }
     
     public static final void sendTo(final IMessage message, final EntityPlayerMP player) {

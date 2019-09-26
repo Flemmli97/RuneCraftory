@@ -8,13 +8,17 @@ import com.flemmli97.runecraftory.client.render.ArmPosePlus;
 import com.flemmli97.runecraftory.common.core.handler.quests.QuestMission;
 import com.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
+import com.flemmli97.runecraftory.common.lib.enums.EnumShop;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 
 public interface IPlayer{
 		
@@ -112,6 +116,19 @@ public interface IPlayer{
 	public boolean acceptMission(QuestMission quest);
 	
 	public boolean finishMission(EntityPlayer player);
+	
+	//Shop and Shipping
+	
+	public void refreshShop(EntityPlayer player);
+	
+	/**
+	 * Client side updating
+	 */
+	public void setShop(EntityPlayer player, EnumShop shop, NonNullList<ItemStack> items);
+	
+	public NonNullList<ItemStack> getShop(EnumShop shop);
+	
+	public void addShippingItem(EntityPlayer player, Item item);
 	
 	//Weapon and ticker
 	

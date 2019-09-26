@@ -410,14 +410,6 @@ public class EventHandlerCore
             World[] worlds = FMLCommonHandler.instance().getMinecraftServerInstance().worlds;
             if (RFCalculations.canUpdateDaily(worlds[0])) 
             {
-                for (World world : worlds) 
-                {
-                    //DailyBlockTickHandler.instance((WorldServer)world).update(world);
-                    for (EntityPlayer player : world.playerEntities) 
-                    {
-                        player.getCapability(PlayerCapProvider.PlayerCap, null).getShippingInv().shipItems(player);
-                    }
-                }
                 CalendarHandler.get(worlds[0]).increaseDay();           
             }
             WeatherData.get(worlds[0]).update(worlds[0]);

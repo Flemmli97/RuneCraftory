@@ -51,8 +51,10 @@ public class InventoryShippingBin extends InventoryBasic
         IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
         int money = 0;
         for (int i = 0; i < this.getSizeInventory(); ++i) {
+        	if(this.getStackInSlot(i).isEmpty())
+        		continue;
             money += ItemUtils.getSellPrice(this.getStackInSlot(i)) * this.getStackInSlot(i).getCount();
-            this.removeStackFromSlot(i);
+            cap.addShippingItem(player, this.removeStackFromSlot(i).getItem());
         }
         cap.setMoney(player, cap.getMoney() + money);
         player.sendStatusMessage((ITextComponent)new TextComponentString(TextFormatting.GOLD + "Total earning today: " + money), true);

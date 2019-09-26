@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.inventory;
 
-import com.flemmli97.runecraftory.api.entities.IShop;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.entity.npc.EntityNPCShopOwner;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 
@@ -14,11 +15,12 @@ import net.minecraft.item.ItemStack;
 public class ContainerShop extends Container
 {
     private InventoryShop invShop;
-    private IShop shop;
+    private EntityNPCShopOwner shopOwner;
     
-    public ContainerShop(InventoryPlayer playerInventory, IShop shop) {
-        this.invShop = new InventoryShop(shop);
-        this.shop = shop;
+    public ContainerShop(EntityPlayer player, EntityNPCShopOwner shopOwner) {
+    	InventoryPlayer playerInventory = player.inventory;
+        this.invShop = new InventoryShop(player.getCapability(PlayerCapProvider.PlayerCap, null).getShop(shopOwner.profession()));
+        this.shopOwner = shopOwner;
         for (int i = 0; i < 5; ++i) {
             for (int j = 0; j < 5; ++j) {
                 this.addSlotToContainer(new Slot(this.invShop, j + i * 5, -8 + j * 27, -4 + i * 21) {
@@ -64,8 +66,8 @@ public class ContainerShop extends Container
         return this.invShop;
     }
     
-    public IShop shopInstance() {
-        return this.shop;
+    public EntityNPCShopOwner shopOwner() {
+        return this.shopOwner;
     }
 
     @Override

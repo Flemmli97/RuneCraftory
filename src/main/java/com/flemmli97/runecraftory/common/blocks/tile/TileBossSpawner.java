@@ -35,7 +35,7 @@ public class TileBossSpawner extends TileEntity implements ITickable, ITileEntit
 	
 	@Override
 	public void update() {
-		if(!this.world.isRemote)
+		if(!this.world.isRemote && this.world.isAnyPlayerWithinRangeAt(this.pos.getX()+0.5, this.pos.getY()+0.5, this.pos.getZ()+0.5, 16))
 		{
 			boolean flag = Math.abs(this.world.getWorldTime()/24000 - this.time/24000)>=1 || this.world.getWorldTime()%24000==1;
 			if(this.base!=null)

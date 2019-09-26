@@ -2,8 +2,8 @@ package com.flemmli97.runecraftory.api.mappings;
 
 import java.util.List;
 
-import com.flemmli97.runecraftory.common.entity.npc.EntityNPCShopOwner;
 import com.flemmli97.runecraftory.common.init.ModItems;
+import com.flemmli97.runecraftory.common.lib.enums.EnumShop;
 import com.google.common.collect.Lists;
 
 import net.minecraft.item.Item;
@@ -29,7 +29,7 @@ public class NPCShopItems
         return list;
     }
     
-    public static void addItem(ItemStack stack, EntityNPCShopOwner.EnumShop shop) {
+    public static void addItem(ItemStack stack, EnumShop shop) {
         switch (shop) 
         {
             case CLINIC:
@@ -59,7 +59,7 @@ public class NPCShopItems
         }
     }
     
-    public static List<ItemStack> getShopList(EntityNPCShopOwner.EnumShop profession) 
+    public static List<ItemStack> getShopList(EnumShop profession) 
     {
         switch (profession) 
         {

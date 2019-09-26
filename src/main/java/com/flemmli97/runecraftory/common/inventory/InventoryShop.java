@@ -2,8 +2,6 @@ package com.flemmli97.runecraftory.common.inventory;
 
 import java.util.List;
 
-import com.flemmli97.runecraftory.api.entities.IShop;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -16,11 +14,11 @@ import net.minecraft.util.text.TextComponentTranslation;
 public class InventoryShop implements IInventory
 {
     private NonNullList<ItemStack> slots = NonNullList.withSize(25, ItemStack.EMPTY);
-    private IShop shop;
+    private NonNullList<ItemStack> shop;
     private int index;
     private ItemStack output = ItemStack.EMPTY;
     
-    public InventoryShop(IShop shop) 
+    public InventoryShop(NonNullList<ItemStack> shop) 
     {
         this.shop = shop;
         this.updateInv();
@@ -145,7 +143,7 @@ public class InventoryShop implements IInventory
     }
     
     public void next() {
-        this.index = Math.min(this.shop.shopItems().size() / 25, ++this.index);
+        this.index = Math.min(this.shop.size() / 25, ++this.index);
         this.updateInv();
     }
     
@@ -155,7 +153,7 @@ public class InventoryShop implements IInventory
     }
     
     private void updateInv() {
-        List<ItemStack> list = (List<ItemStack>)this.shop.shopItems();
+        List<ItemStack> list = (List<ItemStack>)this.shop;
         for (int i = 0; i < this.slots.size(); ++i) {
             int slot = i + 25 * this.index;
             ItemStack stack = ItemStack.EMPTY;

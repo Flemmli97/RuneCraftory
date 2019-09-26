@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import org.lwjgl.input.Mouse;
 
-import com.flemmli97.runecraftory.api.entities.IShop;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.entity.npc.EntityNPCShopOwner;
 import com.flemmli97.runecraftory.common.inventory.ContainerShop;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.network.PacketBuy;
@@ -35,7 +35,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiShop extends GuiContainer
 {
     private static final ResourceLocation texturepath = new ResourceLocation(LibReference.MODID,"textures/gui/shop.png");
-    private IShop shop;
+    private EntityNPCShopOwner shop;
     private final int texX = 256;
     private final int texY = 256;
     private int guiX;
@@ -52,11 +52,11 @@ public class GuiShop extends GuiContainer
     private ButtonBuy buy;
     private SpeechBubble speech;
     
-    public GuiShop(EntityPlayer player, IShop shop) {
-        super(new ContainerShop(player.inventory, shop));
+    public GuiShop(EntityPlayer player, EntityNPCShopOwner shopOwner) {
+        super(new ContainerShop(player, shopOwner));
         this.leftDelay = 25;
         this.rightDelay = 25;
-        this.shop = shop;
+        this.shop = shopOwner;
         this.playerInv = player.inventory;
         this.cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
     }
@@ -65,7 +65,7 @@ public class GuiShop extends GuiContainer
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         this.mc.getTextureManager().bindTexture(texturepath);
         this.drawTexturedModalRect(this.guiX, this.guiY, 0, 0, 256, 256);
-        drawEntityOnScreen(this.guiX + 209, this.guiY + 175, 60, this.guiX + 209 - mouseX, this.guiY + 175 - 100 - mouseY, (EntityLivingBase)this.shop.shopOwner());
+        drawEntityOnScreen(this.guiX + 209, this.guiY + 175, 60, this.guiX + 209 - mouseX, this.guiY + 175 - 100 - mouseY, (EntityNPCShopOwner)this.shop);
         this.drawRightAlignedScaledString(TextFormatting.GOLD + "$ " + this.cap.getMoney(), this.guiX + 220, this.guiY + 210, 1.0f, 0);
         this.drawRightAlignedScaledString("$ " + ItemUtils.getBuyPrice(this.outputStack()) * this.outputStack().getCount(), this.guiX + 190, this.guiY + 156, 1.0f, 0);
     }

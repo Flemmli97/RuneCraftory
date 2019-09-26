@@ -1,19 +1,12 @@
 package com.flemmli97.runecraftory.common.entity.npc;
 
-import java.util.List;
-
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.api.entities.IShop;
-import com.flemmli97.runecraftory.api.mappings.NPCShopItems;
 import com.flemmli97.runecraftory.common.lib.LibReference;
+import com.flemmli97.runecraftory.common.lib.enums.EnumShop;
 import com.flemmli97.runecraftory.common.lib.enums.EnumShopResult;
-import com.flemmli97.runecraftory.common.network.PacketHandler;
-import com.flemmli97.runecraftory.common.network.PacketUpdateShopItems;
-import com.flemmli97.runecraftory.common.utils.RFCalculations;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -26,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 
-public class EntityNPCShopOwner extends EntityNPCBase implements IShop
+public class EntityNPCShopOwner extends EntityNPCBase
 {
     private static final DataParameter<Integer> SHOPTYPE = EntityDataManager.createKey(EntityNPCShopOwner.class, DataSerializers.VARINT);
     private NonNullList<ItemStack> shopItems = NonNullList.create();;
@@ -54,37 +47,20 @@ public class EntityNPCShopOwner extends EntityNPCBase implements IShop
     
     public void setProfession(EnumShop profession) {
         this.dataManager.set(EntityNPCShopOwner.SHOPTYPE, profession.ordinal());
-        this.generateRandomShopItems();
     }
-    
-    @Override
-    public NonNullList<ItemStack> shopItems() {
-        return this.shopItems;
-    }
-    
-    @Override
-    public EntityNPCShopOwner shopOwner() {
-        return this;
-    }
+
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if (RFCalculations.canUpdateDaily(this.world)) {
-            this.generateRandomShopItems();
-        }
     }
+    
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
-        compound.setTag("Shop", ItemStackHelper.saveAllItems(new NBTTagCompound(), this.shopItems));
     }
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
-        if (compound.hasKey("Shop")) {
-            ItemStackHelper.loadAllItems(compound.getCompoundTag("Shop"), this.shopItems);
-        }
-        PacketHandler.sendToAll(new PacketUpdateShopItems(this, this.shopItems));
     }
     
     @Override
@@ -107,28 +83,6 @@ public class EntityNPCShopOwner extends EntityNPCBase implements IShop
         }
     }
     
-    public void generateRandomShopItems() 
-    {
-        this.shopItems.clear();
-        List<ItemStack> list = NPCShopItems.getShopList(this.profession());
-        for (float chance = 2.0f; this.rand.nextFloat() < chance; chance -= 0.1f) 
-        {
-            ItemStack stack = list.get(this.rand.nextInt(list.size()));
-            if (!this.shopItems.contains(stack)) 
-            {
-                this.shopItems.add(stack);
-            }
-        }
-        if(!this.world.isRemote)
-        	PacketHandler.sendToAll(new PacketUpdateShopItems(this, this.shopItems));
-    }
-    
-    @Override
-    public void updateShopItems(NonNullList<ItemStack> list) {
-        this.shopItems = list;
-    }
-    
-    @Override
     public String purchase(EnumShopResult result) {
         String s = "";
         switch (result) {
@@ -155,17 +109,5 @@ public class EntityNPCShopOwner extends EntityNPCBase implements IShop
         }
         player.openGui(RuneCraftory.instance, LibReference.guiShop, this.world, this.getEntityId(), 0, 0);
         return true;
-    }
-    
-    public enum EnumShop
-    {
-        GENERAL, 
-        FLOWER, 
-        WEAPON, 
-        CLINIC, 
-        FOOD, 
-        MAGIC, 
-        RUNESKILL, 
-        RANDOM;
     }
 }
