@@ -57,7 +57,7 @@ jar {
 
 dependencies {
   deobfCompile waila_dep
-  deobfCompile "tenshilib:TenshiLib:1.12.2:${tenshilib_version}"
+  //deobfCompile "tenshilib:TenshiLib:1.12.2:${tenshilib_version}"
   compile crafttweaker_dep
 }
 

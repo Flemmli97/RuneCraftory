@@ -14,6 +14,7 @@ import com.flemmli97.runecraftory.common.init.OreDictInit;
 import com.flemmli97.runecraftory.common.init.WorldGenRegistry;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
+import com.flemmli97.runecraftory.compat.dynamicTrees.DCInit;
 import com.flemmli97.tenshilib.common.config.ConfigUtils.LoadState;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,6 +35,8 @@ public class CommonProxy
     public void preInit(FMLPreInitializationEvent e) {
         LibReference.modDir = e.getModConfigurationDirectory();
         ConfigHandler.load(LoadState.PREINIT);
+        if(ConfigHandler.MainConfig.dynamicTrees && Loader.isModLoaded("dynamictrees"))
+        	DCInit.initItemAndBlocks();
         PacketHandler.registerPackets();
         ModEntities.init();
     }

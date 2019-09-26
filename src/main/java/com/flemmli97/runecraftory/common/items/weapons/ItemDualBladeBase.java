@@ -16,7 +16,6 @@ import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
-import com.flemmli97.runecraftory.common.network.PacketSwingArm;
 import com.flemmli97.runecraftory.common.network.PacketWeaponAnimation;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -69,14 +68,6 @@ public class ItemDualBladeBase extends ItemSword implements IItemUsable, ICharge
     @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return false;
-    }
-
-    @Override
-    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-        if (entityLiving instanceof EntityPlayer && !entityLiving.world.isRemote) {
-            PacketHandler.sendTo(new PacketSwingArm(), (EntityPlayerMP)entityLiving);
-        }
-        return true;
     }
 
     @Override

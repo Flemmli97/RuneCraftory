@@ -136,8 +136,9 @@ public class ConfigHandler {
 	    
 		public static boolean waila=true;
 		public static boolean jei=true;
-		public static boolean harvestCraft=true;
+		//public static boolean harvestCraft=true;
 		public static boolean seasons=true;
+		public static boolean dynamicTrees=true;
 		
 		private static void load(File configDir) {
 			if(mainConfig==null)
@@ -152,7 +153,7 @@ public class ConfigHandler {
     		cat.setRequiresMcRestart(true);
 	        waila = mainConfig.getBoolean("Waila", "integration", waila, "Waila integration");
 	        jei = mainConfig.getBoolean("JEI", "integration", jei, "JEI integration");
-	  		harvestCraft = mainConfig.getBoolean("HarvestCraft", "integration", harvestCraft, "HarvestCraft integration");
+	  		//harvestCraft = mainConfig.getBoolean("HarvestCraft", "integration", harvestCraft, "HarvestCraft integration");
 	  		seasons = mainConfig.getBoolean("SereneSeason", "integration", seasons, "SereneSeason integration"); 
 	  		mainConfig.save();
 	    }

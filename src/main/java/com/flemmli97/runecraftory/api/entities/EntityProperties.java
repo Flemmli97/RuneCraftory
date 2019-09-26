@@ -11,7 +11,6 @@ import com.flemmli97.tenshilib.api.config.IConfigSerializable;
 import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.flemmli97.tenshilib.common.config.ConfigUtils;
 import com.flemmli97.tenshilib.common.javahelper.ArrayUtils;
-import com.flemmli97.tenshilib.common.javahelper.ObjectConverter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
@@ -109,9 +108,8 @@ public class EntityProperties implements IConfigSerializable<EntityProperties>
         this.xp = ConfigUtils.getIntConfig(config, "Base xp", configCategory, this.xp, 0, "Base xp when defeating this entity");
         this.money = ConfigUtils.getIntConfig(config, "Base money", configCategory, this.money, 0, "Base money when defeating this entity");
         this.taming = config.getFloat("Taming chance", configCategory, this.taming, 0.0f, 1.0f, "Base taming chance.");
-        this.tamingItem = ArrayUtils.arrayConverter(config.getStringList("Taming Items", configCategory, ArrayUtils.arrayToStringArr(this.tamingItem), "Syntax is \"item(,meta)\""), new ObjectConverter<String,SimpleItemStackWrapper>(){
-			@Override
-			public SimpleItemStackWrapper convertFrom(String s) {return new SimpleItemStackWrapper(s);}},SimpleItemStackWrapper.class, false);
+        this.tamingItem = ArrayUtils.arrayConverter(config.getStringList("Taming Items", configCategory, ArrayUtils.arrayToStringArr(this.tamingItem), "Syntax is \"item(,meta)\""), 
+        		(string)->new SimpleItemStackWrapper(string),SimpleItemStackWrapper.class, false);
         this.daily.clear();
         for(String s : config.getStringList("Daily Products", configCategory, daily.toArray(new String[0]), "Syntax is \"item(,meta);hearts. Where hearts is the friendship minimum value for that drop\""))
     	{

@@ -11,7 +11,6 @@ import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.lib.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
-import com.flemmli97.runecraftory.common.network.PacketSwingArm;
 import com.flemmli97.runecraftory.common.network.PacketWeaponAnimation;
 import com.flemmli97.tenshilib.api.item.IAOEWeapon;
 import com.flemmli97.tenshilib.api.item.IDualWeapon;
@@ -55,14 +54,6 @@ public class ItemGloveBase extends ItemSword implements IItemUsable, IChargeable
                 return 1.0f;
             }
         });
-    }
-    
-    @Override
-    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-        if (entityLiving instanceof EntityPlayer && !entityLiving.world.isRemote) {
-            PacketHandler.sendTo(new PacketSwingArm(), (EntityPlayerMP)entityLiving);
-        }
-        return true;
     }
     
     @Override

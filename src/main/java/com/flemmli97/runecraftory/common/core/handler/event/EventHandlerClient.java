@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory.common.core.handler.event;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -20,8 +21,9 @@ import com.flemmli97.runecraftory.client.gui.GuiInfoScreen;
 import com.flemmli97.runecraftory.client.gui.GuiInfoScreenSub;
 import com.flemmli97.runecraftory.client.gui.GuiSpellHotbar;
 import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler.EnumSeason;
-import com.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
-import com.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
+import com.flemmli97.runecraftory.common.core.handler.time.WeatherData;
+import com.flemmli97.runecraftory.common.core.handler.time.WeatherData.EnumWeather;
+import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.network.PacketCastSpell;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
@@ -40,14 +42,14 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.MouseHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.InputUpdateEvent;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderSpecificHandEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -125,19 +127,6 @@ public class EventHandlerClient
     }
     
     /**
-     * Rendering dual weapons in first person
-     */
-    @SideOnly(Side.CLIENT)
-    @SubscribeEvent
-    public void renderDualFirst(RenderSpecificHandEvent event) {
-        ItemStack stackMain = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
-        if ((stackMain.getItem() instanceof ItemDualBladeBase || stackMain.getItem() instanceof ItemGloveBase) && event.getHand() == EnumHand.OFF_HAND) {
-            event.setCanceled(true);
-            Minecraft.getMinecraft().getItemRenderer().renderItemInFirstPerson(Minecraft.getMinecraft().player, event.getPartialTicks(), event.getInterpolatedPitch(), EnumHand.OFF_HAND, event.getSwingProgress(), stackMain, event.getEquipProgress());
-        }
-    }
-    
-    /**
      * Disables player interactions when under special conditions
      */
     @SideOnly(Side.CLIENT)
@@ -194,18 +183,14 @@ public class EventHandlerClient
             }
             if (showTooltip) 
             {
-                List<String> newToolTip = Lists.newArrayList();
-                newToolTip.add(event.getToolTip().get(0));
-                this.injectAdditionalTooltip(stack, newToolTip);
-                newToolTip.addAll(event.getToolTip().subList(Math.min(event.getToolTip().size(), 1), event.getToolTip().size()));
-                event.getToolTip().clear();
-                event.getToolTip().addAll(newToolTip);
+            	event.getToolTip().addAll(1, injectAdditionalTooltip(stack));
             }
         }
     }
     
-    private void injectAdditionalTooltip(ItemStack stack, List<String> tooltip)
+    private List<String> injectAdditionalTooltip(ItemStack stack)
     {
+    	List<String> tooltip = Lists.newArrayList();
         CropProperties props = CropMap.getProperties(stack);
         if (props != null) 
         {
@@ -290,5 +275,129 @@ public class EventHandlerClient
                 }
             }
         }
+        return tooltip;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void runey(RenderWorldLastEvent event)
+    {
+    	if(WeatherData.get(Minecraft.getMinecraft().world).currentWeather()==EnumWeather.RUNEY)
+    		renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
+    }
+    
+    private final Random random = new Random();
+    private static final ResourceLocation runeyTex = new ResourceLocation(LibReference.MODID, "environment/runey.png");
+    
+    private void renderRuneyWeather(Minecraft mc, float partialTicks)
+    {
+        /*mc.entityRenderer.enableLightmap();
+        Entity entity = mc.getRenderViewEntity();
+        World world = mc.world;
+        int i = MathHelper.floor(entity.posX);
+        int j = MathHelper.floor(entity.posY);
+        int k = MathHelper.floor(entity.posZ);
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        GlStateManager.disableCull();
+        GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.alphaFunc(516, 0.1F);
+        double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
+        double d1 = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
+        double d2 = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
+        int l = MathHelper.floor(d1);
+        int i1 = 5;
+
+        if (mc.gameSettings.fancyGraphics)
+        {
+            i1 = 10;
+        }
+
+        int j1 = -1;
+        float f1 = (float)rendererUpdateCount + partialTicks;
+        bufferbuilder.setTranslation(-d0, -d1, -d2);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+
+        for (int k1 = k - i1; k1 <= k + i1; ++k1)
+        {
+            for (int l1 = i - i1; l1 <= i + i1; ++l1)
+            {
+                int i2 = (k1 - k + 16) * 32 + l1 - i + 16;
+                double d3 = rainXCoords[i2] * 0.5D;
+                double d4 = rainYCoords[i2] * 0.5D;
+                blockpos$mutableblockpos.setPos(l1, 0, k1);
+                Biome biome = world.getBiome(blockpos$mutableblockpos);
+                    int j2 = world.getPrecipitationHeight(blockpos$mutableblockpos).getY();
+                    int k2 = j - i1;
+                    int l2 = j + i1;
+
+                    if (k2 < j2)
+                    {
+                        k2 = j2;
+                    }
+
+                    if (l2 < j2)
+                    {
+                        l2 = j2;
+                    }
+
+                    int i3 = j2;
+
+                    if (j2 < l)
+                    {
+                        i3 = l;
+                    }
+
+                    if (k2 != l2)
+                    {
+                        random.setSeed((long)(l1 * l1 * 3121 + l1 * 45238971 ^ k1 * k1 * 418711 + k1 * 13761));
+                        blockpos$mutableblockpos.setPos(l1, k2, k1);
+                        float f2 = biome.getTemperature(blockpos$mutableblockpos);
+
+                        if (world.getBiomeProvider().getTemperatureAtHeight(f2, j2) >= 0.15F)
+                        {
+                            if (j1 != 0)
+                            {
+                                if (j1 >= 0)
+                                {
+                                    tessellator.draw();
+                                }
+
+                                j1 = 0;
+                                mc.getTextureManager().bindTexture(runeyTex);
+                                bufferbuilder.begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+                            }
+
+                            double d5 = -((rendererUpdateCount + l1 * l1 * 3121 + l1 * 45238971 + k1 * k1 * 418711 + k1 * 13761 & 31) + partialTicks) / 32.0D * (3.0D + random.nextDouble());
+                            double d6 = ((float)l1 + 0.5F) - entity.posX;
+                            double d7 = ((float)k1 + 0.5F) - entity.posZ;
+                            float f3 = MathHelper.sqrt(d6 * d6 + d7 * d7) / (float)i1;
+                            float f4 = ((1.0F - f3 * f3) * 0.5F + 0.5F) * f;
+                            blockpos$mutableblockpos.setPos(l1, i3, k1);
+                            int j3 = world.getCombinedLight(blockpos$mutableblockpos, 0);
+                            int k3 = j3 >> 16 & 65535;
+                            int l3 = j3 & 65535;
+                            bufferbuilder.pos(l1 - d3 + 0.5D, l2, k1 - d4 + 0.5D).tex(0.0D, k2 * 0.25D + d5).color(1.0F, 1.0F, 1.0F, f4).lightmap(k3, l3).endVertex();
+                            bufferbuilder.pos(l1 + d3 + 0.5D, l2, k1 + d4 + 0.5D).tex(1.0D, k2 * 0.25D + d5).color(1.0F, 1.0F, 1.0F, f4).lightmap(k3, l3).endVertex();
+                            bufferbuilder.pos(l1 + d3 + 0.5D, k2, k1 + d4 + 0.5D).tex(1.0D, l2 * 0.25D + d5).color(1.0F, 1.0F, 1.0F, f4).lightmap(k3, l3).endVertex();
+                            bufferbuilder.pos(l1 - d3 + 0.5D, k2, k1 - d4 + 0.5D).tex(0.0D, l2 * 0.25D + d5).color(1.0F, 1.0F, 1.0F, f4).lightmap(k3, l3).endVertex();
+                        }
+                    }
+                }
+            }
+
+        if (j1 >= 0)
+        {
+            tessellator.draw();
+        }
+
+        bufferbuilder.setTranslation(0.0D, 0.0D, 0.0D);
+        GlStateManager.enableCull();
+        GlStateManager.disableBlend();
+        GlStateManager.alphaFunc(516, 0.1F);
+        mc.entityRenderer.disableLightmap();*/
     }
 }

@@ -27,7 +27,6 @@ public class PacketHandler
         PacketHandler.dispatcher.registerMessage(PacketOpenGuiContainer.Handler.class, PacketOpenGuiContainer.class, id++, Side.SERVER);
         PacketHandler.dispatcher.registerMessage(PacketCrafting.Handler.class, PacketCrafting.class, id++, Side.SERVER);
         PacketHandler.dispatcher.registerMessage(PacketCastSpell.Handler.class, PacketCastSpell.class, id++, Side.SERVER);
-        PacketHandler.dispatcher.registerMessage(PacketSwingArm.Handler.class, PacketSwingArm.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketCalendar.Handler.class, PacketCalendar.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketEntityLevelUp.Handler.class, PacketEntityLevelUp.class, id++, Side.CLIENT);
         PacketHandler.dispatcher.registerMessage(PacketBuy.Handler.class, PacketBuy.class, id++, Side.SERVER);
