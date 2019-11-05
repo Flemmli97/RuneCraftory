@@ -14,7 +14,6 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
@@ -128,7 +127,7 @@ public interface IPlayer{
 	
 	public NonNullList<ItemStack> getShop(EnumShop shop);
 	
-	public void addShippingItem(EntityPlayer player, Item item);
+	public void addShippingItem(EntityPlayer player, ItemStack item);
 	
 	//Weapon and ticker
 	

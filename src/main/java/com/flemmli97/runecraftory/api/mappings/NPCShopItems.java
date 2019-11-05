@@ -23,7 +23,8 @@ public class NPCShopItems
     private static final List<ItemStack> FOOD = Lists.newArrayList();
     private static final List<ItemStack> RANDOM = Lists.newArrayList();
     private static final Set<ExtendedItemStackWrapper> starterItems = Sets.newHashSet();
-    
+    private static final Set<ExtendedItemStackWrapper> leveledItems = Sets.newHashSet();
+
     public static List<ItemStack> allItems(Item[] items) 
     {
         NonNullList<ItemStack> list = NonNullList.create();
@@ -38,7 +39,7 @@ public class NPCShopItems
      * @param shop
      * @param starter true if a shop can sell it despite the player not sold at least one of that item
      */
-    public static void addItem(ItemStack stack, EnumShop shop, boolean starter) {
+    public static void addItem(ItemStack stack, EnumShop shop, boolean starter, boolean leveled) {
         switch (shop) 
         {
             case CLINIC:
@@ -68,11 +69,18 @@ public class NPCShopItems
         }
         if(starter)
         	starterItems.add(new ExtendedItemStackWrapper(stack));
+        if(leveled)
+            leveledItems.add(new ExtendedItemStackWrapper(stack));
     }
     
     public static Set<ExtendedItemStackWrapper> starterItems()
     {
     	return Sets.newHashSet(starterItems);
+    }
+    
+    public static Set<ExtendedItemStackWrapper> leveledItems()
+    {
+        return Sets.newHashSet(leveledItems);
     }
     
     public static List<ItemStack> getShopList(EnumShop profession) 

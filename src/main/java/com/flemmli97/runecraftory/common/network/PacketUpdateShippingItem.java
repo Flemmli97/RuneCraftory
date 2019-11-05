@@ -2,34 +2,34 @@ package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.utils.ItemNBT;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class PacketUpdateShippingItem implements IMessage
 {
-	public Item item;
+	public ItemStack item;
     
     public PacketUpdateShippingItem() {}
     
-    public PacketUpdateShippingItem(Item item) {
-        this.item=item;
+    public PacketUpdateShippingItem(ItemStack item, int level) {
+        this.item=ItemNBT.getLeveledItem(item, level);
     }
     
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.item=ByteBufUtils.readRegistryEntry(buf, ForgeRegistries.ITEMS);
+        this.item=ByteBufUtils.readItemStack(buf);
     }
     
     @Override
     public void toBytes(ByteBuf buf) {
-        ByteBufUtils.writeRegistryEntry(buf, this.item);
+        ByteBufUtils.writeItemStack(buf, this.item);
     }
     
     public static class Handler implements IMessageHandler<PacketUpdateShippingItem, IMessage>

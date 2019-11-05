@@ -54,7 +54,7 @@ public class InventoryShippingBin extends InventoryBasic
         	if(this.getStackInSlot(i).isEmpty())
         		continue;
             money += ItemUtils.getSellPrice(this.getStackInSlot(i)) * this.getStackInSlot(i).getCount();
-            cap.addShippingItem(player, this.removeStackFromSlot(i).getItem());
+            cap.addShippingItem(player, this.removeStackFromSlot(i));
         }
         cap.setMoney(player, cap.getMoney() + money);
         player.sendStatusMessage((ITextComponent)new TextComponentString(TextFormatting.GOLD + "Total earning today: " + money), true);

@@ -48,7 +48,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -75,7 +74,7 @@ public class PlayerCap implements IPlayer
 	private Map<IAttribute, Integer> mainHandBonus = Maps.newHashMap();
 	private Map<IAttribute, Integer> offHandBonus = Maps.newHashMap();
 	
-	private Set<String> shippedItems = Sets.newLinkedHashSet();
+	private Map<String,Integer> shippedItems = Maps.newHashMap();
 	private Map<EnumShop,NonNullList<ItemStack>> shopItems= Maps.newHashMap();
 	private long lastUpdated;
 	
@@ -461,7 +460,7 @@ public class PlayerCap implements IPlayer
 		    	list.removeIf((stack)->
 		    	{
 		        	ExtendedItemStackWrapper wr = new ExtendedItemStackWrapper(stack);		       
-		        	return !this.shippedItems.contains(wr.getItem().getRegistryName().toString()) && !ignore.contains(wr);
+		        	return !this.shippedItems.keySet().contains(wr.getItem().getRegistryName().toString()) && !ignore.contains(wr);
 		    	});
 		    	if(list.isEmpty())
 		    		continue;
@@ -471,8 +470,10 @@ public class PlayerCap implements IPlayer
 		        {
 	            	pre.add(new ExtendedItemStackWrapper(list.get(player.world.rand.nextInt(list.size()))));
 		        }
-		        for(ExtendedItemStackWrapper wr : pre)
-		        	shop.add(wr.getStack());
+		        for(ExtendedItemStackWrapper wr : pre) {
+		            ItemStack stack = wr.getStack();
+		        	shop.add(ItemNBT.getLeveledItem(stack, this.shippedItems.get(stack.getItem().getRegistryName().toString())));
+		        }
 		        this.shopItems.put(profession, shop);
 		        PacketHandler.sendTo(new PacketUpdateShopItems(profession, shop), (EntityPlayerMP) player);
 	    	}
@@ -493,11 +494,12 @@ public class PlayerCap implements IPlayer
 	}
 	
 	@Override
-	public void addShippingItem(EntityPlayer player, Item item)
+	public void addShippingItem(EntityPlayer player, ItemStack item)
 	{
-		this.shippedItems.add(item.getRegistryName().toString());
-		if(!player.world.isRemote)
-	        PacketHandler.sendTo(new PacketUpdateShippingItem(item), (EntityPlayerMP) player);
+	    int level = player.world.isRemote || !NPCShopItems.leveledItems().contains(new ExtendedItemStackWrapper(item))?1:ItemNBT.itemLevel(item);
+	    boolean changed = this.shippedItems.compute(item.getItem().getRegistryName().toString(), (k,v)->v==null?level:Math.max(v, level))!=level;
+		if(!player.world.isRemote && changed)
+	        PacketHandler.sendTo(new PacketUpdateShippingItem(item, level), (EntityPlayerMP) player);
 	}
 	
     @Override
@@ -529,8 +531,9 @@ public class PlayerCap implements IPlayer
             this.spells.readFromNBT(compound2);
         }
         this.shipping.loadInventoryFromNBT(nbt.getTagList("Shipping", Constants.NBT.TAG_COMPOUND));
-        nbt.getTagList("ShippedItems", Constants.NBT.TAG_STRING).forEach(s->
-            this.shippedItems.add(((NBTTagString)s).getString()));
+        nbt.getTagList("ShippedItems", Constants.NBT.TAG_STRING).forEach(s->{
+            String[] sub = ((NBTTagString)s).getString().split(";");
+            this.shippedItems.put(sub[0], Integer.parseInt(sub[1]));});
         NBTTagCompound shops = nbt.getCompoundTag("ShopItems");
         for(EnumShop shop : EnumShop.values())
         {
@@ -579,7 +582,7 @@ public class PlayerCap implements IPlayer
         nbt.setTag("Inventory", compound2);
         nbt.setTag("Shipping", this.shipping.saveInventoryToNBT());
         NBTTagList ship = new NBTTagList();
-        this.shippedItems.forEach(i->ship.appendTag(new NBTTagString(i)));
+        this.shippedItems.entrySet().forEach(e->ship.appendTag(new NBTTagString(e.getKey()+";"+e.getValue())));
         nbt.setTag("ShippedItems", ship);
         NBTTagCompound shop = new NBTTagCompound();
         for(Entry<EnumShop, NonNullList<ItemStack>> entry : this.shopItems.entrySet())
