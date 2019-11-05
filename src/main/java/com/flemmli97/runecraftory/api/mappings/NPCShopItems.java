@@ -1,10 +1,12 @@
 package com.flemmli97.runecraftory.api.mappings;
 
 import java.util.List;
+import java.util.Set;
 
-import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.enums.EnumShop;
+import com.flemmli97.tenshilib.api.config.ExtendedItemStackWrapper;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +22,7 @@ public class NPCShopItems
     private static final List<ItemStack> RUNES = Lists.newArrayList();
     private static final List<ItemStack> FOOD = Lists.newArrayList();
     private static final List<ItemStack> RANDOM = Lists.newArrayList();
+    private static final Set<ExtendedItemStackWrapper> starterItems = Sets.newHashSet();
     
     public static List<ItemStack> allItems(Item[] items) 
     {
@@ -29,7 +32,13 @@ public class NPCShopItems
         return list;
     }
     
-    public static void addItem(ItemStack stack, EnumShop shop) {
+    /**
+     * Adds items to appropriate shops.
+     * @param stack
+     * @param shop
+     * @param starter true if a shop can sell it despite the player not sold at least one of that item
+     */
+    public static void addItem(ItemStack stack, EnumShop shop, boolean starter) {
         switch (shop) 
         {
             case CLINIC:
@@ -57,6 +66,13 @@ public class NPCShopItems
                 NPCShopItems.RANDOM.add(stack);
                 break;
         }
+        if(starter)
+        	starterItems.add(new ExtendedItemStackWrapper(stack));
+    }
+    
+    public static Set<ExtendedItemStackWrapper> starterItems()
+    {
+    	return Sets.newHashSet(starterItems);
     }
     
     public static List<ItemStack> getShopList(EnumShop profession) 
@@ -73,16 +89,5 @@ public class NPCShopItems
             case WEAPON: return Lists.newArrayList(NPCShopItems.WEAPON);
             default: return Lists.newArrayList(NPCShopItems.GENERAL);
         }
-    }
-    
-    static {
-        NPCShopItems.GENERAL.addAll(allItems(ModItems.CROPSEEDS));
-        NPCShopItems.GENERAL.addAll(allItems(ModItems.CROPS));
-        
-        NPCShopItems.WEAPON.addAll(allItems(ModItems.TOOLS));
-        NPCShopItems.WEAPON.addAll(allItems(ModItems.WEAPONS));
-        
-
-        NPCShopItems.RANDOM.addAll(allItems(ModItems.MATERIALS));
     }
 }

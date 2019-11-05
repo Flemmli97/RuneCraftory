@@ -5,24 +5,17 @@ import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumShop;
 import com.flemmli97.runecraftory.common.lib.enums.EnumShopResult;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 
 public class EntityNPCShopOwner extends EntityNPCBase
 {
-    private static final DataParameter<Integer> SHOPTYPE = EntityDataManager.createKey(EntityNPCShopOwner.class, DataSerializers.VARINT);
-    private NonNullList<ItemStack> shopItems = NonNullList.create();;
+    private static final DataParameter<Byte> SHOPTYPE = EntityDataManager.createKey(EntityNPCShopOwner.class, DataSerializers.BYTE);
 
     public EntityNPCShopOwner(World world) {
         this(world, EnumShop.GENERAL);
@@ -38,15 +31,15 @@ public class EntityNPCShopOwner extends EntityNPCBase
     @Override
 	public void entityInit() {
         super.entityInit();
-        this.dataManager.register(SHOPTYPE, EnumShop.GENERAL.ordinal());
+        this.dataManager.register(SHOPTYPE, (byte) EnumShop.GENERAL.ordinal());
     }
     
     public EnumShop profession() {
-        return EnumShop.values()[(int)this.dataManager.get(SHOPTYPE)];
+        return EnumShop.values()[this.dataManager.get(SHOPTYPE)];
     }
     
     public void setProfession(EnumShop profession) {
-        this.dataManager.set(EntityNPCShopOwner.SHOPTYPE, profession.ordinal());
+        this.dataManager.set(EntityNPCShopOwner.SHOPTYPE, (byte) profession.ordinal());
     }
 
     @Override
@@ -57,30 +50,12 @@ public class EntityNPCShopOwner extends EntityNPCBase
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
+        compound.setByte("ShopType", this.dataManager.get(SHOPTYPE));
     }
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
-    }
-    
-    @Override
-    public void writeSpawnData(ByteBuf buffer) {
-    	NBTTagCompound compound = new NBTTagCompound();
-        NBTTagList tagList = new NBTTagList();
-        for (ItemStack stack : this.shopItems) {
-            tagList.appendTag(stack.writeToNBT(new NBTTagCompound()));
-        }
-        compound.setTag("Items", tagList);
-        ByteBufUtils.writeTag(buffer, compound);
-    }
-
-    @Override
-    public void readSpawnData(ByteBuf additionalData) {
-    	NBTTagCompound compound = ByteBufUtils.readTag(additionalData);
-        NBTTagList list = compound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-        for (int i = 0; i < list.tagCount(); ++i) {
-            this.shopItems.add(new ItemStack(list.getCompoundTagAt(i)));
-        }
+        this.dataManager.set(SHOPTYPE, compound.getByte("ShopType"));
     }
     
     public String purchase(EnumShopResult result) {

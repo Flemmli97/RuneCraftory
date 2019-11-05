@@ -27,9 +27,11 @@ public class TileFarmland extends TileEntity implements IDailyTickable, ITickabl
 	private boolean growGiant;
 	private int health=255;
 	private float level;
-
+	private long lastUpdate;
 	//Used for other crops not from this mod
 	private float age;
+	//If the tile got updated during reload.
+	private boolean updated;
 	public TileFarmland()
 	{
 	}
@@ -63,18 +65,10 @@ public class TileFarmland extends TileEntity implements IDailyTickable, ITickabl
         this.age=compound.getFloat("Age");
         this.growGiant=compound.getBoolean("Giant");
         //Looks up the last time this tile was saved.
-        long saveTime = compound.getLong("SaveTime");
-        if(this.world!=null && !this.world.isRemote)
-        {
-    		long diff = this.world.getWorldTime()-saveTime;
-    		while(diff>24000)
-    		{
-    			this.dailyUpdate(this.world, this.pos, this.world.getBlockState(this.pos));
-    			diff-=24000;
-    		}
-        }
+        this.lastUpdate = compound.getLong("SaveTime");
     }
 	
+	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound)
     {
 		super.writeToNBT(compound);
@@ -83,7 +77,7 @@ public class TileFarmland extends TileEntity implements IDailyTickable, ITickabl
 		compound.setFloat("Growth", this.growthMultiplier);
 		compound.setFloat("Age", this.age);
 		compound.setBoolean("Giant", this.growGiant);
-		compound.setLong("SaveTime", this.world.getWorldTime());
+		compound.setLong("SaveTime", this.lastUpdate);
         return compound;
     }
 	
@@ -197,6 +191,7 @@ public class TileFarmland extends TileEntity implements IDailyTickable, ITickabl
 	        }
 	        this.health=Math.min(++this.health, 100);
 		}
+		this.lastUpdate=this.world.getWorldTime();
 		this.markDirty();
 	}
 	
@@ -220,8 +215,19 @@ public class TileFarmland extends TileEntity implements IDailyTickable, ITickabl
 	@Override
 	public void update() {
 		
-		if(RFCalculations.canUpdateDaily(this.world))
-			this.dailyUpdate(this.world, this.pos, this.world.getBlockState(this.pos));
+		if(!this.world.isRemote)
+			if(!this.updated)
+			{
+				long diff = this.world.getWorldTime()-this.lastUpdate;
+	    		while(diff>24000)
+	    		{
+	    			this.dailyUpdate(this.world, this.pos, this.world.getBlockState(this.pos));
+	    			diff-=24000;
+	    		}
+				this.updated=true;
+			}
+			else if(RFCalculations.canUpdateDaily(this.world))
+				this.dailyUpdate(this.world, this.pos, this.world.getBlockState(this.pos));
 	}
 
 }

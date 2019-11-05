@@ -16,9 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class ItemUtils
@@ -132,6 +130,6 @@ public class ItemUtils
     
     public static boolean areItemsStackable(ItemStack stack1, ItemStack stack2) 
     {
-        return (stack1.isEmpty() && stack2.isEmpty()) || (!stack1.isEmpty() && !stack2.isEmpty() && stack1.getItem() == stack2.getItem() && stack1.getMetadata() == stack2.getMetadata() && ((!stack1.hasTagCompound() && !stack2.hasTagCompound()) || (stack1.hasTagCompound() && (stack1.getTagCompound().equals((Object)stack2.getTagCompound()) && stack1.areCapsCompatible(stack2)))));
+    	return ItemStack.areItemsEqual(stack1, stack2) && ItemStack.areItemStackTagsEqual(stack1, stack2);
     }
 }

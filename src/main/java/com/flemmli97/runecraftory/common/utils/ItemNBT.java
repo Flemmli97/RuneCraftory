@@ -16,8 +16,6 @@ import com.flemmli97.runecraftory.api.mappings.ItemStatMap;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.google.common.collect.Maps;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -34,9 +32,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 
 public class ItemNBT
-{
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    
+{    
     public static int itemLevel(ItemStack stack) 
     {
         NBTTagCompound tag = getItemNBT(stack);

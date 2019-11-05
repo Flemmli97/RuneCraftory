@@ -35,6 +35,7 @@ import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
+import com.flemmli97.tenshilib.api.config.ExtendedItemStackWrapper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -50,6 +51,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
@@ -72,7 +75,7 @@ public class PlayerCap implements IPlayer
 	private Map<IAttribute, Integer> mainHandBonus = Maps.newHashMap();
 	private Map<IAttribute, Integer> offHandBonus = Maps.newHashMap();
 	
-	private Set<Item> shippedItems = Sets.newLinkedHashSet();
+	private Set<String> shippedItems = Sets.newLinkedHashSet();
 	private Map<EnumShop,NonNullList<ItemStack>> shopItems= Maps.newHashMap();
 	private long lastUpdated;
 	
@@ -449,19 +452,31 @@ public class PlayerCap implements IPlayer
 	public void refreshShop(EntityPlayer player)
     {
     	if(!player.world.isRemote)
+    	{
+    		Set<ExtendedItemStackWrapper> ignore = NPCShopItems.starterItems();
 	    	for(EnumShop profession : EnumShop.values())
 	    	{
-		    	List<ItemStack> list = NPCShopItems.getShopList(profession);
+	    		
+		    	List<ItemStack> list = NPCShopItems.getShopList(profession);		    	
+		    	list.removeIf((stack)->
+		    	{
+		        	ExtendedItemStackWrapper wr = new ExtendedItemStackWrapper(stack);		       
+		        	return !this.shippedItems.contains(wr.getItem().getRegistryName().toString()) && !ignore.contains(wr);
+		    	});
+		    	if(list.isEmpty())
+		    		continue;
 		    	NonNullList<ItemStack> shop = NonNullList.create();
-		        for (float chance = 2.0f; player.world.rand.nextFloat() < chance; chance -= 0.1f) 
+		    	Set<ExtendedItemStackWrapper> pre = Sets.newHashSet();
+		        for (float chance = 2.0f+list.size()*0.002f; player.world.rand.nextFloat() < chance; chance -= 0.1f) 
 		        {
-		            ItemStack stack = list.get(player.world.rand.nextInt(list.size()));
-		            if (!shop.contains(stack) && this.shippedItems.contains(stack.getItem())) 
-		            	shop.add(stack);
+	            	pre.add(new ExtendedItemStackWrapper(list.get(player.world.rand.nextInt(list.size()))));
 		        }
+		        for(ExtendedItemStackWrapper wr : pre)
+		        	shop.add(wr.getStack());
 		        this.shopItems.put(profession, shop);
 		        PacketHandler.sendTo(new PacketUpdateShopItems(profession, shop), (EntityPlayerMP) player);
 	    	}
+    	}
     }
 	
 	@Override
@@ -480,7 +495,7 @@ public class PlayerCap implements IPlayer
 	@Override
 	public void addShippingItem(EntityPlayer player, Item item)
 	{
-		this.shippedItems.add(item);
+		this.shippedItems.add(item.getRegistryName().toString());
 		if(!player.world.isRemote)
 	        PacketHandler.sendTo(new PacketUpdateShippingItem(item), (EntityPlayerMP) player);
 	}
@@ -514,6 +529,17 @@ public class PlayerCap implements IPlayer
             this.spells.readFromNBT(compound2);
         }
         this.shipping.loadInventoryFromNBT(nbt.getTagList("Shipping", Constants.NBT.TAG_COMPOUND));
+        nbt.getTagList("ShippedItems", Constants.NBT.TAG_STRING).forEach(s->
+            this.shippedItems.add(((NBTTagString)s).getString()));
+        NBTTagCompound shops = nbt.getCompoundTag("ShopItems");
+        for(EnumShop shop : EnumShop.values())
+        {
+        	NonNullList<ItemStack> items = NonNullList.create();
+        	shops.getTagList(shop.toString(), Constants.NBT.TAG_COMPOUND).forEach(comp->
+        	items.add(new ItemStack((NBTTagCompound)comp)));
+        	this.shopItems.put(shop, items);
+        }
+        this.lastUpdated=nbt.getLong("LastUpdated");
         if (nbt.hasKey("Quest")) {
             this.quest = new QuestMission(nbt.getCompoundTag("Quest"));
         }
@@ -552,6 +578,19 @@ public class PlayerCap implements IPlayer
         this.spells.writeToNBT(compound2);
         nbt.setTag("Inventory", compound2);
         nbt.setTag("Shipping", this.shipping.saveInventoryToNBT());
+        NBTTagList ship = new NBTTagList();
+        this.shippedItems.forEach(i->ship.appendTag(new NBTTagString(i)));
+        nbt.setTag("ShippedItems", ship);
+        NBTTagCompound shop = new NBTTagCompound();
+        for(Entry<EnumShop, NonNullList<ItemStack>> entry : this.shopItems.entrySet())
+        {
+        	NBTTagList l = new NBTTagList();
+        	for(ItemStack stack : entry.getValue())
+        		l.appendTag(stack.writeToNBT(new NBTTagCompound()));
+        	shop.setTag(entry.getKey().toString(), l);
+        }
+        nbt.setTag("ShopItems", shop);
+        nbt.setLong("LastUpdated", this.lastUpdated);
         if (this.quest != null) {
             nbt.setTag("Quest", this.quest.writeToNBT(new NBTTagCompound()));
         }
