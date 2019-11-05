@@ -9,7 +9,8 @@ public class CapabilityNetwork
 {
     public static class PlayerCapNetwork implements Capability.IStorage<IPlayer>
     {
-        public NBTBase writeNBT(Capability<IPlayer> capability, IPlayer instance, EnumFacing side) {
+        @Override
+		public NBTBase writeNBT(Capability<IPlayer> capability, IPlayer instance, EnumFacing side) {
             NBTTagCompound compound = new NBTTagCompound();
             instance.writeToNBT(compound, null);
             return compound;

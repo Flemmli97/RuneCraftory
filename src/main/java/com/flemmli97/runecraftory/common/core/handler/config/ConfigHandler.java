@@ -1,8 +1,8 @@
 package com.flemmli97.runecraftory.common.core.handler.config;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -22,10 +22,13 @@ import com.flemmli97.runecraftory.api.mappings.CropMap;
 import com.flemmli97.runecraftory.api.mappings.EntityStatMap;
 import com.flemmli97.runecraftory.api.mappings.ItemFoodMap;
 import com.flemmli97.runecraftory.api.mappings.ItemStatMap;
+import com.flemmli97.runecraftory.api.mappings.NPCShopItems;
 import com.flemmli97.runecraftory.api.mappings.Quests;
 import com.flemmli97.runecraftory.common.init.GateSpawning;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
+import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.LibReference;
+import com.flemmli97.runecraftory.common.lib.enums.EnumShop;
 import com.flemmli97.runecraftory.common.utils.MapWrapper;
 import com.flemmli97.runecraftory.common.world.HerbGenerator;
 import com.flemmli97.runecraftory.common.world.HerbGenerator.HerbEntry;
@@ -34,6 +37,7 @@ import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.flemmli97.tenshilib.common.config.ConfigUtils;
 import com.flemmli97.tenshilib.common.config.ConfigUtils.LoadState;
 import com.flemmli97.tenshilib.common.config.JsonConfig;
+import com.flemmli97.tenshilib.common.item.ItemUtil;
 import com.flemmli97.tenshilib.common.javahelper.ResourceStream;
 import com.flemmli97.tenshilib.common.world.structure.GenerationType;
 import com.flemmli97.tenshilib.common.world.structure.LocationType;
@@ -42,17 +46,20 @@ import com.flemmli97.tenshilib.common.world.structure.StructureGenerator;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.init.Biomes;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.RandomValueRange;
@@ -102,20 +109,20 @@ public class ConfigHandler {
 		if(loadState==LoadState.POSTINIT || loadState==LoadState.SYNC)
 			MobConfigs.load(configDir);
 		if(loadState==LoadState.POSTINIT)
+		{
 			CropConfig.load(configDir);
-		if(loadState==LoadState.POSTINIT)
 			SpawnConfig.load(configDir);
+		}
 		if(loadState==LoadState.POSTINIT || loadState==LoadState.SYNC)
 			GenerationConfig.load(configDir, loadState==LoadState.POSTINIT);
 		if(loadState==LoadState.POSTINIT)
+		{
 			ItemStatsConfig.load(configDir);
-		if(loadState==LoadState.POSTINIT)
 			FoodConfig.load(configDir);
-		if(loadState==LoadState.POSTINIT)
 			ShopConfig.load(configDir);
-		if(loadState==LoadState.POSTINIT)
 			QuestConfig.load(configDir);
-		test(configDir);
+			//test(configDir);
+		}
 	}
 		
 	public static class MainConfig
@@ -423,6 +430,27 @@ public class ConfigHandler {
 			copyDefaultConfigs(def, "DefaultShopItems.json");
 			if(shopConfig==null)
 				shopConfig = new JsonConfig<JsonObject>(new File(configDir, "shop_items.json"), JsonObject.class, def).setGson(GSON);
+			LibReference.logger.info("Adding shop items");
+			JsonObject obj = shopConfig.getElement();
+			for(EnumShop shop : EnumShop.values())
+			{
+				if(obj.has(shop.toString()))
+				{
+					obj.getAsJsonArray(shop.toString()).forEach(e->{
+						if(e.isJsonObject())
+						{
+							JsonObject o = (JsonObject) e;
+							NBTTagCompound tag = ItemUtil.stackCompoundFromJson(o);
+							if(tag==null)
+								tag = new NBTTagCompound();
+							tag.setString("id", o.get("item").getAsString());
+							tag.setByte("Count", (byte) 1);
+							tag.setInteger("Damage", o.has("meta")?o.get("meta").getAsInt():0);
+							NPCShopItems.addItem(new ItemStack(tag), shop, o.has("starter")?o.get("starter").getAsBoolean():false, o.has("leveled")?o.get("leveled").getAsBoolean():false);
+						}
+					});
+				}
+			}
 			shopConfig.save();
 	    }
 	}
@@ -440,25 +468,6 @@ public class ConfigHandler {
 			Quests.loadQuests(GSON, obj);
 			questConfig.save();
 	    }
-	}
-	
-	public static void copyDefaultConfigs(File dest, File source)
-	{
-		if(!dest.exists())
-		{
-			try 
-			{
-				dest.createNewFile();
-				OutputStream out = new FileOutputStream(source);
-				InputStream in = new FileInputStream(dest);
-				IOUtils.copy(in, out);
-				in.close();
-				out.close();
-				Files.copy(source, dest);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	public static void copyDefaultConfigs(File dest, String conf)
@@ -482,8 +491,61 @@ public class ConfigHandler {
 	{
 		try
 		{
-			/*File def = new File(defFolder, "DefaultFoodStats.json");
-			copyDefaultConfigs(def, "DefaultFoodStats.json");
+			File def = new File(configDir, "shop.json");
+			if(!def.exists())
+				def.createNewFile();
+			FileWriter writer = new FileWriter(def);
+            JsonWriter json2 = GSON.newJsonWriter(writer);
+            json2.beginObject();
+            json2.name(EnumShop.GENERAL.toString());
+            json2.beginArray();
+            for(Item i : ModItems.CROPSEEDS)
+            {
+            	json2.beginObject();
+            	json2.name("item");
+            	json2.value(i.getRegistryName().toString());
+            	json2.endObject();
+            }
+            for(Item i : ModItems.CROPS)
+            {
+            	json2.beginObject();
+            	json2.name("item");
+            	json2.value(i.getRegistryName().toString());
+            	json2.endObject();
+            }
+            json2.endArray();
+            
+            json2.name(EnumShop.WEAPON.toString());
+            json2.beginArray();
+            for(Item i : ModItems.TOOLS)
+            {
+            	json2.beginObject();
+            	json2.name("item");
+            	json2.value(i.getRegistryName().toString());
+            	json2.endObject();
+            }
+            for(Item i : ModItems.WEAPONS)
+            {
+            	json2.beginObject();
+            	json2.name("item");
+            	json2.value(i.getRegistryName().toString());
+            	json2.endObject();
+            }
+            json2.endArray();
+            
+            json2.name(EnumShop.RANDOM.toString());
+            json2.beginArray();
+            for(Item i : ModItems.MATERIALS)
+            {
+            	json2.beginObject();
+            	json2.name("item");
+            	json2.value(i.getRegistryName().toString());
+            	json2.endObject();
+            }
+            json2.endArray();
+            json2.endObject();
+            writer.close();
+			/*copyDefaultConfigs(def, "DefaultFoodStats.json");
 			if(foodStatConfig==null)
 				foodStatConfig = new JsonConfig<JsonObject>(new File(configDir, "food_stats.json"), JsonObject.class, def).setGson(GSON);
 			LibReference.logger.info("Configuring foodstats");

@@ -1,1 +1,1503 @@
-{}
+{
+  "GENERAL": [
+    {
+      "item": "runecraftory:seed_turnip",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:seed_turnip_pink"
+    },
+    {
+      "item": "runecraftory:seed_cabbage"
+    },
+    {
+      "item": "runecraftory:seed_pink_melon"
+    },
+    {
+      "item": "runecraftory:seed_pineapple"
+    },
+    {
+      "item": "runecraftory:seed_strawberry"
+    },
+    {
+      "item": "runecraftory:seed_golden_turnip"
+    },
+    {
+      "item": "runecraftory:seed_golden_potato"
+    },
+    {
+      "item": "runecraftory:seed_golden_pumpkin"
+    },
+    {
+      "item": "runecraftory:seed_golden_cabbage"
+    },
+    {
+      "item": "runecraftory:seed_hot_hot_fruit"
+    },
+    {
+      "item": "runecraftory:seed_bok_choy"
+    },
+    {
+      "item": "runecraftory:seed_leek"
+    },
+    {
+      "item": "runecraftory:seed_radish"
+    },
+    {
+      "item": "runecraftory:seed_green_pepper"
+    },
+    {
+      "item": "runecraftory:seed_spinach"
+    },
+    {
+      "item": "runecraftory:seed_yam"
+    },
+    {
+      "item": "runecraftory:seed_eggplant"
+    },
+    {
+      "item": "runecraftory:seed_tomato"
+    },
+    {
+      "item": "runecraftory:seed_corn"
+    },
+    {
+      "item": "runecraftory:seed_cucumber"
+    },
+    {
+      "item": "runecraftory:seed_pumpkin"
+    },
+    {
+      "item": "runecraftory:seed_onion"
+    },
+    {
+      "item": "runecraftory:seed_fodder"
+    },
+    {
+      "item": "runecraftory:seed_sword"
+    },
+    {
+      "item": "runecraftory:seed_shield"
+    },
+    {
+      "item": "runecraftory:seed_dungeon"
+    },
+    {
+      "item": "runecraftory:crop_turnip"
+    },
+    {
+      "item": "runecraftory:crop_turnip_pink"
+    },
+    {
+      "item": "runecraftory:crop_cabbage"
+    },
+    {
+      "item": "runecraftory:crop_pink_melon"
+    },
+    {
+      "item": "runecraftory:crop_pineapple"
+    },
+    {
+      "item": "runecraftory:crop_strawberry"
+    },
+    {
+      "item": "runecraftory:crop_golden_turnip"
+    },
+    {
+      "item": "runecraftory:crop_golden_potato"
+    },
+    {
+      "item": "runecraftory:crop_golden_pumpkin"
+    },
+    {
+      "item": "runecraftory:crop_golden_cabbage"
+    },
+    {
+      "item": "runecraftory:crop_hot_hot_fruit"
+    },
+    {
+      "item": "runecraftory:crop_bok_choy"
+    },
+    {
+      "item": "runecraftory:crop_leek"
+    },
+    {
+      "item": "runecraftory:crop_radish"
+    },
+    {
+      "item": "runecraftory:crop_spinach"
+    },
+    {
+      "item": "runecraftory:crop_green_pepper"
+    },
+    {
+      "item": "runecraftory:crop_yam"
+    },
+    {
+      "item": "runecraftory:crop_eggplant"
+    },
+    {
+      "item": "runecraftory:crop_tomato"
+    },
+    {
+      "item": "runecraftory:crop_corn"
+    },
+    {
+      "item": "runecraftory:crop_cucumber"
+    },
+    {
+      "item": "runecraftory:crop_pumpkin"
+    },
+    {
+      "item": "runecraftory:crop_onion"
+    },
+    {
+      "item": "runecraftory:fodder"
+    }
+  ],
+  "WEAPON": [
+    {
+      "item": "runecraftory:hoe_scrap",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:hoe_iron"
+    },
+    {
+      "item": "runecraftory:hoe_silver"
+    },
+    {
+      "item": "runecraftory:hoe_gold"
+    },
+    {
+      "item": "runecraftory:hoe_platinum"
+    },
+    {
+      "item": "runecraftory:wateringcan_scrap",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:wateringcan_iron"
+    },
+    {
+      "item": "runecraftory:wateringcan_silver"
+    },
+    {
+      "item": "runecraftory:wateringcan_gold"
+    },
+    {
+      "item": "runecraftory:wateringcan_platinum"
+    },
+    {
+      "item": "runecraftory:sickle_scrap",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:sickle_iron"
+    },
+    {
+      "item": "runecraftory:sickle_silver"
+    },
+    {
+      "item": "runecraftory:sickle_gold"
+    },
+    {
+      "item": "runecraftory:sickle_platinum"
+    },
+    {
+      "item": "runecraftory:hammer_scrap",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:hammer_iron"
+    },
+    {
+      "item": "runecraftory:hammer_silver"
+    },
+    {
+      "item": "runecraftory:hammer_gold"
+    },
+    {
+      "item": "runecraftory:hammer_platinum"
+    },
+    {
+      "item": "runecraftory:axe_scrap",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:axe_iron"
+    },
+    {
+      "item": "runecraftory:axe_silver"
+    },
+    {
+      "item": "runecraftory:axe_gold"
+    },
+    {
+      "item": "runecraftory:axe_platinum"
+    },
+    {
+      "item": "runecraftory:fishing_rod_scrap",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:fishing_rod_iron"
+    },
+    {
+      "item": "runecraftory:fishing_rod_silver"
+    },
+    {
+      "item": "runecraftory:fishing_rod_gold"
+    },
+    {
+      "item": "runecraftory:fishing_rod_platinum"
+    },
+    {
+      "item": "runecraftory:inspector",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:brush",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:magnifying_glass",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:formular_a",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:formular_b"
+    },
+    {
+      "item": "runecraftory:formular_c"
+    },
+    {
+      "item": "runecraftory:minimizer"
+    },
+    {
+      "item": "runecraftory:giantizer"
+    },
+    {
+      "item": "runecraftory:greenifier"
+    },
+    {
+      "item": "runecraftory:greenifier_plus"
+    },
+    {
+      "item": "runecraftory:wettable_powder"
+    },
+    {
+      "item": "runecraftory:broad_sword",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:steel_sword"
+    },
+    {
+      "item": "runecraftory:steel_sword_plus"
+    },
+    {
+      "item": "runecraftory:cutlass"
+    },
+    {
+      "item": "runecraftory:aqua_sword"
+    },
+    {
+      "item": "runecraftory:invis_blade"
+    },
+    {
+      "item": "runecraftory:defender"
+    },
+    {
+      "item": "runecraftory:burning_sword"
+    },
+    {
+      "item": "runecraftory:gorgeous_sword"
+    },
+    {
+      "item": "runecraftory:snake_sword"
+    },
+    {
+      "item": "runecraftory:gaia_sword"
+    },
+    {
+      "item": "runecraftory:luck_blade"
+    },
+    {
+      "item": "runecraftory:platinum_sword"
+    },
+    {
+      "item": "runecraftory:wind_sword"
+    },
+    {
+      "item": "runecraftory:chaos_blade"
+    },
+    {
+      "item": "runecraftory:sakura"
+    },
+    {
+      "item": "runecraftory:sunspot"
+    },
+    {
+      "item": "runecraftory:durendal"
+    },
+    {
+      "item": "runecraftory:aerial_blade"
+    },
+    {
+      "item": "runecraftory:grantale"
+    },
+    {
+      "item": "runecraftory:smash_blade"
+    },
+    {
+      "item": "runecraftory:icifier"
+    },
+    {
+      "item": "runecraftory:soul_eater"
+    },
+    {
+      "item": "runecraftory:raventine"
+    },
+    {
+      "item": "runecraftory:star_saber"
+    },
+    {
+      "item": "runecraftory:platinum_sword_plus"
+    },
+    {
+      "item": "runecraftory:dragon_slayer"
+    },
+    {
+      "item": "runecraftory:rune_blade"
+    },
+    {
+      "item": "runecraftory:gladius"
+    },
+    {
+      "item": "runecraftory:rune_legend"
+    },
+    {
+      "item": "runecraftory:back_scratcher"
+    },
+    {
+      "item": "runecraftory:spoon"
+    },
+    {
+      "item": "runecraftory:veggie_blade"
+    },
+    {
+      "item": "runecraftory:seed_sword_item"
+    },
+    {
+      "item": "runecraftory:claymore",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:zweihaender"
+    },
+    {
+      "item": "runecraftory:zweihaender_plus"
+    },
+    {
+      "item": "runecraftory:great_sword"
+    },
+    {
+      "item": "runecraftory:seacutter"
+    },
+    {
+      "item": "runecraftory:cyclone_blade"
+    },
+    {
+      "item": "runecraftory:poison_blade"
+    },
+    {
+      "item": "runecraftory:katzbalger"
+    },
+    {
+      "item": "runecraftory:earth_shade"
+    },
+    {
+      "item": "runecraftory:big_knife"
+    },
+    {
+      "item": "runecraftory:katana"
+    },
+    {
+      "item": "runecraftory:flame_saber"
+    },
+    {
+      "item": "runecraftory:bio_smasher"
+    },
+    {
+      "item": "runecraftory:snow_crown"
+    },
+    {
+      "item": "runecraftory:dancing_dicer"
+    },
+    {
+      "item": "runecraftory:flamberge"
+    },
+    {
+      "item": "runecraftory:flamberge_plus"
+    },
+    {
+      "item": "runecraftory:volcanon"
+    },
+    {
+      "item": "runecraftory:psycho"
+    },
+    {
+      "item": "runecraftory:shine_blade"
+    },
+    {
+      "item": "runecraftory:grand_smasher"
+    },
+    {
+      "item": "runecraftory:belzebuth"
+    },
+    {
+      "item": "runecraftory:orochi"
+    },
+    {
+      "item": "runecraftory:punisher"
+    },
+    {
+      "item": "runecraftory:steel_slicer"
+    },
+    {
+      "item": "runecraftory:moon_shadow"
+    },
+    {
+      "item": "runecraftory:blue_eyed_blade"
+    },
+    {
+      "item": "runecraftory:balmung"
+    },
+    {
+      "item": "runecraftory:braveheart"
+    },
+    {
+      "item": "runecraftory:force_element"
+    },
+    {
+      "item": "runecraftory:heavens_asunder"
+    },
+    {
+      "item": "runecraftory:caliburn"
+    },
+    {
+      "item": "runecraftory:dekash"
+    },
+    {
+      "item": "runecraftory:daicone"
+    },
+    {
+      "item": "runecraftory:spear",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:wood_staff"
+    },
+    {
+      "item": "runecraftory:lance"
+    },
+    {
+      "item": "runecraftory:lance_plus"
+    },
+    {
+      "item": "runecraftory:needle_spear"
+    },
+    {
+      "item": "runecraftory:trident"
+    },
+    {
+      "item": "runecraftory:water_spear"
+    },
+    {
+      "item": "runecraftory:halberd"
+    },
+    {
+      "item": "runecraftory:corsesca"
+    },
+    {
+      "item": "runecraftory:corsesca_plus"
+    },
+    {
+      "item": "runecraftory:poison_spear"
+    },
+    {
+      "item": "runecraftory:five_staff"
+    },
+    {
+      "item": "runecraftory:heavy_lance"
+    },
+    {
+      "item": "runecraftory:feather_lance"
+    },
+    {
+      "item": "runecraftory:iceberg"
+    },
+    {
+      "item": "runecraftory:blood_lance"
+    },
+    {
+      "item": "runecraftory:magical_lance"
+    },
+    {
+      "item": "runecraftory:flare_lance"
+    },
+    {
+      "item": "runecraftory:brionac"
+    },
+    {
+      "item": "runecraftory:poison_queen"
+    },
+    {
+      "item": "runecraftory:monk_staff"
+    },
+    {
+      "item": "runecraftory:metus"
+    },
+    {
+      "item": "runecraftory:silent_grave"
+    },
+    {
+      "item": "runecraftory:overbreak"
+    },
+    {
+      "item": "runecraftory:bjor"
+    },
+    {
+      "item": "runecraftory:belvarose"
+    },
+    {
+      "item": "runecraftory:gae_bolg"
+    },
+    {
+      "item": "runecraftory:dragons_fang"
+    },
+    {
+      "item": "runecraftory:gungnir"
+    },
+    {
+      "item": "runecraftory:legion"
+    },
+    {
+      "item": "runecraftory:pitchfork"
+    },
+    {
+      "item": "runecraftory:safety_lance"
+    },
+    {
+      "item": "runecraftory:pine_club"
+    },
+    {
+      "item": "runecraftory:battle_axe",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:battle_scythe"
+    },
+    {
+      "item": "runecraftory:pole_axe"
+    },
+    {
+      "item": "runecraftory:pole_axe_plus"
+    },
+    {
+      "item": "runecraftory:great_axe"
+    },
+    {
+      "item": "runecraftory:tomohawk"
+    },
+    {
+      "item": "runecraftory:basilisk_fang"
+    },
+    {
+      "item": "runecraftory:rock_axe"
+    },
+    {
+      "item": "runecraftory:demon_axe"
+    },
+    {
+      "item": "runecraftory:frost_axe"
+    },
+    {
+      "item": "runecraftory:crescent_axe"
+    },
+    {
+      "item": "runecraftory:crescent_axe_plus"
+    },
+    {
+      "item": "runecraftory:heat_axe"
+    },
+    {
+      "item": "runecraftory:double_edge"
+    },
+    {
+      "item": "runecraftory:alldale"
+    },
+    {
+      "item": "runecraftory:devil_finger"
+    },
+    {
+      "item": "runecraftory:executioner"
+    },
+    {
+      "item": "runecraftory:saint_axe"
+    },
+    {
+      "item": "runecraftory:axe"
+    },
+    {
+      "item": "runecraftory:lollipop"
+    },
+    {
+      "item": "runecraftory:battle_hammer",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:bat"
+    },
+    {
+      "item": "runecraftory:war_hammer"
+    },
+    {
+      "item": "runecraftory:war_hammer_plus"
+    },
+    {
+      "item": "runecraftory:iron_bat"
+    },
+    {
+      "item": "runecraftory:great_hammer"
+    },
+    {
+      "item": "runecraftory:ice_hammer"
+    },
+    {
+      "item": "runecraftory:bone_hammer"
+    },
+    {
+      "item": "runecraftory:strong_stone"
+    },
+    {
+      "item": "runecraftory:flame_hammer"
+    },
+    {
+      "item": "runecraftory:gigant_hammer"
+    },
+    {
+      "item": "runecraftory:sky_hammer"
+    },
+    {
+      "item": "runecraftory:graviton_hammer"
+    },
+    {
+      "item": "runecraftory:spiked_hammer"
+    },
+    {
+      "item": "runecraftory:crystal_hammer"
+    },
+    {
+      "item": "runecraftory:schnabel"
+    },
+    {
+      "item": "runecraftory:gigant_hammer_plus"
+    },
+    {
+      "item": "runecraftory:kongo"
+    },
+    {
+      "item": "runecraftory:mjolnir"
+    },
+    {
+      "item": "runecraftory:fatal_crush"
+    },
+    {
+      "item": "runecraftory:splash_star"
+    },
+    {
+      "item": "runecraftory:hammer"
+    },
+    {
+      "item": "runecraftory:toy_hammer"
+    },
+    {
+      "item": "runecraftory:short_dagger",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:steel_edge"
+    },
+    {
+      "item": "runecraftory:frost_edge"
+    },
+    {
+      "item": "runecraftory:iron_edge"
+    },
+    {
+      "item": "runecraftory:thief_knife"
+    },
+    {
+      "item": "runecraftory:wind_edge"
+    },
+    {
+      "item": "runecraftory:gourgeous_lx"
+    },
+    {
+      "item": "runecraftory:steel_katana"
+    },
+    {
+      "item": "runecraftory:twin_blade"
+    },
+    {
+      "item": "runecraftory:rampage"
+    },
+    {
+      "item": "runecraftory:salamander"
+    },
+    {
+      "item": "runecraftory:platinum_edge"
+    },
+    {
+      "item": "runecraftory:sonic_dagger"
+    },
+    {
+      "item": "runecraftory:chaos_edge"
+    },
+    {
+      "item": "runecraftory:desert_wind"
+    },
+    {
+      "item": "runecraftory:broken_wall"
+    },
+    {
+      "item": "runecraftory:force_divide"
+    },
+    {
+      "item": "runecraftory:heart_fire"
+    },
+    {
+      "item": "runecraftory:orcus_sword"
+    },
+    {
+      "item": "runecraftory:deep_blizzard"
+    },
+    {
+      "item": "runecraftory:dark_invitation"
+    },
+    {
+      "item": "runecraftory:priest_saber"
+    },
+    {
+      "item": "runecraftory:efreet"
+    },
+    {
+      "item": "runecraftory:dragoon_claw"
+    },
+    {
+      "item": "runecraftory:emerald_edge"
+    },
+    {
+      "item": "runecraftory:rune_edge"
+    },
+    {
+      "item": "runecraftory:earnest_edge"
+    },
+    {
+      "item": "runecraftory:twin_justice"
+    },
+    {
+      "item": "runecraftory:double_scratch"
+    },
+    {
+      "item": "runecraftory:acutorimass"
+    },
+    {
+      "item": "runecraftory:twin_leeks"
+    },
+    {
+      "item": "runecraftory:leather_glove"
+    },
+    {
+      "item": "runecraftory:brass_knuckles"
+    },
+    {
+      "item": "runecraftory:kote"
+    },
+    {
+      "item": "runecraftory:gloves",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:bear_claws"
+    },
+    {
+      "item": "runecraftory:fist_of_earth"
+    },
+    {
+      "item": "runecraftory:fist_of_fire"
+    },
+    {
+      "item": "runecraftory:fist_of_water"
+    },
+    {
+      "item": "runecraftory:dragon_claws"
+    },
+    {
+      "item": "runecraftory:fist_of_dark"
+    },
+    {
+      "item": "runecraftory:fist_of_wind"
+    },
+    {
+      "item": "runecraftory:fist_of_light"
+    },
+    {
+      "item": "runecraftory:cat_punch"
+    },
+    {
+      "item": "runecraftory:animal_puppets"
+    },
+    {
+      "item": "runecraftory:ironleaf_fists"
+    },
+    {
+      "item": "runecraftory:caestus"
+    },
+    {
+      "item": "runecraftory:golem_punch"
+    },
+    {
+      "item": "runecraftory:hand_of_god"
+    },
+    {
+      "item": "runecraftory:bazal_katar"
+    },
+    {
+      "item": "runecraftory:fenrir"
+    },
+    {
+      "item": "runecraftory:rod",
+      "starter":true
+    },
+    {
+      "item": "runecraftory:amethyst_rod"
+    },
+    {
+      "item": "runecraftory:aquamarine_rod"
+    },
+    {
+      "item": "runecraftory:friendly_rod"
+    },
+    {
+      "item": "runecraftory:love_love_rod"
+    },
+    {
+      "item": "runecraftory:staf"
+    },
+    {
+      "item": "runecraftory:emerald_rod"
+    },
+    {
+      "item": "runecraftory:silver_staff"
+    },
+    {
+      "item": "runecraftory:flare_staff"
+    },
+    {
+      "item": "runecraftory:ruby_rod"
+    },
+    {
+      "item": "runecraftory:sapphire_rod"
+    },
+    {
+      "item": "runecraftory:earth_staff"
+    },
+    {
+      "item": "runecraftory:lightning_wand"
+    },
+    {
+      "item": "runecraftory:ice_staff"
+    },
+    {
+      "item": "runecraftory:diamond_rod"
+    },
+    {
+      "item": "runecraftory:wizards_staff"
+    },
+    {
+      "item": "runecraftory:mages_staff"
+    },
+    {
+      "item": "runecraftory:shooting_star_staff"
+    },
+    {
+      "item": "runecraftory:hell_branch"
+    },
+    {
+      "item": "runecraftory:crimson_staff"
+    },
+    {
+      "item": "runecraftory:bubble_staff"
+    },
+    {
+      "item": "runecraftory:gaia_rod"
+    },
+    {
+      "item": "runecraftory:cyclone_rod"
+    },
+    {
+      "item": "runecraftory:storm_wand"
+    },
+    {
+      "item": "runecraftory:rune_staff"
+    },
+    {
+      "item": "runecraftory:mages_staff_plus"
+    },
+    {
+      "item": "runecraftory:magic_broom"
+    },
+    {
+      "item": "runecraftory:magic_shot"
+    },
+    {
+      "item": "runecraftory:hell_curse"
+    },
+    {
+      "item": "runecraftory:algernon"
+    },
+    {
+      "item": "runecraftory:sorceres_wand"
+    },
+    {
+      "item": "runecraftory:basket"
+    },
+    {
+      "item": "runecraftory:golden_turnip_staff"
+    },
+    {
+      "item": "runecraftory:sweet_potato_staff"
+    },
+    {
+      "item": "runecraftory:elvish_harp"
+    },
+    {
+      "item": "runecraftory:syringe"
+    }
+  ],
+  "RANDOM": [
+    {
+      "item": "runecraftory:bronze"
+    },
+    {
+      "item": "runecraftory:silver"
+    },
+    {
+      "item": "runecraftory:platinum"
+    },
+    {
+      "item": "runecraftory:orichalcum"
+    },
+    {
+      "item": "runecraftory:dragonic_stone"
+    },
+    {
+      "item": "runecraftory:scrap"
+    },
+    {
+      "item": "runecraftory:scrap_plus"
+    },
+    {
+      "item": "runecraftory:amethyst"
+    },
+    {
+      "item": "runecraftory:aquamarine"
+    },
+    {
+      "item": "runecraftory:emerald"
+    },
+    {
+      "item": "runecraftory:ruby"
+    },
+    {
+      "item": "runecraftory:sapphire"
+    },
+    {
+      "item": "runecraftory:core_red"
+    },
+    {
+      "item": "runecraftory:core_blue"
+    },
+    {
+      "item": "runecraftory:core_yellow"
+    },
+    {
+      "item": "runecraftory:core_green"
+    },
+    {
+      "item": "runecraftory:crystal_skull"
+    },
+    {
+      "item": "runecraftory:crystal_water"
+    },
+    {
+      "item": "runecraftory:crystal_earth"
+    },
+    {
+      "item": "runecraftory:crystal_fire"
+    },
+    {
+      "item": "runecraftory:crystal_wind"
+    },
+    {
+      "item": "runecraftory:crystal_light"
+    },
+    {
+      "item": "runecraftory:crystal_dark"
+    },
+    {
+      "item": "runecraftory:crystal_love"
+    },
+    {
+      "item": "runecraftory:crystal_small"
+    },
+    {
+      "item": "runecraftory:crystal_big"
+    },
+    {
+      "item": "runecraftory:crystal_magic"
+    },
+    {
+      "item": "runecraftory:crystal_rune"
+    },
+    {
+      "item": "runecraftory:crystal_electro"
+    },
+    {
+      "item": "runecraftory:stick_thick"
+    },
+    {
+      "item": "runecraftory:horn_insect"
+    },
+    {
+      "item": "runecraftory:horn_rigid"
+    },
+    {
+      "item": "runecraftory:horn_devil"
+    },
+    {
+      "item": "runecraftory:plant_stem"
+    },
+    {
+      "item": "runecraftory:horn_bull"
+    },
+    {
+      "item": "runecraftory:moving_branch"
+    },
+    {
+      "item": "runecraftory:glue"
+    },
+    {
+      "item": "runecraftory:devil_blood"
+    },
+    {
+      "item": "runecraftory:paralysis_poison"
+    },
+    {
+      "item": "runecraftory:poison_king"
+    },
+    {
+      "item": "runecraftory:feather_black"
+    },
+    {
+      "item": "runecraftory:feather_thunder"
+    },
+    {
+      "item": "runecraftory:feather_yellow"
+    },
+    {
+      "item": "runecraftory:dragon_fin"
+    },
+    {
+      "item": "runecraftory:turtle_shell"
+    },
+    {
+      "item": "runecraftory:fish_fossil"
+    },
+    {
+      "item": "runecraftory:skull"
+    },
+    {
+      "item": "runecraftory:dragon_bones"
+    },
+    {
+      "item": "runecraftory:tortoise_shell"
+    },
+    {
+      "item": "runecraftory:ammonite"
+    },
+    {
+      "item": "runecraftory:rock"
+    },
+    {
+      "item": "runecraftory:stone_round"
+    },
+    {
+      "item": "runecraftory:stone_tiny_golem"
+    },
+    {
+      "item": "runecraftory:stone_golem"
+    },
+    {
+      "item": "runecraftory:tablet_golem"
+    },
+    {
+      "item": "runecraftory:stone_gole_spirit"
+    },
+    {
+      "item": "runecraftory:tablet_truth"
+    },
+    {
+      "item": "runecraftory:yarn"
+    },
+    {
+      "item": "runecraftory:old_bandage"
+    },
+    {
+      "item": "runecraftory:ambrosias_thorns"
+    },
+    {
+      "item": "runecraftory:thread_spider"
+    },
+    {
+      "item": "runecraftory:puppetry_strings"
+    },
+    {
+      "item": "runecraftory:vine"
+    },
+    {
+      "item": "runecraftory:tail_scorpion"
+    },
+    {
+      "item": "runecraftory:strong_vine"
+    },
+    {
+      "item": "runecraftory:thread_pretty"
+    },
+    {
+      "item": "runecraftory:tail_chimera"
+    },
+    {
+      "item": "runecraftory:arrowhead"
+    },
+    {
+      "item": "runecraftory:blade_shard"
+    },
+    {
+      "item": "runecraftory:broken_hilt"
+    },
+    {
+      "item": "runecraftory:broken_box"
+    },
+    {
+      "item": "runecraftory:blade_glistening"
+    },
+    {
+      "item": "runecraftory:great_hammer_shard"
+    },
+    {
+      "item": "runecraftory:hammer_piece"
+    },
+    {
+      "item": "runecraftory:shoulder_piece"
+    },
+    {
+      "item": "runecraftory:pirates_armor"
+    },
+    {
+      "item": "runecraftory:screw_rusty"
+    },
+    {
+      "item": "runecraftory:screw_shiny"
+    },
+    {
+      "item": "runecraftory:rock_shard_left"
+    },
+    {
+      "item": "runecraftory:rock_shard_right"
+    },
+    {
+      "item": "runecraftory:mtgu_plate"
+    },
+    {
+      "item": "runecraftory:broken_ice_wall"
+    },
+    {
+      "item": "runecraftory:fur_s"
+    },
+    {
+      "item": "runecraftory:fur_m"
+    },
+    {
+      "item": "runecraftory:fur_l"
+    },
+    {
+      "item": "runecraftory:fur"
+    },
+    {
+      "item": "runecraftory:furball"
+    },
+    {
+      "item": "runecraftory:down_yellow"
+    },
+    {
+      "item": "runecraftory:fur_quality"
+    },
+    {
+      "item": "runecraftory:fur_puffy"
+    },
+    {
+      "item": "runecraftory:down_penguin"
+    },
+    {
+      "item": "runecraftory:lightning_mane"
+    },
+    {
+      "item": "runecraftory:fur_red_lion"
+    },
+    {
+      "item": "runecraftory:fur_blue_lion"
+    },
+    {
+      "item": "runecraftory:chest_hair"
+    },
+    {
+      "item": "runecraftory:spore"
+    },
+    {
+      "item": "runecraftory:powder_poison"
+    },
+    {
+      "item": "runecraftory:spore_holy"
+    },
+    {
+      "item": "runecraftory:fairy_dust"
+    },
+    {
+      "item": "runecraftory:fairy_elixier"
+    },
+    {
+      "item": "runecraftory:root"
+    },
+    {
+      "item": "runecraftory:powder_magic"
+    },
+    {
+      "item": "runecraftory:powder_mysterious"
+    },
+    {
+      "item": "runecraftory:magic"
+    },
+    {
+      "item": "runecraftory:ash_earth"
+    },
+    {
+      "item": "runecraftory:ash_fire"
+    },
+    {
+      "item": "runecraftory:ash_water"
+    },
+    {
+      "item": "runecraftory:turnips_miracle"
+    },
+    {
+      "item": "runecraftory:melody_bottle"
+    },
+    {
+      "item": "runecraftory:cloth_cheap"
+    },
+    {
+      "item": "runecraftory:cloth_quality"
+    },
+    {
+      "item": "runecraftory:cloth_quality_worn"
+    },
+    {
+      "item": "runecraftory:cloth_silk"
+    },
+    {
+      "item": "runecraftory:ghost_hood"
+    },
+    {
+      "item": "runecraftory:glove_giant"
+    },
+    {
+      "item": "runecraftory:glove_blue_giant"
+    },
+    {
+      "item": "runecraftory:carapace_insect"
+    },
+    {
+      "item": "runecraftory:carapace_pretty"
+    },
+    {
+      "item": "runecraftory:cloth_ancient_orc"
+    },
+    {
+      "item": "runecraftory:jaw_insect"
+    },
+    {
+      "item": "runecraftory:claw_panther"
+    },
+    {
+      "item": "runecraftory:claw_magic"
+    },
+    {
+      "item": "runecraftory:fang_wolf"
+    },
+    {
+      "item": "runecraftory:fang_gold_wolf"
+    },
+    {
+      "item": "runecraftory:claw_palm"
+    },
+    {
+      "item": "runecraftory:claw_malm"
+    },
+    {
+      "item": "runecraftory:giants_nail"
+    },
+    {
+      "item": "runecraftory:claw_chimera"
+    },
+    {
+      "item": "runecraftory:tusk_ivory"
+    },
+    {
+      "item": "runecraftory:tusk_unbroken_ivory"
+    },
+    {
+      "item": "runecraftory:scorpion_pincer"
+    },
+    {
+      "item": "runecraftory:dangerous_scissors"
+    },
+    {
+      "item": "runecraftory:propeller_cheap"
+    },
+    {
+      "item": "runecraftory:propellor_quality"
+    },
+    {
+      "item": "runecraftory:fang_dragon"
+    },
+    {
+      "item": "runecraftory:jaw_queen"
+    },
+    {
+      "item": "runecraftory:wind_dragon_tooth"
+    },
+    {
+      "item": "runecraftory:giants_nail_big"
+    },
+    {
+      "item": "runecraftory:scale_wet"
+    },
+    {
+      "item": "runecraftory:scale_grimoire"
+    },
+    {
+      "item": "runecraftory:scale_dragon"
+    },
+    {
+      "item": "runecraftory:scale_crimson"
+    },
+    {
+      "item": "runecraftory:scale_blue"
+    },
+    {
+      "item": "runecraftory:scale_glitter"
+    },
+    {
+      "item": "runecraftory:scale_love"
+    },
+    {
+      "item": "runecraftory:scale_black"
+    },
+    {
+      "item": "runecraftory:scale_fire"
+    },
+    {
+      "item": "runecraftory:scale_earth"
+    },
+    {
+      "item": "runecraftory:scale_legend"
+    },
+    {
+      "item": "runecraftory:steel_double"
+    },
+    {
+      "item": "runecraftory:steel_ten_fold"
+    },
+    {
+      "item": "runecraftory:glitta_augite"
+    },
+    {
+      "item": "runecraftory:invisible_stone"
+    },
+    {
+      "item": "runecraftory:light_ore"
+    },
+    {
+      "item": "runecraftory:rune_sphere_shard"
+    },
+    {
+      "item": "runecraftory:shade_stone"
+    },
+    {
+      "item": "runecraftory:racoon_leaf"
+    },
+    {
+      "item": "runecraftory:icy_nose"
+    },
+    {
+      "item": "runecraftory:big_birds_comb"
+    },
+    {
+      "item": "runecraftory:rafflesia_petal"
+    },
+    {
+      "item": "runecraftory:cursed_doll"
+    },
+    {
+      "item": "runecraftory:warriors_proof"
+    },
+    {
+      "item": "runecraftory:proof_of_rank"
+    },
+    {
+      "item": "runecraftory:throne_of_emire"
+    },
+    {
+      "item": "runecraftory:white_stone"
+    },
+    {
+      "item": "runecraftory:rare_can"
+    },
+    {
+      "item": "runecraftory:can"
+    },
+    {
+      "item": "runecraftory:boots"
+    },
+    {
+      "item": "runecraftory:ayngondaia_lawn"
+    }
+  ]
+}
