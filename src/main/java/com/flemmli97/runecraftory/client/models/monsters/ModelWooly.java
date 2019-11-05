@@ -1,7 +1,9 @@
 package com.flemmli97.runecraftory.client.models.monsters;
 
 import com.flemmli97.runecraftory.common.entity.monster.EntityWooly;
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
@@ -190,15 +192,12 @@ public class ModelWooly extends ModelImproved {
         this.legRight.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.0F * limbSwingAmount;
         this.legLeft.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.0F * limbSwingAmount;
 		
-        int time = wooly.getAttackTime();
-		if(wooly.attackFromPattern()==0)
-		{
-			
-		}
-		else if(wooly.getAttackPattern()==1)
-		{
-			
-		}
+        float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+		AnimatedAction anim = ((EntityWooly)entity).getAnimation();
+    	if(anim!=null)
+    	{
+    		
+    	}
 	}
 
 	/**

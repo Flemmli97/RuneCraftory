@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.entity.monster;
 
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.entity.ai.EntityAIGenericMelee;
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 
 import net.minecraft.world.World;
 
@@ -20,18 +21,13 @@ public class EntityAnt extends EntityMobBase
         return 0.6f;
     }
     
-    @Override
-    public int getAttackTimeFromPattern(byte pattern) {
-        return 10;
-    }
-    
-    @Override
-    public int attackFromPattern() {
-        return 7;
-    }
-    
-    @Override
-    public int maxAttackPatterns() {
-        return 1;
-    }
+	@Override
+	public AnimatedAction[] getAnimations() {
+		return AnimatedAction.vanillaAttackOnly;
+	}
+
+	@Override
+	public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+		return true;
+	}
 }

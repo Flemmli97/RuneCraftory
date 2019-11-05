@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.entity.monster;
 
 import com.flemmli97.runecraftory.common.entity.EntityChargeable;
 import com.flemmli97.runecraftory.common.entity.ai.EntityAIGenericCharge;
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 
 import net.minecraft.world.World;
 
@@ -25,20 +26,15 @@ public class EntityBeetle extends EntityChargeable
         return 0.9f;
     }
     
-    @Override
-    public int getAttackTimeFromPattern(byte pattern) {
-        return 20;
-    }
-    
-    @Override
-    public int attackFromPattern() {
-        return 18;
-    }
-    
-    @Override
-    public int maxAttackPatterns() {
-        return 1;
-    }
+	@Override
+	public AnimatedAction[] getAnimations() {
+		return AnimatedAction.vanillaAttackOnly;
+	}
+	
+	@Override
+	public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+		return true;
+	}
     
     @Override
     public boolean isCharging() {
@@ -49,4 +45,5 @@ public class EntityBeetle extends EntityChargeable
     public void setCharging(boolean charge) {
         this.dataManager.set(EntityChargeable.isCharging, charge);
     }
+
 }

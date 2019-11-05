@@ -115,21 +115,6 @@ public abstract class EntityBossBase extends EntityMobBase
     }
     
     @Override
-    public int getAttackTimeFromPattern(byte pattern) {
-        return 0;
-    }
-    
-    @Override
-    public int attackFromPattern() {
-        return 0;
-    }
-    
-    @Override
-    public int maxAttackPatterns() {
-        return 0;
-    }
-    
-    @Override
     public void setDead() {
         this.isDead = true;
         for (EntityPlayerMP entityplayermp1 : this.bossInfo.getPlayers()) 

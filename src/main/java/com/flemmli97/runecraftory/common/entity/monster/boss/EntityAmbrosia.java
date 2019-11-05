@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.common.entity.ai.EntityAIAmbrosia;
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityAmbrosiaSleep;
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityAmbrosiaWave;
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityButterfly;
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,9 +15,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityAmbrosia extends EntityBossBase
-{
-    private AttackAI status = AttackAI.IDDLE;
+{    
+    //Tries kicking target 3 times in a row   
+    private static final AnimatedAction kick_1 = new AnimatedAction(36,12,"kick_1");
+    //Sends a wave of hp-draining(hard) butterflies at target
+    private static final AnimatedAction butterfly = new AnimatedAction(85,7,"butterfly");
+    //Shockwave kind of attack surrounding ambrosia
+    private static final AnimatedAction wave = new AnimatedAction(125,5,"wave");
+    //Sleep balls
+    private static final AnimatedAction sleep = new AnimatedAction(12,10,"sleep");
+    //2 spinning kick changing direction between them. also scatters earth damage pollen while doing it
+    private static final AnimatedAction kick_2 = new AnimatedAction(36,12,"kick_2");
     
+	private static final AnimatedAction[] anims = new AnimatedAction[] {kick_1, butterfly, wave, sleep, kick_2};
+	
     public EntityAmbrosia(World world) {
         super(world);
         this.tasks.addTask(1, new EntityAIAmbrosia(this));
@@ -25,17 +37,17 @@ public class EntityAmbrosia extends EntityBossBase
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.34);
+        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.29);
     }
     
     @Override
     public float attackChance() {
-        return 100.0f;
+        return 1;
     }
     
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        return this.status != AttackAI.WAVE && super.attackEntityFrom(source, amount);
+        return (this.getAnimation()==null || !this.getAnimation().getID().equals("wave")) && super.attackEntityFrom(source, amount);
     }
     
     public void summonButterfly() {
@@ -68,46 +80,25 @@ public class EntityAmbrosia extends EntityBossBase
         }
     }
     
-    public AttackAI getStatus() {
-        return this.status;
-    }
-    
-    public void setStatus(AttackAI status) {
-        this.status = status;
-    }
-    
     @Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
     }
     
-    public enum AttackAI
-    {
-        IDDLE(0, 0), 
-        //Tries kicking target 3 times in a row
-        KICK1(36, 12), 
-        //Sends a wave of hp-draining(hard) butterflies at target
-        BUTTERFLY(85, 80), 
-        //Shockwave kind of attack surrounding ambrosia
-        WAVE(125, 120), 
-        //Sleep balls
-        SLEEP(12, 10),
-        //2 spinning kick changing direction between them. also scatters earth damage pollen while doing it
-        KICK2(36, 12);
-        
-        private int duration;
-        private int time;
-        
-        private AttackAI(int attackDuration, int attackTime) {
-            this.duration = attackDuration;
-            this.time = attackTime;
-        }
-        
-        public int getDuration() {
-            return this.duration;
-        }
-        
-        public int getTime() {
-            return this.time;
-        }
-    }
+	@Override
+	public AnimatedAction[] getAnimations() {
+		return anims;
+	}
+    
+	@Override
+	public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+		if(type==AnimationType.GENERICATTACK)
+			return !anim.getID().equals("kick_2") || this.isEnraged();
+		return true;
+	}
+	
+	@Override
+	public int animationCooldown(AnimatedAction anim)
+	{
+		return 34 + this.getRNG().nextInt(22)-(this.isEnraged()?10:0);
+	}
 }

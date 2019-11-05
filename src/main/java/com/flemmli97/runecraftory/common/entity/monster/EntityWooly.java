@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.entity.ai.EntityAIGenericMelee;
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.Blocks;
@@ -73,20 +74,15 @@ public class EntityWooly extends EntityMobBase implements IShearable
         return this.dataManager.get(EntityWooly.SHEARED) ? 0.7f : 0.01f;
     }
     
-    @Override
-    public int getAttackTimeFromPattern(byte pattern) {
-        return 20;
-    }
-    
-    @Override
-    public int attackFromPattern() {
-        return 15;
-    }
-    
-    @Override
-    public int maxAttackPatterns() {
-        return 2;
-    }
+	@Override
+	public AnimatedAction[] getAnimations() {
+		return AnimatedAction.vanillaAttackOnly;
+	}
+	
+	@Override
+	public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+		return true;
+	}
     
     public boolean isSheared() {
         return this.dataManager.get(EntityWooly.SHEARED);

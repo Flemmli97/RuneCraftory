@@ -28,6 +28,8 @@ import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+import com.flemmli97.tenshilib.common.entity.IAnimated;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 
@@ -77,13 +79,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public abstract class EntityMobBase extends EntityCreature implements IEntityAdvanced, IMob, IEntityAdditionalSpawnData
+public abstract class EntityMobBase extends EntityCreature implements IEntityAdvanced, IMob, IEntityAdditionalSpawnData, IAnimated
 {
     private Map<IAttribute, Float> genes =  Maps.newHashMap();
     protected static final DataParameter<Boolean> isTamed = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> owner = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.STRING);
-    private static final DataParameter<Integer> attackTimer = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.VARINT);
-    private static final DataParameter<Byte> attackPattern = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> mobLevel = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> levelXP = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.VARINT);
     private static final UUID foodUUID = UUID.fromString("87A55C28-8C8C-4BFF-AF5F-9972A38CCD9D");
@@ -121,6 +121,8 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     private Map<ItemStack, Float> drops = Maps.newHashMap();
 	private Map<ItemStack, Integer> dailyDrops = Maps.newHashMap();
 	private NonNullList<ItemStack> tamingItem = NonNullList.create();
+	
+	private AnimatedAction currenAnimation;
 	
     public EntityMobBase(World world) {
         super(world);
@@ -178,8 +180,6 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         super.entityInit();
         this.dataManager.register(isTamed, false);
         this.dataManager.register(owner, "");
-        this.dataManager.register(attackTimer, 0);
-        this.dataManager.register(attackPattern, (byte)0);
         this.dataManager.register(mobLevel, LibConstants.baseLevel);
         this.dataManager.register(levelXP, 0);
     }
@@ -349,19 +349,37 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         }
     }
     
-    public void setAttackTimeAndPattern(byte pattern) {
-        this.dataManager.set(attackTimer, this.getAttackTimeFromPattern(pattern));
-        this.dataManager.set(attackPattern, pattern);
-    }
+    //Animation
     
-    public byte getAttackPattern() {
-        return this.dataManager.get(attackPattern);
-    }
-    
-    public int getAttackTime() {
-        return this.dataManager.get(attackTimer);
-    }
+    @Override
+	@Nullable
+	public AnimatedAction getAnimation()
+	{
+		return this.currenAnimation;
+	}
+	
+	@Override
+	public void setAnimation(AnimatedAction anim) 
+	{
+		this.currenAnimation=anim==null?null:anim.create();
+		IAnimated.sentToClient(this);
+	}
+	
+	public AnimatedAction getRandomAnimation(AnimationType type)
+	{
+		AnimatedAction anim = this.getAnimations()[this.rand.nextInt(this.getAnimations().length)];
+		if(this.isAnimOfType(anim, type))
+			return anim;
+		return this.getRandomAnimation(type);
+	}
 
+	public abstract boolean isAnimOfType(AnimatedAction anim, AnimationType type);
+	
+	public int animationCooldown(AnimatedAction anim)
+	{
+		return 0;
+	}
+	
     @Override
     public void writeEntityToNBT(NBTTagCompound compound) {
         super.writeEntityToNBT(compound);
@@ -415,16 +433,17 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     
     @Override
 	public void onLivingUpdate() {
+    	this.tickAnimation();
         if (!this.dead) {
             if (this.tamingTick > 0) {
                 --this.tamingTick;
             }
             if (this.tamingTick == 0) {
                 if (this.isTamed()) {
-                    this.world.setEntityState((Entity)this, (byte)10);
+                    this.world.setEntityState(this, (byte)10);
                 }
                 else {
-                    this.world.setEntityState((Entity)this, (byte)11);
+                    this.world.setEntityState(this, (byte)11);
                 }
                 this.tamingTick = -1;
             }
@@ -432,9 +451,6 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
                 --this.feedTimeOut;
             }
             super.onLivingUpdate();
-            if (this.getAttackTime() > 0) {
-                this.dataManager.set(attackTimer, (this.getAttackTime() - 1));
-            }
             this.foodBuffTick=Math.max(-1, --this.foodBuffTick);
             if(this.foodBuffTick==0)
             {
@@ -445,7 +461,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 
     @Override
     public ItemStack getPickedResult(RayTraceResult target) {
-        ResourceLocation name = EntityList.getKey((Entity)this);
+        ResourceLocation name = EntityList.getKey(this);
         if (name != null && EntitySpawnEggList.entityEggs.containsKey(name)) {
             ItemStack stack = new ItemStack(ModItems.spawnEgg);
             ItemSpawnEgg.applyEntityIdToItemStack(stack, name);
@@ -519,8 +535,8 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         this.setTamed(true);
         this.setOwner(owner);
         this.navigator.clearPath();
-        this.setAttackTarget((EntityLivingBase)null);
-        this.world.setEntityState((Entity)this, (byte)10);
+        this.setAttackTarget(null);
+        this.world.setEntityState(this, (byte)10);
     }
 
     @Override
@@ -619,7 +635,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         }
         else {
             this.jumpMovementFactor = 0.02f;
-            super.travel(strafing, forward, forward);
+            super.travel(strafing, upward, forward);
         }
     }
     
@@ -800,12 +816,6 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         }
         this.setHealth(this.getMaxHealth());
     }
-    
-    public abstract int getAttackTimeFromPattern(byte pattern);
-    
-    public abstract int attackFromPattern();
-    
-    public abstract int maxAttackPatterns();
 
     @Override
     public void writeSpawnData(ByteBuf buffer) {
@@ -888,4 +898,13 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     		ins.removeModifier(foodUUIDMulti);
     	}
    	}
+    
+    public static enum AnimationType
+    {
+    	MOVE,
+    	GENERICATTACK,
+    	MELEE,
+    	RANGED,
+    	IDLE;
+    }
 }

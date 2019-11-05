@@ -16,7 +16,6 @@ import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -103,9 +102,9 @@ public class EntityAmbrosiaWave extends Entity
         if (this.getRadius() <= 5.0f) {
             this.increaseRadius();
         }
-        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow((double)this.getRadius(), 1.0, this.getRadius()), this.pred);
+        List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(this.getRadius(), 1.0, this.getRadius()), this.pred);
         for (EntityLivingBase e : list) {
-            if (!e.equals((Object)this.owner) && this.owner != null && RFCalculations.attackEntity((Entity)e, CustomDamage.attack((EntityLivingBase)this.owner, EnumElement.NONE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 15), RFCalculations.getAttributeValue((EntityLivingBase)this.owner, (IAttribute)ItemStatAttributes.RFMAGICATT, null, null) / 2.5f)) {
+            if (!e.equals(this.owner) && this.owner != null && RFCalculations.attackEntity(e, CustomDamage.attack(this.owner, EnumElement.NONE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 15), RFCalculations.getAttributeValue(this.owner, ItemStatAttributes.RFMAGICATT, null, null) / 2.5f)) {
                 e.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:slowness"), 10, 6, true, false));
                 e.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:jump_boost"), 10, 128, true, false));
             }
