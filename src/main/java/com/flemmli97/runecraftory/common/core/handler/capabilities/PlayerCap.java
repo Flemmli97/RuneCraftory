@@ -472,7 +472,7 @@ public class PlayerCap implements IPlayer
 		        }
 		        for(ExtendedItemStackWrapper wr : pre) {
 		            ItemStack stack = wr.getStack();
-		        	shop.add(ItemNBT.getLeveledItem(stack, this.shippedItems.get(stack.getItem().getRegistryName().toString())));
+		        	shop.add(ItemNBT.getLeveledItem(stack, this.shippedItems.getOrDefault(stack.getItem().getRegistryName().toString(), 1)));
 		        }
 		        this.shopItems.put(profession, shop);
 		        PacketHandler.sendTo(new PacketUpdateShopItems(profession, shop), (EntityPlayerMP) player);

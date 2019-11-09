@@ -15,7 +15,6 @@ import com.flemmli97.runecraftory.common.lib.LibReference;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityList;
@@ -51,15 +50,16 @@ public class ItemSpawnEgg extends Item{
 		this.setUnlocalizedName(this.getRegistryName().toString());
 	}
 	
-	@Override
+	@SuppressWarnings("deprecation")
+    @Override
 	public String getItemStackDisplayName(ItemStack stack)
     {
-        String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
+        String s = net.minecraft.util.text.translation.I18n.translateToLocal(this.getUnlocalizedName() + ".name").trim();
         ResourceLocation entityName = getEntityIdFromItem(stack);
 
         if (entityName != null)
         {
-            s = s + " " + I18n.format("entity." + entityName.toString().replaceAll("runecraftory:", "")  + ".name");
+            s = s + " " + net.minecraft.util.text.translation.I18n.translateToLocal("entity." + entityName.toString().replaceAll("runecraftory:", "")  + ".name");
         }
 
         return s;
@@ -229,13 +229,13 @@ public class ItemSpawnEgg extends Item{
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-		if(tab==RuneCraftory.monsters)
-        for (EntityList.EntityEggInfo eggEntity  : EntitySpawnEggList.entityEggs.values())
-        {            
-    		ItemStack stack = new ItemStack(this, 1);
-    		applyEntityIdToItemStack(stack, eggEntity.spawnedID);
-    		items.add(stack);
-        }
+		if(this.isInCreativeTab(tab))
+            for (EntityList.EntityEggInfo eggEntity  : EntitySpawnEggList.entityEggs.values())
+            {            
+        		ItemStack stack = new ItemStack(this, 1);
+        		applyEntityIdToItemStack(stack, eggEntity.spawnedID);
+        		items.add(stack);
+            }
     }
 
     public static void applyEntityIdToItemStack(ItemStack stack, ResourceLocation entityId)
