@@ -754,7 +754,7 @@ public class ModItems {
 	public static final Item greeting = new ItemEmptySkill("greeting");
 	public static final Item powerWave = new ItemEmptySkill("power_wave");
 	public static final Item dashSlash = new ItemEmptySkill("dash_slash");
-	public static final Item rushAttack = new ItemEmptySkill("ruch_attack");
+	public static final Item rushAttack = new ItemEmptySkill("rush_attack");
 	public static final Item roundBreak = new ItemEmptySkill("round_break");
 	public static final Item mindThrust = new ItemEmptySkill("mind_thrust");
 	public static final Item gust = new ItemEmptySkill("gust");
