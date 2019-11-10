@@ -5,10 +5,10 @@ import com.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
 import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
 import com.flemmli97.runecraftory.common.blocks.BlockCookingBench;
 import com.flemmli97.runecraftory.common.blocks.BlockForge;
+import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.blocks.BlockIgnore;
 import com.flemmli97.runecraftory.common.blocks.BlockMineral;
 import com.flemmli97.runecraftory.common.blocks.BlockPharmacy;
-import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.blocks.BlockRFFarmland;
 import com.flemmli97.runecraftory.common.blocks.BlockRequestBoard;
 import com.flemmli97.runecraftory.common.blocks.BlockResearchTable;
@@ -35,10 +35,12 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumMineralTier;
 import com.flemmli97.tenshilib.common.ItemBlockInitUtils;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -138,7 +140,7 @@ public class ModBlocks {
 	public static final Block toyherb = new BlockCropBase("toyherb", LibOreDictionary.TOYHERB);
 	
 	public static final Block mushroom = new BlockHerb("mushroom", LibOreDictionary.MUSHROOM);
-	public static final Block monarchMushroom = new BlockHerb("mushroom_monarch", LibOreDictionary.MONARCHMUSHROOM);
+	public static final Block monarchMushroom = new BlockHerb("monarch_mushroom", LibOreDictionary.MONARCHMUSHROOM);
 	public static final Block elliLeaves = new BlockHerb("elli_leaves", LibOreDictionary.ELLILEAVES);
 	public static final Block witheredGrass = new BlockHerb("withered_grass", LibOreDictionary.WITHEREDGRASS);
 	public static final Block weeds = new BlockHerb("weeds", LibOreDictionary.WEEDS);
@@ -256,7 +258,7 @@ public class ModBlocks {
 	    for(Block block : TREE)
 	    	event.getRegistry().register(ItemBlockInitUtils.itemFromBlock(block));
 	}
-	
+
 	@SubscribeEvent
 	@SideOnly(value = Side.CLIENT)
 	public static final void initModel(ModelRegistryEvent event)
@@ -271,5 +273,8 @@ public class ModBlocks {
 		ItemBlockInitUtils.registerDefaultModel(research);
 		ItemBlockInitUtils.registerDefaultModel(board);
 		ItemBlockInitUtils.registerDefaultModel(shipping);
+		for(Block block : HERBS)
+		    if(block instanceof BlockHerb)
+		        ModelLoader.setCustomStateMapper(block, (new StateMap.Builder()).ignore(BlockHerb.LEVEL).build());
 	}
 }

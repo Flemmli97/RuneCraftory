@@ -5,14 +5,11 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
-import com.flemmli97.runecraftory.client.render.item.BakedItemRecipeModel;
 import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
 import com.flemmli97.runecraftory.common.core.handler.crafting.RecipeSextuple;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
 
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -21,10 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemRecipe extends Item
 {
@@ -56,16 +49,5 @@ public class ItemRecipe extends Item
         else {
             stack.getTagCompound().setString("Recipe", recipeID);
         }
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public void initModel(ModelBakeEvent event) {
-        ModelLoader.setCustomMeshDefinition(this, new ItemMeshDefinition() {
-            @Override
-			public ModelResourceLocation getModelLocation(ItemStack stack) {
-                return new ModelResourceLocation(ItemRecipe.this.getRegistryName(), "inventory");
-            }
-        });
-        event.getModelRegistry().putObject(new ModelResourceLocation(this.getRegistryName(), "inventory"), new BakedItemRecipeModel(event.getModelManager().getModel(new ModelResourceLocation(this.getRegistryName(), "inventory"))));
     }
 }

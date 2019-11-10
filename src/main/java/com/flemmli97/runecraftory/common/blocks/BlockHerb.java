@@ -10,6 +10,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,6 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockHerb extends BlockBush{
 
+    public static final PropertyInteger LEVEL = PropertyInteger.create("variant", 0, 10);
     private String item;
 	    
 	public BlockHerb(String name, String drop) {
@@ -36,7 +40,28 @@ public class BlockHerb extends BlockBush{
         this.setRegistryName(new ResourceLocation(LibReference.MODID, name));
 		this.setUnlocalizedName(this.getRegistryName().toString());
 		this.item=drop;
+		CropMap.addPlant(drop, this);
 	}
+	
+	@Override
+    protected BlockStateContainer createBlockState()
+    {
+        return new BlockStateContainer(this, new IProperty[] {LEVEL});
+    }
+	
+	@Override
+    public IBlockState getStateFromMeta(int meta)
+    {
+	    if(meta>10)
+	        meta-=10;
+        return this.getDefaultState().withProperty(LEVEL, meta);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state)
+    {
+        return state.getValue(LEVEL);
+    }
 	
 	public Item drop()
 	{
@@ -52,8 +77,11 @@ public class BlockHerb extends BlockBush{
 	@Override
     public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
     {        
-		Random random = new Random();
-        drops.add(ItemNBT.getLeveledItem(new ItemStack(this.drop()), MathHelper.clamp(random.nextInt(5)+random.nextInt(4)+random.nextInt(3)+random.nextInt(2), 1, 10)));
+	    Random random = world instanceof World ? ((World)world).rand : RANDOM;
+	    int level = state.getValue(LEVEL);
+        if(level==0)
+            level=MathHelper.clamp(random.nextInt(5)+random.nextInt(4)+random.nextInt(3)+random.nextInt(2), 1, 10);
+        drops.add(ItemNBT.getLeveledItem(new ItemStack(this.drop()), level));
     }
 	
 	@Override

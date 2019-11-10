@@ -11,6 +11,7 @@ import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -19,7 +20,6 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -117,7 +117,7 @@ public class BlockCropBase extends BlockBush implements IGrowable, ITileEntityPr
 	@Override
     protected boolean canSustainBush(IBlockState state)
     {
-        return state.getBlock() == Blocks.FARMLAND;
+        return state.getBlock() instanceof BlockFarmland;
     }
 
     @Override

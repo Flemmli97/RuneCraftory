@@ -6,7 +6,6 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import com.flemmli97.runecraftory.api.items.CropProperties;
-import com.flemmli97.runecraftory.common.blocks.crops.BlockCropBase;
 import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler;
 import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler.EnumSeason;
 import com.flemmli97.runecraftory.common.items.consumables.ItemCrops;
@@ -14,6 +13,7 @@ import com.flemmli97.runecraftory.common.items.itemblocks.ItemCropSeed;
 import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.google.common.collect.Maps;
 
+import net.minecraft.block.BlockBush;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -25,7 +25,7 @@ public class CropMap
     private static final Map<String, ItemCropSeed> seedToID = Maps.newHashMap();
     private static final Map<String, Item> cropToID = Maps.newHashMap();
     private static final Map<String, ItemCrops> giantCropToID = Maps.newHashMap();
-    private static final Map<String, BlockCropBase> plantToID = Maps.newHashMap();
+    private static final Map<String, BlockBush> plantToID = Maps.newHashMap();
     
     /**
      * Maps seed items to properties
@@ -49,7 +49,7 @@ public class CropMap
     	giantCropToID.put(id, seed);
     }
     
-    public static void addPlant(String id, BlockCropBase seed) {
+    public static void addPlant(String id, BlockBush seed) {
         plantToID.put(id, seed);
     }
     
@@ -66,7 +66,7 @@ public class CropMap
         return giantCropToID.get(id);
     }
     
-    public static BlockCropBase plantFromString(String id) {
+    public static BlockBush plantFromString(String id) {
         return plantToID.get(id);
     }
     

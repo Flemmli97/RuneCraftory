@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.init;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.mappings.CropMap;
+import com.flemmli97.runecraftory.client.render.item.BakedItemRecipeModel;
 import com.flemmli97.runecraftory.common.items.consumables.ItemCrops;
 import com.flemmli97.runecraftory.common.items.consumables.ItemFishBase;
 import com.flemmli97.runecraftory.common.items.consumables.ItemGenericConsumable;
@@ -62,12 +63,14 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumToolTier;
 import com.flemmli97.tenshilib.common.javahelper.ArrayUtils;
 
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -1188,7 +1191,7 @@ public class ModItems {
 	public static final Item grapes = new ItemGenericConsumable("grapes");
 
 	public static final Item mushroom = new ItemMushroom("mushroom", LibOreDictionary.MUSHROOM).setCreativeTab(RuneCraftory.food);
-	public static final Item mushroomMonarch = new ItemHerb("monarch_mushroom", LibOreDictionary.MONARCHMUSHROOM).setCreativeTab(RuneCraftory.food);
+	public static final Item mushroomMonarch = new ItemMushroom("monarch_mushroom", LibOreDictionary.MONARCHMUSHROOM).setCreativeTab(RuneCraftory.food);
 	public static final Item mealyApple = new ItemGenericConsumable("mealy_apple");
 
 	//=====Item groups
@@ -1360,6 +1363,12 @@ public class ModItems {
 	@SubscribeEvent
 	public static final void recipeRender(ModelBakeEvent event)
 	{
-		((ItemRecipe) recipe).initModel(event);
+	    ModelLoader.setCustomMeshDefinition(recipe, new ItemMeshDefinition() {
+            @Override
+            public ModelResourceLocation getModelLocation(ItemStack stack) {
+                return new ModelResourceLocation(recipe.getRegistryName(), "inventory");
+            }
+        });
+        event.getModelRegistry().putObject(new ModelResourceLocation(recipe.getRegistryName(), "inventory"), new BakedItemRecipeModel(event.getModelManager().getModel(new ModelResourceLocation(recipe.getRegistryName(), "inventory"))));    
 	}
 }
