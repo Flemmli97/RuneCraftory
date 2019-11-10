@@ -304,15 +304,15 @@ public class ConfigHandler {
 				.mapWrapperAdd(ModBlocks.elliLeaves, new String[] {})
 				.mapWrapperAdd(ModBlocks.witheredGrass, new String[] {"PLAINS,25,4,2"})
 				.mapWrapperAdd(ModBlocks.weeds, new String[] {"PLAINS,30,6,5"})
-				.mapWrapperAdd(ModBlocks.whiteGrass, new String[] {"SNOWY,10,4,3"})
-				.mapWrapperAdd(ModBlocks.indigoGrass, new String[] {})
-				.mapWrapperAdd(ModBlocks.purpleGrass, new String[] {})
-				.mapWrapperAdd(ModBlocks.greenGrass, new String[] {})
-				.mapWrapperAdd(ModBlocks.blueGrass, new String[] {})
-				.mapWrapperAdd(ModBlocks.yellowGrass, new String[] {})
-				.mapWrapperAdd(ModBlocks.redGrass, new String[] {})
-				.mapWrapperAdd(ModBlocks.orangeGrass, new String[] {})
-				.mapWrapperAdd(ModBlocks.blackGrass, new String[] {})
+				.mapWrapperAdd(ModBlocks.whiteGrass, new String[] {"SNOWY,10,3,8","COLD,10,3,8"})
+				.mapWrapperAdd(ModBlocks.indigoGrass, new String[] {"MAGICAL,10,3,8"})
+				.mapWrapperAdd(ModBlocks.purpleGrass, new String[] {"MAGICAL,10,3,8","JUNGLE,10,3,8"})
+				.mapWrapperAdd(ModBlocks.greenGrass, new String[] {"PLAINS,10,3,8","FOREST,10,3,8"})
+				.mapWrapperAdd(ModBlocks.blueGrass, new String[] {"WET,10,3,8","COLD,10,3,8"})
+				.mapWrapperAdd(ModBlocks.yellowGrass, new String[] {"MESA,10,3,8","MOUNTAIN,10,3,8","SAVANNA,10,3,8"})
+				.mapWrapperAdd(ModBlocks.redGrass, new String[] {"MAGICAL,10,3,8","MUSHROOM,10,3,8", "HOT,10,3,8"})
+				.mapWrapperAdd(ModBlocks.orangeGrass, new String[] {"MESA,10,3,8"})
+				.mapWrapperAdd(ModBlocks.blackGrass, new String[] {"DEAD,10,3,8","SPOOKY,10,3,8"})
 				.mapWrapperAdd(ModBlocks.antidoteGrass, new String[] {})
 				.mapWrapperAdd(ModBlocks.medicinalHerb, new String[] {})
 				.mapWrapperAdd(ModBlocks.bambooSprout, new String[] {});
@@ -337,6 +337,7 @@ public class ConfigHandler {
 			{
 				for(String s : generationConfig.getStringList(block.getRegistryName().toString(), "herbs", strArr, "Syntax: (BIOME/BIOME TYPE,weight,maxTries,maxAmount"))
 				{
+				    
 					String[] sub = s.split(",");
 					if(sub.length<4)
 						throw new ConfigError("Couldnt parse string " + s);
