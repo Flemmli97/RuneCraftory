@@ -788,6 +788,7 @@ public class ModItems {
 	public static final Item bonusConcerto = new ItemEmptySkill("bonus_concerto");
 	public static final Item strikingMarch = new ItemEmptySkill("striking_march");
 	public static final Item ironWaltz = new ItemEmptySkill("iron_waltz");
+    public static final Item teleport = new ItemEmptySkill("teleport");
 
 	public static final Item rockfish = new ItemFishBase("rockfish");
 	public static final Item sandFlounder = new ItemFishBase("sand_flounder");
@@ -1248,7 +1249,7 @@ public class ModItems {
 	public static final Item[] MAGIC =  new Item[] {fireBallSmall, fireBallBig, explosion, waterLaser, parallelLaser, deltaLaser, screwRock, earthSpike, avengerRock, sonicWind, doubleSonic, penetrateSonic, lightBarrier, shine, prism, darkBall, darkSnake, darkness, cure, cureAll, cureMaster, mediPoison, mediPara, mediSeal};
 	public static final Item[] SKILLS =  new Item[] {
 			powerWave, dashSlash, rushAttack, roundBreak, mindThrust, gust, storm, blitz, twinAttack, railStrike, windSlash, flashStrike, naiveBlade, steelHeart, deltaStrike, hurricane, reaperSlash, millionStrike, axelDisaster, stardustUpper, tornadoSwing, grandImpact, gigaSwing, upperCut, doubleKick, straightPunch, nekoDamashi, rushPunch, cyclone, rapidMove,
-			bonusConcerto, strikingMarch, ironWaltz, greeting
+			bonusConcerto, strikingMarch, ironWaltz, greeting, teleport
 	};
 	public static final Item[] SPELLS = ArrayUtils.combine(new Item[] {}, new Item[][] {MAGIC, SKILLS});
 	public static final Item[] FISH = new Item[] {rockfish, sandFlounder, pondSmelt, lobster, lampSquid, cherrySalmon, fallFlounder, girella, tuna, crucianCarp, yellowtail, blowfish, flounder, rainbowTrout, loverSnapper, snapper, shrimp, sunsquid, pike, needlefish, mackerel, salmon, gibelio, turbot, skipjack, glitterSnapper, chub, charFish, sardine, taimen, squid, masuTrout};
