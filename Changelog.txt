@@ -36,3 +36,8 @@ Runecraftory a0.3.0
 - Finished the lang file
 - Quest system added with configs
 - Added water laser
+- NPC shops are now player based
+- Shops now configurable
+- Shipment tracking with shop integration. Cant buy items (unless specified) that were not shipped previously.
+- Better entity attack animation system
+- Herb items are now placeable
