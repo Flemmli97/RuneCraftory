@@ -82,7 +82,6 @@ import net.minecraftforge.oredict.OreDictionary;
 public abstract class EntityMobBase extends EntityCreature implements IEntityAdvanced, IMob, IEntityAdditionalSpawnData, IAnimated
 {
     private Map<IAttribute, Float> genes =  Maps.newHashMap();
-    protected static final DataParameter<Boolean> isTamed = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.BOOLEAN);
     private static final DataParameter<String> owner = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.STRING);
     private static final DataParameter<Integer> mobLevel = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> levelXP = EntityDataManager.createKey(EntityMobBase.class, DataSerializers.VARINT);
@@ -178,7 +177,6 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(isTamed, false);
         this.dataManager.register(owner, "");
         this.dataManager.register(mobLevel, LibConstants.baseLevel);
         this.dataManager.register(levelXP, 0);
@@ -237,11 +235,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 
     @Override
     public boolean isTamed() {
-        return this.dataManager.get(isTamed);
-    }
-    
-    public void setTamed(boolean tamed) {
-        this.dataManager.set(isTamed, tamed);
+        return this.ownerUUID()!=null;
     }
 
     @Override
@@ -278,19 +272,23 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     public int baseMoney() {
         return this.prop.getMoney();
     }
+    
+    @Override
+    public UUID ownerUUID() {
+        if(this.dataManager.get(owner).isEmpty())
+            return null;
+        try {
+            return UUID.fromString(this.dataManager.get(owner));
+        }
+        catch (IllegalArgumentException var2) {
+            return null;
+        }
+    }
 
     @Override
     public EntityPlayer getOwner() {
-        if (owner != null) {
-            try {
-                UUID var1 = UUID.fromString(this.dataManager.get(owner));
-                return (var1 == null) ? null : this.world.getPlayerEntityByUUID(var1);
-            }
-            catch (IllegalArgumentException var2) {
-                return null;
-            }
-        }
-        return null;
+        UUID var1 = this.ownerUUID();
+        return (var1 == null) ? null : this.world.getPlayerEntityByUUID(var1);
     }
 
     @Override
@@ -298,6 +296,8 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         if (player != null) {
             this.dataManager.set(owner, player.getUniqueID().toString());
         }
+        else
+            this.dataManager.set(owner, "");
     }
     
     public Map<IAttribute, Float> mobGene() {
@@ -377,7 +377,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 	
 	public int animationCooldown(AnimatedAction anim)
 	{
-		return 0;
+		return 40;
 	}
 	
     @Override
@@ -401,9 +401,6 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         super.readEntityFromNBT(compound);
         if (compound.hasKey("MobLevel")) {
             this.dataManager.set(mobLevel, compound.getInteger("MobLevel"));
-        }
-        if (compound.hasKey("Tamed")) {
-            this.setTamed(compound.getBoolean("Tamed"));
         }
         NBTTagCompound nbtGenes = compound.getCompoundTag("Genes");
         for (String s : nbtGenes.getKeySet()) {
@@ -508,7 +505,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 				if(stack.getItem()==Items.STICK)
 				{
 					System.out.println("untame");
-					this.dataManager.set(isTamed, false); //for debugging
+					this.setOwner(null); //for debugging
 
 				}
 				else if(stack.getItem()==ModItems.inspector)
@@ -532,7 +529,6 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 	}
     
     protected void tameEntity(EntityPlayer owner) {
-        this.setTamed(true);
         this.setOwner(owner);
         this.navigator.clearPath();
         this.setAttackTarget(null);
@@ -904,6 +900,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     	MOVE,
     	GENERICATTACK,
     	MELEE,
+    	CHARGE,
     	RANGED,
     	IDLE;
     }

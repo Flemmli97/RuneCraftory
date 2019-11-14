@@ -5,6 +5,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -73,15 +74,15 @@ public abstract class EntityBossBase extends EntityMobBase
     }
     
     @Override
-    public void setTamed(boolean tamed) {
-        if (tamed) 
+    public void setOwner(EntityPlayer player) {
+        super.setOwner(player);
+        if (player!=null) 
         {
             for (EntityPlayerMP entityplayermp1 : this.bossInfo.getPlayers()) 
             {
                 this.bossInfo.removePlayer(entityplayermp1);
             }
         }
-        super.setTamed(tamed);
     }
     
     private void updateplayers() {

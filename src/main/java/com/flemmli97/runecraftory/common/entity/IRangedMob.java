@@ -6,5 +6,5 @@ public interface IRangedMob
 {
     public void attackRanged(EntityLivingBase entity);
     
-    public float strafeChance();
+    public float meleeChance();
 }

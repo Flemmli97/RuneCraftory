@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.api.entities;
 
 import java.util.Map;
+import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,8 @@ public interface IEntityAdvanced extends IEntityBase
     public boolean isTamed();
     
     public boolean ridable();
+    
+    public UUID ownerUUID();
     
     public EntityPlayer getOwner();
     

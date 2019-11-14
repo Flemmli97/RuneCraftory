@@ -12,6 +12,12 @@ public abstract class EntityChargeable extends EntityMobBase{
 	public EntityChargeable(World world) {
 		super(world);
 	}
+	
+	@Override
+    public void entityInit() {
+        super.entityInit();
+        this.dataManager.register(EntityChargeable.isCharging, false);
+    }
     
     public boolean isCharging()
     {
@@ -22,4 +28,5 @@ public abstract class EntityChargeable extends EntityMobBase{
     {
     	this.dataManager.set(isCharging, charge);
     }
+        
 }
