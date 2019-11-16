@@ -377,7 +377,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 	
 	public int animationCooldown(AnimatedAction anim)
 	{
-		return 40;
+		return this.getRNG().nextInt(15)+25;
 	}
 	
     @Override

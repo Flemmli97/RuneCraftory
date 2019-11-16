@@ -7,6 +7,7 @@ import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 public class EntityAIMeleeBase<T extends EntityMobBase> extends EntityAIAttackBase<T> {
 
     protected float rangeModifier;
+    protected int iddleMoveDelay, iddleMoveFlag;
 
     public EntityAIMeleeBase(T entity, float reachMod) {
         super(entity);
@@ -45,7 +46,18 @@ public class EntityAIMeleeBase<T extends EntityMobBase> extends EntityAIAttackBa
 
     @Override
     public void handleIddle() {
-        this.moveToWithDelay(1);
+        if(this.iddleMoveDelay<=0) {
+            this.iddleMoveFlag=this.attacker.getRNG().nextInt(3);
+            this.iddleMoveDelay=this.attacker.getRNG().nextInt(35)+55-this.iddleMoveFlag*10;
+        }
+        switch(this.iddleMoveFlag) {
+            case 0:
+                this.moveToWithDelay(1);
+                break;
+            case 1:
+                this.moveRandomlyAround(36);
+                break;
+        }
     }
 
 }
