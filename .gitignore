@@ -8,7 +8,7 @@ build
 # forge
 libs
 run
-lib
+/lib/
 
 # github
 .git
@@ -18,3 +18,4 @@ lib
 
 # things
 .DS_Store
+
