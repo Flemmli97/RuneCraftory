@@ -16,6 +16,7 @@ import com.flemmli97.runecraftory.api.mappings.ItemFoodMap;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.entity.ai.EntityMoveHelperNew;
 import com.flemmli97.runecraftory.common.init.EntitySpawnEggList;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.items.creative.ItemSpawnEgg;
@@ -46,6 +47,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -125,6 +127,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 	
     public EntityMobBase(World world) {
         super(world);
+        this.moveHelper=new EntityMoveHelperNew(this);
         this.hurt = new EntityAIHurtByTarget(this, false, new Class[0]);
 
         this.prop = EntityStatMap.getDefaultStats(this.getClass());
@@ -307,6 +310,48 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     //=====Move helper
     
     @Override
+    public void updateAITasks()
+    {
+        super.updateAITasks();
+        if (this.getMoveHelper().action!=EntityMoveHelper.Action.WAIT)
+        {
+            this.setMoving(true);
+            /*double d0 = this.getMoveHelper().getSpeed();
+
+            if (d0 == 0.6D)
+            {
+                this.setSneaking(true);
+                this.setSprinting(false);
+            }
+            else if (d0 == 1.33D)
+            {
+                this.setSneaking(false);
+                this.setSprinting(true);
+            }
+            else
+            {
+                this.setSneaking(false);
+                this.setSprinting(false);
+            }*/
+            this.updateMoveAnimation();
+        }
+        else
+        {
+            this.setMoving(false);
+            this.setSneaking(false);
+            this.setSprinting(false);
+        }
+    }
+    
+    public boolean isMoving() {
+        return this.getFlag(2);
+    }
+    
+    public void setMoving(boolean flag) {
+        this.setFlag(2, flag);
+    }
+    
+    @Override
     public boolean isFlyingEntity() {
         return this.prop.flying();
     }
@@ -357,7 +402,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 	{
 		return this.currenAnimation;
 	}
-	
+    
 	@Override
 	public void setAnimation(AnimatedAction anim) 
 	{
@@ -378,6 +423,10 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 	public int animationCooldown(AnimatedAction anim)
 	{
 		return this.getRNG().nextInt(15)+25;
+	}
+	
+	public void updateMoveAnimation() {
+	    
 	}
 	
     @Override
@@ -432,6 +481,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 	public void onLivingUpdate() {
     	this.tickAnimation();
         if (!this.dead) {
+            super.onLivingUpdate();
             if (this.tamingTick > 0) {
                 --this.tamingTick;
             }
@@ -447,7 +497,6 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
             if (this.feedTimeOut > 0) {
                 --this.feedTimeOut;
             }
-            super.onLivingUpdate();
             this.foodBuffTick=Math.max(-1, --this.foodBuffTick);
             if(this.foodBuffTick==0)
             {
