@@ -9,8 +9,10 @@ import com.flemmli97.runecraftory.client.render.monsters.RenderAnt;
 import com.flemmli97.runecraftory.client.render.monsters.RenderBeetle;
 import com.flemmli97.runecraftory.client.render.monsters.RenderOrc;
 import com.flemmli97.runecraftory.client.render.monsters.RenderWooly;
+import com.flemmli97.runecraftory.client.render.projectile.RenderAmbrosiaWave;
 import com.flemmli97.runecraftory.client.render.projectile.RenderButterfly;
 import com.flemmli97.runecraftory.client.render.projectile.RenderFireball;
+import com.flemmli97.runecraftory.client.render.projectile.RenderSleepBall;
 import com.flemmli97.runecraftory.client.render.projectile.RenderWaterLaser;
 import com.flemmli97.runecraftory.common.entity.EntityGate;
 import com.flemmli97.runecraftory.common.entity.magic.EntityFireBall;
@@ -76,6 +78,9 @@ public class ModEntities
         RenderingRegistry.registerEntityRenderingHandler(EntityAmbrosia.class, RenderAmbrosia::new);
         
         RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, RenderButterfly::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityAmbrosiaSleep.class, RenderSleepBall::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityAmbrosiaWave.class, RenderAmbrosiaWave::new);
+
         RenderingRegistry.registerEntityRenderingHandler(EntityFireBall.class, RenderFireball::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityWaterLaser.class, RenderWaterLaser::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityNPCShopOwner.class, new IRenderFactory<EntityNPCShopOwner>() 

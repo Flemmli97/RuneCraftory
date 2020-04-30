@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 public class RenderWooly<T extends EntityWooly> extends RenderMobBase<T>{
 
 	private ResourceLocation tex = new ResourceLocation(LibReference.MODID, "textures/entity/monsters/wooly.png");
+	
 	public RenderWooly(RenderManager renderManager) {
 		super(renderManager, new ModelWooly());
 	}

@@ -19,9 +19,9 @@ public class EntityAmbrosia extends EntityBossBase
     //Tries kicking target 3 times in a row   
     private static final AnimatedAction kick_1 = new AnimatedAction(36,12,"kick_1");
     //Sends a wave of hp-draining(hard) butterflies at target
-    private static final AnimatedAction butterfly = new AnimatedAction(85,7,"butterfly");
+    private static final AnimatedAction butterfly = new AnimatedAction(55,5,"butterfly");
     //Shockwave kind of attack surrounding ambrosia
-    private static final AnimatedAction wave = new AnimatedAction(125,5,"wave");
+    private static final AnimatedAction wave = new AnimatedAction(75,5,"wave");
     //Sleep balls
     private static final AnimatedAction sleep = new AnimatedAction(12,10,"sleep");
     //2 spinning kick changing direction between them. also scatters earth damage pollen while doing it
@@ -50,11 +50,12 @@ public class EntityAmbrosia extends EntityBossBase
         return (this.getAnimation()==null || !this.getAnimation().getID().equals("wave")) && super.attackEntityFrom(source, amount);
     }
     
-    public void summonButterfly() {
+    public void summonButterfly(double x, double y, double z) {
         for (int i = 0; i < 2; ++i) {
             if (!this.world.isRemote) {
                 EntityButterfly fly = new EntityButterfly(this.world, (EntityLivingBase)this);
-                fly.shoot(this, this.rotationPitch, this.rotationYawHead, 0.0f, 0.3f, 15.0f);
+                fly.setPosition(fly.posX+this.rand.nextFloat()*2-1, fly.posY+2+this.rand.nextFloat()*0.5-0.25, fly.posZ+this.rand.nextFloat()*2-1);
+                fly.shootAtPosition(x, y, z, 0.3f, 10.0f);
                 this.world.spawnEntity(fly);
             }
         }

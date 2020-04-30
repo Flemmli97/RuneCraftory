@@ -4,9 +4,12 @@ import org.lwjgl.input.Keyboard;
 
 import com.flemmli97.runecraftory.client.gui.GuiShop;
 import com.flemmli97.runecraftory.client.render.item.MultiItemColor;
+import com.flemmli97.runecraftory.client.render.particles.ParticleAmbrosiaSleep;
 import com.flemmli97.runecraftory.common.init.ModEntities;
 import com.flemmli97.runecraftory.common.init.ModItems;
+import com.flemmli97.runecraftory.common.lib.LibParticles;
 import com.flemmli97.runecraftory.common.lib.LibReference;
+import com.flemmli97.tenshilib.client.particles.ParticleRegistries;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
@@ -30,6 +33,7 @@ public class ClientProxy extends CommonProxy
     public void preInit(FMLPreInitializationEvent e) {
         super.preInit(e);
         ModEntities.registerRenders();
+        registerParticles();
     }
     
     @Override
@@ -46,6 +50,11 @@ public class ClientProxy extends CommonProxy
     public void postInit(FMLPostInitializationEvent e) {
         super.postInit(e);
     }
+    
+    private static final void registerParticles()
+    {
+        ParticleRegistries.registerParticle(LibParticles.particleFlame, new ParticleAmbrosiaSleep.Factory());
+    }    
     
     @Override
     public IThreadListener getListener(MessageContext ctx) {

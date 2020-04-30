@@ -1,57 +1,50 @@
 package com.flemmli97.runecraftory.common.entity.npc;
 
 import java.util.Map;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.flemmli97.runecraftory.common.entity.EntityBossBase;
 import com.flemmli97.runecraftory.common.lib.LibConstants;
+import com.flemmli97.runecraftory.common.world.village.NPCVillage;
+import com.flemmli97.runecraftory.common.world.village.NPCVillageHandler;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.INpc;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.effect.EntityLightningBolt;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.village.MerchantRecipe;
-import net.minecraft.village.MerchantRecipeList;
-import net.minecraft.world.DifficultyInstance;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityNPCBase extends EntityVillager implements IEntityAdditionalSpawnData
+public class EntityNPCBase extends EntityAgeable implements IEntityAdditionalSpawnData, INpc
 {
     private Map<IAttribute, Double> baseValues;
-    private Map<String, Integer> playerHearts;
+    private Map<UUID, Integer> playerHearts;
     
     private static final DataParameter<Integer> level = EntityDataManager.createKey(EntityNPCBase.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> levelXP = EntityDataManager.createKey(EntityNPCBase.class, DataSerializers.VARINT);
     
-    private String fatherUUID;
-    private String motherUUID;
-    private String[] childUUIDs;
+    private UUID fatherUUID;
+    private UUID motherUUID;
+    private UUID[] childUUIDs;
+    
+    private UUID village;
+    private int villageCheck;
     
     public EntityNPCBase(World worldIn) {
         super(worldIn);
@@ -77,6 +70,22 @@ public class EntityNPCBase extends EntityVillager implements IEntityAdditionalSp
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         return true;
     }
+    
+    @Override
+	protected void updateAITasks()
+    {
+    	if(this.villageCheck<0) {
+    		this.villageCheck=100+this.rand.nextInt(50);
+    		if(this.village==null) {
+    			NPCVillage vill = NPCVillageHandler.get(this.world).nearestFrom(this.getPosition(), 64);
+    			if(vill!=null)
+    				this.village=vill.getUUID();
+    		}
+    		else if(NPCVillageHandler.get(this.world).getFromUUID(this.village)==null){
+    			this.village=null;
+    		}
+    	}
+    }
 
     @Override
     public void onDeath(DamageSource cause) {
@@ -90,109 +99,41 @@ public class EntityNPCBase extends EntityVillager implements IEntityAdditionalSp
     public void readSpawnData(ByteBuf additionalData) {
     }
 
-    //=====Vanilla villager disabling
-    
-    @Override
-    protected void onGrowingAdult() {
-    }
-
-    @Override
-    public ITextComponent getDisplayName() {
-        TextComponentString textcomponentstring = new TextComponentString(ScorePlayerTeam.formatPlayerName(this.getTeam(), this.getName()));
-        textcomponentstring.getStyle().setHoverEvent(this.getHoverEvent());
-        textcomponentstring.getStyle().setInsertion(this.getCachedUniqueIdString());
-        return (ITextComponent)textcomponentstring;
-    }
-
     @Override
     public void handleStatusUpdate(byte id) {
-        super.handleStatusUpdate(id);
+    	if (id == 12)
+        {
+            this.spawnParticles(EnumParticleTypes.HEART);
+        }
+        else if (id == 13)
+        {
+            this.spawnParticles(EnumParticleTypes.VILLAGER_ANGRY);
+        }
+        else if (id == 14)
+        {
+            this.spawnParticles(EnumParticleTypes.VILLAGER_HAPPY);
+        }
+        else
+        {
+            super.handleStatusUpdate(id);
+        }
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private void spawnParticles(EnumParticleTypes particleType)
+    {
+        for (int i = 0; i < 5; ++i)
+        {
+            double d0 = this.rand.nextGaussian() * 0.02D;
+            double d1 = this.rand.nextGaussian() * 0.02D;
+            double d2 = this.rand.nextGaussian() * 0.02D;
+            this.world.spawnParticle(particleType, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 1.0D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+        }
     }
 
     @Override
-    public IEntityLivingData finalizeMobSpawn(DifficultyInstance diff, @Nullable IEntityLivingData data, boolean setprofession) {
-        return data;
-    }
-
-    @Override
-    public boolean replaceItemInInventory(int inventorySlot, ItemStack itemStackIn) {
-        return false;
-    }
-
-    @Override
-    public boolean isFarmItemInInventory() {
-        return false;
-    }
-
-    @Override
-    public void onStruckByLightning(EntityLightningBolt lightningBolt) {
-    }
-
-    @Override
-    public EntityVillager createChild(EntityAgeable ageable) {
+    public EntityNPCBase createChild(EntityAgeable ageable) {
         return null;
-    }
-
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return this.isTrading() ? SoundEvents.ENTITY_VILLAGER_TRADING : SoundEvents.ENTITY_VILLAGER_AMBIENT;
-    }
-
-    @Override
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return SoundEvents.ENTITY_VILLAGER_HURT;
-    }
-
-    @Override
-    protected SoundEvent getDeathSound() {
-        return SoundEvents.ENTITY_VILLAGER_DEATH;
-    }
-
-    @Override
-    @Nullable
-    protected ResourceLocation getLootTable() {
-        return LootTableList.ENTITIES_VILLAGER;
-    }
-
-    @Override
-    public void setProfession(int professionId) {
-    }
-
-    @Override
-    public int getProfession() {
-        return 0;
-    }
-
-    @Override
-    public void setProfession(VillagerRegistry.VillagerProfession prof) {
-    }
-
-    @Override
-    public VillagerRegistry.VillagerProfession getProfessionForge() {
-        return VillagerRegistry.FARMER;
-    }
-
-    @Override
-    public void notifyDataManagerChange(DataParameter<?> key) {
-        super.notifyDataManagerChange(key);
-    }
-
-    @Override
-    public boolean isMating() {
-        return false;
-    }
-
-    @Override
-    public void setMating(boolean mating) {
-    }
-
-    @Override
-    public void setPlaying(boolean playing) {
-    }
-
-    @Override
-    public boolean isPlaying() {
-        return false;
     }
 
     @Override
@@ -205,56 +146,5 @@ public class EntityNPCBase extends EntityVillager implements IEntityAdditionalSp
                 this.world.setEntityState(this, (byte)13);
             }
         }
-    }
-
-    @Override
-    public void setCustomer(@Nullable EntityPlayer player) {
-    }
-
-    @Override
-    @Nullable
-    public EntityPlayer getCustomer() {
-        return null;
-    }
-
-    @Override
-    public boolean isTrading() {
-        return false;
-    }
-
-    @Override
-    public boolean getIsWillingToMate(boolean updateFirst) {
-        return false;
-    }
-
-    @Override
-    public void setIsWillingToMate(boolean isWillingToMate) {
-    }
-
-    @Override
-    public void useRecipe(MerchantRecipe recipe) {
-    }
-
-    @Override
-    public void verifySellingItem(ItemStack stack) {
-        if (!this.world.isRemote && this.livingSoundTime > -this.getTalkInterval() + 20) {
-            this.livingSoundTime = -this.getTalkInterval();
-            this.playSound(stack.isEmpty() ? SoundEvents.ENTITY_VILLAGER_NO : SoundEvents.ENTITY_VILLAGER_YES, this.getSoundVolume(), this.getSoundPitch());
-        }
-    }
-
-    @Override
-    @Nullable
-    public MerchantRecipeList getRecipes(EntityPlayer player) {
-        return null;
-    }
-
-    @Override
-    public boolean isChild() {
-        return this.getGrowingAge() < 0;
-    }
-
-    @Override
-    public void setScaleForAge(boolean child) {
     }
 }

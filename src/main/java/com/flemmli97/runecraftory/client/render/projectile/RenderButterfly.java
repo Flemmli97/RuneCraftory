@@ -50,7 +50,10 @@ public class RenderButterfly<T extends EntityButterfly> extends Render<T>
         GlStateManager.rotate((-entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks)+180, 0.0F, 0.0F, 0.0F);
         GlStateManager.enableRescaleNormal();
 
-        this.mainModel.render(entity, 0, 0, 0, 0, 0, 0.0325F);
+        //Values not used
+        float age = entity.ticksExisted + partialTicks;
+        this.mainModel.setRotationAngles(0, 0, age, 0, 0, 0, entity);
+        this.mainModel.render(entity, 0, 0, age, 0, 0, 0.0325F);
         if (this.renderOutlines)
         {
             GlStateManager.enableColorMaterial();

@@ -29,6 +29,9 @@ public class EntityWooly extends EntityMobBase implements IShearable {
     private static final DataParameter<Boolean> SPAWNSHEARED = EntityDataManager.createKey(EntityWooly.class, DataSerializers.BOOLEAN);
 
     private int shearTick;
+    
+    public static final AnimatedAction walk = new AnimatedAction(28,0, "walk");
+    public static final AnimatedAction[] anims = new AnimatedAction[] {AnimatedAction.vanillaAttack, walk};
 
     public EntityAIMeleeBase<EntityWooly> attack = new EntityAIMeleeBase<EntityWooly>(this, 1);
 
@@ -43,6 +46,7 @@ public class EntityWooly extends EntityMobBase implements IShearable {
         super.entityInit();
         this.dataManager.register(SPAWNSHEARED, this.getRNG().nextFloat()<0.1);
         this.dataManager.register(SHEARED, this.dataManager.get(SPAWNSHEARED));
+
     }
 
     @Override
@@ -89,7 +93,7 @@ public class EntityWooly extends EntityMobBase implements IShearable {
 
     @Override
     public AnimatedAction[] getAnimations() {
-        return AnimatedAction.vanillaAttackOnly;
+        return anims;
     }
 
     @Override

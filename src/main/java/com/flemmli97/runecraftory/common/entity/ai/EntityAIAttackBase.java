@@ -39,7 +39,13 @@ public abstract class EntityAIAttackBase<T extends EntityMobBase> extends Entity
 
     @Override
     public void resetTask() {
+        this.next=null;
+        this.target=null;
+        this.iddleTime=0;
+        this.movementDone=false;
         this.attacker.getNavigator().clearPath();
+        this.attacker.setMoveForward(0);
+        this.attacker.setMoveStrafing(0);
     }
 
     public abstract AnimatedAction randomAttack();
@@ -145,12 +151,12 @@ public abstract class EntityAIAttackBase<T extends EntityMobBase> extends Entity
         }
     }
     
-    protected void circleAroundFacing(double posX, double posZ, float radius, boolean clockWise, float speed) {
-        double x = this.attacker.posX - posX;
-        double z = this.attacker.posZ - posZ;
+    protected void circleAroundTargetFacing(float radius, boolean clockWise, float speed) {
+        this.attacker.faceEntity(this.target, 30, 30);
+        double x = this.attacker.posX - this.target.posX;
+        double z = this.attacker.posZ - this.target.posZ;
         double r = x * x + z * z;
-        this.attacker.getMoveHelper().strafe(r < (radius - 1.5) * (radius - 1.5) ? -0.5f : r > (radius + 1.5) * (radius + 1.5)?0.5f:0, clockWise ? 0.5f : -0.5f);
-        this.attacker.faceEntity(target, 30.0f, 30.0f);
+        this.attacker.getMoveHelper().strafe(r < (radius - 1.5) * (radius - 1.5) ? -0.5f : r > (radius + 1.5) * (radius + 1.5)?0.5f:0, clockWise ? speed : -speed);
     }
 
     protected void teleportAround(double posX, double posY, double posZ, int range) {

@@ -41,7 +41,7 @@ public class EntityAIRangedBase<T extends EntityMobBase & IRangedMob> extends En
             else if(--this.rangedMove>0) {
                 if(this.rangedMove==39)
                     this.clockWise=this.attacker.getRNG().nextBoolean();
-                this.circleAroundFacing(this.target.posX, this.target.posZ, this.rangedReach-2, this.clockWise, 1);
+                this.circleAroundTargetFacing(this.rangedReach-2, this.clockWise, 1);
             }
             else {
                 this.movementDone=true;
@@ -70,7 +70,7 @@ public class EntityAIRangedBase<T extends EntityMobBase & IRangedMob> extends En
         }
         switch(this.iddleMoveFlag) {
             case 0:
-                this.circleAroundFacing(this.target.posX, this.target.posZ, this.rangedReach-2, this.clockWise, 1);
+                this.circleAroundTargetFacing(this.rangedReach-2, this.clockWise, 1);
                 break;
             case 1:
                 this.moveRandomlyAround(36);

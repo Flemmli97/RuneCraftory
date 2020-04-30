@@ -12,9 +12,9 @@ import net.minecraft.util.math.BlockPos;
 
 public class EntityAIAmbrosia extends EntityAIAttackBase<EntityAmbrosia> {
 
-    private boolean moveFlag;
     private int moveDelay;
-
+    private boolean moveFlag,iddleFlag,clockwise;
+    private double[] butterflyTarget;
     public EntityAIAmbrosia(EntityAmbrosia entity) {
         super(entity);
     }
@@ -28,9 +28,21 @@ public class EntityAIAmbrosia extends EntityAIAttackBase<EntityAmbrosia> {
         }
         return this.randomAttack();
     }
+    
+    public int coolDown(AnimatedAction anim) {
+        return 99999;
+    }
 
     @Override
+    public void resetTask() {
+        super.resetTask();
+        this.moveDelay=0;
+        this.moveFlag=false;
+    }
+    
+    @Override
     public void handlePreAttack() {
+        this.iddleFlag = false;
         switch (this.next.getID()) {
             case "butterfly":
                 if (!this.moveFlag) {
@@ -40,8 +52,11 @@ public class EntityAIAmbrosia extends EntityAIAttackBase<EntityAmbrosia> {
                     }
                     this.moveDelay = 44;
                     this.moveFlag = true;
-                } else if (this.moveDelay-- <= 0 && this.attacker.getNavigator().noPath())
+                } else if (this.moveDelay-- <= 0 && this.attacker.getNavigator().noPath()) {
+                    this.butterflyTarget=new double[] {this.target.posX, this.target.posY, this.target.posZ};
                     this.movementDone = true;
+                    this.moveFlag=false;
+                }
                 break;
             case "kick_1":
                 if (this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.0) && this.moveDelay == 0) {
@@ -76,7 +91,12 @@ public class EntityAIAmbrosia extends EntityAIAttackBase<EntityAmbrosia> {
             case "butterfly":
                 this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
                 if (anim.getTick() > anim.getAttackTime()) {
-                    this.attacker.summonButterfly();
+                    float yDec = -1.5f;
+                    if(this.distanceToTargetSq<9)
+                        yDec=1;
+                    else if(this.distanceToTargetSq<25)
+                        yDec=0;
+                    this.attacker.summonButterfly(this.butterflyTarget[0], this.butterflyTarget[1]-yDec, this.butterflyTarget[2]);
                 }
                 break;
             case "kick_1":
@@ -123,7 +143,11 @@ public class EntityAIAmbrosia extends EntityAIAttackBase<EntityAmbrosia> {
 
     @Override
     public void handleIddle() {
-        this.moveRandomlyAround();
+        if(!this.iddleFlag) {
+            this.clockwise=this.attacker.getRNG().nextBoolean();
+            this.iddleFlag=true;
+        }
+        this.circleAroundTargetFacing(7, this.clockwise, 1);
     }
 
 }

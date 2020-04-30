@@ -8,14 +8,15 @@ import javax.annotation.Nullable;
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
 import com.flemmli97.runecraftory.common.entity.monster.boss.EntityAmbrosia;
+import com.flemmli97.runecraftory.common.lib.LibParticles;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
+import com.flemmli97.tenshilib.common.world.Particles;
 import com.google.common.base.Predicate;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -76,19 +77,23 @@ public class EntityAmbrosiaSleep extends Entity
     @Override
     public void onUpdate() {
         ++this.livingTick;
+        if(this.world.isRemote) {
+            for(int i = 0; i < 4; i++) {
+                Particles.spawnParticle(LibParticles.particleFlame, this.world, this.posX, this.posY+0.35, this.posZ, rand.nextGaussian() * 0.008D, Math.abs(rand.nextGaussian() * 0.025), rand.nextGaussian() * 0.009D);
+            }
+        }
         if (this.livingTick > 90) {
             this.setDead();
         }
         if (!this.world.isRemote) {
             List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(0.3), this.pred);
             for (EntityLivingBase e : list) {
-                if (!e.equals((Object)this.owner)) {
-                    if (this.owner != null) {
-                        RFCalculations.attackEntity((Entity)e, CustomDamage.attack((EntityLivingBase)this.owner, EnumElement.EARTH, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 20), RFCalculations.getAttributeValue((EntityLivingBase)this.owner, (IAttribute)ItemStatAttributes.RFMAGICATT, null, null) / 3.0f);
+                if (!e.equals(this.owner)) {
+                    if (RFCalculations.attackEntity(e, CustomDamage.attack(this.owner, EnumElement.EARTH, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 20), RFCalculations.getAttributeValue(this.owner, ItemStatAttributes.RFMAGICATT, null, null) / 3.0f)){                  
+                        e.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:blindness"), 80, 1, true, false));
+                        e.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("runecraftory:sleep"), 80, 1, true, false));
+                        this.setDead();
                     }
-                    e.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:blindness"), 80, 1, true, false));
-                    e.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("runecraftory:sleep"), 80, 1, true, false));
-                    this.setDead();
                 }
             }
         }
