@@ -6789,7 +6789,7 @@
 		"element": "NONE",
 		"itemStats": {}
 	},
-	"runecraftory:ruch_attack": {
+	"runecraftory:rush_attack": {
 		"buyPrice": 1,
 		"sellPrice": 1,
 		"upgradeDifficulty": -1,

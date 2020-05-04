@@ -1,24 +1,20 @@
 package com.flemmli97.runecraftory.api.mappings;
 
-import java.util.Map;
-
 import com.flemmli97.runecraftory.api.entities.EntityProperties;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
-import com.flemmli97.runecraftory.common.entity.monster.EntityAnt;
-import com.flemmli97.runecraftory.common.entity.monster.EntityBeetle;
-import com.flemmli97.runecraftory.common.entity.monster.EntityOrc;
-import com.flemmli97.runecraftory.common.entity.monster.EntityWooly;
+import com.flemmli97.runecraftory.common.entity.monster.*;
 import com.flemmli97.runecraftory.common.entity.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.entity.monster.boss.EntityThunderbolt;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.utils.MapWrapper;
 import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.google.common.collect.Maps;
-
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.init.Blocks;
+
+import java.util.Map;
 
 public class EntityStatMap
 {
@@ -102,6 +98,22 @@ public class EntityStatMap
         		new SimpleItemStackWrapper[] { new SimpleItemStackWrapper(ModItems.clothCheap) }, 
         		new MapWrapper<SimpleItemStackWrapper, Integer>(),
         		true, false));
+
+		entityStatsMap.put(EntityBigMuck.class, new EntityProperties(
+				new MapWrapper<IAttribute, Double>()
+						.mapWrapperAdd(SharedMonsterAttributes.MAX_HEALTH, 145.0)
+						.mapWrapperAdd(ItemStatAttributes.RFATTACK, 15.5)
+						.mapWrapperAdd(ItemStatAttributes.RFDEFENCE, 10.2)
+						.mapWrapperAdd(ItemStatAttributes.RFMAGICATT, 11.0)
+						.mapWrapperAdd(ItemStatAttributes.RFMAGICDEF, 10.8),
+				new MapWrapper<SimpleItemStackWrapper, Float>()
+						.mapWrapperAdd(new SimpleItemStackWrapper(ModItems.clothCheap), 0.5f)
+						.mapWrapperAdd(new SimpleItemStackWrapper(ModItems.arrowHead), 0.5f)
+						.mapWrapperAdd(new SimpleItemStackWrapper(ModItems.cheapBracelet), 0.3f),
+				5, 1, 0.8f,
+				new SimpleItemStackWrapper[] { new SimpleItemStackWrapper(ModItems.clothCheap) },
+				new MapWrapper<SimpleItemStackWrapper, Integer>(),
+				true, false));
         
         entityStatsMap.put(EntityAmbrosia.class, new EntityProperties(
         		new MapWrapper<IAttribute, Double>()

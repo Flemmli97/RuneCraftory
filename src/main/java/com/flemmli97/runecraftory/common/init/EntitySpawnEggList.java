@@ -1,19 +1,15 @@
 package com.flemmli97.runecraftory.common.init;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-import com.flemmli97.runecraftory.common.entity.monster.EntityAnt;
-import com.flemmli97.runecraftory.common.entity.monster.EntityBeetle;
-import com.flemmli97.runecraftory.common.entity.monster.EntityOrc;
-import com.flemmli97.runecraftory.common.entity.monster.EntityWooly;
+import com.flemmli97.runecraftory.common.entity.monster.*;
 import com.flemmli97.runecraftory.common.entity.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.entity.monster.boss.EntityThunderbolt;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityList.EntityEggInfo;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class EntitySpawnEggList
 {
@@ -32,5 +28,6 @@ public class EntitySpawnEggList
         addMapping(EntityBeetle.class, 0x000000, 0x800000);
         addMapping(EntityAmbrosia.class, 0x00ff00, 0xe600e6);
         addMapping(EntityThunderbolt.class, 0x010e23, 0x3c3693);
+        addMapping(EntityBigMuck.class, 0x010e23, 0x3c3693);
     }
 }

@@ -2,10 +2,9 @@ package com.flemmli97.runecraftory.client.models.monsters;
 
 import com.flemmli97.runecraftory.common.entity.monster.EntityWooly;
 import com.flemmli97.runecraftory.common.lib.LibReference;
-import com.flemmli97.tenshilib.client.model.Animation;
+import com.flemmli97.tenshilib.client.model.TabulaAnimation;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.javahelper.MathUtils;
 
 import net.minecraft.client.Minecraft;
@@ -45,7 +44,7 @@ public class ModelWooly extends ModelBase implements IResetModel{
     public ModelRendererPlus feetRight;
 
     //20
-    public Animation walk;
+    public TabulaAnimation walk;
     
     public ModelWooly() {
         this.textureWidth = 64;
@@ -167,7 +166,7 @@ public class ModelWooly extends ModelBase implements IResetModel{
         this.bodyUp.addChild(this.bodyUpLeft);
         this.feetLeftBase.addChild(this.feetLeft);
         
-        this.walk = new Animation(this, new ResourceLocation(LibReference.MODID, "models/entity/animation/wooly_walk.json"), false);
+        this.walk = new TabulaAnimation(this, new ResourceLocation(LibReference.MODID, "models/entity/animation/wooly_walk.json"), false);
     }
 
     @Override

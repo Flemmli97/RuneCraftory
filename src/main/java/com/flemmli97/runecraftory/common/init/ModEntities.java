@@ -4,11 +4,7 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.client.models.ModelNPCBase;
 import com.flemmli97.runecraftory.client.render.RenderGate;
 import com.flemmli97.runecraftory.client.render.RenderNPCBase;
-import com.flemmli97.runecraftory.client.render.monsters.RenderAmbrosia;
-import com.flemmli97.runecraftory.client.render.monsters.RenderAnt;
-import com.flemmli97.runecraftory.client.render.monsters.RenderBeetle;
-import com.flemmli97.runecraftory.client.render.monsters.RenderOrc;
-import com.flemmli97.runecraftory.client.render.monsters.RenderWooly;
+import com.flemmli97.runecraftory.client.render.monsters.*;
 import com.flemmli97.runecraftory.client.render.projectile.RenderAmbrosiaWave;
 import com.flemmli97.runecraftory.client.render.projectile.RenderButterfly;
 import com.flemmli97.runecraftory.client.render.projectile.RenderFireball;
@@ -17,10 +13,7 @@ import com.flemmli97.runecraftory.client.render.projectile.RenderWaterLaser;
 import com.flemmli97.runecraftory.common.entity.EntityGate;
 import com.flemmli97.runecraftory.common.entity.magic.EntityFireBall;
 import com.flemmli97.runecraftory.common.entity.magic.EntityWaterLaser;
-import com.flemmli97.runecraftory.common.entity.monster.EntityAnt;
-import com.flemmli97.runecraftory.common.entity.monster.EntityBeetle;
-import com.flemmli97.runecraftory.common.entity.monster.EntityOrc;
-import com.flemmli97.runecraftory.common.entity.monster.EntityWooly;
+import com.flemmli97.runecraftory.common.entity.monster.*;
 import com.flemmli97.runecraftory.common.entity.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.entity.monster.boss.EntityThunderbolt;
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityAmbrosiaSleep;
@@ -49,6 +42,8 @@ public class ModEntities
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "orc"), EntityOrc.class, "orc", id++, RuneCraftory.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ant"), EntityAnt.class, "ant", id++, RuneCraftory.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "beetle"), EntityBeetle.class, "beetle", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "big_muck"), EntityBigMuck.class, "big_muck", id++, RuneCraftory.instance, 64, 3, true);
+
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ambrosia"), EntityAmbrosia.class, "ambrosia", id++, RuneCraftory.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "thunderbolt"), EntityThunderbolt.class, "thunderbolt", id++, RuneCraftory.instance, 64, 3, true);
 
@@ -75,6 +70,8 @@ public class ModEntities
         RenderingRegistry.registerEntityRenderingHandler(EntityOrc.class, RenderOrc::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityAnt.class, RenderAnt::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityBeetle.class, RenderBeetle::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityBigMuck.class, RenderBigMuck::new);
+
         RenderingRegistry.registerEntityRenderingHandler(EntityAmbrosia.class, RenderAmbrosia::new);
         
         RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, RenderButterfly::new);
