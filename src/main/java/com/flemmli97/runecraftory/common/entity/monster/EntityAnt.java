@@ -9,6 +9,9 @@ import net.minecraft.world.World;
 public class EntityAnt extends EntityMobBase {
 
     public EntityAIMeleeBase<EntityAnt> attack = new EntityAIMeleeBase<EntityAnt>(this, 1.0f);
+    private static final AnimatedAction melee = new AnimatedAction(25,20, "attack");
+
+    private static final AnimatedAction[] anims = new AnimatedAction[] {melee};
 
     public EntityAnt(World world) {
         super(world);
@@ -23,11 +26,11 @@ public class EntityAnt extends EntityMobBase {
 
     @Override
     public AnimatedAction[] getAnimations() {
-        return AnimatedAction.vanillaAttackOnly;
+        return anims;
     }
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type==AnimationType.MELEE?anim.getID().equals("vanilla"):true;
+        return type==AnimationType.MELEE?anim.getID().equals("attack"):true;
     }
 }

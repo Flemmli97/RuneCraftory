@@ -1,174 +1,208 @@
-package com.flemmli97.runecraftory.client.models.monsters;
+package com.flemmli97.runecraftory.client.models.monsters;// Made with Blockbench 3.5.2
+// Exported for Minecraft version 1.12
+// Paste this class into your mod and generate all required imports
 
-import net.minecraft.client.model.ModelRenderer;
+
+import com.flemmli97.runecraftory.common.entity.monster.EntityAnt;
+import com.flemmli97.runecraftory.common.lib.LibReference;
+import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
+import com.flemmli97.tenshilib.client.model.IResetModel;
+import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBox;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-/**
- * ModelAnt 
- * Created using Tabula 7.0.0
- */
-public class ModelAnt extends ModelImproved {
-
-	public ModelRenderer bodyFront;
-    public ModelRenderer bodyBack;
-    public ModelRenderer head;
-    public ModelRenderer leg1Up;
-    public ModelRenderer leg2Up;
-    public ModelRenderer leg3Up;
-    public ModelRenderer leg4Up;
-    public ModelRenderer leg5Up;
-    public ModelRenderer leg6Up;
-    public ModelRenderer bodyBackTop;
-    public ModelRenderer feeler1;
-    public ModelRenderer feeler2;
-    public ModelRenderer leg1Down;
-    public ModelRenderer leg2Down;
-    public ModelRenderer leg3Down;
-    public ModelRenderer leg4Down;
-    public ModelRenderer leg5Down;
-    public ModelRenderer leg6Down;
+public class ModelAnt extends ModelBase implements IResetModel {
+    public ModelRendererPlus body;
+    public ModelRendererPlus bodyBack;
+    public ModelRendererPlus bodyBackTop2;
+    public ModelRendererPlus head;
+    public ModelRendererPlus headFront;
+    public ModelRendererPlus feelerLeft;
+    public ModelRendererPlus feelerRight;
+    public ModelRendererPlus jawLeft;
+    public ModelRendererPlus jawRight;
+    public ModelRendererPlus leg1Up1;
+    public ModelRendererPlus leg1Down1;
+    public ModelRendererPlus leg1Up2;
+    public ModelRendererPlus leg1Down2;
+    public ModelRendererPlus leg1Up3;
+    public ModelRendererPlus leg1Down3;
+    public ModelRendererPlus leg1Up4;
+    public ModelRendererPlus leg1Down4;
+    public ModelRendererPlus leg1Up5;
+    public ModelRendererPlus leg1Down5;
+    public ModelRendererPlus leg1Up6;
+    public ModelRendererPlus leg1Down6;
+    public BlockBenchAnimations animations;
 
     public ModelAnt() {
-        this.textureWidth = 64;
-        this.textureHeight = 64;
-        this.leg6Down = new ModelRenderer(this, 0, 0);
-        this.leg6Down.setRotationPoint(-39.0F, 0.0F, 0.0F);
-        this.leg6Down.addBox(-30.0F, -4.0F, -4.0F, 30, 8, 8, 0.0F);
-        this.setRotateAngle(leg6Down, 0.0F, -0.2792526803190927F, -0.3141592653589793F);
-        this.bodyFront = new ModelRenderer(this, 0, 0);
-        this.bodyFront.setRotationPoint(0.0F, 205.0F, 0.0F);
-        this.bodyFront.addBox(-18.0F, -8.0F, -32.0F, 36, 18, 32, 0.0F);
-        this.leg3Up = new ModelRenderer(this, 0, 0);
-        this.leg3Up.setRotationPoint(17.0F, 0.0F, -25.0F);
-        this.leg3Up.addBox(0.0F, -4.0F, -4.0F, 40, 8, 8, 0.0F);
-        this.setRotateAngle(leg3Up, 0.0F, 0.13962634015954636F, 0.3490658503988659F);
-        this.leg6Up = new ModelRenderer(this, 0, 0);
-        this.leg6Up.setRotationPoint(-17.0F, 0.0F, -25.0F);
-        this.leg6Up.addBox(-40.0F, -4.0F, -4.0F, 40, 8, 8, 0.0F);
-        this.setRotateAngle(leg6Up, 0.0F, -0.13962634015954636F, -0.3490658503988659F);
-        this.leg4Down = new ModelRenderer(this, 0, 0);
-        this.leg4Down.setRotationPoint(-39.0F, 0.0F, 0.0F);
-        this.leg4Down.addBox(-30.0F, -4.0F, -4.0F, 30, 8, 8, 0.0F);
-        this.setRotateAngle(leg4Down, 0.0F, 0.27314402793711257F, -0.31869712141416456F);
-        this.leg2Up = new ModelRenderer(this, 0, 0);
-        this.leg2Up.setRotationPoint(17.0F, 0.0F, -15.0F);
-        this.leg2Up.addBox(0.0F, -4.0F, -4.0F, 40, 8, 8, 0.0F);
-        this.setRotateAngle(leg2Up, 0.0F, -0.08726646259971647F, 0.3490658503988659F);
-        this.bodyBackTop = new ModelRenderer(this, 0, 0);
-        this.bodyBackTop.setRotationPoint(0.0F, -10.0F, 30.0F);
-        this.bodyBackTop.addBox(-15.0F, -10.0F, -25.0F, 30, 10, 50, 0.0F);
-        this.leg1Up = new ModelRenderer(this, 0, 0);
-        this.leg1Up.setRotationPoint(17.0F, 0.0F, -5.0F);
-        this.leg1Up.addBox(0.0F, -4.0F, -4.0F, 40, 8, 8, 0.0F);
-        this.setRotateAngle(leg1Up, 0.0F, -0.3490658503988659F, 0.3490658503988659F);
-        this.leg2Down = new ModelRenderer(this, 0, 0);
-        this.leg2Down.setRotationPoint(39.0F, 0.0F, 0.0F);
-        this.leg2Down.addBox(0.0F, -4.0F, -4.0F, 30, 8, 8, 0.0F);
-        this.setRotateAngle(leg2Down, 0.0F, 0.3141592653589793F, 0.2617993877991494F);
-        this.feeler2 = new ModelRenderer(this, 0, 0);
-        this.feeler2.setRotationPoint(-11.0F, -15.0F, -31.0F);
-        this.feeler2.addBox(-4.0F, -16.0F, -4.0F, 4, 16, 4, 0.0F);
-        this.feeler1 = new ModelRenderer(this, 0, 0);
-        this.feeler1.setRotationPoint(11.0F, -15.0F, -31.0F);
-        this.feeler1.addBox(-2.0F, -16.0F, -2.0F, 4, 16, 4, 0.0F);
-        this.head = new ModelRenderer(this, 0, 0);
-        this.head.setRotationPoint(0.0F, 0.0F, -32.0F);
-        this.head.addBox(-20.0F, -15.0F, -40.0F, 40, 30, 40, 0.0F);
-        this.leg3Down = new ModelRenderer(this, 0, 0);
-        this.leg3Down.setRotationPoint(39.0F, 0.0F, 0.0F);
-        this.leg3Down.addBox(0.0F, -4.0F, -4.0F, 30, 8, 8, 0.0F);
-        this.setRotateAngle(leg3Down, 0.0F, 0.2792526803190927F, 0.3141592653589793F);
-        this.leg5Down = new ModelRenderer(this, 0, 0);
-        this.leg5Down.setRotationPoint(-39.0F, 0.0F, 0.0F);
-        this.leg5Down.addBox(-30.0F, -4.0F, -4.0F, 30, 8, 8, 0.0F);
-        this.setRotateAngle(leg5Down, 0.0F, -0.3141592653589793F, -0.2792526803190927F);
-        this.leg4Up = new ModelRenderer(this, 0, 0);
-        this.leg4Up.setRotationPoint(-17.0F, 0.0F, -5.0F);
-        this.leg4Up.addBox(-40.0F, -4.0F, -4.0F, 40, 8, 8, 0.0F);
-        this.setRotateAngle(leg4Up, 0.0F, 0.3490658503988659F, -0.3490658503988659F);
-        this.leg5Up = new ModelRenderer(this, 0, 0);
-        this.leg5Up.setRotationPoint(-17.0F, 0.0F, -15.0F);
-        this.leg5Up.addBox(-40.0F, -4.0F, -4.0F, 40, 8, 8, 0.0F);
-        this.setRotateAngle(leg5Up, 0.0F, 0.08726646259971647F, -0.3490658503988659F);
-        this.leg1Down = new ModelRenderer(this, 0, 0);
-        this.leg1Down.setRotationPoint(39.0F, 0.0F, 0.0F);
-        this.leg1Down.addBox(0.0F, -4.0F, -4.0F, 30, 8, 8, 0.0F);
-        this.setRotateAngle(leg1Down, 0.0F, -0.27314402793711257F, 0.31869712141416456F);
-        this.bodyBack = new ModelRenderer(this, 0, 0);
-        this.bodyBack.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.bodyBack.addBox(-25.0F, -10.0F, 0.0F, 50, 20, 60, 0.0F);
-        this.leg6Up.addChild(this.leg6Down);
-        this.bodyFront.addChild(this.leg3Up);
-        this.bodyFront.addChild(this.leg6Up);
-        this.leg4Up.addChild(this.leg4Down);
-        this.bodyFront.addChild(this.leg2Up);
-        this.bodyBack.addChild(this.bodyBackTop);
-        this.bodyFront.addChild(this.leg1Up);
-        this.leg2Up.addChild(this.leg2Down);
-        this.head.addChild(this.feeler2);
-        this.head.addChild(this.feeler1);
-        this.bodyFront.addChild(this.head);
-        this.leg3Up.addChild(this.leg3Down);
-        this.leg5Up.addChild(this.leg5Down);
-        this.bodyFront.addChild(this.leg4Up);
-        this.bodyFront.addChild(this.leg5Up);
-        this.leg1Up.addChild(this.leg1Down);
-        this.bodyFront.addChild(this.bodyBack);
+        textureWidth = 64;
+        textureHeight = 64;
+
+        body = new ModelRendererPlus(this);
+        body.setDefaultRotPoint(0.0F, 20.0F, -4.0F);
+        body.cubeList.add(new ModelBox(body, 0, 23, -4.0F, -2.0F, -4.0F, 8, 4, 8, 0.0F, true));
+
+        bodyBack = new ModelRendererPlus(this);
+        bodyBack.setDefaultRotPoint(0.0F, 0.0F, 4.0F);
+        body.addChild(bodyBack);
+        bodyBack.cubeList.add(new ModelBox(bodyBack, 0, 35, -5.0F, -2.5F, 0.0F, 10, 5, 13, 0.0F, true));
+
+        bodyBackTop2 = new ModelRendererPlus(this);
+        bodyBackTop2.setDefaultRotPoint(0.0F, -2.5F, 7.0F);
+        bodyBack.addChild(bodyBackTop2);
+        bodyBackTop2.cubeList.add(new ModelBox(bodyBackTop2, 28, 5, -3.5F, -1.0F, -6.0F, 7, 1, 11, 0.0F, true));
+
+        head = new ModelRendererPlus(this);
+        head.setDefaultRotPoint(0.0F, 0.0F, -4.0F);
+        body.addChild(head);
+        head.cubeList.add(new ModelBox(head, 0, 0, -5.0F, -3.0F, -3.0F, 10, 6, 3, 0.0F, true));
+
+        headFront = new ModelRendererPlus(this);
+        headFront.setDefaultRotPoint(0.0F, 0.0F, 0.0F);
+        head.addChild(headFront);
+        headFront.cubeList.add(new ModelBox(headFront, 0, 9, -4.5F, -2.5F, -8.0F, 9, 5, 5, 0.0F, true));
+
+        feelerLeft = new ModelRendererPlus(this);
+        feelerLeft.setDefaultRotPoint(3.5F, -2.5F, -7.5F);
+        headFront.addChild(feelerLeft);
+        setRotationAngle(feelerLeft, 0.6109F, 0.0F, 0.0F);
+        feelerLeft.cubeList.add(new ModelBox(feelerLeft, 26, 0, -0.5F, -3.5F, -0.5F, 1, 4, 1, 0.0F, true));
+
+        feelerRight = new ModelRendererPlus(this);
+        feelerRight.setDefaultRotPoint(-3.5F, -2.5F, -7.5F);
+        headFront.addChild(feelerRight);
+        setRotationAngle(feelerRight, 0.6109F, 0.0F, 0.0F);
+        feelerRight.cubeList.add(new ModelBox(feelerRight, 26, 0, -0.5F, -3.5F, -0.5F, 1, 4, 1, 0.0F, false));
+
+        jawLeft = new ModelRendererPlus(this);
+        jawLeft.setDefaultRotPoint(-3.0F, 1.5F, -7.5F);
+        headFront.addChild(jawLeft);
+        setRotationAngle(jawLeft, 0.0F, -0.3491F, 0.0F);
+        jawLeft.cubeList.add(new ModelBox(jawLeft, 0, 19, 0.0F, -0.5F, -3.5F, 2, 1, 3, 0.0F, true));
+
+        jawRight = new ModelRendererPlus(this);
+        jawRight.setDefaultRotPoint(3.0F, 1.5F, -7.5F);
+        headFront.addChild(jawRight);
+        setRotationAngle(jawRight, 0.0F, 0.3491F, 0.0F);
+        jawRight.cubeList.add(new ModelBox(jawRight, 0, 19, -2.0F, -0.5F, -3.5F, 2, 1, 3, 0.0F, false));
+
+        leg1Up1 = new ModelRendererPlus(this);
+        leg1Up1.setDefaultRotPoint(-4.0F, 1.0F, 2.5F);
+        body.addChild(leg1Up1);
+        setRotationAngle(leg1Up1, 0.0F, 0.6109F, 0.2618F);
+        leg1Up1.cubeList.add(new ModelBox(leg1Up1, 0, 53, -7.0F, -1.0F, -1.0F, 7, 2, 2, 0.0F, true));
+
+        leg1Down1 = new ModelRendererPlus(this);
+        leg1Down1.setDefaultRotPoint(-6.5F, 0.0F, 0.0F);
+        leg1Up1.addChild(leg1Down1);
+        setRotationAngle(leg1Down1, 0.0F, 0.4363F, -0.6981F);
+        leg1Down1.cubeList.add(new ModelBox(leg1Down1, 0, 57, -9.0F, -1.0F, -1.0F, 9, 2, 2, 0.0F, true));
+
+        leg1Up2 = new ModelRendererPlus(this);
+        leg1Up2.setDefaultRotPoint(-4.0F, 1.0F, 0.0F);
+        body.addChild(leg1Up2);
+        setRotationAngle(leg1Up2, 0.0F, 0.0F, 0.2618F);
+        leg1Up2.cubeList.add(new ModelBox(leg1Up2, 0, 53, -7.0F, -1.0F, -1.0F, 7, 2, 2, 0.0F, true));
+
+        leg1Down2 = new ModelRendererPlus(this);
+        leg1Down2.setDefaultRotPoint(-6.5F, 0.0F, 0.0F);
+        leg1Up2.addChild(leg1Down2);
+        setRotationAngle(leg1Down2, 0.0F, 0.1745F, -0.6981F);
+        leg1Down2.cubeList.add(new ModelBox(leg1Down2, 0, 57, -9.0F, -1.0F, -1.0F, 9, 2, 2, 0.0F, true));
+
+        leg1Up3 = new ModelRendererPlus(this);
+        leg1Up3.setDefaultRotPoint(-4.0F, 1.0F, -2.5F);
+        body.addChild(leg1Up3);
+        setRotationAngle(leg1Up3, 0.0F, -0.5236F, 0.3491F);
+        leg1Up3.cubeList.add(new ModelBox(leg1Up3, 0, 53, -7.0F, -1.0F, -1.0F, 7, 2, 2, 0.0F, true));
+
+        leg1Down3 = new ModelRendererPlus(this);
+        leg1Down3.setDefaultRotPoint(-6.5F, 0.0F, 0.0F);
+        leg1Up3.addChild(leg1Down3);
+        setRotationAngle(leg1Down3, 0.0F, -0.0873F, -0.7854F);
+        leg1Down3.cubeList.add(new ModelBox(leg1Down3, 0, 57, -9.0F, -1.0F, -1.0F, 9, 2, 2, 0.0F, true));
+
+        leg1Up4 = new ModelRendererPlus(this);
+        leg1Up4.setDefaultRotPoint(4.0F, 1.0F, -2.5F);
+        body.addChild(leg1Up4);
+        setRotationAngle(leg1Up4, 0.0F, 0.5236F, -0.3491F);
+        leg1Up4.cubeList.add(new ModelBox(leg1Up4, 0, 53, 0.0F, -1.0F, -1.0F, 7, 2, 2, 0.0F, false));
+
+        leg1Down4 = new ModelRendererPlus(this);
+        leg1Down4.setDefaultRotPoint(6.5F, 0.0F, 0.0F);
+        leg1Up4.addChild(leg1Down4);
+        setRotationAngle(leg1Down4, 0.0F, -0.0873F, 0.7854F);
+        leg1Down4.cubeList.add(new ModelBox(leg1Down4, 0, 57, 0.0F, -1.0F, -1.0F, 9, 2, 2, 0.0F, false));
+
+        leg1Up5 = new ModelRendererPlus(this);
+        leg1Up5.setDefaultRotPoint(4.0F, 1.0F, 0.0F);
+        body.addChild(leg1Up5);
+        setRotationAngle(leg1Up5, 0.0F, 0.0F, -0.2618F);
+        leg1Up5.cubeList.add(new ModelBox(leg1Up5, 0, 53, 0.0F, -1.0F, -1.0F, 7, 2, 2, 0.0F, false));
+
+        leg1Down5 = new ModelRendererPlus(this);
+        leg1Down5.setDefaultRotPoint(6.5F, 0.0F, 0.0F);
+        leg1Up5.addChild(leg1Down5);
+        setRotationAngle(leg1Down5, 0.0F, -0.1745F, 0.6981F);
+        leg1Down5.cubeList.add(new ModelBox(leg1Down5, 0, 57, 0.0F, -1.0F, -1.0F, 9, 2, 2, 0.0F, false));
+
+        leg1Up6 = new ModelRendererPlus(this);
+        leg1Up6.setDefaultRotPoint(4.0F, 1.0F, 2.5F);
+        body.addChild(leg1Up6);
+        setRotationAngle(leg1Up6, 0.0F, -0.6109F, -0.2618F);
+        leg1Up6.cubeList.add(new ModelBox(leg1Up6, 0, 53, 0.0F, -1.0F, -1.0F, 7, 2, 2, 0.0F, false));
+
+        leg1Down6 = new ModelRendererPlus(this);
+        leg1Down6.setDefaultRotPoint(6.5F, 0.0F, 0.0F);
+        leg1Up6.addChild(leg1Down6);
+        setRotationAngle(leg1Down6, 0.0F, -0.4363F, 0.6981F);
+        leg1Down6.cubeList.add(new ModelBox(leg1Down6, 0, 57, 0.0F, -1.0F, -1.0F, 9, 2, 2, 0.0F, false));
+
+        this.animations = new BlockBenchAnimations(this, new ResourceLocation(LibReference.MODID, "models/entity/animation/ant.json"));
+        System.out.println(this.animations);
     }
 
     @Override
-    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) { 
-    		this.startingPosition();
-    		this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
-        this.bodyFront.render(scale/10.0F);
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+        body.render(f5);
     }
 
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
     @Override
-	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-        modelRenderer.rotateAngleX = x;
-        modelRenderer.rotateAngleY = y;
-        modelRenderer.rotateAngleZ = z;
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+                                  float headPitch, float scaleFactor, Entity entity) {
+        if (!(entity instanceof EntityAnt))
+            return;
+        this.resetModel();
+        this.head.rotateAngleY = netHeadYaw * 0.008726646F;
+        this.head.rotateAngleX = headPitch * 0.008726646F;
+        this.feelerLeft.rotateAngleZ += MathHelper.cos(ageInTicks * 0.15F) * 0.05F + 0.05F;
+        this.feelerRight.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.15F) * 0.05F + 0.05F;
+        this.feelerLeft.rotateAngleX += MathHelper.sin(ageInTicks * 0.1F) * 0.05F;
+        this.feelerRight.rotateAngleX -= MathHelper.sin(ageInTicks * 0.1F) * 0.05F;
+        EntityAnt ant = (EntityAnt) entity;
+        float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+
+        if (ant.isMoving())
+            this.animations.doAnimation("walk", ant.ticksExisted, partialTicks);
+
+        AnimatedAction anim = ant.getAnimation();
+        if (anim != null)
+            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
     }
 
-	@Override
-	public void startingPosition() {
-		this.setRotateAngle(this.feeler1, 0, 0, 0);
-		this.setRotateAngle(this.feeler2, 0, 0, 0);
-		
-        this.setRotateAngle(leg1Up, 0.0F, -0.3490658503988659F, 0.3490658503988659F);
-        this.setRotateAngle(leg1Down, 0.0F, -0.27314402793711257F, 0.31869712141416456F);
-        this.setRotateAngle(leg2Up, 0.0F, -0.08726646259971647F, 0.3490658503988659F);
-        this.setRotateAngle(leg2Down, 0.0F, 0.3141592653589793F, 0.2617993877991494F);
-        this.setRotateAngle(leg3Up, 0.0F, 0.13962634015954636F, 0.3490658503988659F);
-        this.setRotateAngle(leg3Down, 0.0F, 0.2792526803190927F, 0.3141592653589793F);
-        this.setRotateAngle(leg4Up, 0.0F, 0.3490658503988659F, -0.3490658503988659F);
-        this.setRotateAngle(leg4Down, 0.0F, 0.27314402793711257F, -0.31869712141416456F);
-        this.setRotateAngle(leg5Up, 0.0F, 0.08726646259971647F, -0.3490658503988659F);
-        this.setRotateAngle(leg5Down, 0.0F, -0.3141592653589793F, -0.2792526803190927F);
-        this.setRotateAngle(leg6Up, 0.0F, -0.13962634015954636F, -0.3490658503988659F);
-        this.setRotateAngle(leg6Down, 0.0F, -0.2792526803190927F, -0.3141592653589793F);
+    public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {
+        modelRenderer.setDefaultRotAngle(x, y, z);
+    }
 
-	}
-	
-	@Override
-	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
-			float headPitch, float scale, Entity entity) {
-	    	this.head.rotateAngleY = netHeadYaw * 0.008726646F;
-	    	this.head.rotateAngleX = headPitch * 0.008726646F;
-		this.leg1Up.rotateAngleY+=MathHelper.cos(limbSwing * 2.2F) * toRadians(7);
-		this.leg2Up.rotateAngleY-=MathHelper.cos(limbSwing * 2.2F) * toRadians(7);
-		this.leg3Up.rotateAngleY+=MathHelper.cos(limbSwing * 2.2F) * toRadians(7);
-		this.leg4Up.rotateAngleY-=MathHelper.cos(limbSwing * 2.2F) * toRadians(7);
-		this.leg5Up.rotateAngleY+=MathHelper.cos(limbSwing * 2.2F) * toRadians(7);
-		this.leg6Up.rotateAngleY-=MathHelper.cos(limbSwing * 2.2F) * toRadians(7);
-
-        this.feeler1.rotateAngleZ += MathHelper.cos(ageInTicks * 0.15F) * 0.05F + 0.05F;
-        this.feeler2.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.15F) * 0.05F + 0.05F;
-        this.feeler1.rotateAngleX += MathHelper.sin(ageInTicks * 0.1F) * 0.05F;
-        this.feeler2.rotateAngleX -= MathHelper.sin(ageInTicks * 0.1F) * 0.05F;
+    @Override
+    public void resetModel() {
+        body.reset();
+        this.resetChild(this.body);
     }
 }
