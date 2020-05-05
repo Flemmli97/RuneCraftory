@@ -1,10 +1,8 @@
 package com.flemmli97.runecraftory.common.blocks;
 
-import java.util.Random;
-
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
+import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import com.flemmli97.runecraftory.common.items.weapons.ItemHammerBase;
@@ -13,7 +11,6 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumMineralTier;
 import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.MineralBlockConverter;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -34,6 +31,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Random;
+
 public class BlockMineral extends Block{
 	
     private static float skillChanceUp = 0.005F;
@@ -52,7 +51,7 @@ public class BlockMineral extends Block{
 	private AxisAlignedBB box = new AxisAlignedBB(0,0,0,1,0.875,1);
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return box;
+		return this.box;
 	}
 
 	@Override

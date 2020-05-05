@@ -53,14 +53,14 @@ public class ModelOrc extends ModelImproved {
         this.rightLegDown = new ModelRenderer(this, 0, 0);
         this.rightLegDown.setRotationPoint(0.0F, 27.0F, 0.0F);
         this.rightLegDown.addBox(-7.0F, 0.0F, -7.0F, 14, 20, 14, 0.0F);
-        this.setRotateAngle(rightLegDown, 0.3490658503988659F, 0.0F, 0.0F);
+        this.setRotateAngle(this.rightLegDown, 0.3490658503988659F, 0.0F, 0.0F);
         this.earRight = new ModelRenderer(this, 0, 0);
         this.earRight.setRotationPoint(-10.0F, -44.0F, -16.0F);
         this.earRight.addBox(-8.0F, -16.0F, -1.0F, 16, 16, 3, 0.0F);
         this.legUpLeft = new ModelRenderer(this, 0, 0);
         this.legUpLeft.setRotationPoint(13.0F, 38.0F, 0.0F);
         this.legUpLeft.addBox(-7.0F, 0.0F, -7.0F, 14, 30, 14, 0.0F);
-        this.setRotateAngle(legUpLeft, -0.5235987755982988F, 0.0F, 0.0F);
+        this.setRotateAngle(this.legUpLeft, -0.5235987755982988F, 0.0F, 0.0F);
         this.rightArmUp = new ModelRenderer(this, 0, 0);
         this.rightArmUp.setRotationPoint(-20.0F, -14.0F, 0.0F);
         this.rightArmUp.addBox(-24.0F, -7.0F, -7.0F, 26, 14, 14, 0.0F);
@@ -70,15 +70,15 @@ public class ModelOrc extends ModelImproved {
         this.leftLegDown = new ModelRenderer(this, 0, 0);
         this.leftLegDown.setRotationPoint(0.0F, 27.0F, 0.0F);
         this.leftLegDown.addBox(-7.0F, 0.0F, -7.0F, 14, 20, 14, 0.0F);
-        this.setRotateAngle(leftLegDown, 0.3490658503988659F, 0.0F, 0.0F);
+        this.setRotateAngle(this.leftLegDown, 0.3490658503988659F, 0.0F, 0.0F);
         this.body = new ModelRenderer(this, 0, 0);
         this.body.setRotationPoint(0.0F, 36.0F, 0.0F);
         this.body.addBox(-20.0F, -40.0F, -20.0F, 40, 80, 40, 0.0F);
-        this.setRotateAngle(body, 0.17453292519943295F, 0.0F, 0.0F);
+        this.setRotateAngle(this.body, 0.17453292519943295F, 0.0F, 0.0F);
         this.legUpLeft_1 = new ModelRenderer(this, 0, 0);
         this.legUpLeft_1.setRotationPoint(-13.0F, 38.0F, 0.0F);
         this.legUpLeft_1.addBox(-7.0F, 0.0F, -7.0F, 14, 30, 14, 0.0F);
-        this.setRotateAngle(legUpLeft_1, -0.5235987755982988F, 0.0F, 0.0F);
+        this.setRotateAngle(this.legUpLeft_1, -0.5235987755982988F, 0.0F, 0.0F);
         this.body.addChild(this.leftArmUp);
         this.head.addChild(this.earLeft);
         this.leftArmUp.addChild(this.leftArmDown);
@@ -97,10 +97,10 @@ public class ModelOrc extends ModelImproved {
     
     @Override
 	public void startingPosition() {
-    		this.setRotateAngle(leftArmUp, 0, 0, 0);
-    		this.setRotateAngle(rightArmUp, 0, 0, 0);
-    		this.setRotateAngle(earLeft, 0, 0, 0);
-    		this.setRotateAngle(earRight, 0, 0, 0);
+    		this.setRotateAngle(this.leftArmUp, 0, 0, 0);
+    		this.setRotateAngle(this.rightArmUp, 0, 0, 0);
+    		this.setRotateAngle(this.earLeft, 0, 0, 0);
+    		this.setRotateAngle(this.earRight, 0, 0, 0);
     }
 
     @Override

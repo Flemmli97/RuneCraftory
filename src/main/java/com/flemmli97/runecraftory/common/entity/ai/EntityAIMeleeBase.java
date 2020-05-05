@@ -39,7 +39,7 @@ public class EntityAIMeleeBase<T extends EntityMobBase> extends EntityAIAttackBa
         if (this.attacker.isAnimOfType(anim, AnimationType.MELEE)) {
             this.attacker.getNavigator().clearPath();
             if (this.distanceToTargetSq <= this.getAttackReachSqr(this.target, this.rangeModifier) && anim.canAttack()) {
-                this.attacker.attackEntityAsMob(target);
+                this.attacker.attackEntityAsMob(this.target);
             }
         }
     }

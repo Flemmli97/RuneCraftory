@@ -29,7 +29,7 @@ public class BlockForge extends BlockMultiBase{
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return state.getValue(PART)==EnumPartType.LEFT?leftBox:(state.getValue(FACING)==EnumFacing.NORTH||state.getValue(FACING)==EnumFacing.SOUTH)?rightBoxNS:rightBoxEW;
+		return state.getValue(PART)==EnumPartType.LEFT? this.leftBox :(state.getValue(FACING)==EnumFacing.NORTH||state.getValue(FACING)==EnumFacing.SOUTH)? this.rightBoxNS : this.rightBoxEW;
 	}
 
 	@Override

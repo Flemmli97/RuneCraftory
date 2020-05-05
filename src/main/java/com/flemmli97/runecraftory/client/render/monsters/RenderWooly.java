@@ -18,7 +18,7 @@ public class RenderWooly<T extends EntityWooly> extends RenderMobBase<T>{
 
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
-		return tex;
+		return this.tex;
 	}
 
 }

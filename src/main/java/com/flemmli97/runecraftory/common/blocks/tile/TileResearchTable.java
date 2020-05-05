@@ -42,7 +42,7 @@ public class TileResearchTable extends TileEntity implements IInventory{
 
 	@Override
 	public boolean isEmpty() {
-		for(ItemStack stack : inventory)
+		for(ItemStack stack : this.inventory)
 			if(!stack.isEmpty())
 				return false;
 		return true;
@@ -166,8 +166,8 @@ public class TileResearchTable extends TileEntity implements IInventory{
 						this.getRandomRecipe(player, EnumCrafting.FORGE, levelMin, levelMax);
 					else
 					{
-						player.world.playSound(null, getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
-						player.world.playSound(null, getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
+						player.world.playSound(null, this.getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
+						player.world.playSound(null, this.getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
 					}
 					return;
 				}
@@ -179,7 +179,7 @@ public class TileResearchTable extends TileEntity implements IInventory{
 					if(capSync.getSkillLevel(EnumSkills.CRAFTING)[0]>levelMax-10)
 						;//this.getRandomRecipe(player, EnumCrafting.ARMOR, levelMin, levelMax);
 					else
-						player.world.playSound(null, getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
+						player.world.playSound(null, this.getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
 					return;
 				}
 			}
@@ -190,7 +190,7 @@ public class TileResearchTable extends TileEntity implements IInventory{
 					if(capSync.getSkillLevel(EnumSkills.CHEMISTRY)[0]>levelMax-10)
 						;//this.getRandomRecipe(player, EnumCrafting.PHARMA, levelMin, levelMax);
 					else
-						player.world.playSound(null, getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
+						player.world.playSound(null, this.getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
 					return;
 				}
 			}
@@ -198,12 +198,12 @@ public class TileResearchTable extends TileEntity implements IInventory{
 				if(capSync.getSkillLevel(EnumSkills.COOKING)[0]>levelMax-10)
 					;//this.getRandomRecipe(player, EnumCrafting.COOKING, levelMin, levelMax);
 				else
-					player.world.playSound(null, getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
+					player.world.playSound(null, this.getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
 			else if(OreDictionary.getOres(LibOreDictionary.MINERALS).contains(this.inventory.get(0)))
 				if(capSync.getSkillLevel(EnumSkills.CHEMISTRY)[0]>levelMax-10)
 					;//this.getRandomRecipe(player, EnumCrafting.PHARMA, levelMin, levelMax);
 				else
-					player.world.playSound(null, getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
+					player.world.playSound(null, this.getPos(), SoundEvents.ENTITY_VILLAGER_NO, SoundCategory.BLOCKS, 1, 1);
 		}
 	}
 	

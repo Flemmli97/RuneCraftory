@@ -29,9 +29,9 @@ public class ParticleAmbrosiaSleep extends ParticleSimpleTexture{
         this.frameOffset=this.rand.nextInt(9);
         this.rows=3;
         this.columns=3;
-        this.length=rows*columns;
-        this.uSize=1D/columns;
-        this.vSize=1D/rows;
+        this.length= this.rows * this.columns;
+        this.uSize=1D/ this.columns;
+        this.vSize=1D/ this.rows;
         //this.setRBGColorF(236/255f, 133/255f, 133/255f);
     }
 

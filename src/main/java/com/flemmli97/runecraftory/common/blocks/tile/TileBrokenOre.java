@@ -26,7 +26,7 @@ public class TileBrokenOre extends TileEntity implements ITickable{
 			if(block instanceof BlockBrokenMineral)
 			{
 				BlockBrokenMineral mineral = (BlockBrokenMineral) block;
-				this.world.setBlockState(pos, MineralBlockConverter.getRestoredState(mineral.getTier()));
+				this.world.setBlockState(this.pos, MineralBlockConverter.getRestoredState(mineral.getTier()));
 			}
 		}
 	}
@@ -40,7 +40,7 @@ public class TileBrokenOre extends TileEntity implements ITickable{
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
-		compound.setLong("BrokenTime", time);
+		compound.setLong("BrokenTime", this.time);
 		return compound;
 	}
 

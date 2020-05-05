@@ -36,8 +36,8 @@ public class PacketCrafting  implements IMessage{
 	@Override
 	public void toBytes(ByteBuf buf) {
 		NBTTagCompound compound = new NBTTagCompound();
-		compound.setInteger("craft", craft);
-		compound.setIntArray("pos", pos);
+		compound.setInteger("craft", this.craft);
+		compound.setIntArray("pos", this.pos);
 		ByteBufUtils.writeTag(buf, compound);
 	}
 	

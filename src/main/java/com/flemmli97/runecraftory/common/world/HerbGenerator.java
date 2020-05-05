@@ -93,7 +93,7 @@ public class HerbGenerator implements IWorldGenerator{
 		@Override
 		public String toString()
 		{
-			return block.getRegistryName()+","+this.itemWeight+","+this.tries+","+this.maxAmount;
+			return this.block.getRegistryName()+","+this.itemWeight+","+this.tries+","+this.maxAmount;
 		}
 	}
 }

@@ -18,7 +18,7 @@ public class RenderAmbrosia<T extends EntityAmbrosia> extends RenderMobBase<T>{
 
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
-		return tex;
+		return this.tex;
 	}
 	
 

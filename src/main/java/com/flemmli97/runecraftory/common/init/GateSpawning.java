@@ -1,19 +1,18 @@
 package com.flemmli97.runecraftory.common.init;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class GateSpawning {
 	
@@ -40,10 +39,8 @@ public class GateSpawning {
 
 	public static final void addToBiomeType(ResourceLocation res, BiomeDictionary.Type... biomeType)
 	{
-		for(int i = 0; i <biomeType.length; i++)
-		{
-			for(Biome biome : BiomeDictionary.getBiomes(biomeType[i]))
-			{					
+		for (BiomeDictionary.Type type : biomeType) {
+			for (Biome biome : BiomeDictionary.getBiomes(type)) {
 				spawningMappingBiome.put(biome, res);
 			}
 		}
@@ -51,9 +48,8 @@ public class GateSpawning {
 
 	public static final void addToBiome(ResourceLocation res, Biome... biome)
 	{
-		for(int i = 0; i <biome.length; i++)
-		{
-			spawningMappingBiome.put(biome[i], res);
+		for (Biome value : biome) {
+			spawningMappingBiome.put(value, res);
 		}
 	}
 

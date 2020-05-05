@@ -46,7 +46,7 @@ public abstract class TileMultiBase extends TileEntity implements IInventory{
 
 	@Override
 	public boolean isEmpty() {
-		for(ItemStack stack : inventory)
+		for(ItemStack stack : this.inventory)
 			if(!stack.isEmpty())
 				return false;
 		return true;
@@ -110,7 +110,7 @@ public abstract class TileMultiBase extends TileEntity implements IInventory{
 			else
 				return false;
 		else if(index==7)
-			if(validItem(stack))
+			if(this.validItem(stack))
 				return true;
 			else 
 				return false;

@@ -16,7 +16,7 @@ public class RenderBigMuck<T extends EntityBigMuck> extends RenderMobBase<T>{
 
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
-		return tex;
+		return this.tex;
 	}
 
 }

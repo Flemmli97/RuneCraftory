@@ -147,21 +147,21 @@ public class ModelWoolyOld extends ModelImproved {
     
     @Override
 	public void startingPosition() {
-        this.setRotateAngle(armLeft, 0.17453292519943295F, -0.03490658503988659F, 0.0F);
-        this.setRotateAngle(earRight, 0.0F, 0.0F, -0.1890191579909859F);
-        this.setRotateAngle(earLeft, 0.0F, 0.0F, 0.1890191579909859F);
+        this.setRotateAngle(this.armLeft, 0.17453292519943295F, -0.03490658503988659F, 0.0F);
+        this.setRotateAngle(this.earRight, 0.0F, 0.0F, -0.1890191579909859F);
+        this.setRotateAngle(this.earLeft, 0.0F, 0.0F, 0.1890191579909859F);
 
-        this.setRotateAngle(handRight, 0.22759093446006054F, -0.5462880558742251F, 0.0F);
-        this.setRotateAngle(handLeft, 0.22759093446006054F, 0.5462880558742251F, 0.0F);
-        this.setRotateAngle(armRight, 0.17453292519943295F, 0.03490658503988659F, 0.0F);
-        this.setRotateAngle(armJointRight, -0.17453292519943295F, 0.03490658503988659F, 0.0F);
-        this.setRotateAngle(armJointLeft, -0.17453292519943295F, 0.03490658503988659F, 0.0F);
+        this.setRotateAngle(this.handRight, 0.22759093446006054F, -0.5462880558742251F, 0.0F);
+        this.setRotateAngle(this.handLeft, 0.22759093446006054F, 0.5462880558742251F, 0.0F);
+        this.setRotateAngle(this.armRight, 0.17453292519943295F, 0.03490658503988659F, 0.0F);
+        this.setRotateAngle(this.armJointRight, -0.17453292519943295F, 0.03490658503988659F, 0.0F);
+        this.setRotateAngle(this.armJointLeft, -0.17453292519943295F, 0.03490658503988659F, 0.0F);
 
-        this.setRotateAngle(footLeft, 0, 0, 0);
-        this.setRotateAngle(footRight, 0, 0, 0);
-        this.setRotateAngle(legLeft, 0, 0, 0);
-        this.setRotateAngle(legRight, 0, 0, 0);
-        this.setRotateAngle(tail, 0, 0, 0);
+        this.setRotateAngle(this.footLeft, 0, 0, 0);
+        this.setRotateAngle(this.footRight, 0, 0, 0);
+        this.setRotateAngle(this.legLeft, 0, 0, 0);
+        this.setRotateAngle(this.legRight, 0, 0, 0);
+        this.setRotateAngle(this.tail, 0, 0, 0);
     }
 
     @Override

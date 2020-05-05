@@ -38,9 +38,9 @@ public class PacketPlayerStats  implements IMessage{
 	@Override
 	public void toBytes(ByteBuf buf) {
 		NBTTagCompound compound = new NBTTagCompound();
-		compound.setFloat("str", str);
-		compound.setFloat("vit", vit);
-		compound.setFloat("intel", intel);
+		compound.setFloat("str", this.str);
+		compound.setFloat("vit", this.vit);
+		compound.setFloat("intel", this.intel);
 		ByteBufUtils.writeTag(buf, compound);
 	}
 	

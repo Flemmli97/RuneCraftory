@@ -55,19 +55,19 @@ public class TileBossSpawner extends TileEntity implements ITickable, ITileEntit
 	{
 		if(!this.world.isRemote)
 		{
-			EntityMobBase mob = GateSpawning.entityFromString(world, savedEntity);
+			EntityMobBase mob = GateSpawning.entityFromString(this.world, this.savedEntity);
 			if(mob!=null)
 			{
 				this.time=this.world.getWorldTime();
-		        int k = world.getEntitiesWithinAABB(mob.getClass(), (new AxisAlignedBB(this.pos).grow(32))).size();
+		        int k = this.world.getEntitiesWithinAABB(mob.getClass(), (new AxisAlignedBB(this.pos).grow(32))).size();
 		        if(k!=0)
 		        {        
 		        		return;
 		        }
-		        mob.setLevel(LevelCalc.levelFromDistSpawn(world, pos));
-		        mob.setLocationAndAngles(this.pos.getX()+0.5, this.pos.getY()+5, this.pos.getZ()+0.5, world.rand.nextFloat() * 360.0F, 0.0F);
+		        mob.setLevel(LevelCalc.levelFromDistSpawn(this.world, this.pos));
+		        mob.setLocationAndAngles(this.pos.getX()+0.5, this.pos.getY()+5, this.pos.getZ()+0.5, this.world.rand.nextFloat() * 360.0F, 0.0F);
 				mob.setHomePosAndDistance(this.pos, 16);
-		        mob.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(mob)), null);
+		        mob.onInitialSpawn(this.world.getDifficultyForLocation(new BlockPos(mob)), null);
 		        this.world.spawnEntity(mob);
 			}
 		}
@@ -106,7 +106,7 @@ public class TileBossSpawner extends TileEntity implements ITickable, ITileEntit
 		super.writeToNBT(compound);
 		if(this.savedEntity!=null)
 			compound.setString("Entity", this.savedEntity.toString());
-		compound.setLong("LastSpawned", time);
+		compound.setLong("LastSpawned", this.time);
 		return compound;
 	}
 

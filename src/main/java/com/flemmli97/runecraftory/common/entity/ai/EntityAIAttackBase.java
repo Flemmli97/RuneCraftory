@@ -64,8 +64,8 @@ public abstract class EntityAIAttackBase<T extends EntityMobBase> extends Entity
     public void updateTask() {
         this.target = this.attacker.getAttackTarget();
         AnimatedAction anim = this.attacker.getAnimation();
-        this.distanceToTargetSq = this.attacker.getDistanceSq(target);
-        --pathFindDelay;
+        this.distanceToTargetSq = this.attacker.getDistanceSq(this.target);
+        --this.pathFindDelay;
         if (anim != null)
             this.prevAnim = anim.getID();
         if (this.next == null && anim == null) {

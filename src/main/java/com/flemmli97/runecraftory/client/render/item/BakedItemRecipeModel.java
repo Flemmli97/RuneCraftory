@@ -1,16 +1,9 @@
 package com.flemmli97.runecraftory.client.render.item;
 
-import java.util.ArrayList;
-
-import javax.annotation.Nullable;
-
-import org.lwjgl.input.Keyboard;
-
 import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
 import com.flemmli97.runecraftory.common.core.handler.crafting.RecipeSextuple;
 import com.flemmli97.runecraftory.common.items.misc.ItemRecipe;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverride;
@@ -19,6 +12,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.BakedModelWrapper;
+import org.lwjgl.input.Keyboard;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class BakedItemRecipeModel extends BakedModelWrapper<IBakedModel>{
 
@@ -32,7 +29,7 @@ public class BakedItemRecipeModel extends BakedModelWrapper<IBakedModel>{
 
 	@Override
 	public ItemOverrideList getOverrides() {
-		return overrides;
+		return this.overrides;
 	}
 		
 	public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world,
@@ -61,7 +58,7 @@ public class BakedItemRecipeModel extends BakedModelWrapper<IBakedModel>{
 		@Override
 		public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity)
 	    {
-			return model.handleItemState( originalModel, stack, world, entity );
+			return this.model.handleItemState( originalModel, stack, world, entity );
 		}
 	}
 }

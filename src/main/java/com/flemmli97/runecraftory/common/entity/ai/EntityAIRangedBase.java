@@ -55,7 +55,7 @@ public class EntityAIRangedBase<T extends EntityMobBase & IRangedMob> extends En
         if (this.attacker.isAnimOfType(anim, AnimationType.RANGED)) {
             this.attacker.getNavigator().clearPath();
             if(anim.canAttack())
-                this.attacker.attackRanged(target);
+                this.attacker.attackRanged(this.target);
         }
         else
             super.handleAttack(anim);

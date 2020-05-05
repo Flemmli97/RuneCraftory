@@ -1,29 +1,12 @@
 package com.flemmli97.runecraftory.common.core.handler.config;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
-
 import com.flemmli97.runecraftory.api.entities.EntityProperties;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.items.CropProperties;
 import com.flemmli97.runecraftory.api.items.FoodProperties;
 import com.flemmli97.runecraftory.api.items.ItemStat;
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
-import com.flemmli97.runecraftory.api.mappings.CropMap;
-import com.flemmli97.runecraftory.api.mappings.EntityStatMap;
-import com.flemmli97.runecraftory.api.mappings.ItemFoodMap;
-import com.flemmli97.runecraftory.api.mappings.ItemStatMap;
-import com.flemmli97.runecraftory.api.mappings.NPCShopItems;
-import com.flemmli97.runecraftory.api.mappings.Quests;
+import com.flemmli97.runecraftory.api.mappings.*;
 import com.flemmli97.runecraftory.common.init.GateSpawning;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
 import com.flemmli97.runecraftory.common.init.ModItems;
@@ -46,13 +29,8 @@ import com.flemmli97.tenshilib.common.world.structure.StructureGenerator;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.stream.JsonWriter;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
@@ -72,6 +50,12 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.io.IOUtils;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ConfigHandler {
 
@@ -183,21 +167,20 @@ public class ConfigHandler {
 	        validStatValues.add(SharedMonsterAttributes.MAX_HEALTH.getName());
 	        validStatValues.addAll(ItemStatAttributes.ATTRIBUTESTRINGMAP.keySet());
 	        int i = 0;
-	        String values = Configuration.NEW_LINE + "<";
+	        StringBuilder val = new StringBuilder(Configuration.NEW_LINE + "<");
 	        for (String s : validStatValues) 
 	        {
 	            if (++i == 3) 
 	            {
-	                values = values + s + ">" + Configuration.NEW_LINE + "<";
+	                val.append(s).append(">").append(Configuration.NEW_LINE).append("<");
 	                i = 0;
 	            }
 	            else 
 	            {
-	                values = values + s + "> <";
+	                val.append(s).append("> <");
 	            }
 	        }
-	        values = values.substring(0, values.length() - 2);
-	        mobConfig.addCustomCategoryComment("mobs", "Valid attribute names are:" + values);
+	        mobConfig.addCustomCategoryComment("mobs", "Valid attribute names are:" + val.substring(0, val.length()-2));
 	        mobData(mobConfig);
 	        gateDef = ConfigUtils.getFloatConfig(mobConfig, "GateDef", "mobs.runecraftory:gate", gateDef, "Base health for gates");
 	        gateMDef = ConfigUtils.getFloatConfig(mobConfig, "GateMDef", "mobs.runecraftory:gate", gateMDef, "Base defence for gates");

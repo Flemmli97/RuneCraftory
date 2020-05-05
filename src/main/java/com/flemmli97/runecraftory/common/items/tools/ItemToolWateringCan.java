@@ -158,7 +158,7 @@ public class ItemToolWateringCan extends ItemTool implements IItemUsable, ICharg
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
     	RayTraceResult ray = this.rayTrace(world, player, true);
         ItemStack itemstack = player.getHeldItem(hand);
-        if (ray != null && ray.typeOfHit == RayTraceResult.Type.BLOCK && world.getBlockState(ray.getBlockPos()).getBlock() == Blocks.WATER && !hasFullWater(itemstack)) {
+        if (ray != null && ray.typeOfHit == RayTraceResult.Type.BLOCK && world.getBlockState(ray.getBlockPos()).getBlock() == Blocks.WATER && !this.hasFullWater(itemstack)) {
         	if (!itemstack.hasTagCompound()) {
                 ItemNBT.initNBT(itemstack);
             }

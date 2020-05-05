@@ -1,10 +1,7 @@
 package com.flemmli97.runecraftory.common.core.handler.quests;
 
-import java.util.List;
-
 import com.flemmli97.runecraftory.common.core.handler.quests.TaskTracker.NBTParser;
 import com.google.common.collect.Lists;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,6 +11,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
+
+import java.util.List;
 
 public class ObjectiveKill implements IObjective<EntityLivingBase>{
 
@@ -62,14 +61,14 @@ public class ObjectiveKill implements IObjective<EntityLivingBase>{
 
 	@Override
 	public String currentProgress() {
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		boolean first = true;
 		for(TaskTracker<ResourceLocation> res : this.mobs)
 		{
-			s+=(first?"":", ")+I18n.format("entity." + EntityList.getTranslationName(res.getTask())+".name")+" ("+res.progress()+"/"+res.getAmount()+")";
+			s.append(first ? "" : ", ").append(I18n.format("entity." + EntityList.getTranslationName(res.getTask()) + ".name")).append(" (").append(res.progress()).append("/").append(res.getAmount()).append(")");
 			first=false;
 		}
-		return s;
+		return s.toString();
 	}
 
 	@Override
@@ -124,11 +123,11 @@ public class ObjectiveKill implements IObjective<EntityLivingBase>{
 	@Override
 	public String objDesc()
 	{
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		boolean first = true;
 		for(TaskTracker<ResourceLocation> res : this.mobs)
 		{
-			s+=(first?"":", ")+I18n.format("entity." + EntityList.getTranslationName(res.getTask())+".name")+" ("+res.getAmount()+")";
+			s.append(first ? "" : ", ").append(I18n.format("entity." + EntityList.getTranslationName(res.getTask()) + ".name")).append(" (").append(res.getAmount()).append(")");
 			first=false;
 		}
 		return "Defeat " + s;
@@ -137,11 +136,11 @@ public class ObjectiveKill implements IObjective<EntityLivingBase>{
 	@Override
 	public String rewardDesc()
 	{
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		boolean first = true;
 		for(ItemStack res : this.rewards)
 		{
-			s+=(first?"":", ")+I18n.format(res.getUnlocalizedName()+".name")+" ("+res.getCount()+")";
+			s.append(first ? "" : ", ").append(I18n.format(res.getUnlocalizedName() + ".name")).append(" (").append(res.getCount()).append(")");
 			first=false;
 		}
 		return "Rewards: " + s;

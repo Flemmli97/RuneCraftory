@@ -63,7 +63,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
         NoiseGeneratorOctaves mobSpawnerNoise = new NoiseGeneratorOctaves(rand, 8);
 
         net.minecraftforge.event.terraingen.InitNoiseGensEvent.ContextOverworld ctx =
-                new net.minecraftforge.event.terraingen.InitNoiseGensEvent.ContextOverworld(minLimitPerlinNoise, maxLimitPerlinNoise, mainPerlinNoise, surfaceNoise, noiseGen5, depthNoise, mobSpawnerNoise);
+                new net.minecraftforge.event.terraingen.InitNoiseGensEvent.ContextOverworld(this.minLimitPerlinNoise, this.maxLimitPerlinNoise, this.mainPerlinNoise, this.surfaceNoise, noiseGen5, this.depthNoise, mobSpawnerNoise);
         ctx = net.minecraftforge.event.terraingen.TerrainGen.getModdedNoiseGenerators(world, rand, ctx);
         this.minLimitPerlinNoise = ctx.getLPerlin1();
         this.maxLimitPerlinNoise = ctx.getLPerlin2();
@@ -96,7 +96,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
                         float baseHeight = biome.getBaseHeight();
                         float variation = biome.getHeightVariation();
 
-                        float f5 = biomeWeights[l1 + 2 + (i2 + 2) * 5] / (baseHeight + 2.0F);
+                        float f5 = this.biomeWeights[l1 + 2 + (i2 + 2) * 5] / (baseHeight + 2.0F);
                         f += variation * f5;
                         f1 += baseHeight * f5;
                         f2 += f5;
@@ -165,7 +165,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 
 
     public void generate(int chunkX, int chunkZ, ChunkPrimer primer) {
-        generateHeightmap(chunkX * 4, 0, chunkZ * 4);
+        this.generateHeightmap(chunkX * 4, 0, chunkZ * 4);
 
         byte waterLevel = 63;
         for (int x4 = 0; x4 < 4; ++x4) {
@@ -180,14 +180,14 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 
                 for (int height32 = 0; height32 < 32; ++height32) {
                     double d0 = 0.125D;
-                    double d1 = heightMap[k1 + height32];
-                    double d2 = heightMap[l1 + height32];
-                    double d3 = heightMap[i2 + height32];
-                    double d4 = heightMap[j2 + height32];
-                    double d5 = (heightMap[k1 + height32 + 1] - d1) * d0;
-                    double d6 = (heightMap[l1 + height32 + 1] - d2) * d0;
-                    double d7 = (heightMap[i2 + height32 + 1] - d3) * d0;
-                    double d8 = (heightMap[j2 + height32 + 1] - d4) * d0;
+                    double d1 = this.heightMap[k1 + height32];
+                    double d2 = this.heightMap[l1 + height32];
+                    double d3 = this.heightMap[i2 + height32];
+                    double d4 = this.heightMap[j2 + height32];
+                    double d5 = (this.heightMap[k1 + height32 + 1] - d1) * d0;
+                    double d6 = (this.heightMap[l1 + height32 + 1] - d2) * d0;
+                    double d7 = (this.heightMap[i2 + height32 + 1] - d3) * d0;
+                    double d8 = (this.heightMap[j2 + height32 + 1] - d4) * d0;
 
                     for (int h = 0; h < 8; ++h) {
                         double d9 = 0.25D;

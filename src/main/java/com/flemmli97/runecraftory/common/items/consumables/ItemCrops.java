@@ -43,6 +43,6 @@ public class ItemCrops extends ItemFood{
     
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
-		return this.isGiant?(int)1.5*super.getMaxItemUseDuration(stack):super.getMaxItemUseDuration(stack);
+		return this.isGiant?(int)(1.5*super.getMaxItemUseDuration(stack)):super.getMaxItemUseDuration(stack);
 	}
 }

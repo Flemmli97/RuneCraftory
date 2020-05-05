@@ -17,7 +17,7 @@ public class RenderAnt<T extends EntityAnt> extends RenderMobBase<T>{
 
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
-		return tex;
+		return this.tex;
 	}
 	
 

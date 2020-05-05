@@ -561,7 +561,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 				{
 					//open tamed gui
 				}
-				else if(feedTimeOut<=0 && stack.getItem() instanceof ItemFood)
+				else if(this.feedTimeOut <=0 && stack.getItem() instanceof ItemFood)
 				{
 					this.applyFoodEffect(stack);
 					this.feedTimeOut=24000;

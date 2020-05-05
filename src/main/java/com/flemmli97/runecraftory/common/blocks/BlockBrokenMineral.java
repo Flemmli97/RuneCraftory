@@ -52,7 +52,7 @@ public class BlockBrokenMineral extends Block implements ITileEntityProvider{
 	private AxisAlignedBB box = new AxisAlignedBB(0,0,0,1,0.125,1);
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return box;
+		return this.box;
 	}
 	
 	@Override

@@ -22,12 +22,12 @@ public class ModelButterfly extends ModelBase {
         this.wingLeft = new ModelRenderer(this, 0, 6);
         this.wingLeft.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.wingLeft.addBox(0.0F, 0.0F, -2.5F, 4, 1, 5, 0.0F);
-        this.setRotateAngle(wingLeft, 0.0F, 0.0F, -0.6108652381980153F);
+        this.setRotateAngle(this.wingLeft, 0.0F, 0.0F, -0.6108652381980153F);
         this.wingRight = new ModelRenderer(this, 0, 0);
         this.wingRight.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.wingRight.addBox(-4.0F, 0.0F, -2.5F, 4, 1, 5, 0.0F);
         this.wingRight.mirror=true;
-        this.setRotateAngle(wingRight, 0.0F, 0.0F, 0.6108652381980153F);
+        this.setRotateAngle(this.wingRight, 0.0F, 0.0F, 0.6108652381980153F);
         this.body = new ModelRenderer(this, 0, 12);
         this.body.setRotationPoint(0.0F, -3F, 0.0F);
         this.body.addBox(-0.5F, 0.0F, -3.0F, 1, 1, 6, 0.0F);

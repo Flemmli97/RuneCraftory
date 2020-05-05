@@ -47,7 +47,7 @@ public class EntityAIAmbrosia extends EntityAIAttackBase<EntityAmbrosia> {
             case "butterfly":
                 if (!this.moveFlag) {
                     if (this.distanceToTargetSq < 36.0) {
-                        BlockPos pos = this.randomPosAwayFrom(target, 8.0f);
+                        BlockPos pos = this.randomPosAwayFrom(this.target, 8.0f);
                         this.attacker.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 1);
                     }
                     this.moveDelay = 44;
@@ -59,25 +59,25 @@ public class EntityAIAmbrosia extends EntityAIAttackBase<EntityAmbrosia> {
                 }
                 break;
             case "kick_1":
-                if (this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.0) && this.moveDelay == 0) {
+                if (this.attacker.getNavigator().tryMoveToEntityLiving(this.target, 1.0) && this.moveDelay == 0) {
                     this.moveDelay = 50;
                 } else if (this.moveDelay-- <= 0)
                     this.movementDone = true;
                 break;
             case "sleep":
-                if (this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.0) && this.moveDelay == 0) {
+                if (this.attacker.getNavigator().tryMoveToEntityLiving(this.target, 1.0) && this.moveDelay == 0) {
                     this.moveDelay = 24 + this.attacker.getRNG().nextInt(7);
                 } else if (this.moveDelay-- <= 0)
                     this.movementDone = true;
                 break;
             case "wave":
-                if (this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.0) && this.moveDelay == 0) {
+                if (this.attacker.getNavigator().tryMoveToEntityLiving(this.target, 1.0) && this.moveDelay == 0) {
                     this.moveDelay = 24 + this.attacker.getRNG().nextInt(7);
                 } else if (this.moveDelay-- <= 0)
                     this.movementDone = true;
                 break;
             case "kick_2":
-                if (this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.0) && this.moveDelay == 0) {
+                if (this.attacker.getNavigator().tryMoveToEntityLiving(this.target, 1.0) && this.moveDelay == 0) {
                     this.moveDelay = 40;
                 } else if (this.moveDelay-- <= 0)
                     this.movementDone = true;
@@ -89,7 +89,7 @@ public class EntityAIAmbrosia extends EntityAIAttackBase<EntityAmbrosia> {
     public void handleAttack(AnimatedAction anim) {
         switch (anim.getID()) {
             case "butterfly":
-                this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
+                this.attacker.getLookHelper().setLookPositionWithEntity(this.target, 30.0f, 30.0f);
                 if (anim.getTick() > anim.getAttackTime()) {
                     float yDec = -1.5f;
                     if(this.distanceToTargetSq<9)
@@ -100,27 +100,27 @@ public class EntityAIAmbrosia extends EntityAIAttackBase<EntityAmbrosia> {
                 }
                 break;
             case "kick_1":
-                this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
-                this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.0);
-                if (anim.getTick() % anim.getAttackTime() == 0 && this.distanceToTargetSq <= this.getAttackReachSqr(target, 2.5f)) {
-                    this.attacker.attackEntityAsMob(target);
+                this.attacker.getLookHelper().setLookPositionWithEntity(this.target, 30.0f, 30.0f);
+                this.attacker.getNavigator().tryMoveToEntityLiving(this.target, 1.0);
+                if (anim.getTick() % anim.getAttackTime() == 0 && this.distanceToTargetSq <= this.getAttackReachSqr(this.target, 2.5f)) {
+                    this.attacker.attackEntityAsMob(this.target);
                 }
                 break;
             case "sleep":
                 this.attacker.getNavigator().clearPath();
-                this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
+                this.attacker.getLookHelper().setLookPositionWithEntity(this.target, 30.0f, 30.0f);
                 if (anim.getTick() == anim.getAttackTime())
                     this.attacker.summonSleepBalls();
                 break;
             case "wave":
                 this.attacker.getNavigator().clearPath();
-                this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
+                this.attacker.getLookHelper().setLookPositionWithEntity(this.target, 30.0f, 30.0f);
                 if (anim.getTick() == anim.getAttackTime())
                     this.attacker.summonWave(anim.getLength() - anim.getAttackTime());
                 break;
             case "kick_2":
-                this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0f, 30.0f);
-                this.attacker.getNavigator().tryMoveToEntityLiving(target, 1.0);
+                this.attacker.getLookHelper().setLookPositionWithEntity(this.target, 30.0f, 30.0f);
+                this.attacker.getNavigator().tryMoveToEntityLiving(this.target, 1.0);
                 if (anim.getTick() % anim.getAttackTime() == 0) {
                     this.attacker.world.getEntitiesWithinAABB(EntityLivingBase.class, this.attacker.getEntityBoundingBox().grow(2.0), new Predicate<EntityLivingBase>() {
 

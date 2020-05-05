@@ -17,7 +17,7 @@ public class RenderBeetle<T extends EntityBeetle> extends RenderMobBase<T>{
 
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
-		return tex;
+		return this.tex;
 	}
 
 }

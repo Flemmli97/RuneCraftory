@@ -1,13 +1,5 @@
 package com.flemmli97.runecraftory.common.core.handler.event;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Random;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
 import com.flemmli97.runecraftory.api.items.CropProperties;
 import com.flemmli97.runecraftory.api.items.FoodProperties;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
@@ -15,11 +7,7 @@ import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.api.mappings.CropMap;
 import com.flemmli97.runecraftory.api.mappings.ItemFoodMap;
 import com.flemmli97.runecraftory.api.mappings.ItemStatMap;
-import com.flemmli97.runecraftory.client.gui.ButtonSkill;
-import com.flemmli97.runecraftory.client.gui.GuiBars;
-import com.flemmli97.runecraftory.client.gui.GuiInfoScreen;
-import com.flemmli97.runecraftory.client.gui.GuiInfoScreenSub;
-import com.flemmli97.runecraftory.client.gui.GuiSpellHotbar;
+import com.flemmli97.runecraftory.client.gui.*;
 import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler.EnumSeason;
 import com.flemmli97.runecraftory.common.core.handler.time.WeatherData;
 import com.flemmli97.runecraftory.common.core.handler.time.WeatherData.EnumWeather;
@@ -32,7 +20,6 @@ import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.proxy.ClientProxy;
 import com.google.common.collect.Lists;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
@@ -45,17 +32,20 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.client.event.InputUpdateEvent;
-import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
 
 public class EventHandlerClient
 {
@@ -183,7 +173,7 @@ public class EventHandlerClient
             }
             if (showTooltip) 
             {
-            	event.getToolTip().addAll(1, injectAdditionalTooltip(stack));
+            	event.getToolTip().addAll(1, this.injectAdditionalTooltip(stack));
             }
         }
     }
@@ -196,27 +186,27 @@ public class EventHandlerClient
         {
         	if(!props.bestSeasons().isEmpty())
         	{
-        		String season=I18n.format("season.best") + ": ";
+        		StringBuilder season= new StringBuilder(I18n.format("season.best") + ": ");
         		int i = 0;
         		for(EnumSeason seas : props.bestSeasons())
         		{
-        			season+=(i!=0?TextFormatting.GRAY+"/":"")+TextFormatting.getValueByName(seas.getColor()) + I18n.format(seas.formattingText());
+        			season.append(i != 0 ? TextFormatting.GRAY + "/" : "").append(TextFormatting.getValueByName(seas.getColor())).append(I18n.format(seas.formattingText()));
         			i++;
         		}
-            	tooltip.add(season);
+            	tooltip.add(season.toString());
         	}      	
         	if(!props.badSeasons().isEmpty())
         	{
-        		String sub = I18n.format("season.bad") + ": ";
+        		StringBuilder sub = new StringBuilder(I18n.format("season.bad") + ": ");
         		int i = 0;
         		for(EnumSeason seas : props.badSeasons())
         			if(!props.bestSeasons().contains(seas))
         			{
-        				sub+=(i!=0?TextFormatting.GRAY+"/":"")+TextFormatting.getValueByName(seas.getColor()) + I18n.format(seas.formattingText());
+        				sub.append(i != 0 ? TextFormatting.GRAY + "/" : "").append(TextFormatting.getValueByName(seas.getColor())).append(I18n.format(seas.formattingText()));
         				i++;
         			}
         		if(i!=0)
-        			tooltip.add(sub);
+        			tooltip.add(sub.toString());
         	}
             tooltip.add(I18n.format("growth") + ": " + props.growth() + "  " + I18n.format("harvested") + ": " + props.maxDrops());
         }
@@ -283,7 +273,7 @@ public class EventHandlerClient
     public void runey(RenderWorldLastEvent event)
     {
     	if(WeatherData.get(Minecraft.getMinecraft().world).currentWeather()==EnumWeather.RUNEY)
-    		renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
+            this.renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
     }
     
     private final Random random = new Random();

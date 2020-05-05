@@ -51,7 +51,7 @@ public class ItemBlockBase extends Item{
 
                 if (flag2 && flag3 && worldIn.getBlockState(pos.down()).isSideSolid(worldIn, blockpos, EnumFacing.UP) && worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos, EnumFacing.UP))
                 {
-                    IBlockState iblockstate2 = savedBlock.getDefaultState().withProperty(BlockMultiBase.FACING, blockFacing).withProperty(BlockMultiBase.PART, BlockMultiBase.EnumPartType.LEFT);
+                    IBlockState iblockstate2 = this.savedBlock.getDefaultState().withProperty(BlockMultiBase.FACING, blockFacing).withProperty(BlockMultiBase.PART, BlockMultiBase.EnumPartType.LEFT);
                     worldIn.setBlockState(pos, iblockstate2);
                     worldIn.setBlockState(blockpos, iblockstate2.withProperty(BlockMultiBase.PART, BlockMultiBase.EnumPartType.RIGHT));
                     SoundType soundtype = iblockstate2.getBlock().getSoundType(iblockstate2, worldIn, pos, player);

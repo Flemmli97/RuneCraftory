@@ -38,7 +38,7 @@ public abstract class ItemFertilizer extends Item
 
             if (enumdyecolor == EnumDyeColor.WHITE)
             {
-                if (applyItem(itemstack, worldIn, pos, player, hand))
+                if (this.applyItem(itemstack, worldIn, pos, player, hand))
                 {
                     if (!worldIn.isRemote)
                     {

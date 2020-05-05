@@ -35,7 +35,7 @@ public class PacketSkills  implements IMessage{
 	@Override
 	public void toBytes(ByteBuf buf) {
 		NBTTagCompound compound = new NBTTagCompound();
-		compound.setIntArray("level", skillLevel);
+		compound.setIntArray("level", this.skillLevel);
 		compound.setString("skill", this.skill.getIdentifier());
 		ByteBufUtils.writeTag(buf, compound);
 	}

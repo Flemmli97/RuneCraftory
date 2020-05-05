@@ -1,16 +1,15 @@
 package com.flemmli97.runecraftory.common.core.handler.quests;
 
-import java.util.List;
-
 import com.flemmli97.runecraftory.common.core.handler.quests.TaskTracker.NBTParser;
 import com.google.common.collect.Lists;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
+
+import java.util.List;
 
 public abstract class ObjectiveItems implements IObjective<ItemStack>{
 
@@ -62,14 +61,14 @@ public abstract class ObjectiveItems implements IObjective<ItemStack>{
 
 	@Override
 	public String currentProgress() {
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		boolean first = true;
 		for(TaskTracker<ItemStack> t : this.items)
 		{
-			s+=(first?"":", ")+I18n.format(t.getTask().getUnlocalizedName())+" ("+t.progress()+"/"+t.getAmount()+")";
+			s.append(first ? "" : ", ").append(I18n.format(t.getTask().getUnlocalizedName())).append(" (").append(t.progress()).append("/").append(t.getAmount()).append(")");
 			first=false;
 		}
-		return s;
+		return s.toString();
 	}
 
 	@Override
@@ -120,24 +119,24 @@ public abstract class ObjectiveItems implements IObjective<ItemStack>{
 	@Override
 	public String objDesc()
 	{
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		boolean first = true;
 		for(TaskTracker<ItemStack> t : this.items)
 		{
-			s+=(first?"":", ")+I18n.format(t.getTask().getUnlocalizedName()+".name")+" ("+t.getAmount()+")";
+			s.append(first ? "" : ", ").append(I18n.format(t.getTask().getUnlocalizedName() + ".name")).append(" (").append(t.getAmount()).append(")");
 			first=false;
 		}
-		return s;
+		return s.toString();
 	}
 	
 	@Override
 	public String rewardDesc()
 	{
-		String s = "";
+		StringBuilder s = new StringBuilder();
 		boolean first = true;
 		for(ItemStack stack : this.rewards)
 		{
-			s+=(first?"":", ")+I18n.format(stack.getUnlocalizedName()+".name")+" ("+stack.getCount()+")";
+			s.append(first ? "" : ", ").append(I18n.format(stack.getUnlocalizedName() + ".name")).append(" (").append(stack.getCount()).append(")");
 			first=false;
 		}
 		return "Rewards: "+s;

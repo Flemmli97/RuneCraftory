@@ -31,7 +31,7 @@ public class PacketPlayerLevel  implements IMessage{
 	@Override
 	public void toBytes(ByteBuf buf) {
 		NBTTagCompound compound = new NBTTagCompound();
-		compound.setIntArray("level", level);
+		compound.setIntArray("level", this.level);
 		ByteBufUtils.writeTag(buf, compound);
 	}
 	

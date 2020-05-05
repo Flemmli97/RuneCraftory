@@ -17,7 +17,7 @@ public class RenderOrc<T extends EntityOrc> extends RenderMobBase<T>{
 
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
-		return tex;
+		return this.tex;
 	}
 
 }

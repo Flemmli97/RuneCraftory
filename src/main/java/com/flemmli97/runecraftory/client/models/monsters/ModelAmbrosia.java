@@ -40,7 +40,7 @@ public class ModelAmbrosia extends ModelImproved {
         this.leftArm = new ModelRenderer(this, 32, 48);
         this.leftArm.setRotationPoint(20.0F, 10.0F, 0.0F);
         this.leftArm.addBox(-4.0F, -8.0F, -8.0F, 12, 24, 16, 0.0F);
-        this.setRotateAngle(leftArm, -0.17453292519943295F, 0.0F, -0.08726646259971647F);
+        this.setRotateAngle(this.leftArm, -0.17453292519943295F, 0.0F, -0.08726646259971647F);
         this.head = new ModelRenderer(this, 0, 0);
         this.head.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.head.addBox(-16.0F, -32.0F, -16.0F, 32, 32, 32, 0.0F);
@@ -53,15 +53,15 @@ public class ModelAmbrosia extends ModelImproved {
         this.body = new ModelRenderer(this, 16, 16);
         this.body.setRotationPoint(0.0F, -20.0F, 0.0F);
         this.body.addBox(-16.0F, 0.0F, -8.0F, 32, 40, 16, 0.0F);
-        this.setRotateAngle(body, 0.4363323129985824F, 0.0F, 0.0F);
+        this.setRotateAngle(this.body, 0.4363323129985824F, 0.0F, 0.0F);
         this.rightArm = new ModelRenderer(this, 40, 16);
         this.rightArm.setRotationPoint(-20.0F, 10.0F, 0.0F);
         this.rightArm.addBox(-8.0F, -8.0F, -8.0F, 12, 24, 16, 0.0F);
-        this.setRotateAngle(rightArm, -0.17453292519943295F, 0.0F, 0.08726646259971647F);
+        this.setRotateAngle(this.rightArm, -0.17453292519943295F, 0.0F, 0.08726646259971647F);
         this.leftArmDown = new ModelRenderer(this, 0, 0);
         this.leftArmDown.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.leftArmDown.addBox(-4.0F, -2.0F, -8.0F, 12, 26, 16, 0.0F);
-        this.setRotateAngle(leftArmDown, -0.17453292519943295F, 0.0F, 0.0F);
+        this.setRotateAngle(this.leftArmDown, -0.17453292519943295F, 0.0F, 0.0F);
         this.hornRightFlower = new ModelRenderer(this, 0, 0);
         this.hornRightFlower.setRotationPoint(0.0F, -8.0F, 0.0F);
         this.hornRightFlower.addBox(-3.0F, -10.0F, -3.0F, 6, 10, 6, 0.0F);
@@ -71,30 +71,30 @@ public class ModelAmbrosia extends ModelImproved {
         this.rightLegDown = new ModelRenderer(this, 16, 48);
         this.rightLegDown.setRotationPoint(0.0F, 24.0F, 0.0F);
         this.rightLegDown.addBox(-8.0F, -2.0F, -8.0F, 16, 26, 16, 0.0F);
-        this.setRotateAngle(rightLegDown, 0.2617993877991494F, 0.0F, 0.0F);
+        this.setRotateAngle(this.rightLegDown, 0.2617993877991494F, 0.0F, 0.0F);
         this.rightArmJoint = new ModelRenderer(this, 0, 0);
         this.rightArmJoint.setRotationPoint(0.0F, 16.0F, 0.0F);
         this.rightArmJoint.addBox(0.0F, 0.0F, 0.0F, 0, 0, 0, 0.0F);
         this.leftLegDown = new ModelRenderer(this, 16, 48);
         this.leftLegDown.setRotationPoint(0.0F, 24.0F, 0.0F);
         this.leftLegDown.addBox(-8.0F, -2.0F, -8.0F, 16, 26, 16, 0.0F);
-        this.setRotateAngle(leftLegDown, 0.2617993877991494F, 0.0F, 0.0F);
+        this.setRotateAngle(this.leftLegDown, 0.2617993877991494F, 0.0F, 0.0F);
         this.rightLeg = new ModelRenderer(this, 0, 16);
         this.rightLeg.setRotationPoint(-7.6F, 48.0F, 0.0F);
         this.rightLeg.addBox(-8.0F, 0.0F, -8.0F, 16, 24, 16, 0.0F);
-        this.setRotateAngle(rightLeg, -0.08726646259971647F, 0.0F, 0.0F);
+        this.setRotateAngle(this.rightLeg, -0.08726646259971647F, 0.0F, 0.0F);
         this.rightLowerWing = new ModelRenderer(this, 0, 0);
         this.rightLowerWing.setRotationPoint(0.0F, 20.0F, 8.0F);
         this.rightLowerWing.addBox(-60.0F, 0.0F, 0.0F, 60, 50, 4, 0.0F);
-        this.setRotateAngle(rightLowerWing, 0.08726646259971647F, 0.0F, -0.08726646259971647F);
+        this.setRotateAngle(this.rightLowerWing, 0.08726646259971647F, 0.0F, -0.08726646259971647F);
         this.rightUpperWing = new ModelRenderer(this, 0, 0);
         this.rightUpperWing.setRotationPoint(0.0F, 20.0F, 8.0F);
         this.rightUpperWing.addBox(-70.0F, -60.0F, 0.0F, 70, 60, 4, 0.0F);
-        this.setRotateAngle(rightUpperWing, -0.2617993877991494F, 0.0F, 0.08726646259971647F);
+        this.setRotateAngle(this.rightUpperWing, -0.2617993877991494F, 0.0F, 0.08726646259971647F);
         this.leftUpperWing = new ModelRenderer(this, 0, 0);
         this.leftUpperWing.setRotationPoint(0.0F, 20.0F, 8.0F);
         this.leftUpperWing.addBox(0.0F, -60.0F, 0.0F, 70, 60, 4, 0.0F);
-        this.setRotateAngle(leftUpperWing, -0.2617993877991494F, 0.0F, -0.08726646259971647F);
+        this.setRotateAngle(this.leftUpperWing, -0.2617993877991494F, 0.0F, -0.08726646259971647F);
         this.leftLowerWing = new ModelRenderer(this, 0, 0);
         this.leftLowerWing.setRotationPoint(0.0F, 20.0F, 8.0F);
         this.leftLowerWing.addBox(0.0F, 0.0F, 0.0F, 60, 50, 4, 0.0F);
@@ -102,26 +102,26 @@ public class ModelAmbrosia extends ModelImproved {
         this.hornLeftStick = new ModelRenderer(this, 0, 0);
         this.hornLeftStick.setRotationPoint(8.0F, -32.0F, -4.0F);
         this.hornLeftStick.addBox(-1.0F, -8.0F, -1.0F, 2, 8, 2, 0.0F);
-        this.setRotateAngle(hornLeftStick, 0.17453292519943295F, 0.0F, 0.17453292519943295F);
+        this.setRotateAngle(this.hornLeftStick, 0.17453292519943295F, 0.0F, 0.17453292519943295F);
         this.hornFront = new ModelRenderer(this, 0, 0);
         this.hornFront.setRotationPoint(0.0F, -32.0F, -10.0F);
         this.hornFront.addBox(-2.0F, -20.0F, -2.0F, 4, 20, 4, 0.0F);
-        this.setRotateAngle(hornFront, 0.5009094953223726F, 0.0F, 0.0F);
+        this.setRotateAngle(this.hornFront, 0.5009094953223726F, 0.0F, 0.0F);
         this.dressUp = new ModelRenderer(this, 0, 0);
         this.dressUp.setRotationPoint(0.0F, 40.0F, 0.0F);
         this.dressUp.addBox(-18.0F, 0.0F, -10.0F, 36, 4, 20, 0.0F);
         this.leftLeg = new ModelRenderer(this, 16, 48);
         this.leftLeg.setRotationPoint(7.6F, 48.0F, 0.0F);
         this.leftLeg.addBox(-8.0F, 0.0F, -8.0F, 16, 24, 16, 0.0F);
-        this.setRotateAngle(leftLeg, -0.08726646259971647F, 0.0F, 0.0F);
+        this.setRotateAngle(this.leftLeg, -0.08726646259971647F, 0.0F, 0.0F);
         this.rightArmDown = new ModelRenderer(this, 0, 0);
         this.rightArmDown.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.rightArmDown.addBox(-8.0F, -2.0F, -8.0F, 12, 26, 16, 0.0F);
-        this.setRotateAngle(rightArmDown, -0.17453292519943295F, 0.0F, 0.0F);
+        this.setRotateAngle(this.rightArmDown, -0.17453292519943295F, 0.0F, 0.0F);
         this.hornRightStick = new ModelRenderer(this, 0, 0);
         this.hornRightStick.setRotationPoint(-8.0F, -32.0F, -4.0F);
         this.hornRightStick.addBox(-1.0F, -8.0F, -1.0F, 2, 8, 2, 0.0F);
-        this.setRotateAngle(hornRightStick, 0.17453292519943295F, 0.0F, -0.17453292519943295F);
+        this.setRotateAngle(this.hornRightStick, 0.17453292519943295F, 0.0F, -0.17453292519943295F);
         this.body.addChild(this.leftArm);
         this.body.addChild(this.head);
         this.leftArm.addChild(this.leftArmJoint);
@@ -148,19 +148,19 @@ public class ModelAmbrosia extends ModelImproved {
 
     @Override
 	public void startingPosition() {
-        this.setRotateAngle(leftLowerWing, 0.08726646259971647F, 0.0F, 0.08726646259971647F);
-        this.setRotateAngle(rightLowerWing, 0.08726646259971647F, 0.0F, -0.08726646259971647F);
-        this.setRotateAngle(leftUpperWing, -0.2617993877991494F, 0.0F, -0.08726646259971647F);
-        this.setRotateAngle(rightUpperWing, -0.2617993877991494F, 0.0F, 0.08726646259971647F);
+        this.setRotateAngle(this.leftLowerWing, 0.08726646259971647F, 0.0F, 0.08726646259971647F);
+        this.setRotateAngle(this.rightLowerWing, 0.08726646259971647F, 0.0F, -0.08726646259971647F);
+        this.setRotateAngle(this.leftUpperWing, -0.2617993877991494F, 0.0F, -0.08726646259971647F);
+        this.setRotateAngle(this.rightUpperWing, -0.2617993877991494F, 0.0F, 0.08726646259971647F);
         
-        this.setRotateAngle(rightArm, -0.17453292519943295F, 0.0F, 0.08726646259971647F);
-        this.setRotateAngle(leftArm, -0.17453292519943295F, 0.0F, -0.08726646259971647F);
+        this.setRotateAngle(this.rightArm, -0.17453292519943295F, 0.0F, 0.08726646259971647F);
+        this.setRotateAngle(this.leftArm, -0.17453292519943295F, 0.0F, -0.08726646259971647F);
         
-        this.setRotateAngle(body, 0.2617993877991494F, 0.0F, 0.0F);
+        this.setRotateAngle(this.body, 0.2617993877991494F, 0.0F, 0.0F);
         
-        this.setRotateAngle(hornRightStick, 0.17453292519943295F, 0.0F, -0.17453292519943295F);
-        this.setRotateAngle(hornLeftStick, 0.17453292519943295F, 0.0F, 0.17453292519943295F);
-        this.setRotateAngle(hornFront, 0.5009094953223726F, 0.0F, 0.0F);
+        this.setRotateAngle(this.hornRightStick, 0.17453292519943295F, 0.0F, -0.17453292519943295F);
+        this.setRotateAngle(this.hornLeftStick, 0.17453292519943295F, 0.0F, 0.17453292519943295F);
+        this.setRotateAngle(this.hornFront, 0.5009094953223726F, 0.0F, 0.0F);
 
 	}
 
@@ -176,7 +176,7 @@ public class ModelAmbrosia extends ModelImproved {
 			float headPitch, float scale, Entity entity) {
 	    	if(((EntityLivingBase)entity).limbSwingAmount != ((EntityLivingBase)entity).prevLimbSwingAmount)
 	    	{
-	    		this.setRotateAngle(body, 0.6108652381980154F, 0.0F, 0.0F);
+	    		this.setRotateAngle(this.body, 0.6108652381980154F, 0.0F, 0.0F);
 	    	}
 	    	this.head.rotateAngleY = netHeadYaw * 0.017453292F;
 	    	this.head.rotateAngleX = headPitch * 0.017453292F;

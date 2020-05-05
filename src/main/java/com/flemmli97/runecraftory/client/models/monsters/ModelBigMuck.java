@@ -25,44 +25,44 @@ public class ModelBigMuck extends ModelBase implements IResetModel {
     private BlockBenchAnimations animations;
 
     public ModelBigMuck() {
-        textureWidth = 128;
-        textureHeight = 128;
+        this.textureWidth = 128;
+        this.textureHeight = 128;
 
-        body = new ModelRendererPlus(this);
-        body.setDefaultRotPoint(0.0F, 24.0F, 0.0F);
-        body.cubeList.add(new ModelBox(body, 0, 0, -6.0F, -14.0F, -5.0F, 11, 14, 11, 0.0F, false));
-        body.cubeList.add(new ModelBox(body, 0, 25, -5.0F, -14.0F, -6.0F, 9, 14, 1, 0.0F, false));
-        body.cubeList.add(new ModelBox(body, 44, 0, 5.0F, -14.0F, -4.0F, 1, 14, 9, 0.0F, false));
-        body.cubeList.add(new ModelBox(body, 44, 0, -7.0F, -14.0F, -4.0F, 1, 14, 9, 0.0F, false));
-        body.cubeList.add(new ModelBox(body, 20, 25, -5.0F, -14.0F, 6.0F, 9, 14, 1, 0.0F, false));
+        this.body = new ModelRendererPlus(this);
+        this.body.setDefaultRotPoint(0.0F, 24.0F, 0.0F);
+        this.body.cubeList.add(new ModelBox(this.body, 0, 0, -6.0F, -14.0F, -5.0F, 11, 14, 11, 0.0F, false));
+        this.body.cubeList.add(new ModelBox(this.body, 0, 25, -5.0F, -14.0F, -6.0F, 9, 14, 1, 0.0F, false));
+        this.body.cubeList.add(new ModelBox(this.body, 44, 0, 5.0F, -14.0F, -4.0F, 1, 14, 9, 0.0F, false));
+        this.body.cubeList.add(new ModelBox(this.body, 44, 0, -7.0F, -14.0F, -4.0F, 1, 14, 9, 0.0F, false));
+        this.body.cubeList.add(new ModelBox(this.body, 20, 25, -5.0F, -14.0F, 6.0F, 9, 14, 1, 0.0F, false));
 
-        mushroomCap = new ModelRendererPlus(this);
-        mushroomCap.setDefaultRotPoint(0.0F, 0.0F, 0.0F);
-        body.addChild(mushroomCap);
-        mushroomCap.cubeList.add(new ModelBox(mushroomCap, 0, 48, -10.0F, -16.0F, -9.0F, 19, 2, 19, 0.0F, false));
-        mushroomCap.cubeList.add(new ModelBox(mushroomCap, 0, 69, -8.0F, -18.0F, -7.0F, 15, 2, 15, 0.0F, false));
-        mushroomCap.cubeList.add(new ModelBox(mushroomCap, 0, 86, -7.0F, -21.0F, -6.0F, 13, 3, 13, 0.0F, false));
-        mushroomCap.cubeList.add(new ModelBox(mushroomCap, 84, 0, -6.0F, -24.0F, -5.0F, 11, 3, 11, 0.0F, false));
-        mushroomCap.cubeList.add(new ModelBox(mushroomCap, 100, 14, -4.0F, -26.0F, -3.0F, 7, 2, 7, 0.0F, false));
+        this.mushroomCap = new ModelRendererPlus(this);
+        this.mushroomCap.setDefaultRotPoint(0.0F, 0.0F, 0.0F);
+        this.body.addChild(this.mushroomCap);
+        this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 0, 48, -10.0F, -16.0F, -9.0F, 19, 2, 19, 0.0F, false));
+        this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 0, 69, -8.0F, -18.0F, -7.0F, 15, 2, 15, 0.0F, false));
+        this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 0, 86, -7.0F, -21.0F, -6.0F, 13, 3, 13, 0.0F, false));
+        this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 84, 0, -6.0F, -24.0F, -5.0F, 11, 3, 11, 0.0F, false));
+        this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 100, 14, -4.0F, -26.0F, -3.0F, 7, 2, 7, 0.0F, false));
 
-        handLeft = new ModelRendererPlus(this);
-        handLeft.setDefaultRotPoint(6.0F, -8.5F, 0.5F);
-        setRotationAngle(handLeft, 0.0F, 0.0F, 0.2618F);
-        handLeft.cubeList.add(new ModelBox(handLeft, 0, 40, 0.0F, -0.5F, -3.5F, 8, 1, 7, 0.0F, true));
-        body.addChild(handLeft);
+        this.handLeft = new ModelRendererPlus(this);
+        this.handLeft.setDefaultRotPoint(6.0F, -8.5F, 0.5F);
+        this.setRotationAngle(this.handLeft, 0.0F, 0.0F, 0.2618F);
+        this.handLeft.cubeList.add(new ModelBox(this.handLeft, 0, 40, 0.0F, -0.5F, -3.5F, 8, 1, 7, 0.0F, true));
+        this.body.addChild(this.handLeft);
 
-        handRight = new ModelRendererPlus(this);
-        handRight.setDefaultRotPoint(-7.0F, -8.5F, 0.5F);
-        setRotationAngle(handRight, 0.0F, 0.0F, -0.2618F);
-        handRight.cubeList.add(new ModelBox(handRight, 0, 40, -8.0F, -0.5F, -3.5F, 8, 1, 7, 0.0F, false));
-        body.addChild(handRight);
+        this.handRight = new ModelRendererPlus(this);
+        this.handRight.setDefaultRotPoint(-7.0F, -8.5F, 0.5F);
+        this.setRotationAngle(this.handRight, 0.0F, 0.0F, -0.2618F);
+        this.handRight.cubeList.add(new ModelBox(this.handRight, 0, 40, -8.0F, -0.5F, -3.5F, 8, 1, 7, 0.0F, false));
+        this.body.addChild(this.handRight);
 
         this.animations = new BlockBenchAnimations(this, new ResourceLocation(LibReference.MODID, "models/entity/animation/big_muck.json"));
     }
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        body.render(f5);
+        this.body.render(f5);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class ModelBigMuck extends ModelBase implements IResetModel {
 
     @Override
     public void resetModel() {
-        body.reset();
+        this.body.reset();
         this.resetChild(this.body);
     }
 

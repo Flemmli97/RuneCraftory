@@ -63,7 +63,7 @@ public class PlayerCap implements IPlayer
 	//max runepoints possible: 2883
 	private int money=0;
 	private int runePointsMax=56;
-	private int runePoints = runePointsMax;
+	private int runePoints = this.runePointsMax;
 	private float str = 5;
 	private float vit = 4;
 	private float intel = 5;

@@ -14,7 +14,7 @@ public class ItemEntityLevelUp extends Item{
 	public ItemEntityLevelUp()
     {
 		super();
-		setUnlocalizedName("entity_level_item");
+        this.setUnlocalizedName("entity_level_item");
 		this.setRegistryName(new ResourceLocation(LibReference.MODID, "entity_level_item"));
     }
 	

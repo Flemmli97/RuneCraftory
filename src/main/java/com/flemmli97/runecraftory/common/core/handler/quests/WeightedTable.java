@@ -27,13 +27,13 @@ public class WeightedTable<T> {
 		switch(diff)
 		{
 			case EASY:
-				check=easy;
+				check= this.easy;
 				break;
 			case HARD:
-				check=hard;
+				check= this.hard;
 				break;
 			case NORMAL:
-				check=normal;
+				check= this.normal;
 				break;
 		}
 		int rolls = 1;
@@ -105,16 +105,16 @@ public class WeightedTable<T> {
 		
 		public T get()
 		{
-			return t;
+			return this.t;
 		}
 		
 		public int amount()
 		{
-			return amount;
+			return this.amount;
 		}
 		
 		public int money() {
-			return money;
+			return this.money;
 		}
 		
 		@Nullable

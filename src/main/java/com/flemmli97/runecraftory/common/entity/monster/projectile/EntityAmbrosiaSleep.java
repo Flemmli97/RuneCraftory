@@ -79,7 +79,7 @@ public class EntityAmbrosiaSleep extends Entity
         ++this.livingTick;
         if(this.world.isRemote) {
             for(int i = 0; i < 4; i++) {
-                Particles.spawnParticle(LibParticles.particleFlame, this.world, this.posX, this.posY+0.35, this.posZ, rand.nextGaussian() * 0.008D, Math.abs(rand.nextGaussian() * 0.025), rand.nextGaussian() * 0.009D);
+                Particles.spawnParticle(LibParticles.particleFlame, this.world, this.posX, this.posY+0.35, this.posZ, this.rand.nextGaussian() * 0.008D, Math.abs(this.rand.nextGaussian() * 0.025), this.rand.nextGaussian() * 0.009D);
             }
         }
         if (this.livingTick > 90) {
