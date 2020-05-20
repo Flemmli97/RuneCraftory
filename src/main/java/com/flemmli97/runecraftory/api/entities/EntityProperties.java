@@ -1,9 +1,5 @@
 package com.flemmli97.runecraftory.api.entities;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.MapWrapper;
@@ -13,9 +9,12 @@ import com.flemmli97.tenshilib.common.config.ConfigUtils;
 import com.flemmli97.tenshilib.common.javahelper.ArrayUtils;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraftforge.common.config.Configuration;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class EntityProperties implements IConfigSerializable<EntityProperties>
 {
@@ -80,9 +79,7 @@ public class EntityProperties implements IConfigSerializable<EntityProperties>
 	@Override
 	public EntityProperties config(Configuration config, String configCategory) {
 		List<String> stats = Lists.newArrayList();
-        this.baseValues.entrySet().forEach(entry->{
-            stats.add(entry.getKey().getName() + ";" + entry.getValue());
-        });
+        this.baseValues.forEach((key, value) -> stats.add(key.getName() + ";" + value));
         List<String> drops = Lists.newArrayList();
         for (Entry<SimpleItemStackWrapper, Float> mapEntry : this.drops.entrySet()) {
             drops.add(mapEntry.getKey().toString() + ";" + mapEntry.getValue());
@@ -108,8 +105,8 @@ public class EntityProperties implements IConfigSerializable<EntityProperties>
         this.xp = ConfigUtils.getIntConfig(config, "Base xp", configCategory, this.xp, 0, "Base xp when defeating this entity");
         this.money = ConfigUtils.getIntConfig(config, "Base money", configCategory, this.money, 0, "Base money when defeating this entity");
         this.taming = config.getFloat("Taming chance", configCategory, this.taming, 0.0f, 1.0f, "Base taming chance.");
-        this.tamingItem = ArrayUtils.arrayConverter(config.getStringList("Taming Items", configCategory, ArrayUtils.arrayToStringArr(this.tamingItem), "Syntax is \"item(,meta)\""), 
-        		(string)->new SimpleItemStackWrapper(string),SimpleItemStackWrapper.class, false);
+        this.tamingItem = ArrayUtils.arrayConverter(config.getStringList("Taming Items", configCategory, ArrayUtils.arrayToStringArr(this.tamingItem), "Syntax is \"item(,meta)\""),
+                SimpleItemStackWrapper::new,SimpleItemStackWrapper.class, false);
         this.daily.clear();
         for(String s : config.getStringList("Daily Products", configCategory, daily.toArray(new String[0]), "Syntax is \"item(,meta);hearts. Where hearts is the friendship minimum value for that drop\""))
     	{

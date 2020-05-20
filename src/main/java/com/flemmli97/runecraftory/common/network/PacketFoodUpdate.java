@@ -20,7 +20,8 @@ public class PacketFoodUpdate  implements IMessage{
 	
 	private Map<IAttribute, Integer> gain;
 	private int duration;
-	public PacketFoodUpdate() {};
+	public PacketFoodUpdate() {}
+
 	public PacketFoodUpdate(Map<IAttribute, Integer> gain, int duration)
 	{
 		this.gain=gain;
@@ -44,9 +45,7 @@ public class PacketFoodUpdate  implements IMessage{
 		NBTTagCompound compound = new NBTTagCompound();
 		compound.setInteger("Duration", this.duration);
 		NBTTagCompound tag = new NBTTagCompound();
-		this.gain.forEach((att,i)->{
-			tag.setInteger(att.getName(), i);
-		});
+		this.gain.forEach((att,i)-> tag.setInteger(att.getName(), i));
 		compound.setTag("Map", tag);
 		ByteBufUtils.writeTag(buf, compound);
 	}
@@ -58,7 +57,7 @@ public class PacketFoodUpdate  implements IMessage{
         	EntityPlayer player = RuneCraftory.proxy.getPlayerEntity(ctx);
         if(player!=null)
 		{
-			player.getCapability(PlayerCapProvider.PlayerCap, null).applyFoodEffect(player, msg.gain, Maps.newHashMap(), msg.duration);;				     	
+			player.getCapability(PlayerCapProvider.PlayerCap, null).applyFoodEffect(player, msg.gain, Maps.newHashMap(), msg.duration);
 		}	
             return null;
         }

@@ -164,9 +164,7 @@ public class GuiMaking extends GuiContainer
             if (!stack1.hasTagCompound() && stack2.hasTagCompound()) {
                 return false;
             }
-            if (stack1.getTagCompound().equals(stack2.getTagCompound())) {
-                return true;
-            }
+            return stack1.getTagCompound().equals(stack2.getTagCompound());
         }
         return false;
     }

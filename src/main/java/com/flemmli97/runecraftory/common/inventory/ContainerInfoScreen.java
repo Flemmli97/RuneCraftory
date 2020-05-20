@@ -19,8 +19,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerInfoScreen extends Container
 {
-    private static final EntityEquipmentSlot[] VALID_EQUIPMENT_SLOTS = new EntityEquipmentSlot[] { EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET };;
-    
+    private static final EntityEquipmentSlot[] VALID_EQUIPMENT_SLOTS = new EntityEquipmentSlot[] { EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET };
+
     public ContainerInfoScreen(EntityPlayer player) {
         InventoryPlayer playerInventory = player.inventory;
         InventorySpells playerSpells = player.getCapability(PlayerCapProvider.PlayerCap, null).getInv();

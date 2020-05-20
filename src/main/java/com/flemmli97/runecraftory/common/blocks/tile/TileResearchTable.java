@@ -101,19 +101,11 @@ public class TileResearchTable extends TileEntity implements IInventory{
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
 		if(index==1)
-			if(stack.getItem()==Items.BREAD)
-				return true;
-			else 
-				return false;
+			return stack.getItem() == Items.BREAD;
 		if(index == 2)
 			for(ItemStack ore : OreDictionary.getOres("paper"))
-				if(OreDictionary.itemMatches(stack, ore, false))
-					return true;
-			else
-				return false;
-		if(index==3)
-			return false;
-		return true;
+				return OreDictionary.itemMatches(stack, ore, false);
+		return index != 3;
 	}
 
 	@Override

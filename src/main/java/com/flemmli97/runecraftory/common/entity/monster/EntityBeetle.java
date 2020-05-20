@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 public class EntityBeetle extends EntityMobBase {
 
-    private EntityAIChargeAttackBase<EntityBeetle> ai = new EntityAIChargeAttackBase<EntityBeetle>(this, 1.0f);;
+    private EntityAIChargeAttackBase<EntityBeetle> ai = new EntityAIChargeAttackBase<EntityBeetle>(this, 1.0f);
     private static final AnimatedAction chargeAttack = new AnimatedAction(30,0, "charge");
     private static final AnimatedAction[] anims = new AnimatedAction[] {AnimatedAction.vanillaAttack, chargeAttack};
 
@@ -32,6 +32,6 @@ public class EntityBeetle extends EntityMobBase {
         if(type==AnimationType.CHARGE) {
             return anim.getID().equals("charge");
         }
-        return type==AnimationType.MELEE?anim.getID().equals("vanilla"):true;
+        return type != AnimationType.MELEE || anim.getID().equals("vanilla");
     }
 }

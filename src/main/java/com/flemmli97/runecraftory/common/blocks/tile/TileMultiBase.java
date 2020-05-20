@@ -1,7 +1,5 @@
 package com.flemmli97.runecraftory.common.blocks.tile;
 
-import java.util.Collection;
-
 import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
 import com.flemmli97.runecraftory.common.core.handler.crafting.RecipeSextuple;
@@ -11,7 +9,6 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
@@ -21,6 +18,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
+
+import java.util.Collection;
 
 public abstract class TileMultiBase extends TileEntity implements IInventory{
 
@@ -105,15 +104,9 @@ public abstract class TileMultiBase extends TileEntity implements IInventory{
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
 		if(index==0)
-			if(stack.getItem() instanceof ItemRecipe && stack.getMetadata()==this.type.getID())
-				return true;
-			else
-				return false;
+			return stack.getItem() instanceof ItemRecipe && stack.getMetadata() == this.type.getID();
 		else if(index==7)
-			if(this.validItem(stack))
-				return true;
-			else 
-				return false;
+			return this.validItem(stack);
 		return true;
 	}
 	

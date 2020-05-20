@@ -92,10 +92,8 @@ public abstract class ParticleOverlayBlend extends ParticleSimpleTexture{
         
     };
     
-    private static final GLManip two = ()->{
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR,
-            GlStateManager.SourceFactor.DST_ALPHA, GlStateManager.DestFactor.ZERO);
-    };
+    private static final GLManip two = ()-> GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR,
+        GlStateManager.SourceFactor.DST_ALPHA, GlStateManager.DestFactor.ZERO);
     
     private static interface GLManip{
         

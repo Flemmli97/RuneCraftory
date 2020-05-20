@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 
 public class ItemStatMap
 {
-    private static final Map<SimpleItemStackWrapper, ItemStat> stats = Maps.newHashMap();;
+    private static final Map<SimpleItemStackWrapper, ItemStat> stats = Maps.newHashMap();
     private static int count = 0;
     
     public static void add(SimpleItemStackWrapper item, ItemStat stat) {

@@ -19,8 +19,8 @@ import net.minecraft.world.World;
 public abstract class EntityBossBase extends EntityMobBase
 {
     private BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), BossInfo.Color.GREEN, BossInfo.Overlay.PROGRESS);
-    private static DataParameter<Boolean> enraged = EntityDataManager.createKey(EntityBossBase.class, DataSerializers.BOOLEAN);;
-    
+    private static DataParameter<Boolean> enraged = EntityDataManager.createKey(EntityBossBase.class, DataSerializers.BOOLEAN);
+
     protected EntityBossBase(World world) {
         super(world);
     }

@@ -42,17 +42,14 @@ public class ItemGloveBase extends ItemSword implements IItemUsable, IChargeable
         this.setCreativeTab(RuneCraftory.weaponToolTab);
         this.setRegistryName(new ResourceLocation(LibReference.MODID, name));
         this.setUnlocalizedName(this.getRegistryName().toString());
-        this.addPropertyOverride(new ResourceLocation("held"), (IItemPropertyGetter)new IItemPropertyGetter() {
-            @Override
-			public float apply(ItemStack stack, World world, EntityLivingBase entity) {
-                if (world == null || entity==null || entity.getHeldItemMainhand() != stack) {
-                    return 0.0f;
-                }
-                if (entity instanceof EntityPlayer && entity.world.isRemote && ((AbstractClientPlayer)entity).getSkinType().equals("slim")) {
-                    return 2.0f;
-                }
-                return 1.0f;
+        this.addPropertyOverride(new ResourceLocation("held"), (IItemPropertyGetter) (stack, world, entity) -> {
+            if (world == null || entity==null || entity.getHeldItemMainhand() != stack) {
+                return 0.0f;
             }
+            if (entity instanceof EntityPlayer && entity.world.isRemote && ((AbstractClientPlayer)entity).getSkinType().equals("slim")) {
+                return 2.0f;
+            }
+            return 1.0f;
         });
     }
     

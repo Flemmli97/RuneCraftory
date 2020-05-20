@@ -1,13 +1,9 @@
 package com.flemmli97.runecraftory;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.proxy.CommonProxy;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
@@ -25,6 +21,9 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 @Mod(modid = LibReference.MODID, name = LibReference.MODNAME, version = LibReference.VERSION, dependencies = LibReference.dependencies, guiFactory = LibReference.guiFactory)
 public class RuneCraftory
@@ -153,7 +152,7 @@ public class RuneCraftory
 	        {
 				NonNullList<ItemStack> sub = NonNullList.create();
 	            item.getSubItems(this, sub);
-	            sub.forEach(stack->ItemNBT.initNBT(stack));
+	            sub.forEach(ItemNBT::initNBT);
 	            list.addAll(sub);
 	        }
 		}

@@ -54,14 +54,11 @@ public class ItemDualBladeBase extends ItemSword implements IItemUsable, ICharge
         this.setCreativeTab(RuneCraftory.weaponToolTab);
         this.setRegistryName(new ResourceLocation(LibReference.MODID, name));
         this.setUnlocalizedName(this.getRegistryName().toString());
-        this.addPropertyOverride(new ResourceLocation("held"), (IItemPropertyGetter)new IItemPropertyGetter() {
-            @Override
-			public float apply(ItemStack stack, World world, EntityLivingBase entity) {
-                if (entity != null && entity.getHeldItemMainhand() == stack) {
-                    return 1.0f;
-                }
-                return 0.0f;
+        this.addPropertyOverride(new ResourceLocation("held"), (IItemPropertyGetter) (stack, world, entity) -> {
+            if (entity != null && entity.getHeldItemMainhand() == stack) {
+                return 1.0f;
             }
+            return 0.0f;
         });
     }
     

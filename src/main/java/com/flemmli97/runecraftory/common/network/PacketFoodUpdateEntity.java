@@ -26,7 +26,8 @@ public class PacketFoodUpdateEntity  implements IMessage{
 
 	private int duration;
 	
-	public PacketFoodUpdateEntity() {};
+	public PacketFoodUpdateEntity() {}
+
 	public PacketFoodUpdateEntity(EntityLiving e, Map<IAttribute, Integer> gain, Map<IAttribute, Float> gainMulti, int duration)
 	{
 		this.entityID=e.getEntityId();
@@ -43,15 +44,11 @@ public class PacketFoodUpdateEntity  implements IMessage{
 		NBTTagCompound tag = compound.getCompoundTag("Map");
 		this.gain=Maps.newHashMap();
 		tag.getKeySet().forEach(s->
-		{
-			this.gain.put(ItemUtils.getAttFromName(s), tag.getInteger(s));
-		});
+                this.gain.put(ItemUtils.getAttFromName(s), tag.getInteger(s)));
 		NBTTagCompound tag2 = compound.getCompoundTag("MapMulti");
 		this.gainMulti=Maps.newHashMap();
 		tag.getKeySet().forEach(s->
-		{
-			this.gainMulti.put(ItemUtils.getAttFromName(s), tag2.getFloat(s));
-		});
+                this.gainMulti.put(ItemUtils.getAttFromName(s), tag2.getFloat(s)));
 	}
 
 	@Override
@@ -59,14 +56,10 @@ public class PacketFoodUpdateEntity  implements IMessage{
 		NBTTagCompound compound = new NBTTagCompound();
 		compound.setInteger("Duration", this.duration);
 		NBTTagCompound tag = new NBTTagCompound();
-		this.gain.forEach((att,i)->{
-			tag.setInteger(att.getName(), i);
-		});
+		this.gain.forEach((att,i)-> tag.setInteger(att.getName(), i));
 		compound.setTag("Map", tag);
 		NBTTagCompound tag2 = new NBTTagCompound();
-		this.gainMulti.forEach((att,f)->{
-			tag.setFloat(att.getName(), f);
-		});
+		this.gainMulti.forEach((att,f)-> tag.setFloat(att.getName(), f));
 		compound.setTag("MapMulti", tag2);
 		compound.setInteger("EntityID", this.entityID);
 		ByteBufUtils.writeTag(buf, compound);

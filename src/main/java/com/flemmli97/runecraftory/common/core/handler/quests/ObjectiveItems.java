@@ -86,32 +86,22 @@ public abstract class ObjectiveItems implements IObjective<ItemStack>{
 		NBTTagList list = compound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		if(this.items==null)
 			this.items = Lists.newArrayList();
-		list.forEach(tag->{
-			this.items.add(new TaskTracker<ItemStack>((NBTTagCompound)tag, NBTParser.itemstack));
-
-		});
+		list.forEach(tag-> this.items.add(new TaskTracker<ItemStack>((NBTTagCompound)tag, NBTParser.itemstack)));
 		this.money=compound.getInteger("Money");
 		NBTTagList list2 = compound.getTagList("Rewards", Constants.NBT.TAG_COMPOUND);
 		if(this.rewards==null)
 			this.rewards = Lists.newArrayList();
-		list2.forEach(tag->{
-			this.rewards.add(new ItemStack((NBTTagCompound)tag));
-
-		});
+		list2.forEach(tag-> this.rewards.add(new ItemStack((NBTTagCompound)tag)));
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		NBTTagList list = new NBTTagList();
-		this.items.forEach(track->{
-			list.appendTag(track.writeToNBT(NBTParser.itemstack));
-		});
+		this.items.forEach(track-> list.appendTag(track.writeToNBT(NBTParser.itemstack)));
 		compound.setTag("Items", list);
 		compound.setInteger("Money", this.money);
 		NBTTagList list2 = new NBTTagList();
-		this.rewards.forEach(stack->{
-			list2.appendTag(stack.writeToNBT(new NBTTagCompound()));
-		});
+		this.rewards.forEach(stack-> list2.appendTag(stack.writeToNBT(new NBTTagCompound())));
 		compound.setTag("Rewards", list2);
 		return compound;
 	}

@@ -98,7 +98,7 @@ public class EntityWooly extends EntityMobBase implements IShearable {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type==AnimationType.MELEE?anim.getID().equals("vanilla"):true;
+        return type != AnimationType.MELEE || anim.getID().equals("vanilla");
     }
 
     public boolean isSheared() {

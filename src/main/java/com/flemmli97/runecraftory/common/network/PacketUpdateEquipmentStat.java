@@ -13,8 +13,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class PacketUpdateEquipmentStat  implements IMessage{
 	
 	private EntityEquipmentSlot slot;
-	public PacketUpdateEquipmentStat() {};
-	public PacketUpdateEquipmentStat(EntityEquipmentSlot slot)
+	public PacketUpdateEquipmentStat() {}
+
+    public PacketUpdateEquipmentStat(EntityEquipmentSlot slot)
 	{
 		this.slot=slot;
 	}

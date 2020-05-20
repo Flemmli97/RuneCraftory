@@ -1,10 +1,5 @@
 package com.flemmli97.runecraftory.common.core.handler.capabilities;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
@@ -38,7 +33,6 @@ import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.flemmli97.tenshilib.api.config.ExtendedItemStackWrapper;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -57,6 +51,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.util.Constants;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class PlayerCap implements IPlayer
 {
@@ -134,7 +133,7 @@ public class PlayerCap implements IPlayer
     
     @Override
     public float getMaxHealth(EntityPlayer player) {
-        return player.getMaxHealth()+(this.foodBuffs.containsKey(SharedMonsterAttributes.MAX_HEALTH)?this.foodBuffs.get(SharedMonsterAttributes.MAX_HEALTH):0);
+        return player.getMaxHealth()+(this.foodBuffs.getOrDefault(SharedMonsterAttributes.MAX_HEALTH, 0));
     }
     
     @Override
@@ -151,7 +150,7 @@ public class PlayerCap implements IPlayer
     
     @Override
     public int getMaxRunePoints() {
-        return this.runePointsMax+(this.foodBuffs.containsKey(ItemStatAttributes.RPMAX)?this.foodBuffs.get(ItemStatAttributes.RPMAX):0);
+        return this.runePointsMax+(this.foodBuffs.getOrDefault(ItemStatAttributes.RPMAX, 0));
     }
     
     //TODO: boolean forced. so healing spells wont damage player when not enough rp
@@ -348,7 +347,7 @@ public class PlayerCap implements IPlayer
     		i+=this.getVit()*0.5;
     	if(att==ItemStatAttributes.RFDEFENCE)
     		i+=this.getVit()*0.5;
-    	i+=this.foodBuffs.containsKey(att)?this.foodBuffs.get(att):0;
+    	i+= this.foodBuffs.getOrDefault(att, 0);
 		return i;
 	}
     
@@ -582,7 +581,7 @@ public class PlayerCap implements IPlayer
         nbt.setTag("Inventory", compound2);
         nbt.setTag("Shipping", this.shipping.saveInventoryToNBT());
         NBTTagList ship = new NBTTagList();
-        this.shippedItems.entrySet().forEach(e->ship.appendTag(new NBTTagString(e.getKey()+";"+e.getValue())));
+        this.shippedItems.forEach((key, value) -> ship.appendTag(new NBTTagString(key + ";" + value)));
         nbt.setTag("ShippedItems", ship);
         NBTTagCompound shop = new NBTTagCompound();
         for(Entry<EnumShop, NonNullList<ItemStack>> entry : this.shopItems.entrySet())
@@ -625,7 +624,7 @@ public class PlayerCap implements IPlayer
 				i+=this.intel*gainMulti.get(att);
 			else if(att==ItemStatAttributes.RFMAGICDEF)
 				i+=this.vit*0.5*gainMulti.get(att);
-			i+=gain.containsKey(att)?gain.get(att):0;
+			i+= gain.getOrDefault(att, 0);
 			gain.put(att, i);
 		}
 		this.foodBuffs=gain;

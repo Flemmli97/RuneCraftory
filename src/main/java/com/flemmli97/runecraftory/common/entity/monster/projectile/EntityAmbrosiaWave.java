@@ -27,7 +27,7 @@ import net.minecraft.world.WorldServer;
 public class EntityAmbrosiaWave extends Entity
 {
     private static final DataParameter<Float> radius = EntityDataManager.createKey(EntityAmbrosiaWave.class, DataSerializers.FLOAT);
-    private static final DataParameter<Integer> maxTick = EntityDataManager.createKey(EntityAmbrosiaWave.class, DataSerializers.VARINT);;
+    private static final DataParameter<Integer> maxTick = EntityDataManager.createKey(EntityAmbrosiaWave.class, DataSerializers.VARINT);
 
     private EntityAmbrosia owner;
     private int livingTick;

@@ -1,12 +1,7 @@
 package com.flemmli97.runecraftory.common.entity.ai;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.google.common.base.Predicate;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -19,6 +14,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.Team;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Comparator;
+import java.util.List;
 
 public class EntityAIAttackTarget extends EntityAIBase {
 
@@ -65,7 +63,7 @@ public class EntityAIAttackTarget extends EntityAIBase {
         List<EntityLivingBase> list = this.taskOwner.world.getEntitiesWithinAABB(EntityLivingBase.class, this.targetArea(this.maxDist), this.pred);
         if (list.isEmpty())
             return false;
-        Collections.sort(list, this.sorter);
+        list.sort(this.sorter);
         this.target = list.get(0);
         return true;
     }
@@ -89,7 +87,7 @@ public class EntityAIAttackTarget extends EntityAIBase {
         else {
             Team team = this.taskOwner.getTeam();
             Team team1 = eTarget.getTeam();
-            if (team != null && team1.equals(team))
+            if (team != null && team.equals(team1))
                 return false;
             else {
                 double maxDis = this.getTargetDistance();

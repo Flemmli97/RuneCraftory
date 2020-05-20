@@ -142,7 +142,7 @@ public class ItemSpawnEgg extends Item{
             {
                 if (!player.capabilities.isCreativeMode)
                 {
-                		player.getHeldItem(hand).shrink(1);;
+                		player.getHeldItem(hand).shrink(1);
                 }
             }
 
@@ -188,7 +188,7 @@ public class ItemSpawnEgg extends Item{
                     {
                         if (!player.capabilities.isCreativeMode)
                         {
-                        		player.getHeldItem(hand).shrink(1);;
+                        		player.getHeldItem(hand).shrink(1);
                         }
 
                         player.addStat(StatList.getObjectUseStats(this));

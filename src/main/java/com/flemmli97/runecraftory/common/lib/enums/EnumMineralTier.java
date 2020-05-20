@@ -45,9 +45,7 @@ public enum EnumMineralTier implements IStringSerializable
     
     public static boolean isElemental(EnumMineralTier tier)
     {
-    	if(tier==EnumMineralTier.FIRE || tier==EnumMineralTier.WIND||tier==EnumMineralTier.EARTH||tier==EnumMineralTier.WATER)
-    		return true;
-    	return false;
+        return tier == EnumMineralTier.FIRE || tier == EnumMineralTier.WIND || tier == EnumMineralTier.EARTH || tier == EnumMineralTier.WATER;
     }
 	
 }

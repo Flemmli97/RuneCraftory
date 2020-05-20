@@ -1,11 +1,5 @@
 package com.flemmli97.runecraftory.common.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
@@ -18,8 +12,6 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
-import com.google.common.base.Predicate;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -49,6 +41,11 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.ForgeEventFactory;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class EntityGate extends EntityLiving implements IEntityBase
 {
@@ -172,12 +169,7 @@ public class EntityGate extends EntityLiving implements IEntityBase
     private void spawnMobs() {
         if (!this.spawnList.isEmpty()) {
             int randAmount = this.rand.nextInt(4) + 1;
-            List<Entity> nearby = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(12.0), new Predicate<Entity>() {
-                @Override
-				public boolean apply(Entity entity) {
-                    return EntityGate.this.spawnList.contains(EntityList.getKey(entity));
-                }
-            });
+            List<Entity> nearby = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(12.0), entity -> EntityGate.this.spawnList.contains(EntityList.getKey(entity)));
             if (nearby.size() <= 6) 
             {
                 for (int amount = 0; amount < randAmount; ++amount) 

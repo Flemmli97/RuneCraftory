@@ -44,7 +44,6 @@ public class ModelPlayerImproved extends ModelPlayer{
             GlStateManager.pushMatrix();
             GlStateManager.scale(0.5F, 0.5F, 0.5F);
             GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
-            this.bipedBody.render(scale);
         }
         else
         {
@@ -52,8 +51,8 @@ public class ModelPlayerImproved extends ModelPlayer{
             {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
-            this.bipedBody.render(scale);
         }
+        this.bipedBody.render(scale);
 
         GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
@@ -62,7 +61,6 @@ public class ModelPlayerImproved extends ModelPlayer{
         {
             GlStateManager.scale(0.5F, 0.5F, 0.5F);
             GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
-            this.bipedBodyWear.render(scale);
         }
         else
         {
@@ -70,8 +68,8 @@ public class ModelPlayerImproved extends ModelPlayer{
             {
                 GlStateManager.translate(0.0F, 0.2F, 0.0F);
             }
-            this.bipedBodyWear.render(scale);
         }
+        this.bipedBodyWear.render(scale);
 
         GlStateManager.popMatrix();
     }

@@ -36,7 +36,7 @@ public class EntityThunderbolt extends EntityBossBase{
 
     private static final AnimatedAction[] anims = new AnimatedAction[] {front_kick, back_kick, lazer_x5, stomp, horn_attack, wind_blade, charge, lazer_aoe, lazer_kick, lazer_kick_x3};
 	
-    private static DataParameter<Boolean> death_feinted = EntityDataManager.createKey(EntityThunderbolt.class, DataSerializers.BOOLEAN);;
+    private static DataParameter<Boolean> death_feinted = EntityDataManager.createKey(EntityThunderbolt.class, DataSerializers.BOOLEAN);
 
     public EntityThunderbolt(World world) {
 		super(world);

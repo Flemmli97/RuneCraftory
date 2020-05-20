@@ -4,9 +4,9 @@ import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
 import com.flemmli97.runecraftory.common.core.handler.crafting.RecipeSextuple;
 import com.flemmli97.runecraftory.common.items.misc.ItemRecipe;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -15,7 +15,6 @@ import net.minecraftforge.client.model.BakedModelWrapper;
 import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 
 public class BakedItemRecipeModel extends BakedModelWrapper<IBakedModel>{
 
@@ -51,7 +50,7 @@ public class BakedItemRecipeModel extends BakedModelWrapper<IBakedModel>{
 	{
 		BakedItemRecipeModel model;
 		public RecipeItemOverride(BakedItemRecipeModel model) {
-			super(new ArrayList<ItemOverride>());
+			super(Lists.newArrayList());
 			this.model=model;
 		}
 		

@@ -1364,12 +1364,7 @@ public class ModItems {
 	@SubscribeEvent
 	public static final void recipeRender(ModelBakeEvent event)
 	{
-	    ModelLoader.setCustomMeshDefinition(recipe, new ItemMeshDefinition() {
-            @Override
-            public ModelResourceLocation getModelLocation(ItemStack stack) {
-                return new ModelResourceLocation(recipe.getRegistryName(), "inventory");
-            }
-        });
+	    ModelLoader.setCustomMeshDefinition(recipe, stack -> new ModelResourceLocation(recipe.getRegistryName(), "inventory"));
         event.getModelRegistry().putObject(new ModelResourceLocation(recipe.getRegistryName(), "inventory"), new BakedItemRecipeModel(event.getModelManager().getModel(new ModelResourceLocation(recipe.getRegistryName(), "inventory"))));    
 	}
 }
