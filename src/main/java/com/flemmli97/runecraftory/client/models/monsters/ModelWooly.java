@@ -1,229 +1,193 @@
-package com.flemmli97.runecraftory.client.models.monsters;
+package com.flemmli97.runecraftory.client.models.monsters;// Made with Blockbench 3.5.2
+// Exported for Minecraft version 1.12
+// Paste this class into your mod and generate all required imports
+
 
 import com.flemmli97.runecraftory.common.entity.monster.EntityWooly;
 import com.flemmli97.runecraftory.common.lib.LibReference;
-import com.flemmli97.tenshilib.client.model.TabulaAnimation;
+import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.javahelper.MathUtils;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelBox;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-/**
- * woolyNew - Undefined
- * Created using Tabula 7.0.0
- */
-public class ModelWooly extends ModelBase implements IResetModel{
-    public ModelRendererPlus body;
-    public ModelRendererPlus bodyLeft;
-    public ModelRendererPlus bodyRight;
-    public ModelRendererPlus bodyUp;
-    public ModelRendererPlus armLeftBase;
-    public ModelRendererPlus armRightBase;
-    public ModelRendererPlus feetLeftBase;
-    public ModelRendererPlus feetRightBase;
-    public ModelRendererPlus tail;
-    public ModelRendererPlus bodyUpLeft;
-    public ModelRendererPlus bodyUpRight;
-    public ModelRendererPlus neck;
-    public ModelRendererPlus head;
-    public ModelRendererPlus headLeft;
-    public ModelRendererPlus headRight;
-    public ModelRendererPlus headUp;
-    public ModelRendererPlus earLeft;
-    public ModelRendererPlus earRight;
-    public ModelRendererPlus armLeftUp;
-    public ModelRendererPlus leftArmDown;
-    public ModelRendererPlus armRightUp;
-    public ModelRendererPlus armRightDown;
-    public ModelRendererPlus feetLeft;
-    public ModelRendererPlus feetRight;
+public class ModelWooly extends ModelBase implements IResetModel {
+	public ModelRendererPlus body;
+	public ModelRendererPlus bodyUp;
+	public ModelRendererPlus neck;
+	public ModelRendererPlus head;
+	public ModelRendererPlus earLeft;
+	public ModelRendererPlus earRight;
+	public ModelRendererPlus armLeftBase;
+	public ModelRendererPlus armLeftUp;
+	public ModelRendererPlus armLeftDown;
+	public ModelRendererPlus armRightBase;
+	public ModelRendererPlus armRightUp;
+	public ModelRendererPlus armRightDown;
+	public ModelRendererPlus feetLeftBase;
+	public ModelRendererPlus feetLeft;
+	public ModelRendererPlus feetRightBase;
+	public ModelRendererPlus feetRight;
+	public ModelRendererPlus tail;
 
-    //20
-    public TabulaAnimation walk;
-    
-    public ModelWooly() {
-        this.textureWidth = 64;
-        this.textureHeight = 64;
-        this.armRightUp = new ModelRendererPlus(this, 28, 45);
-        this.armRightUp.mirror = true;
-        this.armRightUp.setDefaultRotPoint(-1.0F, 0.0F, -0.5F);
-        this.armRightUp.addBox(-0.5F, -0.5F, -3.0F, 1, 1, 3, 0.0F);
-        this.setRotateAngle(this.armRightUp, 0.2617993877991494F, -0.2617993877991494F, 0.0F);
-        this.body = new ModelRendererPlus(this, 0, 0);
-        this.body.setDefaultRotPoint(0.0F, 17.75F, 0.0F);
-        this.body.addBox(-3.0F, -6.0F, -4.0F, 6, 12, 8, 0.0F);
-        this.headRight = new ModelRendererPlus(this, 28, 16);
-        this.headRight.mirror = true;
-        this.headRight.setDefaultRotPoint(-3.5F, -3.5F, 0.0F);
-        this.headRight.addBox(-1.0F, -3.5F, -3.5F, 1, 7, 7, 0.0F);
-        this.earRight = new ModelRendererPlus(this, 28, 38);
-        this.earRight.mirror = true;
-        this.earRight.setDefaultRotPoint(3.5F, -4.0F, 0.0F);
-        this.earRight.addBox(0.0F, -0.5F, -1.0F, 5, 1, 2, 0.0F);
-        this.setRotateAngle(this.earRight, 0.0F, 0.0F, 0.3490658503988659F);
-        this.feetRightBase = new ModelRendererPlus(this, 42, 38);
-        this.feetRightBase.mirror = true;
-        this.feetRightBase.setDefaultRotPoint(-3.0F, 4.75F, 0.0F);
-        this.feetRightBase.addBox(-1.5F, -3.5F, -2.0F, 3, 5, 4, 0.0F);
-        this.head = new ModelRendererPlus(this, 28, 0);
-        this.head.setDefaultRotPoint(0.0F, 0.0F, 0.0F);
-        this.head.addBox(-3.5F, -7.0F, -4.5F, 7, 7, 9, 0.0F);
-        this.earLeft = new ModelRendererPlus(this, 28, 38);
-        this.earLeft.setDefaultRotPoint(-4.0F, -4.0F, 0.0F);
-        this.earLeft.addBox(-5.0F, -0.5F, -1.0F, 5, 1, 2, 0.0F);
-        this.setRotateAngle(this.earLeft, 0.0F, 0.0F, -0.3490658503988659F);
-        this.armLeftBase = new ModelRendererPlus(this, 28, 41);
-        this.armLeftBase.setDefaultRotPoint(3.75F, -3.0F, 0.0F);
-        this.armLeftBase.addBox(0.0F, -1.0F, -1.0F, 2, 2, 2, 0.0F);
-        this.setRotateAngle(this.armLeftBase, 0.17453292519943295F, 0.0F, 0.0F);
-        this.armRightDown = new ModelRendererPlus(this, 28, 49);
-        this.armRightDown.mirror = true;
-        this.armRightDown.setDefaultRotPoint(0.0F, 0.0F, -3.0F);
-        this.armRightDown.addBox(-0.5F, -0.5F, -3.0F, 1, 1, 3, 0.0F);
-        this.setRotateAngle(this.armRightDown, 0.08726646259971647F, -0.5235987755982988F, 0.0F);
-        this.feetLeftBase = new ModelRendererPlus(this, 42, 38);
-        this.feetLeftBase.setDefaultRotPoint(3.0F, 4.75F, 0.0F);
-        this.feetLeftBase.addBox(-1.5F, -3.5F, -2.0F, 3, 5, 4, 0.0F);
-        this.bodyUp = new ModelRendererPlus(this, 0, 38);
-        this.bodyUp.setDefaultRotPoint(0.0F, -7.0F, 0.0F);
-        this.bodyUp.addBox(-2.5F, -1.0F, -3.5F, 5, 2, 7, 0.0F);
-        this.headLeft = new ModelRendererPlus(this, 28, 16);
-        this.headLeft.setDefaultRotPoint(3.5F, -3.5F, 0.0F);
-        this.headLeft.addBox(0.0F, -3.5F, -3.0F, 1, 7, 7, 0.0F);
-        this.headUp = new ModelRendererPlus(this, 28, 30);
-        this.headUp.setDefaultRotPoint(0.0F, -7.0F, 0.0F);
-        this.headUp.addBox(-3.5F, -1.0F, -3.5F, 7, 1, 7, 0.0F);
-        this.bodyUpRight = new ModelRendererPlus(this, 0, 47);
-        this.bodyUpRight.mirror = true;
-        this.bodyUpRight.setDefaultRotPoint(-2.5F, 0.0F, 0.0F);
-        this.bodyUpRight.addBox(-1.0F, -1.0F, -2.5F, 1, 2, 5, 0.0F);
-        this.setRotateAngle(this.bodyUpRight, 0.0F, 0.0F, 0.012042771838760872F);
-        this.leftArmDown = new ModelRendererPlus(this, 28, 49);
-        this.leftArmDown.setDefaultRotPoint(0.0F, 0.0F, -3.0F);
-        this.leftArmDown.addBox(-0.5F, -0.5F, -3.0F, 1, 1, 3, 0.0F);
-        this.setRotateAngle(this.leftArmDown, 0.08726646259971647F, 0.5235987755982988F, 0.0F);
-        this.bodyRight = new ModelRendererPlus(this, 0, 20);
-        this.bodyRight.mirror = true;
-        this.bodyRight.setDefaultRotPoint(-3.0F, 0.0F, 0.0F);
-        this.bodyRight.addBox(-1.0F, -6.0F, -3.0F, 1, 12, 6, 0.0F);
-        this.setRotateAngle(this.bodyRight, 0.0F, 0.0F, 0.012042771838760872F);
-        this.armRightBase = new ModelRendererPlus(this, 28, 41);
-        this.armRightBase.mirror = true;
-        this.armRightBase.setDefaultRotPoint(-3.75F, -3.0F, 0.0F);
-        this.armRightBase.addBox(-2.0F, -1.0F, -1.0F, 2, 2, 2, 0.0F);
-        this.setRotateAngle(this.armRightBase, 0.17453292519943295F, 0.0F, 0.0F);
-        this.bodyLeft = new ModelRendererPlus(this, 0, 20);
-        this.bodyLeft.setDefaultRotPoint(3.0F, 0.0F, 0.0F);
-        this.bodyLeft.addBox(0.0F, -6.0F, -3.0F, 1, 12, 6, 0.0F);
-        this.setRotateAngle(this.bodyLeft, 0.0F, 0.0F, 0.012042771838760872F);
-        this.armLeftUp = new ModelRendererPlus(this, 28, 45);
-        this.armLeftUp.setDefaultRotPoint(1.0F, 0.0F, -0.5F);
-        this.armLeftUp.addBox(-0.5F, -0.5F, -3.0F, 1, 1, 3, 0.0F);
-        this.setRotateAngle(this.armLeftUp, 0.2617993877991494F, 0.2617993877991494F, 0.0F);
-        this.tail = new ModelRendererPlus(this, 44, 16);
-        this.tail.setDefaultRotPoint(0.0F, 3.0F, 4.0F);
-        this.tail.addBox(-1.5F, -1.5F, 0.0F, 3, 3, 3, 0.0F);
-        this.feetRight = new ModelRendererPlus(this, 42, 47);
-        this.feetRight.mirror = true;
-        this.feetRight.setDefaultRotPoint(0.0F, 0.5F, 0.0F);
-        this.feetRight.addBox(-1.0F, 0.0F, -7.0F, 2, 1, 7, 0.0F);
-        this.neck = new ModelRendererPlus(this, 0, 54);
-        this.neck.setDefaultRotPoint(0.0F, -2.5F, 0.0F);
-        this.neck.addBox(-2.5F, 0.0F, -2.5F, 5, 2, 5, 0.0F);
-        this.bodyUpLeft = new ModelRendererPlus(this, 0, 47);
-        this.bodyUpLeft.setDefaultRotPoint(2.5F, 0.0F, 0.0F);
-        this.bodyUpLeft.addBox(0.0F, -1.0F, -2.5F, 1, 2, 5, 0.0F);
-        this.setRotateAngle(this.bodyUpLeft, 0.0F, 0.0F, 0.012042771838760872F);
-        this.feetLeft = new ModelRendererPlus(this, 42, 47);
-        this.feetLeft.setDefaultRotPoint(0.0F, 0.5F, 0.0F);
-        this.feetLeft.addBox(-1.0F, 0.0F, -7.0F, 2, 1, 7, 0.0F);
-        this.armRightBase.addChild(this.armRightUp);
-        this.head.addChild(this.headRight);
-        this.head.addChild(this.earRight);
-        this.body.addChild(this.feetRightBase);
-        this.neck.addChild(this.head);
-        this.head.addChild(this.earLeft);
-        this.body.addChild(this.armLeftBase);
-        this.armRightUp.addChild(this.armRightDown);
-        this.body.addChild(this.feetLeftBase);
-        this.body.addChild(this.bodyUp);
-        this.head.addChild(this.headLeft);
-        this.head.addChild(this.headUp);
-        this.bodyUp.addChild(this.bodyUpRight);
-        this.armLeftUp.addChild(this.leftArmDown);
-        this.body.addChild(this.bodyRight);
-        this.body.addChild(this.armRightBase);
-        this.body.addChild(this.bodyLeft);
-        this.armLeftBase.addChild(this.armLeftUp);
-        this.body.addChild(this.tail);
-        this.feetRightBase.addChild(this.feetRight);
-        this.bodyUp.addChild(this.neck);
-        this.bodyUp.addChild(this.bodyUpLeft);
-        this.feetLeftBase.addChild(this.feetLeft);
-        
-        this.walk = new TabulaAnimation(this, new ResourceLocation(LibReference.MODID, "models/entity/animation/wooly_walk.json"), false);
-    }
+	public BlockBenchAnimations animations;
+	public ModelWooly() {
+		this.textureWidth = 64;
+		this.textureHeight = 64;
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.body.render(f5);
-    }
+		this.body = new ModelRendererPlus(this);
+		this.body.setDefaultRotPoint(0.0F, 17.75F, 0.0F);
+		this.body.cubeList.add(new ModelBox(this.body, 0, 31, -3.5F, -6.0F, -4.5F, 7, 12, 9, 0.0F, true));
+		this.body.cubeList.add(new ModelBox(this.body, 32, 30, -4.5F, -6.0F, -3.5F, 1, 12, 7, 0.0F, true));
+		this.body.cubeList.add(new ModelBox(this.body, 32, 30, 3.5F, -6.0F, -3.5F, 1, 12, 7, 0.0F, false));
 
-    @Override
-    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
-            float headPitch, float scaleFactor, Entity entity) {
-        if(!(entity instanceof EntityWooly))
-            return;
-        this.resetModel();
-        EntityWooly wooly = (EntityWooly) entity;
-        this.head.rotateAngleY = netHeadYaw * 0.008453292F;
-        this.head.rotateAngleX = headPitch * 0.012453292F;
-        this.earLeft.rotateAngleZ+=Math.abs(MathHelper.sin(ageInTicks*0.04F)*0.1735987755982989F);
-        this.earRight.rotateAngleZ-=Math.abs(MathHelper.sin(ageInTicks*0.04F)*0.1735987755982989F);
-            
-        //this.armLeftUp.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F) * 0.4F * limbSwingAmount ;
-        //this.armRightUp.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 0.4F * limbSwingAmount;
-            
-        this.tail.rotateAngleY+= MathHelper.cos(ageInTicks * 0.6662F) * MathUtils.degToRad(10);
-        this.armRightUp.rotateAngleZ += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-        this.armLeftUp.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-        this.armRightUp.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-        this.armLeftUp.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-        
-        //this.feetRight.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.0F * limbSwingAmount;
-        //this.feetLeft.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.0F * limbSwingAmount;
-        
-        float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
-        if(wooly.isMoving()) {
-            this.resetModel();
-            this.body.rotateAngleX=MathUtils.degToRad(20);
-            this.walk.animate(wooly.ticksExisted, partialTicks);
-        }
-        /*AnimatedAction anim = wooly.getAnimation();
-        if(anim!=null)
-        {
-            if(anim.getID().equals("walk")) {
-                this.resetModel();
-                this.body.rotateAngleX=MathUtils.degToRad(20);
-                this.walk.animate(anim.getTick(), partialTicks);
-            }
-        }*/
-    }
-    /**
-     * This is a helper function from Tabula to set the rotation of model parts
-     */
-    public void setRotateAngle(ModelRendererPlus modelRendererPlus, float x, float y, float z) {
-        modelRendererPlus.setDefaultRotAngle(x, y, z);
-    }
+		this.bodyUp = new ModelRendererPlus(this);
+		this.bodyUp.setDefaultRotPoint(0.0F, -7.0F, 0.0F);
+		this.body.addChild(this.bodyUp);
+		this.bodyUp.cubeList.add(new ModelBox(this.bodyUp, 32, 14, -2.5F, -1.0F, -3.5F, 5, 2, 7, 0.0F, true));
+		this.bodyUp.cubeList.add(new ModelBox(this.bodyUp, 28, 23, 2.5F, -1.0F, -2.5F, 1, 2, 5, 0.0F, false));
+		this.bodyUp.cubeList.add(new ModelBox(this.bodyUp, 28, 23, -3.5F, -1.0F, -2.5F, 1, 2, 5, 0.0F, true));
 
-    @Override
-    public void resetModel() {
-        this.body.reset();
-        this.resetChild(this.body);
-    }
+		this.neck = new ModelRendererPlus(this);
+		this.neck.setDefaultRotPoint(0.0F, -1.5F, 0.0F);
+		this.bodyUp.addChild(this.neck);
+		this.neck.cubeList.add(new ModelBox(this.neck, 0, 24, -2.5F, -1.0F, -2.5F, 5, 2, 5, 0.0F, true));
+
+		this.head = new ModelRendererPlus(this);
+		this.head.setDefaultRotPoint(0.0F, -1.0F, 0.0F);
+		this.neck.addChild(this.head);
+		this.head.cubeList.add(new ModelBox(this.head, 0, 0, -3.5F, -7.0F, -4.5F, 7, 7, 9, 0.0F, true));
+		this.head.cubeList.add(new ModelBox(this.head, 32, 0, -4.5F, -7.0F, -3.0F, 1, 7, 7, 0.0F, true));
+		this.head.cubeList.add(new ModelBox(this.head, 32, 0, 3.5F, -7.0F, -3.5F, 1, 7, 7, 0.0F, false));
+		this.head.cubeList.add(new ModelBox(this.head, 0, 16, -3.5F, -8.0F, -3.5F, 7, 1, 7, 0.0F, true));
+
+		this.earLeft = new ModelRendererPlus(this);
+		this.earLeft.setDefaultRotPoint(4.0F, -4.0F, 0.0F);
+		this.head.addChild(this.earLeft);
+		this.setRotationAngle(this.earLeft, 0.0F, 0.0F, -0.3491F);
+		this.earLeft.cubeList.add(new ModelBox(this.earLeft, 48, 0, 0.0F, -0.5F, -1.0F, 5, 1, 2, 0.0F, true));
+
+		this.earRight = new ModelRendererPlus(this);
+		this.earRight.setDefaultRotPoint(-3.5F, -4.0F, 0.0F);
+		this.head.addChild(this.earRight);
+		this.setRotationAngle(this.earRight, 0.0F, 0.0F, 0.3491F);
+		this.earRight.cubeList.add(new ModelBox(this.earRight, 48, 0, -5.0F, -0.5F, -1.0F, 5, 1, 2, 0.0F, false));
+
+		this.armLeftBase = new ModelRendererPlus(this);
+		this.armLeftBase.setDefaultRotPoint(3.75F, -3.0F, 0.0F);
+		this.body.addChild(this.armLeftBase);
+		this.setRotationAngle(this.armLeftBase, 0.1745F, 0.0F, 0.0F);
+		this.armLeftBase.cubeList.add(new ModelBox(this.armLeftBase, 32, 49, 0.25F, -1.0F, -1.0F, 2, 2, 2, 0.0F, false));
+
+		this.armLeftUp = new ModelRendererPlus(this);
+		this.armLeftUp.setDefaultRotPoint(1.0F, 0.0F, -0.5F);
+		this.armLeftBase.addChild(this.armLeftUp);
+		this.setRotationAngle(this.armLeftUp, 0.1745F, 0.1745F, 0.0F);
+		this.armLeftUp.cubeList.add(new ModelBox(this.armLeftUp, 54, 23, -0.25F, -0.5F, -4.0F, 1, 1, 4, 0.0F, false));
+
+		this.armLeftDown = new ModelRendererPlus(this);
+		this.armLeftDown.setDefaultRotPoint(0.75F, 0.0F, -4.0F);
+		this.armLeftUp.addChild(this.armLeftDown);
+		this.setRotationAngle(this.armLeftDown, 0.4363F, 0.5236F, 0.0F);
+		this.armLeftDown.cubeList.add(new ModelBox(this.armLeftDown, 54, 28, -1.0F, -0.5F, -4.0F, 1, 1, 4, 0.0F, false));
+
+		this.armRightBase = new ModelRendererPlus(this);
+		this.armRightBase.setDefaultRotPoint(-3.75F, -3.0F, 0.0F);
+		this.body.addChild(this.armRightBase);
+		this.setRotationAngle(this.armRightBase, 0.1745F, 0.0F, 0.0F);
+		this.armRightBase.cubeList.add(new ModelBox(this.armRightBase, 32, 49, -2.25F, -1.0F, -1.0F, 2, 2, 2, 0.0F, false));
+
+		this.armRightUp = new ModelRendererPlus(this);
+		this.armRightUp.setDefaultRotPoint(-1.0F, 0.0F, -0.5F);
+		this.armRightBase.addChild(this.armRightUp);
+		this.setRotationAngle(this.armRightUp, 0.1745F, -0.1745F, 0.0F);
+		this.armRightUp.cubeList.add(new ModelBox(this.armRightUp, 54, 23, -0.75F, -0.5F, -4.0F, 1, 1, 4, 0.0F, false));
+
+		this.armRightDown = new ModelRendererPlus(this);
+		this.armRightDown.setDefaultRotPoint(-0.75F, 0.0F, -4.0F);
+		this.armRightUp.addChild(this.armRightDown);
+		this.setRotationAngle(this.armRightDown, 0.4363F, -0.5236F, 0.0F);
+		this.armRightDown.cubeList.add(new ModelBox(this.armRightDown, 54, 28, 0.0F, -0.5F, -4.0F, 1, 1, 4, 0.0F, false));
+
+		this.feetLeftBase = new ModelRendererPlus(this);
+		this.feetLeftBase.setDefaultRotPoint(4.0F, 4.75F, 0.0F);
+		this.body.addChild(this.feetLeftBase);
+		this.feetLeftBase.cubeList.add(new ModelBox(this.feetLeftBase, 0, 52, -1.5F, -3.5F, -2.0F, 3, 5, 4, 0.0F, false));
+
+		this.feetLeft = new ModelRendererPlus(this);
+		this.feetLeft.setDefaultRotPoint(0.0F, 0.5F, 0.0F);
+		this.feetLeftBase.addChild(this.feetLeft);
+		this.feetLeft.cubeList.add(new ModelBox(this.feetLeft, 14, 52, -1.0F, 0.0F, -7.0F, 2, 1, 7, 0.0F, false));
+
+		this.feetRightBase = new ModelRendererPlus(this);
+		this.feetRightBase.setDefaultRotPoint(-4.0F, 4.75F, 0.0F);
+		this.body.addChild(this.feetRightBase);
+		this.feetRightBase.cubeList.add(new ModelBox(this.feetRightBase, 0, 52, -1.5F, -3.5F, -2.0F, 3, 5, 4, 0.0F, true));
+
+		this.feetRight = new ModelRendererPlus(this);
+		this.feetRight.setDefaultRotPoint(0.0F, 0.5F, 0.0F);
+		this.feetRightBase.addChild(this.feetRight);
+		this.feetRight.cubeList.add(new ModelBox(this.feetRight, 14, 52, -1.0F, 0.0F, -7.0F, 2, 1, 7, 0.0F, false));
+
+		this.tail = new ModelRendererPlus(this);
+		this.tail.setDefaultRotPoint(0.0F, 3.0F, 4.0F);
+		this.body.addChild(this.tail);
+		this.tail.cubeList.add(new ModelBox(this.tail, 52, 3, -1.5F, -1.5F, 0.0F, 3, 3, 3, 0.0F, true));
+
+		this.animations = new BlockBenchAnimations(this, new ResourceLocation(LibReference.MODID, "models/entity/animation/wooly.json"));
+	}
+
+	@Override
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		this.body.render(f5);
+	}
+
+	@Override
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+								  float headPitch, float scaleFactor, Entity entity) {
+		if(!(entity instanceof EntityWooly))
+			return;
+		this.resetModel();
+		EntityWooly wooly = (EntityWooly) entity;
+		this.head.rotateAngleY = netHeadYaw * 0.008453292F;
+		this.head.rotateAngleX = headPitch * 0.012453292F;
+		this.earLeft.rotateAngleZ+=Math.abs(MathHelper.sin(ageInTicks*0.04F)*0.1735987755982989F);
+		this.earRight.rotateAngleZ-=Math.abs(MathHelper.sin(ageInTicks*0.04F)*0.1735987755982989F);
+
+		//this.armLeftUp.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F) * 0.4F * limbSwingAmount ;
+		//this.armRightUp.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 0.4F * limbSwingAmount;
+
+		this.tail.rotateAngleY+= MathHelper.cos(ageInTicks * 0.6662F) * MathUtils.degToRad(10);
+		this.armRightUp.rotateAngleZ += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+		this.armLeftUp.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+		this.armRightUp.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+		this.armLeftUp.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+
+		//this.feetRight.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.0F * limbSwingAmount;
+		//this.feetLeft.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.0F * limbSwingAmount;
+
+		float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
+		if(wooly.isMoving())
+			this.animations.doAnimation("walk", wooly.ticksExisted, partialTicks);
+
+		AnimatedAction anim = wooly.getAnimation();
+		if (anim != null)
+			this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+	}
+
+	public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {
+		modelRenderer.setDefaultRotAngle(x, y, z);
+	}
+
+	@Override
+	public void resetModel() {
+		this.body.reset();
+		this.resetChild(this.body);
+	}
 }

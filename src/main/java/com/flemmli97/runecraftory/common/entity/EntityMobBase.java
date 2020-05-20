@@ -1,11 +1,5 @@
 package com.flemmli97.runecraftory.common.entity;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.flemmli97.runecraftory.api.entities.EntityProperties;
 import com.flemmli97.runecraftory.api.entities.IEntityAdvanced;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
@@ -33,21 +27,9 @@ import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.entity.IAnimated;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
-
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -63,11 +45,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -80,6 +58,11 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
+
+import javax.annotation.Nullable;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 public abstract class EntityMobBase extends EntityCreature implements IEntityAdvanced, IMob, IEntityAdditionalSpawnData, IAnimated
 {
@@ -96,27 +79,14 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     private boolean doJumping = false;
     private EntityProperties prop;
     private int foodBuffTick;
-    public EntityAINearestAttackableTarget<EntityPlayer> targetPlayer = new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 5, true, true, new Predicate<EntityPlayer>() {
-        @Override
-		public boolean apply(EntityPlayer player) {
-            return !EntityMobBase.this.isTamed() || player != EntityMobBase.this.getOwner();
+    public EntityAINearestAttackableTarget<EntityPlayer> targetPlayer = new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 5, true, true, player -> !EntityMobBase.this.isTamed() || player != EntityMobBase.this.getOwner());
+    public EntityAINearestAttackableTarget<EntityVillager> targetNPC = new EntityAINearestAttackableTarget<EntityVillager>(this, EntityVillager.class, 5, true, true, mob -> !EntityMobBase.this.isTamed());
+    public EntityAINearestAttackableTarget<EntityCreature> targetMobs = new EntityAINearestAttackableTarget<EntityCreature>(this, EntityCreature.class, 5, true, true, mob -> {
+        if (EntityMobBase.this.isTamed()) {
+            return !(mob instanceof EntityMobBase) || !((EntityMobBase)mob).isTamed();
         }
+        return mob instanceof EntityMobBase && ((EntityMobBase)mob).isTamed() && IMob.VISIBLE_MOB_SELECTOR.apply(mob);
     });
-    public EntityAINearestAttackableTarget<EntityVillager> targetNPC = new EntityAINearestAttackableTarget<EntityVillager>(this, EntityVillager.class, 5, true, true, new Predicate<EntityVillager>() {
-        @Override
-		public boolean apply(EntityVillager mob) {
-            return !EntityMobBase.this.isTamed();
-        }
-    });;
-    public EntityAINearestAttackableTarget<EntityCreature> targetMobs = new EntityAINearestAttackableTarget<EntityCreature>(this, EntityCreature.class, 5, true, true, new Predicate<EntityCreature>() {
-        @Override
-		public boolean apply(EntityCreature mob) {
-            if (EntityMobBase.this.isTamed()) {
-                return !(mob instanceof EntityMobBase) || !((EntityMobBase)mob).isTamed();
-            }
-            return mob instanceof EntityMobBase && ((EntityMobBase)mob).isTamed() && IMob.VISIBLE_MOB_SELECTOR.apply(mob);
-        }
-    });;
     public EntityAIHurtByTarget hurt = new EntityAIHurtByTarget(this, false, new Class[0]);
     
     private Map<ItemStack, Float> drops = Maps.newHashMap();
@@ -422,7 +392,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 	
 	public int animationCooldown(AnimatedAction anim)
 	{
-		return this.getRNG().nextInt(15)+25;
+		return this.getRNG().nextInt(10)+5;
 	}
 	
 	public void updateMoveAnimation() {
@@ -810,8 +780,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     @Override
     public void knockBack(Entity entityIn, float strength, double xRatio, double zRatio) 
     {
-        strength *= 0.85f;
-        super.knockBack(entityIn, strength, xRatio, zRatio);
+        super.knockBack(entityIn, 0, xRatio, zRatio);
     }
 
     @Override
@@ -951,6 +920,6 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
     	MELEE,
     	CHARGE,
     	RANGED,
-    	IDLE;
+    	IDLE
     }
 }

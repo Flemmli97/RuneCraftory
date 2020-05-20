@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 public class EntityBigMuck extends EntityMobBase {
 
-    private EntityAIMeleeBase<EntityBigMuck> ai = new EntityAIMeleeBase<EntityBigMuck>(this, 1.0f);;
+    private EntityAIMeleeBase<EntityBigMuck> ai = new EntityAIMeleeBase<EntityBigMuck>(this, 1.0f);
     private static final AnimatedAction slapAttack = new AnimatedAction(24,7, "slap");
     private static final AnimatedAction sporeAttack = new AnimatedAction(44,40, "spore");
 
@@ -15,6 +15,8 @@ public class EntityBigMuck extends EntityMobBase {
 
     public EntityBigMuck(World world) {
         super(world);
+        this.setSize(0.9f, 1.6f);
+
         this.tasks.addTask(2, this.ai);
     }
 
@@ -30,6 +32,6 @@ public class EntityBigMuck extends EntityMobBase {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type==AnimationType.MELEE?(anim.getID().equals("slap") || anim.getID().equals("spore")):true;
+        return type != AnimationType.MELEE || (anim.getID().equals("slap") || anim.getID().equals("spore"));
     }
 }

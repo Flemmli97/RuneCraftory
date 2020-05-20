@@ -29,7 +29,7 @@ public class EntityAIMeleeBase<T extends EntityMobBase> extends EntityAIAttackBa
     @Override
     public void handlePreAttack() {
         this.moveToWithDelay(1);
-        if (this.distanceToTargetSq <= this.getAttackReachSqr(this.target, this.rangeModifier)) {
+        if (this.distanceToTargetSq <= this.getAttackReachSqr(this.target, this.rangeModifier*0.5f)) {
             this.movementDone = true;
         }
     }

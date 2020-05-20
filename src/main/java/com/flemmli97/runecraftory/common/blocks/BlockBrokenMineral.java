@@ -1,14 +1,10 @@
 package com.flemmli97.runecraftory.common.blocks;
 
-import java.util.Random;
-
-import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.blocks.tile.TileBrokenOre;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import com.flemmli97.runecraftory.common.items.weapons.ItemHammerBase;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumMineralTier;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -30,17 +26,18 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Random;
+
 public class BlockBrokenMineral extends Block implements ITileEntityProvider{
 	
 	private final EnumMineralTier tier;
 	public BlockBrokenMineral(EnumMineralTier tier) {
 		super(Material.ROCK);
 		this.tier=tier;
-		this.setCreativeTab(RuneCraftory.blocks);
         this.blockSoundType = SoundType.STONE;
         this.setResistance(15.0F);
         this.setHardness(50.0F);
-        this.setRegistryName(new ResourceLocation(LibReference.MODID, "broken_ore_"+tier.getName()));
+        this.setRegistryName(new ResourceLocation(LibReference.MODID, "ore_broken_"+tier.getName()));
 		this.setUnlocalizedName(this.getRegistryName().toString());
 	}
 	

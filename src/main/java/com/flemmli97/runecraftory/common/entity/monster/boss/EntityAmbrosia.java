@@ -23,7 +23,7 @@ public class EntityAmbrosia extends EntityBossBase
     //Shockwave kind of attack surrounding ambrosia
     private static final AnimatedAction wave = new AnimatedAction(75,5,"wave");
     //Sleep balls
-    private static final AnimatedAction sleep = new AnimatedAction(12,10,"sleep");
+    private static final AnimatedAction sleep = new AnimatedAction(15,7,"sleep");
     //2 spinning kick changing direction between them. also scatters earth damage pollen while doing it
     private static final AnimatedAction kick_2 = new AnimatedAction(36,12,"kick_2");
     

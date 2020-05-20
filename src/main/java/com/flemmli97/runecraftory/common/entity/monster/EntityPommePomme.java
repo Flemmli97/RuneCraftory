@@ -3,18 +3,26 @@ package com.flemmli97.runecraftory.common.entity.monster;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.entity.ai.EntityAIChargeAttackBase;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.world.World;
 
 public class EntityPommePomme extends EntityMobBase {
 
-    private EntityAIChargeAttackBase<EntityPommePomme> ai = new EntityAIChargeAttackBase<EntityPommePomme>(this, 1.0f);;
+    private EntityAIChargeAttackBase<EntityPommePomme> ai = new EntityAIChargeAttackBase<EntityPommePomme>(this, 1.0f);
     private static final AnimatedAction chargeAttack = new AnimatedAction(30,0, "charge");
-    private static final AnimatedAction[] anims = new AnimatedAction[] {AnimatedAction.vanillaAttack, chargeAttack};
+    private static final AnimatedAction kick = new AnimatedAction(17,11, "kick");
+
+    private static final AnimatedAction[] anims = new AnimatedAction[] {kick, chargeAttack};
 
     public EntityPommePomme(World world) {
         super(world);
         this.tasks.addTask(2, this.ai);
+    }
+
+    @Override
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2);
     }
 
     @Override
@@ -32,6 +40,6 @@ public class EntityPommePomme extends EntityMobBase {
         if(type==AnimationType.CHARGE) {
             return anim.getID().equals("charge");
         }
-        return type==AnimationType.MELEE?anim.getID().equals("vanilla"):true;
+        return type != AnimationType.MELEE || anim.getID().equals("kick");
     }
 }

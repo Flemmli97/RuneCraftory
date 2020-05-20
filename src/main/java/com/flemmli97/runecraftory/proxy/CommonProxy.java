@@ -16,7 +16,7 @@ import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.compat.dynamicTrees.DCInit;
 import com.flemmli97.tenshilib.common.config.ConfigUtils.LoadState;
-
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.world.WorldServer;
@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class CommonProxy
 {
@@ -57,6 +58,11 @@ public class CommonProxy
     
     public void postInit(FMLPostInitializationEvent e) {
         ConfigHandler.load(LoadState.POSTINIT);
+        if(ConfigHandler.MainConfig.noVanillaMobs)
+            ForgeRegistries.BIOMES.forEach(biome-> {
+                for (EnumCreatureType type : EnumCreatureType.values())
+                    biome.getSpawnableList(type).clear();
+            });
         if (ConfigHandler.MainConfig.mobs) {
             ModEntities.registerMobSpawn();
         }

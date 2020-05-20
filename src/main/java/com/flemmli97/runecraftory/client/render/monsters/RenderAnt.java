@@ -4,6 +4,7 @@ import com.flemmli97.runecraftory.client.models.monsters.ModelAnt;
 import com.flemmli97.runecraftory.client.render.RenderMobBase;
 import com.flemmli97.runecraftory.common.entity.monster.EntityAnt;
 import com.flemmli97.runecraftory.common.lib.LibReference;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
@@ -19,6 +20,9 @@ public class RenderAnt<T extends EntityAnt> extends RenderMobBase<T>{
 	protected ResourceLocation getEntityTexture(T entity) {
 		return this.tex;
 	}
-	
 
+	@Override
+	protected void preRenderCallback(T entitylivingbaseIn, float partialTickTime) {
+		GlStateManager.scale(0.7f, 0.7f, 0.7f);
+	}
 }

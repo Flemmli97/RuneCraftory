@@ -4,8 +4,6 @@ import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.entity.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-import com.google.common.base.Predicate;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.math.BlockPos;
@@ -29,9 +27,9 @@ public class EntityAIAmbrosia extends EntityAIAttackBase<EntityAmbrosia> {
         return this.randomAttack();
     }
     
-    public int coolDown(AnimatedAction anim) {
-        return 99999;
-    }
+    //public int coolDown(AnimatedAction anim) {
+    //    return 99999;
+    //}
 
     @Override
     public void resetTask() {
@@ -122,18 +120,14 @@ public class EntityAIAmbrosia extends EntityAIAttackBase<EntityAmbrosia> {
                 this.attacker.getLookHelper().setLookPositionWithEntity(this.target, 30.0f, 30.0f);
                 this.attacker.getNavigator().tryMoveToEntityLiving(this.target, 1.0);
                 if (anim.getTick() % anim.getAttackTime() == 0) {
-                    this.attacker.world.getEntitiesWithinAABB(EntityLivingBase.class, this.attacker.getEntityBoundingBox().grow(2.0), new Predicate<EntityLivingBase>() {
-
-                        @Override
-                        public boolean apply(EntityLivingBase input) {
-                            if (EntityAIAmbrosia.this.attacker.isTamed()) {
-                                return (input instanceof EntityMobBase) ? (!((EntityMobBase) input).isTamed()) : IMob.VISIBLE_MOB_SELECTOR.apply(input);
-                            }
-                            if (input instanceof EntityMobBase) {
-                                return ((EntityMobBase) input).isTamed();
-                            }
-                            return !IMob.VISIBLE_MOB_SELECTOR.apply(input);
+                    this.attacker.world.getEntitiesWithinAABB(EntityLivingBase.class, this.attacker.getEntityBoundingBox().grow(2.0), input -> {
+                        if (EntityAIAmbrosia.this.attacker.isTamed()) {
+                            return (input instanceof EntityMobBase) ? (!((EntityMobBase) input).isTamed()) : IMob.VISIBLE_MOB_SELECTOR.apply(input);
                         }
+                        if (input instanceof EntityMobBase) {
+                            return ((EntityMobBase) input).isTamed();
+                        }
+                        return !IMob.VISIBLE_MOB_SELECTOR.apply(input);
                     }).forEach(e -> this.attacker.attackEntityAsMobWithElement(e, EnumElement.EARTH));
                     this.attacker.moveRelative(0.0f, 0.0f, 2.0f, 0.0f);
                 }

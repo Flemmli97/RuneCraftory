@@ -1,15 +1,6 @@
 package com.flemmli97.runecraftory.common.init;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.client.models.ModelNPCBase;
-import com.flemmli97.runecraftory.client.render.RenderGate;
-import com.flemmli97.runecraftory.client.render.RenderNPCBase;
-import com.flemmli97.runecraftory.client.render.monsters.*;
-import com.flemmli97.runecraftory.client.render.projectile.RenderAmbrosiaWave;
-import com.flemmli97.runecraftory.client.render.projectile.RenderButterfly;
-import com.flemmli97.runecraftory.client.render.projectile.RenderFireball;
-import com.flemmli97.runecraftory.client.render.projectile.RenderSleepBall;
-import com.flemmli97.runecraftory.client.render.projectile.RenderWaterLaser;
 import com.flemmli97.runecraftory.common.entity.EntityGate;
 import com.flemmli97.runecraftory.common.entity.magic.EntityFireBall;
 import com.flemmli97.runecraftory.common.entity.magic.EntityWaterLaser;
@@ -21,16 +12,10 @@ import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityAmbrosi
 import com.flemmli97.runecraftory.common.entity.monster.projectile.EntityButterfly;
 import com.flemmli97.runecraftory.common.entity.npc.EntityNPCShopOwner;
 import com.flemmli97.runecraftory.common.lib.LibReference;
-
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ModEntities
 {
@@ -43,6 +28,10 @@ public class ModEntities
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ant"), EntityAnt.class, "ant", id++, RuneCraftory.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "beetle"), EntityBeetle.class, "beetle", id++, RuneCraftory.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "big_muck"), EntityBigMuck.class, "big_muck", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "buffamoo"), EntityBuffamoo.class, "buffamoo", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "cluckadoodle"), EntityCluckadoodle.class, "cluckadoodle", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "pomme_pomme"), EntityPommePomme.class, "pomme_pomme", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "chipsqueek"), EntityChipsqueek.class, "chipsqueek", id++, RuneCraftory.instance, 64, 3, true);
 
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ambrosia"), EntityAmbrosia.class, "ambrosia", id++, RuneCraftory.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "thunderbolt"), EntityThunderbolt.class, "thunderbolt", id++, RuneCraftory.instance, 64, 3, true);
@@ -61,31 +50,5 @@ public class ModEntities
         for (final Biome biome : Biome.REGISTRY) {
             EntityRegistry.addSpawn(EntityGate.class, 50, 1, 2, EnumCreatureType.MONSTER, biome);
         }
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public static final void registerRenders() {
-        RenderingRegistry.registerEntityRenderingHandler(EntityGate.class, RenderGate::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityWooly.class, RenderWooly::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityOrc.class, RenderOrc::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityAnt.class, RenderAnt::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityBeetle.class, RenderBeetle::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityBigMuck.class, RenderBigMuck::new);
-
-        RenderingRegistry.registerEntityRenderingHandler(EntityAmbrosia.class, RenderAmbrosia::new);
-        
-        RenderingRegistry.registerEntityRenderingHandler(EntityButterfly.class, RenderButterfly::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityAmbrosiaSleep.class, RenderSleepBall::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityAmbrosiaWave.class, RenderAmbrosiaWave::new);
-
-        RenderingRegistry.registerEntityRenderingHandler(EntityFireBall.class, RenderFireball::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityWaterLaser.class, RenderWaterLaser::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityNPCShopOwner.class, new IRenderFactory<EntityNPCShopOwner>() 
-        {
-            @Override
-            public RenderNPCBase<? super EntityNPCShopOwner> createRenderFor(RenderManager manager) {
-                return new RenderNPCBase<EntityNPCShopOwner>(manager, new ModelNPCBase());
-            }
-        });
     }
 }

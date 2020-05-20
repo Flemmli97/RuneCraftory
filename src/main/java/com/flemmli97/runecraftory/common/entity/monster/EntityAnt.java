@@ -8,20 +8,20 @@ import net.minecraft.world.World;
 
 public class EntityAnt extends EntityMobBase {
 
-    public EntityAIMeleeBase<EntityAnt> attack = new EntityAIMeleeBase<EntityAnt>(this, 1.0f);
-    private static final AnimatedAction melee = new AnimatedAction(25,20, "attack");
+    public EntityAIMeleeBase<EntityAnt> attack = new EntityAIMeleeBase<EntityAnt>(this, 0.8f);
+    private static final AnimatedAction melee = new AnimatedAction(23,12, "attack");
 
     private static final AnimatedAction[] anims = new AnimatedAction[] {melee};
 
     public EntityAnt(World world) {
         super(world);
-        this.setSize(0.6f, 0.45f);
+        this.setSize(1.1f, 0.44f);
         this.tasks.addTask(2, this.attack);
     }
 
     @Override
     public float attackChance() {
-        return 0.6f;
+        return 1f;
     }
 
     @Override

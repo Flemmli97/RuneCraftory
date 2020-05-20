@@ -4,7 +4,6 @@ import com.flemmli97.runecraftory.client.models.monsters.ModelAmbrosia;
 import com.flemmli97.runecraftory.client.render.RenderMobBase;
 import com.flemmli97.runecraftory.common.entity.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.lib.LibReference;
-
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 

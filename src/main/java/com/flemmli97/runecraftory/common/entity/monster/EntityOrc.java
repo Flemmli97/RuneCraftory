@@ -9,9 +9,15 @@ import net.minecraft.world.World;
 public class EntityOrc extends EntityMobBase {
 
     public EntityAIMeleeBase<EntityOrc> attack = new EntityAIMeleeBase<EntityOrc>(this, 1.2f);
+    private static final AnimatedAction melee1 = new AnimatedAction(22,14, "attack1");
+    private static final AnimatedAction melee2 = new AnimatedAction(23,13, "attack2");
+
+    private static final AnimatedAction[] anims = new AnimatedAction[] {melee1, melee2};
 
     public EntityOrc(World world) {
         super(world);
+        this.setSize(0.63f, 2.4f);
+
         this.tasks.addTask(2, this.attack);
     }
 
@@ -22,11 +28,13 @@ public class EntityOrc extends EntityMobBase {
 
     @Override
     public AnimatedAction[] getAnimations() {
-        return AnimatedAction.vanillaAttackOnly;
+        return anims;
     }
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type==AnimationType.MELEE?anim.getID().equals("vanilla"):true;
+        if(type==AnimationType.MELEE)
+            return anim.getID().equals("attack1") || anim.getID().equals("attack2");
+        return true;
     }
 }

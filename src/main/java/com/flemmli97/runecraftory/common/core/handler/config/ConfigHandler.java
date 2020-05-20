@@ -113,6 +113,7 @@ public class ConfigHandler {
 	{
 		public static boolean debugMode;
 		public static boolean mobs;
+		public static boolean noVanillaMobs;
 		public static boolean crops;
 		public static boolean rp;
 		
@@ -139,7 +140,7 @@ public class ConfigHandler {
 			}
 	        debugMode = mainConfig.getBoolean("Debug Mode", "general", false, "");
 	        mobs = mainConfig.getBoolean("Enable entity module", "general", true, "Enables/Disable entities in general from this mod. You will not be able to get drops normally if you disable this");
-	        
+	        noVanillaMobs = mainConfig.get("Prevent normal mob spawn (only gates will spawn)", "general", true, "").setRequiresMcRestart(true).getBoolean();
 	        ConfigCategory cat = mainConfig.getCategory("integration");
     		cat.setRequiresMcRestart(true);
 	        waila = mainConfig.getBoolean("Waila", "integration", waila, "Waila integration");
@@ -223,13 +224,9 @@ public class ConfigHandler {
 		            if (string.contains(":"))
 		            	res.put(string, entry.getValue());
 		            else
-		            	OreDictionary.getOres(string).forEach(stack->{
-		                	CropMap.addProperties(new SimpleItemStackWrapper(stack).setIgnoreAmount(), GSON.fromJson(entry.getValue(), CropProperties.class));
-		            	});
+		            	OreDictionary.getOres(string).forEach(stack-> CropMap.addProperties(new SimpleItemStackWrapper(stack).setIgnoreAmount(), GSON.fromJson(entry.getValue(), CropProperties.class)));
 				});
-				res.forEach((string, el)->{
-                	CropMap.addProperties(new SimpleItemStackWrapper(string).setIgnoreAmount(), GSON.fromJson(el, CropProperties.class));
-				});
+				res.forEach((string, el)-> CropMap.addProperties(new SimpleItemStackWrapper(string).setIgnoreAmount(), GSON.fromJson(el, CropProperties.class)));
             }
 		    
 	        LibReference.logger.info("Configured {} crops", CropMap.propCount());
@@ -257,13 +254,9 @@ public class ConfigHandler {
 					List<String> biomeList = Lists.newArrayList();
 					List<String> biomeTypeList = Lists.newArrayList();
 					if(biomes!=null)
-						biomes.forEach(e->{
-							biomeList.add(e.getAsString());
-						});
+						biomes.forEach(e-> biomeList.add(e.getAsString()));
 					if(biomeTypes!=null)
-						biomeTypes.forEach(e->{
-							biomeTypeList.add(e.getAsString());
-						});
+						biomeTypes.forEach(e-> biomeTypeList.add(e.getAsString()));
 					GateSpawning.addToBiome(s, biomeList);
 					GateSpawning.addToBiomeType(s, biomeTypeList);
 				});
@@ -359,14 +352,10 @@ public class ConfigHandler {
 						res.put(string, entry.getValue());
 					else
 					{
-						OreDictionary.getOres(string).forEach(stack->{
-							ItemStatMap.add(new SimpleItemStackWrapper(stack).setIgnoreAmount(), GSON.fromJson(entry.getValue(), ItemStat.class));
-						});
+						OreDictionary.getOres(string).forEach(stack-> ItemStatMap.add(new SimpleItemStackWrapper(stack).setIgnoreAmount(), GSON.fromJson(entry.getValue(), ItemStat.class)));
 					}
 				});
-				res.forEach((string, el)->{
-					ItemStatMap.add(new SimpleItemStackWrapper(string).setIgnoreAmount(), GSON.fromJson(el, ItemStat.class));
-				});
+				res.forEach((string, el)-> ItemStatMap.add(new SimpleItemStackWrapper(string).setIgnoreAmount(), GSON.fromJson(el, ItemStat.class)));
             }
 	        LibReference.logger.info("Configured stats for {} items", ItemStatMap.configuredItems());
 	        itemStatConfig.save();
@@ -392,14 +381,10 @@ public class ConfigHandler {
 					if(string.contains(":"))
 						res.put(string, entry.getValue());
 					else
-						OreDictionary.getOres(string).forEach(stack->{
-							ItemFoodMap.add(new SimpleItemStackWrapper(stack).setIgnoreAmount(), GSON.fromJson(entry.getValue(), FoodProperties.class));
-						});
+						OreDictionary.getOres(string).forEach(stack-> ItemFoodMap.add(new SimpleItemStackWrapper(stack).setIgnoreAmount(), GSON.fromJson(entry.getValue(), FoodProperties.class)));
 				});
 				res.forEach((string, el)->
-				{
-					ItemFoodMap.add(new SimpleItemStackWrapper(string).setIgnoreAmount(), GSON.fromJson(el, FoodProperties.class));
-				});
+						ItemFoodMap.add(new SimpleItemStackWrapper(string).setIgnoreAmount(), GSON.fromJson(el, FoodProperties.class)));
             }
 	        LibReference.logger.info("Configured stats for {} food items", ItemFoodMap.configuredFood());
 	        foodStatConfig.save();
@@ -430,7 +415,7 @@ public class ConfigHandler {
 							tag.setString("id", o.get("item").getAsString());
 							tag.setByte("Count", (byte) 1);
 							tag.setInteger("Damage", o.has("meta")?o.get("meta").getAsInt():0);
-							NPCShopItems.addItem(new ItemStack(tag), shop, o.has("starter")?o.get("starter").getAsBoolean():false, o.has("leveled")?o.get("leveled").getAsBoolean():false);
+							NPCShopItems.addItem(new ItemStack(tag), shop, o.has("starter") && o.get("starter").getAsBoolean(), o.has("leveled") && o.get("leveled").getAsBoolean());
 						}
 					});
 				}

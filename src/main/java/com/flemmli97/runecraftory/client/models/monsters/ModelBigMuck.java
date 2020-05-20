@@ -16,17 +16,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
 public class ModelBigMuck extends ModelBase implements IResetModel {
-
     public ModelRendererPlus body;
-    public ModelRendererPlus mushroomCap;
-    public ModelRendererPlus handLeft;
-    public ModelRendererPlus handRight;
+	public ModelRendererPlus mushroomCap;
+	public ModelRendererPlus handLeft;
+	public ModelRendererPlus handRight;
 
-    private BlockBenchAnimations animations;
-
+    public BlockBenchAnimations animations;
     public ModelBigMuck() {
-        this.textureWidth = 128;
-        this.textureHeight = 128;
+        this.textureWidth = 76;
+        this.textureHeight = 125;
 
         this.body = new ModelRendererPlus(this);
         this.body.setDefaultRotPoint(0.0F, 24.0F, 0.0F);
@@ -42,20 +40,20 @@ public class ModelBigMuck extends ModelBase implements IResetModel {
         this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 0, 48, -10.0F, -16.0F, -9.0F, 19, 2, 19, 0.0F, false));
         this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 0, 69, -8.0F, -18.0F, -7.0F, 15, 2, 15, 0.0F, false));
         this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 0, 86, -7.0F, -21.0F, -6.0F, 13, 3, 13, 0.0F, false));
-        this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 84, 0, -6.0F, -24.0F, -5.0F, 11, 3, 11, 0.0F, false));
-        this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 100, 14, -4.0F, -26.0F, -3.0F, 7, 2, 7, 0.0F, false));
+        this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 0, 102, -6.0F, -24.0F, -5.0F, 11, 3, 11, 0.0F, false));
+        this.mushroomCap.cubeList.add(new ModelBox(this.mushroomCap, 0, 116, -4.0F, -26.0F, -3.0F, 7, 2, 7, 0.0F, false));
 
         this.handLeft = new ModelRendererPlus(this);
         this.handLeft.setDefaultRotPoint(6.0F, -8.5F, 0.5F);
+        this.body.addChild(this.handLeft);
         this.setRotationAngle(this.handLeft, 0.0F, 0.0F, 0.2618F);
         this.handLeft.cubeList.add(new ModelBox(this.handLeft, 0, 40, 0.0F, -0.5F, -3.5F, 8, 1, 7, 0.0F, true));
-        this.body.addChild(this.handLeft);
 
         this.handRight = new ModelRendererPlus(this);
         this.handRight.setDefaultRotPoint(-7.0F, -8.5F, 0.5F);
+        this.body.addChild(this.handRight);
         this.setRotationAngle(this.handRight, 0.0F, 0.0F, -0.2618F);
         this.handRight.cubeList.add(new ModelBox(this.handRight, 0, 40, -8.0F, -0.5F, -3.5F, 8, 1, 7, 0.0F, false));
-        this.body.addChild(this.handRight);
 
         this.animations = new BlockBenchAnimations(this, new ResourceLocation(LibReference.MODID, "models/entity/animation/big_muck.json"));
     }
@@ -91,5 +89,4 @@ public class ModelBigMuck extends ModelBase implements IResetModel {
         this.body.reset();
         this.resetChild(this.body);
     }
-
 }
