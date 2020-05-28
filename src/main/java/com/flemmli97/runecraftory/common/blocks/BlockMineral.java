@@ -100,8 +100,10 @@ public class BlockMineral extends Block{
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player,
 			boolean willHarvest) {
+		if(world.isRemote)
+			return false;
 		if(player.capabilities.isCreativeMode)
-	        return world.setBlockState(pos, Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
+	        return world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		else if(player.getHeldItemMainhand().getItem() instanceof ItemToolHammer || player.getHeldItemMainhand().getItem() instanceof ItemHammerBase)
 		{
 			if(player.getHeldItemMainhand().getItem() instanceof ItemToolHammer)
@@ -114,7 +116,7 @@ public class BlockMineral extends Block{
 			}
 			if(world.rand.nextFloat()<breakChance)
 			{
-		        return world.setBlockState(pos, MineralBlockConverter.getBrokenState(this.tier).withProperty(BlockBrokenMineral.FACING, state.getValue(FACING)), world.isRemote ? 11 : 3);
+		        return world.setBlockState(pos, MineralBlockConverter.getBrokenState(this.tier).withProperty(BlockBrokenMineral.FACING, state.getValue(FACING)), 3);
 			}
 			else
 				return false;

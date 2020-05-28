@@ -6,6 +6,6 @@
     "facing=north": {"model": "runecraftory:ore_broken_diamond"},
     "facing=east": {"model": "runecraftory:ore_broken_diamond","y":90},
     "facing=south": {"model": "runecraftory:ore_broken_diamond","y":180},
-    "facing=west": {"model": "runecraftory:ore_broken_diamond","y":27}
+    "facing=west": {"model": "runecraftory:ore_broken_diamond","y":270}
   }
 }

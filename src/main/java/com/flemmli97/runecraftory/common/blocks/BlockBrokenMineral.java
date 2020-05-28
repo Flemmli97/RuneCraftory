@@ -47,7 +47,7 @@ public class BlockBrokenMineral extends Block implements ITileEntityProvider{
 		this.tier=tier;
         this.blockSoundType = SoundType.STONE;
         this.setResistance(15.0F);
-        this.setHardness(50.0F);
+        this.setHardness(30.0F);
         this.setRegistryName(new ResourceLocation(LibReference.MODID, "ore_broken_"+tier.getName()));
 		this.setUnlocalizedName(this.getRegistryName().toString());
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
@@ -86,11 +86,13 @@ public class BlockBrokenMineral extends Block implements ITileEntityProvider{
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player,
 			boolean willHarvest) {
+		if(world.isRemote)
+			return false;
 		if(player.capabilities.isCreativeMode)
-	        return world.setBlockState(pos, Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
+	        return world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		else if((player.getHeldItemMainhand().getItem() instanceof ItemToolHammer || player.getHeldItemMainhand().getItem() instanceof ItemHammerBase) && player.isSneaking())
 		{
-			return world.setBlockState(pos, Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
+			return world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		}
 		return false;
 	}

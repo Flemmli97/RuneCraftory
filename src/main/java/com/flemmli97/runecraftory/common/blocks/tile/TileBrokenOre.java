@@ -22,7 +22,7 @@ public class TileBrokenOre extends TileEntity implements ITickable{
 
 	@Override
 	public void update() {
-		if(Math.abs(this.world.getWorldTime()/24000 - this.time/24000)>=1 || this.world.getWorldTime()%24000==1)
+		if(!this.world.isRemote && Math.abs(this.world.getWorldTime()/24000 - this.time/24000)>=1 || this.world.getWorldTime()%24000==1)
 		{
 			IBlockState state = this.world.getBlockState(this.pos);
 			Block block = state.getBlock();
