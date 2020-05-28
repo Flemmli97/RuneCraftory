@@ -2,6 +2,10 @@
   "variants": {
     "normal": {
       "model": "runecraftory:ore_broken_wind"
-    }
+    },
+    "facing=north": {"model": "runecraftory:ore_broken_wind"},
+    "facing=east": {"model": "runecraftory:ore_broken_wind","y":90},
+    "facing=south": {"model": "runecraftory:ore_broken_wind","y":180},
+    "facing=west": {"model": "runecraftory:ore_broken_wind","y":270}
   }
 }

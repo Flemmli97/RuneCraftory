@@ -12,10 +12,14 @@ import com.flemmli97.runecraftory.common.lib.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.MineralBlockConverter;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -23,7 +27,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -37,6 +44,9 @@ public class BlockMineral extends Block{
 	
     private static float skillChanceUp = 0.005F;
     private final EnumMineralTier tier;
+
+	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+
 	public BlockMineral(EnumMineralTier tier) {
 		super(Material.ROCK);
 		this.tier=tier;
@@ -46,6 +56,7 @@ public class BlockMineral extends Block{
         this.setHardness(3.0F);
         this.setRegistryName(new ResourceLocation(LibReference.MODID, "ore_"+tier.getName()));
 		this.setUnlocalizedName(this.getRegistryName().toString());
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 	
 	private AxisAlignedBB box = new AxisAlignedBB(0,0,0,1,0.875,1);
@@ -103,7 +114,7 @@ public class BlockMineral extends Block{
 			}
 			if(world.rand.nextFloat()<breakChance)
 			{
-		        return world.setBlockState(pos, MineralBlockConverter.getBrokenState(this.tier), world.isRemote ? 11 : 3);
+		        return world.setBlockState(pos, MineralBlockConverter.getBrokenState(this.tier).withProperty(BlockBrokenMineral.FACING, state.getValue(FACING)), world.isRemote ? 11 : 3);
 			}
 			else
 				return false;
@@ -295,5 +306,47 @@ public class BlockMineral extends Block{
 				}
 				break;
 		}
+	}
+
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+	}
+
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		EnumFacing enumfacing = EnumFacing.getFront(meta);
+
+		if (enumfacing.getAxis() == EnumFacing.Axis.Y)
+		{
+			enumfacing = EnumFacing.NORTH;
+		}
+
+		return this.getDefaultState().withProperty(FACING, enumfacing);
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state)
+	{
+		return (state.getValue(FACING)).getIndex();
+	}
+
+	@Override
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
+		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
+	}
+
+	@Override
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, FACING);
 	}
 }
