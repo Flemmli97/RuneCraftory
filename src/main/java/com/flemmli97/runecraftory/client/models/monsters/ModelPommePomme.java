@@ -113,8 +113,14 @@ public class ModelPommePomme extends ModelBase implements IResetModel {
         if (pommePomme.isMoving())
             this.animations.doAnimation("walk", pommePomme.ticksExisted, partialTicks);
         AnimatedAction anim = pommePomme.getAnimation();
-        if (anim != null)
-            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+        if (anim != null) {
+            if(anim.getID().equals("roll")) {
+                if (anim.getTick() > anim.getAttackTime())
+                    this.animations.doAnimation(anim.getID(), anim.getTick() - anim.getAttackTime(), partialTicks);
+            }
+            else
+                this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+        }
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

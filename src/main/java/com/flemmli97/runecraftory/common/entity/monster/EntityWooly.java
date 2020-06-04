@@ -1,12 +1,8 @@
 package com.flemmli97.runecraftory.common.entity.monster;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.entity.ai.EntityAIMeleeBase;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -23,6 +19,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EntityWooly extends EntityMobBase implements IShearable {
 
     private static final DataParameter<Boolean> SHEARED = EntityDataManager.createKey(EntityWooly.class, DataSerializers.BOOLEAN);
@@ -33,7 +32,7 @@ public class EntityWooly extends EntityMobBase implements IShearable {
     public static final AnimatedAction walk = new AnimatedAction(28,0, "walk");
     public static final AnimatedAction[] anims = new AnimatedAction[] {AnimatedAction.vanillaAttack, walk};
 
-    public EntityAIMeleeBase<EntityWooly> attack = new EntityAIMeleeBase<EntityWooly>(this, 1);
+    public EntityAIMeleeBase<EntityWooly> attack = new EntityAIMeleeBase<EntityWooly>(this);
 
     public EntityWooly(World world) {
         super(world);
@@ -94,6 +93,11 @@ public class EntityWooly extends EntityMobBase implements IShearable {
     @Override
     public AnimatedAction[] getAnimations() {
         return anims;
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim){
+        return 0.7;
     }
 
     @Override

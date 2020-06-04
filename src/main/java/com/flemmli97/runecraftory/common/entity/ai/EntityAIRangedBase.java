@@ -11,14 +11,14 @@ public class EntityAIRangedBase<T extends EntityMobBase & IRangedMob> extends En
     private float rangedReach;
     private boolean moveTo, clockWise;
     public EntityAIRangedBase(T entity, float meleeReachMod, float rangedReach) {
-        super(entity, meleeReachMod);
+        super(entity);
         this.rangedReach=rangedReach;
     }
 
     @Override
     public AnimatedAction randomAttack() {
         if (this.attacker.getRNG().nextFloat() < this.attacker.attackChance())
-            if(this.attacker.getRNG().nextFloat() < this.attacker.meleeChance() && this.distanceToTargetSq <= this.getAttackReachSqr(this.target, this.rangeModifier))
+            if(this.attacker.getRNG().nextFloat() < this.attacker.meleeChance() && this.distanceToTargetSq <= 0)//this.attacker.getAttackReach())
                 return this.attacker.getRandomAnimation(AnimationType.MELEE);
             else
                 return this.attacker.getRandomAnimation(AnimationType.RANGED);
@@ -50,7 +50,7 @@ public class EntityAIRangedBase<T extends EntityMobBase & IRangedMob> extends En
         }
     }
 
-    @Override
+    /*@Override
     public void handleAttack(AnimatedAction anim) {
         if (this.attacker.isAnimOfType(anim, AnimationType.RANGED)) {
             this.attacker.getNavigator().clearPath();
@@ -59,7 +59,7 @@ public class EntityAIRangedBase<T extends EntityMobBase & IRangedMob> extends En
         }
         else
             super.handleAttack(anim);
-    }
+    }*/
 
     @Override
     public void handleIddle() {

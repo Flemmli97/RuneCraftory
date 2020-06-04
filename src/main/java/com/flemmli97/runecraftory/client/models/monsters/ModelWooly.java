@@ -43,12 +43,12 @@ public class ModelWooly extends ModelBase implements IResetModel {
 
 		this.body = new ModelRendererPlus(this);
 		this.body.setDefaultRotPoint(0.0F, 17.75F, 0.0F);
-		this.body.cubeList.add(new ModelBox(this.body, 0, 31, -3.5F, -6.0F, -4.5F, 7, 12, 9, 0.0F, true));
-		this.body.cubeList.add(new ModelBox(this.body, 32, 30, -4.5F, -6.0F, -3.5F, 1, 12, 7, 0.0F, true));
-		this.body.cubeList.add(new ModelBox(this.body, 32, 30, 3.5F, -6.0F, -3.5F, 1, 12, 7, 0.0F, false));
+		this.body.cubeList.add(new ModelBox(this.body, 0, 31, -3.5F, -7.0F, -4.5F, 7, 13, 9, 0.0F, true));
+		this.body.cubeList.add(new ModelBox(this.body, 32, 30, -4.5F, -7.0F, -3.5F, 1, 13, 7, 0.0F, true));
+		this.body.cubeList.add(new ModelBox(this.body, 32, 30, 3.5F, -7.0F, -3.5F, 1, 13, 7, 0.0F, false));
 
 		this.bodyUp = new ModelRendererPlus(this);
-		this.bodyUp.setDefaultRotPoint(0.0F, -7.0F, 0.0F);
+		this.bodyUp.setDefaultRotPoint(0.0F, -8.0F, 0.0F);
 		this.body.addChild(this.bodyUp);
 		this.bodyUp.cubeList.add(new ModelBox(this.bodyUp, 32, 14, -2.5F, -1.0F, -3.5F, 5, 2, 7, 0.0F, true));
 		this.bodyUp.cubeList.add(new ModelBox(this.bodyUp, 28, 23, 2.5F, -1.0F, -2.5F, 1, 2, 5, 0.0F, false));
@@ -83,7 +83,7 @@ public class ModelWooly extends ModelBase implements IResetModel {
 		this.armLeftBase.setDefaultRotPoint(3.75F, -3.0F, 0.0F);
 		this.body.addChild(this.armLeftBase);
 		this.setRotationAngle(this.armLeftBase, 0.1745F, 0.0F, 0.0F);
-		this.armLeftBase.cubeList.add(new ModelBox(this.armLeftBase, 32, 49, 0.25F, -1.0F, -1.0F, 2, 2, 2, 0.0F, false));
+		this.armLeftBase.cubeList.add(new ModelBox(this.armLeftBase, 34, 50, 0.25F, -1.0F, -1.0F, 2, 2, 2, 0.0F, false));
 
 		this.armLeftUp = new ModelRendererPlus(this);
 		this.armLeftUp.setDefaultRotPoint(1.0F, 0.0F, -0.5F);
@@ -101,7 +101,7 @@ public class ModelWooly extends ModelBase implements IResetModel {
 		this.armRightBase.setDefaultRotPoint(-3.75F, -3.0F, 0.0F);
 		this.body.addChild(this.armRightBase);
 		this.setRotationAngle(this.armRightBase, 0.1745F, 0.0F, 0.0F);
-		this.armRightBase.cubeList.add(new ModelBox(this.armRightBase, 32, 49, -2.25F, -1.0F, -1.0F, 2, 2, 2, 0.0F, false));
+		this.armRightBase.cubeList.add(new ModelBox(this.armRightBase, 34, 50, -2.25F, -1.0F, -1.0F, 2, 2, 2, 0.0F, false));
 
 		this.armRightUp = new ModelRendererPlus(this);
 		this.armRightUp.setDefaultRotPoint(-1.0F, 0.0F, -0.5F);
@@ -113,27 +113,27 @@ public class ModelWooly extends ModelBase implements IResetModel {
 		this.armRightDown.setDefaultRotPoint(-0.75F, 0.0F, -4.0F);
 		this.armRightUp.addChild(this.armRightDown);
 		this.setRotationAngle(this.armRightDown, 0.4363F, -0.5236F, 0.0F);
-		this.armRightDown.cubeList.add(new ModelBox(this.armRightDown, 54, 28, 0.0F, -0.5F, -4.0F, 1, 1, 4, 0.0F, false));
+		this.armRightDown.cubeList.add(new ModelBox(this.armRightDown, 54, 28, 0.0F, -0.5F, -4.0F, 1, 1, 4, 0.0F, true));
 
 		this.feetLeftBase = new ModelRendererPlus(this);
 		this.feetLeftBase.setDefaultRotPoint(4.0F, 4.75F, 0.0F);
 		this.body.addChild(this.feetLeftBase);
-		this.feetLeftBase.cubeList.add(new ModelBox(this.feetLeftBase, 0, 52, -1.5F, -3.5F, -2.0F, 3, 5, 4, 0.0F, false));
+		this.feetLeftBase.cubeList.add(new ModelBox(this.feetLeftBase, 42, 50, -1.5F, -5.5F, -2.5F, 3, 7, 5, 0.0F, false));
 
 		this.feetLeft = new ModelRendererPlus(this);
 		this.feetLeft.setDefaultRotPoint(0.0F, 0.5F, 0.0F);
 		this.feetLeftBase.addChild(this.feetLeft);
-		this.feetLeft.cubeList.add(new ModelBox(this.feetLeft, 14, 52, -1.0F, 0.0F, -7.0F, 2, 1, 7, 0.0F, false));
+		this.feetLeft.cubeList.add(new ModelBox(this.feetLeft, 16, 53, -1.0F, 0.0F, -7.0F, 2, 1, 7, 0.0F, false));
 
 		this.feetRightBase = new ModelRendererPlus(this);
 		this.feetRightBase.setDefaultRotPoint(-4.0F, 4.75F, 0.0F);
 		this.body.addChild(this.feetRightBase);
-		this.feetRightBase.cubeList.add(new ModelBox(this.feetRightBase, 0, 52, -1.5F, -3.5F, -2.0F, 3, 5, 4, 0.0F, true));
+		this.feetRightBase.cubeList.add(new ModelBox(this.feetRightBase, 42, 50, -1.5F, -5.5F, -2.5F, 3, 7, 5, 0.0F, true));
 
 		this.feetRight = new ModelRendererPlus(this);
 		this.feetRight.setDefaultRotPoint(0.0F, 0.5F, 0.0F);
 		this.feetRightBase.addChild(this.feetRight);
-		this.feetRight.cubeList.add(new ModelBox(this.feetRight, 14, 52, -1.0F, 0.0F, -7.0F, 2, 1, 7, 0.0F, false));
+		this.feetRight.cubeList.add(new ModelBox(this.feetRight, 16, 53, -1.0F, 0.0F, -7.0F, 2, 1, 7, 0.0F, false));
 
 		this.tail = new ModelRendererPlus(this);
 		this.tail.setDefaultRotPoint(0.0F, 3.0F, 4.0F);

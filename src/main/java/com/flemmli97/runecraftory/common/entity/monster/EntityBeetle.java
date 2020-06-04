@@ -1,14 +1,13 @@
 package com.flemmli97.runecraftory.common.entity.monster;
 
-import com.flemmli97.runecraftory.common.entity.EntityMobBase;
+import com.flemmli97.runecraftory.common.entity.EntityChargingMobBase;
 import com.flemmli97.runecraftory.common.entity.ai.EntityAIChargeAttackBase;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-
 import net.minecraft.world.World;
 
-public class EntityBeetle extends EntityMobBase {
+public class EntityBeetle extends EntityChargingMobBase {
 
-    private EntityAIChargeAttackBase<EntityBeetle> ai = new EntityAIChargeAttackBase<EntityBeetle>(this, 1.0f);
+    private EntityAIChargeAttackBase<EntityBeetle> ai = new EntityAIChargeAttackBase<EntityBeetle>(this);
     private static final AnimatedAction chargeAttack = new AnimatedAction(30,0, "charge");
     private static final AnimatedAction[] anims = new AnimatedAction[] {AnimatedAction.vanillaAttack, chargeAttack};
 

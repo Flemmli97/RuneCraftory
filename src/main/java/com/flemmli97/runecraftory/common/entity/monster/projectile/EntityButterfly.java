@@ -2,10 +2,12 @@ package com.flemmli97.runecraftory.common.entity.monster.projectile;
 
 import com.flemmli97.runecraftory.api.items.ItemStatAttributes;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
+import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.flemmli97.tenshilib.common.entity.EntityProjectile;
-
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -13,11 +15,16 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class EntityButterfly extends EntityProjectile
 {
     private Vec3d targetPos;
     private double length;
     private boolean turn;
+    private Predicate<EntityLivingBase> pred;
+    private List<EntityLivingBase> hitEntities = Lists.newArrayList();
     public EntityButterfly(World worldIn) {
         super(worldIn);
         this.setSize(0.2f, 0.2f);
@@ -29,12 +36,14 @@ public class EntityButterfly extends EntityProjectile
     
     public EntityButterfly(World worldIn, EntityLivingBase thrower) {
         super(worldIn, thrower);
+        if(thrower instanceof EntityMobBase)
+            this.pred = ((EntityMobBase)thrower).attackPred;
     }
     
     @Override
     public int livingTickMax()
     {
-        return 100;
+        return 50;
     }
     
     @Override
@@ -55,7 +64,7 @@ public class EntityButterfly extends EntityProjectile
     
     @Override
 	public void onUpdate() {
-        if(this.targetPos!=null && this.getDistance(this.targetPos.x, this.targetPos.y, this.targetPos.z)<3)
+        if(this.targetPos!=null && this.getDistanceSq(this.targetPos.x, this.targetPos.y, this.targetPos.z)<7)
             this.turn=true;
         if(this.turn && this.motionY<0.5) {
             if(this.motionY<-2.5)
@@ -67,10 +76,13 @@ public class EntityButterfly extends EntityProjectile
     
     @Override
 	protected void onImpact(final RayTraceResult result) {
-        if (result.entityHit != null && !this.world.isRemote && result.entityHit != this.getShooter() && result.entityHit instanceof EntityLivingBase) {
+        EntityLivingBase e = null;
+        if (result.entityHit instanceof EntityLivingBase && !this.world.isRemote && (e = (EntityLivingBase) result.entityHit) != this.getShooter()
+                && (this.pred==null || this.pred.apply((EntityLivingBase) result.entityHit)) && !this.hitEntities.contains(e)) {
             if (RFCalculations.attackEntity(result.entityHit, CustomDamage.attack(this.getShooter(), EnumElement.NONE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 10), RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
-                ((EntityLivingBase)result.entityHit).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:slowness"), 60, 3));
-                this.setDead();
+                e.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("minecraft:slowness"), 60, 3));
+                this.hitEntities.add(e);
+                //this.setDead();
             }
         }
     }
@@ -78,5 +90,14 @@ public class EntityButterfly extends EntityProjectile
     @Override
 	protected float getGravityVelocity() {
         return 0.0f;
+    }
+
+    @Nullable
+    @Override
+    public EntityLivingBase getShooter() {
+        EntityLivingBase entityLivingBase = super.getShooter();
+        if(entityLivingBase instanceof EntityMobBase)
+            this.pred = ((EntityMobBase)entityLivingBase).attackPred;
+        return entityLivingBase;
     }
 }

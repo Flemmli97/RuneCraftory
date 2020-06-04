@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 public class EntityAnt extends EntityMobBase {
 
-    public EntityAIMeleeBase<EntityAnt> attack = new EntityAIMeleeBase<EntityAnt>(this, 0.8f);
+    public EntityAIMeleeBase<EntityAnt> attack = new EntityAIMeleeBase<EntityAnt>(this);
     private static final AnimatedAction melee = new AnimatedAction(23,12, "attack");
 
     private static final AnimatedAction[] anims = new AnimatedAction[] {melee};
@@ -27,6 +27,11 @@ public class EntityAnt extends EntityMobBase {
     @Override
     public AnimatedAction[] getAnimations() {
         return anims;
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim){
+        return 0.7;
     }
 
     @Override

@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 public class EntityBigMuck extends EntityMobBase {
 
-    private EntityAIMeleeBase<EntityBigMuck> ai = new EntityAIMeleeBase<EntityBigMuck>(this, 1.0f);
+    private EntityAIMeleeBase<EntityBigMuck> ai = new EntityAIMeleeBase<EntityBigMuck>(this);
     private static final AnimatedAction slapAttack = new AnimatedAction(24,7, "slap");
     private static final AnimatedAction sporeAttack = new AnimatedAction(44,40, "spore");
 
@@ -28,6 +28,11 @@ public class EntityBigMuck extends EntityMobBase {
     @Override
     public AnimatedAction[] getAnimations() {
         return anims;
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim){
+        return 0.8;
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.client.render;
 
 import com.flemmli97.runecraftory.common.entity.EntityBossBase;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -24,9 +23,9 @@ public abstract class RenderMobBase<T extends EntityMobBase> extends RenderLivin
         float f = entity.getBrightness();
         int i = this.getColorMultiplier(entity, f, partialTicks);
         boolean colorMulti = (i >> 24 & 255) > 0;
-        boolean hurtDeath = entity.hurtTime > 0 || entity.deathTime > 0;
-        boolean enraged = entity instanceof EntityBossBase && ((EntityBossBase) entity).isEnraged();
-        if (!colorMulti && !hurtDeath && !enraged)
+        boolean hurt = entity.hurtTime > 0;
+        boolean enraged = entity instanceof EntityBossBase && ((EntityBossBase) entity).isEnraged() && entity.deathTime<=0;
+        if (!colorMulti && !hurt && !enraged)
         {
             return false;
         }
@@ -61,14 +60,13 @@ public abstract class RenderMobBase<T extends EntityMobBase> extends RenderLivin
             GlStateManager.glTexEnvi(8960, OpenGlHelper.GL_SOURCE0_ALPHA, OpenGlHelper.GL_PREVIOUS);
             GlStateManager.glTexEnvi(8960, OpenGlHelper.GL_OPERAND0_ALPHA, 770);
             this.brightnessBuffer.position(0);
-            if (hurtDeath||enraged)
+            if (hurt||enraged)
             {
-            	float hurt = hurtDeath?0.3F:0;
                 float alpha = enraged?(float) (Math.sin(entity.ticksExisted/7F)*0.3+0.3):0;
                 this.brightnessBuffer.put(1.0F);
                 this.brightnessBuffer.put(0.0F);
                 this.brightnessBuffer.put(0.0F);
-                this.brightnessBuffer.put(alpha+hurt);
+                this.brightnessBuffer.put(alpha+(hurt?0.3F:0));
             }
             else
             {

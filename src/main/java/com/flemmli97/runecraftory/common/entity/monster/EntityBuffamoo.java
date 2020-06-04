@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.entity.monster;
 
-import com.flemmli97.runecraftory.common.entity.EntityMobBase;
+import com.flemmli97.runecraftory.common.entity.EntityChargingMobBase;
 import com.flemmli97.runecraftory.common.entity.ai.EntityAIChargeAttackBase;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.init.SoundEvents;
@@ -8,9 +8,9 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
-public class EntityBuffamoo extends EntityMobBase {
+public class EntityBuffamoo extends EntityChargingMobBase {
 
-    private EntityAIChargeAttackBase<EntityBuffamoo> ai = new EntityAIChargeAttackBase<EntityBuffamoo>(this, 1.0f);
+    private EntityAIChargeAttackBase<EntityBuffamoo> ai = new EntityAIChargeAttackBase<EntityBuffamoo>(this);
     private static final AnimatedAction chargeAttack = new AnimatedAction(30,0, "charge");
     private static final AnimatedAction[] anims = new AnimatedAction[] {AnimatedAction.vanillaAttack, chargeAttack};
 

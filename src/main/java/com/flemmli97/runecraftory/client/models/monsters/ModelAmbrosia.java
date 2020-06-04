@@ -143,10 +143,10 @@ public class ModelAmbrosia extends ModelBase implements IResetModel {
 		this.dressDown.cubeList.add(new ModelBox(this.dressDown, 24, 57, -5.5F, 0.0F, -3.5F, 11, 1, 7, 0.0F, true));
 
 		this.leftLeg = new ModelRendererPlus(this);
-		this.leftLeg.setDefaultRotPoint(1.9F, 12.0F, 0.0F);
+		this.leftLeg.setDefaultRotPoint(1.9F, 11.0F, 0.0F);
 		this.body.addChild(this.leftLeg);
 		this.setRotationAngle(this.leftLeg, -0.0873F, 0.0F, 0.0F);
-		this.leftLeg.cubeList.add(new ModelBox(this.leftLeg, 34, 20, -1.9F, 0.0F, -2.0F, 4, 6, 4, 0.0F, true));
+		this.leftLeg.cubeList.add(new ModelBox(this.leftLeg, 34, 20, -1.9F, 0.0F, -2.0F, 4, 7, 4, 0.0F, true));
 
 		this.leftLegDown = new ModelRendererPlus(this);
 		this.leftLegDown.setDefaultRotPoint(0.1F, 6.0F, -2.0F);
@@ -155,10 +155,10 @@ public class ModelAmbrosia extends ModelBase implements IResetModel {
 		this.leftLegDown.cubeList.add(new ModelBox(this.leftLegDown, 50, 20, -2.0F, 0.0F, 0.0F, 4, 6, 4, 0.0F, true));
 
 		this.rightLeg = new ModelRendererPlus(this);
-		this.rightLeg.setDefaultRotPoint(-1.9F, 12.0F, 0.0F);
+		this.rightLeg.setDefaultRotPoint(-1.9F, 11.0F, 0.0F);
 		this.body.addChild(this.rightLeg);
 		this.setRotationAngle(this.rightLeg, -0.0873F, 0.0F, 0.0F);
-		this.rightLeg.cubeList.add(new ModelBox(this.rightLeg, 34, 30, -2.1F, 0.0F, -2.0F, 4, 6, 4, 0.0F, false));
+		this.rightLeg.cubeList.add(new ModelBox(this.rightLeg, 34, 31, -2.1F, 0.0F, -2.0F, 4, 7, 4, 0.0F, false));
 
 		this.rightLegDown = new ModelRendererPlus(this);
 		this.rightLegDown.setDefaultRotPoint(-0.1F, 6.0F, -2.0F);
@@ -180,31 +180,31 @@ public class ModelAmbrosia extends ModelBase implements IResetModel {
 		if (!(entity instanceof EntityAmbrosia))
 			return;
 		this.resetModel();
-		this.head.rotateAngleY = netHeadYaw * 0.017453292F;
-		this.head.rotateAngleX = headPitch * 0.017453292F;
-
-		this.leftLowerWing.rotateAngleY+= MathHelper.cos(ageInTicks * 1.2F) * MathUtils.degToRad(10)+MathUtils.degToRad(-5);
-		this.rightLowerWing.rotateAngleY-=MathHelper.cos(ageInTicks * 1.2F) * MathUtils.degToRad(10)+MathUtils.degToRad(-5);
-		this.leftUpperWing.rotateAngleY+=MathHelper.cos(ageInTicks * 1.2F) * MathUtils.degToRad(10)+MathUtils.degToRad(-5);
-		this.rightUpperWing.rotateAngleY-=MathHelper.cos(ageInTicks * 1.2F) * MathUtils.degToRad(10)+MathUtils.degToRad(-5);
-		this.rightArm.rotateAngleZ += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-		this.leftArm.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-		this.rightArm.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-		this.leftArm.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-
-		this.hornRightStick.rotateAngleZ += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-		this.hornLeftStick.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-		this.hornRightStick.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-		this.hornLeftStick.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-		this.hornFront.rotateAngleX+= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
-
 		EntityAmbrosia brosia = (EntityAmbrosia) entity;
-		float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
-
-		if (brosia.isMoving())
-			this.body.rotateAngleX = 0.6108652381980154F;
-
 		AnimatedAction anim = brosia.getAnimation();
+		if(brosia.deathTime<=0) {
+			this.head.rotateAngleY = netHeadYaw * 0.017453292F;
+			this.head.rotateAngleX = headPitch * 0.017453292F;
+
+			this.leftLowerWing.rotateAngleY += MathHelper.cos(ageInTicks * 1.2F) * MathUtils.degToRad(10) + MathUtils.degToRad(-5);
+			this.rightLowerWing.rotateAngleY -= MathHelper.cos(ageInTicks * 1.2F) * MathUtils.degToRad(10) + MathUtils.degToRad(-5);
+			this.leftUpperWing.rotateAngleY += MathHelper.cos(ageInTicks * 1.2F) * MathUtils.degToRad(10) + MathUtils.degToRad(-5);
+			this.rightUpperWing.rotateAngleY -= MathHelper.cos(ageInTicks * 1.2F) * MathUtils.degToRad(10) + MathUtils.degToRad(-5);
+			this.rightArm.rotateAngleZ += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+			this.leftArm.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+			this.rightArm.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+			this.leftArm.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+
+			this.hornRightStick.rotateAngleZ += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+			this.hornLeftStick.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+			this.hornRightStick.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+			this.hornLeftStick.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
+			this.hornFront.rotateAngleX += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
+
+			if (brosia.isMoving() && anim==null)
+				this.body.rotateAngleX = 0.6108652381980154F;
+		}
+		float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
 		if (anim != null)
 			this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
 	}

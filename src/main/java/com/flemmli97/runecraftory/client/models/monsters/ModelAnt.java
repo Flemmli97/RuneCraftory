@@ -73,13 +73,13 @@ public class ModelAnt extends ModelBase implements IResetModel {
 		this.feelerLeft = new ModelRendererPlus(this);
 		this.feelerLeft.setDefaultRotPoint(3.5F, -2.5F, -7.5F);
 		this.headFront.addChild(this.feelerLeft);
-		this.setRotationAngle(this.feelerLeft, 0.6109F, 0.0F, 0.0F);
+		this.setRotationAngle(this.feelerLeft, 0.9599F, 0.0F, 0.0F);
 		this.feelerLeft.cubeList.add(new ModelBox(this.feelerLeft, 26, 0, -0.5F, -5.5F, -0.5F, 1, 6, 1, 0.0F, true));
 
 		this.feelerRight = new ModelRendererPlus(this);
 		this.feelerRight.setDefaultRotPoint(-3.5F, -2.5F, -7.5F);
 		this.headFront.addChild(this.feelerRight);
-		this.setRotationAngle(this.feelerRight, 0.6109F, 0.0F, 0.0F);
+		this.setRotationAngle(this.feelerRight, 0.9599F, 0.0F, 0.0F);
 		this.feelerRight.cubeList.add(new ModelBox(this.feelerRight, 26, 0, -0.5F, -5.5F, -0.5F, 1, 6, 1, 0.0F, false));
 
 		this.jawLeft = new ModelRendererPlus(this);

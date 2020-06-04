@@ -30,12 +30,6 @@ public class EntityAIThunderbolt extends EntityAIAttackBase<EntityThunderbolt> {
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void handleIddle() {
         if (this.circlePoint == null) {
             this.circlePoint = new double[] {this.target.posX, this.target.posZ};

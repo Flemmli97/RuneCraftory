@@ -1,9 +1,6 @@
 package com.flemmli97.runecraftory.common.entity;
 
-import java.util.Set;
-
 import com.google.common.collect.Sets;
-
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,6 +12,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
+
+import java.util.Set;
 
 public abstract class EntityBossBase extends EntityMobBase
 {
@@ -41,7 +40,7 @@ public abstract class EntityBossBase extends EntityMobBase
         return this.dataManager.get(enraged);
     }
     
-    public void setEnraged(boolean flag) {
+    public void setEnraged(boolean flag, boolean load) {
         this.dataManager.set(enraged, flag);
     }
     
@@ -57,8 +56,16 @@ public abstract class EntityBossBase extends EntityMobBase
     @Override
     protected void damageEntity(DamageSource damageSrc, float damageAmount) {
     	super.damageEntity(damageSrc, damageAmount);
-    	if(this.getHealth()/this.getMaxHealth()<0.5)
-    		this.setEnraged(true);
+    	if(!this.isTamed() && this.getHealth()/this.getMaxHealth()<0.5 && !this.isEnraged()) {
+            this.setEnraged(true, false);
+
+        }
+    }
+
+    @Override
+    protected void tameEntity(EntityPlayer owner) {
+        super.tameEntity(owner);
+        this.setEnraged(false, false);
     }
     
     @Override
@@ -70,7 +77,7 @@ public abstract class EntityBossBase extends EntityMobBase
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
         super.readEntityFromNBT(compound);
-        this.setEnraged(compound.getBoolean("Enraged"));
+        this.setEnraged(compound.getBoolean("Enraged"), true);
     }
     
     @Override

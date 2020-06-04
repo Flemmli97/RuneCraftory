@@ -1154,6 +1154,9 @@ entity.beetle.name=Beetle
 entity.ambrosia.name=Ambrosia
 entity.thunderbolt.name=Thunderbolt
 entity.pomme_pomme.name=Pomme Pomme
+entity.cluckadoodle.name=Cluckadoodle
+entity.buffamoo.name=Buffamoo
+entity.chipsqueek.name=Chipsqueek
 
 death.attack.rfExhaust=%1$s fainted
 death.attack.rfAttack=%1$s was knocked down from %2$s

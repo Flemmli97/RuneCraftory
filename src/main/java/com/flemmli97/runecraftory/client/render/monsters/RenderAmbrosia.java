@@ -19,6 +19,9 @@ public class RenderAmbrosia<T extends EntityAmbrosia> extends RenderMobBase<T>{
 	protected ResourceLocation getEntityTexture(T entity) {
 		return this.tex;
 	}
-	
 
+	@Override
+	protected float getDeathMaxRotation(T entityLivingBaseIn) {
+		return 0;
+	}
 }

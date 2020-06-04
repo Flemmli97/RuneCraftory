@@ -8,7 +8,7 @@ import net.minecraft.world.World;
 
 public class EntityOrc extends EntityMobBase {
 
-    public EntityAIMeleeBase<EntityOrc> attack = new EntityAIMeleeBase<EntityOrc>(this, 1.2f);
+    public EntityAIMeleeBase<EntityOrc> attack = new EntityAIMeleeBase<EntityOrc>(this);
     private static final AnimatedAction melee1 = new AnimatedAction(22,14, "attack1");
     private static final AnimatedAction melee2 = new AnimatedAction(23,13, "attack2");
 
@@ -16,7 +16,7 @@ public class EntityOrc extends EntityMobBase {
 
     public EntityOrc(World world) {
         super(world);
-        this.setSize(0.63f, 2.4f);
+        this.setSize(0.73f, 2.4f);
 
         this.tasks.addTask(2, this.attack);
     }
@@ -29,6 +29,13 @@ public class EntityOrc extends EntityMobBase {
     @Override
     public AnimatedAction[] getAnimations() {
         return anims;
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim){
+        if(anim.getID().equals("attack2"))
+            return 1.2;
+        return 1.1;
     }
 
     @Override

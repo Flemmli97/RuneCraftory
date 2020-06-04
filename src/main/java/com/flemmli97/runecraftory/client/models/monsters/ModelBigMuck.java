@@ -14,12 +14,15 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 public class ModelBigMuck extends ModelBase implements IResetModel {
     public ModelRendererPlus body;
 	public ModelRendererPlus mushroomCap;
 	public ModelRendererPlus handLeft;
 	public ModelRendererPlus handRight;
+    public ModelRendererPlus tail;
+    public ModelRendererPlus tailCap;
 
     public BlockBenchAnimations animations;
     public ModelBigMuck() {
@@ -55,6 +58,17 @@ public class ModelBigMuck extends ModelBase implements IResetModel {
         this.setRotationAngle(this.handRight, 0.0F, 0.0F, -0.2618F);
         this.handRight.cubeList.add(new ModelBox(this.handRight, 0, 40, -8.0F, -0.5F, -3.5F, 8, 1, 7, 0.0F, false));
 
+        this.tail = new ModelRendererPlus(this);
+        this.tail.setDefaultRotPoint(-0.5F, -1.0F, 7.0F);
+        this.body.addChild(this.tail);
+        this.setRotationAngle(this.tail, 0.6981F, 0.0F, 0.0F);
+        this.tail.cubeList.add(new ModelBox(this.tail, 44, 23, -0.5F, -1.0F, 0.0F, 1, 1, 2, 0.0F, false));
+
+        this.tailCap = new ModelRendererPlus(this);
+        this.tailCap.setDefaultRotPoint(0.5F, 0.0F, 0.0F);
+        this.tail.addChild(this.tailCap);
+        this.tailCap.cubeList.add(new ModelBox(this.tailCap, 50, 23, -1.5F, -1.5F, 2.0F, 2, 2, 2, 0.0F, false));
+
         this.animations = new BlockBenchAnimations(this, new ResourceLocation(LibReference.MODID, "models/entity/animation/big_muck.json"));
     }
 
@@ -74,6 +88,9 @@ public class ModelBigMuck extends ModelBase implements IResetModel {
         this.animations.doAnimation("iddle", mushroom.ticksExisted, partialTicks);
         if (mushroom.isMoving())
             this.animations.doAnimation("walk", mushroom.ticksExisted, partialTicks);
+
+        this.tail.rotateAngleX += MathHelper.cos(ageInTicks * 0.09F) * 0.15F + 0.05F;
+        this.tail.rotateAngleY += MathHelper.sin(ageInTicks * 0.067F) * 0.15F;
 
         AnimatedAction anim = mushroom.getAnimation();
         if (anim != null)

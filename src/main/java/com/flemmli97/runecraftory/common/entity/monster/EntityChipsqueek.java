@@ -8,11 +8,16 @@ import net.minecraft.world.World;
 
 public class EntityChipsqueek extends EntityMobBase{
 
-    public EntityAIMeleeBase<EntityChipsqueek> attack = new EntityAIMeleeBase<EntityChipsqueek>(this, 1.2f);
+    public EntityAIMeleeBase<EntityChipsqueek> attack = new EntityAIMeleeBase<EntityChipsqueek>(this);
+    private static final AnimatedAction melee = new AnimatedAction(11,6, "tail_slap");
+    private static final AnimatedAction roll = new AnimatedAction(12,4, "roll");
+
+    private static final AnimatedAction[] anims = new AnimatedAction[] {melee, roll};
 
     public EntityChipsqueek(World world) {
         super(world);
         this.tasks.addTask(2, this.attack);
+        this.setSize(0.65f, 1.15f);
     }
 
     @Override
@@ -21,12 +26,17 @@ public class EntityChipsqueek extends EntityMobBase{
     }
 
     @Override
+    public double maxAttackRange(AnimatedAction anim){
+        return 0.75;
+    }
+
+    @Override
     public AnimatedAction[] getAnimations() {
-        return AnimatedAction.vanillaAttackOnly;
+        return anims;
     }
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type != AnimationType.MELEE || anim.getID().equals("vanilla");
+        return type != AnimationType.MELEE || anim.getID().equals("tail_slap");
     }
 }
