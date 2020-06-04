@@ -1,9 +1,5 @@
 package com.flemmli97.runecraftory.common.items.creative;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.blocks.tile.TileBossSpawner;
 import com.flemmli97.runecraftory.common.entity.EntityMobBase;
@@ -11,7 +7,6 @@ import com.flemmli97.runecraftory.common.init.EntitySpawnEggList;
 import com.flemmli97.runecraftory.common.init.GateSpawning;
 import com.flemmli97.runecraftory.common.init.ModBlocks;
 import com.flemmli97.runecraftory.common.lib.LibReference;
-
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -39,6 +34,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemSpawnEgg extends Item{
 	
@@ -229,13 +227,13 @@ public class ItemSpawnEgg extends Item{
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     {
-		if(this.isInCreativeTab(tab))
-            for (EntityList.EntityEggInfo eggEntity  : EntitySpawnEggList.entityEggs.values())
-            {            
-        		ItemStack stack = new ItemStack(this, 1);
-        		applyEntityIdToItemStack(stack, eggEntity.spawnedID);
-        		items.add(stack);
+		if(this.isInCreativeTab(tab)) {
+            for (EntityList.EntityEggInfo eggEntity : EntitySpawnEggList.values()) {
+                ItemStack stack = new ItemStack(this, 1);
+                applyEntityIdToItemStack(stack, eggEntity.spawnedID);
+                items.add(stack);
             }
+        }
     }
 
     public static void applyEntityIdToItemStack(ItemStack stack, ResourceLocation entityId)
