@@ -7,7 +7,13 @@ import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.api.mappings.CropMap;
 import com.flemmli97.runecraftory.api.mappings.ItemFoodMap;
 import com.flemmli97.runecraftory.api.mappings.ItemStatMap;
-import com.flemmli97.runecraftory.client.gui.*;
+import com.flemmli97.runecraftory.client.gui.ButtonSkill;
+import com.flemmli97.runecraftory.client.gui.GuiBars;
+import com.flemmli97.runecraftory.client.gui.GuiInfoScreen;
+import com.flemmli97.runecraftory.client.gui.GuiInfoScreenSub;
+import com.flemmli97.runecraftory.client.gui.GuiSpellHotbar;
+import com.flemmli97.runecraftory.client.render.RenderAttackAABBHandler;
+import com.flemmli97.runecraftory.common.core.handler.config.ConfigHandler;
 import com.flemmli97.runecraftory.common.core.handler.time.CalendarHandler.EnumSeason;
 import com.flemmli97.runecraftory.common.core.handler.time.WeatherData;
 import com.flemmli97.runecraftory.common.core.handler.time.WeatherData.EnumWeather;
@@ -32,7 +38,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MouseHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.InputUpdateEvent;
+import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -270,10 +280,12 @@ public class EventHandlerClient
     
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
-    public void runey(RenderWorldLastEvent event)
+    public void worldRender(RenderWorldLastEvent event)
     {
     	if(WeatherData.get(Minecraft.getMinecraft().world).currentWeather()==EnumWeather.RUNEY)
             this.renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
+        if(ConfigHandler.MainConfig.debugAttack)
+    	    RenderAttackAABBHandler.INST.render();
     }
     
     private final Random random = new Random();

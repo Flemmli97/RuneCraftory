@@ -6,7 +6,6 @@ import com.flemmli97.runecraftory.common.core.handler.capabilities.CapabilityNet
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCap;
 import com.flemmli97.runecraftory.common.core.handler.config.ConfigHandler;
-import com.flemmli97.runecraftory.common.core.handler.event.EventHandlerClient;
 import com.flemmli97.runecraftory.common.core.handler.event.EventHandlerCore;
 import com.flemmli97.runecraftory.common.core.handler.event.EventHandlerSounds;
 import com.flemmli97.runecraftory.common.init.ModEntities;
@@ -45,7 +44,6 @@ public class CommonProxy
     public void init(FMLInitializationEvent e) {
         CapabilityManager.INSTANCE.register(IPlayer.class, new CapabilityNetwork.PlayerCapNetwork(), PlayerCap::new);
         MinecraftForge.EVENT_BUS.register(new EventHandlerCore());
-        MinecraftForge.EVENT_BUS.register(new EventHandlerClient());
         MinecraftForge.EVENT_BUS.register(new EventHandlerSounds());
         NetworkRegistry.INSTANCE.registerGuiHandler(RuneCraftory.instance, new GuiHandler());
         OreDictInit.init();

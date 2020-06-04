@@ -131,7 +131,9 @@ public class ConfigHandler {
 		//public static boolean harvestCraft=true;
 		public static boolean seasons=true;
 		public static boolean dynamicTrees=true;
-		
+
+		public static boolean debugAttack;
+
 		private static void load(File configDir) {
 			if(mainConfig==null)
 			{
@@ -140,13 +142,14 @@ public class ConfigHandler {
 			}
 	        debugMode = mainConfig.getBoolean("Debug Mode", "general", false, "");
 	        mobs = mainConfig.getBoolean("Enable entity module", "general", true, "Enables/Disable entities in general from this mod. You will not be able to get drops normally if you disable this");
-	        noVanillaMobs = mainConfig.get("Prevent normal mob spawn (only gates will spawn)", "general", true, "").setRequiresMcRestart(true).getBoolean();
+	        noVanillaMobs = mainConfig.get("general", "Prevent normal mob spawn (only gates will spawn)", true, "").setRequiresMcRestart(true).getBoolean();
 	        ConfigCategory cat = mainConfig.getCategory("integration");
     		cat.setRequiresMcRestart(true);
 	        waila = mainConfig.getBoolean("Waila", "integration", waila, "Waila integration");
 	        jei = mainConfig.getBoolean("JEI", "integration", jei, "JEI integration");
 	  		//harvestCraft = mainConfig.getBoolean("HarvestCraft", "integration", harvestCraft, "HarvestCraft integration");
-	  		seasons = mainConfig.getBoolean("SereneSeason", "integration", seasons, "SereneSeason integration"); 
+	  		seasons = mainConfig.getBoolean("SereneSeason", "integration", seasons, "SereneSeason integration");
+			debugAttack = mainConfig.getBoolean("Debug Attack", "debugging", false, "Shows the aabb of entity attacks");
 	  		mainConfig.save();
 	    }
 	}

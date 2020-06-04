@@ -1,7 +1,5 @@
 package com.flemmli97.runecraftory.common.utils;
 
-import java.util.Random;
-
 import com.flemmli97.runecraftory.api.entities.IEntityAdvanced;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.entities.IRFNpc;
@@ -14,7 +12,6 @@ import com.flemmli97.runecraftory.common.entity.EntityMobBase;
 import com.flemmli97.runecraftory.common.init.PotionRegistry;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.tenshilib.api.item.IAOEWeapon;
-
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -35,7 +32,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
+
+import java.util.Random;
 
 public class RFCalculations
 {
@@ -325,7 +325,7 @@ public class RFCalculations
         return amount;
     }
     
-    public static boolean attackEntity(Entity target, CustomDamage source, float amount) 
+    public static boolean attackEntity(Entity target, CustomDamage source, float amount)
     {
         if (target instanceof EntityLivingBase) {
             knockBack((EntityLivingBase) target, source);
@@ -339,31 +339,31 @@ public class RFCalculations
     
     public static void spawnElementalParticle(Entity target, EnumElement element) 
     {
-        if (target.world.isRemote) 
+        if (target.world instanceof WorldServer)
         {
-            int color = 16777215;
+            int color = 0xFFFFFF;
             switch (element) 
             {
                 case DARK:
-                    color = 1774399;
+                    color = 0x1B133F;
                     break;
                 case EARTH:
-                    color = 9201679;
+                    color = 0x8C680F;
                     break;
                 case FIRE:
-                    color = 12846855;
+                    color = 0xC40707;
                     break;
                 case LIGHT:
-                    color = 16777031;
+                    color = 0xFFFF47;
                     break;
                 case LOVE:
-                    color = 16221146;
+                    color = 0xF783DA;
                     break;
                 case WATER:
-                    color = 2781149;
+                    color = 0x2A6FDD;
                     break;
                 case WIND:
-                    color = 2204954;
+                    color = 0x21A51A;
                     break;
 				default:
 					break;
@@ -372,8 +372,8 @@ public class RFCalculations
             double g = (color >> 8 & 0xFF) / 255.0;
             double b = (color >> 0 & 0xFF) / 255.0;
             Random rand = new Random();
-            for (int i = 0; i < 30; ++i) {
-                target.world.spawnParticle(EnumParticleTypes.SPELL_MOB, target.posX + (rand.nextDouble() - 0.5) * target.width, target.posY + 0.3 + rand.nextDouble() * target.height, target.posZ + (rand.nextDouble() - 0.5) * target.width, r, g, b, new int[0]);
+            for (int i = 0; i < 7; ++i) {
+                ((WorldServer)target.world).spawnParticle(EnumParticleTypes.SPELL_MOB, target.posX + (rand.nextDouble() - 0.5) * target.width, target.posY + 0.3 + rand.nextDouble() * target.height, target.posZ + (rand.nextDouble() - 0.5) * target.width, 0, r, g, b, 1);
             }
         }
     }

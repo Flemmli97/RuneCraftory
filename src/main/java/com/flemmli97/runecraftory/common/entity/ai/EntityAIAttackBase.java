@@ -15,7 +15,7 @@ public abstract class EntityAIAttackBase<T extends EntityMobBase> extends Entity
     protected T attacker;
     protected EntityLivingBase target;
     protected AnimatedAction next;
-    protected String prevAnim;
+    protected String prevAnim = "";
     protected int iddleTime, pathFindDelay;
     protected double distanceToTargetSq;
     protected boolean movementDone;
@@ -46,13 +46,13 @@ public abstract class EntityAIAttackBase<T extends EntityMobBase> extends Entity
         this.attacker.getNavigator().clearPath();
         this.attacker.setMoveForward(0);
         this.attacker.setMoveStrafing(0);
+        this.prevAnim="";
+        this.pathFindDelay=0;
     }
 
     public abstract AnimatedAction randomAttack();
 
     public abstract void handlePreAttack();
-
-    public abstract void handleAttack(AnimatedAction anim);
 
     public abstract void handleIddle();
 
@@ -81,12 +81,11 @@ public abstract class EntityAIAttackBase<T extends EntityMobBase> extends Entity
         if (this.next != null) {
             this.handlePreAttack();
             if (this.movementDone) {
-                this.attacker.setAnimation(anim = this.next);
+                if(anim==null)
+                    this.attacker.setAnimation(anim = this.next);
                 this.next = null;
             }
         }
-        if (anim != null)
-            this.handleAttack(anim);
     }
 
     protected void moveRandomlyAround() {
@@ -109,7 +108,7 @@ public abstract class EntityAIAttackBase<T extends EntityMobBase> extends Entity
         if (this.pathFindDelay <= 0) {
             if (!this.attacker.getNavigator().tryMoveToXYZ(x, y, z, speed))
                 this.pathFindDelay += 15;
-            this.pathFindDelay += this.attacker.getRNG().nextInt(10) + 10;
+            this.pathFindDelay += this.attacker.getRNG().nextInt(10) + 5;
         }
     }
 
@@ -117,7 +116,7 @@ public abstract class EntityAIAttackBase<T extends EntityMobBase> extends Entity
         if (this.pathFindDelay <= 0) {
             if (!this.attacker.getNavigator().tryMoveToEntityLiving(this.target, speed))
                 this.pathFindDelay += 15;
-            this.pathFindDelay += this.attacker.getRNG().nextInt(10) + 10;
+            this.pathFindDelay += this.attacker.getRNG().nextInt(10) + 5;
         }
     }
 
@@ -164,9 +163,5 @@ public abstract class EntityAIAttackBase<T extends EntityMobBase> extends Entity
         double y = posY + (this.attacker.getRNG().nextInt(3));
         double z = posZ + (this.attacker.getRNG().nextDouble() - 0.5D) * range * 2;
         this.attacker.attemptTeleport(x, y, z);
-    }
-
-    protected double getAttackReachSqr(EntityLivingBase attackTarget, float mult) {
-        return (this.attacker.width * 2.0f * this.attacker.width * 2.0f + attackTarget.width) * mult;
     }
 }

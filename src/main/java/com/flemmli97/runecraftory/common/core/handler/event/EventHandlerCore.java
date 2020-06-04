@@ -1,7 +1,5 @@
 package com.flemmli97.runecraftory.common.core.handler.event;
 
-import java.util.List;
-
 import com.flemmli97.runecraftory.api.entities.IEntityAdvanced;
 import com.flemmli97.runecraftory.api.entities.IEntityBase;
 import com.flemmli97.runecraftory.api.items.CropProperties;
@@ -32,7 +30,6 @@ import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.RFCalculations;
 import com.flemmli97.tenshilib.common.config.ConfigUtils.LoadState;
 import com.flemmli97.tenshilib.common.events.AOEAttackEvent;
-
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.IGrowable;
@@ -89,6 +86,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class EventHandlerCore
 {

@@ -50,7 +50,7 @@ public class EntityMoveHelperNew extends EntityMoveHelper{
                 int y=MathHelper.floor(this.entity.posY);
                 int z=MathHelper.floor(this.entity.posZ + (double)f8/len);
                 PathNodeType node = nodeprocessor!=null?nodeprocessor.getPathNodeType(this.entity.world, x, y, z):PathNodeType.OPEN;
-                System.out.printf("%s %d %d %d \n", node, x, y, z);
+                //System.out.printf("%s %d %d %d \n", node, x, y, z);
                 if(node==PathNodeType.BLOCKED) {
                     int yAdd = 0;
                     while(yAdd < this.entity.stepHeight) {
@@ -78,6 +78,7 @@ public class EntityMoveHelperNew extends EntityMoveHelper{
         else if (this.action == EntityMoveHelper.Action.MOVE_TO)
         {
             this.action = EntityMoveHelper.Action.WAIT;
+            this.entity.setMoveStrafing(0);
             double d0 = this.posX - this.entity.posX;
             double d1 = this.posZ - this.entity.posZ;
             double d2 = this.posY - this.entity.posY;
@@ -111,6 +112,7 @@ public class EntityMoveHelperNew extends EntityMoveHelper{
         else
         {
             this.entity.setMoveForward(0.0F);
+            this.entity.setMoveStrafing(0);
         }
     }
     
