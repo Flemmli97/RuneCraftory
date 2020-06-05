@@ -8,8 +8,10 @@ import net.minecraft.world.World;
 public class EntityBeetle extends EntityChargingMobBase {
 
     private EntityAIChargeAttackBase<EntityBeetle> ai = new EntityAIChargeAttackBase<EntityBeetle>(this);
-    private static final AnimatedAction chargeAttack = new AnimatedAction(30,0, "charge");
-    private static final AnimatedAction[] anims = new AnimatedAction[] {AnimatedAction.vanillaAttack, chargeAttack};
+    private static final AnimatedAction chargeAttack = new AnimatedAction(30,2, "ramm");
+    private static final AnimatedAction melee = new AnimatedAction(15,8, "attack");
+
+    private static final AnimatedAction[] anims = new AnimatedAction[] {melee, chargeAttack};
 
     public EntityBeetle(World world) {
         super(world);
@@ -18,7 +20,7 @@ public class EntityBeetle extends EntityChargingMobBase {
 
     @Override
     public float attackChance() {
-        return 0.9f;
+        return 1.1f;
     }
 
     @Override
@@ -27,10 +29,16 @@ public class EntityBeetle extends EntityChargingMobBase {
     }
 
     @Override
+    public float chargingLength(){
+        return 7;
+    }
+
+    @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if(type==AnimationType.CHARGE) {
-            return anim.getID().equals("charge");
+        switch(type){
+            case CHARGE: return anim.getID().equals(chargeAttack.getID()) && this.getRNG().nextFloat() < 0.8;
+            case MELEE: return anim.getID().equals(melee.getID());
         }
-        return type != AnimationType.MELEE || anim.getID().equals("vanilla");
+        return false;
     }
 }

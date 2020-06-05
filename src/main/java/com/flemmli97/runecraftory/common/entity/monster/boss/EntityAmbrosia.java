@@ -200,13 +200,8 @@ public class EntityAmbrosia extends EntityBossBase
 
 	@Override
 	public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        switch(anim.getID()){
-            case "kick_1":
-            case "butterfly":
-            case "wave":
-            case "sleep": return type==AnimationType.GENERICATTACK;
-            case "pollen": return this.isEnraged() && type==AnimationType.GENERICATTACK;
-        }
+        if(type==AnimationType.GENERICATTACK)
+            return this.isEnraged() || !anim.getID().equals(pollen.getID());
         return false;
 	}
 

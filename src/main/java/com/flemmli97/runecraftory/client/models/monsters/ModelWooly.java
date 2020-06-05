@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelWooly extends ModelBase implements IResetModel {
+	public ModelRendererPlus bodyCenter;
 	public ModelRendererPlus body;
 	public ModelRendererPlus bodyUp;
 	public ModelRendererPlus neck;
@@ -37,12 +38,17 @@ public class ModelWooly extends ModelBase implements IResetModel {
 	public ModelRendererPlus tail;
 
 	public BlockBenchAnimations animations;
+
 	public ModelWooly() {
 		this.textureWidth = 64;
-		this.textureHeight = 64;
+		this.textureHeight = 62;
+
+		this.bodyCenter = new ModelRendererPlus(this);
+		this.bodyCenter.setDefaultRotPoint(0.0F, 17.75F, 0.0F);
 
 		this.body = new ModelRendererPlus(this);
-		this.body.setDefaultRotPoint(0.0F, 17.75F, 0.0F);
+		this.body.setDefaultRotPoint(0.0F, 0.0F, 0.0F);
+		this.bodyCenter.addChild(this.body);
 		this.body.cubeList.add(new ModelBox(this.body, 0, 31, -3.5F, -7.0F, -4.5F, 7, 13, 9, 0.0F, true));
 		this.body.cubeList.add(new ModelBox(this.body, 32, 30, -4.5F, -7.0F, -3.5F, 1, 13, 7, 0.0F, true));
 		this.body.cubeList.add(new ModelBox(this.body, 32, 30, 3.5F, -7.0F, -3.5F, 1, 13, 7, 0.0F, false));
@@ -145,7 +151,7 @@ public class ModelWooly extends ModelBase implements IResetModel {
 
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		this.body.render(f5);
+		this.bodyCenter.render(f5);
 	}
 
 	@Override
@@ -187,7 +193,7 @@ public class ModelWooly extends ModelBase implements IResetModel {
 
 	@Override
 	public void resetModel() {
-		this.body.reset();
-		this.resetChild(this.body);
+		this.bodyCenter.reset();
+		this.resetChild(this.bodyCenter);
 	}
 }

@@ -42,10 +42,15 @@ public class EntityPommePomme extends EntityChargingMobBase {
     }
 
     @Override
+    public float chargingLength(){
+        return 7;
+    }
+
+    @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if(type==AnimationType.CHARGE) {
-            return anim.getID().equals("roll");
+            return anim.getID().equals(chargeAttack.getID());
         }
-        return type != AnimationType.MELEE || anim.getID().equals("kick");
+        return type == AnimationType.MELEE && anim.getID().equals(kick.getID());
     }
 }

@@ -1,16 +1,15 @@
 package com.flemmli97.runecraftory.common.entity.monster;
 
-import com.flemmli97.runecraftory.common.entity.EntityMobBase;
-import com.flemmli97.runecraftory.common.entity.ai.EntityAIMeleeBase;
+import com.flemmli97.runecraftory.common.entity.EntityChargingMobBase;
+import com.flemmli97.runecraftory.common.entity.ai.EntityAIChargeAttackBase;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-
 import net.minecraft.world.World;
 
-public class EntityChipsqueek extends EntityMobBase{
+public class EntityChipsqueek extends EntityChargingMobBase {
 
-    public EntityAIMeleeBase<EntityChipsqueek> attack = new EntityAIMeleeBase<EntityChipsqueek>(this);
+    public EntityAIChargeAttackBase<EntityChipsqueek> attack = new EntityAIChargeAttackBase<EntityChipsqueek>(this);
     private static final AnimatedAction melee = new AnimatedAction(11,6, "tail_slap");
-    private static final AnimatedAction roll = new AnimatedAction(12,4, "roll");
+    private static final AnimatedAction roll = new AnimatedAction(12,2, "roll");
 
     private static final AnimatedAction[] anims = new AnimatedAction[] {melee, roll};
 
@@ -31,12 +30,21 @@ public class EntityChipsqueek extends EntityMobBase{
     }
 
     @Override
+    public float chargingLength(){
+        return 5;
+    }
+
+    @Override
     public AnimatedAction[] getAnimations() {
         return anims;
     }
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type != AnimationType.MELEE || anim.getID().equals("tail_slap");
+        switch(type){
+            case MELEE: return anim.getID().equals(melee.getID());
+            case CHARGE: return anim.getID().equals(roll.getID());
+        }
+        return false;
     }
 }

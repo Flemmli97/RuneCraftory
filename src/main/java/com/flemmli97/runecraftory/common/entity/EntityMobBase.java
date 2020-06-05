@@ -27,6 +27,7 @@ import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.entity.IAnimated;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
@@ -78,6 +79,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -406,13 +408,17 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 		this.currenAnimation=anim==null?null:anim.create();
 		IAnimated.sentToClient(this);
 	}
-	
+
+	@Nullable
 	public AnimatedAction getRandomAnimation(AnimationType type)
 	{
-		AnimatedAction anim = this.getAnimations()[this.rand.nextInt(this.getAnimations().length)];
-		if(this.isAnimOfType(anim, type))
-			return anim;
-		return this.getRandomAnimation(type);
+		List<AnimatedAction> anims = Lists.newArrayList();
+		for(AnimatedAction anim : this.getAnimations())
+		    if(this.isAnimOfType(anim, type))
+		        anims.add(anim);
+		if(anims.isEmpty())
+			return null;
+		return anims.get(this.getRNG().nextInt(anims.size()));
 	}
 
 	public abstract boolean isAnimOfType(AnimatedAction anim, AnimationType type);
@@ -670,6 +676,11 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
             this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1f;
             if (this.canPassengerSteer()) {
                 this.setAIMoveSpeed((float)this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+                if(forward != 0 || strafing != 0) {
+                    this.setMoving(true);
+                }
+                else
+                    this.setMoving(false);
                 super.travel(strafing, upward, forward);
             }
             else if (entitylivingbase instanceof EntityPlayer) {

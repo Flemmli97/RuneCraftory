@@ -33,7 +33,7 @@ public class EntityOrc extends EntityMobBase {
 
     @Override
     public double maxAttackRange(AnimatedAction anim){
-        if(anim.getID().equals("attack2"))
+        if(anim.getID().equals(melee2.getID()))
             return 1.2;
         return 1.1;
     }
@@ -41,7 +41,7 @@ public class EntityOrc extends EntityMobBase {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if(type==AnimationType.MELEE)
-            return anim.getID().equals("attack1") || anim.getID().equals("attack2");
-        return true;
+            return anim.getID().equals(melee1.getID()) || anim.getID().equals(melee2.getID());
+        return false;
     }
 }

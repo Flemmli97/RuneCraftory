@@ -70,6 +70,6 @@ public class EntityCluckadoodle extends EntityMobBase {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type != AnimationType.MELEE || anim.getID().equals("attack");
+        return type == AnimationType.MELEE && anim.getID().equals(melee.getID());
     }
 }

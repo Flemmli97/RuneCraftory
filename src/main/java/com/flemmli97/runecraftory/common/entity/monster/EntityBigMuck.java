@@ -37,6 +37,8 @@ public class EntityBigMuck extends EntityMobBase {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type != AnimationType.MELEE || (anim.getID().equals("slap") || anim.getID().equals("spore"));
+        if(type==AnimationType.MELEE)
+            return anim.getID().equals(slapAttack.getID()) || anim.getID().equals(sporeAttack.getID());
+        return false;
     }
 }
