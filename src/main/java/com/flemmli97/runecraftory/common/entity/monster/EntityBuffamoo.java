@@ -11,12 +11,15 @@ import net.minecraft.world.World;
 public class EntityBuffamoo extends EntityChargingMobBase {
 
     private EntityAIChargeAttackBase<EntityBuffamoo> ai = new EntityAIChargeAttackBase<EntityBuffamoo>(this);
-    private static final AnimatedAction chargeAttack = new AnimatedAction(30,0, "charge");
-    private static final AnimatedAction[] anims = new AnimatedAction[] {AnimatedAction.vanillaAttack, chargeAttack};
+    private static final AnimatedAction chargeAttack = new AnimatedAction(61,16, "charge");
+    private static final AnimatedAction stamp = new AnimatedAction(8,4, "stamp");
+
+    private static final AnimatedAction[] anims = new AnimatedAction[] {stamp, chargeAttack};
 
     public EntityBuffamoo(World world) {
         super(world);
         this.tasks.addTask(2, this.ai);
+        this.setSize(1.1F, 1.45F);
     }
 
     @Override
@@ -50,10 +53,20 @@ public class EntityBuffamoo extends EntityChargingMobBase {
     }
 
     @Override
+    public double maxAttackRange(AnimatedAction anim){
+        return 1.2;
+    }
+
+    @Override
+    public float chargingLength(){
+        return 9;
+    }
+
+    @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if(type==AnimationType.CHARGE) {
-            return anim.getID().equals("charge");
+            return anim.getID().equals(chargeAttack.getID());
         }
-        return type != AnimationType.MELEE || anim.getID().equals("vanilla");
+        return type == AnimationType.MELEE && anim.getID().equals(stamp.getID());
     }
 }

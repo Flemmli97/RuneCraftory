@@ -25,6 +25,7 @@ public class ModEntities
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "gate"), EntityGate.class, "gate", id++, RuneCraftory.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "wooly"), EntityWooly.class, "wooly", id++, RuneCraftory.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "orc"), EntityOrc.class, "orc", id++, RuneCraftory.instance, 64, 3, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "orc_archer"), EntityOrcArcher.class, "orc_archer", id++, RuneCraftory.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "ant"), EntityAnt.class, "ant", id++, RuneCraftory.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "beetle"), EntityBeetle.class, "beetle", id++, RuneCraftory.instance, 64, 3, true);
         EntityRegistry.registerModEntity(new ResourceLocation(LibReference.MODID, "big_muck"), EntityBigMuck.class, "big_muck", id++, RuneCraftory.instance, 64, 3, true);

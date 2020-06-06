@@ -99,6 +99,22 @@ public class EntityStatMap
         		new MapWrapper<SimpleItemStackWrapper, Integer>(),
         		true, false));
 
+		entityStatsMap.put(EntityOrcArcher.class, new EntityProperties(
+				new MapWrapper<IAttribute, Double>()
+						.mapWrapperAdd(SharedMonsterAttributes.MAX_HEALTH, 145.0)
+						.mapWrapperAdd(ItemStatAttributes.RFATTACK, 15.5)
+						.mapWrapperAdd(ItemStatAttributes.RFDEFENCE, 10.2)
+						.mapWrapperAdd(ItemStatAttributes.RFMAGICATT, 11.0)
+						.mapWrapperAdd(ItemStatAttributes.RFMAGICDEF, 10.8),
+				new MapWrapper<SimpleItemStackWrapper, Float>()
+						.mapWrapperAdd(new SimpleItemStackWrapper(ModItems.clothCheap), 0.5f)
+						.mapWrapperAdd(new SimpleItemStackWrapper(ModItems.arrowHead), 0.5f)
+						.mapWrapperAdd(new SimpleItemStackWrapper(ModItems.cheapBracelet), 0.3f),
+				5, 1, 0.8f,
+				new SimpleItemStackWrapper[] { new SimpleItemStackWrapper(ModItems.clothCheap) },
+				new MapWrapper<SimpleItemStackWrapper, Integer>(),
+				true, false));
+
 		entityStatsMap.put(EntityCluckadoodle.class, new EntityProperties(
 				new MapWrapper<IAttribute, Double>()
 						.mapWrapperAdd(SharedMonsterAttributes.MAX_HEALTH, 145.0)

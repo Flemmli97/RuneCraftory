@@ -4,6 +4,7 @@ import com.flemmli97.runecraftory.common.network.PacketAttackDebug;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.google.common.collect.Lists;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -32,6 +33,13 @@ public abstract class EntityChargingMobBase extends EntityMobBase{
             this.rotationPitch = 0;
             this.rotationYaw = (float) (MathHelper.atan2(this.motionX, -this.motionZ) * (180D / Math.PI)) + 180;
         }
+    }
+
+    @Override
+    public void applyEntityCollision(Entity entityIn) {
+        if(this.getAnimation()!=null && this.isAnimOfType(this.getAnimation(), AnimationType.CHARGE))
+            return;
+        super.applyEntityCollision(entityIn);
     }
 
     @Override

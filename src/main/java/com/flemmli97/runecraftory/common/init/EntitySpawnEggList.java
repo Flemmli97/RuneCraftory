@@ -7,6 +7,7 @@ import com.flemmli97.runecraftory.common.entity.monster.EntityBuffamoo;
 import com.flemmli97.runecraftory.common.entity.monster.EntityChipsqueek;
 import com.flemmli97.runecraftory.common.entity.monster.EntityCluckadoodle;
 import com.flemmli97.runecraftory.common.entity.monster.EntityOrc;
+import com.flemmli97.runecraftory.common.entity.monster.EntityOrcArcher;
 import com.flemmli97.runecraftory.common.entity.monster.EntityPommePomme;
 import com.flemmli97.runecraftory.common.entity.monster.EntityWooly;
 import com.flemmli97.runecraftory.common.entity.monster.boss.EntityAmbrosia;
@@ -39,6 +40,7 @@ public class EntitySpawnEggList
     static {
         addMapping(EntityWooly.class, 0xffffcc, 0xffffff);
         addMapping(EntityOrc.class, 0x663300, 0xffbf80);
+        addMapping(EntityOrcArcher.class, 0x663300, 0xffbf80);
         addMapping(EntityAnt.class, 0x800000, 0x1a0000);
         addMapping(EntityBeetle.class, 0x000000, 0x800000);
         addMapping(EntityBigMuck.class, 0xd7ce4a, 0xad5c25);

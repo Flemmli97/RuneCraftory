@@ -9,7 +9,6 @@ import net.minecraft.util.math.Vec3d;
 
 public class EntityAIChargeAttackBase<T extends EntityChargingMobBase> extends EntityAIMeleeBase<T> {
 
-    private int attackCooldown;
     private Predicate<EntityLivingBase> pred;
 
     public EntityAIChargeAttackBase(T entity) {

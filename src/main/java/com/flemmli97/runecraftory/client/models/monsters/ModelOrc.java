@@ -145,7 +145,6 @@ public class ModelOrc extends ModelBase implements IResetModel {
         this.body.render(f5);
     }
 
-
     @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
                                   float headPitch, float scaleFactor, Entity entity) {

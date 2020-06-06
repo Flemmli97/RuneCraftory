@@ -17,7 +17,6 @@ public class EntityOrc extends EntityMobBase {
     public EntityOrc(World world) {
         super(world);
         this.setSize(0.73f, 2.4f);
-
         this.tasks.addTask(2, this.attack);
     }
 
