@@ -62,15 +62,12 @@ import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.common.lib.enums.EnumToolTier;
 import com.flemmli97.tenshilib.common.javahelper.ArrayUtils;
-
-import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -994,7 +991,7 @@ public class ModItems {
 	public static final Item blackGrass = new ItemHerb("black_grass", LibOreDictionary.BLACKGRASS);
 	public static final Item antidoteGrass = new ItemHerb("antidote_grass", LibOreDictionary.ANTIDOTEGRASS);
 	public static final Item medicinalHerb = new ItemHerb("medicinal_herb", LibOreDictionary.MEDICINALHERB);
-	public static final Item bambooSprout = new ItemHerb("bamboo_sprout", LibOreDictionary.MEDICINALHERB);
+	public static final Item bambooSprout = new ItemHerb("bamboo_sprout", LibOreDictionary.BAMBOOSPROUT);
 
 	//Food
 	

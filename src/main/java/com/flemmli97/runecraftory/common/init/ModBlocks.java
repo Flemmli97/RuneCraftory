@@ -129,7 +129,7 @@ public class ModBlocks {
 	public static final Block blackGrass = new BlockHerb("black_grass", LibOreDictionary.BLACKGRASS);
 	public static final Block antidoteGrass = new BlockHerb("antidote_grass", LibOreDictionary.ANTIDOTEGRASS);
 	public static final Block medicinalHerb = new BlockHerb("medicinal_herb", LibOreDictionary.MEDICINALHERB);
-	public static final Block bambooSprout = new BlockHerb("bamboo_sprout", LibOreDictionary.BAMBOOSPROUT);
+	public static final Block bambooSprout = new BlockBambooSprout("bamboo_sprout", LibOreDictionary.BAMBOOSPROUT);
 
 	//Trees
 
@@ -168,7 +168,7 @@ public class ModBlocks {
 	};
 	
 	public static final Block[] HERBS = new Block[] {
-			mushroom, monarchMushroom, elliLeaves, witheredGrass, weeds, whiteGrass, indigoGrass, purpleGrass, greenGrass, blueGrass, yellowGrass, redGrass, orangeGrass, blackGrass, antidoteGrass, medicinalHerb
+			mushroom, monarchMushroom, elliLeaves, witheredGrass, weeds, whiteGrass, indigoGrass, purpleGrass, greenGrass, blueGrass, yellowGrass, redGrass, orangeGrass, blackGrass, antidoteGrass, medicinalHerb, bambooSprout
 	};
 	
 	public static final Block[] TREE = new Block[] {
