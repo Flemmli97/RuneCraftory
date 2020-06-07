@@ -235,7 +235,7 @@ public class BlockMineral extends Block{
 					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.scrap, 1, 0));
 				}
 				break;
-			case EARTH:
+			case AMETHYST:
 				if(world.rand.nextFloat()<Math.min(0.1+addChance, 0.7))
 				{
 					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystalEarth));
@@ -253,7 +253,7 @@ public class BlockMineral extends Block{
 					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.scrap, 1, 0));
 				}
 				break;
-			case FIRE:
+			case RUBY:
 				if(world.rand.nextFloat()<Math.min(0.1+addChance, 0.7))
 				{
 					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystalFire));
@@ -271,7 +271,7 @@ public class BlockMineral extends Block{
 					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.scrap, 1, 0));
 				}
 				break;
-			case WATER:
+			case AQUAMARINE:
 				if(world.rand.nextFloat()<Math.min(0.1+addChance, 0.7))
 				{
 					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystalWater));
@@ -289,14 +289,14 @@ public class BlockMineral extends Block{
 					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.scrap, 1, 0));
 				}
 				break;
-			case WIND:
+			case EMERALD:
 				if(world.rand.nextFloat()<Math.min(0.1+addChance, 0.7))
 				{
 					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.crystalWind));
 				}
 				else if(world.rand.nextFloat()<0.15F+addChance)
 				{
-					ItemUtils.spawnItemAt(world, pos, new ItemStack(ModItems.emerald));
+					ItemUtils.spawnItemAt(world, pos, new ItemStack(Items.EMERALD));
 				}
 				else if(world.rand.nextFloat()<0.35F+addChance)
 				{

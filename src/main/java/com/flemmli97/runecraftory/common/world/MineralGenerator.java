@@ -1,13 +1,9 @@
 package com.flemmli97.runecraftory.common.world;
 
-import java.util.Random;
-import java.util.Set;
-
 import com.flemmli97.runecraftory.common.core.handler.config.ConfigHandler;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumMineralTier;
 import com.flemmli97.runecraftory.common.utils.MineralBlockConverter;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockGravel;
@@ -22,6 +18,9 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
+
+import java.util.Random;
+import java.util.Set;
 
 public class MineralGenerator implements IWorldGenerator{
 	
@@ -71,7 +70,7 @@ public class MineralGenerator implements IWorldGenerator{
 				{
 					for(int i = 0; i < amount; i++)
 					{
-						this.generateNether(world, pos, EnumMineralTier.FIRE);
+						this.generateNether(world, pos, EnumMineralTier.RUBY);
 						pos = pos.add(random.nextInt(5)-2, 0, random.nextInt(5)-2);
 					}
 				}
@@ -139,19 +138,19 @@ public class MineralGenerator implements IWorldGenerator{
 		{
 			if(types.contains(Type.FOREST) || types.contains(Type.MOUNTAIN) || types.contains(Type.DEAD))
 			{
-				tier = EnumMineralTier.EARTH;
+				tier = EnumMineralTier.AMETHYST;
 			}
 			else if(types.contains(Type.PLAINS)|| types.contains(Type.HILLS)||types.contains(Type.WASTELAND)||types.contains(Type.SPARSE))
 			{
-				tier = EnumMineralTier.WIND;
+				tier = EnumMineralTier.EMERALD;
 			}
 			else if(types.contains(Type.BEACH) || types.contains(Type.OCEAN)||types.contains(Type.RIVER)||types.contains(Type.WET))
 			{
-				tier = EnumMineralTier.WATER;
+				tier = EnumMineralTier.AQUAMARINE;
 			}
 			else if(types.contains(Type.HOT))
 			{
-				tier = EnumMineralTier.FIRE;
+				tier = EnumMineralTier.RUBY;
 			}
 		}
 		return tier;

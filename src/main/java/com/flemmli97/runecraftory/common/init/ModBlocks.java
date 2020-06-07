@@ -39,10 +39,11 @@ public class ModBlocks {
 	public static final Block mineralOrichalcum = new BlockMineral(EnumMineralTier.ORICHALCUM);
 	public static final Block mineralDiamond = new BlockMineral(EnumMineralTier.DIAMOND);
 	public static final Block mineralDragonic = new BlockMineral(EnumMineralTier.DRAGONIC);
-	public static final Block mineralWater = new BlockMineral(EnumMineralTier.WATER);
-	public static final Block mineralEarth = new BlockMineral(EnumMineralTier.EARTH);
-	public static final Block mineralFire = new BlockMineral(EnumMineralTier.FIRE);
-	public static final Block mineralWind = new BlockMineral(EnumMineralTier.WIND);
+	public static final Block mineralAquamarine = new BlockMineral(EnumMineralTier.AQUAMARINE);
+	public static final Block mineralAmethyst = new BlockMineral(EnumMineralTier.AMETHYST);
+	public static final Block mineralRuby = new BlockMineral(EnumMineralTier.RUBY);
+	public static final Block mineralEmerald = new BlockMineral(EnumMineralTier.EMERALD);
+	public static final Block mineralSapphire = new BlockMineral(EnumMineralTier.SAPPHIRE);
 
 	public static final Block brokenMineralIron = new BlockBrokenMineral(EnumMineralTier.IRON);
 	public static final Block brokenMineralBronze = new BlockBrokenMineral(EnumMineralTier.BRONZE);
@@ -52,10 +53,11 @@ public class ModBlocks {
 	public static final Block brokenMineralOrichalcum = new BlockBrokenMineral(EnumMineralTier.ORICHALCUM);
 	public static final Block brokenMineralDiamond = new BlockBrokenMineral(EnumMineralTier.DIAMOND);
 	public static final Block brokenMineralDragonic = new BlockBrokenMineral(EnumMineralTier.DRAGONIC);
-	public static final Block brokenMineralWater = new BlockBrokenMineral(EnumMineralTier.WATER);
-	public static final Block brokenMineralEarth = new BlockBrokenMineral(EnumMineralTier.EARTH);
-	public static final Block brokenMineralFire = new BlockBrokenMineral(EnumMineralTier.FIRE);
-	public static final Block brokenMineralWind = new BlockBrokenMineral(EnumMineralTier.WIND);
+	public static final Block brokenMineralAquamarine = new BlockBrokenMineral(EnumMineralTier.AQUAMARINE);
+	public static final Block brokenMineralAmethyst = new BlockBrokenMineral(EnumMineralTier.AMETHYST);
+	public static final Block brokenMineralRuby = new BlockBrokenMineral(EnumMineralTier.RUBY);
+	public static final Block brokenMineralEmerald = new BlockBrokenMineral(EnumMineralTier.EMERALD);
+	public static final Block brokenMineralSapphire = new BlockBrokenMineral(EnumMineralTier.SAPPHIRE);
 
 	public static final Block bossSpawner = new BlockBossSpawner();
 	public static final Block research = new BlockResearchTable();
@@ -154,8 +156,8 @@ public class ModBlocks {
 	public static final Block shinySapling = new BlockTreeSapling("shiny_sapling", shinyTree);
 
 	public static final Block[] MINERALBLOCKS = new Block[] 
-			{ mineralIron, mineralBronze, mineralSilver, mineralGold, mineralPlatinum, mineralOrichalcum, mineralDiamond, mineralDragonic, mineralWater, mineralEarth, mineralFire, mineralWind,
-			brokenMineralIron, brokenMineralBronze, brokenMineralSilver, brokenMineralGold, brokenMineralPlatinum, brokenMineralOrichalcum, brokenMineralDiamond, brokenMineralDragonic, brokenMineralWater, brokenMineralEarth, brokenMineralFire, brokenMineralWind};
+			{ mineralIron, mineralBronze, mineralSilver, mineralGold, mineralPlatinum, mineralOrichalcum, mineralDiamond, mineralDragonic, mineralAquamarine, mineralAmethyst, mineralRuby, mineralEmerald, mineralSapphire,
+			brokenMineralIron, brokenMineralBronze, brokenMineralSilver, brokenMineralGold, brokenMineralPlatinum, brokenMineralOrichalcum, brokenMineralDiamond, brokenMineralDragonic, brokenMineralAquamarine, brokenMineralAmethyst, brokenMineralRuby, brokenMineralEmerald, brokenMineralSapphire};
 
 	//Grass, Herbs, Elli Leaves, Ayngondaia Lawn
 	

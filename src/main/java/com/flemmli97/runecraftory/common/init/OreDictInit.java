@@ -66,7 +66,7 @@ public class OreDictInit
         OreDictionary.registerOre(LibOreDictionary.PLATINUM, ModItems.platinum);
         OreDictionary.registerOre(LibOreDictionary.AMETHYST, ModItems.amethyst);
         OreDictionary.registerOre(LibOreDictionary.AQUAMARINE, ModItems.aquamarine);
-        OreDictionary.registerOre(LibOreDictionary.EMERALD, ModItems.emerald);
+        //OreDictionary.registerOre(LibOreDictionary.EMERALD, ModItems.emerald);
         OreDictionary.registerOre(LibOreDictionary.RUBY, ModItems.ruby);
         OreDictionary.registerOre(LibOreDictionary.SAPPHIRE, ModItems.sapphire);
         //OreDictionary.registerOre(LibOreDictionary.DIAMOND, ModItems.diamond);

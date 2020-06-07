@@ -1,8 +1,8 @@
 package com.flemmli97.runecraftory.common.lib.enums;
 
-import java.util.Random;
-
 import net.minecraft.util.IStringSerializable;
+
+import java.util.Random;
 
 public enum EnumMineralTier implements IStringSerializable 
 {
@@ -14,10 +14,11 @@ public enum EnumMineralTier implements IStringSerializable
 	PLATINUM("platinum"),
 	ORICHALCUM("orichalcum"),
 	DRAGONIC("dragonic"),
-	WATER("water"),
-	EARTH("earth"),
-	FIRE("fire"),
-	WIND("wind");
+	AMETHYST("amethyst"),
+	AQUAMARINE("aquamarine"),
+	RUBY("ruby"),
+	EMERALD("emerald"),
+    SAPPHIRE("sapphire");
 
 	private final String name;
 
@@ -45,7 +46,7 @@ public enum EnumMineralTier implements IStringSerializable
     
     public static boolean isElemental(EnumMineralTier tier)
     {
-        return tier == EnumMineralTier.FIRE || tier == EnumMineralTier.WIND || tier == EnumMineralTier.EARTH || tier == EnumMineralTier.WATER;
+        return tier == EnumMineralTier.AMETHYST || tier == EnumMineralTier.AQUAMARINE || tier == EnumMineralTier.EMERALD || tier == EnumMineralTier.RUBY || tier == EnumMineralTier.SAPPHIRE;
     }
 	
 }

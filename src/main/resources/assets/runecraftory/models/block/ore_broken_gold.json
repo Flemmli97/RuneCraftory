@@ -1,6 +1,6 @@
 {
   "parent": "runecraftory:block/ore_broken",
   "textures": {
-    "ore": "runecraftory:blocks/ore_broken_gold"
+    "ore": "runecraftory:blocks/ore_gold"
   }
 }

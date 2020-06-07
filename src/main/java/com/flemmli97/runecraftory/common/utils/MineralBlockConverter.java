@@ -14,15 +14,16 @@ public class MineralBlockConverter {
 			case BRONZE: return ModBlocks.brokenMineralBronze.getDefaultState();
 			case DIAMOND: return ModBlocks.brokenMineralDiamond.getDefaultState();
 			case DRAGONIC: return ModBlocks.brokenMineralDragonic.getDefaultState();
-			case EARTH: return ModBlocks.brokenMineralEarth.getDefaultState();
-			case FIRE: return ModBlocks.brokenMineralFire.getDefaultState();
+			case AMETHYST: return ModBlocks.brokenMineralAmethyst.getDefaultState();
+			case RUBY: return ModBlocks.brokenMineralRuby.getDefaultState();
 			case GOLD: return ModBlocks.brokenMineralGold.getDefaultState();
 			case IRON: return ModBlocks.brokenMineralIron.getDefaultState();
 			case ORICHALCUM: return ModBlocks.brokenMineralOrichalcum.getDefaultState();
 			case PLATINUM: return ModBlocks.brokenMineralPlatinum.getDefaultState();
 			case SILVER: return ModBlocks.brokenMineralSilver.getDefaultState();
-			case WATER: return ModBlocks.brokenMineralWater.getDefaultState();
-			case WIND: return ModBlocks.brokenMineralWind.getDefaultState();
+			case AQUAMARINE: return ModBlocks.brokenMineralAquamarine.getDefaultState();
+			case EMERALD: return ModBlocks.brokenMineralEmerald.getDefaultState();
+			case SAPPHIRE: return ModBlocks.brokenMineralSapphire.getDefaultState();
 		}
 		return null;
 	}
@@ -34,15 +35,16 @@ public class MineralBlockConverter {
 			case BRONZE: return ModBlocks.mineralBronze.getDefaultState();
 			case DIAMOND: return ModBlocks.mineralDiamond.getDefaultState();
 			case DRAGONIC: return ModBlocks.mineralDragonic.getDefaultState();
-			case EARTH: return ModBlocks.mineralEarth.getDefaultState();
-			case FIRE: return ModBlocks.mineralFire.getDefaultState();
+			case AMETHYST: return ModBlocks.mineralAmethyst.getDefaultState();
+			case RUBY: return ModBlocks.mineralRuby.getDefaultState();
 			case GOLD: return ModBlocks.mineralGold.getDefaultState();
 			case IRON: return ModBlocks.mineralIron.getDefaultState();
 			case ORICHALCUM: return ModBlocks.mineralOrichalcum.getDefaultState();
 			case PLATINUM: return ModBlocks.mineralPlatinum.getDefaultState();
 			case SILVER: return ModBlocks.mineralSilver.getDefaultState();
-			case WATER: return ModBlocks.mineralWater.getDefaultState();
-			case WIND: return ModBlocks.mineralWind.getDefaultState();
+			case AQUAMARINE: return ModBlocks.mineralAquamarine.getDefaultState();
+			case EMERALD: return ModBlocks.mineralEmerald.getDefaultState();
+			case SAPPHIRE: return ModBlocks.mineralSapphire.getDefaultState();
 		}
 		return null;
 	}

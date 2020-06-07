@@ -533,7 +533,7 @@ public class ModItems {
 	public static final Item scrapPlus = new ItemMaterial("scrap_plus");
 	public static final Item amethyst = new ItemMaterial("amethyst");
 	public static final Item aquamarine = new ItemMaterial("aquamarine");
-	public static final Item emerald = new ItemMaterial("emerald");
+	//public static final Item emerald = new ItemMaterial("emerald");
 	public static final Item ruby = new ItemMaterial("ruby");
 	public static final Item sapphire = new ItemMaterial("sapphire");
 	//public static final Item diamond = new ItemMaterial("diamond");
@@ -1223,7 +1223,7 @@ public class ModItems {
 
 	public static final Item[] minerals = new Item[] {bronze, silver, platinum, orichalcum, dragonic};
 	public static final Item[] scraps = new Item[] {scrap, scrapPlus};
-	public static final Item[] jewels = new Item[] {amethyst, aquamarine, emerald, ruby, sapphire, coreRed, coreBlue, coreYellow, coreGreen, crystalSkull};
+	public static final Item[] jewels = new Item[] {amethyst, aquamarine, ruby, sapphire, coreRed, coreBlue, coreYellow, coreGreen, crystalSkull};
 	public static final Item[] crystals = new Item[] {crystalWater, crystalEarth, crystalFire, crystalWind, crystalLight, crystalDark, crystalLove, crystalSmall, crystalBig, crystalMagic, crystalRune, crystalElectro};
 	public static final Item[] sticks = new Item[] {stickThick, hornInsect, hornRigid, hornDevil, plantStem, hornBull, movingBranch};
 	public static final Item[] liquids = new Item[] {glue, devilBlood, paraPoison, poisonKing};
