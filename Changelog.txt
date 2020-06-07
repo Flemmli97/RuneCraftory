@@ -7,9 +7,11 @@ Runecraftory a0.4.0
     - Buffamoo
     - Chipsqueek
     - Big Muck
+    - Orc Archer
 - Added texture and animations to all mobs
 - New mob attack logic
 - Finished attack logic from previous mobs
+- Added textures and models to various items/blocks
 
 Runecraftory a0.3.0
 ================
