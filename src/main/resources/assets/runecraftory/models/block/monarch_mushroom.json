@@ -1,0 +1,7 @@
+{
+    "parent": "block/cross",
+    "textures": {
+	"particle":"runecraftory:items/monarch_mushroom",
+        "cross": "runecraftory:items/monarch_mushroom"
+    }
+}

@@ -49,7 +49,7 @@ public class ItemBlockBase extends Item{
                 boolean flag2 = flag || worldIn.isAirBlock(pos);
                 boolean flag3 = flag1 || worldIn.isAirBlock(blockpos);
 
-                if (flag2 && flag3 && worldIn.getBlockState(pos.down()).isSideSolid(worldIn, blockpos, EnumFacing.UP) && worldIn.getBlockState(blockpos.down()).isSideSolid(worldIn, blockpos, EnumFacing.UP))
+                if (flag2 && flag3)
                 {
                     IBlockState iblockstate2 = this.savedBlock.getDefaultState().withProperty(BlockMultiBase.FACING, blockFacing).withProperty(BlockMultiBase.PART, BlockMultiBase.EnumPartType.LEFT);
                     worldIn.setBlockState(pos, iblockstate2);

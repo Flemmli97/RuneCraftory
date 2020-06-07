@@ -1,0 +1,7 @@
+{
+    "parent": "block/cross",
+    "textures": {
+	"particle":"runecraftory:items/mushroom",
+        "cross": "runecraftory:items/mushroom"
+    }
+}

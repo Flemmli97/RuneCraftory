@@ -4,9 +4,9 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.mappings.CropMap;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
-
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -40,7 +41,10 @@ public class ItemHerb extends ItemGenericConsumable implements IPlantable{
         {
             if(!(plant instanceof BlockHerb))
                 return EnumActionResult.FAIL;
-            worldIn.setBlockState(pos.up(), plant.getDefaultState().withProperty(BlockHerb.LEVEL, ItemNBT.itemLevel(itemstack)));
+            IBlockState plantState = plant.getDefaultState().withProperty(BlockHerb.LEVEL, ItemNBT.itemLevel(itemstack));
+            worldIn.setBlockState(pos.up(), plantState);
+            SoundType soundtype = plant.getSoundType(plantState, worldIn, pos, player);
+            worldIn.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 
             if (player instanceof EntityPlayerMP)
             {
