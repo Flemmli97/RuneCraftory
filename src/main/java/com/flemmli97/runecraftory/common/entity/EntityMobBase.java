@@ -10,6 +10,7 @@ import com.flemmli97.runecraftory.api.mappings.ItemFoodMap;
 import com.flemmli97.runecraftory.common.core.handler.CustomDamage;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.entity.ai.EntityAIHurtNew;
 import com.flemmli97.runecraftory.common.entity.ai.EntityMoveHelperNew;
 import com.flemmli97.runecraftory.common.init.EntitySpawnEggList;
 import com.flemmli97.runecraftory.common.init.ModItems;
@@ -36,7 +37,6 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -107,13 +107,14 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         }
         return mob instanceof EntityMobBase && ((EntityMobBase)mob).isTamed() && IMob.VISIBLE_MOB_SELECTOR.apply(mob);
     });
-    public EntityAIHurtByTarget hurt = new EntityAIHurtByTarget(this, false);
+
+    public EntityAIHurtNew hurt;
     
     private Map<ItemStack, Float> drops = Maps.newHashMap();
 	private Map<ItemStack, Integer> dailyDrops = Maps.newHashMap();
 	private NonNullList<ItemStack> tamingItem = NonNullList.create();
 	
-	private AnimatedAction currenAnimation;
+	private AnimatedAction currentAnimation;
 
     public final Predicate<EntityLivingBase> attackPred = (e)->{
         if(e!=EntityMobBase.this) {
@@ -125,8 +126,19 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         return false;
     };
 
+    public final Predicate<EntityLivingBase> defendPred = (e)->{
+        if(e!=EntityMobBase.this) {
+            if (EntityMobBase.this.isTamed()) {
+                return e!=EntityMobBase.this.getOwner();
+            }
+            return true;
+        }
+        return false;
+    };
+
     public EntityMobBase(World world) {
         super(world);
+        this.hurt = new EntityAIHurtNew(this, this.defendPred);
         this.moveHelper=new EntityMoveHelperNew(this);
 
         this.prop = EntityStatMap.getDefaultStats(this.getClass());
@@ -150,6 +162,7 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
         this.targetTasks.addTask(1, this.targetPlayer);
         this.targetTasks.addTask(2, this.targetNPC);
         this.targetTasks.addTask(3, this.targetMobs);
+        this.targetTasks.addTask(0, this.hurt);
     }
     
     //=====Init
@@ -399,13 +412,13 @@ public abstract class EntityMobBase extends EntityCreature implements IEntityAdv
 	@Nullable
 	public AnimatedAction getAnimation()
 	{
-		return this.currenAnimation;
+		return this.currentAnimation;
 	}
     
 	@Override
 	public void setAnimation(AnimatedAction anim) 
 	{
-		this.currenAnimation=anim==null?null:anim.create();
+		this.currentAnimation =anim==null?null:anim.create();
 		IAnimated.sentToClient(this);
 	}
 

@@ -126,7 +126,7 @@ public class ModItems {
 	public static final Item steelSwordPlus = new ItemShortSwordBase("steel_sword_plus");
 	public static final Item cutlass = new ItemShortSwordBase("cutlass");
 	public static final Item aquaSword = new ItemShortSwordBase("aqua_sword");
-	public static final Item invisBlade = new ItemShortSwordBase("invis_blade");
+	public static final Item invisiBlade = new ItemShortSwordBase("invisiblade");
 	public static final Item defender = new ItemShortSwordBase("defender");
 	public static final Item burningSword = new ItemShortSwordBase("burning_sword");
 	public static final Item gorgeousSword = new ItemShortSwordBase("gorgeous_sword");
@@ -824,7 +824,6 @@ public class ModItems {
 	
 	public static final Item icon0 = new ItemIcon(0);
 	public static final Item icon1 = new ItemIcon(1);
-	public static final Item icon2 = new ItemIcon(2);
 
 	public static final Item debug = new ItemDebug();
 	public static final Item level = new ItemLevelUp();
@@ -1203,7 +1202,7 @@ public class ModItems {
 			inspector, brush, glass, formularA, formularB, formularC, minimizer, giantizer, greenifier, greenifierPlus, wettablePowder};
 	
 	public static final Item[] WEAPONS = new Item[] {
-			broadSword, steelSword, steelSwordPlus, cutlass, aquaSword, invisBlade, defender, burningSword, gorgeousSword, snakeSword, gaiaSword, luckBlade, platinumSword, windSword, chaosBlade, sakura, sunspot, durendal, aerialBlade, grantale, smashBlade, icifier, soulEater, raventine, starSaber, platinumSwordPlus, dragonSlayer, runeBlade, gladius, runeLegend, backScratcher, spoon, veggieBlade, seedSword,
+			broadSword, steelSword, steelSwordPlus, cutlass, aquaSword, invisiBlade, defender, burningSword, gorgeousSword, snakeSword, gaiaSword, luckBlade, platinumSword, windSword, chaosBlade, sakura, sunspot, durendal, aerialBlade, grantale, smashBlade, icifier, soulEater, raventine, starSaber, platinumSwordPlus, dragonSlayer, runeBlade, gladius, runeLegend, backScratcher, spoon, veggieBlade, seedSword,
 			claymore, zweihaender, zweihaenderPlus, greatSword, seaCutter, cycloneBlade, poisonBlade, katzbalger, earthShade, bigKnife, katana, flameSaber, bioSmasher, snowCrown, dancingDicer, flamberge, flambergePlus, volcanon, psycho, shineBlade, grandSmasher, belzebuth, orochi, punisher, steelSlicer, moonShadow, blueEyedBlade, balmung, braveheart, forceElement, heavensAsunder, caliburn, dekash, daicone,
 			spear, woodStaff, lance, lancePlus, needleSpear, trident, waterSpear, halberd, corsesca, corsescaPlus, poisonSpear, fiveStaff, heavyLance, featherLance, iceberg, bloodLance, magicalLance, flareLance, brionac, poisonQueen, monkStaff, metus, silentGrave, overbreak, bjor, belvarose, gaeBolg, dragonsFang, gungnir, legion, pitchfork, safetyLance, pineClub,
 			battleAxe, battleScythe, poleAxe, poleAxePlus, greatAxe, tomohawk, basiliskFang, rockAxe, demonAxe, frostAxe, crescentAxe, crescentAxePlus, heatAxe, doubleEdge, alldale, devilFinger, executioner, saintAxe, axe, lollipop,
@@ -1250,7 +1249,7 @@ public class ModItems {
 	};
 	public static final Item[] SPELLS = ArrayUtils.combine(new Item[] {}, new Item[][] {MAGIC, SKILLS});
 	public static final Item[] FISH = new Item[] {rockfish, sandFlounder, pondSmelt, lobster, lampSquid, cherrySalmon, fallFlounder, girella, tuna, crucianCarp, yellowtail, blowfish, flounder, rainbowTrout, loverSnapper, snapper, shrimp, sunsquid, pike, needlefish, mackerel, salmon, gibelio, turbot, skipjack, glitterSnapper, chub, charFish, sardine, taimen, squid, masuTrout};
-	public static final Item[] CREATIVE = new Item[] {icon0, icon1, icon2, debug, level, skill, tame, spawnEgg, entityLevel};
+	public static final Item[] CREATIVE = new Item[] {icon0, icon1, debug, level, skill, tame, spawnEgg, entityLevel};
 
 	public static final Item[] CROPS = new Item[] {turnip, turnipPink, cabbage, pinkMelon, pineapple, strawberry, goldenTurnip, goldenPotato, goldenPumpkin, goldenCabbage, hotHotFruit, bokChoy, leek, radish, spinach, greenPepper, yam, eggplant, tomato, corn, cucumber, pumpkin, onion, fodder};
 	public static final Item[] CROPSGIANT = new Item[] {turnipGiant, turnipPinkGiant, cabbageGiant, pinkMelonGiant, pineappleGiant, strawberryGiant, goldenTurnipGiant, goldenPotatoGiant, goldenPumpkinGiant, goldenCabbageGiant, hotHotFruitGiant, bokChoyGiant, leekGiant, radishGiant, spinachGiant, greenPepperGiant, yamGiant, eggplantGiant, tomatoGiant, cornGiant, cucumberGiant, pumpkinGiant, onionGiant, potatoGiant, carrotGiant};

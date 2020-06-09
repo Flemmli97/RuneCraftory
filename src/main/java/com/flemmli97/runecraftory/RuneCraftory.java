@@ -118,7 +118,7 @@ public class RuneCraftory
     	@Override
         public ItemStack getTabIconItem() 
         {
-            return new ItemStack(ModItems.icon1);
+            return new ItemStack(ModItems.onigiri);
         }
     };
     
@@ -136,7 +136,7 @@ public class RuneCraftory
     	@Override
         public ItemStack getTabIconItem() 
         {
-            return new ItemStack(ModItems.icon2);
+            return new ItemStack(ModItems.icon1);
         }
     };
     

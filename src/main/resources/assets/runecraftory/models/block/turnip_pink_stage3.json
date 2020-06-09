@@ -1,6 +1,0 @@
-{
-    "parent": "block/crop",
-    "textures": {
-        "crop": "runecraftory:blocks/turnip_pink_stage_3"
-    }
-}

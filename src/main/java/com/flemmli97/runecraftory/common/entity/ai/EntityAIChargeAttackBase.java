@@ -21,7 +21,7 @@ public class EntityAIChargeAttackBase<T extends EntityChargingMobBase> extends E
             AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.MELEE);
             if (this.distanceToTargetSq <= this.attacker.maxAttackRange(anim)*3)
                 return anim;
-            else if(this.distanceToTargetSq <= (this.attacker.chargingLength()*this.attacker.chargingLength()+1))
+            else if(this.distanceToTargetSq <= (this.attacker.chargingLength()*this.attacker.chargingLength()+1) && this.attacker.posY>=this.target.posY)
                 return this.attacker.getRandomAnimation(AnimationType.CHARGE);
         }
         return this.attacker.getRandomAnimation(AnimationType.IDLE);

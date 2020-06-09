@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "runecraftory:item/longsword",
   "textures": {
     "layer0": "runecraftory:items/great_sword"
   }

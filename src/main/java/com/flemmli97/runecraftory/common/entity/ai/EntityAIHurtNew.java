@@ -1,42 +1,27 @@
 package com.flemmli97.runecraftory.common.entity.ai;
 
-import net.minecraft.entity.EntityCreature;
+import com.flemmli97.runecraftory.common.entity.EntityMobBase;
+import com.google.common.base.Predicate;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAITarget;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
 
-public class EntityAIHurtNew extends EntityAITarget {
+import javax.annotation.Nullable;
 
-    public EntityAIHurtNew(EntityCreature creature)
+public class EntityAIHurtNew extends EntityAIHurtByTarget {
+
+    private EntityLivingBase target;
+    private Predicate<EntityLivingBase> pred;
+
+    public EntityAIHurtNew(EntityMobBase mob, Predicate<EntityLivingBase> pred)
     {
-        super(creature, false);
-        this.setMutexBits(1);
+        super(mob, false);
+        this.pred=pred;
     }
 
     @Override
-    public boolean shouldExecute() {
-        if(this.taskOwner.getAttackTarget()==null && this.taskOwner.getRevengeTarget()!=null)
-            return this.checkTarget(this.taskOwner.getRevengeTarget());
-        return false;
-    }
-
-    private boolean isNotSameTarget()
+    protected boolean isSuitableTarget(@Nullable EntityLivingBase target, boolean includeInvincibles)
     {
-        if(this.taskOwner.getAttackTarget()==null)
-            return true;
-        return !this.taskOwner.getRevengeTarget().equals(this.taskOwner.getAttackTarget());
+        return (this.taskOwner.getAttackTarget()==null || this.taskOwner.getAttackTarget()!=target) &&
+                (this.pred==null || this.pred.apply(target)) && super.isSuitableTarget(target, includeInvincibles);
     }
-    @Override
-    public void startExecuting()
-    {
-        if(this.isNotSameTarget())
-            this.taskOwner.setAttackTarget(this.taskOwner.getRevengeTarget());
-        super.startExecuting();
-    }
-
-    protected boolean checkTarget(EntityLivingBase livingBase)
-    {
-
-        return super.isSuitableTarget(livingBase, false);
-    }
-
 }

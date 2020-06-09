@@ -30,7 +30,7 @@ public class EntityBeetle extends EntityChargingMobBase {
 
     @Override
     public float chargingLength(){
-        return 7;
+        return 9;
     }
 
     @Override

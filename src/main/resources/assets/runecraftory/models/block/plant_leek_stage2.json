@@ -1,0 +1,7 @@
+{
+  "parent": "block/crop",
+  "textures": {
+    "crop": "runecraftory:blocks/plant_leek_stage2",
+    "particle": "runecraftory:blocks/plant_leek_stage2"
+  }
+}

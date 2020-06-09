@@ -1,0 +1,7 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "runecraftory:items/crop_charm_blue",
+    "particle": "runecraftory:items/crop_charm_blue"
+  }
+}
