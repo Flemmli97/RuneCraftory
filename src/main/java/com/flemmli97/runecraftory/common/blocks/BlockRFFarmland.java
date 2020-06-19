@@ -55,7 +55,9 @@ public class BlockRFFarmland extends BlockFarmland implements ITileEntityProvide
 				tile.resetGrowth();
 			else
 			{
-				if(up.getValue(BlockCrops.AGE)==0 && tile.age()!=0)
+				if(!up.getPropertyKeys().contains(BlockCrops.AGE))
+					;
+				else if(up.getValue(BlockCrops.AGE)==0 && tile.age()!=0)
 					tile.resetGrowth();
 			}
 		}

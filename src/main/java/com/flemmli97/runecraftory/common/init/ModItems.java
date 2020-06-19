@@ -582,7 +582,7 @@ public class ModItems {
 	public static final Item stoneTiny = new ItemMaterial("stone_tiny_golem");
 	public static final Item stoneGolem = new ItemMaterial("stone_golem");
 	public static final Item tabletGolem = new ItemMaterial("tablet_golem");
-	public static final Item stoneSpirit = new ItemMaterial("stone_gole_spirit");
+	public static final Item stoneSpirit = new ItemMaterial("stone_golem_spirit");
 	public static final Item tabletTruth = new ItemMaterial("tablet_truth");
 	public static final Item yarn = new ItemMaterial("yarn");
 	public static final Item oldBandage = new ItemMaterial("old_bandage");

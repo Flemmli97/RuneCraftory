@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
-import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
-import com.flemmli97.runecraftory.common.core.handler.crafting.RecipeSextuple;
+import com.flemmli97.runecraftory.common.crafting.CraftingHandler;
+import com.flemmli97.runecraftory.common.crafting.RecipeSextuple;
 import com.flemmli97.runecraftory.common.lib.LibReference;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
 

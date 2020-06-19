@@ -341,7 +341,7 @@ public class EntityGate extends EntityLiving implements IEntityBase
         Biome biome = this.world.getBiome(this.getPosition());
         List<ResourceLocation> list = GateSpawning.getSpawningListFromBiome(biome);
         for (int counter = (list.size() < 3) ? list.size() : 3; counter > 0; --counter) {
-        	ResourceLocation randEnt = GateSpawning.getSpawningListFromBiome(biome).get(this.rand.nextInt(GateSpawning.getSpawningListFromBiome(biome).size()));
+        	ResourceLocation randEnt = list.get(this.rand.nextInt(list.size()));
             if (!this.spawnList.contains(randEnt)) {
                 this.spawnList.add(randEnt);
             }

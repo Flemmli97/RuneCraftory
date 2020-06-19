@@ -1,8 +1,11 @@
-package com.flemmli97.runecraftory.common.core.handler.crafting;
+package com.flemmli97.runecraftory.common.crafting;
 
-import com.flemmli97.runecraftory.common.lib.enums.*;
-import java.util.*;
-import com.google.common.collect.*;
+import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+
+import java.util.Collection;
+import java.util.Random;
 
 public class CraftingHandler
 {

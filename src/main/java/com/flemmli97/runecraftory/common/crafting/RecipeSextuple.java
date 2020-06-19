@@ -1,15 +1,16 @@
-package com.flemmli97.runecraftory.common.core.handler.crafting;
+package com.flemmli97.runecraftory.common.crafting;
+
+import com.flemmli97.runecraftory.common.lib.LibReference;
+import com.flemmli97.runecraftory.common.utils.ItemNBT;
+import com.google.gson.JsonObject;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
-import com.flemmli97.runecraftory.common.lib.LibReference;
-import com.flemmli97.runecraftory.common.utils.ItemNBT;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class RecipeSextuple
 {
@@ -93,7 +94,7 @@ public class RecipeSextuple
                     boolean flag = false;
                     if (stack != ItemStack.EMPTY) 
                     {
-                        for (ItemStack itemStack : OreDictionary.getOres((String)ing)) 
+                        for (ItemStack itemStack : OreDictionary.getOres((String)ing))
                         {
                             if (OreDictionary.itemMatches(itemStack, stack, false)) {
                                 ++match;
@@ -110,12 +111,16 @@ public class RecipeSextuple
         }
         return this.ingredients.size() == match;
     }
-    
+
     public static class Sort implements Comparator<RecipeSextuple>
     {
         @Override
         public int compare(RecipeSextuple o1, RecipeSextuple o2) {
             return Integer.compare(o1.level, o2.level);
         }
+    }
+
+    public static RecipeSextuple fromJson(JsonContext context, JsonObject obj){
+        return null;
     }
 }

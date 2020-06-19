@@ -2,7 +2,7 @@ package com.flemmli97.runecraftory.common.blocks.tile;
 
 import com.flemmli97.runecraftory.common.core.handler.capabilities.IPlayer;
 import com.flemmli97.runecraftory.common.core.handler.capabilities.PlayerCapProvider;
-import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
+import com.flemmli97.runecraftory.common.crafting.CraftingHandler;
 import com.flemmli97.runecraftory.common.init.ModItems;
 import com.flemmli97.runecraftory.common.lib.LibOreDictionary;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;

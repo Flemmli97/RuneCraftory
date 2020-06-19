@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.flemmli97.runecraftory.common.blocks.tile.TileMultiBase;
-import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
-import com.flemmli97.runecraftory.common.core.handler.crafting.RecipeSextuple;
+import com.flemmli97.runecraftory.common.crafting.CraftingHandler;
+import com.flemmli97.runecraftory.common.crafting.RecipeSextuple;
 import com.flemmli97.runecraftory.common.inventory.ContainerMaking;
 import com.flemmli97.runecraftory.common.items.misc.ItemRecipe;
 import com.flemmli97.runecraftory.common.lib.LibReference;

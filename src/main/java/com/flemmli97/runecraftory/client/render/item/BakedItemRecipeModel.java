@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.client.render.item;
 
-import com.flemmli97.runecraftory.common.core.handler.crafting.CraftingHandler;
-import com.flemmli97.runecraftory.common.core.handler.crafting.RecipeSextuple;
+import com.flemmli97.runecraftory.common.crafting.CraftingHandler;
+import com.flemmli97.runecraftory.common.crafting.RecipeSextuple;
 import com.flemmli97.runecraftory.common.items.misc.ItemRecipe;
 import com.flemmli97.runecraftory.common.lib.enums.EnumCrafting;
 import com.google.common.collect.Lists;
