@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.common.blocks;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.lib.LibReference;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
