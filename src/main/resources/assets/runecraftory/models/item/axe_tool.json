@@ -1,9 +1,6 @@
 {
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
-	"textures": {
-		"0": "runecraftory:items/axe_scrap"
-	},
 	"elements": [
 		{
 			"name": "handle",
@@ -215,24 +212,6 @@
 				"south": {"uv": [0, 11, 1, 11.5], "texture": "#0"},
 				"west": {"uv": [0, 10.5, 1.5, 11], "texture": "#0"},
 				"down": {"uv": [0, 11.5, 1, 13], "rotation": 180, "texture": "#0"}
-			}
-		},
-		{
-			"name": "broken",
-			"from": [7, 18, 1],
-			"to": [9, 18, 3],
-			"rotation": {"angle": 0, "axis": "y", "origin": [6, 8, 8]},
-			"faces": {
-				"down": {"uv": [8, 10, 9, 11], "rotation": 180, "texture": "#0"}
-			}
-		},
-		{
-			"name": "broken",
-			"from": [7.5, 19, 0],
-			"to": [8.5, 19, 1],
-			"rotation": {"angle": 0, "axis": "y", "origin": [5.5, 8, 8]},
-			"faces": {
-				"down": {"uv": [7.5, 10, 8, 10.5], "rotation": 180, "texture": "#0"}
 			}
 		}
 	],

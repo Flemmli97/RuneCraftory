@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "runecraftory:item/axe_tool",
   "textures": {
-    "layer0": "runecraftory:items/axe_gold"
+    "0": "runecraftory:items/axe_gold"
   }
 }
