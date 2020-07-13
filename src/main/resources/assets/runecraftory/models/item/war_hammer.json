@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "runecraftory:item/hammer_weapon",
   "textures": {
     "layer0": "runecraftory:items/war_hammer"
   }
