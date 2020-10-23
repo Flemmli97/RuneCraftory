@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/hammer_tool",
+  "textures": {
+    "0": "runecraftory:items/hammer_platinum"
+  }
+}

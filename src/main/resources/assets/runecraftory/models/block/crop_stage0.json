@@ -1,0 +1,7 @@
+{
+    "parent": "block/crop",
+    "textures": {
+	"particle":"runecraftory:blocks/crop_stage0",
+        "crop": "runecraftory:blocks/crop_stage0"
+    }
+}

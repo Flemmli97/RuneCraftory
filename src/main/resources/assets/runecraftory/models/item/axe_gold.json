@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/axe_tool",
+  "textures": {
+    "0": "runecraftory:items/axe_gold"
+  }
+}

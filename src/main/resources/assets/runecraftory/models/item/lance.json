@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/spear_base",
+  "textures": {
+    "layer0": "runecraftory:items/lance"
+  }
+}

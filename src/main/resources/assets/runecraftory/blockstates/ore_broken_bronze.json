@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "normal": {
+      "model": "runecraftory:ore_broken_bronze"
+    },
+    "facing=north": {"model": "runecraftory:ore_broken_bronze"},
+    "facing=east": {"model": "runecraftory:ore_broken_bronze","y":90},
+    "facing=south": {"model": "runecraftory:ore_broken_bronze","y":180},
+    "facing=west": {"model": "runecraftory:ore_broken_bronze","y":270}
+  }
+}

@@ -1,0 +1,199 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "block/thin_block",
+	"textures": {
+		"0": "blocks/stone",
+		"particle": "blocks/stone"
+	},
+	"elements": [
+		{
+			"name": "ore1",
+			"from": [3, 0, 11],
+			"to": [8, 1, 16],
+			"faces": {
+				"north": {"uv": [6, 3, 11, 4], "texture": "#0"},
+				"east": {"uv": [7, 7, 12, 8], "texture": "#0"},
+				"south": {"uv": [8, 2, 13, 3], "texture": "#0"},
+				"west": {"uv": [3, 4, 8, 5], "texture": "#0"},
+				"up": {"uv": [1, 8, 6, 13], "texture": "#0"},
+				"down": {"uv": [10, 2, 15, 7], "texture": "#0"}
+			}
+		},
+		{
+			"name": "ore2",
+			"from": [3, 0, 6],
+			"to": [6, 1, 8],
+			"faces": {
+				"north": {"uv": [1, 1, 4, 2], "texture": "#0"},
+				"east": {"uv": [9, 2, 11, 3], "texture": "#0"},
+				"south": {"uv": [1, 1, 4, 2], "texture": "#0"},
+				"west": {"uv": [5, 2, 7, 3], "texture": "#0"},
+				"up": {"uv": [7, 7, 10, 9], "texture": "#0"},
+				"down": {"uv": [8, 5, 11, 7], "texture": "#0"}
+			}
+		},
+		{
+			"name": "ore3",
+			"from": [0, 0, 1],
+			"to": [7, 1, 6],
+			"faces": {
+				"north": {"uv": [5, 1, 12, 2], "texture": "#0"},
+				"east": {"uv": [5, 2, 10, 3], "texture": "#0"},
+				"south": {"uv": [5, 1, 12, 2], "texture": "#0"},
+				"west": {"uv": [4, 1, 9, 2], "texture": "#0"},
+				"up": {"uv": [1, 8, 8, 13], "texture": "#0"},
+				"down": {"uv": [7, 3, 14, 8], "texture": "#0"}
+			}
+		},
+		{
+			"name": "ore4",
+			"from": [6, 0, 6],
+			"to": [10, 3, 8],
+			"faces": {
+				"north": {"uv": [6, 4, 10, 7], "texture": "#0"},
+				"east": {"uv": [2, 4, 4, 7], "texture": "#0"},
+				"south": {"uv": [9, 2, 13, 5], "texture": "#0"},
+				"west": {"uv": [10, 1, 12, 4], "texture": "#0"},
+				"up": {"uv": [10, 10, 14, 12], "texture": "#0"},
+				"down": {"uv": [9, 7, 13, 9], "texture": "#0"}
+			}
+		},
+		{
+			"name": "ore5",
+			"from": [7, 0, 2],
+			"to": [13, 2, 6],
+			"faces": {
+				"north": {"uv": [6, 8, 12, 10], "texture": "#0"},
+				"east": {"uv": [10, 1, 14, 3], "texture": "#0"},
+				"south": {"uv": [7, 1, 13, 3], "texture": "#0"},
+				"west": {"uv": [1, 7, 5, 9], "texture": "#0"},
+				"up": {"uv": [3, 9, 9, 13], "texture": "#0"},
+				"down": {"uv": [8, 3, 14, 7], "texture": "#0"}
+			}
+		},
+		{
+			"name": "ore6",
+			"from": [8, 0, 12],
+			"to": [10, 1, 13],
+			"faces": {
+				"north": {"uv": [7, 7, 9, 8], "texture": "#0"},
+				"east": {"uv": [3, 5, 4, 6], "texture": "#0"},
+				"south": {"uv": [11, 4, 13, 5], "texture": "#0"},
+				"west": {"uv": [9, 2, 10, 3], "texture": "#0"},
+				"up": {"uv": [7, 6, 9, 7], "texture": "#0"},
+				"down": {"uv": [12, 4, 14, 5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "ore7",
+			"from": [9, 0, 13],
+			"to": [14, 1, 15],
+			"faces": {
+				"north": {"uv": [3, 9, 8, 10], "texture": "#0"},
+				"east": {"uv": [9, 4, 11, 5], "texture": "#0"},
+				"south": {"uv": [9, 4, 14, 5], "texture": "#0"},
+				"west": {"uv": [10, 6, 12, 7], "texture": "#0"},
+				"up": {"uv": [2, 4, 7, 6], "texture": "#0"},
+				"down": {"uv": [8, 6, 13, 8], "texture": "#0"}
+			}
+		},
+		{
+			"name": "ore8",
+			"from": [10, 0, 6],
+			"to": [15, 3, 13],
+			"faces": {
+				"north": {"uv": [9, 2, 14, 5], "texture": "#0"},
+				"east": {"uv": [5, 2, 12, 5], "texture": "#0"},
+				"south": {"uv": [2, 3, 7, 6], "texture": "#0"},
+				"west": {"uv": [7, 2, 14, 5], "texture": "#0"},
+				"up": {"uv": [9, 7, 14, 14], "texture": "#0"},
+				"down": {"uv": [9, 3, 14, 10], "texture": "#0"}
+			}
+		},
+		{
+			"name": "ore9",
+			"from": [13, 0, 0],
+			"to": [16, 1, 6],
+			"faces": {
+				"north": {"uv": [6, 7, 9, 8], "texture": "#0"},
+				"east": {"uv": [6, 4, 12, 5], "texture": "#0"},
+				"south": {"uv": [6, 10, 9, 11], "texture": "#0"},
+				"west": {"uv": [7, 3, 13, 4], "texture": "#0"},
+				"up": {"uv": [3, 6, 6, 12], "texture": "#0"},
+				"down": {"uv": [11, 3, 14, 9], "texture": "#0"}
+			}
+		},
+		{
+			"name": "ore10",
+			"from": [1, 0, 6],
+			"to": [3, 2, 15],
+			"faces": {
+				"north": {"uv": [7, 4, 9, 6], "texture": "#0"},
+				"east": {"uv": [5, 2, 14, 4], "texture": "#0"},
+				"south": {"uv": [10, 7, 12, 9], "texture": "#0"},
+				"west": {"uv": [5, 6, 14, 8], "texture": "#0"},
+				"up": {"uv": [2, 4, 4, 13], "texture": "#0"},
+				"down": {"uv": [9, 3, 11, 12], "texture": "#0"}
+			}
+		},
+		{
+			"name": "ore11",
+			"from": [3, 0, 8],
+			"to": [10, 2, 12],
+			"faces": {
+				"north": {"uv": [3, 0, 10, 2], "texture": "#0"},
+				"east": {"uv": [8, 1, 12, 3], "texture": "#0"},
+				"south": {"uv": [6, 0, 13, 2], "texture": "#0"},
+				"west": {"uv": [10, 0, 14, 2], "texture": "#0"},
+				"up": {"uv": [4, 7, 11, 11], "texture": "#0"},
+				"down": {"uv": [6, 2, 13, 6], "texture": "#0"}
+			}
+		},
+		{
+			"name": "mineral1",
+			"from": [4, 0.3, 6],
+			"to": [6, 1.3, 7],
+			"faces": {
+				"north": {"uv": [5, 6, 7, 7], "texture": "#ore"},
+				"east": {"uv": [2, 10, 3, 11], "texture": "#ore"},
+				"south": {"uv": [8, 4, 10, 5], "texture": "#ore"},
+				"west": {"uv": [8, 9, 9, 10], "texture": "#ore"},
+				"up": {"uv": [3, 5, 5, 6], "texture": "#ore"},
+				"down": {"uv": [4, 5, 6, 6], "texture": "#ore"}
+			}
+		},
+		{
+			"name": "mineral2",
+			"from": [7.25, 1.55, 8.5],
+			"to": [9.25, 2.55, 11.5],
+			"faces": {
+				"north": {"uv": [2, 6, 4, 7], "texture": "#ore"},
+				"east": {"uv": [8, 3, 11, 4], "texture": "#ore"},
+				"south": {"uv": [6, 5, 8, 6], "texture": "#ore"},
+				"west": {"uv": [10, 6, 13, 7], "texture": "#ore"},
+				"up": {"uv": [9, 8, 11, 11], "texture": "#ore"},
+				"down": {"uv": [2, 5, 4, 8], "texture": "#ore"}
+			}
+		},
+		{
+			"name": "mineral3",
+			"from": [10.25, 1.55, 4.5],
+			"to": [12.25, 2.55, 6.5],
+			"faces": {
+				"north": {"uv": [10, 6, 12, 7], "texture": "#ore"},
+				"east": {"uv": [1, 5, 3, 6], "texture": "#ore"},
+				"south": {"uv": [9, 2, 11, 3], "texture": "#ore"},
+				"west": {"uv": [6, 5, 8, 6], "texture": "#ore"},
+				"up": {"uv": [0, 7, 2, 9], "texture": "#ore"},
+				"down": {"uv": [9, 8, 11, 10], "texture": "#ore"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "VoxelShape",
+			"origin": [8, 8, 8],
+			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+		}
+	]
+}

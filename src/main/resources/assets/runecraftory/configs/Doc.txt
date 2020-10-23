@@ -1,0 +1,52 @@
+Items are defined like following:
+
+    Item = <OreDictionary Name> | (<Registry Name>,<Optional:metadata>,<Optional:amount>)
+
+    Hard defined items will take over oredict defined ones
+
+Valid Stat-Names are:
+
+    <generic.maxHealth> <rf.rpMax> <rf.attack>
+    <rf.defence> <rf.magicAtt> <rf.magicDef>
+    <rf.paralysis> <rf.poison> <rf.seal>
+    <rf.sleep> <rf.fatigue> <rf.cold>
+    <rf.diz> <rf.crit> <rf.stun>
+    <rf.faint> <rf.drain> <rf.knock>
+    <rf.resWater> <rf.resEarth> <rf.resWind>
+    <rf.resFire> <rf.resDark> <rf.resLight>
+    <rf.resLove> <rf.resPoison> <rf.resSleep>
+    <rf.resFat> <rf.resCold> <rf.resPara>
+    <rf.resSeal> <rf.resCrit> <rf.resDiz>
+    <rf.resStun> <rf.resFaint> <rf.resDrain>
+    <rf.luck>
+
+FoodStats:
+
+    "Item":{"hp":0,"rp":0,"hpPercent":0,"rpPercent":0,"duration":0,
+        "map":{"Stat":Value, [...] },
+        "mapMulti":{"Stat":Value, [...] },
+        "potionHeal":["Potion Registry Name", [...] ],"potionApply":["Potion Registry Name;Duration;Amplifier", [...] ]}
+
+    Potion Registry Name: e.g. "minecraft:regeneration"
+
+Crops:
+
+    "Item":{"season":"SPRING/SUMMER/FALL/WINTER","growth":Value,"dropsCount":Value,"regrowable":false/true}
+
+Mob Spawn:
+
+    "Entity Registry Name":{"biomes":["Biome Registry Name", [...] ],"biomeTypes":["Biome Type Names", [...] ]}
+
+    Biome Registry Name: e.g. "minecraft:forest"
+    Biome Type Names: e.g. PLAINS
+
+ItemStats:
+
+    "Item":{"buy":Value,"sell":Value,"upgradeDifficulty":Value,"element":"NONE/WATER/EARTH/WIND/FIRE/DARK/LIGHT/LOVE",
+            "stats": {"Stat":Value, [...] }}
+
+    element has only effect on weapons
+
+Shop:
+
+Quests:

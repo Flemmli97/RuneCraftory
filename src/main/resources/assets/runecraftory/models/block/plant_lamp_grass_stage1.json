@@ -1,0 +1,7 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "runecraftory:blocks/plant_lamp_grass_stage1",
+    "particle": "runecraftory:blocks/plant_lamp_grass_stage1"
+  }
+}

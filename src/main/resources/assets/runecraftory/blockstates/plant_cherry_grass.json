@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "status=0": {
+      "model": "runecraftory:flower_stage0"
+    },
+    "status=1": {
+      "model": "runecraftory:plant_cherry_grass_stage1"
+    },
+    "status=2": {
+      "model": "runecraftory:plant_cherry_grass_stage2"
+    },
+    "status=3": {
+      "model": "runecraftory:plant_cherry_grass_stage3"
+    }
+  }
+}

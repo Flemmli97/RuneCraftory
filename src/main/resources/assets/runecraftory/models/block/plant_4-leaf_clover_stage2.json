@@ -1,0 +1,7 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "runecraftory:blocks/plant_4-leaf_clover_stage2",
+    "particle": "runecraftory:blocks/plant_4-leaf_clover_stage2"
+  }
+}

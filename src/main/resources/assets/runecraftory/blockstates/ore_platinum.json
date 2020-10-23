@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "normal": {
+      "model": "runecraftory:ore_platinum"
+    },
+    "facing=north": {"model": "runecraftory:ore_platinum"},
+    "facing=east": {"model": "runecraftory:ore_platinum","y":90},
+    "facing=south": {"model": "runecraftory:ore_platinum","y":180},
+    "facing=west": {"model": "runecraftory:ore_platinum","y":270}
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/longsword",
+  "textures": {
+    "layer0": "runecraftory:items/zweihaender"
+  }
+}

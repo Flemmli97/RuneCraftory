@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "normal": {
+      "model": "runecraftory:ore_silver"
+    },
+    "facing=north": {"model": "runecraftory:ore_silver"},
+    "facing=east": {"model": "runecraftory:ore_silver","y":90},
+    "facing=south": {"model": "runecraftory:ore_silver","y":180},
+    "facing=west": {"model": "runecraftory:ore_silver","y":270}
+  }
+}

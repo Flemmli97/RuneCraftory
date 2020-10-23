@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "runecraftory:items/lamp_squid_sashimi"
+  }
+}

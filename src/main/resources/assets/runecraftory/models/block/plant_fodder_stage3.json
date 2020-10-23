@@ -1,0 +1,7 @@
+{
+  "parent": "block/crop",
+  "textures": {
+    "crop": "runecraftory:blocks/plant_fodder_stage3",
+    "particle": "runecraftory:blocks/plant_fodder_stage3"
+  }
+}

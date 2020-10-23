@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/axe_side",
+  "textures": {
+    "layer0": "runecraftory:items/battle_scythe"
+  }
+}

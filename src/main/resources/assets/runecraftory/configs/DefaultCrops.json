@@ -1,0 +1,500 @@
+{
+  "minecraft:wheat_seeds": {
+    "bestSeason": [
+      "FALL"
+    ],
+    "badSeason": [],
+    "growth": 7,
+    "maxDrops": 4,
+    "regrowable": true
+  },
+  "seedWhiteCrystal": {
+    "bestSeason": [
+      "WINTER"
+    ],
+    "badSeason": [
+      "SPRING",
+      "SUMMER",
+      "FALL"
+    ],
+    "growth": 90,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedRedCrystal": {
+    "bestSeason": [
+      "FALL"
+    ],
+    "badSeason": [
+      "SPRING",
+      "SUMMER",
+      "WINTER"
+    ],
+    "growth": 80,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedPomPomGrass": {
+    "bestSeason": [
+      "FALL"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 14,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedAutumnGrass": {
+    "bestSeason": [
+      "FALL"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 29,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedNoelGrass": {
+    "bestSeason": [
+      "WINTER"
+    ],
+    "badSeason": [
+      "SUMMER"
+    ],
+    "growth": 33,
+    "maxDrops": 4,
+    "regrowable": false
+  },
+  "seedGreenCrystal": {
+    "bestSeason": [
+      "SUMMER"
+    ],
+    "badSeason": [
+      "SPRING",
+      "FALL",
+      "WINTER"
+    ],
+    "growth": 70,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedFireflower": {
+    "bestSeason": [
+      "SUMMER"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 42,
+    "maxDrops": 4,
+    "regrowable": false
+  },
+  "seedFourLeafClover": {
+    "bestSeason": [
+      "SPRING",
+      "FALL"
+    ],
+    "badSeason": [
+      "SUMMER"
+    ],
+    "growth": 28,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedIronleaf": {
+    "bestSeason": [
+      "WINTER"
+    ],
+    "badSeason": [
+      "SUMMER"
+    ],
+    "growth": 21,
+    "maxDrops": 2,
+    "regrowable": false
+  },
+  "seedEmeryFlower": {
+    "bestSeason": [],
+    "badSeason": [],
+    "growth": 120,
+    "maxDrops": 2,
+    "regrowable": false
+  },
+  "seedBlueCrystal": {
+    "bestSeason": [
+      "SPRING"
+    ],
+    "badSeason": [
+      "SUMMER",
+      "FALL",
+      "WINTER"
+    ],
+    "growth": 4,
+    "maxDrops": 2,
+    "regrowable": false
+  },
+  "seedLampGrass": {
+    "bestSeason": [
+      "WINTER"
+    ],
+    "badSeason": [],
+    "growth": 16,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedCherryGrass": {
+    "bestSeason": [
+      "SPRING"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 10,
+    "maxDrops": 4,
+    "regrowable": false
+  },
+  "seedCharmBlue": {
+    "bestSeason": [
+      "FALL"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 8,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedPinkCat": {
+    "bestSeason": [
+      "SUMMER"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 6,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedMoondropFlower": {
+    "bestSeason": [
+      "SPRING",
+      "FALL"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 7,
+    "maxDrops": 4,
+    "regrowable": false
+  },
+  "seedToyherb": {
+    "bestSeason": [
+      "SPRING"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 4,
+    "maxDrops": 2,
+    "regrowable": false
+  },
+  "seedTurnip": {
+    "bestSeason": [
+      "SUMMER",
+      "FALL"
+    ],
+    "badSeason": [],
+    "growth": 3,
+    "maxDrops": 2,
+    "regrowable": false
+  },
+  "seedPinkTurnip": {
+    "bestSeason": [
+      "SPRING"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 11,
+    "maxDrops": 4,
+    "regrowable": false
+  },
+  "seedCabbage": {
+    "bestSeason": [
+      "SPRING",
+      "FALL"
+    ],
+    "badSeason": [],
+    "growth": 8,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedPinkMelon": {
+    "bestSeason": [
+      "SPRING",
+      "SUMMER"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 7,
+    "maxDrops": 2,
+    "regrowable": true
+  },
+  "cropPotato": {
+    "bestSeason": [
+      "SPRING",
+      "SUMMER"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 7,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "cropCarrot": {
+    "bestSeason": [
+      "FALL"
+    ],
+    "badSeason": [],
+    "growth": 10,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedPineapple": {
+    "bestSeason": [
+      "SUMMER"
+    ],
+    "badSeason": [
+      "FALL",
+      "SPRING",
+      "WINTER"
+    ],
+    "growth": 28,
+    "maxDrops": 3,
+    "regrowable": true
+  },
+  "seedStrawberry": {
+    "bestSeason": [
+      "SPRING",
+      "FALL"
+    ],
+    "badSeason": [],
+    "growth": 16,
+    "maxDrops": 6,
+    "regrowable": true
+  },
+  "seedGoldenTurnip": {
+    "bestSeason": [
+      "WINTER"
+    ],
+    "badSeason": [
+      "SUMMER"
+    ],
+    "growth": 90,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedGoldenPotato": {
+    "bestSeason": [
+      "WINTER"
+    ],
+    "badSeason": [
+      "SUMMER"
+    ],
+    "growth": 50,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedGoldenPumpkin": {
+    "bestSeason": [
+      "WINTER"
+    ],
+    "badSeason": [
+      "SUMMER"
+    ],
+    "growth": 70,
+    "maxDrops": 3,
+    "regrowable": true
+  },
+  "seedGoldenCabbage": {
+    "bestSeason": [
+      "WINTER"
+    ],
+    "badSeason": [
+      "SUMMER"
+    ],
+    "growth": 90,
+    "maxDrops": 3,
+    "regrowable": false
+  },
+  "seedHotHotFruit": {
+    "bestSeason": [
+      "WINTER"
+    ],
+    "badSeason": [
+      "SUMMER"
+    ],
+    "growth": 31,
+    "maxDrops": 5,
+    "regrowable": false
+  },
+  "seedBokChoy": {
+    "bestSeason": [
+      "FALL"
+    ],
+    "badSeason": [
+      "SUMMER"
+    ],
+    "growth": 5,
+    "maxDrops": 4,
+    "regrowable": false
+  },
+  "seedLeek": {
+    "bestSeason": [
+      "SPRING",
+      "SUMMER"
+    ],
+    "badSeason": [
+      "FALL"
+    ],
+    "growth": 9,
+    "maxDrops": 1,
+    "regrowable": false
+  },
+  "seedRadish": {
+    "bestSeason": [
+      "FALL"
+    ],
+    "badSeason": [
+      "SUMMER"
+    ],
+    "growth": 5,
+    "maxDrops": 1,
+    "regrowable": false
+  },
+  "seedSpinach": {
+    "bestSeason": [
+      "FALL"
+    ],
+    "badSeason": [],
+    "growth": 2,
+    "maxDrops": 2,
+    "regrowable": false
+  },
+  "seedGreenPepper": {
+    "bestSeason": [
+      "SUMMER"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 7,
+    "maxDrops": 5,
+    "regrowable": true
+  },
+  "seedYam": {
+    "bestSeason": [
+      "SUMMER",
+      "FALL"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 8,
+    "maxDrops": 5,
+    "regrowable": false
+  },
+  "seedEggplant": {
+    "bestSeason": [
+      "SPRING",
+      "SUMMER"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 7,
+    "maxDrops": 4,
+    "regrowable": true
+  },
+  "seedTomato": {
+    "bestSeason": [
+      "SPRING",
+      "SUMMER"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 7,
+    "maxDrops": 3,
+    "regrowable": true
+  },
+  "seedCorn": {
+    "bestSeason": [
+      "SPRING",
+      "SUMMER"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 7,
+    "maxDrops": 1,
+    "regrowable": false
+  },
+  "seedCucumber": {
+    "bestSeason": [
+      "SPRING",
+      "SUMMER"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 5,
+    "maxDrops": 5,
+    "regrowable": true
+  },
+  "seedPumpkin": {
+    "bestSeason": [
+      "SPRING",
+      "SUMMER"
+    ],
+    "badSeason": [
+      "WINTER"
+    ],
+    "growth": 7,
+    "maxDrops": 3,
+    "regrowable": true
+  },
+  "seedOnion": {
+    "bestSeason": [
+      "FALL"
+    ],
+    "badSeason": [],
+    "growth": 18,
+    "maxDrops": 5,
+    "regrowable": false
+  },
+  "seedSword": {
+    "bestSeason": [],
+    "badSeason": [],
+    "growth": 12,
+    "maxDrops": 1,
+    "regrowable": false
+  },
+  "seedShield": {
+    "bestSeason": [],
+    "badSeason": [],
+    "growth": 12,
+    "maxDrops": 1,
+    "regrowable": false
+  },
+  "seedFodder": {
+    "bestSeason": [],
+    "badSeason": [],
+    "growth": 4,
+    "maxDrops": 1,
+    "regrowable": false
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "normal": {
+      "model": "runecraftory:ore_aquamarine"
+    },
+    "facing=north": {"model": "runecraftory:ore_aquamarine"},
+    "facing=east": {"model": "runecraftory:ore_aquamarine","y":90},
+    "facing=south": {"model": "runecraftory:ore_aquamarine","y":180},
+    "facing=west": {"model": "runecraftory:ore_aquamarine","y":270}
+  }
+}
