@@ -1,10 +1,13 @@
 package com.flemmli97.runecraftory.mobs.entity.monster;
 
+import com.flemmli97.runecraftory.mobs.entity.AnimationType;
 import com.flemmli97.runecraftory.mobs.entity.ChargingMonster;
 import com.flemmli97.runecraftory.mobs.entity.monster.ai.ChargeAttackGoal;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
@@ -20,6 +23,12 @@ public class EntityBuffamoo extends ChargingMonster {
     public EntityBuffamoo(EntityType<? extends EntityBuffamoo> type, World world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.ai);
+    }
+
+    @Override
+    protected void applyAttributes() {
+        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.16);
+        super.applyAttributes();
     }
 
     @Override
@@ -43,13 +52,19 @@ public class EntityBuffamoo extends ChargingMonster {
     }
 
     @Override
-    public float attackChance() {
-        return 0.9f;
+    public float attackChance(AnimationType type) {
+        return 0.7f;
     }
 
     @Override
     public AnimatedAction[] getAnimations() {
         return anims;
+    }
+
+    @Override
+    public void doWhileCharge(){
+        if(this.ticksExisted % 3 == 0)
+            this.world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_COW_STEP, SoundCategory.HOSTILE, 1, this.getRNG().nextFloat() * 0.2F);
     }
 
     @Override

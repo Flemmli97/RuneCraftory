@@ -10,7 +10,9 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.model.ZombieModel;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 public class ModelBuffamoo<T extends EntityBuffamoo> extends EntityModel<T> implements IResetModel {
     public ModelRendererPlus body;
@@ -29,8 +31,10 @@ public class ModelBuffamoo<T extends EntityBuffamoo> extends EntityModel<T> impl
     public ModelRendererPlus backLegLeftDown;
     public ModelRendererPlus backLegRightUp;
     public ModelRendererPlus backLegRightDown;
-    public ModelRendererPlus frontFur;
-    public ModelRendererPlus backFur;
+    public ModelRendererPlus topFur1;
+    public ModelRendererPlus topFur2;
+    public ModelRendererPlus topFur3;
+    public ModelRendererPlus topFur4;
     public ModelRendererPlus tail;
     public ModelRendererPlus tail2;
     public ModelRendererPlus tail3;
@@ -127,15 +131,25 @@ public class ModelBuffamoo<T extends EntityBuffamoo> extends EntityModel<T> impl
         this.backLegRightUp.addChild(this.backLegRightDown);
         this.backLegRightDown.setTextureOffset(105, 10).addCuboid(-2.0F, 0.0F, 0.0F, 4.0F, 5.0F, 4.0F, 0.0F, false);
 
-        this.frontFur = new ModelRendererPlus(this);
-        this.frontFur.setDefaultRotPoint(0.0F, 0.0F, 0.0F);
-        this.body.addChild(this.frontFur);
-        this.frontFur.setTextureOffset(64, 28).addCuboid(0.0F, -9.0F, -11.0F, 0.0F, 9.0F, 13.0F, 0.0F, false);
+        this.topFur1 = new ModelRendererPlus(this);
+        this.topFur1.setDefaultRotPoint(0.0F, -1.0F, -4.0F);
+        this.body.addChild(this.topFur1);
+        this.topFur1.setTextureOffset(60, 36).addCuboid(0.0F, -8.0F, -7.0F, 0.0F, 9.0F, 7.0F, 0.0F, false);
 
-        this.backFur = new ModelRendererPlus(this);
-        this.backFur.setDefaultRotPoint(0.0F, 0.0F, 13.0F);
-        this.body.addChild(this.backFur);
-        this.backFur.setTextureOffset(91, 30).addCuboid(0.0F, -9.0F, -11.0F, 0.0F, 9.0F, 11.0F, 0.0F, false);
+        this.topFur2 = new ModelRendererPlus(this);
+        this.topFur2.setDefaultRotPoint(0.0F, -1.0F, 2.0F);
+        this.body.addChild(this.topFur2);
+        this.topFur2.setTextureOffset(74, 37).addCuboid(0.0F, -8.0F, -6.0F, 0.0F, 9.0F, 6.0F, 0.0F, false);
+
+        this.topFur3 = new ModelRendererPlus(this);
+        this.topFur3.setDefaultRotPoint(0.0F, -1.0F, 8.0F);
+        this.body.addChild(this.topFur3);
+        this.topFur3.setTextureOffset(86, 37).addCuboid(0.0F, -8.0F, -6.0F, 0.0F, 9.0F, 6.0F, 0.0F, false);
+
+        this.topFur4 = new ModelRendererPlus(this);
+        this.topFur4.setDefaultRotPoint(0.0F, -1.0F, 13.0F);
+        this.body.addChild(this.topFur4);
+        this.topFur4.setTextureOffset(98, 38).addCuboid(0.0F, -8.0F, -5.0F, 0.0F, 9.0F, 5.0F, 0.0F, false);
 
         this.tail = new ModelRendererPlus(this);
         this.tail.setDefaultRotPoint(0.0F, -1.0F, 12.0F);
@@ -175,6 +189,10 @@ public class ModelBuffamoo<T extends EntityBuffamoo> extends EntityModel<T> impl
         this.head.rotateAngleX = headPitch * 0.008726646F;
 
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
+        this.topFur1.rotateAngleZ = (float) (MathHelper.sin(buffamoo.ticksExisted * 0.4f)*0.1);
+        this.topFur2.rotateAngleZ = (float) (MathHelper.sin(buffamoo.ticksExisted * 0.4f+4)*0.1);
+        this.topFur3.rotateAngleZ = (float) (MathHelper.sin(buffamoo.ticksExisted * 0.4f+8)*0.1);
+        this.topFur4.rotateAngleZ = (float) (MathHelper.sin(buffamoo.ticksExisted * 0.4f+12)*0.1);
 
         if (buffamoo.isMoving())
             this.animations.doAnimation("walk", buffamoo.ticksExisted, partialTicks);

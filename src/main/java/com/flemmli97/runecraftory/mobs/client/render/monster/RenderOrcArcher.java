@@ -2,9 +2,11 @@ package com.flemmli97.runecraftory.mobs.client.render.monster;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.mobs.client.model.monster.ModelOrcArcher;
+import com.flemmli97.runecraftory.mobs.client.render.ItemLayer;
 import com.flemmli97.runecraftory.mobs.client.render.RenderMonster;
 import com.flemmli97.runecraftory.mobs.entity.monster.EntityOrcArcher;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderOrcArcher<T extends EntityOrcArcher> extends RenderMonster<T, ModelOrcArcher<T>> {
@@ -13,7 +15,7 @@ public class RenderOrcArcher<T extends EntityOrcArcher> extends RenderMonster<T,
 
     public RenderOrcArcher(EntityRendererManager renderManager) {
         super(renderManager, new ModelOrcArcher<>());
-        //this.layerRenderers.add(new HeldItemLayer(this, new ItemStack(Items.BOW), Hand.MAIN_HAND));
+        this.layerRenderers.add(new ItemLayer<>(this));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.mobs.client.model.monster;// Made with Blockbench 3.5.2
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.mobs.client.model.IItemArmModel;
 import com.flemmli97.runecraftory.mobs.entity.monster.EntityOrc;
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IResetModel;
@@ -10,10 +11,13 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.client.renderer.entity.model.IHasArm;
+import net.minecraft.client.renderer.model.ModelRenderer;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IResetModel {
+public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IResetModel, IItemArmModel {
     public ModelRendererPlus body;
     public ModelRendererPlus head;
     public ModelRendererPlus headFront;
@@ -92,7 +96,7 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IRe
         this.handRightDown = new ModelRendererPlus(this);
         this.handRightDown.setDefaultRotPoint(-3.0F, 3.0F, -0.5F);
         this.handRightUp.addChild(this.handRightDown);
-        this.setRotationAngle(this.handRightDown, -0.4363F, -0.2618F, -0.5236F);
+        this.setRotationAngle(this.handRightDown, -0.4363F, -0.2618F, -0.2618F);
         this.handRightDown.setTextureOffset(12, 57).addCuboid(0.0F, 0.0F, -1.5F, 3.0F, 9.0F, 3.0F, 0.0F, true);
 
         this.mazeStick = new ModelRendererPlus(this);
@@ -167,5 +171,27 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IRe
     public void resetModel() {
         this.body.reset();
         this.resetChild(this.body);
+    }
+
+    @Override
+    public void transform(HandSide side, MatrixStack stack) {
+        float transX = 3;
+        float transY = 7;
+        if(side == HandSide.LEFT){
+            this.handLeftUp.rotationPointX-=transX;
+            this.handLeftUp.rotationPointY+=transY;
+            this.handLeftUp.rotate(stack);
+            this.handLeftUp.rotationPointX+=transX;
+            this.handLeftUp.rotationPointY-=transY;
+            this.handLeftDown.rotate(stack);
+        }
+        else {
+            this.handRightUp.rotationPointX+=transX;
+            this.handRightUp.rotationPointY+=transY;
+            this.handRightUp.rotate(stack);
+            this.handRightUp.rotationPointX-=transX;
+            this.handRightUp.rotationPointY-=transY;
+            this.handRightDown.rotate(stack);
+        }
     }
 }

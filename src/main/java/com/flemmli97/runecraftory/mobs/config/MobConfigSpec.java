@@ -13,6 +13,7 @@ public class MobConfigSpec {
 
     public static final Configuration<MobConfigSpec> config;
 
+    public final ForgeConfigSpec.BooleanValue disableNaturalSpawn;
     public final ForgeConfigSpec.ConfigValue<Integer> gateHealth;
     public final ForgeConfigSpec.ConfigValue<Integer> gateDef;
     public final ForgeConfigSpec.ConfigValue<Integer> gateMDef;
@@ -22,6 +23,10 @@ public class MobConfigSpec {
 
     public final Map<EntityType<? extends BaseMonster>, EntityPropertySpecs> mobSpecs = Maps.newHashMap();
     private MobConfigSpec(ForgeConfigSpec.Builder builder){
+        builder.push("general");
+        disableNaturalSpawn = builder.comment("Disable all spawning not from gates").define("Disable Spawn", true);
+        builder.pop();
+
         builder.comment("Gate Configs").push("gate");
         this.gateHealth = builder.comment("Base health of gates").define("Health", 75);
         this.gateDef = builder.comment("Base defence of gates").define("Defence", 5);

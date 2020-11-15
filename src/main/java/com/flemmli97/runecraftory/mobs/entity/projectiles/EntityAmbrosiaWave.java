@@ -66,7 +66,7 @@ public class EntityAmbrosiaWave extends Entity {
     }
 
     protected EntityAmbrosia getOwner() {
-        if (this.owner == null) {
+        if (this.owner == null && this.ownerUUID != null) {
             this.owner = EntityUtil.findFromUUID(EntityAmbrosia.class, this.world, this.ownerUUID);
             if (this.owner != null)
                 this.pred = this.owner.attackPred;
@@ -123,7 +123,7 @@ public class EntityAmbrosiaWave extends Entity {
             if (this.livingTick < this.dataManager.get(maxTick)) {
                 List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(this.getRadius(), 1.0, this.getRadius()), (e) -> e.getDistanceSq(this) <= this.getRadius() * this.getRadius() && (this.pred == null || this.pred.test(e)));
                 for (LivingEntity e : list) {
-                    if (MobUtils.handleMobAttack(e, CustomDamage.attack(this.owner, EnumElement.NONE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 15), MobUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC, e)*0.5f)){//RFCalculations.getAttributeValue(this.owner, ItemStatAttributes.RFMAGICATT, null, null) / 2.5f)) {
+                    if (MobUtils.handleMobAttack(e, new CustomDamage.Builder(this).trueSource(this.getOwner()).hurtResistant(15).get(), MobUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC, e)*0.5f)){//RFCalculations.getAttributeValue(this.owner, ItemStatAttributes.RFMAGICATT, null, null) / 2.5f)) {
                         e.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 6, true, false));
                         e.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 10, 128, true, false));
                     }

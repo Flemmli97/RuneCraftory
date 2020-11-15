@@ -41,7 +41,7 @@ public class EntityAmbrosiaSleep extends Entity {
     }
 
     public EntityAmbrosia getOwner() {
-        if (this.owner == null) {
+        if (this.owner == null && this.ownerUUID != null) {
             this.owner = EntityUtil.findFromUUID(EntityAmbrosia.class, this.world, this.ownerUUID);
             if (this.owner != null)
                 this.pred = this.owner.attackPred;
@@ -90,7 +90,7 @@ public class EntityAmbrosiaSleep extends Entity {
             for (LivingEntity e : list) {
                 if (!e.equals(this.getOwner()) && (this.pred == null || this.pred.test(e))) {
 
-                    if (MobUtils.handleMobAttack(e, CustomDamage.attack(this.owner, EnumElement.EARTH, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 20), MobUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC, e)*0.3f)){//RFCalculations.getAttributeValue(this.owner, ItemStatAttributes.RFMAGICATT, null, null) / 3.0f)) {
+                    if (MobUtils.handleMobAttack(e, new CustomDamage.Builder(this).trueSource(this.getOwner()).element(EnumElement.EARTH).get(), MobUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC, e)*0.3f)){//RFCalculations.getAttributeValue(this.owner, ItemStatAttributes.RFMAGICATT, null, null) / 3.0f)) {
                         e.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 80, 1, true, false));
                         //e.addPotionEffect(new EffectInstance(Potion.getPotionFromResourceLocation("runecraftory:sleep"), 80, 1, true, false));
                         this.remove();

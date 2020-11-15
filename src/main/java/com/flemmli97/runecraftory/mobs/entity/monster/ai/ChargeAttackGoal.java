@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.mobs.entity.monster.ai;
 
+import com.flemmli97.runecraftory.mobs.entity.AnimationType;
 import com.flemmli97.runecraftory.mobs.entity.BaseMonster;
 import com.flemmli97.runecraftory.mobs.entity.ChargingMonster;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
@@ -13,19 +14,19 @@ public class ChargeAttackGoal<T extends ChargingMonster> extends AnimatedMeleeGo
 
     @Override
     public AnimatedAction randomAttack() {
-        if (this.attacker.getRNG().nextFloat() < this.attacker.attackChance()) {
-            AnimatedAction anim = this.attacker.getRandomAnimation(BaseMonster.AnimationType.MELEE);
+        if (this.attacker.getRNG().nextFloat() < this.attacker.attackChance(AnimationType.GENERICATTACK)) {
+            AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.MELEE);
             if (this.distanceToTargetSq <= this.attacker.maxAttackRange(anim) * 3)
                 return anim;
             else if (this.distanceToTargetSq <= (this.attacker.chargingLength() * this.attacker.chargingLength() + 1) && this.attacker.getY() >= this.target.getY())
-                return this.attacker.getRandomAnimation(BaseMonster.AnimationType.CHARGE);
+                return this.attacker.getRandomAnimation(AnimationType.CHARGE);
         }
-        return this.attacker.getRandomAnimation(BaseMonster.AnimationType.IDLE);
+        return this.attacker.getRandomAnimation(AnimationType.IDLE);
     }
 
     @Override
     public void handlePreAttack() {
-        if (this.attacker.isAnimOfType(this.next, BaseMonster.AnimationType.MELEE))
+        if (this.attacker.isAnimOfType(this.next, AnimationType.MELEE))
             super.handlePreAttack();
         else {
             int length = this.next.getLength();

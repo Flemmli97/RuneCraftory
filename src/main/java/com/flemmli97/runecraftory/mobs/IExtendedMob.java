@@ -1,5 +1,7 @@
 package com.flemmli97.runecraftory.mobs;
 
+import com.flemmli97.runecraftory.mobs.entity.AnimationType;
+import com.flemmli97.runecraftory.mobs.entity.BaseMonster;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -27,5 +29,5 @@ public interface IExtendedMob extends IBaseMob {
 
     boolean isFlyingEntity();
 
-    float attackChance();
+    float attackChance(AnimationType type);
 }

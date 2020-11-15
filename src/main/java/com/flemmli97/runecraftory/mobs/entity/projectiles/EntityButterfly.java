@@ -28,7 +28,6 @@ public class EntityButterfly extends EntityProjectile {
     private double length;
     private boolean turn;
     private Predicate<LivingEntity> pred;
-    private List<LivingEntity> hitEntities = Lists.newArrayList();
 
     public EntityButterfly(EntityType<? extends EntityButterfly> type, World worldIn) {
         super(type, worldIn);
@@ -47,6 +46,11 @@ public class EntityButterfly extends EntityProjectile {
     @Override
     public int livingTickMax() {
         return 50;
+    }
+
+    @Override
+    public boolean isPiercing() {
+        return true;
     }
 
     @Override
@@ -82,16 +86,17 @@ public class EntityButterfly extends EntityProjectile {
     }
 
     @Override
-    protected void onEntityHit(EntityRayTraceResult result) {
+    protected boolean onEntityHit(EntityRayTraceResult result) {
         LivingEntity e;
-        if (result.getEntity() instanceof LivingEntity && !this.world.isRemote && (e = (LivingEntity) result.getEntity()) != this.getShooter()
-                && (this.pred == null || this.pred.test((LivingEntity) result.getEntity())) && !this.hitEntities.contains(e)) {
-            if (MobUtils.handleMobAttack(result.getEntity(), CustomDamage.attack(this.getShooter(), EnumElement.NONE, CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.BACK, 0.0f, 10), MobUtils.getAttributeValue(this.getShooter(), ModAttributes.RF_MAGIC, e)*0.3f)){//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
+        if (result.getEntity() instanceof LivingEntity && (e = (LivingEntity) result.getEntity()) != this.getShooter()
+                && (this.pred == null || this.pred.test((LivingEntity) result.getEntity()))) {
+            if (MobUtils.handleMobAttack(result.getEntity(), new CustomDamage.Builder(this).trueSource(this.getShooter()).hurtResistant(10).get(), MobUtils.getAttributeValue(this.getShooter(), ModAttributes.RF_MAGIC, e)*0.3f)){//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
                 e.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 60, 3));
-                this.hitEntities.add(e);
                 //this.setDead();
+                return true;
             }
         }
+        return false;
     }
 
     @Override

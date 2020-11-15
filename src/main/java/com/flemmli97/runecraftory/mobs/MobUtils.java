@@ -7,6 +7,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
 
 public class MobUtils {
 
@@ -15,10 +16,10 @@ public class MobUtils {
             //TODO
             return entity.attackEntityFrom(src, dmg);
         } else
-            return entity.attackEntityFrom(src, dmg);
+            return entity.attackEntityFrom(src, MathHelper.sqrt(dmg));
     }
 
-    public static float getAttributeValue(LivingEntity attacker, Attribute att, LivingEntity target) {
+    public static float getAttributeValue(LivingEntity attacker, Attribute att, Entity target) {
         float increase = 0;
         /*if (attacker instanceof PlayerEntity) {
             IPlayer cap = entity.getCapability(PlayerCapProvider.PlayerCap, null);
@@ -28,11 +29,14 @@ public class MobUtils {
         } else */if (attacker.getAttribute(att) != null) {
             increase += (float) attacker.getAttribute(att).getValue();
         }
+        if(!(target instanceof LivingEntity))
+            return increase;
         Attribute opp = opposing(att);
         if(opp==null)
             return increase;
-        if(target.getAttribute(opp)!=null)
-            increase-= target.getAttribute(opp).getValue();
+        LivingEntity lT = (LivingEntity) target;
+        if(lT.getAttribute(opp)!=null)
+            increase-= lT.getAttribute(opp).getValue();
         /*if (target instanceof IEntityBase && target.getAttributeMap().getAttributeInstance(resAtt) != null) {
             increase -= (int) target.getAttributeMap().getAttributeInstance(resAtt).getAttributeValue();
         } else if (target instanceof IRFNpc) {

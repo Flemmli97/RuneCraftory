@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.mobs.entity;
 
+import com.flemmli97.tenshilib.api.entity.IOverlayEntityRender;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,8 +18,8 @@ import net.minecraft.world.server.ServerWorld;
 
 import java.util.Set;
 
-public abstract class BossMonster extends BaseMonster {
-    private ServerBossInfo bossInfo = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.GREEN, BossInfo.Overlay.PROGRESS);
+public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
+    private final ServerBossInfo bossInfo = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.GREEN, BossInfo.Overlay.PROGRESS);
     private static final DataParameter<Boolean> enraged = EntityDataManager.createKey(BossMonster.class, DataSerializers.BOOLEAN);
 
     public BossMonster(EntityType<? extends BossMonster> type, World world) {
@@ -32,7 +33,7 @@ public abstract class BossMonster extends BaseMonster {
     }
 
     public boolean isEnraged() {
-        return this.dataManager.get(enraged);
+        return !this.isTamed() && this.dataManager.get(enraged);
     }
 
     public void setEnraged(boolean flag, boolean load) {
@@ -46,9 +47,6 @@ public abstract class BossMonster extends BaseMonster {
             if(!this.isTamed()) {
                 this.updateplayers();
                 this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
-            }
-            if(this.isAlive() && this.isEnraged() && this.ticksExisted % 5 == 0){
-                ((ServerWorld)this.world).spawnParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getHeight() + 0.15, this.getZ(), 1, 0, 0.1, 0, 1);
             }
         }
     }
@@ -120,5 +118,15 @@ public abstract class BossMonster extends BaseMonster {
         for (ServerPlayerEntity entityplayermp1 : this.bossInfo.getPlayers()) {
             this.removeTrackingPlayer(entityplayermp1);
         }
+    }
+
+    @Override
+    public int overlayU(int orig) {
+        return this.isEnraged()? (int) (Math.sin(this.ticksExisted / 7F) * 5 + 5) :orig;
+    }
+
+    @Override
+    public int overlayV(int orig) {
+        return this.isEnraged()?0:orig;
     }
 }

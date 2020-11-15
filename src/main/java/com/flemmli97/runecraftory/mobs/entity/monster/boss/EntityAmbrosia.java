@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.mobs.entity.monster.boss;
 
+import com.flemmli97.runecraftory.mobs.entity.AnimationType;
 import com.flemmli97.runecraftory.mobs.entity.BossMonster;
 import com.flemmli97.runecraftory.mobs.entity.monster.ai.AmbrosiaAttackGoal;
 import com.flemmli97.runecraftory.mobs.entity.projectiles.EntityAmbrosiaSleep;
@@ -14,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -58,7 +60,7 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
-    public float attackChance() {
+    public float attackChance(AnimationType type) {
         return 1;
     }
 
@@ -174,16 +176,7 @@ public class EntityAmbrosia extends BossMonster {
         if (anim.getID().equals(pollen.getID())) {
             return this.getBoundingBox().grow(2.0);
         }
-        double reach = this.maxAttackRange(anim) * 0.5 + this.getWidth() * 0.5;
-        Vector3d dir;
-        if (target != null) {
-            reach = Math.min(reach, this.getDistance(target));
-            dir = target.getPositionVec().subtract(this.getPositionVec()).normalize();
-        } else {
-            dir = Vector3d.fromPitchYaw(this.rotationPitch, this.rotationYaw);
-        }
-        Vector3d attackPos = this.getPositionVec().add(dir.scale(reach));
-        return this.attackAABB(anim).offset(attackPos.x, this.getY(), attackPos.z);
+        return super.calculateAttackAABB(anim, target);
     }
 
     @Override

@@ -23,19 +23,19 @@ public class PacketHandler {
                     .clientAcceptedVersions(a -> true)
                     .serverAcceptedVersions(a -> true)
                     .networkProtocolVersion(() -> "v1.0").simpleChannel();
-    private static int id = 0;
-
-    public static <MSG> void register(Class<MSG> messageType, BiConsumer<MSG, PacketBuffer> encoder, Function<PacketBuffer, MSG> decoder, BiConsumer<MSG, Supplier<NetworkEvent.Context>> messageConsumer) {
-        dispatcher.registerMessage(id++, messageType, encoder, decoder, messageConsumer);
-    }
 
     public static void register() {
-        register(S2CAttackDebug.class, S2CAttackDebug::write, S2CAttackDebug::read, S2CAttackDebug::handle);
-        register(C2SRideJump.class, C2SRideJump::write, C2SRideJump::read, C2SRideJump::handle);
+        int id = 0;
+        dispatcher.registerMessage(id++, S2CAttackDebug.class, S2CAttackDebug::write, S2CAttackDebug::read, S2CAttackDebug::handle);
+        dispatcher.registerMessage(id++, C2SRideJump.class, C2SRideJump::write, C2SRideJump::read, C2SRideJump::handle);
     }
 
     public static <T> void sendToClient(T message, ServerPlayerEntity player) {
         dispatcher.sendTo(message, player.connection.getNetworkManager(), NetworkDirection.PLAY_TO_CLIENT);
+    }
+
+    public static <T> void sendToServer(T message) {
+        dispatcher.sendToServer(message);
     }
 
     public static <T> void sendToAll(T message) {

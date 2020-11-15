@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.mobs.entity.monster;
 
+import com.flemmli97.runecraftory.mobs.entity.AnimationType;
 import com.flemmli97.runecraftory.mobs.entity.ChargingMonster;
 import com.flemmli97.runecraftory.mobs.entity.monster.ai.ChargeAttackGoal;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
@@ -93,7 +94,7 @@ public class EntityWooly extends ChargingMonster implements IForgeShearable {
     }
 
     @Override
-    public float attackChance() {
+    public float attackChance(AnimationType type) {
         return this.dataManager.get(SPAWNSHEARED) || this.isTamed() ? 0.8f : 0.03f;
     }
 

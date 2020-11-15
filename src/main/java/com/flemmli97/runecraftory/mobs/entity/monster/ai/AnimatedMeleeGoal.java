@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.mobs.entity.monster.ai;
 
+import com.flemmli97.runecraftory.mobs.entity.AnimationType;
 import com.flemmli97.runecraftory.mobs.entity.BaseMonster;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.entity.ai.AnimatedAttackGoal;
@@ -16,9 +17,9 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
 
     @Override
     public AnimatedAction randomAttack() {
-        if (this.attacker.getRNG().nextFloat() < this.attacker.attackChance())
-            return this.attacker.getRandomAnimation(BaseMonster.AnimationType.MELEE);
-        return this.attacker.getRandomAnimation(BaseMonster.AnimationType.IDLE);
+        if (this.attacker.getRNG().nextFloat() < this.attacker.attackChance(AnimationType.GENERICATTACK))
+            return this.attacker.getRandomAnimation(AnimationType.MELEE);
+        return this.attacker.getRandomAnimation(AnimationType.IDLE);
     }
 
     @Override

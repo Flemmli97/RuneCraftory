@@ -9,6 +9,8 @@ public class LibEntities {
 
     public static final ResourceLocation wooly = new ResourceLocation(RuneCraftory.MODID, "wooly");
     public static final ResourceLocation orc = new ResourceLocation(RuneCraftory.MODID, "orc");
+    public static final ResourceLocation orcArcher = new ResourceLocation(RuneCraftory.MODID, "orc_archer");
+
     public static final ResourceLocation ant = new ResourceLocation(RuneCraftory.MODID, "ant");
     public static final ResourceLocation beetle = new ResourceLocation(RuneCraftory.MODID, "beetle");
     public static final ResourceLocation big_muck = new ResourceLocation(RuneCraftory.MODID, "big_muck");
@@ -18,6 +20,8 @@ public class LibEntities {
     public static final ResourceLocation pomme_pomme = new ResourceLocation(RuneCraftory.MODID, "pomme_pomme");
 
     public static final ResourceLocation ambrosia = new ResourceLocation(RuneCraftory.MODID, "ambrosia");
+
+    public static final ResourceLocation arrow = new ResourceLocation(RuneCraftory.MODID, "arrow");
 
     public static final ResourceLocation ambrosia_sleep = new ResourceLocation(RuneCraftory.MODID, "sleep_ball");
     public static final ResourceLocation ambrosia_wave = new ResourceLocation(RuneCraftory.MODID, "ambrosia_wave");

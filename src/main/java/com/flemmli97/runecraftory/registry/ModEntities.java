@@ -12,12 +12,14 @@ import com.flemmli97.runecraftory.mobs.entity.monster.EntityBuffamoo;
 import com.flemmli97.runecraftory.mobs.entity.monster.EntityChipsqueek;
 import com.flemmli97.runecraftory.mobs.entity.monster.EntityCluckadoodle;
 import com.flemmli97.runecraftory.mobs.entity.monster.EntityOrc;
+import com.flemmli97.runecraftory.mobs.entity.monster.EntityOrcArcher;
 import com.flemmli97.runecraftory.mobs.entity.monster.EntityPommePomme;
 import com.flemmli97.runecraftory.mobs.entity.monster.EntityWooly;
 import com.flemmli97.runecraftory.mobs.entity.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.mobs.entity.projectiles.EntityAmbrosiaSleep;
 import com.flemmli97.runecraftory.mobs.entity.projectiles.EntityAmbrosiaWave;
 import com.flemmli97.runecraftory.mobs.entity.projectiles.EntityButterfly;
+import com.flemmli97.runecraftory.mobs.entity.projectiles.EntityMobArrow;
 import com.flemmli97.runecraftory.mobs.libs.LibAttributes;
 import com.flemmli97.runecraftory.mobs.libs.LibEntities;
 import net.minecraft.entity.Entity;
@@ -37,6 +39,8 @@ public class ModEntities {
     public static EntityType<GateEntity> gate;
     public static EntityType<EntityWooly> wooly;
     public static EntityType<EntityOrc> orc;
+    public static EntityType<EntityOrcArcher> orcArcher;
+
     public static EntityType<EntityAnt> ant;
     public static EntityType<EntityBeetle> beetle;
     public static EntityType<EntityBigMuck> big_muck;
@@ -46,6 +50,8 @@ public class ModEntities {
     public static EntityType<EntityPommePomme> pomme_pomme;
 
     public static EntityType<EntityAmbrosia> ambrosia;
+
+    public static EntityType<EntityMobArrow> arrow;
 
     public static EntityType<EntityAmbrosiaSleep> sleep_ball;
     public static EntityType<EntityAmbrosiaWave> ambrosia_wave;
@@ -71,6 +77,14 @@ public class ModEntities {
                                 .putAttributes(LibAttributes.rf_defence, 2)
                                 .putAttributes(LibAttributes.rf_magic, 3)
                                 .putAttributes(LibAttributes.rf_magic_defence, 3)
+                                .xp(2).money(3).tamingChance(0.6f).setRidable().build()),
+                orcArcher = regMonster(EntityType.Builder.create(EntityOrcArcher::new, EntityClassification.MONSTER).size(0.73f, 2.4f).maxTrackingRange(8), LibEntities.orcArcher,
+                        new EntityProperties.Builder()
+                                .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 20)
+                                .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 6)
+                                .putAttributes(LibAttributes.rf_defence, 1)
+                                .putAttributes(LibAttributes.rf_magic, 3)
+                                .putAttributes(LibAttributes.rf_magic_defence, 2)
                                 .xp(2).money(3).tamingChance(0.6f).setRidable().build()),
                 ant = regMonster(EntityType.Builder.create(EntityAnt::new, EntityClassification.MONSTER).size(1.1f, 0.44f).maxTrackingRange(8), LibEntities.ant,
                         new EntityProperties.Builder()
@@ -139,20 +153,21 @@ public class ModEntities {
                                 .putAttributes(LibAttributes.rf_res_earth, 25)
                                 .xp(2).money(3).tamingChance(0.6f).setRidable().build()),
 
+                arrow = reg(EntityType.Builder.<EntityMobArrow>create(EntityMobArrow::new, EntityClassification.MISC).size(0.5F, 0.5F).maxTrackingRange(4).trackingTickInterval(20), LibEntities.arrow),
+
                 sleep_ball = reg(EntityType.Builder.<EntityAmbrosiaSleep>create(EntityAmbrosiaSleep::new, EntityClassification.MISC).size(0.6f, 1.2f).maxTrackingRange(4), LibEntities.ambrosia_sleep),
                 ambrosia_wave = reg(EntityType.Builder.<EntityAmbrosiaWave>create(EntityAmbrosiaWave::new, EntityClassification.MISC).size(0.05f, 0.05f).maxTrackingRange(4), LibEntities.ambrosia_wave),
                 butterfly = reg(EntityType.Builder.<EntityButterfly>create(EntityButterfly::new, EntityClassification.MISC).size(0.2f, 0.2f).maxTrackingRange(4), LibEntities.butterfly)
         );
-        registerAttributes();
-
         EntitySpawnPlacementRegistry.register(gate, EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
     }
 
 
-    private static void registerAttributes() {
+    public static void registerAttributes() {
         GlobalEntityTypeAttributes.put(gate, GateEntity.createAttributes().build());
         GlobalEntityTypeAttributes.put(wooly, BaseMonster.createAttributes(ModAttributes.modAttributes).build());
         GlobalEntityTypeAttributes.put(orc, BaseMonster.createAttributes(ModAttributes.modAttributes).build());
+        GlobalEntityTypeAttributes.put(orcArcher, BaseMonster.createAttributes(ModAttributes.modAttributes).build());
         GlobalEntityTypeAttributes.put(ant, BaseMonster.createAttributes(ModAttributes.modAttributes).build());
         GlobalEntityTypeAttributes.put(beetle, BaseMonster.createAttributes(ModAttributes.modAttributes).build());
         GlobalEntityTypeAttributes.put(big_muck, BaseMonster.createAttributes(ModAttributes.modAttributes).build());

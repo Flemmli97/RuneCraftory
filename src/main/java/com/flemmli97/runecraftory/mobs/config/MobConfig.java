@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class MobConfig {
 
+    public static boolean disableNaturalSpawn;
+
     public static float gateDef = 5f;
     public static float gateMDef = 5f;
     public static float gateHealth = 100;
@@ -18,6 +20,7 @@ public class MobConfig {
     public static Map<EntityType<? extends BaseMonster>, EntityProperties> propertiesMap = Maps.newHashMap();
 
     public static void load(MobConfigSpec spec){
+        disableNaturalSpawn = spec.disableNaturalSpawn.get();
         gateHealth = spec.gateHealth.get();
         gateDef = spec.gateDef.get();
         gateMDef = spec.gateMDef.get();

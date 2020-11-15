@@ -2,7 +2,7 @@ package com.flemmli97.runecraftory.mobs.events;
 
 import com.flemmli97.runecraftory.mobs.entity.BaseMonster;
 import com.flemmli97.runecraftory.mobs.network.C2SRideJump;
-import com.flemmli97.tenshilib.common.network.PacketHandler;
+import com.flemmli97.runecraftory.network.PacketHandler;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

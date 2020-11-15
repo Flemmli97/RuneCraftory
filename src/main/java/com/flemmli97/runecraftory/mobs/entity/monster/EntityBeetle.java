@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.mobs.entity.monster;
 
+import com.flemmli97.runecraftory.mobs.entity.AnimationType;
 import com.flemmli97.runecraftory.mobs.entity.ChargingMonster;
 import com.flemmli97.runecraftory.mobs.entity.monster.ai.ChargeAttackGoal;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
@@ -20,8 +21,8 @@ public class EntityBeetle extends ChargingMonster {
     }
 
     @Override
-    public float attackChance() {
-        return 1.1f;
+    public float attackChance(AnimationType type) {
+        return 1f;
     }
 
     @Override

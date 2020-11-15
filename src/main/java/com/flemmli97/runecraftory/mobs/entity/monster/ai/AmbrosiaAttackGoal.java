@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.mobs.entity.monster.ai;
 
+import com.flemmli97.runecraftory.mobs.entity.AnimationType;
 import com.flemmli97.runecraftory.mobs.entity.BaseMonster;
 import com.flemmli97.runecraftory.mobs.entity.monster.boss.EntityAmbrosia;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
@@ -20,7 +21,7 @@ public class AmbrosiaAttackGoal extends AnimatedAttackGoal<EntityAmbrosia> {
     public AnimatedAction randomAttack() {
         AnimatedAction anim = this.attacker.chainAnim(this.prevAnim);
         if (anim == null) {
-            anim = this.attacker.getRandomAnimation(BaseMonster.AnimationType.GENERICATTACK);
+            anim = this.attacker.getRandomAnimation(AnimationType.GENERICATTACK);
             if(EntityAmbrosia.nonChoosableAttacks.contains(anim.getID()))
                 return this.randomAttack();
         }

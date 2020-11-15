@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.mobs.entity;
 
+import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.lib.EnumElement;
 import com.flemmli97.runecraftory.mobs.IBaseMob;
 import com.flemmli97.runecraftory.mobs.config.MobConfig;
@@ -21,6 +22,8 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.StringNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -41,8 +44,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.spawner.AbstractSpawner;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -112,30 +117,28 @@ public class GateEntity extends MobEntity implements IBaseMob {
     @Override
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        compound.putInt("levelMob", this.dataManager.get(level));
-        for (int i = 0; i < this.spawnList.size(); ++i) {
-            compound.putString("spawnList[" + i + "]", this.spawnList.get(i).toString());
-        }
-        compound.putInt("size", this.spawnList.size());
-        compound.putString("element", this.type.getName());
+        compound.putInt("MobLevel", this.dataManager.get(level));
+        ListNBT list = new ListNBT();
+        this.spawnList.forEach(type->list.add(StringNBT.of(type.getRegistryName().toString())));
+        compound.put("Spawns", list);
+        compound.putString("Element", this.type.toString());
     }
 
     @Override
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
-        if (compound.contains("levelMob")) {
-            this.dataManager.set(level, compound.getInt("levelMob"));
+        if (compound.contains("MobLevel")) {
+            this.dataManager.set(level, compound.getInt("MobLevel"));
         }
-        for (int i = 0; i < compound.getInt("size"); ++i) {
-            EntityType<?> type = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(compound.getString("spawnList[" + i + "]")));
-            if (type != null)
-                this.spawnList.add(type);
+        compound.getList("Spawns", Constants.NBT.TAG_STRING)
+                .forEach(nbt->this.spawnList.add(ForgeRegistries.ENTITIES.getValue(new ResourceLocation(nbt.getString()))));
+        String el = compound.getString("Element");
+        try {
+            this.type = EnumElement.valueOf(el);
+            this.dataManager.set(elementType, this.type.getName());
         }
-        for (EnumElement element : EnumElement.values()) {
-            if (element.getName().equals(compound.getString("element"))) {
-                this.type = element;
-                this.dataManager.set(elementType, element.getName());
-            }
+        catch (IllegalArgumentException e){
+            RuneCraftory.logger.error("Unable to set element type for gate entity {}", this);
         }
     }
 
@@ -192,11 +195,14 @@ public class GateEntity extends MobEntity implements IBaseMob {
                     if (entity instanceof MobEntity) {
                         MobEntity mob = (MobEntity) entity;
                         BlockPos pos = new BlockPos(x, y, z);
-                        if (this.world.getBlockState(pos.down()).isTopSolid(this.world, pos, entity, Direction.UP)) {
+                        boolean notSolid;
+                        while((notSolid = !this.world.getBlockState(pos.down()).isTopSolid(this.world, pos, entity, Direction.UP)) && pos.distanceSq(x,y,z, true) < 16)
+                            pos = pos.down();
+                        if (!notSolid) {
                             if (mob instanceof BaseMonster)
                                 ((BaseMonster) mob).setLevel(levelRand);
                             entity.setPositionAndRotation(x, y, z, this.world.rand.nextFloat() * 360.0f, 0.0f);
-                            if (ForgeEventFactory.canEntitySpawnSpawner(mob, this.world, (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), null)) {
+                            if (ForgeEventFactory.canEntitySpawnSpawner(mob, this.world, (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), null) && this.world.isSpaceEmpty(mob)) {
                                 mob.onInitialSpawn((IServerWorld) this.world, this.world.getDifficultyForLocation(mob.getBlockPos()), SpawnReason.SPAWNER, null, null);
                                 mob.setHomePosAndDistance(this.getBlockPos(), 16);
                                 this.world.addEntity(entity);

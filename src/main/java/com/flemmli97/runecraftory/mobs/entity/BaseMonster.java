@@ -15,9 +15,11 @@ import com.google.common.collect.Lists;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.INPC;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -53,6 +55,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -86,7 +90,6 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     public final Predicate<LivingEntity> attackPred = (e) -> {
         if (!e.equals(BaseMonster.this)) {
             if (BaseMonster.this.isTamed()) {
-                this.enablePersistence();
                 return e == BaseMonster.this.getAttackTarget() || !(e instanceof BaseMonster) || !((BaseMonster) e).isTamed();
             }
             return e == BaseMonster.this.getAttackTarget() || e instanceof PlayerEntity || e instanceof INPC || (e instanceof BaseMonster && ((BaseMonster) e).isTamed());
@@ -126,10 +129,12 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     protected void applyAttributes() {
         for (Map.Entry<Attribute, Double> att : this.prop.getBaseValues().entrySet()) {
             ModifiableAttributeInstance inst = this.getAttribute(att.getKey());
-            if(inst!=null)
+            if(inst!=null) {
                 inst.setBaseValue(att.getValue());
+                if(att.getKey() == Attributes.GENERIC_MAX_HEALTH)
+                    this.setHealth(this.getMaxHealth());
+            }
         }
-        this.setHealth(this.getMaxHealth());
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes(Set<Attribute> atts) {
@@ -159,6 +164,12 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         this.dataManager.register(owner, Optional.empty());
         this.dataManager.register(mobLevel, LibEntityConstants.baseLevel);
         this.dataManager.register(levelXP, 0);
+    }
+
+    @Override
+    public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance diff, SpawnReason reason, @Nullable ILivingEntityData data, @Nullable CompoundNBT nbt) {
+        this.setEquipmentBasedOnDifficulty(diff);
+        return data;
     }
 
     //=====Animation Stuff
@@ -450,17 +461,6 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         }
     }
 
-    //=====Disable/Tweak vanilla
-
-    @Override
-    public boolean canEquipItem(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public void setItemStackToSlot(EquipmentSlotType slotIn, ItemStack stack) {
-    }
-
     //=====Damage Logic
 
     @Override
@@ -677,8 +677,10 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
                 boolean flag = false;
                 if (this.tamingItem() != null)
                     for (ItemStack item : this.tamingItem())
-                        if (item.getItem() == stack.getItem())
+                        if (item.getItem() == stack.getItem()) {
                             flag = true;
+                            break;
+                        }
                 float rightItemMultiplier = flag ? 2 : 1F;
                 if (!player.isCreative())
                     stack.shrink(1);
@@ -710,6 +712,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     protected void tameEntity(PlayerEntity owner) {
+        this.setHomePosAndDistance(this.getBlockPos(), -1);
         this.setOwner(owner);
         this.navigator.clearPath();
         this.setAttackTarget(null);
@@ -807,7 +810,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
         compound.putBoolean("Out", this.dead);
         compound.putInt("FeedTime", this.feedTimeOut);
-        compound.putIntArray("Home", new int[]{this.getHomePosition().getX(), this.getHomePosition().getY(), this.getHomePosition().getZ(), (int) this.getMaximumHomeDistance()});
+        if(!this.detachHome())
+            compound.putIntArray("Home", new int[]{this.getHomePosition().getX(), this.getHomePosition().getY(), this.getHomePosition().getZ(), (int) this.getMaximumHomeDistance()});
         compound.putInt("FoodBuffTick", this.foodBuffTick);
     }
 
@@ -824,15 +828,5 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         }
         this.dead = compound.getBoolean("Out");
         this.foodBuffTick = compound.getInt("FoodBuffTick");
-    }
-
-    public enum AnimationType {
-        MOVE,
-        GENERICATTACK,
-        MELEE,
-        JUMPATTACK,
-        CHARGE,
-        RANGED,
-        IDLE
     }
 }

@@ -50,6 +50,7 @@ public abstract class ChargingMonster extends BaseMonster {
                 return;
             this.getNavigator().clearPath();
             if (anim.getTick() > anim.getAttackTime()) {
+                this.doWhileCharge();
                 this.setMotion(this.chargeMotion[0], this.getMotion().y, this.chargeMotion[2]);
                 if (this.hitEntity == null)
                     this.hitEntity = Lists.newArrayList();
@@ -62,6 +63,10 @@ public abstract class ChargingMonster extends BaseMonster {
             }
         } else
             super.handleAttack(anim);
+    }
+
+    public void doWhileCharge(){
+
     }
 
     @Override
