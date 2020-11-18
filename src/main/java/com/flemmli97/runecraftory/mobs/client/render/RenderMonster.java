@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 public abstract class RenderMonster<T extends BaseMonster, M extends EntityModel<T>> extends MobRenderer<T, M> {
 
     public RenderMonster(EntityRendererManager manager, M model) {
-        super(manager, model, 0);
+        super(manager, model, 0.5f);
     }
 
 }

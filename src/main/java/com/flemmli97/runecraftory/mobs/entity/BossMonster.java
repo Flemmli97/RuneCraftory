@@ -33,7 +33,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     }
 
     public boolean isEnraged() {
-        return !this.isTamed() && this.dataManager.get(enraged);
+        return this.isAlive() && !this.isTamed() && this.dataManager.get(enraged);
     }
 
     public void setEnraged(boolean flag, boolean load) {
