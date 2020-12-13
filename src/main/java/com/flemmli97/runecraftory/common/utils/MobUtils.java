@@ -1,0 +1,82 @@
+package com.flemmli97.runecraftory.common.utils;
+
+import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.common.registry.ModAttributes;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.MathHelper;
+
+public class MobUtils {
+
+    public static boolean handleMobAttack(Entity entity, DamageSource src, float dmg) {
+        if (RuneCraftory.conf.combatModule) {
+            //TODO
+            return entity.attackEntityFrom(src, dmg);
+        } else
+            return entity.attackEntityFrom(src, MathHelper.sqrt(dmg));
+    }
+
+    public static float getAttributeValue(LivingEntity attacker, Attribute att, Entity target) {
+        float increase = 0;
+        /*if (attacker instanceof PlayerEntity) {
+            IPlayer cap = entity.getCapability(PlayerCapProvider.PlayerCap, null);
+            increase += cap.getAttributeValue(att);
+        } else if (attacker instanceof IRFNpc) {
+            increase += ((IRFNpc) entity).getAttributeValue(att);
+        } else */
+        if (attacker.getAttribute(att) != null) {
+            increase += (float) attacker.getAttribute(att).getValue();
+        }
+        if (!(target instanceof LivingEntity))
+            return increase;
+        Attribute opp = opposing(att);
+        if (opp == null)
+            return increase;
+        LivingEntity lT = (LivingEntity) target;
+        if (lT.getAttribute(opp) != null)
+            increase -= lT.getAttribute(opp).getValue();
+        /*if (target instanceof IEntityBase && target.getAttributeMap().getAttributeInstance(resAtt) != null) {
+            increase -= (int) target.getAttributeMap().getAttributeInstance(resAtt).getAttributeValue();
+        } else if (target instanceof IRFNpc) {
+            increase -= ((IRFNpc) target).getAttributeValue(att);
+        } else if (target instanceof EntityPlayer) {
+            IPlayer cap = target.getCapability(PlayerCapProvider.PlayerCap, null);
+            increase -= cap.getAttributeValue(att);
+        }*/
+        return increase;
+    }
+
+    public static Attribute opposing(Attribute att) {
+        //if (att == Attributes.GENERIC_ATTACK_DAMAGE)
+        //    return ModAttributes.RF_DEFENCE;
+        //if (att == ModAttributes.RF_MAGIC)
+        //    return ModAttributes.RF_MAGIC_DEFENCE;
+        if (att == ModAttributes.RFPARA.get())
+            return ModAttributes.RFRESPARA.get();
+        if (att == ModAttributes.RFPOISON.get())
+            return ModAttributes.RFRESPOISON.get();
+        if (att == ModAttributes.RFSEAL.get())
+            return ModAttributes.RFRESSEAL.get();
+        if (att == ModAttributes.RFSLEEP.get())
+            return ModAttributes.RFRESSLEEP.get();
+        if (att == ModAttributes.RFFAT.get())
+            return ModAttributes.RFRESFAT.get();
+        if (att == ModAttributes.RFCOLD.get())
+            return ModAttributes.RFRESCOLD.get();
+        if (att == ModAttributes.RFDIZ.get())
+            return ModAttributes.RFRESDIZ.get();
+        if (att == ModAttributes.RFCRIT.get())
+            return ModAttributes.RFRESCRIT.get();
+        if (att == ModAttributes.RFSTUN.get())
+            return ModAttributes.RFRESSTUN.get();
+        if (att == ModAttributes.RFFAINT.get())
+            return ModAttributes.RFRESFAINT.get();
+        if (att == ModAttributes.RFDRAIN.get())
+            return ModAttributes.RFRESDRAIN.get();
+        //if(att == ModAttributes.RFKNOCK)
+        //    return ModAttributes.RESKNOCK;
+        return null;
+    }
+}
