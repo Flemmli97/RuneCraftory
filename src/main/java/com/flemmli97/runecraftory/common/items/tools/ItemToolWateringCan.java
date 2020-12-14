@@ -1,12 +1,12 @@
 package com.flemmli97.runecraftory.common.items.tools;
 
+import com.flemmli97.runecraftory.api.enums.EnumToolTier;
+import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.api.items.EnumToolCharge;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.lib.ItemTiers;
-import com.flemmli97.runecraftory.lib.enums.EnumToolTier;
-import com.flemmli97.runecraftory.lib.enums.EnumWeaponType;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;

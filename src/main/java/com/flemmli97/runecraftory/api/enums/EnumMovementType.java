@@ -1,4 +1,4 @@
-package com.flemmli97.runecraftory.lib.enums;
+package com.flemmli97.runecraftory.api.enums;
 
 public enum EnumMovementType {
     STRAFE,

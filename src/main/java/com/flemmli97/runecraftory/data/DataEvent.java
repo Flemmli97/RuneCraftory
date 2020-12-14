@@ -20,6 +20,9 @@ public class DataEvent {
             BlockTagGen blocks = new BlockTagGen(data, event.getExistingFileHelper());
             data.addProvider(blocks);
             data.addProvider(new ItemTagGen(data, blocks, event.getExistingFileHelper()));
+            data.addProvider(new ItemStatGen(data));
+            data.addProvider(new FoodGen(data));
+            data.addProvider(new CropGen(data));
         }
     }
 

@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory;
 import com.flemmli97.runecraftory.client.ClientEvents;
 import com.flemmli97.runecraftory.client.ClientRegister;
 import com.flemmli97.runecraftory.common.MobModule;
+import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
@@ -10,8 +11,8 @@ import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModPotions;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -35,10 +36,15 @@ public class RuneCraftory {
 
     public RuneCraftory() {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modBus.register(this);
+        modBus.addListener(this::clientSetup);
+        modBus.addListener(this::common);
+
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientEvents::register);
 
         registries(modBus);
+
+        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+        forgeBus.addListener(DataPackHandler::registerDataPackHandler);
 
         Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
         File def = confDir.resolve("default").toFile();
@@ -59,12 +65,10 @@ public class RuneCraftory {
         ModPotions.EFFECTS.register(modBus);
     }
 
-    @SubscribeEvent
     public void clientSetup(FMLClientSetupEvent event) {
         ClientRegister.registerEntityRender();
     }
 
-    @SubscribeEvent
     public void common(FMLCommonSetupEvent event) {
         PacketHandler.register();
         event.enqueueWork(() -> ModEntities.registerAttributes());

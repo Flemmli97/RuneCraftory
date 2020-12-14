@@ -1,11 +1,11 @@
 package com.flemmli97.runecraftory.common.entities.projectiles;
 
+import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
 import com.flemmli97.runecraftory.common.utils.MobUtils;
-import com.flemmli97.runecraftory.lib.enums.EnumElement;
 import com.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

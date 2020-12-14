@@ -50,15 +50,15 @@ public class RFCreativeTabs {
         public ItemStack createIcon() {
             return new ItemStack(ModItems.teleport);
         }
-    };
+    };*/
 
     public static CreativePlus food = new CreativePlus("runecraftory.food") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(ModItems.onigiri);
+            return new ItemStack(ModItems.onigiri.get());
         }
     };
-
+/*
     public static CreativePlus crops = new CreativePlus("runecraftory.crops") {
         @Override
         public ItemStack createIcon() {

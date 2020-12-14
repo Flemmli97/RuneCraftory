@@ -1,9 +1,10 @@
 package com.flemmli97.runecraftory.common.utils;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.api.items.IItemWearable;
-import com.flemmli97.runecraftory.api.items.ItemStat;
+import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -18,25 +19,20 @@ public class ItemNBT {
     }
 
     public static boolean initNBT(ItemStack stack, boolean forced) {
-        ItemStat stat = null;//ItemStatMap.get(stack);
-        if (stat != null || forced)
-        {
+        ItemStat stat = DataPackHandler.getStats(stack.getItem());
+        if (stat != null || forced) {
             CompoundNBT stackTag = stack.getOrCreateTag();
             CompoundNBT compound = new CompoundNBT();
             compound.putInt("ItemLevel", 1);
-            if (stack.getItem() instanceof IItemWearable)
-            {
+            if (stack.getItem() instanceof IItemWearable) {
                 compound.put("Upgrades", new ListNBT());
-                if(stat!=null)
-                {
+                if (stat != null) {
                     CompoundNBT stats = new CompoundNBT();
-                    for (Map.Entry<Attribute, Integer> entry : stat.itemStats().entrySet())
-                    {
+                    for (Map.Entry<Attribute, Integer> entry : stat.itemStats().entrySet()) {
                         stats.putInt(entry.getKey().getRegistryName().toString(), entry.getValue());
                     }
                     compound.put("ItemStats", stats);
-                    if (stack.getItem() instanceof IItemUsable)
-                    {
+                    if (stack.getItem() instanceof IItemUsable) {
                         compound.putString("Element", stat.element().getName());
                     }
                 }

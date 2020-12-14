@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.utils;
 
-import com.flemmli97.runecraftory.lib.enums.EnumElement;
+import com.flemmli97.runecraftory.api.enums.EnumElement;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

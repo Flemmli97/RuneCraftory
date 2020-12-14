@@ -1,10 +1,10 @@
 package com.flemmli97.runecraftory.common.utils;
 
+import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.entities.IBaseMob;
 import com.flemmli97.runecraftory.common.entities.IExtendedMob;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModPotions;
-import com.flemmli97.runecraftory.lib.enums.EnumElement;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;

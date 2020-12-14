@@ -1,10 +1,10 @@
 package com.flemmli97.runecraftory.common.entities;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.config.MobConfig;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.world.GateSpawning;
-import com.flemmli97.runecraftory.lib.enums.EnumElement;
 import com.flemmli97.runecraftory.lib.LibEntityConstants;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
