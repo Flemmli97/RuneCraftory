@@ -8,7 +8,7 @@ public enum EnumCrafting {
 
     private int id;
 
-    private EnumCrafting(final int id) {
+    EnumCrafting(final int id) {
         this.id = id;
     }
 

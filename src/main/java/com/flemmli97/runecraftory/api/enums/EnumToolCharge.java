@@ -1,4 +1,4 @@
-package com.flemmli97.runecraftory.api.items;
+package com.flemmli97.runecraftory.api.enums;
 
 public enum EnumToolCharge {
     CHARGEUPTOOL,
@@ -10,5 +10,6 @@ public enum EnumToolCharge {
     CHARGEFISHING,
     CHARGECAN,
     CHARGEFIST,
-    CHARGESEEDS;
+    CHARGESEEDS,
+    NONE
 }

@@ -9,10 +9,51 @@ import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.math.MathHelper;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class ItemNBT {
+
+    public static int itemLevel(ItemStack stack)
+    {
+        CompoundNBT tag = getItemNBT(stack);
+        return tag != null ? tag.getInt("ItemLevel") : 1;
+    }
+
+    public static boolean addItemLevel(ItemStack stack)
+    {
+        if (itemLevel(stack) < 10)
+        {
+            CompoundNBT tag = getItemNBT(stack);
+            if (tag != null)
+            {
+                tag.putInt("ItemLevel", MathHelper.clamp(tag.getInt("ItemLevel") + 1, 1, 10));
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static ItemStack getLeveledItem(ItemStack stack, int level) {
+        CompoundNBT compound = ItemNBT.getItemNBT(stack);
+        if (compound != null) {
+            compound.putInt("ItemLevel", MathHelper.clamp(level, 1, 10));
+        }
+        return stack;
+    }
+
+    @Nullable
+    public static CompoundNBT getItemNBT(ItemStack stack) {
+        if (stack.hasTag() && stack.getTag().contains(RuneCraftory.MODID)) {
+            return stack.getTag().getCompound(RuneCraftory.MODID);
+        }
+        if (initNBT(stack)) {
+            return stack.getTag().getCompound(RuneCraftory.MODID);
+        }
+        return null;
+    }
 
     public static boolean initNBT(ItemStack stack) {
         return initNBT(stack, false);

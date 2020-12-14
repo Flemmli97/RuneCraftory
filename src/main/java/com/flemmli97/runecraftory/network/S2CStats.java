@@ -1,24 +1,24 @@
 package com.flemmli97.runecraftory.network;
 
+import com.flemmli97.runecraftory.common.capability.IPlayerCap;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class S2CAttackDebug {
+public class S2CStats {
 
-    public AxisAlignedBB aabb;
-    public int duration;
+    private final int rp;
 
-    public S2CAttackDebug(AxisAlignedBB aabb) {
-        this(aabb, 300);
+    private S2CStats(int rp) {
+        this.rp = rp;
     }
 
-    public S2CAttackDebug(AxisAlignedBB aabb, int duration) {
-        this.aabb = aabb;
-        this.duration = duration;
+    public S2CStats(IPlayerCap cap) {
+        this.rp = cap.getRunePoints();
     }
+
 
     public static S2CAttackDebug read(PacketBuffer buf) {
         AxisAlignedBB aabb = new AxisAlignedBB(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
@@ -26,16 +26,11 @@ public class S2CAttackDebug {
     }
 
     public static void write(S2CAttackDebug pkt, PacketBuffer buf) {
-        buf.writeDouble(pkt.aabb.maxX);
-        buf.writeDouble(pkt.aabb.maxY);
-        buf.writeDouble(pkt.aabb.maxZ);
-        buf.writeDouble(pkt.aabb.minX);
-        buf.writeDouble(pkt.aabb.minY);
-        buf.writeDouble(pkt.aabb.minZ);
-        buf.writeInt(pkt.duration);
+
     }
 
     public static void handle(S2CAttackDebug pkt, Supplier<NetworkEvent.Context> ctx) {
+
         ctx.get().setPacketHandled(true);
     }
 }
