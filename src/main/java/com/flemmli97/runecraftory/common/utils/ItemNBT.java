@@ -5,30 +5,30 @@ import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class ItemNBT {
 
-    public static int itemLevel(ItemStack stack)
-    {
+    public static int itemLevel(ItemStack stack) {
         CompoundNBT tag = getItemNBT(stack);
         return tag != null ? tag.getInt("ItemLevel") : 1;
     }
 
-    public static boolean addItemLevel(ItemStack stack)
-    {
-        if (itemLevel(stack) < 10)
-        {
+    public static boolean addItemLevel(ItemStack stack) {
+        if (itemLevel(stack) < 10) {
             CompoundNBT tag = getItemNBT(stack);
-            if (tag != null)
-            {
+            if (tag != null) {
                 tag.putInt("ItemLevel", MathHelper.clamp(tag.getInt("ItemLevel") + 1, 1, 10));
                 return true;
             }
@@ -42,6 +42,27 @@ public class ItemNBT {
             compound.putInt("ItemLevel", MathHelper.clamp(level, 1, 10));
         }
         return stack;
+    }
+
+    public static Map<Attribute, Integer> statIncrease(ItemStack stack) {
+        Map<Attribute, Integer> map = new TreeMap<>(ModAttributes.sorted);
+        if (stack.getItem() instanceof IItemUsable) {
+            CompoundNBT compound = getItemNBT(stack);
+            if (compound != null) {
+                CompoundNBT tag = compound.getCompound("ItemStats");
+                for (String attName : tag.keySet()) {
+                    Attribute att = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attName));
+                    if (att.getRegistryName().toString().equals(attName))
+                        map.put(att, tag.getInt(attName));
+                }
+            }
+        } else {
+            ItemStat stat = DataPackHandler.getStats(stack.getItem());
+            if (stat != null) {
+                return stat.itemStats();
+            }
+        }
+        return map;
     }
 
     @Nullable

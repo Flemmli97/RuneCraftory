@@ -10,13 +10,12 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class InventoryShippingBin extends ItemStackHandler {
 
-    public InventoryShippingBin()
-    {
+    public InventoryShippingBin() {
         super(54);
     }
 
     public void shipItems(PlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap, null).ifPresent(cap-> {
+        player.getCapability(PlayerCapProvider.PlayerCap, null).ifPresent(cap -> {
             int money = 0;
             for (int i = 0; i < this.getSlots(); ++i) {
                 if (this.getStackInSlot(i).isEmpty())
@@ -27,7 +26,7 @@ public class InventoryShippingBin extends ItemStackHandler {
                 this.setStackInSlot(i, ItemStack.EMPTY);
             }
             cap.setMoney(player, cap.getMoney() + money);
-            player.sendStatusMessage(new TranslationTextComponent("shipping.money").append(""+money).formatted(TextFormatting.GOLD), true);
+            player.sendStatusMessage(new TranslationTextComponent("shipping.money").append("" + money).formatted(TextFormatting.GOLD), true);
         });
     }
 }

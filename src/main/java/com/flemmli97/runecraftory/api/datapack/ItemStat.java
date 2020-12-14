@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.network.PacketBuffer;
 
 import java.util.Map;
 import java.util.TreeMap;
@@ -34,6 +35,30 @@ public class ItemStat {
 
     public Map<Attribute, Integer> itemStats() {
         return ImmutableMap.copyOf(this.itemStats);
+    }
+
+    public void toPacket(PacketBuffer buffer) {
+        buffer.writeInt(this.buyPrice);
+        buffer.writeInt(this.sellPrice);
+        buffer.writeInt(this.upgradeDifficulty);
+        buffer.writeEnumValue(this.element);
+        buffer.writeInt(this.itemStats.size());
+        this.itemStats.forEach((att, val) -> {
+            buffer.writeRegistryId(att);
+            buffer.writeInt(val);
+        });
+    }
+
+    public static ItemStat fromPacket(PacketBuffer buffer) {
+        ItemStat stat = new ItemStat();
+        stat.buyPrice = buffer.readInt();
+        stat.sellPrice = buffer.readInt();
+        stat.upgradeDifficulty = buffer.readInt();
+        stat.element = buffer.readEnumValue(EnumElement.class);
+        int size = buffer.readInt();
+        for (int i = 0; i < size; i++)
+            stat.itemStats.put(buffer.readRegistryIdSafe(Attribute.class), buffer.readInt());
+        return stat;
     }
 
     @Override

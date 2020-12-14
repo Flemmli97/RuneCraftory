@@ -26,12 +26,12 @@ public class InventorySpells implements IItemHandler {
 
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        if(this.inventory.get(slot).isEmpty()){
+        if (this.inventory.get(slot).isEmpty()) {
             ItemStack copy = stack.copy();
             copy.shrink(1);
             ItemStack toInsert = stack.copy();
             toInsert.setCount(1);
-            if(!simulate) {
+            if (!simulate) {
                 this.inventory.set(slot, toInsert);
             }
             return copy;
@@ -41,7 +41,7 @@ public class InventorySpells implements IItemHandler {
 
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if(simulate)
+        if (simulate)
             return this.getStackInSlot(slot);
         return this.inventory.set(slot, ItemStack.EMPTY);
     }
@@ -56,30 +56,24 @@ public class InventorySpells implements IItemHandler {
         return stack.getItem() instanceof ISpells;
     }
 
-    public void readFromNBT(CompoundNBT compound)
-    {
+    public void readFromNBT(CompoundNBT compound) {
         ItemStackHelper.loadAllItems(compound, this.inventory);
     }
 
-    public CompoundNBT writeToNBT(CompoundNBT compound)
-    {
+    public CompoundNBT writeToNBT(CompoundNBT compound) {
         ItemStackHelper.saveAllItems(compound, this.inventory);
         return compound;
     }
 
-    public void useSkill(PlayerEntity player, int index)
-    {
+    public void useSkill(PlayerEntity player, int index) {
         ItemStack stack = this.getStackInSlot(index);
         if (stack.getItem() instanceof ISpells && player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f) <= 0.0f)
-            ((ISpells)stack.getItem()).use(player.world, player, stack);
+            ((ISpells) stack.getItem()).use(player.world, player, stack);
     }
 
-    public void dropItemsAt(LivingEntity entity)
-    {
-        if (!entity.world.isRemote)
-        {
-            for (ItemStack stack : this.inventory)
-            {
+    public void dropItemsAt(LivingEntity entity) {
+        if (!entity.world.isRemote) {
+            for (ItemStack stack : this.inventory) {
                 ItemEntity item = new ItemEntity(entity.world, entity.getX(), entity.getY(), entity.getZ(), stack);
                 item.setPickupDelay(0);
                 entity.world.addEntity(item);
@@ -88,12 +82,10 @@ public class InventorySpells implements IItemHandler {
         this.inventory.clear();
     }
 
-    public void update(PlayerEntity player)
-    {
-        for (ItemStack stack : this.inventory)
-        {
+    public void update(PlayerEntity player) {
+        for (ItemStack stack : this.inventory) {
             if (stack.getItem() instanceof ISpells) {
-                ((ISpells)stack.getItem()).update(stack, player);
+                ((ISpells) stack.getItem()).update(stack, player);
             }
         }
     }

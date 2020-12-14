@@ -4,8 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public interface ISpells
-{
+public interface ISpells {
     void levelSkill(PlayerEntity player);
 
     int coolDown();

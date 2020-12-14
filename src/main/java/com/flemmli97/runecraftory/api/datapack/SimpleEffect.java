@@ -15,6 +15,18 @@ public class SimpleEffect {
         this.amplifier = amplifier;
     }
 
+    public Effect getPotion() {
+        return this.potion;
+    }
+
+    public int getDuration() {
+        return this.duration;
+    }
+
+    public int getAmplifier() {
+        return this.amplifier;
+    }
+
     public EffectInstance create() {
         return new EffectInstance(this.potion, this.duration, this.amplifier);
     }

@@ -1,4 +1,4 @@
-package com.flemmli97.runecraftory.common.capability;
+/*package com.flemmli97.runecraftory.common.capability;
 
 import com.flemmli97.runecraftory.api.enums.EnumShop;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
@@ -59,7 +59,7 @@ public class PlayerCapImpl implements IPlayerCap {
     /**
      * first number is level, second is the xp a.k.a. percent to next level
      */
-    private int[] level = new int[]{1, 0};
+    /*private int[] level = new int[]{1, 0};
 
     private Map<EnumSkills, int[]> skillMap = Maps.newHashMap();
     private InventorySpells spells = new InventorySpells();
@@ -403,7 +403,7 @@ public class PlayerCapImpl implements IPlayerCap {
         return false;
     }*/
 
-    @Override
+    /*@Override
     public boolean finishMission(PlayerEntity player) {
         /*if (this.quest != null && this.quest.questObjective().isFinished())
         {
@@ -414,7 +414,7 @@ public class PlayerCapImpl implements IPlayerCap {
             this.quest = null;
             return true;
         }*/
-        return false;
+        /*return false;
     }
 
 
@@ -721,4 +721,4 @@ public class PlayerCapImpl implements IPlayerCap {
         nbt.setInteger("FoodBuffDuration", this.foodDuration);
         return nbt;
     }
-}
+}*/

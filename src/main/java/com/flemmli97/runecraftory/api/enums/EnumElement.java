@@ -1,24 +1,25 @@
 package com.flemmli97.runecraftory.api.enums;
 
 import com.google.common.collect.Maps;
+import net.minecraft.util.text.TextFormatting;
 
 import java.util.Map;
 
 public enum EnumElement {
-    NONE("white", "none"),
-    WATER("dark_blue", "water"),
-    EARTH("yellow", "earth"),
-    WIND("green", "wind"),
-    FIRE("dark_red", "fire"),
-    LIGHT("white", "light"),
-    DARK("dark_purple", "dark"),
-    LOVE("red", "love");
+    NONE(TextFormatting.GRAY, "none"),
+    WATER(TextFormatting.DARK_BLUE, "water"),
+    EARTH(TextFormatting.YELLOW, "earth"),
+    WIND(TextFormatting.GREEN, "wind"),
+    FIRE(TextFormatting.DARK_RED, "fire"),
+    LIGHT(TextFormatting.WHITE, "light"),
+    DARK(TextFormatting.DARK_PURPLE, "dark"),
+    LOVE(TextFormatting.RED, "love");
 
     private final String name;
-    private final String color;
+    private final TextFormatting color;
     private static final Map<String, EnumElement> map = Maps.newHashMap();
 
-    EnumElement(String color, String name) {
+    EnumElement(TextFormatting color, String name) {
         this.color = color;
         this.name = name;
     }
@@ -27,7 +28,7 @@ public enum EnumElement {
         return this.name;
     }
 
-    public String getColor() {
+    public TextFormatting getColor() {
         return this.color;
     }
 

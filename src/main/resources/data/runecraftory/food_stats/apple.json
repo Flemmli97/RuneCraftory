@@ -1,0 +1,10 @@
+{
+  "hpRegen": 3,
+  "rpRegen": 0,
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 0,
+  "duration": 500,
+  "effects": {},
+  "effectsPercentage": {},
+  "item": "minecraft:apple"
+}

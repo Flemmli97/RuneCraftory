@@ -20,3 +20,6 @@ build
 
 # things
 .DS_Store
+
+# datagen
+src/generated

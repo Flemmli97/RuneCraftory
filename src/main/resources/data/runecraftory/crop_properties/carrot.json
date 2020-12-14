@@ -1,0 +1,10 @@
+{
+  "bestSeason": [
+    "FALL"
+  ],
+  "badSeason": [],
+  "growth": 10,
+  "maxDrops": 3,
+  "regrowable": false,
+  "item": "minecraft:carrot"
+}

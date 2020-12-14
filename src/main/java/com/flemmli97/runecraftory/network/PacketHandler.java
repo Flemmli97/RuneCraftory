@@ -20,6 +20,11 @@ public class PacketHandler {
         int id = 0;
         dispatcher.registerMessage(id++, S2CAttackDebug.class, S2CAttackDebug::write, S2CAttackDebug::read, S2CAttackDebug::handle);
         dispatcher.registerMessage(id++, C2SRideJump.class, C2SRideJump::write, C2SRideJump::read, C2SRideJump::handle);
+        dispatcher.registerMessage(id++, S2CDataPackSync.class, S2CDataPackSync::write, S2CDataPackSync::read, S2CDataPackSync::handle);
+        dispatcher.registerMessage(id++, S2CMaxRunePoints.class, S2CMaxRunePoints::write, S2CMaxRunePoints::read, S2CMaxRunePoints::handle);
+        dispatcher.registerMessage(id++, S2CMoney.class, S2CMoney::write, S2CMoney::read, S2CMoney::handle);
+        dispatcher.registerMessage(id++, S2CRunePoints.class, S2CRunePoints::write, S2CRunePoints::read, S2CRunePoints::handle);
+
     }
 
     public static <T> void sendToClient(T message, ServerPlayerEntity player) {

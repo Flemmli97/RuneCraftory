@@ -7,6 +7,7 @@ import com.flemmli97.runecraftory.common.datapack.manager.CropManager;
 import com.flemmli97.runecraftory.common.datapack.manager.FoodManager;
 import com.flemmli97.runecraftory.common.datapack.manager.ItemStatManager;
 import net.minecraft.item.Item;
+import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.event.AddReloadListenerEvent;
 
 public class DataPackHandler {
@@ -31,5 +32,23 @@ public class DataPackHandler {
 
     public static FoodProperties getFoodStat(Item item) {
         return foods.get(item);
+    }
+
+    public static void toPacket(PacketBuffer buffer) {
+        itemStats.toPacket(buffer);
+        crops.toPacket(buffer);
+        foods.toPacket(buffer);
+    }
+
+    public static void fromPacket(PacketBuffer buffer) {
+        if (itemStats == null)
+            itemStats = new ItemStatManager();
+        if (crops == null)
+            crops = new CropManager();
+        if (foods == null)
+            foods = new FoodManager();
+        itemStats.fromPacket(buffer);
+        crops.fromPacket(buffer);
+        foods.fromPacket(buffer);
     }
 }
