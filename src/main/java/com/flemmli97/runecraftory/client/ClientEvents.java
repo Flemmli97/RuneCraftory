@@ -50,20 +50,20 @@ public class ClientEvents {
         List<ITextComponent> tooltip = Lists.newArrayList();
         CropProperties props = DataPackHandler.getCropStat(stack.getItem());
         if (props != null) {
-            for(ITextComponent text : props.texts())
+            for (ITextComponent text : props.texts())
                 tooltip.add(text);
         }
         boolean shift = Screen.hasShiftDown();
         if (shift) {
             FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
             if (food != null) {
-                for(ITextComponent text : food.texts())
+                for (ITextComponent text : food.texts())
                     tooltip.add(text);
             }
         }
         ItemStat stat = DataPackHandler.getStats(stack.getItem());
         if (stat != null) {
-            for(ITextComponent text : stat.texts(stack, shift))
+            for (ITextComponent text : stat.texts(stack, shift))
                 tooltip.add(text);
         }
         return tooltip;

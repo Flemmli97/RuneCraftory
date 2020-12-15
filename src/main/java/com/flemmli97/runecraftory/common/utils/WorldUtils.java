@@ -4,7 +4,7 @@ import net.minecraft.world.World;
 
 public class WorldUtils {
 
-    public static boolean canUpdateDaily(World world){
+    public static boolean canUpdateDaily(World world) {
         return false;
     }
 }

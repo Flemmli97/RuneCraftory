@@ -4,7 +4,7 @@ import com.flemmli97.runecraftory.common.config.MobConfig;
 import com.flemmli97.runecraftory.common.config.values.EntityProperties;
 import com.flemmli97.runecraftory.common.entities.monster.ai.HurtByTargetPredicate;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
-import com.flemmli97.runecraftory.lib.LibEntityConstants;
+import com.flemmli97.runecraftory.lib.LibConstants;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import com.flemmli97.runecraftory.network.S2CAttackDebug;
 import com.flemmli97.tenshilib.api.entity.IAnimated;
@@ -159,7 +159,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     protected void registerData() {
         super.registerData();
         this.dataManager.register(owner, Optional.empty());
-        this.dataManager.register(mobLevel, LibEntityConstants.baseLevel);
+        this.dataManager.register(mobLevel, LibConstants.baseLevel);
         this.dataManager.register(levelXP, 0);
     }
 

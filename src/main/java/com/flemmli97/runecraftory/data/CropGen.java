@@ -15,8 +15,8 @@ public class CropGen extends CropProvider {
 
     @Override
     protected void add() {
-        this.addStat("wheat_seed", Items.WHEAT_SEEDS, new CropProperties.MutableCropProps(7,4,true).addGoodSeason(EnumSeason.FALL));
-        this.addStat("carrot", Items.CARROT, new CropProperties.MutableCropProps(10,3,false).addGoodSeason(EnumSeason.FALL));
+        this.addStat("wheat_seed", Items.WHEAT_SEEDS, new CropProperties.MutableCropProps(7, 4, true).addGoodSeason(EnumSeason.FALL));
+        this.addStat("carrot", Items.CARROT, new CropProperties.MutableCropProps(10, 3, false).addGoodSeason(EnumSeason.FALL));
 
     }
 }

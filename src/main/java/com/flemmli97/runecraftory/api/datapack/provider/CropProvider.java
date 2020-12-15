@@ -47,9 +47,9 @@ public abstract class CropProvider implements IDataProvider {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/crop_properties/" + res.getPath() + ".json");
             try {
                 JsonElement obj = GSON.toJsonTree(builder);
-                if(obj.isJsonObject())
+                if (obj.isJsonObject())
                     item.get(res).accept(obj.getAsJsonObject());
-                IDataProvider.save(GSON, cache,obj, path);
+                IDataProvider.save(GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save crop properties {}", path, e);
             }
@@ -68,7 +68,7 @@ public abstract class CropProvider implements IDataProvider {
     public void addStat(String id, Item item, CropProperties.MutableCropProps builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj->obj.addProperty("item", item.getRegistryName().toString()));
+        this.item.put(res, obj -> obj.addProperty("item", item.getRegistryName().toString()));
     }
 
     public void addStat(String id, ITag<Item> tag, int growth, int maxDrops, boolean regrowable) {
@@ -78,6 +78,6 @@ public abstract class CropProvider implements IDataProvider {
     public void addStat(String id, ITag<Item> tag, CropProperties.MutableCropProps builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj->obj.addProperty("tag", TagCollectionManager.getTagManager().getItems().getTagId(tag).toString()));
+        this.item.put(res, obj -> obj.addProperty("tag", TagCollectionManager.getTagManager().getItems().getTagId(tag).toString()));
     }
 }

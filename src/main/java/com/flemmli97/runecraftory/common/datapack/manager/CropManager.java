@@ -29,10 +29,10 @@ public class CropManager extends JsonReloadListener {
     }
 
     public CropProperties get(Item item) {
-        if(crops.containsKey(item.getRegistryName()))
+        if (crops.containsKey(item.getRegistryName()))
             return crops.get(item.getRegistryName());
-        for(ResourceLocation tag : item.getTags())
-            if(crops.containsKey(tag))
+        for (ResourceLocation tag : item.getTags())
+            if (crops.containsKey(tag))
                 return crops.get(tag);
         return null;
     }
@@ -43,11 +43,10 @@ public class CropManager extends JsonReloadListener {
         data.forEach((fres, el) -> {
             try {
                 JsonObject obj = el.getAsJsonObject();
-                if(obj.has("tag")) {
+                if (obj.has("tag")) {
                     ITag<Item> tag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(obj.get("tag").getAsString()));
-                    tag.values().forEach(item->builder.put(item.getRegistryName(), GSON.fromJson(el, CropProperties.class)));
-                }
-                else if(obj.has("item")){
+                    tag.values().forEach(item -> builder.put(item.getRegistryName(), GSON.fromJson(el, CropProperties.class)));
+                } else if (obj.has("item")) {
                     ResourceLocation res = new ResourceLocation(obj.get("item").getAsString());
                     builder.put(res, GSON.fromJson(el, CropProperties.class));
                 }
@@ -68,8 +67,10 @@ public class CropManager extends JsonReloadListener {
     }
 
     public void fromPacket(PacketBuffer buffer) {
+        ImmutableMap.Builder<ResourceLocation, CropProperties> builder = ImmutableMap.builder();
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            crops.put(buffer.readResourceLocation(), CropProperties.fromPacket(buffer));
+            builder.put(buffer.readResourceLocation(), CropProperties.fromPacket(buffer));
+        crops = builder.build();
     }
 }

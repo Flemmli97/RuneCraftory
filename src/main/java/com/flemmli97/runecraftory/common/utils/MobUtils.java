@@ -1,10 +1,12 @@
 package com.flemmli97.runecraftory.common.utils;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 
@@ -20,13 +22,11 @@ public class MobUtils {
 
     public static float getAttributeValue(LivingEntity attacker, Attribute att, Entity target) {
         float increase = 0;
-        /*if (attacker instanceof PlayerEntity) {
-            IPlayer cap = entity.getCapability(PlayerCapProvider.PlayerCap, null);
-            increase += cap.getAttributeValue(att);
-        } else if (attacker instanceof IRFNpc) {
-            increase += ((IRFNpc) entity).getAttributeValue(att);
-        } else */
-        if (attacker.getAttribute(att) != null) {
+        if (attacker instanceof PlayerEntity) {
+            increase += attacker.getCapability(PlayerCapProvider.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) attacker, att)).orElse(0);
+            //} else if (attacker instanceof IRFNpc) {
+            //    increase += ((IRFNpc) entity).getAttributeValue(att);
+        } else if (attacker.getAttribute(att) != null) {
             increase += (float) attacker.getAttribute(att).getValue();
         }
         if (!(target instanceof LivingEntity))
@@ -34,17 +34,18 @@ public class MobUtils {
         Attribute opp = opposing(att);
         if (opp == null)
             return increase;
-        LivingEntity lT = (LivingEntity) target;
-        if (lT.getAttribute(opp) != null)
-            increase -= lT.getAttribute(opp).getValue();
-        /*if (target instanceof IEntityBase && target.getAttributeMap().getAttributeInstance(resAtt) != null) {
-            increase -= (int) target.getAttributeMap().getAttributeInstance(resAtt).getAttributeValue();
+        if (target instanceof PlayerEntity) {
+            increase -= target.getCapability(PlayerCapProvider.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) target, att)).orElse(0);
+        }
+                /*
         } else if (target instanceof IRFNpc) {
             increase -= ((IRFNpc) target).getAttributeValue(att);
-        } else if (target instanceof EntityPlayer) {
-            IPlayer cap = target.getCapability(PlayerCapProvider.PlayerCap, null);
-            increase -= cap.getAttributeValue(att);
-        }*/
+        */
+        else {
+            LivingEntity lT = (LivingEntity) target;
+            if (lT.getAttribute(opp) != null)
+                increase -= lT.getAttribute(opp).getValue();
+        }
         return increase;
     }
 

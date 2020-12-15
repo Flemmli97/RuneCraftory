@@ -3,6 +3,8 @@ package com.flemmli97.runecraftory.common.capability;
 import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.enums.EnumShop;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
+import com.flemmli97.runecraftory.common.config.GeneralConfig;
+import com.flemmli97.runecraftory.common.config.values.SkillProperties;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
@@ -12,7 +14,7 @@ import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.WorldUtils;
-import com.flemmli97.runecraftory.lib.LibEntityConstants;
+import com.flemmli97.runecraftory.lib.LibConstants;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import com.flemmli97.runecraftory.network.S2CEquipmentUpdate;
 import com.flemmli97.runecraftory.network.S2CFoodPkt;
@@ -26,6 +28,7 @@ import com.google.common.collect.Maps;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
@@ -43,15 +46,16 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Collections;
 import java.util.Map;
 
 public class PlayerCapImpl implements IPlayerCap {
 
     //max runepoints possible: 2883
-    private int money = 0;
+    private int money = GeneralConfig.startingMoney;
     private int runePointsMax = 56;
     private int runePoints = this.runePointsMax;
-    private float str = 5;
+    private float str = 4;
     private float vit = 4;
     private float intel = 5;
     private Map<Attribute, Integer> headBonus = Maps.newHashMap();
@@ -128,8 +132,8 @@ public class PlayerCapImpl implements IPlayerCap {
     @Override
     public void setMaxHealth(PlayerEntity player, float amount) {
         ModifiableAttributeInstance health = player.getAttribute(Attributes.GENERIC_MAX_HEALTH);
-        health.removeModifier(LibEntityConstants.maxHealthModifier);
-        health.addPersistentModifier(new AttributeModifier(LibEntityConstants.maxHealthModifier, "rf.hpModifier", amount - health.getBaseValue(), AttributeModifier.Operation.ADDITION));
+        health.removeModifier(LibConstants.maxHealthModifier);
+        health.addPersistentModifier(new AttributeModifier(LibConstants.maxHealthModifier, "rf.hpModifier", amount - health.getBaseValue(), AttributeModifier.Operation.ADDITION));
     }
 
     @Override
@@ -142,7 +146,6 @@ public class PlayerCapImpl implements IPlayerCap {
         return this.runePointsMax + this.rpFoodBuff;
     }
 
-    //TODO: boolean forced. so healing spells wont damage player when not enough rp
     @Override
     public boolean decreaseRunePoints(PlayerEntity player, int amount, boolean damage) {
         if (!player.isCreative()) {
@@ -220,7 +223,7 @@ public class PlayerCapImpl implements IPlayerCap {
         this.addXp(player, amount, false);
     }
 
-    private void addXp(PlayerEntity player, int amount, boolean leveledUp){
+    private void addXp(PlayerEntity player, int amount, boolean leveledUp) {
         //if (!player.capabilities.isCreativeMode)
         {
             int neededXP = LevelCalc.xpAmountForLevelUp(this.level[0]);
@@ -324,7 +327,7 @@ public class PlayerCapImpl implements IPlayerCap {
     }
 
     @Override
-    public int getAttributeValue(Attribute att) {
+    public int getAttributeValue(PlayerEntity player, Attribute att) {
         int i = (int) Math.floor(this.headBonus.getOrDefault(att, 0) +
                 this.bodyBonus.getOrDefault(att, 0) +
                 this.legsBonus.getOrDefault(att, 0) +
@@ -340,6 +343,9 @@ public class PlayerCapImpl implements IPlayerCap {
         if (att == ModAttributes.RF_MAGIC_DEFENCE.get())
             i += this.getVit() * 0.5;
         i += this.foodBuffs.getOrDefault(att, 0);
+
+        AttributeModifierManager atts = player.getAttributes();
+        i += atts.hasAttribute(att) ? atts.getValue(att) : 0;
         return i;
     }
 
@@ -377,20 +383,21 @@ public class PlayerCapImpl implements IPlayerCap {
             } else {
                 this.skillMap.get(skill)[1] += xp;
                 if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
-                    PacketHandler.sendToClient(new S2CSkillLevelPkt(this, skill, leveledUp? S2CSkillLevelPkt.Type.LEVELUP : S2CSkillLevelPkt.Type.SET), (ServerPlayerEntity) player);
+                    PacketHandler.sendToClient(new S2CSkillLevelPkt(this, skill, leveledUp ? S2CSkillLevelPkt.Type.LEVELUP : S2CSkillLevelPkt.Type.SET), (ServerPlayerEntity) player);
                 }
             }
         }
     }
 
     private void onSkillLevelUp(EnumSkills skill, PlayerEntity player) {
-        this.setMaxHealth(player, this.getHealth(player) + skill.getHealthIncrease());
-        this.regenHealth(player, skill.getHealthIncrease());
-        this.runePointsMax += skill.getRPIncrease();
-        this.runePoints += skill.getRPIncrease();
-        this.str += skill.getStrIncrease();
-        this.vit += skill.getVitIncrease();
-        this.intel += skill.getIntelIncrease();
+        SkillProperties prop = GeneralConfig.skillProps.get(skill);
+        this.setMaxHealth(player, this.getHealth(player) + prop.getHealthIncrease());
+        this.regenHealth(player, prop.getHealthIncrease());
+        this.runePointsMax += prop.getRPIncrease();
+        this.runePoints += prop.getRPIncrease();
+        this.str += prop.getStrIncrease();
+        this.vit += prop.getVitIncrease();
+        this.intel += prop.getIntelIncrease();
     }
 
     @Override
@@ -485,7 +492,7 @@ public class PlayerCapImpl implements IPlayerCap {
         this.removeFoodEffect(player);
         FoodProperties prop = DataPackHandler.getFoodStat(stack.getItem());
         Map<Attribute, Integer> gain = prop.effects();
-        prop.effectsMultiplier().forEach((att, f)->{
+        prop.effectsMultiplier().forEach((att, f) -> {
             int i = 0;
             if (att == Attributes.GENERIC_MAX_HEALTH)
                 i += this.getMaxHealth(player) * f;
@@ -500,7 +507,7 @@ public class PlayerCapImpl implements IPlayerCap {
             i += gain.getOrDefault(att, 0);
             gain.put(att, i);
         });
-        this.rpFoodBuff = this.runePointsMax*prop.getRpPercentIncrease() + prop.getRpIncrease();
+        this.rpFoodBuff = this.runePointsMax * prop.getRpPercentIncrease() + prop.getRpIncrease();
         this.foodBuffs = gain;
         this.foodDuration = prop.duration();
         if (player instanceof ServerPlayerEntity) {
@@ -510,7 +517,7 @@ public class PlayerCapImpl implements IPlayerCap {
 
     @Override
     public void removeFoodEffect(PlayerEntity player) {
-        this.foodBuffs.clear();
+        this.foodBuffs = Collections.emptyMap();
         this.foodDuration = -1;
         this.rpFoodBuff = 0;
         if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
@@ -519,7 +526,7 @@ public class PlayerCapImpl implements IPlayerCap {
     }
 
     @Override
-    public int rpFoodBuff(){
+    public int rpFoodBuff() {
         return this.rpFoodBuff;
     }
 
@@ -555,7 +562,7 @@ public class PlayerCapImpl implements IPlayerCap {
         player.setMotion(move.x, player.getMotion().y, move.z);
         for (LivingEntity e : player.world.getEntitiesWithinAABB(LivingEntity.class, player.getBoundingBox().grow(1.0))) {
             if (e != player) {
-                float damagePhys = this.getAttributeValue(Attributes.GENERIC_ATTACK_DAMAGE);
+                float damagePhys = this.getAttributeValue(player, Attributes.GENERIC_ATTACK_DAMAGE);
                 this.decreaseRunePoints(player, 2, true);
                 this.increaseSkill(EnumSkills.FIST, player, 5);
                 /*if (!(e instanceof IEntityBase)) {
@@ -576,6 +583,7 @@ public class PlayerCapImpl implements IPlayerCap {
             this.refreshShop(player);
             this.lastUpdated = player.world.getGameTime();
         }
+        this.getInv().update(player);
         this.ticker = Math.max(--this.ticker, 0);
         this.foodDuration = Math.max(--this.foodDuration, -1);
         if (this.foodDuration == 0) {
@@ -672,7 +680,7 @@ public class PlayerCapImpl implements IPlayerCap {
         }
         this.shipping.deserializeNBT(nbt.getCompound("Shipping"));
         CompoundNBT shipped = nbt.getCompound("ShippedItems");
-        for(String key : shipped.keySet()){
+        for (String key : shipped.keySet()) {
             this.shippedItems.put(new ResourceLocation(key), shipped.getInt(key));
         }
         CompoundNBT shops = nbt.getCompound("ShopItems");

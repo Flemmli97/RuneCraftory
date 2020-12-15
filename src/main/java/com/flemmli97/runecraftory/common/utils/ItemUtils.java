@@ -48,7 +48,7 @@ public class ItemUtils {
         return 0;
     }
 
-    public static int getSellPrice(ItemStack stack, ItemStat stat){
+    public static int getSellPrice(ItemStack stack, ItemStat stat) {
         return stat.getSell() * ItemNBT.itemLevel(stack);
     }
 
@@ -60,7 +60,7 @@ public class ItemUtils {
         return 0;
     }
 
-    public static int getBuyPrice(ItemStack stack, ItemStat stat){
+    public static int getBuyPrice(ItemStack stack, ItemStat stat) {
         return stat.getBuy();
     }
 }

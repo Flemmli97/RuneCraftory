@@ -3,6 +3,9 @@ package com.flemmli97.runecraftory;
 import com.flemmli97.runecraftory.client.ClientEvents;
 import com.flemmli97.runecraftory.client.ClientRegister;
 import com.flemmli97.runecraftory.common.MobModule;
+import com.flemmli97.runecraftory.common.capability.IPlayerCap;
+import com.flemmli97.runecraftory.common.capability.PlayerCapImpl;
+import com.flemmli97.runecraftory.common.capability.PlayerCapNetwork;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.events.PlayerEvents;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -13,6 +16,7 @@ import com.flemmli97.runecraftory.common.registry.ModPotions;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -74,5 +78,6 @@ public class RuneCraftory {
     public void common(FMLCommonSetupEvent event) {
         PacketHandler.register();
         event.enqueueWork(() -> ModEntities.registerAttributes());
+        CapabilityManager.INSTANCE.register(IPlayerCap.class, new PlayerCapNetwork(), PlayerCapImpl::new);
     }
 }

@@ -1,8 +1,7 @@
 package com.flemmli97.runecraftory.api.datapack.provider;
 
-import com.flemmli97.runecraftory.api.datapack.AttributeSerializer;
-import com.flemmli97.runecraftory.api.datapack.EffectSerializer;
 import com.flemmli97.runecraftory.api.datapack.FoodProperties;
+import com.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -16,6 +15,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -30,8 +30,8 @@ public abstract class FoodProvider implements IDataProvider {
     private static final Logger LOGGER = LogManager.getLogger();
 
     private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping()
-            .registerTypeAdapter(Attribute.class, new AttributeSerializer())
-            .registerTypeAdapter(Effect.class, new EffectSerializer()).create();
+            .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(ForgeRegistries.ATTRIBUTES))
+            .registerTypeAdapter(Effect.class, new RegistryObjectSerializer<>(ForgeRegistries.POTIONS)).create();
 
     private final Map<ResourceLocation, FoodProperties.MutableFoodProps> data = new HashMap<>();
     private final Map<ResourceLocation, Consumer<JsonObject>> item = new HashMap<>();
@@ -53,7 +53,7 @@ public abstract class FoodProvider implements IDataProvider {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/food_stats/" + res.getPath() + ".json");
             try {
                 JsonElement obj = GSON.toJsonTree(builder);
-                if(obj.isJsonObject())
+                if (obj.isJsonObject())
                     item.get(res).accept(obj.getAsJsonObject());
                 IDataProvider.save(GSON, cache, obj, path);
             } catch (IOException e) {
@@ -74,7 +74,7 @@ public abstract class FoodProvider implements IDataProvider {
     public void addStat(String id, Item item, FoodProperties.MutableFoodProps builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj->obj.addProperty("item", item.getRegistryName().toString()));
+        this.item.put(res, obj -> obj.addProperty("item", item.getRegistryName().toString()));
     }
 
     public void addStat(String id, ITag<Item> tag, int duration) {
@@ -84,6 +84,6 @@ public abstract class FoodProvider implements IDataProvider {
     public void addStat(String id, ITag<Item> tag, FoodProperties.MutableFoodProps builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj->obj.addProperty("tag", TagCollectionManager.getTagManager().getItems().getTagId(tag).toString()));
+        this.item.put(res, obj -> obj.addProperty("tag", TagCollectionManager.getTagManager().getItems().getTagId(tag).toString()));
     }
 }

@@ -1,9 +1,8 @@
 package com.flemmli97.runecraftory.common.datapack.manager;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.api.datapack.AttributeSerializer;
-import com.flemmli97.runecraftory.api.datapack.EffectSerializer;
 import com.flemmli97.runecraftory.api.datapack.FoodProperties;
+import com.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,14 +19,15 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
 
 public class FoodManager extends JsonReloadListener {
 
     private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization()
-            .registerTypeAdapter(Attribute.class, new AttributeSerializer())
-            .registerTypeAdapter(Effect.class, new EffectSerializer()).create();
+            .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(ForgeRegistries.ATTRIBUTES))
+            .registerTypeAdapter(Effect.class, new RegistryObjectSerializer<>(ForgeRegistries.POTIONS)).create();
     private Map<ResourceLocation, FoodProperties> food = ImmutableMap.of();
 
     public FoodManager() {
@@ -44,11 +44,10 @@ public class FoodManager extends JsonReloadListener {
         data.forEach((fres, el) -> {
             try {
                 JsonObject obj = el.getAsJsonObject();
-                if(obj.has("tag")) {
+                if (obj.has("tag")) {
                     ITag<Item> tag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(obj.get("tag").getAsString()));
-                    tag.values().forEach(item->builder.put(item.getRegistryName(), GSON.fromJson(el, FoodProperties.class)));
-                }
-                else if(obj.has("item")){
+                    tag.values().forEach(item -> builder.put(item.getRegistryName(), GSON.fromJson(el, FoodProperties.class)));
+                } else if (obj.has("item")) {
                     ResourceLocation res = new ResourceLocation(obj.get("item").getAsString());
                     builder.put(res, GSON.fromJson(el, FoodProperties.class));
                 }
@@ -69,8 +68,10 @@ public class FoodManager extends JsonReloadListener {
     }
 
     public void fromPacket(PacketBuffer buffer) {
+        ImmutableMap.Builder<ResourceLocation, FoodProperties> builder = ImmutableMap.builder();
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            food.put(buffer.readResourceLocation(), FoodProperties.fromPacket(buffer));
+            builder.put(buffer.readResourceLocation(), FoodProperties.fromPacket(buffer));
+        food = builder.build();
     }
 }

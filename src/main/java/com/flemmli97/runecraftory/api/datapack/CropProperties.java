@@ -79,7 +79,7 @@ public class CropProperties {
         if (this.translationTexts == null) {
             this.translationTexts = Lists.newArrayList();
             if (!this.bestSeason.isEmpty()) {
-                IFormattableTextComponent season = new TranslationTextComponent("season.best").append(": ");
+                IFormattableTextComponent season = new TranslationTextComponent("tooltip.season.best").append(": ");
                 int i = 0;
                 for (EnumSeason seas : this.bestSeasons()) {
                     season.append(i != 0 ? "/" : "").formatted(TextFormatting.GRAY)
@@ -91,7 +91,7 @@ public class CropProperties {
             EnumSet<EnumSeason> badSeasons = EnumSet.copyOf(this.badSeason);
             badSeasons.removeAll(this.bestSeasons());
             if (!badSeasons.isEmpty()) {
-                IFormattableTextComponent season = new TranslationTextComponent("season.bad").append(": ");
+                IFormattableTextComponent season = new TranslationTextComponent("tooltip.season.bad").append(": ");
                 int i = 0;
                 for (EnumSeason seas : badSeasons) {
                     season.append(i != 0 ? "/" : "").formatted(TextFormatting.GRAY)
@@ -100,8 +100,8 @@ public class CropProperties {
                 }
                 this.translationTexts.add(season);
             }
-            IFormattableTextComponent growth = new TranslationTextComponent("growth", this.growth());
-            ITextComponent harvest = new TranslationTextComponent("harvested", this.maxDrops());
+            IFormattableTextComponent growth = new TranslationTextComponent("tooltip.growth", this.growth());
+            ITextComponent harvest = new TranslationTextComponent("tooltip.harvested", this.maxDrops());
             this.translationTexts.add(growth.append("  ").append(harvest));
         }
         return this.translationTexts;

@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.registry;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.api.enums.EnumToolTier;
 import com.flemmli97.runecraftory.common.RFCreativeTabs;
 import com.flemmli97.runecraftory.common.items.tools.ItemBrush;
@@ -12,8 +13,18 @@ import com.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolHoe;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolWateringCan;
+import com.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemHammerBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemShortSwordBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
+import com.flemmli97.runecraftory.common.items.weapons.shortsword.ItemSeedSword;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -36,16 +47,16 @@ public class ModItems {
     public static final RegistryObject<Item> sickleSilver = sickle(EnumToolTier.SILVER);
     public static final RegistryObject<Item> sickleGold = sickle(EnumToolTier.GOLD);
     public static final RegistryObject<Item> sicklePlatinum = sickle(EnumToolTier.PLATINUM);
-    public static final RegistryObject<Item> hammerScrap = hammer(EnumToolTier.SCRAP);
-    public static final RegistryObject<Item> hammerIron = hammer(EnumToolTier.IRON);
-    public static final RegistryObject<Item> hammerSilver = hammer(EnumToolTier.SILVER);
-    public static final RegistryObject<Item> hammerGold = hammer(EnumToolTier.GOLD);
-    public static final RegistryObject<Item> hammerPlatinum = hammer(EnumToolTier.PLATINUM);
-    public static final RegistryObject<Item> axeScrap = axe(EnumToolTier.SCRAP);
-    public static final RegistryObject<Item> axeIron = axe(EnumToolTier.IRON);
-    public static final RegistryObject<Item> axeSilver = axe(EnumToolTier.SILVER);
-    public static final RegistryObject<Item> axeGold = axe(EnumToolTier.GOLD);
-    public static final RegistryObject<Item> axePlatinum = axe(EnumToolTier.PLATINUM);
+    public static final RegistryObject<Item> hammerScrap = hammerTool(EnumToolTier.SCRAP);
+    public static final RegistryObject<Item> hammerIron = hammerTool(EnumToolTier.IRON);
+    public static final RegistryObject<Item> hammerSilver = hammerTool(EnumToolTier.SILVER);
+    public static final RegistryObject<Item> hammerGold = hammerTool(EnumToolTier.GOLD);
+    public static final RegistryObject<Item> hammerPlatinum = hammerTool(EnumToolTier.PLATINUM);
+    public static final RegistryObject<Item> axeScrap = axeTool(EnumToolTier.SCRAP);
+    public static final RegistryObject<Item> axeIron = axeTool(EnumToolTier.IRON);
+    public static final RegistryObject<Item> axeSilver = axeTool(EnumToolTier.SILVER);
+    public static final RegistryObject<Item> axeGold = axeTool(EnumToolTier.GOLD);
+    public static final RegistryObject<Item> axePlatinum = axeTool(EnumToolTier.PLATINUM);
     public static final RegistryObject<Item> fishingRodScrap = fishingRod(EnumToolTier.SCRAP);
     public static final RegistryObject<Item> fishingRodIron = fishingRod(EnumToolTier.IRON);
     public static final RegistryObject<Item> fishingRodSilver = fishingRod(EnumToolTier.SILVER);
@@ -55,246 +66,246 @@ public class ModItems {
     public static final RegistryObject<Item> brush = ITEMS.register("brush", () -> new ItemBrush(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> glass = ITEMS.register("magnifying_glass", () -> new ItemToolGlass(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
 
-    /*public static final RegistryObject<Item> seedSword = new ItemSeedSword();
-    public static final RegistryObject<Item> broadSword = new ItemShortSwordBase("broad_sword");
-    public static final RegistryObject<Item> steelSword = new ItemShortSwordBase("steel_sword");
-    public static final RegistryObject<Item> steelSwordPlus = new ItemShortSwordBase("steel_sword_plus");
-    public static final RegistryObject<Item> cutlass = new ItemShortSwordBase("cutlass");
-    public static final RegistryObject<Item> aquaSword = new ItemShortSwordBase("aqua_sword");
-    public static final RegistryObject<Item> invisiBlade = new ItemShortSwordBase("invisiblade");
-    public static final RegistryObject<Item> defender = new ItemShortSwordBase("defender");
-    public static final RegistryObject<Item> burningSword = new ItemShortSwordBase("burning_sword");
-    public static final RegistryObject<Item> gorgeousSword = new ItemShortSwordBase("gorgeous_sword");
-    public static final RegistryObject<Item> gaiaSword = new ItemShortSwordBase("gaia_sword");
-    public static final RegistryObject<Item> snakeSword = new ItemShortSwordBase("snake_sword");
-    public static final RegistryObject<Item> luckBlade = new ItemShortSwordBase("luck_blade");
-    public static final RegistryObject<Item> platinumSword = new ItemShortSwordBase("platinum_sword");
-    public static final RegistryObject<Item> windSword = new ItemShortSwordBase("wind_sword");
-    public static final RegistryObject<Item> chaosBlade = new ItemShortSwordBase("chaos_blade");
-    public static final RegistryObject<Item> sakura = new ItemShortSwordBase("sakura");
-    public static final RegistryObject<Item> sunspot = new ItemShortSwordBase("sunspot");
-    public static final RegistryObject<Item> durendal = new ItemShortSwordBase("durendal");
-    public static final RegistryObject<Item> aerialBlade = new ItemShortSwordBase("aerial_blade");
-    public static final RegistryObject<Item> grantale = new ItemShortSwordBase("grantale");
-    public static final RegistryObject<Item> smashBlade = new ItemShortSwordBase("smash_blade");
-    public static final RegistryObject<Item> icifier = new ItemShortSwordBase("icifier");
-    public static final RegistryObject<Item> soulEater = new ItemShortSwordBase("soul_eater");
-    public static final RegistryObject<Item> raventine = new ItemShortSwordBase("raventine");
-    public static final RegistryObject<Item> starSaber = new ItemShortSwordBase("star_saber");
-    public static final RegistryObject<Item> platinumSwordPlus = new ItemShortSwordBase("platinum_sword_plus");
-    public static final RegistryObject<Item> dragonSlayer = new ItemShortSwordBase("dragon_slayer");
-    public static final RegistryObject<Item> runeBlade = new ItemShortSwordBase("rune_blade");
-    public static final RegistryObject<Item> gladius = new ItemShortSwordBase("gladius");
-    public static final RegistryObject<Item> runeLegend = new ItemShortSwordBase("rune_legend");
-    public static final RegistryObject<Item> backScratcher = new ItemShortSwordBase("back_scratcher");
-    public static final RegistryObject<Item> spoon = new ItemShortSwordBase("spoon");
-    public static final RegistryObject<Item> veggieBlade = new ItemShortSwordBase("veggie_blade");
+    public static final RegistryObject<Item> seedSword = ITEMS.register("seed_sword", ()->new ItemSeedSword(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> broadSword = shortSword("broad_sword");
+    public static final RegistryObject<Item> steelSword = shortSword("steel_sword");
+    public static final RegistryObject<Item> steelSwordPlus = shortSword("steel_sword_plus");
+    public static final RegistryObject<Item> cutlass = shortSword("cutlass");
+    public static final RegistryObject<Item> aquaSword = shortSword("aqua_sword");
+    public static final RegistryObject<Item> invisiBlade = shortSword("invisiblade");
+    public static final RegistryObject<Item> defender = shortSword("defender");
+    public static final RegistryObject<Item> burningSword = shortSword("burning_sword");
+    public static final RegistryObject<Item> gorgeousSword = shortSword("gorgeous_sword");
+    public static final RegistryObject<Item> gaiaSword = shortSword("gaia_sword");
+    public static final RegistryObject<Item> snakeSword = shortSword("snake_sword");
+    public static final RegistryObject<Item> luckBlade = shortSword("luck_blade");
+    public static final RegistryObject<Item> platinumSword = shortSword("platinum_sword");
+    public static final RegistryObject<Item> windSword = shortSword("wind_sword");
+    public static final RegistryObject<Item> chaosBlade = shortSword("chaos_blade");
+    public static final RegistryObject<Item> sakura = shortSword("sakura");
+    public static final RegistryObject<Item> sunspot = shortSword("sunspot");
+    public static final RegistryObject<Item> durendal = shortSword("durendal");
+    public static final RegistryObject<Item> aerialBlade = shortSword("aerial_blade");
+    public static final RegistryObject<Item> grantale = shortSword("grantale");
+    public static final RegistryObject<Item> smashBlade = shortSword("smash_blade");
+    public static final RegistryObject<Item> icifier = shortSword("icifier");
+    public static final RegistryObject<Item> soulEater = shortSword("soul_eater");
+    public static final RegistryObject<Item> raventine = shortSword("raventine");
+    public static final RegistryObject<Item> starSaber = shortSword("star_saber");
+    public static final RegistryObject<Item> platinumSwordPlus = shortSword("platinum_sword_plus");
+    public static final RegistryObject<Item> dragonSlayer = shortSword("dragon_slayer");
+    public static final RegistryObject<Item> runeBlade = shortSword("rune_blade");
+    public static final RegistryObject<Item> gladius = shortSword("gladius");
+    public static final RegistryObject<Item> runeLegend = shortSword("rune_legend");
+    public static final RegistryObject<Item> backScratcher = shortSword("back_scratcher");
+    public static final RegistryObject<Item> spoon = shortSword("spoon");
+    public static final RegistryObject<Item> veggieBlade = shortSword("veggie_blade");
 
-    public static final RegistryObject<Item> claymore = new ItemLongSwordBase("claymore");
-    public static final RegistryObject<Item> zweihaender = new ItemLongSwordBase("zweihaender");
-    public static final RegistryObject<Item> zweihaenderPlus = new ItemLongSwordBase("zweihaender_plus");
-    public static final RegistryObject<Item> greatSword = new ItemLongSwordBase("great_sword");
-    public static final RegistryObject<Item> seaCutter = new ItemLongSwordBase("seaCutter");
-    public static final RegistryObject<Item> cycloneBlade = new ItemLongSwordBase("cyclone_blade");
-    public static final RegistryObject<Item> poisonBlade = new ItemLongSwordBase("poison_blade");
-    public static final RegistryObject<Item> katzbalger = new ItemLongSwordBase("katzbalger");
-    public static final RegistryObject<Item> earthShade = new ItemLongSwordBase("earth_shade");
-    public static final RegistryObject<Item> bigKnife = new ItemLongSwordBase("big_knife");
-    public static final RegistryObject<Item> katana = new ItemLongSwordBase("katana");
-    public static final RegistryObject<Item> flameSaber = new ItemLongSwordBase("flame_saber");
-    public static final RegistryObject<Item> bioSmasher = new ItemLongSwordBase("bio_smasher");
-    public static final RegistryObject<Item> snowCrown = new ItemLongSwordBase("snow_crown");
-    public static final RegistryObject<Item> dancingDicer = new ItemLongSwordBase("dancing_dicer");
-    public static final RegistryObject<Item> flamberge = new ItemLongSwordBase("flamberge");
-    public static final RegistryObject<Item> flambergePlus = new ItemLongSwordBase("flamberge_plus");
-    public static final RegistryObject<Item> volcanon = new ItemLongSwordBase("volcanon");
-    public static final RegistryObject<Item> psycho = new ItemLongSwordBase("psycho");
-    public static final RegistryObject<Item> shineBlade = new ItemLongSwordBase("shine_blade");
-    public static final RegistryObject<Item> grandSmasher = new ItemLongSwordBase("grand_smasher");
-    public static final RegistryObject<Item> belzebuth = new ItemLongSwordBase("belzebuth");
-    public static final RegistryObject<Item> orochi = new ItemLongSwordBase("orochi");
-    public static final RegistryObject<Item> punisher = new ItemLongSwordBase("punisher");
-    public static final RegistryObject<Item> steelSlicer = new ItemLongSwordBase("steel_slicer");
-    public static final RegistryObject<Item> moonShadow = new ItemLongSwordBase("moon_shadow");
-    public static final RegistryObject<Item> blueEyedBlade = new ItemLongSwordBase("blue_eyed_blade");
-    public static final RegistryObject<Item> balmung = new ItemLongSwordBase("balmung");
-    public static final RegistryObject<Item> braveheart = new ItemLongSwordBase("braveheart");
-    public static final RegistryObject<Item> forceElement = new ItemLongSwordBase("force_element");
-    public static final RegistryObject<Item> heavensAsunder = new ItemLongSwordBase("heavens_asunder");
-    public static final RegistryObject<Item> caliburn = new ItemLongSwordBase("caliburn");
-    public static final RegistryObject<Item> dekash = new ItemLongSwordBase("dekash");
-    public static final RegistryObject<Item> daicone = new ItemLongSwordBase("daicone");
+    public static final RegistryObject<Item> claymore = longSword("claymore");
+    public static final RegistryObject<Item> zweihaender = longSword("zweihaender");
+    public static final RegistryObject<Item> zweihaenderPlus = longSword("zweihaender_plus");
+    public static final RegistryObject<Item> greatSword = longSword("great_sword");
+    public static final RegistryObject<Item> seaCutter = longSword("seaCutter");
+    public static final RegistryObject<Item> cycloneBlade = longSword("cyclone_blade");
+    public static final RegistryObject<Item> poisonBlade = longSword("poison_blade");
+    public static final RegistryObject<Item> katzbalger = longSword("katzbalger");
+    public static final RegistryObject<Item> earthShade = longSword("earth_shade");
+    public static final RegistryObject<Item> bigKnife = longSword("big_knife");
+    public static final RegistryObject<Item> katana = longSword("katana");
+    public static final RegistryObject<Item> flameSaber = longSword("flame_saber");
+    public static final RegistryObject<Item> bioSmasher = longSword("bio_smasher");
+    public static final RegistryObject<Item> snowCrown = longSword("snow_crown");
+    public static final RegistryObject<Item> dancingDicer = longSword("dancing_dicer");
+    public static final RegistryObject<Item> flamberge = longSword("flamberge");
+    public static final RegistryObject<Item> flambergePlus = longSword("flamberge_plus");
+    public static final RegistryObject<Item> volcanon = longSword("volcanon");
+    public static final RegistryObject<Item> psycho = longSword("psycho");
+    public static final RegistryObject<Item> shineBlade = longSword("shine_blade");
+    public static final RegistryObject<Item> grandSmasher = longSword("grand_smasher");
+    public static final RegistryObject<Item> belzebuth = longSword("belzebuth");
+    public static final RegistryObject<Item> orochi = longSword("orochi");
+    public static final RegistryObject<Item> punisher = longSword("punisher");
+    public static final RegistryObject<Item> steelSlicer = longSword("steel_slicer");
+    public static final RegistryObject<Item> moonShadow = longSword("moon_shadow");
+    public static final RegistryObject<Item> blueEyedBlade = longSword("blue_eyed_blade");
+    public static final RegistryObject<Item> balmung = longSword("balmung");
+    public static final RegistryObject<Item> braveheart = longSword("braveheart");
+    public static final RegistryObject<Item> forceElement = longSword("force_element");
+    public static final RegistryObject<Item> heavensAsunder = longSword("heavens_asunder");
+    public static final RegistryObject<Item> caliburn = longSword("caliburn");
+    public static final RegistryObject<Item> dekash = longSword("dekash");
+    public static final RegistryObject<Item> daicone = longSword("daicone");
 
-    public static final RegistryObject<Item> spear = new ItemSpearBase("spear");
-    public static final RegistryObject<Item> woodStaff = new ItemSpearBase("wood_staff");
-    public static final RegistryObject<Item> lance = new ItemSpearBase("lance");
-    public static final RegistryObject<Item> lancePlus = new ItemSpearBase("lance_plus");
-    public static final RegistryObject<Item> needleSpear = new ItemSpearBase("needle_spear");
-    public static final RegistryObject<Item> trident = new ItemSpearBase("trident");
-    public static final RegistryObject<Item> waterSpear = new ItemSpearBase("water_spear");
-    public static final RegistryObject<Item> halberd = new ItemSpearBase("halberd");
-    public static final RegistryObject<Item> corsesca = new ItemSpearBase("corsesca");
-    public static final RegistryObject<Item> corsescaPlus = new ItemSpearBase("corsesca_plus");
-    public static final RegistryObject<Item> poisonSpear = new ItemSpearBase("poison_spear");
-    public static final RegistryObject<Item> fiveStaff = new ItemSpearBase("five_staff");
-    public static final RegistryObject<Item> heavyLance = new ItemSpearBase("heavy_lance");
-    public static final RegistryObject<Item> featherLance = new ItemSpearBase("feather_lance");
-    public static final RegistryObject<Item> iceberg = new ItemSpearBase("iceberg");
-    public static final RegistryObject<Item> bloodLance = new ItemSpearBase("blood_lance");
-    public static final RegistryObject<Item> magicalLance = new ItemSpearBase("magical_lance");
-    public static final RegistryObject<Item> flareLance = new ItemSpearBase("flare_lance");
-    public static final RegistryObject<Item> brionac = new ItemSpearBase("brionac");
-    public static final RegistryObject<Item> poisonQueen = new ItemSpearBase("poison_queen");
-    public static final RegistryObject<Item> monkStaff = new ItemSpearBase("monk_staff");
-    public static final RegistryObject<Item> metus = new ItemSpearBase("metus");
-    public static final RegistryObject<Item> silentGrave = new ItemSpearBase("silent_grave");
-    public static final RegistryObject<Item> overbreak = new ItemSpearBase("overbreak");
-    public static final RegistryObject<Item> bjor = new ItemSpearBase("bjor");
-    public static final RegistryObject<Item> belvarose = new ItemSpearBase("belvarose");
-    public static final RegistryObject<Item> gaeBolg = new ItemSpearBase("gae_bolg");
-    public static final RegistryObject<Item> dragonsFang = new ItemSpearBase("dragons_fang");
-    public static final RegistryObject<Item> gungnir = new ItemSpearBase("gungnir");
-    public static final RegistryObject<Item> legion = new ItemSpearBase("legion");
-    public static final RegistryObject<Item> pitchfork = new ItemSpearBase("pitchfork");
-    public static final RegistryObject<Item> safetyLance = new ItemSpearBase("safety_lance");
-    public static final RegistryObject<Item> pineClub = new ItemSpearBase("pine_club");
+    public static final RegistryObject<Item> spear = spear("spear");
+    public static final RegistryObject<Item> woodStaff = spear("wood_staff");
+    public static final RegistryObject<Item> lance = spear("lance");
+    public static final RegistryObject<Item> lancePlus = spear("lance_plus");
+    public static final RegistryObject<Item> needleSpear = spear("needle_spear");
+    public static final RegistryObject<Item> trident = spear("trident");
+    public static final RegistryObject<Item> waterSpear = spear("water_spear");
+    public static final RegistryObject<Item> halberd = spear("halberd");
+    public static final RegistryObject<Item> corsesca = spear("corsesca");
+    public static final RegistryObject<Item> corsescaPlus = spear("corsesca_plus");
+    public static final RegistryObject<Item> poisonSpear = spear("poison_spear");
+    public static final RegistryObject<Item> fiveStaff = spear("five_staff");
+    public static final RegistryObject<Item> heavyLance = spear("heavy_lance");
+    public static final RegistryObject<Item> featherLance = spear("feather_lance");
+    public static final RegistryObject<Item> iceberg = spear("iceberg");
+    public static final RegistryObject<Item> bloodLance = spear("blood_lance");
+    public static final RegistryObject<Item> magicalLance = spear("magical_lance");
+    public static final RegistryObject<Item> flareLance = spear("flare_lance");
+    public static final RegistryObject<Item> brionac = spear("brionac");
+    public static final RegistryObject<Item> poisonQueen = spear("poison_queen");
+    public static final RegistryObject<Item> monkStaff = spear("monk_staff");
+    public static final RegistryObject<Item> metus = spear("metus");
+    public static final RegistryObject<Item> silentGrave = spear("silent_grave");
+    public static final RegistryObject<Item> overbreak = spear("overbreak");
+    public static final RegistryObject<Item> bjor = spear("bjor");
+    public static final RegistryObject<Item> belvarose = spear("belvarose");
+    public static final RegistryObject<Item> gaeBolg = spear("gae_bolg");
+    public static final RegistryObject<Item> dragonsFang = spear("dragons_fang");
+    public static final RegistryObject<Item> gungnir = spear("gungnir");
+    public static final RegistryObject<Item> legion = spear("legion");
+    public static final RegistryObject<Item> pitchfork = spear("pitchfork");
+    public static final RegistryObject<Item> safetyLance = spear("safety_lance");
+    public static final RegistryObject<Item> pineClub = spear("pine_club");
 
-    public static final RegistryObject<Item> battleAxe = new ItemAxeBase("battle_axe");
-    public static final RegistryObject<Item> battleScythe = new ItemAxeBase("battle_scythe");
-    public static final RegistryObject<Item> poleAxe = new ItemAxeBase("pole_axe");
-    public static final RegistryObject<Item> poleAxePlus = new ItemAxeBase("pole_axe_plus");
-    public static final RegistryObject<Item> greatAxe = new ItemAxeBase("great_axe");
-    public static final RegistryObject<Item> tomohawk = new ItemAxeBase("tomohawk");
-    public static final RegistryObject<Item> basiliskFang = new ItemAxeBase("basilisk_fang");
-    public static final RegistryObject<Item> rockAxe = new ItemAxeBase("rock_axe");
-    public static final RegistryObject<Item> demonAxe = new ItemAxeBase("demon_axe");
-    public static final RegistryObject<Item> frostAxe = new ItemAxeBase("frost_axe");
-    public static final RegistryObject<Item> crescentAxe = new ItemAxeBase("crescent_axe");
-    public static final RegistryObject<Item> crescentAxePlus = new ItemAxeBase("crescent_axe_plus");
-    public static final RegistryObject<Item> heatAxe = new ItemAxeBase("heat_axe");
-    public static final RegistryObject<Item> doubleEdge = new ItemAxeBase("double_edge");
-    public static final RegistryObject<Item> alldale = new ItemAxeBase("alldale");
-    public static final RegistryObject<Item> devilFinger = new ItemAxeBase("devil_finger");
-    public static final RegistryObject<Item> executioner = new ItemAxeBase("executioner");
-    public static final RegistryObject<Item> saintAxe = new ItemAxeBase("saint_axe");
-    public static final RegistryObject<Item> axe = new ItemAxeBase("axe");
-    public static final RegistryObject<Item> lollipop = new ItemAxeBase("lollipop");
+    public static final RegistryObject<Item> battleAxe = axe("battle_axe");
+    public static final RegistryObject<Item> battleScythe = axe("battle_scythe");
+    public static final RegistryObject<Item> poleAxe = axe("pole_axe");
+    public static final RegistryObject<Item> poleAxePlus = axe("pole_axe_plus");
+    public static final RegistryObject<Item> greatAxe = axe("great_axe");
+    public static final RegistryObject<Item> tomohawk = axe("tomohawk");
+    public static final RegistryObject<Item> basiliskFang = axe("basilisk_fang");
+    public static final RegistryObject<Item> rockAxe = axe("rock_axe");
+    public static final RegistryObject<Item> demonAxe = axe("demon_axe");
+    public static final RegistryObject<Item> frostAxe = axe("frost_axe");
+    public static final RegistryObject<Item> crescentAxe = axe("crescent_axe");
+    public static final RegistryObject<Item> crescentAxePlus = axe("crescent_axe_plus");
+    public static final RegistryObject<Item> heatAxe = axe("heat_axe");
+    public static final RegistryObject<Item> doubleEdge = axe("double_edge");
+    public static final RegistryObject<Item> alldale = axe("alldale");
+    public static final RegistryObject<Item> devilFinger = axe("devil_finger");
+    public static final RegistryObject<Item> executioner = axe("executioner");
+    public static final RegistryObject<Item> saintAxe = axe("saint_axe");
+    public static final RegistryObject<Item> axe = axe("axe");
+    public static final RegistryObject<Item> lollipop = axe("lollipop");
 
-    public static final RegistryObject<Item> battleHammer = new ItemHammerBase("battle_hammer");
-    public static final RegistryObject<Item> bat = new ItemHammerBase("bat");
-    public static final RegistryObject<Item> warHammer = new ItemHammerBase("war_hammer");
-    public static final RegistryObject<Item> warHammerPlus = new ItemHammerBase("war_hammer_plus");
-    public static final RegistryObject<Item> ironBat = new ItemHammerBase("iron_bat");
-    public static final RegistryObject<Item> greatHammer = new ItemHammerBase("great_hammer");
-    public static final RegistryObject<Item> iceHammer = new ItemHammerBase("ice_hammer");
-    public static final RegistryObject<Item> boneHammer = new ItemHammerBase("bone_hammer");
-    public static final RegistryObject<Item> strongStone = new ItemHammerBase("strong_stone");
-    public static final RegistryObject<Item> flameHammer = new ItemHammerBase("flame_hammer");
-    public static final RegistryObject<Item> gigantHammer = new ItemHammerBase("gigant_hammer");
-    public static final RegistryObject<Item> skyHammer = new ItemHammerBase("sky_hammer");
-    public static final RegistryObject<Item> gravitonHammer = new ItemHammerBase("graviton_hammer");
-    public static final RegistryObject<Item> spikedHammer = new ItemHammerBase("spiked_hammer");
-    public static final RegistryObject<Item> crystalHammer = new ItemHammerBase("crystal_hammer");
-    public static final RegistryObject<Item> schnabel = new ItemHammerBase("schnabel");
-    public static final RegistryObject<Item> gigantHammerPlus = new ItemHammerBase("gigant_hammer_plus");
-    public static final RegistryObject<Item> kongo = new ItemHammerBase("kongo");
-    public static final RegistryObject<Item> mjolnir = new ItemHammerBase("mjolnir");
-    public static final RegistryObject<Item> fatalCrush = new ItemHammerBase("fatal_crush");
-    public static final RegistryObject<Item> splashStar = new ItemHammerBase("splash_star");
-    public static final RegistryObject<Item> hammer = new ItemHammerBase("hammer");
-    public static final RegistryObject<Item> toyHammer = new ItemHammerBase("toy_hammer");
+    public static final RegistryObject<Item> battleHammer = hammer("battle_hammer");
+    public static final RegistryObject<Item> bat = hammer("bat");
+    public static final RegistryObject<Item> warHammer = hammer("war_hammer");
+    public static final RegistryObject<Item> warHammerPlus = hammer("war_hammer_plus");
+    public static final RegistryObject<Item> ironBat = hammer("iron_bat");
+    public static final RegistryObject<Item> greatHammer = hammer("great_hammer");
+    public static final RegistryObject<Item> iceHammer = hammer("ice_hammer");
+    public static final RegistryObject<Item> boneHammer = hammer("bone_hammer");
+    public static final RegistryObject<Item> strongStone = hammer("strong_stone");
+    public static final RegistryObject<Item> flameHammer = hammer("flame_hammer");
+    public static final RegistryObject<Item> gigantHammer = hammer("gigant_hammer");
+    public static final RegistryObject<Item> skyHammer = hammer("sky_hammer");
+    public static final RegistryObject<Item> gravitonHammer = hammer("graviton_hammer");
+    public static final RegistryObject<Item> spikedHammer = hammer("spiked_hammer");
+    public static final RegistryObject<Item> crystalHammer = hammer("crystal_hammer");
+    public static final RegistryObject<Item> schnabel = hammer("schnabel");
+    public static final RegistryObject<Item> gigantHammerPlus = hammer("gigant_hammer_plus");
+    public static final RegistryObject<Item> kongo = hammer("kongo");
+    public static final RegistryObject<Item> mjolnir = hammer("mjolnir");
+    public static final RegistryObject<Item> fatalCrush = hammer("fatal_crush");
+    public static final RegistryObject<Item> splashStar = hammer("splash_star");
+    public static final RegistryObject<Item> hammer = hammer("hammer");
+    public static final RegistryObject<Item> toyHammer = hammer("toy_hammer");
 
-    public static final RegistryObject<Item> shortDagger = new ItemDualBladeBase("short_dagger");
-    public static final RegistryObject<Item> steelEdge = new ItemDualBladeBase("steel_edge");
-    public static final RegistryObject<Item> frostEdge = new ItemDualBladeBase("frost_edge");
-    public static final RegistryObject<Item> ironEdge = new ItemDualBladeBase("iron_edge");
-    public static final RegistryObject<Item> thiefKnife = new ItemDualBladeBase("thief_knife");
-    public static final RegistryObject<Item> windEdge = new ItemDualBladeBase("wind_edge");
-    public static final RegistryObject<Item> gorgeousLx = new ItemDualBladeBase("gourgeous_lx");
-    public static final RegistryObject<Item> steelKatana = new ItemDualBladeBase("steel_katana");
-    public static final RegistryObject<Item> twinBlade = new ItemDualBladeBase("twin_blade");
-    public static final RegistryObject<Item> rampage = new ItemDualBladeBase("rampage");
-    public static final RegistryObject<Item> salamander = new ItemDualBladeBase("salamander");
-    public static final RegistryObject<Item> platinumEdge = new ItemDualBladeBase("platinum_edge");
-    public static final RegistryObject<Item> sonicDagger = new ItemDualBladeBase("sonic_dagger");
-    public static final RegistryObject<Item> chaosEdge = new ItemDualBladeBase("chaos_edge");
-    public static final RegistryObject<Item> desertWind = new ItemDualBladeBase("desert_wind");
-    public static final RegistryObject<Item> brokenWall = new ItemDualBladeBase("broken_wall");
-    public static final RegistryObject<Item> forceDivide = new ItemDualBladeBase("force_divide");
-    public static final RegistryObject<Item> heartFire = new ItemDualBladeBase("heart_fire");
-    public static final RegistryObject<Item> orcusSword = new ItemDualBladeBase("orcus_sword");
-    public static final RegistryObject<Item> deepBlizzard = new ItemDualBladeBase("deep_blizzard");
-    public static final RegistryObject<Item> darkInvitation = new ItemDualBladeBase("dark_invitation");
-    public static final RegistryObject<Item> priestSaber = new ItemDualBladeBase("priest_saber");
-    public static final RegistryObject<Item> efreet = new ItemDualBladeBase("efreet");
-    public static final RegistryObject<Item> dragoonClaw = new ItemDualBladeBase("dragoon_claw");
-    public static final RegistryObject<Item> emeraldEdge = new ItemDualBladeBase("emerald_edge");
-    public static final RegistryObject<Item> runeEdge = new ItemDualBladeBase("rune_edge");
-    public static final RegistryObject<Item> earnestEdge = new ItemDualBladeBase("earnest_edge");
-    public static final RegistryObject<Item> twinJustice = new ItemDualBladeBase("twin_justice");
-    public static final RegistryObject<Item> doubleScratch = new ItemDualBladeBase("double_scratch");
-    public static final RegistryObject<Item> acutorimass = new ItemDualBladeBase("acutorimass");
-    public static final RegistryObject<Item> twinLeeks = new ItemDualBladeBase("twin_leeks");
+    public static final RegistryObject<Item> shortDagger = dualBlade("short_dagger");
+    public static final RegistryObject<Item> steelEdge = dualBlade("steel_edge");
+    public static final RegistryObject<Item> frostEdge = dualBlade("frost_edge");
+    public static final RegistryObject<Item> ironEdge = dualBlade("iron_edge");
+    public static final RegistryObject<Item> thiefKnife = dualBlade("thief_knife");
+    public static final RegistryObject<Item> windEdge = dualBlade("wind_edge");
+    public static final RegistryObject<Item> gorgeousLx = dualBlade("gourgeous_lx");
+    public static final RegistryObject<Item> steelKatana = dualBlade("steel_katana");
+    public static final RegistryObject<Item> twinBlade = dualBlade("twin_blade");
+    public static final RegistryObject<Item> rampage = dualBlade("rampage");
+    public static final RegistryObject<Item> salamander = dualBlade("salamander");
+    public static final RegistryObject<Item> platinumEdge = dualBlade("platinum_edge");
+    public static final RegistryObject<Item> sonicDagger = dualBlade("sonic_dagger");
+    public static final RegistryObject<Item> chaosEdge = dualBlade("chaos_edge");
+    public static final RegistryObject<Item> desertWind = dualBlade("desert_wind");
+    public static final RegistryObject<Item> brokenWall = dualBlade("broken_wall");
+    public static final RegistryObject<Item> forceDivide = dualBlade("force_divide");
+    public static final RegistryObject<Item> heartFire = dualBlade("heart_fire");
+    public static final RegistryObject<Item> orcusSword = dualBlade("orcus_sword");
+    public static final RegistryObject<Item> deepBlizzard = dualBlade("deep_blizzard");
+    public static final RegistryObject<Item> darkInvitation = dualBlade("dark_invitation");
+    public static final RegistryObject<Item> priestSaber = dualBlade("priest_saber");
+    public static final RegistryObject<Item> efreet = dualBlade("efreet");
+    public static final RegistryObject<Item> dragoonClaw = dualBlade("dragoon_claw");
+    public static final RegistryObject<Item> emeraldEdge = dualBlade("emerald_edge");
+    public static final RegistryObject<Item> runeEdge = dualBlade("rune_edge");
+    public static final RegistryObject<Item> earnestEdge = dualBlade("earnest_edge");
+    public static final RegistryObject<Item> twinJustice = dualBlade("twin_justice");
+    public static final RegistryObject<Item> doubleScratch = dualBlade("double_scratch");
+    public static final RegistryObject<Item> acutorimass = dualBlade("acutorimass");
+    public static final RegistryObject<Item> twinLeeks = dualBlade("twin_leeks");
 
-    public static final RegistryObject<Item> leatherGlove = new ItemGloveBase("leather_glove");
-    public static final RegistryObject<Item> brassKnuckles = new ItemGloveBase("brass_knuckles");
-    public static final RegistryObject<Item> kote = new ItemGloveBase("kote");
-    public static final RegistryObject<Item> gloves = new ItemGloveBase("gloves");
-    public static final RegistryObject<Item> bearClaws = new ItemGloveBase("bear_claws");
-    public static final RegistryObject<Item> fistEarth = new ItemGloveBase("fist_of_earth");
-    public static final RegistryObject<Item> fistFire = new ItemGloveBase("fist_of_fire");
-    public static final RegistryObject<Item> fistWater = new ItemGloveBase("fist_of_water");
-    public static final RegistryObject<Item> dragonClaws = new ItemGloveBase("dragon_claws");
-    public static final RegistryObject<Item> fistDark = new ItemGloveBase("fist_of_dark");
-    public static final RegistryObject<Item> fistWind = new ItemGloveBase("fist_of_wind");
-    public static final RegistryObject<Item> fistLight = new ItemGloveBase("fist_of_light");
-    public static final RegistryObject<Item> catPunch = new ItemGloveBase("cat_punch");
-    public static final RegistryObject<Item> animalPuppets = new ItemGloveBase("animal_puppets");
-    public static final RegistryObject<Item> ironleafFists = new ItemGloveBase("ironleaf_fists");
-    public static final RegistryObject<Item> caestus = new ItemGloveBase("caestus");
-    public static final RegistryObject<Item> golemPunch = new ItemGloveBase("golem_punch");
-    public static final RegistryObject<Item> godHand = new ItemGloveBase("hand_of_god");
-    public static final RegistryObject<Item> bazalKatar = new ItemGloveBase("bazal_katar");
-    public static final RegistryObject<Item> fenrir = new ItemGloveBase("fenrir");
+    public static final RegistryObject<Item> leatherGlove = gloves("leather_glove");
+    public static final RegistryObject<Item> brassKnuckles = gloves("brass_knuckles");
+    public static final RegistryObject<Item> kote = gloves("kote");
+    public static final RegistryObject<Item> gloves = gloves("gloves");
+    public static final RegistryObject<Item> bearClaws = gloves("bear_claws");
+    public static final RegistryObject<Item> fistEarth = gloves("fist_of_earth");
+    public static final RegistryObject<Item> fistFire = gloves("fist_of_fire");
+    public static final RegistryObject<Item> fistWater = gloves("fist_of_water");
+    public static final RegistryObject<Item> dragonClaws = gloves("dragon_claws");
+    public static final RegistryObject<Item> fistDark = gloves("fist_of_dark");
+    public static final RegistryObject<Item> fistWind = gloves("fist_of_wind");
+    public static final RegistryObject<Item> fistLight = gloves("fist_of_light");
+    public static final RegistryObject<Item> catPunch = gloves("cat_punch");
+    public static final RegistryObject<Item> animalPuppets = gloves("animal_puppets");
+    public static final RegistryObject<Item> ironleafFists = gloves("ironleaf_fists");
+    public static final RegistryObject<Item> caestus = gloves("caestus");
+    public static final RegistryObject<Item> golemPunch = gloves("golem_punch");
+    public static final RegistryObject<Item> godHand = gloves("hand_of_god");
+    public static final RegistryObject<Item> bazalKatar = gloves("bazal_katar");
+    public static final RegistryObject<Item> fenrir = gloves("fenrir");
 
-    public static final RegistryObject<Item> rod = new ItemStaffBase("rod", EnumElement.FIRE);
-    public static final RegistryObject<Item> amethystRod = new ItemStaffBase("amethyst_rod", EnumElement.EARTH);
-    public static final RegistryObject<Item> aquamarineRod = new ItemStaffBase("aquamarine_rod", EnumElement.WATER);
-    public static final RegistryObject<Item> friendlyRod = new ItemStaffBase("friendly_rod", EnumElement.LOVE);
-    public static final RegistryObject<Item> loveLoveRod = new ItemStaffBase("love_love_rod", EnumElement.LOVE);
-    public static final RegistryObject<Item> staff = new ItemStaffBase("staf", EnumElement.EARTH);
-    public static final RegistryObject<Item> emeraldRod = new ItemStaffBase("emerald_rod", EnumElement.WIND);
-    public static final RegistryObject<Item> silverStaff = new ItemStaffBase("silver_staff", EnumElement.DARK);
-    public static final RegistryObject<Item> flareStaff = new ItemStaffBase("flare_staff", EnumElement.FIRE);
-    public static final RegistryObject<Item> rubyRod = new ItemStaffBase("ruby_rod", EnumElement.FIRE);
-    public static final RegistryObject<Item> sapphireRod = new ItemStaffBase("sapphire_rod", EnumElement.LIGHT);
-    public static final RegistryObject<Item> earthStaff = new ItemStaffBase("earth_staff", EnumElement.EARTH);
-    public static final RegistryObject<Item> lightningWand = new ItemStaffBase("lightning_wand", EnumElement.WIND);
-    public static final RegistryObject<Item> iceStaff = new ItemStaffBase("ice_staff", EnumElement.WATER);
-    public static final RegistryObject<Item> diamondRod = new ItemStaffBase("diamond_rod", EnumElement.DARK);
-    public static final RegistryObject<Item> wizardsStaff = new ItemStaffBase("wizards_staff", EnumElement.LIGHT);
-    public static final RegistryObject<Item> magesStaff = new ItemStaffBase("mages_staff", EnumElement.EARTH);
-    public static final RegistryObject<Item> shootingStarStaff = new ItemStaffBase("shooting_star_staff", EnumElement.LIGHT);
-    public static final RegistryObject<Item> hellBranch = new ItemStaffBase("hell_branch", EnumElement.DARK);
-    public static final RegistryObject<Item> crimsonStaff = new ItemStaffBase("crimson_staff", EnumElement.FIRE);
-    public static final RegistryObject<Item> bubbleStaff = new ItemStaffBase("bubble_staff", EnumElement.WATER);
-    public static final RegistryObject<Item> gaiaRod = new ItemStaffBase("gaia_rod", EnumElement.EARTH);
-    public static final RegistryObject<Item> cycloneRod = new ItemStaffBase("cyclone_rod", EnumElement.WIND);
-    public static final RegistryObject<Item> stormWand = new ItemStaffBase("storm_wand", EnumElement.WIND);
-    public static final RegistryObject<Item> runeStaff = new ItemStaffBase("rune_staff", EnumElement.LIGHT);
-    public static final RegistryObject<Item> magesStaffPlus = new ItemStaffBase("mages_staff_plus", EnumElement.LOVE);
-    public static final RegistryObject<Item> magicBroom = new ItemStaffBase("magic_broom", EnumElement.WIND);
-    public static final RegistryObject<Item> magicShot = new ItemStaffBase("magic_shot", EnumElement.LOVE);
-    public static final RegistryObject<Item> hellCurse = new ItemStaffBase("hell_curse", EnumElement.DARK);
-    public static final RegistryObject<Item> algernon = new ItemStaffBase("algernon", EnumElement.EARTH);
-    public static final RegistryObject<Item> sorceresWand = new ItemStaffBase("sorceres_wand", EnumElement.LIGHT);
-    public static final RegistryObject<Item> basket = new ItemStaffBase("basket", EnumElement.LOVE);
-    public static final RegistryObject<Item> goldenTurnipStaff = new ItemStaffBase("golden_turnip_staff", EnumElement.LOVE);
-    public static final RegistryObject<Item> sweetPotatoStaff = new ItemStaffBase("sweet_potato_staff", EnumElement.LOVE);
-    public static final RegistryObject<Item> elvishHarp = new ItemStaffBase("elvish_harp", EnumElement.LOVE);
-    public static final RegistryObject<Item> syringe = new ItemStaffBase("syringe", EnumElement.WATER);
+    public static final RegistryObject<Item> rod = staff("rod", EnumElement.FIRE);
+    public static final RegistryObject<Item> amethystRod = staff("amethyst_rod", EnumElement.EARTH);
+    public static final RegistryObject<Item> aquamarineRod = staff("aquamarine_rod", EnumElement.WATER);
+    public static final RegistryObject<Item> friendlyRod = staff("friendly_rod", EnumElement.LOVE);
+    public static final RegistryObject<Item> loveLoveRod = staff("love_love_rod", EnumElement.LOVE);
+    public static final RegistryObject<Item> staff = staff("staf", EnumElement.EARTH);
+    public static final RegistryObject<Item> emeraldRod = staff("emerald_rod", EnumElement.WIND);
+    public static final RegistryObject<Item> silverStaff = staff("silver_staff", EnumElement.DARK);
+    public static final RegistryObject<Item> flareStaff = staff("flare_staff", EnumElement.FIRE);
+    public static final RegistryObject<Item> rubyRod = staff("ruby_rod", EnumElement.FIRE);
+    public static final RegistryObject<Item> sapphireRod = staff("sapphire_rod", EnumElement.LIGHT);
+    public static final RegistryObject<Item> earthStaff = staff("earth_staff", EnumElement.EARTH);
+    public static final RegistryObject<Item> lightningWand = staff("lightning_wand", EnumElement.WIND);
+    public static final RegistryObject<Item> iceStaff = staff("ice_staff", EnumElement.WATER);
+    public static final RegistryObject<Item> diamondRod = staff("diamond_rod", EnumElement.DARK);
+    public static final RegistryObject<Item> wizardsStaff = staff("wizards_staff", EnumElement.LIGHT);
+    public static final RegistryObject<Item> magesStaff = staff("mages_staff", EnumElement.EARTH);
+    public static final RegistryObject<Item> shootingStarStaff = staff("shooting_star_staff", EnumElement.LIGHT);
+    public static final RegistryObject<Item> hellBranch = staff("hell_branch", EnumElement.DARK);
+    public static final RegistryObject<Item> crimsonStaff = staff("crimson_staff", EnumElement.FIRE);
+    public static final RegistryObject<Item> bubbleStaff = staff("bubble_staff", EnumElement.WATER);
+    public static final RegistryObject<Item> gaiaRod = staff("gaia_rod", EnumElement.EARTH);
+    public static final RegistryObject<Item> cycloneRod = staff("cyclone_rod", EnumElement.WIND);
+    public static final RegistryObject<Item> stormWand = staff("storm_wand", EnumElement.WIND);
+    public static final RegistryObject<Item> runeStaff = staff("rune_staff", EnumElement.LIGHT);
+    public static final RegistryObject<Item> magesStaffPlus = staff("mages_staff_plus", EnumElement.LOVE);
+    public static final RegistryObject<Item> magicBroom = staff("magic_broom", EnumElement.WIND);
+    public static final RegistryObject<Item> magicShot = staff("magic_shot", EnumElement.LOVE);
+    public static final RegistryObject<Item> hellCurse = staff("hell_curse", EnumElement.DARK);
+    public static final RegistryObject<Item> algernon = staff("algernon", EnumElement.EARTH);
+    public static final RegistryObject<Item> sorceresWand = staff("sorceres_wand", EnumElement.LIGHT);
+    public static final RegistryObject<Item> basket = staff("basket", EnumElement.LOVE);
+    public static final RegistryObject<Item> goldenTurnipStaff = staff("golden_turnip_staff", EnumElement.LOVE);
+    public static final RegistryObject<Item> sweetPotatoStaff = staff("sweet_potato_staff", EnumElement.LOVE);
+    public static final RegistryObject<Item> elvishHarp = staff("elvish_harp", EnumElement.LOVE);
+    public static final RegistryObject<Item> syringe = staff("syringe", EnumElement.WATER);
 
-    public static final RegistryObject<Item> engagementRing = new ItemAccessoireBase("engagement_ring");
+    /*public static final RegistryObject<Item> engagementRing = new ItemAccessoireBase("engagement_ring");
     public static final RegistryObject<Item> cheapBracelet = new ItemAccessoireBase("cheap_bracelet");
     public static final RegistryObject<Item> bronzeBracelet = new ItemAccessoireBase("bronze_bracelet");
     public static final RegistryObject<Item> silverBracelet = new ItemAccessoireBase("silver_bracelet");
@@ -1124,7 +1135,7 @@ public class ModItems {
     public static final RegistryObject<Item> mealyApple = food("mealy_apple");*/
 
     public static RegistryObject<Item> hoe(EnumToolTier tier) {
-        return ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().addToolType(ToolType.HOE, tier.getTierLevel()).maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> wateringCan(EnumToolTier tier) {
@@ -1135,16 +1146,48 @@ public class ModItems {
         return ITEMS.register("sickle_" + tier.getName(), () -> new ItemToolSickle(tier, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
     }
 
-    public static RegistryObject<Item> hammer(EnumToolTier tier) {
-        return ITEMS.register("hammer_" + tier.getName(), () -> new ItemToolHammer(tier, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    public static RegistryObject<Item> hammerTool(EnumToolTier tier) {
+        return ITEMS.register("hammer_" + tier.getName(), () -> new ItemToolHammer(tier, new Item.Properties().addToolType(ToolType.PICKAXE, tier.getTierLevel()).maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
     }
 
-    public static RegistryObject<Item> axe(EnumToolTier tier) {
-        return ITEMS.register("axe_" + tier.getName(), () -> new ItemToolAxe(tier, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    public static RegistryObject<Item> axeTool(EnumToolTier tier) {
+        return ITEMS.register("axe_" + tier.getName(), () -> new ItemToolAxe(tier, new Item.Properties().addToolType(ToolType.AXE, tier.getTierLevel()).maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> fishingRod(EnumToolTier tier) {
         return ITEMS.register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(tier, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    }
+
+    public static RegistryObject<Item> shortSword(String name) {
+        return ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    }
+
+    public static RegistryObject<Item> longSword(String name) {
+        return ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    }
+
+    public static RegistryObject<Item> spear(String name) {
+        return ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    }
+
+    public static RegistryObject<Item> axe(String name) {
+        return ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties().addToolType(ToolType.AXE, 1).maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    }
+
+    public static RegistryObject<Item> hammer(String name) {
+        return ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties().addToolType(ToolType.PICKAXE, 1).maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    }
+
+    public static RegistryObject<Item> dualBlade(String name) {
+        return ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    }
+
+    public static RegistryObject<Item> gloves(String name) {
+        return ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    }
+
+    public static RegistryObject<Item> staff(String name, EnumElement starterElement) {
+        return ITEMS.register(name, () -> new ItemStaffBase(starterElement, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> mat(String name) {

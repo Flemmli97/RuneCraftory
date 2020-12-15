@@ -7,4 +7,8 @@ public class EntityUtils {
     public static boolean isExhaust(LivingEntity entity) {
         return false;
     }
+
+    public static boolean paralysed(LivingEntity entity) {
+        return false;
+    }
 }

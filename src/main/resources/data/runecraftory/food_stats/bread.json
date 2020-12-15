@@ -1,0 +1,22 @@
+{
+  "hpRegen": 3,
+  "rpRegen": 0,
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "rpPercentIncrease": 0,
+  "duration": 500,
+  "effects": {
+    "minecraft:generic.attack_damage": 10
+  },
+  "effectsPercentage": {},
+  "potionApply": [
+    {
+      "potion": "minecraft:speed",
+      "duration": 100,
+      "amplifier": 2
+    }
+  ],
+  "potionRemove": [],
+  "item": "minecraft:bread"
+}

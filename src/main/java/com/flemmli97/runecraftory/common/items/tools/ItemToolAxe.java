@@ -6,6 +6,7 @@ import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.lib.ItemTiers;
+import com.flemmli97.runecraftory.lib.LibConstants;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -46,7 +47,7 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
 
     @Override
     public int itemCoolDownTicks() {
-        return 19;
+        return LibConstants.axeToolCooldown;
     }
 
     @Override

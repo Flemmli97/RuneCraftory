@@ -15,7 +15,7 @@ public class S2CEquipmentUpdate {
 
     private final EquipmentSlotType slot;
 
-    public S2CEquipmentUpdate(EquipmentSlotType slot){
+    public S2CEquipmentUpdate(EquipmentSlotType slot) {
         this.slot = slot;
     }
 

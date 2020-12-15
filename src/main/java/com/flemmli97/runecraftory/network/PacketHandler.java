@@ -24,7 +24,11 @@ public class PacketHandler {
         dispatcher.registerMessage(id++, S2CMaxRunePoints.class, S2CMaxRunePoints::write, S2CMaxRunePoints::read, S2CMaxRunePoints::handle);
         dispatcher.registerMessage(id++, S2CMoney.class, S2CMoney::write, S2CMoney::read, S2CMoney::handle);
         dispatcher.registerMessage(id++, S2CRunePoints.class, S2CRunePoints::write, S2CRunePoints::read, S2CRunePoints::handle);
-
+        dispatcher.registerMessage(id++, S2CEquipmentUpdate.class, S2CEquipmentUpdate::write, S2CEquipmentUpdate::read, S2CEquipmentUpdate::handle);
+        dispatcher.registerMessage(id++, S2CFoodPkt.class, S2CFoodPkt::write, S2CFoodPkt::read, S2CFoodPkt::handle);
+        dispatcher.registerMessage(id++, S2CLevelPkt.class, S2CLevelPkt::write, S2CLevelPkt::read, S2CLevelPkt::handle);
+        dispatcher.registerMessage(id++, S2CSkillLevelPkt.class, S2CSkillLevelPkt::write, S2CSkillLevelPkt::read, S2CSkillLevelPkt::handle);
+        dispatcher.registerMessage(id++, S2CPlayerStats.class, S2CPlayerStats::write, S2CPlayerStats::read, S2CPlayerStats::handle);
     }
 
     public static <T> void sendToClient(T message, ServerPlayerEntity player) {

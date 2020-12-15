@@ -39,7 +39,7 @@ public class S2CSkillLevelPkt {
         this.type = type;
         this.skill = skill;
         this.level = cap.getSkillLevel(skill);
-        if(type == Type.LEVELUP) {
+        if (type == Type.LEVELUP) {
             this.rp = cap.getRunePoints();
             this.rpMax = cap.getMaxRunePoints();
             this.str = cap.getStr();
@@ -50,7 +50,7 @@ public class S2CSkillLevelPkt {
 
     public static S2CSkillLevelPkt read(PacketBuffer buf) {
         Type type = buf.readEnumValue(Type.class);
-        if(type == Type.SET)
+        if (type == Type.SET)
             return new S2CSkillLevelPkt(type, buf.readEnumValue(EnumSkills.class), new int[]{buf.readInt(), buf.readInt()});
         return new S2CSkillLevelPkt(type, buf.readEnumValue(EnumSkills.class), new int[]{buf.readInt(), buf.readInt()}, buf.readInt(), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
@@ -60,7 +60,7 @@ public class S2CSkillLevelPkt {
         buf.writeEnumValue(pkt.skill);
         buf.writeInt(pkt.level[0]);
         buf.writeInt(pkt.level[1]);
-        if(pkt.type == Type.LEVELUP){
+        if (pkt.type == Type.LEVELUP) {
             buf.writeInt(pkt.rp);
             buf.writeInt(pkt.rpMax);
             buf.writeFloat(pkt.str);
@@ -76,7 +76,7 @@ public class S2CSkillLevelPkt {
                 return;
             player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
                 cap.setSkillLevel(pkt.skill, player, pkt.level[0], pkt.level[1]);
-                if(pkt.type == Type.LEVELUP) {
+                if (pkt.type == Type.LEVELUP) {
                     cap.setRunePoints(player, pkt.rp);
                     cap.setMaxRunePoints(player, pkt.rpMax);
                     cap.setStr(player, pkt.str);
@@ -88,7 +88,7 @@ public class S2CSkillLevelPkt {
         ctx.get().setPacketHandled(true);
     }
 
-    public enum Type{
+    public enum Type {
         SET,
         LEVELUP
     }

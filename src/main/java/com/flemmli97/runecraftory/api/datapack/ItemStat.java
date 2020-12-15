@@ -98,13 +98,17 @@ public class ItemStat {
                         list.add(new TranslationTextComponent(prefix));
                     }
                     for (Map.Entry<Attribute, Integer> entry : stats.entrySet()) {
-                        IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + entry.getValue()));
+                        IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + format(entry.getValue())));
                         list.add(comp);
                     }
                 }
             }
         }
         return list;
+    }
+
+    private String format(int n) {
+        return n >= 0 ? "+" + n : "-" + n;
     }
 
     @Override

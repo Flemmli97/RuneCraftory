@@ -1,26 +1,139 @@
 package com.flemmli97.runecraftory.common.utils;
 
 import com.flemmli97.runecraftory.api.enums.EnumElement;
+import com.flemmli97.runecraftory.api.items.IItemUsable;
+import com.flemmli97.runecraftory.common.capability.IPlayerCap;
+import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.entities.IBaseMob;
 import com.flemmli97.runecraftory.common.entities.IExtendedMob;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModPotions;
+import com.flemmli97.tenshilib.api.item.IAOEWeapon;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.play.server.SEntityVelocityPacket;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.Random;
 
 public class CombatUtils {
+
+    /**
+     * The player attack
+     *
+     * @param player        the attacking player
+     * @param target        the target
+     * @param resetCooldown should the attack reset cooldown
+     * @param playSound     should the attack play sounds
+     * @return if the attack was successful or not
+     */
+    public static boolean doPlayerAttack(PlayerEntity player, LivingEntity target, boolean resetCooldown, boolean playSound, boolean levelSkill) {
+        IPlayerCap cap = player.getCapability(PlayerCapProvider.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"));
+        ItemStack stack = player.getHeldItemMainhand();
+        if (!(stack.getItem() instanceof IItemUsable))
+            return false;
+        IItemUsable item = (IItemUsable) stack.getItem();
+        if (target.canBeAttackedWithItem() && !target.hitByEntity(player)) {
+            //Gather damage from player
+            float damagePhys = cap.getAttributeValue(player, Attributes.GENERIC_ATTACK_DAMAGE);
+            float coolDown = player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f);
+            //If cooldown isnt finished disable further processing.
+            if (coolDown > 0) {
+                return false;
+            }
+            if (damagePhys > 0) {
+                if (resetCooldown) {
+                    player.getCooldownTracker().setCooldown(stack.getItem(), item.itemCoolDownTicks());
+                }
+                boolean faintChance = player.world.rand.nextInt(100) < MobUtils.getAttributeValue(player, ModAttributes.RFFAINT.get(), target);
+                boolean critChance = player.world.rand.nextInt(100) < MobUtils.getAttributeValue(player, ModAttributes.RFCRIT.get(), target);
+                boolean knockBackChance = player.world.rand.nextInt(100) < MobUtils.getAttributeValue(player, ModAttributes.RFKNOCK.get(), target);
+                int i = knockBackChance ? 2 : 1;
+                if (player.isSprinting()) {
+                    player.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundCategory(), 1.0f, 1.0f);
+                    ++i;
+                }
+                Vector3d targetMot = target.getMotion();
+                damagePhys = faintChance ? Float.MAX_VALUE : (damagePhys += (float) (player.world.rand.nextGaussian() * damagePhys / 10.0));
+                boolean ignoreArmor = critChance || faintChance;
+                //Scale damage for vanilla mobs
+                damagePhys = (faintChance ? Float.MAX_VALUE : damagePhys);
+                float knockback = i * 0.5f - 0.1f;
+                if (target instanceof BaseMonster) {
+                    knockback *= 0.85f;
+                }
+                CustomDamage source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(ignoreArmor ? CustomDamage.DamageType.IGNOREDEF : CustomDamage.DamageType.NORMAL).knock(CustomDamage.KnockBackType.VANILLA).knockAmount(knockback).hurtResistant(0).get();
+                if (playerDamage(player, target, source, damagePhys, cap, stack)) {
+                    //Level skill on successful attack
+                    if (levelSkill)
+                        item.onEntityHit(player);
+                    if (i > 0) {
+                        player.setMotion(player.getMotion().mul(0.6D, 1.0D, 0.6D));
+                        player.setSprinting(false);
+                    }
+                    if (target instanceof ServerPlayerEntity && target.velocityChanged) {
+                        ((ServerPlayerEntity) target).connection.sendPacket(new SEntityVelocityPacket(target));
+                        target.velocityChanged = false;
+                        target.setMotion(targetMot);
+                    }
+                    if (critChance) {
+                        if (playSound) {
+                            player.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0f, 1.0f);
+                        }
+                        player.onCriticalHit(target);
+                        player.onEnchantmentCritical(target);
+                    } else if (stack.getItem() instanceof IAOEWeapon && ((IAOEWeapon) stack.getItem()).getFOV() == 0.0f && playSound) {
+                        player.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0f, 1.0f);
+                    } else if (playSound) {
+                        player.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0f, 1.0f);
+                    }
+                } else if (playSound) {
+                    player.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, player.getSoundCategory(), 1.0f, 1.0f);
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean playerDamage(PlayerEntity player, LivingEntity target, CustomDamage source, float damagePhys, IPlayerCap cap, ItemStack stack) {
+        boolean success = target.attackEntityFrom(source, damagePhys);
+        spawnElementalParticle(target, source.getElement());
+        if (success) {
+            knockBack(target, source);
+            int drainPercent = (int) MobUtils.getAttributeValue(player, ModAttributes.RFDRAIN.get(), target);
+            if (drainPercent > 0f) {
+                cap.regenHealth(player, drainPercent * damagePhys);
+            }
+            applyStatusEffects(player, target);
+            player.setLastAttackedEntity(target);
+            EnchantmentHelper.applyThornEnchantments(target, player);
+            ItemStack beforeHitCopy = stack.copy();
+            stack.hitEntity(target, player);
+            if (stack.isEmpty()) {
+                ForgeEventFactory.onPlayerDestroyItem(player, beforeHitCopy, Hand.MAIN_HAND);
+                player.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+            }
+            applyAddEffect(ItemNBT.getElement(stack), target);
+        }
+        return success;
+    }
 
     public static void applyAddEffect(EnumElement element, LivingEntity target) {
         if (!(target instanceof IBaseMob) && element == EnumElement.FIRE && !target.isBurning()) {

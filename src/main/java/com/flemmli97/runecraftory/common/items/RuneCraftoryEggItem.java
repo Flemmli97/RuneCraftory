@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.items;
 
 import com.flemmli97.runecraftory.common.entities.IBaseMob;
-import com.flemmli97.runecraftory.lib.LibEntityConstants;
+import com.flemmli97.runecraftory.lib.LibConstants;
 import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -25,7 +25,7 @@ public class RuneCraftoryEggItem extends SpawnEgg {
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, PlayerEntity player) {
         if (e instanceof IBaseMob && stack.hasDisplayName()) {
-            int level = LibEntityConstants.baseLevel;
+            int level = LibConstants.baseLevel;
             try {
                 level = Integer.parseInt(stack.getDisplayName().getUnformattedComponentText());
             } catch (NumberFormatException ex) {

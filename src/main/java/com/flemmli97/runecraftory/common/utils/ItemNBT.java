@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.utils;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
+import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -63,6 +64,25 @@ public class ItemNBT {
             }
         }
         return map;
+    }
+
+    public static void setElement(EnumElement element, ItemStack stack) {
+        CompoundNBT tag = getItemNBT(stack);
+        if (tag != null) {
+            if (EnumElement.valueOf(tag.getString("Element")) == EnumElement.NONE) {
+                tag.putString("Element", element.toString());
+            } else {
+                tag.putString("Element", EnumElement.NONE.toString());
+            }
+        }
+    }
+
+    public static EnumElement getElement(ItemStack stack) {
+        CompoundNBT tag = getItemNBT(stack);
+        if (tag != null) {
+            return EnumElement.valueOf(tag.getString("Element"));
+        }
+        return EnumElement.NONE;
     }
 
     @Nullable

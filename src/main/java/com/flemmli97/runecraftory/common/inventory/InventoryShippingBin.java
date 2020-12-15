@@ -15,7 +15,7 @@ public class InventoryShippingBin extends ItemStackHandler {
     }
 
     public void shipItems(PlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap, null).ifPresent(cap -> {
+        player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
             int money = 0;
             for (int i = 0; i < this.getSlots(); ++i) {
                 if (this.getStackInSlot(i).isEmpty())

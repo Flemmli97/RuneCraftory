@@ -19,6 +19,6 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));
 
         this.addStat("emerald", Tags.Items.GEMS_EMERALD, new ItemStat.MutableItemStat(1, 1, 0)
-                );
+        );
     }
 }

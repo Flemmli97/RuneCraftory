@@ -16,19 +16,19 @@ public class S2CFoodPkt {
 
     private final ItemStack stack;
 
-    public S2CFoodPkt(@Nullable ItemStack stack){
+    public S2CFoodPkt(@Nullable ItemStack stack) {
         this.stack = stack;
     }
 
     public static S2CFoodPkt read(PacketBuffer buf) {
-        if(buf.readBoolean())
+        if (buf.readBoolean())
             return new S2CFoodPkt(buf.readItemStack());
         return new S2CFoodPkt(null);
     }
 
     public static void write(S2CFoodPkt pkt, PacketBuffer buf) {
         buf.writeBoolean(pkt.stack != null);
-        if(pkt.stack != null)
+        if (pkt.stack != null)
             buf.writeItemStack(pkt.stack);
     }
 
@@ -38,10 +38,10 @@ public class S2CFoodPkt {
             if (player == null)
                 return;
             player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
-               if(pkt.stack == null)
-                   cap.removeFoodEffect(player);
-               else
-                   cap.applyFoodEffect(player, pkt.stack);
+                if (pkt.stack == null)
+                    cap.removeFoodEffect(player);
+                else
+                    cap.applyFoodEffect(player, pkt.stack);
             });
         });
         ctx.get().setPacketHandled(true);

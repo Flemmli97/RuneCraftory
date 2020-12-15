@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.api.datapack.provider;
 
-import com.flemmli97.runecraftory.api.datapack.AttributeSerializer;
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
+import com.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +28,7 @@ public abstract class ItemStatProvider implements IDataProvider {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping().registerTypeAdapter(Attribute.class, new AttributeSerializer()).create();
+    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping().registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(ForgeRegistries.ATTRIBUTES)).create();
 
     private final Map<ResourceLocation, ItemStat.MutableItemStat> data = new HashMap<>();
     private final Map<ResourceLocation, Consumer<JsonObject>> item = new HashMap<>();
@@ -49,7 +50,7 @@ public abstract class ItemStatProvider implements IDataProvider {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/item_stats/" + res.getPath() + ".json");
             try {
                 JsonElement obj = GSON.toJsonTree(builder);
-                if(obj.isJsonObject())
+                if (obj.isJsonObject())
                     item.get(res).accept(obj.getAsJsonObject());
                 IDataProvider.save(GSON, cache, obj, path);
             } catch (IOException e) {
@@ -70,7 +71,7 @@ public abstract class ItemStatProvider implements IDataProvider {
     public void addStat(String id, Item item, ItemStat.MutableItemStat builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj->obj.addProperty("item", item.getRegistryName().toString()));
+        this.item.put(res, obj -> obj.addProperty("item", item.getRegistryName().toString()));
     }
 
     public void addStat(String id, ITag<Item> tag, int buy, int sell, int upgrade) {
@@ -80,6 +81,6 @@ public abstract class ItemStatProvider implements IDataProvider {
     public void addStat(String id, ITag<Item> tag, ItemStat.MutableItemStat builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj->obj.addProperty("tag", TagCollectionManager.getTagManager().getItems().getTagId(tag).toString()));
+        this.item.put(res, obj -> obj.addProperty("tag", TagCollectionManager.getTagManager().getItems().getTagId(tag).toString()));
     }
 }
