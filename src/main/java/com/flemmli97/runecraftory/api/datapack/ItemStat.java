@@ -1,12 +1,24 @@
 package com.flemmli97.runecraftory.api.datapack;
 
 import com.flemmli97.runecraftory.api.enums.EnumElement;
+import com.flemmli97.runecraftory.api.items.IItemUsable;
+import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
+import com.flemmli97.runecraftory.common.utils.ItemNBT;
+import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -59,6 +71,40 @@ public class ItemStat {
         for (int i = 0; i < size; i++)
             stat.itemStats.put(buffer.readRegistryIdSafe(Attribute.class), buffer.readInt());
         return stat;
+    }
+
+    public List<ITextComponent> texts(ItemStack stack, boolean showStat) {
+        List<ITextComponent> list = Lists.newArrayList();
+        CompoundNBT tag = ItemNBT.getItemNBT(stack);
+        if (tag != null) {
+            if (stack.getItem() instanceof IItemUsable) {
+                try {
+                    EnumElement element = EnumElement.valueOf(tag.getString("Element"));
+                    if (element != EnumElement.NONE) {
+                        list.add(new TranslationTextComponent(element.getTranslation()).formatted(element.getColor()));
+                    }
+                } catch (IllegalArgumentException e) {
+                }
+            }
+            IFormattableTextComponent price = new TranslationTextComponent("tooltip.item.level", tag.getInt("ItemLevel"));
+            if (ItemUtils.getBuyPrice(stack, this) > 0) {
+                price.append(" ").append(new TranslationTextComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack)));
+                price.append(" ").append(new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack)));
+                list.add(price);
+                if (showStat) {
+                    Map<Attribute, Integer> stats = ItemNBT.statIncrease(stack);
+                    if (!stats.isEmpty()) {
+                        String prefix = (stack.getItem() instanceof IItemWearable) ? "tooltip.item.equipped" : "tooltip.item.upgrade";
+                        list.add(new TranslationTextComponent(prefix));
+                    }
+                    for (Map.Entry<Attribute, Integer> entry : stats.entrySet()) {
+                        IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + entry.getValue()));
+                        list.add(comp);
+                    }
+                }
+            }
+        }
+        return list;
     }
 
     @Override

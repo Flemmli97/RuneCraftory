@@ -1,9 +1,15 @@
 package com.flemmli97.runecraftory.api.datapack;
 
 import com.flemmli97.runecraftory.api.enums.EnumSeason;
+import com.google.common.collect.Lists;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 
 public class CropProperties {
@@ -14,6 +20,8 @@ public class CropProperties {
     private int growth;
     private int maxDrops;
     private boolean regrowable;
+
+    private transient List<ITextComponent> translationTexts;
 
     public Set<EnumSeason> bestSeasons() {
         return this.bestSeason;
@@ -65,6 +73,38 @@ public class CropProperties {
         for (int i = 0; i < size; i++)
             prop.badSeason.add(buffer.readEnumValue(EnumSeason.class));
         return prop;
+    }
+
+    public List<ITextComponent> texts() {
+        if (this.translationTexts == null) {
+            this.translationTexts = Lists.newArrayList();
+            if (!this.bestSeason.isEmpty()) {
+                IFormattableTextComponent season = new TranslationTextComponent("season.best").append(": ");
+                int i = 0;
+                for (EnumSeason seas : this.bestSeasons()) {
+                    season.append(i != 0 ? "/" : "").formatted(TextFormatting.GRAY)
+                            .append(new TranslationTextComponent(seas.formattingText()).formatted(seas.getColor()));
+                    i++;
+                }
+                this.translationTexts.add(season);
+            }
+            EnumSet<EnumSeason> badSeasons = EnumSet.copyOf(this.badSeason);
+            badSeasons.removeAll(this.bestSeasons());
+            if (!badSeasons.isEmpty()) {
+                IFormattableTextComponent season = new TranslationTextComponent("season.bad").append(": ");
+                int i = 0;
+                for (EnumSeason seas : badSeasons) {
+                    season.append(i != 0 ? "/" : "").formatted(TextFormatting.GRAY)
+                            .append(new TranslationTextComponent(seas.formattingText()).formatted(seas.getColor()));
+                    i++;
+                }
+                this.translationTexts.add(season);
+            }
+            IFormattableTextComponent growth = new TranslationTextComponent("growth", this.growth());
+            ITextComponent harvest = new TranslationTextComponent("harvested", this.maxDrops());
+            this.translationTexts.add(growth.append("  ").append(harvest));
+        }
+        return this.translationTexts;
     }
 
     @Override

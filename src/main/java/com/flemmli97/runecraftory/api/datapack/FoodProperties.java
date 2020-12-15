@@ -7,6 +7,10 @@ import com.google.common.collect.Lists;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.potion.Effect;
+import net.minecraft.util.text.IFormattableTextComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
 import java.util.Map;
@@ -14,11 +18,13 @@ import java.util.TreeMap;
 
 public class FoodProperties {
 
-    private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, duration;
+    private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
     private Map<Attribute, Integer> effects = new TreeMap<>(ModAttributes.sorted);
     private Map<Attribute, Float> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
     private SimpleEffect[] potionApply = new SimpleEffect[0];
     private SimpleEffect[] potionRemove = new SimpleEffect[0];
+
+    private transient List<ITextComponent> translationTexts;
 
     public int getHPGain() {
         return this.hpRegen;
@@ -34,6 +40,14 @@ public class FoodProperties {
 
     public int getRpPercentRegen() {
         return this.rpRegenPercent;
+    }
+
+    public int getRpIncrease(){
+        return this.rpIncrease;
+    }
+
+    public int getRpPercentIncrease(){
+        return this.rpPercentIncrease;
     }
 
     public int duration() {
@@ -110,6 +124,40 @@ public class FoodProperties {
         return prop;
     }
 
+    public List<ITextComponent> texts() {
+        if(this.translationTexts == null){
+            this.translationTexts = Lists.newArrayList();
+            this.translationTexts.add(new TranslationTextComponent("item.eaten"));
+            StringTextComponent hprp = new StringTextComponent("");
+            if(this.getHPGain()!=0)
+                hprp.append(" ").append(new TranslationTextComponent("tooltip.food.hp", this.getHPGain()));
+            if(this.getHpPercentGain()!=0)
+                hprp.append(" ").append(new TranslationTextComponent("tooltip.food.hp.percent", this.getHpPercentGain()));
+            if(this.getRPRegen()!=0)
+                hprp.append(" ").append(new TranslationTextComponent("tooltip.food.rp", this.getRPRegen()));
+            if(this.getRpPercentRegen()!=0)
+                hprp.append(" ").append(new TranslationTextComponent("tooltip.food.rp.percent", this.getRpPercentRegen()));
+            if(!hprp.getSiblings().isEmpty())
+                this.translationTexts.add(hprp);
+            StringTextComponent rpIncrease = new StringTextComponent("");
+            if(this.getRpIncrease()!=0)
+                rpIncrease.append(" ").append(new TranslationTextComponent("tooltip.food.rpmax", this.getRpIncrease()));
+            if(this.getRpPercentIncrease()!=0)
+                rpIncrease.append(" ").append(new TranslationTextComponent("tooltip.food.rpmax.percent", this.getRpPercentIncrease()));
+            if(!rpIncrease.getSiblings().isEmpty())
+                this.translationTexts.add(rpIncrease);
+            for (Map.Entry<Attribute, Integer> entry : this.effects().entrySet()) {
+                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + entry.getValue()));
+                this.translationTexts.add(comp);
+            }
+            for (Map.Entry<Attribute, Float> entry : this.effectsMultiplier().entrySet()) {
+                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + (int) (100 * entry.getValue()) + "%"));
+                this.translationTexts.add(comp);
+            }
+        }
+        return this.translationTexts;
+    }
+
     @Override
     public String toString() {
         return "[HP:" + this.hpRegen + ",RP:" + this.rpRegen + ",HP%:" + this.hpRegenPercent + ",RP%:" + this.rpRegenPercent + ",Duration:" + this.duration + "]" + "{effects:[" + this.effects + "], potions:[" + ArrayUtils.arrayToString(this.potionRemove, null) + "]";
@@ -117,7 +165,7 @@ public class FoodProperties {
 
     public static class MutableFoodProps {
 
-        private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, duration;
+        private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
         private Map<Attribute, Integer> effects = new TreeMap<>(ModAttributes.sorted);
         private Map<Attribute, Float> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
         private List<SimpleEffect> potionApply = Lists.newArrayList();
@@ -136,6 +184,12 @@ public class FoodProperties {
         public MutableFoodProps setRPRegen(int rpRegen, int rpRegenPercent) {
             this.rpRegen = rpRegen;
             this.rpRegenPercent = rpRegenPercent;
+            return this;
+        }
+
+        public MutableFoodProps setRPIncrease(int increase, int percentIncrease){
+            this.rpIncrease = increase;
+            this.rpPercentIncrease = percentIncrease;
             return this;
         }
 

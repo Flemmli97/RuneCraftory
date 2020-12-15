@@ -1,39 +1,31 @@
 package com.flemmli97.runecraftory.api.enums;
 
-import com.google.common.collect.Maps;
 import net.minecraft.util.text.TextFormatting;
 
-import java.util.Map;
-
 public enum EnumElement {
-    NONE(TextFormatting.GRAY, "none"),
-    WATER(TextFormatting.DARK_BLUE, "water"),
-    EARTH(TextFormatting.YELLOW, "earth"),
-    WIND(TextFormatting.GREEN, "wind"),
-    FIRE(TextFormatting.DARK_RED, "fire"),
-    LIGHT(TextFormatting.WHITE, "light"),
-    DARK(TextFormatting.DARK_PURPLE, "dark"),
-    LOVE(TextFormatting.RED, "love");
+    NONE(TextFormatting.GRAY, "element.none"),
+    WATER(TextFormatting.DARK_BLUE, "element.water"),
+    EARTH(TextFormatting.YELLOW, "element.earth"),
+    WIND(TextFormatting.GREEN, "element.wind"),
+    FIRE(TextFormatting.DARK_RED, "element.fire"),
+    LIGHT(TextFormatting.WHITE, "element.light"),
+    DARK(TextFormatting.DARK_PURPLE, "element.dark"),
+    LOVE(TextFormatting.RED, "element.love");
 
-    private final String name;
+    private final String translation;
     private final TextFormatting color;
-    private static final Map<String, EnumElement> map = Maps.newHashMap();
 
     EnumElement(TextFormatting color, String name) {
         this.color = color;
-        this.name = name;
+        this.translation = name;
     }
 
-    public String getName() {
-        return this.name;
+    public String getTranslation() {
+        return this.translation;
     }
 
     public TextFormatting getColor() {
         return this.color;
-    }
-
-    public static EnumElement fromName(String name) {
-        return EnumElement.map.get(name);
     }
 
     public static EnumElement opposing(EnumElement element) {
@@ -62,12 +54,6 @@ public enum EnumElement {
             default: {
                 return EnumElement.NONE;
             }
-        }
-    }
-
-    static {
-        for (EnumElement skill : values()) {
-            EnumElement.map.put(skill.name, skill);
         }
     }
 }

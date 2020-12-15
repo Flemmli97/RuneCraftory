@@ -133,7 +133,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
         String el = compound.getString("Element");
         try {
             this.type = EnumElement.valueOf(el);
-            this.dataManager.set(elementType, this.type.getName());
+            this.dataManager.set(elementType, this.type.getTranslation());
         } catch (IllegalArgumentException e) {
             RuneCraftory.logger.error("Unable to set element type for gate entity {}", this);
         }
@@ -355,7 +355,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
         this.spawnList.addAll(GateSpawning.pickRandomMobs(world.getWorld(), key, this.rand, this.rand.nextInt(4) + 2, this.getBlockPos()));
         this.type = this.getType(world, key);
         //this.dataManager.set(level, LevelCalc.levelFromDistSpawn(this.world, this.getPosition()));
-        this.dataManager.set(elementType, this.type.getName());
+        this.dataManager.set(elementType, this.type.getTranslation());
         this.setPosition(this.getX(), this.getY() + 1, this.getZ());
         this.updateStatsToLevel();
         return data;

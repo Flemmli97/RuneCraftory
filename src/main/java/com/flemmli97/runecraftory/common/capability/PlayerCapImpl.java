@@ -1,22 +1,29 @@
-/*package com.flemmli97.runecraftory.common.capability;
+package com.flemmli97.runecraftory.common.capability;
 
+import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.enums.EnumShop;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
+import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
+import com.flemmli97.runecraftory.common.utils.WorldUtils;
 import com.flemmli97.runecraftory.lib.LibEntityConstants;
 import com.flemmli97.runecraftory.network.PacketHandler;
+import com.flemmli97.runecraftory.network.S2CEquipmentUpdate;
+import com.flemmli97.runecraftory.network.S2CFoodPkt;
+import com.flemmli97.runecraftory.network.S2CLevelPkt;
 import com.flemmli97.runecraftory.network.S2CMaxRunePoints;
 import com.flemmli97.runecraftory.network.S2CMoney;
+import com.flemmli97.runecraftory.network.S2CPlayerStats;
 import com.flemmli97.runecraftory.network.S2CRunePoints;
-import com.flemmli97.tenshilib.api.config.ExtendedItemStackWrapper;
-import com.flemmli97.tenshilib.common.utils.ItemUtils;
+import com.flemmli97.runecraftory.network.S2CSkillLevelPkt;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -26,15 +33,17 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class PlayerCapImpl implements IPlayerCap {
 
@@ -52,14 +61,14 @@ public class PlayerCapImpl implements IPlayerCap {
     private Map<Attribute, Integer> mainHandBonus = Maps.newHashMap();
     private Map<Attribute, Integer> offHandBonus = Maps.newHashMap();
 
-    private Map<String, Integer> shippedItems = Maps.newHashMap();
+    private Map<ResourceLocation, Integer> shippedItems = Maps.newHashMap();
     private Map<EnumShop, NonNullList<ItemStack>> shopItems = Maps.newHashMap();
     private long lastUpdated;
 
     /**
      * first number is level, second is the xp a.k.a. percent to next level
      */
-    /*private int[] level = new int[]{1, 0};
+    private int[] level = new int[]{1, 0};
 
     private Map<EnumSkills, int[]> skillMap = Maps.newHashMap();
     private InventorySpells spells = new InventorySpells();
@@ -208,6 +217,10 @@ public class PlayerCapImpl implements IPlayerCap {
 
     @Override
     public void addXp(PlayerEntity player, int amount) {
+        this.addXp(player, amount, false);
+    }
+
+    private void addXp(PlayerEntity player, int amount, boolean leveledUp){
         //if (!player.capabilities.isCreativeMode)
         {
             int neededXP = LevelCalc.xpAmountForLevelUp(this.level[0]);
@@ -218,12 +231,12 @@ public class PlayerCapImpl implements IPlayerCap {
                 this.level[1] = 0;
                 this.onLevelUp(player);
                 player.world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2f, 1.0f);
-                this.addXp(player, diff);
+                this.addXp(player, diff, true);
             } else {
                 this.level[1] += amount;
-            }
-            if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
-                PacketHandler.sendToClient(new PacketUpdateClient(this), (ServerPlayerEntity) player);
+                if (player instanceof ServerPlayerEntity) {
+                    PacketHandler.sendToClient(new S2CLevelPkt(this, leveledUp ? S2CLevelPkt.Type.LEVELUP : S2CLevelPkt.Type.SET), (ServerPlayerEntity) player);
+                }
             }
         }
     }
@@ -243,7 +256,7 @@ public class PlayerCapImpl implements IPlayerCap {
         this.level[0] = level;
         this.level[1] = xpAmount;
         if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
-            PacketHandler.sendToClient(new PacketPlayerLevel(this), (ServerPlayerEntity) player);
+            PacketHandler.sendToClient(new S2CLevelPkt(this, S2CLevelPkt.Type.LEVELUP), (ServerPlayerEntity) player);
         }
     }
 
@@ -255,9 +268,8 @@ public class PlayerCapImpl implements IPlayerCap {
     @Override
     public void setStr(PlayerEntity player, float amount) {
         this.str = amount;
-        if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
-            PacketHandler.sendToClient(new PacketPlayerStats(this), (ServerPlayerEntity) player);
-        }
+        if (player instanceof ServerPlayerEntity)
+            PacketHandler.sendToClient(new S2CPlayerStats(this), (ServerPlayerEntity) player);
     }
 
     @Override
@@ -268,9 +280,8 @@ public class PlayerCapImpl implements IPlayerCap {
     @Override
     public void setVit(PlayerEntity player, float amount) {
         this.vit = amount;
-        if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
-            PacketHandler.sendToClient(new PacketPlayerStats(this), (ServerPlayerEntity) player);
-        }
+        if (player instanceof ServerPlayerEntity)
+            PacketHandler.sendToClient(new S2CPlayerStats(this), (ServerPlayerEntity) player);
     }
 
     @Override
@@ -281,9 +292,8 @@ public class PlayerCapImpl implements IPlayerCap {
     @Override
     public void setIntel(PlayerEntity player, float amount) {
         this.intel = amount;
-        if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
-            PacketHandler.sendToClient(new PacketPlayerStats(this), (ServerPlayerEntity) player);
-        }
+        if (player instanceof ServerPlayerEntity)
+            PacketHandler.sendToClient(new S2CPlayerStats(this), (ServerPlayerEntity) player);
     }
 
     @Override
@@ -309,7 +319,7 @@ public class PlayerCapImpl implements IPlayerCap {
                 break;
         }
         if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
-            PacketHandler.sendToClient(new PacketUpdateEquipmentStat(slot), (ServerPlayerEntity) player);
+            PacketHandler.sendToClient(new S2CEquipmentUpdate(slot), (ServerPlayerEntity) player);
         }
     }
 
@@ -343,12 +353,16 @@ public class PlayerCapImpl implements IPlayerCap {
         this.skillMap.get(skill)[0] = level;
         this.skillMap.get(skill)[1] = xp;
         if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
-            PacketHandler.sendToClient(new PacketSkills(this, skill), (ServerPlayerEntity) player);
+            PacketHandler.sendToClient(new S2CSkillLevelPkt(this, skill, S2CSkillLevelPkt.Type.SET), (ServerPlayerEntity) player);
         }
     }
 
     @Override
     public void increaseSkill(EnumSkills skill, PlayerEntity player, int xp) {
+        this.increaseSkill(skill, player, xp, false);
+    }
+
+    private void increaseSkill(EnumSkills skill, PlayerEntity player, int xp, boolean leveledUp) {
         //if (!player.capabilities.isCreativeMode)
         {
             int neededXP = LevelCalc.xpAmountForSkills(this.skillMap.get(skill)[0]);
@@ -358,13 +372,13 @@ public class PlayerCapImpl implements IPlayerCap {
                 this.skillMap.get(skill)[0] += 1;
                 this.skillMap.get(skill)[1] = 0;
                 this.onSkillLevelUp(skill, player);
-                player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2f, 1.0f);
-                this.increaseSkill(skill, player, diff);
+                player.world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2f, 1.0f);
+                this.increaseSkill(skill, player, diff, true);
             } else {
                 this.skillMap.get(skill)[1] += xp;
-            }
-            if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
-                PacketHandler.sendToClient(new PacketUpdateClient(this), (ServerPlayerEntity) player);
+                if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
+                    PacketHandler.sendToClient(new S2CSkillLevelPkt(this, skill, leveledUp? S2CSkillLevelPkt.Type.LEVELUP : S2CSkillLevelPkt.Type.SET), (ServerPlayerEntity) player);
+                }
             }
         }
     }
@@ -403,7 +417,7 @@ public class PlayerCapImpl implements IPlayerCap {
         return false;
     }*/
 
-    /*@Override
+    @Override
     public boolean finishMission(PlayerEntity player) {
         /*if (this.quest != null && this.quest.questObjective().isFinished())
         {
@@ -414,13 +428,13 @@ public class PlayerCapImpl implements IPlayerCap {
             this.quest = null;
             return true;
         }*/
-        /*return false;
+        return false;
     }
 
 
     @Override
     public void refreshShop(PlayerEntity player) {
-        if (!player.world.isRemote) {
+       /* if (!player.world.isRemote) {
             Set<ExtendedItemStackWrapper> ignore = NPCShopItems.starterItems();
             for (EnumShop profession : EnumShop.values()) {
 
@@ -444,7 +458,7 @@ public class PlayerCapImpl implements IPlayerCap {
                 this.shopItems.put(profession, shop);
                 PacketHandler.sendToClient(new PacketUpdateShopItems(profession, shop), (ServerPlayerEntity) player);
             }
-        }
+        }*/
     }
 
     @Override
@@ -460,36 +474,37 @@ public class PlayerCapImpl implements IPlayerCap {
 
     @Override
     public void addShippingItem(PlayerEntity player, ItemStack item) {
-        int level = player.world.isRemote || !NPCShopItems.leveledItems().contains(new ExtendedItemStackWrapper(item)) ? 1 : ItemNBT.itemLevel(item);
+        /*int level = player.world.isRemote || !NPCShopItems.leveledItems().contains(new ExtendedItemStackWrapper(item)) ? 1 : ItemNBT.itemLevel(item);
         boolean changed = this.shippedItems.compute(item.getItem().getRegistryName().toString(), (k, v) -> v == null ? level : Math.max(v, level)) != level;
         if (!player.world.isRemote && changed)
-            PacketHandler.sendToClient(new PacketUpdateShippingItem(item, level), (ServerPlayerEntity) player);
+            PacketHandler.sendToClient(new PacketUpdateShippingItem(item, level), (ServerPlayerEntity) player);*/
     }
 
     @Override
-    public void applyFoodEffect(PlayerEntity player, Map<Attribute, Integer> gain, Map<Attribute, Float> gainMulti, int duration) {
+    public void applyFoodEffect(PlayerEntity player, ItemStack stack) {
         this.removeFoodEffect(player);
-        for (Attribute att : gainMulti.keySet()) {
+        FoodProperties prop = DataPackHandler.getFoodStat(stack.getItem());
+        Map<Attribute, Integer> gain = prop.effects();
+        prop.effectsMultiplier().forEach((att, f)->{
             int i = 0;
-            if (att == SharedMonsterAttributes.MAX_HEALTH)
-                i += this.getMaxHealth(player) * gainMulti.get(att);
-            else if (att == ItemStatAttributes.RPMAX)
-                i += this.runePointsMax * gainMulti.get(att);
-            else if (att == ItemStatAttributes.RFATTACK)
-                i += this.str * gainMulti.get(att);
-            else if (att == ItemStatAttributes.RFDEFENCE)
-                i += this.vit * 0.5 * gainMulti.get(att);
-            else if (att == ItemStatAttributes.RFMAGICATT)
-                i += this.intel * gainMulti.get(att);
-            else if (att == ItemStatAttributes.RFMAGICDEF)
-                i += this.vit * 0.5 * gainMulti.get(att);
+            if (att == Attributes.GENERIC_MAX_HEALTH)
+                i += this.getMaxHealth(player) * f;
+            else if (att == Attributes.GENERIC_ATTACK_DAMAGE)
+                i += this.str * f;
+            else if (att == ModAttributes.RF_DEFENCE.get())
+                i += this.vit * 0.5 * f;
+            else if (att == ModAttributes.RF_MAGIC.get())
+                i += this.intel * f;
+            else if (att == ModAttributes.RF_DEFENCE.get())
+                i += this.vit * 0.5 * f;
             i += gain.getOrDefault(att, 0);
             gain.put(att, i);
-        }
+        });
+        this.rpFoodBuff = this.runePointsMax*prop.getRpPercentIncrease() + prop.getRpIncrease();
         this.foodBuffs = gain;
-        this.foodDuration = duration;
-        if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
-            PacketHandler.sendToClient(new PacketFoodUpdate(this.foodBuffs, this.foodDuration), (ServerPlayerEntity) player);
+        this.foodDuration = prop.duration();
+        if (player instanceof ServerPlayerEntity) {
+            PacketHandler.sendToClient(new S2CFoodPkt(stack), (ServerPlayerEntity) player);
         }
     }
 
@@ -497,9 +512,15 @@ public class PlayerCapImpl implements IPlayerCap {
     public void removeFoodEffect(PlayerEntity player) {
         this.foodBuffs.clear();
         this.foodDuration = -1;
+        this.rpFoodBuff = 0;
         if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
-            PacketHandler.sendToClient(new PacketFoodUpdate(this.foodBuffs, this.foodDuration), (ServerPlayerEntity) player);
+            PacketHandler.sendToClient(new S2CFoodPkt(null), (ServerPlayerEntity) player);
         }
+    }
+
+    @Override
+    public int rpFoodBuff(){
+        return this.rpFoodBuff;
     }
 
     @Override
@@ -529,19 +550,18 @@ public class PlayerCapImpl implements IPlayerCap {
 
     private void updateGlove(PlayerEntity player) {
         --this.gloveTick;
-        Vec3d look = player.getLookVec();
-        Vec3d move = new Vec3d(look.x, 0.0, look.z).normalize().scale(0.4);
-        player.motionX = move.x;
-        player.motionZ = move.z;
-        for (EntityLivingBase e : player.world.getEntitiesWithinAABB(EntityLivingBase.class, player.getEntityBoundingBox().grow(1.0))) {
+        Vector3d look = player.getLookVec();
+        Vector3d move = new Vector3d(look.x, 0.0, look.z).normalize().scale(0.4);
+        player.setMotion(move.x, player.getMotion().y, move.z);
+        for (LivingEntity e : player.world.getEntitiesWithinAABB(LivingEntity.class, player.getBoundingBox().grow(1.0))) {
             if (e != player) {
-                float damagePhys = this.getAttributeValue(ItemStatAttributes.RFATTACK);
-                this.decreaseRunePoints(player, 2);
+                float damagePhys = this.getAttributeValue(Attributes.GENERIC_ATTACK_DAMAGE);
+                this.decreaseRunePoints(player, 2, true);
                 this.increaseSkill(EnumSkills.FIST, player, 5);
-                if (!(e instanceof IEntityBase)) {
+                /*if (!(e instanceof IEntityBase)) {
                     damagePhys = LevelCalc.scaleForVanilla(damagePhys);
-                }
-                RFCalculations.playerDamage(player, e, CustomDamage.attack((EntityLivingBase) player, ItemNBT.getElement(player.getHeldItemMainhand()), CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.VANILLA, 1.0f, 20), damagePhys, this, player.getHeldItemMainhand());
+                }*/
+                //RFCalculations.playerDamage(player, e, CustomDamage.attack((EntityLivingBase) player, ItemNBT.getElement(player.getHeldItemMainhand()), CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.VANILLA, 1.0f, 20), damagePhys, this, player.getHeldItemMainhand());
             }
         }
         if (this.gloveTick == 0) {
@@ -551,10 +571,10 @@ public class PlayerCapImpl implements IPlayerCap {
 
     @Override
     public void update(PlayerEntity player) {
-        if (RFCalculations.canUpdateDaily(player.world) || Math.abs(player.world.getWorldTime() / 24000 - this.lastUpdated / 24000) >= 1) {
+        if (WorldUtils.canUpdateDaily(player.world) || Math.abs(player.world.getGameTime() / 24000 - this.lastUpdated / 24000) >= 1) {
             this.getShippingInv().shipItems(player);
             this.refreshShop(player);
-            this.lastUpdated = player.world.getWorldTime();
+            this.lastUpdated = player.world.getGameTime();
         }
         this.ticker = Math.max(--this.ticker, 0);
         this.foodDuration = Math.max(--this.foodDuration, -1);
@@ -642,37 +662,38 @@ public class PlayerCapImpl implements IPlayerCap {
         this.vit = nbt.getFloat("Vitality");
         this.intel = nbt.getFloat("Intelligence");
         this.level = nbt.getIntArray("Level");
-        NBTTagCompound compound = nbt.getCompoundTag("Skills");
+        CompoundNBT compound = nbt.getCompound("Skills");
         for (EnumSkills skill : EnumSkills.values()) {
-            this.skillMap.put(skill, compound.getIntArray(skill.getIdentifier()));
+            this.skillMap.put(skill, compound.getIntArray(skill.toString()));
         }
-        if (nbt.hasKey("Inventory")) {
-            NBTTagCompound compound2 = (NBTTagCompound) nbt.getTag("Inventory");
+        if (nbt.contains("Inventory")) {
+            CompoundNBT compound2 = nbt.getCompound("Inventory");
             this.spells.readFromNBT(compound2);
         }
-        this.shipping.loadInventoryFromNBT(nbt.getTagList("Shipping", Constants.NBT.TAG_COMPOUND));
-        nbt.getTagList("ShippedItems", Constants.NBT.TAG_STRING).forEach(s -> {
-            String[] sub = ((NBTTagString) s).getString().split(";");
-            this.shippedItems.put(sub[0], Integer.parseInt(sub[1]));
-        });
-        NBTTagCompound shops = nbt.getCompoundTag("ShopItems");
+        this.shipping.deserializeNBT(nbt.getCompound("Shipping"));
+        CompoundNBT shipped = nbt.getCompound("ShippedItems");
+        for(String key : shipped.keySet()){
+            this.shippedItems.put(new ResourceLocation(key), shipped.getInt(key));
+        }
+        CompoundNBT shops = nbt.getCompound("ShopItems");
         for (EnumShop shop : EnumShop.values()) {
             NonNullList<ItemStack> items = NonNullList.create();
-            shops.getTagList(shop.toString(), Constants.NBT.TAG_COMPOUND).forEach(comp ->
-                    items.add(new ItemStack((NBTTagCompound) comp)));
+            shops.getList(shop.toString(), Constants.NBT.TAG_COMPOUND).forEach(comp ->
+                    items.add(ItemStack.read((CompoundNBT) comp)));
             this.shopItems.put(shop, items);
         }
         this.lastUpdated = nbt.getLong("LastUpdated");
-        if (nbt.hasKey("Quest")) {
+        /*if (nbt.contains("Quest")) {
             this.quest = new QuestMission(nbt.getCompoundTag("Quest"));
-        }
-        if (nbt.hasKey("FoodBuffs")) {
-            NBTTagCompound tag = nbt.getCompoundTag("FoodBuffs");
-            for (String s : tag.getKeySet()) {
-                this.foodBuffs.put(ItemUtils.getAttFromName(s), tag.getInteger(s));
+        }*/
+        if (nbt.contains("FoodBuffs")) {
+            CompoundNBT tag = nbt.getCompound("FoodBuffs");
+            for (String s : tag.keySet()) {
+                this.foodBuffs.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(s)), tag.getInt(s));
             }
         }
-        this.foodDuration = nbt.getInteger("FoodBuffDuration");
+        this.rpFoodBuff = nbt.getInt("FoodBuffRP");
+        this.foodDuration = nbt.getInt("FoodBuffDuration");
     }
 
     @Override
@@ -691,34 +712,35 @@ public class PlayerCapImpl implements IPlayerCap {
         nbt.putIntArray("Level", this.level);
         CompoundNBT compound = new CompoundNBT();
         for (EnumSkills skill : EnumSkills.values()) {
-            compound.putIntArray(skill.getIdentifier(), this.skillMap.get(skill));
+            compound.putIntArray(skill.toString(), this.skillMap.get(skill));
         }
-        nbt.setTag("Skills", compound);
-        NBTTagCompound compound2 = new NBTTagCompound();
+        nbt.put("Skills", compound);
+        CompoundNBT compound2 = new CompoundNBT();
         this.spells.writeToNBT(compound2);
-        nbt.setTag("Inventory", compound2);
-        nbt.setTag("Shipping", this.shipping.saveInventoryToNBT());
-        NBTTagList ship = new NBTTagList();
-        this.shippedItems.forEach((key, value) -> ship.appendTag(new NBTTagString(key + ";" + value)));
-        nbt.setTag("ShippedItems", ship);
-        NBTTagCompound shop = new NBTTagCompound();
-        for (Entry<EnumShop, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
-            NBTTagList l = new NBTTagList();
+        nbt.put("Inventory", compound2);
+        nbt.put("Shipping", this.shipping.serializeNBT());
+        CompoundNBT ship = new CompoundNBT();
+        this.shippedItems.forEach((key, value) -> ship.putInt(key.toString(), value));
+        nbt.put("ShippedItems", ship);
+        CompoundNBT shop = new CompoundNBT();
+        for (Map.Entry<EnumShop, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
+            ListNBT l = new ListNBT();
             for (ItemStack stack : entry.getValue())
-                l.appendTag(stack.writeToNBT(new NBTTagCompound()));
-            shop.setTag(entry.getKey().toString(), l);
+                l.add(stack.serializeNBT());
+            shop.put(entry.getKey().toString(), l);
         }
-        nbt.setTag("ShopItems", shop);
-        nbt.setLong("LastUpdated", this.lastUpdated);
-        if (this.quest != null) {
+        nbt.put("ShopItems", shop);
+        nbt.putLong("LastUpdated", this.lastUpdated);
+        /*if (this.quest != null) {
             nbt.setTag("Quest", this.quest.writeToNBT(new NBTTagCompound()));
+        }*/
+        CompoundNBT compound3 = new CompoundNBT();
+        for (Map.Entry<Attribute, Integer> entry : this.foodBuffs.entrySet()) {
+            compound3.putInt(entry.getKey().getRegistryName().toString(), entry.getValue());
         }
-        NBTTagCompound compound3 = new NBTTagCompound();
-        for (Entry<Attribute, Integer> entry : this.foodBuffs.entrySet()) {
-            compound3.setInteger(entry.getKey().getName(), entry.getValue());
-        }
-        nbt.setTag("FoodBuffs", compound3);
-        nbt.setInteger("FoodBuffDuration", this.foodDuration);
+        nbt.put("FoodBuffs", compound3);
+        nbt.putInt("FoodBuffRP", this.rpFoodBuff);
+        nbt.putInt("FoodBuffDuration", this.foodDuration);
         return nbt;
     }
-}*/
+}

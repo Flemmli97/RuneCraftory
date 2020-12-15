@@ -67,9 +67,11 @@ public interface IPlayerCap {
 
     void setIntel(PlayerEntity player, float amount);
 
-    void applyFoodEffect(PlayerEntity player, Map<Attribute, Integer> gain, Map<Attribute, Float> gainMulti, int duration);
+    void applyFoodEffect(PlayerEntity player, ItemStack food);
 
     void removeFoodEffect(PlayerEntity player);
+
+    int rpFoodBuff();
 
     Map<Attribute, Integer> foodEffects();
 

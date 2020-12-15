@@ -43,16 +43,24 @@ public class ItemUtils {
     public static int getSellPrice(ItemStack stack) {
         ItemStat price = DataPackHandler.getStats(stack.getItem());
         if (price != null) {
-            return price.getSell() * ItemNBT.itemLevel(stack);
+            return getSellPrice(stack, price);
         }
         return 0;
+    }
+
+    public static int getSellPrice(ItemStack stack, ItemStat stat){
+        return stat.getSell() * ItemNBT.itemLevel(stack);
     }
 
     public static int getBuyPrice(ItemStack stack) {
         ItemStat price = DataPackHandler.getStats(stack.getItem());
         if (price != null) {
-            return price.getBuy();
+            return getBuyPrice(stack, price);
         }
         return 0;
+    }
+
+    public static int getBuyPrice(ItemStack stack, ItemStat stat){
+        return stat.getBuy();
     }
 }

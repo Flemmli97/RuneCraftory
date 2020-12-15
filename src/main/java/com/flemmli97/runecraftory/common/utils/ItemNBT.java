@@ -95,7 +95,7 @@ public class ItemNBT {
                     }
                     compound.put("ItemStats", stats);
                     if (stack.getItem() instanceof IItemUsable) {
-                        compound.putString("Element", stat.element().getName());
+                        compound.putString("Element", stat.element().getTranslation());
                     }
                 }
             }
