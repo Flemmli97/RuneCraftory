@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class BlockStatesGen extends BlockStateProvider {
@@ -22,9 +21,8 @@ public class BlockStatesGen extends BlockStateProvider {
             Block block = reg.get();
             if(block instanceof BlockHerb) {
                 ResourceLocation texture = this.itemTexture(block);
-                this.getVariantBuilder(block).forAllStates(state ->
-                        ConfiguredModel.builder().modelFile(this.models().cross(block.getRegistryName().toString(),texture)
-                                .texture("particle", texture)).build());
+                this.simpleBlock(block, this.models().cross(block.getRegistryName().toString(),texture)
+                                .texture("particle", texture));
             }
         });
     }

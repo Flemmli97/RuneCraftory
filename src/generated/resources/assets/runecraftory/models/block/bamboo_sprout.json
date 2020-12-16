@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "runecraftory:items/bamboo_sprout",
+    "particle": "runecraftory:items/bamboo_sprout"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "entries": [
+    "runecraftory:potato",
+    "runecraftory:wheat",
+    "runecraftory:beetroot",
+    "runecraftory:carrot"
+  ]
+}

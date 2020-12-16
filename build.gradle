@@ -96,6 +96,14 @@ minecraft {
     }
 }
 
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+}
+
+processResources {
+    exclude '.cache'
+}
+
 repositories {
     mavenLocal()
     maven {

@@ -23,7 +23,7 @@ public class DataEvent {
         if (event.includeClient()) {
             data.addProvider(new BlockStatesGen(data, ignore));
             data.addProvider(new ItemModels(data, event.getExistingFileHelper()));
-            data.addProvider(new Lang(data));
+            data.addProvider(new LangGen(data, event.getExistingFileHelper()));
         }
         if (event.includeServer()) {
             BlockTagGen blocks = new BlockTagGen(data, event.getExistingFileHelper());

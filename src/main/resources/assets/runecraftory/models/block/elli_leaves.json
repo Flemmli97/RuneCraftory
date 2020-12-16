@@ -1,7 +1,0 @@
-{
-    "parent": "block/cross",
-    "textures": {
-	"particle":"runecraftory:items/elli_leaves",
-        "cross": "runecraftory:items/elli_leaves"
-    }
-}

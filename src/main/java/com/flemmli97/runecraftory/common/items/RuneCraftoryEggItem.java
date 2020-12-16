@@ -51,7 +51,7 @@ public class RuneCraftoryEggItem extends SpawnEgg {
 
     @Override
     public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        tooltip.add(new TranslationTextComponent("item.spawn.tooltip").formatted(TextFormatting.GOLD));
+        tooltip.add(new TranslationTextComponent("tooltip.item.spawn").formatted(TextFormatting.GOLD));
         super.addInformation(stack, world, tooltip, flag);
     }
 }
