@@ -3,14 +3,14 @@ package com.flemmli97.runecraftory.api.enums;
 import net.minecraft.util.text.TextFormatting;
 
 public enum EnumElement {
-    NONE(TextFormatting.GRAY, "element.none"),
-    WATER(TextFormatting.DARK_BLUE, "element.water"),
-    EARTH(TextFormatting.YELLOW, "element.earth"),
-    WIND(TextFormatting.GREEN, "element.wind"),
-    FIRE(TextFormatting.DARK_RED, "element.fire"),
-    LIGHT(TextFormatting.WHITE, "element.light"),
-    DARK(TextFormatting.DARK_PURPLE, "element.dark"),
-    LOVE(TextFormatting.RED, "element.love");
+    NONE(TextFormatting.GRAY, "element_none"),
+    WATER(TextFormatting.DARK_BLUE, "element_water"),
+    EARTH(TextFormatting.YELLOW, "element_earth"),
+    WIND(TextFormatting.GREEN, "element_wind"),
+    FIRE(TextFormatting.DARK_RED, "element_fire"),
+    LIGHT(TextFormatting.WHITE, "element_light"),
+    DARK(TextFormatting.DARK_PURPLE, "element_dark"),
+    LOVE(TextFormatting.RED, "element_love");
 
     private final String translation;
     private final TextFormatting color;

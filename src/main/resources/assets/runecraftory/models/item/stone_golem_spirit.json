@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "runecraftory:items/shard_stone"
+    "layer0": "runecraftory:items/stone_golem_spirit"
   }
 }

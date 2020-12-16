@@ -36,15 +36,15 @@ public class RFCreativeTabs {
         public ItemStack createIcon() {
             return new ItemStack(ModItems.itemBlockForge);
         }
-    };
+    };*/
 
     public static CreativePlus medicine = new CreativePlus("runecraftory.medicine") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(ModItems.recoveryPotion);
+            return new ItemStack(ModItems.recoveryPotion.get());
         }
     };
-
+/*
     public static CreativePlus cast = new CreativePlus("runecraftory.cast") {
         @Override
         public ItemStack createIcon() {

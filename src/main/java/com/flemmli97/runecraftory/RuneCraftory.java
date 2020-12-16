@@ -12,6 +12,7 @@ import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModItems;
+import com.flemmli97.runecraftory.common.registry.ModLootModifier;
 import com.flemmli97.runecraftory.common.registry.ModPotions;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import net.minecraftforge.api.distmarker.Dist;
@@ -65,14 +66,16 @@ public class RuneCraftory {
 
     public static void registries(IEventBus modBus) {
         ModBlocks.BLOCKS.register(modBus);
+        ModBlocks.TILES.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITIES.register(modBus);
         ModAttributes.ATTRIBUTES.register(modBus);
         ModPotions.EFFECTS.register(modBus);
+        ModLootModifier.SERIALZER.register(modBus);
     }
 
     public void clientSetup(FMLClientSetupEvent event) {
-        ClientRegister.registerEntityRender();
+        ClientRegister.registerRender();
     }
 
     public void common(FMLCommonSetupEvent event) {

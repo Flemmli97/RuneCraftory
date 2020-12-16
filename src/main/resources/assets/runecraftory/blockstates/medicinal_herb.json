@@ -1,5 +1,37 @@
 {
-    "variants": {
-        "normal": { "model": "runecraftory:medicinal_herb" }
+  "variants": {
+    "variant=0": {
+      "model": "runecraftory:block/medicinal_herb"
+    },
+    "variant=1": {
+      "model": "runecraftory:block/medicinal_herb"
+    },
+    "variant=2": {
+      "model": "runecraftory:block/medicinal_herb"
+    },
+    "variant=3": {
+      "model": "runecraftory:block/medicinal_herb"
+    },
+    "variant=4": {
+      "model": "runecraftory:block/medicinal_herb"
+    },
+    "variant=5": {
+      "model": "runecraftory:block/medicinal_herb"
+    },
+    "variant=6": {
+      "model": "runecraftory:block/medicinal_herb"
+    },
+    "variant=7": {
+      "model": "runecraftory:block/medicinal_herb"
+    },
+    "variant=8": {
+      "model": "runecraftory:block/medicinal_herb"
+    },
+    "variant=9": {
+      "model": "runecraftory:block/medicinal_herb"
+    },
+    "variant=10": {
+      "model": "runecraftory:block/medicinal_herb"
     }
+  }
 }

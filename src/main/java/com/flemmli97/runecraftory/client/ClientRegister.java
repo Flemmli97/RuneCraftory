@@ -16,12 +16,16 @@ import com.flemmli97.runecraftory.client.render.projectiles.RenderAmbrosiaWave;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderSleepBall;
+import com.flemmli97.runecraftory.common.blocks.BlockHerb;
+import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class ClientRegister {
 
-    public static void registerEntityRender() {
+    public static void registerRender() {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.gate.get(), RenderGate::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.wooly.get(), RenderWooly::new);
@@ -43,5 +47,10 @@ public class ClientRegister {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.sleep_ball.get(), RenderSleepBall::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.ambrosia_wave.get(), RenderAmbrosiaWave::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.butterfly.get(), RenderButterfly::new);
+
+        ModBlocks.BLOCKS.getEntries().forEach(reg->{
+            if(reg.get() instanceof BlockHerb)
+                RenderTypeLookup.setRenderLayer(reg.get(), RenderType.getCutout());
+        });
     }
 }

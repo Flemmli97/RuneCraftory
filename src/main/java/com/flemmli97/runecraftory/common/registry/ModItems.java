@@ -4,6 +4,8 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.api.enums.EnumToolTier;
 import com.flemmli97.runecraftory.common.RFCreativeTabs;
+import com.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
+import com.flemmli97.runecraftory.common.items.consumables.ItemMushroom;
 import com.flemmli97.runecraftory.common.items.tools.ItemBrush;
 import com.flemmli97.runecraftory.common.items.tools.ItemPetInspector;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
@@ -22,6 +24,8 @@ import com.flemmli97.runecraftory.common.items.weapons.ItemShortSwordBase;
 import com.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import com.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import com.flemmli97.runecraftory.common.items.weapons.shortsword.ItemSeedSword;
+import net.minecraft.block.Block;
+import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.ToolType;
@@ -29,9 +33,13 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.function.Supplier;
+
 public class ModItems {
 
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, RuneCraftory.MODID);
+    private static final Food foodProp = new Food.Builder().hunger(1).saturation(1).setAlwaysEdible().build();
+
     public static final RegistryObject<Item> hoeScrap = hoe(EnumToolTier.SCRAP);
     public static final RegistryObject<Item> hoeIron = hoe(EnumToolTier.IRON);
     public static final RegistryObject<Item> hoeSilver = hoe(EnumToolTier.SILVER);
@@ -105,7 +113,7 @@ public class ModItems {
     public static final RegistryObject<Item> zweihaender = longSword("zweihaender");
     public static final RegistryObject<Item> zweihaenderPlus = longSword("zweihaender_plus");
     public static final RegistryObject<Item> greatSword = longSword("great_sword");
-    public static final RegistryObject<Item> seaCutter = longSword("seaCutter");
+    public static final RegistryObject<Item> seaCutter = longSword("sea_cutter");
     public static final RegistryObject<Item> cycloneBlade = longSword("cyclone_blade");
     public static final RegistryObject<Item> poisonBlade = longSword("poison_blade");
     public static final RegistryObject<Item> katzbalger = longSword("katzbalger");
@@ -468,10 +476,8 @@ public class ModItems {
     public static final RegistryObject<Item> itemBlockCooking = new ItemBlockCooking();
     public static final RegistryObject<Item> itemBlockPharm = new ItemBlockPharm();*/
 
-    //public static final RegistryObject<Item iron = mat("iron");
     public static final RegistryObject<Item> bronze = mat("bronze");
     public static final RegistryObject<Item> silver = mat("silver");
-    //public static final RegistryObject<Item gold = mat("gold");
     public static final RegistryObject<Item> platinum = mat("platinum");
     public static final RegistryObject<Item> orichalcum = mat("orichalcum");
     public static final RegistryObject<Item> dragonic = mat("dragonic_stone");
@@ -479,10 +485,8 @@ public class ModItems {
     public static final RegistryObject<Item> scrapPlus = mat("scrap_plus");
     public static final RegistryObject<Item> amethyst = mat("amethyst");
     public static final RegistryObject<Item> aquamarine = mat("aquamarine");
-    //public static final RegistryObject<Item emerald = mat("emerald");
     public static final RegistryObject<Item> ruby = mat("ruby");
     public static final RegistryObject<Item> sapphire = mat("sapphire");
-    //public static final RegistryObject<Item diamond = mat("diamond");
     public static final RegistryObject<Item> coreRed = mat("core_red");
     public static final RegistryObject<Item> coreBlue = mat("core_blue");
     public static final RegistryObject<Item> coreYellow = mat("core_yellow");
@@ -500,7 +504,6 @@ public class ModItems {
     public static final RegistryObject<Item> crystalMagic = mat("crystal_magic");
     public static final RegistryObject<Item> crystalRune = mat("crystal_rune");
     public static final RegistryObject<Item> crystalElectro = mat("crystal_electro");
-    //public static final RegistryObject<Item stick = mat("stick");
     public static final RegistryObject<Item> stickThick = mat("stick_thick");
     public static final RegistryObject<Item> hornInsect = mat("horn_insect");
     public static final RegistryObject<Item> hornRigid = mat("horn_rigid");
@@ -512,7 +515,6 @@ public class ModItems {
     public static final RegistryObject<Item> devilBlood = mat("devil_blood");
     public static final RegistryObject<Item> paraPoison = mat("paralysis_poison");
     public static final RegistryObject<Item> poisonKing = mat("poison_king");
-    //public static final RegistryObject<Item feather = mat("feather");
     public static final RegistryObject<Item> featherBlack = mat("feather_black");
     public static final RegistryObject<Item> featherThunder = mat("feather_thunder");
     public static final RegistryObject<Item> featherYellow = mat("feather_yellow");
@@ -573,7 +575,6 @@ public class ModItems {
     public static final RegistryObject<Item> sporeHoly = mat("spore_holy");
     public static final RegistryObject<Item> fairyDust = mat("fairy_dust");
     public static final RegistryObject<Item> fairyElixier = mat("fairy_elixier");
-    //public static final RegistryObject<Item gunpowder = mat("gunpowder");
     public static final RegistryObject<Item> root = mat("root");
     public static final RegistryObject<Item> powderMagic = mat("powder_magic");
     public static final RegistryObject<Item> powderMysterious = mat("powder_mysterious");
@@ -646,18 +647,18 @@ public class ModItems {
     public static final RegistryObject<Item> lawn = mat("ayngondaia_lawn");
 
     //Recovery and stuff
-    /*public static final RegistryObject<Item> roundoff = new ItemMedicine("roundoff");
-    public static final RegistryObject<Item> paraGone = new ItemMedicine("para_gone");
-    public static final RegistryObject<Item> coldMed = new ItemMedicine("cold_medicine");
-    public static final RegistryObject<Item> antidote = new ItemMedicine("antidote_potion");
-    public static final RegistryObject<Item> recoveryPotion = new ItemMedicine("recovery_potion");
-    public static final RegistryObject<Item> healingPotion = new ItemMedicine("healing_potion");
-    public static final RegistryObject<Item> mysteryPotion = new ItemMedicine("mystery_potion");
-    public static final RegistryObject<Item> magicalPotion = new ItemMedicine("magical_potion");
-    public static final RegistryObject<Item> invinciroid = new ItemMedicine("invinciroid");
-    public static final RegistryObject<Item> lovePotion = new ItemMedicine("love_potion");
-    public static final RegistryObject<Item> formuade = new ItemMedicine("formuade");
-    public static final RegistryObject<Item> leveliser = new ItemStatIncrease("leveliser", Stat.LEVEL);
+    public static final RegistryObject<Item> roundoff = medicine("roundoff");
+    public static final RegistryObject<Item> paraGone = medicine("para_gone");
+    public static final RegistryObject<Item> coldMed = medicine("cold_medicine");
+    public static final RegistryObject<Item> antidote = medicine("antidote_potion");
+    public static final RegistryObject<Item> recoveryPotion = medicine("recovery_potion");
+    public static final RegistryObject<Item> healingPotion = medicine("healing_potion");
+    public static final RegistryObject<Item> mysteryPotion = medicine("mystery_potion");
+    public static final RegistryObject<Item> magicalPotion = medicine("magical_potion");
+    public static final RegistryObject<Item> invinciroid = medicine("invinciroid");
+    public static final RegistryObject<Item> lovePotion = medicine("love_potion");
+    public static final RegistryObject<Item> formuade = medicine("formuade");
+    /*public static final RegistryObject<Item> leveliser = new ItemStatIncrease("leveliser", Stat.LEVEL);
     public static final RegistryObject<Item> heartDrink = new ItemStatIncrease("heart_drink", Stat.HP);
     public static final RegistryObject<Item> vitalGummi = new ItemStatIncrease("vital_gummi", Stat.VIT);
     public static final RegistryObject<Item> intelligencer = new ItemStatIncrease("intelligencer", Stat.INT);
@@ -918,23 +919,23 @@ public class ModItems {
     public static final RegistryObject<Item> dungeonSeeds = new ItemDungeonSeed();
 
     //Herbs
-
-    public static final RegistryObject<Item> elliLeaves = new ItemHerb("elli_leaves", LibOreDictionary.ELLILEAVES);
-    public static final RegistryObject<Item> witheredGrass = new ItemHerb("withered_grass", LibOreDictionary.WITHEREDGRASS);
-    public static final RegistryObject<Item> weeds = new ItemHerb("weeds", LibOreDictionary.WEEDS);
-    public static final RegistryObject<Item> whiteGrass = new ItemHerb("white_grass", LibOreDictionary.WHITEGRASS);
-    public static final RegistryObject<Item> indigoGrass = new ItemHerb("indigo_grass", LibOreDictionary.INDIGOGRASS);
-    public static final RegistryObject<Item> purpleGrass = new ItemHerb("purple_grass", LibOreDictionary.PURPLEGRASS);
-    public static final RegistryObject<Item> greenGrass = new ItemHerb("green_grass", LibOreDictionary.GREENGRASS);
-    public static final RegistryObject<Item> blueGrass = new ItemHerb("blue_grass", LibOreDictionary.BLUEGRASS);
-    public static final RegistryObject<Item> yellowGrass = new ItemHerb("yellow_grass", LibOreDictionary.YELLOWGRASS);
-    public static final RegistryObject<Item> redGrass = new ItemHerb("red_grass", LibOreDictionary.REDGRASS);
-    public static final RegistryObject<Item> orangeGrass = new ItemHerb("orange_grass", LibOreDictionary.ORANGEGRASS);
-    public static final RegistryObject<Item> blackGrass = new ItemHerb("black_grass", LibOreDictionary.BLACKGRASS);
-    public static final RegistryObject<Item> antidoteGrass = new ItemHerb("antidote_grass", LibOreDictionary.ANTIDOTEGRASS);
-    public static final RegistryObject<Item> medicinalHerb = new ItemHerb("medicinal_herb", LibOreDictionary.MEDICINALHERB);
-    public static final RegistryObject<Item> bambooSprout = new ItemHerb("bamboo_sprout", LibOreDictionary.BAMBOOSPROUT);
 */
+    public static final RegistryObject<Item> elliLeaves = herb("elli_leaves",()-> ModBlocks.elliLeaves);
+    public static final RegistryObject<Item> witheredGrass = herb("withered_grass", ()->ModBlocks.witheredGrass);
+    public static final RegistryObject<Item> weeds = herb("weeds",()-> ModBlocks.weeds);
+    public static final RegistryObject<Item> whiteGrass = herb("white_grass", ()->ModBlocks.whiteGrass);
+    public static final RegistryObject<Item> indigoGrass = herb("indigo_grass", ()->ModBlocks.indigoGrass);
+    public static final RegistryObject<Item> purpleGrass = herb("purple_grass", ()->ModBlocks.purpleGrass);
+    public static final RegistryObject<Item> greenGrass = herb("green_grass", ()->ModBlocks.greenGrass);
+    public static final RegistryObject<Item> blueGrass = herb("blue_grass",()-> ModBlocks.blueGrass);
+    public static final RegistryObject<Item> yellowGrass = herb("yellow_grass", ()->ModBlocks.yellowGrass);
+    public static final RegistryObject<Item> redGrass = herb("red_grass", ()->ModBlocks.redGrass);
+    public static final RegistryObject<Item> orangeGrass = herb("orange_grass", ()->ModBlocks.orangeGrass);
+    public static final RegistryObject<Item> blackGrass = herb("black_grass", ()->ModBlocks.blackGrass);
+    public static final RegistryObject<Item> antidoteGrass = herb("antidote_grass", ()->ModBlocks.antidoteGrass);
+    public static final RegistryObject<Item> medicinalHerb = herb("medicinal_herb", ()->ModBlocks.medicinalHerb);
+    public static final RegistryObject<Item> bambooSprout = herb("bamboo_sprout", ()->ModBlocks.bambooSprout);
+
     //Food
 
     public static final RegistryObject<Item> riceFlour = food("rice_flour");
@@ -1129,10 +1130,10 @@ public class ModItems {
 
     public static final RegistryObject<Item> orange = food("orange");
     public static final RegistryObject<Item> grapes = food("grapes");
-    /*
-    public static final RegistryObject<Item> mushroom = new ItemMushroom("mushroom", LibOreDictionary.MUSHROOM).setCreativeTab(RuneCraftory.food);
-    public static final RegistryObject<Item> mushroomMonarch = new ItemMushroom("monarch_mushroom", LibOreDictionary.MONARCHMUSHROOM).setCreativeTab(RuneCraftory.food);
-    public static final RegistryObject<Item> mealyApple = food("mealy_apple");*/
+
+    public static final RegistryObject<Item> mushroom = ITEMS.register("mushroom", ()-> new ItemMushroom(new Item.Properties().food(foodProp).group(RFCreativeTabs.food)));
+    public static final RegistryObject<Item> mushroomMonarch = ITEMS.register("monarch_mushroom", ()-> new ItemMushroom(new Item.Properties().food(foodProp).group(RFCreativeTabs.food)));
+    public static final RegistryObject<Item> mealyApple = food("mealy_apple");
 
     public static RegistryObject<Item> hoe(EnumToolTier tier) {
         return ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().addToolType(ToolType.HOE, tier.getTierLevel()).maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
@@ -1194,13 +1195,19 @@ public class ModItems {
         return ITEMS.register(name, () -> new Item(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.upgradeItems)));
     }
 
+    public static RegistryObject<Item> medicine(String name) {
+        return ITEMS.register(name, () -> new ItemMedicine(new Item.Properties().food(foodProp).maxStackSize(16).group(RFCreativeTabs.medicine)));
+    }
+
     public static RegistryObject<Item> fish(String name) {
         return ITEMS.register(name, () -> new Item(new Item.Properties().group(RFCreativeTabs.food)));
     }
 
-    private static final Food foodProp = new Food.Builder().hunger(1).saturation(1).setAlwaysEdible().build();
+    public static RegistryObject<Item> herb(String name, Supplier<Supplier<Block>> block) {
+        return ITEMS.register(name, () -> new BlockNamedItem(block.get().get(), new Item.Properties().food(foodProp).group(RFCreativeTabs.medicine)));
+    }
 
     public static RegistryObject<Item> food(String name) {
-        return ITEMS.register(name, () -> new Item(new Item.Properties().maxStackSize(1).food(foodProp).group(RFCreativeTabs.food)));
+        return ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).group(RFCreativeTabs.food)));
     }
 }
