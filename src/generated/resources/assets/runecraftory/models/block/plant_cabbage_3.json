@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "runecraftory:blocks/plant_cabbage_3",
+    "particle": "runecraftory:blocks/plant_cabbage_3"
+  }
+}

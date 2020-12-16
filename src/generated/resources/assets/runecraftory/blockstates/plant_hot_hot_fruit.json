@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "status=0": {
+      "model": "runecraftory:block/plant_hot_hot_fruit_0"
+    },
+    "status=1": {
+      "model": "runecraftory:block/plant_hot_hot_fruit_1"
+    },
+    "status=2": {
+      "model": "runecraftory:block/plant_hot_hot_fruit_2"
+    },
+    "status=3": {
+      "model": "runecraftory:block/plant_hot_hot_fruit_3"
+    }
+  }
+}

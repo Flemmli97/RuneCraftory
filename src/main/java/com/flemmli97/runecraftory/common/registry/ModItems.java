@@ -4,8 +4,12 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.api.enums.EnumToolTier;
 import com.flemmli97.runecraftory.common.RFCreativeTabs;
+import com.flemmli97.runecraftory.common.items.consumables.ItemGiantCrops;
 import com.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import com.flemmli97.runecraftory.common.items.consumables.ItemMushroom;
+import com.flemmli97.runecraftory.common.items.creative.ItemDebug;
+import com.flemmli97.runecraftory.common.items.creative.ItemLevelUp;
+import com.flemmli97.runecraftory.common.items.creative.ItemSkillUp;
 import com.flemmli97.runecraftory.common.items.tools.ItemBrush;
 import com.flemmli97.runecraftory.common.items.tools.ItemPetInspector;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
@@ -770,156 +774,156 @@ public class ModItems {
     public static final RegistryObject<Item> icon0 = ITEMS.register("icon_0", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> icon1 = ITEMS.register("icon_1", () -> new Item(new Item.Properties()));
 
-    /*public static final RegistryObject<Item> debug = new ItemDebug();
-    public static final RegistryObject<Item> level = new ItemLevelUp();
-    public static final RegistryObject<Item> skill = new ItemSkillUp();
-    public static final RegistryObject<Item> tame = new ItemInstaTame();
-    public static final RegistryObject<Item> entityLevel = new ItemEntityLevelUp();
+    public static final RegistryObject<Item> debug = ITEMS.register("debug_item", () -> new ItemDebug(new Item.Properties()));
+    public static final RegistryObject<Item> level =ITEMS.register("level_item", () -> new ItemLevelUp(new Item.Properties()));
+    public static final RegistryObject<Item> skill = ITEMS.register("skill_item", () -> new ItemSkillUp(new Item.Properties()));
+    public static final RegistryObject<Item> tame = ITEMS.register("insta_tame", () -> new ItemDebug(new Item.Properties()));
+    public static final RegistryObject<Item> entityLevel = ITEMS.register("entity_level_item", () -> new ItemDebug(new Item.Properties()));
 
     //Crop items
-    public static final RegistryObject<Item> turnipSeeds = new ItemCropSeed("turnip", LibOreDictionary.TURNIP);
-    public static final RegistryObject<Item> turnipPinkSeeds = new ItemCropSeed("turnip_pink", LibOreDictionary.PINKTURNIP);
-    public static final RegistryObject<Item> cabbageSeeds = new ItemCropSeed("cabbage", LibOreDictionary.CABBAGE);
-    public static final RegistryObject<Item> pinkMelonSeeds = new ItemCropSeed("pink_melon", LibOreDictionary.PINKMELON);
-    public static final RegistryObject<Item> hotHotSeeds = new ItemCropSeed("hot_hot_fruit", LibOreDictionary.HOTHOTFRUIT);
-    public static final RegistryObject<Item> goldTurnipSeeds = new ItemCropSeed("golden_turnip", LibOreDictionary.GOLDENTURNIP);
-    public static final RegistryObject<Item> goldPotatoSeeds = new ItemCropSeed("golden_potato", LibOreDictionary.GOLDENPOTATO);
-    public static final RegistryObject<Item> goldPumpkinSeeds = new ItemCropSeed("golden_pumpkin", LibOreDictionary.GOLDENPUMPKIN);
-    public static final RegistryObject<Item> goldCabbageSeeds = new ItemCropSeed("golden_cabbage", LibOreDictionary.GOLDENCABBAGE);
-    public static final RegistryObject<Item> bokChoySeeds = new ItemCropSeed("bok_choy", LibOreDictionary.BOKCHOY);
-    public static final RegistryObject<Item> leekSeeds = new ItemCropSeed("leek", LibOreDictionary.LEEK);
-    public static final RegistryObject<Item> radishSeeds = new ItemCropSeed("radish", LibOreDictionary.RADISH);
-    public static final RegistryObject<Item> greenPepperSeeds = new ItemCropSeed("green_pepper", LibOreDictionary.GREENPEPPER);
-    public static final RegistryObject<Item> spinachSeeds = new ItemCropSeed("spinach", LibOreDictionary.SPINACH);
-    public static final RegistryObject<Item> yamSeeds = new ItemCropSeed("yam", LibOreDictionary.YAM);
-    public static final RegistryObject<Item> eggplantSeeds = new ItemCropSeed("eggplant", LibOreDictionary.EGGPLANT);
-    public static final RegistryObject<Item> pineappleSeeds = new ItemCropSeed("pineapple", LibOreDictionary.PINEAPPLE);
-    public static final RegistryObject<Item> pumpkinSeeds = new ItemCropSeed("pumpkin", LibOreDictionary.PUMPKIN);
-    public static final RegistryObject<Item> onionSeeds = new ItemCropSeed("onion", LibOreDictionary.ONION);
-    public static final RegistryObject<Item> cornSeeds = new ItemCropSeed("corn", LibOreDictionary.CORN);
-    public static final RegistryObject<Item> tomatoSeeds = new ItemCropSeed("tomato", LibOreDictionary.TOMATO);
-    public static final RegistryObject<Item> strawberrySeeds = new ItemCropSeed("strawberry", LibOreDictionary.STRAWBERRY);
-    public static final RegistryObject<Item> cucumberSeeds = new ItemCropSeed("cucumber", LibOreDictionary.CUCUMBER);
-    public static final RegistryObject<Item> fodderSeeds = new ItemCropSeed("fodder", LibOreDictionary.FODDER);
+    public static final RegistryObject<Item> turnipSeeds = seed("turnip", ()->ModBlocks.turnip);
+    public static final RegistryObject<Item> turnipPinkSeeds = seed("turnip_pink", ()->ModBlocks.turnipPink);
+    public static final RegistryObject<Item> cabbageSeeds = seed("cabbage", ()->ModBlocks.cabbage);
+    public static final RegistryObject<Item> pinkMelonSeeds = seed("pink_melon", ()->ModBlocks.pinkMelon);
+    public static final RegistryObject<Item> hotHotSeeds = seed("hot_hot_fruit", ()->ModBlocks.hotHotFruit);
+    public static final RegistryObject<Item> goldTurnipSeeds = seed("golden_turnip", ()->ModBlocks.goldenTurnip);
+    public static final RegistryObject<Item> goldPotatoSeeds = seed("golden_potato", ()->ModBlocks.goldenPotato);
+    public static final RegistryObject<Item> goldPumpkinSeeds = seed("golden_pumpkin", ()->ModBlocks.goldenPumpkin);
+    public static final RegistryObject<Item> goldCabbageSeeds = seed("golden_cabbage", ()->ModBlocks.goldenCabbage);
+    public static final RegistryObject<Item> bokChoySeeds = seed("bok_choy", ()->ModBlocks.bokChoy);
+    public static final RegistryObject<Item> leekSeeds = seed("leek", ()->ModBlocks.leek);
+    public static final RegistryObject<Item> radishSeeds = seed("radish", ()->ModBlocks.radish);
+    public static final RegistryObject<Item> greenPepperSeeds = seed("green_pepper", ()->ModBlocks.greenPepper);
+    public static final RegistryObject<Item> spinachSeeds = seed("spinach", ()->ModBlocks.spinach);
+    public static final RegistryObject<Item> yamSeeds = seed("yam", ()->ModBlocks.yam);
+    public static final RegistryObject<Item> eggplantSeeds = seed("eggplant", ()->ModBlocks.eggplant);
+    public static final RegistryObject<Item> pineappleSeeds = seed("pineapple", ()->ModBlocks.pineapple);
+    public static final RegistryObject<Item> pumpkinSeeds = seed("pumpkin", ()->ModBlocks.pumpkin);
+    public static final RegistryObject<Item> onionSeeds = seed("onion", ()->ModBlocks.onion);
+    public static final RegistryObject<Item> cornSeeds = seed("corn", ()->ModBlocks.corn);
+    public static final RegistryObject<Item> tomatoSeeds = seed("tomato", ()->ModBlocks.tomato);
+    public static final RegistryObject<Item> strawberrySeeds = seed("strawberry", ()->ModBlocks.strawberry);
+    public static final RegistryObject<Item> cucumberSeeds = seed("cucumber", ()->ModBlocks.cucumber);
+    public static final RegistryObject<Item> fodderSeeds = seed("fodder", ()->ModBlocks.fodder);
 
-    public static final RegistryObject<Item> turnip = new ItemCrops("turnip", LibOreDictionary.TURNIP, false);
-    public static final RegistryObject<Item> turnipGiant = new ItemCrops("turnip", LibOreDictionary.TURNIP, true);
-    public static final RegistryObject<Item> turnipPink = new ItemCrops("turnip_pink", LibOreDictionary.PINKTURNIP, false);
-    public static final RegistryObject<Item> turnipPinkGiant = new ItemCrops("turnip_pink", LibOreDictionary.PINKTURNIP, true);
-    public static final RegistryObject<Item> cabbage = new ItemCrops("cabbage", LibOreDictionary.CABBAGE, false);
-    public static final RegistryObject<Item> cabbageGiant = new ItemCrops("cabbage", LibOreDictionary.CABBAGE, true);
-    public static final RegistryObject<Item> pinkMelon = new ItemCrops("pink_melon", LibOreDictionary.PINKMELON, false);
-    public static final RegistryObject<Item> pinkMelonGiant = new ItemCrops("pink_melon", LibOreDictionary.PINKMELON, true);
-    public static final RegistryObject<Item> pineapple = new ItemCrops("pineapple", LibOreDictionary.PINEAPPLE, false);
-    public static final RegistryObject<Item> pineappleGiant = new ItemCrops("pineapple", LibOreDictionary.PINEAPPLE, true);
-    public static final RegistryObject<Item> strawberry = new ItemCrops("strawberry", LibOreDictionary.STRAWBERRY, false);
-    public static final RegistryObject<Item> strawberryGiant = new ItemCrops("strawberry", LibOreDictionary.STRAWBERRY, true);
-    public static final RegistryObject<Item> goldenTurnip = new ItemCrops("golden_turnip", LibOreDictionary.GOLDENTURNIP, false);
-    public static final RegistryObject<Item> goldenTurnipGiant = new ItemCrops("golden_turnip", LibOreDictionary.GOLDENTURNIP, true);
-    public static final RegistryObject<Item> goldenPotato = new ItemCrops("golden_potato", LibOreDictionary.GOLDENPOTATO, false);
-    public static final RegistryObject<Item> goldenPotatoGiant = new ItemCrops("golden_potato", LibOreDictionary.GOLDENPOTATO, true);
-    public static final RegistryObject<Item> goldenPumpkin = new ItemCrops("golden_pumpkin", LibOreDictionary.GOLDENPUMPKIN, false);
-    public static final RegistryObject<Item> goldenPumpkinGiant = new ItemCrops("golden_pumpkin", LibOreDictionary.GOLDENPUMPKIN, true);
-    public static final RegistryObject<Item> goldenCabbage = new ItemCrops("golden_cabbage", LibOreDictionary.GOLDENCABBAGE, false);
-    public static final RegistryObject<Item> goldenCabbageGiant = new ItemCrops("golden_cabbage", LibOreDictionary.GOLDENCABBAGE, true);
-    public static final RegistryObject<Item> hotHotFruit = new ItemCrops("hot_hot_fruit", LibOreDictionary.HOTHOTFRUIT, false);
-    public static final RegistryObject<Item> hotHotFruitGiant = new ItemCrops("hot_hot_fruit", LibOreDictionary.HOTHOTFRUIT, true);
-    public static final RegistryObject<Item> bokChoy = new ItemCrops("bok_choy", LibOreDictionary.BOKCHOY, false);
-    public static final RegistryObject<Item> bokChoyGiant = new ItemCrops("bok_choy", LibOreDictionary.BOKCHOY, true);
-    public static final RegistryObject<Item> leek = new ItemCrops("leek", LibOreDictionary.LEEK, false);
-    public static final RegistryObject<Item> leekGiant = new ItemCrops("leek", LibOreDictionary.LEEK, true);
-    public static final RegistryObject<Item> radish = new ItemCrops("radish", LibOreDictionary.RADISH, false);
-    public static final RegistryObject<Item> radishGiant = new ItemCrops("radish", LibOreDictionary.RADISH, true);
-    public static final RegistryObject<Item> spinach = new ItemCrops("spinach", LibOreDictionary.SPINACH, false);
-    public static final RegistryObject<Item> spinachGiant = new ItemCrops("spinach", LibOreDictionary.SPINACH, true);
-    public static final RegistryObject<Item> greenPepper = new ItemCrops("green_pepper", LibOreDictionary.GREENPEPPER, false);
-    public static final RegistryObject<Item> greenPepperGiant = new ItemCrops("green_pepper", LibOreDictionary.GREENPEPPER, true);
-    public static final RegistryObject<Item> yam = new ItemCrops("yam", LibOreDictionary.YAM, false);
-    public static final RegistryObject<Item> yamGiant = new ItemCrops("yam", LibOreDictionary.YAM, true);
-    public static final RegistryObject<Item> eggplant = new ItemCrops("eggplant", LibOreDictionary.EGGPLANT, false);
-    public static final RegistryObject<Item> eggplantGiant = new ItemCrops("eggplant", LibOreDictionary.EGGPLANT, true);
-    public static final RegistryObject<Item> tomato = new ItemCrops("tomato", LibOreDictionary.TOMATO, false);
-    public static final RegistryObject<Item> tomatoGiant = new ItemCrops("tomato", LibOreDictionary.TOMATO, true);
-    public static final RegistryObject<Item> corn = new ItemCrops("corn", LibOreDictionary.CORN, false);
-    public static final RegistryObject<Item> cornGiant = new ItemCrops("corn", LibOreDictionary.CORN, true);
-    public static final RegistryObject<Item> cucumber = new ItemCrops("cucumber", LibOreDictionary.CUCUMBER, false);
-    public static final RegistryObject<Item> cucumberGiant = new ItemCrops("cucumber", LibOreDictionary.CUCUMBER, true);
-    public static final RegistryObject<Item> pumpkin = new ItemCrops("pumpkin", LibOreDictionary.PUMPKIN, false);
-    public static final RegistryObject<Item> pumpkinGiant = new ItemCrops("pumpkin", LibOreDictionary.PUMPKIN, true);
-    public static final RegistryObject<Item> onion = new ItemCrops("onion", LibOreDictionary.ONION, false);
-    public static final RegistryObject<Item> onionGiant = new ItemCrops("onion", LibOreDictionary.ONION, true);
+    public static final RegistryObject<Item> turnip = crop("turnip", false);
+    public static final RegistryObject<Item> turnipGiant = crop("turnip", true);
+    public static final RegistryObject<Item> turnipPink = crop("turnip_pink", false);
+    public static final RegistryObject<Item> turnipPinkGiant = crop("turnip_pink", true);
+    public static final RegistryObject<Item> cabbage = crop("cabbage", false);
+    public static final RegistryObject<Item> cabbageGiant = crop("cabbage", true);
+    public static final RegistryObject<Item> pinkMelon = crop("pink_melon", false);
+    public static final RegistryObject<Item> pinkMelonGiant = crop("pink_melon", true);
+    public static final RegistryObject<Item> pineapple = crop("pineapple", false);
+    public static final RegistryObject<Item> pineappleGiant = crop("pineapple", true);
+    public static final RegistryObject<Item> strawberry = crop("strawberry", false);
+    public static final RegistryObject<Item> strawberryGiant = crop("strawberry", true);
+    public static final RegistryObject<Item> goldenTurnip = crop("golden_turnip", false);
+    public static final RegistryObject<Item> goldenTurnipGiant = crop("golden_turnip", true);
+    public static final RegistryObject<Item> goldenPotato = crop("golden_potato", false);
+    public static final RegistryObject<Item> goldenPotatoGiant = crop("golden_potato", true);
+    public static final RegistryObject<Item> goldenPumpkin = crop("golden_pumpkin", false);
+    public static final RegistryObject<Item> goldenPumpkinGiant = crop("golden_pumpkin", true);
+    public static final RegistryObject<Item> goldenCabbage = crop("golden_cabbage", false);
+    public static final RegistryObject<Item> goldenCabbageGiant = crop("golden_cabbage", true);
+    public static final RegistryObject<Item> hotHotFruit = crop("hot_hot_fruit", false);
+    public static final RegistryObject<Item> hotHotFruitGiant = crop("hot_hot_fruit", true);
+    public static final RegistryObject<Item> bokChoy = crop("bok_choy", false);
+    public static final RegistryObject<Item> bokChoyGiant = crop("bok_choy", true);
+    public static final RegistryObject<Item> leek = crop("leek", false);
+    public static final RegistryObject<Item> leekGiant = crop("leek", true);
+    public static final RegistryObject<Item> radish = crop("radish", false);
+    public static final RegistryObject<Item> radishGiant = crop("radish", true);
+    public static final RegistryObject<Item> spinach = crop("spinach", false);
+    public static final RegistryObject<Item> spinachGiant = crop("spinach", true);
+    public static final RegistryObject<Item> greenPepper = crop("green_pepper", false);
+    public static final RegistryObject<Item> greenPepperGiant = crop("green_pepper", true);
+    public static final RegistryObject<Item> yam = crop("yam", false);
+    public static final RegistryObject<Item> yamGiant = crop("yam", true);
+    public static final RegistryObject<Item> eggplant = crop("eggplant", false);
+    public static final RegistryObject<Item> eggplantGiant = crop("eggplant", true);
+    public static final RegistryObject<Item> tomato = crop("tomato", false);
+    public static final RegistryObject<Item> tomatoGiant = crop("tomato", true);
+    public static final RegistryObject<Item> corn = crop("corn", false);
+    public static final RegistryObject<Item> cornGiant = crop("corn", true);
+    public static final RegistryObject<Item> cucumber = crop("cucumber", false);
+    public static final RegistryObject<Item> cucumberGiant = crop("cucumber", true);
+    public static final RegistryObject<Item> pumpkin = crop("pumpkin", false);
+    public static final RegistryObject<Item> pumpkinGiant = crop("pumpkin", true);
+    public static final RegistryObject<Item> onion = crop("onion", false);
+    public static final RegistryObject<Item> onionGiant = crop("onion", true);
 
-    public static final RegistryObject<Item> fodder = CropMap.addCrop(LibOreDictionary.FODDER, mat("fodder"));
+    public static final RegistryObject<Item> fodder = mat("fodder");
 
     //Flowers
-    public static final RegistryObject<Item> toyherbSeeds = new ItemCropSeed("toyherb", LibOreDictionary.TOYHERB);
-    public static final RegistryObject<Item> moondropSeeds = new ItemCropSeed("moondrop_flower", LibOreDictionary.MOONDROPFLOWER);
-    public static final RegistryObject<Item> pinkCatSeeds = new ItemCropSeed("pink_cat", LibOreDictionary.PINKCAT);
-    public static final RegistryObject<Item> charmBlueSeeds = new ItemCropSeed("charm_blue", LibOreDictionary.CHARMBLUE);
-    public static final RegistryObject<Item> lampGrassSeeds = new ItemCropSeed("lamp_grass", LibOreDictionary.LAMPGRASS);
-    public static final RegistryObject<Item> cherryGrassSeeds = new ItemCropSeed("cherry_grass", LibOreDictionary.CHERRYGRASS);
-    public static final RegistryObject<Item> whiteCrystalSeeds = new ItemCropSeed("white_crystal", LibOreDictionary.WHITECRYSTAL);
-    public static final RegistryObject<Item> redCrystalSeeds = new ItemCropSeed("red_crystal", LibOreDictionary.REDCRYSTAL);
-    public static final RegistryObject<Item> pomPomGrassSeeds = new ItemCropSeed("pom_pom_grass", LibOreDictionary.POMPOMGRASS);
-    public static final RegistryObject<Item> autumnGrassSeeds = new ItemCropSeed("autumn_grass", LibOreDictionary.AUTUMNGRASS);
-    public static final RegistryObject<Item> noelGrassSeeds = new ItemCropSeed("noel_grass", LibOreDictionary.NOELGRASS);
-    public static final RegistryObject<Item> greenCrystalSeeds = new ItemCropSeed("green_crystal", LibOreDictionary.GREENCRYSTAL);
-    public static final RegistryObject<Item> fireflowerSeeds = new ItemCropSeed("fireflower", LibOreDictionary.FIREFLOWER);
-    public static final RegistryObject<Item> fourLeafCloverSeeds = new ItemCropSeed("four_leaf_clover", LibOreDictionary.FOURLEAFCLOVER);
-    public static final RegistryObject<Item> ironleafSeeds = new ItemCropSeed("ironleaf", LibOreDictionary.IRONLEAF);
-    public static final RegistryObject<Item> emeryFlowerSeeds = new ItemCropSeed("emery_flower", LibOreDictionary.EMERYFLOWER);
-    public static final RegistryObject<Item> blueCrystalSeeds = new ItemCropSeed("blue_crystal", LibOreDictionary.BLUECRYSTAL);
+    public static final RegistryObject<Item> toyherbSeeds = seed("toyherb", ()->ModBlocks.toyherb);
+    public static final RegistryObject<Item> moondropSeeds = seed("moondrop_flower", ()->ModBlocks.moondropFlower);
+    public static final RegistryObject<Item> pinkCatSeeds = seed("pink_cat", ()->ModBlocks.pinkCat);
+    public static final RegistryObject<Item> charmBlueSeeds = seed("charm_blue", ()->ModBlocks.charmBlue);
+    public static final RegistryObject<Item> lampGrassSeeds = seed("lamp_grass", ()->ModBlocks.lampGrass);
+    public static final RegistryObject<Item> cherryGrassSeeds = seed("cherry_grass", ()->ModBlocks.cherryGrass);
+    public static final RegistryObject<Item> whiteCrystalSeeds = seed("white_crystal", ()->ModBlocks.whiteCrystal);
+    public static final RegistryObject<Item> redCrystalSeeds = seed("red_crystal", ()->ModBlocks.redCrystal);
+    public static final RegistryObject<Item> pomPomGrassSeeds = seed("pom_pom_grass", ()->ModBlocks.pomPomGrass);
+    public static final RegistryObject<Item> autumnGrassSeeds = seed("autumn_grass", ()->ModBlocks.autumnGrass);
+    public static final RegistryObject<Item> noelGrassSeeds = seed("noel_grass", ()->ModBlocks.noelGrass);
+    public static final RegistryObject<Item> greenCrystalSeeds = seed("green_crystal", ()->ModBlocks.greenCrystal);
+    public static final RegistryObject<Item> fireflowerSeeds = seed("fireflower", ()->ModBlocks.fireflower);
+    public static final RegistryObject<Item> fourLeafCloverSeeds = seed("four_leaf_clover", ()->ModBlocks.fourLeafClover);
+    public static final RegistryObject<Item> ironleafSeeds = seed("ironleaf", ()->ModBlocks.ironleaf);
+    public static final RegistryObject<Item> emeryFlowerSeeds = seed("emery_flower", ()->ModBlocks.emeryFlower);
+    public static final RegistryObject<Item> blueCrystalSeeds = seed("blue_crystal", ()->ModBlocks.blueCrystal);
 
-    public static final RegistryObject<Item> whiteCrystal = new ItemCrops("white_crystal", LibOreDictionary.WHITECRYSTAL, false);
-    public static final RegistryObject<Item> whiteCrystalGiant = new ItemCrops("white_crystal", LibOreDictionary.WHITECRYSTAL, true);
-    public static final RegistryObject<Item> redCrystal = new ItemCrops("red_crystal", LibOreDictionary.REDCRYSTAL, false);
-    public static final RegistryObject<Item> redCrystalGiant = new ItemCrops("red_crystal", LibOreDictionary.REDCRYSTAL, true);
-    public static final RegistryObject<Item> pomPomGrass = new ItemCrops("pom-pom_grass", LibOreDictionary.POMPOMGRASS, false);
-    public static final RegistryObject<Item> pomPomGrassGiant = new ItemCrops("pom-pom_grass", LibOreDictionary.POMPOMGRASS, true);
-    public static final RegistryObject<Item> autumnGrass = new ItemCrops("autumn_grass", LibOreDictionary.AUTUMNGRASS, false);
-    public static final RegistryObject<Item> autumnGrassGiant = new ItemCrops("autumn_grass", LibOreDictionary.AUTUMNGRASS, true);
-    public static final RegistryObject<Item> noelGrass = new ItemCrops("noel_grass", LibOreDictionary.NOELGRASS, false);
-    public static final RegistryObject<Item> noelGrassGiant = new ItemCrops("noel_grass", LibOreDictionary.NOELGRASS, true);
-    public static final RegistryObject<Item> greenCrystal = new ItemCrops("green_crystal", LibOreDictionary.GREENCRYSTAL, false);
-    public static final RegistryObject<Item> greenCrystalGiant = new ItemCrops("green_crystal", LibOreDictionary.GREENCRYSTAL, true);
-    public static final RegistryObject<Item> fireflower = new ItemCrops("fireflower", LibOreDictionary.FIREFLOWER, false);
-    public static final RegistryObject<Item> fireflowerGiant = new ItemCrops("fireflower", LibOreDictionary.FIREFLOWER, true);
-    public static final RegistryObject<Item> fourLeafClover = new ItemCrops("four_leaf_clover", LibOreDictionary.FOURLEAFCLOVER, false);
-    public static final RegistryObject<Item> fourLeafCloverGiant = new ItemCrops("four_leaf_clover", LibOreDictionary.FOURLEAFCLOVER, true);
-    public static final RegistryObject<Item> ironleaf = new ItemCrops("ironleaf", LibOreDictionary.IRONLEAF, false);
-    public static final RegistryObject<Item> ironleafGiant = new ItemCrops("ironleaf", LibOreDictionary.IRONLEAF, true);
-    public static final RegistryObject<Item> emeryFlower = new ItemCrops("emery_flower", LibOreDictionary.EMERYFLOWER, false);
-    public static final RegistryObject<Item> emeryFlowerGiant = new ItemCrops("emery_flower", LibOreDictionary.EMERYFLOWER, true);
-    public static final RegistryObject<Item> blueCrystal = new ItemCrops("blue_crystal", LibOreDictionary.BLUECRYSTAL, false);
-    public static final RegistryObject<Item> blueCrystalGiant = new ItemCrops("blue_crystal", LibOreDictionary.BLUECRYSTAL, true);
-    public static final RegistryObject<Item> lampGrass = new ItemCrops("lamp_grass", LibOreDictionary.LAMPGRASS, false);
-    public static final RegistryObject<Item> lampGrassGiant = new ItemCrops("lamp_grass", LibOreDictionary.LAMPGRASS, true);
-    public static final RegistryObject<Item> cherryGrass = new ItemCrops("cherry_grass", LibOreDictionary.CHERRYGRASS, false);
-    public static final RegistryObject<Item> cherryGrassGiant = new ItemCrops("cherry_grass", LibOreDictionary.CHERRYGRASS, true);
-    public static final RegistryObject<Item> charmBlue = new ItemCrops("charm_blue", LibOreDictionary.CHARMBLUE, false);
-    public static final RegistryObject<Item> charmBlueGiant = new ItemCrops("charm_blue", LibOreDictionary.CHARMBLUE, true);
-    public static final RegistryObject<Item> pinkCat = new ItemCrops("pink_cat", LibOreDictionary.PINKCAT, false);
-    public static final RegistryObject<Item> pinkCatGiant = new ItemCrops("pink_cat", LibOreDictionary.PINKCAT, true);
-    public static final RegistryObject<Item> moondropFlower = new ItemCrops("moondrop_flower", LibOreDictionary.MOONDROPFLOWER, false);
-    public static final RegistryObject<Item> moondropFlowerGiant = new ItemCrops("moondrop_flower", LibOreDictionary.MOONDROPFLOWER, true);
-    public static final RegistryObject<Item> toyherb = new ItemCrops("toyherb", LibOreDictionary.TOYHERB, false);
-    public static final RegistryObject<Item> toyherbGiant = new ItemCrops("toyherb", LibOreDictionary.TOYHERB, true);
+    public static final RegistryObject<Item> whiteCrystal = crop("white_crystal", false);
+    public static final RegistryObject<Item> whiteCrystalGiant = crop("white_crystal", true);
+    public static final RegistryObject<Item> redCrystal = crop("red_crystal", false);
+    public static final RegistryObject<Item> redCrystalGiant = crop("red_crystal", true);
+    public static final RegistryObject<Item> pomPomGrass = crop("pom-pom_grass", false);
+    public static final RegistryObject<Item> pomPomGrassGiant = crop("pom-pom_grass", true);
+    public static final RegistryObject<Item> autumnGrass = crop("autumn_grass", false);
+    public static final RegistryObject<Item> autumnGrassGiant = crop("autumn_grass", true);
+    public static final RegistryObject<Item> noelGrass = crop("noel_grass", false);
+    public static final RegistryObject<Item> noelGrassGiant = crop("noel_grass", true);
+    public static final RegistryObject<Item> greenCrystal = crop("green_crystal", false);
+    public static final RegistryObject<Item> greenCrystalGiant = crop("green_crystal", true);
+    public static final RegistryObject<Item> fireflower = crop("fireflower", false);
+    public static final RegistryObject<Item> fireflowerGiant = crop("fireflower", true);
+    public static final RegistryObject<Item> fourLeafClover = crop("four_leaf_clover", false);
+    public static final RegistryObject<Item> fourLeafCloverGiant = crop("four_leaf_clover", true);
+    public static final RegistryObject<Item> ironleaf = crop("ironleaf", false);
+    public static final RegistryObject<Item> ironleafGiant = crop("ironleaf", true);
+    public static final RegistryObject<Item> emeryFlower = crop("emery_flower", false);
+    public static final RegistryObject<Item> emeryFlowerGiant = crop("emery_flower", true);
+    public static final RegistryObject<Item> blueCrystal = crop("blue_crystal", false);
+    public static final RegistryObject<Item> blueCrystalGiant = crop("blue_crystal", true);
+    public static final RegistryObject<Item> lampGrass = crop("lamp_grass", false);
+    public static final RegistryObject<Item> lampGrassGiant = crop("lamp_grass", true);
+    public static final RegistryObject<Item> cherryGrass = crop("cherry_grass", false);
+    public static final RegistryObject<Item> cherryGrassGiant = crop("cherry_grass", true);
+    public static final RegistryObject<Item> charmBlue = crop("charm_blue", false);
+    public static final RegistryObject<Item> charmBlueGiant = crop("charm_blue", true);
+    public static final RegistryObject<Item> pinkCat = crop("pink_cat", false);
+    public static final RegistryObject<Item> pinkCatGiant = crop("pink_cat", true);
+    public static final RegistryObject<Item> moondropFlower = crop("moondrop_flower", false);
+    public static final RegistryObject<Item> moondropFlowerGiant = crop("moondrop_flower", true);
+    public static final RegistryObject<Item> toyherb = crop("toyherb", false);
+    public static final RegistryObject<Item> toyherbGiant = crop("toyherb", true);
     //Vanilla
 
-    public static final RegistryObject<Item> potatoGiant = new ItemCrops("potato", LibOreDictionary.POTATO, true);
+    public static final RegistryObject<Item> potatoGiant = crop("potato", true);
 
-    public static final RegistryObject<Item> carrotGiant = new ItemCrops("carrot", LibOreDictionary.CARROT, true);
+    public static final RegistryObject<Item> carrotGiant = crop("carrot", true);
 
     //Special seeds
 
-    public static final RegistryObject<Item> shieldSeeds = new ItemCropSeed("shield", LibOreDictionary.SEEDSHIELDITEM);
+    /*public static final RegistryObject<Item> shieldSeeds = seed("shield", ()->ModBlocks.SEEDSHIELDITEM);
 
-    public static final RegistryObject<Item> swordSeeds = new ItemCropSeed("sword", LibOreDictionary.SEEDSWORDITEM);
+    public static final RegistryObject<Item> swordSeeds = seed("sword", ()->ModBlocks.SEEDSWORDITEM);
 
-    public static final RegistryObject<Item> dungeonSeeds = new ItemDungeonSeed();
+    public static final RegistryObject<Item> dungeonSeeds = new ItemDungeonSeed();*/
 
     //Herbs
-*/
+
     public static final RegistryObject<Item> elliLeaves = herb("elli_leaves",()-> ModBlocks.elliLeaves);
     public static final RegistryObject<Item> witheredGrass = herb("withered_grass", ()->ModBlocks.witheredGrass);
     public static final RegistryObject<Item> weeds = herb("weeds",()-> ModBlocks.weeds);
@@ -1201,6 +1205,17 @@ public class ModItems {
 
     public static RegistryObject<Item> fish(String name) {
         return ITEMS.register(name, () -> new Item(new Item.Properties().group(RFCreativeTabs.food)));
+    }
+
+    public static RegistryObject<Item> seed(String name, Supplier<Supplier<Block>> block) {
+        return ITEMS.register("seed_"+name, () -> new BlockNamedItem(block.get().get(), new Item.Properties().group(RFCreativeTabs.crops)));
+    }
+
+    public static RegistryObject<Item> crop(String name, boolean giant) {
+        if(giant)
+            return ITEMS.register("crop_"+name+"_giant", () -> new ItemGiantCrops(new Item.Properties().food(foodProp).group(RFCreativeTabs.crops)));
+        else
+            return ITEMS.register("crop_"+name, () -> new Item(new Item.Properties().food(foodProp).group(RFCreativeTabs.crops)));
     }
 
     public static RegistryObject<Item> herb(String name, Supplier<Supplier<Block>> block) {

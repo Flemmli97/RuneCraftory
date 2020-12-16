@@ -14,11 +14,12 @@ import java.util.Set;
 
 public class CropProperties {
 
+    public static final CropProperties defaultProp = new CropProperties();
     private EnumSet<EnumSeason> bestSeason = EnumSet.noneOf(EnumSeason.class);
     private EnumSet<EnumSeason> badSeason = EnumSet.noneOf(EnumSeason.class);
 
-    private int growth;
-    private int maxDrops;
+    private int growth = 3;
+    private int maxDrops = 2;
     private boolean regrowable;
 
     private transient List<ITextComponent> translationTexts;

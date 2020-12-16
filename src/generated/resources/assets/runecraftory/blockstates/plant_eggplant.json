@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "status=0": {
+      "model": "runecraftory:block/plant_eggplant_0"
+    },
+    "status=1": {
+      "model": "runecraftory:block/plant_eggplant_1"
+    },
+    "status=2": {
+      "model": "runecraftory:block/plant_eggplant_2"
+    },
+    "status=3": {
+      "model": "runecraftory:block/plant_eggplant_3"
+    }
+  }
+}

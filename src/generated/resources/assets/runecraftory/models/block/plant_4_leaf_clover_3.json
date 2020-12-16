@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "runecraftory:items/crop_4_leaf_clover",
+    "particle": "runecraftory:items/crop_4_leaf_clover"
+  }
+}

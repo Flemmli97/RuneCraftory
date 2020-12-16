@@ -92,7 +92,10 @@ public class BlockCrop extends BushBlock implements IGrowable {
 
     public CropProperties properties()
     {
-        return DataPackHandler.getCropStat(this.crop.get());
+        CropProperties prop = DataPackHandler.getCropStat(this.crop.get());
+        if(prop == null)
+            prop = CropProperties.defaultProp;
+        return prop;
     }
 
     @Override

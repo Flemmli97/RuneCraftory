@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "status=0": {
+      "model": "runecraftory:block/plant_turnip_pink_0"
+    },
+    "status=1": {
+      "model": "runecraftory:block/plant_turnip_pink_1"
+    },
+    "status=2": {
+      "model": "runecraftory:block/plant_turnip_pink_2"
+    },
+    "status=3": {
+      "model": "runecraftory:block/plant_turnip_pink_3"
+    }
+  }
+}

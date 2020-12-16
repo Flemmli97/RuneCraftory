@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "runecraftory:items/crop_blue_crystal",
+    "particle": "runecraftory:items/crop_blue_crystal"
+  }
+}

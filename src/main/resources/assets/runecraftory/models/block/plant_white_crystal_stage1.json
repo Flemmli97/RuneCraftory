@@ -1,7 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "runecraftory:blocks/plant_white_crystal_stage1",
-    "particle": "runecraftory:blocks/plant_white_crystal_stage1"
-  }
-}

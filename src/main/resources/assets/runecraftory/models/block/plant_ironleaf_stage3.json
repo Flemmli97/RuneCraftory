@@ -1,7 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "runecraftory:items/crop_ironleaf",
-    "particle": "runecraftory:items/crop_ironleaf"
-  }
-}

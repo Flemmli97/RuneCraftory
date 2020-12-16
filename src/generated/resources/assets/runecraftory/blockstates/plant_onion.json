@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "status=0": {
+      "model": "runecraftory:block/plant_onion_0"
+    },
+    "status=1": {
+      "model": "runecraftory:block/plant_onion_1"
+    },
+    "status=2": {
+      "model": "runecraftory:block/plant_onion_2"
+    },
+    "status=3": {
+      "model": "runecraftory:block/plant_onion_3"
+    }
+  }
+}

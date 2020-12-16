@@ -10,6 +10,8 @@ import net.minecraft.item.Item;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.event.AddReloadListenerEvent;
 
+import javax.annotation.Nullable;
+
 public class DataPackHandler {
 
     private static ItemStatManager itemStats;
@@ -22,6 +24,7 @@ public class DataPackHandler {
         event.addListener(foods = new FoodManager());
     }
 
+    @Nullable
     public static ItemStat getStats(Item item) {
         return itemStats.get(item);
     }
@@ -30,6 +33,7 @@ public class DataPackHandler {
         return crops.get(item);
     }
 
+    @Nullable
     public static FoodProperties getFoodStat(Item item) {
         return foods.get(item);
     }

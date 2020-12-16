@@ -1,7 +1,0 @@
-{
-  "parent": "block/crop",
-  "textures": {
-    "crop": "runecraftory:blocks/plant_golden_potato_stage2",
-    "particle": "runecraftory:blocks/plant_golden_potato_stage2"
-  }
-}

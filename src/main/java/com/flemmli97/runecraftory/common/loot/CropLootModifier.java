@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.loot;
 
 import com.flemmli97.runecraftory.api.datapack.CropProperties;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,6 +12,7 @@ import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.common.loot.LootModifier;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
@@ -25,18 +27,26 @@ public class CropLootModifier extends LootModifier {
 
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-        generatedLoot.forEach(this::modifyStack);
+        List<ItemStack> mod = Lists.newArrayList();
+        generatedLoot.removeIf(stack->stack.getItem() == this.remove);
+        generatedLoot.removeIf(stack->this.insertMerge(mod, stack));
+        generatedLoot.addAll(mod);
         return generatedLoot;
     }
 
-    private void modifyStack(ItemStack stack){
-        if(stack.getItem() == this.remove)
-            stack.setCount(0);
-        else {
-            CropProperties prop = DataPackHandler.getCropStat(stack.getItem());
-            if (prop != null)
-                stack.setCount(prop.maxDrops());
+    private boolean insertMerge(List<ItemStack> list, ItemStack stack){
+        CropProperties prop = DataPackHandler.getCropStat(stack.getItem());
+        if (prop != null) {
+            for (ItemStack s : list) {
+                if (ItemHandlerHelper.canItemStacksStack(s, stack)) {
+                    return true;
+                }
+            }
+            stack.setCount(prop.maxDrops());
+            list.add(stack);
+            return true;
         }
+        return false;
     }
 
     public static class Serializer extends GlobalLootModifierSerializer<CropLootModifier>{

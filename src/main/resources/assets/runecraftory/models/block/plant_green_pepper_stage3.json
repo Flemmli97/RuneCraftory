@@ -1,7 +1,0 @@
-{
-  "parent": "block/crop",
-  "textures": {
-    "crop": "runecraftory:blocks/plant_green_pepper_stage3",
-    "particle": "runecraftory:blocks/plant_green_pepper_stage3"
-  }
-}

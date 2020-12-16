@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "status=0": {
+      "model": "runecraftory:block/plant_corn_0"
+    },
+    "status=1": {
+      "model": "runecraftory:block/plant_corn_1"
+    },
+    "status=2": {
+      "model": "runecraftory:block/plant_corn_2"
+    },
+    "status=3": {
+      "model": "runecraftory:block/plant_corn_3"
+    }
+  }
+}

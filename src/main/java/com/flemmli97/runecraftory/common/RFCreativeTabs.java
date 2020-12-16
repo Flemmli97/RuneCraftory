@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class RFCreativeTabs {
+public class    RFCreativeTabs {
 
     public static CreativePlus weaponToolTab = new CreativePlus("runecraftory.weaponsTools") {
         @Override
@@ -58,13 +58,13 @@ public class RFCreativeTabs {
             return new ItemStack(ModItems.onigiri.get());
         }
     };
-/*
+
     public static CreativePlus crops = new CreativePlus("runecraftory.crops") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(ModItems.turnipSeeds);
+            return new ItemStack(ModItems.turnipSeeds.get());
         }
-    };*/
+    };
 
     public static CreativePlus monsters = new CreativePlus("runecraftory.monsters") {
         @Override

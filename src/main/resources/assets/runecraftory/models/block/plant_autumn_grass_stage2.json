@@ -1,7 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "runecraftory:blocks/plant_autumn_grass_stage2",
-    "particle": "runecraftory:blocks/plant_autumn_grass_stage2"
-  }
-}
