@@ -9,7 +9,7 @@ public class SkillProperties {
     private float intel;
     private int baseXP;
 
-    public SkillProperties(float healthIncrease, int rpIncrease, float strIncrease, float vitIncrease, float intelIncrease, int baseXP){
+    public SkillProperties(float healthIncrease, int rpIncrease, float strIncrease, float vitIncrease, float intelIncrease, int baseXP) {
         this.hp = healthIncrease;
         this.rp = rpIncrease;
         this.str = strIncrease;
@@ -38,11 +38,11 @@ public class SkillProperties {
         return this.intel;
     }
 
-    public int getBaseXPGain(){
+    public int getBaseXPGain() {
         return this.baseXP;
     }
 
-    public SkillProperties read(SkillPropertySpecs specs){
+    public SkillProperties read(SkillPropertySpecs specs) {
         this.hp = specs.hp.get();
         this.rp = specs.rp.get();
         this.str = specs.str.get();

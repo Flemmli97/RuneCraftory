@@ -12,6 +12,7 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -30,6 +31,19 @@ public class ClientEvents {
     public void jump(LivingEvent.LivingUpdateEvent e) {
         if (e.getEntityLiving() instanceof ClientPlayerEntity && e.getEntityLiving().getRidingEntity() instanceof BaseMonster && ((ClientPlayerEntity) e.getEntityLiving()).movementInput.jump)
             PacketHandler.sendToServer(new C2SRideJump());
+    }
+
+    @SubscribeEvent
+    public void renderRunePoints(RenderGameOverlayEvent.Pre event) {
+        if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD || event.getType() == RenderGameOverlayEvent.ElementType.HEALTH)
+            event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public void renderRunePoints(RenderGameOverlayEvent.Post event) {
+        if (event.isCancelable() || event.getType() != RenderGameOverlayEvent.ElementType.EXPERIENCE || ClientHandlers.overlay == null)
+            return;
+        ClientHandlers.overlay.renderBar(event.getMatrixStack());
     }
 
     @SubscribeEvent

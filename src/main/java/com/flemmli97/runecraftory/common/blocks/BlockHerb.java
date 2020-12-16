@@ -35,8 +35,7 @@ public class BlockHerb extends BushBlock {
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
-    {
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(LEVEL);
     }
 
@@ -44,12 +43,12 @@ public class BlockHerb extends BushBlock {
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> list = super.getDrops(state, builder);
         int level = state.get(LEVEL);
-        list.forEach(stack-> this.modify(stack, level, builder.getWorld().rand));
+        list.forEach(stack -> this.modify(stack, level, builder.getWorld().rand));
         return list;
     }
 
-    private void modify(ItemStack stack, int level, Random random){
-        if(stack.getItem() == this.item.get()) {
+    private void modify(ItemStack stack, int level, Random random) {
+        if (stack.getItem() == this.item.get()) {
             if (level == 0)
                 level = MathHelper.clamp(random.nextInt(5) + random.nextInt(4) + random.nextInt(3) + random.nextInt(2), 1, 10);
             ItemNBT.getLeveledItem(stack, level);
@@ -57,8 +56,7 @@ public class BlockHerb extends BushBlock {
     }
 
     @Override
-    public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state)
-    {
+    public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {
         return ItemNBT.getLeveledItem(new ItemStack(this.item.get(), 1), 1);
     }
 

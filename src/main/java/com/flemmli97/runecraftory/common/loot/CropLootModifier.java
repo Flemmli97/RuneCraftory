@@ -20,6 +20,7 @@ import java.util.List;
 public class CropLootModifier extends LootModifier {
 
     private final Item remove;
+
     public CropLootModifier(ILootCondition[] conditionsIn, Item ignore) {
         super(conditionsIn);
         this.remove = ignore;
@@ -28,13 +29,13 @@ public class CropLootModifier extends LootModifier {
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
         List<ItemStack> mod = Lists.newArrayList();
-        generatedLoot.removeIf(stack->stack.getItem() == this.remove);
-        generatedLoot.removeIf(stack->this.insertMerge(mod, stack));
+        generatedLoot.removeIf(stack -> stack.getItem() == this.remove);
+        generatedLoot.removeIf(stack -> this.insertMerge(mod, stack));
         generatedLoot.addAll(mod);
         return generatedLoot;
     }
 
-    private boolean insertMerge(List<ItemStack> list, ItemStack stack){
+    private boolean insertMerge(List<ItemStack> list, ItemStack stack) {
         CropProperties prop = DataPackHandler.getCropStat(stack.getItem());
         if (prop != null) {
             for (ItemStack s : list) {
@@ -49,7 +50,7 @@ public class CropLootModifier extends LootModifier {
         return false;
     }
 
-    public static class Serializer extends GlobalLootModifierSerializer<CropLootModifier>{
+    public static class Serializer extends GlobalLootModifierSerializer<CropLootModifier> {
 
         @Override
         public CropLootModifier read(ResourceLocation location, JsonObject object, ILootCondition[] ailootcondition) {

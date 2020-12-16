@@ -28,8 +28,8 @@ public class GlobalLootModifierGen extends GlobalLootModifierProvider {
         this.add("potato", ModLootModifier.crop.get(), this.createForCrop(Blocks.POTATOES, Items.AIR));
     }
 
-    public CropLootModifier createForCrop(Block block, Item ignore){
-        if(block instanceof CropsBlock){
+    public CropLootModifier createForCrop(Block block, Item ignore) {
+        if (block instanceof CropsBlock) {
             return new CropLootModifier(new ILootCondition[]{BlockStateProperty.builder(block).properties(
                     StatePropertiesPredicate.Builder.create().exactMatch(CropsBlock.AGE, ((CropsBlock) block).getMaxAge())).build()}, ignore);
         }

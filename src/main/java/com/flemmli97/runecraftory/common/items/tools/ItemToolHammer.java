@@ -61,13 +61,13 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public void onEntityHit(PlayerEntity player) {
         player.getCapability(PlayerCapProvider.PlayerCap)
-                .ifPresent(cap->LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 0.5f));
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 0.5f));
     }
 
     @Override
     public void onBlockBreak(PlayerEntity player) {
         player.getCapability(PlayerCapProvider.PlayerCap)
-                .ifPresent(cap->LevelCalc.levelSkill(player, cap, EnumSkills.MINING, this.tier.getTierLevel()+1));
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.MINING, this.tier.getTierLevel() + 1));
     }
 
     @Override

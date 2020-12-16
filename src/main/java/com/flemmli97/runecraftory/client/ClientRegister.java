@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.client;
 
+import com.flemmli97.runecraftory.client.gui.OverlayGui;
 import com.flemmli97.runecraftory.client.render.RenderGate;
 import com.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
 import com.flemmli97.runecraftory.client.render.monster.RenderAnt;
@@ -20,6 +21,7 @@ import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -49,9 +51,11 @@ public class ClientRegister {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.ambrosia_wave.get(), RenderAmbrosiaWave::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.butterfly.get(), RenderButterfly::new);
 
-        ModBlocks.BLOCKS.getEntries().forEach(reg->{
-            if(reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop)
+        ModBlocks.BLOCKS.getEntries().forEach(reg -> {
+            if (reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop)
                 RenderTypeLookup.setRenderLayer(reg.get(), RenderType.getCutout());
         });
+
+        ClientHandlers.overlay = new OverlayGui(Minecraft.getInstance());
     }
 }

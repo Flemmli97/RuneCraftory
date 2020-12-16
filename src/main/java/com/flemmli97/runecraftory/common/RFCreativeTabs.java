@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class    RFCreativeTabs {
+public class RFCreativeTabs {
 
     public static CreativePlus weaponToolTab = new CreativePlus("runecraftory.weaponsTools") {
         @Override

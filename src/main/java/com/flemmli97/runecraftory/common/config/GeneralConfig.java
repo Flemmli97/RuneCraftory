@@ -20,11 +20,11 @@ public class GeneralConfig {
 
     public static int mineralRarity;
 
-    public static boolean waila=true;
-    public static boolean jei=true;
+    public static boolean waila = true;
+    public static boolean jei = true;
     //public static boolean harvestCraft=true;
-    public static boolean seasons=true;
-    public static boolean dynamicTrees=true;
+    public static boolean seasons = true;
+    public static boolean dynamicTrees = true;
 
     public static boolean debugAttack;
 
@@ -98,7 +98,7 @@ public class GeneralConfig {
         skillProps.put(EnumSkills.MINING, new SkillProperties(0.0f, 2, 1.5f, 0.5f, 0.0f, 0));
         skillProps.put(EnumSkills.FISHING, new SkillProperties(0.0f, 5, 0.0f, 0.5f, 1.0f, 0));
         skillProps.put(EnumSkills.COOKING, new SkillProperties(1.0f, 2, 0.0f, 0.5f, 1.0f, 0));
-        skillProps.put(EnumSkills.FORGING, new SkillProperties( 1.0f, 2, 1.0f, 0.5f, 1.0f, 0));
+        skillProps.put(EnumSkills.FORGING, new SkillProperties(1.0f, 2, 1.0f, 0.5f, 1.0f, 0));
         skillProps.put(EnumSkills.CHEMISTRY, new SkillProperties(1.0f, 2, 0.0f, 0.5f, 1.5f, 0));
         skillProps.put(EnumSkills.CRAFTING, new SkillProperties(1.0f, 2, 0.5f, 0.5f, 1.0f, 0));
         skillProps.put(EnumSkills.SLEEPING, new SkillProperties(7.0f, 5, 0.0f, 2.5f, 0.0f, 0));
@@ -108,7 +108,7 @@ public class GeneralConfig {
         skillProps.put(EnumSkills.RESSEAL, new SkillProperties(5.0f, 6, 0.0f, 0.5f, 0.5f, 0));
         skillProps.put(EnumSkills.RESPARA, new SkillProperties(3.0f, 3, 0.0f, 0.5f, 0.5f, 0));
         skillProps.put(EnumSkills.RESSLEEP, new SkillProperties(5.0f, 2, 0.0f, 0.5f, 0.5f, 0));
-        skillProps.put(EnumSkills.RESFAT, new SkillProperties( 10.0f, 6, 0.0f, 0.5f, 0.5f, 0));
+        skillProps.put(EnumSkills.RESFAT, new SkillProperties(10.0f, 6, 0.0f, 0.5f, 0.5f, 0));
         skillProps.put(EnumSkills.RESCOLD, new SkillProperties(12.0f, 3, 0.0f, 0.5f, 0.5f, 0));
         skillProps.put(EnumSkills.BATH, new SkillProperties(3.0f, 4, 0.0f, 1.0f, 0.0f, 0));
         skillProps.put(EnumSkills.TAMING, new SkillProperties(3.0f, 4, 1.0f, 1.0f, 1.0f, 0));

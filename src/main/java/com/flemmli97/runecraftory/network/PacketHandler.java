@@ -29,6 +29,7 @@ public class PacketHandler {
         dispatcher.registerMessage(id++, S2CLevelPkt.class, S2CLevelPkt::write, S2CLevelPkt::read, S2CLevelPkt::handle);
         dispatcher.registerMessage(id++, S2CSkillLevelPkt.class, S2CSkillLevelPkt::write, S2CSkillLevelPkt::read, S2CSkillLevelPkt::handle);
         dispatcher.registerMessage(id++, S2CPlayerStats.class, S2CPlayerStats::write, S2CPlayerStats::read, S2CPlayerStats::handle);
+        dispatcher.registerMessage(id++, S2CCalendar.class, S2CCalendar::write, S2CCalendar::read, S2CCalendar::handle);
     }
 
     public static <T> void sendToClient(T message, ServerPlayerEntity player) {

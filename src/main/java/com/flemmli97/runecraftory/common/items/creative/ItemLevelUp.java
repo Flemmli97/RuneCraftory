@@ -18,8 +18,8 @@ public class ItemLevelUp extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         if (!world.isRemote) {
-            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap->
-                    cap.addXp(player, LevelCalc.xpAmountForLevelUp(cap.getPlayerLevel()[0])-cap.getPlayerLevel()[1]));
+            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap ->
+                    cap.addXp(player, LevelCalc.xpAmountForLevelUp(cap.getPlayerLevel()[0]) - cap.getPlayerLevel()[1]));
         }
         return ActionResult.success(player.getHeldItem(hand));
     }

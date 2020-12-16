@@ -16,14 +16,11 @@ public class ItemEntityLevelUp extends Item {
     }
 
     @Override
-    public ActionResultType itemInteractionForEntity(ItemStack itemstack, PlayerEntity player, LivingEntity entity, Hand hand)
-    {
-        if (entity.world.isRemote)
-        {
+    public ActionResultType itemInteractionForEntity(ItemStack itemstack, PlayerEntity player, LivingEntity entity, Hand hand) {
+        if (entity.world.isRemote) {
             return ActionResultType.SUCCESS;
         }
-        if(entity instanceof BaseMonster)
-        {
+        if (entity instanceof BaseMonster) {
             //((BaseMonster)entity)();
             player.playSound(SoundEvents.ENTITY_PLAYER_LEVELUP, 1, 1);
             return ActionResultType.SUCCESS;

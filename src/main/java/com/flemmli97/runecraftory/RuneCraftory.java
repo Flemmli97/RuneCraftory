@@ -8,6 +8,7 @@ import com.flemmli97.runecraftory.common.capability.PlayerCapImpl;
 import com.flemmli97.runecraftory.common.capability.PlayerCapNetwork;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.events.PlayerEvents;
+import com.flemmli97.runecraftory.common.events.WorldEvents;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
@@ -52,6 +53,7 @@ public class RuneCraftory {
         IEventBus forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(DataPackHandler::registerDataPackHandler);
         forgeBus.register(new PlayerEvents());
+        forgeBus.register(new WorldEvents());
 
         Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
         File def = confDir.resolve("default").toFile();

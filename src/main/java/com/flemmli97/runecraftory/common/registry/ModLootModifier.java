@@ -11,5 +11,5 @@ public class ModLootModifier {
 
     public static final DeferredRegister<GlobalLootModifierSerializer<?>> SERIALZER = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, RuneCraftory.MODID);
 
-    public static final RegistryObject<CropLootModifier.Serializer> crop = SERIALZER.register("crop_modifier", ()->new CropLootModifier.Serializer());
+    public static final RegistryObject<CropLootModifier.Serializer> crop = SERIALZER.register("crop_modifier", () -> new CropLootModifier.Serializer());
 }

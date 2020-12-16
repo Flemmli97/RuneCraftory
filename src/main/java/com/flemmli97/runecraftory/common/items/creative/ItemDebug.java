@@ -15,8 +15,7 @@ public class ItemDebug extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand handIn) {
-        if(!world.isRemote)
-        {
+        if (!world.isRemote) {
             /*ItemStack stack = new ItemStack(ModItems.recipe);
             //IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
             stack.setTagCompound(new NBTTagCompound());

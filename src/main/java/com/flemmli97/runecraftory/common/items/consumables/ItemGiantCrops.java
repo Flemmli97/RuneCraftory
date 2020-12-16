@@ -11,6 +11,6 @@ public class ItemGiantCrops extends Item {
 
     @Override
     public int getUseDuration(ItemStack stack) {
-        return (int) (super.getUseDuration(stack)*1.5)  ;
+        return (int) (super.getUseDuration(stack) * 1.5);
     }
 }

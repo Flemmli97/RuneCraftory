@@ -26,8 +26,7 @@ import net.minecraft.item.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemLongSwordBase extends SwordItem implements IItemUsable, IChargeable, IAOEWeapon
-{
+public class ItemLongSwordBase extends SwordItem implements IItemUsable, IChargeable, IAOEWeapon {
     private int chargeXP = 25;
 
     public ItemLongSwordBase(Item.Properties props) {
@@ -36,7 +35,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
 
     @Override
     public int[] getChargeTime() {
-        return new int[] { 15, 1 };
+        return new int[]{15, 1};
     }
 
     @Override
@@ -57,13 +56,13 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     @Override
     public void onEntityHit(PlayerEntity player) {
         player.getCapability(PlayerCapProvider.PlayerCap)
-                .ifPresent(cap-> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 1));
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 1));
     }
 
     @Override
     public void onBlockBreak(PlayerEntity player) {
         player.getCapability(PlayerCapProvider.PlayerCap)
-                .ifPresent(cap->LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, 0.5f));
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, 0.5f));
     }
 
     @Override

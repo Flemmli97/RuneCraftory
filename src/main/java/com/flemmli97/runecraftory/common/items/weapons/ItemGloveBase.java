@@ -20,8 +20,7 @@ import net.minecraft.item.UseAction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDualWeapon, IAOEWeapon
-{
+public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDualWeapon, IAOEWeapon {
     public ItemGloveBase(Item.Properties props) {
         super(props);
 
@@ -39,7 +38,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
 
     @Override
     public int[] getChargeTime() {
-        return new int[] { 15, 1 };
+        return new int[]{15, 1};
     }
 
     @Override
@@ -60,13 +59,13 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     @Override
     public void onEntityHit(PlayerEntity player) {
         player.getCapability(PlayerCapProvider.PlayerCap)
-                .ifPresent(cap-> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 1));
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 1));
     }
 
     @Override
     public void onBlockBreak(PlayerEntity player) {
         player.getCapability(PlayerCapProvider.PlayerCap)
-                .ifPresent(cap->LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, 0.5f));
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, 0.5f));
     }
 
     @Override

@@ -4,7 +4,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 
-public class ItemMedicine extends Item{
+public class ItemMedicine extends Item {
 
     public ItemMedicine(Item.Properties props) {
         super(props);
@@ -16,8 +16,7 @@ public class ItemMedicine extends Item{
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack)
-    {
+    public UseAction getUseAction(ItemStack stack) {
         return UseAction.DRINK;
     }
 }

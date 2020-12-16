@@ -13,9 +13,9 @@ import net.minecraft.world.World;
 
 public class TileCrop extends TileEntity {
 
-    private boolean isGiant=false;
+    private boolean isGiant = false;
     private float age;
-    private long lastGrowth=0;
+    private long lastGrowth = 0;
     private float level;
     private boolean withered;
     private BlockPos[] nearbyGiant;
@@ -24,63 +24,52 @@ public class TileCrop extends TileEntity {
         super(ModBlocks.cropTile.get());
     }
 
-    public int age()
-    {
+    public int age() {
         return (int) this.age;
     }
 
-    public void resetAge()
-    {
-        this.age=0;
+    public void resetAge() {
+        this.age = 0;
         this.markDirty();
     }
 
-    public int level()
-    {
+    public int level() {
         return (int) this.level;
     }
 
-    public boolean isGiant()
-    {
+    public boolean isGiant() {
         return this.isGiant;
     }
 
-    public void increaseLevel(float amount)
-    {
-        this.level+=amount;
+    public void increaseLevel(float amount) {
+        this.level += amount;
     }
 
-    public boolean isFullyGrown(BlockCrop block)
-    {
-        return this.age>=block.properties().growth();
+    public boolean isFullyGrown(BlockCrop block) {
+        return this.age >= block.properties().growth();
     }
 
-    public boolean canGrow()
-    {
-        return Math.abs(this.world.getGameTime()/24000 - this.lastGrowth/24000)>=1;
+    public boolean canGrow() {
+        return Math.abs(this.world.getGameTime() / 24000 - this.lastGrowth / 24000) >= 1;
     }
 
-    public void growCrop(World world, BlockPos pos, BlockState state, float speed, float level, float seasonModifier)
-    {
+    public void growCrop(World world, BlockPos pos, BlockState state, float speed, float level, float seasonModifier) {
         Block block = state.getBlock();
-        this.age+=speed*seasonModifier;
+        this.age += speed * seasonModifier;
 
-        if(block instanceof BlockCrop)
-        {
-            this.age=Math.min(((BlockCrop) block).properties().growth(), this.age);
+        if (block instanceof BlockCrop) {
+            this.age = Math.min(((BlockCrop) block).properties().growth(), this.age);
         }
         this.world.notifyBlockUpdate(pos, state, state, 2);
         this.markDirty();
     }
 
-    public void setWithered()
-    {
-        this.withered=true;
+    public void setWithered() {
+        this.withered = true;
         //this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).withMirror(mirrorIn))
     }
 
-    public boolean isWithered()
-    {
+    public boolean isWithered() {
         return this.withered;
     }
 
@@ -90,8 +79,7 @@ public class TileCrop extends TileEntity {
         return oldState.getBlock() != newSate.getBlock();
     }*/
 
-    public void postProcess()
-    {
+    public void postProcess() {
 
     }
 
@@ -107,8 +95,7 @@ public class TileCrop extends TileEntity {
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
-    {
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         this.fromTag(this.getBlockState(), pkt.getNbtCompound());
         this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(this.pos), this.getWorld().getBlockState(this.pos), 3);
     }
@@ -116,10 +103,10 @@ public class TileCrop extends TileEntity {
     @Override
     public void fromTag(BlockState state, CompoundNBT compound) {
         super.fromTag(state, compound);
-        this.age=compound.getFloat("Age");
-        this.isGiant=compound.getBoolean("Giant");
-        this.level=compound.getFloat("Level");
-        this.withered=compound.getBoolean("Withered");
+        this.age = compound.getFloat("Age");
+        this.isGiant = compound.getBoolean("Giant");
+        this.level = compound.getFloat("Level");
+        this.withered = compound.getBoolean("Withered");
     }
 
     @Override

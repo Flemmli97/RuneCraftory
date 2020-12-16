@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.data;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.api.enums.EnumDay;
 import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 /**
  * Same as LanguageProvider but with a linked hashmap and reading from old lang file
  */
-public class LangGen implements IDataProvider{
+public class LangGen implements IDataProvider {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private final Map<String, String> data = new LinkedHashMap<>();
@@ -54,13 +55,15 @@ public class LangGen implements IDataProvider{
     protected void addTranslations() {
         for (SpawnEgg egg : SpawnEgg.getEggs())
             this.add(egg, "%s" + " Spawn Egg");
+        for(EnumDay day : EnumDay.values())
+            this.add(day.translation(), day.toString().substring(0, 3));
     }
 
-    private void setupOldFile(ExistingFileHelper existing){
+    private void setupOldFile(ExistingFileHelper existing) {
         try {
             JsonObject obj = GSON.fromJson(
                     new InputStreamReader(existing.getResource(new ResourceLocation(RuneCraftory.MODID, "en_us"), ResourcePackType.CLIENT_RESOURCES, ".json", "lang").getInputStream()), JsonObject.class);
-            obj.entrySet().forEach(e-> data.put(e.getKey(), e.getValue().getAsString()));
+            obj.entrySet().forEach(e -> data.put(e.getKey(), e.getValue().getAsString()));
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -69,8 +72,8 @@ public class LangGen implements IDataProvider{
     @Override
     public void act(DirectoryCache cache) throws IOException {
         addTranslations();
-        Map<String, String> sort = data.entrySet().stream().sorted((e,e2)->order.compare(e.getKey(), e2.getKey()))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,(old, v) -> old, LinkedHashMap::new));
+        Map<String, String> sort = data.entrySet().stream().sorted((e, e2) -> order.compare(e.getKey(), e2.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, v) -> old, LinkedHashMap::new));
         if (!data.isEmpty())
             save(cache, sort, this.gen.getOutputFolder().resolve("assets/" + modid + "/lang/" + locale + ".json"));
     }
@@ -166,31 +169,34 @@ public class LangGen implements IDataProvider{
         ELEMENT,
         ATTRIBUTE,
         TOOLTIP,
+        DAY,
         SEASON,
         DEATH,
         ITEMGROUP,
         OTHER;
 
-        public static LangType get(String s){
-            if(s.startsWith("item."))
+        public static LangType get(String s) {
+            if (s.startsWith("item."))
                 return ITEM;
-            if(s.startsWith("block."))
+            if (s.startsWith("block."))
                 return BLOCK;
-            if(s.startsWith("entity."))
+            if (s.startsWith("entity."))
                 return ENTITY;
-            if(s.startsWith("container."))
+            if (s.startsWith("container."))
                 return CONTAINER;
-            if(s.startsWith("element_"))
+            if (s.startsWith("element_"))
                 return ELEMENT;
-            if(s.startsWith("attribute.rf."))
+            if (s.startsWith("attribute.rf."))
                 return ATTRIBUTE;
-            if(s.startsWith("tooltip."))
+            if (s.startsWith("tooltip."))
                 return TOOLTIP;
-            if(s.startsWith("season."))
+            if (s.startsWith("day."))
+                return DAY;
+            if (s.startsWith("season."))
                 return SEASON;
-            if(s.startsWith("death."))
+            if (s.startsWith("death."))
                 return DEATH;
-            if(s.startsWith("itemGroup."))
+            if (s.startsWith("itemGroup."))
                 return ITEMGROUP;
             return OTHER;
         }

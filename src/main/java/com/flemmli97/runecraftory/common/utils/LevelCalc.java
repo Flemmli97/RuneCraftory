@@ -15,11 +15,11 @@ public class LevelCalc {
         return 1;
     }
 
-    public static int getBaseXP(EnumSkills skill){
+    public static int getBaseXP(EnumSkills skill) {
         return GeneralConfig.skillProps.get(skill).getBaseXPGain();
     }
 
-    public static void levelSkill(PlayerEntity player, IPlayerCap cap, EnumSkills skill, float multiplier){
-        cap.increaseSkill(skill, player, (int) (getBaseXP(skill)*multiplier));
+    public static void levelSkill(PlayerEntity player, IPlayerCap cap, EnumSkills skill, float multiplier) {
+        cap.increaseSkill(skill, player, (int) (getBaseXP(skill) * multiplier));
     }
 }

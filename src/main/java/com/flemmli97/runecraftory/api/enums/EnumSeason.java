@@ -33,7 +33,7 @@ public enum EnumSeason {
         return this.color;
     }
 
-    public String formattingText() {
+    public String translationKey() {
         return this.translationKey;
     }
 }

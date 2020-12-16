@@ -19,32 +19,32 @@ public class BlockStatesGen extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        ModBlocks.herbs.forEach(reg->{
+        ModBlocks.herbs.forEach(reg -> {
             Block block = reg.get();
-            if(block instanceof BlockHerb) {
+            if (block instanceof BlockHerb) {
                 ResourceLocation texture = this.itemTexture(block);
-                this.simpleBlock(block, this.models().cross(block.getRegistryName().toString(),texture)
-                                .texture("particle", texture));
+                this.simpleBlock(block, this.models().cross(block.getRegistryName().toString(), texture)
+                        .texture("particle", texture));
             }
         });
-        ModBlocks.flowers.forEach(reg->{
+        ModBlocks.flowers.forEach(reg -> {
             Block block = reg.get();
-            this.getVariantBuilder(block).forAllStates(state->{
+            this.getVariantBuilder(block).forAllStates(state -> {
                 int stage = state.get(BlockCrop.STATUS);
-                String name = stage==0?"runecraftory:flower_stage_0":block.getRegistryName().toString()+"_"+stage;
-                ResourceLocation texture = stage == 0?this.blockTexture(RuneCraftory.MODID, "flower_stage_0")
-                        :stage == 3?this.itemCropTexture(block):this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath()+"_"+stage);
-                return ConfiguredModel.builder().modelFile(this.models().cross(name,texture)
+                String name = stage == 0 ? "runecraftory:flower_stage_0" : block.getRegistryName().toString() + "_" + stage;
+                ResourceLocation texture = stage == 0 ? this.blockTexture(RuneCraftory.MODID, "flower_stage_0")
+                        : stage == 3 ? this.itemCropTexture(block) : this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
+                return ConfiguredModel.builder().modelFile(this.models().cross(name, texture)
                         .texture("particle", texture)).build();
             });
         });
-        ModBlocks.crops.forEach(reg->{
+        ModBlocks.crops.forEach(reg -> {
             Block block = reg.get();
-            this.getVariantBuilder(block).forAllStates(state->{
+            this.getVariantBuilder(block).forAllStates(state -> {
                 int stage = state.get(BlockCrop.STATUS);
-                String name = block.getRegistryName().toString()+"_"+stage;
-                ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath()+"_"+stage);
-                return ConfiguredModel.builder().modelFile(this.models().crop(name,texture)
+                String name = block.getRegistryName().toString() + "_" + stage;
+                ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
+                return ConfiguredModel.builder().modelFile(this.models().crop(name, texture)
                         .texture("particle", texture)).build();
             });
         });

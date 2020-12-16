@@ -84,7 +84,7 @@ public class CropProperties {
                 int i = 0;
                 for (EnumSeason seas : this.bestSeasons()) {
                     season.append(i != 0 ? "/" : "").formatted(TextFormatting.GRAY)
-                            .append(new TranslationTextComponent(seas.formattingText()).formatted(seas.getColor()));
+                            .append(new TranslationTextComponent(seas.translationKey()).formatted(seas.getColor()));
                     i++;
                 }
                 this.translationTexts.add(season);
@@ -96,7 +96,7 @@ public class CropProperties {
                 int i = 0;
                 for (EnumSeason seas : badSeasons) {
                     season.append(i != 0 ? "/" : "").formatted(TextFormatting.GRAY)
-                            .append(new TranslationTextComponent(seas.formattingText()).formatted(seas.getColor()));
+                            .append(new TranslationTextComponent(seas.translationKey()).formatted(seas.getColor()));
                     i++;
                 }
                 this.translationTexts.add(season);

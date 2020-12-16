@@ -39,7 +39,7 @@ import java.util.function.Supplier;
 
 public class BlockCrop extends BushBlock implements IGrowable {
 
-    private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[] {new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
+    private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[]{new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
     private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     public static final IntegerProperty STATUS = IntegerProperty.create("status", 0, 3);
@@ -47,8 +47,8 @@ public class BlockCrop extends BushBlock implements IGrowable {
     private final Supplier<Item> crop;
     private final Supplier<Item> giant;
     private final Supplier<Item> seed;
-    public BlockCrop(AbstractBlock.Properties prop, Supplier<Item> crop, Supplier<Item> giant, Supplier<Item> seed)
-    {
+
+    public BlockCrop(AbstractBlock.Properties prop, Supplier<Item> crop, Supplier<Item> giant, Supplier<Item> seed) {
         super(prop);
         this.setDefaultState(this.getDefaultState().with(STATUS, 0));
         this.crop = crop;
@@ -62,18 +62,14 @@ public class BlockCrop extends BushBlock implements IGrowable {
     }
 
     @Override
-    public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult res)
-    {
+    public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult res) {
         TileCrop tile = (TileCrop) world.getTileEntity(pos);
-        if(tile.age()>=this.properties().growth() && player.getHeldItem(hand).isEmpty())
-        {
+        if (tile.age() >= this.properties().growth() && player.getHeldItem(hand).isEmpty()) {
             spawnDrops(state, world, pos, tile);
-            if(this.properties().regrowable())
-            {
+            if (this.properties().regrowable()) {
                 tile.resetAge();
                 world.setBlockState(pos, state.with(STATUS, 0));
-            }
-            else
+            } else
                 world.removeBlock(pos, false);
             return ActionResultType.SUCCESS;
         }
@@ -81,19 +77,18 @@ public class BlockCrop extends BushBlock implements IGrowable {
     }
 
     @Override
-    public PlantType getPlantType(IBlockReader world, BlockPos pos)
-    {
+    public PlantType getPlantType(IBlockReader world, BlockPos pos) {
         return PlantType.CROP;
     }
+
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
         return SHAPE_BY_AGE[state.get(STATUS)];
     }
 
-    public CropProperties properties()
-    {
+    public CropProperties properties() {
         CropProperties prop = DataPackHandler.getCropStat(this.crop.get());
-        if(prop == null)
+        if (prop == null)
             prop = CropProperties.defaultProp;
         return prop;
     }
@@ -117,15 +112,15 @@ public class BlockCrop extends BushBlock implements IGrowable {
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> list = super.getDrops(state, builder);
         TileEntity tile = builder.get(LootParameters.BLOCK_ENTITY);
-        if(tile instanceof TileCrop && ((TileCrop) tile).age() >= this.properties().growth())
+        if (tile instanceof TileCrop && ((TileCrop) tile).age() >= this.properties().growth())
             list.forEach(this::modifyStack);
         return list;
     }
 
-    private void modifyStack(ItemStack stack){
-        if(stack.getItem() == this.crop.get() || stack.getItem() == this.giant.get()) {
+    private void modifyStack(ItemStack stack) {
+        if (stack.getItem() == this.crop.get() || stack.getItem() == this.giant.get()) {
             CropProperties prop = DataPackHandler.getCropStat(this.crop.get());
-            if(prop != null)
+            if (prop != null)
                 stack.setCount(prop.maxDrops());
         }
     }
@@ -134,31 +129,28 @@ public class BlockCrop extends BushBlock implements IGrowable {
      * Whether this IGrowable can grow
      */
     @Override
-    public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient)
-    {
-        return !((TileCrop)world.getTileEntity(pos)).isFullyGrown(this);
+    public boolean canGrow(IBlockReader world, BlockPos pos, BlockState state, boolean isClient) {
+        return !((TileCrop) world.getTileEntity(pos)).isFullyGrown(this);
     }
 
     /**
      * Use as a soil fertilizer?
      */
     @Override
-    public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state)
-    {
+    public boolean canUseBonemeal(World world, Random rand, BlockPos pos, BlockState state) {
         return true;
     }
+
     /**
      * Used for bonemeal items.
      */
     @Override
-    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state)
-    {
+    public void grow(ServerWorld world, Random rand, BlockPos pos, BlockState state) {
 
     }
 
     @Override
-    public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state)
-    {
+    public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {
         return ItemNBT.getLeveledItem(new ItemStack(this.seed.get(), 1), 1);
     }
 

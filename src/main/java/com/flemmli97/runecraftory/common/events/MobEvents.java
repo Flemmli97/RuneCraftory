@@ -44,7 +44,7 @@ public class MobEvents {
         if (event.getSource().getTrueSource() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
             if (!(player.getHeldItemMainhand().getItem() instanceof IItemUsable)) {
-                event.setAmount(player.getCapability(PlayerCapProvider.PlayerCap).map(cap -> Math.max(0, cap.getAttributeValue(player, Attributes.GENERIC_ATTACK_DAMAGE)-4)).orElse(0));
+                event.setAmount(player.getCapability(PlayerCapProvider.PlayerCap).map(cap -> Math.max(0, cap.getAttributeValue(player, Attributes.GENERIC_ATTACK_DAMAGE) - 4)).orElse(0));
             }
         }
     }

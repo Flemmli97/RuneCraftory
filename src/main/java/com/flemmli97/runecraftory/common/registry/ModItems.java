@@ -78,7 +78,7 @@ public class ModItems {
     public static final RegistryObject<Item> brush = ITEMS.register("brush", () -> new ItemBrush(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> glass = ITEMS.register("magnifying_glass", () -> new ItemToolGlass(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
 
-    public static final RegistryObject<Item> seedSword = ITEMS.register("seed_sword", ()->new ItemSeedSword(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> seedSword = ITEMS.register("seed_sword", () -> new ItemSeedSword(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> broadSword = shortSword("broad_sword");
     public static final RegistryObject<Item> steelSword = shortSword("steel_sword");
     public static final RegistryObject<Item> steelSwordPlus = shortSword("steel_sword_plus");
@@ -775,36 +775,36 @@ public class ModItems {
     public static final RegistryObject<Item> icon1 = ITEMS.register("icon_1", () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> debug = ITEMS.register("debug_item", () -> new ItemDebug(new Item.Properties()));
-    public static final RegistryObject<Item> level =ITEMS.register("level_item", () -> new ItemLevelUp(new Item.Properties()));
+    public static final RegistryObject<Item> level = ITEMS.register("level_item", () -> new ItemLevelUp(new Item.Properties()));
     public static final RegistryObject<Item> skill = ITEMS.register("skill_item", () -> new ItemSkillUp(new Item.Properties()));
     public static final RegistryObject<Item> tame = ITEMS.register("insta_tame", () -> new ItemDebug(new Item.Properties()));
     public static final RegistryObject<Item> entityLevel = ITEMS.register("entity_level_item", () -> new ItemDebug(new Item.Properties()));
 
     //Crop items
-    public static final RegistryObject<Item> turnipSeeds = seed("turnip", ()->ModBlocks.turnip);
-    public static final RegistryObject<Item> turnipPinkSeeds = seed("turnip_pink", ()->ModBlocks.turnipPink);
-    public static final RegistryObject<Item> cabbageSeeds = seed("cabbage", ()->ModBlocks.cabbage);
-    public static final RegistryObject<Item> pinkMelonSeeds = seed("pink_melon", ()->ModBlocks.pinkMelon);
-    public static final RegistryObject<Item> hotHotSeeds = seed("hot_hot_fruit", ()->ModBlocks.hotHotFruit);
-    public static final RegistryObject<Item> goldTurnipSeeds = seed("golden_turnip", ()->ModBlocks.goldenTurnip);
-    public static final RegistryObject<Item> goldPotatoSeeds = seed("golden_potato", ()->ModBlocks.goldenPotato);
-    public static final RegistryObject<Item> goldPumpkinSeeds = seed("golden_pumpkin", ()->ModBlocks.goldenPumpkin);
-    public static final RegistryObject<Item> goldCabbageSeeds = seed("golden_cabbage", ()->ModBlocks.goldenCabbage);
-    public static final RegistryObject<Item> bokChoySeeds = seed("bok_choy", ()->ModBlocks.bokChoy);
-    public static final RegistryObject<Item> leekSeeds = seed("leek", ()->ModBlocks.leek);
-    public static final RegistryObject<Item> radishSeeds = seed("radish", ()->ModBlocks.radish);
-    public static final RegistryObject<Item> greenPepperSeeds = seed("green_pepper", ()->ModBlocks.greenPepper);
-    public static final RegistryObject<Item> spinachSeeds = seed("spinach", ()->ModBlocks.spinach);
-    public static final RegistryObject<Item> yamSeeds = seed("yam", ()->ModBlocks.yam);
-    public static final RegistryObject<Item> eggplantSeeds = seed("eggplant", ()->ModBlocks.eggplant);
-    public static final RegistryObject<Item> pineappleSeeds = seed("pineapple", ()->ModBlocks.pineapple);
-    public static final RegistryObject<Item> pumpkinSeeds = seed("pumpkin", ()->ModBlocks.pumpkin);
-    public static final RegistryObject<Item> onionSeeds = seed("onion", ()->ModBlocks.onion);
-    public static final RegistryObject<Item> cornSeeds = seed("corn", ()->ModBlocks.corn);
-    public static final RegistryObject<Item> tomatoSeeds = seed("tomato", ()->ModBlocks.tomato);
-    public static final RegistryObject<Item> strawberrySeeds = seed("strawberry", ()->ModBlocks.strawberry);
-    public static final RegistryObject<Item> cucumberSeeds = seed("cucumber", ()->ModBlocks.cucumber);
-    public static final RegistryObject<Item> fodderSeeds = seed("fodder", ()->ModBlocks.fodder);
+    public static final RegistryObject<Item> turnipSeeds = seed("turnip", () -> ModBlocks.turnip);
+    public static final RegistryObject<Item> turnipPinkSeeds = seed("turnip_pink", () -> ModBlocks.turnipPink);
+    public static final RegistryObject<Item> cabbageSeeds = seed("cabbage", () -> ModBlocks.cabbage);
+    public static final RegistryObject<Item> pinkMelonSeeds = seed("pink_melon", () -> ModBlocks.pinkMelon);
+    public static final RegistryObject<Item> hotHotSeeds = seed("hot_hot_fruit", () -> ModBlocks.hotHotFruit);
+    public static final RegistryObject<Item> goldTurnipSeeds = seed("golden_turnip", () -> ModBlocks.goldenTurnip);
+    public static final RegistryObject<Item> goldPotatoSeeds = seed("golden_potato", () -> ModBlocks.goldenPotato);
+    public static final RegistryObject<Item> goldPumpkinSeeds = seed("golden_pumpkin", () -> ModBlocks.goldenPumpkin);
+    public static final RegistryObject<Item> goldCabbageSeeds = seed("golden_cabbage", () -> ModBlocks.goldenCabbage);
+    public static final RegistryObject<Item> bokChoySeeds = seed("bok_choy", () -> ModBlocks.bokChoy);
+    public static final RegistryObject<Item> leekSeeds = seed("leek", () -> ModBlocks.leek);
+    public static final RegistryObject<Item> radishSeeds = seed("radish", () -> ModBlocks.radish);
+    public static final RegistryObject<Item> greenPepperSeeds = seed("green_pepper", () -> ModBlocks.greenPepper);
+    public static final RegistryObject<Item> spinachSeeds = seed("spinach", () -> ModBlocks.spinach);
+    public static final RegistryObject<Item> yamSeeds = seed("yam", () -> ModBlocks.yam);
+    public static final RegistryObject<Item> eggplantSeeds = seed("eggplant", () -> ModBlocks.eggplant);
+    public static final RegistryObject<Item> pineappleSeeds = seed("pineapple", () -> ModBlocks.pineapple);
+    public static final RegistryObject<Item> pumpkinSeeds = seed("pumpkin", () -> ModBlocks.pumpkin);
+    public static final RegistryObject<Item> onionSeeds = seed("onion", () -> ModBlocks.onion);
+    public static final RegistryObject<Item> cornSeeds = seed("corn", () -> ModBlocks.corn);
+    public static final RegistryObject<Item> tomatoSeeds = seed("tomato", () -> ModBlocks.tomato);
+    public static final RegistryObject<Item> strawberrySeeds = seed("strawberry", () -> ModBlocks.strawberry);
+    public static final RegistryObject<Item> cucumberSeeds = seed("cucumber", () -> ModBlocks.cucumber);
+    public static final RegistryObject<Item> fodderSeeds = seed("fodder", () -> ModBlocks.fodder);
 
     public static final RegistryObject<Item> turnip = crop("turnip", false);
     public static final RegistryObject<Item> turnipGiant = crop("turnip", true);
@@ -856,23 +856,23 @@ public class ModItems {
     public static final RegistryObject<Item> fodder = mat("fodder");
 
     //Flowers
-    public static final RegistryObject<Item> toyherbSeeds = seed("toyherb", ()->ModBlocks.toyherb);
-    public static final RegistryObject<Item> moondropSeeds = seed("moondrop_flower", ()->ModBlocks.moondropFlower);
-    public static final RegistryObject<Item> pinkCatSeeds = seed("pink_cat", ()->ModBlocks.pinkCat);
-    public static final RegistryObject<Item> charmBlueSeeds = seed("charm_blue", ()->ModBlocks.charmBlue);
-    public static final RegistryObject<Item> lampGrassSeeds = seed("lamp_grass", ()->ModBlocks.lampGrass);
-    public static final RegistryObject<Item> cherryGrassSeeds = seed("cherry_grass", ()->ModBlocks.cherryGrass);
-    public static final RegistryObject<Item> whiteCrystalSeeds = seed("white_crystal", ()->ModBlocks.whiteCrystal);
-    public static final RegistryObject<Item> redCrystalSeeds = seed("red_crystal", ()->ModBlocks.redCrystal);
-    public static final RegistryObject<Item> pomPomGrassSeeds = seed("pom_pom_grass", ()->ModBlocks.pomPomGrass);
-    public static final RegistryObject<Item> autumnGrassSeeds = seed("autumn_grass", ()->ModBlocks.autumnGrass);
-    public static final RegistryObject<Item> noelGrassSeeds = seed("noel_grass", ()->ModBlocks.noelGrass);
-    public static final RegistryObject<Item> greenCrystalSeeds = seed("green_crystal", ()->ModBlocks.greenCrystal);
-    public static final RegistryObject<Item> fireflowerSeeds = seed("fireflower", ()->ModBlocks.fireflower);
-    public static final RegistryObject<Item> fourLeafCloverSeeds = seed("four_leaf_clover", ()->ModBlocks.fourLeafClover);
-    public static final RegistryObject<Item> ironleafSeeds = seed("ironleaf", ()->ModBlocks.ironleaf);
-    public static final RegistryObject<Item> emeryFlowerSeeds = seed("emery_flower", ()->ModBlocks.emeryFlower);
-    public static final RegistryObject<Item> blueCrystalSeeds = seed("blue_crystal", ()->ModBlocks.blueCrystal);
+    public static final RegistryObject<Item> toyherbSeeds = seed("toyherb", () -> ModBlocks.toyherb);
+    public static final RegistryObject<Item> moondropSeeds = seed("moondrop_flower", () -> ModBlocks.moondropFlower);
+    public static final RegistryObject<Item> pinkCatSeeds = seed("pink_cat", () -> ModBlocks.pinkCat);
+    public static final RegistryObject<Item> charmBlueSeeds = seed("charm_blue", () -> ModBlocks.charmBlue);
+    public static final RegistryObject<Item> lampGrassSeeds = seed("lamp_grass", () -> ModBlocks.lampGrass);
+    public static final RegistryObject<Item> cherryGrassSeeds = seed("cherry_grass", () -> ModBlocks.cherryGrass);
+    public static final RegistryObject<Item> whiteCrystalSeeds = seed("white_crystal", () -> ModBlocks.whiteCrystal);
+    public static final RegistryObject<Item> redCrystalSeeds = seed("red_crystal", () -> ModBlocks.redCrystal);
+    public static final RegistryObject<Item> pomPomGrassSeeds = seed("pom_pom_grass", () -> ModBlocks.pomPomGrass);
+    public static final RegistryObject<Item> autumnGrassSeeds = seed("autumn_grass", () -> ModBlocks.autumnGrass);
+    public static final RegistryObject<Item> noelGrassSeeds = seed("noel_grass", () -> ModBlocks.noelGrass);
+    public static final RegistryObject<Item> greenCrystalSeeds = seed("green_crystal", () -> ModBlocks.greenCrystal);
+    public static final RegistryObject<Item> fireflowerSeeds = seed("fireflower", () -> ModBlocks.fireflower);
+    public static final RegistryObject<Item> fourLeafCloverSeeds = seed("four_leaf_clover", () -> ModBlocks.fourLeafClover);
+    public static final RegistryObject<Item> ironleafSeeds = seed("ironleaf", () -> ModBlocks.ironleaf);
+    public static final RegistryObject<Item> emeryFlowerSeeds = seed("emery_flower", () -> ModBlocks.emeryFlower);
+    public static final RegistryObject<Item> blueCrystalSeeds = seed("blue_crystal", () -> ModBlocks.blueCrystal);
 
     public static final RegistryObject<Item> whiteCrystal = crop("white_crystal", false);
     public static final RegistryObject<Item> whiteCrystalGiant = crop("white_crystal", true);
@@ -924,21 +924,21 @@ public class ModItems {
 
     //Herbs
 
-    public static final RegistryObject<Item> elliLeaves = herb("elli_leaves",()-> ModBlocks.elliLeaves);
-    public static final RegistryObject<Item> witheredGrass = herb("withered_grass", ()->ModBlocks.witheredGrass);
-    public static final RegistryObject<Item> weeds = herb("weeds",()-> ModBlocks.weeds);
-    public static final RegistryObject<Item> whiteGrass = herb("white_grass", ()->ModBlocks.whiteGrass);
-    public static final RegistryObject<Item> indigoGrass = herb("indigo_grass", ()->ModBlocks.indigoGrass);
-    public static final RegistryObject<Item> purpleGrass = herb("purple_grass", ()->ModBlocks.purpleGrass);
-    public static final RegistryObject<Item> greenGrass = herb("green_grass", ()->ModBlocks.greenGrass);
-    public static final RegistryObject<Item> blueGrass = herb("blue_grass",()-> ModBlocks.blueGrass);
-    public static final RegistryObject<Item> yellowGrass = herb("yellow_grass", ()->ModBlocks.yellowGrass);
-    public static final RegistryObject<Item> redGrass = herb("red_grass", ()->ModBlocks.redGrass);
-    public static final RegistryObject<Item> orangeGrass = herb("orange_grass", ()->ModBlocks.orangeGrass);
-    public static final RegistryObject<Item> blackGrass = herb("black_grass", ()->ModBlocks.blackGrass);
-    public static final RegistryObject<Item> antidoteGrass = herb("antidote_grass", ()->ModBlocks.antidoteGrass);
-    public static final RegistryObject<Item> medicinalHerb = herb("medicinal_herb", ()->ModBlocks.medicinalHerb);
-    public static final RegistryObject<Item> bambooSprout = herb("bamboo_sprout", ()->ModBlocks.bambooSprout);
+    public static final RegistryObject<Item> elliLeaves = herb("elli_leaves", () -> ModBlocks.elliLeaves);
+    public static final RegistryObject<Item> witheredGrass = herb("withered_grass", () -> ModBlocks.witheredGrass);
+    public static final RegistryObject<Item> weeds = herb("weeds", () -> ModBlocks.weeds);
+    public static final RegistryObject<Item> whiteGrass = herb("white_grass", () -> ModBlocks.whiteGrass);
+    public static final RegistryObject<Item> indigoGrass = herb("indigo_grass", () -> ModBlocks.indigoGrass);
+    public static final RegistryObject<Item> purpleGrass = herb("purple_grass", () -> ModBlocks.purpleGrass);
+    public static final RegistryObject<Item> greenGrass = herb("green_grass", () -> ModBlocks.greenGrass);
+    public static final RegistryObject<Item> blueGrass = herb("blue_grass", () -> ModBlocks.blueGrass);
+    public static final RegistryObject<Item> yellowGrass = herb("yellow_grass", () -> ModBlocks.yellowGrass);
+    public static final RegistryObject<Item> redGrass = herb("red_grass", () -> ModBlocks.redGrass);
+    public static final RegistryObject<Item> orangeGrass = herb("orange_grass", () -> ModBlocks.orangeGrass);
+    public static final RegistryObject<Item> blackGrass = herb("black_grass", () -> ModBlocks.blackGrass);
+    public static final RegistryObject<Item> antidoteGrass = herb("antidote_grass", () -> ModBlocks.antidoteGrass);
+    public static final RegistryObject<Item> medicinalHerb = herb("medicinal_herb", () -> ModBlocks.medicinalHerb);
+    public static final RegistryObject<Item> bambooSprout = herb("bamboo_sprout", () -> ModBlocks.bambooSprout);
 
     //Food
 
@@ -1135,8 +1135,8 @@ public class ModItems {
     public static final RegistryObject<Item> orange = food("orange");
     public static final RegistryObject<Item> grapes = food("grapes");
 
-    public static final RegistryObject<Item> mushroom = ITEMS.register("mushroom", ()-> new ItemMushroom(new Item.Properties().food(foodProp).group(RFCreativeTabs.food)));
-    public static final RegistryObject<Item> mushroomMonarch = ITEMS.register("monarch_mushroom", ()-> new ItemMushroom(new Item.Properties().food(foodProp).group(RFCreativeTabs.food)));
+    public static final RegistryObject<Item> mushroom = ITEMS.register("mushroom", () -> new ItemMushroom(new Item.Properties().food(foodProp).group(RFCreativeTabs.food)));
+    public static final RegistryObject<Item> mushroomMonarch = ITEMS.register("monarch_mushroom", () -> new ItemMushroom(new Item.Properties().food(foodProp).group(RFCreativeTabs.food)));
     public static final RegistryObject<Item> mealyApple = food("mealy_apple");
 
     public static RegistryObject<Item> hoe(EnumToolTier tier) {
@@ -1208,14 +1208,14 @@ public class ModItems {
     }
 
     public static RegistryObject<Item> seed(String name, Supplier<Supplier<Block>> block) {
-        return ITEMS.register("seed_"+name, () -> new BlockNamedItem(block.get().get(), new Item.Properties().group(RFCreativeTabs.crops)));
+        return ITEMS.register("seed_" + name, () -> new BlockNamedItem(block.get().get(), new Item.Properties().group(RFCreativeTabs.crops)));
     }
 
     public static RegistryObject<Item> crop(String name, boolean giant) {
-        if(giant)
-            return ITEMS.register("crop_"+name+"_giant", () -> new ItemGiantCrops(new Item.Properties().food(foodProp).group(RFCreativeTabs.crops)));
+        if (giant)
+            return ITEMS.register("crop_" + name + "_giant", () -> new ItemGiantCrops(new Item.Properties().food(foodProp).group(RFCreativeTabs.crops)));
         else
-            return ITEMS.register("crop_"+name, () -> new Item(new Item.Properties().food(foodProp).group(RFCreativeTabs.crops)));
+            return ITEMS.register("crop_" + name, () -> new Item(new Item.Properties().food(foodProp).group(RFCreativeTabs.crops)));
     }
 
     public static RegistryObject<Item> herb(String name, Supplier<Supplier<Block>> block) {

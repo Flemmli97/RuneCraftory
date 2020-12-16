@@ -36,10 +36,11 @@ public class DataEvent {
         }
     }
 
-    protected static class IgnoreFileHelper extends ExistingFileHelper{
+    protected static class IgnoreFileHelper extends ExistingFileHelper {
 
         private final ExistingFileHelper wrapper;
-        public IgnoreFileHelper(ExistingFileHelper wrapper){
+
+        public IgnoreFileHelper(ExistingFileHelper wrapper) {
             super(Collections.EMPTY_SET, false);
             this.wrapper = wrapper;
         }
