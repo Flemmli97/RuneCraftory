@@ -2,8 +2,10 @@ package com.flemmli97.runecraftory.common.registry;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.blocks.BlockCrop;
+import com.flemmli97.runecraftory.common.blocks.BlockFarm;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrop;
+import com.flemmli97.runecraftory.common.blocks.tile.TileFarm;
 import com.google.common.collect.Lists;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -33,10 +35,10 @@ public class ModBlocks {
     /*public static final RegistryObject<Block> forge = new BlockForge();
     public static final RegistryObject<Block> cooking = new BlockCookingBench();
     public static final RegistryObject<Block> pharm = new BlockPharmacy();
-    public static final RegistryObject<Block> accessory = new BlockAccessoryCrafter();
-    public static final RegistryObject<Block> farmland = new BlockRFFarmland();
+    public static final RegistryObject<Block> accessory = new BlockAccessoryCrafter();*/
+    public static final RegistryObject<Block> farmland = BLOCKS.register("farmland",()->new BlockFarm(AbstractBlock.Properties.create(Material.EARTH).hardnessAndResistance(0.6F).sound(SoundType.GROUND).blockVision((state, reader, pos)->true).suffocates((state, reader, pos)->true)));
 
-    public static final RegistryObject<Block> mineralIron = new BlockMineral(EnumMineralTier.IRON);
+    /*public static final RegistryObject<Block> mineralIron = new BlockMineral(EnumMineralTier.IRON);
     public static final RegistryObject<Block> mineralBronze = new BlockMineral(EnumMineralTier.BRONZE);
     public static final RegistryObject<Block> mineralSilver = new BlockMineral(EnumMineralTier.SILVER);
     public static final RegistryObject<Block> mineralGold = new BlockMineral(EnumMineralTier.GOLD);
@@ -159,7 +161,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> shinyWood = new BlockTreeWood("shiny_wood");
     public static final RegistryObject<Block> shinyLeaves = new BlockTreeLeaves("shiny_leaves");
     public static final RegistryObject<Block> shinySapling = new BlockTreeSapling("shiny_sapling", shinyTree);*/
-
+    public static final RegistryObject<TileEntityType<TileFarm>> farmTile = TILES.register("farmland_tile", ()->TileEntityType.Builder.create(TileFarm::new, farmland.get()).build(null));
     public static final RegistryObject<TileEntityType<TileCrop>> cropTile = cropTile("crop_tile", combine(Lists.newArrayList(crops), flowers));
 
     public static RegistryObject<Block> crop(String name, Supplier<Supplier<Item>> crop, Supplier<Supplier<Item>> giant, Supplier<Supplier<Item>> seed) {

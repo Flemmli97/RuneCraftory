@@ -1,11 +1,11 @@
 package com.flemmli97.runecraftory.common.blocks.tile;
 
 import com.flemmli97.runecraftory.api.IDailyUpdate;
+import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.world.WorldHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.world.server.ServerWorld;
 
 public class TileFarm extends TileEntity implements IDailyUpdate {
@@ -20,8 +20,8 @@ public class TileFarm extends TileEntity implements IDailyUpdate {
     //If the tile got updated during reload.
     private boolean updated;
 
-    public TileFarm(TileEntityType<?> p_i48289_1_) {
-        super(p_i48289_1_);
+    public TileFarm() {
+        super(ModBlocks.farmTile.get());
     }
 
     public int health() {
