@@ -70,9 +70,10 @@ public class CombatUtils {
                     ++i;
                 }
                 Vector3d targetMot = target.getMotion();
-                damagePhys = faintChance ? Float.MAX_VALUE : (damagePhys += (float) (player.world.rand.nextGaussian() * damagePhys / 10.0));
+                damagePhys = faintChance ? Float.MAX_VALUE : damagePhys + (float) (player.world.rand.nextGaussian() * damagePhys / 10.0);
                 boolean ignoreArmor = critChance || faintChance;
                 //Scale damage for vanilla mobs
+
                 damagePhys = (faintChance ? Float.MAX_VALUE : damagePhys);
                 float knockback = i * 0.5f - 0.1f;
                 if (target instanceof BaseMonster) {

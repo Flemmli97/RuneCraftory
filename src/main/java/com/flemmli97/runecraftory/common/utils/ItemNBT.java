@@ -49,6 +49,10 @@ public class ItemNBT {
         Map<Attribute, Integer> map = new TreeMap<>(ModAttributes.sorted);
         if (stack.getItem() instanceof IItemUsable) {
             CompoundNBT compound = getItemNBT(stack);
+            if(compound != null && !compound.contains("ItemStats")) {
+                initNBT(stack);
+                compound = getItemNBT(stack);
+            }
             if (compound != null) {
                 CompoundNBT tag = compound.getCompound("ItemStats");
                 for (String attName : tag.keySet()) {
@@ -104,18 +108,22 @@ public class ItemNBT {
         ItemStat stat = DataPackHandler.getStats(stack.getItem());
         if (stat != null || forced) {
             CompoundNBT stackTag = stack.getOrCreateTag();
-            CompoundNBT compound = new CompoundNBT();
-            compound.putInt("ItemLevel", 1);
+            CompoundNBT compound = stackTag.getCompound(RuneCraftory.MODID);
+            if(compound.contains("ItemLevel"))
+                compound.putInt("ItemLevel", 1);
             if (stack.getItem() instanceof IItemWearable) {
-                compound.put("Upgrades", new ListNBT());
+                if(!compound.contains("Upgrades"))
+                    compound.put("Upgrades", new ListNBT());
                 if (stat != null) {
-                    CompoundNBT stats = new CompoundNBT();
-                    for (Map.Entry<Attribute, Integer> entry : stat.itemStats().entrySet()) {
-                        stats.putInt(entry.getKey().getRegistryName().toString(), entry.getValue());
+                    if(!compound.contains("ItemStats")) {
+                        CompoundNBT stats = new CompoundNBT();
+                        for (Map.Entry<Attribute, Integer> entry : stat.itemStats().entrySet()) {
+                            stats.putInt(entry.getKey().getRegistryName().toString(), entry.getValue());
+                        }
+                        compound.put("ItemStats", stats);
                     }
-                    compound.put("ItemStats", stats);
-                    if (stack.getItem() instanceof IItemUsable) {
-                        compound.putString("Element", stat.element().getTranslation());
+                    if (stack.getItem() instanceof IItemUsable && !compound.contains("Element")) {
+                        compound.putString("Element", stat.element().toString());
                     }
                 }
             }

@@ -1,7 +1,7 @@
 {
   "buyPrice": 1,
   "sellPrice": 1,
-  "upgradeDifficulty": 0,
+  "upgradeDifficulty": 5,
   "element": "NONE",
   "itemStats": {
     "runecraftory:attribute.rf.defence": 1

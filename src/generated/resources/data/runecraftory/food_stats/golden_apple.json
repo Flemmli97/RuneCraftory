@@ -7,21 +7,11 @@
   "rpPercentIncrease": 5,
   "duration": 1500,
   "effects": {
-    "minecraft:generic.attack_damage": 10
+    "minecraft:generic.attack_damage": 10,
+    "runecraftory:attribute.rf.defence": 10
   },
   "effectsPercentage": {},
-  "potionApply": [
-    {
-      "potion": "minecraft:speed",
-      "duration": 100,
-      "amplifier": 2
-    },
-    {
-      "potion": "minecraft:regeneration",
-      "duration": 200,
-      "amplifier": 3
-    }
-  ],
+  "potionApply": [],
   "potionRemove": [],
   "item": "minecraft:golden_apple"
 }

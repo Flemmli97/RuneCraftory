@@ -1,0 +1,19 @@
+{
+  "hpRegen": 100,
+  "rpRegen": 50,
+  "hpRegenPercent": 40,
+  "rpRegenPercent": 15,
+  "rpIncrease": 50,
+  "rpPercentIncrease": 20,
+  "duration": 3000,
+  "effects": {
+    "minecraft:generic.attack_damage": 30
+  },
+  "effectsPercentage": {
+    "minecraft:generic.attack_damage": 10,
+    "runecraftory:attribute.rf.defence": 10
+  },
+  "potionApply": [],
+  "potionRemove": [],
+  "item": "minecraft:enchanted_golden_apple"
+}

@@ -493,17 +493,18 @@ public class PlayerCapImpl implements IPlayerCap {
         FoodProperties prop = DataPackHandler.getFoodStat(stack.getItem());
         Map<Attribute, Integer> gain = prop.effects();
         prop.effectsMultiplier().forEach((att, f) -> {
+            float percent = f > 0 ? 1+f * 0.01f:1-f*0.01f;
             int i = 0;
             if (att == Attributes.GENERIC_MAX_HEALTH)
-                i += this.getMaxHealth(player) * f;
+                i += this.getMaxHealth(player) * percent;
             else if (att == Attributes.GENERIC_ATTACK_DAMAGE)
-                i += this.str * f;
+                i += this.str * percent;
             else if (att == ModAttributes.RF_DEFENCE.get())
-                i += this.vit * 0.5 * f;
+                i += this.vit * 0.5 * percent;
             else if (att == ModAttributes.RF_MAGIC.get())
-                i += this.intel * f;
+                i += this.intel * percent;
             else if (att == ModAttributes.RF_DEFENCE.get())
-                i += this.vit * 0.5 * f;
+                i += this.vit * 0.5 * percent;
             i += gain.getOrDefault(att, 0);
             gain.put(att, i);
         });

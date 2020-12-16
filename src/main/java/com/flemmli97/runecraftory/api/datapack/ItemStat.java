@@ -6,13 +6,16 @@ import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
+import com.flemmli97.runecraftory.lib.LibAttributes;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -20,9 +23,17 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class ItemStat {
+
+    private static Set<ResourceLocation> flatAttributes = Sets.newHashSet(
+            LibAttributes.GENERIC_ATTACK_DAMAGE,
+            LibAttributes.rf_defence,
+            LibAttributes.rf_magic,
+            LibAttributes.rf_magic_defence);
+
     private int buyPrice;
     private int sellPrice;
     private int upgradeDifficulty;
@@ -87,28 +98,29 @@ public class ItemStat {
                 }
             }
             IFormattableTextComponent price = new TranslationTextComponent("tooltip.item.level", tag.getInt("ItemLevel"));
-            if (ItemUtils.getBuyPrice(stack, this) > 0) {
+            if (ItemUtils.getBuyPrice(stack, this) > 0)
                 price.append(" ").append(new TranslationTextComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack)));
-                price.append(" ").append(new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack)));
-                list.add(price);
-                if (showStat) {
-                    Map<Attribute, Integer> stats = ItemNBT.statIncrease(stack);
-                    if (!stats.isEmpty()) {
-                        String prefix = (stack.getItem() instanceof IItemWearable) ? "tooltip.item.equipped" : "tooltip.item.upgrade";
-                        list.add(new TranslationTextComponent(prefix));
-                    }
-                    for (Map.Entry<Attribute, Integer> entry : stats.entrySet()) {
-                        IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + format(entry.getValue())));
-                        list.add(comp);
-                    }
+            price.append(" ").append(new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack)));
+            list.add(price);
+            if (showStat) {
+                Map<Attribute, Integer> stats = ItemNBT.statIncrease(stack);
+                if (!stats.isEmpty()) {
+                    String prefix = (stack.getItem() instanceof IItemWearable) ? "tooltip.item.equipped" : "tooltip.item.upgrade";
+                    list.add(new TranslationTextComponent(prefix));
+                }
+                for (Map.Entry<Attribute, Integer> entry : stats.entrySet()) {
+                    IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + format(entry.getKey(), entry.getValue())));
+                    list.add(comp);
                 }
             }
         }
         return list;
     }
 
-    private String format(int n) {
-        return n >= 0 ? "+" + n : "-" + n;
+    private String format(Attribute att, int n) {
+        boolean flat = flatAttributes.contains(att.getRegistryName());
+        int val = flat ? n : (n > 100 ? n-100 : 100-n);
+        return val >= (flat?0:100) ? "+" + val : "-" + val;
     }
 
     @Override
@@ -118,11 +130,11 @@ public class ItemStat {
 
     public static class MutableItemStat {
 
-        public int buyPrice;
-        public int sellPrice;
-        public int upgradeDifficulty;
-        public EnumElement element = EnumElement.NONE;
-        public Map<Attribute, Integer> itemStats = Maps.newHashMap();
+        private int buyPrice;
+        private int sellPrice;
+        private int upgradeDifficulty;
+        private EnumElement element = EnumElement.NONE;
+        private Map<Attribute, Integer> itemStats = Maps.newHashMap();
 
         public MutableItemStat(int buy, int sell, int upgrade) {
             this.buyPrice = buy;

@@ -1,0 +1,12 @@
+{
+  "buyPrice": 122,
+  "sellPrice": 30,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_def": 1,
+    "minecraft:generic.attack_damage": 16,
+    "runecraftory:attribute.rf.defence": 3
+  },
+  "item": "runecraftory:cutlass"
+}

@@ -13,6 +13,7 @@ import com.flemmli97.runecraftory.common.world.WorldHandler;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import com.flemmli97.runecraftory.network.S2CCalendar;
 import com.flemmli97.runecraftory.network.S2CDataPackSync;
+import com.flemmli97.tenshilib.api.event.AOEAttackEvent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -27,6 +28,8 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+
+import java.util.List;
 
 public class PlayerEvents {
 
@@ -63,22 +66,22 @@ public class PlayerEvents {
             CombatUtils.doPlayerAttack(player, (LivingEntity) event.getTarget(), true, true, true);
         }
     }
-    /*
+
     @SubscribeEvent
     public void playerAttack(AOEAttackEvent event)
     {
-    	EntityPlayer player = event.getEntityPlayer();
+        PlayerEntity player = event.getPlayer();
         if (player.getHeldItemMainhand().getItem() instanceof IItemUsable)
         {
             event.setCanceled(true);
-            List<EntityLivingBase> entityList = event.attackList();
+            List<LivingEntity> entityList = event.attackList();
             for (int i = 0; i < entityList.size(); ++i)
             {
-                RFCalculations.doPlayerAttack(player, entityList.get(i), i == entityList.size() - 1, true, i == entityList.size() - 1);
+                CombatUtils.doPlayerAttack(player, entityList.get(i), i == entityList.size() - 1, true, i == entityList.size() - 1);
             }
         }
     }
-
+/*
     @SubscribeEvent
     public void playerDeath(LivingDeathEvent event)
     {

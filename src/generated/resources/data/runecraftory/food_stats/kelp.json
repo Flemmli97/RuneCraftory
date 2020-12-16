@@ -1,6 +1,6 @@
 {
-  "hpRegen": 15,
-  "rpRegen": 5,
+  "hpRegen": 7,
+  "rpRegen": 0,
   "hpRegenPercent": 0,
   "rpRegenPercent": 0,
   "rpIncrease": 0,
@@ -10,5 +10,5 @@
   "effectsPercentage": {},
   "potionApply": [],
   "potionRemove": [],
-  "item": "minecraft:apple"
+  "item": "minecraft:dried_kelp"
 }

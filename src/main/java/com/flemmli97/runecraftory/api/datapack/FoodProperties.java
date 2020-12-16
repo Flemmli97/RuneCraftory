@@ -20,7 +20,7 @@ public class FoodProperties {
 
     private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
     private Map<Attribute, Integer> effects = new TreeMap<>(ModAttributes.sorted);
-    private Map<Attribute, Float> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
+    private Map<Attribute, Integer> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
     private SimpleEffect[] potionApply = new SimpleEffect[0];
     private Effect[] potionRemove = new Effect[0];
 
@@ -58,7 +58,7 @@ public class FoodProperties {
         return ImmutableMap.copyOf(this.effects);
     }
 
-    public Map<Attribute, Float> effectsMultiplier() {
+    public Map<Attribute, Integer> effectsMultiplier() {
         return ImmutableMap.copyOf(this.effectsPercentage);
     }
 
@@ -84,7 +84,7 @@ public class FoodProperties {
         buffer.writeInt(this.effectsPercentage.size());
         this.effectsPercentage.forEach((att, val) -> {
             buffer.writeRegistryId(att);
-            buffer.writeFloat(val);
+            buffer.writeInt(val);
         });
         buffer.writeInt(this.potionRemove.length);
         for (Effect eff : this.potionRemove) {
@@ -110,7 +110,7 @@ public class FoodProperties {
             prop.effects.put(buffer.readRegistryIdSafe(Attribute.class), buffer.readInt());
         size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            prop.effectsPercentage.put(buffer.readRegistryIdSafe(Attribute.class), buffer.readFloat());
+            prop.effectsPercentage.put(buffer.readRegistryIdSafe(Attribute.class), buffer.readInt());
         size = buffer.readInt();
         prop.potionRemove = new Effect[size];
         for (int i = 0; i < size; i++)
@@ -148,8 +148,8 @@ public class FoodProperties {
                 IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + format(entry.getValue())));
                 this.translationTexts.add(comp);
             }
-            for (Map.Entry<Attribute, Float> entry : this.effectsMultiplier().entrySet()) {
-                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + format((int) (100 * entry.getValue())) + "%"));
+            for (Map.Entry<Attribute, Integer> entry : this.effectsMultiplier().entrySet()) {
+                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + format(entry.getValue()) + "%"));
                 this.translationTexts.add(comp);
             }
         }
@@ -157,10 +157,6 @@ public class FoodProperties {
     }
 
     private String format(int n) {
-        return n >= 0 ? "+" + n : "-" + n;
-    }
-
-    private String format(float n) {
         return n >= 0 ? "+" + n : "-" + n;
     }
 
@@ -173,7 +169,7 @@ public class FoodProperties {
 
         private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
         private Map<Attribute, Integer> effects = new TreeMap<>(ModAttributes.sorted);
-        private Map<Attribute, Float> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
+        private Map<Attribute, Integer> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
         private List<SimpleEffect> potionApply = Lists.newArrayList();
         private List<Effect> potionRemove = Lists.newArrayList();
 
@@ -204,7 +200,7 @@ public class FoodProperties {
             return this;
         }
 
-        public MutableFoodProps addEffectPercentage(Attribute att, float value) {
+        public MutableFoodProps addEffectPercentage(Attribute att, int value) {
             this.effectsPercentage.put(att, value);
             return this;
         }
