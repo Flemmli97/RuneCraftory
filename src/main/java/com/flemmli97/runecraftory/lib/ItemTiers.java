@@ -1,7 +1,11 @@
 package com.flemmli97.runecraftory.lib;
 
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 
 public class ItemTiers {
 
@@ -13,7 +17,7 @@ public class ItemTiers {
 
         @Override
         public float getEfficiency() {
-            return 0;
+            return 7;
         }
 
         @Override
@@ -23,7 +27,7 @@ public class ItemTiers {
 
         @Override
         public int getHarvestLevel() {
-            return 0;
+            return 2;
         }
 
         @Override
@@ -34,6 +38,48 @@ public class ItemTiers {
         @Override
         public Ingredient getRepairMaterial() {
             return Ingredient.EMPTY;
+        }
+    };
+
+    public static final IArmorMaterial armor = new IArmorMaterial() {
+        @Override
+        public int getDurability(EquipmentSlotType p_200896_1_) {
+            return 0;
+        }
+
+        @Override
+        public int getDamageReductionAmount(EquipmentSlotType p_200902_1_) {
+            return 0;
+        }
+
+        @Override
+        public int getEnchantability() {
+            return 0;
+        }
+
+        @Override
+        public SoundEvent getSoundEvent() {
+            return SoundEvents.ITEM_ARMOR_EQUIP_LEATHER;
+        }
+
+        @Override
+        public Ingredient getRepairMaterial() {
+            return Ingredient.EMPTY;
+        }
+
+        @Override
+        public String getName() {
+            return "rf_armor";
+        }
+
+        @Override
+        public float getToughness() {
+            return 0;
+        }
+
+        @Override
+        public float getKnockbackResistance() {
+            return 0;
         }
     };
 }

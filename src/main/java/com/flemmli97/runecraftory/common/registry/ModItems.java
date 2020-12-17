@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.registry;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.enums.EnumElement;
+import com.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import com.flemmli97.runecraftory.api.enums.EnumToolTier;
 import com.flemmli97.runecraftory.common.RFCreativeTabs;
 import com.flemmli97.runecraftory.common.items.consumables.ItemGiantCrops;
@@ -10,6 +11,9 @@ import com.flemmli97.runecraftory.common.items.consumables.ItemMushroom;
 import com.flemmli97.runecraftory.common.items.creative.ItemDebug;
 import com.flemmli97.runecraftory.common.items.creative.ItemLevelUp;
 import com.flemmli97.runecraftory.common.items.creative.ItemSkillUp;
+import com.flemmli97.runecraftory.common.items.equipment.ItemAccessoireBase;
+import com.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
+import com.flemmli97.runecraftory.common.items.equipment.ItemSeedShield;
 import com.flemmli97.runecraftory.common.items.tools.ItemBrush;
 import com.flemmli97.runecraftory.common.items.tools.ItemPetInspector;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
@@ -29,9 +33,12 @@ import com.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import com.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import com.flemmli97.runecraftory.common.items.weapons.shortsword.ItemSeedSword;
 import net.minecraft.block.Block;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
+import net.minecraft.item.ShieldItem;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -74,11 +81,11 @@ public class ModItems {
     public static final RegistryObject<Item> fishingRodSilver = fishingRod(EnumToolTier.SILVER);
     public static final RegistryObject<Item> fishingRodGold = fishingRod(EnumToolTier.GOLD);
     public static final RegistryObject<Item> fishingRodPlatinum = fishingRod(EnumToolTier.PLATINUM);
-    public static final RegistryObject<Item> inspector = ITEMS.register("inspector", () -> new ItemPetInspector(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> brush = ITEMS.register("brush", () -> new ItemBrush(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> glass = ITEMS.register("magnifying_glass", () -> new ItemToolGlass(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> inspector = ITEMS.register("inspector", () -> new ItemPetInspector(new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> brush = ITEMS.register("brush", () -> new ItemBrush(new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> glass = ITEMS.register("magnifying_glass", () -> new ItemToolGlass(new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
 
-    public static final RegistryObject<Item> seedSword = ITEMS.register("seed_sword", () -> new ItemSeedSword(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> seedSword = ITEMS.register("seed_sword", () -> new ItemSeedSword(new Item.Properties()));
     public static final RegistryObject<Item> broadSword = shortSword("broad_sword");
     public static final RegistryObject<Item> steelSword = shortSword("steel_sword");
     public static final RegistryObject<Item> steelSwordPlus = shortSword("steel_sword_plus");
@@ -317,168 +324,196 @@ public class ModItems {
     public static final RegistryObject<Item> elvishHarp = staff("elvish_harp", EnumElement.LOVE);
     public static final RegistryObject<Item> syringe = staff("syringe", EnumElement.WATER);
 
-    /*public static final RegistryObject<Item> engagementRing = new ItemAccessoireBase("engagement_ring");
-    public static final RegistryObject<Item> cheapBracelet = new ItemAccessoireBase("cheap_bracelet");
-    public static final RegistryObject<Item> bronzeBracelet = new ItemAccessoireBase("bronze_bracelet");
-    public static final RegistryObject<Item> silverBracelet = new ItemAccessoireBase("silver_bracelet");
-    public static final RegistryObject<Item> goldBracelet = new ItemAccessoireBase("gold_bracelet");
-    public static final RegistryObject<Item> platinumBracelet = new ItemAccessoireBase("platinum_bracelet");
-    public static final RegistryObject<Item> silverRing = new ItemAccessoireBase("silver_ring");
-    public static final RegistryObject<Item> shieldRing = new ItemAccessoireBase("shield_ring");
-    public static final RegistryObject<Item> criticalRing = new ItemAccessoireBase("critical_ring");
-    public static final RegistryObject<Item> silentRing = new ItemAccessoireBase("silent_ring");
-    public static final RegistryObject<Item> paralysisRing = new ItemAccessoireBase("paralysis_ring");
-    public static final RegistryObject<Item> poisonRing = new ItemAccessoireBase("poison_ring");
-    public static final RegistryObject<Item> magicRing = new ItemAccessoireBase("magic_ring");
-    public static final RegistryObject<Item> throwingRing = new ItemAccessoireBase("throwing_ring");
-    public static final RegistryObject<Item> stayUpRing = new ItemAccessoireBase("stay_up_ring");
-    public static final RegistryObject<Item> aquamarineRing = new ItemAccessoireBase("aquamarine_ring");
-    public static final RegistryObject<Item> amethystRing = new ItemAccessoireBase("amethyst_ring");
-    public static final RegistryObject<Item> emeraldRing = new ItemAccessoireBase("emerald_ring");
-    public static final RegistryObject<Item> sapphireRing = new ItemAccessoireBase("sapphire_ring");
-    public static final RegistryObject<Item> rubyRing = new ItemAccessoireBase("ruby_ring");
-    public static final RegistryObject<Item> cursedRing = new ItemAccessoireBase("cursed_ring");
-    public static final RegistryObject<Item> diamondRing = new ItemAccessoireBase("diamond_ring");
-    public static final RegistryObject<Item> aquamarineBrooch = new ItemAccessoireBase("aquamarine_brooch");
-    public static final RegistryObject<Item> amethystBrooch = new ItemAccessoireBase("amethyst_brooch");
-    public static final RegistryObject<Item> emeraldBrooch = new ItemAccessoireBase("emerald_brooch");
-    public static final RegistryObject<Item> sapphireBrooch = new ItemAccessoireBase("sapphire_brooch");
-    public static final RegistryObject<Item> rubyBrooch = new ItemAccessoireBase("ruby_brooch");
-    public static final RegistryObject<Item> diamondBrooch = new ItemAccessoireBase("diamond_brooch");
-    public static final RegistryObject<Item> dolphinBrooch = new ItemAccessoireBase("dolphin_brooch");
-    public static final RegistryObject<Item> fireRing = new ItemAccessoireBase("fire_ring");
-    public static final RegistryObject<Item> windRing = new ItemAccessoireBase("wind_ring");
-    public static final RegistryObject<Item> waterRing = new ItemAccessoireBase("water_ring");
-    public static final RegistryObject<Item> earthRing = new ItemAccessoireBase("earth_ring");
-    public static final RegistryObject<Item> happyRing = new ItemAccessoireBase("happy_ring");
-    public static final RegistryObject<Item> silverPendant = new ItemAccessoireBase("silver_pendant");
-    public static final RegistryObject<Item> starPendant = new ItemAccessoireBase("star_pendant");
-    public static final RegistryObject<Item> sunPendant = new ItemAccessoireBase("sun_pendant");
-    public static final RegistryObject<Item> fieldPendant = new ItemAccessoireBase("field_pendant");
-    public static final RegistryObject<Item> dewPendant = new ItemAccessoireBase("dew_pendant");
-    public static final RegistryObject<Item> earthPendant = new ItemAccessoireBase("earth_pendant");
-    public static final RegistryObject<Item> heartPendant = new ItemAccessoireBase("heart_pendant");
-    public static final RegistryObject<Item> strangePendant = new ItemAccessoireBase("strange_pendant");
-    public static final RegistryObject<Item> anettesNecklace = new ItemAccessoireBase("anettes_necklace");
-    public static final RegistryObject<Item> workGloves = new ItemAccessoireBase("work_gloves");
-    public static final RegistryObject<Item> glovesAccess = new ItemAccessoireBase("gloves_accessory");
-    public static final RegistryObject<Item> powerGloves = new ItemAccessoireBase("power_gloves");
-    public static final RegistryObject<Item> earrings = new ItemAccessoireBase("earrings");
-    public static final RegistryObject<Item> witchEarrings = new ItemAccessoireBase("witch_earrings");
-    public static final RegistryObject<Item> magicEarrings = new ItemAccessoireBase("magic_earrings").setModelType(EntityEquipmentSlot.HEAD);
-    public static final RegistryObject<Item> charm = new ItemAccessoireBase("charm");
-    public static final RegistryObject<Item> holyAmulet = new ItemAccessoireBase("holy_amulet");
-    public static final RegistryObject<Item> rosary = new ItemAccessoireBase("rosary");
-    public static final RegistryObject<Item> talisman = new ItemAccessoireBase("talisman");
-    public static final RegistryObject<Item> magicCharm = new ItemAccessoireBase("magic_charm");
-    public static final RegistryObject<Item> leatherBelt = new ItemAccessoireBase("leather_belt");
-    public static final RegistryObject<Item> luckyStrike = new ItemAccessoireBase("lucky_strike");
-    public static final RegistryObject<Item> champBelt = new ItemAccessoireBase("champ_belt");
-    public static final RegistryObject<Item> handKnitScarf = new ItemAccessoireBase("hand_knit_scarf");
-    public static final RegistryObject<Item> fluffyScarf = new ItemAccessoireBase("fluffy_scarf");
-    public static final RegistryObject<Item> herosProof = new ItemAccessoireBase("heros_proof");
-    public static final RegistryObject<Item> proofOfWisdom = new ItemAccessoireBase("proof_of_wisdom");
-    public static final RegistryObject<Item> artOfAttack = new ItemAccessoireBase("art_of_attack");
-    public static final RegistryObject<Item> artOfDefense = new ItemAccessoireBase("art_of_defense");
-    public static final RegistryObject<Item> artOfMagic = new ItemAccessoireBase("art_of_magic");
-    public static final RegistryObject<Item> badge = new ItemAccessoireBase("badge");
-    public static final RegistryObject<Item> courageBadge = new ItemAccessoireBase("courage_badge");
+    public static final RegistryObject<Item> engagementRing = accessoire("engagement_ring");
+    public static final RegistryObject<Item> cheapBracelet = accessoire("cheap_bracelet");
+    public static final RegistryObject<Item> bronzeBracelet = accessoire("bronze_bracelet");
+    public static final RegistryObject<Item> silverBracelet = accessoire("silver_bracelet");
+    public static final RegistryObject<Item> goldBracelet = accessoire("gold_bracelet");
+    public static final RegistryObject<Item> platinumBracelet = accessoire("platinum_bracelet");
+    public static final RegistryObject<Item> silverRing = accessoire("silver_ring");
+    public static final RegistryObject<Item> shieldRing = accessoire("shield_ring");
+    public static final RegistryObject<Item> criticalRing = accessoire("critical_ring");
+    public static final RegistryObject<Item> silentRing = accessoire("silent_ring");
+    public static final RegistryObject<Item> paralysisRing = accessoire("paralysis_ring");
+    public static final RegistryObject<Item> poisonRing = accessoire("poison_ring");
+    public static final RegistryObject<Item> magicRing = accessoire("magic_ring");
+    public static final RegistryObject<Item> throwingRing = accessoire("throwing_ring");
+    public static final RegistryObject<Item> stayUpRing = accessoire("stay_up_ring");
+    public static final RegistryObject<Item> aquamarineRing = accessoire("aquamarine_ring");
+    public static final RegistryObject<Item> amethystRing = accessoire("amethyst_ring");
+    public static final RegistryObject<Item> emeraldRing = accessoire("emerald_ring");
+    public static final RegistryObject<Item> sapphireRing = accessoire("sapphire_ring");
+    public static final RegistryObject<Item> rubyRing = accessoire("ruby_ring");
+    public static final RegistryObject<Item> cursedRing = accessoire("cursed_ring");
+    public static final RegistryObject<Item> diamondRing = accessoire("diamond_ring");
+    public static final RegistryObject<Item> aquamarineBrooch = accessoire("aquamarine_brooch");
+    public static final RegistryObject<Item> amethystBrooch = accessoire("amethyst_brooch");
+    public static final RegistryObject<Item> emeraldBrooch = accessoire("emerald_brooch");
+    public static final RegistryObject<Item> sapphireBrooch = accessoire("sapphire_brooch");
+    public static final RegistryObject<Item> rubyBrooch = accessoire("ruby_brooch");
+    public static final RegistryObject<Item> diamondBrooch = accessoire("diamond_brooch");
+    public static final RegistryObject<Item> dolphinBrooch = accessoire("dolphin_brooch");
+    public static final RegistryObject<Item> fireRing = accessoire("fire_ring");
+    public static final RegistryObject<Item> windRing = accessoire("wind_ring");
+    public static final RegistryObject<Item> waterRing = accessoire("water_ring");
+    public static final RegistryObject<Item> earthRing = accessoire("earth_ring");
+    public static final RegistryObject<Item> happyRing = accessoire("happy_ring");
+    public static final RegistryObject<Item> silverPendant = accessoire("silver_pendant");
+    public static final RegistryObject<Item> starPendant = accessoire("star_pendant");
+    public static final RegistryObject<Item> sunPendant = accessoire("sun_pendant");
+    public static final RegistryObject<Item> fieldPendant = accessoire("field_pendant");
+    public static final RegistryObject<Item> dewPendant = accessoire("dew_pendant");
+    public static final RegistryObject<Item> earthPendant = accessoire("earth_pendant");
+    public static final RegistryObject<Item> heartPendant = accessoire("heart_pendant");
+    public static final RegistryObject<Item> strangePendant = accessoire("strange_pendant");
+    public static final RegistryObject<Item> anettesNecklace = accessoire("anettes_necklace");
+    public static final RegistryObject<Item> workGloves = accessoire("work_gloves");
+    public static final RegistryObject<Item> glovesAccess = accessoire("gloves_accessory");
+    public static final RegistryObject<Item> powerGloves = accessoire("power_gloves");
+    public static final RegistryObject<Item> earrings = accessoire("earrings");
+    public static final RegistryObject<Item> witchEarrings = accessoire("witch_earrings");
+    public static final RegistryObject<Item> magicEarrings = accessoire("magic_earrings", EquipmentSlotType.HEAD);
+    public static final RegistryObject<Item> charm = accessoire("charm");
+    public static final RegistryObject<Item> holyAmulet = accessoire("holy_amulet");
+    public static final RegistryObject<Item> rosary = accessoire("rosary");
+    public static final RegistryObject<Item> talisman = accessoire("talisman");
+    public static final RegistryObject<Item> magicCharm = accessoire("magic_charm");
+    public static final RegistryObject<Item> leatherBelt = accessoire("leather_belt");
+    public static final RegistryObject<Item> luckyStrike = accessoire("lucky_strike");
+    public static final RegistryObject<Item> champBelt = accessoire("champ_belt");
+    public static final RegistryObject<Item> handKnitScarf = accessoire("hand_knit_scarf");
+    public static final RegistryObject<Item> fluffyScarf = accessoire("fluffy_scarf");
+    public static final RegistryObject<Item> herosProof = accessoire("heros_proof");
+    public static final RegistryObject<Item> proofOfWisdom = accessoire("proof_of_wisdom");
+    public static final RegistryObject<Item> artOfAttack = accessoire("art_of_attack");
+    public static final RegistryObject<Item> artOfDefense = accessoire("art_of_defense");
+    public static final RegistryObject<Item> artOfMagic = accessoire("art_of_magic");
+    public static final RegistryObject<Item> badge = accessoire("badge");
+    public static final RegistryObject<Item> courageBadge = accessoire("courage_badge");
 
-    public static final RegistryObject<Item> shirt = new ItemArmorBase("shirt");
-    public static final RegistryObject<Item> vest = new ItemArmorBase("vest");
-    public static final RegistryObject<Item> cottonCloth = new ItemArmorBase("cotton_cloth");
-    public static final RegistryObject<Item> mail = new ItemArmorBase("mail");
-    public static final RegistryObject<Item> chainMail = new ItemArmorBase("chain_mail");
-    public static final RegistryObject<Item> scaleVest = new ItemArmorBase("scale_vest");
-    public static final RegistryObject<Item> sparklingShirt = new ItemArmorBase("sparkling_shirt");
-    public static final RegistryObject<Item> windCloak = new ItemArmorBase("wind_cloak");
-    public static final RegistryObject<Item> protector = new ItemArmorBase("protector");
-    public static final RegistryObject<Item> platinumMail = new ItemArmorBase("platinum_mail");
-    public static final RegistryObject<Item> lemellarVest = new ItemArmorBase("lemellar_vest");
-    public static final RegistryObject<Item> mercenarysCloak = new ItemArmorBase("mercenarys_cloak");
-    public static final RegistryObject<Item> woolyShirt = new ItemArmorBase("wooly_shirt");
-    public static final RegistryObject<Item> elvishCloak = new ItemArmorBase("elvish_cloak");
-    public static final RegistryObject<Item> dragonCloak = new ItemArmorBase("dragon_cloak");
-    public static final RegistryObject<Item> powerProtector = new ItemArmorBase("power_protector");
-    public static final RegistryObject<Item> runeVest = new ItemArmorBase("rune_vest");
-    public static final RegistryObject<Item> royalGarter = new ItemArmorBase("royal_garter");
-    public static final RegistryObject<Item> fourDragonsVest = new ItemArmorBase("four_dragons_vest");
+    public static final RegistryObject<Item> shirt = equipment(EquipmentSlotType.CHEST, "shirt");
+    public static final RegistryObject<Item> vest = equipment(EquipmentSlotType.CHEST, "vest");
+    public static final RegistryObject<Item> cottonCloth = equipment(EquipmentSlotType.CHEST, "cotton_cloth");
+    public static final RegistryObject<Item> mail = equipment(EquipmentSlotType.CHEST, "mail");
+    public static final RegistryObject<Item> chainMail = equipment(EquipmentSlotType.CHEST, "chain_mail");
+    public static final RegistryObject<Item> scaleVest = equipment(EquipmentSlotType.CHEST, "scale_vest");
+    public static final RegistryObject<Item> sparklingShirt = equipment(EquipmentSlotType.CHEST, "sparkling_shirt");
+    public static final RegistryObject<Item> windCloak = equipment(EquipmentSlotType.CHEST, "wind_cloak");
+    public static final RegistryObject<Item> protector = equipment(EquipmentSlotType.CHEST, "protector");
+    public static final RegistryObject<Item> platinumMail = equipment(EquipmentSlotType.CHEST, "platinum_mail");
+    public static final RegistryObject<Item> lemellarVest = equipment(EquipmentSlotType.CHEST, "lemellar_vest");
+    public static final RegistryObject<Item> mercenarysCloak = equipment(EquipmentSlotType.CHEST, "mercenarys_cloak");
+    public static final RegistryObject<Item> woolyShirt = equipment(EquipmentSlotType.CHEST, "wooly_shirt");
+    public static final RegistryObject<Item> elvishCloak = equipment(EquipmentSlotType.CHEST, "elvish_cloak");
+    public static final RegistryObject<Item> dragonCloak = equipment(EquipmentSlotType.CHEST, "dragon_cloak");
+    public static final RegistryObject<Item> powerProtector = equipment(EquipmentSlotType.CHEST, "power_protector");
+    public static final RegistryObject<Item> runeVest = equipment(EquipmentSlotType.CHEST, "rune_vest");
+    public static final RegistryObject<Item> royalGarter = equipment(EquipmentSlotType.CHEST, "royal_garter");
+    public static final RegistryObject<Item> fourDragonsVest = equipment(EquipmentSlotType.CHEST, "four_dragons_vest");
 
-    public static final RegistryObject<Item> headband = new ItemHeadBase("headband");
-    public static final RegistryObject<Item> blueRibbon = new ItemHeadBase("blue_ribbon");
-    public static final RegistryObject<Item> greenRibbon = new ItemHeadBase("green_ribbon");
-    public static final RegistryObject<Item> purpleRibbon = new ItemHeadBase("purple_ribbon");
-    public static final RegistryObject<Item> spectacles = new ItemHeadBase("spectacles");
-    public static final RegistryObject<Item> strawHat = new ItemHeadBase("straw_hat");
-    public static final RegistryObject<Item> fancyHat = new ItemHeadBase("fancy_hat");
-    public static final RegistryObject<Item> brandGlasses = new ItemHeadBase("brand_glasses");
-    public static final RegistryObject<Item> cuteKnitting = new ItemHeadBase("cute_knitting");
-    public static final RegistryObject<Item> intelligentGlasses = new ItemHeadBase("intelligent_glasses");
-    public static final RegistryObject<Item> fireproofHood = new ItemHeadBase("fireproof_hood");
-    public static final RegistryObject<Item> silkHat = new ItemHeadBase("silk_hat");
-    public static final RegistryObject<Item> blackRibbon = new ItemHeadBase("black_ribbon");
-    public static final RegistryObject<Item> lolitaHeaddress = new ItemHeadBase("lolita_headdress");
-    public static final RegistryObject<Item> headdress = new ItemHeadBase("headdress");
-    public static final RegistryObject<Item> yellowRibbon = new ItemHeadBase("yellow_ribbon");
-    public static final RegistryObject<Item> catEars = new ItemHeadBase("cat_ears");
-    public static final RegistryObject<Item> silverHairpin = new ItemHeadBase("silver_hairpin");
-    public static final RegistryObject<Item> redRibbon = new ItemHeadBase("red_ribbon");
-    public static final RegistryObject<Item> orangeRibbon = new ItemHeadBase("orange_ribbon");
-    public static final RegistryObject<Item> whiteRibbon = new ItemHeadBase("white_ribbon");
-    public static final RegistryObject<Item> fourSeasons = new ItemHeadBase("four_seasons");
-    public static final RegistryObject<Item> feathersHat = new ItemHeadBase("feathers_hat");
-    public static final RegistryObject<Item> goldHairpin = new ItemHeadBase("gold_hairpin");
-    public static final RegistryObject<Item> indigoRibbon = new ItemHeadBase("indigo_ribbon");
-    public static final RegistryObject<Item> crown = new ItemHeadBase("crown");
-    public static final RegistryObject<Item> turnipHeadgear = new ItemHeadBase("turnip_headgear");
-    public static final RegistryObject<Item> pumpkinHeadgear = new ItemHeadBase("pumpkin_headgear");
+    public static final RegistryObject<Item> headband = equipment(EquipmentSlotType.HEAD, "headband");
+    public static final RegistryObject<Item> blueRibbon = equipment(EquipmentSlotType.HEAD, "blue_ribbon");
+    public static final RegistryObject<Item> greenRibbon = equipment(EquipmentSlotType.HEAD, "green_ribbon");
+    public static final RegistryObject<Item> purpleRibbon = equipment(EquipmentSlotType.HEAD, "purple_ribbon");
+    public static final RegistryObject<Item> spectacles = equipment(EquipmentSlotType.HEAD, "spectacles");
+    public static final RegistryObject<Item> strawHat = equipment(EquipmentSlotType.HEAD, "straw_hat");
+    public static final RegistryObject<Item> fancyHat = equipment(EquipmentSlotType.HEAD, "fancy_hat");
+    public static final RegistryObject<Item> brandGlasses = equipment(EquipmentSlotType.HEAD, "brand_glasses");
+    public static final RegistryObject<Item> cuteKnitting = equipment(EquipmentSlotType.HEAD, "cute_knitting");
+    public static final RegistryObject<Item> intelligentGlasses = equipment(EquipmentSlotType.HEAD, "intelligent_glasses");
+    public static final RegistryObject<Item> fireproofHood = equipment(EquipmentSlotType.HEAD, "fireproof_hood");
+    public static final RegistryObject<Item> silkHat = equipment(EquipmentSlotType.HEAD, "silk_hat");
+    public static final RegistryObject<Item> blackRibbon = equipment(EquipmentSlotType.HEAD, "black_ribbon");
+    public static final RegistryObject<Item> lolitaHeaddress = equipment(EquipmentSlotType.HEAD, "lolita_headdress");
+    public static final RegistryObject<Item> headdress = equipment(EquipmentSlotType.HEAD, "headdress");
+    public static final RegistryObject<Item> yellowRibbon = equipment(EquipmentSlotType.HEAD, "yellow_ribbon");
+    public static final RegistryObject<Item> catEars = equipment(EquipmentSlotType.HEAD, "cat_ears");
+    public static final RegistryObject<Item> silverHairpin = equipment(EquipmentSlotType.HEAD, "silver_hairpin");
+    public static final RegistryObject<Item> redRibbon = equipment(EquipmentSlotType.HEAD, "red_ribbon");
+    public static final RegistryObject<Item> orangeRibbon = equipment(EquipmentSlotType.HEAD, "orange_ribbon");
+    public static final RegistryObject<Item> whiteRibbon = equipment(EquipmentSlotType.HEAD, "white_ribbon");
+    public static final RegistryObject<Item> fourSeasons = equipment(EquipmentSlotType.HEAD, "four_seasons");
+    public static final RegistryObject<Item> feathersHat = equipment(EquipmentSlotType.HEAD, "feathers_hat");
+    public static final RegistryObject<Item> goldHairpin = equipment(EquipmentSlotType.HEAD, "gold_hairpin");
+    public static final RegistryObject<Item> indigoRibbon = equipment(EquipmentSlotType.HEAD, "indigo_ribbon");
+    public static final RegistryObject<Item> crown = equipment(EquipmentSlotType.HEAD, "crown");
+    public static final RegistryObject<Item> turnipHeadgear = equipment(EquipmentSlotType.HEAD, "turnip_headgear");
+    public static final RegistryObject<Item> pumpkinHeadgear = equipment(EquipmentSlotType.HEAD, "pumpkin_headgear");
 
-    public static final RegistryObject<Item> seedShield = new ItemSeedShield();
-    public static final RegistryObject<Item> smallShield = new ItemShieldBase("small_shield");
-    public static final RegistryObject<Item> umbrella = new ItemShieldBase("umbrella");
-    public static final RegistryObject<Item> ironShield = new ItemShieldBase("iron_shield");
-    public static final RegistryObject<Item> monkeyPlush = new ItemShieldBase("monkey_plush");
-    public static final RegistryObject<Item> roundShield = new ItemShieldBase("round_shield");
-    public static final RegistryObject<Item> turtleShield = new ItemShieldBase("turtle_shield");
-    public static final RegistryObject<Item> chaosShield = new ItemShieldBase("chaos_shield");
-    public static final RegistryObject<Item> boneShield = new ItemShieldBase("bone_shield");
-    public static final RegistryObject<Item> magicShield = new ItemShieldBase("magic_shield");
-    public static final RegistryObject<Item> heavyShield = new ItemShieldBase("heavy_shield");
-    public static final RegistryObject<Item> platinumShield = new ItemShieldBase("platinum_shield");
-    public static final RegistryObject<Item> kiteShield = new ItemShieldBase("kite_shield");
-    public static final RegistryObject<Item> knightShield = new ItemShieldBase("knight_shield");
-    public static final RegistryObject<Item> elementShield = new ItemShieldBase("element_shield");
-    public static final RegistryObject<Item> magicalShield = new ItemShieldBase("magical_shield");
-    public static final RegistryObject<Item> prismShield = new ItemShieldBase("prism_shield");
-    public static final RegistryObject<Item> runeShield = new ItemShieldBase("rune_shield");
+    public static final RegistryObject<Item> leatherBoots = equipment(EquipmentSlotType.FEET, "leather_boots");
+    public static final RegistryObject<Item> freeFarmingShoes = equipment(EquipmentSlotType.FEET, "free_farming_shoes");
+    public static final RegistryObject<Item> piyoSandals = equipment(EquipmentSlotType.FEET, "piyo_sandals");
+    public static final RegistryObject<Item> secretShoes = equipment(EquipmentSlotType.FEET, "secret_shoes");
+    public static final RegistryObject<Item> silverBoots = equipment(EquipmentSlotType.FEET, "silver_boots");
+    public static final RegistryObject<Item> heavyBoots = equipment(EquipmentSlotType.FEET, "heavy_boots");
+    public static final RegistryObject<Item> sneakingBoots = equipment(EquipmentSlotType.FEET, "sneaking_boots");
+    public static final RegistryObject<Item> fastStepBoots = equipment(EquipmentSlotType.FEET, "fast_step_boots");
+    public static final RegistryObject<Item> goldBoots = equipment(EquipmentSlotType.FEET, "gold_boots");
+    public static final RegistryObject<Item> boneBoots = equipment(EquipmentSlotType.FEET, "bone_boots");
+    public static final RegistryObject<Item> snowBoots = equipment(EquipmentSlotType.FEET, "snow_boots");
+    public static final RegistryObject<Item> striderBoots = equipment(EquipmentSlotType.FEET, "strider_boots");
+    public static final RegistryObject<Item> stepInBoots = equipment(EquipmentSlotType.FEET, "step_in_boots");
+    public static final RegistryObject<Item> featherBoots = equipment(EquipmentSlotType.FEET, "feather_boots");
+    public static final RegistryObject<Item> ghostBoots = equipment(EquipmentSlotType.FEET, "ghost_boots");
+    public static final RegistryObject<Item> ironGeta = equipment(EquipmentSlotType.FEET, "iron_geta");
+    public static final RegistryObject<Item> knightBoots = equipment(EquipmentSlotType.FEET, "knight_boots");
+    public static final RegistryObject<Item> fairyBoots = equipment(EquipmentSlotType.FEET, "fairy_boots");
+    public static final RegistryObject<Item> wetBoots = equipment(EquipmentSlotType.FEET, "wet_boots");
+    public static final RegistryObject<Item> waterShoes = equipment(EquipmentSlotType.FEET, "water_shoes");
+    public static final RegistryObject<Item> iceSkates = equipment(EquipmentSlotType.FEET, "ice_skates");
+    public static final RegistryObject<Item> rocketWing = equipment(EquipmentSlotType.FEET, "rocket_wing");
 
-    public static final RegistryObject<Item> leatherBoots = new ItemShoeBase("leather_boots");
-    public static final RegistryObject<Item> freeFarmingShoes = new ItemShoeBase("free_farming_shoes");
-    public static final RegistryObject<Item> piyoSandals = new ItemShoeBase("piyo_sandals");
-    public static final RegistryObject<Item> secretShoes = new ItemShoeBase("secret_shoes");
-    public static final RegistryObject<Item> silverBoots = new ItemShoeBase("silver_boots");
-    public static final RegistryObject<Item> heavyBoots = new ItemShoeBase("heavy_boots");
-    public static final RegistryObject<Item> sneakingBoots = new ItemShoeBase("sneaking_boots");
-    public static final RegistryObject<Item> fastStepBoots = new ItemShoeBase("fast_step_boots");
-    public static final RegistryObject<Item> goldBoots = new ItemShoeBase("gold_boots");
-    public static final RegistryObject<Item> boneBoots = new ItemShoeBase("bone_boots");
-    public static final RegistryObject<Item> snowBoots = new ItemShoeBase("snow_boots");
-    public static final RegistryObject<Item> striderBoots = new ItemShoeBase("strider_boots");
-    public static final RegistryObject<Item> stepInBoots = new ItemShoeBase("step_in_boots");
-    public static final RegistryObject<Item> featherBoots = new ItemShoeBase("feather_boots");
-    public static final RegistryObject<Item> ghostBoots = new ItemShoeBase("ghost_boots");
-    public static final RegistryObject<Item> ironGeta = new ItemShoeBase("iron_geta");
-    public static final RegistryObject<Item> knightBoots = new ItemShoeBase("knight_boots");
-    public static final RegistryObject<Item> fairyBoots = new ItemShoeBase("fairy_boots");
-    public static final RegistryObject<Item> wetBoots = new ItemShoeBase("wet_boots");
-    public static final RegistryObject<Item> waterShoes = new ItemShoeBase("water_shoes");
-    public static final RegistryObject<Item> iceSkates = new ItemShoeBase("ice_skates");
-    public static final RegistryObject<Item> rocketWing = new ItemShoeBase("rocket_wing");
+    public static final RegistryObject<Item> seedShield = ITEMS.register("seed_shield_item", () -> new ItemSeedShield(new Item.Properties().maxStackSize(1)));
+    public static final RegistryObject<Item> smallShield = shield("small_shield");
+    public static final RegistryObject<Item> umbrella = shield("umbrella");
+    public static final RegistryObject<Item> ironShield = shield("iron_shield");
+    public static final RegistryObject<Item> monkeyPlush = shield("monkey_plush");
+    public static final RegistryObject<Item> roundShield = shield("round_shield");
+    public static final RegistryObject<Item> turtleShield = shield("turtle_shield");
+    public static final RegistryObject<Item> chaosShield = shield("chaos_shield");
+    public static final RegistryObject<Item> boneShield = shield("bone_shield");
+    public static final RegistryObject<Item> magicShield = shield("magic_shield");
+    public static final RegistryObject<Item> heavyShield = shield("heavy_shield");
+    public static final RegistryObject<Item> platinumShield = shield("platinum_shield");
+    public static final RegistryObject<Item> kiteShield = shield("kite_shield");
+    public static final RegistryObject<Item> knightShield = shield("knight_shield");
+    public static final RegistryObject<Item> elementShield = shield("element_shield");
+    public static final RegistryObject<Item> magicalShield = shield("magical_shield");
+    public static final RegistryObject<Item> prismShield = shield("prism_shield");
+    public static final RegistryObject<Item> runeShield = shield("rune_shield");
 
-    public static final RegistryObject<Item> itemBlockForge = new ItemBlockForge();
+    /*public static final RegistryObject<Item> itemBlockForge = new ItemBlockForge();
     public static final RegistryObject<Item> itemBlockAccess = new ItemBlockAccess();
     public static final RegistryObject<Item> itemBlockCooking = new ItemBlockCooking();
     public static final RegistryObject<Item> itemBlockPharm = new ItemBlockPharm();*/
+
+    public static final RegistryObject<Item> mineralIron = mineral(EnumMineralTier.IRON);
+    public static final RegistryObject<Item> mineralBronze = mineral(EnumMineralTier.BRONZE);
+    public static final RegistryObject<Item> mineralSilver = mineral(EnumMineralTier.SILVER);
+    public static final RegistryObject<Item> mineralGold = mineral(EnumMineralTier.GOLD);
+    public static final RegistryObject<Item> mineralPlatinum = mineral(EnumMineralTier.PLATINUM);
+    public static final RegistryObject<Item> mineralOrichalcum = mineral(EnumMineralTier.ORICHALCUM);
+    public static final RegistryObject<Item> mineralDiamond = mineral(EnumMineralTier.DIAMOND);
+    public static final RegistryObject<Item> mineralDragonic = mineral(EnumMineralTier.DRAGONIC);
+    public static final RegistryObject<Item> mineralAquamarine = mineral(EnumMineralTier.AQUAMARINE);
+    public static final RegistryObject<Item> mineralAmethyst = mineral(EnumMineralTier.AMETHYST);
+    public static final RegistryObject<Item> mineralRuby = mineral(EnumMineralTier.RUBY);
+    public static final RegistryObject<Item> mineralEmerald = mineral(EnumMineralTier.EMERALD);
+    public static final RegistryObject<Item> mineralSapphire = mineral(EnumMineralTier.SAPPHIRE);
+
+    public static final RegistryObject<Item> brokenMineralIron = brokenMineral(EnumMineralTier.IRON);
+    public static final RegistryObject<Item> brokenMineralBronze = brokenMineral(EnumMineralTier.BRONZE);
+    public static final RegistryObject<Item> brokenMineralSilver = brokenMineral(EnumMineralTier.SILVER);
+    public static final RegistryObject<Item> brokenMineralGold = brokenMineral(EnumMineralTier.GOLD);
+    public static final RegistryObject<Item> brokenMineralPlatinum = brokenMineral(EnumMineralTier.PLATINUM);
+    public static final RegistryObject<Item> brokenMineralOrichalcum = brokenMineral(EnumMineralTier.ORICHALCUM);
+    public static final RegistryObject<Item> brokenMineralDiamond = brokenMineral(EnumMineralTier.DIAMOND);
+    public static final RegistryObject<Item> brokenMineralDragonic = brokenMineral(EnumMineralTier.DRAGONIC);
+    public static final RegistryObject<Item> brokenMineralAquamarine = brokenMineral(EnumMineralTier.AQUAMARINE);
+    public static final RegistryObject<Item> brokenMineralAmethyst = brokenMineral(EnumMineralTier.AMETHYST);
+    public static final RegistryObject<Item> brokenMineralRuby = brokenMineral(EnumMineralTier.RUBY);
+    public static final RegistryObject<Item> brokenMineralEmerald = brokenMineral(EnumMineralTier.EMERALD);
+    public static final RegistryObject<Item> brokenMineralSapphire = brokenMineral(EnumMineralTier.SAPPHIRE);
 
     public static final RegistryObject<Item> bronze = mat("bronze");
     public static final RegistryObject<Item> silver = mat("silver");
@@ -1136,67 +1171,93 @@ public class ModItems {
     public static final RegistryObject<Item> grapes = food("grapes");
 
     public static final RegistryObject<Item> mushroom = ITEMS.register("mushroom", () -> new ItemMushroom(new Item.Properties().food(foodProp).group(RFCreativeTabs.food)));
-    public static final RegistryObject<Item> mushroomMonarch = ITEMS.register("monarch_mushroom", () -> new ItemMushroom(new Item.Properties().food(foodProp).group(RFCreativeTabs.food)));
+    public static final RegistryObject<Item> monarchMushroom = ITEMS.register("monarch_mushroom", () -> new ItemMushroom(new Item.Properties().food(foodProp).group(RFCreativeTabs.food)));
     public static final RegistryObject<Item> mealyApple = food("mealy_apple");
 
     public static RegistryObject<Item> hoe(EnumToolTier tier) {
-        return ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().addToolType(ToolType.HOE, tier.getTierLevel()).maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().addToolType(ToolType.HOE, tier.getTierLevel()).group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> wateringCan(EnumToolTier tier) {
-        return ITEMS.register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(tier, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(tier, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> sickle(EnumToolTier tier) {
-        return ITEMS.register("sickle_" + tier.getName(), () -> new ItemToolSickle(tier, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register("sickle_" + tier.getName(), () -> new ItemToolSickle(tier, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> hammerTool(EnumToolTier tier) {
-        return ITEMS.register("hammer_" + tier.getName(), () -> new ItemToolHammer(tier, new Item.Properties().addToolType(ToolType.PICKAXE, tier.getTierLevel()).maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register("hammer_" + tier.getName(), () -> new ItemToolHammer(tier, new Item.Properties().addToolType(ToolType.PICKAXE, tier.getTierLevel()).group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> axeTool(EnumToolTier tier) {
-        return ITEMS.register("axe_" + tier.getName(), () -> new ItemToolAxe(tier, new Item.Properties().addToolType(ToolType.AXE, tier.getTierLevel()).maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register("axe_" + tier.getName(), () -> new ItemToolAxe(tier, new Item.Properties().addToolType(ToolType.AXE, tier.getTierLevel()).group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> fishingRod(EnumToolTier tier) {
-        return ITEMS.register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(tier, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(tier, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> shortSword(String name) {
-        return ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> longSword(String name) {
-        return ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> spear(String name) {
-        return ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> axe(String name) {
-        return ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties().addToolType(ToolType.AXE, 1).maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties().addToolType(ToolType.AXE, 1).group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> hammer(String name) {
-        return ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties().addToolType(ToolType.PICKAXE, 1).maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties().addToolType(ToolType.PICKAXE, 1).group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> dualBlade(String name) {
-        return ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> gloves(String name) {
-        return ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> staff(String name, EnumElement starterElement) {
-        return ITEMS.register(name, () -> new ItemStaffBase(starterElement, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register(name, () -> new ItemStaffBase(starterElement, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    }
+
+    public static RegistryObject<Item> accessoire(String name) {
+        return ITEMS.register(name, () -> new ItemAccessoireBase(new Item.Properties().group(RFCreativeTabs.equipment)));
+    }
+
+    public static RegistryObject<Item> accessoire(String name, EquipmentSlotType renderSlot) {
+        return ITEMS.register(name, () -> new ItemAccessoireBase(renderSlot, new Item.Properties().group(RFCreativeTabs.equipment)));
+    }
+
+    public static RegistryObject<Item> equipment(EquipmentSlotType slot, String name) {
+        return ITEMS.register(name, () -> new ItemArmorBase(slot, new Item.Properties().group(RFCreativeTabs.equipment)));
+    }
+
+    public static RegistryObject<Item> shield(String name) {
+        return ITEMS.register(name, () -> new ShieldItem(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.equipment)));
+    }
+
+    public static RegistryObject<Item> mineral(EnumMineralTier tier) {
+        Supplier<Block> block = ()->ModBlocks.mineralMap.get(tier).get();
+        return ITEMS.register("ore_"+tier.getString(), () -> new BlockItem(block.get(), new Item.Properties().group(RFCreativeTabs.blocks)));
+    }
+
+    public static RegistryObject<Item> brokenMineral(EnumMineralTier tier) {
+        Supplier<Block> block = ()->ModBlocks.brokenMineralMap.get(tier).get();
+        return ITEMS.register("ore_broken_"+tier.getString(), () -> new BlockItem(block.get(), new Item.Properties().group(RFCreativeTabs.blocks)));
     }
 
     public static RegistryObject<Item> mat(String name) {
-        return ITEMS.register(name, () -> new Item(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.upgradeItems)));
+        return ITEMS.register(name, () -> new Item(new Item.Properties().group(RFCreativeTabs.upgradeItems)));
     }
 
     public static RegistryObject<Item> medicine(String name) {

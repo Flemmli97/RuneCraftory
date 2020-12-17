@@ -1,9 +1,12 @@
 package com.flemmli97.runecraftory.common.registry;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.api.enums.EnumMineralTier;
+import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
 import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockFarm;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
+import com.flemmli97.runecraftory.common.blocks.BlockMineral;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrop;
 import com.flemmli97.runecraftory.common.blocks.tile.TileFarm;
 import com.google.common.collect.Lists;
@@ -20,6 +23,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -31,6 +35,8 @@ public class ModBlocks {
     public static final List<RegistryObject<Block>> crops = Lists.newArrayList();
     public static final List<RegistryObject<Block>> flowers = Lists.newArrayList();
     public static final List<RegistryObject<Block>> herbs = Lists.newArrayList();
+    public static final EnumMap<EnumMineralTier, RegistryObject<Block>> mineralMap = new EnumMap<>(EnumMineralTier.class);
+    public static final EnumMap<EnumMineralTier, RegistryObject<Block>> brokenMineralMap = new EnumMap<>(EnumMineralTier.class);
 
     /*public static final RegistryObject<Block> forge = new BlockForge();
     public static final RegistryObject<Block> cooking = new BlockCookingBench();
@@ -38,34 +44,34 @@ public class ModBlocks {
     public static final RegistryObject<Block> accessory = new BlockAccessoryCrafter();*/
     public static final RegistryObject<Block> farmland = BLOCKS.register("farmland",()->new BlockFarm(AbstractBlock.Properties.create(Material.EARTH).hardnessAndResistance(0.6F).sound(SoundType.GROUND).blockVision((state, reader, pos)->true).suffocates((state, reader, pos)->true)));
 
-    /*public static final RegistryObject<Block> mineralIron = new BlockMineral(EnumMineralTier.IRON);
-    public static final RegistryObject<Block> mineralBronze = new BlockMineral(EnumMineralTier.BRONZE);
-    public static final RegistryObject<Block> mineralSilver = new BlockMineral(EnumMineralTier.SILVER);
-    public static final RegistryObject<Block> mineralGold = new BlockMineral(EnumMineralTier.GOLD);
-    public static final RegistryObject<Block> mineralPlatinum = new BlockMineral(EnumMineralTier.PLATINUM);
-    public static final RegistryObject<Block> mineralOrichalcum = new BlockMineral(EnumMineralTier.ORICHALCUM);
-    public static final RegistryObject<Block> mineralDiamond = new BlockMineral(EnumMineralTier.DIAMOND);
-    public static final RegistryObject<Block> mineralDragonic = new BlockMineral(EnumMineralTier.DRAGONIC);
-    public static final RegistryObject<Block> mineralAquamarine = new BlockMineral(EnumMineralTier.AQUAMARINE);
-    public static final RegistryObject<Block> mineralAmethyst = new BlockMineral(EnumMineralTier.AMETHYST);
-    public static final RegistryObject<Block> mineralRuby = new BlockMineral(EnumMineralTier.RUBY);
-    public static final RegistryObject<Block> mineralEmerald = new BlockMineral(EnumMineralTier.EMERALD);
-    public static final RegistryObject<Block> mineralSapphire = new BlockMineral(EnumMineralTier.SAPPHIRE);
+    public static final RegistryObject<Block> mineralIron = mineral(EnumMineralTier.IRON);
+    public static final RegistryObject<Block> mineralBronze = mineral(EnumMineralTier.BRONZE);
+    public static final RegistryObject<Block> mineralSilver = mineral(EnumMineralTier.SILVER);
+    public static final RegistryObject<Block> mineralGold = mineral(EnumMineralTier.GOLD);
+    public static final RegistryObject<Block> mineralPlatinum = mineral(EnumMineralTier.PLATINUM);
+    public static final RegistryObject<Block> mineralOrichalcum = mineral(EnumMineralTier.ORICHALCUM);
+    public static final RegistryObject<Block> mineralDiamond = mineral(EnumMineralTier.DIAMOND);
+    public static final RegistryObject<Block> mineralDragonic = mineral(EnumMineralTier.DRAGONIC);
+    public static final RegistryObject<Block> mineralAquamarine = mineral(EnumMineralTier.AQUAMARINE);
+    public static final RegistryObject<Block> mineralAmethyst = mineral(EnumMineralTier.AMETHYST);
+    public static final RegistryObject<Block> mineralRuby = mineral(EnumMineralTier.RUBY);
+    public static final RegistryObject<Block> mineralEmerald = mineral(EnumMineralTier.EMERALD);
+    public static final RegistryObject<Block> mineralSapphire = mineral(EnumMineralTier.SAPPHIRE);
 
-    public static final RegistryObject<Block> brokenMineralIron = new BlockBrokenMineral(EnumMineralTier.IRON);
-    public static final RegistryObject<Block> brokenMineralBronze = new BlockBrokenMineral(EnumMineralTier.BRONZE);
-    public static final RegistryObject<Block> brokenMineralSilver = new BlockBrokenMineral(EnumMineralTier.SILVER);
-    public static final RegistryObject<Block> brokenMineralGold = new BlockBrokenMineral(EnumMineralTier.GOLD);
-    public static final RegistryObject<Block> brokenMineralPlatinum = new BlockBrokenMineral(EnumMineralTier.PLATINUM);
-    public static final RegistryObject<Block> brokenMineralOrichalcum = new BlockBrokenMineral(EnumMineralTier.ORICHALCUM);
-    public static final RegistryObject<Block> brokenMineralDiamond = new BlockBrokenMineral(EnumMineralTier.DIAMOND);
-    public static final RegistryObject<Block> brokenMineralDragonic = new BlockBrokenMineral(EnumMineralTier.DRAGONIC);
-    public static final RegistryObject<Block> brokenMineralAquamarine = new BlockBrokenMineral(EnumMineralTier.AQUAMARINE);
-    public static final RegistryObject<Block> brokenMineralAmethyst = new BlockBrokenMineral(EnumMineralTier.AMETHYST);
-    public static final RegistryObject<Block> brokenMineralRuby = new BlockBrokenMineral(EnumMineralTier.RUBY);
-    public static final RegistryObject<Block> brokenMineralEmerald = new BlockBrokenMineral(EnumMineralTier.EMERALD);
-    public static final RegistryObject<Block> brokenMineralSapphire = new BlockBrokenMineral(EnumMineralTier.SAPPHIRE);
-
+    public static final RegistryObject<Block> brokenMineralIron = brokenMineral(EnumMineralTier.IRON);
+    public static final RegistryObject<Block> brokenMineralBronze = brokenMineral(EnumMineralTier.BRONZE);
+    public static final RegistryObject<Block> brokenMineralSilver = brokenMineral(EnumMineralTier.SILVER);
+    public static final RegistryObject<Block> brokenMineralGold = brokenMineral(EnumMineralTier.GOLD);
+    public static final RegistryObject<Block> brokenMineralPlatinum = brokenMineral(EnumMineralTier.PLATINUM);
+    public static final RegistryObject<Block> brokenMineralOrichalcum = brokenMineral(EnumMineralTier.ORICHALCUM);
+    public static final RegistryObject<Block> brokenMineralDiamond = brokenMineral(EnumMineralTier.DIAMOND);
+    public static final RegistryObject<Block> brokenMineralDragonic = brokenMineral(EnumMineralTier.DRAGONIC);
+    public static final RegistryObject<Block> brokenMineralAquamarine = brokenMineral(EnumMineralTier.AQUAMARINE);
+    public static final RegistryObject<Block> brokenMineralAmethyst = brokenMineral(EnumMineralTier.AMETHYST);
+    public static final RegistryObject<Block> brokenMineralRuby = brokenMineral(EnumMineralTier.RUBY);
+    public static final RegistryObject<Block> brokenMineralEmerald = brokenMineral(EnumMineralTier.EMERALD);
+    public static final RegistryObject<Block> brokenMineralSapphire = brokenMineral(EnumMineralTier.SAPPHIRE);
+/*
     public static final RegistryObject<Block> bossSpawner = new BlockBossSpawner();
     public static final RegistryObject<Block> research = new BlockResearchTable();
     public static final RegistryObject<Block> ignore = new BlockIgnore();
@@ -123,7 +129,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> toyherb = flower("toyherb", () -> ModItems.toyherb, () -> ModItems.toyherbGiant, () -> ModItems.toyherbSeeds);
 
     public static final RegistryObject<Block> mushroom = herb("mushroom", () -> ModItems.mushroom);
-    public static final RegistryObject<Block> monarchMushroom = herb("monarch_mushroom", () -> ModItems.mushroomMonarch);
+    public static final RegistryObject<Block> monarchMushroom = herb("monarch_mushroom", () -> ModItems.monarchMushroom);
     public static final RegistryObject<Block> elliLeaves = herb("elli_leaves", () -> ModItems.elliLeaves);
     public static final RegistryObject<Block> witheredGrass = herb("withered_grass", () -> ModItems.witheredGrass);
     public static final RegistryObject<Block> weeds = herb("weeds", () -> ModItems.weeds);
@@ -163,6 +169,18 @@ public class ModBlocks {
     public static final RegistryObject<Block> shinySapling = new BlockTreeSapling("shiny_sapling", shinyTree);*/
     public static final RegistryObject<TileEntityType<TileFarm>> farmTile = TILES.register("farmland_tile", ()->TileEntityType.Builder.create(TileFarm::new, farmland.get()).build(null));
     public static final RegistryObject<TileEntityType<TileCrop>> cropTile = cropTile("crop_tile", combine(Lists.newArrayList(crops), flowers));
+
+    public static RegistryObject<Block> mineral(EnumMineralTier name) {
+        RegistryObject<Block> reg = BLOCKS.register("ore_" + name.getString(), () -> new BlockMineral(name, AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 5)));
+        mineralMap.put(name, reg);
+        return reg;
+    }
+
+    public static RegistryObject<Block> brokenMineral(EnumMineralTier name) {
+        RegistryObject<Block> reg = BLOCKS.register("ore_broken_" + name.getString(), () -> new BlockBrokenMineral(name, AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(30, 15)));
+        brokenMineralMap.put(name, reg);
+        return reg;
+    }
 
     public static RegistryObject<Block> crop(String name, Supplier<Supplier<Item>> crop, Supplier<Supplier<Item>> giant, Supplier<Supplier<Item>> seed) {
         RegistryObject<Block> reg = BLOCKS.register("plant_" + name, () -> new BlockCrop(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().sound(SoundType.PLANT), crop.get(), giant.get(), seed.get()));

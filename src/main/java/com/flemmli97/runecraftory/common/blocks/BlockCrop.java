@@ -17,6 +17,7 @@ import net.minecraft.loot.LootContext;
 import net.minecraft.loot.LootParameters;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -42,7 +43,7 @@ public class BlockCrop extends BushBlock implements IGrowable {
     private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[]{new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
     private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
-    public static final IntegerProperty STATUS = IntegerProperty.create("status", 0, 3);
+    public static final IntegerProperty AGE = BlockStateProperties.AGE_0_3;
 
     private final Supplier<Item> crop;
     private final Supplier<Item> giant;
@@ -50,7 +51,7 @@ public class BlockCrop extends BushBlock implements IGrowable {
 
     public BlockCrop(AbstractBlock.Properties prop, Supplier<Item> crop, Supplier<Item> giant, Supplier<Item> seed) {
         super(prop);
-        this.setDefaultState(this.getDefaultState().with(STATUS, 0));
+        this.setDefaultState(this.getDefaultState().with(AGE, 0));
         this.crop = crop;
         this.giant = giant;
         this.seed = seed;
@@ -58,22 +59,26 @@ public class BlockCrop extends BushBlock implements IGrowable {
 
     @Override
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
-        builder.add(STATUS);
+        builder.add(AGE);
     }
 
     @Override
     public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult res) {
-        TileCrop tile = (TileCrop) world.getTileEntity(pos);
-        if (tile.age() >= this.properties().growth() && player.getHeldItem(hand).isEmpty()) {
+        if (this.isMaxAge(state, world, pos)) {
+            TileEntity tile = world.getTileEntity(pos);
             spawnDrops(state, world, pos, tile);
-            if (this.properties().regrowable()) {
-                tile.resetAge();
-                world.setBlockState(pos, state.with(STATUS, 0));
+            if (tile instanceof TileCrop && this.properties().regrowable()) {
+                ((TileCrop) tile).resetAge();
+                world.setBlockState(pos, state.with(AGE, 0));
             } else
                 world.removeBlock(pos, false);
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
+    }
+
+    public boolean isMaxAge(BlockState state, World world, BlockPos pos){
+        return state.get(AGE) == 3;
     }
 
     @Override
@@ -83,7 +88,7 @@ public class BlockCrop extends BushBlock implements IGrowable {
 
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context) {
-        return SHAPE_BY_AGE[state.get(STATUS)];
+        return SHAPE_BY_AGE[state.get(AGE)];
     }
 
     public CropProperties properties() {
@@ -113,16 +118,15 @@ public class BlockCrop extends BushBlock implements IGrowable {
         List<ItemStack> list = super.getDrops(state, builder);
         TileEntity tile = builder.get(LootParameters.BLOCK_ENTITY);
         if (tile instanceof TileCrop && ((TileCrop) tile).age() >= this.properties().growth())
-            list.forEach(this::modifyStack);
+            list.forEach(stack->this.modifyStack(stack, (TileCrop) tile));
         return list;
     }
 
-    private void modifyStack(ItemStack stack) {
-        if (stack.getItem() == this.crop.get() || stack.getItem() == this.giant.get()) {
-            CropProperties prop = DataPackHandler.getCropStat(this.crop.get());
-            if (prop != null)
-                stack.setCount(prop.maxDrops());
-        }
+    private void modifyStack(ItemStack stack, TileCrop tile) {
+        CropProperties prop = DataPackHandler.getCropStat(this.crop.get());
+        if (prop != null)
+            stack.setCount(prop.maxDrops());
+        ItemNBT.getLeveledItem(stack, tile.level());
     }
 
     /**
@@ -152,6 +156,14 @@ public class BlockCrop extends BushBlock implements IGrowable {
     @Override
     public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {
         return ItemNBT.getLeveledItem(new ItemStack(this.seed.get(), 1), 1);
+    }
+
+    public Item getCrop(){
+        return this.crop.get();
+    }
+
+    public Item getGiantCrop(){
+        return this.giant.get();
     }
 
     @Override

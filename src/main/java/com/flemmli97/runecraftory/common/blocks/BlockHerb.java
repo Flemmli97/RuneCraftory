@@ -1,5 +1,7 @@
 package com.flemmli97.runecraftory.common.blocks;
 
+import com.flemmli97.runecraftory.common.loot.IBlockModifyLevel;
+import com.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -11,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -22,7 +25,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class BlockHerb extends BushBlock {
+public class BlockHerb extends BushBlock implements IBlockModifyLevel {
 
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
@@ -45,6 +48,14 @@ public class BlockHerb extends BushBlock {
         int level = state.get(LEVEL);
         list.forEach(stack -> this.modify(stack, level, builder.getWorld().rand));
         return list;
+    }
+
+    @Override
+    public int getLevel(BlockState state, TileEntity tile, ItemLevelLootFunction func, LootContext ctx){
+        int level = state.get(LEVEL);
+        if (level == 0)
+            level = func.getLevel(ctx);
+        return level;
     }
 
     private void modify(ItemStack stack, int level, Random random) {

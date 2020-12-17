@@ -1,15 +1,15 @@
 {
   "variants": {
-    "status=0": {
+    "age=0": {
       "model": "runecraftory:block/plant_pineapple_0"
     },
-    "status=1": {
+    "age=1": {
       "model": "runecraftory:block/plant_pineapple_1"
     },
-    "status=2": {
+    "age=2": {
       "model": "runecraftory:block/plant_pineapple_2"
     },
-    "status=3": {
+    "age=3": {
       "model": "runecraftory:block/plant_pineapple_3"
     }
   }

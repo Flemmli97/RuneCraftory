@@ -16,13 +16,13 @@ public class RFCreativeTabs {
             return new ItemStack(ModItems.icon0.get());
         }
     };
-/*
+
     public static CreativePlus equipment = new CreativePlus("runecraftory.equipment") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(ModItems.cheapBracelet);
+            return new ItemStack(ModItems.cheapBracelet.get());
         }
-    };*/
+    };
 
     public static CreativePlus upgradeItems = new CreativePlus("runecraftory.upgrade") {
         @Override
@@ -30,13 +30,13 @@ public class RFCreativeTabs {
             return new ItemStack(ModItems.dragonic.get());
         }
     };
-/*
+
     public static CreativePlus blocks = new CreativePlus("runecraftory.blocks") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(ModItems.itemBlockForge);
+            return new ItemStack(ModItems.mineralIron.get());
         }
-    };*/
+    };
 
     public static CreativePlus medicine = new CreativePlus("runecraftory.medicine") {
         @Override

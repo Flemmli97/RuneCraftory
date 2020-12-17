@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"parent": "block/thin_block",
 	"textures": {
-		"0": "blocks/stone",
-		"particle": "blocks/stone"
+		"0": "block/stone",
+		"particle": "block/stone"
 	},
 	"elements": [
 		{

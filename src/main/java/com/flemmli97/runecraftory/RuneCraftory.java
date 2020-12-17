@@ -19,6 +19,7 @@ import com.flemmli97.runecraftory.network.PacketHandler;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -74,6 +75,7 @@ public class RuneCraftory {
         ModAttributes.ATTRIBUTES.register(modBus);
         ModPotions.EFFECTS.register(modBus);
         ModLootModifier.SERIALZER.register(modBus);
+        modBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootModifier::register);
     }
 
     public void clientSetup(FMLClientSetupEvent event) {
@@ -82,7 +84,9 @@ public class RuneCraftory {
 
     public void common(FMLCommonSetupEvent event) {
         PacketHandler.register();
-        event.enqueueWork(() -> ModEntities.registerAttributes());
+        event.enqueueWork(() -> {
+            ModEntities.registerAttributes();
+        });
         CapabilityManager.INSTANCE.register(IPlayerCap.class, new PlayerCapNetwork(), PlayerCapImpl::new);
     }
 }

@@ -1,8 +1,0 @@
-{
-  "parent": "runecraftory:block/ore",
-  "textures": {
-    "ore": "runecraftory:blocks/ore_dragonic",
-    "0": "blocks/end_stone",
-    "particles": "blocks/end_stone"
-  }
-}

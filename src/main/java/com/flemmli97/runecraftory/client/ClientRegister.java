@@ -17,8 +17,10 @@ import com.flemmli97.runecraftory.client.render.projectiles.RenderAmbrosiaWave;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderSleepBall;
+import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
 import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
+import com.flemmli97.runecraftory.common.blocks.BlockMineral;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import net.minecraft.client.Minecraft;
@@ -52,7 +54,7 @@ public class ClientRegister {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.butterfly.get(), RenderButterfly::new);
 
         ModBlocks.BLOCKS.getEntries().forEach(reg -> {
-            if (reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop)
+            if (reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop || reg.get() instanceof BlockMineral || reg.get() instanceof BlockBrokenMineral)
                 RenderTypeLookup.setRenderLayer(reg.get(), RenderType.getCutout());
         });
 

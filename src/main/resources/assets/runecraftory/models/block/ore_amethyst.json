@@ -1,6 +1,0 @@
-{
-  "parent": "runecraftory:block/ore",
-  "textures": {
-    "ore": "runecraftory:blocks/ore_amethyst"
-  }
-}
