@@ -106,6 +106,11 @@ public class ModBlocks {
     public static final RegistryObject<Block> onion = crop("onion", () -> ModItems.onion, () -> ModItems.onionGiant, () -> ModItems.onionSeeds);
     public static final RegistryObject<Block> fodder = crop("fodder", () -> ModItems.fodder, () -> () -> Items.AIR, () -> ModItems.fodderSeeds);
 
+    public static final RegistryObject<Block> shieldCrop = crop("shield", () -> ModItems.seedShield, () -> () -> Items.AIR, () -> ModItems.shieldSeeds);
+    public static final RegistryObject<Block> swordCrop = crop("sword", () -> ModItems.seedSword, () -> () -> Items.AIR, () -> ModItems.swordSeeds);
+
+    public static final RegistryObject<Block> dungeon = crop("dungeon", () -> () -> Items.STONE, () -> () -> Items.AIR, () -> ModItems.dungeonSeeds);
+
     public static final RegistryObject<Block> potatoGiant = crop("potato", () -> () -> Items.POTATO, () -> ModItems.potatoGiant, () -> () -> Items.POTATO);
     public static final RegistryObject<Block> carrotGiant = crop("carrot", () -> () -> Items.CARROT, () -> ModItems.carrotGiant, () -> () -> Items.CARROT);
 

@@ -61,9 +61,7 @@ public class ItemRecipeBread extends Item {
             ServerPlayerEntity player = (ServerPlayerEntity) living;
             AtomicBoolean success = new AtomicBoolean(false);
             player.getServer().getRecipeManager().listAllOfType(this.getType())
-                    .stream().filter(r -> !player.getRecipeBook().isUnlocked(r)
-                    && r.getCraftingLevel() - player.getCapability(PlayerCapProvider.PlayerCap)
-                    .map(cap -> cap.getSkillLevel(this.getSkill())[0]).orElse(0) <= 5)
+                    .stream().filter(r -> !player.getRecipeBook().isUnlocked(r) && r.getCraftingLevel() - player.getCapability(PlayerCapProvider.PlayerCap).map(cap -> cap.getSkillLevel(this.getSkill())[0]).orElse(0) <= 5)
                     .sorted(Comparator.comparingInt(SextupleRecipe::getCraftingLevel))
                     .limit(amount).forEach(recipe -> {
                 player.getRecipeBook().unlock(recipe);

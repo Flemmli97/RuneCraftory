@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.inventory;
 
-import com.flemmli97.runecraftory.api.items.ISpells;
+import com.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -53,7 +53,7 @@ public class InventorySpells implements IItemHandler {
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        return stack.getItem() instanceof ISpells;
+        return stack.getItem() instanceof ItemSpell;
     }
 
     public void readFromNBT(CompoundNBT compound) {
@@ -67,8 +67,8 @@ public class InventorySpells implements IItemHandler {
 
     public void useSkill(PlayerEntity player, int index) {
         ItemStack stack = this.getStackInSlot(index);
-        if (stack.getItem() instanceof ISpells && player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f) <= 0.0f)
-            ((ISpells) stack.getItem()).use(player.world, player, stack);
+        if (stack.getItem() instanceof ItemSpell && player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f) <= 0.0f)
+            ((ItemSpell) stack.getItem()).getSpell().use(player.world, player, stack);
     }
 
     public void dropItemsAt(LivingEntity entity) {
@@ -84,9 +84,8 @@ public class InventorySpells implements IItemHandler {
 
     public void update(PlayerEntity player) {
         for (ItemStack stack : this.inventory) {
-            if (stack.getItem() instanceof ISpells) {
-                ((ISpells) stack.getItem()).update(stack, player);
-            }
+            if(stack.getItem() instanceof ItemSpell)
+                ((ItemSpell) stack.getItem()).getSpell().update(player, stack);
         }
     }
 }

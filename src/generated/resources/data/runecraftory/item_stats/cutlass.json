@@ -4,8 +4,8 @@
   "upgradeDifficulty": 0,
   "element": "NONE",
   "itemStats": {
-    "minecraft:generic.attack_damage": 16,
     "runecraftory:attribute.rf.defence": 3,
+    "minecraft:generic.attack_damage": 16,
     "runecraftory:attribute.rf.magic_def": 1
   },
   "item": "runecraftory:cutlass"

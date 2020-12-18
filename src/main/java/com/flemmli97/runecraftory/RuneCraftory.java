@@ -16,6 +16,7 @@ import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModLootModifier;
 import com.flemmli97.runecraftory.common.registry.ModPotions;
+import com.flemmli97.runecraftory.common.registry.ModSpells;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -91,6 +92,7 @@ public class RuneCraftory {
         event.enqueueWork(() -> {
             ModEntities.registerAttributes();
         });
+        ModSpells.register();
         CapabilityManager.INSTANCE.register(IPlayerCap.class, new PlayerCapNetwork(), PlayerCapImpl::new);
     }
 }

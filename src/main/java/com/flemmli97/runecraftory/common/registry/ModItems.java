@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.registry;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.api.enums.EnumMineralTier;
@@ -16,6 +17,8 @@ import com.flemmli97.runecraftory.common.items.creative.ItemSkillUp;
 import com.flemmli97.runecraftory.common.items.equipment.ItemAccessoireBase;
 import com.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import com.flemmli97.runecraftory.common.items.equipment.ItemSeedShield;
+import com.flemmli97.runecraftory.common.items.tools.ItemFertilizer;
+import com.flemmli97.runecraftory.common.items.tools.ItemStatIncrease;
 import com.flemmli97.runecraftory.common.items.tools.ItemBrush;
 import com.flemmli97.runecraftory.common.items.tools.ItemPetInspector;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
@@ -32,6 +35,7 @@ import com.flemmli97.runecraftory.common.items.weapons.ItemHammerBase;
 import com.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
 import com.flemmli97.runecraftory.common.items.weapons.ItemShortSwordBase;
 import com.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import com.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import com.flemmli97.runecraftory.common.items.weapons.shortsword.ItemSeedSword;
 import net.minecraft.block.Block;
@@ -699,82 +703,82 @@ public class ModItems {
     public static final RegistryObject<Item> invinciroid = medicine("invinciroid");
     public static final RegistryObject<Item> lovePotion = medicine("love_potion");
     public static final RegistryObject<Item> formuade = medicine("formuade");
-    /*public static final RegistryObject<Item> leveliser = new ItemStatIncrease("leveliser", Stat.LEVEL);
-    public static final RegistryObject<Item> heartDrink = new ItemStatIncrease("heart_drink", Stat.HP);
-    public static final RegistryObject<Item> vitalGummi = new ItemStatIncrease("vital_gummi", Stat.VIT);
-    public static final RegistryObject<Item> intelligencer = new ItemStatIncrease("intelligencer", Stat.INT);
-    public static final RegistryObject<Item> protein = new ItemStatIncrease("protein", Stat.STR);
-    public static final RegistryObject<Item> formularA = new ItemFormular(0);
-    public static final RegistryObject<Item> formularB = new ItemFormular(1);
-    public static final RegistryObject<Item> formularC = new ItemFormular(2);
-    public static final RegistryObject<Item> minimizer = new ItemSizeFertilizer(false);
-    public static final RegistryObject<Item> giantizer = new ItemSizeFertilizer(true);
-    public static final RegistryObject<Item> greenifier = new ItemGreenifier(false);
-    public static final RegistryObject<Item> greenifierPlus = new ItemGreenifier(true);
-    public static final RegistryObject<Item> wettablePowder = new ItemWettablePowder();
+    public static final RegistryObject<Item> leveliser = ITEMS.register("leveliser", ()->new ItemStatIncrease(ItemStatIncrease.Stat.LEVEL, new Item.Properties().group(RFCreativeTabs.medicine)));
+    public static final RegistryObject<Item> heartDrink = ITEMS.register("heart_drink", ()->new ItemStatIncrease(ItemStatIncrease.Stat.HP, new Item.Properties().group(RFCreativeTabs.medicine)));
+    public static final RegistryObject<Item> vitalGummi = ITEMS.register("vital_gummi", ()->new ItemStatIncrease(ItemStatIncrease.Stat.VIT, new Item.Properties().group(RFCreativeTabs.medicine)));
+    public static final RegistryObject<Item> intelligencer =ITEMS.register("intelligencer", ()->new ItemStatIncrease(ItemStatIncrease.Stat.INT, new Item.Properties().group(RFCreativeTabs.medicine)));
+    public static final RegistryObject<Item> protein = ITEMS.register("protein", ()->new ItemStatIncrease(ItemStatIncrease.Stat.STR, new Item.Properties().group(RFCreativeTabs.medicine)));
+    public static final RegistryObject<Item> formularA = ITEMS.register("formular_a", ()->new ItemFertilizer(ItemFertilizer.formularA, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> formularB = ITEMS.register("formular_b", ()->new ItemFertilizer(ItemFertilizer.formularB, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> formularC = ITEMS.register("formular_c", ()->new ItemFertilizer(ItemFertilizer.formularC, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> minimizer = ITEMS.register("minimizer", ()->new ItemFertilizer(ItemFertilizer.minimizer, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> giantizer = ITEMS.register("giantizer", ()->new ItemFertilizer(ItemFertilizer.giantizer, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> greenifier = ITEMS.register("greenifier", ()->new ItemFertilizer(ItemFertilizer.greenifier, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> greenifierPlus = ITEMS.register("greenifier_plus", ()->new ItemFertilizer(ItemFertilizer.greenifierPlus, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> wettablePowder = ITEMS.register("wettable_powder", ()->new ItemFertilizer(ItemFertilizer.wettable, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> objectX = food("object_x");
 
     //Skills and Magic
-    public static final RegistryObject<Item> fireBallSmall = new ItemFireballCast();
-    public static final RegistryObject<Item> fireBallBig = new ItemEmptySkill("fireball_big");
-    public static final RegistryObject<Item> explosion = new ItemEmptySkill("explosion");
-    public static final RegistryObject<Item> waterLaser = new ItemWaterLaserCast();
-    public static final RegistryObject<Item> parallelLaser = new ItemEmptySkill("parallel_laser");
-    public static final RegistryObject<Item> deltaLaser = new ItemEmptySkill("delta_laser");
-    public static final RegistryObject<Item> screwRock = new ItemEmptySkill("screw_rock");
-    public static final RegistryObject<Item> earthSpike = new ItemEmptySkill("earth_spike");
-    public static final RegistryObject<Item> avengerRock = new ItemEmptySkill("avenger_rock");
-    public static final RegistryObject<Item> sonicWind = new ItemEmptySkill("sonic_wind");
-    public static final RegistryObject<Item> doubleSonic = new ItemEmptySkill("double_sonic");
-    public static final RegistryObject<Item> penetrateSonic = new ItemEmptySkill("penetrate_sonic");
-    public static final RegistryObject<Item> lightBarrier = new ItemEmptySkill("light_barrier");
-    public static final RegistryObject<Item> shine = new ItemEmptySkill("shine");
-    public static final RegistryObject<Item> prism = new ItemEmptySkill("prism");
-    public static final RegistryObject<Item> darkBall = new ItemEmptySkill("dark_ball");
-    public static final RegistryObject<Item> darkSnake = new ItemEmptySkill("dark_snake");
-    public static final RegistryObject<Item> darkness = new ItemEmptySkill("darkness");
-    public static final RegistryObject<Item> cure = new ItemEmptySkill("cure");
-    public static final RegistryObject<Item> cureAll = new ItemEmptySkill("cure_all");
-    public static final RegistryObject<Item> cureMaster = new ItemEmptySkill("cure_master");
-    public static final RegistryObject<Item> mediPoison = new ItemEmptySkill("medi_poison");
-    public static final RegistryObject<Item> mediPara = new ItemEmptySkill("medi_paralysis");
-    public static final RegistryObject<Item> mediSeal = new ItemEmptySkill("medi_seal");
-    public static final RegistryObject<Item> greeting = new ItemEmptySkill("greeting");
-    public static final RegistryObject<Item> powerWave = new ItemEmptySkill("power_wave");
-    public static final RegistryObject<Item> dashSlash = new ItemEmptySkill("dash_slash");
-    public static final RegistryObject<Item> rushAttack = new ItemEmptySkill("rush_attack");
-    public static final RegistryObject<Item> roundBreak = new ItemEmptySkill("round_break");
-    public static final RegistryObject<Item> mindThrust = new ItemEmptySkill("mind_thrust");
-    public static final RegistryObject<Item> gust = new ItemEmptySkill("gust");
-    public static final RegistryObject<Item> storm = new ItemEmptySkill("storm");
-    public static final RegistryObject<Item> blitz = new ItemEmptySkill("blitz");
-    public static final RegistryObject<Item> twinAttack = new ItemEmptySkill("twin_attack");
-    public static final RegistryObject<Item> railStrike = new ItemEmptySkill("rail_strike");
-    public static final RegistryObject<Item> windSlash = new ItemEmptySkill("wind_slash");
-    public static final RegistryObject<Item> flashStrike = new ItemEmptySkill("flash_strike");
-    public static final RegistryObject<Item> naiveBlade = new ItemEmptySkill("naive_blade");
-    public static final RegistryObject<Item> steelHeart = new ItemEmptySkill("steel_heart");
-    public static final RegistryObject<Item> deltaStrike = new ItemEmptySkill("delta_strike");
-    public static final RegistryObject<Item> hurricane = new ItemEmptySkill("hurricane");
-    public static final RegistryObject<Item> reaperSlash = new ItemEmptySkill("reaper_slash");
-    public static final RegistryObject<Item> millionStrike = new ItemEmptySkill("million_strike");
-    public static final RegistryObject<Item> axelDisaster = new ItemEmptySkill("axel_disaster");
-    public static final RegistryObject<Item> stardustUpper = new ItemEmptySkill("stardust_upper");
-    public static final RegistryObject<Item> tornadoSwing = new ItemEmptySkill("tornado_swing");
-    public static final RegistryObject<Item> grandImpact = new ItemEmptySkill("grand_impact");
-    public static final RegistryObject<Item> gigaSwing = new ItemEmptySkill("giga_swing");
-    public static final RegistryObject<Item> upperCut = new ItemEmptySkill("upper_cut");
-    public static final RegistryObject<Item> doubleKick = new ItemEmptySkill("double_kick");
-    public static final RegistryObject<Item> straightPunch = new ItemEmptySkill("straight_punch");
-    public static final RegistryObject<Item> nekoDamashi = new ItemEmptySkill("neko_damashi");
-    public static final RegistryObject<Item> rushPunch = new ItemEmptySkill("rush_punch");
-    public static final RegistryObject<Item> cyclone = new ItemEmptySkill("cyclone");
-    public static final RegistryObject<Item> rapidMove = new ItemEmptySkill("rapid_move");
-    public static final RegistryObject<Item> bonusConcerto = new ItemEmptySkill("bonus_concerto");
-    public static final RegistryObject<Item> strikingMarch = new ItemEmptySkill("striking_march");
-    public static final RegistryObject<Item> ironWaltz = new ItemEmptySkill("iron_waltz");
-    public static final RegistryObject<Item> teleport = new ItemEmptySkill("teleport");
-*/
+    public static final RegistryObject<Item> fireBallSmall = spell(()->ModSpells.EMPTY, "fireball");
+    public static final RegistryObject<Item> fireBallBig = spell(()->ModSpells.EMPTY, "fireball_big");
+    public static final RegistryObject<Item> explosion = spell(()->ModSpells.EMPTY, "explosion");
+    public static final RegistryObject<Item> waterLaser = spell(()->ModSpells.EMPTY, "water_laser");
+    public static final RegistryObject<Item> parallelLaser = spell(()->ModSpells.EMPTY, "parallel_laser");
+    public static final RegistryObject<Item> deltaLaser = spell(()->ModSpells.EMPTY, "delta_laser");
+    public static final RegistryObject<Item> screwRock = spell(()->ModSpells.EMPTY, "screw_rock");
+    public static final RegistryObject<Item> earthSpike = spell(()->ModSpells.EMPTY, "earth_spike");
+    public static final RegistryObject<Item> avengerRock = spell(()->ModSpells.EMPTY, "avenger_rock");
+    public static final RegistryObject<Item> sonicWind = spell(()->ModSpells.EMPTY, "sonic_wind");
+    public static final RegistryObject<Item> doubleSonic = spell(()->ModSpells.EMPTY, "double_sonic");
+    public static final RegistryObject<Item> penetrateSonic = spell(()->ModSpells.EMPTY, "penetrate_sonic");
+    public static final RegistryObject<Item> lightBarrier = spell(()->ModSpells.EMPTY, "light_barrier");
+    public static final RegistryObject<Item> shine = spell(()->ModSpells.EMPTY, "shine");
+    public static final RegistryObject<Item> prism = spell(()->ModSpells.EMPTY, "prism");
+    public static final RegistryObject<Item> darkBall = spell(()->ModSpells.EMPTY, "dark_ball");
+    public static final RegistryObject<Item> darkSnake = spell(()->ModSpells.EMPTY, "dark_snake");
+    public static final RegistryObject<Item> darkness = spell(()->ModSpells.EMPTY, "darkness");
+    public static final RegistryObject<Item> cure = spell(()->ModSpells.EMPTY, "cure");
+    public static final RegistryObject<Item> cureAll = spell(()->ModSpells.EMPTY, "cure_all");
+    public static final RegistryObject<Item> cureMaster = spell(()->ModSpells.EMPTY, "cure_master");
+    public static final RegistryObject<Item> mediPoison = spell(()->ModSpells.EMPTY, "medi_poison");
+    public static final RegistryObject<Item> mediPara = spell(()->ModSpells.EMPTY, "medi_paralysis");
+    public static final RegistryObject<Item> mediSeal = spell(()->ModSpells.EMPTY, "medi_seal");
+    public static final RegistryObject<Item> greeting = spell(()->ModSpells.EMPTY, "greeting");
+    public static final RegistryObject<Item> powerWave = spell(()->ModSpells.EMPTY, "power_wave");
+    public static final RegistryObject<Item> dashSlash = spell(()->ModSpells.EMPTY, "dash_slash");
+    public static final RegistryObject<Item> rushAttack = spell(()->ModSpells.EMPTY, "rush_attack");
+    public static final RegistryObject<Item> roundBreak = spell(()->ModSpells.EMPTY, "round_break");
+    public static final RegistryObject<Item> mindThrust = spell(()->ModSpells.EMPTY, "mind_thrust");
+    public static final RegistryObject<Item> gust = spell(()->ModSpells.EMPTY, "gust");
+    public static final RegistryObject<Item> storm = spell(()->ModSpells.EMPTY, "storm");
+    public static final RegistryObject<Item> blitz = spell(()->ModSpells.EMPTY, "blitz");
+    public static final RegistryObject<Item> twinAttack = spell(()->ModSpells.EMPTY, "twin_attack");
+    public static final RegistryObject<Item> railStrike = spell(()->ModSpells.EMPTY, "rail_strike");
+    public static final RegistryObject<Item> windSlash = spell(()->ModSpells.EMPTY, "wind_slash");
+    public static final RegistryObject<Item> flashStrike = spell(()->ModSpells.EMPTY, "flash_strike");
+    public static final RegistryObject<Item> naiveBlade = spell(()->ModSpells.EMPTY, "naive_blade");
+    public static final RegistryObject<Item> steelHeart = spell(()->ModSpells.EMPTY, "steel_heart");
+    public static final RegistryObject<Item> deltaStrike = spell(()->ModSpells.EMPTY, "delta_strike");
+    public static final RegistryObject<Item> hurricane = spell(()->ModSpells.EMPTY, "hurricane");
+    public static final RegistryObject<Item> reaperSlash = spell(()->ModSpells.EMPTY, "reaper_slash");
+    public static final RegistryObject<Item> millionStrike = spell(()->ModSpells.EMPTY, "million_strike");
+    public static final RegistryObject<Item> axelDisaster = spell(()->ModSpells.EMPTY, "axel_disaster");
+    public static final RegistryObject<Item> stardustUpper = spell(()->ModSpells.EMPTY, "stardust_upper");
+    public static final RegistryObject<Item> tornadoSwing = spell(()->ModSpells.EMPTY, "tornado_swing");
+    public static final RegistryObject<Item> grandImpact = spell(()->ModSpells.EMPTY, "grand_impact");
+    public static final RegistryObject<Item> gigaSwing = spell(()->ModSpells.EMPTY, "giga_swing");
+    public static final RegistryObject<Item> upperCut = spell(()->ModSpells.EMPTY, "upper_cut");
+    public static final RegistryObject<Item> doubleKick = spell(()->ModSpells.EMPTY, "double_kick");
+    public static final RegistryObject<Item> straightPunch = spell(()->ModSpells.EMPTY, "straight_punch");
+    public static final RegistryObject<Item> nekoDamashi = spell(()->ModSpells.EMPTY, "neko_damashi");
+    public static final RegistryObject<Item> rushPunch = spell(()->ModSpells.EMPTY, "rush_punch");
+    public static final RegistryObject<Item> cyclone = spell(()->ModSpells.EMPTY, "cyclone");
+    public static final RegistryObject<Item> rapidMove = spell(()->ModSpells.EMPTY, "rapid_move");
+    public static final RegistryObject<Item> bonusConcerto = spell(()->ModSpells.EMPTY, "bonus_concerto");
+    public static final RegistryObject<Item> strikingMarch = spell(()->ModSpells.EMPTY, "striking_march");
+    public static final RegistryObject<Item> ironWaltz = spell(()->ModSpells.EMPTY, "iron_waltz");
+    public static final RegistryObject<Item> teleport = spell(()->ModSpells.EMPTY, "teleport");
+
     public static final RegistryObject<Item> rockfish = fish("rockfish");
     public static final RegistryObject<Item> sandFlounder = fish("sand_flounder");
     public static final RegistryObject<Item> pondSmelt = fish("pond_smelt");
@@ -953,11 +957,11 @@ public class ModItems {
 
     //Special seeds
 
-    /*public static final RegistryObject<Item> shieldSeeds = seed("shield", ()->ModBlocks.SEEDSHIELDITEM);
+    public static final RegistryObject<Item> shieldSeeds = seed("shield", ()->ModBlocks.shieldCrop);
 
-    public static final RegistryObject<Item> swordSeeds = seed("sword", ()->ModBlocks.SEEDSWORDITEM);
+    public static final RegistryObject<Item> swordSeeds = seed("sword", ()->ModBlocks.swordCrop);
 
-    public static final RegistryObject<Item> dungeonSeeds = new ItemDungeonSeed();*/
+    public static final RegistryObject<Item> dungeonSeeds = seed("dungeon", ()->ModBlocks.swordCrop);
 
     //Herbs
 
@@ -1269,6 +1273,10 @@ public class ModItems {
 
     public static RegistryObject<Item> medicine(String name) {
         return ITEMS.register(name, () -> new ItemMedicine(new Item.Properties().food(foodProp).maxStackSize(16).group(RFCreativeTabs.medicine)));
+    }
+
+    public static RegistryObject<Item> spell(Supplier<Spell> sup, String name) {
+        return ITEMS.register(name, () -> new ItemSpell(sup, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.cast)));
     }
 
     public static RegistryObject<Item> fish(String name) {

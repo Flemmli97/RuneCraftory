@@ -44,13 +44,13 @@ public class RFCreativeTabs {
             return new ItemStack(ModItems.recoveryPotion.get());
         }
     };
-/*
+
     public static CreativePlus cast = new CreativePlus("runecraftory.cast") {
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(ModItems.teleport);
+            return new ItemStack(ModItems.teleport.get());
         }
-    };*/
+    };
 
     public static CreativePlus food = new CreativePlus("runecraftory.food") {
         @Override
