@@ -1173,7 +1173,7 @@
     "death.attack.rfExhaust": "%1$s fainted",
     "death.attack.rfAttack": "%1$s was knocked down from %2$s",
 
-    "itemGroup.runecraftory.weaponsTools": "Weapons and Tools",
+    "itemGroup.runecraftory.weapons_tools": "Weapons and Tools",
     "itemGroup.runecraftory.equipment": "Armor",
     "itemGroup.runecraftory.upgrade": "Materials",
     "itemGroup.runecraftory.blocks": "Rune Craftory Blocks",

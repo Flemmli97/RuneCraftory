@@ -11,11 +11,13 @@ import com.flemmli97.runecraftory.common.events.PlayerEvents;
 import com.flemmli97.runecraftory.common.events.WorldEvents;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
+import com.flemmli97.runecraftory.common.registry.ModCrafting;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModLootModifier;
 import com.flemmli97.runecraftory.common.registry.ModPotions;
 import com.flemmli97.runecraftory.network.PacketHandler;
+import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -74,6 +76,8 @@ public class RuneCraftory {
         ModEntities.ENTITIES.register(modBus);
         ModAttributes.ATTRIBUTES.register(modBus);
         ModPotions.EFFECTS.register(modBus);
+        ModCrafting.RECIPESERIALIZER.register(modBus);
+        modBus.addGenericListener(IRecipeSerializer.class, ModCrafting::register);
         ModLootModifier.SERIALZER.register(modBus);
         modBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootModifier::register);
     }

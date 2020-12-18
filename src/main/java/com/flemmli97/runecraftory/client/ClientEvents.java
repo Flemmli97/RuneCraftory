@@ -62,23 +62,23 @@ public class ClientEvents {
 
     private List<ITextComponent> injectAdditionalTooltip(ItemStack stack) {
         List<ITextComponent> tooltip = Lists.newArrayList();
+        boolean shift = Screen.hasShiftDown();
+        ItemStat stat = DataPackHandler.getStats(stack.getItem());
+        if (stat != null) {
+            for (ITextComponent text : stat.texts(stack, shift))
+                tooltip.add(text);
+        }
         CropProperties props = DataPackHandler.getCropStat(stack.getItem());
         if (props != null) {
             for (ITextComponent text : props.texts())
                 tooltip.add(text);
         }
-        boolean shift = Screen.hasShiftDown();
         if (shift) {
             FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
             if (food != null) {
                 for (ITextComponent text : food.texts())
                     tooltip.add(text);
             }
-        }
-        ItemStat stat = DataPackHandler.getStats(stack.getItem());
-        if (stat != null) {
-            for (ITextComponent text : stat.texts(stack, shift))
-                tooltip.add(text);
         }
         return tooltip;
     }

@@ -24,7 +24,6 @@ public class DataEvent {
             data.addProvider(new BlockStatesGen(data, ignore));
             data.addProvider(new ItemModels(data, event.getExistingFileHelper()));
             data.addProvider(new LangGen(data, event.getExistingFileHelper()));
-            data.addProvider(new Loottables(data));
         }
         if (event.includeServer()) {
             BlockTagGen blocks = new BlockTagGen(data, event.getExistingFileHelper());
@@ -34,6 +33,8 @@ public class DataEvent {
             data.addProvider(new FoodGen(data));
             data.addProvider(new CropGen(data));
             data.addProvider(new GlobalLootModifierGen(data));
+            data.addProvider(new RecipesGen(data));
+            data.addProvider(new Loottables(data));
         }
     }
 

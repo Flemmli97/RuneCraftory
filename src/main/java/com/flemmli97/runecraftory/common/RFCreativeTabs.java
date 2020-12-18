@@ -10,7 +10,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class RFCreativeTabs {
 
-    public static CreativePlus weaponToolTab = new CreativePlus("runecraftory.weaponsTools") {
+    public static CreativePlus weaponToolTab = new CreativePlus("runecraftory.weapons_tools") {
         @Override
         public ItemStack createIcon() {
             return new ItemStack(ModItems.icon0.get());

@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.potion.Effect;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
@@ -67,14 +68,22 @@ public abstract class FoodProvider implements IDataProvider {
         return "FoodProps";
     }
 
-    public void addStat(String id, Item item, int duration) {
+    public void addStat(IItemProvider item, int duration) {
+        this.addStat(item, new FoodProperties.MutableFoodProps(duration));
+    }
+
+    public void addStat(String id, IItemProvider item, int duration) {
         this.addStat(id, item, new FoodProperties.MutableFoodProps(duration));
     }
 
-    public void addStat(String id, Item item, FoodProperties.MutableFoodProps builder) {
+    public void addStat(IItemProvider item, FoodProperties.MutableFoodProps builder) {
+        this.addStat(item.asItem().getRegistryName().getPath(), item, builder);
+    }
+
+    public void addStat(String id, IItemProvider item, FoodProperties.MutableFoodProps builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj -> obj.addProperty("item", item.getRegistryName().toString()));
+        this.item.put(res, obj -> obj.addProperty("item", item.asItem().getRegistryName().toString()));
     }
 
     public void addStat(String id, ITag<Item> tag, int duration) {

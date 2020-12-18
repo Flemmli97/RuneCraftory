@@ -1,0 +1,12 @@
+{
+  "type": "runecraftory:chemistry",
+  "level": 3,
+  "ingredients": [
+    {
+      "item": "runecraftory:medicinal_herb"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:recovery_potion"
+  }
+}

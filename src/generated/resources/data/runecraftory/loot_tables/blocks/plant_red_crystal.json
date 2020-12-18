@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:crop_giant",
+              "giant": false
+            }
+          ],
+          "name": "runecraftory:crop_red_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:crop_giant",
+              "giant": true
+            }
+          ],
+          "name": "runecraftory:crop_red_crystal_giant"
+        }
+      ]
+    }
+  ]
+}

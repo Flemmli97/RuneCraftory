@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.registry;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import com.flemmli97.runecraftory.api.enums.EnumToolTier;
@@ -8,6 +9,7 @@ import com.flemmli97.runecraftory.common.RFCreativeTabs;
 import com.flemmli97.runecraftory.common.items.consumables.ItemGiantCrops;
 import com.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import com.flemmli97.runecraftory.common.items.consumables.ItemMushroom;
+import com.flemmli97.runecraftory.common.items.consumables.ItemRecipeBread;
 import com.flemmli97.runecraftory.common.items.creative.ItemDebug;
 import com.flemmli97.runecraftory.common.items.creative.ItemLevelUp;
 import com.flemmli97.runecraftory.common.items.creative.ItemSkillUp;
@@ -1166,6 +1168,11 @@ public class ModItems {
     public static final RegistryObject<Item> sourDrop = food("sour_drop");
     public static final RegistryObject<Item> sweetPowder = food("sweet_powder");
     public static final RegistryObject<Item> heavySpice = food("heavy_spice");
+
+    public static final RegistryObject<Item> forgingBread = ITEMS.register("forging_bread", ()->new ItemRecipeBread(EnumCrafting.FORGE, new Item.Properties().group(RFCreativeTabs.food).maxStackSize(16)));
+    public static final RegistryObject<Item> armorBread = ITEMS.register("armory_bread", ()->new ItemRecipeBread(EnumCrafting.ARMOR, new Item.Properties().group(RFCreativeTabs.food).maxStackSize(16)));
+    public static final RegistryObject<Item> chemistryBread = ITEMS.register("chemistry_bread", ()->new ItemRecipeBread(EnumCrafting.CHEM, new Item.Properties().group(RFCreativeTabs.food).maxStackSize(16)));
+    public static final RegistryObject<Item> cookingBread = ITEMS.register("cooking_bread", ()->new ItemRecipeBread(EnumCrafting.COOKING, new Item.Properties().group(RFCreativeTabs.food).maxStackSize(16)));
 
     public static final RegistryObject<Item> orange = food("orange");
     public static final RegistryObject<Item> grapes = food("grapes");

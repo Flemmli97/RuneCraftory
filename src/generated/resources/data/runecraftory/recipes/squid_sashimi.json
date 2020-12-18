@@ -1,0 +1,12 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 5,
+  "ingredients": [
+    {
+      "item": "runecraftory:squid"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:squid_sashimi"
+  }
+}

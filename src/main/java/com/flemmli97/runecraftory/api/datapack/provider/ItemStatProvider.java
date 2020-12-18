@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.Item;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
@@ -64,14 +65,22 @@ public abstract class ItemStatProvider implements IDataProvider {
         return "ItemStats";
     }
 
-    public void addStat(String id, Item item, int buy, int sell, int upgrade) {
+    public void addStat(IItemProvider item, int buy, int sell, int upgrade) {
+        this.addStat(item, new ItemStat.MutableItemStat(buy, sell, upgrade));
+    }
+
+    public void addStat(String id, IItemProvider item, int buy, int sell, int upgrade) {
         this.addStat(id, item, new ItemStat.MutableItemStat(buy, sell, upgrade));
     }
 
-    public void addStat(String id, Item item, ItemStat.MutableItemStat builder) {
+    public void addStat(IItemProvider item, ItemStat.MutableItemStat builder) {
+        this.addStat(item.asItem().getRegistryName().getPath(), item, builder);
+    }
+
+    public void addStat(String id, IItemProvider item, ItemStat.MutableItemStat builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj -> obj.addProperty("item", item.getRegistryName().toString()));
+        this.item.put(res, obj -> obj.addProperty("item", item.asItem().getRegistryName().toString()));
     }
 
     public void addStat(String id, ITag<Item> tag, int buy, int sell, int upgrade) {

@@ -1,0 +1,12 @@
+{
+  "type": "runecraftory:armor",
+  "level": 1,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:cheap_bracelet"
+  }
+}

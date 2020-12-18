@@ -6,6 +6,7 @@ import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import com.flemmli97.runecraftory.common.items.weapons.ItemHammerBase;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
+import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.IWaterLoggable;
@@ -255,7 +256,7 @@ public class BlockMineral extends Block implements IWaterLoggable {
                     ItemToolHammer item = (ItemToolHammer) player.getHeldItemMainhand().getItem();
                     addChance*=1+item.tier.getTierLevel()*0.5;
                 }
-                builder.withLuck(addChance);
+                builder.withLuck(addChance + EntityUtils.playerLuck(player));
             });
         }
         return super.getDrops(state, builder);

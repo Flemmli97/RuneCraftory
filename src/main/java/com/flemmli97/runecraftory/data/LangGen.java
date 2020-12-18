@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.data;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.enums.EnumDay;
+import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -57,6 +58,13 @@ public class LangGen implements IDataProvider {
             this.add(egg, "%s" + " Spawn Egg");
         for(EnumDay day : EnumDay.values())
             this.add(day.translation(), day.toString().substring(0, 3));
+        this.add(ModItems.armorBread.get(), "Armor Recipe Bread");
+        this.add(ModItems.forgingBread.get(), "Forging Recipe Bread");
+        this.add(ModItems.chemistryBread.get(), "Pharmacy Recipe Bread");
+        this.add(ModItems.cookingBread.get(), "Cooking Recipe Bread");
+
+        this.add("recipe.eat.unlock", "Unlocked recipe for %s");
+        this.add("recipe.eat.fail", "Didn't learn any recipe. Maybe your crafting level is too low");
     }
 
     private void setupOldFile(ExistingFileHelper existing) {

@@ -7,7 +7,9 @@ import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -109,9 +111,9 @@ public class ItemNBT {
         if (stat != null || forced) {
             CompoundNBT stackTag = stack.getOrCreateTag();
             CompoundNBT compound = stackTag.getCompound(RuneCraftory.MODID);
-            if(compound.contains("ItemLevel"))
+            if(!compound.contains("ItemLevel"))
                 compound.putInt("ItemLevel", 1);
-            if (stack.getItem() instanceof IItemWearable) {
+            if (shouldHaveStats(stack)) {
                 if(!compound.contains("Upgrades"))
                     compound.put("Upgrades", new ListNBT());
                 if (stat != null) {
@@ -132,5 +134,9 @@ public class ItemNBT {
             return true;
         }
         return false;
+    }
+
+    public static boolean shouldHaveStats(ItemStack stack){
+        return stack.getItem() instanceof IItemWearable || MobEntity.getSlotForItemStack(stack) != EquipmentSlotType.MAINHAND;
     }
 }

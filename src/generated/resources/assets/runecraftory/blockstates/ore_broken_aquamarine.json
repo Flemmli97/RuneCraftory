@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/ore_broken_aquamarine",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "runecraftory:block/ore_broken_aquamarine"
+    },
+    "facing=west": {
+      "model": "runecraftory:block/ore_broken_aquamarine",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "runecraftory:block/ore_broken_aquamarine",
+      "y": 270
+    }
+  }
+}

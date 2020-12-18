@@ -1,6 +1,5 @@
 package com.flemmli97.runecraftory.common.items.equipment;
 
-import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.lib.ItemTiers;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -16,7 +15,7 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-public class ItemArmorBase extends ArmorItem implements IItemWearable {
+public class ItemArmorBase extends ArmorItem {
 
     private static final String armorModelPath = "runecraftory:textures/models/armor/";
 

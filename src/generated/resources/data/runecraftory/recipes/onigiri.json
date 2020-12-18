@@ -1,0 +1,12 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 1,
+  "ingredients": [
+    {
+      "item": "runecraftory:rice"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:onigiri"
+  }
+}

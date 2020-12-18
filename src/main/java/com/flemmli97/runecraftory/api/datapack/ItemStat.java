@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.api.datapack;
 
 import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
-import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
@@ -105,7 +104,7 @@ public class ItemStat {
             if (showStat) {
                 Map<Attribute, Integer> stats = ItemNBT.statIncrease(stack);
                 if (!stats.isEmpty()) {
-                    String prefix = (stack.getItem() instanceof IItemWearable) ? "tooltip.item.equipped" : "tooltip.item.upgrade";
+                    String prefix = ItemNBT.shouldHaveStats(stack) ? "tooltip.item.equipped" : "tooltip.item.upgrade";
                     list.add(new TranslationTextComponent(prefix));
                 }
                 for (Map.Entry<Attribute, Integer> entry : stats.entrySet()) {

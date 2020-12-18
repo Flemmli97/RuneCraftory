@@ -4,6 +4,7 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.datapack.provider.FoodProvider;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
+import com.flemmli97.runecraftory.common.registry.ModItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.Items;
@@ -59,5 +60,18 @@ public class FoodGen extends FoodProvider {
                 .addEffect(Attributes.GENERIC_ATTACK_DAMAGE, 30)
                 .addEffectPercentage(Attributes.GENERIC_ATTACK_DAMAGE, 10)
                 .addEffectPercentage(ModAttributes.RF_DEFENCE.get(), 10));
+
+        this.addStat(ModItems.witheredGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(-25, -10).setRPRegen(-10, 0));
+        this.addStat(ModItems.weeds.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(-15, -5).setRPRegen(-5, 0));
+        this.addStat(ModItems.whiteGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(25, 0).setRPRegen(5, 0));
+        this.addStat(ModItems.indigoGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(25, 0).setRPRegen(5, 0));
+        this.addStat(ModItems.purpleGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(25, 0).setRPRegen(5, 0));
+        this.addStat(ModItems.greenGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(25, 0).setRPRegen(5, 0));
+        this.addStat(ModItems.blueGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(25, 0).setRPRegen(5, 0));
+        this.addStat(ModItems.yellowGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(25, 0).setRPRegen(5, 0));
+        this.addStat(ModItems.orangeGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(25, 0).setRPRegen(5, 0));
+        this.addStat(ModItems.blackGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(25, 0).setRPRegen(5, 0));
+        this.addStat(ModItems.antidoteGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(25, 0).setRPRegen(5, 0));
+        this.addStat(ModItems.medicinalHerb.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(50, 0));
     }
 }
