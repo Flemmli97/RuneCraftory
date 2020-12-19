@@ -18,12 +18,15 @@ import javax.annotation.Nonnull;
 
 public class TileCrafting extends TileEntity implements IItemHandlerModifiable, INamedContainerProvider {
 
-    private final NonNullList<ItemStack> inventory = NonNullList.withSize(8, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> inventory;
     private final EnumCrafting type;
 
     public TileCrafting(TileEntityType<?> p_i48289_1_, EnumCrafting type) {
         super(p_i48289_1_);
         this.type = type;
+        if(this.type == EnumCrafting.COOKING || this.type == EnumCrafting.CHEM)
+            inventory = NonNullList.withSize(6, ItemStack.EMPTY);
+                    else inventory = NonNullList.withSize(8, ItemStack.EMPTY);
     }
 
     public EnumCrafting craftingType(){

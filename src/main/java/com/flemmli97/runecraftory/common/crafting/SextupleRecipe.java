@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.crafting;
 
-import com.flemmli97.runecraftory.common.inventory.InvWrapperPlayer;
+import com.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
@@ -24,7 +24,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.List;
 
-public abstract class SextupleRecipe implements IRecipe<InvWrapperPlayer> {
+public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
 
     private final ResourceLocation id;
     private final String group;
@@ -43,7 +43,7 @@ public abstract class SextupleRecipe implements IRecipe<InvWrapperPlayer> {
     }
 
     @Override
-    public boolean matches(InvWrapperPlayer inv, World world) {
+    public boolean matches(PlayerContainerInv inv, World world) {
         RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
         List<ItemStack> inputs = Lists.newArrayList();
         int i = 0;
@@ -62,7 +62,7 @@ public abstract class SextupleRecipe implements IRecipe<InvWrapperPlayer> {
     }
 
     @Override
-    public ItemStack getCraftingResult(InvWrapperPlayer inv) {
+    public ItemStack getCraftingResult(PlayerContainerInv inv) {
         ItemStack stack = this.recipeOutput.copy();
         ItemNBT.initNBT(stack);
         return stack;

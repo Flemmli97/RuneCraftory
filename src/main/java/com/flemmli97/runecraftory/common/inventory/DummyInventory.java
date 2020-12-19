@@ -11,16 +11,6 @@ public class DummyInventory extends RecipeWrapper {
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int count) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public ItemStack removeStackFromSlot(int index) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {
         return false;
     }

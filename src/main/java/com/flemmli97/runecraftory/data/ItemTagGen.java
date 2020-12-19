@@ -22,6 +22,7 @@ public class ItemTagGen extends ItemTagsProvider {
                 .addOptionalTag(Tags.Items.INGOTS_IRON.getId())
                 .addOptionalTag(Tags.Items.INGOTS_GOLD.getId())
                 .add(ModItems.bronze.get())
+                .add(ModItems.silver.get())
                 .add(ModItems.platinum.get())
                 .add(ModItems.orichalcum.get())
                 .add(ModItems.dragonic.get());

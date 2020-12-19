@@ -1,17 +1,24 @@
 package com.flemmli97.runecraftory.common.registry;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.api.enums.EnumMineralTier;
+import com.flemmli97.runecraftory.common.blocks.BlockAccessory;
+import com.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
 import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
-import com.flemmli97.runecraftory.common.blocks.BlockCrafting;
+import com.flemmli97.runecraftory.common.blocks.BlockChemistry;
+import com.flemmli97.runecraftory.common.blocks.BlockCooking;
 import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockFarm;
+import com.flemmli97.runecraftory.common.blocks.BlockForge;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.blocks.BlockMineral;
+import com.flemmli97.runecraftory.common.blocks.BlockShippingBin;
 import com.flemmli97.runecraftory.common.blocks.tile.TileAccessory;
+import com.flemmli97.runecraftory.common.blocks.tile.TileChemistry;
+import com.flemmli97.runecraftory.common.blocks.tile.TileCooking;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrop;
 import com.flemmli97.runecraftory.common.blocks.tile.TileFarm;
+import com.flemmli97.runecraftory.common.blocks.tile.TileForge;
 import com.google.common.collect.Lists;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -41,10 +48,10 @@ public class ModBlocks {
     public static final EnumMap<EnumMineralTier, RegistryObject<Block>> mineralMap = new EnumMap<>(EnumMineralTier.class);
     public static final EnumMap<EnumMineralTier, RegistryObject<Block>> brokenMineralMap = new EnumMap<>(EnumMineralTier.class);
 
-    public static final RegistryObject<Block> forge = BLOCKS.register("forge", () -> new BlockCrafting(EnumCrafting.FORGE, true, AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
-    public static final RegistryObject<Block> cooking = BLOCKS.register("cooking", () -> new BlockCrafting(EnumCrafting.FORGE, false, AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
-    public static final RegistryObject<Block> chemistry = BLOCKS.register("chemistry", () -> new BlockCrafting(EnumCrafting.FORGE, false, AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
-    public static final RegistryObject<Block> accessory = BLOCKS.register("accessory", () -> new BlockCrafting(EnumCrafting.ARMOR, true, AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> forge = BLOCKS.register("forge", () -> new BlockForge(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> cooking = BLOCKS.register("cooking", () -> new BlockCooking(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> chemistry = BLOCKS.register("chemistry", () -> new BlockChemistry(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> accessory = BLOCKS.register("accessory", () -> new BlockAccessory(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
     public static final RegistryObject<Block> farmland = BLOCKS.register("farmland", () -> new BlockFarm(AbstractBlock.Properties.create(Material.EARTH).hardnessAndResistance(0.6F).sound(SoundType.GROUND).blockVision((state, reader, pos) -> true).suffocates((state, reader, pos) -> true)));
 
     public static final RegistryObject<Block> mineralIron = mineral(EnumMineralTier.IRON);
@@ -74,11 +81,10 @@ public class ModBlocks {
     public static final RegistryObject<Block> brokenMineralRuby = brokenMineral(EnumMineralTier.RUBY);
     public static final RegistryObject<Block> brokenMineralEmerald = brokenMineral(EnumMineralTier.EMERALD);
     public static final RegistryObject<Block> brokenMineralSapphire = brokenMineral(EnumMineralTier.SAPPHIRE);
-    /*
-        public static final RegistryObject<Block> bossSpawner = new BlockBossSpawner();
-        public static final RegistryObject<Block> ignore = new BlockIgnore();
-        public static final RegistryObject<Block> board = new BlockRequestBoard();
-        public static final RegistryObject<Block> shipping = new BlockShippingBin();
+
+        public static final RegistryObject<Block> bossSpawner = BLOCKS.register("boss_spawner", () -> new BlockBossSpawner(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(30, 9999)));
+        public static final RegistryObject<Block> board = BLOCKS.register("black_board", () -> new Block(AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(5, 5)));
+        public static final RegistryObject<Block> shipping = BLOCKS.register("shipping_bin", () -> new BlockShippingBin(AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(3, 10)));
 
         /*public static final RegistryObject<Block> hotSpring = new BlockHotSpring();
 
@@ -177,6 +183,9 @@ public class ModBlocks {
     public static final RegistryObject<TileEntityType<TileFarm>> farmTile = TILES.register("farmland_tile", () -> TileEntityType.Builder.create(TileFarm::new, farmland.get()).build(null));
     public static final RegistryObject<TileEntityType<TileCrop>> cropTile = cropTile("crop_tile", combine(Lists.newArrayList(crops), flowers));
     public static final RegistryObject<TileEntityType<TileAccessory>> accessoryTile = TILES.register("accessory_tile", ()->TileEntityType.Builder.create(TileAccessory::new, accessory.get()).build(null));
+    public static final RegistryObject<TileEntityType<TileForge>> forgingTile = TILES.register("forge_tile", ()->TileEntityType.Builder.create(TileForge::new, forge.get()).build(null));
+    public static final RegistryObject<TileEntityType<TileChemistry>> chemistryTile = TILES.register("chemistry_tile", ()->TileEntityType.Builder.create(TileChemistry::new, chemistry.get()).build(null));
+    public static final RegistryObject<TileEntityType<TileCooking>> cookingTile = TILES.register("cooking_tile", ()->TileEntityType.Builder.create(TileCooking::new, cooking.get()).build(null));
 
     public static RegistryObject<Block> mineral(EnumMineralTier name) {
         RegistryObject<Block> reg = BLOCKS.register("ore_" + name.getString(), () -> new BlockMineral(name, AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 5)));

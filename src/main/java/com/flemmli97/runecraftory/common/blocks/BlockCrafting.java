@@ -1,7 +1,6 @@
 package com.flemmli97.runecraftory.common.blocks;
 
 import com.flemmli97.runecraftory.api.enums.EnumCrafting;
-import com.flemmli97.runecraftory.common.blocks.tile.TileAccessory;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrafting;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -32,7 +31,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public class BlockCrafting extends Block {
+public abstract class BlockCrafting extends Block {
 
     public static final EnumProperty<EnumPart> PART = EnumProperty.create("part", EnumPart.class);
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -40,10 +39,10 @@ public class BlockCrafting extends Block {
     private final EnumCrafting type;
     private final boolean hasUpgradeScreen;
 
-    public BlockCrafting(EnumCrafting type, boolean hasUpgradeScreen, Properties p_i48440_1_) {
+    public BlockCrafting(EnumCrafting type, Properties p_i48440_1_) {
         super(p_i48440_1_);
         this.type = type;
-        this.hasUpgradeScreen = hasUpgradeScreen;
+        this.hasUpgradeScreen = type == EnumCrafting.ARMOR || type == EnumCrafting.FORGE;
     }
 
     @Override
@@ -68,7 +67,6 @@ public class BlockCrafting extends Block {
         BlockPos blockpos = p_196258_1_.getPos();
         if (blockpos.getY() < 255 && p_196258_1_.getWorld().getBlockState(blockpos.up()).isReplaceable(p_196258_1_)) {
             World world = p_196258_1_.getWorld();
-            boolean flag = world.isBlockPowered(blockpos) || world.isBlockPowered(blockpos.up());
             return this.getDefaultState().with(FACING, p_196258_1_.getPlacementHorizontalFacing().getOpposite()).with(PART, EnumPart.LEFT);
         } else {
             return null;
@@ -84,12 +82,14 @@ public class BlockCrafting extends Block {
     }
 
     @Override
-    public ActionResultType onUse(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity player, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
-        if (p_225533_2_.isRemote) {
+    public ActionResultType onUse(BlockState p_225533_1_, World world, BlockPos pos, PlayerEntity player, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
+        if (world.isRemote) {
             return ActionResultType.PASS;
         } else {
-            if(this.type == EnumCrafting.ARMOR)
-                NetworkHooks.openGui((ServerPlayerEntity) player, (TileCrafting)p_225533_2_.getTileEntity(p_225533_3_));
+            TileEntity tile = world.getTileEntity(pos);
+            if(tile instanceof TileCrafting) {
+                NetworkHooks.openGui((ServerPlayerEntity) player, (TileCrafting) tile, pos);
+            }
             /*
             BlockPos newPos = pos;
             if(state.getValue(PART)==EnumPartType.RIGHT)
@@ -100,7 +100,7 @@ public class BlockCrafting extends Block {
                 player.openGui(RuneCraftory.instance, LibReference.guiUpgrade, world, newPos.getX(), newPos.getY(), newPos.getZ());
 
              */
-            return ActionResultType.success(p_225533_2_.isRemote);
+            return ActionResultType.success(world.isRemote);
         }
     }
 
@@ -139,8 +139,10 @@ public class BlockCrafting extends Block {
 
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return state.get(PART) == EnumPart.LEFT?new TileAccessory() : null;
+        return state.get(PART) == EnumPart.LEFT?this.getTile(state, world) : null;
     }
+
+    public abstract TileEntity getTile(BlockState state, IBlockReader world);
 
     enum EnumPart implements IStringSerializable {
         LEFT("left"),
