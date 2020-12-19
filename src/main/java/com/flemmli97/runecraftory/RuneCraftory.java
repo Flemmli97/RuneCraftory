@@ -11,6 +11,7 @@ import com.flemmli97.runecraftory.common.events.PlayerEvents;
 import com.flemmli97.runecraftory.common.events.WorldEvents;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
+import com.flemmli97.runecraftory.common.registry.ModContainer;
 import com.flemmli97.runecraftory.common.registry.ModCrafting;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModItems;
@@ -73,6 +74,7 @@ public class RuneCraftory {
     public static void registries(IEventBus modBus) {
         ModBlocks.BLOCKS.register(modBus);
         ModBlocks.TILES.register(modBus);
+        ModContainer.CONTAINERS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITIES.register(modBus);
         ModAttributes.ATTRIBUTES.register(modBus);

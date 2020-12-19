@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.client;
 
+import com.flemmli97.runecraftory.client.gui.CraftingGui;
 import com.flemmli97.runecraftory.client.gui.OverlayGui;
 import com.flemmli97.runecraftory.client.render.RenderGate;
 import com.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
@@ -22,8 +23,10 @@ import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.blocks.BlockMineral;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
+import com.flemmli97.runecraftory.common.registry.ModContainer;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -59,5 +62,7 @@ public class ClientRegister {
         });
 
         ClientHandlers.overlay = new OverlayGui(Minecraft.getInstance());
+
+        ScreenManager.registerFactory(ModContainer.craftingContainer.get(), CraftingGui::new);
     }
 }

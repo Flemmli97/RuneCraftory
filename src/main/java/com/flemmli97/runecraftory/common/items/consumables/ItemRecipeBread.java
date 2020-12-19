@@ -4,7 +4,7 @@ import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.crafting.SextupleRecipe;
-import com.flemmli97.runecraftory.common.registry.ModCrafting;
+import com.flemmli97.runecraftory.common.utils.CraftingUtils;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +12,6 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
-import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
@@ -60,7 +59,7 @@ public class ItemRecipeBread extends Item {
             int amount = Math.max(1, ItemNBT.itemLevel(stack) / 3);
             ServerPlayerEntity player = (ServerPlayerEntity) living;
             AtomicBoolean success = new AtomicBoolean(false);
-            player.getServer().getRecipeManager().listAllOfType(this.getType())
+            player.getServer().getRecipeManager().listAllOfType(CraftingUtils.getType(this.type))
                     .stream().filter(r -> !player.getRecipeBook().isUnlocked(r) && r.getCraftingLevel() - player.getCapability(PlayerCapProvider.PlayerCap).map(cap -> cap.getSkillLevel(this.getSkill())[0]).orElse(0) <= 5)
                     .sorted(Comparator.comparingInt(SextupleRecipe::getCraftingLevel))
                     .limit(amount).forEach(recipe -> {
@@ -76,20 +75,6 @@ public class ItemRecipeBread extends Item {
             stack.shrink(1);
         }
         return stack;
-    }
-
-    private IRecipeType<SextupleRecipe> getType() {
-        switch (type) {
-            case FORGE:
-                return ModCrafting.FORGE;
-            case ARMOR:
-                return ModCrafting.ARMOR;
-            case CHEM:
-                return ModCrafting.CHEMISTRY;
-            default:
-                COOKING:
-                return ModCrafting.COOKING;
-        }
     }
 
     private EnumSkills getSkill() {

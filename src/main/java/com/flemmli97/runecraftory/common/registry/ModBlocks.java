@@ -9,6 +9,7 @@ import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockFarm;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.blocks.BlockMineral;
+import com.flemmli97.runecraftory.common.blocks.tile.TileAccessory;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrop;
 import com.flemmli97.runecraftory.common.blocks.tile.TileFarm;
 import com.google.common.collect.Lists;
@@ -175,6 +176,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> shinySapling = new BlockTreeSapling("shiny_sapling", shinyTree);*/
     public static final RegistryObject<TileEntityType<TileFarm>> farmTile = TILES.register("farmland_tile", () -> TileEntityType.Builder.create(TileFarm::new, farmland.get()).build(null));
     public static final RegistryObject<TileEntityType<TileCrop>> cropTile = cropTile("crop_tile", combine(Lists.newArrayList(crops), flowers));
+    public static final RegistryObject<TileEntityType<TileAccessory>> accessoryTile = TILES.register("accessory_tile", ()->TileEntityType.Builder.create(TileAccessory::new, accessory.get()).build(null));
 
     public static RegistryObject<Block> mineral(EnumMineralTier name) {
         RegistryObject<Block> reg = BLOCKS.register("ore_" + name.getString(), () -> new BlockMineral(name, AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 5)));

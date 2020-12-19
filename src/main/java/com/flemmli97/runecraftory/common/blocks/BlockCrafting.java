@@ -1,12 +1,14 @@
 package com.flemmli97.runecraftory.common.blocks;
 
 import com.flemmli97.runecraftory.api.enums.EnumCrafting;
+import com.flemmli97.runecraftory.common.blocks.tile.TileAccessory;
+import com.flemmli97.runecraftory.common.blocks.tile.TileCrafting;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
@@ -22,9 +24,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
@@ -76,15 +80,16 @@ public class BlockCrafting extends Block {
      */
     @Override
     public void onBlockPlacedBy(World p_180633_1_, BlockPos p_180633_2_, BlockState p_180633_3_, LivingEntity living, ItemStack p_180633_5_) {
-        System.out.println("post");
         p_180633_1_.setBlockState(p_180633_2_.offset(living.getHorizontalFacing().getOpposite().rotateYCCW()), p_180633_3_.with(PART, EnumPart.RIGTH), 3);
     }
 
     @Override
-    public ActionResultType onUse(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
-        if (this.material == Material.IRON) {
+    public ActionResultType onUse(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity player, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
+        if (p_225533_2_.isRemote) {
             return ActionResultType.PASS;
         } else {
+            if(this.type == EnumCrafting.ARMOR)
+                NetworkHooks.openGui((ServerPlayerEntity) player, (TileCrafting)p_225533_2_.getTileEntity(p_225533_3_));
             /*
             BlockPos newPos = pos;
             if(state.getValue(PART)==EnumPartType.RIGHT)
@@ -125,6 +130,16 @@ public class BlockCrafting extends Block {
 
             super.onReplaced(p_196243_1_, p_196243_2_, p_196243_3_, p_196243_4_, p_196243_5_);
         }
+    }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return state.get(PART) == EnumPart.LEFT?new TileAccessory() : null;
     }
 
     enum EnumPart implements IStringSerializable {

@@ -1,11 +1,12 @@
 package com.flemmli97.runecraftory.common.crafting;
 
-import com.flemmli97.runecraftory.common.inventory.InventoryCraftingImpl;
+import com.flemmli97.runecraftory.common.inventory.InvWrapperPlayer;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -23,7 +24,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.List;
 
-public abstract class SextupleRecipe implements IRecipe<InventoryCraftingImpl> {
+public abstract class SextupleRecipe implements IRecipe<InvWrapperPlayer> {
 
     private final ResourceLocation id;
     private final String group;
@@ -42,7 +43,7 @@ public abstract class SextupleRecipe implements IRecipe<InventoryCraftingImpl> {
     }
 
     @Override
-    public boolean matches(InventoryCraftingImpl inv, World world) {
+    public boolean matches(InvWrapperPlayer inv, World world) {
         RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
         List<ItemStack> inputs = Lists.newArrayList();
         int i = 0;
@@ -56,14 +57,12 @@ public abstract class SextupleRecipe implements IRecipe<InventoryCraftingImpl> {
                 else inputs.add(itemstack);
             }
         }
-        boolean unlocked = inv.getCraftingPlayer().getRecipeBook().isUnlocked(this);
+        boolean unlocked = inv.getPlayer() instanceof ServerPlayerEntity ? ((ServerPlayerEntity) inv.getPlayer()).getRecipeBook().isUnlocked(this):false;
         return unlocked && i == this.recipeItems.size() && (isSimple ? recipeitemhelper.canCraft(this, null) : RecipeMatcher.findMatches(inputs, this.recipeItems) != null);
     }
 
     @Override
-    public ItemStack getCraftingResult(InventoryCraftingImpl inv) {
-        if (!inv.canCraft(this))
-            return ItemStack.EMPTY;
+    public ItemStack getCraftingResult(InvWrapperPlayer inv) {
         ItemStack stack = this.recipeOutput.copy();
         ItemNBT.initNBT(stack);
         return stack;
