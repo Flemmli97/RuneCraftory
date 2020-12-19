@@ -47,7 +47,7 @@ public abstract class SextupleRecipe implements IRecipe<InventoryCraftingImpl> {
         List<ItemStack> inputs = Lists.newArrayList();
         int i = 0;
 
-        for(int j = 0; j < inv.getSizeInventory(); ++j) {
+        for (int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
             if (!itemstack.isEmpty()) {
                 ++i;
@@ -57,12 +57,12 @@ public abstract class SextupleRecipe implements IRecipe<InventoryCraftingImpl> {
             }
         }
         boolean unlocked = inv.getCraftingPlayer().getRecipeBook().isUnlocked(this);
-        return unlocked && i == this.recipeItems.size() && (isSimple ? recipeitemhelper.canCraft(this,null) : RecipeMatcher.findMatches(inputs,  this.recipeItems) != null);
+        return unlocked && i == this.recipeItems.size() && (isSimple ? recipeitemhelper.canCraft(this, null) : RecipeMatcher.findMatches(inputs, this.recipeItems) != null);
     }
 
     @Override
     public ItemStack getCraftingResult(InventoryCraftingImpl inv) {
-        if(!inv.canCraft(this))
+        if (!inv.canCraft(this))
             return ItemStack.EMPTY;
         ItemStack stack = this.recipeOutput.copy();
         ItemNBT.initNBT(stack);
@@ -71,7 +71,7 @@ public abstract class SextupleRecipe implements IRecipe<InventoryCraftingImpl> {
 
     @Override
     public boolean canFit(int x, int y) {
-        return x*y>this.recipeItems.size();
+        return x * y > this.recipeItems.size();
     }
 
     @Override
@@ -96,7 +96,7 @@ public abstract class SextupleRecipe implements IRecipe<InventoryCraftingImpl> {
         return this.id;
     }
 
-    public int getCraftingLevel(){
+    public int getCraftingLevel() {
         return this.craftingLevel;
     }
 
@@ -114,7 +114,7 @@ public abstract class SextupleRecipe implements IRecipe<InventoryCraftingImpl> {
         return String.format("Result: %s; Required Level: %d; ID: %s", this.recipeOutput, this.craftingLevel, this.id);
     }
 
-    public static abstract class Serializer<T extends SextupleRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T>{
+    public static abstract class Serializer<T extends SextupleRecipe> extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<T> {
 
         @Override
         public T read(ResourceLocation res, JsonObject obj) {
@@ -134,7 +134,7 @@ public abstract class SextupleRecipe implements IRecipe<InventoryCraftingImpl> {
         private static NonNullList<Ingredient> readIngredients(JsonArray p_199568_0_) {
             NonNullList<Ingredient> nonnulllist = NonNullList.create();
 
-            for(int i = 0; i < p_199568_0_.size(); ++i) {
+            for (int i = 0; i < p_199568_0_.size(); ++i) {
                 Ingredient ingredient = Ingredient.deserialize(p_199568_0_.get(i));
                 if (!ingredient.hasNoMatchingItems()) {
                     nonnulllist.add(ingredient);
@@ -150,7 +150,7 @@ public abstract class SextupleRecipe implements IRecipe<InventoryCraftingImpl> {
             String s = buffer.readString(32767);
             int i = buffer.readVarInt();
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
-            for(int j = 0; j < nonnulllist.size(); ++j) {
+            for (int j = 0; j < nonnulllist.size(); ++j) {
                 nonnulllist.set(j, Ingredient.read(buffer));
             }
             ItemStack itemstack = buffer.readItemStack();
@@ -165,7 +165,7 @@ public abstract class SextupleRecipe implements IRecipe<InventoryCraftingImpl> {
             buffer.writeString(recipe.getGroup());
             buffer.writeVarInt(recipe.getIngredients().size());
 
-            for(Ingredient ingredient : recipe.getIngredients()) {
+            for (Ingredient ingredient : recipe.getIngredients()) {
                 ingredient.write(buffer);
             }
             buffer.writeItemStack(recipe.getRecipeOutput());

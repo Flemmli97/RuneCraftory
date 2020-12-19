@@ -84,7 +84,7 @@ public class InventorySpells implements IItemHandler {
 
     public void update(PlayerEntity player) {
         for (ItemStack stack : this.inventory) {
-            if(stack.getItem() instanceof ItemSpell)
+            if (stack.getItem() instanceof ItemSpell)
                 ((ItemSpell) stack.getItem()).getSpell().update(player, stack);
         }
     }

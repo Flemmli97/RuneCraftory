@@ -9,7 +9,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
-public class ForgingRecipe extends SextupleRecipe{
+public class ForgingRecipe extends SextupleRecipe {
 
     public ForgingRecipe(ResourceLocation id, String group, int level, ItemStack result, NonNullList<Ingredient> ingredients) {
         super(id, group, level, result, ingredients);
@@ -30,7 +30,7 @@ public class ForgingRecipe extends SextupleRecipe{
         return new ItemStack(ModItems.onigiri.get());
     }
 
-    public static class Serializer extends SextupleRecipe.Serializer<ForgingRecipe>{
+    public static class Serializer extends SextupleRecipe.Serializer<ForgingRecipe> {
 
         @Override
         public ForgingRecipe get(ResourceLocation id, String group, int level, ItemStack result, NonNullList<Ingredient> ingredients) {

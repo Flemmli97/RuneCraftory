@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class RecipeBuilder{
+public class RecipeBuilder {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private final ItemStack result;
@@ -54,13 +54,18 @@ public class RecipeBuilder{
     public static RecipeBuilder create(EnumCrafting type, ItemStack item, int level) {
         IRecipeSerializer<?> serializer;
         switch (type) {
-            case FORGE: serializer = ModCrafting.FORGESERIALIZER.get();
+            case FORGE:
+                serializer = ModCrafting.FORGESERIALIZER.get();
                 break;
-            case ARMOR:serializer = ModCrafting.ARMORSERIALIZER.get();
+            case ARMOR:
+                serializer = ModCrafting.ARMORSERIALIZER.get();
                 break;
-            case CHEM:serializer = ModCrafting.CHEMISTRYSERIALIZER.get();
+            case CHEM:
+                serializer = ModCrafting.CHEMISTRYSERIALIZER.get();
                 break;
-            default: COOKING:serializer = ModCrafting.COOKINGSERIALIZER.get();
+            default:
+                COOKING:
+                serializer = ModCrafting.COOKINGSERIALIZER.get();
                 break;
         }
         return new RecipeBuilder(item, level, serializer);
@@ -75,7 +80,7 @@ public class RecipeBuilder{
     }
 
     public RecipeBuilder addIngredient(IItemProvider item, int amount) {
-        for(int i = 0; i < amount; ++i) {
+        for (int i = 0; i < amount; ++i) {
             this.addIngredient(Ingredient.fromItems(item));
         }
         return this;
@@ -86,7 +91,7 @@ public class RecipeBuilder{
     }
 
     public RecipeBuilder addIngredient(Ingredient ingredient, int amount) {
-        for(int i = 0; i < amount; ++i) {
+        for (int i = 0; i < amount; ++i) {
             this.ingredients.add(ingredient);
         }
 
@@ -123,7 +128,7 @@ public class RecipeBuilder{
     public void build(Consumer<IFinishedRecipe> cons, ResourceLocation res) {
         this.validate(res);
         this.advancementBuilder.withParentId(new ResourceLocation("recipes/root")).withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(res)).withRewards(AdvancementRewards.Builder.recipe(res)).withRequirementsStrategy(IRequirementsStrategy.OR);
-        cons.accept(new Result(res, this.result, this.level, this.group == null ? "" : this.group, this.ingredients, this.advancementBuilder, new ResourceLocation(res.getNamespace(), "recipes/" + this.result.getItem().getGroup().getPath() + "/" + res.getPath())){
+        cons.accept(new Result(res, this.result, this.level, this.group == null ? "" : this.group, this.ingredients, this.advancementBuilder, new ResourceLocation(res.getNamespace(), "recipes/" + this.result.getItem().getGroup().getPath() + "/" + res.getPath())) {
             @Override
             public IRecipeSerializer<?> getSerializer() {
                 return RecipeBuilder.this.serializer;
@@ -134,8 +139,8 @@ public class RecipeBuilder{
     private void validate(ResourceLocation res) {
         if (this.advancementBuilder.getCriteria().isEmpty())
             throw new IllegalStateException("No way of obtaining recipe " + res);
-        if(this.ingredients.size()>6)
-            throw new IllegalStateException("Recipe " + res +  " too big. Max size is 6");
+        if (this.ingredients.size() > 6)
+            throw new IllegalStateException("Recipe " + res + " too big. Max size is 6");
     }
 
     public static class Result implements IFinishedRecipe {
@@ -165,7 +170,7 @@ public class RecipeBuilder{
             obj.addProperty("level", this.level);
             JsonArray jsonarray = new JsonArray();
 
-            for(Ingredient ingredient : this.ingredients) {
+            for (Ingredient ingredient : this.ingredients) {
                 jsonarray.add(ingredient.serialize());
             }
 
@@ -173,12 +178,12 @@ public class RecipeBuilder{
             obj.add("result", this.itemStackToJson(this.result));
         }
 
-        private JsonObject itemStackToJson(ItemStack stack){
+        private JsonObject itemStackToJson(ItemStack stack) {
             JsonObject obj = new JsonObject();
             obj.addProperty("item", stack.getItem().getRegistryName().toString());
-            if(stack.getCount() > 1)
+            if (stack.getCount() > 1)
                 obj.addProperty("count", stack.getCount());
-            if(stack.hasTag())
+            if (stack.hasTag())
                 obj.addProperty("nbt", stack.getTag().toString());
             return obj;
         }

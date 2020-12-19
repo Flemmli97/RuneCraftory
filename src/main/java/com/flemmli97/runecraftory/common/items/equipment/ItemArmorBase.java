@@ -30,14 +30,12 @@ public class ItemArmorBase extends ArmorItem {
 
     @Override
     @Nullable
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type)
-    {
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlotType slot, String type) {
         return armorModelPath + stack.getItem().getRegistryName().getPath() + ".png";
     }
 
     @Override
-    public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default)
-    {
+    public <A extends BipedModel<?>> A getArmorModel(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlotType armorSlot, A _default) {
         _default.setVisible(false);
         return _default;
     }

@@ -13,7 +13,7 @@ public class EntityUtils {
         return false;
     }
 
-    public static float playerLuck(PlayerEntity player){
+    public static float playerLuck(PlayerEntity player) {
         float luckAtt = player.getLuck();
 
         return luckAtt;

@@ -77,7 +77,7 @@ public class BlockCrop extends BushBlock implements IGrowable {
         return ActionResultType.PASS;
     }
 
-    public boolean isMaxAge(BlockState state, World world, BlockPos pos){
+    public boolean isMaxAge(BlockState state, World world, BlockPos pos) {
         return state.get(AGE) == 3;
     }
 
@@ -118,7 +118,7 @@ public class BlockCrop extends BushBlock implements IGrowable {
         List<ItemStack> list = super.getDrops(state, builder);
         TileEntity tile = builder.get(LootParameters.BLOCK_ENTITY);
         if (tile instanceof TileCrop && ((TileCrop) tile).age() >= this.properties().growth())
-            list.forEach(stack->this.modifyStack(stack, (TileCrop) tile));
+            list.forEach(stack -> this.modifyStack(stack, (TileCrop) tile));
         return list;
     }
 
@@ -155,14 +155,14 @@ public class BlockCrop extends BushBlock implements IGrowable {
 
     @Override
     public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {
-        return ItemNBT.getLeveledItem(new ItemStack(this.seed.get(), 1), 1);
+        return ItemNBT.getLeveledItem(super.getItem(world, pos, state), 1);
     }
 
-    public Item getCrop(){
+    public Item getCrop() {
         return this.crop.get();
     }
 
-    public Item getGiantCrop(){
+    public Item getGiantCrop() {
         return this.giant.get();
     }
 

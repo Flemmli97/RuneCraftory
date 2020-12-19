@@ -21,8 +21,7 @@ public class ItemSpell extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        if(!player.world.isRemote && player.getCooldownTracker().getCooldown(this, 0)<=0 && this.spell.get().use(world, player, player.getHeldItem(hand)))
-        {
+        if (!player.world.isRemote && player.getCooldownTracker().getCooldown(this, 0) <= 0 && this.spell.get().use(world, player, player.getHeldItem(hand))) {
             player.getCooldownTracker().setCooldown(this, this.getSpell().coolDown());
             this.spell.get().levelSkill(player);
             return ActionResult.success(player.getHeldItem(hand));
@@ -30,7 +29,7 @@ public class ItemSpell extends Item {
         return ActionResult.fail(player.getHeldItem(hand));
     }
 
-    public Spell getSpell(){
+    public Spell getSpell() {
         return this.spell.get();
     }
 }

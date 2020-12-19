@@ -51,7 +51,7 @@ public class ItemNBT {
         Map<Attribute, Integer> map = new TreeMap<>(ModAttributes.sorted);
         if (stack.getItem() instanceof IItemUsable) {
             CompoundNBT compound = getItemNBT(stack);
-            if(compound != null && !compound.contains("ItemStats")) {
+            if (compound != null && !compound.contains("ItemStats")) {
                 initNBT(stack);
                 compound = getItemNBT(stack);
             }
@@ -111,13 +111,13 @@ public class ItemNBT {
         if (stat != null || forced) {
             CompoundNBT stackTag = stack.getOrCreateTag();
             CompoundNBT compound = stackTag.getCompound(RuneCraftory.MODID);
-            if(!compound.contains("ItemLevel"))
+            if (!compound.contains("ItemLevel"))
                 compound.putInt("ItemLevel", 1);
             if (shouldHaveStats(stack)) {
-                if(!compound.contains("Upgrades"))
+                if (!compound.contains("Upgrades"))
                     compound.put("Upgrades", new ListNBT());
                 if (stat != null) {
-                    if(!compound.contains("ItemStats")) {
+                    if (!compound.contains("ItemStats")) {
                         CompoundNBT stats = new CompoundNBT();
                         for (Map.Entry<Attribute, Integer> entry : stat.itemStats().entrySet()) {
                             stats.putInt(entry.getKey().getRegistryName().toString(), entry.getValue());
@@ -136,7 +136,7 @@ public class ItemNBT {
         return false;
     }
 
-    public static boolean shouldHaveStats(ItemStack stack){
+    public static boolean shouldHaveStats(ItemStack stack) {
         return stack.getItem() instanceof IItemWearable || MobEntity.getSlotForItemStack(stack) != EquipmentSlotType.MAINHAND;
     }
 }

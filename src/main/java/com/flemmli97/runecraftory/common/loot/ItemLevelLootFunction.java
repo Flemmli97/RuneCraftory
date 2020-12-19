@@ -25,7 +25,7 @@ public class ItemLevelLootFunction extends LootFunction {
 
     private final Set<WeightedLevel> levels;
 
-    private ItemLevelLootFunction(ILootCondition[] conditions, Set<WeightedLevel> levels){
+    private ItemLevelLootFunction(ILootCondition[] conditions, Set<WeightedLevel> levels) {
         super(conditions);
         this.levels = levels;
     }
@@ -39,16 +39,15 @@ public class ItemLevelLootFunction extends LootFunction {
     protected ItemStack doApply(ItemStack stack, LootContext ctx) {
         int level;
         BlockState state = ctx.get(LootParameters.BLOCK_STATE);
-        if(state != null && state.getBlock() instanceof IBlockModifyLevel) {
+        if (state != null && state.getBlock() instanceof IBlockModifyLevel) {
             level = ((IBlockModifyLevel) state.getBlock()).getLevel(state, ctx.get(LootParameters.BLOCK_ENTITY), this, ctx);
-        }
-        else
+        } else
             level = this.getLevel(ctx);
 
         return ItemNBT.getLeveledItem(stack, Math.abs(level));
     }
 
-    public int getLevel(LootContext ctx){
+    public int getLevel(LootContext ctx) {
         return getRandomItem(this.levels, ctx.getLuck());
     }
 
@@ -81,7 +80,7 @@ public class ItemLevelLootFunction extends LootFunction {
         }
     }
 
-    public static class Serializer  extends LootFunction.Serializer<ItemLevelLootFunction>{
+    public static class Serializer extends LootFunction.Serializer<ItemLevelLootFunction> {
 
         @Override
         public ItemLevelLootFunction deserialize(JsonObject obj, JsonDeserializationContext ctx, ILootCondition[] conditions) {
@@ -105,8 +104,8 @@ public class ItemLevelLootFunction extends LootFunction {
             this.level = level;
         }
 
-        public int getWeight(float modifier){
-            return this.weight + (int)(this.bonus * modifier);
+        public int getWeight(float modifier) {
+            return this.weight + (int) (this.bonus * modifier);
         }
 
         @Override
@@ -116,33 +115,33 @@ public class ItemLevelLootFunction extends LootFunction {
 
         @Override
         public boolean equals(Object obj) {
-            if(obj == this)
+            if (obj == this)
                 return true;
-            if(obj instanceof WeightedLevel)
+            if (obj instanceof WeightedLevel)
                 return ((WeightedLevel) obj).weight == this.weight;
             return false;
         }
     }
 
     public static int totalWeight(Set<WeightedLevel> Set, float modifier) {
-        return Set.stream().mapToInt(w->w.getWeight(modifier)).sum();
+        return Set.stream().mapToInt(w -> w.getWeight(modifier)).sum();
     }
 
     public static int getRandomItem(Set<WeightedLevel> Set, float modifier) {
         int total = totalWeight(Set, modifier);
-        if(total <=0)
+        if (total <= 0)
             throw new IllegalArgumentException();
-        for(WeightedLevel w : Set){
-            total-=w.getWeight(modifier);
-            if(total < 0)
+        for (WeightedLevel w : Set) {
+            total -= w.getWeight(modifier);
+            if (total < 0)
                 return w.level;
         }
         return 1;
     }
 
-    public static JsonArray serialize(Set<WeightedLevel> Set){
+    public static JsonArray serialize(Set<WeightedLevel> Set) {
         JsonArray arr = new JsonArray();
-        Set.forEach(w->{
+        Set.forEach(w -> {
             JsonObject obj = new JsonObject();
             obj.addProperty("weight", w.weight);
             obj.addProperty("luck_bonus", w.bonus);
@@ -152,15 +151,15 @@ public class ItemLevelLootFunction extends LootFunction {
         return arr;
     }
 
-    public static Set<WeightedLevel> deserialize(JsonElement element){
+    public static Set<WeightedLevel> deserialize(JsonElement element) {
         Set<WeightedLevel> Set = Sets.newHashSet();
-        if(!element.isJsonArray())
+        if (!element.isJsonArray())
             throw new JsonParseException("Expected a json array for " + element);
-        element.getAsJsonArray().forEach(el->{
-            if(!el.isJsonObject())
+        element.getAsJsonArray().forEach(el -> {
+            if (!el.isJsonObject())
                 throw new JsonParseException("Expected a json object for " + el);
             JsonObject obj = (JsonObject) el;
-            Set.add(new WeightedLevel(JsonUtils.get(obj, "weight", 1),JsonUtils.get(obj, "luck_bonus", 0), JsonUtils.get(obj, "level", 1)));
+            Set.add(new WeightedLevel(JsonUtils.get(obj, "weight", 1), JsonUtils.get(obj, "luck_bonus", 0), JsonUtils.get(obj, "level", 1)));
         });
         return Set;
     }

@@ -82,7 +82,9 @@ public class BlockBrokenMineral extends Block implements IWaterLoggable {
             Block.makeCuboidShape(9, 0.3, 4, 10, 1.3, 6),
             Block.makeCuboidShape(4.5, 1.55, 7.25, 7.5, 2.55, 9.25),
             Block.makeCuboidShape(9.5, 1.55, 10.25, 11.5, 2.55, 12.25)
-    ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get();
+    ).reduce((v1, v2) -> {
+        return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);
+    }).get();
     public static final VoxelShape east = Stream.of(
             Block.makeCuboidShape(11, 0, 8, 16, 1, 13),
             Block.makeCuboidShape(6, 0, 10, 8, 1, 13),
@@ -169,15 +171,15 @@ public class BlockBrokenMineral extends Block implements IWaterLoggable {
     @Override
     public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         super.onBlockHarvested(world, pos, state, player);
-        if(player instanceof ServerPlayerEntity)
-            ((ServerPlayerEntity)player).connection.sendPacket(new SPlaySoundEventPacket(2001, pos, getStateId(state), false));
+        if (player instanceof ServerPlayerEntity)
+            ((ServerPlayerEntity) player).connection.sendPacket(new SPlaySoundEventPacket(2001, pos, getStateId(state), false));
     }
 
-    protected BlockState getBrokenState(BlockState state){
+    protected BlockState getBrokenState(BlockState state) {
         BlockState blockState = ModBlocks.mineralMap.get(this.tier).get().getDefaultState();
-        if(state.contains(FACING))
+        if (state.contains(FACING))
             state.with(FACING, state.get(FACING));
-        if(state.contains(WATERLOGGED))
+        if (state.contains(WATERLOGGED))
             state.with(WATERLOGGED, state.get(WATERLOGGED));
         return blockState;
     }

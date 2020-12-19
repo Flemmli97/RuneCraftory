@@ -30,8 +30,7 @@ public class ItemFertilizer extends Item {
         if (tile instanceof TileFarm && this.use.useItemOnFarmland(ctx.getItem(), world, (TileFarm) tile, ctx.getPlayer())) {
             world.playEvent(2005, blockpos, 0);
             return ActionResultType.SUCCESS;
-        }
-        else if(world.getBlockState(blockpos).getBlock() instanceof BushBlock) {
+        } else if (world.getBlockState(blockpos).getBlock() instanceof BushBlock) {
             blockpos = blockpos.down();
             tile = world.getTileEntity(blockpos);
             if (tile instanceof TileFarm && this.use.useItemOnFarmland(ctx.getItem(), world, (TileFarm) tile, ctx.getPlayer())) {

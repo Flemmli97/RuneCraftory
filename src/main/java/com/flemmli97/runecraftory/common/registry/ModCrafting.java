@@ -2,9 +2,9 @@ package com.flemmli97.runecraftory.common.registry;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.crafting.ArmorRecipe;
+import com.flemmli97.runecraftory.common.crafting.ChemistryRecipe;
 import com.flemmli97.runecraftory.common.crafting.CookingRecipe;
 import com.flemmli97.runecraftory.common.crafting.ForgingRecipe;
-import com.flemmli97.runecraftory.common.crafting.ChemistryRecipe;
 import com.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -30,15 +30,15 @@ public class ModCrafting {
     public static IRecipeType<SextupleRecipe> COOKING;
     public static IRecipeType<SextupleRecipe> FORGE;
 
-    public static void register(RegistryEvent.Register<IRecipeSerializer<?>> event){
+    public static void register(RegistryEvent.Register<IRecipeSerializer<?>> event) {
         CHEMISTRY = reg("chemistry_recipe");
         ARMOR = reg("armor_recipe");
         COOKING = reg("cooking_recipe");
         FORGE = reg("forge_recipe");
     }
 
-    private static  <T extends IRecipe<?>> IRecipeType<T> reg(String name){
-       return Registry.register(Registry.RECIPE_TYPE, new ResourceLocation(RuneCraftory.MODID, name), new IRecipeType<T>(){
+    private static <T extends IRecipe<?>> IRecipeType<T> reg(String name) {
+        return Registry.register(Registry.RECIPE_TYPE, new ResourceLocation(RuneCraftory.MODID, name), new IRecipeType<T>() {
             @Override
             public String toString() {
                 return name;

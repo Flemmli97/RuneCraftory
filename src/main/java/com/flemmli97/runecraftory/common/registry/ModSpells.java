@@ -16,29 +16,29 @@ public class ModSpells {
 
     public static final Spell EMPTY = new EmptySpell();
 
-    private static Spell register(ResourceLocation res, Spell spell){
+    private static Spell register(ResourceLocation res, Spell spell) {
         spellRegistry.put(res, spell.setRegistryName(res));
         return spell;
     }
 
-    public static Spell getSpell(ResourceLocation res){
+    public static Spell getSpell(ResourceLocation res) {
         return spellRegistry.getOrDefault(res, EMPTY);
     }
 
-    public static void register(){
+    public static void register() {
 
         MinecraftForge.EVENT_BUS.post(new SpellRegisterEvent(new WrappedMap<>(spellRegistry)));
     }
 
-    public static class WrappedMap<T extends IForgeRegistryEntry<T>>{
+    public static class WrappedMap<T extends IForgeRegistryEntry<T>> {
 
         private final Map<ResourceLocation, T> map;
 
-        public WrappedMap(Map<ResourceLocation, T> map){
+        public WrappedMap(Map<ResourceLocation, T> map) {
             this.map = map;
         }
 
-        public T register(ResourceLocation res, T spell){
+        public T register(ResourceLocation res, T spell) {
             this.map.put(res, spell.setRegistryName(res));
             return spell;
         }

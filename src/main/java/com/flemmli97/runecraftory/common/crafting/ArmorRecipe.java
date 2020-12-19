@@ -9,7 +9,7 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
-public class ArmorRecipe extends SextupleRecipe{
+public class ArmorRecipe extends SextupleRecipe {
 
     public ArmorRecipe(ResourceLocation id, String group, int level, ItemStack result, NonNullList<Ingredient> ingredients) {
         super(id, group, level, result, ingredients);
@@ -30,7 +30,7 @@ public class ArmorRecipe extends SextupleRecipe{
         return new ItemStack(ModItems.onigiri.get());
     }
 
-    public static class Serializer extends SextupleRecipe.Serializer<ArmorRecipe>{
+    public static class Serializer extends SextupleRecipe.Serializer<ArmorRecipe> {
 
         @Override
         public ArmorRecipe get(ResourceLocation id, String group, int level, ItemStack result, NonNullList<Ingredient> ingredients) {

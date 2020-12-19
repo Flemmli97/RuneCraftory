@@ -10,7 +10,7 @@ public class ModTags {
 
     public static Tags.IOptionalNamedTag<Item> minerals = tag("mineral");
 
-    private static Tags.IOptionalNamedTag<Item> tag(String name){
+    private static Tags.IOptionalNamedTag<Item> tag(String name) {
         return ItemTags.createOptional(new ResourceLocation(RuneCraftory.MODID, name));
     }
 }

@@ -26,7 +26,7 @@ public class ModLootModifier {
 
     public static LootFunctionType ITEM_LEVEL;
 
-    public static void register(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event){
+    public static void register(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
         INT_CHECK = Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(RuneCraftory.MODID, "mining_check"), new LootConditionType(new MiningLootCondition.Serializer()));
         GIANTCROP = Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(RuneCraftory.MODID, "crop_giant"), new LootConditionType(new GiantLootCondition.Serializer()));
 

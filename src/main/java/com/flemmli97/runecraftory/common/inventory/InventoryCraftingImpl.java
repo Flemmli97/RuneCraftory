@@ -8,13 +8,13 @@ import net.minecraft.item.ItemStack;
 
 import java.util.function.BiFunction;
 
-public class InventoryCraftingImpl extends CraftingInventory{
+public class InventoryCraftingImpl extends CraftingInventory {
 
     private final BiFunction<Integer, ItemStack, Boolean> validation;
     private final ServerPlayerEntity craftingPlayer;
 
-    public InventoryCraftingImpl(Container container, ServerPlayerEntity player, BiFunction<Integer, ItemStack, Boolean> validation){
-        super(container, 3,2);
+    public InventoryCraftingImpl(Container container, ServerPlayerEntity player, BiFunction<Integer, ItemStack, Boolean> validation) {
+        super(container, 3, 2);
         this.validation = validation;
         this.craftingPlayer = player;
     }
@@ -24,11 +24,11 @@ public class InventoryCraftingImpl extends CraftingInventory{
         return this.validation.apply(slot, stack);
     }
 
-    public boolean canCraft(SextupleRecipe recipe){
+    public boolean canCraft(SextupleRecipe recipe) {
         return false;
     }
 
-    public ServerPlayerEntity getCraftingPlayer(){
+    public ServerPlayerEntity getCraftingPlayer() {
         return this.craftingPlayer;
     }
 }

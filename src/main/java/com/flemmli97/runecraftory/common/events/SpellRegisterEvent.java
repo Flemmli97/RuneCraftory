@@ -8,7 +8,7 @@ public class SpellRegisterEvent extends Event {
 
     public final ModSpells.WrappedMap<Spell> map;
 
-    public SpellRegisterEvent(ModSpells.WrappedMap<Spell> map){
+    public SpellRegisterEvent(ModSpells.WrappedMap<Spell> map) {
         this.map = map;
     }
 }

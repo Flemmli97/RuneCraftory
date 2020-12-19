@@ -67,7 +67,9 @@ public class BlockMineral extends Block implements IWaterLoggable {
             Block.makeCuboidShape(7.5, 11.4, 4.4, 8.5, 12.4, 5.4),
             Block.makeCuboidShape(3.5, 8.4, 4.4, 4.5, 10.4, 7.4),
             Block.makeCuboidShape(4.2, 5, 14.4, 8.2, 7, 15.4)
-    ).reduce((v1, v2) -> {return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);}).get();
+    ).reduce((v1, v2) -> {
+        return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);
+    }).get();
     public static final VoxelShape north = Stream.of(
             Block.makeCuboidShape(8, 0, 0, 13, 6, 5),
             Block.makeCuboidShape(10, 0, 8, 13, 11, 10),
@@ -166,7 +168,7 @@ public class BlockMineral extends Block implements IWaterLoggable {
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext ctx) {
         FluidState fluidstate = ctx.getWorld().getFluidState(ctx.getPos());
-        return this.getDefaultState().with(FACING, ctx.getPlayer() != null?ctx.getPlayer().getHorizontalFacing().getOpposite(): Direction.NORTH).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
+        return this.getDefaultState().with(FACING, ctx.getPlayer() != null ? ctx.getPlayer().getHorizontalFacing().getOpposite() : Direction.NORTH).with(WATERLOGGED, fluidstate.getFluid() == Fluids.WATER);
     }
 
     @Override
@@ -200,27 +202,22 @@ public class BlockMineral extends Block implements IWaterLoggable {
 
     @Override
     public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
-        if(world.isRemote)
+        if (world.isRemote)
             return false;
         boolean hammer;
-        if(player.isCreative()) {
+        if (player.isCreative()) {
             return super.removedByPlayer(state, world, pos, player, willHarvest, fluid);
-        }
-        else if(hammer = player.getHeldItemMainhand().getItem() instanceof ItemToolHammer || player.getHeldItemMainhand().getItem() instanceof ItemHammerBase)
-        {
+        } else if (hammer = player.getHeldItemMainhand().getItem() instanceof ItemToolHammer || player.getHeldItemMainhand().getItem() instanceof ItemHammerBase) {
             float breakChance = 0.5F;
-            if(hammer)
-            {
+            if (hammer) {
                 ItemToolHammer item = (ItemToolHammer) player.getHeldItemMainhand().getItem();
-                breakChance-=item.tier.getTierLevel()*0.075F;
+                breakChance -= item.tier.getTierLevel() * 0.075F;
             }
             this.onBlockHarvested(world, pos, state, player);
-            if(world.rand.nextFloat()<breakChance)
-            {
+            if (world.rand.nextFloat() < breakChance) {
                 return world.setBlockState(pos, this.getBrokenState(state), 3);
-            }
-            else {
-                if(hammer)
+            } else {
+                if (hammer)
                     spawnDrops(state, world, pos, null, player, player.getHeldItemMainhand());
                 return false;
             }
@@ -231,15 +228,15 @@ public class BlockMineral extends Block implements IWaterLoggable {
     @Override
     public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         super.onBlockHarvested(world, pos, state, player);
-        if(player instanceof ServerPlayerEntity)
-            ((ServerPlayerEntity)player).connection.sendPacket(new SPlaySoundEventPacket(2001, pos, getStateId(state), false));
+        if (player instanceof ServerPlayerEntity)
+            ((ServerPlayerEntity) player).connection.sendPacket(new SPlaySoundEventPacket(2001, pos, getStateId(state), false));
     }
 
-    protected BlockState getBrokenState(BlockState state){
+    protected BlockState getBrokenState(BlockState state) {
         BlockState blockState = ModBlocks.brokenMineralMap.get(this.tier).get().getDefaultState();
-        if(blockState.contains(FACING))
+        if (blockState.contains(FACING))
             blockState.with(FACING, state.get(FACING));
-        if(blockState.contains(WATERLOGGED))
+        if (blockState.contains(WATERLOGGED))
             blockState.with(WATERLOGGED, state.get(WATERLOGGED));
         return blockState;
     }
@@ -247,14 +244,13 @@ public class BlockMineral extends Block implements IWaterLoggable {
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         Entity entity = builder.get(LootParameters.THIS_ENTITY);
-        if(entity instanceof PlayerEntity){
+        if (entity instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) entity;
-            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap->{
-                float addChance = cap.getSkillLevel(EnumSkills.MINING)[0]*0.1f;
-                if(player.getHeldItemMainhand().getItem() instanceof ItemToolHammer)
-                {
+            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+                float addChance = cap.getSkillLevel(EnumSkills.MINING)[0] * 0.1f;
+                if (player.getHeldItemMainhand().getItem() instanceof ItemToolHammer) {
                     ItemToolHammer item = (ItemToolHammer) player.getHeldItemMainhand().getItem();
-                    addChance*=1+item.tier.getTierLevel()*0.5;
+                    addChance *= 1 + item.tier.getTierLevel() * 0.5;
                 }
                 builder.withLuck(addChance + EntityUtils.playerLuck(player));
             });

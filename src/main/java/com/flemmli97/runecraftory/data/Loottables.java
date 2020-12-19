@@ -101,27 +101,27 @@ public class Loottables extends ForgeLootTableProvider {
             this.registerLootTable(ModBlocks.whiteGrass.get(), LootTable.builder().addLootPool(herbLoot(ModItems.whiteGrass.get())));
             this.registerLootTable(ModBlocks.indigoGrass.get(), LootTable.builder().addLootPool(herbLoot(ModItems.indigoGrass.get())));
             this.registerLootTable(ModBlocks.purpleGrass.get(), LootTable.builder().addLootPool(herbLoot(ModItems.purpleGrass.get())));
-            this.registerLootTable(ModBlocks.greenGrass.get(),LootTable.builder().addLootPool(herbLoot( ModItems.greenGrass.get())));
+            this.registerLootTable(ModBlocks.greenGrass.get(), LootTable.builder().addLootPool(herbLoot(ModItems.greenGrass.get())));
             this.registerLootTable(ModBlocks.blueGrass.get(), LootTable.builder().addLootPool(herbLoot(ModItems.blueGrass.get())));
             this.registerLootTable(ModBlocks.yellowGrass.get(), LootTable.builder().addLootPool(herbLoot(ModItems.yellowGrass.get())));
             this.registerLootTable(ModBlocks.redGrass.get(), LootTable.builder().addLootPool(herbLoot(ModItems.redGrass.get())));
             this.registerLootTable(ModBlocks.orangeGrass.get(), LootTable.builder().addLootPool(herbLoot(ModItems.orangeGrass.get())));
             this.registerLootTable(ModBlocks.blackGrass.get(), LootTable.builder().addLootPool(herbLoot(ModItems.blackGrass.get())));
-            this.registerLootTable(ModBlocks.antidoteGrass.get(),LootTable.builder().addLootPool(herbLoot( ModItems.antidoteGrass.get())));
-            this.registerLootTable(ModBlocks.medicinalHerb.get(),LootTable.builder().addLootPool(herbLoot( ModItems.medicinalHerb.get())));
+            this.registerLootTable(ModBlocks.antidoteGrass.get(), LootTable.builder().addLootPool(herbLoot(ModItems.antidoteGrass.get())));
+            this.registerLootTable(ModBlocks.medicinalHerb.get(), LootTable.builder().addLootPool(herbLoot(ModItems.medicinalHerb.get())));
             this.registerLootTable(ModBlocks.bambooSprout.get(), LootTable.builder().addLootPool(herbLoot(ModItems.bambooSprout.get())));
 
-            ModBlocks.crops.forEach(reg->{
+            ModBlocks.crops.forEach(reg -> {
                 Block block = reg.get();
-                if(block instanceof BlockCrop)
+                if (block instanceof BlockCrop)
                     this.registerLootTable(reg.get(), LootTable.builder().addLootPool(cropLoot((BlockCrop) block)));
             });
-            ModBlocks.flowers.forEach(reg->{
+            ModBlocks.flowers.forEach(reg -> {
                 Block block = reg.get();
-                if(block instanceof BlockCrop)
+                if (block instanceof BlockCrop)
                     this.registerLootTable(reg.get(), LootTable.builder().addLootPool(cropLoot((BlockCrop) block)));
             });
-            ModBlocks.mineralMap.forEach((tier, reg)->{
+            ModBlocks.mineralMap.forEach((tier, reg) -> {
                 this.registerLootTable(reg.get(), LootTable.builder().addLootPool(oreLootPool(tier)));
             });
             this.loots.forEach(cons);

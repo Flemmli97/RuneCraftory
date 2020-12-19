@@ -36,13 +36,13 @@ public class GiantLootCondition implements ILootCondition {
 
     @Override
     public boolean test(LootContext ctx) {
-        if(ctx.get(LootParameters.BLOCK_ENTITY) instanceof TileCrop)
-            return ((TileCrop) ctx.get(LootParameters.BLOCK_ENTITY)).isGiant() ==this.isGiant;
+        if (ctx.get(LootParameters.BLOCK_ENTITY) instanceof TileCrop)
+            return ((TileCrop) ctx.get(LootParameters.BLOCK_ENTITY)).isGiant() == this.isGiant;
         return false;
     }
 
-    public static ILootCondition.IBuilder get(boolean giant){
-        return ()->new GiantLootCondition(giant);
+    public static ILootCondition.IBuilder get(boolean giant) {
+        return () -> new GiantLootCondition(giant);
     }
 
     public static class Serializer implements ILootSerializer<GiantLootCondition> {

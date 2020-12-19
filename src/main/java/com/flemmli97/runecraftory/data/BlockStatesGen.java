@@ -49,7 +49,7 @@ public class BlockStatesGen extends BlockStateProvider {
                         .texture("particle", texture)).build();
             });
         });
-        ModBlocks.mineralMap.values().forEach(reg->{
+        ModBlocks.mineralMap.values().forEach(reg -> {
             Block block = reg.get();
             this.getVariantBuilder(block)
                     .forAllStatesExcept(state -> ConfiguredModel.builder()
@@ -59,13 +59,13 @@ public class BlockStatesGen extends BlockStateProvider {
                             BlockStateProperties.WATERLOGGED
                     );
         });
-        ModBlocks.brokenMineralMap.values().forEach(reg->{
+        ModBlocks.brokenMineralMap.values().forEach(reg -> {
             Block block = reg.get();
             this.getVariantBuilder(block)
                     .forAllStatesExcept(state -> ConfiguredModel.builder()
-                            .modelFile(this.models().withExistingParent(block.getRegistryName().toString(), "runecraftory:block/ore_broken").texture("ore", this.mineralTexture(block)))
-                            .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle()) % 360)
-                            .build(),
+                                    .modelFile(this.models().withExistingParent(block.getRegistryName().toString(), "runecraftory:block/ore_broken").texture("ore", this.mineralTexture(block)))
+                                    .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle()) % 360)
+                                    .build(),
                             BlockStateProperties.WATERLOGGED
                     );
         });

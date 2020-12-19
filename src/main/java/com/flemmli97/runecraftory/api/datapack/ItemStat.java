@@ -118,8 +118,8 @@ public class ItemStat {
 
     private String format(Attribute att, int n) {
         boolean flat = flatAttributes.contains(att.getRegistryName());
-        int val = flat ? n : (n > 100 ? n-100 : 100-n);
-        return val >= (flat?0:100) ? "+" + val : "-" + val;
+        int val = flat ? n : (n > 100 ? n - 100 : 100 - n);
+        return val >= (flat ? 0 : 100) ? "+" + val : "-" + val;
     }
 
     @Override

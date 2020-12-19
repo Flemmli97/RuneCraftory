@@ -68,15 +68,12 @@ public class PlayerEvents {
     }
 
     @SubscribeEvent
-    public void playerAttack(AOEAttackEvent event)
-    {
+    public void playerAttack(AOEAttackEvent event) {
         PlayerEntity player = event.getPlayer();
-        if (player.getHeldItemMainhand().getItem() instanceof IItemUsable)
-        {
+        if (player.getHeldItemMainhand().getItem() instanceof IItemUsable) {
             event.setCanceled(true);
             List<LivingEntity> entityList = event.attackList();
-            for (int i = 0; i < entityList.size(); ++i)
-            {
+            for (int i = 0; i < entityList.size(); ++i) {
                 CombatUtils.doPlayerAttack(player, entityList.get(i), i == entityList.size() - 1, true, i == entityList.size() - 1);
             }
         }

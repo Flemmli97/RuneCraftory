@@ -39,15 +39,15 @@ public class MiningLootCondition implements ILootCondition {
     @Override
     public boolean test(LootContext ctx) {
         int level = 0;
-        if(ctx.get(LootParameters.THIS_ENTITY) instanceof PlayerEntity){
+        if (ctx.get(LootParameters.THIS_ENTITY) instanceof PlayerEntity) {
             level = ctx.get(LootParameters.THIS_ENTITY).getCapability(PlayerCapProvider.PlayerCap)
-                    .map(cap->cap.getSkillLevel(EnumSkills.MINING)[0]).orElse(0);
+                    .map(cap -> cap.getSkillLevel(EnumSkills.MINING)[0]).orElse(0);
         }
-        return level >=this.min;
+        return level >= this.min;
     }
 
-    public static ILootCondition.IBuilder get(int val){
-        return ()->new MiningLootCondition(val);
+    public static ILootCondition.IBuilder get(int val) {
+        return () -> new MiningLootCondition(val);
     }
 
     public static class Serializer implements ILootSerializer<MiningLootCondition> {

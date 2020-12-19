@@ -24,8 +24,7 @@ public class ItemStatIncrease extends Item {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack)
-    {
+    public UseAction getUseAction(ItemStack stack) {
         return UseAction.DRINK;
     }
 
@@ -35,18 +34,15 @@ public class ItemStatIncrease extends Item {
     }
 
     @Override
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving)
-    {
-        if (entityLiving instanceof PlayerEntity)
-        {
-            PlayerEntity entityplayer = (PlayerEntity)entityLiving;
+    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
+        if (entityLiving instanceof PlayerEntity) {
+            PlayerEntity entityplayer = (PlayerEntity) entityLiving;
             worldIn.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
             this.increaseStat(stack, worldIn, entityplayer);
             entityplayer.addStat(Stats.ITEM_USED.get(this));
 
-            if (entityplayer instanceof ServerPlayerEntity)
-            {
-                CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayerEntity)entityplayer, stack);
+            if (entityplayer instanceof ServerPlayerEntity) {
+                CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayerEntity) entityplayer, stack);
             }
         }
 
@@ -55,25 +51,28 @@ public class ItemStatIncrease extends Item {
     }
 
     private void increaseStat(ItemStack stack, World worldIn, PlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap->{
-            switch(this.stat)
-            {
-                case HP: cap.setMaxHealth(player, cap.getMaxHealth(player)+10);
+        player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+            switch (this.stat) {
+                case HP:
+                    cap.setMaxHealth(player, cap.getMaxHealth(player) + 10);
                     break;
-                case INT: cap.setIntel(player, cap.getIntel()+1);
+                case INT:
+                    cap.setIntel(player, cap.getIntel() + 1);
                     break;
-                case LEVEL: cap.addXp(player, LevelCalc.xpAmountForLevelUp(cap.getPlayerLevel()[0]) - cap.getPlayerLevel()[1]);
+                case LEVEL:
+                    cap.addXp(player, LevelCalc.xpAmountForLevelUp(cap.getPlayerLevel()[0]) - cap.getPlayerLevel()[1]);
                     break;
-                case STR: cap.setStr(player, cap.getStr()+1);
+                case STR:
+                    cap.setStr(player, cap.getStr() + 1);
                     break;
-                case VIT: cap.setVit(player, cap.getVit()+1);
+                case VIT:
+                    cap.setVit(player, cap.getVit() + 1);
                     break;
             }
         });
     }
 
-    public enum Stat
-    {
+    public enum Stat {
         LEVEL,
         HP,
         STR,

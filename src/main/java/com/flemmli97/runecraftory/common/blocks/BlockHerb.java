@@ -8,33 +8,27 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BushBlock;
 import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 
 import java.util.List;
-import java.util.Random;
-import java.util.function.Supplier;
 
 public class BlockHerb extends BushBlock implements IBlockModifyLevel {
 
     protected static final VoxelShape SHAPE = Block.makeCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("variant", 0, 10);
-    private final Supplier<Item> item;
 
-    public BlockHerb(AbstractBlock.Properties props, Supplier<Item> item) {
+    public BlockHerb(AbstractBlock.Properties props) {
         super(props);
-        this.item = item;
     }
 
     @Override
@@ -45,30 +39,30 @@ public class BlockHerb extends BushBlock implements IBlockModifyLevel {
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> list = super.getDrops(state, builder);
-        int level = state.get(LEVEL);
-        list.forEach(stack -> this.modify(stack, level, builder.getWorld().rand));
+        //int level = state.get(LEVEL);
+        //list.forEach(stack -> this.modify(stack, level, builder.getWorld().rand));
         return list;
     }
 
     @Override
-    public int getLevel(BlockState state, TileEntity tile, ItemLevelLootFunction func, LootContext ctx){
+    public int getLevel(BlockState state, TileEntity tile, ItemLevelLootFunction func, LootContext ctx) {
         int level = state.get(LEVEL);
         if (level == 0)
             level = func.getLevel(ctx);
         return level;
     }
-
+/*
     private void modify(ItemStack stack, int level, Random random) {
         if (stack.getItem() == this.item.get()) {
             if (level == 0)
                 level = MathHelper.clamp(random.nextInt(5) + random.nextInt(4) + random.nextInt(3) + random.nextInt(2), 1, 10);
             ItemNBT.getLeveledItem(stack, level);
         }
-    }
+    }*/
 
     @Override
     public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {
-        return ItemNBT.getLeveledItem(new ItemStack(this.item.get(), 1), 1);
+        return ItemNBT.getLeveledItem(super.getItem(world, pos, state), 1);
     }
 
     @Override

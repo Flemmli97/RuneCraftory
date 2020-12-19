@@ -1,8 +1,10 @@
 package com.flemmli97.runecraftory.common.registry;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
+import com.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockFarm;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
@@ -38,11 +40,11 @@ public class ModBlocks {
     public static final EnumMap<EnumMineralTier, RegistryObject<Block>> mineralMap = new EnumMap<>(EnumMineralTier.class);
     public static final EnumMap<EnumMineralTier, RegistryObject<Block>> brokenMineralMap = new EnumMap<>(EnumMineralTier.class);
 
-    /*public static final RegistryObject<Block> forge = new BlockForge();
-    public static final RegistryObject<Block> cooking = new BlockCookingBench();
-    public static final RegistryObject<Block> pharm = new BlockPharmacy();
-    public static final RegistryObject<Block> accessory = new BlockAccessoryCrafter();*/
-    public static final RegistryObject<Block> farmland = BLOCKS.register("farmland",()->new BlockFarm(AbstractBlock.Properties.create(Material.EARTH).hardnessAndResistance(0.6F).sound(SoundType.GROUND).blockVision((state, reader, pos)->true).suffocates((state, reader, pos)->true)));
+    public static final RegistryObject<Block> forge = BLOCKS.register("forge", () -> new BlockCrafting(EnumCrafting.FORGE, true, AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> cooking = BLOCKS.register("cooking", () -> new BlockCrafting(EnumCrafting.FORGE, false, AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> chemistry = BLOCKS.register("chemistry", () -> new BlockCrafting(EnumCrafting.FORGE, false, AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> accessory = BLOCKS.register("accessory", () -> new BlockCrafting(EnumCrafting.ARMOR, true, AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> farmland = BLOCKS.register("farmland", () -> new BlockFarm(AbstractBlock.Properties.create(Material.EARTH).hardnessAndResistance(0.6F).sound(SoundType.GROUND).blockVision((state, reader, pos) -> true).suffocates((state, reader, pos) -> true)));
 
     public static final RegistryObject<Block> mineralIron = mineral(EnumMineralTier.IRON);
     public static final RegistryObject<Block> mineralBronze = mineral(EnumMineralTier.BRONZE);
@@ -71,16 +73,15 @@ public class ModBlocks {
     public static final RegistryObject<Block> brokenMineralRuby = brokenMineral(EnumMineralTier.RUBY);
     public static final RegistryObject<Block> brokenMineralEmerald = brokenMineral(EnumMineralTier.EMERALD);
     public static final RegistryObject<Block> brokenMineralSapphire = brokenMineral(EnumMineralTier.SAPPHIRE);
-/*
-    public static final RegistryObject<Block> bossSpawner = new BlockBossSpawner();
-    public static final RegistryObject<Block> research = new BlockResearchTable();
-    public static final RegistryObject<Block> ignore = new BlockIgnore();
-    public static final RegistryObject<Block> board = new BlockRequestBoard();
-    public static final RegistryObject<Block> shipping = new BlockShippingBin();
+    /*
+        public static final RegistryObject<Block> bossSpawner = new BlockBossSpawner();
+        public static final RegistryObject<Block> ignore = new BlockIgnore();
+        public static final RegistryObject<Block> board = new BlockRequestBoard();
+        public static final RegistryObject<Block> shipping = new BlockShippingBin();
 
-    public static final RegistryObject<Block> hotSpring = new BlockHotSpring();
+        /*public static final RegistryObject<Block> hotSpring = new BlockHotSpring();
 
-    //Crops*/
+        //Crops*/
     public static final RegistryObject<Block> turnip = crop("turnip", () -> ModItems.turnip, () -> ModItems.turnipGiant, () -> ModItems.turnipSeeds);
     public static final RegistryObject<Block> turnipPink = crop("turnip_pink", () -> ModItems.turnipPink, () -> ModItems.turnipPinkGiant, () -> ModItems.turnipPinkSeeds);
     public static final RegistryObject<Block> cabbage = crop("cabbage", () -> ModItems.cabbage, () -> ModItems.cabbageGiant, () -> ModItems.cabbageSeeds);
@@ -133,23 +134,23 @@ public class ModBlocks {
     public static final RegistryObject<Block> moondropFlower = flower("moondrop_flower", () -> ModItems.moondropFlower, () -> ModItems.moondropFlowerGiant, () -> ModItems.moondropSeeds);
     public static final RegistryObject<Block> toyherb = flower("toyherb", () -> ModItems.toyherb, () -> ModItems.toyherbGiant, () -> ModItems.toyherbSeeds);
 
-    public static final RegistryObject<Block> mushroom = herb("mushroom", () -> ModItems.mushroom);
-    public static final RegistryObject<Block> monarchMushroom = herb("monarch_mushroom", () -> ModItems.monarchMushroom);
-    public static final RegistryObject<Block> elliLeaves = herb("elli_leaves", () -> ModItems.elliLeaves);
-    public static final RegistryObject<Block> witheredGrass = herb("withered_grass", () -> ModItems.witheredGrass);
-    public static final RegistryObject<Block> weeds = herb("weeds", () -> ModItems.weeds);
-    public static final RegistryObject<Block> whiteGrass = herb("white_grass", () -> ModItems.whiteGrass);
-    public static final RegistryObject<Block> indigoGrass = herb("indigo_grass", () -> ModItems.indigoGrass);
-    public static final RegistryObject<Block> purpleGrass = herb("purple_grass", () -> ModItems.purpleGrass);
-    public static final RegistryObject<Block> greenGrass = herb("green_grass", () -> ModItems.greenGrass);
-    public static final RegistryObject<Block> blueGrass = herb("blue_grass", () -> ModItems.blueGrass);
-    public static final RegistryObject<Block> yellowGrass = herb("yellow_grass", () -> ModItems.yellowGrass);
-    public static final RegistryObject<Block> redGrass = herb("red_grass", () -> ModItems.redGrass);
-    public static final RegistryObject<Block> orangeGrass = herb("orange_grass", () -> ModItems.orangeGrass);
-    public static final RegistryObject<Block> blackGrass = herb("black_grass", () -> ModItems.blackGrass);
-    public static final RegistryObject<Block> antidoteGrass = herb("antidote_grass", () -> ModItems.antidoteGrass);
-    public static final RegistryObject<Block> medicinalHerb = herb("medicinal_herb", () -> ModItems.medicinalHerb);
-    public static final RegistryObject<Block> bambooSprout = herb("bamboo_sprout", () -> ModItems.bambooSprout);
+    public static final RegistryObject<Block> mushroom = herb("mushroom");
+    public static final RegistryObject<Block> monarchMushroom = herb("monarch_mushroom");
+    public static final RegistryObject<Block> elliLeaves = herb("elli_leaves");
+    public static final RegistryObject<Block> witheredGrass = herb("withered_grass");
+    public static final RegistryObject<Block> weeds = herb("weeds");
+    public static final RegistryObject<Block> whiteGrass = herb("white_grass");
+    public static final RegistryObject<Block> indigoGrass = herb("indigo_grass");
+    public static final RegistryObject<Block> purpleGrass = herb("purple_grass");
+    public static final RegistryObject<Block> greenGrass = herb("green_grass");
+    public static final RegistryObject<Block> blueGrass = herb("blue_grass");
+    public static final RegistryObject<Block> yellowGrass = herb("yellow_grass");
+    public static final RegistryObject<Block> redGrass = herb("red_grass");
+    public static final RegistryObject<Block> orangeGrass = herb("orange_grass");
+    public static final RegistryObject<Block> blackGrass = herb("black_grass");
+    public static final RegistryObject<Block> antidoteGrass = herb("antidote_grass");
+    public static final RegistryObject<Block> medicinalHerb = herb("medicinal_herb");
+    public static final RegistryObject<Block> bambooSprout = herb("bamboo_sprout");
 
     //Trees
 
@@ -172,7 +173,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> shinyWood = new BlockTreeWood("shiny_wood");
     public static final RegistryObject<Block> shinyLeaves = new BlockTreeLeaves("shiny_leaves");
     public static final RegistryObject<Block> shinySapling = new BlockTreeSapling("shiny_sapling", shinyTree);*/
-    public static final RegistryObject<TileEntityType<TileFarm>> farmTile = TILES.register("farmland_tile", ()->TileEntityType.Builder.create(TileFarm::new, farmland.get()).build(null));
+    public static final RegistryObject<TileEntityType<TileFarm>> farmTile = TILES.register("farmland_tile", () -> TileEntityType.Builder.create(TileFarm::new, farmland.get()).build(null));
     public static final RegistryObject<TileEntityType<TileCrop>> cropTile = cropTile("crop_tile", combine(Lists.newArrayList(crops), flowers));
 
     public static RegistryObject<Block> mineral(EnumMineralTier name) {
@@ -199,8 +200,8 @@ public class ModBlocks {
         return reg;
     }
 
-    public static RegistryObject<Block> herb(String name, Supplier<Supplier<Item>> item) {
-        RegistryObject<Block> reg = BLOCKS.register(name, () -> new BlockHerb(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().sound(SoundType.PLANT), item.get()));
+    public static RegistryObject<Block> herb(String name) {
+        RegistryObject<Block> reg = BLOCKS.register(name, () -> new BlockHerb(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().sound(SoundType.PLANT)));
         herbs.add(reg);
         return reg;
     }

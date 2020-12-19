@@ -56,7 +56,7 @@ public class LangGen implements IDataProvider {
     protected void addTranslations() {
         for (SpawnEgg egg : SpawnEgg.getEggs())
             this.add(egg, "%s" + " Spawn Egg");
-        for(EnumDay day : EnumDay.values())
+        for (EnumDay day : EnumDay.values())
             this.add(day.translation(), day.toString().substring(0, 3));
         this.add(ModItems.armorBread.get(), "Armor Recipe Bread");
         this.add(ModItems.forgingBread.get(), "Forging Recipe Bread");
