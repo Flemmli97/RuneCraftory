@@ -11,25 +11,29 @@ public class PlayerContainerInv extends RecipeWrapper {
     private final PlayerEntity player;
     private final Container container;
 
-    private PlayerContainerInv(Container container, IItemHandlerModifiable inv, PlayerEntity player){
+    private PlayerContainerInv(Container container, IItemHandlerModifiable inv, PlayerEntity player) {
         super(inv);
         this.player = player;
         this.container = container;
     }
 
-    public PlayerEntity getPlayer(){
+    public PlayerEntity getPlayer() {
         return this.player;
     }
 
     @Override
-    public boolean isUsableByPlayer(PlayerEntity player) { return true; }
+    public boolean isUsableByPlayer(PlayerEntity player) {
+        return true;
+    }
 
     @Override
-    public int getInventoryStackLimit() { return 64; }
+    public int getInventoryStackLimit() {
+        return 64;
+    }
 
     @Override
     public ItemStack decrStackSize(int slot, int count) {
-        ItemStack stack =  super.decrStackSize(slot, count);
+        ItemStack stack = super.decrStackSize(slot, count);
         this.container.onCraftMatrixChanged(this);
         return stack;
     }
@@ -40,7 +44,7 @@ public class PlayerContainerInv extends RecipeWrapper {
         this.container.onCraftMatrixChanged(this);
     }
 
-    public static PlayerContainerInv create(Container container, IItemHandlerModifiable inv, PlayerEntity player){
+    public static PlayerContainerInv create(Container container, IItemHandlerModifiable inv, PlayerEntity player) {
         return new PlayerContainerInv(container, inv, player);
     }
 }

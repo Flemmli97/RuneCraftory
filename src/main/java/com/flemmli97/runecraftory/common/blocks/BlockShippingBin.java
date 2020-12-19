@@ -27,16 +27,16 @@ public class BlockShippingBin extends Block {
     @Override
     public ActionResultType onUse(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
 
-        if(p_225533_2_.isRemote)
+        if (p_225533_2_.isRemote)
             return ActionResultType.SUCCESS;
-        InventoryShippingBin shippingInv = p_225533_4_.getCapability(PlayerCapProvider.PlayerCap).map(cap->cap.getShippingInv()).orElse(null);
-        if(shippingInv != null)
-        p_225533_4_.openContainer(new SimpleNamedContainerProvider((p_226928_1_, p_226928_2_, p_226928_3_) -> ChestContainer.createGeneric9X6(p_226928_1_, p_226928_2_, new RecipeWrapper(shippingInv){
-            @Override
-            public int getInventoryStackLimit() {
-                return 64;
-            }
-        }), name));
+        InventoryShippingBin shippingInv = p_225533_4_.getCapability(PlayerCapProvider.PlayerCap).map(cap -> cap.getShippingInv()).orElse(null);
+        if (shippingInv != null)
+            p_225533_4_.openContainer(new SimpleNamedContainerProvider((p_226928_1_, p_226928_2_, p_226928_3_) -> ChestContainer.createGeneric9X6(p_226928_1_, p_226928_2_, new RecipeWrapper(shippingInv) {
+                @Override
+                public int getInventoryStackLimit() {
+                    return 64;
+                }
+            }), name));
         return super.onUse(p_225533_1_, p_225533_2_, p_225533_3_, p_225533_4_, p_225533_5_, p_225533_6_);
     }
 }

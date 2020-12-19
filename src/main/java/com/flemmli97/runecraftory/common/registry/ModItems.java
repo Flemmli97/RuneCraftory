@@ -92,6 +92,34 @@ public class ModItems {
     public static final RegistryObject<Item> brush = ITEMS.register("brush", () -> new ItemBrush(new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> glass = ITEMS.register("magnifying_glass", () -> new ItemToolGlass(new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
 
+    //Recovery and stuff
+    public static final RegistryObject<Item> roundoff = medicine("roundoff");
+    public static final RegistryObject<Item> paraGone = medicine("para_gone");
+    public static final RegistryObject<Item> coldMed = medicine("cold_medicine");
+    public static final RegistryObject<Item> antidote = medicine("antidote_potion");
+    public static final RegistryObject<Item> recoveryPotion = medicine("recovery_potion");
+    public static final RegistryObject<Item> healingPotion = medicine("healing_potion");
+    public static final RegistryObject<Item> mysteryPotion = medicine("mystery_potion");
+    public static final RegistryObject<Item> magicalPotion = medicine("magical_potion");
+    public static final RegistryObject<Item> invinciroid = medicine("invinciroid");
+    public static final RegistryObject<Item> lovePotion = medicine("love_potion");
+    public static final RegistryObject<Item> formuade = medicine("formuade");
+    public static final RegistryObject<Item> leveliser = ITEMS.register("leveliser", () -> new ItemStatIncrease(ItemStatIncrease.Stat.LEVEL, new Item.Properties().group(RFCreativeTabs.medicine)));
+    public static final RegistryObject<Item> heartDrink = ITEMS.register("heart_drink", () -> new ItemStatIncrease(ItemStatIncrease.Stat.HP, new Item.Properties().group(RFCreativeTabs.medicine)));
+    public static final RegistryObject<Item> vitalGummi = ITEMS.register("vital_gummi", () -> new ItemStatIncrease(ItemStatIncrease.Stat.VIT, new Item.Properties().group(RFCreativeTabs.medicine)));
+    public static final RegistryObject<Item> intelligencer = ITEMS.register("intelligencer", () -> new ItemStatIncrease(ItemStatIncrease.Stat.INT, new Item.Properties().group(RFCreativeTabs.medicine)));
+    public static final RegistryObject<Item> protein = ITEMS.register("protein", () -> new ItemStatIncrease(ItemStatIncrease.Stat.STR, new Item.Properties().group(RFCreativeTabs.medicine)));
+    public static final RegistryObject<Item> formularA = ITEMS.register("formular_a", () -> new ItemFertilizer(ItemFertilizer.formularA, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> formularB = ITEMS.register("formular_b", () -> new ItemFertilizer(ItemFertilizer.formularB, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> formularC = ITEMS.register("formular_c", () -> new ItemFertilizer(ItemFertilizer.formularC, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> minimizer = ITEMS.register("minimizer", () -> new ItemFertilizer(ItemFertilizer.minimizer, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> giantizer = ITEMS.register("giantizer", () -> new ItemFertilizer(ItemFertilizer.giantizer, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> greenifier = ITEMS.register("greenifier", () -> new ItemFertilizer(ItemFertilizer.greenifier, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> greenifierPlus = ITEMS.register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.greenifierPlus, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> wettablePowder = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.wettable, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryObject<Item> objectX = ITEMS.register("object_x", () -> new Item(new Item.Properties().food(foodProp).group(RFCreativeTabs.medicine)));
+
+    //Weapons
     public static final RegistryObject<Item> seedSword = ITEMS.register("seed_sword_item", () -> new ItemSeedSword(new Item.Properties()));
     public static final RegistryObject<Item> broadSword = shortSword("broad_sword");
     public static final RegistryObject<Item> steelSword = shortSword("steel_sword");
@@ -691,33 +719,6 @@ public class ModItems {
     public static final RegistryObject<Item> boots = mat("boots");
 
     public static final RegistryObject<Item> lawn = mat("ayngondaia_lawn");
-
-    //Recovery and stuff
-    public static final RegistryObject<Item> roundoff = medicine("roundoff");
-    public static final RegistryObject<Item> paraGone = medicine("para_gone");
-    public static final RegistryObject<Item> coldMed = medicine("cold_medicine");
-    public static final RegistryObject<Item> antidote = medicine("antidote_potion");
-    public static final RegistryObject<Item> recoveryPotion = medicine("recovery_potion");
-    public static final RegistryObject<Item> healingPotion = medicine("healing_potion");
-    public static final RegistryObject<Item> mysteryPotion = medicine("mystery_potion");
-    public static final RegistryObject<Item> magicalPotion = medicine("magical_potion");
-    public static final RegistryObject<Item> invinciroid = medicine("invinciroid");
-    public static final RegistryObject<Item> lovePotion = medicine("love_potion");
-    public static final RegistryObject<Item> formuade = medicine("formuade");
-    public static final RegistryObject<Item> leveliser = ITEMS.register("leveliser", () -> new ItemStatIncrease(ItemStatIncrease.Stat.LEVEL, new Item.Properties().group(RFCreativeTabs.medicine)));
-    public static final RegistryObject<Item> heartDrink = ITEMS.register("heart_drink", () -> new ItemStatIncrease(ItemStatIncrease.Stat.HP, new Item.Properties().group(RFCreativeTabs.medicine)));
-    public static final RegistryObject<Item> vitalGummi = ITEMS.register("vital_gummi", () -> new ItemStatIncrease(ItemStatIncrease.Stat.VIT, new Item.Properties().group(RFCreativeTabs.medicine)));
-    public static final RegistryObject<Item> intelligencer = ITEMS.register("intelligencer", () -> new ItemStatIncrease(ItemStatIncrease.Stat.INT, new Item.Properties().group(RFCreativeTabs.medicine)));
-    public static final RegistryObject<Item> protein = ITEMS.register("protein", () -> new ItemStatIncrease(ItemStatIncrease.Stat.STR, new Item.Properties().group(RFCreativeTabs.medicine)));
-    public static final RegistryObject<Item> formularA = ITEMS.register("formular_a", () -> new ItemFertilizer(ItemFertilizer.formularA, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> formularB = ITEMS.register("formular_b", () -> new ItemFertilizer(ItemFertilizer.formularB, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> formularC = ITEMS.register("formular_c", () -> new ItemFertilizer(ItemFertilizer.formularC, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> minimizer = ITEMS.register("minimizer", () -> new ItemFertilizer(ItemFertilizer.minimizer, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> giantizer = ITEMS.register("giantizer", () -> new ItemFertilizer(ItemFertilizer.giantizer, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> greenifier = ITEMS.register("greenifier", () -> new ItemFertilizer(ItemFertilizer.greenifier, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> greenifierPlus = ITEMS.register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.greenifierPlus, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> wettablePowder = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.wettable, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> objectX = food("object_x");
 
     //Skills and Magic
     public static final RegistryObject<Item> fireBallSmall = spell(() -> ModSpells.EMPTY, "fireball");

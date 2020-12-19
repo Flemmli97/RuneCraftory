@@ -12,6 +12,6 @@ public class ModContainer {
 
     public static final DeferredRegister<ContainerType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, RuneCraftory.MODID);
 
-    public static final RegistryObject<ContainerType<ContainerCrafting>> craftingContainer = CONTAINERS.register("crafting_container", ()-> IForgeContainerType.create(ContainerCrafting::new));
+    public static final RegistryObject<ContainerType<ContainerCrafting>> craftingContainer = CONTAINERS.register("crafting_container", () -> IForgeContainerType.create(ContainerCrafting::new));
 
 }

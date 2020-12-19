@@ -42,7 +42,7 @@ public class CraftingOutputSlot extends Slot {
         }
 
         if (this.inventory instanceof IRecipeHolder) {
-            ((IRecipeHolder)this.inventory).onCrafting(player);
+            ((IRecipeHolder) this.inventory).onCrafting(player);
         }
 
         this.amountCrafted = 0;
@@ -53,7 +53,7 @@ public class CraftingOutputSlot extends Slot {
         this.onCrafting(p_190901_2_);
         NonNullList<ItemStack> remaining = this.container.getCurrentRecipe() != null ? this.container.getCurrentRecipe().getRemainingItems(this.ingredientInv) : NonNullList.withSize(0, ItemStack.EMPTY);
         boolean changed = false;
-        for(int i = 0; i < remaining.size(); ++i) {
+        for (int i = 0; i < remaining.size(); ++i) {
             ItemStack itemstack = this.ingredientInv.getStackInSlot(i);
             ItemStack itemstack1 = remaining.get(i);
             if (!itemstack.isEmpty()) {
@@ -73,7 +73,7 @@ public class CraftingOutputSlot extends Slot {
                 }
             }
         }
-        if(changed)
+        if (changed)
             this.container.updateCraftingOutput();
         return super.onTake(p_190901_1_, p_190901_2_);
     }
@@ -93,5 +93,6 @@ public class CraftingOutputSlot extends Slot {
         if (this.getHasStack()) {
             this.amountCrafted += Math.min(p_75209_1_, this.getStack().getCount());
         }
-        return super.decrStackSize(p_75209_1_);    }
+        return super.decrStackSize(p_75209_1_);
+    }
 }

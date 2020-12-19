@@ -6,7 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
 
-public class BlockAccessory extends BlockCrafting{
+public class BlockAccessory extends BlockCrafting {
 
     public BlockAccessory(Properties p_i48440_1_) {
         super(EnumCrafting.ARMOR, p_i48440_1_);

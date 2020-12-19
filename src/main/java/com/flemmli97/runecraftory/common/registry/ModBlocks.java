@@ -82,13 +82,13 @@ public class ModBlocks {
     public static final RegistryObject<Block> brokenMineralEmerald = brokenMineral(EnumMineralTier.EMERALD);
     public static final RegistryObject<Block> brokenMineralSapphire = brokenMineral(EnumMineralTier.SAPPHIRE);
 
-        public static final RegistryObject<Block> bossSpawner = BLOCKS.register("boss_spawner", () -> new BlockBossSpawner(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(30, 9999)));
-        public static final RegistryObject<Block> board = BLOCKS.register("black_board", () -> new Block(AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(5, 5)));
-        public static final RegistryObject<Block> shipping = BLOCKS.register("shipping_bin", () -> new BlockShippingBin(AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(3, 10)));
+    public static final RegistryObject<Block> bossSpawner = BLOCKS.register("boss_spawner", () -> new BlockBossSpawner(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(30, 9999)));
+    public static final RegistryObject<Block> board = BLOCKS.register("black_board", () -> new Block(AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(5, 5)));
+    public static final RegistryObject<Block> shipping = BLOCKS.register("shipping_bin", () -> new BlockShippingBin(AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(3, 10)));
 
-        /*public static final RegistryObject<Block> hotSpring = new BlockHotSpring();
+    /*public static final RegistryObject<Block> hotSpring = new BlockHotSpring();
 
-        //Crops*/
+    //Crops*/
     public static final RegistryObject<Block> turnip = crop("turnip", () -> ModItems.turnip, () -> ModItems.turnipGiant, () -> ModItems.turnipSeeds);
     public static final RegistryObject<Block> turnipPink = crop("turnip_pink", () -> ModItems.turnipPink, () -> ModItems.turnipPinkGiant, () -> ModItems.turnipPinkSeeds);
     public static final RegistryObject<Block> cabbage = crop("cabbage", () -> ModItems.cabbage, () -> ModItems.cabbageGiant, () -> ModItems.cabbageSeeds);
@@ -182,10 +182,10 @@ public class ModBlocks {
     public static final RegistryObject<Block> shinySapling = new BlockTreeSapling("shiny_sapling", shinyTree);*/
     public static final RegistryObject<TileEntityType<TileFarm>> farmTile = TILES.register("farmland_tile", () -> TileEntityType.Builder.create(TileFarm::new, farmland.get()).build(null));
     public static final RegistryObject<TileEntityType<TileCrop>> cropTile = cropTile("crop_tile", combine(Lists.newArrayList(crops), flowers));
-    public static final RegistryObject<TileEntityType<TileAccessory>> accessoryTile = TILES.register("accessory_tile", ()->TileEntityType.Builder.create(TileAccessory::new, accessory.get()).build(null));
-    public static final RegistryObject<TileEntityType<TileForge>> forgingTile = TILES.register("forge_tile", ()->TileEntityType.Builder.create(TileForge::new, forge.get()).build(null));
-    public static final RegistryObject<TileEntityType<TileChemistry>> chemistryTile = TILES.register("chemistry_tile", ()->TileEntityType.Builder.create(TileChemistry::new, chemistry.get()).build(null));
-    public static final RegistryObject<TileEntityType<TileCooking>> cookingTile = TILES.register("cooking_tile", ()->TileEntityType.Builder.create(TileCooking::new, cooking.get()).build(null));
+    public static final RegistryObject<TileEntityType<TileAccessory>> accessoryTile = TILES.register("accessory_tile", () -> TileEntityType.Builder.create(TileAccessory::new, accessory.get()).build(null));
+    public static final RegistryObject<TileEntityType<TileForge>> forgingTile = TILES.register("forge_tile", () -> TileEntityType.Builder.create(TileForge::new, forge.get()).build(null));
+    public static final RegistryObject<TileEntityType<TileChemistry>> chemistryTile = TILES.register("chemistry_tile", () -> TileEntityType.Builder.create(TileChemistry::new, chemistry.get()).build(null));
+    public static final RegistryObject<TileEntityType<TileCooking>> cookingTile = TILES.register("cooking_tile", () -> TileEntityType.Builder.create(TileCooking::new, cooking.get()).build(null));
 
     public static RegistryObject<Block> mineral(EnumMineralTier name) {
         RegistryObject<Block> reg = BLOCKS.register("ore_" + name.getString(), () -> new BlockMineral(name, AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 5)));

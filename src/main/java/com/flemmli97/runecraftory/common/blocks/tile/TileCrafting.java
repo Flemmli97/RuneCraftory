@@ -24,12 +24,12 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
     public TileCrafting(TileEntityType<?> p_i48289_1_, EnumCrafting type) {
         super(p_i48289_1_);
         this.type = type;
-        if(this.type == EnumCrafting.COOKING || this.type == EnumCrafting.CHEM)
+        if (this.type == EnumCrafting.COOKING || this.type == EnumCrafting.CHEM)
             inventory = NonNullList.withSize(6, ItemStack.EMPTY);
-                    else inventory = NonNullList.withSize(8, ItemStack.EMPTY);
+        else inventory = NonNullList.withSize(8, ItemStack.EMPTY);
     }
 
-    public EnumCrafting craftingType(){
+    public EnumCrafting craftingType() {
         return this.type;
     }
 
@@ -40,7 +40,7 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        return slot <= this.getSlots() && slot >= 0 ? inventory.get(slot):ItemStack.EMPTY;
+        return slot <= this.getSlots() && slot >= 0 ? inventory.get(slot) : ItemStack.EMPTY;
     }
 
     @Override
@@ -65,13 +65,13 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
 
     @Override
     public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-        if(slot <= this.getSlots() && slot >= 0)
+        if (slot <= this.getSlots() && slot >= 0)
             inventory.set(slot, stack);
     }
 
     @Override
     public ITextComponent getDisplayName() {
-        return new TranslationTextComponent("tile.crafting."+this.type.toString().toLowerCase());
+        return new TranslationTextComponent("tile.crafting." + this.type.toString().toLowerCase());
     }
 
     @Override

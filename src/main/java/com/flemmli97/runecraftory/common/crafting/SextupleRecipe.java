@@ -57,7 +57,7 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
                 else inputs.add(itemstack);
             }
         }
-        boolean unlocked = inv.getPlayer() instanceof ServerPlayerEntity ? ((ServerPlayerEntity) inv.getPlayer()).getRecipeBook().isUnlocked(this):false;
+        boolean unlocked = inv.getPlayer() instanceof ServerPlayerEntity ? ((ServerPlayerEntity) inv.getPlayer()).getRecipeBook().isUnlocked(this) : false;
         return unlocked && i == this.recipeItems.size() && (isSimple ? recipeitemhelper.canCraft(this, null) : RecipeMatcher.findMatches(inputs, this.recipeItems) != null);
     }
 

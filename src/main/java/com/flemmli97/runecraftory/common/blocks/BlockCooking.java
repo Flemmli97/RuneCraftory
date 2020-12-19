@@ -6,7 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
 
-public class BlockCooking extends BlockCrafting{
+public class BlockCooking extends BlockCrafting {
 
     public BlockCooking(Properties p_i48440_1_) {
         super(EnumCrafting.COOKING, p_i48440_1_);

@@ -41,7 +41,7 @@ public class ContainerCrafting extends Container {
         this.outPutInv = new DummyInventory(new ItemStackHandler());
         this.craftingInv = PlayerContainerInv.create(this, tile, playerInv.player);
         this.type = tile.craftingType();
-        this.addSlot(new CraftingOutputSlot(this.outPutInv, this, this.craftingInv, 0, 116 , 34));
+        this.addSlot(new CraftingOutputSlot(this.outPutInv, this, this.craftingInv, 0, 116, 34));
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -59,7 +59,7 @@ public class ContainerCrafting extends Container {
         this.updateCraftingOutput();
     }
 
-    public EnumCrafting craftingType(){
+    public EnumCrafting craftingType() {
         return this.type;
     }
 
@@ -70,55 +70,55 @@ public class ContainerCrafting extends Container {
 
     @Override
     public void onCraftMatrixChanged(IInventory p_75130_1_) {
-        if(p_75130_1_ == this.craftingInv)
+        if (p_75130_1_ == this.craftingInv)
             this.updateCraftingOutput();
         super.onCraftMatrixChanged(p_75130_1_);
     }
 
-    public void updateCraftingOutput(){
-        if(this.craftingInv.getPlayer().world.isRemote)
+    public void updateCraftingOutput() {
+        if (this.craftingInv.getPlayer().world.isRemote)
             return;
         this.matchingRecipes = getRecipes(this.craftingInv, this.type);
         this.matchingRecipesIndex = 0;
         this.updateCraftingSlot();
     }
 
-    private void updateCraftingSlot(){
+    private void updateCraftingSlot() {
         ItemStack stack;
-        if(this.matchingRecipes != null && this.matchingRecipesIndex < this.matchingRecipes.size()) {
-            this.currentRecipe =  this.matchingRecipes.get(this.matchingRecipesIndex);
+        if (this.matchingRecipes != null && this.matchingRecipesIndex < this.matchingRecipes.size()) {
+            this.currentRecipe = this.matchingRecipes.get(this.matchingRecipesIndex);
             stack = this.currentRecipe.getCraftingResult(this.craftingInv);
-        }
-        else {
+        } else {
             stack = ItemStack.EMPTY;
             this.currentRecipe = null;
         }
         this.outPutInv.setInventorySlotContents(0, stack);
-        if(this.craftingInv.getPlayer() instanceof ServerPlayerEntity)
+        if (this.craftingInv.getPlayer() instanceof ServerPlayerEntity)
             ((ServerPlayerEntity) this.craftingInv.getPlayer()).connection.sendPacket(new SSetSlotPacket(this.windowId, 0, stack));
 
     }
 
-    public SextupleRecipe getCurrentRecipe(){
+    public SextupleRecipe getCurrentRecipe() {
         return this.currentRecipe;
     }
-    public boolean canIncrease(){
-        return this.matchingRecipes != null && this.matchingRecipesIndex < this.matchingRecipes.size()-1;
+
+    public boolean canIncrease() {
+        return this.matchingRecipes != null && this.matchingRecipesIndex < this.matchingRecipes.size() - 1;
     }
 
-    public boolean canDecrease(){
+    public boolean canDecrease() {
         return this.matchingRecipesIndex > 0;
     }
 
-    public void increase(){
-        if(this.canIncrease()) {
+    public void increase() {
+        if (this.canIncrease()) {
             this.matchingRecipesIndex++;
             this.updateCraftingSlot();
         }
     }
 
-    public void decrease(){
-        if(this.canDecrease()) {
+    public void decrease() {
+        if (this.canDecrease()) {
             this.matchingRecipesIndex--;
             this.updateCraftingSlot();
         }
@@ -131,13 +131,12 @@ public class ContainerCrafting extends Container {
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if(p_82846_2_ == 0){
+            if (p_82846_2_ == 0) {
                 itemstack1.onCrafting(p_82846_1_.world, p_82846_1_, itemstack1.getCount());
                 if (!this.mergeItemStack(itemstack1, 1, 36, false))
                     return ItemStack.EMPTY;
-                    slot.onSlotChange(itemstack1, itemstack);
-            }
-            else if (p_82846_2_ < 37) {
+                slot.onSlotChange(itemstack1, itemstack);
+            } else if (p_82846_2_ < 37) {
                 if (!this.mergeItemStack(itemstack1, 37, this.inventorySlots.size(), false)) {
                     return ItemStack.EMPTY;
                 }
@@ -166,10 +165,11 @@ public class ContainerCrafting extends Container {
             }
         }
 
-        return itemstack;    }
+        return itemstack;
+    }
 
-    public static List<SextupleRecipe> getRecipes(PlayerContainerInv inv, EnumCrafting type){
-        if(inv.getPlayer() instanceof ServerPlayerEntity){
+    public static List<SextupleRecipe> getRecipes(PlayerContainerInv inv, EnumCrafting type) {
+        if (inv.getPlayer() instanceof ServerPlayerEntity) {
 
 
             return inv.getPlayer().getServer().getRecipeManager().getRecipes(CraftingUtils.getType(type), inv, ((ServerPlayerEntity) inv.getPlayer()).getServerWorld());
@@ -178,9 +178,9 @@ public class ContainerCrafting extends Container {
         return Lists.newArrayList();
     }
 
-    private static TileCrafting getTile(World world, PacketBuffer buffer){
+    private static TileCrafting getTile(World world, PacketBuffer buffer) {
         TileEntity tile = world.getTileEntity(buffer.readBlockPos());
-        if(tile instanceof TileCrafting) {
+        if (tile instanceof TileCrafting) {
             System.out.println(((TileCrafting) tile).craftingType());
             return (TileCrafting) tile;
         }

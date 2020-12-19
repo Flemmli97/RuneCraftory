@@ -87,7 +87,7 @@ public abstract class BlockCrafting extends Block {
             return ActionResultType.PASS;
         } else {
             TileEntity tile = world.getTileEntity(pos);
-            if(tile instanceof TileCrafting) {
+            if (tile instanceof TileCrafting) {
                 NetworkHooks.openGui((ServerPlayerEntity) player, (TileCrafting) tile, pos);
             }
             /*
@@ -139,7 +139,7 @@ public abstract class BlockCrafting extends Block {
 
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return state.get(PART) == EnumPart.LEFT?this.getTile(state, world) : null;
+        return state.get(PART) == EnumPart.LEFT ? this.getTile(state, world) : null;
     }
 
     public abstract TileEntity getTile(BlockState state, IBlockReader world);

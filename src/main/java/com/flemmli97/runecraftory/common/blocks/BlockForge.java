@@ -6,7 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
 
-public class BlockForge extends BlockCrafting{
+public class BlockForge extends BlockCrafting {
 
     public BlockForge(Properties p_i48440_1_) {
         super(EnumCrafting.FORGE, p_i48440_1_);
