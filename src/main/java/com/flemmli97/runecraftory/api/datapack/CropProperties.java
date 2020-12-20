@@ -15,8 +15,8 @@ import java.util.Set;
 public class CropProperties {
 
     public static final CropProperties defaultProp = new CropProperties();
-    private EnumSet<EnumSeason> bestSeason = EnumSet.noneOf(EnumSeason.class);
-    private EnumSet<EnumSeason> badSeason = EnumSet.noneOf(EnumSeason.class);
+    private final EnumSet<EnumSeason> bestSeason = EnumSet.noneOf(EnumSeason.class);
+    private final EnumSet<EnumSeason> badSeason = EnumSet.noneOf(EnumSeason.class);
 
     private int growth = 3;
     private int maxDrops = 2;
@@ -57,9 +57,9 @@ public class CropProperties {
         buffer.writeInt(this.maxDrops);
         buffer.writeBoolean(this.regrowable);
         buffer.writeInt(this.bestSeason.size());
-        this.bestSeason.forEach(season -> buffer.writeEnumValue(season));
+        this.bestSeason.forEach(buffer::writeEnumValue);
         buffer.writeInt(this.badSeason.size());
-        this.badSeason.forEach(season -> buffer.writeEnumValue(season));
+        this.badSeason.forEach(buffer::writeEnumValue);
     }
 
     public static CropProperties fromPacket(PacketBuffer buffer) {
@@ -113,10 +113,13 @@ public class CropProperties {
         return "[BestSeasons:" + this.bestSeason + ";BadSeasons:" + this.badSeason + ";Growth:" + this.growth + ";Drops:" + this.maxDrops + ";Regrowable:" + this.regrowable + "]";
     }
 
+    /**
+     * Used in serialization
+     */
     public static class MutableCropProps {
 
-        private EnumSet<EnumSeason> bestSeason = EnumSet.noneOf(EnumSeason.class);
-        private EnumSet<EnumSeason> badSeason = EnumSet.noneOf(EnumSeason.class);
+        private final EnumSet<EnumSeason> bestSeason = EnumSet.noneOf(EnumSeason.class);
+        private final EnumSet<EnumSeason> badSeason = EnumSet.noneOf(EnumSeason.class);
 
         private int growth;
         private int maxDrops;
@@ -129,12 +132,12 @@ public class CropProperties {
         }
 
         public MutableCropProps addGoodSeason(EnumSeason season) {
-            bestSeason.add(season);
+            this.bestSeason.add(season);
             return this;
         }
 
         public MutableCropProps addBadSeason(EnumSeason season) {
-            badSeason.add(season);
+            this.badSeason.add(season);
             return this;
         }
     }

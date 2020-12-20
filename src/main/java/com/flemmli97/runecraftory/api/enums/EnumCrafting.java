@@ -4,5 +4,5 @@ public enum EnumCrafting {
     FORGE,
     ARMOR,
     CHEM,
-    COOKING;
+    COOKING
 }

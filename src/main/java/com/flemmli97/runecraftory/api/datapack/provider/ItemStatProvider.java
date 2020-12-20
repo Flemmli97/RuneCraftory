@@ -47,12 +47,12 @@ public abstract class ItemStatProvider implements IDataProvider {
     @Override
     public void act(DirectoryCache cache) {
         this.add();
-        data.forEach((res, builder) -> {
+        this.data.forEach((res, builder) -> {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/item_stats/" + res.getPath() + ".json");
             try {
                 JsonElement obj = GSON.toJsonTree(builder);
                 if (obj.isJsonObject())
-                    item.get(res).accept(obj.getAsJsonObject());
+                    this.item.get(res).accept(obj.getAsJsonObject());
                 IDataProvider.save(GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save itemstat {}", path, e);

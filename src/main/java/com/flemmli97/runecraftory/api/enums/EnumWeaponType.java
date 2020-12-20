@@ -8,5 +8,5 @@ public enum EnumWeaponType {
     HAXE,
     DUAL,
     GLOVE,
-    STAFF;
+    STAFF
 }

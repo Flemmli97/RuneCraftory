@@ -1,7 +1,12 @@
 package com.flemmli97.runecraftory.network;
 
+import com.flemmli97.runecraftory.client.AttackAABBRender;
+import com.flemmli97.runecraftory.client.ClientHandlers;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -36,6 +41,12 @@ public class S2CAttackDebug {
     }
 
     public static void handle(S2CAttackDebug pkt, Supplier<NetworkEvent.Context> ctx) {
+        ctx.get().enqueueWork(() -> {
+            PlayerEntity player = DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> ClientHandlers::getPlayer);
+            if (player == null)
+                return;
+            AttackAABBRender.INST.addNewAABB(pkt.aabb, pkt.duration);
+        });
         ctx.get().setPacketHandled(true);
     }
 }

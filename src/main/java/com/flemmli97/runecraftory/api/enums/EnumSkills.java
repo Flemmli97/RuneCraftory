@@ -33,5 +33,5 @@ public enum EnumSkills {
     RESCOLD,
     BATH,
     TAMING,
-    LEADER;
+    LEADER
 }

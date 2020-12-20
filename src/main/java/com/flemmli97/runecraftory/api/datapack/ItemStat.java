@@ -27,7 +27,7 @@ import java.util.TreeMap;
 
 public class ItemStat {
 
-    private static Set<ResourceLocation> flatAttributes = Sets.newHashSet(
+    private static final Set<ResourceLocation> flatAttributes = Sets.newHashSet(
             LibAttributes.GENERIC_ATTACK_DAMAGE,
             LibAttributes.rf_defence,
             LibAttributes.rf_magic,
@@ -37,7 +37,7 @@ public class ItemStat {
     private int sellPrice;
     private int upgradeDifficulty;
     private EnumElement element;
-    private Map<Attribute, Integer> itemStats = new TreeMap<>(ModAttributes.sorted);
+    private final Map<Attribute, Integer> itemStats = new TreeMap<>(ModAttributes.sorted);
 
     public int getBuy() {
         return this.buyPrice;
@@ -93,7 +93,7 @@ public class ItemStat {
                     if (element != EnumElement.NONE) {
                         list.add(new TranslationTextComponent(element.getTranslation()).formatted(element.getColor()));
                     }
-                } catch (IllegalArgumentException e) {
+                } catch (IllegalArgumentException ignored) {
                 }
             }
             IFormattableTextComponent price = new TranslationTextComponent("tooltip.item.level", tag.getInt("ItemLevel"));
@@ -108,7 +108,7 @@ public class ItemStat {
                     list.add(new TranslationTextComponent(prefix));
                 }
                 for (Map.Entry<Attribute, Integer> entry : stats.entrySet()) {
-                    IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + format(entry.getKey(), entry.getValue())));
+                    IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + this.format(entry.getKey(), entry.getValue())));
                     list.add(comp);
                 }
             }
@@ -127,13 +127,16 @@ public class ItemStat {
         return "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + this.itemStats + "]}";
     }
 
+    /**
+     * Used in serialization
+     */
     public static class MutableItemStat {
 
         private int buyPrice;
         private int sellPrice;
         private int upgradeDifficulty;
         private EnumElement element = EnumElement.NONE;
-        private Map<Attribute, Integer> itemStats = Maps.newHashMap();
+        private final Map<Attribute, Integer> itemStats = Maps.newHashMap();
 
         public MutableItemStat(int buy, int sell, int upgrade) {
             this.buyPrice = buy;

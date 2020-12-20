@@ -65,19 +65,16 @@ public class ClientEvents {
         boolean shift = Screen.hasShiftDown();
         ItemStat stat = DataPackHandler.getStats(stack.getItem());
         if (stat != null) {
-            for (ITextComponent text : stat.texts(stack, shift))
-                tooltip.add(text);
+            tooltip.addAll(stat.texts(stack, shift));
         }
         CropProperties props = DataPackHandler.getCropStat(stack.getItem());
         if (props != null) {
-            for (ITextComponent text : props.texts())
-                tooltip.add(text);
+            tooltip.addAll(props.texts());
         }
         if (shift) {
             FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
             if (food != null) {
-                for (ITextComponent text : food.texts())
-                    tooltip.add(text);
+                tooltip.addAll(food.texts());
             }
         }
         return tooltip;
@@ -87,7 +84,7 @@ public class ClientEvents {
     public void worldRender(RenderWorldLastEvent event) {
         /*if(WeatherData.get(Minecraft.getMinecraft().world).currentWeather()==EnumWeather.RUNEY)
             this.renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
-        if(ConfigHandler.MainConfig.debugAttack)
-            RenderAttackAABBHandler.INST.render();*/
+        *///if(ConfigHandler.MainConfig.debugAttack)
+        //AttackAABBRender.INST.render(event.getMatrixStack(), event.getContext().getEntityFramebuffer());
     }
 }

@@ -21,7 +21,7 @@ public enum EnumMineralTier implements IStringSerializable {
 
     private final String name;
 
-    private EnumMineralTier(String name) {
+    EnumMineralTier(String name) {
         this.name = name;
     }
 

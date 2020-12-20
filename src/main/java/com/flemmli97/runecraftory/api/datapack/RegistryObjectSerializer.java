@@ -24,7 +24,7 @@ public class RegistryObjectSerializer<V extends IForgeRegistryEntry<V>> implemen
     @Override
     public V deserialize(JsonElement el, Type type, JsonDeserializationContext context) throws JsonParseException {
         ResourceLocation res = new ResourceLocation(el.getAsString());
-        V entry = registry.getValue(res);
+        V entry = this.registry.getValue(res);
         if (!entry.getRegistryName().equals(res))
             throw new JsonParseException("No such registry value: " + res.toString());
         return entry;

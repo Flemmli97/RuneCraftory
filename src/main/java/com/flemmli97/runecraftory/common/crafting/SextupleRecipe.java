@@ -50,6 +50,8 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
 
         for (int j = 0; j < inv.getSizeInventory(); ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
+            System.out.println(itemstack);
+            System.out.println(itemstack.getTag());
             if (!itemstack.isEmpty()) {
                 ++i;
                 if (isSimple)
@@ -57,6 +59,8 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
                 else inputs.add(itemstack);
             }
         }
+        this.getIngredients().forEach(ing -> System.out.println("ing " + ing.serialize()));
+        System.out.println("ing " + this.getIngredients());
         boolean unlocked = inv.getPlayer() instanceof ServerPlayerEntity ? ((ServerPlayerEntity) inv.getPlayer()).getRecipeBook().isUnlocked(this) : false;
         return unlocked && i == this.recipeItems.size() && (isSimple ? recipeitemhelper.canCraft(this, null) : RecipeMatcher.findMatches(inputs, this.recipeItems) != null);
     }

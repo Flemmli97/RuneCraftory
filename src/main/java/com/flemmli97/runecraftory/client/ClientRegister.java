@@ -30,10 +30,11 @@ import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 public class ClientRegister {
 
-    public static void registerRender() {
+    public static void registerRender(FMLClientSetupEvent event) {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.gate.get(), RenderGate::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.wooly.get(), RenderWooly::new);
@@ -56,13 +57,15 @@ public class ClientRegister {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.ambrosia_wave.get(), RenderAmbrosiaWave::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.butterfly.get(), RenderButterfly::new);
 
-        ModBlocks.BLOCKS.getEntries().forEach(reg -> {
-            if (reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop || reg.get() instanceof BlockMineral || reg.get() instanceof BlockBrokenMineral)
-                RenderTypeLookup.setRenderLayer(reg.get(), RenderType.getCutout());
-        });
-
         ClientHandlers.overlay = new OverlayGui(Minecraft.getInstance());
 
-        ScreenManager.registerFactory(ModContainer.craftingContainer.get(), CraftingGui::new);
+        event.enqueueWork(() -> {
+            ModBlocks.BLOCKS.getEntries().forEach(reg -> {
+                if (reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop || reg.get() instanceof BlockMineral || reg.get() instanceof BlockBrokenMineral)
+                    RenderTypeLookup.setRenderLayer(reg.get(), RenderType.getCutout());
+            });
+
+            ScreenManager.registerFactory(ModContainer.craftingContainer.get(), CraftingGui::new);
+        });
     }
 }

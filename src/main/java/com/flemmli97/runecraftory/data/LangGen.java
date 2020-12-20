@@ -71,7 +71,7 @@ public class LangGen implements IDataProvider {
         try {
             JsonObject obj = GSON.fromJson(
                     new InputStreamReader(existing.getResource(new ResourceLocation(RuneCraftory.MODID, "en_us"), ResourcePackType.CLIENT_RESOURCES, ".json", "lang").getInputStream()), JsonObject.class);
-            obj.entrySet().forEach(e -> data.put(e.getKey(), e.getValue().getAsString()));
+            obj.entrySet().forEach(e -> this.data.put(e.getKey(), e.getValue().getAsString()));
         } catch (IOException exception) {
             exception.printStackTrace();
         }
@@ -79,18 +79,19 @@ public class LangGen implements IDataProvider {
 
     @Override
     public void act(DirectoryCache cache) throws IOException {
-        addTranslations();
-        Map<String, String> sort = data.entrySet().stream().sorted((e, e2) -> order.compare(e.getKey(), e2.getKey()))
+        this.addTranslations();
+        Map<String, String> sort = this.data.entrySet().stream().sorted((e, e2) -> order.compare(e.getKey(), e2.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (old, v) -> old, LinkedHashMap::new));
-        if (!data.isEmpty())
-            save(cache, sort, this.gen.getOutputFolder().resolve("assets/" + modid + "/lang/" + locale + ".json"));
+        if (!this.data.isEmpty())
+            this.save(cache, sort, this.gen.getOutputFolder().resolve("assets/" + this.modid + "/lang/" + this.locale + ".json"));
     }
 
     @Override
     public String getName() {
-        return "Languages: " + locale;
+        return "Languages: " + this.locale;
     }
 
+    @SuppressWarnings("deprecation")
     private void save(DirectoryCache cache, Object object, Path target) throws IOException {
         String data = GSON.toJson(object);
         data = JavaUnicodeEscaper.outsideOf(0, 0x7f).translate(data); // Escape unicode after the fact so that it's not double escaped by GSON
@@ -107,35 +108,35 @@ public class LangGen implements IDataProvider {
     }
 
     public void addBlock(Supplier<? extends Block> key, String name) {
-        add(key.get(), name);
+        this.add(key.get(), name);
     }
 
     public void add(Block key, String name) {
-        add(key.getTranslationKey(), name);
+        this.add(key.getTranslationKey(), name);
     }
 
     public void addItem(Supplier<? extends Item> key, String name) {
-        add(key.get(), name);
+        this.add(key.get(), name);
     }
 
     public void add(Item key, String name) {
-        add(key.getTranslationKey(), name);
+        this.add(key.getTranslationKey(), name);
     }
 
     public void addItemStack(Supplier<ItemStack> key, String name) {
-        add(key.get(), name);
+        this.add(key.get(), name);
     }
 
     public void add(ItemStack key, String name) {
-        add(key.getTranslationKey(), name);
+        this.add(key.getTranslationKey(), name);
     }
 
     public void addEnchantment(Supplier<? extends Enchantment> key, String name) {
-        add(key.get(), name);
+        this.add(key.get(), name);
     }
 
     public void add(Enchantment key, String name) {
-        add(key.getName(), name);
+        this.add(key.getName(), name);
     }
 
     /*
@@ -149,23 +150,23 @@ public class LangGen implements IDataProvider {
     */
 
     public void addEffect(Supplier<? extends Effect> key, String name) {
-        add(key.get(), name);
+        this.add(key.get(), name);
     }
 
     public void add(Effect key, String name) {
-        add(key.getName(), name);
+        this.add(key.getName(), name);
     }
 
     public void addEntityType(Supplier<? extends EntityType<?>> key, String name) {
-        add(key.get(), name);
+        this.add(key.get(), name);
     }
 
     public void add(EntityType<?> key, String name) {
-        add(key.getTranslationKey(), name);
+        this.add(key.getTranslationKey(), name);
     }
 
     public void add(String key, String value) {
-        if (data.put(key, value) != null)
+        if (this.data.put(key, value) != null)
             throw new IllegalStateException("Duplicate translation key " + key);
     }
 

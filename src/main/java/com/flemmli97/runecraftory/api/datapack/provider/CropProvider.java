@@ -43,12 +43,12 @@ public abstract class CropProvider implements IDataProvider {
     @Override
     public void act(DirectoryCache cache) {
         this.add();
-        data.forEach((res, builder) -> {
+        this.data.forEach((res, builder) -> {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/crop_properties/" + res.getPath() + ".json");
             try {
                 JsonElement obj = GSON.toJsonTree(builder);
                 if (obj.isJsonObject())
-                    item.get(res).accept(obj.getAsJsonObject());
+                    this.item.get(res).accept(obj.getAsJsonObject());
                 IDataProvider.save(GSON, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save crop properties {}", path, e);
@@ -61,8 +61,16 @@ public abstract class CropProvider implements IDataProvider {
         return "CropProps";
     }
 
+    public void addStat(Item item, int growth, int maxDrops, boolean regrowable) {
+        this.addStat(item, new CropProperties.MutableCropProps(growth, maxDrops, regrowable));
+    }
+
     public void addStat(String id, Item item, int growth, int maxDrops, boolean regrowable) {
         this.addStat(id, item, new CropProperties.MutableCropProps(growth, maxDrops, regrowable));
+    }
+
+    public void addStat(Item item, CropProperties.MutableCropProps builder) {
+        this.addStat(item.getRegistryName().getPath(), item, builder);
     }
 
     public void addStat(String id, Item item, CropProperties.MutableCropProps builder) {

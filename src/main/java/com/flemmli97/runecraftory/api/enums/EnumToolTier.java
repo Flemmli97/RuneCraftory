@@ -7,8 +7,8 @@ public enum EnumToolTier {
     GOLD(3, "gold"),
     PLATINUM(4, "platinum");
 
-    private String id;
-    private int level;
+    private final String id;
+    private final int level;
 
     EnumToolTier(int level, String id) {
         this.id = id;

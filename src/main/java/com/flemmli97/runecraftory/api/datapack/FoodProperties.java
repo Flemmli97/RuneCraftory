@@ -19,8 +19,8 @@ import java.util.TreeMap;
 public class FoodProperties {
 
     private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
-    private Map<Attribute, Integer> effects = new TreeMap<>(ModAttributes.sorted);
-    private Map<Attribute, Integer> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
+    private final Map<Attribute, Integer> effects = new TreeMap<>(ModAttributes.sorted);
+    private final Map<Attribute, Integer> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
     private SimpleEffect[] potionApply = new SimpleEffect[0];
     private Effect[] potionRemove = new Effect[0];
 
@@ -145,11 +145,11 @@ public class FoodProperties {
             if (!rpIncrease.getSiblings().isEmpty())
                 this.translationTexts.add(rpIncrease);
             for (Map.Entry<Attribute, Integer> entry : this.effects().entrySet()) {
-                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + format(entry.getValue())));
+                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + this.format(entry.getValue())));
                 this.translationTexts.add(comp);
             }
             for (Map.Entry<Attribute, Integer> entry : this.effectsMultiplier().entrySet()) {
-                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + format(entry.getValue()) + "%"));
+                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + this.format(entry.getValue()) + "%"));
                 this.translationTexts.add(comp);
             }
         }
@@ -165,13 +165,16 @@ public class FoodProperties {
         return "[HP:" + this.hpRegen + ",RP:" + this.rpRegen + ",HP%:" + this.hpRegenPercent + ",RP%:" + this.rpRegenPercent + ",Duration:" + this.duration + "]" + "{effects:[" + this.effects + "], potions:[" + ArrayUtils.arrayToString(this.potionRemove, null) + "]";
     }
 
+    /**
+     * Used in serialization
+     */
     public static class MutableFoodProps {
 
         private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
-        private Map<Attribute, Integer> effects = new TreeMap<>(ModAttributes.sorted);
-        private Map<Attribute, Integer> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
-        private List<SimpleEffect> potionApply = Lists.newArrayList();
-        private List<Effect> potionRemove = Lists.newArrayList();
+        private final Map<Attribute, Integer> effects = new TreeMap<>(ModAttributes.sorted);
+        private final Map<Attribute, Integer> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
+        private final List<SimpleEffect> potionApply = Lists.newArrayList();
+        private final List<Effect> potionRemove = Lists.newArrayList();
 
         public MutableFoodProps(int duration) {
             this.duration = duration;

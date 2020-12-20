@@ -8,8 +8,8 @@ public enum EnumSeason {
     FALL(TextFormatting.GOLD, "season.fall"),
     WINTER(TextFormatting.BLUE, "season.winter");
 
-    private TextFormatting color;
-    private String translationKey;
+    private final TextFormatting color;
+    private final String translationKey;
 
     EnumSeason(TextFormatting color, String id) {
         this.color = color;

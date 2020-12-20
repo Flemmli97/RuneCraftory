@@ -13,6 +13,10 @@ public class WorldUtils {
         return (int) (world.getDayTime() % 24000);
     }
 
+    public static int dayTimeTotal(World world) {
+        return (int) (world.getDayTime());
+    }
+
     public static long totalTime(World world) {
         return world.getGameTime();
     }

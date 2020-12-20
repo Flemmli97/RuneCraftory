@@ -20,21 +20,21 @@ public class RecipesGen extends ForgeRecipeProvider {
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.broadSword.get(), 1)
                 .addIngredient(ModTags.minerals)
-                .dummyCriterion("rice").build(consumer);
+                .dummyCriterion().build(consumer);
 
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.cheapBracelet.get(), 1)
                 .addIngredient(ModTags.minerals)
-                .dummyCriterion("rice").build(consumer);
+                .dummyCriterion().build(consumer);
 
         RecipeBuilder.create(EnumCrafting.CHEM, ModItems.recoveryPotion.get(), 3)
                 .addIngredient(ModItems.medicinalHerb.get())
-                .dummyCriterion("healing_potion").build(consumer);
+                .dummyCriterion().build(consumer);
 
         RecipeBuilder.create(EnumCrafting.COOKING, ModItems.onigiri.get(), 1)
                 .addIngredient(ModItems.rice.get())
-                .dummyCriterion("rice").build(consumer);
+                .dummyCriterion().build(consumer);
         RecipeBuilder.create(EnumCrafting.COOKING, ModItems.squidSashimi.get(), 5)
                 .addIngredient(ModItems.squid.get())
-                .dummyCriterion("squid").build(consumer);
+                .dummyCriterion().build(consumer);
     }
 }

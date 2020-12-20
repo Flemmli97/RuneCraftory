@@ -86,7 +86,7 @@ public class RuneCraftory {
     }
 
     public void clientSetup(FMLClientSetupEvent event) {
-        ClientRegister.registerRender();
+        ClientRegister.registerRender(event);
     }
 
     public void common(FMLCommonSetupEvent event) {

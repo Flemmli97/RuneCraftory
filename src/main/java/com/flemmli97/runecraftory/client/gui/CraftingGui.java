@@ -14,37 +14,36 @@ public class CraftingGui extends ContainerScreen<ContainerCrafting> {
     private static final ResourceLocation crafting = new ResourceLocation(RuneCraftory.MODID, "textures/gui/craftingc.png");
     private static final ResourceLocation chem = new ResourceLocation(RuneCraftory.MODID, "textures/gui/chemc.png");
     private static final ResourceLocation cooking = new ResourceLocation(RuneCraftory.MODID, "textures/gui/cookingc.png");
-    private static final ResourceLocation bars = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
 
-    public CraftingGui(ContainerCrafting p_i51105_1_, PlayerInventory p_i51105_2_, ITextComponent p_i51105_3_) {
-        super(p_i51105_1_, p_i51105_2_, p_i51105_3_);
+    public CraftingGui(ContainerCrafting container, PlayerInventory inv, ITextComponent name) {
+        super(container, inv, name);
     }
 
     @Override
-    protected void drawBackground(MatrixStack p_230450_1_, float p_230450_2_, int p_230450_3_, int p_230450_4_) {
+    protected void drawBackground(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
         switch (this.container.craftingType()) {
             case ARMOR:
                 this.client.getTextureManager().bindTexture(crafting);
-                this.drawTexture(p_230450_1_, this.guiLeft, this.guiTop, 0, 0, 176, 166);
+                this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
                 break;
             case COOKING:
                 this.client.getTextureManager().bindTexture(cooking);
-                this.drawTexture(p_230450_1_, this.guiLeft, this.guiTop, 0, 0, 176, 166);
+                this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
                 break;
             case FORGE:
                 this.client.getTextureManager().bindTexture(forging);
-                this.drawTexture(p_230450_1_, this.guiLeft, this.guiTop, 0, 0, 176, 166);
+                this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
                 break;
             case CHEM:
                 this.client.getTextureManager().bindTexture(chem);
-                this.drawTexture(p_230450_1_, this.guiLeft, this.guiTop, 0, 0, 176, 166);
+                this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
                 break;
         }
     }
 
     @Override
-    public void render(MatrixStack p_230430_1_, int p_230430_2_, int p_230430_3_, float p_230430_4_) {
-        super.render(p_230430_1_, p_230430_2_, p_230430_3_, p_230430_4_);
-        this.drawMouseoverTooltip(p_230430_1_, p_230430_2_, p_230430_3_);
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+        super.render(stack, mouseX, mouseY, partialTicks);
+        this.drawMouseoverTooltip(stack, mouseX, mouseY);
     }
 }

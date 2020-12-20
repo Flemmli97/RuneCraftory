@@ -9,5 +9,5 @@ public enum EnumShop {
     FOOD,
     MAGIC,
     RUNESKILL,
-    RANDOM;
+    RANDOM
 }

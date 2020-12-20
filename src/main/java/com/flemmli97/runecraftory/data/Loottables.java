@@ -6,6 +6,7 @@ import com.flemmli97.runecraftory.common.loot.GiantLootCondition;
 import com.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
 import com.flemmli97.runecraftory.common.loot.MiningLootCondition;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
+import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
@@ -60,21 +61,28 @@ public class Loottables extends ForgeLootTableProvider {
         private final Map<ResourceLocation, LootTable.Builder> lootTables = Maps.newHashMap();
 
         private void init() {
-
+            this.registerLootTable(ModEntities.wooly.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.furSmall.get(), 0.4f, 0.2f, 1, 10, 5))));
+            this.registerLootTable(ModEntities.ant.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.carapaceInsect.get(), 0.3f, 0.2f, 1, 15, 2))
+                            .addEntry(this.add(ModItems.jawInsect.get(), 0.2f, 0.2f, 1, 10, 5))));
+            this.registerLootTable(ModEntities.orcArcher.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.bladeShard.get(), 0.4f, 0.2f, 1, 10, 5))
+                        .addEntry(this.add(ModItems.clothCheap.get(), 0.6f, 0.3f, 1, 15, 2))));
         }
 
-        private LootTable.Builder getDefault(IItemProvider... items) {
-            LootPool.Builder build = LootPool.builder().rolls(ConstantRange.of(1));
-            LootPool.builder().rolls(ConstantRange.of(1));
-            for (IItemProvider item : items)
-                build.addEntry(ItemLootEntry.builder(item))
-                        .acceptFunction(SetCount.builder(RandomValueRange.of(0.0F, 0.1F)))
-                        .acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(0.0F, 0.05F)).func_216072_a(1));
-            return LootTable.builder().addLootPool(build);
+        private LootPool.Builder create(){
+            return LootPool.builder().rolls(ConstantRange.of(1));
         }
 
         protected void registerLootTable(EntityType<?> type, LootTable.Builder builder) {
             this.lootTables.put(type.getLootTable(), builder);
+        }
+
+        private ItemLootEntry.Builder add(IItemProvider item, float chance, float lootingBonus, int lootingMax, int weight, int quality){
+            return ItemLootEntry.builder(item).acceptFunction(SetCount.builder(RandomValueRange.of(0, chance)))
+                    .acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(0, lootingBonus)).func_216072_a(lootingMax))
+                    .weight(weight).quality(quality);
         }
 
         @Override

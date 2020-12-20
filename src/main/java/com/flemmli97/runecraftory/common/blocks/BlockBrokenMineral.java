@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.blocks;
 
 import com.flemmli97.runecraftory.api.enums.EnumMineralTier;
+import com.flemmli97.runecraftory.common.blocks.tile.TileBrokenMineral;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -175,7 +176,7 @@ public class BlockBrokenMineral extends Block implements IWaterLoggable {
             ((ServerPlayerEntity) player).connection.sendPacket(new SPlaySoundEventPacket(2001, pos, getStateId(state), false));
     }
 
-    protected BlockState getBrokenState(BlockState state) {
+    public BlockState getMineralState(BlockState state) {
         BlockState blockState = ModBlocks.mineralMap.get(this.tier).get().getDefaultState();
         if (state.contains(FACING))
             state.with(FACING, state.get(FACING));
@@ -186,12 +187,12 @@ public class BlockBrokenMineral extends Block implements IWaterLoggable {
 
     @Override
     public boolean hasTileEntity(BlockState state) {
-        return false;
+        return true;
     }
 
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return null;
+        return new TileBrokenMineral();
     }
 }
 

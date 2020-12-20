@@ -14,9 +14,9 @@ import net.minecraft.util.text.TranslationTextComponent;
 import org.lwjgl.opengl.GL11;
 
 public class OverlayGui extends AbstractGui {
-    private Minecraft mc;
-    public static int width;
+
     private static final ResourceLocation texturepath = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
+    private final Minecraft mc;
 
     public OverlayGui(Minecraft mc) {
         this.mc = mc;
@@ -38,6 +38,6 @@ public class OverlayGui extends AbstractGui {
             this.drawTexture(stack, xPos + 18, yPos + 3, 18, 30, healthWidth, 9);
             this.drawTexture(stack, xPos + 18, yPos + 17, 18, 40, runePointsWidth, 9);
         }
-        this.drawCenteredText(stack, this.mc.fontRenderer, new TranslationTextComponent(season.translationKey()).formatted(season.getColor()).append(" " + calendar.date() + " ").append(new TranslationTextComponent(calendar.currentDay().translation())), 50, 50, 0);
+        drawCenteredText(stack, this.mc.fontRenderer, new TranslationTextComponent(season.translationKey()).formatted(season.getColor()).append(" " + calendar.date() + " ").append(new TranslationTextComponent(calendar.currentDay().translation())), 50, 50, 0);
     }
 }

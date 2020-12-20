@@ -14,11 +14,13 @@ import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.blocks.BlockMineral;
 import com.flemmli97.runecraftory.common.blocks.BlockShippingBin;
 import com.flemmli97.runecraftory.common.blocks.tile.TileAccessory;
+import com.flemmli97.runecraftory.common.blocks.tile.TileBrokenMineral;
 import com.flemmli97.runecraftory.common.blocks.tile.TileChemistry;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCooking;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrop;
 import com.flemmli97.runecraftory.common.blocks.tile.TileFarm;
 import com.flemmli97.runecraftory.common.blocks.tile.TileForge;
+import com.flemmli97.runecraftory.common.blocks.tile.TileSpawner;
 import com.google.common.collect.Lists;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -181,11 +183,14 @@ public class ModBlocks {
     public static final RegistryObject<Block> shinyLeaves = new BlockTreeLeaves("shiny_leaves");
     public static final RegistryObject<Block> shinySapling = new BlockTreeSapling("shiny_sapling", shinyTree);*/
     public static final RegistryObject<TileEntityType<TileFarm>> farmTile = TILES.register("farmland_tile", () -> TileEntityType.Builder.create(TileFarm::new, farmland.get()).build(null));
+    public static final RegistryObject<TileEntityType<TileSpawner>> brokenMineralTile =brokenMineralTile("broken_mineral_tile", brokenMineralMap.values());
+
     public static final RegistryObject<TileEntityType<TileCrop>> cropTile = cropTile("crop_tile", combine(Lists.newArrayList(crops), flowers));
     public static final RegistryObject<TileEntityType<TileAccessory>> accessoryTile = TILES.register("accessory_tile", () -> TileEntityType.Builder.create(TileAccessory::new, accessory.get()).build(null));
     public static final RegistryObject<TileEntityType<TileForge>> forgingTile = TILES.register("forge_tile", () -> TileEntityType.Builder.create(TileForge::new, forge.get()).build(null));
     public static final RegistryObject<TileEntityType<TileChemistry>> chemistryTile = TILES.register("chemistry_tile", () -> TileEntityType.Builder.create(TileChemistry::new, chemistry.get()).build(null));
     public static final RegistryObject<TileEntityType<TileCooking>> cookingTile = TILES.register("cooking_tile", () -> TileEntityType.Builder.create(TileCooking::new, cooking.get()).build(null));
+    public static final RegistryObject<TileEntityType<TileSpawner>> bossSpawnerTile = TILES.register("spawner_tile", () -> TileEntityType.Builder.create(TileSpawner::new).build(null));
 
     public static RegistryObject<Block> mineral(EnumMineralTier name) {
         RegistryObject<Block> reg = BLOCKS.register("ore_" + name.getString(), () -> new BlockMineral(name, AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 5)));
@@ -227,5 +232,9 @@ public class ModBlocks {
 
     public static <V extends TileEntity> RegistryObject<TileEntityType<V>> cropTile(String name, Collection<RegistryObject<Block>> blocks) {
         return TILES.register(name, () -> new TileEntityType(TileCrop::new, blocks.stream().map(obj -> obj.get()).collect(Collectors.toSet()), null));
+    }
+
+    public static <V extends TileEntity> RegistryObject<TileEntityType<V>> brokenMineralTile(String name, Collection<RegistryObject<Block>> blocks) {
+        return TILES.register(name, () -> new TileEntityType(TileBrokenMineral::new, blocks.stream().map(obj -> obj.get()).collect(Collectors.toSet()), null));
     }
 }

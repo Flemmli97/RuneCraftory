@@ -4,7 +4,9 @@ import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.common.registry.ModCrafting;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.ICriterionInstance;
@@ -16,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
@@ -103,6 +106,10 @@ public class RecipeBuilder {
         return this;
     }
 
+    public RecipeBuilder dummyCriterion() {
+        return this.addCriterion("dummy", new ImpossibleTrigger.Instance());
+    }
+
     public RecipeBuilder dummyCriterion(String name) {
         return this.addCriterion(name, new ImpossibleTrigger.Instance());
     }
@@ -178,13 +185,13 @@ public class RecipeBuilder {
             obj.add("result", this.itemStackToJson(this.result));
         }
 
-        private JsonObject itemStackToJson(ItemStack stack) {
+        private JsonElement itemStackToJson(ItemStack stack) {
             JsonObject obj = new JsonObject();
             obj.addProperty("item", stack.getItem().getRegistryName().toString());
             if (stack.getCount() > 1)
                 obj.addProperty("count", stack.getCount());
             if (stack.hasTag())
-                obj.addProperty("nbt", stack.getTag().toString());
+                CompoundNBT.CODEC.encode(stack.getTag(), JsonOps.INSTANCE, new JsonObject()).result().ifPresent(e -> obj.add("nbt", e));
             return obj;
         }
 

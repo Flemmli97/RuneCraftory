@@ -181,7 +181,6 @@ public class ContainerCrafting extends Container {
     private static TileCrafting getTile(World world, PacketBuffer buffer) {
         TileEntity tile = world.getTileEntity(buffer.readBlockPos());
         if (tile instanceof TileCrafting) {
-            System.out.println(((TileCrafting) tile).craftingType());
             return (TileCrafting) tile;
         }
         throw new IllegalStateException("Expected tile entity of type TileCrafting but got " + tile);

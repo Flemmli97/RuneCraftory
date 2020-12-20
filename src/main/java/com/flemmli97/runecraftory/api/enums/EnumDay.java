@@ -9,7 +9,7 @@ public enum EnumDay {
     SATURDAY("day.saturday"),
     SUNDAY("day.sunday");
 
-    String translation;
+    private final String translation;
 
     EnumDay(String id) {
         this.translation = id;

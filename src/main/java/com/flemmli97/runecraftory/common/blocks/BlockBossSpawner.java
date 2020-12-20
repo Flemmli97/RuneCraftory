@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.common.blocks;
 
+import com.flemmli97.runecraftory.common.blocks.tile.TileSpawner;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -17,6 +18,6 @@ public class BlockBossSpawner extends Block {
 
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return null;
+        return new TileSpawner();
     }
 }
