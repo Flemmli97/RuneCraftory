@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.common.blocks;
 
 import com.flemmli97.runecraftory.common.blocks.tile.TileFarm;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.FarmlandBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
@@ -20,17 +19,13 @@ public class BlockFarm extends FarmlandBlock {
     }
 
     @Override
-    public void randomTick(BlockState p_225542_1_, ServerWorld p_225542_2_, BlockPos p_225542_3_, Random p_225542_4_) {
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random rand) {
 
     }
 
     @Override
-    public void onFallenUpon(World p_180658_1_, BlockPos p_180658_2_, Entity p_180658_3_, float p_180658_4_) {
-        if (!p_180658_1_.isRemote && net.minecraftforge.common.ForgeHooks.onFarmlandTrample(p_180658_1_, p_180658_2_, Blocks.DIRT.getDefaultState(), p_180658_4_, p_180658_3_)) { // Forge: Move logic to Entity#canTrample
-            turnToDirt(p_180658_1_.getBlockState(p_180658_2_), p_180658_1_, p_180658_2_);
-        }
-
-        super.onFallenUpon(p_180658_1_, p_180658_2_, p_180658_3_, p_180658_4_);
+    public void onFallenUpon(World world, BlockPos pos, Entity entity, float dmg) {
+        entity.handleFallDamage(dmg, 1.0F);
     }
 
     @Override

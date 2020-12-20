@@ -19,11 +19,9 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 
-import java.util.List;
-
 public class BlockHerb extends BushBlock implements IBlockModifyLevel {
 
-    protected static final VoxelShape SHAPE = Block.makeCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
+    public static final VoxelShape SHAPE = Block.makeCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 10.0D, 11.0D);
 
     public static final IntegerProperty LEVEL = IntegerProperty.create("variant", 0, 10);
 
@@ -37,28 +35,10 @@ public class BlockHerb extends BushBlock implements IBlockModifyLevel {
     }
 
     @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        List<ItemStack> list = super.getDrops(state, builder);
-        //int level = state.get(LEVEL);
-        //list.forEach(stack -> this.modify(stack, level, builder.getWorld().rand));
-        return list;
-    }
-
-    @Override
     public int getLevel(BlockState state, TileEntity tile, ItemLevelLootFunction func, LootContext ctx) {
         int level = state.get(LEVEL);
-        if (level == 0)
-            level = func.getLevel(ctx);
-        return level;
+        return level == 0 ? func.getLevel(ctx) : level;
     }
-/*
-    private void modify(ItemStack stack, int level, Random random) {
-        if (stack.getItem() == this.item.get()) {
-            if (level == 0)
-                level = MathHelper.clamp(random.nextInt(5) + random.nextInt(4) + random.nextInt(3) + random.nextInt(2), 1, 10);
-            ItemNBT.getLeveledItem(stack, level);
-        }
-    }*/
 
     @Override
     public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {

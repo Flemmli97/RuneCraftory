@@ -1,14 +1,16 @@
 package com.flemmli97.runecraftory.common.blocks;
 
 import com.flemmli97.runecraftory.common.blocks.tile.TileSpawner;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockReader;
 
 public class BlockBossSpawner extends Block {
-    public BlockBossSpawner(Properties p_i48440_1_) {
-        super(p_i48440_1_);
+
+    public BlockBossSpawner(AbstractBlock.Properties props) {
+        super(props);
     }
 
     @Override

@@ -23,8 +23,6 @@ import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -32,7 +30,6 @@ import java.util.function.Consumer;
 
 public class RecipeBuilder {
 
-    private static final Logger LOGGER = LogManager.getLogger();
     private final ItemStack result;
     private final int level;
     private final List<Ingredient> ingredients = Lists.newArrayList();
@@ -124,12 +121,7 @@ public class RecipeBuilder {
     }
 
     public void build(Consumer<IFinishedRecipe> cons, String string) {
-        ResourceLocation resourcelocation = ForgeRegistries.ITEMS.getKey(this.result.getItem());
-        if (resourcelocation.toString().equals(string)) {
-            throw new IllegalStateException("Shapeless Recipe " + string + " should remove its 'save' argument");
-        } else {
-            this.build(cons, new ResourceLocation(string));
-        }
+        this.build(cons, new ResourceLocation(string));
     }
 
     public void build(Consumer<IFinishedRecipe> cons, ResourceLocation res) {
@@ -151,6 +143,7 @@ public class RecipeBuilder {
     }
 
     public static class Result implements IFinishedRecipe {
+
         private final ResourceLocation id;
         private final ItemStack result;
         private final int level;
