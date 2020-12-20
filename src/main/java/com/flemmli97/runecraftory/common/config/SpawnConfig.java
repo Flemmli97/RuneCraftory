@@ -37,13 +37,13 @@ public class SpawnConfig {
                 int dist = o.has("minSpawnDist") ? o.get("minSpawnDist").getAsInt() : 0;
                 String raw = e.getKey() + "," + dist + "," + weight;
                 if (o.has("biomes") && (el = o.get("biomes")).isJsonArray()) {
-                    ((JsonArray) el).forEach(ae -> rawEntityBiomeMap.merge(ae.getAsString(), Lists.newArrayList(raw), (old, v) -> {
+                    ((JsonArray) el).forEach(ae -> this.rawEntityBiomeMap.merge(ae.getAsString(), Lists.newArrayList(raw), (old, v) -> {
                         old.add(raw);
                         return old;
                     }));
                 }
                 if (o.has("biomeTypes") && (el = o.get("biomeTypes")).isJsonArray()) {
-                    ((JsonArray) el).forEach(ae -> rawEntityBiomeTypeMap.merge(ae.getAsString(), Lists.newArrayList(raw), (old, v) -> {
+                    ((JsonArray) el).forEach(ae -> this.rawEntityBiomeTypeMap.merge(ae.getAsString(), Lists.newArrayList(raw), (old, v) -> {
                         old.add(raw);
                         return old;
                     }));
@@ -53,11 +53,11 @@ public class SpawnConfig {
     }
 
     public List<String> getEntityFromBiome(ResourceLocation loc) {
-        return rawEntityBiomeMap.getOrDefault(loc.toString(), Lists.newArrayList());
+        return this.rawEntityBiomeMap.getOrDefault(loc.toString(), Lists.newArrayList());
     }
 
     public List<String> getEntityFromBiomeType(BiomeDictionary.Type type) {
-        return rawEntityBiomeTypeMap.getOrDefault(type.getName(), Lists.newArrayList());
+        return this.rawEntityBiomeTypeMap.getOrDefault(type.getName(), Lists.newArrayList());
     }
 
 }

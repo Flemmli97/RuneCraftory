@@ -25,8 +25,8 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
         super(p_i48289_1_);
         this.type = type;
         if (this.type == EnumCrafting.COOKING || this.type == EnumCrafting.CHEM)
-            inventory = NonNullList.withSize(6, ItemStack.EMPTY);
-        else inventory = NonNullList.withSize(8, ItemStack.EMPTY);
+            this.inventory = NonNullList.withSize(6, ItemStack.EMPTY);
+        else this.inventory = NonNullList.withSize(8, ItemStack.EMPTY);
     }
 
     public EnumCrafting craftingType() {
@@ -35,12 +35,12 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
 
     @Override
     public int getSlots() {
-        return inventory.size();
+        return this.inventory.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        return slot <= this.getSlots() && slot >= 0 ? inventory.get(slot) : ItemStack.EMPTY;
+        return slot <= this.getSlots() && slot >= 0 ? this.inventory.get(slot) : ItemStack.EMPTY;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
     @Override
     public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
         if (slot <= this.getSlots() && slot >= 0)
-            inventory.set(slot, stack);
+            this.inventory.set(slot, stack);
     }
 
     @Override

@@ -181,9 +181,7 @@ public class PlayerEvents {
     public void updateLivingTick(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
-                cap.update(player);
-            });
+            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> cap.update(player));
             int food = EntityUtils.paralysed(player) ? 3 : 7;
             player.getFoodStats().setFoodLevel(food);
             player.getFoodStats().setFoodSaturationLevel(0);

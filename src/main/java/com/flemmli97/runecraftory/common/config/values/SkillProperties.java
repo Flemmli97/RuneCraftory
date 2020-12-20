@@ -48,7 +48,7 @@ public class SkillProperties {
         this.str = specs.str.get();
         this.vit = specs.vit.get();
         this.intel = specs.intel.get();
-        this.baseXP = baseXP;
+        this.baseXP = this.baseXP;
         return this;
     }
 }

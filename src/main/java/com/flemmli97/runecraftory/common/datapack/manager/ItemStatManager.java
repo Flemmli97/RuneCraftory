@@ -32,7 +32,7 @@ public class ItemStatManager extends JsonReloadListener {
     }
 
     public ItemStat get(Item item) {
-        return itemstat.get(item.getRegistryName());
+        return this.itemstat.get(item.getRegistryName());
     }
 
     @Override
@@ -57,8 +57,8 @@ public class ItemStatManager extends JsonReloadListener {
     }
 
     public void toPacket(PacketBuffer buffer) {
-        buffer.writeInt(itemstat.size());
-        itemstat.forEach((res, stat) -> {
+        buffer.writeInt(this.itemstat.size());
+        this.itemstat.forEach((res, stat) -> {
             buffer.writeResourceLocation(res);
             stat.toPacket(buffer);
         });
@@ -69,6 +69,6 @@ public class ItemStatManager extends JsonReloadListener {
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
             builder.put(buffer.readResourceLocation(), ItemStat.fromPacket(buffer));
-        itemstat = builder.build();
+        this.itemstat = builder.build();
     }
 }

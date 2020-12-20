@@ -77,6 +77,6 @@ public class ItemStatIncrease extends Item {
         HP,
         STR,
         INT,
-        VIT;
+        VIT
     }
 }

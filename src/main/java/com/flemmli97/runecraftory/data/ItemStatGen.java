@@ -17,18 +17,21 @@ public class ItemStatGen extends ItemStatProvider {
 
     @Override
     protected void add() {
-        this.addStat("broad_sword", ModItems.broadSword.get(), new ItemStat.MutableItemStat(25, 5, 0)
+        this.addStat(ModItems.broadSword.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 5));
-        this.addStat("steel_sword", ModItems.steelSword.get(), new ItemStat.MutableItemStat(55, 15, 0)
+        this.addStat(ModItems.steelSword.get(), new ItemStat.MutableItemStat(55, 15, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 9)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 2));
-        this.addStat("steel_sword_plus", ModItems.steelSwordPlus.get(), new ItemStat.MutableItemStat(100, 25, 0)
+        this.addStat(ModItems.steelSwordPlus.get(), new ItemStat.MutableItemStat(100, 25, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 11)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 4));
-        this.addStat("cutlass", ModItems.cutlass.get(), new ItemStat.MutableItemStat(122, 30, 0)
+        this.addStat(ModItems.cutlass.get(), new ItemStat.MutableItemStat(122, 30, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 16)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 3)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 1));
+
+        this.addStat(ModItems.cheapBracelet.get(), new ItemStat.MutableItemStat(100, 25, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 5));
 
         this.addStat("iron", Tags.Items.INGOTS_IRON, new ItemStat.MutableItemStat(1, 1, 5)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));
@@ -44,6 +47,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.blueGrass.get(), 120, 5, 1);
         this.addStat(ModItems.yellowGrass.get(), 120, 5, 1);
         this.addStat(ModItems.orangeGrass.get(), 120, 5, 1);
+        this.addStat(ModItems.redGrass.get(), 120, 5, 1);
         this.addStat(ModItems.blackGrass.get(), 120, 5, 1);
         this.addStat(ModItems.antidoteGrass.get(), 120, 5, 1);
         this.addStat(ModItems.medicinalHerb.get(), 150, 10, 1);

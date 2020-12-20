@@ -23,7 +23,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -31,7 +30,7 @@ import net.minecraftforge.fml.network.NetworkHooks;
 
 import javax.annotation.Nullable;
 
-public abstract class BlockCrafting extends Block {
+public class BlockCrafting extends Block {
 
     public static final EnumProperty<EnumPart> PART = EnumProperty.create("part", EnumPart.class);
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
@@ -134,15 +133,8 @@ public abstract class BlockCrafting extends Block {
 
     @Override
     public boolean hasTileEntity(BlockState state) {
-        return true;
+        return state.get(PART) == EnumPart.LEFT;
     }
-
-    @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
-        return state.get(PART) == EnumPart.LEFT ? this.getTile(state, world) : null;
-    }
-
-    public abstract TileEntity getTile(BlockState state, IBlockReader world);
 
     enum EnumPart implements IStringSerializable {
         LEFT("left"),
@@ -156,7 +148,7 @@ public abstract class BlockCrafting extends Block {
 
         @Override
         public String getString() {
-            return s;
+            return this.s;
         }
     }
 }

@@ -35,7 +35,7 @@ public class CraftingOutputSlot extends Slot {
 
     @Override
     protected void onCrafting(ItemStack p_75208_1_) {
-        PlayerEntity player = ingredientInv.getPlayer();
+        PlayerEntity player = this.ingredientInv.getPlayer();
         if (this.amountCrafted > 0) {
             p_75208_1_.onCrafting(player.world, player, this.amountCrafted);
             net.minecraftforge.fml.hooks.BasicEventHooks.firePlayerCraftingEvent(player, p_75208_1_, this.inventory);

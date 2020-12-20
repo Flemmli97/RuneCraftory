@@ -1,0 +1,12 @@
+{
+  "bestSeason": [
+    "SUMMER"
+  ],
+  "badSeason": [
+    "WINTER"
+  ],
+  "growth": 6,
+  "maxDrops": 3,
+  "regrowable": false,
+  "item": "runecraftory:seed_pink_cat"
+}

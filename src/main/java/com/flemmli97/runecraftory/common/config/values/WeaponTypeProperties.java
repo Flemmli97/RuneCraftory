@@ -15,7 +15,7 @@ public class WeaponTypeProperties {
     }
 
     public float aoe() {
-        return aoe;
+        return this.aoe;
     }
 
     public WeaponTypeProperties read(WeaponTypePropertySpecs specs) {

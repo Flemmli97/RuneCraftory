@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 import java.util.Set;
 
 public class ItemToolSickle extends ToolItem implements IItemUsable, IChargeable {
-    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(new Block[]{Blocks.CACTUS, Blocks.CHORUS_FLOWER, Blocks.CHORUS_PLANT, Blocks.PUMPKIN, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.RED_MUSHROOM_BLOCK, Blocks.VINE});
+    private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.CACTUS, Blocks.CHORUS_FLOWER, Blocks.CHORUS_PLANT, Blocks.PUMPKIN, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.RED_MUSHROOM_BLOCK, Blocks.VINE);
 
     private int[] chargeRunes = new int[]{1, 5, 15, 50, 100};
     private int[] levelXP = new int[]{5, 20, 50, 200, 500};
@@ -92,7 +92,7 @@ public class ItemToolSickle extends ToolItem implements IItemUsable, IChargeable
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
         if (state.isIn(BlockTags.LEAVES) || state.isIn(BlockTags.WART_BLOCKS))
-            return efficiency;
+            return this.efficiency;
         return super.getDestroySpeed(stack, state);
     }
 

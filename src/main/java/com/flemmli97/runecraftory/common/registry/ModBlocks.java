@@ -28,7 +28,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -183,7 +182,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> shinyLeaves = new BlockTreeLeaves("shiny_leaves");
     public static final RegistryObject<Block> shinySapling = new BlockTreeSapling("shiny_sapling", shinyTree);*/
     public static final RegistryObject<TileEntityType<TileFarm>> farmTile = TILES.register("farmland_tile", () -> TileEntityType.Builder.create(TileFarm::new, farmland.get()).build(null));
-    public static final RegistryObject<TileEntityType<TileSpawner>> brokenMineralTile =brokenMineralTile("broken_mineral_tile", brokenMineralMap.values());
+    public static final RegistryObject<TileEntityType<TileBrokenMineral>> brokenMineralTile =brokenMineralTile("broken_mineral_tile", brokenMineralMap.values());
 
     public static final RegistryObject<TileEntityType<TileCrop>> cropTile = cropTile("crop_tile", combine(Lists.newArrayList(crops), flowers));
     public static final RegistryObject<TileEntityType<TileAccessory>> accessoryTile = TILES.register("accessory_tile", () -> TileEntityType.Builder.create(TileAccessory::new, accessory.get()).build(null));
@@ -230,11 +229,11 @@ public class ModBlocks {
         return one;
     }
 
-    public static <V extends TileEntity> RegistryObject<TileEntityType<V>> cropTile(String name, Collection<RegistryObject<Block>> blocks) {
-        return TILES.register(name, () -> new TileEntityType(TileCrop::new, blocks.stream().map(obj -> obj.get()).collect(Collectors.toSet()), null));
+    public static RegistryObject<TileEntityType<TileCrop>> cropTile(String name, Collection<RegistryObject<Block>> blocks) {
+        return TILES.register(name, () -> new TileEntityType<>(TileCrop::new, blocks.stream().map(RegistryObject::get).collect(Collectors.toSet()), null));
     }
 
-    public static <V extends TileEntity> RegistryObject<TileEntityType<V>> brokenMineralTile(String name, Collection<RegistryObject<Block>> blocks) {
-        return TILES.register(name, () -> new TileEntityType(TileBrokenMineral::new, blocks.stream().map(obj -> obj.get()).collect(Collectors.toSet()), null));
+    public static RegistryObject<TileEntityType<TileBrokenMineral>> brokenMineralTile(String name, Collection<RegistryObject<Block>> blocks) {
+        return TILES.register(name, () -> new TileEntityType<>(TileBrokenMineral::new, blocks.stream().map(RegistryObject::get).collect(Collectors.toSet()), null));
     }
 }

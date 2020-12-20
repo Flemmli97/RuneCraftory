@@ -13,7 +13,7 @@ public class ItemConfig {
 
     public static class ItemConfigSpec {
 
-        public static final Configuration<ItemConfigSpec> config = new Configuration<ItemConfigSpec>(ItemConfigSpec::new, (p) -> p.resolve(RuneCraftory.MODID).resolve("mobs.toml"), ItemConfig::load, RuneCraftory.MODID);
+        public static final Configuration<ItemConfigSpec> config = new Configuration<>(ItemConfigSpec::new, (p) -> p.resolve(RuneCraftory.MODID).resolve("mobs.toml"), ItemConfig::load, RuneCraftory.MODID);
 
         private ItemConfigSpec(ForgeConfigSpec.Builder builder) {
 

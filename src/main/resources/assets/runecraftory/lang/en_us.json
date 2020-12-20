@@ -416,10 +416,6 @@
     "item.runecraftory.water_shoes": "Water Shoes",
     "item.runecraftory.ice_skates": "Ice Skates",
     "item.runecraftory.rocket_wing": "Rocket Wing",
-    "item.runecraftory.block_forge": "Forge",
-    "item.runecraftory.block_access": "Accessory Workbench",
-    "item.runecraftory.block_cooking": "Cooking Table",
-    "item.runecraftory.block_pharm": "Pharmacy",
     "item.runecraftory.bronze": "Bronze",
     "item.runecraftory.silver": "Silver",
     "item.runecraftory.platinum": "Platinum",
@@ -1057,6 +1053,10 @@
 
     "tooltip.item.spawn": "Rename to a number to set level",
 
+    "block.runecraftory.forge": "Forge",
+    "block.runecraftory.accessory": "Accessory Workbench",
+    "block.runecraftory.cooking": "Cooking Table",
+    "block.runecraftory.chemistry": "Chemistry Set",
     "block.runecraftory.farmland": "Farmland",
     "block.runecraftory.ore_iron": "Iron Mineral",
     "block.runecraftory.ore_bronze": "Bronze Mineral",
@@ -1085,7 +1085,7 @@
     "block.runecraftory.ore_broken_emerald": "Broken Emerald Mineral",
     "block.runecraftory.ore_broken_sapphire": "Broken Sapphire Mineral",
     "block.runecraftory.research_table": "Research Table",
-    "block.runecraftory.bossspawner": "Boss Spawner",
+    "block.runecraftory.boss_spawner": "Boss Spawner",
     "block.runecraftory.black_board": "Quest Box",
     "block.runecraftory.shipping_bin": "Shipping Bin",
 

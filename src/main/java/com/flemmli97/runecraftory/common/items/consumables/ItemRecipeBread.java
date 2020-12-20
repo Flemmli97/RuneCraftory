@@ -78,7 +78,7 @@ public class ItemRecipeBread extends Item {
     }
 
     private EnumSkills getSkill() {
-        switch (type) {
+        switch (this.type) {
             case FORGE:
                 return EnumSkills.FORGING;
             case ARMOR:

@@ -53,7 +53,7 @@ public class MobConfig {
 
         private MobConfigSpec(ForgeConfigSpec.Builder builder) {
             builder.push("general");
-            disableNaturalSpawn = builder.comment("Disable all spawning not from gates").define("Disable Spawn", true);
+            this.disableNaturalSpawn = builder.comment("Disable all spawning not from gates").define("Disable Spawn", true);
             builder.pop();
 
             builder.comment("Gate Configs").push("gate");
@@ -61,8 +61,8 @@ public class MobConfig {
             this.gateDef = builder.comment("Base defence of gates").define("Defence", 5);
             this.gateMDef = builder.comment("Base magic defence of gates").define("Magic Defence", 5);
             this.spawnChance = builder.comment("Chance for next spawn (1/x chance per tick)").define("Spawn", 150);
-            gateXP = builder.comment("Base xp a gate gives").define("XP", 10);
-            gateMoney = builder.comment("Money a gate gives").define("Money", 4);
+            this.gateXP = builder.comment("Base xp a gate gives").define("XP", 10);
+            this.gateMoney = builder.comment("Money a gate gives").define("Money", 4);
             builder.pop();
             for (Map.Entry<ResourceLocation, EntityProperties> e : MobConfig.propertiesMap.entrySet()) {
                 builder.push(e.getKey().toString());

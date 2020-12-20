@@ -67,9 +67,7 @@ public class BlockMineral extends Block implements IWaterLoggable {
             Block.makeCuboidShape(7.5, 11.4, 4.4, 8.5, 12.4, 5.4),
             Block.makeCuboidShape(3.5, 8.4, 4.4, 4.5, 10.4, 7.4),
             Block.makeCuboidShape(4.2, 5, 14.4, 8.2, 7, 15.4)
-    ).reduce((v1, v2) -> {
-        return VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR);
-    }).get();
+    ).reduce((v1, v2) -> VoxelShapes.combineAndSimplify(v1, v2, IBooleanFunction.OR)).get();
     public static final VoxelShape north = Stream.of(
             Block.makeCuboidShape(8, 0, 0, 13, 6, 5),
             Block.makeCuboidShape(10, 0, 8, 13, 11, 10),

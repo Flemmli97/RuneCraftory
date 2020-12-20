@@ -16,12 +16,12 @@ public class InventorySpells implements IItemHandler {
 
     @Override
     public int getSlots() {
-        return inventory.size();
+        return this.inventory.size();
     }
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        return inventory.get(slot);
+        return this.inventory.get(slot);
     }
 
     @Override

@@ -9,27 +9,26 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.concurrent.TickDelayedTask;
 import net.minecraft.world.server.ServerWorld;
 
 public class TileBrokenMineral extends TileEntity implements IDailyUpdate {
 
-    private int lastUpdateDay = -1;
+    private int lastUpdateDay;
+    private boolean check;
 
     public TileBrokenMineral() {
         super(ModBlocks.brokenMineralTile.get());
-        System.out.println("tile " + this);
     }
 
     @Override
     public void update(ServerWorld world) {
-        System.out.println("on update");
-        BlockState state = this.world.getBlockState(this.pos);
+        BlockState state = this.getBlockState();
         Block block = state.getBlock();
         if(block instanceof BlockBrokenMineral)
         {
             BlockBrokenMineral mineral = (BlockBrokenMineral) block;
             this.world.setBlockState(this.pos, mineral.getMineralState(state));
-            this.lastUpdateDay = WorldUtils.day(world);
         }
     }
 
@@ -37,6 +36,7 @@ public class TileBrokenMineral extends TileEntity implements IDailyUpdate {
     public void fromTag(BlockState state, CompoundNBT nbt) {
         super.fromTag(state, nbt);
         this.lastUpdateDay = nbt.getInt("LastUpdate");
+        this.check = true;
     }
 
     @Override
@@ -49,14 +49,27 @@ public class TileBrokenMineral extends TileEntity implements IDailyUpdate {
     @Override
     public void onLoad() {
         if (this.world != null && !this.world.isRemote) {
-            if(this.lastUpdateDay != -1 && Math.abs(this.lastUpdateDay - WorldUtils.day(this.world))>0)
-                this.update((ServerWorld) this.world);
             WorldHandler.get((ServerWorld) this.world).addToTracker(this);
+            if(this.check && Math.abs(this.lastUpdateDay - WorldUtils.day(this.world))>0) {
+                this.world.getServer().enqueue(new TickDelayedTask(1, ()->this.update((ServerWorld) this.world)));
+            } else {
+                this.lastUpdateDay = WorldUtils.day(this.world);
+                this.check = false;
+                this.world.getServer().enqueue(new TickDelayedTask(1, this::markDirty));
+            }
         }
     }
 
     @Override
     public void onChunkUnloaded() {
+        if (this.world != null && !this.world.isRemote) {
+            WorldHandler.get((ServerWorld) this.world).removeFromTracker(this);
+        }
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
         if (this.world != null && !this.world.isRemote) {
             WorldHandler.get((ServerWorld) this.world).removeFromTracker(this);
         }

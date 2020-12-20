@@ -1190,6 +1190,7 @@ public class ModItems {
     public static final RegistryObject<Item> shippingBin = blockItem("shippping_bin", () -> ModBlocks.shipping);
     public static final RegistryObject<Item> requestBoard = blockItem("black_board", () -> ModBlocks.board);
     public static final RegistryObject<Item> spawner = blockItem("boss_spawner", () -> ModBlocks.bossSpawner, RFCreativeTabs.monsters);
+    public static final RegistryObject<Item> farmland = blockItem("farmland", () -> ModBlocks.farmland, null);
 
     public static RegistryObject<Item> hoe(EnumToolTier tier) {
         return ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().addToolType(ToolType.HOE, tier.getTierLevel()).group(RFCreativeTabs.weaponToolTab)));

@@ -35,7 +35,7 @@ public class FoodManager extends JsonReloadListener {
     }
 
     public FoodProperties get(Item item) {
-        return food.get(item.getRegistryName());
+        return this.food.get(item.getRegistryName());
     }
 
     @Override
@@ -60,8 +60,8 @@ public class FoodManager extends JsonReloadListener {
     }
 
     public void toPacket(PacketBuffer buffer) {
-        buffer.writeInt(food.size());
-        food.forEach((res, prop) -> {
+        buffer.writeInt(this.food.size());
+        this.food.forEach((res, prop) -> {
             buffer.writeResourceLocation(res);
             prop.toPacket(buffer);
         });
@@ -72,6 +72,6 @@ public class FoodManager extends JsonReloadListener {
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
             builder.put(buffer.readResourceLocation(), FoodProperties.fromPacket(buffer));
-        food = builder.build();
+        this.food = builder.build();
     }
 }

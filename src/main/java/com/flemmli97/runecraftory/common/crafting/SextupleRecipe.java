@@ -54,15 +54,14 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
             System.out.println(itemstack.getTag());
             if (!itemstack.isEmpty()) {
                 ++i;
-                if (isSimple)
+                if (this.isSimple)
                     recipeitemhelper.func_221264_a(itemstack, 1);
                 else inputs.add(itemstack);
             }
         }
         this.getIngredients().forEach(ing -> System.out.println("ing " + ing.serialize()));
-        System.out.println("ing " + this.getIngredients());
-        boolean unlocked = inv.getPlayer() instanceof ServerPlayerEntity ? ((ServerPlayerEntity) inv.getPlayer()).getRecipeBook().isUnlocked(this) : false;
-        return unlocked && i == this.recipeItems.size() && (isSimple ? recipeitemhelper.canCraft(this, null) : RecipeMatcher.findMatches(inputs, this.recipeItems) != null);
+        boolean unlocked = inv.getPlayer() instanceof ServerPlayerEntity && ((ServerPlayerEntity) inv.getPlayer()).getRecipeBook().isUnlocked(this);
+        return unlocked && i == this.recipeItems.size() && (this.isSimple ? recipeitemhelper.canCraft(this, null) : RecipeMatcher.findMatches(inputs, this.recipeItems) != null);
     }
 
     @Override
@@ -130,7 +129,7 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
                 throw new JsonParseException("Too many ingredients for shapeless recipe the max is " + 6);
             } else {
                 ItemStack itemstack = CraftingHelper.getItemStack(JSONUtils.getJsonObject(obj, "result"), true);
-                return get(res, s, level, itemstack, nonnulllist);
+                return this.get(res, s, level, itemstack, nonnulllist);
             }
         }
 
@@ -157,7 +156,7 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
                 nonnulllist.set(j, Ingredient.read(buffer));
             }
             ItemStack itemstack = buffer.readItemStack();
-            return get(res, s, level, itemstack, nonnulllist);
+            return this.get(res, s, level, itemstack, nonnulllist);
         }
 
         public abstract T get(ResourceLocation id, String group, int level, ItemStack result, NonNullList<Ingredient> ingredients);

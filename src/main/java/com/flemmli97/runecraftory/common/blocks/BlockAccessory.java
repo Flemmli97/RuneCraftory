@@ -13,7 +13,7 @@ public class BlockAccessory extends BlockCrafting {
     }
 
     @Override
-    public TileEntity getTile(BlockState state, IBlockReader world) {
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
         return new TileAccessory();
     }
 }

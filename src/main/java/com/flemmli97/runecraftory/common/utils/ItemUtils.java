@@ -26,7 +26,7 @@ public class ItemUtils {
     public static void spawnItemAt(World world, BlockPos pos, ItemStack stack) {
         if (!world.isRemote) {
             ItemNBT.initNBT(stack);
-            ItemEntity item = new ItemEntity(world, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), stack);
+            ItemEntity item = new ItemEntity(world, pos.getX(), pos.getY(), pos.getZ(), stack);
             item.setPickupDelay(0);
             world.addEntity(item);
         }

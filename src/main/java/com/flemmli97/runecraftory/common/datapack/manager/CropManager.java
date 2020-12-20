@@ -29,11 +29,11 @@ public class CropManager extends JsonReloadListener {
     }
 
     public CropProperties get(Item item) {
-        if (crops.containsKey(item.getRegistryName()))
-            return crops.get(item.getRegistryName());
+        if (this.crops.containsKey(item.getRegistryName()))
+            return this.crops.get(item.getRegistryName());
         for (ResourceLocation tag : item.getTags())
-            if (crops.containsKey(tag))
-                return crops.get(tag);
+            if (this.crops.containsKey(tag))
+                return this.crops.get(tag);
         return null;
     }
 
@@ -59,8 +59,8 @@ public class CropManager extends JsonReloadListener {
     }
 
     public void toPacket(PacketBuffer buffer) {
-        buffer.writeInt(crops.size());
-        crops.forEach((res, prop) -> {
+        buffer.writeInt(this.crops.size());
+        this.crops.forEach((res, prop) -> {
             buffer.writeResourceLocation(res);
             prop.toPacket(buffer);
         });
@@ -71,6 +71,6 @@ public class CropManager extends JsonReloadListener {
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
             builder.put(buffer.readResourceLocation(), CropProperties.fromPacket(buffer));
-        crops = builder.build();
+        this.crops = builder.build();
     }
 }

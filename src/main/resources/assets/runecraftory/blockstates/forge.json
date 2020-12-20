@@ -1,12 +1,12 @@
 {
     "variants": {
-        "facing=south,part=left": { "model": "runecraftory:forge1" },
-        "facing=west,part=left": { "model": "runecraftory:forge1","y":90 },
-        "facing=north,part=left": { "model": "runecraftory:forge1","y":180 },
-        "facing=east,part=left": { "model": "runecraftory:forge1","y":270 },
-        "facing=south,part=right": { "model": "runecraftory:forge2" },
-        "facing=west,part=right": { "model": "runecraftory:forge2","y":90 },
-        "facing=north,part=right": { "model": "runecraftory:forge2","y":180 },
-        "facing=east,part=right": { "model": "runecraftory:forge2","y":270 }
+        "facing=south,part=left": { "model": "runecraftory:block/forge1" },
+        "facing=west,part=left": { "model": "runecraftory:block/forge1","y":90 },
+        "facing=north,part=left": { "model": "runecraftory:block/forge1","y":180 },
+        "facing=east,part=left": { "model": "runecraftory:block/forge1","y":270 },
+        "facing=south,part=right": { "model": "runecraftory:block/forge2" },
+        "facing=west,part=right": { "model": "runecraftory:block/forge2","y":90 },
+        "facing=north,part=right": { "model": "runecraftory:block/forge2","y":180 },
+        "facing=east,part=right": { "model": "runecraftory:block/forge2","y":270 }
     }
 }
