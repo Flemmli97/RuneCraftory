@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.api.enums;
 
 public enum EnumToolTier {
+
     SCRAP(0, "scrap"),
     IRON(1, "iron"),
     SILVER(2, "silver"),

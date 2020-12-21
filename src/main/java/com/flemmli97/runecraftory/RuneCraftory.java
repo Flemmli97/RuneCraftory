@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory;
 
+import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.client.ClientEvents;
 import com.flemmli97.runecraftory.client.ClientRegister;
 import com.flemmli97.runecraftory.common.MobModule;
@@ -20,10 +21,12 @@ import com.flemmli97.runecraftory.common.registry.ModPotions;
 import com.flemmli97.runecraftory.common.registry.ModSpells;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import net.minecraft.item.crafting.IRecipeSerializer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -31,6 +34,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.RegistryBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,7 +54,7 @@ public class RuneCraftory {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         modBus.addListener(this::clientSetup);
         modBus.addListener(this::common);
-
+        modBus.addListener(this::newReg);
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> ClientEvents::register);
 
         registries(modBus);
@@ -83,6 +87,12 @@ public class RuneCraftory {
         modBus.addGenericListener(IRecipeSerializer.class, ModCrafting::register);
         ModLootModifier.SERIALZER.register(modBus);
         modBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootModifier::register);
+        ModSpells.SPELLS.register(modBus);
+    }
+
+    public void newReg(RegistryEvent.NewRegistry event) {
+        new RegistryBuilder().setName(new ResourceLocation(RuneCraftory.MODID, "spell_registry"))
+                .setType(Spell.class).setDefaultKey(new ResourceLocation(RuneCraftory.MODID, "empty_spell")).create();
     }
 
     public void clientSetup(FMLClientSetupEvent event) {
@@ -94,7 +104,6 @@ public class RuneCraftory {
         event.enqueueWork(() -> {
             ModEntities.registerAttributes();
         });
-        ModSpells.register();
         CapabilityManager.INSTANCE.register(IPlayerCap.class, new PlayerCapNetwork(), PlayerCapImpl::new);
     }
 }

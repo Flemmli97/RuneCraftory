@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 import java.util.function.Supplier;
 
@@ -21,7 +22,7 @@ public class ItemSpell extends Item {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        if (!player.world.isRemote && player.getCooldownTracker().getCooldown(this, 0) <= 0 && this.spell.get().use(world, player, player.getHeldItem(hand))) {
+        if (!player.world.isRemote && player.getCooldownTracker().getCooldown(this, 0) <= 0 && this.spell.get().use((ServerWorld) world, player, player.getHeldItem(hand))) {
             player.getCooldownTracker().setCooldown(this, this.getSpell().coolDown());
             this.spell.get().levelSkill(player);
             return ActionResult.success(player.getHeldItem(hand));

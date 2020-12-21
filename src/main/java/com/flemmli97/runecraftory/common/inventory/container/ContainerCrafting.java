@@ -36,8 +36,8 @@ public class ContainerCrafting extends Container {
         this(windowId, inv, getTile(inv.player.world, data));
     }
 
-    public ContainerCrafting(int p_i50105_2_, PlayerInventory playerInv, TileCrafting tile) {
-        super(ModContainer.craftingContainer.get(), p_i50105_2_);
+    public ContainerCrafting(int windowID, PlayerInventory playerInv, TileCrafting tile) {
+        super(ModContainer.craftingContainer.get(), windowID);
         this.outPutInv = new DummyInventory(new ItemStackHandler());
         this.craftingInv = PlayerContainerInv.create(this, tile, playerInv.player);
         this.type = tile.craftingType();
@@ -52,8 +52,6 @@ public class ContainerCrafting extends Container {
         }
         for (int i = 0; i < 3; ++i) {
             this.addSlot(new Slot(this.craftingInv, i, 20 + i * 18, 26));
-        }
-        for (int i = 0; i < 3; ++i) {
             this.addSlot(new Slot(this.craftingInv, i + 3, 20 + i * 18, 44));
         }
         this.updateCraftingOutput();
@@ -64,15 +62,15 @@ public class ContainerCrafting extends Container {
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity p_75145_1_) {
+    public boolean canInteractWith(PlayerEntity player) {
         return true;
     }
 
     @Override
-    public void onCraftMatrixChanged(IInventory p_75130_1_) {
-        if (p_75130_1_ == this.craftingInv)
+    public void onCraftMatrixChanged(IInventory inv) {
+        if (inv == this.craftingInv)
             this.updateCraftingOutput();
-        super.onCraftMatrixChanged(p_75130_1_);
+        super.onCraftMatrixChanged(inv);
     }
 
     public void updateCraftingOutput() {
@@ -125,18 +123,18 @@ public class ContainerCrafting extends Container {
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity p_82846_1_, int p_82846_2_) {
+    public ItemStack transferStackInSlot(PlayerEntity player, int slotID) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = this.inventorySlots.get(p_82846_2_);
+        Slot slot = this.inventorySlots.get(slotID);
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
             itemstack = itemstack1.copy();
-            if (p_82846_2_ == 0) {
-                itemstack1.onCrafting(p_82846_1_.world, p_82846_1_, itemstack1.getCount());
+            if (slotID == 0) {
+                itemstack1.onCrafting(player.world, player, itemstack1.getCount());
                 if (!this.mergeItemStack(itemstack1, 1, 36, false))
                     return ItemStack.EMPTY;
                 slot.onSlotChange(itemstack1, itemstack);
-            } else if (p_82846_2_ < 37) {
+            } else if (slotID < 37) {
                 if (!this.mergeItemStack(itemstack1, 37, this.inventorySlots.size(), false)) {
                     return ItemStack.EMPTY;
                 }
@@ -149,19 +147,14 @@ public class ContainerCrafting extends Container {
             } else {
                 slot.onSlotChanged();
             }
-            if (itemstack1.isEmpty()) {
-                slot.putStack(ItemStack.EMPTY);
-            } else {
-                slot.onSlotChanged();
-            }
 
             if (itemstack1.getCount() == itemstack.getCount()) {
                 return ItemStack.EMPTY;
             }
 
-            ItemStack itemstack2 = slot.onTake(p_82846_1_, itemstack1);
-            if (p_82846_2_ == 0) {
-                p_82846_1_.dropItem(itemstack2, false);
+            ItemStack itemstack2 = slot.onTake(player, itemstack1);
+            if (slotID == 0) {
+                player.dropItem(itemstack2, false);
             }
         }
 
@@ -169,12 +162,8 @@ public class ContainerCrafting extends Container {
     }
 
     public static List<SextupleRecipe> getRecipes(PlayerContainerInv inv, EnumCrafting type) {
-        if (inv.getPlayer() instanceof ServerPlayerEntity) {
-
-
+        if (inv.getPlayer() instanceof ServerPlayerEntity)
             return inv.getPlayer().getServer().getRecipeManager().getRecipes(CraftingUtils.getType(type), inv, ((ServerPlayerEntity) inv.getPlayer()).getServerWorld());
-
-        }
         return Lists.newArrayList();
     }
 

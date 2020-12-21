@@ -25,8 +25,7 @@ public class TileBrokenMineral extends TileEntity implements IDailyUpdate {
     public void update(ServerWorld world) {
         BlockState state = this.getBlockState();
         Block block = state.getBlock();
-        if(block instanceof BlockBrokenMineral)
-        {
+        if (block instanceof BlockBrokenMineral) {
             BlockBrokenMineral mineral = (BlockBrokenMineral) block;
             this.world.setBlockState(this.pos, mineral.getMineralState(state));
         }
@@ -50,8 +49,8 @@ public class TileBrokenMineral extends TileEntity implements IDailyUpdate {
     public void onLoad() {
         if (this.world != null && !this.world.isRemote) {
             WorldHandler.get((ServerWorld) this.world).addToTracker(this);
-            if(this.check && Math.abs(this.lastUpdateDay - WorldUtils.day(this.world))>0) {
-                this.world.getServer().enqueue(new TickDelayedTask(1, ()->this.update((ServerWorld) this.world)));
+            if (this.check && Math.abs(this.lastUpdateDay - WorldUtils.day(this.world)) > 0) {
+                this.world.getServer().enqueue(new TickDelayedTask(1, () -> this.update((ServerWorld) this.world)));
             } else {
                 this.lastUpdateDay = WorldUtils.day(this.world);
                 this.check = false;

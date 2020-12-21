@@ -1,10 +1,13 @@
 package com.flemmli97.runecraftory.data;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FarmlandBlock;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
@@ -69,11 +72,36 @@ public class BlockStatesGen extends BlockStateProvider {
                             BlockStateProperties.WATERLOGGED
                     );
         });
+        this.craftingModel(ModBlocks.forge.get());
+        this.craftingModel(ModBlocks.accessory.get());
+        this.craftingModel(ModBlocks.cooking.get());
+        this.craftingModel(ModBlocks.chemistry.get());
+        this.simpleBlock(ModBlocks.board.get());
+        this.simpleBlock(ModBlocks.bossSpawner.get(), this.models().getExistingFile(new ResourceLocation("block/"+ Blocks.SPAWNER.getRegistryName().getPath())));
+
+        this.getVariantBuilder(ModBlocks.farmland.get()).forAllStates(state->ConfiguredModel.builder().modelFile(
+                this.models().getExistingFile(state.get(FarmlandBlock.MOISTURE) == 7 ? new ResourceLocation("block/farmland_moist"):new ResourceLocation("block/farmland")))
+                .build());
+
+        this.getVariantBuilder(ModBlocks.shipping.get()).forAllStates(state->ConfiguredModel.builder().modelFile(
+                this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/shipping_bin")))
+                        .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle()) % 360)
+                        .build());
     }
 
     public ResourceLocation mineralTexture(Block block) {
         ResourceLocation name = block.getRegistryName();
         return new ResourceLocation(name.getNamespace(), "blocks" + "/" + name.getPath().replace("broken_", ""));
+    }
+
+    private void craftingModel(Block block){
+        this.getVariantBuilder(block)
+                .forAllStatesExcept(state -> ConfiguredModel.builder()
+                                .modelFile(this.models().cubeAll(block.getRegistryName().toString() + "_" + state.get(BlockCrafting.PART).getString(), new ResourceLocation("block/stone")))
+                                .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle()) % 360)
+                                .build()
+                        //, BlockStateProperties.WATERLOGGED
+                );
     }
 
     @Override

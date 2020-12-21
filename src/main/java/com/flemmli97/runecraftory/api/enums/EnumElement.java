@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory.api.enums;
 import net.minecraft.util.text.TextFormatting;
 
 public enum EnumElement {
+
     NONE(TextFormatting.GRAY, "element_none"),
     WATER(TextFormatting.DARK_BLUE, "element_water"),
     EARTH(TextFormatting.YELLOW, "element_earth"),

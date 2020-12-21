@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.api.enums;
 
 public enum EnumDay {
+
     MONDAY("day.monday"),
     TUESDAY("day.tuesday"),
     WEDNESDAY("day.wednesday"),

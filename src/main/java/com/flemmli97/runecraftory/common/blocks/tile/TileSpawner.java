@@ -7,7 +7,6 @@ import com.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -41,10 +40,8 @@ public class TileSpawner extends TileEntity implements ITickableTileEntity {
             Entity e = ForgeRegistries.ENTITIES.getValue(this.savedEntity).create(this.world);
             if (e != null) {
                 this.lastUpdateDay = WorldUtils.day(this.world);
-                int k = this.world.getEntitiesWithinAABB(e.getClass(), (new AxisAlignedBB(this.pos).grow(32))).size();
-                if (k != 0) {
+                if (this.world.getEntitiesWithinAABB(e.getClass(), (new AxisAlignedBB(this.pos).grow(32))).size() != 0)
                     return;
-                }
                 if (e instanceof BaseMonster)
                     ((BaseMonster) e).setLevel(LevelCalc.levelFromPos(this.world, this.pos));
                 e.setLocationAndAngles(this.pos.getX() + 0.5, this.pos.getY() + 5, this.pos.getZ() + 0.5, this.world.rand.nextFloat() * 360.0F, 0.0F);
@@ -57,14 +54,10 @@ public class TileSpawner extends TileEntity implements ITickableTileEntity {
         }
     }
 
-    public boolean setEntity(PlayerEntity player, ResourceLocation entity) {
-        if (player == null || player.canUseCommandBlock()) {
-            this.savedEntity = entity;
-            this.spawnEntity();
-            this.lastUpdateDay = WorldUtils.day(this.world);
-            return true;
-        }
-        return false;
+    public void setEntity(ResourceLocation entity) {
+        this.savedEntity = entity;
+        this.spawnEntity();
+        this.lastUpdateDay = WorldUtils.day(this.world);
     }
 
     @Override

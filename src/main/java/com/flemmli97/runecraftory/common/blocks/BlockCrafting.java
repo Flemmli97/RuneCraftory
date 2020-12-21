@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.blocks;
 
 import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrafting;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -33,15 +34,13 @@ import javax.annotation.Nullable;
 public class BlockCrafting extends Block {
 
     public static final EnumProperty<EnumPart> PART = EnumProperty.create("part", EnumPart.class);
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     private final EnumCrafting type;
-    private final boolean hasUpgradeScreen;
 
-    public BlockCrafting(EnumCrafting type, Properties p_i48440_1_) {
-        super(p_i48440_1_);
+    public BlockCrafting(EnumCrafting type, AbstractBlock.Properties props) {
+        super(props);
         this.type = type;
-        this.hasUpgradeScreen = type == EnumCrafting.ARMOR || type == EnumCrafting.FORGE;
     }
 
     @Override
@@ -62,22 +61,18 @@ public class BlockCrafting extends Block {
 
     @Override
     @Nullable
-    public BlockState getStateForPlacement(BlockItemUseContext p_196258_1_) {
-        BlockPos blockpos = p_196258_1_.getPos();
-        if (blockpos.getY() < 255 && p_196258_1_.getWorld().getBlockState(blockpos.up()).isReplaceable(p_196258_1_)) {
-            World world = p_196258_1_.getWorld();
-            return this.getDefaultState().with(FACING, p_196258_1_.getPlacementHorizontalFacing().getOpposite()).with(PART, EnumPart.LEFT);
+    public BlockState getStateForPlacement(BlockItemUseContext ctx) {
+        BlockPos blockpos = ctx.getPos();
+        if (blockpos.getY() < 255 && ctx.getWorld().getBlockState(blockpos.up()).isReplaceable(ctx)) {
+            return this.getDefaultState().with(FACING, ctx.getPlacementHorizontalFacing().getOpposite()).with(PART, EnumPart.LEFT);
         } else {
             return null;
         }
     }
 
-    /**
-     * Called by ItemBlocks after a block is set in the world, to allow post-place logic
-     */
     @Override
-    public void onBlockPlacedBy(World p_180633_1_, BlockPos p_180633_2_, BlockState p_180633_3_, LivingEntity living, ItemStack p_180633_5_) {
-        p_180633_1_.setBlockState(p_180633_2_.offset(living.getHorizontalFacing().getOpposite().rotateYCCW()), p_180633_3_.with(PART, EnumPart.RIGTH), 3);
+    public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity living, ItemStack stack) {
+        world.setBlockState(pos.offset(living.getHorizontalFacing().getOpposite().rotateYCCW()), state.with(PART, EnumPart.RIGTH), 3);
     }
 
     @Override
@@ -87,47 +82,40 @@ public class BlockCrafting extends Block {
         } else {
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TileCrafting) {
-                NetworkHooks.openGui((ServerPlayerEntity) player, (TileCrafting) tile, pos);
+                if (player.isSneaking() && this.hasUpgradeScreen())
+                    ;
+                else
+                    NetworkHooks.openGui((ServerPlayerEntity) player, (TileCrafting) tile, pos);
             }
-            /*
-            BlockPos newPos = pos;
-            if(state.getValue(PART)==EnumPartType.RIGHT)
-                newPos=newPos.offset(state.getValue(FACING).rotateY());
-            if(!player.isSneaking())
-                player.openGui(RuneCraftory.instance, LibReference.guiMaking, world, newPos.getX(), newPos.getY(), newPos.getZ());
-            else if(this.hasUpgrade())
-                player.openGui(RuneCraftory.instance, LibReference.guiUpgrade, world, newPos.getX(), newPos.getY(), newPos.getZ());
-
-             */
-            return ActionResultType.success(world.isRemote);
+            return ActionResultType.SUCCESS;
         }
     }
 
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader p_196260_2_, BlockPos p_196260_3_) {
+    public boolean isValidPosition(BlockState state, IWorldReader reader, BlockPos pos) {
         if (state.get(PART) == EnumPart.LEFT) {
-            BlockState blockstate = p_196260_2_.getBlockState(p_196260_3_.offset(state.get(FACING).rotateYCCW()));
+            BlockState blockstate = reader.getBlockState(pos.offset(state.get(FACING).rotateYCCW()));
             return blockstate.getMaterial().isReplaceable();
         }
-        BlockState blockstate = p_196260_2_.getBlockState(p_196260_3_.offset(state.get(FACING).rotateY()));
+        BlockState blockstate = reader.getBlockState(pos.offset(state.get(FACING).rotateY()));
         return blockstate.isIn(this);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> p_206840_1_) {
-        p_206840_1_.add(FACING, PART);
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+        builder.add(FACING, PART);
     }
 
     @Override
-    public void onReplaced(BlockState p_196243_1_, World p_196243_2_, BlockPos p_196243_3_, BlockState p_196243_4_, boolean p_196243_5_) {
-        if (!p_196243_1_.isIn(p_196243_4_.getBlock())) {
-            TileEntity tileentity = p_196243_2_.getTileEntity(p_196243_3_);
+    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState orig, boolean moving) {
+        if (!state.isIn(orig.getBlock())) {
+            TileEntity tileentity = world.getTileEntity(pos);
             if (tileentity instanceof IInventory) {
-                InventoryHelper.dropInventoryItems(p_196243_2_, p_196243_3_, (IInventory) tileentity);
-                p_196243_2_.updateComparatorOutputLevel(p_196243_3_, this);
+                InventoryHelper.dropInventoryItems(world, pos, (IInventory) tileentity);
+                world.updateComparatorOutputLevel(pos, this);
             }
 
-            super.onReplaced(p_196243_1_, p_196243_2_, p_196243_3_, p_196243_4_, p_196243_5_);
+            super.onReplaced(state, world, pos, orig, moving);
         }
     }
 
@@ -136,11 +124,22 @@ public class BlockCrafting extends Block {
         return state.get(PART) == EnumPart.LEFT;
     }
 
-    enum EnumPart implements IStringSerializable {
+    public BlockPos getOtherPos(BlockPos from, BlockState state) {
+        if (state.get(PART) == EnumPart.LEFT)
+            return from.offset(state.get(FACING).rotateY());
+        return from.offset(state.get(FACING).rotateYCCW());
+    }
+
+    public boolean hasUpgradeScreen() {
+        return this.type == EnumCrafting.ARMOR || this.type == EnumCrafting.FORGE;
+    }
+
+    public enum EnumPart implements IStringSerializable {
+
         LEFT("left"),
         RIGTH("right");
 
-        final String s;
+        private final String s;
 
         EnumPart(String s) {
             this.s = s;

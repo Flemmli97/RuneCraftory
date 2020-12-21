@@ -20,6 +20,10 @@ public class ItemModels extends ItemModelProvider {
         this.singleTexture(ModItems.forgingBread.get().getRegistryName().getPath(), this.mcLoc("item/generated"), "layer0", this.mcLoc("item/bread"));
         this.singleTexture(ModItems.chemistryBread.get().getRegistryName().getPath(), this.mcLoc("item/generated"), "layer0", this.mcLoc("item/bread"));
         this.singleTexture(ModItems.cookingBread.get().getRegistryName().getPath(), this.mcLoc("item/generated"), "layer0", this.mcLoc("item/bread"));
+
+        this.withExistingParent(ModItems.farmland.get().getRegistryName().getPath(), "block/farmland");
+        this.withExistingParent(ModItems.spawner.get().getRegistryName().getPath(), "block/spawner");
+
         for (SpawnEgg egg : SpawnEgg.getEggs())
             this.withExistingParent(egg.getRegistryName().getPath(), ModelsResourceUtil.getMinecraftNamespacedItem("template_spawn_egg"));
     }

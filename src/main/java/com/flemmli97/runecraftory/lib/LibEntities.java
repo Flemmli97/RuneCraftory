@@ -27,4 +27,6 @@ public class LibEntities {
     public static final ResourceLocation ambrosia_wave = new ResourceLocation(RuneCraftory.MODID, "ambrosia_wave");
     public static final ResourceLocation butterfly = new ResourceLocation(RuneCraftory.MODID, "butterfly");
 
+    public static final ResourceLocation fireball = new ResourceLocation(RuneCraftory.MODID, "fireball");
+
 }

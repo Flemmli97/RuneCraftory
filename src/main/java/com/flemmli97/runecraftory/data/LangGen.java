@@ -65,6 +65,9 @@ public class LangGen implements IDataProvider {
 
         this.add("recipe.eat.unlock", "Unlocked recipe for %s");
         this.add("recipe.eat.fail", "Didn't learn any recipe. Maybe your crafting level is too low");
+
+        this.add("container.shipping_bin", "Shipping Bin");
+
     }
 
     private void setupOldFile(ExistingFileHelper existing) {

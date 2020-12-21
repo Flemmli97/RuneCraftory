@@ -5,6 +5,7 @@ import net.minecraft.util.IStringSerializable;
 import java.util.Random;
 
 public enum EnumMineralTier implements IStringSerializable {
+
     IRON("iron"),
     BRONZE("bronze"),
     SILVER("silver"),
@@ -26,21 +27,15 @@ public enum EnumMineralTier implements IStringSerializable {
     }
 
     @Override
-    public String toString() {
-        return this.name;
-    }
-
-    @Override
     public String getString() {
         return this.name;
     }
 
     public static EnumMineralTier randomNonElemental(Random rand) {
-        return values()[rand.nextInt(5)];
+        return values()[rand.nextInt(8)];
     }
 
     public static boolean isElemental(EnumMineralTier tier) {
-        return tier == EnumMineralTier.AMETHYST || tier == EnumMineralTier.AQUAMARINE || tier == EnumMineralTier.EMERALD || tier == EnumMineralTier.RUBY || tier == EnumMineralTier.SAPPHIRE;
+        return tier.ordinal() > 7;
     }
-
 }

@@ -16,6 +16,7 @@ import com.flemmli97.runecraftory.client.render.monster.RenderPommePomme;
 import com.flemmli97.runecraftory.client.render.monster.RenderWooly;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderAmbrosiaWave;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
+import com.flemmli97.runecraftory.client.render.projectiles.RenderFireball;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderSleepBall;
 import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
@@ -57,6 +58,8 @@ public class ClientRegister {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.ambrosia_wave.get(), RenderAmbrosiaWave::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.butterfly.get(), RenderButterfly::new);
 
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.fireBall.get(), RenderFireball::new);
+
         ClientHandlers.overlay = new OverlayGui(Minecraft.getInstance());
 
         event.enqueueWork(() -> {
@@ -64,6 +67,8 @@ public class ClientRegister {
                 if (reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop || reg.get() instanceof BlockMineral || reg.get() instanceof BlockBrokenMineral)
                     RenderTypeLookup.setRenderLayer(reg.get(), RenderType.getCutout());
             });
+
+            RenderTypeLookup.setRenderLayer(ModBlocks.bossSpawner.get(), RenderType.getCutout());
 
             ScreenManager.registerFactory(ModContainer.craftingContainer.get(), CraftingGui::new);
         });

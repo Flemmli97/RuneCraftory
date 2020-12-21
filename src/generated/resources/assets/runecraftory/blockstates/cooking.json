@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,part=left": {
+      "model": "runecraftory:block/cooking_left",
+      "y": 180
+    },
+    "facing=south,part=left": {
+      "model": "runecraftory:block/cooking_left"
+    },
+    "facing=west,part=left": {
+      "model": "runecraftory:block/cooking_left",
+      "y": 90
+    },
+    "facing=east,part=left": {
+      "model": "runecraftory:block/cooking_left",
+      "y": 270
+    },
+    "facing=north,part=right": {
+      "model": "runecraftory:block/cooking_right",
+      "y": 180
+    },
+    "facing=south,part=right": {
+      "model": "runecraftory:block/cooking_right"
+    },
+    "facing=west,part=right": {
+      "model": "runecraftory:block/cooking_right",
+      "y": 90
+    },
+    "facing=east,part=right": {
+      "model": "runecraftory:block/cooking_right",
+      "y": 270
+    }
+  }
+}

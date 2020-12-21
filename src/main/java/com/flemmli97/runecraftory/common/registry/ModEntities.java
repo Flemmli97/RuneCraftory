@@ -20,6 +20,7 @@ import com.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.entities.projectiles.EntityAmbrosiaSleep;
 import com.flemmli97.runecraftory.common.entities.projectiles.EntityAmbrosiaWave;
 import com.flemmli97.runecraftory.common.entities.projectiles.EntityButterfly;
+import com.flemmli97.runecraftory.common.entities.projectiles.EntityFireball;
 import com.flemmli97.runecraftory.common.entities.projectiles.EntityMobArrow;
 import com.flemmli97.runecraftory.common.items.RuneCraftoryEggItem;
 import com.flemmli97.runecraftory.lib.LibAttributes;
@@ -149,6 +150,8 @@ public class ModEntities {
     public static final RegistryObject<EntityType<EntityAmbrosiaSleep>> sleep_ball = reg(EntityType.Builder.<EntityAmbrosiaSleep>create(EntityAmbrosiaSleep::new, EntityClassification.MISC).size(0.6f, 1.2f).maxTrackingRange(4), LibEntities.ambrosia_sleep);
     public static final RegistryObject<EntityType<EntityAmbrosiaWave>> ambrosia_wave = reg(EntityType.Builder.<EntityAmbrosiaWave>create(EntityAmbrosiaWave::new, EntityClassification.MISC).size(0.05f, 0.05f).maxTrackingRange(4), LibEntities.ambrosia_wave);
     public static final RegistryObject<EntityType<EntityButterfly>> butterfly = reg(EntityType.Builder.<EntityButterfly>create(EntityButterfly::new, EntityClassification.MISC).size(0.2f, 0.2f).maxTrackingRange(4), LibEntities.butterfly);
+
+    public static final RegistryObject<EntityType<EntityFireball>> fireBall = reg(EntityType.Builder.<EntityFireball>create(EntityFireball::new, EntityClassification.MISC).size(0.2f, 0.2f).maxTrackingRange(4), LibEntities.fireball);
 
     public static void registerAttributes() {
         GlobalEntityTypeAttributes.put(gate.get(), GateEntity.createAttributes().build());

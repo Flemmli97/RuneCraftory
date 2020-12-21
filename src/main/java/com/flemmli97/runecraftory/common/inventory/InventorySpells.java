@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.common.inventory;
 
+import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
@@ -8,6 +9,7 @@ import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.items.IItemHandler;
 
 public class InventorySpells implements IItemHandler {
@@ -67,8 +69,13 @@ public class InventorySpells implements IItemHandler {
 
     public void useSkill(PlayerEntity player, int index) {
         ItemStack stack = this.getStackInSlot(index);
-        if (stack.getItem() instanceof ItemSpell && player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f) <= 0.0f)
-            ((ItemSpell) stack.getItem()).getSpell().use(player.world, player, stack);
+        if (!player.world.isRemote && stack.getItem() instanceof ItemSpell && player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f) <= 0.0f) {
+            Spell spell = ((ItemSpell) stack.getItem()).getSpell();
+            if(spell.use((ServerWorld) player.world, player, stack)) {
+                player.getCooldownTracker().setCooldown(stack.getItem(), spell.coolDown());
+                spell.levelSkill(player);
+            }
+        }
     }
 
     public void dropItemsAt(LivingEntity entity) {

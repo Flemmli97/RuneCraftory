@@ -6,5 +6,4 @@ public enum EnumNPCPersonality {
     ALL,
     CHERRISH,
     GRUMPY
-
 }

@@ -3,7 +3,7 @@ package com.flemmli97.runecraftory.api;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public abstract class Spell extends ForgeRegistryEntry<Spell> {
@@ -14,5 +14,7 @@ public abstract class Spell extends ForgeRegistryEntry<Spell> {
 
     public abstract int coolDown();
 
-    public abstract boolean use(World world, LivingEntity player, ItemStack stack);
+    public abstract boolean use(ServerWorld world, LivingEntity entity, ItemStack stack);
+
+    public abstract int rpCost();
 }

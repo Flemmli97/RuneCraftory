@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory.api.enums;
 import net.minecraft.util.text.TextFormatting;
 
 public enum EnumSeason {
+
     SPRING(TextFormatting.RED, "season.spring"),
     SUMMER(TextFormatting.DARK_GREEN, "season.summer"),
     FALL(TextFormatting.GOLD, "season.fall"),

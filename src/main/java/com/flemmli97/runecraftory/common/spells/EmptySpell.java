@@ -4,7 +4,7 @@ import com.flemmli97.runecraftory.api.Spell;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class EmptySpell extends Spell {
 
@@ -23,7 +23,12 @@ public class EmptySpell extends Spell {
     }
 
     @Override
-    public boolean use(World world, LivingEntity player, ItemStack stack) {
+    public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack) {
         return true;
+    }
+
+    @Override
+    public int rpCost() {
+        return 0;
     }
 }

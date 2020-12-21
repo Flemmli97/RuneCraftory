@@ -1,13 +1,18 @@
 package com.flemmli97.runecraftory.common.items;
 
+import com.flemmli97.runecraftory.common.blocks.tile.TileSpawner;
 import com.flemmli97.runecraftory.common.entities.IBaseMob;
 import com.flemmli97.runecraftory.lib.LibConstants;
 import com.flemmli97.tenshilib.common.item.SpawnEgg;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -53,5 +58,14 @@ public class RuneCraftoryEggItem extends SpawnEgg {
     public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
         tooltip.add(new TranslationTextComponent("tooltip.item.spawn").formatted(TextFormatting.GOLD));
         super.addInformation(stack, world, tooltip, flag);
+    }
+
+    @Override
+    public ActionResultType onBlockUse(ItemStack stack, BlockPos pos, BlockState state, TileEntity tile) {
+        if(tile instanceof TileSpawner){
+            ((TileSpawner) tile).setEntity(this.getType(stack.getTag()).getRegistryName());
+            return ActionResultType.SUCCESS;
+        }
+        return super.onBlockUse(stack, pos, state, tile);
     }
 }

@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.api.enums;
 
 public enum EnumSkills {
+
     SHORTSWORD,
     LONGSWORD,
     SPEAR,

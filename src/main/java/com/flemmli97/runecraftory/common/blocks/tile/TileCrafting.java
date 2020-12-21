@@ -21,8 +21,8 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
     private final NonNullList<ItemStack> inventory;
     private final EnumCrafting type;
 
-    public TileCrafting(TileEntityType<?> p_i48289_1_, EnumCrafting type) {
-        super(p_i48289_1_);
+    public TileCrafting(TileEntityType<?> tileEntityType, EnumCrafting type) {
+        super(tileEntityType);
         this.type = type;
         if (this.type == EnumCrafting.COOKING || this.type == EnumCrafting.CHEM)
             this.inventory = NonNullList.withSize(6, ItemStack.EMPTY);
@@ -75,7 +75,7 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
     }
 
     @Override
-    public Container createMenu(int p_createMenu_1_, PlayerInventory p_createMenu_2_, PlayerEntity p_createMenu_3_) {
-        return new ContainerCrafting(p_createMenu_1_, p_createMenu_2_, this);
+    public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity player) {
+        return new ContainerCrafting(windowID, playerInventory, this);
     }
 }

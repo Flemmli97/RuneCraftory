@@ -721,7 +721,7 @@ public class ModItems {
     public static final RegistryObject<Item> lawn = mat("ayngondaia_lawn");
 
     //Skills and Magic
-    public static final RegistryObject<Item> fireBallSmall = spell(() -> ModSpells.EMPTY, "fireball");
+    public static final RegistryObject<Item> fireBallSmall = spell(() -> ModSpells.FIREBALL, "fireball");
     public static final RegistryObject<Item> fireBallBig = spell(() -> ModSpells.EMPTY, "fireball_big");
     public static final RegistryObject<Item> explosion = spell(() -> ModSpells.EMPTY, "explosion");
     public static final RegistryObject<Item> waterLaser = spell(() -> ModSpells.EMPTY, "water_laser");
@@ -1187,7 +1187,7 @@ public class ModItems {
     public static final RegistryObject<Item> monarchMushroom = ITEMS.register("monarch_mushroom", () -> new ItemMushroom(new Item.Properties().food(foodProp).group(RFCreativeTabs.food)));
     public static final RegistryObject<Item> mealyApple = food("mealy_apple");
 
-    public static final RegistryObject<Item> shippingBin = blockItem("shippping_bin", () -> ModBlocks.shipping);
+    public static final RegistryObject<Item> shippingBin = blockItem("shipping_bin", () -> ModBlocks.shipping);
     public static final RegistryObject<Item> requestBoard = blockItem("black_board", () -> ModBlocks.board);
     public static final RegistryObject<Item> spawner = blockItem("boss_spawner", () -> ModBlocks.bossSpawner, RFCreativeTabs.monsters);
     public static final RegistryObject<Item> farmland = blockItem("farmland", () -> ModBlocks.farmland, null);
@@ -1290,8 +1290,8 @@ public class ModItems {
         return ITEMS.register(name, () -> new ItemMedicine(new Item.Properties().food(foodProp).maxStackSize(16).group(RFCreativeTabs.medicine)));
     }
 
-    public static RegistryObject<Item> spell(Supplier<Spell> sup, String name) {
-        return ITEMS.register(name, () -> new ItemSpell(sup, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.cast)));
+    public static RegistryObject<Item> spell(Supplier<Supplier<Spell>> sup, String name) {
+        return ITEMS.register(name, () -> new ItemSpell(sup.get(), new Item.Properties().maxStackSize(1).group(RFCreativeTabs.cast)));
     }
 
     public static RegistryObject<Item> fish(String name) {

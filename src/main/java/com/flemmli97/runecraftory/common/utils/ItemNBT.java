@@ -4,13 +4,14 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
-import com.flemmli97.runecraftory.api.items.IItemWearable;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.SwordItem;
+import net.minecraft.item.ToolItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
@@ -49,7 +50,7 @@ public class ItemNBT {
 
     public static Map<Attribute, Integer> statIncrease(ItemStack stack) {
         Map<Attribute, Integer> map = new TreeMap<>(ModAttributes.sorted);
-        if (stack.getItem() instanceof IItemUsable) {
+        if (shouldHaveStats(stack)) {
             CompoundNBT compound = getItemNBT(stack);
             if (compound != null && !compound.contains("ItemStats")) {
                 initNBT(stack);
@@ -137,6 +138,7 @@ public class ItemNBT {
     }
 
     public static boolean shouldHaveStats(ItemStack stack) {
-        return stack.getItem() instanceof IItemWearable || MobEntity.getSlotForItemStack(stack) != EquipmentSlotType.MAINHAND;
+        return stack.getItem() instanceof IItemUsable || MobEntity.getSlotForItemStack(stack) != EquipmentSlotType.MAINHAND
+                || stack.getItem() instanceof ToolItem || stack.getItem() instanceof SwordItem;
     }
 }

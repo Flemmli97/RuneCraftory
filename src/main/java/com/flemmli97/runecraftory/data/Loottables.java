@@ -68,10 +68,10 @@ public class Loottables extends ForgeLootTableProvider {
                             .addEntry(this.add(ModItems.jawInsect.get(), 0.2f, 0.2f, 1, 10, 5))));
             this.registerLootTable(ModEntities.orcArcher.get(), LootTable.builder()
                     .addLootPool(this.create().addEntry(this.add(ModItems.bladeShard.get(), 0.4f, 0.2f, 1, 10, 5))
-                        .addEntry(this.add(ModItems.clothCheap.get(), 0.6f, 0.3f, 1, 15, 2))));
+                            .addEntry(this.add(ModItems.clothCheap.get(), 0.6f, 0.3f, 1, 15, 2))));
         }
 
-        private LootPool.Builder create(){
+        private LootPool.Builder create() {
             return LootPool.builder().rolls(ConstantRange.of(1));
         }
 
@@ -79,7 +79,7 @@ public class Loottables extends ForgeLootTableProvider {
             this.lootTables.put(type.getLootTable(), builder);
         }
 
-        private ItemLootEntry.Builder add(IItemProvider item, float chance, float lootingBonus, int lootingMax, int weight, int quality){
+        private ItemLootEntry.Builder add(IItemProvider item, float chance, float lootingBonus, int lootingMax, int weight, int quality) {
             return ItemLootEntry.builder(item).acceptFunction(SetCount.builder(RandomValueRange.of(0, chance)))
                     .acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(0, lootingBonus)).func_216072_a(lootingMax))
                     .weight(weight).quality(quality);
