@@ -579,7 +579,7 @@ public class PlayerCapImpl implements IPlayerCap {
 
     @Override
     public void update(PlayerEntity player) {
-        if (WorldUtils.canUpdateDaily(player.world) || Math.abs(player.world.getGameTime() / 24000 - this.lastUpdated / 24000) >= 1) {
+        if (!player.world.isRemote && (WorldUtils.canUpdateDaily(player.world) || Math.abs(player.world.getGameTime() / 24000 - this.lastUpdated / 24000) >= 1)) {
             this.getShippingInv().shipItems(player);
             this.refreshShop(player);
             this.lastUpdated = player.world.getGameTime();

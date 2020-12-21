@@ -68,6 +68,8 @@ public class LangGen implements IDataProvider {
 
         this.add("container.shipping_bin", "Shipping Bin");
 
+        this.add("shipping.money", "Earning from shipped items: %s");
+
     }
 
     private void setupOldFile(ExistingFileHelper existing) {
