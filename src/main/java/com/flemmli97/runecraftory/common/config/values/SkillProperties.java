@@ -47,11 +47,11 @@ public class SkillProperties {
     }
 
     public SkillProperties read(SkillPropertySpecs specs) {
-        this.hp = specs.hp.get();
+        this.hp = specs.hp.get().floatValue();
         this.rp = specs.rp.get();
-        this.str = specs.str.get();
-        this.vit = specs.vit.get();
-        this.intel = specs.intel.get();
+        this.str = specs.str.get().floatValue();
+        this.vit = specs.vit.get().floatValue();
+        this.intel = specs.intel.get().floatValue();
         this.baseXP = specs.baseXP.get();
         return this;
     }

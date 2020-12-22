@@ -87,7 +87,12 @@ public class ItemNBT {
     public static EnumElement getElement(ItemStack stack) {
         CompoundNBT tag = getItemNBT(stack);
         if (tag != null) {
-            return EnumElement.valueOf(tag.getString("Element"));
+            try {
+                return EnumElement.valueOf(tag.getString("Element"));
+            }
+            catch (IllegalArgumentException e) {
+                return EnumElement.NONE;
+            }
         }
         return EnumElement.NONE;
     }

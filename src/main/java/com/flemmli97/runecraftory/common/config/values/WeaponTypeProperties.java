@@ -35,8 +35,8 @@ public class WeaponTypeProperties {
     }
 
     public WeaponTypeProperties read(WeaponTypePropertySpecs specs) {
-        this.range = specs.range.get();
-        this.aoe = specs.aoe.get();
+        this.range = specs.range.get().floatValue();
+        this.aoe = specs.aoe.get().floatValue();
         this.chargeTime = specs.chargeTime.get();
         this.cooldown = specs.cooldown.get();
         return this;

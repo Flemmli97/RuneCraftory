@@ -37,25 +37,30 @@ public class GeneralConfigSpec {
     public final ForgeConfigSpec.ConfigValue<Integer> startingStr;
     public final ForgeConfigSpec.ConfigValue<Integer> startingVit;
     public final ForgeConfigSpec.ConfigValue<Integer> startingIntel;
-    public final ForgeConfigSpec.ConfigValue<Float> hpPerLevel;
+    public final ForgeConfigSpec.ConfigValue<Double> hpPerLevel;
     public final ForgeConfigSpec.ConfigValue<Integer> rpPerLevel;
-    public final ForgeConfigSpec.ConfigValue<Float> strPerLevel;
-    public final ForgeConfigSpec.ConfigValue<Float> vitPerLevel;
-    public final ForgeConfigSpec.ConfigValue<Float> intPerLevel;
+    public final ForgeConfigSpec.ConfigValue<Double> strPerLevel;
+    public final ForgeConfigSpec.ConfigValue<Double> vitPerLevel;
+    public final ForgeConfigSpec.ConfigValue<Double> intPerLevel;
     public final EnumMap<EnumSkills, SkillPropertySpecs> skillProps = new EnumMap<>(EnumSkills.class);
 
-    public final ForgeConfigSpec.ConfigValue<Float> scrapMultiplier;
-    public final ForgeConfigSpec.ConfigValue<Float> ironMultiplier;
-    public final ForgeConfigSpec.ConfigValue<Float> silverMultiplier;
-    public final ForgeConfigSpec.ConfigValue<Float> goldMultiplier;
-    public final ForgeConfigSpec.ConfigValue<Float> platinumMultiplier;
-    public final ForgeConfigSpec.ConfigValue<Float> platinumChargeTime;
+    public final ForgeConfigSpec.ConfigValue<Double> scrapMultiplier;
+    public final ForgeConfigSpec.ConfigValue<Double> ironMultiplier;
+    public final ForgeConfigSpec.ConfigValue<Double> silverMultiplier;
+    public final ForgeConfigSpec.ConfigValue<Double> goldMultiplier;
+    public final ForgeConfigSpec.ConfigValue<Double> platinumMultiplier;
+    public final ForgeConfigSpec.ConfigValue<Double> platinumChargeTime;
+    public final ForgeConfigSpec.ConfigValue<Integer> scrapWateringCanWater;
+    public final ForgeConfigSpec.ConfigValue<Integer> ironWateringCanWater;
+    public final ForgeConfigSpec.ConfigValue<Integer> silverWateringCanWater;
+    public final ForgeConfigSpec.ConfigValue<Integer> goldWateringCanWater;
+    public final ForgeConfigSpec.ConfigValue<Integer> platinumWateringCanWater;
     public final EnumMap<EnumWeaponType, WeaponTypePropertySpecs> weaponProps = new EnumMap<>(EnumWeaponType.class);
 
-    public final ForgeConfigSpec.ConfigValue<Float> xpMultiplier;
-    public final ForgeConfigSpec.ConfigValue<Float> skillXpMultiplier;
-    public final ForgeConfigSpec.ConfigValue<Float> tamingMultiplier;
-    public final ForgeConfigSpec.ConfigValue<Float> dropRateMultiplier;
+    public final ForgeConfigSpec.ConfigValue<Double> xpMultiplier;
+    public final ForgeConfigSpec.ConfigValue<Double> skillXpMultiplier;
+    public final ForgeConfigSpec.ConfigValue<Double> tamingMultiplier;
+    public final ForgeConfigSpec.ConfigValue<Double> dropRateMultiplier;
 
     public final ForgeConfigSpec.BooleanValue debugMode;
     public final ForgeConfigSpec.BooleanValue debugAttack;
@@ -74,11 +79,11 @@ public class GeneralConfigSpec {
         this.startingStr = builder.comment("Starting strength value. 1 strength = 1 attack damage").define("Starting Strength", 5);
         this.startingVit = builder.comment("Starting vitality value. 1 vitality = 0.5 defence & magic defence").define("Starting Vit", 4);
         this.startingIntel = builder.comment("Starting intelligence value. 1 intelligence = 1 magic damage").define("Starting Int", 5);
-        this.hpPerLevel = builder.comment("HP increase per level").define("HP Increase", 10f);
+        this.hpPerLevel = builder.comment("HP increase per level").define("HP Increase", 10.0);
         this.rpPerLevel = builder.comment("RP increase per level").define("RP Increase", 5);
-        this.strPerLevel = builder.comment("Strenghth increase per level").define("Strength Increase", 2f);
-        this.vitPerLevel = builder.comment("Vitality increase per level").define("Vit Increase", 2f);
-        this.intPerLevel = builder.comment("Intelligence increase per level").define("Int Increase", 2f);
+        this.strPerLevel = builder.comment("Strenghth increase per level").define("Strength Increase", 2.0);
+        this.vitPerLevel = builder.comment("Vitality increase per level").define("Vit Increase", 2.0);
+        this.intPerLevel = builder.comment("Intelligence increase per level").define("Int Increase", 2.0);
         GeneralConfig.skillProps.forEach((type, prop)->{
             builder.push(type.toString());
             this.skillProps.put(type, new SkillPropertySpecs(builder, prop));
@@ -87,12 +92,19 @@ public class GeneralConfigSpec {
         builder.pop();
 
         builder.comment("Configs for weapon and tools").push("Weapon and Tools");
-        this.scrapMultiplier = builder.comment("Scrap tier xp multiplier").define("Scrap Multiplier", 0.5f);
-        this.ironMultiplier = builder.comment("Iron tier xp multiplier").define("Iron Multiplier", 1f);
-        this.silverMultiplier = builder.comment("Silver tier xp multiplier").define("Silver Multiplier", 1.5f);
-        this.goldMultiplier = builder.comment("Gold tier xp multiplier").define("Gold Multiplier", 2.5f);
-        this.platinumMultiplier = builder.comment("Platinum tier xp multiplier").define("Platinum Multiplier", 3.5f);
-        this.platinumChargeTime = builder.comment("Platinum tier charge up time multiplier").define("Platinum Charge", 0.5f);
+        this.scrapMultiplier = builder.comment("Scrap tier xp multiplier").define("Scrap Multiplier", 0.5);
+        this.ironMultiplier = builder.comment("Iron tier xp multiplier").define("Iron Multiplier", 1.0);
+        this.silverMultiplier = builder.comment("Silver tier xp multiplier").define("Silver Multiplier", 1.5);
+        this.goldMultiplier = builder.comment("Gold tier xp multiplier").define("Gold Multiplier", 2.5);
+        this.platinumMultiplier = builder.comment("Platinum tier xp multiplier").define("Platinum Multiplier", 3.5);
+        this.platinumChargeTime = builder.comment("Platinum tier charge up time multiplier").define("Platinum Charge", 0.5);
+        builder.comment("X blocks the watering can can water").push("Watering Can Water");
+        this.scrapWateringCanWater = builder.define("Scrap Watering Can Water", 25);
+        this.ironWateringCanWater = builder.define("Iron Watering Can Water", 35);
+        this.silverWateringCanWater = builder.define("Silver Watering Can Water", 50);
+        this.goldWateringCanWater = builder.define("Gold Watering Can Water", 70);
+        this.platinumWateringCanWater = builder.define("Platinum Watering Can Water", 150);
+        builder.pop();
         GeneralConfig.weaponProps.forEach((type, prop)->{
             builder.push(type.toString());
             this.weaponProps.put(type, new WeaponTypePropertySpecs(builder, prop));
@@ -101,10 +113,10 @@ public class GeneralConfigSpec {
         builder.pop();
 
         builder.push("Multipliers");
-        this.xpMultiplier = builder.comment("Gain base xp * multiplier").define("XP Multiplier", 1f);
-        this.skillXpMultiplier = builder.comment("Gain base skill xp * multiplier").define("Skill XP Multiplier", 1f);
-        this.tamingMultiplier = builder.comment("Increase/Decrease global taming chance").define("Taming Chance Multiplier", 1f);
-        this.dropRateMultiplier = builder.comment("Increase/Decrease global drop chance").define("Drop Chance Multiplier", 1f);
+        this.xpMultiplier = builder.comment("Gain base xp * multiplier").define("XP Multiplier", 1.0);
+        this.skillXpMultiplier = builder.comment("Gain base skill xp * multiplier").define("Skill XP Multiplier", 1.0);
+        this.tamingMultiplier = builder.comment("Increase/Decrease global taming chance").define("Taming Chance Multiplier", 1.0);
+        this.dropRateMultiplier = builder.comment("Increase/Decrease global drop chance").define("Drop Chance Multiplier", 1.0);
         builder.pop();
 
         builder.comment("Debug configs").push("Debug");

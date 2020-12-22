@@ -5,27 +5,49 @@ import com.flemmli97.runecraftory.api.enums.EnumToolTier;
 import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
+import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
+import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.lib.ItemTiers;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.FarmlandBlock;
+import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.UseAction;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ItemToolWateringCan extends ToolItem implements IItemUsable, IChargeable {
-    private EnumToolTier tier;
-    private int[] levelXP = new int[]{5, 20, 50, 200, 500};
-    private int[] chargeRunes = new int[]{1, 5, 15, 50, 100};
-    private final int[] waterVol = new int[]{25, 35, 50, 70, 150};
+
+    private final EnumToolTier tier;
 
     public ItemToolWateringCan(EnumToolTier tier, Item.Properties props) {
         super(0, 0, ItemTiers.tier, Sets.newHashSet(), props);
@@ -34,16 +56,16 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
 
     @Override
     public int getChargeTime(ItemStack stack) {
-        if(this.tier == EnumToolTier.PLATINUM)
+        if (this.tier == EnumToolTier.PLATINUM)
             return (int) (GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
         return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
     }
 
     @Override
     public int chargeAmount(ItemStack stack) {
-        if(this.tier == EnumToolTier.PLATINUM)
+        if (this.tier == EnumToolTier.PLATINUM)
             return this.tier.getTierLevel();
-        return this.tier.getTierLevel()+1;
+        return this.tier.getTierLevel() + 1;
     }
 
     @Override
@@ -91,134 +113,149 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
         if (!stack.hasTag()) {
             ItemNBT.initNBT(stack, true);
         }
-        return 1.0f - stack.getTag().getInt("Water") / this.waterVol[this.tier.getTierLevel()];
+        return 1.0f - stack.getTag().getInt("Water") / (float) this.maxWater();
+    }
+
+    public int maxWater() {
+        switch (this.tier) {
+            case IRON:
+                return GeneralConfig.ironWateringCanWater;
+            case SILVER:
+                return GeneralConfig.silverWateringCanWater;
+            case GOLD:
+                return GeneralConfig.goldWateringCanWater;
+            case PLATINUM:
+                return GeneralConfig.platinumWateringCanWater;
+            default:
+                return GeneralConfig.scrapWateringCanWater;
+        }
     }
 
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
         return true;
     }
-/*
+
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
-        if (entityLiving instanceof EntityPlayer && this.tier.getTierLevel() != 0) {
-            EntityPlayer player = (EntityPlayer) entityLiving;
-            ItemStack itemstack = player.getHeldItem(player.getActiveHand());
-            int useTimeMulti = (this.getMaxItemUseDuration(stack) - timeLeft) / this.getChargeTime()[0];
-            int range = Math.min(useTimeMulti, this.tier.getTierLevel());
-            BlockPos pos = player.getPosition().down();
-            boolean flag = false;
+    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+        int duration = stack.getUseDuration() - count;
+        if (duration != 0 && duration / this.getChargeTime(stack) < this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+            player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE, 1, 1);
+    }
+
+    @Override
+    public void onPlayerStoppedUsing(ItemStack stack, World world, LivingEntity entity, int timeLeft) {
+        if (this.tier.getTierLevel() != 0 && !world.isRemote) {
+            int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
+            int range = Math.min(useTime, this.tier.getTierLevel());
+            BlockPos pos = entity.getBlockPos();
+            AtomicBoolean flag = new AtomicBoolean(false);
             if (range == 0) {
-                RayTraceResult result = this.rayTrace(world, player, false);
-                if (result != null && result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                    this.useOnBlock(player, world, result.getBlockPos(), EnumHand.MAIN_HAND, result.sideHit);
-                    return;
-                }
-            } else {
-                for (int x = -range; x <= range; ++x) {
-                    for (int z = -range; z <= range; ++z) {
-                        BlockPos posNew = pos.add(x, 0, z);
-                        if (player.canPlayerEdit(posNew.offset(EnumFacing.UP), EnumFacing.DOWN, itemstack) && this.moisten(world, posNew, itemstack, player)) {
-                            flag = true;
-                        }
+                if (entity instanceof PlayerEntity) {
+                    BlockRayTraceResult result = rayTrace(world, (PlayerEntity) entity, RayTraceContext.FluidMode.NONE);
+                    if (result != null) {
+                        this.useOnBlock(new ItemUseContext((PlayerEntity) entity, Hand.MAIN_HAND, result));
+                        return;
                     }
                 }
+            } else {
+                BlockPos.getAllInBox(pos.add(-range, -1, -range), pos.add(range, 0, range)).forEach(p -> {
+                    if ((!(entity instanceof PlayerEntity) || ((PlayerEntity) entity).canPlayerEdit(p.offset(Direction.UP), Direction.DOWN, stack)) && this.moisten((ServerWorld) world, p, stack, entity))
+                        flag.set(true);
+                });
             }
-            if (flag) {
-                IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
-                capSync.decreaseRunePoints(player, this.chargeRunes[range]);
-                capSync.increaseSkill(EnumSkills.WATER, player, this.levelXP[range]);
-                capSync.increaseSkill(EnumSkills.FARMING, player, this.levelXP[range]);
+            if (flag.get() && entity instanceof PlayerEntity) {
+                entity.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+
+                });
             }
         }
+
+        super.onPlayerStoppedUsing(stack, world, entity, timeLeft);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-        RayTraceResult ray = this.rayTrace(world, player, true);
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+        BlockRayTraceResult ray = rayTrace(world, player, RayTraceContext.FluidMode.SOURCE_ONLY);
         ItemStack itemstack = player.getHeldItem(hand);
-        if (ray != null && ray.typeOfHit == RayTraceResult.Type.BLOCK && world.getBlockState(ray.getBlockPos()).getBlock() == Blocks.WATER && !this.hasFullWater(itemstack)) {
-            if (!itemstack.hasTagCompound()) {
-                ItemNBT.initNBT(itemstack);
+        if (ray != null && world.getFluidState(ray.getPos()).getFluid() == Fluids.WATER) {
+            BlockState state = world.getBlockState(ray.getPos());
+            if(state.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler) state.getBlock()).pickupFluid(world, ray.getPos(), state) != Fluids.EMPTY) {
+                if (!itemstack.hasTag()) {
+                    ItemNBT.initNBT(itemstack);
+                }
+                itemstack.getOrCreateTag().putInt("Water", this.maxWater());
+                world.setBlockState(ray.getPos(), Blocks.AIR.getDefaultState(), 3);
+                player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0f, 1.0f);
+                return ActionResult.success(itemstack);
             }
-            itemstack.getTagCompound().setInteger("Water", this.waterVol[this.tier.getTierLevel()]);
-            world.setBlockState(ray.getBlockPos(), Blocks.AIR.getDefaultState(), 3);
-            player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0f, 1.0f);
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
         }
-        if (hand == EnumHand.MAIN_HAND && this.tier.getTierLevel() != 0) {
+        if (hand == Hand.MAIN_HAND && this.tier.getTierLevel() != 0) {
             player.setActiveHand(hand);
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+            return ActionResult.success(itemstack);
         }
-        return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
+        return ActionResult.fail(itemstack);
     }
 
     @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public ActionResultType onItemUse(ItemUseContext ctx) {
         if (this.tier.getTierLevel() == 0) {
-            return this.useOnBlock(player, worldIn, pos, hand, facing);
+            return this.useOnBlock(ctx);
         }
-        return EnumActionResult.FAIL;
+        return ActionResultType.PASS;
     }
 
-    private EnumActionResult useOnBlock(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing) {
-        EnumActionResult result = EnumActionResult.FAIL;
-        ItemStack stack = player.getHeldItem(hand);
-        boolean flag = false;
+    private ActionResultType useOnBlock(ItemUseContext ctx) {
+        if (ctx.getWorld().isRemote)
+            return ActionResultType.PASS;
+        ActionResultType result = ActionResultType.FAIL;
+        ItemStack stack = ctx.getItem();
+        PlayerEntity player = ctx.getPlayer();
+        BlockPos pos = ctx.getPos();
         boolean used = false;
-        if (player.canPlayerEdit(pos.offset(EnumFacing.UP), EnumFacing.DOWN, player.getHeldItem(hand))) {
-            if (this.moisten(world, pos, stack, player)) {
+        if (player.canPlayerEdit(pos.offset(Direction.UP), Direction.DOWN, stack)) {
+            if (this.moisten((ServerWorld) ctx.getWorld(), pos, stack, player)) {
                 used = true;
-                flag = true;
-                result = EnumActionResult.SUCCESS;
+                result = ActionResultType.SUCCESS;
             }
         }
-        if (!flag) {
+        if (!used) {
             BlockPos newPos = pos.down();
-            if (player.canPlayerEdit(newPos.offset(EnumFacing.UP), EnumFacing.DOWN, player.getHeldItem(hand))) {
-                if (this.moisten(world, newPos, stack, player)) {
-                    flag = true;
+            if (player.canPlayerEdit(newPos.offset(Direction.UP), Direction.DOWN, stack)) {
+                if (this.moisten((ServerWorld) ctx.getWorld(), newPos, stack, player)) {
+                    used = true;
                 }
-                result = EnumActionResult.SUCCESS;
+                result = ActionResultType.SUCCESS;
             }
         }
         if (used) {
-            IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
-            capSync.decreaseRunePoints(player, 1);
-            capSync.increaseSkill(EnumSkills.WATER, player, 1);
-            capSync.increaseSkill(EnumSkills.FARMING, player, 1);
+            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+                /*capSync.decreaseRunePoints(player, 1);
+                capSync.increaseSkill(EnumSkills.WATER, player, 1);
+                capSync.increaseSkill(EnumSkills.FARMING, player, 1);*/
+            });
         }
         return result;
     }
 
-    private boolean moisten(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
-        boolean creative = player.capabilities.isCreativeMode;
-        IBlockState iblockstate = world.getBlockState(pos);
-        Block block = iblockstate.getBlock();
-        if (!stack.hasTagCompound()) {
+    private boolean moisten(ServerWorld world, BlockPos pos, ItemStack stack, LivingEntity entity) {
+        boolean creative = !(entity instanceof PlayerEntity) || ((PlayerEntity) entity).isCreative();
+        BlockState state = world.getBlockState(pos);
+        if (!stack.hasTag()) {
             ItemNBT.initNBT(stack);
         }
-        int water = stack.getTagCompound().getInteger("Water");
-        if ((creative || water > 0) && block == ModBlocks.farmland && iblockstate.getValue(BlockFarmland.MOISTURE) == 0) {
-            for (int j = 0; j < 4; ++j) {
-                world.spawnParticle(EnumParticleTypes.WATER_WAKE, true, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 0.0, 0.01, 0.0, new int[0]);
-            }
-            world.setBlockState(pos, ModBlocks.farmland.getDefaultState().withProperty(BlockFarmland.MOISTURE, 7), 2);
+        int water = stack.getOrCreateTag().getInt("Water");
+        if ((creative || water > 0) && state.isIn(ModBlocks.farmland.get()) && state.get(FarmlandBlock.MOISTURE) == 0) {
+            world.spawnParticle(ParticleTypes.FISHING, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 4, 0.0, 0.01, 0.0, 1.0D);
+            world.setBlockState(pos, state.with(FarmlandBlock.MOISTURE, 7), 3);
             world.playSound(null, pos, SoundEvents.ENTITY_BOAT_PADDLE_WATER, SoundCategory.BLOCKS, 1.0f, 1.1f);
             if (!creative) {
-                stack.getTagCompound().setInteger("Water", water - 1);
+                stack.getTag().putInt("Water", water - 1);
             }
             return true;
         }
         return false;
     }
-
-    private boolean hasFullWater(ItemStack stack) {
-        if (!stack.hasTagCompound()) {
-            ItemNBT.initNBT(stack);
-        }
-        return stack.getTagCompound().getInteger("Water") == this.waterVol[this.tier.getTierLevel()];
-    }*/
 
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {

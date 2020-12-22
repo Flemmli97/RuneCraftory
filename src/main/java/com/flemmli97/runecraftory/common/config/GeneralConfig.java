@@ -43,6 +43,11 @@ public class GeneralConfig {
     public static float goldMultiplier;
     public static float platinumMultiplier;
     public static float platinumChargeTime;
+    public static int scrapWateringCanWater;
+    public static int ironWateringCanWater;
+    public static int silverWateringCanWater;
+    public static int goldWateringCanWater;
+    public static int platinumWateringCanWater;
     public static EnumMap<EnumWeaponType, WeaponTypeProperties> weaponProps = new EnumMap<>(EnumWeaponType.class);
 
     public static float xpMultiplier;
@@ -64,25 +69,30 @@ public class GeneralConfig {
         startingStr = GeneralConfigSpec.generalConf.startingStr.get();
         startingVit = GeneralConfigSpec.generalConf.startingVit.get();
         startingIntel = GeneralConfigSpec.generalConf.startingIntel.get();
-        hpPerLevel = GeneralConfigSpec.generalConf.hpPerLevel.get();
+        hpPerLevel = GeneralConfigSpec.generalConf.hpPerLevel.get().floatValue();
         rpPerLevel = GeneralConfigSpec.generalConf.rpPerLevel.get();
-        strPerLevel = GeneralConfigSpec.generalConf.strPerLevel.get();
-        vitPerLevel = GeneralConfigSpec.generalConf.vitPerLevel.get();
-        intPerLevel = GeneralConfigSpec.generalConf.intPerLevel.get();
+        strPerLevel = GeneralConfigSpec.generalConf.strPerLevel.get().floatValue();
+        vitPerLevel = GeneralConfigSpec.generalConf.vitPerLevel.get().floatValue();
+        intPerLevel = GeneralConfigSpec.generalConf.intPerLevel.get().floatValue();
         GeneralConfigSpec.generalConf.skillProps.forEach((type, specs)->skillProps.compute(type, (t, val)->val == null ? new SkillProperties(specs):val.read(specs)));
 
-        scrapMultiplier = GeneralConfigSpec.generalConf.scrapMultiplier.get();
-        ironMultiplier = GeneralConfigSpec.generalConf.ironMultiplier.get();
-        silverMultiplier = GeneralConfigSpec.generalConf.silverMultiplier.get();
-        goldMultiplier = GeneralConfigSpec.generalConf.goldMultiplier.get();
-        platinumMultiplier = GeneralConfigSpec.generalConf.platinumMultiplier.get();
-        platinumChargeTime = GeneralConfigSpec.generalConf.platinumChargeTime.get();
+        scrapMultiplier = GeneralConfigSpec.generalConf.scrapMultiplier.get().floatValue();
+        ironMultiplier = GeneralConfigSpec.generalConf.ironMultiplier.get().floatValue();
+        silverMultiplier = GeneralConfigSpec.generalConf.silverMultiplier.get().floatValue();
+        goldMultiplier = GeneralConfigSpec.generalConf.goldMultiplier.get().floatValue();
+        platinumMultiplier = GeneralConfigSpec.generalConf.platinumMultiplier.get().floatValue();
+        platinumChargeTime = GeneralConfigSpec.generalConf.platinumChargeTime.get().floatValue();
+        scrapWateringCanWater = GeneralConfigSpec.generalConf.scrapWateringCanWater.get();
+        ironWateringCanWater = GeneralConfigSpec.generalConf.ironWateringCanWater.get();
+        silverWateringCanWater = GeneralConfigSpec.generalConf.silverWateringCanWater.get();
+        goldWateringCanWater = GeneralConfigSpec.generalConf.goldWateringCanWater.get();
+        platinumWateringCanWater = GeneralConfigSpec.generalConf.platinumWateringCanWater.get();
         GeneralConfigSpec.generalConf.weaponProps.forEach((type, specs)->weaponProps.compute(type, (t,val)->val == null ? new WeaponTypeProperties(specs):val.read(specs)));
 
-        xpMultiplier = GeneralConfigSpec.generalConf.xpMultiplier.get();
-        skillXpMultiplier = GeneralConfigSpec.generalConf.skillXpMultiplier.get();
-        tamingMultiplier = GeneralConfigSpec.generalConf.tamingMultiplier.get();
-        dropRateMultiplier = GeneralConfigSpec.generalConf.dropRateMultiplier.get();
+        xpMultiplier = GeneralConfigSpec.generalConf.xpMultiplier.get().floatValue();
+        skillXpMultiplier = GeneralConfigSpec.generalConf.skillXpMultiplier.get().floatValue();
+        tamingMultiplier = GeneralConfigSpec.generalConf.tamingMultiplier.get().floatValue();
+        dropRateMultiplier = GeneralConfigSpec.generalConf.dropRateMultiplier.get().floatValue();
 
         debugMode = GeneralConfigSpec.generalConf.debugMode.get();
         debugAttack = GeneralConfigSpec.generalConf.debugAttack.get();
