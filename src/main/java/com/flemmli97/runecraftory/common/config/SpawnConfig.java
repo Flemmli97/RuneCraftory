@@ -59,5 +59,4 @@ public class SpawnConfig {
     public List<String> getEntityFromBiomeType(BiomeDictionary.Type type) {
         return this.rawEntityBiomeTypeMap.getOrDefault(type.getName(), Lists.newArrayList());
     }
-
 }

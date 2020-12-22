@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.api.datapack.provider.ItemStatProvider;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModItems;
+import com.flemmli97.runecraftory.common.registry.ModTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraftforge.common.Tags;
@@ -35,6 +36,19 @@ public class ItemStatGen extends ItemStatProvider {
 
         this.addStat("iron", Tags.Items.INGOTS_IRON, new ItemStat.MutableItemStat(1, 1, 5)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));
+        this.addStat("bronze", ModTags.bronze, new ItemStat.MutableItemStat(25, 3, 10)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 3));
+        this.addStat("silver", ModTags.silver, new ItemStat.MutableItemStat(105, 20, 15)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 6));
+        this.addStat("gold", Tags.Items.INGOTS_GOLD, new ItemStat.MutableItemStat(222, 34, 20)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 15));
+        this.addStat("platinum", ModTags.platinum, new ItemStat.MutableItemStat(643, 111, 30)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 25));
+        this.addStat("orichalcum", ModTags.orichalcum, new ItemStat.MutableItemStat(1000, 150, 10)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 70));
+        this.addStat("dragonic", ModTags.dragonic, new ItemStat.MutableItemStat(0, 400, 10)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 130)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 90));
 
         this.addStat("emerald", Tags.Items.GEMS_EMERALD, new ItemStat.MutableItemStat(1, 1, 20));
 

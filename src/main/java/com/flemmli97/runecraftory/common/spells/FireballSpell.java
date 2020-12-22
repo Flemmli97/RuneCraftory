@@ -3,10 +3,11 @@ package com.flemmli97.runecraftory.common.spells;
 import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
-import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.entities.projectiles.EntityFireball;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 
@@ -18,8 +19,8 @@ public class FireballSpell extends Spell {
     }
 
     @Override
-    public void levelSkill(PlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap->cap.increaseSkill(EnumSkills.FIRE, player, GeneralConfig.skillProps.get(EnumSkills.FIRE).getBaseXPGain()));
+    public void levelSkill(ServerPlayerEntity player) {
+        player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap-> LevelCalc.levelSkill(player, cap, EnumSkills.FIRE, 1));
     }
 
     @Override

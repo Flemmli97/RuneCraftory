@@ -1,0 +1,11 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 400,
+  "upgradeDifficulty": 10,
+  "element": "NONE",
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_def": 90,
+    "runecraftory:attribute.rf.defence": 130
+  },
+  "tag": "forge:gems/dragonic"
+}

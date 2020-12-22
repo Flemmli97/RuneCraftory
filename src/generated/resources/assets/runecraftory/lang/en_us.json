@@ -1195,5 +1195,6 @@
   "season": "Season",
   "sleep": "Sleep",
   "recipe.eat.unlock": "Unlocked recipe for %s",
-  "recipe.eat.fail": "Didn't learn any recipe. Maybe your crafting level is too low"
+  "recipe.eat.fail": "Didn't learn any recipe. Maybe your crafting level is too low",
+  "shipping.money": "Earning from shipped items: %s"
 }

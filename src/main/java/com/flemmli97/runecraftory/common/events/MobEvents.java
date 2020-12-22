@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.events;
 
+import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
-import com.flemmli97.runecraftory.common.MobModule;
 import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.config.MobConfig;
 import com.flemmli97.runecraftory.common.entities.GateEntity;
@@ -25,9 +25,9 @@ public class MobEvents {
 
     @SubscribeEvent
     public void registerSpawn(BiomeLoadingEvent event) {
-        MobModule.spawnConfig.getEntityFromBiome(event.getName()).forEach(entity -> GateSpawning.addSpawn(event.getName(), entity));
+        RuneCraftory.spawnConfig.getEntityFromBiome(event.getName()).forEach(entity -> GateSpawning.addSpawn(event.getName(), entity));
         for (BiomeDictionary.Type type : BiomeDictionary.getTypes(RegistryKey.of(Registry.BIOME_KEY, event.getName())))
-            MobModule.spawnConfig.getEntityFromBiomeType(type).forEach(entity -> GateSpawning.addSpawn(event.getName(), entity));
+            RuneCraftory.spawnConfig.getEntityFromBiomeType(type).forEach(entity -> GateSpawning.addSpawn(event.getName(), entity));
         event.getSpawns().spawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(ModEntities.gate.get(), 100, 1, 1));
     }
 

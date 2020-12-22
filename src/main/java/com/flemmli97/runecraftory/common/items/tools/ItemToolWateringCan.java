@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.api.enums.EnumToolTier;
 import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
+import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.lib.ItemTiers;
 import com.google.common.collect.ImmutableMultimap;
@@ -13,7 +14,7 @@ import com.google.common.collect.Sets;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,8 +33,17 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
     }
 
     @Override
-    public int[] getChargeTime() {
-        return new int[0];
+    public int getChargeTime(ItemStack stack) {
+        if(this.tier == EnumToolTier.PLATINUM)
+            return (int) (GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
+        return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
+    }
+
+    @Override
+    public int chargeAmount(ItemStack stack) {
+        if(this.tier == EnumToolTier.PLATINUM)
+            return this.tier.getTierLevel();
+        return this.tier.getTierLevel()+1;
     }
 
     @Override
@@ -48,16 +58,16 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
 
     @Override
     public int itemCoolDownTicks() {
-        return 15;
+        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
     }
 
     @Override
-    public void onEntityHit(PlayerEntity player) {
+    public void onEntityHit(ServerPlayerEntity player) {
 
     }
 
     @Override
-    public void onBlockBreak(PlayerEntity player) {
+    public void onBlockBreak(ServerPlayerEntity player) {
 
     }
 

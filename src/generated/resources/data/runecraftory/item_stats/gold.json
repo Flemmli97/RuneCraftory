@@ -1,0 +1,10 @@
+{
+  "buyPrice": 222,
+  "sellPrice": 34,
+  "upgradeDifficulty": 20,
+  "element": "NONE",
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 15
+  },
+  "tag": "forge:ingots/gold"
+}

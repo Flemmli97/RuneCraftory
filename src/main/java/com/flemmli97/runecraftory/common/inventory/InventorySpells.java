@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
@@ -67,9 +68,9 @@ public class InventorySpells implements IItemHandler {
         return compound;
     }
 
-    public void useSkill(PlayerEntity player, int index) {
+    public void useSkill(ServerPlayerEntity player, int index) {
         ItemStack stack = this.getStackInSlot(index);
-        if (!player.world.isRemote && stack.getItem() instanceof ItemSpell && player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f) <= 0.0f) {
+        if (stack.getItem() instanceof ItemSpell && player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f) <= 0.0f) {
             Spell spell = ((ItemSpell) stack.getItem()).getSpell();
             if(spell.use((ServerWorld) player.world, player, stack)) {
                 player.getCooldownTracker().setCooldown(stack.getItem(), spell.coolDown());

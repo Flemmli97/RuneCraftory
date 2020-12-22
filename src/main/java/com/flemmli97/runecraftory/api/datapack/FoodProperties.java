@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.api.datapack;
 
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.tenshilib.common.utils.ArrayUtils;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.network.PacketBuffer;
@@ -12,6 +11,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -55,11 +55,11 @@ public class FoodProperties {
     }
 
     public Map<Attribute, Integer> effects() {
-        return ImmutableMap.copyOf(this.effects);
+        return new LinkedHashMap<>(this.effects);
     }
 
     public Map<Attribute, Integer> effectsMultiplier() {
-        return ImmutableMap.copyOf(this.effectsPercentage);
+        return new LinkedHashMap<>(this.effectsPercentage);
     }
 
     public Effect[] potionHeals() {

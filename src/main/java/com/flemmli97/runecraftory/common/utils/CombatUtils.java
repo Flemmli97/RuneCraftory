@@ -59,6 +59,7 @@ public class CombatUtils {
             }
             if (damagePhys > 0) {
                 if (resetCooldown) {
+                    System.out.println("cooldown ");
                     player.getCooldownTracker().setCooldown(stack.getItem(), item.itemCoolDownTicks());
                 }
                 boolean faintChance = player.world.rand.nextInt(100) < MobUtils.getAttributeValue(player, ModAttributes.RFFAINT.get(), target);
@@ -82,8 +83,8 @@ public class CombatUtils {
                 CustomDamage source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(ignoreArmor ? CustomDamage.DamageType.IGNOREDEF : CustomDamage.DamageType.NORMAL).knock(CustomDamage.KnockBackType.VANILLA).knockAmount(knockback).hurtResistant(0).get();
                 if (playerDamage(player, target, source, damagePhys, cap, stack)) {
                     //Level skill on successful attack
-                    if (levelSkill)
-                        item.onEntityHit(player);
+                    if (levelSkill && player instanceof ServerPlayerEntity)
+                        item.onEntityHit((ServerPlayerEntity) player);
                     if (i > 0) {
                         player.setMotion(player.getMotion().mul(0.6D, 1.0D, 0.6D));
                         player.setSprinting(false);

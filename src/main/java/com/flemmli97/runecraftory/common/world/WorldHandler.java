@@ -81,7 +81,6 @@ public class WorldHandler extends WorldSavedData {
 
     public void update(ServerWorld world) {
         if (WorldUtils.canUpdateDaily(world)) {
-            System.out.println(this.updateTracker);
             this.increaseDay(world);
             this.updateTracker.forEach(update -> update.update(world));
         }

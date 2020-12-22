@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory.common.spells;
 import com.flemmli97.runecraftory.api.Spell;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 
@@ -13,7 +14,7 @@ public class EmptySpell extends Spell {
     }
 
     @Override
-    public void levelSkill(PlayerEntity player) {
+    public void levelSkill(ServerPlayerEntity player) {
 
     }
 

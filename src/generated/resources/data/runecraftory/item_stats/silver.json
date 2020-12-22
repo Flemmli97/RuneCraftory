@@ -1,0 +1,10 @@
+{
+  "buyPrice": 105,
+  "sellPrice": 20,
+  "upgradeDifficulty": 15,
+  "element": "NONE",
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 6
+  },
+  "tag": "forge:ingots/silver"
+}

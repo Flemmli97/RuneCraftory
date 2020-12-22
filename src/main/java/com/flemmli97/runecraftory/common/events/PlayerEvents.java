@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory.common.events;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.datapack.SimpleEffect;
+import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -18,8 +19,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -221,6 +224,23 @@ public class PlayerEvents {
                 for (SimpleEffect s : prop.potionApply()) {
                     event.getEntityLiving().addPotionEffect(s.create());
                 }
+        }
+    }
+
+    @SubscribeEvent
+    public void chargeSound(LivingEntityUseItemEvent.Tick event)
+    {
+        if(event.getEntityLiving() instanceof PlayerEntity)
+        {
+            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+            ItemStack held = event.getItem();
+            if(held.getItem() instanceof IChargeable)
+            {
+                IChargeable item = (IChargeable) held.getItem();
+                int duration  = held.getUseDuration() - event.getDuration();
+                if(duration != 0 && duration/item.getChargeTime(held) <= item.chargeAmount(held) && duration % item.getChargeTime(held) == 0)
+                    player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE, 1, 1);
+            }
         }
     }
 }

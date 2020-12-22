@@ -26,5 +26,16 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.platinum.get())
                 .add(ModItems.orichalcum.get())
                 .add(ModItems.dragonic.get());
+
+        this.getOrCreateTagBuilder(ModTags.bronze)
+                .add(ModItems.bronze.get());
+        this.getOrCreateTagBuilder(ModTags.silver)
+                .add(ModItems.silver.get());
+        this.getOrCreateTagBuilder(ModTags.platinum)
+                .add(ModItems.platinum.get());
+        this.getOrCreateTagBuilder(ModTags.orichalcum)
+                .add(ModItems.orichalcum.get());
+        this.getOrCreateTagBuilder(ModTags.dragonic)
+                .add(ModItems.dragonic.get());
     }
 }

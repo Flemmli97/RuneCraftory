@@ -4,6 +4,7 @@ import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -21,7 +22,7 @@ public class ItemSkillUp extends Item {
         if (!world.isRemote) {
             player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
                 for (EnumSkills skill : EnumSkills.values())
-                    cap.increaseSkill(skill, player, LevelCalc.xpAmountForSkills(cap.getSkillLevel(skill)[0]) / 2);
+                    cap.increaseSkill(skill, (ServerPlayerEntity) player, LevelCalc.xpAmountForSkills(cap.getSkillLevel(skill)[0]) / 2);
             });
         }
         return ActionResult.success(player.getHeldItem(hand));

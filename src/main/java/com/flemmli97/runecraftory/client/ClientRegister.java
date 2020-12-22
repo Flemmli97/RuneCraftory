@@ -23,13 +23,18 @@ import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
 import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.blocks.BlockMineral;
+import com.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
+import com.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModContainer;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
+import com.flemmli97.runecraftory.common.registry.ModItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.item.ItemModelsProperties;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
@@ -71,6 +76,11 @@ public class ClientRegister {
             RenderTypeLookup.setRenderLayer(ModBlocks.bossSpawner.get(), RenderType.getCutout());
 
             ScreenManager.registerFactory(ModContainer.craftingContainer.get(), CraftingGui::new);
+
+            ModItems.ITEMS.getEntries().forEach(reg-> {
+                if(reg.get() instanceof ItemDualBladeBase || reg.get() instanceof ItemGloveBase)
+                    ItemModelsProperties.register(reg.get(), new ResourceLocation("held"), ItemModelProps.heldMainProp);
+            });
         });
     }
 }

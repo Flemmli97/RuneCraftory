@@ -53,11 +53,11 @@ public class PlayerCapImpl implements IPlayerCap {
 
     //max runepoints possible: 2883
     private int money = GeneralConfig.startingMoney;
-    private int runePointsMax = 56;
+    private int runePointsMax = GeneralConfig.startingRP;
     private int runePoints = this.runePointsMax;
-    private float str = 4;
-    private float vit = 4;
-    private float intel = 5;
+    private float str = GeneralConfig.startingStr;
+    private float vit = GeneralConfig.startingVit;
+    private float intel = GeneralConfig.startingIntel;
     private Map<Attribute, Integer> headBonus = Maps.newHashMap();
     private Map<Attribute, Integer> bodyBonus = Maps.newHashMap();
     private Map<Attribute, Integer> legsBonus = Maps.newHashMap();
@@ -220,7 +220,7 @@ public class PlayerCapImpl implements IPlayerCap {
 
     @Override
     public void addXp(PlayerEntity player, int amount) {
-        this.addXp(player, amount, false);
+        this.addXp(player, (int) (amount * GeneralConfig.xpMultiplier), false);
     }
 
     private void addXp(PlayerEntity player, int amount, boolean leveledUp) {
@@ -245,13 +245,13 @@ public class PlayerCapImpl implements IPlayerCap {
     }
 
     private void onLevelUp(PlayerEntity player) {
-        this.setMaxHealth(player, this.getMaxHealth(player) + 10);
-        this.regenHealth(player, 10);
-        this.runePointsMax += 5;
-        this.runePoints = Math.min(this.runePoints + 5, this.runePoints);
-        this.str += 2.0f;
-        this.vit += 2.0f;
-        this.intel += 2.0f;
+        this.setMaxHealth(player, this.getMaxHealth(player) + GeneralConfig.hpPerLevel);
+        this.regenHealth(player, GeneralConfig.hpPerLevel);
+        this.runePointsMax += GeneralConfig.rpPerLevel;
+        this.runePoints = Math.min(this.runePoints + GeneralConfig.rpPerLevel, this.runePoints);
+        this.str += GeneralConfig.strPerLevel;
+        this.vit += GeneralConfig.vitPerLevel;
+        this.intel += GeneralConfig.intPerLevel;
     }
 
     @Override
@@ -556,7 +556,7 @@ public class PlayerCapImpl implements IPlayerCap {
         return true;
     }
 
-    private void updateGlove(PlayerEntity player) {
+    private void updateGlove(ServerPlayerEntity player) {
         --this.gloveTick;
         Vector3d look = player.getLookVec();
         Vector3d move = new Vector3d(look.x, 0.0, look.z).normalize().scale(0.4);
@@ -594,9 +594,9 @@ public class PlayerCapImpl implements IPlayerCap {
         if (this.timeSinceLastSwing == 0) {
             this.swings = 0;
         }
-        if (this.usingGloves) {
+        /*if (this.usingGloves) {
             this.updateGlove(player);
-        }
+        }*/
         this.spearTicker = Math.max(--this.spearTicker, 0);
         this.offHandTick = Math.max(--this.offHandTick, 0);
     }

@@ -18,6 +18,10 @@ public class SkillProperties {
         this.baseXP = baseXP;
     }
 
+    public SkillProperties(SkillPropertySpecs specs){
+        this.read(specs);
+    }
+
     public float getHealthIncrease() {
         return this.hp;
     }
@@ -48,7 +52,7 @@ public class SkillProperties {
         this.str = specs.str.get();
         this.vit = specs.vit.get();
         this.intel = specs.intel.get();
-        this.baseXP = this.baseXP;
+        this.baseXP = specs.baseXP.get();
         return this;
     }
 }

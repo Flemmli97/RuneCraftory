@@ -35,15 +35,12 @@ public class ItemStatIncrease extends Item {
 
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
-        if (entityLiving instanceof PlayerEntity) {
-            PlayerEntity entityplayer = (PlayerEntity) entityLiving;
+        if (entityLiving instanceof ServerPlayerEntity) {
+            ServerPlayerEntity entityplayer = (ServerPlayerEntity) entityLiving;
             worldIn.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
             this.increaseStat(stack, worldIn, entityplayer);
             entityplayer.addStat(Stats.ITEM_USED.get(this));
-
-            if (entityplayer instanceof ServerPlayerEntity) {
-                CriteriaTriggers.CONSUME_ITEM.trigger((ServerPlayerEntity) entityplayer, stack);
-            }
+            CriteriaTriggers.CONSUME_ITEM.trigger(entityplayer, stack);
         }
 
         stack.shrink(1);

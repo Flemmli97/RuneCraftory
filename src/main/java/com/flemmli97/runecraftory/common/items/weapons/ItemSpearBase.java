@@ -8,7 +8,6 @@ import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
-import com.flemmli97.runecraftory.lib.LibConstants;
 import com.flemmli97.tenshilib.api.item.IAOEWeapon;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -17,6 +16,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,8 +32,13 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     @Override
-    public int[] getChargeTime() {
-        return new int[]{15, 1};
+    public int getChargeTime(ItemStack stack) {
+        return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
+    }
+
+    @Override
+    public int chargeAmount(ItemStack stack) {
+        return 1;
     }
 
     @Override
@@ -43,34 +48,34 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
 
     @Override
     public EnumWeaponType getWeaponType() {
-        return EnumWeaponType.HAXE;
+        return EnumWeaponType.SPEAR;
     }
 
     @Override
     public int itemCoolDownTicks() {
-        return LibConstants.axeWeaponCooldown;
+        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
     }
 
     @Override
-    public void onEntityHit(PlayerEntity player) {
+    public void onEntityHit(ServerPlayerEntity player) {
         player.getCapability(PlayerCapProvider.PlayerCap)
                 .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 1));
     }
 
     @Override
-    public void onBlockBreak(PlayerEntity player) {
+    public void onBlockBreak(ServerPlayerEntity player) {
         player.getCapability(PlayerCapProvider.PlayerCap)
                 .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, 0.5f));
     }
 
     @Override
     public float getRange() {
-        return GeneralConfig.weaponProps.get(EnumWeaponType.HAXE).range();
+        return GeneralConfig.weaponProps.get(this.getWeaponType()).range();
     }
 
     @Override
     public float getFOV() {
-        return GeneralConfig.weaponProps.get(EnumWeaponType.HAXE).aoe();
+        return GeneralConfig.weaponProps.get(this.getWeaponType()).aoe();
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.flemmli97.runecraftory.api.enums.EnumShop;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -49,6 +50,9 @@ public interface IPlayerCap {
      */
     int[] getPlayerLevel();
 
+    /**
+     * Level via {@link LevelCalc#addXP}
+     */
     void addXp(PlayerEntity player, int amount);
 
     void setPlayerLevel(PlayerEntity player, int level, int xpAmount);
@@ -85,6 +89,9 @@ public interface IPlayerCap {
 
     void setSkillLevel(EnumSkills skill, PlayerEntity player, int level, int xp);
 
+    /**
+     * Level via {@link LevelCalc#levelSkill}
+     */
     void increaseSkill(EnumSkills skill, PlayerEntity player, int xp);
 
     //=====NBT

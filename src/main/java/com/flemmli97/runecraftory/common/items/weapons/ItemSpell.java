@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.items.weapons;
 
 import com.flemmli97.runecraftory.api.Spell;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -24,7 +25,7 @@ public class ItemSpell extends Item {
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         if (!player.world.isRemote && player.getCooldownTracker().getCooldown(this, 0) <= 0 && this.spell.get().use((ServerWorld) world, player, player.getHeldItem(hand))) {
             player.getCooldownTracker().setCooldown(this, this.getSpell().coolDown());
-            this.spell.get().levelSkill(player);
+            this.spell.get().levelSkill((ServerPlayerEntity) player);
             return ActionResult.success(player.getHeldItem(hand));
         }
         return ActionResult.fail(player.getHeldItem(hand));

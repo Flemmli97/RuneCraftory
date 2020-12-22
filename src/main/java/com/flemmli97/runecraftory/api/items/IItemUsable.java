@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.api.items;
 
 import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 public interface IItemUsable {
 
@@ -9,7 +9,7 @@ public interface IItemUsable {
 
     int itemCoolDownTicks();
 
-    void onEntityHit(PlayerEntity player);
+    void onEntityHit(ServerPlayerEntity player);
 
-    void onBlockBreak(PlayerEntity player);
+    void onBlockBreak(ServerPlayerEntity player);
 }

@@ -5,7 +5,9 @@ import net.minecraft.item.ItemStack;
 
 public interface IChargeable {
 
-    int[] getChargeTime();
+    int getChargeTime(ItemStack stack);
+
+    int chargeAmount(ItemStack stack);
 
     EnumToolCharge chargeType(ItemStack stack);
 }

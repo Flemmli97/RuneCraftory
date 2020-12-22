@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.utils;
 
-import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -13,7 +13,7 @@ import net.minecraft.util.math.MathHelper;
 public class MobUtils {
 
     public static boolean handleMobAttack(Entity entity, DamageSource src, float dmg) {
-        if (RuneCraftory.conf.combatModule) {
+        if (GeneralConfig.combatModule) {
             //TODO
             return entity.attackEntityFrom(src, dmg);
         } else

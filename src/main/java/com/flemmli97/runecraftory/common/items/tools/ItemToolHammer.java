@@ -7,9 +7,9 @@ import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.lib.ItemTiers;
-import com.flemmli97.runecraftory.lib.LibConstants;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.Blocks;
@@ -17,7 +17,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
@@ -39,8 +39,17 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
-    public int[] getChargeTime() {
-        return new int[0];
+    public int getChargeTime(ItemStack stack) {
+        if(this.tier == EnumToolTier.PLATINUM)
+            return (int) (GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
+        return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
+    }
+
+    @Override
+    public int chargeAmount(ItemStack stack) {
+        if(this.tier == EnumToolTier.PLATINUM)
+            return this.tier.getTierLevel();
+        return this.tier.getTierLevel()+1;
     }
 
     @Override
@@ -55,17 +64,17 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
 
     @Override
     public int itemCoolDownTicks() {
-        return LibConstants.hammerToolCooldown;
+        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
     }
 
     @Override
-    public void onEntityHit(PlayerEntity player) {
+    public void onEntityHit(ServerPlayerEntity player) {
         player.getCapability(PlayerCapProvider.PlayerCap)
                 .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 0.5f));
     }
 
     @Override
-    public void onBlockBreak(PlayerEntity player) {
+    public void onBlockBreak(ServerPlayerEntity player) {
         player.getCapability(PlayerCapProvider.PlayerCap)
                 .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.MINING, this.tier.getTierLevel() + 1));
     }
