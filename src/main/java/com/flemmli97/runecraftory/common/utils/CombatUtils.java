@@ -155,19 +155,19 @@ public class CombatUtils {
             boolean dizzyChance = attackingEntity.world.rand.nextInt(1000) < MobUtils.getAttributeValue(attackingEntity, ModAttributes.RFDIZ.get(), target);
             boolean stunChance = attackingEntity.world.rand.nextInt(100) < MobUtils.getAttributeValue(attackingEntity, ModAttributes.RFSTUN.get(), target);
             if (poisonChance) {
-                target.addPotionEffect(new EffectInstance(ModPotions.poison));
+                target.addPotionEffect(new EffectInstance(ModPotions.poison.get()));
             }
             if (fatigueChance) {
-                target.addPotionEffect(new EffectInstance(ModPotions.fatigue));
+                target.addPotionEffect(new EffectInstance(ModPotions.fatigue.get()));
             }
             if (coldChance) {
-                target.addPotionEffect(new EffectInstance(ModPotions.cold));
+                target.addPotionEffect(new EffectInstance(ModPotions.cold.get()));
             }
             if (paraChance) {
-                target.addPotionEffect(new EffectInstance(ModPotions.paralysis));
+                target.addPotionEffect(new EffectInstance(ModPotions.paralysis.get()));
             }
             if (sealChance) {
-                target.addPotionEffect(new EffectInstance(ModPotions.seal));
+                target.addPotionEffect(new EffectInstance(ModPotions.seal.get()));
             }
             if (dizzyChance) {
                 target.addPotionEffect(new EffectInstance(Effects.NAUSEA, 80, 1, true, false));
@@ -178,7 +178,7 @@ public class CombatUtils {
             }
             if (sleepChance) {
                 target.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 80, 1, true, false));
-                target.addPotionEffect(new EffectInstance(ModPotions.sleep, 80, 1, true, false));
+                target.addPotionEffect(new EffectInstance(ModPotions.sleep.get(), 80, 1, true, false));
             }
         }
     }
