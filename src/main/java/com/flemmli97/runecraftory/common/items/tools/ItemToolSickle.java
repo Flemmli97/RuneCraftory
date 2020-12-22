@@ -23,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.UseAction;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -32,7 +33,6 @@ public class ItemToolSickle extends ToolItem implements IItemUsable, IChargeable
     private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(Blocks.CACTUS, Blocks.CHORUS_FLOWER, Blocks.CHORUS_PLANT, Blocks.PUMPKIN, Blocks.RED_MUSHROOM, Blocks.BROWN_MUSHROOM, Blocks.BROWN_MUSHROOM_BLOCK, Blocks.RED_MUSHROOM_BLOCK, Blocks.VINE);
 
     private int[] chargeRunes = new int[]{1, 5, 15, 50, 100};
-    private int[] levelXP = new int[]{5, 20, 50, 200, 500};
     public final EnumToolTier tier;
 
     public ItemToolSickle(EnumToolTier tier, Properties props) {
@@ -112,6 +112,13 @@ public class ItemToolSickle extends ToolItem implements IItemUsable, IChargeable
             this.onBlockBreak((ServerPlayerEntity) entityLiving);
         }
         return super.onBlockDestroyed(stack, world, state, pos, entityLiving);
+    }
+
+    @Override
+    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+        int duration = stack.getUseDuration() - count;
+        if (duration != 0 && duration / this.getChargeTime(stack) < this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+            player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
     /*

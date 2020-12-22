@@ -12,11 +12,13 @@ import com.flemmli97.tenshilib.api.item.IAOEWeapon;
 import com.flemmli97.tenshilib.api.item.IDualWeapon;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -90,6 +92,13 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     @Override
     public UseAction getUseAction(ItemStack stack) {
         return UseAction.BOW;
+    }
+
+    @Override
+    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+        int duration = stack.getUseDuration() - count;
+        if (duration == this.getChargeTime(stack))
+            player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
     /*
     @Override

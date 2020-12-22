@@ -24,6 +24,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.UseAction;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -107,6 +108,13 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
             this.onBlockBreak((ServerPlayerEntity) entityLiving);
         }
         return super.onBlockDestroyed(stack, world, state, pos, entityLiving);
+    }
+
+    @Override
+    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+        int duration = stack.getUseDuration() - count;
+        if (duration == this.getChargeTime(stack))
+            player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
     /*@Override

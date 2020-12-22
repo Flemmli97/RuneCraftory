@@ -7,10 +7,12 @@ import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
+import net.minecraft.util.SoundEvents;
 
 public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, IChargeable {
 
@@ -58,6 +60,13 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
 
+    }
+
+    @Override
+    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+        int duration = stack.getUseDuration() - count;
+        if (duration != 0 && duration / this.getChargeTime(stack) < this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+            player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
     @Override

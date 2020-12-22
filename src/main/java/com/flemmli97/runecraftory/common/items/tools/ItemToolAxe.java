@@ -9,6 +9,7 @@ import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.lib.ItemTiers;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -16,6 +17,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvents;
 
 public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
 
@@ -63,6 +65,13 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
 
+    }
+
+    @Override
+    public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
+        int duration = stack.getUseDuration() - count;
+        if (duration != 0 && duration / this.getChargeTime(stack) < this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+            player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
     @Override
