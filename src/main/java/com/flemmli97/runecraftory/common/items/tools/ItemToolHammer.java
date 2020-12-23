@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.UseAction;
+import net.minecraft.network.play.server.SChangeBlockPacket;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -126,13 +127,13 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
                 if (entity instanceof PlayerEntity) {
                     BlockRayTraceResult result = rayTrace(world, (PlayerEntity) entity, RayTraceContext.FluidMode.NONE);
                     if (result != null) {
-                        this.useOnBlock(new ItemUseContext((PlayerEntity) entity, entity.getActiveHand(), result));
+                        this.useOnBlock(new ItemUseContext((PlayerEntity) entity, entity.getActiveHand(), result), false);
                         return;
                     }
                 }
             } else {
                 BlockPos.getAllInBox(pos.add(-range, -1, -range), pos.add(range, 0, range)).forEach(p -> {
-                    if (this.hammer((ServerWorld) world, p, stack, entity))
+                    if (this.hammer((ServerWorld) world, p, stack, entity, true))
                         flag.set(true);
                 });
             }
@@ -158,30 +159,31 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public ActionResultType onItemUse(ItemUseContext ctx) {
         if (this.tier.getTierLevel() == 0) {
-            return this.useOnBlock(ctx);
+            return this.useOnBlock(ctx, false);
         }
         return ActionResultType.PASS;
     }
 
-    private ActionResultType useOnBlock(ItemUseContext ctx) {
+    private ActionResultType useOnBlock(ItemUseContext ctx, boolean canHammer) {
         if (ctx.getWorld().isRemote)
             return ActionResultType.PASS;
         ItemStack stack = ctx.getItem();
-        if (this.hammer((ServerWorld) ctx.getWorld(), ctx.getPos(), stack, ctx.getPlayer())) {
+        if (this.hammer((ServerWorld) ctx.getWorld(), ctx.getPos(), stack, ctx.getPlayer(), canHammer)) {
             this.onBlockBreak((ServerPlayerEntity) ctx.getPlayer());
             return ActionResultType.SUCCESS;
         }
         return ActionResultType.PASS;
     }
 
-    private boolean hammer(ServerWorld world, BlockPos pos, ItemStack stack, LivingEntity entity) {
+    private boolean hammer(ServerWorld world, BlockPos pos, ItemStack stack, LivingEntity entity, boolean canHammer) {
         if(entity instanceof PlayerEntity && !((PlayerEntity) entity).canPlayerEdit(pos.offset(Direction.UP), Direction.UP, stack))
             return false;
         BlockState state = world.getBlockState(pos);
-        if(state.isIn(ModTags.hammerBreakable)) {
+        if(canHammer && state.isIn(ModTags.hammerBreakable)) {
             if (entity instanceof ServerPlayerEntity) {
                 if(((ServerPlayerEntity)entity).interactionManager.tryHarvestBlock(pos)) {
                     world.playEvent(2001, pos, Block.getStateId(state));
+                    ((ServerPlayerEntity)entity).connection.sendPacket(new SChangeBlockPacket(pos, world.getBlockState(pos)));
                     return true;
                 }
             } else {

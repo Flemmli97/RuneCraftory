@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.ToolItem;
 import net.minecraft.item.UseAction;
+import net.minecraft.network.play.server.SChangeBlockPacket;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -200,6 +201,7 @@ public class ItemToolSickle extends ToolItem implements IItemUsable, IChargeable
             if (entity instanceof ServerPlayerEntity) {
                 if(((ServerPlayerEntity)entity).interactionManager.tryHarvestBlock(pos)) {
                     world.playEvent(2001, pos, Block.getStateId(state));
+                    ((ServerPlayerEntity)entity).connection.sendPacket(new SChangeBlockPacket(pos, world.getBlockState(pos)));
                     return true;
                 }
             } else {
