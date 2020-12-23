@@ -8,32 +8,46 @@ import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
+import com.flemmli97.runecraftory.common.registry.ModTags;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.lib.ItemTiers;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.UseAction;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargeable {
 
     public final EnumToolTier tier;
     private static AxisAlignedBB farmlandTop = new AxisAlignedBB(0.0, 0.9375, 0.0, 1.0, 1.0, 1.0);
     private int[] chargeRunes = new int[]{1, 5, 15, 50, 100};
-    private int[] levelXP = new int[]{5, 20, 50, 100, 200};
 
     public ItemToolHammer(EnumToolTier tier, Properties props) {
         super(ItemTiers.tier, 0, 0, props);
@@ -49,9 +63,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
 
     @Override
     public int chargeAmount(ItemStack stack) {
-        if(this.tier == EnumToolTier.PLATINUM)
-            return this.tier.getTierLevel();
-        return this.tier.getTierLevel()+1;
+        return this.tier.getTierLevel();
     }
 
     @Override
@@ -99,120 +111,90 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         int duration = stack.getUseDuration() - count;
-        if (duration != 0 && duration / this.getChargeTime(stack) < this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
             player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
-    /*
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World world, LivingEntity entityLiving, int timeLeft) {
-        if (entityLiving instanceof PlayerEntity && this.tier.getTierLevel() != 0) {
-            ItemStack itemstack = entityLiving.getHeldItem(Hand.MAIN_HAND);
-            int useTimeMulti = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime()[0];
-            PlayerEntity player = (PlayerEntity) entityLiving;
-            int range = Math.min(useTimeMulti, this.tier.getTierLevel());
-            boolean flag = false;
-            IPlayerCap capSync = player.getCapability(PlayerCapProvider.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability"));
+    public void onPlayerStoppedUsing(ItemStack stack, World world, LivingEntity entity, int timeLeft) {
+        if (this.tier.getTierLevel() != 0 && !world.isRemote) {
+            int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
+            int range = Math.min(useTime, this.tier.getTierLevel());
+            BlockPos pos = entity.getBlockPos();
+            AtomicBoolean flag = new AtomicBoolean(false);
             if (range == 0) {
-                BlockRayTraceResult result = rayTrace(world, player, RayTraceContext.FluidMode.NONE);
-                if (result != null) {
-                    this.useOnBlock(player, world, result.getPos(), Hand.MAIN_HAND, result.getFace());
-                    return;
-                }
-            } else {
-                for (int x = -range; x <= range; ++x) {
-                    for (int y = -1; y <= 1; ++y) {
-                        for (int z = -range; z <= range; ++z) {
-                            BlockPos posNew = player.getBlockPos().add(x, y, z);
-                            if (player.canPlayerEdit(posNew.offset(Direction.UP), Direction.DOWN, itemstack)) {
-                                BlockState iblockstate = world.getBlockState(posNew);
-                                Block block = iblockstate.getBlock();
-                                if (block == Blocks.FARMLAND || block == ModBlocks.farmland || block instanceof GrassPathBlock) {
-                                    if (!(world.getBlockState(posNew.up()).getBlock() instanceof IGrowable)) {
-                                        for (int j = 0; j < 4; ++j) {
-                                            world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, posNew.getX() + 0.5, posNew.getY() + 1.3, posNew.getZ() + 0.5, 0.0, 0.1, 0.0, new int[]{Block.getStateId(Blocks.DIRT.getDefaultState())});
-                                        }
-                                        turnToDirt(world, posNew);
-                                        world.playSound(null, posNew, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 0.5f, 0.1f);
-                                        flag = true;
-                                    }
-                                } else if (block instanceof BlockMineral) {
-                                    for (int j = 0; j < 4; ++j) {
-                                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, posNew.getX() + 0.5, posNew.getY() + 1.3, posNew.getZ() + 0.5, 0.0, 0.1, 0.0, new int[]{Block.getStateId(Blocks.DIRT.getDefaultState())});
-                                    }
-                                    block.removedByPlayer(iblockstate, world, posNew, player, true);
-                                    capSync.increaseSkill(EnumSkills.MINING, player, 1 + this.tier.getTierLevel());
-                                }
-                            }
-                        }
+                if (entity instanceof PlayerEntity) {
+                    BlockRayTraceResult result = rayTrace(world, (PlayerEntity) entity, RayTraceContext.FluidMode.NONE);
+                    if (result != null) {
+                        this.useOnBlock(new ItemUseContext((PlayerEntity) entity, entity.getActiveHand(), result));
+                        return;
                     }
                 }
+            } else {
+                BlockPos.getAllInBox(pos.add(-range, -1, -range), pos.add(range, 0, range)).forEach(p -> {
+                    if (this.hammer((ServerWorld) world, p, stack, entity))
+                        flag.set(true);
+                });
             }
-            if (flag) {
-                player.setPosition(player.getX(), player.getY() + 0.0625, player.getZ());
-                capSync.decreaseRunePoints(player, this.chargeRunes[range], true);
-                capSync.increaseSkill(EnumSkills.EARTH, player, this.levelXP[range]);
+            if (flag.get() && entity instanceof PlayerEntity) {
+                entity.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+
+                });
             }
         }
+        super.onPlayerStoppedUsing(stack, world, entity, timeLeft);
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
-        if (handIn == Hand.MAIN_HAND && this.tier.getTierLevel() != 0) {
-            playerIn.setActiveHand(handIn);
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemstack = player.getHeldItem(hand);
+        if (this.tier.getTierLevel() != 0) {
+            player.setActiveHand(hand);
             return ActionResult.success(itemstack);
         }
-        return ActionResult.fail(itemstack);
+        return ActionResult.pass(itemstack);
     }
 
     @Override
     public ActionResultType onItemUse(ItemUseContext ctx) {
         if (this.tier.getTierLevel() == 0) {
-            return this.useOnBlock(player, world, pos, hand, facing);
+            return this.useOnBlock(ctx);
         }
         return ActionResultType.PASS;
     }
 
-    private EnumActionResult useOnBlock(EntityPlayer player, World world, BlockPos pos, Hand hand, Direction facing) {
-        ItemStack itemstack = player.getHeldItem(hand);
-        EnumActionResult result = EnumActionResult.PASS;
-        if (player.canPlayerEdit(pos.offset(facing), facing, itemstack)) {
-            result = (this.flattenFarm(world, pos) ? EnumActionResult.SUCCESS : result);
-            if (result == EnumActionResult.SUCCESS) {
-                if (player.getPosition() == pos.up()) {
-                    player.setPosition(player.posX, player.posY + 0.0625, player.posZ);
-                }
-                IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
-                capSync.decreaseRunePoints(player, 1);
-                capSync.increaseSkill(EnumSkills.EARTH, player, 1);
-                capSync.increaseSkill(EnumSkills.MINING, player, 1);
-            }
+    private ActionResultType useOnBlock(ItemUseContext ctx) {
+        if (ctx.getWorld().isRemote)
+            return ActionResultType.PASS;
+        ItemStack stack = ctx.getItem();
+        if (this.hammer((ServerWorld) ctx.getWorld(), ctx.getPos(), stack, ctx.getPlayer())) {
+            this.onBlockBreak((ServerPlayerEntity) ctx.getPlayer());
+            return ActionResultType.SUCCESS;
         }
-        return result;
+        return ActionResultType.PASS;
     }
 
-    private boolean flattenFarm(World world, BlockPos pos) {
-        BlockState iblockstate = world.getBlockState(pos);
-        Block block = iblockstate.getBlock();
-        if ((block == Blocks.FARMLAND || block == ModBlocks.farmland || block instanceof BlockGrassPath) && !(world.getBlockState(pos.up()).getBlock() instanceof IGrowable)) {
-            for (int j = 0; j < 4; ++j) {
-                world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, pos.getX() + 0.5, pos.getY() + 1.3, pos.getZ() + 0.5, 0.0, 0.1, 0.0, new int[]{Block.getStateId(Blocks.DIRT.getDefaultState())});
+    private boolean hammer(ServerWorld world, BlockPos pos, ItemStack stack, LivingEntity entity) {
+        if(entity instanceof PlayerEntity && !((PlayerEntity) entity).canPlayerEdit(pos.offset(Direction.UP), Direction.UP, stack))
+            return false;
+        BlockState state = world.getBlockState(pos);
+        if(state.isIn(ModTags.hammerBreakable)) {
+            if (entity instanceof ServerPlayerEntity) {
+                if(((ServerPlayerEntity)entity).interactionManager.tryHarvestBlock(pos)) {
+                    world.playEvent(2001, pos, Block.getStateId(state));
+                    return true;
+                }
+            } else {
+                return world.breakBlock(pos, true, entity, 3);
             }
-            turnToDirt(world, pos);
-            world.playSound(null, pos, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1.0f, 0.1f);
-            return true;
+        }
+        else if (state.isIn(ModTags.hammerFlattenable) && world.getBlockState(pos.up()).getMaterial() == Material.AIR){
+            if(world.setBlockState(pos, Block.nudgeEntitiesWithNewState(state, Blocks.DIRT.getDefaultState(), world, pos))) {
+                world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1, 1);
+                return true;
+            }
         }
         return false;
-    }*/
-
-    private static void turnToDirt(World world, BlockPos pos) {
-        AxisAlignedBB axisalignedbb = ItemToolHammer.farmlandTop.offset(pos);
-        world.setBlockState(pos, Blocks.DIRT.getDefaultState());
-        for (Entity entity : world.getEntitiesWithinAABBExcludingEntity(null, axisalignedbb)) {
-            double d0 = Math.min(axisalignedbb.maxY - axisalignedbb.minY, axisalignedbb.maxY - entity.getBoundingBox().minY);
-            entity.setPositionAndUpdate(entity.getX(), entity.getY() + d0 + 0.001, entity.getZ());
-        }
     }
 
     @Override

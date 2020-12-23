@@ -7,6 +7,8 @@ import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.entities.IBaseMob;
+import com.flemmli97.runecraftory.common.registry.ModBlocks;
+import com.flemmli97.runecraftory.common.registry.ModTags;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.world.WorldHandler;
@@ -21,12 +23,14 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
@@ -223,21 +227,11 @@ public class PlayerEvents {
                 }
         }
     }
-/*
+
     @SubscribeEvent
-    public void chargeSound(LivingEntityUseItemEvent.Tick event)
-    {
-        if(event.getEntityLiving() instanceof PlayerEntity)
-        {
-            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-            ItemStack held = event.getItem();
-            if(held.getItem() instanceof IChargeable)
-            {
-                IChargeable item = (IChargeable) held.getItem();
-                int duration  = held.getUseDuration() - event.getDuration();
-                if(duration != 0 && duration/item.getChargeTime(held) <= item.chargeAmount(held) && duration % item.getChargeTime(held) == 0)
-                    player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE, 1, 1);
-            }
+    public void hoeTill(BlockEvent.BlockToolInteractEvent event){
+        if(event.getToolType() == ToolType.HOE && event.getFinalState() != null && event.getFinalState().isIn(ModTags.farmlandTill)){
+            event.setFinalState(ModBlocks.farmland.get().getDefaultState());
         }
-    }*/
+    }
 }

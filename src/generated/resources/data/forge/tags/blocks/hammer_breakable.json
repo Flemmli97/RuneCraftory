@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:ore_iron",
+    "runecraftory:ore_bronze",
+    "runecraftory:ore_silver",
+    "runecraftory:ore_gold",
+    "runecraftory:ore_diamond",
+    "runecraftory:ore_platinum",
+    "runecraftory:ore_orichalcum",
+    "runecraftory:ore_dragonic",
+    "runecraftory:ore_amethyst",
+    "runecraftory:ore_aquamarine",
+    "runecraftory:ore_ruby",
+    "runecraftory:ore_emerald",
+    "runecraftory:ore_sapphire"
+  ]
+}

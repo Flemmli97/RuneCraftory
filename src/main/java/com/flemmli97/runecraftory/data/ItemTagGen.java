@@ -19,8 +19,7 @@ public class ItemTagGen extends ItemTagsProvider {
     protected void registerTags() {
         this.getOrCreateTagBuilder(ModTags.minerals)
                 .add(ModItems.scrapPlus.get())
-                .addOptionalTag(Tags.Items.INGOTS_IRON.getId())
-                .addOptionalTag(Tags.Items.INGOTS_GOLD.getId())
+                .addTags(Tags.Items.INGOTS_IRON, Tags.Items.INGOTS_GOLD)
                 .add(ModItems.bronze.get())
                 .add(ModItems.silver.get())
                 .add(ModItems.platinum.get())

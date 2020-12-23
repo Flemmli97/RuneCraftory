@@ -59,7 +59,6 @@ public class CombatUtils {
             }
             if (damagePhys > 0) {
                 if (resetCooldown) {
-                    System.out.println("cooldown ");
                     player.getCooldownTracker().setCooldown(stack.getItem(), item.itemCoolDownTicks());
                 }
                 boolean faintChance = player.world.rand.nextInt(100) < MobUtils.getAttributeValue(player, ModAttributes.RFFAINT.get(), target);

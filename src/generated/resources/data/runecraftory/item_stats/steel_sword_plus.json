@@ -4,8 +4,8 @@
   "upgradeDifficulty": 0,
   "element": "NONE",
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 4,
-    "minecraft:generic.attack_damage": 11
+    "minecraft:generic.attack_damage": 11,
+    "runecraftory:attribute.rf.defence": 4
   },
   "item": "runecraftory:steel_sword_plus"
 }

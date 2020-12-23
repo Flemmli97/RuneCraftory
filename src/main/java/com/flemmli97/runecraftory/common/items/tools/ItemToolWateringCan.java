@@ -63,9 +63,7 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
 
     @Override
     public int chargeAmount(ItemStack stack) {
-        if (this.tier == EnumToolTier.PLATINUM)
-            return this.tier.getTierLevel();
-        return this.tier.getTierLevel() + 1;
+        return this.tier.getTierLevel();
     }
 
     @Override
@@ -139,7 +137,7 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
     @Override
     public void onUsingTick(ItemStack stack, LivingEntity player, int count) {
         int duration = stack.getUseDuration() - count;
-        if (duration != 0 && duration / this.getChargeTime(stack) < this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
             player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
@@ -154,13 +152,13 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
                 if (entity instanceof PlayerEntity) {
                     BlockRayTraceResult result = rayTrace(world, (PlayerEntity) entity, RayTraceContext.FluidMode.NONE);
                     if (result != null) {
-                        this.useOnBlock(new ItemUseContext((PlayerEntity) entity, Hand.MAIN_HAND, result));
+                        this.useOnBlock(new ItemUseContext((PlayerEntity) entity, entity.getActiveHand(), result));
                         return;
                     }
                 }
             } else {
                 BlockPos.getAllInBox(pos.add(-range, -1, -range), pos.add(range, 0, range)).forEach(p -> {
-                    if ((!(entity instanceof PlayerEntity) || ((PlayerEntity) entity).canPlayerEdit(p.offset(Direction.UP), Direction.DOWN, stack)) && this.moisten((ServerWorld) world, p, stack, entity))
+                    if (this.moisten((ServerWorld) world, p, stack, entity))
                         flag.set(true);
                 });
             }
@@ -170,7 +168,6 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
                 });
             }
         }
-
         super.onPlayerStoppedUsing(stack, world, entity, timeLeft);
     }
 
@@ -190,11 +187,11 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
                 return ActionResult.success(itemstack);
             }
         }
-        if (hand == Hand.MAIN_HAND && this.tier.getTierLevel() != 0) {
+        if (this.tier.getTierLevel() != 0) {
             player.setActiveHand(hand);
             return ActionResult.success(itemstack);
         }
-        return ActionResult.fail(itemstack);
+        return ActionResult.pass(itemstack);
     }
 
     @Override
@@ -208,37 +205,19 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
     private ActionResultType useOnBlock(ItemUseContext ctx) {
         if (ctx.getWorld().isRemote)
             return ActionResultType.PASS;
-        ActionResultType result = ActionResultType.FAIL;
         ItemStack stack = ctx.getItem();
         PlayerEntity player = ctx.getPlayer();
         BlockPos pos = ctx.getPos();
-        boolean used = false;
-        if (player.canPlayerEdit(pos.offset(Direction.UP), Direction.DOWN, stack)) {
-            if (this.moisten((ServerWorld) ctx.getWorld(), pos, stack, player)) {
-                used = true;
-                result = ActionResultType.SUCCESS;
-            }
+        if (this.moisten((ServerWorld) ctx.getWorld(), pos, stack, player) || this.moisten((ServerWorld) ctx.getWorld(), pos.down(), stack, player)) {
+            this.onBlockBreak((ServerPlayerEntity) ctx.getPlayer());
+            return ActionResultType.SUCCESS;
         }
-        if (!used) {
-            BlockPos newPos = pos.down();
-            if (player.canPlayerEdit(newPos.offset(Direction.UP), Direction.DOWN, stack)) {
-                if (this.moisten((ServerWorld) ctx.getWorld(), newPos, stack, player)) {
-                    used = true;
-                }
-                result = ActionResultType.SUCCESS;
-            }
-        }
-        if (used) {
-            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
-                /*capSync.decreaseRunePoints(player, 1);
-                capSync.increaseSkill(EnumSkills.WATER, player, 1);
-                capSync.increaseSkill(EnumSkills.FARMING, player, 1);*/
-            });
-        }
-        return result;
+        return ActionResultType.PASS;
     }
 
     private boolean moisten(ServerWorld world, BlockPos pos, ItemStack stack, LivingEntity entity) {
+        if(entity instanceof PlayerEntity && !((PlayerEntity) entity).canPlayerEdit(pos.offset(Direction.UP), Direction.UP, stack))
+            return false;
         boolean creative = !(entity instanceof PlayerEntity) || ((PlayerEntity) entity).isCreative();
         BlockState state = world.getBlockState(pos);
         if (!stack.hasTag()) {
