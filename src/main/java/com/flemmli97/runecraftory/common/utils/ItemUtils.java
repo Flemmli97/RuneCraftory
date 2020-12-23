@@ -13,9 +13,9 @@ import net.minecraft.world.World;
 public class ItemUtils {
 
     public static void starterItems(PlayerEntity player) {
-        //ItemStack broadSword = new ItemStack(ModItems.broadSword);
+        ItemStack broadSword = new ItemStack(ModItems.broadSword.get());
         ItemStack hammer = new ItemStack(ModItems.hammerScrap.get());
-        //spawnItemAtEntity(player, broadSword);
+        spawnItemAtEntity(player, broadSword);
         spawnItemAtEntity(player, hammer);
     }
 

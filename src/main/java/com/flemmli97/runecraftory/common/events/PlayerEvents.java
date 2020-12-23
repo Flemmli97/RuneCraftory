@@ -11,6 +11,7 @@ import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModTags;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
+import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.world.WorldHandler;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import com.flemmli97.runecraftory.network.S2CCalendar;
@@ -20,6 +21,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
@@ -51,6 +53,14 @@ public class PlayerEvents {
         if (!event.getPlayer().world.isRemote) {
             PacketHandler.sendToClient(new S2CDataPackSync(), (ServerPlayerEntity) event.getPlayer());
             PacketHandler.sendToClient(new S2CCalendar(WorldHandler.get((ServerWorld) event.getPlayer().world).getCalendar()), (ServerPlayerEntity) event.getPlayer());
+            CompoundNBT playerData = event.getPlayer().getPersistentData();
+            if (!playerData.getBoolean(RuneCraftory.MODID+":starterItems")) {
+                ItemUtils.starterItems(event.getPlayer());
+                playerData.putBoolean(RuneCraftory.MODID+":starterItems", true);
+                event.getPlayer().getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap->{
+                    cap.regenHealth(event.getPlayer(), cap.getMaxHealth(event.getPlayer()));
+                });
+            }
         }
     }
 
