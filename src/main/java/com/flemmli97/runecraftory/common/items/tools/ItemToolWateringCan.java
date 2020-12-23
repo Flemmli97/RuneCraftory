@@ -225,7 +225,7 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
         }
         int water = stack.getOrCreateTag().getInt("Water");
         if ((creative || water > 0) && state.isIn(ModBlocks.farmland.get()) && state.get(FarmlandBlock.MOISTURE) == 0) {
-            world.spawnParticle(ParticleTypes.FISHING, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 4, 0.0, 0.01, 0.0, 1.0D);
+            world.spawnParticle(ParticleTypes.FISHING, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 4, 0.0, 0.01, 0.0, 0.1D);
             world.setBlockState(pos, state.with(FarmlandBlock.MOISTURE, 7), 3);
             world.playSound(null, pos, SoundEvents.ENTITY_BOAT_PADDLE_WATER, SoundCategory.BLOCKS, 1.0f, 1.1f);
             if (!creative) {

@@ -126,6 +126,11 @@ public class TileFarm extends TileEntity implements IDailyUpdate {
     }
 
     @Override
+    public boolean inValid() {
+        return this.isRemoved();
+    }
+
+    @Override
     public void fromTag(BlockState state, CompoundNBT compound) {
         super.fromTag(state, compound);
         this.health = compound.getInt("Health");

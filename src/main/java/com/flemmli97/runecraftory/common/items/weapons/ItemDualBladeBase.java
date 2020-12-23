@@ -7,10 +7,15 @@ import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
+import com.flemmli97.runecraftory.common.utils.CombatUtils;
+import com.flemmli97.runecraftory.common.utils.CustomDamage;
+import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
+import com.flemmli97.runecraftory.common.utils.MobUtils;
 import com.flemmli97.runecraftory.lib.ItemTiers;
 import com.flemmli97.tenshilib.api.item.IAOEWeapon;
 import com.flemmli97.tenshilib.api.item.IDualWeapon;
+import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
@@ -18,6 +23,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
@@ -25,9 +31,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.UseAction;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemDualBladeBase extends SwordItem implements IItemUsable, IChargeable, IDualWeapon, IAOEWeapon {
     private int chargeXP;
@@ -110,45 +120,42 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
             player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
-    /*@Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-        if (entityLiving instanceof EntityPlayer) 
-        {
-            EntityPlayer player = (EntityPlayer)entityLiving;
-            IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
-            if (this.getMaxItemUseDuration(stack) - timeLeft >= this.getChargeTime()[0]) 
-            {
-                if (!player.world.isRemote && player instanceof EntityPlayerMP) {
-                    PacketHandler.sendTo(new PacketWeaponAnimation(20), (EntityPlayerMP)player);
+    @Override
+    public void onPlayerStoppedUsing(ItemStack stack, World world, LivingEntity entity, int timeLeft) {
+        if (!world.isRemote && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
+            List<LivingEntity> list = RayTraceUtils.getEntities(entity, this.getRange()+2, this.getFOV());
+            if (!list.isEmpty()) {
+                CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(20).get();
+                boolean player = entity instanceof PlayerEntity;
+                boolean success = false;
+                for (LivingEntity e : list) {
+                    float damagePhys = MobUtils.getAttributeValue(entity, Attributes.GENERIC_ATTACK_DAMAGE, e);
+                    if (player) {
+                        if (CombatUtils.playerDamage((PlayerEntity) entity, e, src, damagePhys, stack))
+                            success = true;
+                    } else if (MobUtils.handleMobAttack(e, src, damagePhys))
+                        success = true;
                 }
-                List<EntityLivingBase> entityList = RayTraceUtils.getEntities(player, this.getRange() + 2, this.getFOV());
-                if (!entityList.isEmpty()) {
-                    cap.decreaseRunePoints(player, 15);
-                    cap.increaseSkill(EnumSkills.DUAL, player, this.chargeXP);
-                    for (EntityLivingBase e : entityList) {
-                        float damagePhys = RFCalculations.getAttributeValue(player, ItemStatAttributes.RFATTACK, null, null);
-                        if (!(e instanceof IEntityBase)) {
-                            damagePhys = LevelCalc.scaleForVanilla(damagePhys);
-                        }
-                        RFCalculations.playerDamage(player, e, CustomDamage.attack(player, ItemNBT.getElement(stack), CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.UP, 0.65f, 20), damagePhys, cap, stack);
-                        player.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0f, 1.0f);
-                    }
+                if (success) {
+                    entity.world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, entity.getSoundCategory(), 1.0f, 1.0f);
+                    if(player)
+                        entity.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+
+                        });
                 }
             }
         }
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        ItemStack itemstack = playerIn.getHeldItem(handIn);
-        IPlayer cap = playerIn.getCapability(PlayerCapProvider.PlayerCap, null);
-        if (handIn == EnumHand.MAIN_HAND && (cap.getSkillLevel(EnumSkills.DUAL)[0] >= 5 || playerIn.capabilities.isCreativeMode)) {
-            playerIn.setActiveHand(handIn);
-            return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemstack = player.getHeldItem(hand);
+        if (player.isCreative() || player.getCapability(PlayerCapProvider.PlayerCap).map(cap->cap.getSkillLevel(EnumSkills.DUAL)[0]>=5).orElse(false)) {
+            player.setActiveHand(hand);
+            return ActionResult.success(itemstack);
         }
-        return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
-    }*/
-
+        return ActionResult.pass(itemstack);
+    }
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
         return ImmutableMultimap.of();

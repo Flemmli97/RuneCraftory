@@ -11,6 +11,7 @@ import com.flemmli97.runecraftory.lib.ItemTiers;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -170,7 +171,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
             return false;
         BlockState state = world.getBlockState(pos);
         BlockState blockstate = state.getToolModifiedState(world, pos, (PlayerEntity) entity, stack, ToolType.HOE);
-        if(blockstate != null){
+        if(blockstate != null && world.getBlockState(pos.up()).getMaterial() == Material.AIR){
             world.setBlockState(pos, blockstate, 3);
             world.playSound(null, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0f, 1.1f);
             return true;

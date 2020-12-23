@@ -80,7 +80,7 @@ public class CombatUtils {
                     knockback *= 0.85f;
                 }
                 CustomDamage source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(ignoreArmor ? CustomDamage.DamageType.IGNOREDEF : CustomDamage.DamageType.NORMAL).knock(CustomDamage.KnockBackType.VANILLA).knockAmount(knockback).hurtResistant(0).get();
-                if (playerDamage(player, target, source, damagePhys, cap, stack)) {
+                if (playerDamage(player, target, source, damagePhys, stack)) {
                     //Level skill on successful attack
                     if (levelSkill && player instanceof ServerPlayerEntity)
                         item.onEntityHit((ServerPlayerEntity) player);
@@ -113,14 +113,14 @@ public class CombatUtils {
         return false;
     }
 
-    public static boolean playerDamage(PlayerEntity player, LivingEntity target, CustomDamage source, float damagePhys, IPlayerCap cap, ItemStack stack) {
+    public static boolean playerDamage(PlayerEntity player, LivingEntity target, CustomDamage source, float damagePhys, ItemStack stack) {
         boolean success = target.attackEntityFrom(source, damagePhys);
         spawnElementalParticle(target, source.getElement());
         if (success) {
             knockBack(target, source);
             int drainPercent = (int) MobUtils.getAttributeValue(player, ModAttributes.RFDRAIN.get(), target);
             if (drainPercent > 0f) {
-                cap.regenHealth(player, drainPercent * damagePhys);
+                player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap->cap.regenHealth(player, drainPercent * damagePhys));
             }
             applyStatusEffects(player, target);
             player.setLastAttackedEntity(target);

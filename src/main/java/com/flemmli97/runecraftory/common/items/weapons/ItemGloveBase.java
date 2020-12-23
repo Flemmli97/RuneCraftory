@@ -18,6 +18,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -125,4 +127,14 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
         }
         return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
     }*/
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
+        ItemStack itemstack = player.getHeldItem(hand);
+        if (player.isCreative() || player.getCapability(PlayerCapProvider.PlayerCap).map(cap->cap.getSkillLevel(EnumSkills.FIST)[0]>=5).orElse(false)) {
+            player.setActiveHand(hand);
+            return ActionResult.success(itemstack);
+        }
+        return ActionResult.pass(itemstack);
+    }
 }

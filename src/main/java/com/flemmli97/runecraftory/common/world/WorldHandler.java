@@ -26,7 +26,7 @@ public class WorldHandler extends WorldSavedData {
     /**
      * Non persistent tracker to update stuff daily
      */
-    private final Set<IDailyUpdate> updateTracker = Sets.newHashSet();
+    private final Set<IDailyUpdate> updateTracker = Sets.newConcurrentHashSet();
 
     public WorldHandler() {
         this(id);
@@ -82,6 +82,7 @@ public class WorldHandler extends WorldSavedData {
     public void update(ServerWorld world) {
         if (WorldUtils.canUpdateDaily(world)) {
             this.increaseDay(world);
+            this.updateTracker.removeIf(IDailyUpdate::inValid);
             this.updateTracker.forEach(update -> update.update(world));
         }
         if (canUpdateWeather(world, this.currentWeather())) {
