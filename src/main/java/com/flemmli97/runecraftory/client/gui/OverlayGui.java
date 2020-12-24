@@ -4,7 +4,7 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.enums.EnumSeason;
 import com.flemmli97.runecraftory.client.ClientHandlers;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.utils.CalendarImpl;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
@@ -23,7 +23,7 @@ public class OverlayGui extends AbstractGui {
     }
 
     public void renderBar(MatrixStack stack) {
-        IPlayerCap cap = this.mc.player.getCapability(PlayerCapProvider.PlayerCap).orElse(null);
+        IPlayerCap cap = this.mc.player.getCapability(CapabilityInsts.PlayerCap).orElse(null);
         CalendarImpl calendar = ClientHandlers.clientCalendar;
         int xPos = 2;
         int yPos = 2;

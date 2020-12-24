@@ -2,7 +2,7 @@ package com.flemmli97.runecraftory.common.items.consumables;
 
 import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import com.flemmli97.runecraftory.common.utils.CraftingUtils;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -60,7 +60,7 @@ public class ItemRecipeBread extends Item {
             ServerPlayerEntity player = (ServerPlayerEntity) living;
             AtomicBoolean success = new AtomicBoolean(false);
             player.getServer().getRecipeManager().listAllOfType(CraftingUtils.getType(this.type))
-                    .stream().filter(r -> !player.getRecipeBook().isUnlocked(r) && r.getCraftingLevel() - player.getCapability(PlayerCapProvider.PlayerCap).map(cap -> cap.getSkillLevel(this.getSkill())[0]).orElse(0) <= 5)
+                    .stream().filter(r -> !player.getRecipeBook().isUnlocked(r) && r.getCraftingLevel() - player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getSkillLevel(this.getSkill())[0]).orElse(0) <= 5)
                     .sorted(Comparator.comparingInt(SextupleRecipe::getCraftingLevel))
                     .limit(amount).forEach(recipe -> {
                 player.getRecipeBook().unlock(recipe);

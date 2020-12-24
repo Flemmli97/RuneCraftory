@@ -74,6 +74,7 @@ public class RFCreativeTabs {
     };
 
     private static abstract class CreativePlus extends ItemGroup {
+
         public CreativePlus(String label) {
             super(label);
         }

@@ -2,7 +2,7 @@ package com.flemmli97.runecraftory.common.events;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.MobConfig;
 import com.flemmli97.runecraftory.common.entities.GateEntity;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
@@ -44,7 +44,7 @@ public class MobEvents {
         if (event.getSource().getTrueSource() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getSource().getTrueSource();
             if (!(player.getHeldItemMainhand().getItem() instanceof IItemUsable)) {
-                event.setAmount(player.getCapability(PlayerCapProvider.PlayerCap).map(cap -> Math.max(0, cap.getAttributeValue(player, Attributes.GENERIC_ATTACK_DAMAGE) - 4)).orElse(0));
+                event.setAmount(player.getCapability(CapabilityInsts.PlayerCap).map(cap -> Math.max(0, cap.getAttributeValue(player, Attributes.GENERIC_ATTACK_DAMAGE) - 4)).orElse(0));
             }
         }
     }

@@ -5,7 +5,7 @@ import com.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.tenshilib.api.item.IAOEWeapon;
@@ -62,13 +62,13 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
 
     @Override
     public void onEntityHit(ServerPlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap)
+        player.getCapability(CapabilityInsts.PlayerCap)
                 .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 1));
     }
 
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap)
+        player.getCapability(CapabilityInsts.PlayerCap)
                 .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, 0.5f));
     }
 
@@ -159,7 +159,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-        if (player.isCreative() || player.getCapability(PlayerCapProvider.PlayerCap).map(cap->cap.getSkillLevel(EnumSkills.SPEAR)[0]>=5).orElse(false)) {
+        if (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap->cap.getSkillLevel(EnumSkills.SPEAR)[0]>=5).orElse(false)) {
             player.setActiveHand(hand);
             return ActionResult.success(itemstack);
         }

@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.loot;
 
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.registry.ModLootModifier;
 import com.flemmli97.tenshilib.common.utils.JsonUtils;
 import com.google.common.collect.ImmutableSet;
@@ -40,7 +40,7 @@ public class MiningLootCondition implements ILootCondition {
     public boolean test(LootContext ctx) {
         int level = 0;
         if (ctx.get(LootParameters.THIS_ENTITY) instanceof PlayerEntity) {
-            level = ctx.get(LootParameters.THIS_ENTITY).getCapability(PlayerCapProvider.PlayerCap)
+            level = ctx.get(LootParameters.THIS_ENTITY).getCapability(CapabilityInsts.PlayerCap)
                     .map(cap -> cap.getSkillLevel(EnumSkills.MINING)[0]).orElse(0);
         }
         return level >= this.min;

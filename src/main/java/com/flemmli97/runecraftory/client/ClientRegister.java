@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.client;
 
 import com.flemmli97.runecraftory.client.gui.CraftingGui;
 import com.flemmli97.runecraftory.client.gui.OverlayGui;
+import com.flemmli97.runecraftory.client.gui.UpgradeGui;
 import com.flemmli97.runecraftory.client.render.RenderGate;
 import com.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
 import com.flemmli97.runecraftory.client.render.monster.RenderAnt;
@@ -76,6 +77,7 @@ public class ClientRegister {
             RenderTypeLookup.setRenderLayer(ModBlocks.bossSpawner.get(), RenderType.getCutout());
 
             ScreenManager.registerFactory(ModContainer.craftingContainer.get(), CraftingGui::new);
+            ScreenManager.registerFactory(ModContainer.upgradeContainer.get(), UpgradeGui::new);
 
             ModItems.ITEMS.getEntries().forEach(reg-> {
                 if(reg.get() instanceof ItemDualBladeBase || reg.get() instanceof ItemGloveBase)

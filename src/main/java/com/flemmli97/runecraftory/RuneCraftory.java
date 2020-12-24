@@ -3,9 +3,11 @@ package com.flemmli97.runecraftory;
 import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.client.ClientEvents;
 import com.flemmli97.runecraftory.client.ClientRegister;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
+import com.flemmli97.runecraftory.common.capability.IStaffCap;
 import com.flemmli97.runecraftory.common.capability.PlayerCapImpl;
-import com.flemmli97.runecraftory.common.capability.PlayerCapNetwork;
+import com.flemmli97.runecraftory.common.capability.StaffCapImpl;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.config.GeneralConfigSpec;
 import com.flemmli97.runecraftory.common.config.MobConfig;
@@ -43,6 +45,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,6 +62,8 @@ public class RuneCraftory {
     public static Path defaultConfPath;
 
     public static SpawnConfig spawnConfig;
+
+    public static IForgeRegistry<Spell> spellRegistry;
 
     public RuneCraftory() {
         Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
@@ -101,7 +106,7 @@ public class RuneCraftory {
     }
 
     public void newReg(RegistryEvent.NewRegistry event) {
-        new RegistryBuilder().setName(new ResourceLocation(RuneCraftory.MODID, "spell_registry"))
+        spellRegistry = new RegistryBuilder<Spell>().setName(new ResourceLocation(RuneCraftory.MODID, "spell_registry"))
                 .setType(Spell.class).setDefaultKey(new ResourceLocation(RuneCraftory.MODID, "empty_spell")).create();
     }
 
@@ -115,7 +120,8 @@ public class RuneCraftory {
             ModEntities.registerAttributes();
             EntitySpawnPlacementRegistry.register(ModEntities.gate.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
         });
-        CapabilityManager.INSTANCE.register(IPlayerCap.class, new PlayerCapNetwork(), PlayerCapImpl::new);
+        CapabilityManager.INSTANCE.register(IPlayerCap.class, new CapabilityInsts.PlayerCapNetwork(), PlayerCapImpl::new);
+        CapabilityManager.INSTANCE.register(IStaffCap.class, new CapabilityInsts.StaffCapNetwork(), StaffCapImpl::new);
     }
 
     public void conf(ModConfig.ModConfigEvent event) {

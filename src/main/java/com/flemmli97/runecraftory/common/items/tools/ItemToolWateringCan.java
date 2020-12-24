@@ -5,7 +5,7 @@ import com.flemmli97.runecraftory.api.enums.EnumToolTier;
 import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -163,7 +163,7 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
                 });
             }
             if (flag.get() && entity instanceof PlayerEntity) {
-                entity.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+                entity.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
 
                 });
             }

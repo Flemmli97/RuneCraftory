@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.utils;
 
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import net.minecraft.entity.Entity;
@@ -23,7 +23,7 @@ public class MobUtils {
     public static float getAttributeValue(LivingEntity attacker, Attribute att, Entity target) {
         float increase = 0;
         if (attacker instanceof PlayerEntity) {
-            increase += attacker.getCapability(PlayerCapProvider.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) attacker, att)).orElse(0);
+            increase += attacker.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) attacker, att)).orElse(0);
             //} else if (attacker instanceof IRFNpc) {
             //    increase += ((IRFNpc) entity).getAttributeValue(att);
         } else if (attacker.getAttribute(att) != null) {
@@ -35,7 +35,7 @@ public class MobUtils {
         if (opp == null)
             return increase;
         if (target instanceof PlayerEntity) {
-            increase -= target.getCapability(PlayerCapProvider.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) target, att)).orElse(0);
+            increase -= target.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) target, att)).orElse(0);
         }
                 /*
         } else if (target instanceof IRFNpc) {

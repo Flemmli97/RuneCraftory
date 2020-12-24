@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.network;
 
 import com.flemmli97.runecraftory.client.ClientHandlers;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -37,7 +37,7 @@ public class S2CFoodPkt {
             PlayerEntity player = DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> ClientHandlers::getPlayer);
             if (player == null)
                 return;
-            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
                 if (pkt.stack == null)
                     cap.removeFoodEffect(player);
                 else

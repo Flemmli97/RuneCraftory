@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.network;
 
 import com.flemmli97.runecraftory.client.ClientHandlers;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.network.PacketBuffer;
@@ -32,7 +32,7 @@ public class S2CEquipmentUpdate {
             PlayerEntity player = DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> ClientHandlers::getPlayer);
             if (player == null)
                 return;
-            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> cap.updateEquipmentStats(player, pkt.slot));
+            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.updateEquipmentStats(player, pkt.slot));
         });
         ctx.get().setPacketHandled(true);
     }

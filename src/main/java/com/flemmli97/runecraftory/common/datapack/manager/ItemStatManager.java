@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.datapack.manager;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import com.google.common.collect.ImmutableMap;
@@ -19,12 +20,16 @@ import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryManager;
 
 import java.util.Map;
 
 public class ItemStatManager extends JsonReloadListener {
 
-    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(ForgeRegistries.ATTRIBUTES)).create();
+    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization()
+            .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(ForgeRegistries.ATTRIBUTES))
+            .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(RegistryManager.ACTIVE.getRegistry(Spell.class))).create();
+
     private Map<ResourceLocation, ItemStat> itemstat = ImmutableMap.of();
 
     public ItemStatManager() {

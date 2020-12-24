@@ -2,8 +2,8 @@ package com.flemmli97.runecraftory.common.utils;
 
 import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.entities.IBaseMob;
 import com.flemmli97.runecraftory.common.entities.IExtendedMob;
@@ -44,7 +44,7 @@ public class CombatUtils {
      * @return if the attack was successful or not
      */
     public static boolean doPlayerAttack(PlayerEntity player, LivingEntity target, boolean resetCooldown, boolean playSound, boolean levelSkill) {
-        IPlayerCap cap = player.getCapability(PlayerCapProvider.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"));
+        IPlayerCap cap = player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"));
         ItemStack stack = player.getHeldItemMainhand();
         if (!(stack.getItem() instanceof IItemUsable))
             return false;
@@ -120,7 +120,7 @@ public class CombatUtils {
             knockBack(target, source);
             int drainPercent = (int) MobUtils.getAttributeValue(player, ModAttributes.RFDRAIN.get(), target);
             if (drainPercent > 0f) {
-                player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap->cap.regenHealth(player, drainPercent * damagePhys));
+                player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->cap.regenHealth(player, drainPercent * damagePhys));
             }
             applyStatusEffects(player, target);
             player.setLastAttackedEntity(target);

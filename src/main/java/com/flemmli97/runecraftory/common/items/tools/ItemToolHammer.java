@@ -6,7 +6,7 @@ import com.flemmli97.runecraftory.api.enums.EnumToolTier;
 import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.registry.ModTags;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -84,13 +84,13 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
 
     @Override
     public void onEntityHit(ServerPlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap)
+        player.getCapability(CapabilityInsts.PlayerCap)
                 .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 0.5f));
     }
 
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap)
+        player.getCapability(CapabilityInsts.PlayerCap)
                 .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.MINING, this.tier.getTierLevel() + 1));
     }
 
@@ -138,7 +138,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
                 });
             }
             if (flag.get() && entity instanceof PlayerEntity) {
-                entity.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+                entity.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
 
                 });
             }

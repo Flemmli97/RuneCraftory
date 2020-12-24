@@ -4,7 +4,7 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.entities.IBaseMob;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -17,16 +17,13 @@ import com.flemmli97.runecraftory.network.PacketHandler;
 import com.flemmli97.runecraftory.network.S2CCalendar;
 import com.flemmli97.runecraftory.network.S2CDataPackSync;
 import com.flemmli97.tenshilib.api.event.AOEAttackEvent;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -39,15 +36,6 @@ import java.util.List;
 
 public class PlayerEvents {
 
-    public static final ResourceLocation PlayerCap = new ResourceLocation(RuneCraftory.MODID, "player_cap");
-
-    @SubscribeEvent
-    public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof PlayerEntity) {
-            event.addCapability(PlayerCap, new PlayerCapProvider());
-        }
-    }
-
     @SubscribeEvent
     public void join(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.getPlayer().world.isRemote) {
@@ -57,7 +45,7 @@ public class PlayerEvents {
             if (!playerData.getBoolean(RuneCraftory.MODID+":starterItems")) {
                 ItemUtils.starterItems(event.getPlayer());
                 playerData.putBoolean(RuneCraftory.MODID+":starterItems", true);
-                event.getPlayer().getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap->{
+                event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->{
                     cap.regenHealth(event.getPlayer(), cap.getMaxHealth(event.getPlayer()));
                 });
             }
@@ -67,7 +55,7 @@ public class PlayerEvents {
     @SubscribeEvent
     public void updateEquipment(LivingEquipmentChangeEvent event) {
         if (event.getEntityLiving() instanceof PlayerEntity) {
-            event.getEntityLiving().getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap ->
+            event.getEntityLiving().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap ->
                     cap.updateEquipmentStats((PlayerEntity) event.getEntityLiving(), event.getSlot()));
         }
     }
@@ -195,7 +183,7 @@ public class PlayerEvents {
     public void updateLivingTick(LivingEvent.LivingUpdateEvent event) {
         if (event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> cap.update(player));
+            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.update(player));
             int food = EntityUtils.paralysed(player) ? 3 : 7;
             player.getFoodStats().setFoodLevel(food);
             player.getFoodStats().setFoodSaturationLevel(0);
@@ -217,7 +205,7 @@ public class PlayerEvents {
             if (e instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) e;
                 player.getCooldownTracker().setCooldown(event.getItem().getItem(), 3);
-                player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+                player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
                     cap.applyFoodEffect(player, event.getItem());
                     cap.regenHealth(player, prop.getHPGain());
                     cap.refreshRunePoints(player, cap.getRunePoints() + prop.getRPRegen());

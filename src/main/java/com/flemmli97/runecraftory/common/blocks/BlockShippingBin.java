@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.blocks;
 
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import com.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -59,7 +59,7 @@ public class BlockShippingBin extends Block {
     public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (world.isRemote)
             return ActionResultType.SUCCESS;
-        InventoryShippingBin shippingInv = player.getCapability(PlayerCapProvider.PlayerCap).map(IPlayerCap::getShippingInv).orElse(null);
+        InventoryShippingBin shippingInv = player.getCapability(CapabilityInsts.PlayerCap).map(IPlayerCap::getShippingInv).orElse(null);
         if (shippingInv != null) {
             player.openContainer(new SimpleNamedContainerProvider((p_226928_1_, p_226928_2_, p_226928_3_) -> ChestContainer.createGeneric9X6(p_226928_1_, p_226928_2_, new RecipeWrapper(shippingInv) {
                 @Override

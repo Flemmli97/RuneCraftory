@@ -3,11 +3,14 @@ package com.flemmli97.runecraftory.data;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.api.datapack.provider.ItemStatProvider;
+import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModItems;
+import com.flemmli97.runecraftory.common.registry.ModSpells;
 import com.flemmli97.runecraftory.common.registry.ModTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 
 public class ItemStatGen extends ItemStatProvider {
@@ -18,6 +21,10 @@ public class ItemStatGen extends ItemStatProvider {
 
     @Override
     protected void add() {
+        this.addStat("arrows", ItemTags.ARROWS, new ItemStat.MutableItemStat(10, 1, 5)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 5)
+                .setSpell(ModSpells.FIREBALL.get(), ModSpells.ARROW.get(), null));
+
         this.addStat(ModItems.broadSword.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 5));
         this.addStat(ModItems.steelSword.get(), new ItemStat.MutableItemStat(55, 15, 0)
@@ -33,6 +40,12 @@ public class ItemStatGen extends ItemStatProvider {
 
         this.addStat(ModItems.cheapBracelet.get(), new ItemStat.MutableItemStat(100, 25, 0)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 5));
+
+        this.addStat(ModItems.rod.get(), new ItemStat.MutableItemStat(1000, 50, 0)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 8)
+                .addAttribute(ModAttributes.RFDIZ.get(), 15)
+                .setElement(EnumElement.FIRE)
+                .setSpell(ModSpells.FIREBALL.get(), null, null));
 
         this.addStat("iron", Tags.Items.INGOTS_IRON, new ItemStat.MutableItemStat(1, 1, 5)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));

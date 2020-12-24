@@ -1245,7 +1245,7 @@ public class ModItems {
     }
 
     public static RegistryObject<Item> staff(String name, EnumElement starterElement) {
-        return ITEMS.register(name, () -> new ItemStaffBase(starterElement, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
+        return ITEMS.register(name, () -> new ItemStaffBase(starterElement, new Item.Properties().maxStackSize(1).group(RFCreativeTabs.weaponToolTab)));
     }
 
     public static RegistryObject<Item> accessoire(String name) {

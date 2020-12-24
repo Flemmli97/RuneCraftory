@@ -1,6 +1,10 @@
 package com.flemmli97.runecraftory.common.utils;
 
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
+import com.flemmli97.runecraftory.api.enums.EnumCrafting;
+import com.flemmli97.runecraftory.api.enums.EnumSkills;
+import com.flemmli97.runecraftory.common.capability.IPlayerCap;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import net.minecraft.entity.LivingEntity;
@@ -62,5 +66,28 @@ public class ItemUtils {
 
     public static int getBuyPrice(ItemStack stack, ItemStat stat) {
         return stat.getBuy();
+    }
+
+    public static boolean canUpgrade(PlayerEntity player, EnumCrafting type, ItemStack stack, ItemStack ingredient){
+
+        return upgradeCost(type, player, player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability")), stack, ingredient)>=0;
+    }
+
+    public static int upgradeCost(EnumCrafting type, PlayerEntity player, IPlayerCap cap, ItemStack stack, ItemStack ingredient){
+        int level = ItemNBT.itemLevel(stack);
+        ItemStat stat = DataPackHandler.getStats(ingredient.getItem());
+        if(stat != null) {
+            int skillLevel = type == EnumCrafting.FORGE ? cap.getSkillLevel(EnumSkills.FORGING)[0]:cap.getSkillLevel(EnumSkills.CRAFTING)[0];
+            return level * (Math.max(1, stat.getDiff()-skillLevel))*5;
+        }
+        return -1;
+    }
+
+    public static ItemStack getUpgradedStack(ItemStack stack, ItemStack ing){
+        if(ing.isEmpty() || !ItemNBT.shouldHaveStats(stack) || ItemNBT.itemLevel(stack) >= 10)
+            return ItemStack.EMPTY;
+        ItemStack output = stack.copy();
+        ItemNBT.addUpgradeItem(output, ing);
+        return output;
     }
 }

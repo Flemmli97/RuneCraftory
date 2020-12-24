@@ -83,7 +83,7 @@ public class BlockCrafting extends Block {
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TileCrafting) {
                 if (player.isSneaking() && this.hasUpgradeScreen())
-                    ;
+                    NetworkHooks.openGui((ServerPlayerEntity) player, ((TileCrafting) tile).upgradeMenu(), pos);
                 else
                     NetworkHooks.openGui((ServerPlayerEntity) player, (TileCrafting) tile, pos);
             }

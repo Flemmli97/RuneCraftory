@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.items.creative;
 
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -18,7 +18,7 @@ public class ItemLevelUp extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         if (!world.isRemote) {
-            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap ->
+            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap ->
                     cap.addXp(player, LevelCalc.xpAmountForLevelUp(cap.getPlayerLevel()[0]) - cap.getPlayerLevel()[1]));
         }
         return ActionResult.success(player.getHeldItem(hand));

@@ -54,7 +54,7 @@ public class ContainerCrafting extends Container {
             this.addSlot(new Slot(this.craftingInv, i, 20 + i * 18, 26));
             this.addSlot(new Slot(this.craftingInv, i + 3, 20 + i * 18, 44));
         }
-        this.updateCraftingOutput();
+        this.onCraftMatrixChanged(this.craftingInv);
     }
 
     public EnumCrafting craftingType() {
@@ -167,7 +167,7 @@ public class ContainerCrafting extends Container {
         return Lists.newArrayList();
     }
 
-    private static TileCrafting getTile(World world, PacketBuffer buffer) {
+    public static TileCrafting getTile(World world, PacketBuffer buffer) {
         TileEntity tile = world.getTileEntity(buffer.readBlockPos());
         if (tile instanceof TileCrafting) {
             return (TileCrafting) tile;

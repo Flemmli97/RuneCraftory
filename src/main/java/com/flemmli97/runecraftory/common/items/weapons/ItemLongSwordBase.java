@@ -5,7 +5,7 @@ import com.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -72,13 +72,13 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
 
     @Override
     public void onEntityHit(ServerPlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap)
+        player.getCapability(CapabilityInsts.PlayerCap)
                 .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 1));
     }
 
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap)
+        player.getCapability(CapabilityInsts.PlayerCap)
                 .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, 0.5f));
     }
 
@@ -138,7 +138,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
                 if (success) {
                     entity.world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, entity.getSoundCategory(), 1.0f, 1.0f);
                     if(player)
-                        entity.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+                        entity.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
 
                         });
                 }
@@ -149,7 +149,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-        if (player.isCreative() || player.getCapability(PlayerCapProvider.PlayerCap).map(cap->cap.getSkillLevel(EnumSkills.LONGSWORD)[0]>=5).orElse(false)) {
+        if (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap->cap.getSkillLevel(EnumSkills.LONGSWORD)[0]>=5).orElse(false)) {
             player.setActiveHand(hand);
             return ActionResult.success(itemstack);
         }

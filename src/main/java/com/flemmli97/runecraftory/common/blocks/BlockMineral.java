@@ -2,7 +2,7 @@ package com.flemmli97.runecraftory.common.blocks;
 
 import com.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import com.flemmli97.runecraftory.common.items.weapons.ItemHammerBase;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -244,7 +244,7 @@ public class BlockMineral extends Block implements IWaterLoggable {
         Entity entity = builder.get(LootParameters.THIS_ENTITY);
         if (entity instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) entity;
-            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
                 float addChance = cap.getSkillLevel(EnumSkills.MINING)[0] * 0.1f;
                 if (player.getHeldItemMainhand().getItem() instanceof ItemToolHammer) {
                     ItemToolHammer item = (ItemToolHammer) player.getHeldItemMainhand().getItem();

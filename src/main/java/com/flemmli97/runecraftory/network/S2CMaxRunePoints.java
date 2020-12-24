@@ -1,8 +1,8 @@
 package com.flemmli97.runecraftory.network;
 
 import com.flemmli97.runecraftory.client.ClientHandlers;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -36,7 +36,7 @@ public class S2CMaxRunePoints {
             PlayerEntity player = DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> ClientHandlers::getPlayer);
             if (player == null)
                 return;
-            player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> cap.setMaxRunePoints(player, pkt.rpMax));
+            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.setMaxRunePoints(player, pkt.rpMax));
         });
         ctx.get().setPacketHandled(true);
     }

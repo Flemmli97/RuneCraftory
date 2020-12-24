@@ -18,4 +18,9 @@ public abstract class Spell extends ForgeRegistryEntry<Spell> {
     public abstract boolean use(ServerWorld world, LivingEntity entity, ItemStack stack);
 
     public abstract int rpCost();
+
+    @Override
+    public String toString() {
+        return this.getRegistryName().toString();
+    }
 }

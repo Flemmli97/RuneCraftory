@@ -2,7 +2,7 @@ package com.flemmli97.runecraftory.common.spells;
 
 import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.entities.projectiles.EntityFireball;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.entity.LivingEntity;
@@ -20,7 +20,7 @@ public class FireballSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap-> LevelCalc.levelSkill(player, cap, EnumSkills.FIRE, 1));
+        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap-> LevelCalc.levelSkill(player, cap, EnumSkills.FIRE, 1));
     }
 
     @Override
@@ -30,7 +30,7 @@ public class FireballSpell extends Spell {
 
     @Override
     public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack) {
-        boolean rp = !(entity instanceof PlayerEntity) || entity.getCapability(PlayerCapProvider.PlayerCap).map(cap->cap.decreaseRunePoints((PlayerEntity) entity, this.rpCost(), true)).orElse(false);
+        boolean rp = !(entity instanceof PlayerEntity) || entity.getCapability(CapabilityInsts.PlayerCap).map(cap->cap.decreaseRunePoints((PlayerEntity) entity, this.rpCost(), true)).orElse(false);
         if(rp){
             EntityFireball ball = new EntityFireball(world, entity);
             ball.shoot(entity, entity.rotationPitch, entity.rotationYaw, 0, 1, 0);

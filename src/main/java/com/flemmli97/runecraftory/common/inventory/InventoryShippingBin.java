@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.inventory;
 
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -15,7 +15,7 @@ public class InventoryShippingBin extends ItemStackHandler {
     }
 
     public void shipItems(PlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
             int money = 0;
             for (int i = 0; i < this.getSlots(); ++i) {
                 if (this.getStackInSlot(i).isEmpty())

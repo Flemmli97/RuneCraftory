@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.effects;
 
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,7 +17,7 @@ public class PoisonEffect extends PermanentEffect{
     public void performEffect(LivingEntity living, int amplifier) {
         if (living instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) living;
-            living.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap->{
+            living.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->{
                 float amount = cap.getMaxHealth(player) * 0.05f;
                 amount = ((cap.getHealth(player) - amount <= 0.0f) ? (cap.getHealth(player) - 1.0f) : amount);
                 player.attackEntityFrom(CustomDamage.EXHAUST, amount);

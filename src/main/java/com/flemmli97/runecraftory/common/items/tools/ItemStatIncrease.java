@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.items.tools;
 
-import com.flemmli97.runecraftory.common.capability.PlayerCapProvider;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.LivingEntity;
@@ -48,7 +48,7 @@ public class ItemStatIncrease extends Item {
     }
 
     private void increaseStat(ItemStack stack, World worldIn, PlayerEntity player) {
-        player.getCapability(PlayerCapProvider.PlayerCap).ifPresent(cap -> {
+        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
             switch (this.stat) {
                 case HP:
                     cap.setMaxHealth(player, cap.getMaxHealth(player) + 10);

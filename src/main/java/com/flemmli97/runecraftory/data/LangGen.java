@@ -70,6 +70,10 @@ public class LangGen implements IDataProvider {
 
         this.add("shipping.money", "Earning from shipped items: %s");
 
+        this.add("tile.crafting.forge", "Forging");
+        this.add("tile.crafting.armor", "Crafting");
+        this.add("tile.crafting.chemistry", "Chemistry");
+        this.add("tile.crafting.cooking", "Cooking");
     }
 
     private void setupOldFile(ExistingFileHelper existing) {

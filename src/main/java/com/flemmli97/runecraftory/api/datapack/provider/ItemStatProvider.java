@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.api.datapack.provider;
 
+import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import com.google.gson.Gson;
@@ -16,6 +17,7 @@ import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,7 +31,9 @@ public abstract class ItemStatProvider implements IDataProvider {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping().registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(ForgeRegistries.ATTRIBUTES)).create();
+    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping()
+            .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(ForgeRegistries.ATTRIBUTES))
+            .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(RegistryManager.ACTIVE.getRegistry(Spell.class))).create();
 
     private final Map<ResourceLocation, ItemStat.MutableItemStat> data = new HashMap<>();
     private final Map<ResourceLocation, Consumer<JsonObject>> item = new HashMap<>();

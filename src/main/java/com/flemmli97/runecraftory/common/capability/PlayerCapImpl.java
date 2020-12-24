@@ -37,19 +37,26 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Map;
 
-public class PlayerCapImpl implements IPlayerCap {
+public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<CompoundNBT> {
+
+    private final LazyOptional<IPlayerCap> holder = LazyOptional.of(() -> this);
 
     //max runepoints possible: 2883
     private int money = GeneralConfig.startingMoney;
@@ -751,5 +758,21 @@ public class PlayerCapImpl implements IPlayerCap {
         nbt.putInt("FoodBuffRP", this.rpFoodBuff);
         nbt.putInt("FoodBuffDuration", this.foodDuration);
         return nbt;
+    }
+
+    @Override
+    public CompoundNBT serializeNBT() {
+        return this.writeToNBT(new CompoundNBT(), null);
+    }
+
+    @Override
+    public void deserializeNBT(CompoundNBT nbt) {
+        this.readFromNBT(nbt, null);
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
+        return CapabilityInsts.PlayerCap.orEmpty(cap, holder);
     }
 }
