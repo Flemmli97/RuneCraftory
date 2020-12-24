@@ -42,10 +42,10 @@ public class PlayerEvents {
             PacketHandler.sendToClient(new S2CDataPackSync(), (ServerPlayerEntity) event.getPlayer());
             PacketHandler.sendToClient(new S2CCalendar(WorldHandler.get((ServerWorld) event.getPlayer().world).getCalendar()), (ServerPlayerEntity) event.getPlayer());
             CompoundNBT playerData = event.getPlayer().getPersistentData();
-            if (!playerData.getBoolean(RuneCraftory.MODID+":starterItems")) {
+            if (!playerData.getBoolean(RuneCraftory.MODID + ":starterItems")) {
                 ItemUtils.starterItems(event.getPlayer());
-                playerData.putBoolean(RuneCraftory.MODID+":starterItems", true);
-                event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->{
+                playerData.putBoolean(RuneCraftory.MODID + ":starterItems", true);
+                event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
                     cap.regenHealth(event.getPlayer(), cap.getMaxHealth(event.getPlayer()));
                 });
             }
@@ -227,8 +227,8 @@ public class PlayerEvents {
     }
 
     @SubscribeEvent
-    public void hoeTill(BlockEvent.BlockToolInteractEvent event){
-        if(event.getToolType() == ToolType.HOE && event.getFinalState() != null && event.getFinalState().isIn(ModTags.farmlandTill)){
+    public void hoeTill(BlockEvent.BlockToolInteractEvent event) {
+        if (event.getToolType() == ToolType.HOE && event.getFinalState() != null && event.getFinalState().isIn(ModTags.farmlandTill)) {
             event.setFinalState(ModBlocks.farmland.get().getDefaultState());
         }
     }

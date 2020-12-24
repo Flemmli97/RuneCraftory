@@ -57,7 +57,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
 
     @Override
     public int getChargeTime(ItemStack stack) {
-        if(this.tier == EnumToolTier.PLATINUM)
+        if (this.tier == EnumToolTier.PLATINUM)
             return (int) (GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
         return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
     }
@@ -176,22 +176,21 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     }
 
     private boolean hammer(ServerWorld world, BlockPos pos, ItemStack stack, LivingEntity entity, boolean canHammer) {
-        if(entity instanceof PlayerEntity && !((PlayerEntity) entity).canPlayerEdit(pos.offset(Direction.UP), Direction.UP, stack))
+        if (entity instanceof PlayerEntity && !((PlayerEntity) entity).canPlayerEdit(pos.offset(Direction.UP), Direction.UP, stack))
             return false;
         BlockState state = world.getBlockState(pos);
-        if(canHammer && state.isIn(ModTags.hammerBreakable)) {
+        if (canHammer && state.isIn(ModTags.hammerBreakable)) {
             if (entity instanceof ServerPlayerEntity) {
-                if(((ServerPlayerEntity)entity).interactionManager.tryHarvestBlock(pos)) {
+                if (((ServerPlayerEntity) entity).interactionManager.tryHarvestBlock(pos)) {
                     world.playEvent(2001, pos, Block.getStateId(state));
-                    ((ServerPlayerEntity)entity).connection.sendPacket(new SChangeBlockPacket(pos, world.getBlockState(pos)));
+                    ((ServerPlayerEntity) entity).connection.sendPacket(new SChangeBlockPacket(pos, world.getBlockState(pos)));
                     return true;
                 }
             } else {
                 return world.breakBlock(pos, true, entity, 3);
             }
-        }
-        else if (state.isIn(ModTags.hammerFlattenable) && world.getBlockState(pos.up()).getMaterial() == Material.AIR){
-            if(world.setBlockState(pos, Block.nudgeEntitiesWithNewState(state, Blocks.DIRT.getDefaultState(), world, pos))) {
+        } else if (state.isIn(ModTags.hammerFlattenable) && world.getBlockState(pos.up()).getMaterial() == Material.AIR) {
+            if (world.setBlockState(pos, Block.nudgeEntitiesWithNewState(state, Blocks.DIRT.getDefaultState(), world, pos))) {
                 world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1, 1);
                 return true;
             }

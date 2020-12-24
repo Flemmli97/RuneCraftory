@@ -72,7 +72,7 @@ public class InventorySpells implements IItemHandler {
         ItemStack stack = this.getStackInSlot(index);
         if (stack.getItem() instanceof ItemSpell && player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f) <= 0.0f) {
             Spell spell = ((ItemSpell) stack.getItem()).getSpell();
-            if(spell.use((ServerWorld) player.world, player, stack)) {
+            if (spell.use((ServerWorld) player.world, player, stack)) {
                 player.getCooldownTracker().setCooldown(stack.getItem(), spell.coolDown());
                 spell.levelSkill(player);
             }

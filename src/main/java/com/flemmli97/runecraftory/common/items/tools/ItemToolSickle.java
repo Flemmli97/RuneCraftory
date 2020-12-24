@@ -56,7 +56,7 @@ public class ItemToolSickle extends ToolItem implements IItemUsable, IChargeable
 
     @Override
     public int getChargeTime(ItemStack stack) {
-        if(this.tier == EnumToolTier.PLATINUM)
+        if (this.tier == EnumToolTier.PLATINUM)
             return (int) (GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
         return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
     }
@@ -194,14 +194,14 @@ public class ItemToolSickle extends ToolItem implements IItemUsable, IChargeable
     }
 
     private boolean sickleUse(ServerWorld world, BlockPos pos, ItemStack stack, LivingEntity entity) {
-        if(entity instanceof PlayerEntity && !((PlayerEntity) entity).canPlayerEdit(pos.offset(Direction.UP), Direction.UP, stack))
+        if (entity instanceof PlayerEntity && !((PlayerEntity) entity).canPlayerEdit(pos.offset(Direction.UP), Direction.UP, stack))
             return false;
         BlockState state = world.getBlockState(pos);
-        if(state.isIn(ModTags.sickleDestroyable)) {
+        if (state.isIn(ModTags.sickleDestroyable)) {
             if (entity instanceof ServerPlayerEntity) {
-                if(((ServerPlayerEntity)entity).interactionManager.tryHarvestBlock(pos)) {
+                if (((ServerPlayerEntity) entity).interactionManager.tryHarvestBlock(pos)) {
                     world.playEvent(2001, pos, Block.getStateId(state));
-                    ((ServerPlayerEntity)entity).connection.sendPacket(new SChangeBlockPacket(pos, world.getBlockState(pos)));
+                    ((ServerPlayerEntity) entity).connection.sendPacket(new SChangeBlockPacket(pos, world.getBlockState(pos)));
                     return true;
                 }
             } else {

@@ -14,7 +14,7 @@ public class WeaponTypeProperties {
         this.cooldown = cooldown;
     }
 
-    public WeaponTypeProperties(WeaponTypePropertySpecs specs){
+    public WeaponTypeProperties(WeaponTypePropertySpecs specs) {
         this.read(specs);
     }
 
@@ -30,7 +30,7 @@ public class WeaponTypeProperties {
         return this.chargeTime;
     }
 
-    public int cooldown(){
+    public int cooldown() {
         return this.cooldown;
     }
 

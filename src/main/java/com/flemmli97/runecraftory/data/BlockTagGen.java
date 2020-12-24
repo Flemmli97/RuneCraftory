@@ -33,6 +33,6 @@ public class BlockTagGen extends ForgeBlockTagsProvider {
                 .add(Blocks.FARMLAND, ModBlocks.farmland.get(), Blocks.GRASS_PATH);
 
         this.getOrCreateTagBuilder(ModTags.hammerBreakable)
-                .add(ModBlocks.mineralMap.values().stream().map(reg->reg.get()).collect(Collectors.toList()).toArray(new Block[0]));
+                .add(ModBlocks.mineralMap.values().stream().map(reg -> reg.get()).collect(Collectors.toList()).toArray(new Block[0]));
     }
 }

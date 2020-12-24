@@ -27,7 +27,7 @@ public class ContainerUpgrade extends Container {
 
     public ContainerUpgrade(int windowId, PlayerInventory playerInv, TileCrafting tile) {
         super(ModContainer.upgradeContainer.get(), windowId);
-        if(tile.getSlots() <=6)
+        if (tile.getSlots() <= 6)
             throw new IllegalStateException("Tried ccreating a container for " + tile + " but its not made for upgrading items");
         this.outPutInv = new DummyInventory(new ItemStackHandler());
         this.craftingInv = PlayerContainerInv.create(this, tile, playerInv.player);
@@ -41,7 +41,7 @@ public class ContainerUpgrade extends Container {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInv, k, 8 + k * 18, 142));
         }
-        this.addSlot(new Slot(this.craftingInv, 6, 20, 35){
+        this.addSlot(new Slot(this.craftingInv, 6, 20, 35) {
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return this.inventory.isItemValidForSlot(6, stack);
@@ -52,7 +52,7 @@ public class ContainerUpgrade extends Container {
                 return 1;
             }
         });
-        this.addSlot(new Slot(this.craftingInv, 7, 56, 35){
+        this.addSlot(new Slot(this.craftingInv, 7, 56, 35) {
             @Override
             public boolean isItemValid(ItemStack stack) {
                 return this.inventory.isItemValidForSlot(7, stack);
@@ -64,7 +64,7 @@ public class ContainerUpgrade extends Container {
 
     @Override
     public void onCraftMatrixChanged(IInventory inv) {
-        if(inv == this.craftingInv && !this.craftingInv.getPlayer().world.isRemote){
+        if (inv == this.craftingInv && !this.craftingInv.getPlayer().world.isRemote) {
             this.outPutInv.setInventorySlotContents(0, ItemUtils.getUpgradedStack(this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
         }
         super.onCraftMatrixChanged(inv);

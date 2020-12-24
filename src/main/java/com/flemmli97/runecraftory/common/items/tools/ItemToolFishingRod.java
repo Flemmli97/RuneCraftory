@@ -25,16 +25,16 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
 
     @Override
     public int getChargeTime(ItemStack stack) {
-        if(this.tier == EnumToolTier.PLATINUM)
+        if (this.tier == EnumToolTier.PLATINUM)
             return (int) (GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
         return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
     }
 
     @Override
     public int chargeAmount(ItemStack stack) {
-        if(this.tier == EnumToolTier.PLATINUM)
+        if (this.tier == EnumToolTier.PLATINUM)
             return this.tier.getTierLevel();
-        return this.tier.getTierLevel()+1;
+        return this.tier.getTierLevel() + 1;
     }
 
     @Override

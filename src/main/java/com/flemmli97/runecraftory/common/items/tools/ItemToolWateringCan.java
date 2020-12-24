@@ -177,7 +177,7 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
         ItemStack itemstack = player.getHeldItem(hand);
         if (ray != null && world.getFluidState(ray.getPos()).getFluid() == Fluids.WATER) {
             BlockState state = world.getBlockState(ray.getPos());
-            if(state.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler) state.getBlock()).pickupFluid(world, ray.getPos(), state) != Fluids.EMPTY) {
+            if (state.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler) state.getBlock()).pickupFluid(world, ray.getPos(), state) != Fluids.EMPTY) {
                 if (!itemstack.hasTag()) {
                     ItemNBT.initNBT(itemstack);
                 }
@@ -216,7 +216,7 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
     }
 
     private boolean moisten(ServerWorld world, BlockPos pos, ItemStack stack, LivingEntity entity) {
-        if(entity instanceof PlayerEntity && !((PlayerEntity) entity).canPlayerEdit(pos.offset(Direction.UP), Direction.UP, stack))
+        if (entity instanceof PlayerEntity && !((PlayerEntity) entity).canPlayerEdit(pos.offset(Direction.UP), Direction.UP, stack))
             return false;
         boolean creative = !(entity instanceof PlayerEntity) || ((PlayerEntity) entity).isCreative();
         BlockState state = world.getBlockState(pos);

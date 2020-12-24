@@ -70,7 +70,7 @@ public class RuneCraftory {
         File def = confDir.resolve("default").toFile();
         if (!def.exists())
             def.mkdirs();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfigSpec.generalSpec, RuneCraftory.MODID+"/general.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfigSpec.generalSpec, RuneCraftory.MODID + "/general.toml");
         spawnConfig = new SpawnConfig(FMLPaths.CONFIGDIR.get().resolve(RuneCraftory.MODID));
         MobConfig.MobConfigSpec.config.loadConfig();
 

@@ -63,10 +63,10 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        if(slot == 6){
-            if(this.type == EnumCrafting.ARMOR)
+        if (slot == 6) {
+            if (this.type == EnumCrafting.ARMOR)
                 return stack.getItem().getEquipmentSlot(stack) != EquipmentSlotType.MAINHAND;
-            if(this.type == EnumCrafting.FORGE) {
+            if (this.type == EnumCrafting.FORGE) {
                 EquipmentSlotType slotType = stack.getItem().getEquipmentSlot(stack);
                 return (slotType == null || slotType == EquipmentSlotType.MAINHAND) && ItemNBT.shouldHaveStats(stack);
             }

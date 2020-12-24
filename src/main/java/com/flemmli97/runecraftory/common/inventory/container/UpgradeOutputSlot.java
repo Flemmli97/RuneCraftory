@@ -69,17 +69,17 @@ public class UpgradeOutputSlot extends Slot {
         ItemStack ing2 = this.ingredientInv.getStackInSlot(7);
         ItemStack ing1f = ing1;
         ItemStack ing2f = ing2;
-        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->cap.decreaseRunePoints(player, ItemUtils.upgradeCost(this.container.craftingType(), player, cap, ing1f, ing2f), true));
-        if(!ing1.isEmpty()) {
+        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.decreaseRunePoints(player, ItemUtils.upgradeCost(this.container.craftingType(), player, cap, ing1f, ing2f), true));
+        if (!ing1.isEmpty()) {
             this.ingredientInv.decrStackSize(6, 1);
             ing1 = this.ingredientInv.getStackInSlot(6);
         }
-        if(!ing2.isEmpty()) {
+        if (!ing2.isEmpty()) {
             this.ingredientInv.decrStackSize(7, 1);
             ing2 = this.ingredientInv.getStackInSlot(7);
         }
         player.world.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1, 1);
-        if(ing1.isEmpty() || ing2.isEmpty())
+        if (ing1.isEmpty() || ing2.isEmpty())
             this.container.onCraftMatrixChanged(this.ingredientInv);
         return stack;
     }

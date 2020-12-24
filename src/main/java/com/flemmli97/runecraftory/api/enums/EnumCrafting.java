@@ -9,11 +9,11 @@ public enum EnumCrafting {
 
     private final String translation;
 
-    EnumCrafting(String translation){
+    EnumCrafting(String translation) {
         this.translation = translation;
     }
 
-    public String getTranslation(){
+    public String getTranslation() {
         return this.translation;
     }
 }

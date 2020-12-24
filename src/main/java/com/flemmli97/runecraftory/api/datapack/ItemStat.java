@@ -64,15 +64,15 @@ public class ItemStat {
         return new LinkedHashMap<>(this.itemStats);
     }
 
-    public Spell getTier1Spell(){
+    public Spell getTier1Spell() {
         return this.tier1Spell;
     }
 
-    public Spell getTier2Spell(){
+    public Spell getTier2Spell() {
         return this.tier2Spell;
     }
 
-    public Spell getTier3Spell(){
+    public Spell getTier3Spell() {
         return this.tier3Spell;
     }
 
@@ -90,13 +90,13 @@ public class ItemStat {
             buffer.writeInt(val);
         });
         buffer.writeBoolean(this.tier1Spell != null);
-        if(this.tier1Spell != null)
+        if (this.tier1Spell != null)
             buffer.writeRegistryId(this.tier1Spell);
         buffer.writeBoolean(this.tier2Spell != null);
-        if(this.tier2Spell != null)
+        if (this.tier2Spell != null)
             buffer.writeRegistryId(this.tier2Spell);
         buffer.writeBoolean(this.tier3Spell != null);
-        if(this.tier3Spell != null)
+        if (this.tier3Spell != null)
             buffer.writeRegistryId(this.tier3Spell);
     }
 
@@ -109,11 +109,11 @@ public class ItemStat {
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
             stat.itemStats.put(buffer.readRegistryIdSafe(Attribute.class), buffer.readInt());
-        if(buffer.readBoolean())
+        if (buffer.readBoolean())
             stat.tier1Spell = buffer.readRegistryIdSafe(Spell.class);
-        if(buffer.readBoolean())
+        if (buffer.readBoolean())
             stat.tier2Spell = buffer.readRegistryIdSafe(Spell.class);
-        if(buffer.readBoolean())
+        if (buffer.readBoolean())
             stat.tier3Spell = buffer.readRegistryIdSafe(Spell.class);
         return stat;
     }
@@ -159,7 +159,7 @@ public class ItemStat {
 
     @Override
     public String toString() {
-        return "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, reg->reg.getRegistryName().toString(), i->i.toString()) + "]}";
+        return "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, reg -> reg.getRegistryName().toString(), i -> i.toString()) + "]}";
     }
 
     /**
@@ -192,7 +192,7 @@ public class ItemStat {
             return this;
         }
 
-        public MutableItemStat setSpell(Spell tier1, Spell tier2, Spell tier3){
+        public MutableItemStat setSpell(Spell tier1, Spell tier2, Spell tier3) {
             this.tier1Spell = tier1;
             this.tier2Spell = tier2;
             this.tier3Spell = tier3;

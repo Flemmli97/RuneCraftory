@@ -50,7 +50,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
 
     @Override
     public int getChargeTime(ItemStack stack) {
-        if(this.tier == EnumToolTier.PLATINUM)
+        if (this.tier == EnumToolTier.PLATINUM)
             return (int) (GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
         return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
     }
@@ -167,11 +167,11 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     }
 
     private boolean hoeBlock(ServerWorld world, BlockPos pos, ItemStack stack, LivingEntity entity) {
-        if(!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).canPlayerEdit(pos.offset(Direction.UP), Direction.UP, stack))
+        if (!(entity instanceof PlayerEntity) || !((PlayerEntity) entity).canPlayerEdit(pos.offset(Direction.UP), Direction.UP, stack))
             return false;
         BlockState state = world.getBlockState(pos);
         BlockState blockstate = state.getToolModifiedState(world, pos, (PlayerEntity) entity, stack, ToolType.HOE);
-        if(blockstate != null && world.getBlockState(pos.up()).getMaterial() == Material.AIR){
+        if (blockstate != null && world.getBlockState(pos.up()).getMaterial() == Material.AIR) {
             world.setBlockState(pos, blockstate, 3);
             world.playSound(null, pos, SoundEvents.ITEM_HOE_TILL, SoundCategory.BLOCKS, 1.0f, 1.1f);
             return true;

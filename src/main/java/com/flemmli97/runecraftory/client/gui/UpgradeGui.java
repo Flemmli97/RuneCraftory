@@ -10,8 +10,8 @@ import net.minecraft.util.text.ITextComponent;
 
 public class UpgradeGui extends ContainerScreen<ContainerUpgrade> {
 
-    private static final ResourceLocation forging = new ResourceLocation(RuneCraftory.MODID,"textures/gui/forgef.png");
-    private static final ResourceLocation crafting = new ResourceLocation(RuneCraftory.MODID,"textures/gui/craftingf.png");
+    private static final ResourceLocation forging = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forgef.png");
+    private static final ResourceLocation crafting = new ResourceLocation(RuneCraftory.MODID, "textures/gui/craftingf.png");
 
     public UpgradeGui(ContainerUpgrade container, PlayerInventory inv, ITextComponent name) {
         super(container, inv, name);

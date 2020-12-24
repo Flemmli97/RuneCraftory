@@ -41,9 +41,12 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void renderRunePoints(RenderGameOverlayEvent.Post event) {
-        if (event.isCancelable() || event.getType() != RenderGameOverlayEvent.ElementType.EXPERIENCE || ClientHandlers.overlay == null)
+        if (event.isCancelable() || event.getType() != RenderGameOverlayEvent.ElementType.EXPERIENCE)
             return;
-        ClientHandlers.overlay.renderBar(event.getMatrixStack());
+        if (ClientHandlers.overlay != null)
+            ClientHandlers.overlay.renderBar(event.getMatrixStack());
+        if (ClientHandlers.spell != null)
+            ClientHandlers.spell.render(event.getMatrixStack(), event.getPartialTicks());
     }
 
     @SubscribeEvent

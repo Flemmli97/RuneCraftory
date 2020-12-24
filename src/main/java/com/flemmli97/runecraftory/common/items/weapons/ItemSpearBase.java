@@ -159,7 +159,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-        if (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap->cap.getSkillLevel(EnumSkills.SPEAR)[0]>=5).orElse(false)) {
+        if (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getSkillLevel(EnumSkills.SPEAR)[0] >= 5).orElse(false)) {
             player.setActiveHand(hand);
             return ActionResult.success(itemstack);
         }

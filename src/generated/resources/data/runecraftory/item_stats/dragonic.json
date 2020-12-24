@@ -4,8 +4,8 @@
   "upgradeDifficulty": 10,
   "element": "NONE",
   "itemStats": {
-    "runecraftory:attribute.rf.magic_def": 90,
-    "runecraftory:attribute.rf.defence": 130
+    "runecraftory:attribute.rf.defence": 130,
+    "runecraftory:attribute.rf.magic_def": 90
   },
   "tag": "forge:gems/dragonic"
 }

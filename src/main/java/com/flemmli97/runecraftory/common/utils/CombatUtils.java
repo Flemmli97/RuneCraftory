@@ -120,7 +120,7 @@ public class CombatUtils {
             knockBack(target, source);
             int drainPercent = (int) MobUtils.getAttributeValue(player, ModAttributes.RFDRAIN.get(), target);
             if (drainPercent > 0f) {
-                player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->cap.regenHealth(player, drainPercent * damagePhys));
+                player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.regenHealth(player, drainPercent * damagePhys));
             }
             applyStatusEffects(player, target);
             player.setLastAttackedEntity(target);

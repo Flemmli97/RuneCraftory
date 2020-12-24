@@ -18,7 +18,7 @@ public class SkillProperties {
         this.baseXP = baseXP;
     }
 
-    public SkillProperties(SkillPropertySpecs specs){
+    public SkillProperties(SkillPropertySpecs specs) {
         this.read(specs);
     }
 

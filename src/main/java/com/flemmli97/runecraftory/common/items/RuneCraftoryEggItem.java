@@ -62,7 +62,7 @@ public class RuneCraftoryEggItem extends SpawnEgg {
 
     @Override
     public ActionResultType onBlockUse(ItemStack stack, BlockPos pos, BlockState state, TileEntity tile) {
-        if(tile instanceof TileSpawner){
+        if (tile instanceof TileSpawner) {
             ((TileSpawner) tile).setEntity(this.getType(stack.getTag()).getRegistryName());
             return ActionResultType.SUCCESS;
         }

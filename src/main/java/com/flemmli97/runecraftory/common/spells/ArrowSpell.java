@@ -29,8 +29,7 @@ public class ArrowSpell extends Spell {
     @Override
     public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack) {
         ArrowEntity arrowentity = new ArrowEntity(world, entity);
-        arrowentity.setProperties(entity, entity.rotationPitch, entity.rotationYaw, 0.0F,  3.0F, 1.0F);
-
+        arrowentity.setProperties(entity, entity.rotationPitch, entity.rotationYaw, 0.0F, 3.0F, 1.0F);
         arrowentity.setDamage(MobUtils.getAttributeValue(entity, Attributes.GENERIC_ATTACK_DAMAGE, null));
         arrowentity.setFire(200);
         world.addEntity(arrowentity);

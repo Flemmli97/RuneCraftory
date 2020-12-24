@@ -137,7 +137,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
                 }
                 if (success) {
                     entity.world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, entity.getSoundCategory(), 1.0f, 1.0f);
-                    if(player)
+                    if (player)
                         entity.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
 
                         });
@@ -149,7 +149,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-        if (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap->cap.getSkillLevel(EnumSkills.LONGSWORD)[0]>=5).orElse(false)) {
+        if (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getSkillLevel(EnumSkills.LONGSWORD)[0] >= 5).orElse(false)) {
             player.setActiveHand(hand);
             return ActionResult.success(itemstack);
         }

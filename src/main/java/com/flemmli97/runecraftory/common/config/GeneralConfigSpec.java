@@ -27,7 +27,7 @@ public class GeneralConfigSpec {
 
     public final boolean waila = true;
     public final boolean jei = true;
-    public final boolean harvestCraft=true;
+    public final boolean harvestCraft = true;
     public final boolean seasons = true;
     public final boolean dynamicTrees = true;
 
@@ -84,7 +84,7 @@ public class GeneralConfigSpec {
         this.strPerLevel = builder.comment("Strenghth increase per level").define("Strength Increase", 2.0);
         this.vitPerLevel = builder.comment("Vitality increase per level").define("Vit Increase", 2.0);
         this.intPerLevel = builder.comment("Intelligence increase per level").define("Int Increase", 2.0);
-        GeneralConfig.skillProps.forEach((type, prop)->{
+        GeneralConfig.skillProps.forEach((type, prop) -> {
             builder.push(type.toString());
             this.skillProps.put(type, new SkillPropertySpecs(builder, prop));
             builder.pop();
@@ -105,7 +105,7 @@ public class GeneralConfigSpec {
         this.goldWateringCanWater = builder.define("Gold Watering Can Water", 70);
         this.platinumWateringCanWater = builder.define("Platinum Watering Can Water", 150);
         builder.pop();
-        GeneralConfig.weaponProps.forEach((type, prop)->{
+        GeneralConfig.weaponProps.forEach((type, prop) -> {
             builder.push(type.toString());
             this.weaponProps.put(type, new WeaponTypePropertySpecs(builder, prop));
             builder.pop();
@@ -125,7 +125,7 @@ public class GeneralConfigSpec {
         builder.pop();
     }
 
-    static{
+    static {
         Pair<GeneralConfigSpec, ForgeConfigSpec> specPair2 = new ForgeConfigSpec.Builder().configure(GeneralConfigSpec::new);
         generalSpec = specPair2.getRight();
         generalConf = specPair2.getLeft();

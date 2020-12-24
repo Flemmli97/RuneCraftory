@@ -44,7 +44,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable {
     @Override
     public int getChargeTime(ItemStack stack) {
         return stack.getCapability(CapabilityInsts.StaffCap).map(cap ->
-                cap.getTier1Spell() != null ? cap.getTier1Spell().coolDown() : cap.getTier2Spell() != null ?  cap.getTier1Spell().coolDown() : cap.getTier3Spell() != null ? cap.getTier3Spell().coolDown() : 0).orElse(GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime());
+                cap.getTier1Spell() != null ? cap.getTier1Spell().coolDown() : cap.getTier2Spell() != null ? cap.getTier1Spell().coolDown() : cap.getTier3Spell() != null ? cap.getTier3Spell().coolDown() : 0).orElse(GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime());
     }
 
     @Override
@@ -121,7 +121,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable {
     }
 
     public Spell getSpell(ItemStack stack, int level) {
-        IStaffCap cap = stack.getCapability(CapabilityInsts.StaffCap).orElseThrow(()->new NullPointerException("Error getting capability for staff item"));
+        IStaffCap cap = stack.getCapability(CapabilityInsts.StaffCap).orElseThrow(() -> new NullPointerException("Error getting capability for staff item"));
         switch (level) {
             case 3:
                 return cap.getTier3Spell();
@@ -135,7 +135,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable {
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
-        if(this.chargeAmount(player.getHeldItem(hand)) > 0){
+        if (this.chargeAmount(player.getHeldItem(hand)) > 0) {
             player.setActiveHand(hand);
             return ActionResult.success(player.getHeldItem(hand));
         }
@@ -143,8 +143,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable {
     }
 
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt)
-    {
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt) {
         return new StaffCapImpl();
     }
 }

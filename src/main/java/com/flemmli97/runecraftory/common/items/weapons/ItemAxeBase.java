@@ -145,7 +145,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
                 }
                 if (success) {
                     entity.world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, entity.getSoundCategory(), 1.0f, 1.0f);
-                    if(player)
+                    if (player)
                         entity.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
 
                         });

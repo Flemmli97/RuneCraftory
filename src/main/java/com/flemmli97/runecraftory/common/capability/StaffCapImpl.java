@@ -49,21 +49,21 @@ public class StaffCapImpl implements IStaffCap, ICapabilitySerializable<Compound
 
     @Override
     public void readFromNBT(CompoundNBT nbt) {
-        if(nbt.contains("Tier_1"))
+        if (nbt.contains("Tier_1"))
             this.tier1 = RuneCraftory.spellRegistry.getValue(new ResourceLocation(nbt.getString("Tier_1")));
-        if(nbt.contains("Tier_2"))
+        if (nbt.contains("Tier_2"))
             this.tier2 = RuneCraftory.spellRegistry.getValue(new ResourceLocation(nbt.getString("Tier_2")));
-        if(nbt.contains("Tier_3"))
+        if (nbt.contains("Tier_3"))
             this.tier3 = RuneCraftory.spellRegistry.getValue(new ResourceLocation(nbt.getString("Tier_3")));
     }
 
     @Override
     public CompoundNBT writeToNBT(CompoundNBT nbt) {
-        if(this.tier1 != null)
+        if (this.tier1 != null)
             nbt.putString("Tier_1", this.tier1.getRegistryName().toString());
-        if(this.tier2 != null)
+        if (this.tier2 != null)
             nbt.putString("Tier_2", this.tier2.getRegistryName().toString());
-        if(this.tier3 != null)
+        if (this.tier3 != null)
             nbt.putString("Tier_3", this.tier3.getRegistryName().toString());
         return nbt;
     }

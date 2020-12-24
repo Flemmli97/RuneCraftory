@@ -123,7 +123,7 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World world, LivingEntity entity, int timeLeft) {
         if (!world.isRemote && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
-            List<LivingEntity> list = RayTraceUtils.getEntities(entity, this.getRange()+2, this.getFOV());
+            List<LivingEntity> list = RayTraceUtils.getEntities(entity, this.getRange() + 2, this.getFOV());
             if (!list.isEmpty()) {
                 CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(20).get();
                 boolean player = entity instanceof PlayerEntity;
@@ -138,7 +138,7 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
                 }
                 if (success) {
                     entity.world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, entity.getSoundCategory(), 1.0f, 1.0f);
-                    if(player)
+                    if (player)
                         entity.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
 
                         });
@@ -150,12 +150,13 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-        if (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap->cap.getSkillLevel(EnumSkills.DUAL)[0]>=5).orElse(false)) {
+        if (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getSkillLevel(EnumSkills.DUAL)[0] >= 5).orElse(false)) {
             player.setActiveHand(hand);
             return ActionResult.success(itemstack);
         }
         return ActionResult.pass(itemstack);
     }
+
     @Override
     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot) {
         return ImmutableMultimap.of();

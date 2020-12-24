@@ -92,54 +92,48 @@ public class ItemNBT {
         if (tag != null) {
             try {
                 return EnumElement.valueOf(tag.getString(LibNBT.Element));
-            }
-            catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) {
                 return EnumElement.NONE;
             }
         }
         return EnumElement.NONE;
     }
 
-    public static void addUpgradeItem(ItemStack stack, ItemStack stackToAdd)
-    {
+    public static void addUpgradeItem(ItemStack stack, ItemStack stackToAdd) {
         CompoundNBT tag = getItemNBT(stack);
         int level = itemLevel(stack);
-        if(level >=10)
+        if (level >= 10)
             return;
-        if (tag != null)
-        {
-            tag.putInt(LibNBT.Level, level+1);
+        if (tag != null) {
+            tag.putInt(LibNBT.Level, level + 1);
             float efficiency = 1.0f;
             float similar = 1.0f;
 
             CompoundNBT upgrades = tag.getCompound(LibNBT.Upgrades);
             //Searches for items, which are already applied to the itemstack. Reduces the efficiency for each identical item found.
-            for(String item : upgrades.keySet()){
-                if(stackToAdd.getItem().getRegistryName().toString().equals(item)){
-                    efficiency = (float)Math.max(0.0, efficiency - Math.max(0.25, 0.5 / similar));
+            for (String item : upgrades.keySet()) {
+                if (stackToAdd.getItem().getRegistryName().toString().equals(item)) {
+                    efficiency = (float) Math.max(0.0, efficiency - Math.max(0.25, 0.5 / similar));
                     ++similar;
                 }
             }
             upgrades.putInt(stackToAdd.getItem().getRegistryName().toString(), ItemNBT.itemLevel(stackToAdd));
             tag.put(LibNBT.Upgrades, upgrades);
-            if (!shouldHaveStats(stackToAdd))
-            {
+            if (!shouldHaveStats(stackToAdd)) {
                 ItemStat stat = DataPackHandler.getStats(stackToAdd.getItem());
-                if (stat != null)
-                {
-                    for (Map.Entry<Attribute, Integer> entry : stat.itemStats().entrySet())
-                    {
+                if (stat != null) {
+                    for (Map.Entry<Attribute, Integer> entry : stat.itemStats().entrySet()) {
                         updateStatIncrease(entry.getKey(), Math.round(entry.getValue() * efficiency), tag);
                     }
 
-                    if(stack.getItem() instanceof ItemStaffBase){
-                        stack.getCapability(CapabilityInsts.StaffCap).ifPresent(cap->{
+                    if (stack.getItem() instanceof ItemStaffBase) {
+                        stack.getCapability(CapabilityInsts.StaffCap).ifPresent(cap -> {
                             System.out.println(stat.getTier2Spell());
-                            if(stat.getTier1Spell() != null)
+                            if (stat.getTier1Spell() != null)
                                 cap.setTier1Spell(stat.getTier1Spell());
-                            if(stat.getTier2Spell() != null)
+                            if (stat.getTier2Spell() != null)
                                 cap.setTier2Spell(stat.getTier2Spell());
-                            if(stat.getTier3Spell() != null)
+                            if (stat.getTier3Spell() != null)
                                 cap.setTier3Spell(stat.getTier3Spell());
                         });
                     }
@@ -148,8 +142,7 @@ public class ItemNBT {
         }
     }
 
-    public static void updateStatIncrease(Attribute attribute, int amount, CompoundNBT tag)
-    {
+    public static void updateStatIncrease(Attribute attribute, int amount, CompoundNBT tag) {
         int oldValue = tag.getCompound(LibNBT.Stats).getInt(attribute.getRegistryName().toString());
         tag.getCompound(LibNBT.Stats).putInt(attribute.getRegistryName().toString(), oldValue + amount);
     }
@@ -191,13 +184,13 @@ public class ItemNBT {
                         compound.putString(LibNBT.Element, stat.element().toString());
                     }
 
-                    if(stack.getItem() instanceof ItemStaffBase){
-                        stack.getCapability(CapabilityInsts.StaffCap).ifPresent(cap->{
-                            if(stat.getTier1Spell() != null)
+                    if (stack.getItem() instanceof ItemStaffBase) {
+                        stack.getCapability(CapabilityInsts.StaffCap).ifPresent(cap -> {
+                            if (stat.getTier1Spell() != null)
                                 cap.setTier1Spell(stat.getTier1Spell());
-                            if(stat.getTier2Spell() != null)
+                            if (stat.getTier2Spell() != null)
                                 cap.setTier2Spell(stat.getTier2Spell());
-                            if(stat.getTier3Spell() != null)
+                            if (stat.getTier3Spell() != null)
                                 cap.setTier3Spell(stat.getTier3Spell());
                         });
                     }

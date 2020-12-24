@@ -4,7 +4,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.potion.EffectType;
 
-public class ParalysisEffect extends PermanentEffect{
+public class ParalysisEffect extends PermanentEffect {
 
     public ParalysisEffect() {
         super(EffectType.HARMFUL, 0);

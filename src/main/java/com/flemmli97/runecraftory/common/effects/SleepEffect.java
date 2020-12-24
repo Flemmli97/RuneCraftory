@@ -16,11 +16,13 @@ public class SleepEffect extends Effect {
     public boolean isReady(int duration, int amplifier) {
         return true;
     }
+
     @Override
     public void performEffect(LivingEntity ent, int amplifier) {
         //if(!(ent instanceof EntityPlayer) || !((EntityPlayer)ent).capabilities.disableDamage)
         //    ent.motionY -= 0.08;
     }
+
     @Override
     public void applyAttributesModifiersToEntity(LivingEntity entity, AttributeModifierManager manager, int amplifier) {
         if (entity instanceof MobEntity) {

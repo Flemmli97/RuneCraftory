@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.client;
 
 import com.flemmli97.runecraftory.client.gui.CraftingGui;
 import com.flemmli97.runecraftory.client.gui.OverlayGui;
+import com.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import com.flemmli97.runecraftory.client.gui.UpgradeGui;
 import com.flemmli97.runecraftory.client.render.RenderGate;
 import com.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
@@ -67,6 +68,7 @@ public class ClientRegister {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.fireBall.get(), RenderFireball::new);
 
         ClientHandlers.overlay = new OverlayGui(Minecraft.getInstance());
+        ClientHandlers.spell = new SpellInvOverlayGui(Minecraft.getInstance());
 
         event.enqueueWork(() -> {
             ModBlocks.BLOCKS.getEntries().forEach(reg -> {
@@ -79,8 +81,8 @@ public class ClientRegister {
             ScreenManager.registerFactory(ModContainer.craftingContainer.get(), CraftingGui::new);
             ScreenManager.registerFactory(ModContainer.upgradeContainer.get(), UpgradeGui::new);
 
-            ModItems.ITEMS.getEntries().forEach(reg-> {
-                if(reg.get() instanceof ItemDualBladeBase || reg.get() instanceof ItemGloveBase)
+            ModItems.ITEMS.getEntries().forEach(reg -> {
+                if (reg.get() instanceof ItemDualBladeBase || reg.get() instanceof ItemGloveBase)
                     ItemModelsProperties.register(reg.get(), new ResourceLocation("held"), ItemModelProps.heldMainProp);
             });
         });

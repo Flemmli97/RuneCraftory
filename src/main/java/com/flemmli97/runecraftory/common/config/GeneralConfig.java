@@ -20,7 +20,7 @@ public class GeneralConfig {
 
     public static boolean waila = true;
     public static boolean jei = true;
-    public static boolean harvestCraft=true;
+    public static boolean harvestCraft = true;
     public static boolean seasons = true;
     public static boolean dynamicTrees = true;
 
@@ -74,7 +74,7 @@ public class GeneralConfig {
         strPerLevel = GeneralConfigSpec.generalConf.strPerLevel.get().floatValue();
         vitPerLevel = GeneralConfigSpec.generalConf.vitPerLevel.get().floatValue();
         intPerLevel = GeneralConfigSpec.generalConf.intPerLevel.get().floatValue();
-        GeneralConfigSpec.generalConf.skillProps.forEach((type, specs)->skillProps.compute(type, (t, val)->val == null ? new SkillProperties(specs):val.read(specs)));
+        GeneralConfigSpec.generalConf.skillProps.forEach((type, specs) -> skillProps.compute(type, (t, val) -> val == null ? new SkillProperties(specs) : val.read(specs)));
 
         scrapMultiplier = GeneralConfigSpec.generalConf.scrapMultiplier.get().floatValue();
         ironMultiplier = GeneralConfigSpec.generalConf.ironMultiplier.get().floatValue();
@@ -87,7 +87,7 @@ public class GeneralConfig {
         silverWateringCanWater = GeneralConfigSpec.generalConf.silverWateringCanWater.get();
         goldWateringCanWater = GeneralConfigSpec.generalConf.goldWateringCanWater.get();
         platinumWateringCanWater = GeneralConfigSpec.generalConf.platinumWateringCanWater.get();
-        GeneralConfigSpec.generalConf.weaponProps.forEach((type, specs)->weaponProps.compute(type, (t,val)->val == null ? new WeaponTypeProperties(specs):val.read(specs)));
+        GeneralConfigSpec.generalConf.weaponProps.forEach((type, specs) -> weaponProps.compute(type, (t, val) -> val == null ? new WeaponTypeProperties(specs) : val.read(specs)));
 
         xpMultiplier = GeneralConfigSpec.generalConf.xpMultiplier.get().floatValue();
         skillXpMultiplier = GeneralConfigSpec.generalConf.skillXpMultiplier.get().floatValue();
