@@ -3,15 +3,20 @@ package com.flemmli97.runecraftory.client;
 import com.flemmli97.runecraftory.api.datapack.CropProperties;
 import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
+import com.flemmli97.runecraftory.client.gui.widgets.SkillButton;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
+import com.flemmli97.runecraftory.network.C2SOpenInfo;
 import com.flemmli97.runecraftory.network.C2SRideJump;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import com.google.common.collect.Lists;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.inventory.CreativeScreen;
+import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -37,6 +42,23 @@ public class ClientEvents {
     public void renderRunePoints(RenderGameOverlayEvent.Pre event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD || event.getType() == RenderGameOverlayEvent.ElementType.HEALTH)
             event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public void initSkillTab(GuiScreenEvent.InitGuiEvent.Post event) {
+        if (event.getGui() instanceof InventoryScreen || event.getGui() instanceof CreativeScreen) {
+            int x = 0;
+            int y = 0;
+            if (event.getGui() instanceof InventoryScreen) {
+                x = (event.getGui().width - 174) / 2 - 28;
+                y = (event.getGui().height - 166) / 2;
+            }
+            else {
+                x = (event.getGui().width - 192) / 2 - 28;
+                y = (event.getGui().height - 136) / 2;
+            }
+            event.addWidget(new SkillButton(x, y, b-> PacketHandler.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN))));
+        }
     }
 
     @SubscribeEvent

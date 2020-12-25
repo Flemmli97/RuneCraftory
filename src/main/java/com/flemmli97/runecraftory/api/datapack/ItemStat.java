@@ -137,7 +137,7 @@ public class ItemStat {
             price.append(" ").append(new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack)));
             list.add(price);
             if (showStat) {
-                Map<Attribute, Integer> stats = ItemNBT.statIncrease(stack);
+                Map<Attribute, Integer> stats = ItemNBT.statBonusRaw(stack);
                 if (!stats.isEmpty()) {
                     String prefix = ItemNBT.shouldHaveStats(stack) ? "tooltip.item.equipped" : "tooltip.item.upgrade";
                     list.add(new TranslationTextComponent(prefix));

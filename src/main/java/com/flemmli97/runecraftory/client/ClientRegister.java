@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.client;
 
 import com.flemmli97.runecraftory.client.gui.CraftingGui;
+import com.flemmli97.runecraftory.client.gui.InfoScreenGui;
 import com.flemmli97.runecraftory.client.gui.OverlayGui;
 import com.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import com.flemmli97.runecraftory.client.gui.UpgradeGui;
@@ -80,6 +81,7 @@ public class ClientRegister {
 
             ScreenManager.registerFactory(ModContainer.craftingContainer.get(), CraftingGui::new);
             ScreenManager.registerFactory(ModContainer.upgradeContainer.get(), UpgradeGui::new);
+            ScreenManager.registerFactory(ModContainer.infoContainer.get(), InfoScreenGui::new);
 
             ModItems.ITEMS.getEntries().forEach(reg -> {
                 if (reg.get() instanceof ItemDualBladeBase || reg.get() instanceof ItemGloveBase)

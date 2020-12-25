@@ -67,6 +67,26 @@ public class ItemNBT {
                         map.put(att, tag.getInt(attName));
                 }
             }
+        }
+        return map;
+    }
+
+    public static Map<Attribute, Integer> statBonusRaw(ItemStack stack) {
+        Map<Attribute, Integer> map = new TreeMap<>(ModAttributes.sorted);
+        if (shouldHaveStats(stack)) {
+            CompoundNBT compound = getItemNBT(stack);
+            if (compound != null && !compound.contains(LibNBT.Stats)) {
+                initNBT(stack);
+                compound = getItemNBT(stack);
+            }
+            if (compound != null) {
+                CompoundNBT tag = compound.getCompound(LibNBT.Stats);
+                for (String attName : tag.keySet()) {
+                    Attribute att = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attName));
+                    if (att.getRegistryName().toString().equals(attName))
+                        map.put(att, tag.getInt(attName));
+                }
+            }
         } else {
             ItemStat stat = DataPackHandler.getStats(stack.getItem());
             if (stat != null) {

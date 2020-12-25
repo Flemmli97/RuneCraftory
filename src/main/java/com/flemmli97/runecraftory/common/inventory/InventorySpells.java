@@ -11,9 +11,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
-public class InventorySpells implements IItemHandler {
+import javax.annotation.Nonnull;
+
+public class InventorySpells implements IItemHandlerModifiable {
 
     private NonNullList<ItemStack> inventory = NonNullList.withSize(4, ItemStack.EMPTY);
 
@@ -52,6 +54,12 @@ public class InventorySpells implements IItemHandler {
     @Override
     public int getSlotLimit(int slot) {
         return 1;
+    }
+
+    @Override
+    public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
+        if(this.isItemValid(slot, stack))
+            this.inventory.set(slot, stack);
     }
 
     @Override
