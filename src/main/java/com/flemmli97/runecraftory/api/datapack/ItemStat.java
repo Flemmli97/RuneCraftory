@@ -9,7 +9,6 @@ import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.lib.LibAttributes;
 import com.flemmli97.tenshilib.common.utils.MapUtils;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.ItemStack;
@@ -171,7 +170,7 @@ public class ItemStat {
         private int sellPrice;
         private int upgradeDifficulty;
         private EnumElement element = EnumElement.NONE;
-        private final Map<Attribute, Integer> itemStats = Maps.newHashMap();
+        private final Map<Attribute, Integer> itemStats = new TreeMap<>(ModAttributes.sorted);
         private Spell tier1Spell;
         private Spell tier2Spell;
         private Spell tier3Spell;

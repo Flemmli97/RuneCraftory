@@ -208,9 +208,9 @@ public class PlayerEvents {
                 player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
                     cap.applyFoodEffect(player, event.getItem());
                     cap.regenHealth(player, prop.getHPGain());
-                    cap.refreshRunePoints(player, cap.getRunePoints() + prop.getRPRegen());
+                    cap.refreshRunePoints(player, prop.getRPRegen());
                     cap.regenHealth(player, cap.getMaxHealth(player) * prop.getHpPercentGain() * 0.01F);
-                    cap.refreshRunePoints(player, (int) (cap.getRunePoints() + cap.getMaxRunePoints() * prop.getRpPercentRegen() * 0.01));
+                    cap.refreshRunePoints(player, (int) (cap.getMaxRunePoints() * prop.getRpPercentRegen() * 0.01));
                 });
             } else if (e instanceof IBaseMob) {
                 ((IBaseMob) e).applyFoodEffect(event.getItem());
