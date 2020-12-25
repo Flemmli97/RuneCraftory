@@ -93,6 +93,9 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     private int foodDuration;
 
     //Weapon and ticker
+    private int spellFlag;
+    private int spellTicker;
+
     private int ticker = 0;
     private int offHandTick;
     private Hand prevHand = Hand.MAIN_HAND;
@@ -543,6 +546,18 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         return this.foodBuffs;
     }
 
+
+    @Override
+    public int spellFlag(){
+        return this.spellFlag;
+    }
+
+    @Override
+    public void setSpellFlag(int flag, int resetTime){
+        this.spellFlag = flag;
+        this.spellTicker = resetTime;
+    }
+
     @Override
     public int animationTick() {
         return this.ticker;
@@ -586,10 +601,16 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
 
     @Override
     public void update(PlayerEntity player) {
-        if (!player.world.isRemote && (WorldUtils.canUpdateDaily(player.world) || Math.abs(player.world.getGameTime() / 24000 - this.lastUpdated / 24000) >= 1)) {
-            this.getShippingInv().shipItems(player);
-            this.refreshShop(player);
-            this.lastUpdated = player.world.getGameTime();
+        if (!player.world.isRemote) {
+            if((WorldUtils.canUpdateDaily(player.world) || Math.abs(player.world.getGameTime() / 24000 - this.lastUpdated / 24000) >= 1))
+            {
+                this.getShippingInv().shipItems(player);
+                this.refreshShop(player);
+                this.lastUpdated = player.world.getGameTime();
+            }
+            if(--this.spellTicker == 0){
+                this.spellFlag = 0;
+            }
         }
         this.getInv().update(player);
         this.ticker = Math.max(--this.ticker, 0);

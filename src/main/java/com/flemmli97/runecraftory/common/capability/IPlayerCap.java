@@ -135,6 +135,10 @@ public interface IPlayerCap {
 
     //Weapon and ticker
 
+    int spellFlag();
+
+    void setSpellFlag(int flag, int resetTime);
+
     int animationTick();
 
     void startAnimation(int tick);
