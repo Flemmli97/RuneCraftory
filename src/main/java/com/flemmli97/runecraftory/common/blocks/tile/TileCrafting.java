@@ -4,12 +4,15 @@ import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
 import com.flemmli97.runecraftory.common.inventory.container.ContainerUpgrade;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
@@ -83,6 +86,19 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
     @Override
     public ITextComponent getDisplayName() {
         return new TranslationTextComponent("tile.crafting." + this.type.getTranslation());
+    }
+
+    @Override
+    public void fromTag(BlockState state, CompoundNBT nbt) {
+        super.fromTag(state, nbt);
+        ItemStackHelper.loadAllItems(nbt, this.inventory);
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT nbt) {
+        super.write(nbt);
+        ItemStackHelper.saveAllItems(nbt, this.inventory);
+        return nbt;
     }
 
     @Override

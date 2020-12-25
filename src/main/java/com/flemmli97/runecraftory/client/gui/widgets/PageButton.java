@@ -6,14 +6,15 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 
-public class SkillButton extends Button {
+public class PageButton extends Button {
 
     private static final ResourceLocation texturepath = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
 
-    public SkillButton(int x, int y, IPressable press) {
-        super(x, y, 24, 24, StringTextComponent.EMPTY, press);
+    public PageButton(int x, int y, ITextComponent display, IPressable press) {
+        super(x, y, 12, 12, display, press);
     }
 
     @Override
@@ -25,6 +26,8 @@ public class SkillButton extends Button {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        this.drawTexture(stack, this.x, this.y, 98 + (this.hovered ? 25 : 0), 14, this.width, this.height);
+        this.drawTexture(stack, this.x, this.y, 98 + (this.hovered ? 13 : 0), 0, this.width, this.height);
+        int j = getFGColor();
+        drawCenteredText(stack, mc.fontRenderer, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
     }
 }

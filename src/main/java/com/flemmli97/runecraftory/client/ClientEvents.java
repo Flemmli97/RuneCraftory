@@ -8,6 +8,7 @@ import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.network.C2SOpenInfo;
 import com.flemmli97.runecraftory.network.C2SRideJump;
+import com.flemmli97.runecraftory.network.C2SSpellKey;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import com.google.common.collect.Lists;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
@@ -17,6 +18,7 @@ import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -38,6 +40,23 @@ public class ClientEvents {
             PacketHandler.sendToServer(new C2SRideJump());
     }
 
+    @SubscribeEvent(receiveCanceled = true)
+    public void keyEvent(InputEvent.KeyInputEvent event) {
+        if (ClientHandlers.spell1.isPressed()) {
+            PacketHandler.sendToServer(new C2SSpellKey(0));
+
+        }
+        if (ClientHandlers.spell2.isPressed()) {
+            PacketHandler.sendToServer(new C2SSpellKey(1));
+        }
+        if (ClientHandlers.spell3.isPressed()) {
+            PacketHandler.sendToServer(new C2SSpellKey(2));
+        }
+        if (ClientHandlers.spell4.isPressed()) {
+            PacketHandler.sendToServer(new C2SSpellKey(3));
+        }
+    }
+
     @SubscribeEvent
     public void renderRunePoints(RenderGameOverlayEvent.Pre event) {
         if (event.getType() == RenderGameOverlayEvent.ElementType.FOOD || event.getType() == RenderGameOverlayEvent.ElementType.HEALTH)
@@ -52,12 +71,11 @@ public class ClientEvents {
             if (event.getGui() instanceof InventoryScreen) {
                 x = (event.getGui().width - 174) / 2 - 28;
                 y = (event.getGui().height - 166) / 2;
-            }
-            else {
+            } else {
                 x = (event.getGui().width - 192) / 2 - 28;
                 y = (event.getGui().height - 136) / 2;
             }
-            event.addWidget(new SkillButton(x, y, b-> PacketHandler.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN))));
+            event.addWidget(new SkillButton(x, y, b -> PacketHandler.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN))));
         }
     }
 
@@ -67,8 +85,8 @@ public class ClientEvents {
             return;
         if (ClientHandlers.overlay != null)
             ClientHandlers.overlay.renderBar(event.getMatrixStack());
-        if (ClientHandlers.spell != null)
-            ClientHandlers.spell.render(event.getMatrixStack(), event.getPartialTicks());
+        if (ClientHandlers.spellDisplay != null)
+            ClientHandlers.spellDisplay.render(event.getMatrixStack(), event.getPartialTicks());
     }
 
     @SubscribeEvent

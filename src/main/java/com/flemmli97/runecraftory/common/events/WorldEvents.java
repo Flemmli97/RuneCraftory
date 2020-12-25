@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.events;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.capability.PlayerCapImpl;
+import com.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
 import com.flemmli97.runecraftory.common.world.WorldHandler;
 import net.minecraft.block.IGrowable;
 import net.minecraft.entity.Entity;
@@ -12,6 +13,7 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.PlantType;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
@@ -27,6 +29,11 @@ public class WorldEvents {
         if (event.getObject() instanceof PlayerEntity) {
             event.addCapability(PlayerCap, new PlayerCapImpl());
         }
+    }
+
+    @SubscribeEvent
+    public void command(RegisterCommandsEvent event) {
+        RunecraftoryCommand.reg(event.getDispatcher());
     }
 
     @SubscribeEvent

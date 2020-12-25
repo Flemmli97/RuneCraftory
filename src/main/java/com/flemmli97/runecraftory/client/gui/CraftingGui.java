@@ -21,7 +21,7 @@ public class CraftingGui extends ContainerScreen<ContainerCrafting> {
 
     @Override
     protected void drawBackground(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
-        switch (this.container.craftingType()) {
+        /*switch (this.container.craftingType()) {
             case ARMOR:
                 this.client.getTextureManager().bindTexture(crafting);
                 this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
@@ -38,7 +38,9 @@ public class CraftingGui extends ContainerScreen<ContainerCrafting> {
                 this.client.getTextureManager().bindTexture(chem);
                 this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
                 break;
-        }
+        }*/
+        this.client.getTextureManager().bindTexture(forging);
+        this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.flemmli97.runecraftory.client;
 
+import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.client.gui.CraftingGui;
-import com.flemmli97.runecraftory.client.gui.InfoScreenGui;
+import com.flemmli97.runecraftory.client.gui.InfoScreen;
+import com.flemmli97.runecraftory.client.gui.InfoSubScreen;
 import com.flemmli97.runecraftory.client.gui.OverlayGui;
 import com.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import com.flemmli97.runecraftory.client.gui.UpgradeGui;
@@ -36,10 +38,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import org.lwjgl.glfw.GLFW;
 
 public class ClientRegister {
 
@@ -69,7 +74,7 @@ public class ClientRegister {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.fireBall.get(), RenderFireball::new);
 
         ClientHandlers.overlay = new OverlayGui(Minecraft.getInstance());
-        ClientHandlers.spell = new SpellInvOverlayGui(Minecraft.getInstance());
+        ClientHandlers.spellDisplay = new SpellInvOverlayGui(Minecraft.getInstance());
 
         event.enqueueWork(() -> {
             ModBlocks.BLOCKS.getEntries().forEach(reg -> {
@@ -81,7 +86,13 @@ public class ClientRegister {
 
             ScreenManager.registerFactory(ModContainer.craftingContainer.get(), CraftingGui::new);
             ScreenManager.registerFactory(ModContainer.upgradeContainer.get(), UpgradeGui::new);
-            ScreenManager.registerFactory(ModContainer.infoContainer.get(), InfoScreenGui::new);
+            ScreenManager.registerFactory(ModContainer.infoContainer.get(), InfoScreen::new);
+            ScreenManager.registerFactory(ModContainer.infoSubContainer.get(), InfoSubScreen::new);
+
+            ClientRegistry.registerKeyBinding(ClientHandlers.spell1 = new KeyBinding(RuneCraftory.MODID + ".key.spell_1", GLFW.GLFW_KEY_C, RuneCraftory.MODID + ".keycategory"));
+            ClientRegistry.registerKeyBinding(ClientHandlers.spell2 = new KeyBinding(RuneCraftory.MODID + ".key.spell_2", GLFW.GLFW_KEY_V, RuneCraftory.MODID + ".keycategory"));
+            ClientRegistry.registerKeyBinding(ClientHandlers.spell3 = new KeyBinding(RuneCraftory.MODID + ".key.spell_3", GLFW.GLFW_KEY_G, RuneCraftory.MODID + ".keycategory"));
+            ClientRegistry.registerKeyBinding(ClientHandlers.spell4 = new KeyBinding(RuneCraftory.MODID + ".key.spell_4", GLFW.GLFW_KEY_B, RuneCraftory.MODID + ".keycategory"));
 
             ModItems.ITEMS.getEntries().forEach(reg -> {
                 if (reg.get() instanceof ItemDualBladeBase || reg.get() instanceof ItemGloveBase)

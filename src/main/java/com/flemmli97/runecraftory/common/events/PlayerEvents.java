@@ -5,9 +5,11 @@ import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.entities.IBaseMob;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
+import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModTags;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -17,13 +19,19 @@ import com.flemmli97.runecraftory.network.PacketHandler;
 import com.flemmli97.runecraftory.network.S2CCalendar;
 import com.flemmli97.runecraftory.network.S2CDataPackSync;
 import com.flemmli97.tenshilib.api.event.AOEAttackEvent;
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effect;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -45,8 +53,10 @@ public class PlayerEvents {
             if (!playerData.getBoolean(RuneCraftory.MODID + ":starterItems")) {
                 ItemUtils.starterItems(event.getPlayer());
                 playerData.putBoolean(RuneCraftory.MODID + ":starterItems", true);
+
                 event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
-                    cap.regenHealth(event.getPlayer(), cap.getMaxHealth(event.getPlayer()));
+                    cap.setMaxHealth(event.getPlayer(), GeneralConfig.startingHealth);
+                    cap.setHealth(event.getPlayer(), cap.getMaxHealth(event.getPlayer()));
                 });
             }
         }
@@ -80,73 +90,63 @@ public class PlayerEvents {
             }
         }
     }
-/*
+
     @SubscribeEvent
-    public void playerDeath(LivingDeathEvent event)
-    {
-    	if(!event.getSource().canHarmInCreative())
-    	{
-    		ItemStack prevent=null;
-    		for(ItemStack stack : event.getEntityLiving().getEquipmentAndArmor())
-    		{
-    			if(stack.getItem()==ModItems.lawn)
-    			{
-    				prevent=stack;
-    				break;
-    			}
-    		}
-    		if(prevent==null && event.getEntityLiving() instanceof EntityPlayer)
-    		{
-                EntityPlayer player = (EntityPlayer)event.getEntityLiving();
-                for(ItemStack stack : player.inventory.mainInventory)
-        		{
-                	if(stack.getItem()==ModItems.lawn)
-        			{
-        				prevent=stack;
-                		break;
-        			}
-        		}
-    		}
-    		if(prevent!=null)
-    		{
-    			if (event.getEntityLiving() instanceof EntityPlayerMP)
-                {
-                    EntityPlayerMP entityplayermp = (EntityPlayerMP)event.getEntityLiving();
-                    entityplayermp.addStat(StatList.getObjectUseStats(Items.TOTEM_OF_UNDYING));
-                    CriteriaTriggers.CONSUME_ITEM.trigger(entityplayermp, prevent);
+    public void playerDeath(LivingDeathEvent event) {
+        if (!event.getEntityLiving().world.isRemote) {
+            if (!event.getSource().canHarmInCreative()) {
+                ItemStack deathProt = ItemStack.EMPTY;
+                for (ItemStack stack : event.getEntityLiving().getEquipmentAndArmor()) {
+                    if (stack.getItem() == ModItems.lawn.get()) {
+                        deathProt = stack;
+                    }
                 }
-    			event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth()*0.33f);
-    			event.getEntityLiving().clearActivePotions();
-    			event.getEntityLiving().world.setEntityState(event.getEntityLiving(), (byte)35);
-    			return;
-    		}
-    	}
-        if (event.getEntityLiving() instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer)event.getEntityLiving();
-            IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
-            capSync.getInv().dropItemsAt((EntityLivingBase)player);
-            if (!player.world.isRemote) {
-                PacketHandler.sendTo(new PacketUpdateClient(capSync), (EntityPlayerMP)player);
+                if (deathProt.isEmpty() && event.getEntityLiving() instanceof PlayerEntity) {
+                    for (ItemStack stack : ((PlayerEntity) event.getEntityLiving()).inventory.mainInventory) {
+                        if (stack.getItem() == ModItems.lawn.get()) {
+                            deathProt = stack;
+                        }
+                    }
+                }
+                if (!deathProt.isEmpty()) {
+                    if (event.getEntityLiving() instanceof ServerPlayerEntity) {
+                        ServerPlayerEntity player = (ServerPlayerEntity) event.getEntityLiving();
+                        player.addStat(Stats.ITEM_USED.get(deathProt.getItem()));
+                        CriteriaTriggers.CONSUME_ITEM.trigger(player, deathProt);
+                    }
+                    event.getEntityLiving().setHealth(event.getEntityLiving().getMaxHealth() * 0.33f);
+                    event.getEntityLiving().clearActivePotions();
+                    event.getEntityLiving().addPotionEffect(new EffectInstance(Effects.RESISTANCE, 5, 100));
+                    event.getEntityLiving().world.setEntityState(event.getEntityLiving(), (byte) 35);
+                    deathProt.shrink(1);
+                    event.setCanceled(true);
+                    return;
+                }
+            }
+            if (event.getEntityLiving() instanceof PlayerEntity) {
+                event.getEntityLiving().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.getInv().dropItemsAt(event.getEntityLiving()));
+                /*if (!player.world.isRemote) {
+                    PacketHandler.sendTo(new PacketUpdateClient(capSync), (EntityPlayerMP)player);
+                }*/
             }
         }
     }
 
     @SubscribeEvent
-    public void clone(PlayerEvent.Clone event)
-    {
-        if (event.isWasDeath())
-        {
-            IPlayer capSync = event.getOriginal().getCapability(PlayerCapProvider.PlayerCap, null);
-            capSync.useMoney(event.getOriginal(), (int)(capSync.getMoney() * 0.2));
-            NBTTagCompound oldNBT = new NBTTagCompound();
-            capSync.writeToNBT(oldNBT, event.getOriginal());
-            event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null).readFromNBT(oldNBT, event.getEntityPlayer());
-            if (!event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP) {
+    public void clone(PlayerEvent.Clone event) {
+        if (event.isWasDeath() && !event.getPlayer().world.isRemote) {
+            event.getOriginal().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
+                cap.useMoney(event.getOriginal(), (int) (cap.getMoney() * 0.2));
+                event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(newCap -> {
+                    newCap.readFromNBT(cap.writeToNBT(new CompoundNBT(), event.getOriginal()), event.getPlayer());
+                });
+            });
+            /*if (!event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP) {
                 PacketHandler.sendTo(new PacketUpdateClient(event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null)), (EntityPlayerMP)event.getEntityPlayer());
-            }
+            }*/
         }
     }
-
+/*
     @SubscribeEvent(priority = EventPriority.HIGH)
     public void cropRightClickHarvest(PlayerInteractEvent.RightClickBlock event)
     {

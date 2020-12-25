@@ -131,14 +131,14 @@ public class ContainerCrafting extends Container {
             itemstack = itemstack1.copy();
             if (slotID == 0) {
                 itemstack1.onCrafting(player.world, player, itemstack1.getCount());
-                if (!this.mergeItemStack(itemstack1, 1, 36, false))
+                if (!this.mergeItemStack(itemstack1, 1, 37, false))
                     return ItemStack.EMPTY;
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (slotID < 37) {
                 if (!this.mergeItemStack(itemstack1, 37, this.inventorySlots.size(), false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.mergeItemStack(itemstack1, 1, 36, false)) {
+            } else if (!this.mergeItemStack(itemstack1, 1, 37, false)) {
                 return ItemStack.EMPTY;
             }
 

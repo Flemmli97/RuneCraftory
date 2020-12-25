@@ -55,7 +55,7 @@ public class CustomDamage extends EntityDamageSource {
     @Override
     @Nullable
     public Entity getTrueSource() {
-        return this.trueSourceEntity;
+        return this.trueSourceEntity != null ? this.trueSourceEntity : this.getImmediateSource();
     }
 
     @Override
@@ -102,6 +102,11 @@ public class CustomDamage extends EntityDamageSource {
             this.cause = attacker;
         }
 
+        public Builder(Entity attacker, Entity source) {
+            this(attacker);
+            this.trueSource = source;
+        }
+
         public Builder element(EnumElement el) {
             this.element = el;
             return this;
@@ -109,11 +114,6 @@ public class CustomDamage extends EntityDamageSource {
 
         public Builder knock(KnockBackType k) {
             this.knock = k;
-            return this;
-        }
-
-        public Builder trueSource(Entity e) {
-            this.trueSource = e;
             return this;
         }
 

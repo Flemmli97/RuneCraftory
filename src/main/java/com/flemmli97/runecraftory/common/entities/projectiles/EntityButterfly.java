@@ -87,7 +87,7 @@ public class EntityButterfly extends EntityProjectile {
         LivingEntity e;
         if (result.getEntity() instanceof LivingEntity && (e = (LivingEntity) result.getEntity()) != this.getOwner()
                 && (this.pred == null || this.pred.test((LivingEntity) result.getEntity()))) {
-            if (MobUtils.handleMobAttack(result.getEntity(), new CustomDamage.Builder(this).trueSource(this.getOwner()).hurtResistant(10).get(), MobUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.3f)) {//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
+            if (MobUtils.handleMobAttack(result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).get(), MobUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.3f)) {//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
                 e.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 60, 3));
                 //this.setDead();
                 return true;

@@ -16,6 +16,7 @@ public class ModContainer {
 
     public static final RegistryObject<ContainerType<ContainerCrafting>> craftingContainer = CONTAINERS.register("crafting_container", () -> IForgeContainerType.create(ContainerCrafting::new));
     public static final RegistryObject<ContainerType<ContainerUpgrade>> upgradeContainer = CONTAINERS.register("upgrade_container", () -> IForgeContainerType.create(ContainerUpgrade::new));
-    public static final RegistryObject<ContainerType<ContainerInfoScreen>> infoContainer = CONTAINERS.register("info_container", () -> IForgeContainerType.create(ContainerInfoScreen::new));
+    public static final RegistryObject<ContainerType<ContainerInfoScreen>> infoContainer = CONTAINERS.register("info_container", () -> new ContainerType<>((windowID, inv) -> new ContainerInfoScreen(windowID, inv, true)));
+    public static final RegistryObject<ContainerType<ContainerInfoScreen>> infoSubContainer = CONTAINERS.register("info_sub_container", () -> new ContainerType<>((windowID, inv) -> new ContainerInfoScreen(windowID, inv, false)));
 
 }

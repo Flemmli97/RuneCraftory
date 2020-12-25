@@ -2,8 +2,10 @@ package com.flemmli97.runecraftory.data;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.enums.EnumDay;
+import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.tenshilib.common.item.SpawnEgg;
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -28,10 +30,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Same as LanguageProvider but with a linked hashmap and reading from old lang file
@@ -74,6 +78,20 @@ public class LangGen implements IDataProvider {
         this.add("tile.crafting.armor", "Crafting");
         this.add("tile.crafting.chemistry", "Chemistry");
         this.add("tile.crafting.cooking", "Cooking");
+
+        this.add("level", "Level");
+
+        for(EnumSkills s: EnumSkills.values())
+            this.add(s.getTranslation(),
+                    this.capitalize(s.getTranslation().replace("skill.", "").replace("_", " "),
+                            Lists.newArrayList("and")));
+    }
+
+    private String capitalize(String s, List<String> dont){
+        return Stream.of(s.trim().split("\\s"))
+                .filter(word -> word.length() > 0)
+                .map(word -> dont.contains(word)?word:word.substring(0, 1).toUpperCase() + word.substring(1))
+                .collect(Collectors.joining(" "));
     }
 
     private void setupOldFile(ExistingFileHelper existing) {
@@ -186,6 +204,7 @@ public class LangGen implements IDataProvider {
         CONTAINER,
         ELEMENT,
         ATTRIBUTE,
+        SKILL,
         TOOLTIP,
         DAY,
         SEASON,
@@ -206,6 +225,8 @@ public class LangGen implements IDataProvider {
                 return ELEMENT;
             if (s.startsWith("attribute.rf."))
                 return ATTRIBUTE;
+            if(s.startsWith("skill."))
+                return SKILL;
             if (s.startsWith("tooltip."))
                 return TOOLTIP;
             if (s.startsWith("day."))

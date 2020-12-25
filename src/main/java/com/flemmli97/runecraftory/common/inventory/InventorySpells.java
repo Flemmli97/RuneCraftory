@@ -26,6 +26,8 @@ public class InventorySpells implements IItemHandlerModifiable {
 
     @Override
     public ItemStack getStackInSlot(int slot) {
+        if (slot < 0 || slot >= this.getSlots())
+            return ItemStack.EMPTY;
         return this.inventory.get(slot);
     }
 
@@ -58,7 +60,7 @@ public class InventorySpells implements IItemHandlerModifiable {
 
     @Override
     public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-        if(this.isItemValid(slot, stack))
+        if (this.isItemValid(slot, stack))
             this.inventory.set(slot, stack);
     }
 

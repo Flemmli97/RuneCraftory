@@ -10,11 +10,11 @@ import net.minecraft.world.World;
 public class LevelCalc {
 
     public static int xpAmountForLevelUp(int level) {
-        return 1;
+        return 50;
     }
 
     public static int xpAmountForSkills(int level) {
-        return 1;
+        return 50;
     }
 
     public static void addXP(ServerPlayerEntity player, IPlayerCap cap, int amount) {

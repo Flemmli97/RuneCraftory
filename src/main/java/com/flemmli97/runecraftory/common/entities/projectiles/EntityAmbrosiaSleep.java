@@ -90,7 +90,7 @@ public class EntityAmbrosiaSleep extends Entity {
             for (LivingEntity e : list) {
                 if (!e.equals(this.getOwner()) && (this.pred == null || this.pred.test(e))) {
 
-                    if (MobUtils.handleMobAttack(e, new CustomDamage.Builder(this).trueSource(this.getOwner()).element(EnumElement.EARTH).get(), MobUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.3f)) {//RFCalculations.getAttributeValue(this.owner, ItemStatAttributes.RFMAGICATT, null, null) / 3.0f)) {
+                    if (MobUtils.handleMobAttack(e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).get(), MobUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.3f)) {//RFCalculations.getAttributeValue(this.owner, ItemStatAttributes.RFMAGICATT, null, null) / 3.0f)) {
                         e.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 80, 1, true, false));
                         //e.addPotionEffect(new EffectInstance(Potion.getPotionFromResourceLocation("runecraftory:sleep"), 80, 1, true, false));
                         this.remove();

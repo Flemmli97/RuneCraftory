@@ -35,7 +35,7 @@ public class EntityMobArrow extends EntityProjectile {
     @Override
     protected boolean onEntityHit(EntityRayTraceResult res) {
         if (!(this.getOwner() instanceof BaseMonster) || !(res.getEntity() instanceof LivingEntity) || ((BaseMonster) this.getOwner()).attackPred.test((LivingEntity) res.getEntity())) {
-            if (MobUtils.handleMobAttack(res.getEntity(), new CustomDamage.Builder(this).trueSource(this.getOwner()).get().setProjectile(), MobUtils.getAttributeValue(this.getOwner(), Attributes.GENERIC_ATTACK_DAMAGE, res.getEntity()) * this.damageMultiplier)) {
+            if (MobUtils.handleMobAttack(res.getEntity(), new CustomDamage.Builder(this, this.getOwner()).get().setProjectile(), MobUtils.getAttributeValue(this.getOwner(), Attributes.GENERIC_ATTACK_DAMAGE, res.getEntity()) * this.damageMultiplier)) {
                 if (res.getEntity() instanceof LivingEntity) {
                     LivingEntity livingentity = (LivingEntity) res.getEntity();
                     livingentity.setArrowCountInEntity(livingentity.getArrowCountInEntity() + 1);

@@ -12,7 +12,7 @@ public class C2SOpenInfo {
 
     private final Type type;
 
-    public C2SOpenInfo(Type type){
+    public C2SOpenInfo(Type type) {
         this.type = type;
     }
 
@@ -30,10 +30,10 @@ public class C2SOpenInfo {
             if (player != null) {
                 switch (pkt.type) {
                     case MAIN:
-                        NetworkHooks.openGui(player, ContainerInfoScreen.create(), b->b.writeByte(0));
+                        NetworkHooks.openGui(player, ContainerInfoScreen.create());
                         break;
                     case SUB:
-                        NetworkHooks.openGui(player, ContainerInfoScreen.create(), b->b.writeByte(1));
+                        NetworkHooks.openGui(player, ContainerInfoScreen.createSub());
                         break;
                 }
             }
@@ -41,7 +41,7 @@ public class C2SOpenInfo {
         ctx.get().setPacketHandled(true);
     }
 
-    public enum Type{
+    public enum Type {
         MAIN,
         SUB
     }
