@@ -2,8 +2,8 @@ package com.flemmli97.runecraftory.common.entities.projectiles;
 
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
+import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
-import com.flemmli97.runecraftory.common.utils.MobUtils;
 import com.flemmli97.tenshilib.common.entity.EntityProjectile;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
@@ -35,7 +35,7 @@ public class EntityMobArrow extends EntityProjectile {
     @Override
     protected boolean onEntityHit(EntityRayTraceResult res) {
         if (!(this.getOwner() instanceof BaseMonster) || !(res.getEntity() instanceof LivingEntity) || ((BaseMonster) this.getOwner()).attackPred.test((LivingEntity) res.getEntity())) {
-            if (MobUtils.handleMobAttack(res.getEntity(), new CustomDamage.Builder(this, this.getOwner()).get().setProjectile(), MobUtils.getAttributeValue(this.getOwner(), Attributes.GENERIC_ATTACK_DAMAGE, res.getEntity()) * this.damageMultiplier)) {
+            if (CombatUtils.damage(this.getOwner(), res.getEntity(), (CustomDamage) new CustomDamage.Builder(this, this.getOwner()).get().setProjectile(), CombatUtils.getAttributeValue(this.getOwner(), Attributes.GENERIC_ATTACK_DAMAGE, res.getEntity()) * this.damageMultiplier, null)) {
                 if (res.getEntity() instanceof LivingEntity) {
                     LivingEntity livingentity = (LivingEntity) res.getEntity();
                     livingentity.setArrowCountInEntity(livingentity.getArrowCountInEntity() + 1);

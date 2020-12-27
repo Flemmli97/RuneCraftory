@@ -22,6 +22,7 @@ import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModContainer;
 import com.flemmli97.runecraftory.common.registry.ModCrafting;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
+import com.flemmli97.runecraftory.common.registry.ModFeatures;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModLootModifier;
 import com.flemmli97.runecraftory.common.registry.ModPotions;
@@ -70,9 +71,6 @@ public class RuneCraftory {
         File def = confDir.resolve("default").toFile();
         if (!def.exists())
             def.mkdirs();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfigSpec.generalSpec, RuneCraftory.MODID + "/general.toml");
-        spawnConfig = new SpawnConfig(FMLPaths.CONFIGDIR.get().resolve(RuneCraftory.MODID));
-        MobConfig.MobConfigSpec.config.loadConfig();
 
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         modBus.addListener(this::clientSetup);
@@ -88,6 +86,10 @@ public class RuneCraftory {
         forgeBus.register(new MobEvents());
         forgeBus.register(new PlayerEvents());
         forgeBus.register(new WorldEvents());
+
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfigSpec.generalSpec, RuneCraftory.MODID + "/general.toml");
+        spawnConfig = new SpawnConfig(FMLPaths.CONFIGDIR.get().resolve(RuneCraftory.MODID));
+        MobConfig.MobConfigSpec.config.loadConfig();
     }
 
     public static void registries(IEventBus modBus) {
@@ -102,6 +104,7 @@ public class RuneCraftory {
         modBus.addGenericListener(IRecipeSerializer.class, ModCrafting::register);
         ModLootModifier.SERIALZER.register(modBus);
         modBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootModifier::register);
+        ModFeatures.FEATURES.register(modBus);
         ModSpells.SPELLS.register(modBus);
     }
 

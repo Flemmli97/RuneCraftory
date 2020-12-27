@@ -12,6 +12,7 @@ public class GeneralConfig {
     public static boolean combatModule;
     public static boolean gateSpawning;
     public static boolean disableVanillaSpawning;
+    public static boolean randomDamage;
 
     public static boolean crops;
     public static boolean rp;
@@ -62,6 +63,7 @@ public class GeneralConfig {
         combatModule = GeneralConfigSpec.generalConf.combatModule.get();
         gateSpawning = GeneralConfigSpec.generalConf.gateSpawning.get();
         disableVanillaSpawning = GeneralConfigSpec.generalConf.disableVanillaSpawning.get();
+        randomDamage = GeneralConfigSpec.generalConf.randomDamage.get();
 
         startingHealth = GeneralConfigSpec.generalConf.startingHealth.get();
         startingRP = GeneralConfigSpec.generalConf.startingRP.get();

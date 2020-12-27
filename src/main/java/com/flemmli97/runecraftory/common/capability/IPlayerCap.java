@@ -8,6 +8,7 @@ import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Hand;
@@ -71,6 +72,8 @@ public interface IPlayerCap {
 
     void setIntel(PlayerEntity player, float amount);
 
+    Item lastEatenFood();
+
     void applyFoodEffect(PlayerEntity player, ItemStack food);
 
     void removeFoodEffect(PlayerEntity player);
@@ -78,6 +81,12 @@ public interface IPlayerCap {
     int rpFoodBuff();
 
     Map<Attribute, Integer> foodEffects();
+
+    int foodBuffDuration();
+
+    CompoundNBT foodBuffNBT();
+
+    void readFoodBuffFromNBT(CompoundNBT nbt);
 
     void updateEquipmentStats(PlayerEntity player, EquipmentSlotType slot);
 

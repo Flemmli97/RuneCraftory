@@ -17,9 +17,11 @@ import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.world.WorldHandler;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import com.flemmli97.runecraftory.network.S2CCalendar;
+import com.flemmli97.runecraftory.network.S2CCapSync;
 import com.flemmli97.runecraftory.network.S2CDataPackSync;
 import com.flemmli97.tenshilib.api.event.AOEAttackEvent;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -49,6 +51,7 @@ public class PlayerEvents {
         if (!event.getPlayer().world.isRemote) {
             PacketHandler.sendToClient(new S2CDataPackSync(), (ServerPlayerEntity) event.getPlayer());
             PacketHandler.sendToClient(new S2CCalendar(WorldHandler.get((ServerWorld) event.getPlayer().world).getCalendar()), (ServerPlayerEntity) event.getPlayer());
+            PacketHandler.sendToClient(new S2CCapSync(event.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability"))), (ServerPlayerEntity) event.getPlayer());
             CompoundNBT playerData = event.getPlayer().getPersistentData();
             if (!playerData.getBoolean(RuneCraftory.MODID + ":starterItems")) {
                 ItemUtils.starterItems(event.getPlayer());
@@ -73,9 +76,9 @@ public class PlayerEvents {
     @SubscribeEvent
     public void playerAttack(AttackEntityEvent event) {
         PlayerEntity player = event.getPlayer();
-        if (event.getTarget() instanceof LivingEntity && player.getHeldItemMainhand().getItem() instanceof IItemUsable) {
+        if (player.getHeldItemMainhand().getItem() instanceof IItemUsable) {
             event.setCanceled(true);
-            CombatUtils.doPlayerAttack(player, (LivingEntity) event.getTarget(), true, true, true);
+            CombatUtils.playerAttackWithItem(player, event.getTarget(), true, true, true);
         }
     }
 
@@ -84,9 +87,9 @@ public class PlayerEvents {
         PlayerEntity player = event.getPlayer();
         if (player.getHeldItemMainhand().getItem() instanceof IItemUsable) {
             event.setCanceled(true);
-            List<LivingEntity> entityList = event.attackList();
+            List<Entity> entityList = event.attackList();
             for (int i = 0; i < entityList.size(); ++i) {
-                CombatUtils.doPlayerAttack(player, entityList.get(i), i == entityList.size() - 1, true, i == entityList.size() - 1);
+                CombatUtils.playerAttackWithItem(player, entityList.get(i), i == entityList.size() - 1, true, i == entityList.size() - 1);
             }
         }
     }
@@ -137,13 +140,9 @@ public class PlayerEvents {
         if (event.isWasDeath() && !event.getPlayer().world.isRemote) {
             event.getOriginal().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
                 cap.useMoney(event.getOriginal(), (int) (cap.getMoney() * 0.2));
-                event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(newCap -> {
-                    newCap.readFromNBT(cap.writeToNBT(new CompoundNBT(), event.getOriginal()), event.getPlayer());
-                });
+                event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(newCap -> newCap.readFromNBT(cap.writeToNBT(new CompoundNBT(), event.getOriginal()), event.getPlayer()));
             });
-            /*if (!event.getEntityPlayer().world.isRemote && event.getEntityPlayer() instanceof EntityPlayerMP) {
-                PacketHandler.sendTo(new PacketUpdateClient(event.getEntityPlayer().getCapability(PlayerCapProvider.PlayerCap, null)), (EntityPlayerMP)event.getEntityPlayer());
-            }*/
+            PacketHandler.sendToClient(new S2CCapSync(event.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability"))), (ServerPlayerEntity) event.getPlayer());
         }
     }
 /*

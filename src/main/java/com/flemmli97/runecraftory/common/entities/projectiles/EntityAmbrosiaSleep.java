@@ -4,8 +4,8 @@ import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
+import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
-import com.flemmli97.runecraftory.common.utils.MobUtils;
 import com.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -90,7 +90,7 @@ public class EntityAmbrosiaSleep extends Entity {
             for (LivingEntity e : list) {
                 if (!e.equals(this.getOwner()) && (this.pred == null || this.pred.test(e))) {
 
-                    if (MobUtils.handleMobAttack(e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).get(), MobUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.3f)) {//RFCalculations.getAttributeValue(this.owner, ItemStatAttributes.RFMAGICATT, null, null) / 3.0f)) {
+                    if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.3f, null)) {
                         e.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 80, 1, true, false));
                         //e.addPotionEffect(new EffectInstance(Potion.getPotionFromResourceLocation("runecraftory:sleep"), 80, 1, true, false));
                         this.remove();

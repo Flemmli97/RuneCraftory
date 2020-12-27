@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.network;
 
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.inventory.container.ContainerInfoScreen;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -30,9 +31,11 @@ public class C2SOpenInfo {
             if (player != null) {
                 switch (pkt.type) {
                     case MAIN:
+                        PacketHandler.sendToClient(new S2CCapSync(player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability"))), player);
                         NetworkHooks.openGui(player, ContainerInfoScreen.create());
                         break;
                     case SUB:
+                        PacketHandler.sendToClient(new S2CCapSync(player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability"))), player);
                         NetworkHooks.openGui(player, ContainerInfoScreen.createSub());
                         break;
                 }

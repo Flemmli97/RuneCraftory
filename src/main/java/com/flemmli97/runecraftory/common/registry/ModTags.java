@@ -22,6 +22,7 @@ public class ModTags {
     public static Tags.IOptionalNamedTag<Block> sickleDestroyable = blockForge("sickle_destroyable");
     public static Tags.IOptionalNamedTag<Block> hammerFlattenable = blockForge("hammer_flattenable");
     public static Tags.IOptionalNamedTag<Block> hammerBreakable = blockForge("hammer_breakable");
+    public static Tags.IOptionalNamedTag<Block> herbs = blockForge("herbs");
 
     private static Tags.IOptionalNamedTag<Item> tag(String name) {
         return ItemTags.createOptional(new ResourceLocation(RuneCraftory.MODID, name));

@@ -18,4 +18,9 @@ public class RenderFireball extends RenderTexture<EntityFireball> {
     public ResourceLocation getEntityTexture(EntityFireball p_110775_1_) {
         return tex;
     }
+
+    @Override
+    public float[] uvOffset(int timer) {
+        return super.uvOffset((int) (timer*0.5));
+    }
 }

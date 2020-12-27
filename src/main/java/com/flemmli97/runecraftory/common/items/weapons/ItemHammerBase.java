@@ -11,7 +11,6 @@ import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
-import com.flemmli97.runecraftory.common.utils.MobUtils;
 import com.flemmli97.runecraftory.lib.ItemTiers;
 import com.flemmli97.tenshilib.api.item.IAOEWeapon;
 import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
@@ -19,6 +18,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -130,17 +130,14 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World world, LivingEntity entity, int timeLeft) {
         if (!world.isRemote && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
-            List<LivingEntity> list = RayTraceUtils.getEntities(entity, this.getRange(), 360);
+            List<Entity> list = RayTraceUtils.getEntities(entity, this.getRange(), 360);
             if (!list.isEmpty()) {
                 CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(20).get();
                 boolean player = entity instanceof PlayerEntity;
                 boolean success = false;
-                for (LivingEntity e : list) {
-                    float damagePhys = MobUtils.getAttributeValue(entity, Attributes.GENERIC_ATTACK_DAMAGE, e);
-                    if (player) {
-                        if (CombatUtils.playerDamage((PlayerEntity) entity, e, src, damagePhys, stack))
-                            success = true;
-                    } else if (MobUtils.handleMobAttack(e, src, damagePhys))
+                for (Entity e : list) {
+                    float damagePhys = CombatUtils.getAttributeValue(entity, Attributes.GENERIC_ATTACK_DAMAGE, e);
+                    if (CombatUtils.damage(entity, e, src, damagePhys, stack))
                         success = true;
                 }
                 if (success) {

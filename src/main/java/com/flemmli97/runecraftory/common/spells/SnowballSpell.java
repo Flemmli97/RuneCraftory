@@ -4,13 +4,15 @@ import com.flemmli97.runecraftory.api.Spell;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.server.ServerWorld;
 
-public class EmptySpell extends Spell {
+public class SnowballSpell extends Spell {
 
     @Override
     public void update(PlayerEntity player, ItemStack stack) {
+
     }
 
     @Override
@@ -25,11 +27,14 @@ public class EmptySpell extends Spell {
 
     @Override
     public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount) {
+        SnowballEntity snowball = new SnowballEntity(world, entity);
+        snowball.setProperties(entity, entity.rotationPitch, entity.rotationYaw, 0.0F, 2.0F, 1.0F);
+        world.addEntity(snowball);
         return true;
     }
 
     @Override
     public int rpCost() {
-        return 0;
+        return 1;
     }
 }

@@ -29,7 +29,7 @@ public class FireballSpell extends Spell {
     }
 
     @Override
-    public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack) {
+    public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount) {
         boolean rp = !(entity instanceof PlayerEntity) || entity.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.decreaseRunePoints((PlayerEntity) entity, this.rpCost(), true)).orElse(false);
         if (rp) {
             EntityFireball ball = new EntityFireball(world, entity);

@@ -8,11 +8,14 @@ import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FarmlandBlock;
+import net.minecraft.data.BlockModelProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class BlockStatesGen extends BlockStateProvider {
@@ -55,20 +58,30 @@ public class BlockStatesGen extends BlockStateProvider {
         ModBlocks.mineralMap.values().forEach(reg -> {
             Block block = reg.get();
             this.getVariantBuilder(block)
-                    .forAllStatesExcept(state -> ConfiguredModel.builder()
-                                    .modelFile(this.models().withExistingParent(block.getRegistryName().toString(), "runecraftory:block/ore").texture("ore", this.blockTexture(block)))
-                                    .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle()) % 360)
-                                    .build(),
+                    .forAllStatesExcept(state -> {
+                                BlockModelBuilder file = this.models().withExistingParent(block.getRegistryName().toString(), "runecraftory:block/ore").texture("ore", this.blockTexture(block));
+                                if (block == ModBlocks.mineralDragonic.get())
+                                    file = file.texture("0", new ResourceLocation("block/end_stone"));
+                                return ConfiguredModel.builder()
+                                        .modelFile(file)
+                                        .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle()) % 360)
+                                        .build();
+                            },
                             BlockStateProperties.WATERLOGGED
                     );
         });
         ModBlocks.brokenMineralMap.values().forEach(reg -> {
             Block block = reg.get();
             this.getVariantBuilder(block)
-                    .forAllStatesExcept(state -> ConfiguredModel.builder()
-                                    .modelFile(this.models().withExistingParent(block.getRegistryName().toString(), "runecraftory:block/ore_broken").texture("ore", this.mineralTexture(block)))
-                                    .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle()) % 360)
-                                    .build(),
+                    .forAllStatesExcept(state -> {
+                                BlockModelBuilder file = this.models().withExistingParent(block.getRegistryName().toString(), "runecraftory:block/ore_broken").texture("ore", this.mineralTexture(block));
+                                if (block == ModBlocks.brokenMineralDragonic.get())
+                                    file = file.texture("0", new ResourceLocation("block/end_stone"));
+                                return ConfiguredModel.builder()
+                                        .modelFile(file)
+                                        .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle()) % 360)
+                                        .build();
+                            },
                             BlockStateProperties.WATERLOGGED
                     );
         });

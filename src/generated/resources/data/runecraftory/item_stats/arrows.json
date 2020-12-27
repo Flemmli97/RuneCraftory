@@ -6,7 +6,6 @@
   "itemStats": {
     "minecraft:generic.attack_damage": 5
   },
-  "tier1Spell": "runecraftory:fireball",
-  "tier2Spell": "runecraftory:vanilla_arrow",
+  "tier1Spell": "runecraftory:vanilla_arrow",
   "tag": "minecraft:arrows"
 }

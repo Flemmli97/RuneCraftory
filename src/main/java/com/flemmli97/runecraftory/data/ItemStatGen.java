@@ -10,6 +10,7 @@ import com.flemmli97.runecraftory.common.registry.ModSpells;
 import com.flemmli97.runecraftory.common.registry.ModTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
 
@@ -23,7 +24,20 @@ public class ItemStatGen extends ItemStatProvider {
     protected void add() {
         this.addStat("arrows", ItemTags.ARROWS, new ItemStat.MutableItemStat(10, 1, 5)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 5)
-                .setSpell(ModSpells.FIREBALL.get(), ModSpells.ARROW.get(), null));
+                .setSpell(ModSpells.ARROW.get(), null, null));
+        this.addStat("snowball", Items.SNOWBALL, new ItemStat.MutableItemStat(1, 0, 5)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 1)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 1)
+                .setSpell(ModSpells.SNOWBALL.get(), null, null));
+        this.addStat("totem", Items.TOTEM_OF_UNDYING, new ItemStat.MutableItemStat(2500, 100, 5)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 5)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 5)
+                .setSpell(ModSpells.EVOKERFANG.get(), null, null));
+        this.addStat("wither_skull", Items.WITHER_SKELETON_SKULL, new ItemStat.MutableItemStat(5000, 150, 5)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 5)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 15)
+                .setSpell(ModSpells.WITHERSKULL.get(), null, null)
+                .setElement(EnumElement.DARK));
 
         this.addStat(ModItems.broadSword.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 5));

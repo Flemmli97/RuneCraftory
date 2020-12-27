@@ -12,6 +12,7 @@ import com.flemmli97.runecraftory.lib.LibNBT;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolItem;
@@ -145,10 +146,15 @@ public class ItemNBT {
                     for (Map.Entry<Attribute, Integer> entry : stat.itemStats().entrySet()) {
                         updateStatIncrease(entry.getKey(), Math.round(entry.getValue() * efficiency), tag);
                     }
-
+                    if(stat.element() != EnumElement.NONE) {
+                        if (EnumElement.valueOf(tag.getString(LibNBT.Element)) == EnumElement.NONE) {
+                            tag.putString(LibNBT.Element, stat.element().toString());
+                        } else {
+                            tag.putString(LibNBT.Element, EnumElement.NONE.toString());
+                        }
+                    }
                     if (stack.getItem() instanceof ItemStaffBase) {
                         stack.getCapability(CapabilityInsts.StaffCap).ifPresent(cap -> {
-                            System.out.println(stat.getTier2Spell());
                             if (stat.getTier1Spell() != null)
                                 cap.setTier1Spell(stat.getTier1Spell());
                             if (stat.getTier2Spell() != null)
@@ -224,7 +230,10 @@ public class ItemNBT {
     }
 
     public static boolean shouldHaveStats(ItemStack stack) {
-        return stack.getItem() instanceof IItemUsable || MobEntity.getSlotForItemStack(stack) != EquipmentSlotType.MAINHAND
-                || stack.getItem() instanceof ToolItem || stack.getItem() instanceof SwordItem;
+        if(stack.getItem() instanceof BlockItem)
+            return false;
+        EquipmentSlotType slotType;
+        return stack.getItem() instanceof IItemUsable|| stack.getItem() instanceof ToolItem || stack.getItem() instanceof SwordItem
+                || ((slotType = MobEntity.getSlotForItemStack(stack)) != null && slotType != EquipmentSlotType.MAINHAND);
     }
 }

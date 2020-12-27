@@ -34,6 +34,7 @@ import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
@@ -88,6 +89,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     //private QuestMission quest;
 
     //Food buff
+    private Item lastFood;
     private int rpFoodBuff;
     private Map<Attribute, Integer> foodBuffs = Maps.newHashMap();
     private int foodDuration;
@@ -498,6 +500,11 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     }
 
     @Override
+    public Item lastEatenFood(){
+        return this.lastFood;
+    }
+
+    @Override
     public void applyFoodEffect(PlayerEntity player, ItemStack stack) {
         this.removeFoodEffect(player);
         FoodProperties prop = DataPackHandler.getFoodStat(stack.getItem());
@@ -521,6 +528,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         this.rpFoodBuff = this.runePointsMax * prop.getRpPercentIncrease() + prop.getRpIncrease();
         this.foodBuffs = gain;
         this.foodDuration = prop.duration();
+        this.lastFood = stack.getItem();
         if (player instanceof ServerPlayerEntity) {
             PacketHandler.sendToClient(new S2CFoodPkt(stack), (ServerPlayerEntity) player);
         }
@@ -531,6 +539,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         this.foodBuffs = Collections.emptyMap();
         this.foodDuration = -1;
         this.rpFoodBuff = 0;
+        this.lastFood = null;
         if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
             PacketHandler.sendToClient(new S2CFoodPkt(null), (ServerPlayerEntity) player);
         }
@@ -546,6 +555,39 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         return this.foodBuffs;
     }
 
+    @Override
+    public int foodBuffDuration(){
+        return this.foodDuration;
+    }
+
+    @Override
+    public CompoundNBT foodBuffNBT(){
+        CompoundNBT nbt = new CompoundNBT();
+        if(this.lastFood != null)
+            nbt.putString("LastFood", this.lastFood.getRegistryName().toString());
+        CompoundNBT compound3 = new CompoundNBT();
+        for (Map.Entry<Attribute, Integer> entry : this.foodBuffs.entrySet()) {
+            compound3.putInt(entry.getKey().getRegistryName().toString(), entry.getValue());
+        }
+        nbt.put("FoodBuffs", compound3);
+        nbt.putInt("FoodBuffRP", this.rpFoodBuff);
+        nbt.putInt("FoodBuffDuration", this.foodDuration);
+        return nbt;
+    }
+
+    @Override
+    public void readFoodBuffFromNBT(CompoundNBT nbt){
+        if(nbt.contains("LastFood"))
+            this.lastFood = ForgeRegistries.ITEMS.getValue(new ResourceLocation(nbt.getString("LastFood")));
+        if (nbt.contains("FoodBuffs")) {
+            CompoundNBT tag = nbt.getCompound("FoodBuffs");
+            for (String s : tag.keySet()) {
+                this.foodBuffs.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(s)), tag.getInt(s));
+            }
+        }
+        this.rpFoodBuff = nbt.getInt("FoodBuffRP");
+        this.foodDuration = nbt.getInt("FoodBuffDuration");
+    }
 
     @Override
     public int spellFlag(){
@@ -723,14 +765,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         /*if (nbt.contains("Quest")) {
             this.quest = new QuestMission(nbt.getCompoundTag("Quest"));
         }*/
-        if (nbt.contains("FoodBuffs")) {
-            CompoundNBT tag = nbt.getCompound("FoodBuffs");
-            for (String s : tag.keySet()) {
-                this.foodBuffs.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(s)), tag.getInt(s));
-            }
-        }
-        this.rpFoodBuff = nbt.getInt("FoodBuffRP");
-        this.foodDuration = nbt.getInt("FoodBuffDuration");
+        this.readFoodBuffFromNBT(nbt.getCompound("FoodData"));
     }
 
     @Override
@@ -771,13 +806,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         /*if (this.quest != null) {
             nbt.setTag("Quest", this.quest.writeToNBT(new NBTTagCompound()));
         }*/
-        CompoundNBT compound3 = new CompoundNBT();
-        for (Map.Entry<Attribute, Integer> entry : this.foodBuffs.entrySet()) {
-            compound3.putInt(entry.getKey().getRegistryName().toString(), entry.getValue());
-        }
-        nbt.put("FoodBuffs", compound3);
-        nbt.putInt("FoodBuffRP", this.rpFoodBuff);
-        nbt.putInt("FoodBuffDuration", this.foodDuration);
+        nbt.put("FoodData", this.foodBuffNBT());
         return nbt;
     }
 

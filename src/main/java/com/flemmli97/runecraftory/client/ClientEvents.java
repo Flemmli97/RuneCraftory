@@ -44,7 +44,6 @@ public class ClientEvents {
     public void keyEvent(InputEvent.KeyInputEvent event) {
         if (ClientHandlers.spell1.isPressed()) {
             PacketHandler.sendToServer(new C2SSpellKey(0));
-
         }
         if (ClientHandlers.spell2.isPressed()) {
             PacketHandler.sendToServer(new C2SSpellKey(1));

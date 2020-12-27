@@ -5,7 +5,6 @@ import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
-import com.flemmli97.runecraftory.common.utils.MobUtils;
 import com.flemmli97.tenshilib.common.entity.EntityProjectile;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -27,7 +26,7 @@ public class EntityFireball extends EntityProjectile {
 
     @Override
     protected boolean onEntityHit(EntityRayTraceResult result) {
-        boolean att = CombatUtils.attackEntity(result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.FIRE).hurtResistant(5).get(), MobUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), result.getEntity()));
+        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.FIRE).hurtResistant(5).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), result.getEntity()), null);
         this.world.playSound(null, result.getEntity().getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, 1.0f);
         this.remove();
         return att;
@@ -41,6 +40,6 @@ public class EntityFireball extends EntityProjectile {
 
     @Override
     protected float getGravityVelocity() {
-        return 0.005f;
+        return 0.0025f;
     }
 }

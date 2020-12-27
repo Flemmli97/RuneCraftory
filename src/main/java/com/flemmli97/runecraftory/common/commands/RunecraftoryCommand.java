@@ -2,6 +2,9 @@ package com.flemmli97.runecraftory.common.commands;
 
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import com.flemmli97.runecraftory.common.capability.PlayerCapImpl;
+import com.flemmli97.runecraftory.network.PacketHandler;
+import com.flemmli97.runecraftory.network.S2CCapSync;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -10,6 +13,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.server.command.EnumArgument;
 
@@ -21,11 +25,14 @@ public class RunecraftoryCommand {
                         .then(Commands.argument("skill", EnumArgument.enumArgument(EnumSkills.class)).then(Commands.literal("add")
                             .then(Commands.literal("level").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::setSkillXP)))
                             .then(Commands.literal("xp").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addSkillXP)))
-                        )))
+                        ))
+                )
                 .then(Commands.literal("level").requires(src -> src.hasPermissionLevel(2))
                         .then(Commands.literal("set").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::setLevel)))
                         .then(Commands.literal("xp").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addXP)))
-
+                )
+                .then(Commands.literal("reset").requires(src -> src.hasPermissionLevel(2))
+                        .then(Commands.literal("all").executes(RunecraftoryCommand::resetAll))
                 )
         );
     }
@@ -58,6 +65,15 @@ public class RunecraftoryCommand {
 
     private static int setLevel(CommandContext<CommandSource> ctx) {
 
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int resetAll(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
+        ServerPlayerEntity player =  ctx.getSource().asPlayer();
+        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->{
+            cap.readFromNBT(new PlayerCapImpl().writeToNBT(new CompoundNBT(), null), null);
+            PacketHandler.sendToClient(new S2CCapSync(cap), player);
+        });
         return Command.SINGLE_SUCCESS;
     }
 }
