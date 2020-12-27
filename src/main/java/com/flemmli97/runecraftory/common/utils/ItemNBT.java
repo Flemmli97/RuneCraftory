@@ -146,7 +146,7 @@ public class ItemNBT {
                     for (Map.Entry<Attribute, Integer> entry : stat.itemStats().entrySet()) {
                         updateStatIncrease(entry.getKey(), Math.round(entry.getValue() * efficiency), tag);
                     }
-                    if(stat.element() != EnumElement.NONE) {
+                    if (stat.element() != EnumElement.NONE) {
                         if (EnumElement.valueOf(tag.getString(LibNBT.Element)) == EnumElement.NONE) {
                             tag.putString(LibNBT.Element, stat.element().toString());
                         } else {
@@ -230,10 +230,10 @@ public class ItemNBT {
     }
 
     public static boolean shouldHaveStats(ItemStack stack) {
-        if(stack.getItem() instanceof BlockItem)
+        if (stack.getItem() instanceof BlockItem)
             return false;
         EquipmentSlotType slotType;
-        return stack.getItem() instanceof IItemUsable|| stack.getItem() instanceof ToolItem || stack.getItem() instanceof SwordItem
+        return stack.getItem() instanceof IItemUsable || stack.getItem() instanceof ToolItem || stack.getItem() instanceof SwordItem
                 || ((slotType = MobEntity.getSlotForItemStack(stack)) != null && slotType != EquipmentSlotType.MAINHAND);
     }
 }

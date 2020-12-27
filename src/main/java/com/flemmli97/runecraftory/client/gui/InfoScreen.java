@@ -5,8 +5,8 @@ import com.flemmli97.runecraftory.client.gui.widgets.PageButton;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
-import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.network.C2SOpenInfo;
 import com.flemmli97.runecraftory.network.PacketHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -43,7 +43,7 @@ public class InfoScreen extends DisplayEffectsScreen<Container> {
         this.buttons();
     }
 
-    protected void buttons(){
+    protected void buttons() {
         this.addButton(new PageButton(this.guiLeft + 206, this.guiTop + 5, new StringTextComponent(">"), b -> PacketHandler.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.SUB))));
     }
 

@@ -15,7 +15,7 @@ public class TileAccessory extends TileCrafting {
     public boolean isItemValid(int slot, ItemStack stack) {
         if (slot == 6) {
             EquipmentSlotType type = stack.getItem().getEquipmentSlot(stack);
-            return type != null && type!= EquipmentSlotType.MAINHAND;
+            return type != null && type != EquipmentSlotType.MAINHAND;
         }
         return true;
     }

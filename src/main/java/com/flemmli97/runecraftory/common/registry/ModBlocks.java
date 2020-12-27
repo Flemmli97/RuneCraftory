@@ -21,10 +21,7 @@ import com.flemmli97.runecraftory.common.blocks.tile.TileCrop;
 import com.flemmli97.runecraftory.common.blocks.tile.TileFarm;
 import com.flemmli97.runecraftory.common.blocks.tile.TileForge;
 import com.flemmli97.runecraftory.common.blocks.tile.TileSpawner;
-import com.flemmli97.runecraftory.common.config.GenerationConfig;
-import com.flemmli97.runecraftory.common.config.values.GenConfig;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -32,7 +29,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.tileentity.TileEntityType;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -40,7 +36,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -60,26 +55,19 @@ public class ModBlocks {
     public static final RegistryObject<Block> accessory = BLOCKS.register("accessory", () -> new BlockAccessory(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
     public static final RegistryObject<Block> farmland = BLOCKS.register("farmland", () -> new BlockFarm(AbstractBlock.Properties.create(Material.EARTH).hardnessAndResistance(0.6F).sound(SoundType.GROUND).blockVision((state, reader, pos) -> true).suffocates((state, reader, pos) -> true)));
 
-    public static final RegistryObject<Block> mineralIron = mineral(EnumMineralTier.IRON, Sets.newHashSet(),
-            Sets.newHashSet(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.NETHER, BiomeDictionary.Type.END), 25, 75, 4);
-    public static final RegistryObject<Block> mineralBronze = mineral(EnumMineralTier.BRONZE, Sets.newHashSet(),
-            Sets.newHashSet(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.NETHER, BiomeDictionary.Type.END), 25, 50, 4);
-    public static final RegistryObject<Block> mineralSilver = mineral(EnumMineralTier.SILVER, Sets.newHashSet(),
-            Sets.newHashSet(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.NETHER, BiomeDictionary.Type.END), 25, 25, 4);
-    public static final RegistryObject<Block> mineralGold = mineral(EnumMineralTier.GOLD, Sets.newHashSet(),
-            Sets.newHashSet(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.NETHER, BiomeDictionary.Type.END), 25, 25, 4);
-    public static final RegistryObject<Block> mineralPlatinum = mineral(EnumMineralTier.PLATINUM, Sets.newHashSet(),
-            Sets.newHashSet(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.NETHER, BiomeDictionary.Type.END), 25, 10, 4);
-    public static final RegistryObject<Block> mineralOrichalcum = mineral(EnumMineralTier.ORICHALCUM, Sets.newHashSet(),
-            Sets.newHashSet(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.NETHER, BiomeDictionary.Type.END), 20, 5, 4);
-    public static final RegistryObject<Block> mineralDiamond = mineral(EnumMineralTier.DIAMOND, Sets.newHashSet(),
-            Sets.newHashSet(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.NETHER, BiomeDictionary.Type.END), 20, 5, 4);
-    public static final RegistryObject<Block> mineralDragonic = mineral(EnumMineralTier.DRAGONIC, Sets.newHashSet(BiomeDictionary.Type.END), Sets.newHashSet(), 25, 100, 4);
-    public static final RegistryObject<Block> mineralAquamarine = mineral(EnumMineralTier.AQUAMARINE, Sets.newHashSet(BiomeDictionary.Type.BEACH, BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.WET), Sets.newHashSet(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.NETHER, BiomeDictionary.Type.END), 20, 100, 4);
-    public static final RegistryObject<Block> mineralAmethyst = mineral(EnumMineralTier.AMETHYST, Sets.newHashSet(BiomeDictionary.Type.FOREST, BiomeDictionary.Type.MOUNTAIN, BiomeDictionary.Type.DEAD), Sets.newHashSet(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.NETHER, BiomeDictionary.Type.END), 20, 50, 6);
-    public static final RegistryObject<Block> mineralRuby = mineral(EnumMineralTier.RUBY, Sets.newHashSet(BiomeDictionary.Type.HOT, BiomeDictionary.Type.NETHER), Sets.newHashSet(BiomeDictionary.Type.END), 20, 50, 4);
-    public static final RegistryObject<Block> mineralEmerald = mineral(EnumMineralTier.EMERALD, Sets.newHashSet(BiomeDictionary.Type.PLAINS, BiomeDictionary.Type.HILLS, BiomeDictionary.Type.WASTELAND, BiomeDictionary.Type.SPARSE), Sets.newHashSet(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.NETHER, BiomeDictionary.Type.END), 20, 50, 6);
-    public static final RegistryObject<Block> mineralSapphire = mineral(EnumMineralTier.SAPPHIRE, Sets.newHashSet(), Sets.newHashSet(BiomeDictionary.Type.OCEAN, BiomeDictionary.Type.RIVER, BiomeDictionary.Type.NETHER, BiomeDictionary.Type.END), 20, 50, 4);
+    public static final RegistryObject<Block> mineralIron = mineral(EnumMineralTier.IRON);
+    public static final RegistryObject<Block> mineralBronze = mineral(EnumMineralTier.BRONZE);
+    public static final RegistryObject<Block> mineralSilver = mineral(EnumMineralTier.SILVER);
+    public static final RegistryObject<Block> mineralGold = mineral(EnumMineralTier.GOLD);
+    public static final RegistryObject<Block> mineralPlatinum = mineral(EnumMineralTier.PLATINUM);
+    public static final RegistryObject<Block> mineralOrichalcum = mineral(EnumMineralTier.ORICHALCUM);
+    public static final RegistryObject<Block> mineralDiamond = mineral(EnumMineralTier.DIAMOND);
+    public static final RegistryObject<Block> mineralDragonic = mineral(EnumMineralTier.DRAGONIC);
+    public static final RegistryObject<Block> mineralAquamarine = mineral(EnumMineralTier.AQUAMARINE);
+    public static final RegistryObject<Block> mineralAmethyst = mineral(EnumMineralTier.AMETHYST);
+    public static final RegistryObject<Block> mineralRuby = mineral(EnumMineralTier.RUBY);
+    public static final RegistryObject<Block> mineralEmerald = mineral(EnumMineralTier.EMERALD);
+    public static final RegistryObject<Block> mineralSapphire = mineral(EnumMineralTier.SAPPHIRE);
 
     public static final RegistryObject<Block> brokenMineralIron = brokenMineral(EnumMineralTier.IRON);
     public static final RegistryObject<Block> brokenMineralBronze = brokenMineral(EnumMineralTier.BRONZE);
@@ -203,9 +191,8 @@ public class ModBlocks {
     public static final RegistryObject<TileEntityType<TileCooking>> cookingTile = TILES.register("cooking_tile", () -> TileEntityType.Builder.create(TileCooking::new, cooking.get()).build(null));
     public static final RegistryObject<TileEntityType<TileSpawner>> bossSpawnerTile = TILES.register("spawner_tile", () -> TileEntityType.Builder.create(TileSpawner::new, bossSpawner.get()).build(null));
 
-    public static RegistryObject<Block> mineral(EnumMineralTier name, Set<BiomeDictionary.Type> whiteList, Set<BiomeDictionary.Type> blackList, int chance, int weight, int tries) {
+    public static RegistryObject<Block> mineral(EnumMineralTier name) {
         RegistryObject<Block> reg = BLOCKS.register("ore_" + name.getString(), () -> new BlockMineral(name, AbstractBlock.Properties.create(Material.ROCK).hardnessAndResistance(3, 5)));
-        GenerationConfig.mineralGen.add(new GenConfig(reg.getId(), whiteList, blackList, chance, weight, tries, 4, 3, 4));
         mineralMap.put(name, reg);
         return reg;
     }

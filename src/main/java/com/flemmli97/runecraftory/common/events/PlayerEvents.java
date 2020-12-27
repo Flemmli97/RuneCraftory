@@ -51,7 +51,7 @@ public class PlayerEvents {
         if (!event.getPlayer().world.isRemote) {
             PacketHandler.sendToClient(new S2CDataPackSync(), (ServerPlayerEntity) event.getPlayer());
             PacketHandler.sendToClient(new S2CCalendar(WorldHandler.get((ServerWorld) event.getPlayer().world).getCalendar()), (ServerPlayerEntity) event.getPlayer());
-            PacketHandler.sendToClient(new S2CCapSync(event.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability"))), (ServerPlayerEntity) event.getPlayer());
+            PacketHandler.sendToClient(new S2CCapSync(event.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"))), (ServerPlayerEntity) event.getPlayer());
             CompoundNBT playerData = event.getPlayer().getPersistentData();
             if (!playerData.getBoolean(RuneCraftory.MODID + ":starterItems")) {
                 ItemUtils.starterItems(event.getPlayer());
@@ -142,7 +142,7 @@ public class PlayerEvents {
                 cap.useMoney(event.getOriginal(), (int) (cap.getMoney() * 0.2));
                 event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(newCap -> newCap.readFromNBT(cap.writeToNBT(new CompoundNBT(), event.getOriginal()), event.getPlayer()));
             });
-            PacketHandler.sendToClient(new S2CCapSync(event.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability"))), (ServerPlayerEntity) event.getPlayer());
+            PacketHandler.sendToClient(new S2CCapSync(event.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"))), (ServerPlayerEntity) event.getPlayer());
         }
     }
 /*

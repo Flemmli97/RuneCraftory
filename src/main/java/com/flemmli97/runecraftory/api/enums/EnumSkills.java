@@ -38,11 +38,11 @@ public enum EnumSkills {
 
     private final String translation;
 
-    EnumSkills(String translation){
+    EnumSkills(String translation) {
         this.translation = translation;
     }
 
-    public String getTranslation(){
+    public String getTranslation() {
         return this.translation;
     }
 }

@@ -150,7 +150,7 @@ public class BlockBrokenMineral extends Block implements IWaterLoggable {
 
     @Override
     public BlockState updatePostPlacement(BlockState state, Direction direction, BlockState state1, IWorld world, BlockPos pos, BlockPos pos1) {
-        if(!this.isValidPosition(state, world, pos))
+        if (!this.isValidPosition(state, world, pos))
             return Blocks.AIR.getDefaultState();
         if (state.get(WATERLOGGED)) {
             world.getPendingFluidTicks().scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));

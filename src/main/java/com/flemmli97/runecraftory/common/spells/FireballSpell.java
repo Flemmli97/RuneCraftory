@@ -35,13 +35,13 @@ public class FireballSpell extends Spell {
             EntityFireball ball = new EntityFireball(world, entity);
             ball.shoot(entity, entity.rotationPitch, entity.rotationYaw, 0, 1, 0);
             world.addEntity(ball);
-            if(entity instanceof PlayerEntity) {
+            if (entity instanceof PlayerEntity) {
                 boolean cooldown = entity.getCapability(CapabilityInsts.PlayerCap).map(cap -> {
                     cap.setSpellFlag(cap.spellFlag() + 1, this.coolDown());
                     return cap.spellFlag() >= 3;
                 }).orElse(false);
-                if(cooldown)
-                    entity.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->cap.setSpellFlag(0, -1));
+                if (cooldown)
+                    entity.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.setSpellFlag(0, -1));
                 return cooldown;
             }
             return true;

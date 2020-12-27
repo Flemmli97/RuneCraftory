@@ -30,9 +30,10 @@ public class S2CCapSync {
 
     private CompoundNBT foodData;
 
-    private S2CCapSync(){}
+    private S2CCapSync() {
+    }
 
-    public S2CCapSync(IPlayerCap cap){
+    public S2CCapSync(IPlayerCap cap) {
         this.money = cap.getMoney();
         this.runePoints = cap.getRunePoints();
         this.runePointsMax = cap.getMaxRunePoints();
@@ -40,7 +41,7 @@ public class S2CCapSync {
         this.intel = cap.getIntel();
         this.vit = cap.getVit();
         this.level = cap.getPlayerLevel();
-        for(EnumSkills skill : EnumSkills.values())
+        for (EnumSkills skill : EnumSkills.values())
             this.skillMap.put(skill, cap.getSkillLevel(skill));
         this.spells = cap.getInv().writeToNBT(new CompoundNBT());
         this.foodData = cap.foodBuffNBT();
@@ -52,11 +53,11 @@ public class S2CCapSync {
         pkt.runePoints = buf.readInt();
         pkt.runePointsMax = buf.readInt();
         pkt.str = buf.readFloat();
-        pkt.intel= buf.readFloat();
-        pkt.vit= buf.readFloat();
+        pkt.intel = buf.readFloat();
+        pkt.vit = buf.readFloat();
         pkt.level = new int[]{buf.readInt(), buf.readInt()};
         int l = buf.readInt();
-        for(int i = 0; i < l; i++){
+        for (int i = 0; i < l; i++) {
             EnumSkills skill = buf.readEnumValue(EnumSkills.class);
             pkt.skillMap.put(skill, new int[]{buf.readInt(), buf.readInt()});
         }
@@ -75,9 +76,9 @@ public class S2CCapSync {
         buf.writeInt(pkt.level[0]);
         buf.writeInt(pkt.level[1]);
         buf.writeInt(EnumSkills.values().length);
-        for(EnumSkills skill : EnumSkills.values()) {
+        for (EnumSkills skill : EnumSkills.values()) {
             buf.writeEnumValue(skill);
-            int[] i = pkt.skillMap.getOrDefault(skill, new int[]{1,0});
+            int[] i = pkt.skillMap.getOrDefault(skill, new int[]{1, 0});
             buf.writeInt(i[0]);
             buf.writeInt(i[1]);
         }
@@ -98,7 +99,7 @@ public class S2CCapSync {
                 cap.setVit(player, pkt.vit);
                 cap.setIntel(player, pkt.intel);
                 cap.setPlayerLevel(player, pkt.level[0], pkt.level[1]);
-                pkt.skillMap.forEach((skill, val)->cap.setSkillLevel(skill, player, val[0], val[1]));
+                pkt.skillMap.forEach((skill, val) -> cap.setSkillLevel(skill, player, val[0], val[1]));
                 cap.getInv().readFromNBT(pkt.spells);
                 cap.readFoodBuffFromNBT(pkt.foodData);
             });

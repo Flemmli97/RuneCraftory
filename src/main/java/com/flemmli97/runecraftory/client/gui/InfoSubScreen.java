@@ -19,7 +19,7 @@ public class InfoSubScreen extends InfoScreen {
     private static final ResourceLocation page2 = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_2.png");
     private static final ResourceLocation pageEnd = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_3.png");
     private int page;
-    private final int maxPages = EnumSkills.values().length/12;
+    private final int maxPages = EnumSkills.values().length / 12;
 
     public InfoSubScreen(Container container, PlayerInventory inv, ITextComponent name) {
         super(container, inv, name);
@@ -27,13 +27,13 @@ public class InfoSubScreen extends InfoScreen {
 
     @Override
     protected void buttons() {
-        if(this.page < this.maxPages)
+        if (this.page < this.maxPages)
             this.addButton(new PageButton(this.guiLeft + 206, this.guiTop + 5, new StringTextComponent(">"), b -> {
                 this.page++;
                 this.init(this.client, this.width, this.height);
             }));
         this.addButton(new PageButton(this.guiLeft + 193, this.guiTop + 5, new StringTextComponent("<"), b -> {
-            if(this.page == 0)
+            if (this.page == 0)
                 PacketHandler.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN));
             else {
                 this.page--;
@@ -47,7 +47,7 @@ public class InfoSubScreen extends InfoScreen {
         super.drawBackground(stack, partialTicks, mouseX, mouseY);
         for (int i = 0; i < 6; ++i) {
             int index = i + this.page * 12;
-            if(index < EnumSkills.values().length) {
+            if (index < EnumSkills.values().length) {
                 EnumSkills skill = EnumSkills.values()[index];
                 int skillXP = (int) (this.cap.getSkillLevel(skill)[1] / (float) LevelCalc.xpAmountForSkills(this.cap.getSkillLevel(skill)[0]) * 96.0f);
                 this.client.getTextureManager().bindTexture(bars);
@@ -56,7 +56,7 @@ public class InfoSubScreen extends InfoScreen {
                 this.drawRightAlignedScaledString(stack, "" + this.cap.getSkillLevel(skill)[0], this.guiLeft + 104, this.guiTop + 118 + 13 * i, 1.0f, 0xffffff);
             }
             index = i + 6 + this.page * 12;
-            if(index < EnumSkills.values().length) {
+            if (index < EnumSkills.values().length) {
                 EnumSkills skill2 = EnumSkills.values()[i + 6 + this.page * 12];
                 int skillXP2 = (int) (this.cap.getSkillLevel(skill2)[1] / (float) LevelCalc.xpAmountForSkills(this.cap.getSkillLevel(skill2)[0]) * 96.0f);
                 this.client.getTextureManager().bindTexture(bars);
@@ -69,7 +69,7 @@ public class InfoSubScreen extends InfoScreen {
 
     @Override
     protected ResourceLocation texture() {
-        if(this.page == this.maxPages)
+        if (this.page == this.maxPages)
             return pageEnd;
         return page2;
     }

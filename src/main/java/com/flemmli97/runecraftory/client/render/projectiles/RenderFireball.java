@@ -21,6 +21,6 @@ public class RenderFireball extends RenderTexture<EntityFireball> {
 
     @Override
     public float[] uvOffset(int timer) {
-        return super.uvOffset((int) (timer*0.5));
+        return super.uvOffset((int) (timer * 0.5));
     }
 }

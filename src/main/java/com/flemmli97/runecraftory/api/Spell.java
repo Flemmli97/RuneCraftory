@@ -15,7 +15,7 @@ public abstract class Spell extends ForgeRegistryEntry<Spell> {
 
     public abstract int coolDown();
 
-    public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack){
+    public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack) {
         return this.use(world, entity, stack, 1, 1);
     }
 

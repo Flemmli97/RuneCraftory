@@ -10,6 +10,7 @@ import com.flemmli97.runecraftory.common.capability.PlayerCapImpl;
 import com.flemmli97.runecraftory.common.capability.StaffCapImpl;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.config.GeneralConfigSpec;
+import com.flemmli97.runecraftory.common.config.GenerationConfig;
 import com.flemmli97.runecraftory.common.config.MobConfig;
 import com.flemmli97.runecraftory.common.config.SpawnConfig;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -90,6 +91,7 @@ public class RuneCraftory {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfigSpec.generalSpec, RuneCraftory.MODID + "/general.toml");
         spawnConfig = new SpawnConfig(FMLPaths.CONFIGDIR.get().resolve(RuneCraftory.MODID));
         MobConfig.MobConfigSpec.config.loadConfig();
+        GenerationConfig.GenerationConfigSpec.config.loadConfig();
     }
 
     public static void registries(IEventBus modBus) {

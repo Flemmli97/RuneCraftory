@@ -165,17 +165,16 @@ public class CombatUtils {
                     zRatio = -distVec.z;
                     break;
                 case VANILLA:
-                    xRatio = MathHelper.sin(attacker.rotationYaw * ((float)Math.PI / 180F));
-                    zRatio = -MathHelper.cos(attacker.rotationYaw * ((float)Math.PI / 180F));
+                    xRatio = MathHelper.sin(attacker.rotationYaw * ((float) Math.PI / 180F));
+                    zRatio = -MathHelper.cos(attacker.rotationYaw * ((float) Math.PI / 180F));
                     break;
                 case UP:
                     break;
             }
         }
-        if(source.getKnockBackType() == CustomDamage.KnockBackType.VANILLA && strength > 0){
+        if (source.getKnockBackType() == CustomDamage.KnockBackType.VANILLA && strength > 0) {
             entity.takeKnockback(strength, xRatio, zRatio);
-        }
-        else {
+        } else {
             Vector3d mot = entity.getMotion();
             double y = mot.y;
             entity.isAirBorne = true;
@@ -269,7 +268,7 @@ public class CombatUtils {
     }
 
     public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage source, float dmg) {
-        if(target.world.getDifficulty() == Difficulty.PEACEFUL && target instanceof PlayerEntity)
+        if (target.world.getDifficulty() == Difficulty.PEACEFUL && target instanceof PlayerEntity)
             return false;
         if (dmg > 0) {
             boolean faintChance = attacker.world.rand.nextInt(100) < getAttributeValue(attacker, ModAttributes.RFFAINT.get(), target);
@@ -300,7 +299,7 @@ public class CombatUtils {
         boolean success = target.attackEntityFrom(source, damagePhys);
         spawnElementalParticle(target, source.getElement());
         if (success) {
-            if(attacker != null) {
+            if (attacker != null) {
                 int drainPercent = (int) getAttributeValue(attacker, ModAttributes.RFDRAIN.get(), target);
                 if (drainPercent > 0f) {
                     if (attacker instanceof PlayerEntity)
@@ -310,10 +309,10 @@ public class CombatUtils {
                 }
                 attacker.setLastAttackedEntity(target);
             }
-            if(target instanceof LivingEntity) {
+            if (target instanceof LivingEntity) {
                 LivingEntity livingTarget = (LivingEntity) target;
                 knockBack(livingTarget, source);
-                if(attacker != null) {
+                if (attacker != null) {
                     applyStatusEffects(attacker, livingTarget);
                     EnchantmentHelper.applyThornEnchantments(livingTarget, attacker);
                     if (stack != null && attacker instanceof PlayerEntity) {
@@ -333,9 +332,9 @@ public class CombatUtils {
 
     public static void elementalEffects(EnumElement element, Entity target) {
         if (!(target instanceof IBaseMob)) {
-            if(element == EnumElement.FIRE)
+            if (element == EnumElement.FIRE)
                 target.setFire(3);
-            if(element == EnumElement.DARK && target instanceof LivingEntity)
+            if (element == EnumElement.DARK && target instanceof LivingEntity)
                 ((LivingEntity) target).addPotionEffect(new EffectInstance(Effects.WITHER, 200));
         }
     }

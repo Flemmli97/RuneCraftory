@@ -23,8 +23,8 @@ public class RunecraftoryCommand {
         dispatcher.register(Commands.literal("runecraftory")
                 .then(Commands.literal("skill").requires(src -> src.hasPermissionLevel(2))
                         .then(Commands.argument("skill", EnumArgument.enumArgument(EnumSkills.class)).then(Commands.literal("add")
-                            .then(Commands.literal("level").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::setSkillXP)))
-                            .then(Commands.literal("xp").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addSkillXP)))
+                                .then(Commands.literal("level").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::setSkillXP)))
+                                .then(Commands.literal("xp").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addSkillXP)))
                         ))
                 )
                 .then(Commands.literal("level").requires(src -> src.hasPermissionLevel(2))
@@ -38,10 +38,10 @@ public class RunecraftoryCommand {
     }
 
     private static int addSkillXP(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
-        ServerPlayerEntity player =  ctx.getSource().asPlayer();
+        ServerPlayerEntity player = ctx.getSource().asPlayer();
         EnumSkills skill = ctx.getArgument("skill", EnumSkills.class);
-        int amount= IntegerArgumentType.getInteger(ctx, "amount");
-        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->{
+        int amount = IntegerArgumentType.getInteger(ctx, "amount");
+        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
             cap.increaseSkill(skill, player, amount);
         });
         ctx.getSource().sendFeedback(new TranslationTextComponent("command.skill.add", skill, amount), false);
@@ -54,9 +54,9 @@ public class RunecraftoryCommand {
     }
 
     private static int addXP(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
-        ServerPlayerEntity player =  ctx.getSource().asPlayer();
-        int amount= IntegerArgumentType.getInteger(ctx, "amount");
-        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->{
+        ServerPlayerEntity player = ctx.getSource().asPlayer();
+        int amount = IntegerArgumentType.getInteger(ctx, "amount");
+        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
             cap.addXp(player, amount);
         });
         ctx.getSource().sendFeedback(new TranslationTextComponent("command.xp.add", amount), false);
@@ -69,8 +69,8 @@ public class RunecraftoryCommand {
     }
 
     private static int resetAll(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
-        ServerPlayerEntity player =  ctx.getSource().asPlayer();
-        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->{
+        ServerPlayerEntity player = ctx.getSource().asPlayer();
+        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
             cap.readFromNBT(new PlayerCapImpl().writeToNBT(new CompoundNBT(), null), null);
             PacketHandler.sendToClient(new S2CCapSync(cap), player);
         });

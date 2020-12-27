@@ -31,7 +31,7 @@ public class ContainerInfoScreen extends Container {
     private final boolean main;
 
     public ContainerInfoScreen(int windowId, PlayerInventory playerInventory, boolean main) {
-        super(main?ModContainer.infoContainer.get():ModContainer.infoSubContainer.get(), windowId);
+        super(main ? ModContainer.infoContainer.get() : ModContainer.infoSubContainer.get(), windowId);
         this.main = main;
         InventorySpells playerSpells = playerInventory.player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getInv()).orElse(null);
         if (playerSpells == null)

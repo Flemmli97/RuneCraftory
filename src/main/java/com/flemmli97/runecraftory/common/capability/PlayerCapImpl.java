@@ -500,7 +500,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     }
 
     @Override
-    public Item lastEatenFood(){
+    public Item lastEatenFood() {
         return this.lastFood;
     }
 
@@ -556,14 +556,14 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     }
 
     @Override
-    public int foodBuffDuration(){
+    public int foodBuffDuration() {
         return this.foodDuration;
     }
 
     @Override
-    public CompoundNBT foodBuffNBT(){
+    public CompoundNBT foodBuffNBT() {
         CompoundNBT nbt = new CompoundNBT();
-        if(this.lastFood != null)
+        if (this.lastFood != null)
             nbt.putString("LastFood", this.lastFood.getRegistryName().toString());
         CompoundNBT compound3 = new CompoundNBT();
         for (Map.Entry<Attribute, Integer> entry : this.foodBuffs.entrySet()) {
@@ -576,8 +576,8 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     }
 
     @Override
-    public void readFoodBuffFromNBT(CompoundNBT nbt){
-        if(nbt.contains("LastFood"))
+    public void readFoodBuffFromNBT(CompoundNBT nbt) {
+        if (nbt.contains("LastFood"))
             this.lastFood = ForgeRegistries.ITEMS.getValue(new ResourceLocation(nbt.getString("LastFood")));
         if (nbt.contains("FoodBuffs")) {
             CompoundNBT tag = nbt.getCompound("FoodBuffs");
@@ -590,12 +590,12 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     }
 
     @Override
-    public int spellFlag(){
+    public int spellFlag() {
         return this.spellFlag;
     }
 
     @Override
-    public void setSpellFlag(int flag, int resetTime){
+    public void setSpellFlag(int flag, int resetTime) {
         this.spellFlag = flag;
         this.spellTicker = resetTime;
     }
@@ -644,13 +644,12 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     @Override
     public void update(PlayerEntity player) {
         if (!player.world.isRemote) {
-            if((WorldUtils.canUpdateDaily(player.world) || Math.abs(player.world.getGameTime() / 24000 - this.lastUpdated / 24000) >= 1))
-            {
+            if ((WorldUtils.canUpdateDaily(player.world) || Math.abs(player.world.getGameTime() / 24000 - this.lastUpdated / 24000) >= 1)) {
                 this.getShippingInv().shipItems(player);
                 this.refreshShop(player);
                 this.lastUpdated = player.world.getGameTime();
             }
-            if(--this.spellTicker == 0){
+            if (--this.spellTicker == 0) {
                 this.spellFlag = 0;
             }
         }

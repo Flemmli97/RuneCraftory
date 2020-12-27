@@ -81,16 +81,16 @@ public class LangGen implements IDataProvider {
 
         this.add("level", "Level");
 
-        for(EnumSkills s: EnumSkills.values())
+        for (EnumSkills s : EnumSkills.values())
             this.add(s.getTranslation(),
                     this.capitalize(s.getTranslation().replace("skill.", "").replace("_", " "),
                             Lists.newArrayList("and")));
     }
 
-    private String capitalize(String s, List<String> dont){
+    private String capitalize(String s, List<String> dont) {
         return Stream.of(s.trim().split("\\s"))
                 .filter(word -> word.length() > 0)
-                .map(word -> dont.contains(word)?word:word.substring(0, 1).toUpperCase() + word.substring(1))
+                .map(word -> dont.contains(word) ? word : word.substring(0, 1).toUpperCase() + word.substring(1))
                 .collect(Collectors.joining(" "));
     }
 
@@ -225,7 +225,7 @@ public class LangGen implements IDataProvider {
                 return ELEMENT;
             if (s.startsWith("attribute.rf."))
                 return ATTRIBUTE;
-            if(s.startsWith("skill."))
+            if (s.startsWith("skill."))
                 return SKILL;
             if (s.startsWith("tooltip."))
                 return TOOLTIP;
