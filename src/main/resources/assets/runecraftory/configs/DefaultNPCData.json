@@ -1,59 +1,59 @@
 {
-    "npc":{
-        "example":{
-            "dialogs":[
-                {
-                    "min":0,
-                    "max": 5,
-                    "condition":"",
-                    "msg":"greet1",
-                    "type":"greetings"
-                },
-                {
-                    "min":0,
-                    "max": 5,
-                    "condition":"",
-                    "dialog":"greet2",
-                    "type":"greetings"
-                }
-            ],
-            "positive": [],
-            "negative": [],
-            "random": [],
-            "rareRemarks":[],
-            "favGift":"",
-            "likedGift":"",
-            "hatedGift":"",
-            "personality":""
+  "npc": {
+    "example": {
+      "dialogs": [
+        {
+          "min": 0,
+          "max": 5,
+          "condition": "",
+          "msg": "greet1",
+          "type": "greetings"
+        },
+        {
+          "min": 0,
+          "max": 5,
+          "condition": "",
+          "dialog": "greet2",
+          "type": "greetings"
         }
-    },
-    "dialogs":{
-        "greet1":{
-            "msg":"Hello!",
-            "choices":{
-                "Hi":"greet1positive",
-                "Showoff":"greet1negative"
-            }
-        },
-        "greet1positive":{
-            "msg":"Great Day today"
-        },
-        "greet2negative":{
-            "msg":"What is wrong with you"
-        },
-        "greet2":{
-            "msg":"Howdy!"
-        }
-    },
-    "presents":{
-        "favorite":{
-            "groupPies":[]
-        },
-        "liked":{
-            "groupFruit":[]
-        },
-        "hate":{
-            "groupTrash":[]
-        }
+      ],
+      "positive": [],
+      "negative": [],
+      "random": [],
+      "rareRemarks": [],
+      "favGift": "",
+      "likedGift": "",
+      "hatedGift": "",
+      "personality": ""
     }
+  },
+  "dialogs": {
+    "greet1": {
+      "msg": "Hello!",
+      "choices": {
+        "Hi": "greet1positive",
+        "Showoff": "greet1negative"
+      }
+    },
+    "greet1positive": {
+      "msg": "Great Day today"
+    },
+    "greet2negative": {
+      "msg": "What is wrong with you"
+    },
+    "greet2": {
+      "msg": "Howdy!"
+    }
+  },
+  "presents": {
+    "favorite": {
+      "groupPies": []
+    },
+    "liked": {
+      "groupFruit": []
+    },
+    "hate": {
+      "groupTrash": []
+    }
+  }
 }

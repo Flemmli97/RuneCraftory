@@ -37,8 +37,8 @@ public class InfoScreen extends DisplayEffectsScreen<Container> {
 
     @Override
     protected void init() {
-        this.xSize = textureX;
-        this.ySize = textureY;
+        this.xSize = this.textureX;
+        this.ySize = this.textureY;
         super.init();
         this.buttons();
     }
@@ -65,7 +65,7 @@ public class InfoScreen extends DisplayEffectsScreen<Container> {
         this.drawTexture(stack, this.guiLeft + 117, this.guiTop + 41, 2, 66, exp, 9);
         this.drawCenteredScaledString(stack, (int) this.cap.getHealth(this.client.player) + "/" + (int) this.cap.getMaxHealth(this.client.player), this.guiLeft + 173, this.guiTop + 21f, 0.7f, 0xffffff);
         this.drawCenteredScaledString(stack, this.cap.getRunePoints() + "/" + this.cap.getMaxRunePoints(), this.guiLeft + 173, this.guiTop + 30.5f, 0.7f, 0xffffff);
-        this.client.fontRenderer.draw(stack, levelTxt, this.guiLeft + 120, this.guiTop + 42, 0);
+        this.client.fontRenderer.draw(stack, this.levelTxt, this.guiLeft + 120, this.guiTop + 42, 0);
         this.drawRightAlignedScaledString(stack, "" + this.cap.getMoney(), this.guiLeft + 195, this.guiTop + 9.25f, 0.6f, 0);
         this.drawRightAlignedScaledString(stack, "" + this.cap.getPlayerLevel()[0], this.guiLeft + 216, this.guiTop + 42, 1.0f, 0);
         this.drawRightAlignedScaledString(stack, "" + (int) CombatUtils.getAttributeValue(this.client.player, Attributes.GENERIC_ATTACK_DAMAGE, null), this.guiLeft + 215, this.guiTop + 59, 1.0f, 0);

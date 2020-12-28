@@ -4,6 +4,7 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.capability.PlayerCapImpl;
 import com.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
 import com.flemmli97.runecraftory.common.config.GenerationConfig;
+import com.flemmli97.runecraftory.common.config.values.HerbGenConfig;
 import com.flemmli97.runecraftory.common.config.values.MineralGenConfig;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModFeatures;
@@ -20,8 +21,14 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
+import net.minecraft.world.gen.blockstateprovider.WeightedBlockStateProvider;
+import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.FeatureSpreadConfig;
 import net.minecraft.world.gen.feature.Features;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.IPlantable;
@@ -63,10 +70,28 @@ public class WorldEvents {
         event.getSpawns().spawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(ModEntities.gate.get(), 100, 1, 1));
 
         List<MineralGenConfig> mineralConf = GenerationConfig.mineralGenFrom(types);
-        if (!mineralConf.isEmpty()) {
-            for (MineralGenConfig conf : mineralConf)
-                event.getGeneration().feature(GenerationStage.Decoration.SURFACE_STRUCTURES, ModFeatures.MINERALFEATURE.get()
-                        .configure(new ChancedBlockCluster(new SimpleBlockStateProvider(conf.getBlock().getDefaultState()), conf.minAmount(), conf.maxAmount(), conf.xSpread(), conf.ySpread(), conf.zSpread(), conf.chance())).decorate(Features.Placements.SQUARE_TOP_SOLID_HEIGHTMAP));
+        for (MineralGenConfig conf : mineralConf) {
+            if (types.contains(BiomeDictionary.Type.NETHER))
+                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.MINERALFEATURE.get()
+                        .configure(new ChancedBlockCluster(new SimpleBlockStateProvider(conf.getBlock().getDefaultState()), conf.minAmount(), conf.maxAmount(), conf.xSpread(), conf.ySpread(), conf.zSpread())).applyChance(conf.chance()).decorate(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(6))));
+            else
+                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.MINERALFEATURE.get()
+                        .configure(new ChancedBlockCluster(new SimpleBlockStateProvider(conf.getBlock().getDefaultState()), conf.minAmount(), conf.maxAmount(), conf.xSpread(), conf.ySpread(), conf.zSpread())).applyChance(conf.chance()).decorate(Features.Placements.SQUARE_TOP_SOLID_HEIGHTMAP));
+        }
+        List<HerbGenConfig> herbConf = GenerationConfig.herbGenFrom(types);
+        if (!herbConf.isEmpty()) {
+            WeightedBlockStateProvider provider = new WeightedBlockStateProvider();
+            for (HerbGenConfig conf : herbConf)
+                provider.addState(conf.getBlock().getDefaultState(), conf.weight());
+            if (types.contains(BiomeDictionary.Type.NETHER))
+                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
+                        Feature.FLOWER.configure((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.INSTANCE)).tries(GenerationConfig.netherHerbTries).build()).applyChance(GenerationConfig.netherHerbChance).decorate(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(6))));
+            else if (types.contains(BiomeDictionary.Type.END))
+                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
+                        Feature.FLOWER.configure((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.INSTANCE)).tries(GenerationConfig.endHerbTries).build()).applyChance(GenerationConfig.endHerbChance).decorate(Features.Placements.SQUARE_HEIGHTMAP));
+            else
+                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
+                        Feature.FLOWER.configure((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.INSTANCE)).tries(GenerationConfig.overworldHerbTries).build()).applyChance(GenerationConfig.overworldHerbChance).decorate(Features.Placements.SQUARE_HEIGHTMAP));
         }
     }
 

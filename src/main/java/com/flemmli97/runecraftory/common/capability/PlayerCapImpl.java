@@ -822,6 +822,6 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-        return CapabilityInsts.PlayerCap.orEmpty(cap, holder);
+        return CapabilityInsts.PlayerCap.orEmpty(cap, this.holder);
     }
 }

@@ -144,18 +144,18 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> mushroom = herb("mushroom");
     public static final RegistryObject<Block> monarchMushroom = herb("monarch_mushroom");
-    public static final RegistryObject<Block> elliLeaves = herb("elli_leaves");
-    public static final RegistryObject<Block> witheredGrass = herb("withered_grass");
+    public static final RegistryObject<Block> elliLeaves = herb("elli_leaves", BlockHerb.GroundTypes.END);
+    public static final RegistryObject<Block> witheredGrass = herb("withered_grass", BlockHerb.GroundTypes.SANDY);
     public static final RegistryObject<Block> weeds = herb("weeds");
     public static final RegistryObject<Block> whiteGrass = herb("white_grass");
     public static final RegistryObject<Block> indigoGrass = herb("indigo_grass");
     public static final RegistryObject<Block> purpleGrass = herb("purple_grass");
     public static final RegistryObject<Block> greenGrass = herb("green_grass");
     public static final RegistryObject<Block> blueGrass = herb("blue_grass");
-    public static final RegistryObject<Block> yellowGrass = herb("yellow_grass");
-    public static final RegistryObject<Block> redGrass = herb("red_grass");
-    public static final RegistryObject<Block> orangeGrass = herb("orange_grass");
-    public static final RegistryObject<Block> blackGrass = herb("black_grass");
+    public static final RegistryObject<Block> yellowGrass = herb("yellow_grass", BlockHerb.GroundTypes.SANDY, BlockHerb.GroundTypes.NETHER);
+    public static final RegistryObject<Block> redGrass = herb("red_grass", BlockHerb.GroundTypes.NETHER);
+    public static final RegistryObject<Block> orangeGrass = herb("orange_grass", BlockHerb.GroundTypes.SANDY, BlockHerb.GroundTypes.NETHER);
+    public static final RegistryObject<Block> blackGrass = herb("black_grass", BlockHerb.GroundTypes.END);
     public static final RegistryObject<Block> antidoteGrass = herb("antidote_grass");
     public static final RegistryObject<Block> medicinalHerb = herb("medicinal_herb");
     public static final RegistryObject<Block> bambooSprout = herb("bamboo_sprout");
@@ -215,8 +215,8 @@ public class ModBlocks {
         return reg;
     }
 
-    public static RegistryObject<Block> herb(String name) {
-        RegistryObject<Block> reg = BLOCKS.register(name, () -> new BlockHerb(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().sound(SoundType.PLANT)));
+    public static RegistryObject<Block> herb(String name, BlockHerb.GroundTypes... types) {
+        RegistryObject<Block> reg = BLOCKS.register(name, () -> new BlockHerb(AbstractBlock.Properties.create(Material.PLANTS).doesNotBlockMovement().sound(SoundType.PLANT), types));
         herbs.add(reg);
         return reg;
     }

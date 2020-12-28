@@ -3,7 +3,7 @@ package com.flemmli97.runecraftory.common.loot;
 import com.flemmli97.runecraftory.common.registry.ModLootModifier;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.tenshilib.common.utils.JsonUtils;
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -19,13 +19,15 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.loot.functions.ILootFunction;
 
-import java.util.Set;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
 
 public class ItemLevelLootFunction extends LootFunction {
 
-    private final Set<WeightedLevel> levels;
+    private final List<WeightedLevel> levels;
 
-    private ItemLevelLootFunction(ILootCondition[] conditions, Set<WeightedLevel> levels) {
+    private ItemLevelLootFunction(ILootCondition[] conditions, List<WeightedLevel> levels) {
         super(conditions);
         this.levels = levels;
     }
@@ -43,26 +45,25 @@ public class ItemLevelLootFunction extends LootFunction {
             level = ((IBlockModifyLevel) state.getBlock()).getLevel(state, ctx.get(LootParameters.BLOCK_ENTITY), this, ctx);
         } else
             level = this.getLevel(ctx);
-
         return ItemNBT.getLeveledItem(stack, Math.abs(level));
     }
 
     public int getLevel(LootContext ctx) {
-        return getRandomItem(this.levels, ctx.getLuck());
+        return getRandomItem(this.levels, ctx.getRandom(), ctx.getLuck());
     }
 
     public static LootFunction.Builder<ItemLevelLootFunction.Builder> getDef() {
-        return new Builder().add(1, 20, 0)
-                .add(2, 19, 1).add(3, 16, 2)
-                .add(4, 14, 3).add(5, 12, 4)
-                .add(6, 10, 5).add(7, 8, 6)
-                .add(8, 6, 7).add(9, 4, 8)
+        return new Builder().add(1, 30, 0)
+                .add(2, 28, 1).add(3, 26, 2)
+                .add(4, 20, 3).add(5, 17, 4)
+                .add(6, 15, 5).add(7, 11, 6)
+                .add(8, 7, 7).add(9, 4, 8)
                 .add(10, 2, 9);
     }
 
     public static class Builder extends LootFunction.Builder<ItemLevelLootFunction.Builder> {
 
-        private final Set<WeightedLevel> levels = Sets.newHashSet();
+        private final List<WeightedLevel> levels = Lists.newArrayList();
 
         @Override
         protected ItemLevelLootFunction.Builder doCast() {
@@ -121,27 +122,34 @@ public class ItemLevelLootFunction extends LootFunction {
                 return ((WeightedLevel) obj).weight == this.weight;
             return false;
         }
+
+        @Override
+        public String toString() {
+            return String.format("Level: %d; Weight: %d; Bonus: %d", this.level, this.weight, this.bonus);
+        }
     }
 
-    public static int totalWeight(Set<WeightedLevel> Set, float modifier) {
-        return Set.stream().mapToInt(w -> w.getWeight(modifier)).sum();
+    public static int totalWeight(List<WeightedLevel> list, float modifier) {
+        return list.stream().mapToInt(w -> w.getWeight(modifier)).sum();
     }
 
-    public static int getRandomItem(Set<WeightedLevel> Set, float modifier) {
-        int total = totalWeight(Set, modifier);
+    public static int getRandomItem(List<WeightedLevel> list, Random rand, float modifier) {
+        int total = totalWeight(list, modifier);
         if (total <= 0)
             throw new IllegalArgumentException();
-        for (WeightedLevel w : Set) {
-            total -= w.getWeight(modifier);
-            if (total < 0)
+        int randWeight = rand.nextInt(total);
+        for (WeightedLevel w : list) {
+            randWeight -= w.getWeight(modifier);
+            if (randWeight < 0)
                 return w.level;
         }
         return 1;
     }
 
-    public static JsonArray serialize(Set<WeightedLevel> Set) {
+    public static JsonArray serialize(List<WeightedLevel> list) {
+        list.sort(Comparator.comparingInt(w -> w.level));
         JsonArray arr = new JsonArray();
-        Set.forEach(w -> {
+        list.forEach(w -> {
             JsonObject obj = new JsonObject();
             obj.addProperty("weight", w.weight);
             obj.addProperty("luck_bonus", w.bonus);
@@ -151,16 +159,16 @@ public class ItemLevelLootFunction extends LootFunction {
         return arr;
     }
 
-    public static Set<WeightedLevel> deserialize(JsonElement element) {
-        Set<WeightedLevel> Set = Sets.newHashSet();
+    public static List<WeightedLevel> deserialize(JsonElement element) {
+        List<WeightedLevel> list = Lists.newArrayList();
         if (!element.isJsonArray())
             throw new JsonParseException("Expected a json array for " + element);
         element.getAsJsonArray().forEach(el -> {
             if (!el.isJsonObject())
                 throw new JsonParseException("Expected a json object for " + el);
             JsonObject obj = (JsonObject) el;
-            Set.add(new WeightedLevel(JsonUtils.get(obj, "weight", 1), JsonUtils.get(obj, "luck_bonus", 0), JsonUtils.get(obj, "level", 1)));
+            list.add(new WeightedLevel(JsonUtils.get(obj, "weight", 1), JsonUtils.get(obj, "luck_bonus", 0), JsonUtils.get(obj, "level", 1)));
         });
-        return Set;
+        return list;
     }
 }

@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.client.gui;
 
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import com.flemmli97.runecraftory.common.capability.IPlayerCap;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -22,7 +23,7 @@ public class SpellInvOverlayGui extends AbstractGui {
 
     public void render(MatrixStack stack, float partialTicks) {
         if (!this.mc.player.isSpectator()) {
-            InventorySpells inv = this.mc.player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getInv()).orElse(null);
+            InventorySpells inv = this.mc.player.getCapability(CapabilityInsts.PlayerCap).map(IPlayerCap::getInv).orElse(null);
             if (inv != null) {
                 this.mc.getTextureManager().bindTexture(WIDGETS_TEX_PATH);
                 int scaledWidth = this.mc.getWindow().getScaledWidth();
@@ -41,10 +42,10 @@ public class SpellInvOverlayGui extends AbstractGui {
                 RenderSystem.enableBlend();
                 RenderSystem.defaultBlendFunc();
                 for (int a = 0; a < 2; ++a) {
-                    this.renderHotbarItem(stack, i + 117 + 29 * a, scaledHeight - 44, partialTicks, mc.player, inv.getStackInSlot(a));
+                    this.renderHotbarItem(stack, i + 117 + 29 * a, scaledHeight - 44, partialTicks, this.mc.player, inv.getStackInSlot(a));
                 }
                 for (int a = 0; a < 2; ++a) {
-                    this.renderHotbarItem(stack, i + 117 + 29 * a, scaledHeight - 20, partialTicks, mc.player, inv.getStackInSlot(a + 2));
+                    this.renderHotbarItem(stack, i + 117 + 29 * a, scaledHeight - 20, partialTicks, this.mc.player, inv.getStackInSlot(a + 2));
                 }
             }
         }

@@ -20,9 +20,7 @@ public class MineralFeatures extends Feature<ChancedBlockCluster> {
 
     @Override
     public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos center, ChancedBlockCluster conf) {
-        if (conf.chance == 0 || conf.amount.getMax() == 0)
-            return false;
-        if (rand.nextInt(conf.chance) != 0)
+        if (conf.amount.getMax() == 0)
             return false;
         BlockState state = conf.stateProvider.getBlockState(rand, center);
         int tries = conf.amount.generateInt(rand);

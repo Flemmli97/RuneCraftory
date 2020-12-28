@@ -27,9 +27,7 @@ public class C2SSpellKey {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity player = ctx.get().getSender();
             if (player != null) {
-                player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
-                    cap.getInv().useSkill(player, pkt.num);
-                });
+                player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.getInv().useSkill(player, pkt.num));
             }
         });
         ctx.get().setPacketHandled(true);

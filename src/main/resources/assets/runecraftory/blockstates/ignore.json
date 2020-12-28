@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "normal": { "model": "end_rod" }
+  "variants": {
+    "normal": {
+      "model": "end_rod"
     }
+  }
 }

@@ -9,8 +9,7 @@ import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.ForgeBlockTagsProvider;
-
-import java.util.stream.Collectors;
+import net.minecraftforge.fml.RegistryObject;
 
 public class BlockTagGen extends ForgeBlockTagsProvider {
 
@@ -33,6 +32,6 @@ public class BlockTagGen extends ForgeBlockTagsProvider {
                 .add(Blocks.FARMLAND, ModBlocks.farmland.get(), Blocks.GRASS_PATH);
 
         this.getOrCreateTagBuilder(ModTags.hammerBreakable)
-                .add(ModBlocks.mineralMap.values().stream().map(reg -> reg.get()).collect(Collectors.toList()).toArray(new Block[0]));
+                .add(ModBlocks.mineralMap.values().stream().map(RegistryObject::get).toArray(Block[]::new));
     }
 }

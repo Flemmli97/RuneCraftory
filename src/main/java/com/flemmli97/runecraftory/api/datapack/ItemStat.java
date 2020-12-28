@@ -158,7 +158,7 @@ public class ItemStat {
 
     @Override
     public String toString() {
-        return "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, reg -> reg.getRegistryName().toString(), i -> i.toString()) + "]}";
+        return "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, reg -> reg.getRegistryName().toString(), Object::toString) + "]}";
     }
 
     /**

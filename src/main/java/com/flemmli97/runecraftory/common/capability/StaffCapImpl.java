@@ -19,32 +19,32 @@ public class StaffCapImpl implements IStaffCap, ICapabilitySerializable<Compound
 
     @Override
     public Spell getTier1Spell() {
-        return tier1;
+        return this.tier1;
     }
 
     @Override
     public Spell getTier2Spell() {
-        return tier2;
+        return this.tier2;
     }
 
     @Override
     public Spell getTier3Spell() {
-        return tier3;
+        return this.tier3;
     }
 
     @Override
     public void setTier1Spell(Spell spell) {
-        tier1 = spell;
+        this.tier1 = spell;
     }
 
     @Override
     public void setTier2Spell(Spell spell) {
-        tier2 = spell;
+        this.tier2 = spell;
     }
 
     @Override
     public void setTier3Spell(Spell spell) {
-        tier3 = spell;
+        this.tier3 = spell;
     }
 
     @Override
@@ -81,6 +81,6 @@ public class StaffCapImpl implements IStaffCap, ICapabilitySerializable<Compound
     @Nonnull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, Direction side) {
-        return CapabilityInsts.StaffCap.orEmpty(cap, holder);
+        return CapabilityInsts.StaffCap.orEmpty(cap, this.holder);
     }
 }

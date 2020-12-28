@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.common.config.values;
 
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
@@ -17,13 +18,13 @@ public class MineralGenConfigSpec {
     public final ForgeConfigSpec.ConfigValue<Integer> zSpread;
 
     public MineralGenConfigSpec(ForgeConfigSpec.Builder builder, MineralGenConfig def) {
-        whiteList = builder.comment("WhiteList of BiomeDictionary Types").define("WhiteList", def.whiteList().stream().map(type -> type.getName()).collect(Collectors.toList()));
-        blackList = builder.comment("BlackList of BiomeDictionary Types").define("BlackList", def.blackList().stream().map(type -> type.getName()).collect(Collectors.toList()));
-        chance = builder.comment("Chance to generate each chunk in 1/x").define("Chance", def.chance());
-        minAmount = builder.comment("").define("Min Amount", def.minAmount());
-        maxAmount = builder.comment("").define("Max Amount", def.maxAmount());
-        xSpread = builder.comment("Max x spread from center").define("XSpread", def.xSpread());
-        ySpread = builder.comment("Max y spread from center").define("YSpread", def.ySpread());
-        zSpread = builder.comment("Max z spread from center").define("ZSpread", def.zSpread());
+        this.whiteList = builder.comment("WhiteList of BiomeDictionary Types").define("WhiteList", def.whiteList().stream().map(BiomeDictionary.Type::getName).collect(Collectors.toList()));
+        this.blackList = builder.comment("BlackList of BiomeDictionary Types").define("BlackList", def.blackList().stream().map(BiomeDictionary.Type::getName).collect(Collectors.toList()));
+        this.chance = builder.comment("Chance to generate each chunk in 1/x").define("Chance", def.chance());
+        this.minAmount = builder.comment("").define("Min Amount", def.minAmount());
+        this.maxAmount = builder.comment("").define("Max Amount", def.maxAmount());
+        this.xSpread = builder.comment("Max x spread from center").define("XSpread", def.xSpread());
+        this.ySpread = builder.comment("Max y spread from center").define("YSpread", def.ySpread());
+        this.zSpread = builder.comment("Max z spread from center").define("ZSpread", def.zSpread());
     }
 }

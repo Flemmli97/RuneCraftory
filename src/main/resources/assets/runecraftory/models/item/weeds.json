@@ -2,39 +2,115 @@
   "parent": "runecraftory:block/weeds",
   "display": {
     "thirdperson_righthand": {
-      "rotation": [0, 45, 0],
-      "translation": [0, 3, 1],
-      "scale": [0.375, 0.375, 0.375]
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        1
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
     },
     "thirdperson_lefthand": {
-      "rotation": [0, 45, 0],
-      "translation": [0, 3, 1],
-      "scale": [0.375, 0.375, 0.375]
+      "rotation": [
+        0,
+        45,
+        0
+      ],
+      "translation": [
+        0,
+        3,
+        1
+      ],
+      "scale": [
+        0.375,
+        0.375,
+        0.375
+      ]
     },
     "firstperson_righthand": {
-      "rotation": [-15, 45, 0],
-      "translation": [2, 3.5, 0],
-      "scale": [0.4, 0.4, 0.4]
+      "rotation": [
+        -15,
+        45,
+        0
+      ],
+      "translation": [
+        2,
+        3.5,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
     },
     "firstperson_lefthand": {
-      "rotation": [-15, 45, 0],
-      "translation": [2, 3.5, 0],
-      "scale": [0.4, 0.4, 0.4]
+      "rotation": [
+        -15,
+        45,
+        0
+      ],
+      "translation": [
+        2,
+        3.5,
+        0
+      ],
+      "scale": [
+        0.4,
+        0.4,
+        0.4
+      ]
     },
     "ground": {
-      "translation": [0, 3, 0],
-      "scale": [0.6, 0.6, 0.6]
+      "translation": [
+        0,
+        3,
+        0
+      ],
+      "scale": [
+        0.6,
+        0.6,
+        0.6
+      ]
     },
     "gui": {
-      "rotation": [55, 15, 0],
-      "translation": [0, 1.5, 0],
-      "scale": [0.75, 0.75, 0.75]
+      "rotation": [
+        55,
+        15,
+        0
+      ],
+      "translation": [
+        0,
+        1.5,
+        0
+      ],
+      "scale": [
+        0.75,
+        0.75,
+        0.75
+      ]
     },
     "head": {
-      "translation": [0, 14.5, 0]
+      "translation": [
+        0,
+        14.5,
+        0
+      ]
     },
     "fixed": {
-      "translation": [0, 2, -1]
+      "translation": [
+        0,
+        2,
+        -1
+      ]
     }
   }
 }

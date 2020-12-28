@@ -79,7 +79,7 @@ public class Loottables extends ForgeLootTableProvider {
             this.lootTables.put(type.getLootTable(), builder);
         }
 
-        private ItemLootEntry.Builder add(IItemProvider item, float chance, float lootingBonus, int lootingMax, int weight, int quality) {
+        private ItemLootEntry.Builder<?> add(IItemProvider item, float chance, float lootingBonus, int lootingMax, int weight, int quality) {
             return ItemLootEntry.builder(item).acceptFunction(SetCount.builder(RandomValueRange.of(0, chance)))
                     .acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(0, lootingBonus)).func_216072_a(lootingMax))
                     .weight(weight).quality(quality);
@@ -129,9 +129,7 @@ public class Loottables extends ForgeLootTableProvider {
                 if (block instanceof BlockCrop)
                     this.registerLootTable(reg.get(), LootTable.builder().addLootPool(cropLoot((BlockCrop) block)));
             });
-            ModBlocks.mineralMap.forEach((tier, reg) -> {
-                this.registerLootTable(reg.get(), LootTable.builder().addLootPool(oreLootPool(tier)));
-            });
+            ModBlocks.mineralMap.forEach((tier, reg) -> this.registerLootTable(reg.get(), LootTable.builder().addLootPool(oreLootPool(tier))));
             this.loots.forEach(cons);
         }
 

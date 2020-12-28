@@ -1,7 +1,3 @@
 {
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "runecraftory:items/medicinal_herb",
-    "particle": "runecraftory:items/medicinal_herb"
-  }
+  "parent": "runecraftory:item/medicinal_herb"
 }

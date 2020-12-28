@@ -16,11 +16,11 @@ public class ModPotions {
 
     public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, RuneCraftory.MODID);
 
-    public static final RegistryObject<Effect> sleep = EFFECTS.register("sleep", () -> new SleepEffect());
-    public static final RegistryObject<Effect> poison = EFFECTS.register("poison", () -> new PoisonEffect());
-    public static final RegistryObject<Effect> paralysis = EFFECTS.register("paralysis", () -> new ParalysisEffect());
+    public static final RegistryObject<Effect> sleep = EFFECTS.register("sleep", SleepEffect::new);
+    public static final RegistryObject<Effect> poison = EFFECTS.register("poison", PoisonEffect::new);
+    public static final RegistryObject<Effect> paralysis = EFFECTS.register("paralysis", ParalysisEffect::new);
     public static final RegistryObject<Effect> seal = EFFECTS.register("seal", () -> new PermanentEffect(EffectType.HARMFUL, 0));
     public static final RegistryObject<Effect> fatigue = EFFECTS.register("fatigue", () -> new PermanentEffect(EffectType.HARMFUL, 0));
-    public static final RegistryObject<Effect> cold = EFFECTS.register("cold", () -> new ColdEffect());
+    public static final RegistryObject<Effect> cold = EFFECTS.register("cold", ColdEffect::new);
 
 }

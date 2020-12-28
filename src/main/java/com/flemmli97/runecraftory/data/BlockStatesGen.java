@@ -26,7 +26,9 @@ public class BlockStatesGen extends BlockStateProvider {
     protected void registerStatesAndModels() {
         ModBlocks.herbs.forEach(reg -> {
             Block block = reg.get();
-            if (block instanceof BlockHerb) {
+            if (block == ModBlocks.medicinalHerb.get())
+                this.simpleBlock(block, this.models().withExistingParent(block.getRegistryName().toString(), new ResourceLocation(RuneCraftory.MODID + ":item/medicinal_herb")));
+            else if (block instanceof BlockHerb) {
                 ResourceLocation texture = this.itemTexture(block);
                 this.simpleBlock(block, this.models().cross(block.getRegistryName().toString(), texture)
                         .texture("particle", texture));

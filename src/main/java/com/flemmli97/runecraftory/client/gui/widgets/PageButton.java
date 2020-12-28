@@ -27,7 +27,7 @@ public class PageButton extends Button {
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
         this.drawTexture(stack, this.x, this.y, 98 + (this.hovered ? 13 : 0), 0, this.width, this.height);
-        int j = getFGColor();
+        int j = this.getFGColor();
         drawCenteredText(stack, mc.fontRenderer, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0F) << 24);
     }
 }

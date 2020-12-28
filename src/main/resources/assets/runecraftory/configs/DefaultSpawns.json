@@ -12,7 +12,7 @@
       "SAVANNA"
     ],
     "weight": 50,
-    "minSpawnDist" : 0
+    "minSpawnDist": 0
   },
   "runecraftory:orc": {
     "biomes": [],
@@ -27,7 +27,7 @@
       "SAVANNA"
     ],
     "weight": 50,
-    "minSpawnDist" : 0
+    "minSpawnDist": 0
   },
   "runecraftory:ant": {
     "biomes": [],
@@ -40,7 +40,7 @@
       "LUSH"
     ],
     "weight": 50,
-    "minSpawnDist" : 0
+    "minSpawnDist": 0
   },
   "runecraftory:beetle": {
     "biomes": [],
@@ -51,6 +51,6 @@
       "LUSH"
     ],
     "weight": 50,
-    "minSpawnDist" : 0
+    "minSpawnDist": 0
   }
 }

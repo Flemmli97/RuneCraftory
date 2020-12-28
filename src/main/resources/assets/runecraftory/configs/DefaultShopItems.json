@@ -2,7 +2,7 @@
   "GENERAL": [
     {
       "item": "runecraftory:seed_turnip",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:seed_turnip_pink",
@@ -159,7 +159,7 @@
   "WEAPON": [
     {
       "item": "runecraftory:hoe_scrap",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:hoe_iron"
@@ -175,7 +175,7 @@
     },
     {
       "item": "runecraftory:wateringcan_scrap",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:wateringcan_iron"
@@ -191,7 +191,7 @@
     },
     {
       "item": "runecraftory:sickle_scrap",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:sickle_iron"
@@ -207,7 +207,7 @@
     },
     {
       "item": "runecraftory:hammer_scrap",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:hammer_iron"
@@ -223,7 +223,7 @@
     },
     {
       "item": "runecraftory:axe_scrap",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:axe_iron"
@@ -239,7 +239,7 @@
     },
     {
       "item": "runecraftory:fishing_rod_scrap",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:fishing_rod_iron"
@@ -255,19 +255,19 @@
     },
     {
       "item": "runecraftory:inspector",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:brush",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:magnifying_glass",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:formular_a",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:formular_b"
@@ -292,7 +292,7 @@
     },
     {
       "item": "runecraftory:broad_sword",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:steel_sword"
@@ -395,7 +395,7 @@
     },
     {
       "item": "runecraftory:claymore",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:zweihaender"
@@ -498,7 +498,7 @@
     },
     {
       "item": "runecraftory:spear",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:wood_staff"
@@ -598,7 +598,7 @@
     },
     {
       "item": "runecraftory:battle_axe",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:battle_scythe"
@@ -659,7 +659,7 @@
     },
     {
       "item": "runecraftory:battle_hammer",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:bat"
@@ -729,7 +729,7 @@
     },
     {
       "item": "runecraftory:short_dagger",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:steel_edge"
@@ -832,7 +832,7 @@
     },
     {
       "item": "runecraftory:gloves",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:bear_claws"
@@ -884,7 +884,7 @@
     },
     {
       "item": "runecraftory:rod",
-      "starter":true
+      "starter": true
     },
     {
       "item": "runecraftory:amethyst_rod"

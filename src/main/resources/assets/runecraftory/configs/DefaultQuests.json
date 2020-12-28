@@ -1,123 +1,101 @@
 {
-  "killQuests":{
-    "easy":[
-        {
-          "object":"runecraftory:wooly",
-          "weight":30,
-          "additionalRolls": {
-            "min": 0,
-            "max": 0
-          },
-          "amount": {
-            "min": 1,
-            "max": 3
-          },
-          "money": {
-            "min": 5,
-            "max": 10
-          }
+  "killQuests": {
+    "easy": [
+      {
+        "object": "runecraftory:wooly",
+        "weight": 30,
+        "additionalRolls": {
+          "min": 0,
+          "max": 0
+        },
+        "amount": {
+          "min": 1,
+          "max": 3
+        },
+        "money": {
+          "min": 5,
+          "max": 10
         }
-      ],
-    "normal":[
-
+      }
     ],
-    "hard":[
-
+    "normal": [
+    ],
+    "hard": [
     ]
   },
-  "killQuestRewards":{
-    "easy":[
-        {
-          "object":{
-            "item":"minecraft:apple",
-            "count":2
-          },
-          "weight":30,
-          "additionalRolls": {
-            "min": 0,
-            "max": 0
-          },
-          "amount": {
-            "min": 1,
-            "max": 3
-          },
-          "money": {
-            "min": 5,
-            "max": 10
-          }
+  "killQuestRewards": {
+    "easy": [
+      {
+        "object": {
+          "item": "minecraft:apple",
+          "count": 2
+        },
+        "weight": 30,
+        "additionalRolls": {
+          "min": 0,
+          "max": 0
+        },
+        "amount": {
+          "min": 1,
+          "max": 3
+        },
+        "money": {
+          "min": 5,
+          "max": 10
         }
-      ],
-    "normal":[
-
+      }
     ],
-    "hard":[
-
+    "normal": [
+    ],
+    "hard": [
     ]
   },
-  "harvestQuestRewards":{
-    "easy":[
-        
-      ],
-    "normal":[
-
+  "harvestQuestRewards": {
+    "easy": [
     ],
-    "hard":[
-
+    "normal": [
+    ],
+    "hard": [
     ]
   },
-  "harvestQuests":{
-    "easy":[
-        
-      ],
-    "normal":[
-
+  "harvestQuests": {
+    "easy": [
     ],
-    "hard":[
-
+    "normal": [
+    ],
+    "hard": [
     ]
   },
-  "deliverQuestRewards":{
-    "easy":[
-        
-      ],
-    "normal":[
-
+  "deliverQuestRewards": {
+    "easy": [
     ],
-    "hard":[
-
+    "normal": [
+    ],
+    "hard": [
     ]
   },
-  "deliverQuests":{
-    "easy":[
-        
-      ],
-    "normal":[
-
+  "deliverQuests": {
+    "easy": [
     ],
-    "hard":[
-
+    "normal": [
+    ],
+    "hard": [
     ]
   },
-  "shippingQuestRewards":{
-    "easy":[
-        
-      ],
-    "normal":[
-
+  "shippingQuestRewards": {
+    "easy": [
     ],
-    "hard":[
-
+    "normal": [
+    ],
+    "hard": [
     ]
   },
-  "shippingQuests":{
-    "easy":[
-        
-      ],
-    "normal":[
-
+  "shippingQuests": {
+    "easy": [
     ],
-    "hard":[
-
+    "normal": [
+    ],
+    "hard": [
     ]
   }
 }

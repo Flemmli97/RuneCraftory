@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.inventory.container;
 
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import com.flemmli97.runecraftory.common.capability.IPlayerCap;
 import com.flemmli97.runecraftory.common.inventory.InventorySpells;
 import com.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import com.flemmli97.runecraftory.common.registry.ModContainer;
@@ -33,7 +34,7 @@ public class ContainerInfoScreen extends Container {
     public ContainerInfoScreen(int windowId, PlayerInventory playerInventory, boolean main) {
         super(main ? ModContainer.infoContainer.get() : ModContainer.infoSubContainer.get(), windowId);
         this.main = main;
-        InventorySpells playerSpells = playerInventory.player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getInv()).orElse(null);
+        InventorySpells playerSpells = playerInventory.player.getCapability(CapabilityInsts.PlayerCap).map(IPlayerCap::getInv).orElse(null);
         if (playerSpells == null)
             return;
         RecipeWrapper iinv = new RecipeWrapper(playerSpells) {
@@ -74,7 +75,7 @@ public class ContainerInfoScreen extends Container {
                 @Override
                 public boolean canTakeStack(PlayerEntity player) {
                     ItemStack itemstack = this.getStack();
-                    return !itemstack.isEmpty() && !player.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(player);
+                    return (itemstack.isEmpty() || player.isCreative() || !EnchantmentHelper.hasBindingCurse(itemstack)) && super.canTakeStack(player);
                 }
 
                 @Override

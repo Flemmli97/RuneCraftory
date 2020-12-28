@@ -1,7 +1,7 @@
 {
-	"parent": "block/orientable_vertical",
-	"textures": {
-		"side":"runecraftory:blocks/shipping_bin",
-		"front": "runecraftory:blocks/shipping_bin_top"
-	}
+  "parent": "block/orientable_vertical",
+  "textures": {
+    "side": "runecraftory:blocks/shipping_bin",
+    "front": "runecraftory:blocks/shipping_bin_top"
+  }
 }

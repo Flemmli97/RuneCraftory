@@ -14,22 +14,19 @@ public class ChancedBlockCluster implements IFeatureConfig {
             Codec.INT.fieldOf("max").orElse(3).forGetter((cb) -> (int) cb.amount.getMax()),
             Codec.INT.fieldOf("spread_x").orElse(3).forGetter((cb) -> cb.spreadX),
             Codec.INT.fieldOf("spread_y").orElse(3).forGetter((cb) -> cb.spreadY),
-            Codec.INT.fieldOf("spread_z").orElse(3).forGetter((cb) -> cb.spreadZ),
-            Codec.INT.fieldOf("chance").orElse(3).forGetter((cb) -> cb.chance)).apply(codec, ChancedBlockCluster::new));
+            Codec.INT.fieldOf("spread_z").orElse(3).forGetter((cb) -> cb.spreadZ)).apply(codec, ChancedBlockCluster::new));
 
     public final BlockStateProvider stateProvider;
     public final RandomValueRange amount;
     public final int spreadX;
     public final int spreadY;
     public final int spreadZ;
-    public final int chance;
 
-    public ChancedBlockCluster(BlockStateProvider stateProvider, int min, int max, int spreadX, int spreadY, int spreadZ, int chance) {
+    public ChancedBlockCluster(BlockStateProvider stateProvider, int min, int max, int spreadX, int spreadY, int spreadZ) {
         this.stateProvider = stateProvider;
         this.amount = new RandomValueRange(min, max);
         this.spreadX = spreadX;
         this.spreadY = spreadY;
         this.spreadZ = spreadZ;
-        this.chance = chance;
     }
 }
