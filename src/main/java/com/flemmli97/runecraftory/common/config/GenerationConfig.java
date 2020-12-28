@@ -97,7 +97,7 @@ public class GenerationConfig {
         overworldHerbTries = spec.overworldHerbTries.get();
         netherHerbChance = spec.netherHerbChance.get();
         netherHerbTries = spec.netherHerbTries.get();
-        netherHerbChance = spec.netherHerbChance.get();
+        endHerbChance = spec.endHerbChance.get();
         endHerbTries = spec.endHerbTries.get();
         for (HerbGenConfig conf : herbGen)
             conf.read(spec.herbSpecs.get(conf.blockRes().toString()));
@@ -144,9 +144,8 @@ public class GenerationConfig {
             this.overworldHerbTries = builder.comment("Generation tries for overworld").define("Herb Tries", 64);
             this.netherHerbChance = builder.comment("1/x Chance for herb to generate in the nether").define("Nether Herb Chance", 35);
             this.netherHerbTries = builder.comment("Generation tries for the nether").define("Nether Herb Tries", 64);
-            this.endHerbChance = builder.comment("1/x Chance for herb to generate in the end").define("End Herb Chance", 10);
+            this.endHerbChance = builder.comment("1/x Chance for herb to generate in the end").define("End Herb Chance", 7);
             this.endHerbTries = builder.comment("Generation tries for the end").define("End Herb Tries", 32);
-
             for (HerbGenConfig conf : herbGen) {
                 builder.push(conf.blockRes().toString());
                 this.herbSpecs.put(conf.blockRes().toString(), new HerbGenCofigSpecs(builder, conf));
