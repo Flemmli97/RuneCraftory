@@ -6,7 +6,10 @@ import com.flemmli97.runecraftory.common.spells.ArrowSpell;
 import com.flemmli97.runecraftory.common.spells.EmptySpell;
 import com.flemmli97.runecraftory.common.spells.EvokerFangSpell;
 import com.flemmli97.runecraftory.common.spells.FireballSpell;
+import com.flemmli97.runecraftory.common.spells.ParaHealSpell;
+import com.flemmli97.runecraftory.common.spells.PoisonHealSpell;
 import com.flemmli97.runecraftory.common.spells.SnowballSpell;
+import com.flemmli97.runecraftory.common.spells.UnsealSpell;
 import com.flemmli97.runecraftory.common.spells.WitherSkullSpell;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -22,5 +25,9 @@ public class ModSpells {
     public static final RegistryObject<Spell> SNOWBALL = SPELLS.register("vanilla_snowball", SnowballSpell::new);
 
     public static final RegistryObject<Spell> FIREBALL = SPELLS.register("fireball", FireballSpell::new);
+
+    public static final RegistryObject<Spell> MEDIPOISON = SPELLS.register("medi_poison", PoisonHealSpell::new);
+    public static final RegistryObject<Spell> MEDIPARA = SPELLS.register("medi_paralysis", ParaHealSpell::new);
+    public static final RegistryObject<Spell> MEDISEAL = SPELLS.register("medi_seal", UnsealSpell::new);
 
 }

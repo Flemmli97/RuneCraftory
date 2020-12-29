@@ -45,6 +45,7 @@ import net.minecraft.item.BlockNamedItem;
 import net.minecraft.item.Food;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
@@ -117,7 +118,12 @@ public class ModItems {
     public static final RegistryObject<Item> greenifier = ITEMS.register("greenifier", () -> new ItemFertilizer(ItemFertilizer.greenifier, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> greenifierPlus = ITEMS.register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.greenifierPlus, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> wettablePowder = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.wettable, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> objectX = ITEMS.register("object_x", () -> new Item(new Item.Properties().food(foodProp).group(RFCreativeTabs.medicine)));
+    public static final RegistryObject<Item> objectX = ITEMS.register("object_x", () -> new ItemMedicine(new Item.Properties().food(foodProp).group(RFCreativeTabs.medicine)){
+        @Override
+        public int getUseDuration(ItemStack stack) {
+            return 32;
+        }
+    });
 
     //Weapons
     public static final RegistryObject<Item> seedSword = ITEMS.register("seed_sword_item", () -> new ItemSeedSword(new Item.Properties()));
@@ -742,9 +748,9 @@ public class ModItems {
     public static final RegistryObject<Item> cure = spell(() -> ModSpells.EMPTY, "cure");
     public static final RegistryObject<Item> cureAll = spell(() -> ModSpells.EMPTY, "cure_all");
     public static final RegistryObject<Item> cureMaster = spell(() -> ModSpells.EMPTY, "cure_master");
-    public static final RegistryObject<Item> mediPoison = spell(() -> ModSpells.EMPTY, "medi_poison");
-    public static final RegistryObject<Item> mediPara = spell(() -> ModSpells.EMPTY, "medi_paralysis");
-    public static final RegistryObject<Item> mediSeal = spell(() -> ModSpells.EMPTY, "medi_seal");
+    public static final RegistryObject<Item> mediPoison = spell(() -> ModSpells.MEDIPOISON, "medi_poison");
+    public static final RegistryObject<Item> mediPara = spell(() -> ModSpells.MEDIPARA, "medi_paralysis");
+    public static final RegistryObject<Item> mediSeal = spell(() -> ModSpells.MEDISEAL, "medi_seal");
     public static final RegistryObject<Item> greeting = spell(() -> ModSpells.EMPTY, "greeting");
     public static final RegistryObject<Item> powerWave = spell(() -> ModSpells.EMPTY, "power_wave");
     public static final RegistryObject<Item> dashSlash = spell(() -> ModSpells.EMPTY, "dash_slash");
@@ -1279,7 +1285,7 @@ public class ModItems {
 
     public static RegistryObject<Item> brokenMineral(EnumMineralTier tier) {
         Supplier<Block> block = () -> ModBlocks.brokenMineralMap.get(tier).get();
-        return ITEMS.register("ore_broken_" + tier.getString(), () -> new BlockItem(block.get(), new Item.Properties().group(RFCreativeTabs.blocks)));
+        return ITEMS.register("ore_broken_" + tier.getString(), () -> new BlockItem(block.get(), new Item.Properties()));
     }
 
     public static RegistryObject<Item> mat(String name) {

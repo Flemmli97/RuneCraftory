@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderFireball extends RenderTexture<EntityFireball> {
 
-    private static final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/fireball.png");
+    private static final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/fireball_n.png");
 
     public RenderFireball(EntityRendererManager renderManager) {
         super(renderManager, 1, 1, 6, 1);

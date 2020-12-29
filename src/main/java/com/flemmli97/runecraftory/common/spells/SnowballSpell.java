@@ -26,7 +26,7 @@ public class SnowballSpell extends Spell {
     }
 
     @Override
-    public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount) {
+    public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
         SnowballEntity snowball = new SnowballEntity(world, entity);
         snowball.setProperties(entity, entity.rotationPitch, entity.rotationYaw, 0.0F, 2.0F, 1.0F);
         world.addEntity(snowball);

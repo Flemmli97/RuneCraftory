@@ -122,7 +122,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World world, LivingEntity entity, int timeLeft) {
         if (!world.isRemote && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
-            List<Entity> list = RayTraceUtils.getEntities(entity, this.getRange(), 200);
+            List<Entity> list = RayTraceUtils.getEntitiesIgnorePitch(entity, this.getRange(), 200, null);
             if (!list.isEmpty()) {
                 CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(20).get();
                 boolean player = entity instanceof PlayerEntity;

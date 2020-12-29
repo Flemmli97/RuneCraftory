@@ -1,15 +1,16 @@
 package com.flemmli97.runecraftory.common.spells;
 
 import com.flemmli97.runecraftory.api.Spell;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import com.flemmli97.runecraftory.common.registry.ModPotions;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.EvokerFangsEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.potion.Effects;
 import net.minecraft.world.server.ServerWorld;
 
-public class EvokerFangSpell extends Spell {
+public class ParaHealSpell extends Spell {
 
     @Override
     public void update(PlayerEntity player, ItemStack stack) {
@@ -28,18 +29,25 @@ public class EvokerFangSpell extends Spell {
 
     @Override
     public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        Vector3d pos = entity.getPositionVec();
-        Vector3d look = Vector3d.fromPitchYaw(0, entity.rotationYaw);
-        for (int i = 0; i < 7; i++) {
-            pos = pos.add(look.x, 0, look.z);
-            EvokerFangsEntity fang = new EvokerFangsEntity(world, pos.getX(), pos.getY(), pos.getZ(), entity.rotationYaw, 10, entity);
-            world.addEntity(fang);
+        boolean rp = !(entity instanceof PlayerEntity) || entity.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.decreaseRunePoints((PlayerEntity) entity, this.rpCost(), false)).orElse(false);
+        if (rp) {
+            if(level >=10){
+
+            }
+            if(level >= 7){
+
+            }
+            if(level >= 3){
+
+            }
+            entity.removePotionEffect(Effects.SLOWNESS);
+            entity.removePotionEffect(ModPotions.paralysis.get());
+            return true;
         }
-        return true;
-    }
+        return false;    }
 
     @Override
     public int rpCost() {
-        return 1;
+        return 10;
     }
 }

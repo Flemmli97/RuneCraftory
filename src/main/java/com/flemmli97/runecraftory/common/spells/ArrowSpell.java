@@ -30,10 +30,10 @@ public class ArrowSpell extends Spell {
     }
 
     @Override
-    public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount) {
+    public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
         ArrowEntity arrowentity = new ArrowEntity(world, entity);
-        arrowentity.setProperties(entity, entity.rotationPitch, entity.rotationYaw, 0.0F, 3.0F, 1.0F);
-        arrowentity.setDamage(CombatUtils.getAttributeValue(entity, Attributes.GENERIC_ATTACK_DAMAGE, null) * 0.3);
+        arrowentity.setProperties(entity, entity.rotationPitch, entity.rotationYaw, 0.0F, 1.0F, 1.0F);
+        arrowentity.setDamage(CombatUtils.getAttributeValue(entity, Attributes.GENERIC_ATTACK_DAMAGE, null) * 0.05*level);
         arrowentity.setFire(ItemNBT.getElement(stack) == EnumElement.FIRE ? 200 : 0);
         world.addEntity(arrowentity);
         return true;

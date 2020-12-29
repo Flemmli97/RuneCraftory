@@ -166,12 +166,14 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
             }
             if (this.runePoints >= amount)
                 this.runePoints -= amount;
-            else {
+            else if(damage){
                 int diff = amount - this.runePoints;
                 this.runePoints = 0;
-                if (!player.world.isRemote && damage)
+                if (!player.world.isRemote)
                     player.attackEntityFrom(CustomDamage.EXHAUST, (float) (diff * 2));
             }
+            else
+                return false;
             if (player instanceof ServerPlayerEntity)
                 PacketHandler.sendToClient(new S2CRunePoints(this), (ServerPlayerEntity) player);
             return true;
