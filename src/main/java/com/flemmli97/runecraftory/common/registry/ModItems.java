@@ -742,8 +742,8 @@ public class ModItems {
     public static final RegistryObject<Item> lightBarrier = spell(() -> ModSpells.EMPTY, "light_barrier");
     public static final RegistryObject<Item> shine = spell(() -> ModSpells.EMPTY, "shine");
     public static final RegistryObject<Item> prism = spell(() -> ModSpells.EMPTY, "prism");
-    public static final RegistryObject<Item> darkBall = spell(() -> ModSpells.EMPTY, "dark_ball");
     public static final RegistryObject<Item> darkSnake = spell(() -> ModSpells.EMPTY, "dark_snake");
+    public static final RegistryObject<Item> darkBall = spell(() -> ModSpells.EMPTY, "dark_ball");
     public static final RegistryObject<Item> darkness = spell(() -> ModSpells.EMPTY, "darkness");
     public static final RegistryObject<Item> cure = spell(() -> ModSpells.EMPTY, "cure");
     public static final RegistryObject<Item> cureAll = spell(() -> ModSpells.EMPTY, "cure_all");
