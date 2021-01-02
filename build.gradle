@@ -119,6 +119,10 @@ repositories {
         url "https://maven.tterrag.com/"
     }
     maven {
+        name = "JEI"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
         name = "TenshiLib"
         url "https://gitlab.com/api/v4/projects/21830712/packages/maven"
     }
@@ -129,6 +133,11 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:'+"${mcversion}-${forge_version}"
+
+    compileOnly fg.deobf("${jei_dep}:api")
+    runtimeOnly fg.deobf(jei_dep)
+
+    runtimeOnly fg.deobf("curse.maven:hwyla:3033593")
 
     compile fg.deobf("tenshilib:TenshiLib:${tenshilib_version}")
 }
