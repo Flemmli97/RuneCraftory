@@ -1,6 +1,5 @@
-package com.flemmli97.runecraftory.network;
+package com.flemmli97.runecraftory.common.network;
 
-import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.client.ClientHandlers;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
@@ -12,22 +11,20 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class S2CSkillLevelPkt {
+public class S2CLevelPkt {
 
     private final Type type;
-    private final EnumSkills skill;
     private final int[] level;
     private int rp, rpMax;
     private float str, intel, vit;
 
-    private S2CSkillLevelPkt(Type type, EnumSkills skill, int[] level) {
+    private S2CLevelPkt(Type type, int[] level) {
         this.type = type;
-        this.skill = skill;
         this.level = level;
     }
 
-    private S2CSkillLevelPkt(Type type, EnumSkills skill, int[] level, int rp, int rpMax, float str, float intel, float vit) {
-        this(type, skill, level);
+    private S2CLevelPkt(Type type, int[] level, int rp, int rpMax, float str, float intel, float vit) {
+        this(type, level);
         this.rp = rp;
         this.rpMax = rpMax;
         this.str = str;
@@ -35,10 +32,9 @@ public class S2CSkillLevelPkt {
         this.vit = vit;
     }
 
-    public S2CSkillLevelPkt(IPlayerCap cap, EnumSkills skill, Type type) {
+    public S2CLevelPkt(IPlayerCap cap, Type type) {
         this.type = type;
-        this.skill = skill;
-        this.level = cap.getSkillLevel(skill);
+        this.level = cap.getPlayerLevel();
         if (type == Type.LEVELUP) {
             this.rp = cap.getRunePoints();
             this.rpMax = cap.getMaxRunePoints();
@@ -48,16 +44,15 @@ public class S2CSkillLevelPkt {
         }
     }
 
-    public static S2CSkillLevelPkt read(PacketBuffer buf) {
+    public static S2CLevelPkt read(PacketBuffer buf) {
         Type type = buf.readEnumValue(Type.class);
         if (type == Type.SET)
-            return new S2CSkillLevelPkt(type, buf.readEnumValue(EnumSkills.class), new int[]{buf.readInt(), buf.readInt()});
-        return new S2CSkillLevelPkt(type, buf.readEnumValue(EnumSkills.class), new int[]{buf.readInt(), buf.readInt()}, buf.readInt(), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat());
+            return new S2CLevelPkt(type, new int[]{buf.readInt(), buf.readInt()});
+        return new S2CLevelPkt(type, new int[]{buf.readInt(), buf.readInt()}, buf.readInt(), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
 
-    public static void write(S2CSkillLevelPkt pkt, PacketBuffer buf) {
+    public static void write(S2CLevelPkt pkt, PacketBuffer buf) {
         buf.writeEnumValue(pkt.type);
-        buf.writeEnumValue(pkt.skill);
         buf.writeInt(pkt.level[0]);
         buf.writeInt(pkt.level[1]);
         if (pkt.type == Type.LEVELUP) {
@@ -69,14 +64,14 @@ public class S2CSkillLevelPkt {
         }
     }
 
-    public static void handle(S2CSkillLevelPkt pkt, Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(S2CLevelPkt pkt, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             PlayerEntity player = DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> ClientHandlers::getPlayer);
             if (player == null)
                 return;
             player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
-                cap.setSkillLevel(pkt.skill, player, pkt.level[0], pkt.level[1]);
-                if (pkt.type == Type.LEVELUP) {
+                cap.setPlayerLevel(player, pkt.level[0], pkt.level[1]);
+                if (pkt.type == S2CLevelPkt.Type.LEVELUP) {
                     cap.setRunePoints(player, pkt.rp);
                     cap.setMaxRunePoints(player, pkt.rpMax);
                     cap.setStr(player, pkt.str);

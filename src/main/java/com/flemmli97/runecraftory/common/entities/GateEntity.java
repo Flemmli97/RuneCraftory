@@ -5,7 +5,7 @@ import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.config.MobConfig;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.world.GateSpawning;
-import com.flemmli97.runecraftory.lib.LibConstants;
+import com.flemmli97.runecraftory.common.lib.LibConstants;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

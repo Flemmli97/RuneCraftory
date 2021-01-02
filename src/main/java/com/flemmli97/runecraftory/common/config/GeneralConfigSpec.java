@@ -70,7 +70,7 @@ public class GeneralConfigSpec {
         builder.push("Modules");
         this.combatModule = builder.comment("Use this mods combat system.").define("Combat", true);
         this.gateSpawning = builder.comment("Should gates spawn? If disabled will also disable all mobs from this mod to spawn. Needs server restart").define("Gate Spawning", true);
-        this.disableVanillaSpawning = builder.comment("If enabled mobs can only spawn through gates.").define("Disable vanilla spawn", true);
+        this.disableVanillaSpawning = builder.comment("If enabled mobs can only spawn through gates.").define("Disable vanilla spawn", false);
         this.randomDamage = builder.comment("If enabled damage gets a +-10% randomness.").define("Random Damage", true);
         builder.pop();
 

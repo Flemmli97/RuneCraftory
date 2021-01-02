@@ -1,4 +1,4 @@
-package com.flemmli97.runecraftory.network;
+package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.client.ClientHandlers;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
@@ -11,32 +11,32 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class S2CMoney {
+public class S2CRunePoints {
 
-    private final int money;
+    private final int rp;
 
-    private S2CMoney(int money) {
-        this.money = money;
+    private S2CRunePoints(int rp) {
+        this.rp = rp;
     }
 
-    public S2CMoney(IPlayerCap cap) {
-        this.money = cap.getMoney();
+    public S2CRunePoints(IPlayerCap cap) {
+        this.rp = cap.getRunePoints();
     }
 
-    public static S2CMoney read(PacketBuffer buf) {
-        return new S2CMoney(buf.readInt());
+    public static S2CRunePoints read(PacketBuffer buf) {
+        return new S2CRunePoints(buf.readInt());
     }
 
-    public static void write(S2CMoney pkt, PacketBuffer buf) {
-        buf.writeInt(pkt.money);
+    public static void write(S2CRunePoints pkt, PacketBuffer buf) {
+        buf.writeInt(pkt.rp);
     }
 
-    public static void handle(S2CMoney pkt, Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(S2CRunePoints pkt, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             PlayerEntity player = DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> ClientHandlers::getPlayer);
             if (player == null)
                 return;
-            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.setMoney(player, pkt.money));
+            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.setRunePoints(player, pkt.rp));
         });
         ctx.get().setPacketHandled(true);
     }

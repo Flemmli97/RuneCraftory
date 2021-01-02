@@ -1,4 +1,4 @@
-package com.flemmli97.runecraftory.network;
+package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.client.ClientHandlers;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
@@ -11,32 +11,32 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class S2CRunePoints {
+public class S2CMaxRunePoints {
 
-    private final int rp;
+    private final int rpMax;
 
-    private S2CRunePoints(int rp) {
-        this.rp = rp;
+    private S2CMaxRunePoints(int rp) {
+        this.rpMax = rp;
     }
 
-    public S2CRunePoints(IPlayerCap cap) {
-        this.rp = cap.getRunePoints();
+    public S2CMaxRunePoints(IPlayerCap cap) {
+        this.rpMax = cap.getMaxRunePoints();
     }
 
-    public static S2CRunePoints read(PacketBuffer buf) {
-        return new S2CRunePoints(buf.readInt());
+    public static S2CMaxRunePoints read(PacketBuffer buf) {
+        return new S2CMaxRunePoints(buf.readInt());
     }
 
-    public static void write(S2CRunePoints pkt, PacketBuffer buf) {
-        buf.writeInt(pkt.rp);
+    public static void write(S2CMaxRunePoints pkt, PacketBuffer buf) {
+        buf.writeInt(pkt.rpMax);
     }
 
-    public static void handle(S2CRunePoints pkt, Supplier<NetworkEvent.Context> ctx) {
+    public static void handle(S2CMaxRunePoints pkt, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(() -> {
             PlayerEntity player = DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> ClientHandlers::getPlayer);
             if (player == null)
                 return;
-            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.setRunePoints(player, pkt.rp));
+            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.setMaxRunePoints(player, pkt.rpMax));
         });
         ctx.get().setPacketHandled(true);
     }

@@ -14,16 +14,16 @@ import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.WorldUtils;
-import com.flemmli97.runecraftory.lib.LibConstants;
-import com.flemmli97.runecraftory.network.PacketHandler;
-import com.flemmli97.runecraftory.network.S2CEquipmentUpdate;
-import com.flemmli97.runecraftory.network.S2CFoodPkt;
-import com.flemmli97.runecraftory.network.S2CLevelPkt;
-import com.flemmli97.runecraftory.network.S2CMaxRunePoints;
-import com.flemmli97.runecraftory.network.S2CMoney;
-import com.flemmli97.runecraftory.network.S2CPlayerStats;
-import com.flemmli97.runecraftory.network.S2CRunePoints;
-import com.flemmli97.runecraftory.network.S2CSkillLevelPkt;
+import com.flemmli97.runecraftory.common.lib.LibConstants;
+import com.flemmli97.runecraftory.common.network.PacketHandler;
+import com.flemmli97.runecraftory.common.network.S2CEquipmentUpdate;
+import com.flemmli97.runecraftory.common.network.S2CFoodPkt;
+import com.flemmli97.runecraftory.common.network.S2CLevelPkt;
+import com.flemmli97.runecraftory.common.network.S2CMaxRunePoints;
+import com.flemmli97.runecraftory.common.network.S2CMoney;
+import com.flemmli97.runecraftory.common.network.S2CPlayerStats;
+import com.flemmli97.runecraftory.common.network.S2CRunePoints;
+import com.flemmli97.runecraftory.common.network.S2CSkillLevelPkt;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
@@ -166,13 +166,12 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
             }
             if (this.runePoints >= amount)
                 this.runePoints -= amount;
-            else if(damage){
+            else if (damage) {
                 int diff = amount - this.runePoints;
                 this.runePoints = 0;
                 if (!player.world.isRemote)
                     player.attackEntityFrom(CustomDamage.EXHAUST, (float) (diff * 2));
-            }
-            else
+            } else
                 return false;
             if (player instanceof ServerPlayerEntity)
                 PacketHandler.sendToClient(new S2CRunePoints(this), (ServerPlayerEntity) player);

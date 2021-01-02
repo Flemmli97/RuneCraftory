@@ -30,19 +30,20 @@ public class UnsealSpell extends Spell {
     public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
         boolean rp = !(entity instanceof PlayerEntity) || entity.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.decreaseRunePoints((PlayerEntity) entity, this.rpCost(), false)).orElse(false);
         if (rp) {
-            if(level >=10){
+            if (level >= 10) {
 
             }
-            if(level >= 7){
+            if (level >= 7) {
 
             }
-            if(level >= 3){
+            if (level >= 3) {
 
             }
             entity.removePotionEffect(ModPotions.seal.get());
             return true;
         }
-        return false;    }
+        return false;
+    }
 
     @Override
     public int rpCost() {

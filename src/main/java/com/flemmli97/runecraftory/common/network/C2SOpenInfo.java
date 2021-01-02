@@ -1,4 +1,4 @@
-package com.flemmli97.runecraftory.network;
+package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.inventory.container.ContainerInfoScreen;

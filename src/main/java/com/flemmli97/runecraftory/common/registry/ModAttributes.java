@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.registry;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.lib.LibAttributes;
+import com.flemmli97.runecraftory.common.lib.LibAttributes;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.RangedAttribute;

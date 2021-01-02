@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.common.config.values;
 
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
-import com.flemmli97.runecraftory.lib.LibAttributes;
+import com.flemmli97.runecraftory.common.lib.LibAttributes;
 import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;

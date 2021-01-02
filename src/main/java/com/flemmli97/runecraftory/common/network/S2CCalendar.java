@@ -1,4 +1,4 @@
-package com.flemmli97.runecraftory.network;
+package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.client.ClientHandlers;
 import com.flemmli97.runecraftory.common.utils.CalendarImpl;

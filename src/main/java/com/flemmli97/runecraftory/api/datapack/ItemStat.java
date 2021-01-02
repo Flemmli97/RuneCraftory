@@ -6,7 +6,7 @@ import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
-import com.flemmli97.runecraftory.lib.LibAttributes;
+import com.flemmli97.runecraftory.common.lib.LibAttributes;
 import com.flemmli97.tenshilib.common.utils.MapUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

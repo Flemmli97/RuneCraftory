@@ -28,7 +28,7 @@ import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModLootModifier;
 import com.flemmli97.runecraftory.common.registry.ModPotions;
 import com.flemmli97.runecraftory.common.registry.ModSpells;
-import com.flemmli97.runecraftory.network.PacketHandler;
+import com.flemmli97.runecraftory.common.network.PacketHandler;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;

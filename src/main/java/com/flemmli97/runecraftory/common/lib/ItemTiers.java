@@ -1,4 +1,4 @@
-package com.flemmli97.runecraftory.lib;
+package com.flemmli97.runecraftory.common.lib;
 
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.IArmorMaterial;

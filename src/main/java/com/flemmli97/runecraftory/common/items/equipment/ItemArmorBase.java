@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.common.items.equipment;
 
-import com.flemmli97.runecraftory.lib.ItemTiers;
+import com.flemmli97.runecraftory.common.lib.ItemTiers;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.entity.model.BipedModel;

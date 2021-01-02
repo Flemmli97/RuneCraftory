@@ -1,4 +1,4 @@
-package com.flemmli97.runecraftory.lib;
+package com.flemmli97.runecraftory.common.lib;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import net.minecraft.util.ResourceLocation;

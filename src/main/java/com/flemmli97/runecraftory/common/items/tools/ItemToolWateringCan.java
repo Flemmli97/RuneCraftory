@@ -9,7 +9,7 @@ import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
-import com.flemmli97.runecraftory.lib.ItemTiers;
+import com.flemmli97.runecraftory.common.lib.ItemTiers;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;

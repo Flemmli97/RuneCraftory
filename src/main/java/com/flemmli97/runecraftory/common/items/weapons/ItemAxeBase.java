@@ -11,7 +11,7 @@ import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
-import com.flemmli97.runecraftory.lib.ItemTiers;
+import com.flemmli97.runecraftory.common.lib.ItemTiers;
 import com.flemmli97.tenshilib.api.item.IAOEWeapon;
 import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import com.google.common.collect.ImmutableMultimap;

@@ -118,7 +118,7 @@ public class ModItems {
     public static final RegistryObject<Item> greenifier = ITEMS.register("greenifier", () -> new ItemFertilizer(ItemFertilizer.greenifier, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> greenifierPlus = ITEMS.register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.greenifierPlus, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> wettablePowder = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.wettable, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> objectX = ITEMS.register("object_x", () -> new ItemMedicine(new Item.Properties().food(foodProp).group(RFCreativeTabs.medicine)){
+    public static final RegistryObject<Item> objectX = ITEMS.register("object_x", () -> new ItemMedicine(new Item.Properties().food(foodProp).group(RFCreativeTabs.medicine)) {
         @Override
         public int getUseDuration(ItemStack stack) {
             return 32;
