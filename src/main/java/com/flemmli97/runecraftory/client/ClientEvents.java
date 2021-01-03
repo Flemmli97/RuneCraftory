@@ -6,6 +6,7 @@ import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.client.gui.widgets.SkillButton;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
+import com.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import com.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import com.flemmli97.runecraftory.common.network.C2SRideJump;
 import com.flemmli97.runecraftory.common.network.C2SSpellKey;
@@ -116,7 +117,10 @@ public class ClientEvents {
         if (shift) {
             FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
             if (food != null) {
-                tooltip.addAll(food.texts());
+                if (stack.getItem() instanceof ItemMedicine)
+                    tooltip.addAll(food.medicineText((ItemMedicine) stack.getItem(), stack));
+                else
+                    tooltip.addAll(food.texts());
             }
         }
         return tooltip;

@@ -3,10 +3,11 @@ package com.flemmli97.runecraftory.api.datapack;
 import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
+import com.flemmli97.runecraftory.common.lib.LibAttributes;
+import com.flemmli97.runecraftory.common.lib.LibNBT;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
-import com.flemmli97.runecraftory.common.lib.LibAttributes;
 import com.flemmli97.tenshilib.common.utils.MapUtils;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -123,14 +124,14 @@ public class ItemStat {
         if (tag != null) {
             if (stack.getItem() instanceof IItemUsable) {
                 try {
-                    EnumElement element = EnumElement.valueOf(tag.getString("Element"));
+                    EnumElement element = EnumElement.valueOf(tag.getString(LibNBT.Element));
                     if (element != EnumElement.NONE) {
                         list.add(new TranslationTextComponent(element.getTranslation()).formatted(element.getColor()));
                     }
                 } catch (IllegalArgumentException ignored) {
                 }
             }
-            IFormattableTextComponent price = new TranslationTextComponent("tooltip.item.level", tag.getInt("ItemLevel"));
+            IFormattableTextComponent price = new TranslationTextComponent("tooltip.item.level", tag.getInt(LibNBT.Level));
             if (ItemUtils.getBuyPrice(stack, this) > 0)
                 price.append(" ").append(new TranslationTextComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack)));
             price.append(" ").append(new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack)));
@@ -153,7 +154,7 @@ public class ItemStat {
     private String format(Attribute att, int n) {
         boolean flat = flatAttributes.contains(att.getRegistryName());
         int val = flat ? n : (n > 100 ? n - 100 : 100 - n);
-        return val >= (flat ? 0 : 100) ? "+" + val : "-" + val;
+        return (val >= (flat ? 0 : 100) ? "+" + val : "" + val) + (flat ? "" : "%");
     }
 
     @Override

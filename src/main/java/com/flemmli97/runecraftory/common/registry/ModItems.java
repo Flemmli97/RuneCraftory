@@ -47,6 +47,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
+import net.minecraft.item.UseAction;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -94,17 +95,17 @@ public class ModItems {
     public static final RegistryObject<Item> glass = ITEMS.register("magnifying_glass", () -> new ItemToolGlass(new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
 
     //Recovery and stuff
-    public static final RegistryObject<Item> roundoff = medicine("roundoff");
-    public static final RegistryObject<Item> paraGone = medicine("para_gone");
-    public static final RegistryObject<Item> coldMed = medicine("cold_medicine");
-    public static final RegistryObject<Item> antidote = medicine("antidote_potion");
-    public static final RegistryObject<Item> recoveryPotion = medicine("recovery_potion");
-    public static final RegistryObject<Item> healingPotion = medicine("healing_potion");
-    public static final RegistryObject<Item> mysteryPotion = medicine("mystery_potion");
-    public static final RegistryObject<Item> magicalPotion = medicine("magical_potion");
-    public static final RegistryObject<Item> invinciroid = medicine("invinciroid");
-    public static final RegistryObject<Item> lovePotion = medicine("love_potion");
-    public static final RegistryObject<Item> formuade = medicine("formuade");
+    public static final RegistryObject<Item> roundoff = medicine("roundoff", false);
+    public static final RegistryObject<Item> paraGone = medicine("para_gone", false);
+    public static final RegistryObject<Item> coldMed = medicine("cold_medicine", false);
+    public static final RegistryObject<Item> antidote = medicine("antidote_potion", false);
+    public static final RegistryObject<Item> recoveryPotion = medicine("recovery_potion", true);
+    public static final RegistryObject<Item> healingPotion = medicine("healing_potion", true);
+    public static final RegistryObject<Item> mysteryPotion = medicine("mystery_potion", true);
+    public static final RegistryObject<Item> magicalPotion = medicine("magical_potion", true);
+    public static final RegistryObject<Item> invinciroid = drinkable("invinciroid");
+    public static final RegistryObject<Item> lovePotion = drinkable("love_potion");
+    public static final RegistryObject<Item> formuade = drinkable("formuade");
     public static final RegistryObject<Item> leveliser = ITEMS.register("leveliser", () -> new ItemStatIncrease(ItemStatIncrease.Stat.LEVEL, new Item.Properties().group(RFCreativeTabs.medicine)));
     public static final RegistryObject<Item> heartDrink = ITEMS.register("heart_drink", () -> new ItemStatIncrease(ItemStatIncrease.Stat.HP, new Item.Properties().group(RFCreativeTabs.medicine)));
     public static final RegistryObject<Item> vitalGummi = ITEMS.register("vital_gummi", () -> new ItemStatIncrease(ItemStatIncrease.Stat.VIT, new Item.Properties().group(RFCreativeTabs.medicine)));
@@ -118,10 +119,10 @@ public class ModItems {
     public static final RegistryObject<Item> greenifier = ITEMS.register("greenifier", () -> new ItemFertilizer(ItemFertilizer.greenifier, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> greenifierPlus = ITEMS.register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.greenifierPlus, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> wettablePowder = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.wettable, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryObject<Item> objectX = ITEMS.register("object_x", () -> new ItemMedicine(new Item.Properties().food(foodProp).group(RFCreativeTabs.medicine)) {
+    public static final RegistryObject<Item> objectX = ITEMS.register("object_x", () -> new Item(new Item.Properties().food(foodProp).group(RFCreativeTabs.medicine)) {
         @Override
-        public int getUseDuration(ItemStack stack) {
-            return 32;
+        public UseAction getUseAction(ItemStack p_77661_1_) {
+            return UseAction.DRINK;
         }
     });
 
@@ -1292,8 +1293,17 @@ public class ModItems {
         return ITEMS.register(name, () -> new Item(new Item.Properties().group(RFCreativeTabs.upgradeItems)));
     }
 
-    public static RegistryObject<Item> medicine(String name) {
-        return ITEMS.register(name, () -> new ItemMedicine(new Item.Properties().food(foodProp).maxStackSize(16).group(RFCreativeTabs.medicine)));
+    public static RegistryObject<Item> medicine(String name, boolean affectStats) {
+        return ITEMS.register(name, () -> new ItemMedicine(affectStats, new Item.Properties().food(foodProp).maxStackSize(16).group(RFCreativeTabs.medicine)));
+    }
+
+    public static RegistryObject<Item> drinkable(String name) {
+        return ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).maxStackSize(16).group(RFCreativeTabs.medicine)) {
+            @Override
+            public UseAction getUseAction(ItemStack p_77661_1_) {
+                return UseAction.DRINK;
+            }
+        });
     }
 
     public static RegistryObject<Item> spell(Supplier<Supplier<Spell>> sup, String name) {

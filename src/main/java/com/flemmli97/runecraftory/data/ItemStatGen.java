@@ -39,6 +39,15 @@ public class ItemStatGen extends ItemStatProvider {
                 .setSpell(ModSpells.WITHERSKULL.get(), null, null)
                 .setElement(EnumElement.DARK));
 
+        this.addStat(ModItems.roundoff.get(), new ItemStat.MutableItemStat(750, 50, 0));
+        this.addStat(ModItems.paraGone.get(), new ItemStat.MutableItemStat(750, 50, 0));
+        this.addStat(ModItems.coldMed.get(), new ItemStat.MutableItemStat(750, 50, 0));
+        this.addStat(ModItems.antidote.get(), new ItemStat.MutableItemStat(750, 50, 0));
+        this.addStat(ModItems.recoveryPotion.get(), new ItemStat.MutableItemStat(300, 25, 0));
+        this.addStat(ModItems.healingPotion.get(), new ItemStat.MutableItemStat(500, 35, 0));
+        this.addStat(ModItems.mysteryPotion.get(), new ItemStat.MutableItemStat(1000, 250, 0));
+        this.addStat(ModItems.magicalPotion.get(), new ItemStat.MutableItemStat(3000, 500, 0));
+
         this.addStat(ModItems.broadSword.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 5));
         this.addStat(ModItems.steelSword.get(), new ItemStat.MutableItemStat(55, 15, 0)

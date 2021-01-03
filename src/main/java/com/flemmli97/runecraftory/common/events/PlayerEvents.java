@@ -8,6 +8,11 @@ import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.entities.IBaseMob;
+import com.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
+import com.flemmli97.runecraftory.common.network.PacketHandler;
+import com.flemmli97.runecraftory.common.network.S2CCalendar;
+import com.flemmli97.runecraftory.common.network.S2CCapSync;
+import com.flemmli97.runecraftory.common.network.S2CDataPackSync;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModTags;
@@ -15,10 +20,6 @@ import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.world.WorldHandler;
-import com.flemmli97.runecraftory.common.network.PacketHandler;
-import com.flemmli97.runecraftory.common.network.S2CCalendar;
-import com.flemmli97.runecraftory.common.network.S2CCapSync;
-import com.flemmli97.runecraftory.common.network.S2CDataPackSync;
 import com.flemmli97.tenshilib.api.event.AOEAttackEvent;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.Entity;
@@ -197,22 +198,26 @@ public class PlayerEvents {
     @SubscribeEvent
     public void foodHandling(LivingEntityUseItemEvent.Finish event) {
         if (!event.getEntityLiving().world.isRemote) {
-            FoodProperties prop = DataPackHandler.getFoodStat(event.getItem().getItem());
+            ItemStack stack = event.getItem();
+            FoodProperties prop = DataPackHandler.getFoodStat(stack.getItem());
             if (prop == null)
                 return;
             LivingEntity e = event.getEntityLiving();
             if (e instanceof PlayerEntity) {
                 PlayerEntity player = (PlayerEntity) e;
-                player.getCooldownTracker().setCooldown(event.getItem().getItem(), 3);
+                player.getCooldownTracker().setCooldown(stack.getItem(), 3);
                 player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
-                    cap.applyFoodEffect(player, event.getItem());
-                    cap.regenHealth(player, prop.getHPGain());
+                    boolean medicine = stack.getItem() instanceof ItemMedicine;
+                    cap.applyFoodEffect(player, stack);
+                    int healthGain = medicine ? ((ItemMedicine) stack.getItem()).healthRegen(stack, prop) : prop.getHPGain();
+                    cap.regenHealth(player, healthGain);
                     cap.refreshRunePoints(player, prop.getRPRegen());
-                    cap.regenHealth(player, cap.getMaxHealth(player) * prop.getHpPercentGain() * 0.01F);
+                    int healthPercent = medicine ? ((ItemMedicine) stack.getItem()).healthRegenPercent(stack, prop) : prop.getHPGain();
+                    cap.regenHealth(player, cap.getMaxHealth(player) * healthPercent * 0.01F);
                     cap.refreshRunePoints(player, (int) (cap.getMaxRunePoints() * prop.getRpPercentRegen() * 0.01));
                 });
             } else if (e instanceof IBaseMob) {
-                ((IBaseMob) e).applyFoodEffect(event.getItem());
+                ((IBaseMob) e).applyFoodEffect(stack);
             }
             if (prop.potionHeals() != null)
                 for (Effect s : prop.potionHeals()) {

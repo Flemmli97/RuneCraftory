@@ -1,9 +1,11 @@
 package com.flemmli97.runecraftory.api.datapack;
 
+import com.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.tenshilib.common.utils.ArrayUtils;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.text.IFormattableTextComponent;
@@ -156,8 +158,26 @@ public class FoodProperties {
         return this.translationTexts;
     }
 
+    public List<ITextComponent> medicineText(ItemMedicine medicine, ItemStack stack) {
+        List<ITextComponent> translationTexts = this.texts();
+        StringTextComponent hprp = new StringTextComponent("");
+        int hpRegen = medicine.healthRegen(stack, this);
+        if (hpRegen != 0)
+            hprp.append(" ").append(new TranslationTextComponent("tooltip.food.hp", this.format(hpRegen)));
+        int hpPercent = medicine.healthRegenPercent(stack, this);
+        if (hpPercent != 0)
+            hprp.append(" ").append(new TranslationTextComponent("tooltip.food.hp.percent", this.format(hpPercent)));
+        if (this.getRPRegen() != 0)
+            hprp.append(" ").append(new TranslationTextComponent("tooltip.food.rp", this.format(this.getRPRegen())));
+        if (this.getRpPercentRegen() != 0)
+            hprp.append(" ").append(new TranslationTextComponent("tooltip.food.rp.percent", this.format(this.getRpPercentRegen())));
+        if (!hprp.getSiblings().isEmpty())
+            translationTexts.set(1, hprp);
+        return translationTexts;
+    }
+
     private String format(int n) {
-        return n >= 0 ? "+" + n : "-" + n;
+        return n >= 0 ? "+" + n : "" + n;
     }
 
     @Override
