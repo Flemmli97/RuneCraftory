@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -20,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class TileSpawner extends TileEntity implements ITickableTileEntity {
 
     private int lastUpdateDay;
-    private ResourceLocation savedEntity;
+    private EntityType<?> savedEntity;
     private BlockPos structurePos;
     private ResourceLocation structureID;
     private StructureStart<?> structure;
@@ -37,7 +38,7 @@ public class TileSpawner extends TileEntity implements ITickableTileEntity {
 
     public void spawnEntity() {
         if (!this.world.isRemote && this.savedEntity != null) {
-            Entity e = ForgeRegistries.ENTITIES.getValue(this.savedEntity).create(this.world);
+            Entity e = this.savedEntity.create(this.world);
             if (e != null) {
                 this.lastUpdateDay = WorldUtils.day(this.world);
                 if (this.world.getEntitiesWithinAABB(e.getClass(), (new AxisAlignedBB(this.pos).grow(32))).size() != 0)
@@ -55,7 +56,7 @@ public class TileSpawner extends TileEntity implements ITickableTileEntity {
     }
 
     public void setEntity(ResourceLocation entity) {
-        this.savedEntity = entity;
+        this.savedEntity = ForgeRegistries.ENTITIES.getValue(entity);
         this.spawnEntity();
         this.lastUpdateDay = WorldUtils.day(this.world);
     }

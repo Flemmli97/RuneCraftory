@@ -110,6 +110,10 @@ public class GenerationConfig {
         ).collect(Collectors.toList());
     }
 
+    public static List<MineralGenConfig> allMineralConfs(){
+        return mineralGen;
+    }
+
     public static List<HerbGenConfig> herbGenFrom(Set<BiomeDictionary.Type> types) {
         return herbGen.stream().filter(c ->
                 (c.blackList().isEmpty() || Sets.intersection(types, c.blackList()).isEmpty())

@@ -8,9 +8,9 @@ import com.flemmli97.runecraftory.common.config.values.HerbGenConfig;
 import com.flemmli97.runecraftory.common.config.values.MineralGenConfig;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModFeatures;
+import com.flemmli97.runecraftory.common.registry.ModStructures;
 import com.flemmli97.runecraftory.common.world.GateSpawning;
 import com.flemmli97.runecraftory.common.world.WorldHandler;
-import com.flemmli97.runecraftory.common.world.features.ChancedBlockCluster;
 import net.minecraft.block.IGrowable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -20,15 +20,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.MobSpawnInfo;
+import net.minecraft.world.gen.FlatChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.blockplacer.SimpleBlockPlacer;
-import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
 import net.minecraft.world.gen.blockstateprovider.WeightedBlockStateProvider;
 import net.minecraft.world.gen.feature.BlockClusterFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.FeatureSpreadConfig;
 import net.minecraft.world.gen.feature.Features;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.IPlantable;
@@ -38,10 +40,12 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class WorldEvents {
@@ -72,11 +76,9 @@ public class WorldEvents {
         List<MineralGenConfig> mineralConf = GenerationConfig.mineralGenFrom(types);
         for (MineralGenConfig conf : mineralConf) {
             if (types.contains(BiomeDictionary.Type.NETHER))
-                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.MINERALFEATURE.get()
-                        .configure(new ChancedBlockCluster(new SimpleBlockStateProvider(conf.getBlock().getDefaultState()), conf.minAmount(), conf.maxAmount(), conf.xSpread(), conf.ySpread(), conf.zSpread())).applyChance(conf.chance()).decorate(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(6))));
+                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, conf.configuredFeature());
             else
-                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, ModFeatures.MINERALFEATURE.get()
-                        .configure(new ChancedBlockCluster(new SimpleBlockStateProvider(conf.getBlock().getDefaultState()), conf.minAmount(), conf.maxAmount(), conf.xSpread(), conf.ySpread(), conf.zSpread())).applyChance(conf.chance()).decorate(Features.Placements.SQUARE_TOP_SOLID_HEIGHTMAP));
+                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, conf.configuredFeatureNether());
         }
         List<HerbGenConfig> herbConf = GenerationConfig.herbGenFrom(types);
         if (!herbConf.isEmpty()) {
@@ -93,6 +95,8 @@ public class WorldEvents {
                 event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
                         Feature.FLOWER.configure((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.INSTANCE)).tries(GenerationConfig.overworldHerbTries).build()).applyChance(GenerationConfig.overworldHerbChance).decorate(Features.Placements.SQUARE_HEIGHTMAP));
         }
+        if(types.contains(BiomeDictionary.Type.FOREST))
+            event.getGeneration().getStructures().add(()-> ModFeatures.AMBROSIA_FEATURE);
     }
 
     @SubscribeEvent
@@ -109,6 +113,19 @@ public class WorldEvents {
             if (growable.getPlantType(event.getWorld(), event.getPos()) == PlantType.CROP) {
                 event.setResult(Event.Result.DENY);
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void worldLoad(WorldEvent.Load event) {
+        if(event.getWorld() instanceof ServerWorld) {
+            ServerWorld serverWorld = (ServerWorld) event.getWorld();
+            if(serverWorld.getChunkProvider().getChunkGenerator() instanceof FlatChunkGenerator &&
+                    serverWorld.getRegistryKey().equals(World.OVERWORLD)){
+                return;
+            }
+            Map<Structure<?>, StructureSeparationSettings> map =  serverWorld.getChunkProvider().generator.getStructuresConfig().getStructures();
+            map.put(ModStructures.AMBROSIA_FOREST.get(), new StructureSeparationSettings(10, 5, 34645653));
         }
     }
 }

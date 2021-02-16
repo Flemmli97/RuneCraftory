@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.flemmli97.runecraftory.mixin",
+  "refmap": "runecraftory.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "DimStrucSetAccess",
+    "FlatGenSettingAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

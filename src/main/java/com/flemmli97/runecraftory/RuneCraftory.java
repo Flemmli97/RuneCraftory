@@ -29,6 +29,7 @@ import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModLootModifier;
 import com.flemmli97.runecraftory.common.registry.ModPotions;
 import com.flemmli97.runecraftory.common.registry.ModSpells;
+import com.flemmli97.runecraftory.common.registry.ModStructures;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
@@ -108,6 +109,7 @@ public class RuneCraftory {
         modBus.addGenericListener(GlobalLootModifierSerializer.class, ModLootModifier::register);
         ModFeatures.FEATURES.register(modBus);
         ModSpells.SPELLS.register(modBus);
+        ModStructures.STRUCTURES.register(modBus);
     }
 
     public void newReg(RegistryEvent.NewRegistry event) {
@@ -124,6 +126,7 @@ public class RuneCraftory {
         event.enqueueWork(() -> {
             ModEntities.registerAttributes();
             EntitySpawnPlacementRegistry.register(ModEntities.gate.get(), EntitySpawnPlacementRegistry.PlacementType.ON_GROUND, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
+            ModFeatures.registerConfiguredFeatures();
         });
         CapabilityManager.INSTANCE.register(IPlayerCap.class, new CapabilityInsts.PlayerCapNetwork(), PlayerCapImpl::new);
         CapabilityManager.INSTANCE.register(IStaffCap.class, new CapabilityInsts.StaffCapNetwork(), StaffCapImpl::new);
