@@ -185,6 +185,6 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IRe
 
     @Override
     public void postTransform(boolean leftSide, MatrixStack stack) {
-        stack.translate(-2/16d, 3/16d, -9 / 16d);
+        stack.translate(-2 / 16d, 3 / 16d, -9 / 16d);
     }
 }

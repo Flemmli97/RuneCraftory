@@ -7,6 +7,8 @@ import com.flemmli97.runecraftory.common.lib.LibConstants;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
+import com.flemmli97.runecraftory.common.utils.CombatUtils;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.tenshilib.api.entity.IAnimated;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.item.SpawnEgg;
@@ -20,6 +22,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
@@ -73,7 +76,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     private static final DataParameter<Optional<UUID>> owner = EntityDataManager.createKey(BaseMonster.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     private static final DataParameter<Integer> mobLevel = EntityDataManager.createKey(BaseMonster.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> levelXP = EntityDataManager.createKey(BaseMonster.class, DataSerializers.VARINT);
-    private static final UUID attMulti = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
+    private static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
     private static final UUID foodUUID = UUID.fromString("87A55C28-8C8C-4BFF-AF5F-9972A38CCD9D");
     private static final UUID foodUUIDMulti = UUID.fromString("A05442AC-381B-49DF-B0FA-0136B454157B");
     private final EntityProperties prop;
@@ -271,8 +274,9 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     @Override
     public void setLevel(int level) {
+
         this.dataManager.set(mobLevel, Math.min(10000, level));
-        //this.updateStatsToLevel();
+        this.updateStatsToLevel();
     }
 
     @Override
@@ -338,30 +342,33 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     //=====Level Handling
 
-    /*public void setLevel(int level) {
-        this.dataManager.set(mobLevel, Math.min(10000, level));
-        this.updateStatsToLevel();
+    public void updateStatsToLevel() {
+        float mult = Math.max(this.level() - LibConstants.baseLevel * 0.05f, 0);
+        float preHealthDiff = this.getMaxHealth() - this.getHealth();
+        ModifiableAttributeInstance health = this.getAttribute(Attributes.GENERIC_MAX_HEALTH);
+        health.removeModifier(attributeLevelMod);
+        health.addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", this.getAttributeBaseValue(Attributes.GENERIC_MAX_HEALTH) * mult, AttributeModifier.Operation.ADDITION));
+        this.setHealth(this.getMaxHealth() - preHealthDiff);
+
+        ModifiableAttributeInstance dmg = this.getAttribute(Attributes.GENERIC_ATTACK_DAMAGE);
+        dmg.removeModifier(attributeLevelMod);
+        dmg.addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", this.getAttributeBaseValue(Attributes.GENERIC_ATTACK_DAMAGE) * mult, AttributeModifier.Operation.ADDITION));
+
+        for (RegistryObject<Attribute> att : ModAttributes.ATTRIBUTES.getEntries()) {
+            if (LevelCalc.shouldStatIncreaseWithLevel(att)) {
+                ModifiableAttributeInstance inst = this.getAttribute(att.get());
+                inst.removeModifier(attributeLevelMod);
+                inst.addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", this.getAttributeBaseValue(att.get()) * mult, AttributeModifier.Operation.ADDITION));
+            }
+        }
     }
+    /*
 
     public void increaseLevel() {
         this.dataManager.set(mobLevel, Math.min(10000, this.level() + 1));
         if (!this.world.isRemote) {
             this.entityLevelUp();
             PacketHandler.sendToAll(new PacketEntityLevelUp(this.getEntityId()));
-        }
-    }
-
-    public void entityLevelUp() {
-        for (IAttributeInstance att : this.getAttributeMap().getAllAttributes())
-        {
-            if (LevelCalc.shouldStatIncreaseWithLevel(att.getAttribute()))
-            {
-                double oldValue = this.getAttributeMap().getAttributeInstance(att.getAttribute()).getBaseValue();
-                this.getAttributeMap().getAttributeInstance(att.getAttribute()).setBaseValue(LevelCalc.onEntityLevelUp(this.prop.getBaseValues().get(att.getAttribute()), oldValue, this instanceof EntityBossBase, this.genes.containsKey(att.getAttribute()) ? this.genes.get(att.getAttribute()) : 1.0f));
-                if (att.getAttribute() == SharedMonsterAttributes.MAX_HEALTH) {
-                    this.setHealth(this.getHealth() + (float)(this.getMaxHealth() - oldValue));
-                }
-            }
         }
     }
 
@@ -503,45 +510,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     @Override
     public boolean attackEntityAsMob(Entity entity) {
-        return super.attackEntityAsMob(entity);//this.attackEntityAsMobWithElement(entity, EnumElement.NONE);
+        return CombatUtils.mobAttack(this, entity);
     }
-
-    /*public boolean attackEntityAsMobWithElement(Entity entity, EnumElement element) {
-        if (entity instanceof LivingEntity) {
-            float damage = (float) this.getEntityAttribute(ItemStatAttributes.RFATTACK).getAttributeValue();
-            boolean faintChance = this.world.rand.nextInt(100) < RFCalculations.getAttributeValue(this, ItemStatAttributes.RFFAINT, (LivingEntity) entity, ItemStatAttributes.RFRESFAINT);
-            boolean critChance = this.world.rand.nextInt(100) < RFCalculations.getAttributeValue(this, ItemStatAttributes.RFCRIT, (LivingEntity) entity, ItemStatAttributes.RFRESCRIT);
-            boolean knockBackChance = this.world.rand.nextInt(100) < RFCalculations.getAttributeValue(this, ItemStatAttributes.RFKNOCK, (LivingEntity) entity, SharedMonsterAttributes.KNOCKBACK_RESISTANCE);
-            int i = knockBackChance ? 3 : 1;
-            if (!(entity instanceof IEntityBase) && !(entity instanceof PlayerEntity)) {
-                damage = LevelCalc.scaleForVanilla(damage);
-            } else {
-                damage = (faintChance ? Float.MAX_VALUE : damage);
-            }
-            boolean ignoreArmor = faintChance || critChance;
-            CustomDamage source = CustomDamage.attack(this, element, ignoreArmor ? CustomDamage.DamageType.IGNOREDEF : CustomDamage.DamageType.NORMAL, CustomDamage.KnockBackType.VANILLA, i * 0.5f - 0.2f, 5);
-            if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-                damage = 0.0f;
-            }
-            boolean flag = entity.attackEntityFrom(source, damage);
-            if (flag) {
-                if (entity instanceof LivingEntity) {
-                    RFCalculations.knockBack((LivingEntity) entity, source);
-                    this.motionX *= 0.6;
-                    this.motionZ *= 0.6;
-                }
-                float drainPercent = RFCalculations.getAttributeValue(this, ItemStatAttributes.RFDRAIN, (LivingEntity) entity, ItemStatAttributes.RFRESDRAIN) / 100.0f;
-                if (drainPercent > 0.0f) {
-                    this.setHealth(this.getHealth() + drainPercent * damage);
-                }
-                RFCalculations.spawnElementalParticle(entity, element);
-                RFCalculations.applyStatusEffects(this, (LivingEntity) entity);
-                this.applyEnchantments(this, entity);
-            }
-            return flag;
-        }
-        return false;
-    }*/
 
     @Override
     public void takeKnockback(float strength, double xRatio, double zRatio) {
@@ -657,7 +627,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     @Override
     public ItemStack getPickedResult(RayTraceResult target) {
-        return SpawnEgg.fromType(this.getType()).map(egg->new ItemStack(egg)).orElse(ItemStack.EMPTY);
+        return SpawnEgg.fromType(this.getType()).map(egg -> new ItemStack(egg)).orElse(ItemStack.EMPTY);
     }
 
     @Override

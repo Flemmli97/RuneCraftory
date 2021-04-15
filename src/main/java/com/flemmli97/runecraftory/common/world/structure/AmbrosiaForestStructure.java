@@ -31,7 +31,7 @@ public class AmbrosiaForestStructure extends Structure<NoFeatureConfig> {
         return GenerationStage.Decoration.TOP_LAYER_MODIFICATION;
     }
 
-    public static class Start extends StructureStart<NoFeatureConfig>{
+    public static class Start extends StructureStart<NoFeatureConfig> {
 
         public Start(Structure<NoFeatureConfig> struc, int chunkX, int chunkZ, MutableBoundingBox mbb, int ref, long seed) {
             super(struc, chunkX, chunkZ, mbb, ref, seed);
@@ -39,8 +39,8 @@ public class AmbrosiaForestStructure extends Structure<NoFeatureConfig> {
 
         @Override
         public void init(DynamicRegistries reg, ChunkGenerator gen, TemplateManager templateManager, int chunkX, int chunkZ, Biome biome, NoFeatureConfig conf) {
-            int x = chunkX * 16+rand.nextInt(16);
-            int z = chunkZ * 16+rand.nextInt(16);
+            int x = chunkX * 16 + rand.nextInt(16);
+            int z = chunkZ * 16 + rand.nextInt(16);
             int y = gen.func_222531_c(x, z, Heightmap.Type.WORLD_SURFACE_WG);
             BlockPos blockpos = new BlockPos(x, y, z);
             Rotation rotation = Rotation.randomRotation(this.rand);

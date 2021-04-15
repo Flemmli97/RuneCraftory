@@ -62,7 +62,7 @@ public abstract class ChargingMonster extends BaseMonster {
             super.handleAttack(anim);
     }
 
-    public void handleChargeMovement(){
+    public void handleChargeMovement() {
         this.setMotion(this.chargeMotion[0], this.getMotion().y, this.chargeMotion[2]);
     }
 

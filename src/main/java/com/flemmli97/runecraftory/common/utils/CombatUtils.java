@@ -267,6 +267,11 @@ public class CombatUtils {
         return false;
     }
 
+    public static boolean mobAttack(LivingEntity attacker, Entity target) {
+        CustomDamage source = build(attacker, target, new CustomDamage.Builder(attacker)).get();
+        return mobAttack(attacker, target, source, CombatUtils.getAttributeValue(attacker, Attributes.GENERIC_ATTACK_DAMAGE, target));
+    }
+
     public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage source, float dmg) {
         if (target.world.getDifficulty() == Difficulty.PEACEFUL && target instanceof PlayerEntity)
             return false;
@@ -278,7 +283,7 @@ public class CombatUtils {
         return false;
     }
 
-    public static CustomDamage.Builder build(LivingEntity attacker, LivingEntity target, CustomDamage.Builder builder) {
+    public static CustomDamage.Builder build(LivingEntity attacker, Entity target, CustomDamage.Builder builder) {
         boolean faintChance = attacker.world.rand.nextInt(100) < getAttributeValue(attacker, ModAttributes.RFFAINT.get(), target);
         boolean critChance = attacker.world.rand.nextInt(100) < getAttributeValue(attacker, ModAttributes.RFCRIT.get(), target);
         boolean knockBackChance = attacker.world.rand.nextInt(100) < getAttributeValue(attacker, ModAttributes.RFKNOCK.get(), target);

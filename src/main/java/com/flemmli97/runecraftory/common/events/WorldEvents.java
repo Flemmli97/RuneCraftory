@@ -95,8 +95,8 @@ public class WorldEvents {
                 event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
                         Feature.FLOWER.configure((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.INSTANCE)).tries(GenerationConfig.overworldHerbTries).build()).applyChance(GenerationConfig.overworldHerbChance).decorate(Features.Placements.SQUARE_HEIGHTMAP));
         }
-        if(types.contains(BiomeDictionary.Type.FOREST))
-            event.getGeneration().getStructures().add(()-> ModFeatures.AMBROSIA_FEATURE);
+        if (types.contains(BiomeDictionary.Type.FOREST))
+            event.getGeneration().getStructures().add(() -> ModFeatures.AMBROSIA_FEATURE);
     }
 
     @SubscribeEvent
@@ -118,13 +118,13 @@ public class WorldEvents {
 
     @SubscribeEvent
     public void worldLoad(WorldEvent.Load event) {
-        if(event.getWorld() instanceof ServerWorld) {
+        if (event.getWorld() instanceof ServerWorld) {
             ServerWorld serverWorld = (ServerWorld) event.getWorld();
-            if(serverWorld.getChunkProvider().getChunkGenerator() instanceof FlatChunkGenerator &&
-                    serverWorld.getRegistryKey().equals(World.OVERWORLD)){
+            if (serverWorld.getChunkProvider().getChunkGenerator() instanceof FlatChunkGenerator &&
+                    serverWorld.getRegistryKey().equals(World.OVERWORLD)) {
                 return;
             }
-            Map<Structure<?>, StructureSeparationSettings> map =  serverWorld.getChunkProvider().generator.getStructuresConfig().getStructures();
+            Map<Structure<?>, StructureSeparationSettings> map = serverWorld.getChunkProvider().generator.getStructuresConfig().getStructures();
             map.put(ModStructures.AMBROSIA_FOREST.get(), new StructureSeparationSettings(10, 5, 34645653));
         }
     }

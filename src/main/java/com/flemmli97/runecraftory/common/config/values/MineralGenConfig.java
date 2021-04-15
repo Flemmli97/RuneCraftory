@@ -23,7 +23,7 @@ public class MineralGenConfig {
     private Set<BiomeDictionary.Type> blackList;
     private int chance, minAmount, maxAmount, xSpread, ySpread, zSpread;
 
-    private ConfiguredFeature<?,?> bakedConf, bakedConfNether;
+    private ConfiguredFeature<?, ?> bakedConf, bakedConfNether;
 
     private MineralGenConfig(ResourceLocation block, Set<BiomeDictionary.Type> types, Set<BiomeDictionary.Type> blackList, int chance, int min, int max, int xSpread, int ySpread, int zSpread) {
         this.block = block;
@@ -77,22 +77,21 @@ public class MineralGenConfig {
         return this.zSpread;
     }
 
-    public void bake(){
-        if(this.bakedConf == null) {
+    public void bake() {
+        if (this.bakedConf == null) {
             this.bakedConf = ModFeatures.MINERALFEATURE.get()
                     .configure(new ChancedBlockCluster(new SimpleBlockStateProvider(this.getBlock().getDefaultState()), this.minAmount(), this.maxAmount(), this.xSpread(), this.ySpread(), this.zSpread())).applyChance(this.chance()).decorate(Features.Placements.SQUARE_TOP_SOLID_HEIGHTMAP);
             this.bakedConfNether = ModFeatures.MINERALFEATURE.get()
                     .configure(new ChancedBlockCluster(new SimpleBlockStateProvider(this.getBlock().getDefaultState()), this.minAmount(), this.maxAmount(), this.xSpread(), this.ySpread(), this.zSpread())).applyChance(this.chance()).decorate(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(6)));
-        }
-        else
+        } else
             throw new IllegalStateException("Feature already configured");
     }
 
-    public ConfiguredFeature<?,?> configuredFeature(){
+    public ConfiguredFeature<?, ?> configuredFeature() {
         return this.bakedConf;
     }
 
-    public ConfiguredFeature<?,?> configuredFeatureNether(){
+    public ConfiguredFeature<?, ?> configuredFeatureNether() {
         return this.bakedConfNether;
     }
 

@@ -1,0 +1,15 @@
+Before release:
+
+Add goblin + archer, sky fish, weagle, thunderbolt
+
+crafting table models
+
+recipes
+
+item stats
+
+early game food textures
+
+gui button texture
+
+hp/rp overlay texture

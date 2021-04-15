@@ -8,8 +8,8 @@ import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
@@ -29,12 +29,18 @@ public class EntityTortas extends ChargingMonster {
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{bite, spin};
 
+    protected final SwimmerPathNavigator waterNavigator;
+    protected final GroundPathNavigator groundNavigator;
+
+
     public EntityTortas(EntityType<? extends EntityTortas> type, World world) {
         super(type, world);
         this.setPathPriority(PathNodeType.WATER, 0.0F);
         this.goalSelector.addGoal(2, this.ai);
         this.moveController = new EntityTortas.MoveHelperController(this);
         this.goalSelector.removeGoal(this.swimGoal);
+        this.waterNavigator = new SwimmerPathNavigator(this, world);
+        this.groundNavigator = new GroundPathNavigator(this, world);
     }
 
     @Override
@@ -69,11 +75,16 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
+    public boolean canBeRiddenInWater() {
+        return false;
+    }
+
+    @Override
     public CreatureAttribute getCreatureAttribute() {
         return CreatureAttribute.WATER;
     }
 
-    @Override
+    /*@Override
     public void travel(Vector3d vec) {
         if (this.isServerWorld() && this.isInWater()) {
             this.moveRelative(0.1F, vec);
@@ -82,7 +93,19 @@ public class EntityTortas extends ChargingMonster {
         } else {
             super.travel(vec);
         }
+    }*/
 
+    @Override
+    public void updateSwimming() {
+        if (!this.world.isRemote) {
+            if (this.isServerWorld() && this.isInWater()) {
+                this.navigator = this.waterNavigator;
+                this.setSwimming(true);
+            } else {
+                this.navigator = this.groundNavigator;
+                this.setSwimming(false);
+            }
+        }
     }
 
     @Override
@@ -90,16 +113,14 @@ public class EntityTortas extends ChargingMonster {
         if (this.ticksExisted % 15 == 0 && this.hitEntity != null) {
             this.hitEntity.clear();
         }
-            ;//this.world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_COW_STEP, SoundCategory.HOSTILE, 1, this.getRNG().nextFloat() * 0.2F);
     }
 
     @Override
-    public void handleChargeMovement(){
-        if(this.getAttackTarget() != null) {
+    public void handleChargeMovement() {
+        if (this.getAttackTarget() != null) {
             Vector3d mot = this.getAttackTarget().getPositionVec().subtract(this.getPositionVec()).normalize().scale(0.3);
             this.setMotion(mot.x, this.getMotion().y, mot.z);
-        }
-        else
+        } else
             this.setMotion(this.chargeMotion[0], this.getMotion().y, this.chargeMotion[2]);
     }
 
@@ -121,7 +142,7 @@ public class EntityTortas extends ChargingMonster {
         return type == AnimationType.MELEE && anim.getID().equals(bite.getID());
     }
 
-    static class Navigator extends SwimmerPathNavigator{
+    static class Navigator extends SwimmerPathNavigator {
 
         public Navigator(MobEntity entity, World world) {
             super(entity, world);
@@ -158,14 +179,14 @@ public class EntityTortas extends ChargingMonster {
                 double d0 = this.posX - this.tortas.getX();
                 double d1 = this.posY - this.tortas.getY();
                 double d2 = this.posZ - this.tortas.getZ();
-                double d3 = (double) MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
+                double d3 = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
                 d1 = d1 / d3;
-                float f = (float)(MathHelper.atan2(d2, d0) * (double)(180F / (float)Math.PI)) - 90.0F;
+                float f = (float) (MathHelper.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F;
                 this.tortas.rotationYaw = this.limitAngle(this.tortas.rotationYaw, f, 90.0F);
                 this.tortas.renderYawOffset = this.tortas.rotationYaw;
-                float f1 = (float)(this.speed * this.tortas.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED));
+                float f1 = (float) (this.speed * this.tortas.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED));
                 this.tortas.setAIMoveSpeed(MathHelper.lerp(0.125F, this.tortas.getAIMoveSpeed(), f1));
-                this.tortas.setMotion(this.tortas.getMotion().add(0.0D, (double)this.tortas.getAIMoveSpeed() * d1 * 0.1D, 0.0D));
+                this.tortas.setMotion(this.tortas.getMotion().add(0.0D, (double) this.tortas.getAIMoveSpeed() * d1 * 0.1D, 0.0D));
             } else {
                 this.tortas.setAIMoveSpeed(0.0F);
             }

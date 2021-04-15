@@ -110,7 +110,7 @@ public class GenerationConfig {
         ).collect(Collectors.toList());
     }
 
-    public static List<MineralGenConfig> allMineralConfs(){
+    public static List<MineralGenConfig> allMineralConfs() {
         return mineralGen;
     }
 

@@ -34,21 +34,21 @@ public class AmbrosiaForestPiece {
 
     private static final ResourceLocation piece = new ResourceLocation(RuneCraftory.MODID, "bosses/ambrosia_forest");
 
-    public static void add(TemplateManager templateManager, BlockPos pos, Rotation rot, List<StructurePiece> pieces, Random rand){
+    public static void add(TemplateManager templateManager, BlockPos pos, Rotation rot, List<StructurePiece> pieces, Random rand) {
         pieces.add(new AmbrosiaForestPiece.Piece(templateManager, pos, rot, -3));
     }
 
-    public static class Piece extends TemplateStructurePiece{
+    public static class Piece extends TemplateStructurePiece {
 
         public Piece(TemplateManager templateManager, BlockPos pos, Rotation rot, int yoffSet) {
             super(ModStructures.AMBROSIA_PIECE, 0);
-            this.templatePosition = pos.add(0,yoffSet,0);
+            this.templatePosition = pos.add(0, yoffSet, 0);
             this.setup(templateManager, rot);
         }
 
         public Piece(TemplateManager templateManager, CompoundNBT nbt) {
             super(ModStructures.AMBROSIA_PIECE, nbt);
-            this.setup(templateManager,Rotation.valueOf(nbt.getString("Rot")));
+            this.setup(templateManager, Rotation.valueOf(nbt.getString("Rot")));
         }
 
         private void setup(TemplateManager templateManager, Rotation rot) {
@@ -66,18 +66,18 @@ public class AmbrosiaForestPiece {
 
         @Override
         public boolean generate(ISeedReader reader, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox mbb, ChunkPos chunk, BlockPos pos) {
-            boolean flag =  super.generate(reader, manager, generator, random, mbb, chunk, pos);
-            for(int x = 0; x < this.boundingBox.getXSize();x ++)
-                for(int z = 0; z < this.boundingBox.getZSize(); z++)
+            boolean flag = super.generate(reader, manager, generator, random, mbb, chunk, pos);
+            for (int x = 0; x < this.boundingBox.getXSize(); x++)
+                for (int z = 0; z < this.boundingBox.getZSize(); z++)
                     this.replaceAirAndLiquidDownwards(reader, Blocks.DIRT.getDefaultState(), x, -1, z, mbb);
             return flag;
         }
 
         @Override
         protected void handleDataMarker(String id, BlockPos pos, IServerWorld world, Random random, MutableBoundingBox mbb) {
-            if(id.startsWith(RuneCraftory.MODID+"_replace_non_air")){
-                String block = id.replace(RuneCraftory.MODID+"_replace_non_air-", "");
-                if(block.isEmpty() || world.getBlockState(pos).isIn(Blocks.AIR))
+            if (id.startsWith(RuneCraftory.MODID + "_replace_non_air")) {
+                String block = id.replace(RuneCraftory.MODID + "_replace_non_air-", "");
+                if (block.isEmpty() || world.getBlockState(pos).isIn(Blocks.AIR))
                     return;
                 try {
                     BlockStateParser parser = new BlockStateParser(new StringReader(block), false);
@@ -87,13 +87,13 @@ public class AmbrosiaForestPiece {
                     //Skip
                 }
             }
-            if(id.startsWith(RuneCraftory.MODID+"_spawner")){
-                String entity = id.replace(RuneCraftory.MODID+"_spawner-", "");
-                if(entity.isEmpty())
+            if (id.startsWith(RuneCraftory.MODID + "_spawner")) {
+                String entity = id.replace(RuneCraftory.MODID + "_spawner-", "");
+                if (entity.isEmpty())
                     return;
                 world.setBlockState(pos, ModBlocks.bossSpawner.get().getDefaultState(), 3);
                 TileEntity tile = world.getTileEntity(pos);
-                if(tile instanceof TileSpawner){
+                if (tile instanceof TileSpawner) {
                     ((TileSpawner) tile).setEntity(new ResourceLocation(entity));
                 }
             }
