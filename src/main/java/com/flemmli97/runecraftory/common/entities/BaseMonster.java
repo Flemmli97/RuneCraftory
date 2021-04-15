@@ -343,7 +343,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     //=====Level Handling
 
     public void updateStatsToLevel() {
-        float mult = Math.max(this.level() - LibConstants.baseLevel * 0.05f, 0);
+        float mult = Math.max((this.level() - LibConstants.baseLevel) * 0.05f, 0);
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
         ModifiableAttributeInstance health = this.getAttribute(Attributes.GENERIC_MAX_HEALTH);
         health.removeModifier(attributeLevelMod);
