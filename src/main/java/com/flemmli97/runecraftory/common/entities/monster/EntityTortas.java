@@ -2,20 +2,17 @@ package com.flemmli97.runecraftory.common.entities.monster;
 
 import com.flemmli97.runecraftory.common.entities.AnimationType;
 import com.flemmli97.runecraftory.common.entities.ChargingMonster;
-import com.flemmli97.runecraftory.common.entities.NewMoveController;
+import com.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
 import com.flemmli97.runecraftory.common.entities.monster.ai.ChargeAttackGoal;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.pathfinding.GroundPathNavigator;
-import net.minecraft.pathfinding.PathFinder;
-import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
-import net.minecraft.pathfinding.WalkAndSwimNodeProcessor;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
@@ -32,20 +29,15 @@ public class EntityTortas extends ChargingMonster {
     protected final SwimmerPathNavigator waterNavigator;
     protected final GroundPathNavigator groundNavigator;
 
-
     public EntityTortas(EntityType<? extends EntityTortas> type, World world) {
         super(type, world);
         this.setPathPriority(PathNodeType.WATER, 0.0F);
         this.goalSelector.addGoal(2, this.ai);
-        this.moveController = new EntityTortas.MoveHelperController(this);
+        this.moveController = new SwimWalkMoveController(this);
         this.goalSelector.removeGoal(this.swimGoal);
         this.waterNavigator = new SwimmerPathNavigator(this, world);
         this.groundNavigator = new GroundPathNavigator(this, world);
-    }
-
-    @Override
-    protected PathNavigator createNavigator(World world) {
-        return new Navigator(this, world);
+        this.wander.setExecutionChance(3);
     }
 
     @Override
@@ -65,47 +57,17 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public boolean canBreatheUnderwater() {
-        return true;
+    public AxisAlignedBB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
+        if (anim != null && anim.getID().equals(spin.getID()))
+            return this.attackAABB(anim).offset(this.getX(), this.getY(), this.getZ());
+        return super.calculateAttackAABB(anim, target);
     }
 
     @Override
-    public boolean isPushedByWater() {
-        return false;
-    }
-
-    @Override
-    public boolean canBeRiddenInWater() {
-        return false;
-    }
-
-    @Override
-    public CreatureAttribute getCreatureAttribute() {
-        return CreatureAttribute.WATER;
-    }
-
-    /*@Override
-    public void travel(Vector3d vec) {
-        if (this.isServerWorld() && this.isInWater()) {
-            this.moveRelative(0.1F, vec);
-            this.move(MoverType.SELF, this.getMotion());
-            this.setMotion(this.getMotion().scale(0.9D));
-        } else {
-            super.travel(vec);
-        }
-    }*/
-
-    @Override
-    public void updateSwimming() {
-        if (!this.world.isRemote) {
-            if (this.isServerWorld() && this.isInWater()) {
-                this.navigator = this.waterNavigator;
-                this.setSwimming(true);
-            } else {
-                this.navigator = this.groundNavigator;
-                this.setSwimming(false);
-            }
-        }
+    public int animationCooldown(AnimatedAction anim) {
+        if (anim != null && anim.getID().equals(spin.getID()))
+            return super.animationCooldown(anim) * 3;
+        return super.animationCooldown(anim);
     }
 
     @Override
@@ -142,54 +104,52 @@ public class EntityTortas extends ChargingMonster {
         return type == AnimationType.MELEE && anim.getID().equals(bite.getID());
     }
 
-    static class Navigator extends SwimmerPathNavigator {
+    //==========Water stuff
 
-        public Navigator(MobEntity entity, World world) {
-            super(entity, world);
-        }
+    @Override
+    public boolean canBreatheUnderwater() {
+        return true;
+    }
 
-        @Override
-        protected PathFinder getPathFinder(int range) {
-            this.nodeProcessor = new WalkAndSwimNodeProcessor();
-            return new PathFinder(this.nodeProcessor, range);
+    @Override
+    public boolean isPushedByWater() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeRiddenInWater() {
+        return false;
+    }
+
+    @Override
+    public CreatureAttribute getCreatureAttribute() {
+        return CreatureAttribute.WATER;
+    }
+
+    @Override
+    public void updateSwimming() {
+        if (!this.world.isRemote) {
+            if (this.isServerWorld() && this.isInWater()) {
+                this.navigator = this.waterNavigator;
+                this.setSwimming(true);
+            } else {
+                this.navigator = this.groundNavigator;
+                this.setSwimming(false);
+            }
         }
     }
 
-    static class MoveHelperController extends NewMoveController {
-
-        private final EntityTortas tortas;
-
-        public MoveHelperController(EntityTortas tortas) {
-            super(tortas);
-            this.tortas = tortas;
+    @Override
+    public void travel(Vector3d vec) {
+        if (this.isServerWorld() && this.isInWater()) {
+            this.handleWaterTravel(vec);
+        } else {
+            super.travel(vec);
         }
+    }
 
-        private void moveSpeed() {
-            if (this.tortas.isInWater()) {
-                this.tortas.setMotion(this.tortas.getMotion().add(0.0D, 0.005D, 0.0D));
-            } else if (this.tortas.onGround) {
-                this.tortas.setAIMoveSpeed(Math.max(this.tortas.getAIMoveSpeed() / 2.0F, 0.06F));
-            }
-        }
-
-        @Override
-        public void tick() {
-            this.moveSpeed();
-            if (this.action == Action.MOVE_TO && !this.tortas.getNavigator().noPath()) {
-                double d0 = this.posX - this.tortas.getX();
-                double d1 = this.posY - this.tortas.getY();
-                double d2 = this.posZ - this.tortas.getZ();
-                double d3 = MathHelper.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-                d1 = d1 / d3;
-                float f = (float) (MathHelper.atan2(d2, d0) * (double) (180F / (float) Math.PI)) - 90.0F;
-                this.tortas.rotationYaw = this.limitAngle(this.tortas.rotationYaw, f, 90.0F);
-                this.tortas.renderYawOffset = this.tortas.rotationYaw;
-                float f1 = (float) (this.speed * this.tortas.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED));
-                this.tortas.setAIMoveSpeed(MathHelper.lerp(0.125F, this.tortas.getAIMoveSpeed(), f1));
-                this.tortas.setMotion(this.tortas.getMotion().add(0.0D, (double) this.tortas.getAIMoveSpeed() * d1 * 0.1D, 0.0D));
-            } else {
-                this.tortas.setAIMoveSpeed(0.0F);
-            }
-        }
+    @Override
+    public double ridingSpeedModifier() {
+        return 0.4;
     }
 }

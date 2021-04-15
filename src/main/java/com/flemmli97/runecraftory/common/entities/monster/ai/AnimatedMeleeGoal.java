@@ -5,7 +5,6 @@ import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.entity.ai.AnimatedAttackGoal;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.vector.Vector3d;
 
 public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal<T> {
 
@@ -27,10 +26,7 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
         this.moveToWithDelay(1);
         if (this.attackMoveDelay <= 0)
             this.attackMoveDelay = this.attacker.getRNG().nextInt(50) + 100;
-        Vector3d dir = this.target.getPositionVec().subtract(this.attacker.getPositionVec()).normalize();
-        double reach = Math.min(this.attacker.maxAttackRange(this.next) * 0.5 + this.attacker.getWidth() * 0.5, Math.sqrt(this.distanceToTargetSq));
-        Vector3d attackPos = this.attacker.getPositionVec().add(dir.scale(reach));
-        AxisAlignedBB aabb = this.attacker.attackAABB(this.next).offset(attackPos.x, this.attacker.getY(), attackPos.z);
+        AxisAlignedBB aabb = this.attacker.calculateAttackAABB(this.next, this.target);
         if (aabb.intersects(this.target.getBoundingBox())) {
             this.movementDone = true;
             this.attacker.getLookController().setLookPositionWithEntity(this.target, 0, 0);

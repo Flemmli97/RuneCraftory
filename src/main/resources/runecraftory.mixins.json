@@ -6,7 +6,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "DimStrucSetAccess",
-    "FlatGenSettingAccessor"
+    "FlatGenSettingAccessor",
+    "MoveControllerAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

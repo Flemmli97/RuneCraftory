@@ -9,6 +9,7 @@ import com.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
+import com.flemmli97.runecraftory.mixin.MoveControllerAccessor;
 import com.flemmli97.tenshilib.api.entity.IAnimated;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.item.SpawnEgg;
@@ -20,6 +21,7 @@ import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.INPC;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -119,6 +121,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     });
 
     public SwimGoal swimGoal = new SwimGoal(this);
+    public RandomWalkingGoal wander = new RandomWalkingGoal(this, 1.0);
+
     public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
 
     public BaseMonster(EntityType<? extends BaseMonster> type, World world) {
@@ -155,7 +159,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         this.targetSelector.addGoal(0, this.hurt);
 
         this.goalSelector.addGoal(0, new MoveTowardsRestrictionGoal(this, 1.0));
-        this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1.0));
+        this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1.0, 50));
         this.goalSelector.addGoal(3, this.swimGoal);
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 8.0f));
@@ -274,7 +278,6 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     @Override
     public void setLevel(int level) {
-
         this.dataManager.set(mobLevel, Math.min(10000, level));
         this.updateStatsToLevel();
     }
@@ -394,24 +397,25 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     @Override
     public void updateAITasks() {
         super.updateAITasks();
-        if (!this.isPassenger() && (this.getMoveHelper() instanceof NewMoveController) && ((NewMoveController) this.getMoveHelper()).currentAction() != MovementController.Action.WAIT) {
+        if (!this.isPassenger() &&
+                ((MoveControllerAccessor) this.moveController).getAction() != MovementController.Action.WAIT) {
             this.setMoving(true);
-            /*double d0 = this.getMoveHelper().getSpeed();
-            if (d0 == 0.6D)
-            {
-                this.setSneaking(true);
-                this.setSprinting(false);
-            }
-            else if (d0 == 1.33D)
-            {
-                this.setSneaking(false);
-                this.setSprinting(true);
-            }
-            else
-            {
-                this.setSneaking(false);
-                this.setSprinting(false);
-            }*/
+        /*double d0 = this.getMoveHelper().getSpeed();
+        if (d0 == 0.6D)
+        {
+            this.setSneaking(true);
+            this.setSprinting(false);
+        }
+        else if (d0 == 1.33D)
+        {
+            this.setSneaking(false);
+            this.setSprinting(true);
+        }
+        else
+        {
+            this.setSneaking(false);
+            this.setSprinting(false);
+        }*/
             this.updateMoveAnimation();
         } else {
             this.setMoving(false);
@@ -431,8 +435,12 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         this.setFlag(2, flag);
     }
 
-    public void setDoJumping() {
-        this.doJumping = true;
+    public void setDoJumping(boolean jump) {
+        this.doJumping = jump;
+    }
+
+    public boolean doJumping() {
+        return this.doJumping;
     }
 
     @Override
@@ -564,7 +572,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
-        AxisAlignedBB aabb = this.calculateAttackAABB(anim, this.getAttackTarget());
+        AxisAlignedBB aabb = this.calculateAttackAABB(anim, target);
         this.world.getEntitiesWithinAABB(LivingEntity.class, aabb, this.attackPred).forEach(cons);
         PacketHandler.sendToAll(new S2CAttackDebug(aabb));
     }
@@ -745,13 +753,15 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
                     this.setMotion(this.getMotion().add(-0.4f * f, 0, 0.4f * f2));
                 }
             } else if (this.doJumping && this.isFlyingEntity()) {
-                double motionY = Math.min(this.getMotion().y + 0.15, 1.5);
+                double motionY = Math.min(this.getMotion().y + 0.05, this.maxAscensionSpeed());
                 this.setMotion(new Vector3d(this.getMotion().x, motionY, this.getMotion().z));
             }
             this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1f;
             if (this.canPassengerSteer()) {
                 this.setAIMoveSpeed((float) this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED));
                 this.setMoving(forward != 0 || strafing != 0);
+                forward *= this.ridingSpeedModifier();
+                strafing *= this.ridingSpeedModifier();
                 super.travel(new Vector3d(strafing, vec.y, forward));
             } else if (entitylivingbase instanceof PlayerEntity) {
                 this.setMotion(Vector3d.ZERO);
@@ -764,6 +774,55 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             this.jumpMovementFactor = 0.02f;
             super.travel(vec);
         }
+    }
+
+    public void handleWaterTravel(Vector3d vec) {
+        if (this.isBeingRidden()) {
+            LivingEntity entitylivingbase = (LivingEntity) this.getControllingPassenger();
+            this.rotationYaw = entitylivingbase.rotationYaw;
+            this.prevRotationYaw = this.rotationYaw;
+            this.rotationPitch = entitylivingbase.rotationPitch * 0.5f;
+            this.setRotation(this.rotationYaw, this.rotationPitch);
+            this.renderYawOffset = this.rotationYaw;
+            this.rotationYawHead = this.renderYawOffset;
+            float strafing = entitylivingbase.moveStrafing * 0.5f;
+            float forward = entitylivingbase.moveForward;
+            double up = 0;
+            if (forward <= 0.0f) {
+                forward *= 0.25f;
+            } else {
+                up = Math.max(0, entitylivingbase.getLookVec().y - 0.45);
+            }
+            if (this.doJumping()) {
+                up += Math.min(this.getMotion().y + 0.5, this.maxAscensionSpeed());
+            }
+            this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1f;
+            if (this.canPassengerSteer()) {
+                this.setAIMoveSpeed((float) this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED));
+                this.setMoving(forward != 0 || strafing != 0);
+                vec = new Vector3d(strafing, vec.y, forward);
+            } else if (entitylivingbase instanceof PlayerEntity) {
+                vec = Vector3d.ZERO;
+            }
+            vec = vec.add(0, up, 0);
+            this.setDoJumping(false);
+            this.method_29242(this, false);
+        }
+
+        this.moveRelative(0.1F, vec);
+        this.move(MoverType.SELF, this.getMotion());
+        this.setMotion(this.getMotion().scale(0.9D));
+    }
+
+    public double ridingSpeedModifier() {
+        return 0.9;
+    }
+
+    /**
+     * @return For flying entities: The max speed for flying up
+     */
+    public double maxAscensionSpeed() {
+        return 1.5f;
     }
 
     @Override

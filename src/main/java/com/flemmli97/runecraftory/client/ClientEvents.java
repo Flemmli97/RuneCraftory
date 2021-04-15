@@ -16,8 +16,12 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -132,5 +136,17 @@ public class ClientEvents {
             this.renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
         *///if(ConfigHandler.MainConfig.debugAttack)
         //AttackAABBRender.INST.render(event.getMatrixStack(), event.getContext().getEntityFramebuffer());
+    }
+
+    @SubscribeEvent
+    public void pathDebug(LivingEvent e) {
+        if (e.getEntity() instanceof MobEntity && !e.getEntity().world.isRemote) {
+            Path path = ((MobEntity) e.getEntity()).getNavigator().getPath();
+            if (path != null) {
+                for (int i = 0; i < path.getCurrentPathLength(); i++)
+                    ((ServerWorld) e.getEntity().world).spawnParticle(ParticleTypes.NOTE, path.getPathPointFromIndex(i).x + 0.5, path.getPathPointFromIndex(i).y + 0.2, path.getPathPointFromIndex(i).z + 0.5, 1, 0, 0, 0, 0);
+                ((ServerWorld) e.getEntity().world).spawnParticle(ParticleTypes.HEART, path.getFinalPathPoint().x + 0.5, path.getFinalPathPoint().y + 0.2, path.getFinalPathPoint().z + 0.5, 1, 0, 0, 0, 0);
+            }
+        }
     }
 }

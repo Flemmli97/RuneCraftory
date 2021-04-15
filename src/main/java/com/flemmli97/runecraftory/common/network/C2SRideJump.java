@@ -23,7 +23,7 @@ public class C2SRideJump {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity player = ctx.get().getSender();
             if (player != null && player.isPassenger() && player.getRidingEntity() instanceof BaseMonster)
-                ((BaseMonster) player.getRidingEntity()).setDoJumping();
+                ((BaseMonster) player.getRidingEntity()).setDoJumping(true);
         });
         ctx.get().setPacketHandled(true);
     }
