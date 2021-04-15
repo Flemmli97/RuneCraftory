@@ -1,9 +1,9 @@
 package com.flemmli97.runecraftory.client.model.monster;// Made with Blockbench 3.5.2
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.client.model.IItemArmModel;
 import com.flemmli97.runecraftory.common.entities.monster.EntityOrc;
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
+import com.flemmli97.tenshilib.client.model.IItemArmModel;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
@@ -173,22 +173,18 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IRe
 
     @Override
     public void transform(HandSide side, MatrixStack stack) {
-        float transX = 3;
-        float transY = 7;
+        this.body.rotate(stack);
         if (side == HandSide.LEFT) {
-            this.handLeftUp.rotationPointX -= transX;
-            this.handLeftUp.rotationPointY += transY;
             this.handLeftUp.rotate(stack);
-            this.handLeftUp.rotationPointX += transX;
-            this.handLeftUp.rotationPointY -= transY;
             this.handLeftDown.rotate(stack);
         } else {
-            this.handRightUp.rotationPointX += transX;
-            this.handRightUp.rotationPointY += transY;
             this.handRightUp.rotate(stack);
-            this.handRightUp.rotationPointX -= transX;
-            this.handRightUp.rotationPointY -= transY;
             this.handRightDown.rotate(stack);
         }
+    }
+
+    @Override
+    public void postTransform(boolean leftSide, MatrixStack stack) {
+        stack.translate(-2/16d, 3/16d, -9 / 16d);
     }
 }

@@ -12,8 +12,8 @@ import java.util.List;
 
 public abstract class ChargingMonster extends BaseMonster {
 
-    private List<LivingEntity> hitEntity;
-    private double[] chargeMotion;
+    protected List<LivingEntity> hitEntity;
+    protected double[] chargeMotion;
 
     public ChargingMonster(EntityType<? extends ChargingMonster> type, World world) {
         super(type, world);
@@ -48,7 +48,7 @@ public abstract class ChargingMonster extends BaseMonster {
             this.getNavigator().clearPath();
             if (anim.getTick() > anim.getAttackTime()) {
                 this.doWhileCharge();
-                this.setMotion(this.chargeMotion[0], this.getMotion().y, this.chargeMotion[2]);
+                this.handleChargeMovement();
                 if (this.hitEntity == null)
                     this.hitEntity = Lists.newArrayList();
                 this.mobAttack(anim, null, e -> {
@@ -60,6 +60,10 @@ public abstract class ChargingMonster extends BaseMonster {
             }
         } else
             super.handleAttack(anim);
+    }
+
+    public void handleChargeMovement(){
+        this.setMotion(this.chargeMotion[0], this.getMotion().y, this.chargeMotion[2]);
     }
 
     public void doWhileCharge() {

@@ -605,7 +605,7 @@ public class ModItems {
     public static final RegistryObject<Item> skull = mat("skull");
     public static final RegistryObject<Item> dragonBones = mat("dragon_bones");
     public static final RegistryObject<Item> tortoiseShell = mat("tortoise_shell");
-    public static final RegistryObject<Item> ammonite = mat("ammonite");
+    //public static final RegistryObject<Item> ammonite = mat("ammonite"); replaced with nautilus shell
     public static final RegistryObject<Item> rock = mat("rock");
     public static final RegistryObject<Item> stoneRound = mat("stone_round");
     public static final RegistryObject<Item> stoneTiny = mat("stone_tiny_golem");

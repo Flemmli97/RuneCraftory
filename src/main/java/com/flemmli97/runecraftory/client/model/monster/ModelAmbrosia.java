@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> implements IResetModel {
+
     public ModelRendererPlus body;
     public ModelRendererPlus head;
     public ModelRendererPlus hornFront;

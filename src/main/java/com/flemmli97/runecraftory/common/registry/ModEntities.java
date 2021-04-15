@@ -15,6 +15,7 @@ import com.flemmli97.runecraftory.common.entities.monster.EntityCluckadoodle;
 import com.flemmli97.runecraftory.common.entities.monster.EntityOrc;
 import com.flemmli97.runecraftory.common.entities.monster.EntityOrcArcher;
 import com.flemmli97.runecraftory.common.entities.monster.EntityPommePomme;
+import com.flemmli97.runecraftory.common.entities.monster.EntityTortas;
 import com.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import com.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.entities.projectiles.EntityAmbrosiaSleep;
@@ -133,6 +134,15 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic, 3)
                     .putAttributes(LibAttributes.rf_magic_defence, 4)
                     .xp(2).money(3).tamingChance(0.6f).setRidable().build());
+    public static final RegistryObject<EntityType<EntityTortas>> tortas = regMonster(EntityType.Builder.create(EntityTortas::new, EntityClassification.MONSTER).size(1.3f, 0.7f).maxTrackingRange(8), LibEntities.tortas,
+            0x5c6682, 0xa5848c,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 23)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 6)
+                    .putAttributes(LibAttributes.rf_defence, 9)
+                    .putAttributes(LibAttributes.rf_magic, 2)
+                    .putAttributes(LibAttributes.rf_magic_defence, 3)
+                    .xp(2).money(3).tamingChance(0.6f).setRidable().build());
 
     public static final RegistryObject<EntityType<EntityAmbrosia>> ambrosia = regMonster(EntityType.Builder.create(EntityAmbrosia::new, EntityClassification.MONSTER).size(0.85f, 2.3f).maxTrackingRange(8), LibEntities.ambrosia,
             0x00ff00, 0xe600e6,
@@ -165,6 +175,8 @@ public class ModEntities {
         GlobalEntityTypeAttributes.put(chipsqueek.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).build());
         GlobalEntityTypeAttributes.put(cluckadoodle.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).build());
         GlobalEntityTypeAttributes.put(pomme_pomme.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).build());
+        GlobalEntityTypeAttributes.put(tortas.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).build());
+
         GlobalEntityTypeAttributes.put(ambrosia.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).build());
     }
 

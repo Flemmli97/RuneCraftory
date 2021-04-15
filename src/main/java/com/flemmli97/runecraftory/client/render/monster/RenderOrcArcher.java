@@ -2,9 +2,9 @@ package com.flemmli97.runecraftory.client.render.monster;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.client.model.monster.ModelOrcArcher;
-import com.flemmli97.runecraftory.client.render.ItemLayer;
 import com.flemmli97.runecraftory.client.render.RenderMonster;
 import com.flemmli97.runecraftory.common.entities.monster.EntityOrcArcher;
+import com.flemmli97.tenshilib.client.render.ItemLayer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 

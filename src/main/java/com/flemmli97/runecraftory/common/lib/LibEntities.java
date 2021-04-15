@@ -18,6 +18,7 @@ public class LibEntities {
     public static final ResourceLocation chipsqueek = new ResourceLocation(RuneCraftory.MODID, "chipsqueek");
     public static final ResourceLocation cluckadoodle = new ResourceLocation(RuneCraftory.MODID, "cluckadoodle");
     public static final ResourceLocation pomme_pomme = new ResourceLocation(RuneCraftory.MODID, "pomme_pomme");
+    public static final ResourceLocation tortas = new ResourceLocation(RuneCraftory.MODID, "tortas");
 
     public static final ResourceLocation ambrosia = new ResourceLocation(RuneCraftory.MODID, "ambrosia");
 

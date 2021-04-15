@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory.data;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.enums.EnumDay;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
+import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import com.google.common.collect.Lists;
@@ -62,6 +63,7 @@ public class LangGen implements IDataProvider {
             this.add(egg, "%s" + " Spawn Egg");
         for (EnumDay day : EnumDay.values())
             this.add(day.translation(), day.toString().substring(0, 3));
+        this.add(ModEntities.tortas.get(), "Tortas");
         this.add(ModItems.armorBread.get(), "Armor Recipe Bread");
         this.add(ModItems.forgingBread.get(), "Forging Recipe Bread");
         this.add(ModItems.chemistryBread.get(), "Pharmacy Recipe Bread");

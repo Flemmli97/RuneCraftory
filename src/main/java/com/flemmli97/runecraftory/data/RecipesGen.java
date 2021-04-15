@@ -20,7 +20,7 @@ public class RecipesGen extends ForgeRecipeProvider {
     protected void registerRecipes(Consumer<IFinishedRecipe> consumer) {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.broadSword.get(), 1)
                 .addIngredient(ModTags.minerals)
-                .addCriterion("broad_sword", hasItem(ModItems.broadSword.get())).build(consumer);
+                .dummyCriterion().build(consumer);
 
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.cheapBracelet.get(), 1)
                 .addIngredient(ModTags.minerals)

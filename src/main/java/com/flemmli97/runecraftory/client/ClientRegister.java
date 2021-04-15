@@ -18,6 +18,7 @@ import com.flemmli97.runecraftory.client.render.monster.RenderCluckadoodle;
 import com.flemmli97.runecraftory.client.render.monster.RenderOrc;
 import com.flemmli97.runecraftory.client.render.monster.RenderOrcArcher;
 import com.flemmli97.runecraftory.client.render.monster.RenderPommePomme;
+import com.flemmli97.runecraftory.client.render.monster.RenderTortas;
 import com.flemmli97.runecraftory.client.render.monster.RenderWooly;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderAmbrosiaWave;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
@@ -62,6 +63,7 @@ public class ClientRegister {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.chipsqueek.get(), RenderChipsqueek::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.cluckadoodle.get(), RenderCluckadoodle::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.pomme_pomme.get(), RenderPommePomme::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.tortas.get(), RenderTortas::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.ambrosia.get(), RenderAmbrosia::new);
 

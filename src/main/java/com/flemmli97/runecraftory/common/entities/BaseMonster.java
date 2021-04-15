@@ -9,6 +9,7 @@ import com.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.tenshilib.api.entity.IAnimated;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
@@ -49,6 +50,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -113,12 +115,13 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         return mob instanceof BaseMonster && ((BaseMonster) mob).isTamed();
     });
 
+    public SwimGoal swimGoal = new SwimGoal(this);
     public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
 
     public BaseMonster(EntityType<? extends BaseMonster> type, World world) {
         super(type, world);
         this.moveController = new NewMoveController(this);
-        this.prop = MobConfig.propertiesMap.getOrDefault(type, EntityProperties.defaultProp);
+        this.prop = MobConfig.propertiesMap.getOrDefault(type.getRegistryName(), EntityProperties.defaultProp);
         this.applyAttributes();
         this.addGoal();
     }
@@ -150,7 +153,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
         this.goalSelector.addGoal(0, new MoveTowardsRestrictionGoal(this, 1.0));
         this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1.0));
-        this.goalSelector.addGoal(3, new SwimGoal(this));
+        this.goalSelector.addGoal(3, this.swimGoal);
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 8.0f));
     }
@@ -384,7 +387,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     @Override
     public void updateAITasks() {
         super.updateAITasks();
-        if (!this.isPassenger() && ((NewMoveController) this.getMoveHelper()).currentAction() != MovementController.Action.WAIT) {
+        if (!this.isPassenger() && (this.getMoveHelper() instanceof NewMoveController) && ((NewMoveController) this.getMoveHelper()).currentAction() != MovementController.Action.WAIT) {
             this.setMoving(true);
             /*double d0 = this.getMoveHelper().getSpeed();
             if (d0 == 0.6D)
@@ -652,16 +655,10 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         }
     }
 
-    /*@Override
+    @Override
     public ItemStack getPickedResult(RayTraceResult target) {
-        ResourceLocation name = EntityList.getKey(this);
-        if (name != null && EntitySpawnEggList.get(name)!=null) {
-            ItemStack stack = new ItemStack(ModItems.spawnEgg);
-            ItemSpawnEgg.applyEntityIdToItemStack(stack, name);
-            return stack;
-        }
-        return ItemStack.EMPTY;
-    }*/
+        return SpawnEgg.fromType(this.getType()).map(egg->new ItemStack(egg)).orElse(ItemStack.EMPTY);
+    }
 
     @Override
     protected ActionResultType interactMob(PlayerEntity player, Hand hand) {
