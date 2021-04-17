@@ -15,6 +15,11 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
     }
 
     @Override
+    public boolean shouldExecute() {
+        return !this.attacker.isBeingRidden() && super.shouldExecute();
+    }
+
+    @Override
     public AnimatedAction randomAttack() {
         if (this.attacker.getRNG().nextFloat() < this.attacker.attackChance(AnimationType.GENERICATTACK))
             return this.attacker.getRandomAnimation(AnimationType.MELEE);
@@ -27,6 +32,7 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
         if (this.attackMoveDelay <= 0)
             this.attackMoveDelay = this.attacker.getRNG().nextInt(50) + 100;
         AxisAlignedBB aabb = this.attacker.calculateAttackAABB(this.next, this.target);
+        //PacketHandler.sendToAll(new S2CAttackDebug(aabb, EnumAABBType.ATTEMPT));
         if (aabb.intersects(this.target.getBoundingBox())) {
             this.movementDone = true;
             this.attacker.getLookController().setLookPositionWithEntity(this.target, 0, 0);

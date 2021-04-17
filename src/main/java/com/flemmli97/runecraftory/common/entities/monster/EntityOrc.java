@@ -43,4 +43,14 @@ public class EntityOrc extends BaseMonster {
             return anim.getID().equals(melee1.getID()) || anim.getID().equals(melee2.getID());
         return false;
     }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            if (this.rand.nextInt(2) == 0)
+                this.setAnimation(melee1);
+            else
+                this.setAnimation(melee2);
+        }
+    }
 }

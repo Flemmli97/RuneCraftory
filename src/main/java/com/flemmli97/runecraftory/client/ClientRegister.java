@@ -7,18 +7,21 @@ import com.flemmli97.runecraftory.client.gui.InfoSubScreen;
 import com.flemmli97.runecraftory.client.gui.OverlayGui;
 import com.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import com.flemmli97.runecraftory.client.gui.UpgradeGui;
+import com.flemmli97.runecraftory.client.model.monster.ModelBeetle;
+import com.flemmli97.runecraftory.client.model.monster.ModelBigMuck;
+import com.flemmli97.runecraftory.client.model.monster.ModelBuffamoo;
+import com.flemmli97.runecraftory.client.model.monster.ModelChipsqueek;
+import com.flemmli97.runecraftory.client.model.monster.ModelCluckadoodle;
+import com.flemmli97.runecraftory.client.model.monster.ModelOrc;
+import com.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
+import com.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
+import com.flemmli97.runecraftory.client.model.monster.ModelTortas;
+import com.flemmli97.runecraftory.client.model.monster.ModelWeagle;
 import com.flemmli97.runecraftory.client.render.RenderGate;
+import com.flemmli97.runecraftory.client.render.RenderMonster;
 import com.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
 import com.flemmli97.runecraftory.client.render.monster.RenderAnt;
-import com.flemmli97.runecraftory.client.render.monster.RenderBeetle;
-import com.flemmli97.runecraftory.client.render.monster.RenderBigMuck;
-import com.flemmli97.runecraftory.client.render.monster.RenderBuffamoo;
-import com.flemmli97.runecraftory.client.render.monster.RenderChipsqueek;
-import com.flemmli97.runecraftory.client.render.monster.RenderCluckadoodle;
-import com.flemmli97.runecraftory.client.render.monster.RenderOrc;
 import com.flemmli97.runecraftory.client.render.monster.RenderOrcArcher;
-import com.flemmli97.runecraftory.client.render.monster.RenderPommePomme;
-import com.flemmli97.runecraftory.client.render.monster.RenderTortas;
 import com.flemmli97.runecraftory.client.render.monster.RenderWooly;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderAmbrosiaWave;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
@@ -29,6 +32,7 @@ import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
 import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.blocks.BlockMineral;
+import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import com.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -39,10 +43,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.lwjgl.glfw.GLFW;
@@ -53,17 +60,18 @@ public class ClientRegister {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.gate.get(), RenderGate::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.wooly.get(), RenderWooly::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.orc.get(), RenderOrc::new);
+        register(ModEntities.orc.get(), new ModelOrc<>());
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.orcArcher.get(), RenderOrcArcher::new);
-
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.ant.get(), RenderAnt::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.beetle.get(), RenderBeetle::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.big_muck.get(), RenderBigMuck::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.buffamoo.get(), RenderBuffamoo::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.chipsqueek.get(), RenderChipsqueek::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.cluckadoodle.get(), RenderCluckadoodle::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.pomme_pomme.get(), RenderPommePomme::new);
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.tortas.get(), RenderTortas::new);
+        register(ModEntities.beetle.get(), new ModelBeetle<>());
+        register(ModEntities.big_muck.get(), new ModelBigMuck<>());
+        register(ModEntities.buffamoo.get(), new ModelBuffamoo<>());
+        register(ModEntities.chipsqueek.get(), new ModelChipsqueek<>());
+        register(ModEntities.cluckadoodle.get(), new ModelCluckadoodle<>());
+        register(ModEntities.pomme_pomme.get(), new ModelPommePomme<>());
+        register(ModEntities.tortas.get(), new ModelTortas<>());
+        register(ModEntities.sky_fish.get(), new ModelSkyFish<>());
+        register(ModEntities.weagle.get(), new ModelWeagle<>());
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.ambrosia.get(), RenderAmbrosia::new);
 
@@ -95,11 +103,26 @@ public class ClientRegister {
             ClientRegistry.registerKeyBinding(ClientHandlers.spell2 = new KeyBinding(RuneCraftory.MODID + ".key.spell_2", GLFW.GLFW_KEY_V, RuneCraftory.MODID + ".keycategory"));
             ClientRegistry.registerKeyBinding(ClientHandlers.spell3 = new KeyBinding(RuneCraftory.MODID + ".key.spell_3", GLFW.GLFW_KEY_G, RuneCraftory.MODID + ".keycategory"));
             ClientRegistry.registerKeyBinding(ClientHandlers.spell4 = new KeyBinding(RuneCraftory.MODID + ".key.spell_4", GLFW.GLFW_KEY_B, RuneCraftory.MODID + ".keycategory"));
+            ClientRegistry.registerKeyBinding(ClientHandlers.ride0 = new KeyBinding(RuneCraftory.MODID + ".key.ride_2", GLFW.GLFW_KEY_V, RuneCraftory.MODID + ".keycategory"));
+            ClientRegistry.registerKeyBinding(ClientHandlers.ride1 = new KeyBinding(RuneCraftory.MODID + ".key.ride_3", GLFW.GLFW_KEY_G, RuneCraftory.MODID + ".keycategory"));
+            ClientRegistry.registerKeyBinding(ClientHandlers.ride2 = new KeyBinding(RuneCraftory.MODID + ".key.ride_4", GLFW.GLFW_KEY_B, RuneCraftory.MODID + ".keycategory"));
 
             ModItems.ITEMS.getEntries().forEach(reg -> {
                 if (reg.get() instanceof ItemDualBladeBase || reg.get() instanceof ItemGloveBase)
                     ItemModelsProperties.register(reg.get(), new ResourceLocation("held"), ItemModelProps.heldMainProp);
             });
         });
+    }
+
+    private static <T extends BaseMonster, M extends EntityModel<T>> IRenderFactory<? super T> getMonsterRender(M model, ResourceLocation texture) {
+        return manager -> new RenderMonster<>(manager, model, texture);
+    }
+
+    private static <T extends BaseMonster, M extends EntityModel<T>> void register(EntityType<T> reg, M model) {
+        RenderingRegistry.registerEntityRenderingHandler(reg, getMonsterRender(model, mobTexture(reg)));
+    }
+
+    public static <T extends BaseMonster> ResourceLocation mobTexture(EntityType<T> reg) {
+        return new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/" + reg.getRegistryName().getPath() + ".png");
     }
 }

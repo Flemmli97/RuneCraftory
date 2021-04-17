@@ -233,4 +233,16 @@ public class EntityAmbrosia extends BossMonster {
             }
         return 54 + this.getRNG().nextInt(22) - (this.isEnraged() ? 25 : 0) + diffAdd;
     }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            if (command == 2)
+                this.setAnimation(wave);
+            else if (command == 1)
+                this.setAnimation(sleep);
+            else
+                this.setAnimation(kick_1);
+        }
+    }
 }

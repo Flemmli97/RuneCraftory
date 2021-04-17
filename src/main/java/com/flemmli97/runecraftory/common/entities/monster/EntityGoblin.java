@@ -54,4 +54,16 @@ public class EntityGoblin extends ChargingMonster {
             return anim.getID().equals(leap.getID());
         return false;
     }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            if (command == 2)
+                this.setAnimation(stone);
+            else if (command == 1)
+                this.setAnimation(leap);
+            else
+                this.setAnimation(melee);
+        }
+    }
 }

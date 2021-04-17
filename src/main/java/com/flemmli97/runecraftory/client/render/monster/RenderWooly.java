@@ -9,16 +9,9 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderWooly<T extends EntityWooly> extends RenderMonster<T, ModelWooly<T>> {
 
-    private final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/wooly.png");
-
     public RenderWooly(EntityRendererManager renderManager) {
-        super(renderManager, new ModelWooly<>());
+        super(renderManager, new ModelWooly<>(), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/wooly.png"));
         this.layerRenderers.add(new LayerWooly<>(this));
-    }
-
-    @Override
-    public ResourceLocation getEntityTexture(T entity) {
-        return this.tex;
     }
 
 }

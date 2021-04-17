@@ -165,4 +165,16 @@ public class EntityWooly extends ChargingMonster implements IForgeShearable {
         this.setSheared(compound.getBoolean("Sheared"));
         this.dataManager.set(SPAWNSHEARED, compound.getBoolean("SpawnedSheared"));
     }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            if (command == 2)
+                this.setAnimation(kick);
+            else if (command == 1)
+                this.setAnimation(headbutt);
+            else
+                this.setAnimation(slap);
+        }
+    }
 }

@@ -64,6 +64,9 @@ public class LangGen implements IDataProvider {
         for (EnumDay day : EnumDay.values())
             this.add(day.translation(), day.toString().substring(0, 3));
         this.add(ModEntities.tortas.get(), "Tortas");
+        this.add(ModEntities.sky_fish.get(), "Sky Fish");
+        this.add(ModEntities.weagle.get(), "Weagle");
+
         this.add(ModItems.armorBread.get(), "Armor Recipe Bread");
         this.add(ModItems.forgingBread.get(), "Forging Recipe Bread");
         this.add(ModItems.chemistryBread.get(), "Pharmacy Recipe Bread");

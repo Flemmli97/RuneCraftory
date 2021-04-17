@@ -21,6 +21,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.Tags;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -34,8 +35,7 @@ public class BlockHerb extends BushBlock implements IBlockModifyLevel {
 
     public BlockHerb(AbstractBlock.Properties props, GroundTypes... types) {
         super(props);
-        for (GroundTypes type : types)
-            this.types.add(type);
+        this.types.addAll(Arrays.asList(types));
     }
 
     @Override

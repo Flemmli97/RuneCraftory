@@ -81,9 +81,11 @@ public class EntityTortas extends ChargingMonster {
     public void handleChargeMovement() {
         if (this.getAttackTarget() != null) {
             Vector3d mot = this.getAttackTarget().getPositionVec().subtract(this.getPositionVec()).normalize().scale(0.3);
-            this.setMotion(mot.x, this.getMotion().y, mot.z);
-        } else
-            this.setMotion(this.chargeMotion[0], this.getMotion().y, this.chargeMotion[2]);
+            this.setMotion(mot.x, this.isInWater() ? mot.y : this.getMotion().y, mot.z);
+        } else {
+            Vector3d look = this.getLookVec();
+            this.setMotion(look.x, look.y, look.z);
+        }
     }
 
     @Override
@@ -102,6 +104,16 @@ public class EntityTortas extends ChargingMonster {
             return anim.getID().equals(spin.getID());
         }
         return type == AnimationType.MELEE && anim.getID().equals(bite.getID());
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            if (command == 2)
+                this.setAnimation(spin);
+            else
+                this.setAnimation(bite);
+        }
     }
 
     //==========Water stuff

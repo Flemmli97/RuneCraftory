@@ -4,6 +4,7 @@ import com.flemmli97.runecraftory.api.datapack.CropProperties;
 import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.client.gui.widgets.SkillButton;
+import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
@@ -12,6 +13,7 @@ import com.flemmli97.runecraftory.common.network.C2SRideJump;
 import com.flemmli97.runecraftory.common.network.C2SSpellKey;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.google.common.collect.Lists;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.CreativeScreen;
@@ -60,6 +62,23 @@ public class ClientEvents {
             PacketHandler.sendToServer(new C2SSpellKey(3));
         }
     }
+
+    /*@SubscribeEvent
+    public void mouse(InputEvent.ClickInputEvent event){
+        if(Minecraft.getInstance().player != null) {
+            Entity ridingEntity = Minecraft.getInstance().player.getRidingEntity();
+            if (ridingEntity instanceof BaseMonster) {
+                if (event.isAttack()) {
+                    PacketHandler.sendToServer(new C2SRideAttack(0));
+                    event.setCanceled(true);
+                }
+                else if (event.isUseItem()) {
+                    PacketHandler.sendToServer(new C2SRideAttack(1));
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }*/
 
     @SubscribeEvent
     public void renderRunePoints(RenderGameOverlayEvent.Pre event) {
@@ -132,10 +151,10 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void worldRender(RenderWorldLastEvent event) {
-        /*if(WeatherData.get(Minecraft.getMinecraft().world).currentWeather()==EnumWeather.RUNEY)
-            this.renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
-        *///if(ConfigHandler.MainConfig.debugAttack)
-        //AttackAABBRender.INST.render(event.getMatrixStack(), event.getContext().getEntityFramebuffer());
+        //if(WeatherData.get(Minecraft.getMinecraft().world).currentWeather()== EnumWeather.RUNEY)
+        //    this.renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
+        if (GeneralConfig.debugAttack)
+            AttackAABBRender.INST.render(event.getMatrixStack(), Minecraft.getInstance().getBufferBuilders().getEffectVertexConsumers());
     }
 
     @SubscribeEvent

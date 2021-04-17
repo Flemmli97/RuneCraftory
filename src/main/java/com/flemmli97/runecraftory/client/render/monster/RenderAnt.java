@@ -10,15 +10,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderAnt<T extends EntityAnt> extends RenderMonster<T, ModelAnt<T>> {
 
-    private final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/ant.png");
-
     public RenderAnt(EntityRendererManager renderManager) {
-        super(renderManager, new ModelAnt<>());
-    }
-
-    @Override
-    public ResourceLocation getEntityTexture(T entity) {
-        return this.tex;
+        super(renderManager, new ModelAnt<>(), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/ant.png"));
     }
 
     @Override

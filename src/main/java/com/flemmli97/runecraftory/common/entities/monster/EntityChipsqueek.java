@@ -50,4 +50,14 @@ public class EntityChipsqueek extends ChargingMonster {
         }
         return false;
     }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            if (command == 2)
+                this.setAnimation(roll);
+            else
+                this.setAnimation(melee);
+        }
+    }
 }

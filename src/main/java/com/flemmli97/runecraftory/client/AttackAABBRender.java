@@ -1,9 +1,9 @@
 package com.flemmli97.runecraftory.client;
 
+import com.flemmli97.runecraftory.common.lib.EnumAABBType;
 import com.flemmli97.tenshilib.client.render.RenderUtils;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -16,9 +16,11 @@ public class AttackAABBRender {
 
     public static AttackAABBRender INST = new AttackAABBRender();
 
-    public void addNewAABB(AxisAlignedBB aabb, int duration) {
-        //Client tick not 20 per sec???
-        this.toAdd.add(new RenderAABB(aabb, duration));
+    private static final float[] attackRGB = new float[]{18 / 255f, 181 / 255f, 51 / 255f};
+    private static final float[] attemptRGB = new float[]{19 / 255f, 56 / 255f, 191 / 255f};
+
+    public void addNewAABB(AxisAlignedBB aabb, int duration, EnumAABBType type) {
+        this.toAdd.add(new RenderAABB(aabb, duration, type));
     }
 
     public void render(MatrixStack stack, IRenderTypeBuffer buffer) {
@@ -28,17 +30,25 @@ public class AttackAABBRender {
     }
 
     private static class RenderAABB {
+
         private final AxisAlignedBB aabb;
         private int duration;
+        private final EnumAABBType type;
 
-        public RenderAABB(AxisAlignedBB aabb, int duration) {
+        public RenderAABB(AxisAlignedBB aabb, int duration, EnumAABBType type) {
             this.aabb = aabb;
             this.duration = duration;
-
+            this.type = type;
         }
 
         public boolean render(MatrixStack stack, IRenderTypeBuffer buffer) {
-            RenderUtils.renderBoundingBox(stack, buffer, this.aabb, Minecraft.getInstance().player, Minecraft.getInstance().getRenderPartialTicks(), 1 / 18f, 1 / 181f, 1 / 51f, 1, false);
+            float[] color;
+            if (this.type == EnumAABBType.ATTEMPT) {
+                color = attemptRGB;
+            } else {
+                color = attackRGB;
+            }
+            RenderUtils.renderBoundingBox(stack, buffer, this.aabb, color[0], color[1], color[2], 1, false, true);
             return this.duration-- < 0;
         }
     }

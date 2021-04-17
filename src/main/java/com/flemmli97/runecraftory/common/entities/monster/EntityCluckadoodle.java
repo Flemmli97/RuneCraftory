@@ -73,4 +73,11 @@ public class EntityCluckadoodle extends BaseMonster {
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         return type == AnimationType.MELEE && anim.getID().equals(melee.getID());
     }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            this.setAnimation(melee);
+        }
+    }
 }

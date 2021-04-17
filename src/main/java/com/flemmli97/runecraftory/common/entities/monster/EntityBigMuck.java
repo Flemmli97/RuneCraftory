@@ -41,4 +41,14 @@ public class EntityBigMuck extends BaseMonster {
             return anim.getID().equals(slapAttack.getID()) || anim.getID().equals(sporeAttack.getID());
         return false;
     }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            if (command == 2)
+                this.setAnimation(sporeAttack);
+            else
+                this.setAnimation(slapAttack);
+        }
+    }
 }

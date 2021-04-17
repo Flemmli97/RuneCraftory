@@ -10,16 +10,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderOrcArcher<T extends EntityOrcArcher> extends RenderMonster<T, ModelOrcArcher<T>> {
 
-    private final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/orc.png");
-
     public RenderOrcArcher(EntityRendererManager renderManager) {
-        super(renderManager, new ModelOrcArcher<>());
+        super(renderManager, new ModelOrcArcher<>(), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/orc.png"));
         this.layerRenderers.add(new ItemLayer<>(this));
     }
-
-    @Override
-    public ResourceLocation getEntityTexture(T entity) {
-        return this.tex;
-    }
-
 }

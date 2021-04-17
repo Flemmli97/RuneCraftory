@@ -7,6 +7,7 @@ import com.flemmli97.runecraftory.common.lib.LibConstants;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
+import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.mixin.MoveControllerAccessor;
@@ -268,7 +269,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     @Override
     public boolean isFlyingEntity() {
-        return false;
+        return this.prop.flying();
     }
 
     @Override
@@ -587,13 +588,15 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             dir = Vector3d.fromPitchYaw(this.rotationPitch, this.rotationYaw);
         }
         Vector3d attackPos = this.getPositionVec().add(dir.scale(reach));
-        return this.attackAABB(anim).offset(attackPos.x, this.getY(), attackPos.z);
+        return this.attackAABB(anim).offset(attackPos.x, attackPos.y, attackPos.z);
     }
 
     public AxisAlignedBB attackAABB(AnimatedAction anim) {
         double range = this.maxAttackRange(anim) * 0.5;
         return new AxisAlignedBB(-range, 0, -range, range, this.getHeight(), range);
     }
+
+    public abstract void handleRidingCommand(int command);
 
     //=====Interaction
 
@@ -635,7 +638,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     @Override
     public ItemStack getPickedResult(RayTraceResult target) {
-        return SpawnEgg.fromType(this.getType()).map(egg -> new ItemStack(egg)).orElse(ItemStack.EMPTY);
+        return SpawnEgg.fromType(this.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
     }
 
     @Override
@@ -644,9 +647,9 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             return ActionResultType.PASS;
         ItemStack stack = player.getHeldItemMainhand();
         if (!stack.isEmpty() && player.isSneaking()) {
-            if (false)//(stack.getItem() == ModItems.tame) {
+            if (stack.getItem() == ModItems.tame.get()) {
                 this.tameEntity(player);
-            else if (!this.isTamed() && this.tamingTick == -1 && this.deathTime == 0) {
+            } else if (!this.isTamed() && this.tamingTick == -1 && this.deathTime == 0) {
                 boolean flag = false;
                 if (this.tamingItem() != null)
                     for (ItemStack item : this.tamingItem())
@@ -744,17 +747,26 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             if (forward <= 0.0f) {
                 forward *= 0.25f;
             }
-            if (this.doJumping && this.onGround && !this.isFlyingEntity()) {
-                this.isAirBorne = true;
-                this.jump();
-                if (forward > 0.0f) {
-                    float f = MathHelper.sin(this.rotationYaw * 0.017453292f);
-                    float f2 = MathHelper.cos(this.rotationYaw * 0.017453292f);
-                    this.setMotion(this.getMotion().add(-0.4f * f, 0, 0.4f * f2));
+            if (this.doJumping) {
+                if (this.onGround && !this.isFlyingEntity()) {
+                    this.isAirBorne = true;
+                    this.jump();
+                    if (forward > 0.0f) {
+                        float f = MathHelper.sin(this.rotationYaw * 0.017453292f);
+                        float f2 = MathHelper.cos(this.rotationYaw * 0.017453292f);
+                        this.setMotion(this.getMotion().add(-0.4f * f, 0, 0.4f * f2));
+                    }
+                } else if (this.isFlyingEntity()) {
+                    float speed = this.getAIMoveSpeed();
+                    double motionY = Math.min(this.getMotion().y + speed, this.maxAscensionSpeed());
+                    this.setMotion(new Vector3d(this.getMotion().x, motionY, this.getMotion().z));
+                    if (forward > 0.0f) {
+                        float f = MathHelper.sin(this.rotationYaw * 0.017453292f);
+                        float f2 = MathHelper.cos(this.rotationYaw * 0.017453292f);
+                        speed *= 0.5;
+                        this.setMotion(this.getMotion().add(-speed * f, 0, speed * f2));
+                    }
                 }
-            } else if (this.doJumping && this.isFlyingEntity()) {
-                double motionY = Math.min(this.getMotion().y + 0.05, this.maxAscensionSpeed());
-                this.setMotion(new Vector3d(this.getMotion().x, motionY, this.getMotion().z));
             }
             this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1f;
             if (this.canPassengerSteer()) {
@@ -791,7 +803,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             if (forward <= 0.0f) {
                 forward *= 0.25f;
             } else {
-                up = Math.max(0, entitylivingbase.getLookVec().y - 0.45);
+                up = Math.min(0, entitylivingbase.getLookVec().y + 0.45);
             }
             if (this.doJumping()) {
                 up += Math.min(this.getMotion().y + 0.5, this.maxAscensionSpeed());
@@ -815,14 +827,14 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     public double ridingSpeedModifier() {
-        return 0.9;
+        return 0.85;
     }
 
     /**
      * @return For flying entities: The max speed for flying up
      */
     public double maxAscensionSpeed() {
-        return 1.5f;
+        return this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 2;
     }
 
     @Override

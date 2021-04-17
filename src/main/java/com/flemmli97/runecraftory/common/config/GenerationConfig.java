@@ -128,11 +128,11 @@ public class GenerationConfig {
         private final Map<String, MineralGenConfigSpec> mineralSpecs = Maps.newHashMap();
         private final Map<String, HerbGenCofigSpecs> herbSpecs = Maps.newHashMap();
         private final ForgeConfigSpec.ConfigValue<Integer> overworldHerbChance;
-        public static ForgeConfigSpec.ConfigValue<Integer> overworldHerbTries;
+        public ForgeConfigSpec.ConfigValue<Integer> overworldHerbTries;
         private final ForgeConfigSpec.ConfigValue<Integer> netherHerbChance;
-        public static ForgeConfigSpec.ConfigValue<Integer> netherHerbTries;
-        public static ForgeConfigSpec.ConfigValue<Integer> endHerbChance;
-        public static ForgeConfigSpec.ConfigValue<Integer> endHerbTries;
+        public ForgeConfigSpec.ConfigValue<Integer> netherHerbTries;
+        public ForgeConfigSpec.ConfigValue<Integer> endHerbChance;
+        public ForgeConfigSpec.ConfigValue<Integer> endHerbTries;
 
         private GenerationConfigSpec(ForgeConfigSpec.Builder builder) {
             builder.push("mineral");

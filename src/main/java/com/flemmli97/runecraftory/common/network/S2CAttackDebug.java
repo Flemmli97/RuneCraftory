@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.client.AttackAABBRender;
 import com.flemmli97.runecraftory.client.ClientHandlers;
+import com.flemmli97.runecraftory.common.lib.EnumAABBType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -13,21 +14,27 @@ import java.util.function.Supplier;
 
 public class S2CAttackDebug {
 
-    public AxisAlignedBB aabb;
-    public int duration;
+    private AxisAlignedBB aabb;
+    private int duration;
+    private EnumAABBType type;
 
     public S2CAttackDebug(AxisAlignedBB aabb) {
-        this(aabb, 300);
+        this(aabb, 300, EnumAABBType.ATTACK);
     }
 
-    public S2CAttackDebug(AxisAlignedBB aabb, int duration) {
+    public S2CAttackDebug(AxisAlignedBB aabb, EnumAABBType type) {
+        this(aabb, 300, type);
+    }
+
+    public S2CAttackDebug(AxisAlignedBB aabb, int duration, EnumAABBType type) {
         this.aabb = aabb;
         this.duration = duration;
+        this.type = type;
     }
 
     public static S2CAttackDebug read(PacketBuffer buf) {
         AxisAlignedBB aabb = new AxisAlignedBB(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
-        return new S2CAttackDebug(aabb, buf.readInt());
+        return new S2CAttackDebug(aabb, buf.readInt(), buf.readEnumValue(EnumAABBType.class));
     }
 
     public static void write(S2CAttackDebug pkt, PacketBuffer buf) {
@@ -38,6 +45,7 @@ public class S2CAttackDebug {
         buf.writeDouble(pkt.aabb.minY);
         buf.writeDouble(pkt.aabb.minZ);
         buf.writeInt(pkt.duration);
+        buf.writeEnumValue(pkt.type);
     }
 
     public static void handle(S2CAttackDebug pkt, Supplier<NetworkEvent.Context> ctx) {
@@ -45,7 +53,7 @@ public class S2CAttackDebug {
             PlayerEntity player = DistExecutor.safeCallWhenOn(Dist.CLIENT, () -> ClientHandlers::getPlayer);
             if (player == null)
                 return;
-            AttackAABBRender.INST.addNewAABB(pkt.aabb, pkt.duration);
+            AttackAABBRender.INST.addNewAABB(pkt.aabb, pkt.duration, pkt.type);
         });
         ctx.get().setPacketHandled(true);
     }

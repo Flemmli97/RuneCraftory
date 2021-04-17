@@ -35,6 +35,12 @@ public class EntityAnt extends BaseMonster {
     }
 
     @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null)
+            this.setAnimation(melee);
+    }
+
+    @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         return type == AnimationType.MELEE && anim.getID().equals(melee.getID());
     }

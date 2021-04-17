@@ -22,7 +22,7 @@ public class AmbrosiaForestStructure extends Structure<NoFeatureConfig> {
     }
 
     @Override
-    public IStartFactory getStartFactory() {
+    public IStartFactory<NoFeatureConfig> getStartFactory() {
         return AmbrosiaForestStructure.Start::new;
     }
 
@@ -39,8 +39,8 @@ public class AmbrosiaForestStructure extends Structure<NoFeatureConfig> {
 
         @Override
         public void init(DynamicRegistries reg, ChunkGenerator gen, TemplateManager templateManager, int chunkX, int chunkZ, Biome biome, NoFeatureConfig conf) {
-            int x = chunkX * 16 + rand.nextInt(16);
-            int z = chunkZ * 16 + rand.nextInt(16);
+            int x = chunkX * 16 + this.rand.nextInt(16);
+            int z = chunkZ * 16 + this.rand.nextInt(16);
             int y = gen.func_222531_c(x, z, Heightmap.Type.WORLD_SURFACE_WG);
             BlockPos blockpos = new BlockPos(x, y, z);
             Rotation rotation = Rotation.randomRotation(this.rand);

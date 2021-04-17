@@ -33,6 +33,7 @@ public class PacketHandler {
         dispatcher.registerMessage(id++, C2SOpenInfo.class, C2SOpenInfo::write, C2SOpenInfo::read, C2SOpenInfo::handle);
         dispatcher.registerMessage(id++, C2SSpellKey.class, C2SSpellKey::write, C2SSpellKey::read, C2SSpellKey::handle);
         dispatcher.registerMessage(id++, S2CCapSync.class, S2CCapSync::write, S2CCapSync::read, S2CCapSync::handle);
+        dispatcher.registerMessage(id++, C2SRideAttack.class, C2SRideAttack::write, C2SRideAttack::read, C2SRideAttack::handle);
     }
 
     public static <T> void sendToClient(T message, ServerPlayerEntity player) {

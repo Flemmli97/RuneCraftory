@@ -45,4 +45,14 @@ public class EntityBeetle extends ChargingMonster {
         }
         return false;
     }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            if (command == 2)
+                this.setAnimation(chargeAttack);
+            else
+                this.setAnimation(melee);
+        }
+    }
 }

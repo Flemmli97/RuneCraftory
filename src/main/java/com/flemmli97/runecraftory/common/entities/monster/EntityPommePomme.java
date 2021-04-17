@@ -54,4 +54,14 @@ public class EntityPommePomme extends ChargingMonster {
         }
         return type == AnimationType.MELEE && anim.getID().equals(kick.getID());
     }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            if (command == 2)
+                this.setAnimation(chargeAttack);
+            else
+                this.setAnimation(kick);
+        }
+    }
 }
