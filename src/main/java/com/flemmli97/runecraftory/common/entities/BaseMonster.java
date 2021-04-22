@@ -160,7 +160,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         this.targetSelector.addGoal(0, this.hurt);
 
         this.goalSelector.addGoal(0, new MoveTowardsRestrictionGoal(this, 1.0));
-        this.goalSelector.addGoal(2, new RandomWalkingGoal(this, 1.0, 50));
+        this.goalSelector.addGoal(2, this.wander);
         this.goalSelector.addGoal(3, this.swimGoal);
         this.goalSelector.addGoal(4, new LookRandomlyGoal(this));
         this.goalSelector.addGoal(5, new LookAtGoal(this, PlayerEntity.class, 8.0f));
@@ -581,7 +581,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     public AxisAlignedBB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
         double reach = this.maxAttackRange(anim) * 0.5 + this.getWidth() * 0.5;
         Vector3d dir;
-        if (target != null) {
+        if (target != null && !this.isBeingRidden()) {
             reach = Math.min(reach, this.getDistance(target));
             dir = target.getPositionVec().subtract(this.getPositionVec()).normalize();
         } else {
@@ -736,9 +736,11 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     public void travel(Vector3d vec) {
         if (this.isBeingRidden() && this.canBeSteered() && this.getControllingPassenger() instanceof LivingEntity) {
             LivingEntity entitylivingbase = (LivingEntity) this.getControllingPassenger();
-            this.rotationYaw = entitylivingbase.rotationYaw;
+            if(this.adjustRotFromRider(entitylivingbase)) {
+                this.rotationYaw = entitylivingbase.rotationYaw;
+                this.rotationPitch = entitylivingbase.rotationPitch * 0.5f;
+            }
             this.prevRotationYaw = this.rotationYaw;
-            this.rotationPitch = entitylivingbase.rotationPitch * 0.5f;
             this.setRotation(this.rotationYaw, this.rotationPitch);
             this.renderYawOffset = this.rotationYaw;
             this.rotationYawHead = this.renderYawOffset;
@@ -783,17 +785,27 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             }
             this.method_29242(this, false);
         } else {
-            this.jumpMovementFactor = 0.02f;
-            super.travel(vec);
+            this.handleLandTravel(vec);
         }
+    }
+
+    public boolean adjustRotFromRider(LivingEntity rider){
+        return true;
+    }
+
+    public void handleLandTravel(Vector3d vec){
+        this.jumpMovementFactor = 0.02f;
+        super.travel(vec);
     }
 
     public void handleWaterTravel(Vector3d vec) {
         if (this.isBeingRidden()) {
             LivingEntity entitylivingbase = (LivingEntity) this.getControllingPassenger();
-            this.rotationYaw = entitylivingbase.rotationYaw;
+            if(this.adjustRotFromRider(entitylivingbase)) {
+                this.rotationYaw = entitylivingbase.rotationYaw;
+                this.rotationPitch = entitylivingbase.rotationPitch * 0.5f;
+            }
             this.prevRotationYaw = this.rotationYaw;
-            this.rotationPitch = entitylivingbase.rotationPitch * 0.5f;
             this.setRotation(this.rotationYaw, this.rotationPitch);
             this.renderYawOffset = this.rotationYaw;
             this.rotationYawHead = this.renderYawOffset;

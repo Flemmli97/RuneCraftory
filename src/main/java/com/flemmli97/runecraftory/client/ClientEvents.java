@@ -18,12 +18,8 @@ import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.pathfinding.Path;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -62,23 +58,6 @@ public class ClientEvents {
             PacketHandler.sendToServer(new C2SSpellKey(3));
         }
     }
-
-    /*@SubscribeEvent
-    public void mouse(InputEvent.ClickInputEvent event){
-        if(Minecraft.getInstance().player != null) {
-            Entity ridingEntity = Minecraft.getInstance().player.getRidingEntity();
-            if (ridingEntity instanceof BaseMonster) {
-                if (event.isAttack()) {
-                    PacketHandler.sendToServer(new C2SRideAttack(0));
-                    event.setCanceled(true);
-                }
-                else if (event.isUseItem()) {
-                    PacketHandler.sendToServer(new C2SRideAttack(1));
-                    event.setCanceled(true);
-                }
-            }
-        }
-    }*/
 
     @SubscribeEvent
     public void renderRunePoints(RenderGameOverlayEvent.Pre event) {
@@ -157,7 +136,7 @@ public class ClientEvents {
             AttackAABBRender.INST.render(event.getMatrixStack(), Minecraft.getInstance().getBufferBuilders().getEffectVertexConsumers());
     }
 
-    @SubscribeEvent
+    /*@SubscribeEvent
     public void pathDebug(LivingEvent e) {
         if (e.getEntity() instanceof MobEntity && !e.getEntity().world.isRemote) {
             Path path = ((MobEntity) e.getEntity()).getNavigator().getPath();
@@ -167,5 +146,5 @@ public class ClientEvents {
                 ((ServerWorld) e.getEntity().world).spawnParticle(ParticleTypes.HEART, path.getFinalPathPoint().x + 0.5, path.getFinalPathPoint().y + 0.2, path.getFinalPathPoint().z + 0.5, 1, 0, 0, 0, 0);
             }
         }
-    }
+    }*/
 }

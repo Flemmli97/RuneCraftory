@@ -20,9 +20,9 @@ public class EntityTortas extends ChargingMonster {
 
     public final ChargeAttackGoal<EntityTortas> ai = new ChargeAttackGoal<>(this);
     public static final AnimatedAction bite = new AnimatedAction(11, 6, "bite");
-    public static final AnimatedAction swim = new AnimatedAction(32, 6, "swim");
-    public static final AnimatedAction walk = new AnimatedAction(21, 5, "walk");
     public static final AnimatedAction spin = new AnimatedAction(51, 0, "spin");
+    //public static final AnimatedAction swim = new AnimatedAction(32, 6, "swim");
+    //public static final AnimatedAction walk = new AnimatedAction(21, 5, "walk");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{bite, spin};
 
@@ -37,7 +37,8 @@ public class EntityTortas extends ChargingMonster {
         this.goalSelector.removeGoal(this.swimGoal);
         this.waterNavigator = new SwimmerPathNavigator(this, world);
         this.groundNavigator = new GroundPathNavigator(this, world);
-        this.wander.setExecutionChance(3);
+        this.wander.setExecutionChance(2);
+        this.stepHeight = 1;
     }
 
     @Override
@@ -72,20 +73,38 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public void doWhileCharge() {
-        if (this.ticksExisted % 15 == 0 && this.hitEntity != null) {
+        if (this.ticksExisted % 10 == 0) {
             this.hitEntity.clear();
         }
     }
 
     @Override
-    public void handleChargeMovement() {
+    public boolean handleChargeMovement() {
+        Vector3d prevMotion = this.getMotion();
         if (this.getAttackTarget() != null) {
-            Vector3d mot = this.getAttackTarget().getPositionVec().subtract(this.getPositionVec()).normalize().scale(0.3);
-            this.setMotion(mot.x, this.isInWater() ? mot.y : this.getMotion().y, mot.z);
+            Vector3d pos = this.getPositionVec();
+            Vector3d target = this.getAttackTarget().getPositionVec();
+            Vector3d mot = target.subtract(pos.x, this.isInWater() ? pos.y : target.y, pos.z).normalize().scale(0.4);
+            this.setMotion(mot.x, mot.y, mot.z);
+            if (!this.isOnGround() && !this.isInWater())
+                this.setMotion(this.getMotion().add(0, prevMotion.y, 0));
         } else {
-            Vector3d look = this.getLookVec();
+            Vector3d look = this.getVectorForRotation(this.isInWater() ? this.rotationPitch : 0, this.rotationYaw).scale(0.4);
             this.setMotion(look.x, look.y, look.z);
+            if (!this.isOnGround() && !this.isInWater())
+                this.setMotion(this.getMotion().add(0, prevMotion.y, 0));
         }
+        return true;
+    }
+
+    @Override
+    public boolean adjustRotFromRider(LivingEntity rider){
+        return true;
+    }
+
+    @Override
+    public float chargingYaw(){
+        return this.rotationYaw;
     }
 
     @Override
@@ -104,6 +123,11 @@ public class EntityTortas extends ChargingMonster {
             return anim.getID().equals(spin.getID());
         }
         return type == AnimationType.MELEE && anim.getID().equals(bite.getID());
+    }
+
+    @Override
+    protected void jump() {
+
     }
 
     @Override
@@ -141,11 +165,13 @@ public class EntityTortas extends ChargingMonster {
     @Override
     public void updateSwimming() {
         if (!this.world.isRemote) {
-            if (this.isServerWorld() && this.isInWater()) {
+            if (this.isInWater()) {
                 this.navigator = this.waterNavigator;
+                this.wander.setExecutionChance(2);
                 this.setSwimming(true);
             } else {
                 this.navigator = this.groundNavigator;
+                this.wander.setExecutionChance(100);
                 this.setSwimming(false);
             }
         }

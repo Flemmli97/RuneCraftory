@@ -3,7 +3,6 @@ package com.flemmli97.runecraftory.common.entities.monster.ai;
 import com.flemmli97.runecraftory.common.entities.AnimationType;
 import com.flemmli97.runecraftory.common.entities.ChargingMonster;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-import net.minecraft.util.math.vector.Vector3d;
 
 public class ChargeAttackGoal<T extends ChargingMonster> extends AnimatedMeleeGoal<T> {
 
@@ -28,9 +27,9 @@ public class ChargeAttackGoal<T extends ChargingMonster> extends AnimatedMeleeGo
         if (this.attacker.isAnimOfType(this.next, AnimationType.MELEE))
             super.handlePreAttack();
         else {
-            int length = this.next.getLength();
-            Vector3d vec = this.target.getPositionVec().subtract(this.attacker.getPositionVec()).normalize().scale(this.attacker.chargingLength());
-            this.attacker.setChargeMotion(new double[]{vec.x / length, this.attacker.getY(), vec.z / length});
+            this.attacker.setChargeMotion(this.attacker.getChargeTo(this.next, this.target.getPositionVec()));
+            this.attacker.faceEntity(this.target, 360, 10);
+            this.attacker.lockYaw(this.attacker.rotationYaw);
             this.movementDone = true;
         }
     }

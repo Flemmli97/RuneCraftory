@@ -103,9 +103,6 @@ public class ClientRegister {
             ClientRegistry.registerKeyBinding(ClientHandlers.spell2 = new KeyBinding(RuneCraftory.MODID + ".key.spell_2", GLFW.GLFW_KEY_V, RuneCraftory.MODID + ".keycategory"));
             ClientRegistry.registerKeyBinding(ClientHandlers.spell3 = new KeyBinding(RuneCraftory.MODID + ".key.spell_3", GLFW.GLFW_KEY_G, RuneCraftory.MODID + ".keycategory"));
             ClientRegistry.registerKeyBinding(ClientHandlers.spell4 = new KeyBinding(RuneCraftory.MODID + ".key.spell_4", GLFW.GLFW_KEY_B, RuneCraftory.MODID + ".keycategory"));
-            ClientRegistry.registerKeyBinding(ClientHandlers.ride0 = new KeyBinding(RuneCraftory.MODID + ".key.ride_2", GLFW.GLFW_KEY_V, RuneCraftory.MODID + ".keycategory"));
-            ClientRegistry.registerKeyBinding(ClientHandlers.ride1 = new KeyBinding(RuneCraftory.MODID + ".key.ride_3", GLFW.GLFW_KEY_G, RuneCraftory.MODID + ".keycategory"));
-            ClientRegistry.registerKeyBinding(ClientHandlers.ride2 = new KeyBinding(RuneCraftory.MODID + ".key.ride_4", GLFW.GLFW_KEY_B, RuneCraftory.MODID + ".keycategory"));
 
             ModItems.ITEMS.getEntries().forEach(reg -> {
                 if (reg.get() instanceof ItemDualBladeBase || reg.get() instanceof ItemGloveBase)

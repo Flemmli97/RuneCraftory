@@ -18,9 +18,6 @@ public class ClientHandlers {
     public static KeyBinding spell2;
     public static KeyBinding spell3;
     public static KeyBinding spell4;
-    public static KeyBinding ride0;
-    public static KeyBinding ride1;
-    public static KeyBinding ride2;
 
     public static PlayerEntity getPlayer() {
         return Minecraft.getInstance().player;
@@ -29,4 +26,6 @@ public class ClientHandlers {
     public static void updateClientCalendar(PacketBuffer buffer) {
         clientCalendar.fromPacket(buffer);
     }
+
+
 }

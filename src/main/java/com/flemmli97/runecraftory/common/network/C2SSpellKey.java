@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -27,7 +28,10 @@ public class C2SSpellKey {
         ctx.get().enqueueWork(() -> {
             ServerPlayerEntity player = ctx.get().getSender();
             if (player != null) {
-                player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.getInv().useSkill(player, pkt.num));
+                if (player.getRidingEntity() instanceof BaseMonster)
+                    ((BaseMonster) player.getRidingEntity()).handleRidingCommand(pkt.num);
+                else
+                    player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.getInv().useSkill(player, pkt.num));
             }
         });
         ctx.get().setPacketHandled(true);

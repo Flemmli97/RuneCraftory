@@ -71,6 +71,16 @@ public class EntityOrcArcher extends EntityOrc {
             super.handleAttack(anim);
     }
 
+    @Override
+    public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            if (command == 2)
+                this.setAnimation(melee);
+            else
+                this.setAnimation(ranged);
+        }
+    }
+
     private void shootArrow(LivingEntity target) {
         EntityMobArrow arrow = new EntityMobArrow(this.world, this, 0.8f);
         arrow.shootAtPosition(target.getX(), target.getBodyY(0.33), target.getZ(), 1.3f, (14 - this.world.getDifficulty().getId() * 4));

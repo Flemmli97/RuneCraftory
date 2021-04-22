@@ -74,6 +74,18 @@ public class GeneralConfigSpec {
         this.randomDamage = builder.comment("If enabled damage gets a +-10% randomness.").define("Random Damage", true);
         builder.pop();
 
+        builder.push("Multipliers");
+        this.xpMultiplier = builder.comment("Gain base xp * multiplier").define("XP Multiplier", 1.0);
+        this.skillXpMultiplier = builder.comment("Gain base skill xp * multiplier").define("Skill XP Multiplier", 1.0);
+        this.tamingMultiplier = builder.comment("Increase/Decrease global taming chance").define("Taming Chance Multiplier", 1.0);
+        this.dropRateMultiplier = builder.comment("Increase/Decrease global drop chance").define("Drop Chance Multiplier", 1.0);
+        builder.pop();
+
+        builder.comment("Debug configs").push("Debug");
+        this.debugMode = builder.comment("Enable debug mode for various things").define("Debug Mode", false);
+        this.debugAttack = builder.comment("Show the attack AoE of mobs").define("Debug Attack", false);
+        builder.pop();
+
         builder.comment("Configs for player stats").push("Player Stats");
         this.startingHealth = builder.define("Starting HP", 25);
         this.startingRP = builder.define("Starting RP", 56);
@@ -112,18 +124,6 @@ public class GeneralConfigSpec {
             this.weaponProps.put(type, new WeaponTypePropertySpecs(builder, prop));
             builder.pop();
         });
-        builder.pop();
-
-        builder.push("Multipliers");
-        this.xpMultiplier = builder.comment("Gain base xp * multiplier").define("XP Multiplier", 1.0);
-        this.skillXpMultiplier = builder.comment("Gain base skill xp * multiplier").define("Skill XP Multiplier", 1.0);
-        this.tamingMultiplier = builder.comment("Increase/Decrease global taming chance").define("Taming Chance Multiplier", 1.0);
-        this.dropRateMultiplier = builder.comment("Increase/Decrease global drop chance").define("Drop Chance Multiplier", 1.0);
-        builder.pop();
-
-        builder.comment("Debug configs").push("Debug");
-        this.debugMode = builder.comment("Enable debug mode for various things").define("Debug Mode", false);
-        this.debugAttack = builder.comment("Show the attack AoE of mobs").define("Debug Attack", false);
         builder.pop();
     }
 

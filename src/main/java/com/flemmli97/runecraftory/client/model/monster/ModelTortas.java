@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.client.model.monster;// Made with Blockbench 
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.entities.monster.EntityTortas;
-import com.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
@@ -147,7 +146,7 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
     @Override
     public void setAngles(T tortas, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
-        this.neck.rotateAngleY = netHeadYaw * 0.01F;
+        this.neck.rotateAngleY = netHeadYaw * 0.003F;
         this.neck.rotateAngleX = headPitch * 0.01F;
         AnimatedAction anim = tortas.getAnimation();
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
@@ -158,7 +157,7 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
                 this.animations.doAnimation("walk", tortas.ticksExisted, partialTicks);
         }
         if (anim != null)
-            this.animations.doAnimation(anim.getID().equals(EntityAmbrosia.pollen2.getID()) ? EntityAmbrosia.pollen.getID() : anim.getID(), anim.getTick(), partialTicks);
+            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {
