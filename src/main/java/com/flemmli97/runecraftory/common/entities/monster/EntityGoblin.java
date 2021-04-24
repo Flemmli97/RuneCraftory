@@ -42,9 +42,10 @@ public class EntityGoblin extends ChargingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.getID().equals(stone.getID())) {
 
-        } else if (anim.getID().equals(leap.getID())) {
+        } else if(anim.getID().equals(leap.getID())){
 
-        } else
+        }
+        else
             super.handleAttack(anim);
     }
 
