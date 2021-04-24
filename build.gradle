@@ -4,14 +4,10 @@ buildscript {
         jcenter()
         mavenCentral()
         maven {url='https://repo.spongepowered.org/repository/maven-public'}
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
         classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-        classpath "com.wynprice.cursemaven:CurseMaven:2.1.5"
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -20,27 +16,20 @@ apply plugin: 'org.spongepowered.mixin'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply plugin: "com.wynprice.cursemaven"
 
 version = "${mcversion}-${modversion}"
-group = "com.flemmli97.${modid}"
-archivesBaseName = "RuneCraftory"
+group = "flemmli97.${modid}"
+archivesBaseName = modid
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
+mixin {
+    add sourceSets.main, "${modid}.refmap.json"
+}
+
 minecraft {
-    // The mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   Snapshot are built nightly.
-    // stable_#            Stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
     mappings channel: 'snapshot', version: mcp_mapping
 
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    //accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
-
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
             workingDirectory project.file('run')
@@ -109,10 +98,6 @@ processResources {
 repositories {
     mavenLocal()
     maven {
-        name = "CurseForge"
-        url = "https://minecraft.curseforge.com/api/maven/"
-    }
-    maven {
         name = "Unofficial Mappings"
         url 'https://www.dogforce-games.com/maven/'
     }
@@ -121,12 +106,20 @@ repositories {
         url "https://maven.tterrag.com/"
     }
     maven {
+        name = "CurseMaven"
+        url "https://www.cursemaven.com"
+    }
+    maven {
         name = "JEI"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
     maven {
         name = "TenshiLib"
         url "https://gitlab.com/api/v4/projects/21830712/packages/maven"
+    }
+    maven {
+        name = "TenshiLib"
+        url "https://maven.pkg.github.com/flemmli97/TenshiLib"
     }
 }
 
@@ -139,43 +132,49 @@ dependencies {
     compileOnly fg.deobf("${jei_dep}:api")
     runtimeOnly fg.deobf(jei_dep)
 
-    runtimeOnly fg.deobf("curse.maven:hwyla:3033593")
-    runtimeOnly fg.deobf("curse.maven:mobbattle:3053755")
+    runtimeOnly fg.deobf(waila_dep)
+    runtimeOnly fg.deobf(mobbattle_dep)
 
-    compile fg.deobf("tenshilib:TenshiLib:${tenshilib_version}")
+    compile fg.deobf(tenshilib_dep)
 }
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
     manifest {
         attributes([
-            "Specification-Title": "${modid}",
-            "Specification-Vendor": "${modid}",
+            "Specification-Title": modid,
+            "Specification-Vendor": modid,
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"${modid}",
+            "Implementation-Version": version,
+            "Implementation-Vendor" : modid,
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
             "MixinConfigs": "${modid}.mixins.json"
         ])
     }
 }
 
-// Example configuration to allow publishing using the maven-publish task
-// This is the preferred method to reobfuscate your jar file
-//jar.finalizedBy('reobfJar')
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-publish.dependsOn('reobfJar')
+jar.finalizedBy('reobfJar')
 
 publishing {
+    tasks.publish.dependsOn build
     publications {
         mavenJava(MavenPublication) {
             artifact jar
+            groupId group
+            artifactId modid
+            version project.version
         }
     }
     repositories {
         maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
+            url "https://gitlab.com/api/v4/projects/21830712/packages/maven"
+            //url "https://maven.pkg.github.com/flemmli97/RuneCraftory"
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
+                password = project.findProperty("gpr.gitlab.token") ?: System.getenv("GPR_GITLAB_TOKEN")
+                //password = project.findProperty("gpr.github.token") ?: System.getenv("GPR_TOKEN")
+            }
         }
     }
 }
