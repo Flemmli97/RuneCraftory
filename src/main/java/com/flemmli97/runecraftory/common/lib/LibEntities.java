@@ -21,8 +21,10 @@ public class LibEntities {
     public static final ResourceLocation tortas = new ResourceLocation(RuneCraftory.MODID, "tortas");
     public static final ResourceLocation sky_fish = new ResourceLocation(RuneCraftory.MODID, "sky_fish");
     public static final ResourceLocation weagle = new ResourceLocation(RuneCraftory.MODID, "weagle");
+    public static final ResourceLocation goblin = new ResourceLocation(RuneCraftory.MODID, "goblin");
 
     public static final ResourceLocation ambrosia = new ResourceLocation(RuneCraftory.MODID, "ambrosia");
+    public static final ResourceLocation thunderbolt = new ResourceLocation(RuneCraftory.MODID, "thunderbolt");
 
     public static final ResourceLocation arrow = new ResourceLocation(RuneCraftory.MODID, "arrow");
 

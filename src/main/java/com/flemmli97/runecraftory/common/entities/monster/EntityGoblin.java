@@ -10,9 +10,9 @@ import net.minecraft.world.World;
 public class EntityGoblin extends ChargingMonster {
 
     public ChargeAttackGoal<EntityGoblin> attack = new ChargeAttackGoal<>(this);
-    private static final AnimatedAction melee = new AnimatedAction(22, 14, "attack");
-    private static final AnimatedAction leap = new AnimatedAction(23, 13, "leap");
-    private static final AnimatedAction stone = new AnimatedAction(23, 13, "stone");
+    private static final AnimatedAction melee = new AnimatedAction(12, 7, "slash");
+    private static final AnimatedAction leap = new AnimatedAction(19, 6, "leap");
+    private static final AnimatedAction stone = new AnimatedAction(14, 9, "throw");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap, stone};
 
@@ -41,6 +41,8 @@ public class EntityGoblin extends ChargingMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.getID().equals(stone.getID())) {
+
+        } else if (anim.getID().equals(leap.getID())) {
 
         } else
             super.handleAttack(anim);

@@ -18,10 +18,11 @@ import net.minecraft.world.World;
 public class EntityGoblinArcher extends EntityOrc {
 
     public AnimatedRangedGoal<EntityGoblinArcher> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getHeldItemMainhand().getItem() instanceof BowItem);
-    private static final AnimatedAction bow = new AnimatedAction(19, 13, "bow");
-    private static final AnimatedAction triple = new AnimatedAction(20, 12, "triple");
+    private static final AnimatedAction bow = new AnimatedAction(15, 9, "bow");
+    private static final AnimatedAction triple = new AnimatedAction(15, 9, "triple");
+    private static final AnimatedAction kick = new AnimatedAction(11, 7, "kick");
 
-    private static final AnimatedAction[] anims = new AnimatedAction[]{bow, triple};
+    private static final AnimatedAction[] anims = new AnimatedAction[]{bow, triple, kick};
 
     public EntityGoblinArcher(EntityType<? extends EntityOrcArcher> type, World world) {
         super(type, world);

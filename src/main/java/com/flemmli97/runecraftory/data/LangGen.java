@@ -66,6 +66,7 @@ public class LangGen implements IDataProvider {
         this.add(ModEntities.tortas.get(), "Tortas");
         this.add(ModEntities.sky_fish.get(), "Sky Fish");
         this.add(ModEntities.weagle.get(), "Weagle");
+        this.add(ModEntities.goblin.get(), "Goblin");
 
         this.add(ModItems.armorBread.get(), "Armor Recipe Bread");
         this.add(ModItems.forgingBread.get(), "Forging Recipe Bread");

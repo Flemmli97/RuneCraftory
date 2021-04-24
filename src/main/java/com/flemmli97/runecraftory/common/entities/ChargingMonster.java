@@ -44,7 +44,7 @@ public abstract class ChargingMonster extends BaseMonster {
         }
     }
 
-    public float chargingYaw(){
+    public float chargingYaw() {
         return this.isBeingRidden() ? this.rotationYaw : this.dataManager.get(lockedYaw);
     }
 
@@ -91,7 +91,7 @@ public abstract class ChargingMonster extends BaseMonster {
     }
 
     @Override
-    public boolean adjustRotFromRider(LivingEntity rider){
+    public boolean adjustRotFromRider(LivingEntity rider) {
         AnimatedAction anim = this.getAnimation();
         return anim == null || !this.isAnimOfType(anim, AnimationType.CHARGE);
     }
@@ -102,7 +102,7 @@ public abstract class ChargingMonster extends BaseMonster {
             if (anim != null && this.isAnimOfType(anim, AnimationType.CHARGE)) {
                 this.prevStepHeight = this.stepHeight;
                 this.stepHeight = Math.max(1.5f, 1f + this.stepHeight);
-                if(this.isBeingRidden()){
+                if (this.isBeingRidden()) {
                     this.setChargeMotion(this.getChargeTo(anim, this.getPositionVec().add(this.getLookVec())));
                 }
             } else if (this.prevStepHeight != -1) {
@@ -120,13 +120,13 @@ public abstract class ChargingMonster extends BaseMonster {
         return 6;
     }
 
-    public double[] getChargeTo(AnimatedAction anim, Vector3d pos){
+    public double[] getChargeTo(AnimatedAction anim, Vector3d pos) {
         int length = anim.getLength();
         Vector3d vec = pos.subtract(this.getPositionVec()).normalize().scale(this.chargingLength());
         return new double[]{vec.x / length, this.getY(), vec.z / length};
     }
 
-    public void lockYaw(float yaw){
+    public void lockYaw(float yaw) {
         this.dataManager.set(lockedYaw, yaw);
     }
 }

@@ -98,12 +98,12 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public boolean adjustRotFromRider(LivingEntity rider){
+    public boolean adjustRotFromRider(LivingEntity rider) {
         return true;
     }
 
     @Override
-    public float chargingYaw(){
+    public float chargingYaw() {
         return this.rotationYaw;
     }
 
@@ -126,8 +126,7 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    protected void jump() {
-
+    public void setDoJumping(boolean jump) {
     }
 
     @Override

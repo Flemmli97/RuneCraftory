@@ -593,7 +593,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     public AxisAlignedBB attackAABB(AnimatedAction anim) {
         double range = this.maxAttackRange(anim) * 0.5;
-        return new AxisAlignedBB(-range, 0, -range, range, this.getHeight(), range);
+        return new AxisAlignedBB(-range, -0.02, -range, range, this.getHeight() + 0.02, range);
     }
 
     public abstract void handleRidingCommand(int command);
@@ -736,7 +736,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     public void travel(Vector3d vec) {
         if (this.isBeingRidden() && this.canBeSteered() && this.getControllingPassenger() instanceof LivingEntity) {
             LivingEntity entitylivingbase = (LivingEntity) this.getControllingPassenger();
-            if(this.adjustRotFromRider(entitylivingbase)) {
+            if (this.adjustRotFromRider(entitylivingbase)) {
                 this.rotationYaw = entitylivingbase.rotationYaw;
                 this.rotationPitch = entitylivingbase.rotationPitch * 0.5f;
             }
@@ -789,11 +789,11 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         }
     }
 
-    public boolean adjustRotFromRider(LivingEntity rider){
+    public boolean adjustRotFromRider(LivingEntity rider) {
         return true;
     }
 
-    public void handleLandTravel(Vector3d vec){
+    public void handleLandTravel(Vector3d vec) {
         this.jumpMovementFactor = 0.02f;
         super.travel(vec);
     }
@@ -801,7 +801,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     public void handleWaterTravel(Vector3d vec) {
         if (this.isBeingRidden()) {
             LivingEntity entitylivingbase = (LivingEntity) this.getControllingPassenger();
-            if(this.adjustRotFromRider(entitylivingbase)) {
+            if (this.adjustRotFromRider(entitylivingbase)) {
                 this.rotationYaw = entitylivingbase.rotationYaw;
                 this.rotationPitch = entitylivingbase.rotationPitch * 0.5f;
             }

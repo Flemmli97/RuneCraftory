@@ -12,6 +12,7 @@ import com.flemmli97.runecraftory.common.entities.monster.EntityBigMuck;
 import com.flemmli97.runecraftory.common.entities.monster.EntityBuffamoo;
 import com.flemmli97.runecraftory.common.entities.monster.EntityChipsqueek;
 import com.flemmli97.runecraftory.common.entities.monster.EntityCluckadoodle;
+import com.flemmli97.runecraftory.common.entities.monster.EntityGoblin;
 import com.flemmli97.runecraftory.common.entities.monster.EntityOrc;
 import com.flemmli97.runecraftory.common.entities.monster.EntityOrcArcher;
 import com.flemmli97.runecraftory.common.entities.monster.EntityPommePomme;
@@ -20,6 +21,7 @@ import com.flemmli97.runecraftory.common.entities.monster.EntityTortas;
 import com.flemmli97.runecraftory.common.entities.monster.EntityWeagle;
 import com.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import com.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
+import com.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
 import com.flemmli97.runecraftory.common.entities.projectiles.EntityAmbrosiaSleep;
 import com.flemmli97.runecraftory.common.entities.projectiles.EntityAmbrosiaWave;
 import com.flemmli97.runecraftory.common.entities.projectiles.EntityButterfly;
@@ -164,6 +166,15 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic, 2)
                     .putAttributes(LibAttributes.rf_magic_defence, 3)
                     .xp(2).money(3).tamingChance(0.6f).setRidable().setFlying().build());
+    public static final RegistryObject<EntityType<EntityGoblin>> goblin = regMonster(EntityType.Builder.create(EntityGoblin::new, EntityClassification.MONSTER).size(0.6f, 1.5f).maxTrackingRange(8), LibEntities.goblin,
+            0x5c6682, 0xa5848c,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 23)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 6)
+                    .putAttributes(LibAttributes.rf_defence, 9)
+                    .putAttributes(LibAttributes.rf_magic, 2)
+                    .putAttributes(LibAttributes.rf_magic_defence, 3)
+                    .xp(2).money(3).tamingChance(0.6f).setRidable().build());
 
     public static final RegistryObject<EntityType<EntityAmbrosia>> ambrosia = regMonster(EntityType.Builder.create(EntityAmbrosia::new, EntityClassification.MONSTER).size(0.85f, 2.3f).maxTrackingRange(8), LibEntities.ambrosia,
             0x00ff00, 0xe600e6,
@@ -175,6 +186,16 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic_defence, 4)
                     .putAttributes(LibAttributes.rf_res_earth, 25)
                     .xp(2).money(3).tamingChance(0.6f).setRidable().setFlying().build());
+    public static final RegistryObject<EntityType<EntityThunderbolt>> thunderbolt = regMonster(EntityType.Builder.create(EntityThunderbolt::new, EntityClassification.MONSTER).size(1.6f, 2f).maxTrackingRange(8), LibEntities.thunderbolt,
+            0x00ff00, 0xe600e6,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 150)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 10)
+                    .putAttributes(LibAttributes.rf_defence, 5)
+                    .putAttributes(LibAttributes.rf_magic, 12)
+                    .putAttributes(LibAttributes.rf_magic_defence, 4)
+                    .putAttributes(LibAttributes.rf_res_earth, 25)
+                    .xp(2).money(3).tamingChance(0.6f).setRidable().build());
 
     public static final RegistryObject<EntityType<EntityMobArrow>> arrow = reg(EntityType.Builder.<EntityMobArrow>create(EntityMobArrow::new, EntityClassification.MISC).size(0.5F, 0.5F).maxTrackingRange(4).trackingTickInterval(20), LibEntities.arrow);
 
@@ -199,8 +220,10 @@ public class ModEntities {
         GlobalEntityTypeAttributes.put(tortas.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).build());
         GlobalEntityTypeAttributes.put(sky_fish.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).build());
         GlobalEntityTypeAttributes.put(weagle.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).add(Attributes.GENERIC_FLYING_SPEED).build());
+        GlobalEntityTypeAttributes.put(goblin.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).build());
 
         GlobalEntityTypeAttributes.put(ambrosia.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).build());
+        GlobalEntityTypeAttributes.put(thunderbolt.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).build());
     }
 
     public static <V extends Entity> RegistryObject<EntityType<V>> reg(EntityType.Builder<V> v, ResourceLocation name) {
