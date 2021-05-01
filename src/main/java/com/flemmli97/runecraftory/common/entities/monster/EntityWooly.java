@@ -111,7 +111,7 @@ public class EntityWooly extends ChargingMonster implements IForgeShearable {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.CHARGE)
-            return anim.getID().equals(kick.getID()) && this.getRNG().nextFloat() < 0.5;
+            return anim.getID().equals(kick.getID());
         else if (type == AnimationType.MELEE)
             return anim.getID().equals(slap.getID()) || anim.getID().equals(headbutt.getID());
         return false;

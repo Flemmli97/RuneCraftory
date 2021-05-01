@@ -130,7 +130,7 @@ public class ModelCluckadoodle<T extends EntityCluckadoodle> extends EntityModel
 
         AnimatedAction anim = cluckadoodle.getAnimation();
         if (anim != null)
-            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

@@ -111,7 +111,7 @@ public class ModelPommePomme<T extends EntityPommePomme> extends EntityModel<T> 
                 if (anim.getTick() > anim.getAttackTime())
                     this.animations.doAnimation(anim.getID(), anim.getTick() - anim.getAttackTime(), partialTicks);
             } else
-                this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+                this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
         }
     }
 

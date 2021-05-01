@@ -117,7 +117,7 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
             } else
                 this.animations.doAnimation("flyIddle", weagle.ticksExisted, partialTicks);
         } else
-            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

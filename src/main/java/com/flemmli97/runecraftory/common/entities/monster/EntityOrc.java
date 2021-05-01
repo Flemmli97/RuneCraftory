@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 public class EntityOrc extends BaseMonster {
 
     public AnimatedMeleeGoal<EntityOrc> attack = new AnimatedMeleeGoal<>(this);
-    private static final AnimatedAction melee1 = new AnimatedAction(22, 14, "attack1");
-    private static final AnimatedAction melee2 = new AnimatedAction(23, 13, "attack2");
+    private static final AnimatedAction melee1 = new AnimatedAction(22, 14, "attack_1");
+    private static final AnimatedAction melee2 = new AnimatedAction(23, 13, "attack_2");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee1, melee2};
 

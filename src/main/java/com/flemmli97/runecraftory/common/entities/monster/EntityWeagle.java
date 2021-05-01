@@ -6,9 +6,11 @@ import com.flemmli97.runecraftory.common.entities.monster.ai.AirWanderGoal;
 import com.flemmli97.runecraftory.common.entities.monster.ai.AnimatedRangedGoal;
 import com.flemmli97.runecraftory.common.entities.monster.ai.FloatingFlyNavigator;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.controller.FlyingMovementController;
 import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityWeagle extends BaseMonster {
@@ -67,5 +69,9 @@ public class EntityWeagle extends BaseMonster {
                     break;
             }
         }
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 }

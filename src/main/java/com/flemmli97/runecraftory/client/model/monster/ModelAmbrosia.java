@@ -200,7 +200,7 @@ public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> impl
         }
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
         if (anim != null)
-            this.animations.doAnimation(anim.getID().equals(EntityAmbrosia.pollen2.getID()) ? EntityAmbrosia.pollen.getID() : anim.getID(), anim.getTick(), partialTicks);
+            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

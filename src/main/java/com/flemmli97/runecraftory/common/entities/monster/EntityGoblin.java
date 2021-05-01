@@ -3,8 +3,12 @@ package com.flemmli97.runecraftory.common.entities.monster;
 import com.flemmli97.runecraftory.common.entities.AnimationType;
 import com.flemmli97.runecraftory.common.entities.ChargingMonster;
 import com.flemmli97.runecraftory.common.entities.monster.ai.ChargeAttackGoal;
+import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.entity.EntityType;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityGoblin extends ChargingMonster {
@@ -19,6 +23,11 @@ public class EntityGoblin extends ChargingMonster {
     public EntityGoblin(EntityType<? extends EntityGoblin> type, World world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
+    }
+
+    @Override
+    protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+        this.setItemStackToSlot(EquipmentSlotType.MAINHAND, new ItemStack(ModItems.steelSword.get()));
     }
 
     @Override
@@ -42,10 +51,9 @@ public class EntityGoblin extends ChargingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.getID().equals(stone.getID())) {
 
-        } else if(anim.getID().equals(leap.getID())){
+        } else if (anim.getID().equals(leap.getID())) {
 
-        }
-        else
+        } else
             super.handleAttack(anim);
     }
 

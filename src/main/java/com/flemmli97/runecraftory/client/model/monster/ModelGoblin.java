@@ -6,6 +6,7 @@ package com.flemmli97.runecraftory.client.model.monster;// Made with Blockbench 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.entities.monster.EntityGoblin;
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
+import com.flemmli97.tenshilib.client.model.IItemArmModel;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
@@ -13,10 +14,11 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.model.EntityModel;
+import net.minecraft.util.HandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implements IResetModel {
+public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implements IResetModel, IItemArmModel {
 
     public ModelRendererPlus body;
     public ModelRendererPlus leftArm;
@@ -140,7 +142,7 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
 
         AnimatedAction anim = goblin.getAnimation();
         if (anim != null)
-            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {
@@ -151,5 +153,22 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
     public void resetModel() {
         this.body.reset();
         this.resetChild(this.body);
+    }
+
+    @Override
+    public void transform(HandSide side, MatrixStack stack) {
+        this.body.rotate(stack);
+        if (side == HandSide.LEFT) {
+            this.leftArm.rotate(stack);
+            this.leftArmDown.rotate(stack);
+        } else {
+            this.rightArm.rotate(stack);
+            this.rightArmDown.rotate(stack);
+        }
+    }
+
+    @Override
+    public void postTransform(boolean leftSide, MatrixStack stack) {
+        stack.translate(leftSide ? 1 : -1 / 16d, 2 / 16d, -4 / 16d);
     }
 }

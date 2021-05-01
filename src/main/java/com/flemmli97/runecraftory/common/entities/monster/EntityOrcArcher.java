@@ -83,7 +83,7 @@ public class EntityOrcArcher extends EntityOrc {
 
     private void shootArrow(LivingEntity target) {
         EntityMobArrow arrow = new EntityMobArrow(this.world, this, 0.8f);
-        arrow.shootAtPosition(target.getX(), target.getBodyY(0.33), target.getZ(), 1.3f, (14 - this.world.getDifficulty().getId() * 4));
+        arrow.shootAtEntity(target, 1.3f, 14 - this.world.getDifficulty().getId() * 4, 0.2f);
         this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
         this.world.addEntity(arrow);
     }

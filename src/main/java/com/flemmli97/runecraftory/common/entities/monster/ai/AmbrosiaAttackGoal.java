@@ -7,12 +7,12 @@ import com.flemmli97.tenshilib.common.entity.ai.AnimatedAttackGoal;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 
-public class AmbrosiaAttackGoal extends AnimatedAttackGoal<EntityAmbrosia> {
+public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttackGoal<T> {
 
     private int moveDelay;
     private boolean moveFlag, iddleFlag, clockwise;
 
-    public AmbrosiaAttackGoal(EntityAmbrosia entity) {
+    public AmbrosiaAttackGoal(T entity) {
         super(entity);
     }
 

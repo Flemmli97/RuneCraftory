@@ -158,7 +158,7 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IRe
             this.animations.doAnimation("walk", orc.ticksExisted, partialTicks);
         AnimatedAction anim = orc.getAnimation();
         if (anim != null)
-            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {
@@ -185,6 +185,6 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IRe
 
     @Override
     public void postTransform(boolean leftSide, MatrixStack stack) {
-        stack.translate(-2 / 16d, 3 / 16d, -9 / 16d);
+        stack.translate(leftSide ? 2 : -2 / 16d, 3 / 16d, -9 / 16d);
     }
 }

@@ -188,7 +188,7 @@ public class ModelAnt<T extends EntityAnt> extends EntityModel<T> implements IRe
 
         AnimatedAction anim = ant.getAnimation();
         if (anim != null)
-            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

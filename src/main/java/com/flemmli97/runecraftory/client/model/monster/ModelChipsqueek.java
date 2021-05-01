@@ -149,7 +149,7 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
 
         AnimatedAction anim = chipsqueek.getAnimation();
         if (anim != null)
-            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

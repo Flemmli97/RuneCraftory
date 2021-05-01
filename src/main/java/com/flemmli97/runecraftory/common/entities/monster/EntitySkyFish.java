@@ -7,6 +7,7 @@ import com.flemmli97.runecraftory.common.entities.monster.ai.AirWanderGoal;
 import com.flemmli97.runecraftory.common.entities.monster.ai.AnimatedRangedGoal;
 import com.flemmli97.runecraftory.common.entities.monster.ai.FloatingFlyNavigator;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
@@ -93,6 +94,10 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     public boolean handleFallDamage(float distance, float damageMultiplier) {
         return false;
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
     //==========Water stuff

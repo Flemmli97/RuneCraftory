@@ -115,7 +115,7 @@ public class ModelSkyFish<T extends EntitySkyFish> extends EntityModel<T> implem
         if (anim == null) {
             this.animations.doAnimation("swim", fish.ticksExisted, partialTicks);
         } else
-            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

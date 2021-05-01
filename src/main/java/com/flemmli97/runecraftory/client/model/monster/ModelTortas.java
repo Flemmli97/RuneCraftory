@@ -157,7 +157,7 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
                 this.animations.doAnimation("walk", tortas.ticksExisted, partialTicks);
         }
         if (anim != null)
-            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

@@ -198,7 +198,7 @@ public class ModelBuffamoo<T extends EntityBuffamoo> extends EntityModel<T> impl
 
         AnimatedAction anim = buffamoo.getAnimation();
         if (anim != null)
-            this.animations.doAnimation(anim.getID(), anim.getTick(), partialTicks);
+            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

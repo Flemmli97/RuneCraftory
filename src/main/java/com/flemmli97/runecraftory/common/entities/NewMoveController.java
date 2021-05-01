@@ -45,7 +45,6 @@ public class NewMoveController extends MovementController {
                 int y = MathHelper.floor(this.mob.getY());
                 int z = MathHelper.floor(this.mob.getZ() + (double) f8 / len);
                 PathNodeType node = nodeprocessor != null ? nodeprocessor.getPathNodeType(this.mob.world, x, y, z) : PathNodeType.OPEN;
-                //System.out.printf("%s %d %d %d \n", node, x, y, z);
                 if (node == PathNodeType.BLOCKED) {
                     int yAdd = 0;
                     while (yAdd < this.mob.stepHeight) {

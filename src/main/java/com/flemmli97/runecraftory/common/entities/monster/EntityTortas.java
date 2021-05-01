@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.common.entities.ChargingMonster;
 import com.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
 import com.flemmli97.runecraftory.common.entities.monster.ai.ChargeAttackGoal;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,6 +14,7 @@ import net.minecraft.pathfinding.GroundPathNavigator;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.SwimmerPathNavigator;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
@@ -137,6 +139,10 @@ public class EntityTortas extends ChargingMonster {
             else
                 this.setAnimation(bite);
         }
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
     //==========Water stuff

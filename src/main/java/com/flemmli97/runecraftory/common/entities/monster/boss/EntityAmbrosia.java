@@ -33,7 +33,7 @@ public class EntityAmbrosia extends BossMonster {
     public static final AnimatedAction sleep = new AnimatedAction(15, 5, "sleep");
     //2 spinning changing direction between them. also scatters earth damage pollen while doing it
     public static final AnimatedAction pollen = new AnimatedAction(15, 5, "pollen");
-    public static final AnimatedAction pollen2 = new AnimatedAction(15, 5, "pollen_2");
+    public static final AnimatedAction pollen2 = new AnimatedAction(15, 5, "pollen_2", "pollen");
 
     public static final AnimatedAction defeat = new AnimatedAction(204, 150, "defeat");
     public static final AnimatedAction angry = new AnimatedAction(48, 0, "angry");
@@ -47,7 +47,8 @@ public class EntityAmbrosia extends BossMonster {
 
     public EntityAmbrosia(EntityType<? extends EntityAmbrosia> type, World world) {
         super(type, world);
-        this.goalSelector.addGoal(1, this.attack);
+        if (!world.isRemote)
+            this.goalSelector.addGoal(1, this.attack);
     }
 
     @Override

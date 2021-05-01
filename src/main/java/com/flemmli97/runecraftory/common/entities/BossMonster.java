@@ -17,7 +17,7 @@ import net.minecraft.world.server.ServerBossInfo;
 import java.util.Set;
 
 public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
-    private final ServerBossInfo bossInfo = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.GREEN, BossInfo.Overlay.PROGRESS);
+    protected final ServerBossInfo bossInfo = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.GREEN, BossInfo.Overlay.PROGRESS);
     private static final DataParameter<Boolean> enraged = EntityDataManager.createKey(BossMonster.class, DataSerializers.BOOLEAN);
 
     public BossMonster(EntityType<? extends BossMonster> type, World world) {
@@ -54,7 +54,6 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         super.damageEntity(damageSrc, damageAmount);
         if (!this.isTamed() && this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged()) {
             this.setEnraged(true, false);
-
         }
     }
 

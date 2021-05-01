@@ -12,7 +12,6 @@ import com.flemmli97.runecraftory.client.model.monster.ModelBigMuck;
 import com.flemmli97.runecraftory.client.model.monster.ModelBuffamoo;
 import com.flemmli97.runecraftory.client.model.monster.ModelChipsqueek;
 import com.flemmli97.runecraftory.client.model.monster.ModelCluckadoodle;
-import com.flemmli97.runecraftory.client.model.monster.ModelGoblin;
 import com.flemmli97.runecraftory.client.model.monster.ModelOrc;
 import com.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
 import com.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
@@ -22,6 +21,7 @@ import com.flemmli97.runecraftory.client.render.RenderGate;
 import com.flemmli97.runecraftory.client.render.RenderMonster;
 import com.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
 import com.flemmli97.runecraftory.client.render.monster.RenderAnt;
+import com.flemmli97.runecraftory.client.render.monster.RenderGoblin;
 import com.flemmli97.runecraftory.client.render.monster.RenderOrcArcher;
 import com.flemmli97.runecraftory.client.render.monster.RenderThunderbolt;
 import com.flemmli97.runecraftory.client.render.monster.RenderWooly;
@@ -74,7 +74,8 @@ public class ClientRegister {
         register(ModEntities.tortas.get(), new ModelTortas<>());
         register(ModEntities.sky_fish.get(), new ModelSkyFish<>());
         register(ModEntities.weagle.get(), new ModelWeagle<>());
-        register(ModEntities.goblin.get(), new ModelGoblin<>());
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.goblin.get(), RenderGoblin::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.goblinArcher.get(), RenderGoblin::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.ambrosia.get(), RenderAmbrosia::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.thunderbolt.get(), RenderThunderbolt::new);
