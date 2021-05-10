@@ -4,6 +4,7 @@ import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
+import com.flemmli97.runecraftory.common.registry.ModParticles;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
 import com.flemmli97.tenshilib.common.entity.EntityUtil;
@@ -12,7 +13,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
-import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.world.World;
@@ -78,8 +78,7 @@ public class EntityAmbrosiaSleep extends Entity {
         ++this.livingTick;
         if (this.world.isRemote) {
             for (int i = 0; i < 4; i++) {
-                this.world.addParticle(ParticleTypes.FLAME, this.getX(), this.getY() + 0.35, this.getZ(), this.rand.nextGaussian() * 0.008D, Math.abs(this.rand.nextGaussian() * 0.025), this.rand.nextGaussian() * 0.009D);
-                //Particles.spawnParticle(LibParticles.particleFlame, this.world, this.posX, this.posY + 0.35, this.posZ, this.rand.nextGaussian() * 0.008D, Math.abs(this.rand.nextGaussian() * 0.025), this.rand.nextGaussian() * 0.009D);
+                this.world.addParticle(ModParticles.puffParticle.get(), this.getX(), this.getY() + 0.35, this.getZ(), this.rand.nextGaussian() * 0.008D, Math.abs(this.rand.nextGaussian() * 0.025), this.rand.nextGaussian() * 0.009D);
             }
         }
         if (this.livingTick > 40) {

@@ -24,6 +24,7 @@ public class DataEvent {
             data.addProvider(new BlockStatesGen(data, ignore));
             data.addProvider(new ItemModels(data, event.getExistingFileHelper()));
             data.addProvider(new LangGen(data, event.getExistingFileHelper()));
+            data.addProvider(new ParticleGen(data));
         }
         if (event.includeServer()) {
             BlockTagGen blocks = new BlockTagGen(data, event.getExistingFileHelper());

@@ -2,7 +2,7 @@ package com.flemmli97.runecraftory.common.spells;
 
 import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
-import com.flemmli97.runecraftory.common.registry.ModPotions;
+import com.flemmli97.runecraftory.common.registry.ModEffects;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -39,7 +39,7 @@ public class UnsealSpell extends Spell {
             if (level >= 3) {
 
             }
-            entity.removePotionEffect(ModPotions.seal.get());
+            entity.removePotionEffect(ModEffects.seal.get());
             return true;
         }
         return false;

@@ -27,7 +27,8 @@ import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModFeatures;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModLootModifier;
-import com.flemmli97.runecraftory.common.registry.ModPotions;
+import com.flemmli97.runecraftory.common.registry.ModParticles;
+import com.flemmli97.runecraftory.common.registry.ModEffects;
 import com.flemmli97.runecraftory.common.registry.ModSpells;
 import com.flemmli97.runecraftory.common.registry.ModStructures;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
@@ -102,7 +103,7 @@ public class RuneCraftory {
         ModItems.ITEMS.register(modBus);
         ModEntities.ENTITIES.register(modBus);
         ModAttributes.ATTRIBUTES.register(modBus);
-        ModPotions.EFFECTS.register(modBus);
+        ModEffects.EFFECTS.register(modBus);
         ModCrafting.RECIPESERIALIZER.register(modBus);
         modBus.addGenericListener(IRecipeSerializer.class, ModCrafting::register);
         ModLootModifier.SERIALZER.register(modBus);
@@ -110,6 +111,7 @@ public class RuneCraftory {
         ModFeatures.FEATURES.register(modBus);
         ModSpells.SPELLS.register(modBus);
         ModStructures.STRUCTURES.register(modBus);
+        ModParticles.PARTICLES.register(modBus);
     }
 
     public void newReg(RegistryEvent.NewRegistry event) {

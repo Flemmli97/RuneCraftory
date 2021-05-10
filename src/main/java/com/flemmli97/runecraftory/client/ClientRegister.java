@@ -17,6 +17,7 @@ import com.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
 import com.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
 import com.flemmli97.runecraftory.client.model.monster.ModelTortas;
 import com.flemmli97.runecraftory.client.model.monster.ModelWeagle;
+import com.flemmli97.runecraftory.client.particles.PuffParticle;
 import com.flemmli97.runecraftory.client.render.RenderGate;
 import com.flemmli97.runecraftory.client.render.RenderMonster;
 import com.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
@@ -41,8 +42,10 @@ import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModContainer;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModItems;
+import com.flemmli97.runecraftory.common.registry.ModParticles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.client.renderer.entity.model.EntityModel;
@@ -50,6 +53,7 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
@@ -114,6 +118,11 @@ public class ClientRegister {
                     ItemModelsProperties.register(reg.get(), new ResourceLocation("held"), ItemModelProps.heldMainProp);
             });
         });
+    }
+
+    public static void registerParticles(ParticleFactoryRegisterEvent event) {
+        ParticleManager manager = Minecraft.getInstance().particles;
+        manager.registerFactory(ModParticles.puffParticle.get(), PuffParticle.Factory::new);
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T>> IRenderFactory<? super T> getMonsterRender(M model, ResourceLocation texture) {

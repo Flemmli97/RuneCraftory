@@ -5,7 +5,7 @@ import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.datapack.provider.FoodProvider;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModItems;
-import com.flemmli97.runecraftory.common.registry.ModPotions;
+import com.flemmli97.runecraftory.common.registry.ModEffects;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.item.Items;
@@ -75,10 +75,10 @@ public class FoodGen extends FoodProvider {
         this.addStat(ModItems.antidoteGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(25, 0).setRPRegen(5, 0));
         this.addStat(ModItems.medicinalHerb.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(50, 0));
 
-        this.addStat(ModItems.roundoff.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(500, 0).curePotion(ModPotions.seal.get()));
-        this.addStat(ModItems.paraGone.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(500, 0).curePotion(Effects.SLOWNESS).curePotion(ModPotions.paralysis.get()));
-        this.addStat(ModItems.coldMed.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(500, 0).curePotion(ModPotions.cold.get()));
-        this.addStat(ModItems.antidote.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(500, 0).curePotion(Effects.POISON).curePotion(ModPotions.poison.get()));
+        this.addStat(ModItems.roundoff.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(500, 0).curePotion(ModEffects.seal.get()));
+        this.addStat(ModItems.paraGone.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(500, 0).curePotion(Effects.SLOWNESS).curePotion(ModEffects.paralysis.get()));
+        this.addStat(ModItems.coldMed.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(500, 0).curePotion(ModEffects.cold.get()));
+        this.addStat(ModItems.antidote.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(500, 0).curePotion(Effects.POISON).curePotion(ModEffects.poison.get()));
         this.addStat(ModItems.recoveryPotion.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(100, 0));
         this.addStat(ModItems.healingPotion.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(500, 0));
         this.addStat(ModItems.mysteryPotion.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(2000, 0));

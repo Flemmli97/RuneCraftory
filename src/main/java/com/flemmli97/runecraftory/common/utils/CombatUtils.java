@@ -9,7 +9,7 @@ import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.entities.IBaseMob;
 import com.flemmli97.runecraftory.common.entities.IExtendedMob;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
-import com.flemmli97.runecraftory.common.registry.ModPotions;
+import com.flemmli97.runecraftory.common.registry.ModEffects;
 import com.flemmli97.tenshilib.api.item.IAOEWeapon;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -356,19 +356,19 @@ public class CombatUtils {
             boolean dizzyChance = attackingEntity.world.rand.nextInt(1000) < getAttributeValue(attackingEntity, ModAttributes.RFDIZ.get(), target);
             boolean stunChance = attackingEntity.world.rand.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFSTUN.get(), target);
             if (poisonChance) {
-                target.addPotionEffect(new EffectInstance(ModPotions.poison.get()));
+                target.addPotionEffect(new EffectInstance(ModEffects.poison.get()));
             }
             if (fatigueChance) {
-                target.addPotionEffect(new EffectInstance(ModPotions.fatigue.get()));
+                target.addPotionEffect(new EffectInstance(ModEffects.fatigue.get()));
             }
             if (coldChance) {
-                target.addPotionEffect(new EffectInstance(ModPotions.cold.get()));
+                target.addPotionEffect(new EffectInstance(ModEffects.cold.get()));
             }
             if (paraChance) {
-                target.addPotionEffect(new EffectInstance(ModPotions.paralysis.get()));
+                target.addPotionEffect(new EffectInstance(ModEffects.paralysis.get()));
             }
             if (sealChance) {
-                target.addPotionEffect(new EffectInstance(ModPotions.seal.get()));
+                target.addPotionEffect(new EffectInstance(ModEffects.seal.get()));
             }
             if (dizzyChance) {
                 target.addPotionEffect(new EffectInstance(Effects.NAUSEA, 80, 1, true, false));
@@ -379,7 +379,7 @@ public class CombatUtils {
             }
             if (sleepChance) {
                 target.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 80, 1, true, false));
-                target.addPotionEffect(new EffectInstance(ModPotions.sleep.get(), 80, 1, true, false));
+                target.addPotionEffect(new EffectInstance(ModEffects.sleep.get(), 80, 1, true, false));
             }
         }
     }

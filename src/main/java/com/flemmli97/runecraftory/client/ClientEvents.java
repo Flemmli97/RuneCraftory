@@ -28,6 +28,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ public class ClientEvents {
 
     public static void register() {
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientRegister::registerParticles);
     }
 
     @SubscribeEvent
@@ -132,8 +134,9 @@ public class ClientEvents {
     public void worldRender(RenderWorldLastEvent event) {
         //if(WeatherData.get(Minecraft.getMinecraft().world).currentWeather()== EnumWeather.RUNEY)
         //    this.renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
-        if (GeneralConfig.debugAttack)
+        if (GeneralConfig.debugAttack) {
             AttackAABBRender.INST.render(event.getMatrixStack(), Minecraft.getInstance().getBufferBuilders().getEffectVertexConsumers());
+        }
     }
 
     /*@SubscribeEvent
