@@ -530,21 +530,38 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     //=====Combat stuff
 
+    //TODO: Redo Death animation. if server lagging behind client finished animation
     @Override
     protected void onDeathUpdate() {
         //if (!this.isTamed()) {
-        if (this.deathTime == 0)
+        if (this.deathTime == 0) {
             this.playDeathAnimation();
+            this.deathTime = 1;
+        }
         AnimatedAction anim = this.getAnimation();
-        if (this.deathTime > 6 && anim != null && anim.getTick() < anim.getAttackTime())
-            this.deathTime = 6;
-        super.onDeathUpdate();
+        if (anim != null && anim.getTick() < anim.getAttackTime())
+            return;
+        ++this.deathTime;
+        if (this.deathTime == this.maxDeathTime()) {
+            this.remove(false); //Forge keep data until we revive player
+
+            for(int i = 0; i < 20; ++i) {
+                double d0 = this.rand.nextGaussian() * 0.02D;
+                double d1 = this.rand.nextGaussian() * 0.02D;
+                double d2 = this.rand.nextGaussian() * 0.02D;
+                this.world.addParticle(ParticleTypes.POOF, this.getParticleX(1.0D), this.getRandomBodyY(), this.getParticleZ(1.0D), d0, d1, d2);
+            }
+        }
             /*if (this.deathTime == 5 && this.attackingPlayer != null) {
                 IPlayer cap = this.attackingPlayer.getCapability(PlayerCapProvider.PlayerCap, null);
                 cap.addXp(this.attackingPlayer, LevelCalc.xpFromLevel(this.baseXP(), this.level()));
                 cap.setMoney(this.attackingPlayer, cap.getMoney() + LevelCalc.moneyFromLevel(this.baseMoney(), this.level()));
             }*/
         //}
+    }
+
+    public int maxDeathTime() {
+        return 20;
     }
 
     protected void playDeathAnimation() {

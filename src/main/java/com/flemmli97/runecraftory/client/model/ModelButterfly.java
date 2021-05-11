@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.client.model;
 
-import com.flemmli97.runecraftory.common.entities.projectiles.EntityButterfly;
+import com.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
 import com.flemmli97.tenshilib.common.utils.MathUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;

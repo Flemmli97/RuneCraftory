@@ -1,4 +1,4 @@
-package com.flemmli97.runecraftory.common.entities.projectiles;
+package com.flemmli97.runecraftory.common.entities.misc;
 
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -87,7 +87,7 @@ public class EntityButterfly extends EntityProjectile {
         LivingEntity e;
         if (result.getEntity() instanceof LivingEntity && (e = (LivingEntity) result.getEntity()) != this.getOwner()
                 && (this.pred == null || this.pred.test((LivingEntity) result.getEntity()))) {
-            if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.3f, null)) {//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
+            if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e), null)) {//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
                 e.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 60, 3));
                 //this.setDead();
                 return true;

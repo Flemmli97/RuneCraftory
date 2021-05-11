@@ -3,7 +3,7 @@ package com.flemmli97.runecraftory.common.spells;
 import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
-import com.flemmli97.runecraftory.common.entities.projectiles.EntityFireball;
+import com.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

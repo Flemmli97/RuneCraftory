@@ -1,15 +1,15 @@
 package com.flemmli97.runecraftory.client.render.projectiles;
 
-import com.flemmli97.runecraftory.common.entities.projectiles.EntityAmbrosiaSleep;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderSleepBall<T extends EntityAmbrosiaSleep> extends EntityRenderer<T> {
+public class EmptyRender<T extends Entity> extends EntityRenderer<T> {
 
-    public RenderSleepBall(EntityRendererManager manager) {
+    public EmptyRender(EntityRendererManager manager) {
         super(manager);
     }
 

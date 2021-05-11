@@ -1,5 +1,7 @@
 package com.flemmli97.runecraftory.common.entities;
 
+import com.flemmli97.runecraftory.common.particles.ColoredParticleData;
+import com.flemmli97.runecraftory.common.registry.ModParticles;
 import com.flemmli97.tenshilib.api.entity.IOverlayEntityRender;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.EntityType;
@@ -125,5 +127,21 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     @Override
     public int overlayV(int orig) {
         return this.isEnraged() ? 0 : orig;
+    }
+
+    @Override
+    protected void onDeathUpdate() {
+        super.onDeathUpdate();
+        if(this.world.isRemote && this.deathTime > 1) {
+            for(int i = 0; i < (15 /(float)this.maxDeathTime()*this.deathTime-1); i++) {
+                this.world.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                        this.getX() + (this.rand.nextDouble() - 0.5D) * (this.getWidth() + 3),
+                        this.getY() + this.rand.nextDouble() * (this.getHeight() + 1),
+                        this.getZ() + (this.rand.nextDouble() - 0.5D) * (this.getWidth() + 3),
+                        this.rand.nextGaussian() * 0.02D,
+                        this.rand.nextGaussian() * 0.02D,
+                        this.rand.nextGaussian() * 0.02D);
+            }
+        }
     }
 }

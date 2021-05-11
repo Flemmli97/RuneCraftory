@@ -2,7 +2,7 @@ package com.flemmli97.runecraftory.common.entities.monster;
 
 import com.flemmli97.runecraftory.common.entities.AnimationType;
 import com.flemmli97.runecraftory.common.entities.monster.ai.AnimatedRangedGoal;
-import com.flemmli97.runecraftory.common.entities.projectiles.EntityMobArrow;
+import com.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;

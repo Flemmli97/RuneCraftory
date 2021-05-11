@@ -1,11 +1,15 @@
-package com.flemmli97.runecraftory.common.entities.projectiles;
+package com.flemmli97.runecraftory.common.entities.misc;
 
 import com.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
+import com.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
+import com.flemmli97.runecraftory.common.registry.ModParticles;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
+import com.flemmli97.tenshilib.api.entity.IOwnable;
 import com.flemmli97.tenshilib.common.entity.EntityUtil;
+import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -16,6 +20,8 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -23,37 +29,37 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class EntityAmbrosiaWave extends Entity {
+public class EntityCircleCloud extends Entity implements IOwnable<LivingEntity> {
+
     private static final DataParameter<Float> radius = EntityDataManager.createKey(EntityAmbrosiaWave.class, DataSerializers.FLOAT);
-    private static final DataParameter<Integer> maxTick = EntityDataManager.createKey(EntityAmbrosiaWave.class, DataSerializers.VARINT);
 
     private UUID ownerUUID;
-    private EntityAmbrosia owner;
+    private LivingEntity owner;
     private int livingTick;
     private Predicate<LivingEntity> pred;
 
-    public float[] clientWaveSizes = new float[]{0, -1, -2, -3, -4};
-    public float clientAlphaMult = 1;
     public static final float circleInc = 0.2f;
     public static final int timeTillFull = 20;
 
-    public EntityAmbrosiaWave(EntityType<? extends EntityAmbrosiaWave> type, World world) {
+    private static final List<Vector3f> circleParticleMotion = RayTraceUtils.rotatedVecs(new Vector3d(0.25,0,0), new Vector3d(0,1,0), -180, 175, 5);
+
+    public EntityCircleCloud(EntityType<? extends EntityAmbrosiaWave> type, World world) {
         super(type, world);
     }
 
-    public EntityAmbrosiaWave(World world, EntityAmbrosia caster, int maxLivingTick) {
+    public EntityCircleCloud(World world, LivingEntity caster, int maxLivingTick) {
         this(ModEntities.ambrosia_wave.get(), world);
         this.owner = caster;
         this.ownerUUID = caster.getUniqueID();
         this.setPosition(caster.getX(), caster.getY(), caster.getZ());
-        this.dataManager.set(maxTick, maxLivingTick);
-        this.pred = (e) -> !e.equals(this.getOwner()) && caster.attackPred.test(e);
+        //this.dataManager.set(maxTick, maxLivingTick);
+        //this.pred = (e) -> !e.equals(this.getOwner()) && caster.attackPred.test(e);
     }
 
     @Override
     protected void registerData() {
         this.dataManager.register(radius, 0f);
-        this.dataManager.register(maxTick, 200);
+        //this.dataManager.register(maxTick, 200);
     }
 
     public float getRadius() {
@@ -64,11 +70,17 @@ public class EntityAmbrosiaWave extends Entity {
         this.dataManager.set(radius, (this.getRadius() + circleInc));
     }
 
-    protected EntityAmbrosia getOwner() {
+    @Override
+    public UUID ownerUUID() {
+        return this.ownerUUID;
+    }
+
+    @Override
+    public LivingEntity getOwner() {
         if (this.owner == null && this.ownerUUID != null) {
             this.owner = EntityUtil.findFromUUID(EntityAmbrosia.class, this.world, this.ownerUUID);
-            if (this.owner != null)
-                this.pred = this.owner.attackPred;
+            //if (this.owner != null)
+            //    this.pred = this.owner.attackPred;
         }
         return this.owner;
     }
@@ -76,7 +88,7 @@ public class EntityAmbrosiaWave extends Entity {
     @Override
     protected void readAdditional(CompoundNBT compound) {
         this.livingTick = compound.getInt("livingTick");
-        this.dataManager.set(maxTick, compound.getInt("maxTick"));
+        //this.dataManager.set(maxTick, compound.getInt("maxTick"));
         this.dataManager.set(radius, compound.getFloat("radius"));
         if (compound.contains("owner"))
             this.ownerUUID = compound.getUniqueId("owner");
@@ -85,7 +97,7 @@ public class EntityAmbrosiaWave extends Entity {
     @Override
     protected void writeAdditional(CompoundNBT compound) {
         compound.putInt("livingTick", this.livingTick);
-        compound.putInt("maxTick", this.dataManager.get(maxTick));
+        //compound.putInt("maxTick", this.dataManager.get(maxTick));
         compound.putFloat("radius", this.getRadius());
         if (this.owner != null)
             compound.putUniqueId("owner", this.owner.getUniqueID());
@@ -100,26 +112,20 @@ public class EntityAmbrosiaWave extends Entity {
     public void tick() {
         ++this.livingTick;
         if (this.world.isRemote) {
-            for (int i = 0; i < this.clientWaveSizes.length; i++) {
-                if (this.clientWaveSizes[i] > -100) {
-                    this.clientWaveSizes[i] += circleInc;
-                    if (this.clientWaveSizes[i] > 5)
-                        if (this.dataManager.get(maxTick) > this.livingTick)
-                            this.clientWaveSizes[i] = 0;
-                        else
-                            this.clientWaveSizes[i] = -100;
+            if(this.livingTick % 5 == 1) {
+                for(Vector3f vec : circleParticleMotion) {
+                    //for(int i = 0; i < 2; i++)
+                    this.world.addParticle(new ColoredParticleData(ModParticles.ambrosiaWaveParticle.get(), 219/255F, 153/255F, 66/255F, 1, 2), this.getX(), this.getY()+0.2, this.getZ(), vec.getX(), vec.getY(), vec.getZ());
                 }
             }
-            if (this.dataManager.get(maxTick) < this.livingTick)
-                this.clientAlphaMult = Math.max(0.2f, this.clientAlphaMult - 0.1f);
         }
         if (!this.world.isRemote) {
-            if (this.livingTick > this.dataManager.get(maxTick) + timeTillFull || (this.owner != null && !this.owner.isAlive()))
+            //if (this.livingTick > this.dataManager.get(maxTick) + timeTillFull || (this.owner != null && !this.owner.isAlive()))
                 this.remove();
             if (this.getRadius() <= 5.0f) {
                 this.increaseRadius();
             }
-            if (this.livingTick < this.dataManager.get(maxTick)) {
+            //if (this.livingTick < this.dataManager.get(maxTick)) {
                 List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(this.getRadius(), 1.0, this.getRadius()), (e) -> e.getDistanceSq(this) <= this.getRadius() * this.getRadius() && (this.pred == null || this.pred.test(e)));
                 for (LivingEntity e : list) {
                     if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(15).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.5f, null)) {//RFCalculations.getAttributeValue(this.owner, ItemStatAttributes.RFMAGICATT, null, null) / 2.5f)) {
@@ -127,7 +133,7 @@ public class EntityAmbrosiaWave extends Entity {
                         e.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 10, 128, true, false));
                     }
                 }
-            }
+            //}
         }
     }
 }

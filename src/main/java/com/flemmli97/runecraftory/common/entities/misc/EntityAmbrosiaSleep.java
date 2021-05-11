@@ -1,7 +1,8 @@
-package com.flemmli97.runecraftory.common.entities.projectiles;
+package com.flemmli97.runecraftory.common.entities.misc;
 
 import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
+import com.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModParticles;
@@ -77,14 +78,14 @@ public class EntityAmbrosiaSleep extends Entity {
     public void tick() {
         ++this.livingTick;
         if (this.world.isRemote) {
-            for (int i = 0; i < 4; i++) {
-                this.world.addParticle(ModParticles.puffParticle.get(), this.getX(), this.getY() + 0.35, this.getZ(), this.rand.nextGaussian() * 0.008D, Math.abs(this.rand.nextGaussian() * 0.025), this.rand.nextGaussian() * 0.009D);
+            for (int i = 0; i < 3; i++) {
+                this.world.addParticle(new ColoredParticleData(ModParticles.light.get(), 207/255F, 64/255F, 64/255F, 1, 2), this.getX() + this.rand.nextGaussian()*0.1, this.getY() + 0.35 + this.rand.nextGaussian()*0.07, this.getZ() + this.rand.nextGaussian()*0.1, this.rand.nextGaussian() * 0.008, Math.abs(this.rand.nextGaussian() * 0.025), this.rand.nextGaussian() * 0.008);
             }
         }
         if (this.livingTick > 40) {
             this.remove();
         }
-        if (!this.world.isRemote) {
+        if (!this.world.isRemote && this.getOwner() != null) {
             List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(0.3), this.pred);
             for (LivingEntity e : list) {
                 if (!e.equals(this.getOwner()) && (this.pred == null || this.pred.test(e))) {

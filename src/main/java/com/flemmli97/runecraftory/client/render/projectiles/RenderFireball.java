@@ -1,7 +1,7 @@
 package com.flemmli97.runecraftory.client.render.projectiles;
 
 import com.flemmli97.runecraftory.RuneCraftory;
-import com.flemmli97.runecraftory.common.entities.projectiles.EntityFireball;
+import com.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import com.flemmli97.tenshilib.client.render.RenderTexture;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;

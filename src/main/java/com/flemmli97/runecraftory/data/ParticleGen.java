@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,12 @@ public class ParticleGen implements IDataProvider {
     }
 
     public void add() {
-        this.addTo(ModParticles.puffParticle.get());
+        this.addTo(ModParticles.puff.get());
+        this.addTo(ModParticles.light.get());
+        this.addTo(ModParticles.ambrosiaWaveParticle.get(), ModParticles.light.getId());
+        this.addTo(ModParticles.cross.get());
+        this.addTo(ModParticles.blink.get());
+        this.addTo(ModParticles.smoke.get(), 4);
     }
 
     @Override
@@ -59,6 +65,15 @@ public class ParticleGen implements IDataProvider {
 
     public void addTo(ParticleType<?> type) {
         this.particleTextures.put(type.getRegistryName(), Lists.newArrayList(type.getRegistryName()));
+    }
+
+    public void addTo(ParticleType<?> type, int nums) {
+        List<ResourceLocation> list = new ArrayList<>();
+        ResourceLocation typeRes = type.getRegistryName();
+        for(int i = 0; i < nums; i++) {
+            list.add(new ResourceLocation(typeRes.getNamespace(), typeRes.getPath()+"_"+i));
+        }
+        this.particleTextures.put(typeRes, list);
     }
 
     @Override

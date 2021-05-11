@@ -1,4 +1,4 @@
-package com.flemmli97.runecraftory.common.entities.projectiles;
+package com.flemmli97.runecraftory.common.entities.misc;
 
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.registry.ModEntities;

@@ -1,6 +1,6 @@
 package com.flemmli97.runecraftory.client.render.projectiles;
 
-import com.flemmli97.runecraftory.common.entities.projectiles.EntityMobArrow;
+import com.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;

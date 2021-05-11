@@ -17,7 +17,9 @@ import com.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
 import com.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
 import com.flemmli97.runecraftory.client.model.monster.ModelTortas;
 import com.flemmli97.runecraftory.client.model.monster.ModelWeagle;
+import com.flemmli97.runecraftory.client.particles.ColoredParticle;
 import com.flemmli97.runecraftory.client.particles.PuffParticle;
+import com.flemmli97.runecraftory.client.particles.WaveParticle;
 import com.flemmli97.runecraftory.client.render.RenderGate;
 import com.flemmli97.runecraftory.client.render.RenderMonster;
 import com.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
@@ -26,11 +28,11 @@ import com.flemmli97.runecraftory.client.render.monster.RenderGoblin;
 import com.flemmli97.runecraftory.client.render.monster.RenderOrcArcher;
 import com.flemmli97.runecraftory.client.render.monster.RenderThunderbolt;
 import com.flemmli97.runecraftory.client.render.monster.RenderWooly;
+import com.flemmli97.runecraftory.client.render.projectiles.EmptyRender;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderAmbrosiaWave;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderFireball;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow;
-import com.flemmli97.runecraftory.client.render.projectiles.RenderSleepBall;
 import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
 import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
@@ -86,7 +88,7 @@ public class ClientRegister {
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.arrow.get(), RenderMobArrow::new);
 
-        RenderingRegistry.registerEntityRenderingHandler(ModEntities.sleep_ball.get(), RenderSleepBall::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.sleep_ball.get(), EmptyRender::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.ambrosia_wave.get(), RenderAmbrosiaWave::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.butterfly.get(), RenderButterfly::new);
 
@@ -122,7 +124,12 @@ public class ClientRegister {
 
     public static void registerParticles(ParticleFactoryRegisterEvent event) {
         ParticleManager manager = Minecraft.getInstance().particles;
-        manager.registerFactory(ModParticles.puffParticle.get(), PuffParticle.Factory::new);
+        manager.registerFactory(ModParticles.puff.get(), PuffParticle.Factory::new);
+        manager.registerFactory(ModParticles.light.get(), ColoredParticle.LightParticleFactory::new);
+        manager.registerFactory(ModParticles.cross.get(), ColoredParticle.LightParticleFactory::new);
+        manager.registerFactory(ModParticles.blink.get(), ColoredParticle.LightParticleFactory::new);
+        manager.registerFactory(ModParticles.smoke.get(), ColoredParticle.LightParticleFactory::new);
+        manager.registerFactory(ModParticles.ambrosiaWaveParticle.get(), WaveParticle.Factory::new);
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T>> IRenderFactory<? super T> getMonsterRender(M model, ResourceLocation texture) {
