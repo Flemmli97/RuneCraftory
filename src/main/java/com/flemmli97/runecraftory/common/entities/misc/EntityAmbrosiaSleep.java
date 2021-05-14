@@ -4,10 +4,12 @@ import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import com.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
+import com.flemmli97.runecraftory.common.registry.ModEffects;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModParticles;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
+import com.flemmli97.tenshilib.api.entity.IOwnable;
 import com.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -23,7 +25,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-public class EntityAmbrosiaSleep extends Entity {
+public class EntityAmbrosiaSleep extends Entity implements IOwnable<EntityAmbrosia> {
+
     private UUID ownerUUID;
     private EntityAmbrosia owner;
     private int livingTick;
@@ -38,14 +41,20 @@ public class EntityAmbrosiaSleep extends Entity {
         this.owner = caster;
         this.ownerUUID = caster.getUniqueID();
         this.setPosition(caster.getX(), caster.getY(), caster.getZ());
-        this.pred = caster.attackPred;
+        this.pred = caster.hitPred;
     }
 
+    @Override
+    public UUID getOwnerUUID() {
+        return this.ownerUUID;
+    }
+
+    @Override
     public EntityAmbrosia getOwner() {
         if (this.owner == null && this.ownerUUID != null) {
             this.owner = EntityUtil.findFromUUID(EntityAmbrosia.class, this.world, this.ownerUUID);
             if (this.owner != null)
-                this.pred = this.owner.attackPred;
+                this.pred = this.owner.hitPred;
         }
         return this.owner;
     }
@@ -78,8 +87,8 @@ public class EntityAmbrosiaSleep extends Entity {
     public void tick() {
         ++this.livingTick;
         if (this.world.isRemote) {
-            for (int i = 0; i < 3; i++) {
-                this.world.addParticle(new ColoredParticleData(ModParticles.light.get(), 207/255F, 64/255F, 64/255F, 1, 2), this.getX() + this.rand.nextGaussian()*0.1, this.getY() + 0.35 + this.rand.nextGaussian()*0.07, this.getZ() + this.rand.nextGaussian()*0.1, this.rand.nextGaussian() * 0.008, Math.abs(this.rand.nextGaussian() * 0.025), this.rand.nextGaussian() * 0.008);
+            for (int i = 0; i < 2; i++) {
+                this.world.addParticle(new ColoredParticleData(ModParticles.light.get(), 207 / 255F, 13 / 255F, 38 / 255F, 1, 2), this.getX() + this.rand.nextGaussian() * 0.15, this.getY() + 0.35 + this.rand.nextGaussian() * 0.07, this.getZ() + this.rand.nextGaussian() * 0.15, this.rand.nextGaussian() * 0.01, Math.abs(this.rand.nextGaussian() * 0.03), this.rand.nextGaussian() * 0.01);
             }
         }
         if (this.livingTick > 40) {
@@ -92,8 +101,9 @@ public class EntityAmbrosiaSleep extends Entity {
 
                     if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.3f, null)) {
                         e.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 80, 1, true, false));
-                        //e.addPotionEffect(new EffectInstance(Potion.getPotionFromResourceLocation("runecraftory:sleep"), 80, 1, true, false));
+                        e.addPotionEffect(new EffectInstance(ModEffects.sleep.get(), 80, 1, true, false));
                         this.remove();
+                        break;
                     }
                 }
             }

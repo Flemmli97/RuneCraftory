@@ -28,10 +28,13 @@ public class LibEntities {
     public static final ResourceLocation thunderbolt = new ResourceLocation(RuneCraftory.MODID, "thunderbolt");
 
     public static final ResourceLocation arrow = new ResourceLocation(RuneCraftory.MODID, "arrow");
+    public static final ResourceLocation spore = new ResourceLocation(RuneCraftory.MODID, "spore");
+    public static final ResourceLocation gust = new ResourceLocation(RuneCraftory.MODID, "gust");
 
     public static final ResourceLocation ambrosia_sleep = new ResourceLocation(RuneCraftory.MODID, "sleep_ball");
     public static final ResourceLocation ambrosia_wave = new ResourceLocation(RuneCraftory.MODID, "ambrosia_wave");
     public static final ResourceLocation butterfly = new ResourceLocation(RuneCraftory.MODID, "butterfly");
+    public static final ResourceLocation pollen = new ResourceLocation(RuneCraftory.MODID, "pollen");
 
     public static final ResourceLocation fireball = new ResourceLocation(RuneCraftory.MODID, "fireball");
 

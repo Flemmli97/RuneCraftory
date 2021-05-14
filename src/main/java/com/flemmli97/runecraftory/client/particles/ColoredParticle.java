@@ -31,12 +31,12 @@ public class ColoredParticle extends SpriteTexturedParticle {
 
     @Override
     public float getScale(float partialTicks) {
-        return this.particleScale * MathHelper.clamp(((float)this.age + partialTicks) / (float)this.maxAge * 32.0F, 0.0F, 1.0F);
+        return this.particleScale * MathHelper.clamp(((float) this.age + partialTicks) / (float) this.maxAge * 32.0F, 0.0F, 1.0F);
     }
 
     @Override
     public IParticleRenderType getRenderType() {
-        return ParticleRenderTypes.TRANSLUCENTREVERSE;
+        return ParticleRenderTypes.TRANSLUCENTADD;
     }
 
     @Override

@@ -11,7 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 public class ParticleRenderTypes {
 
-    public static final IParticleRenderType TRANSLUCENTREVERSE = new IParticleRenderType() {
+    public static final IParticleRenderType TRANSLUCENTADD = new IParticleRenderType() {
         @Override
         public void beginRender(BufferBuilder builder, TextureManager manager) {
             RenderSystem.depthMask(false);

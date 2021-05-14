@@ -43,6 +43,8 @@ public class CombatUtils {
 
     public static float getAttributeValue(LivingEntity attacker, Attribute att, Entity target) {
         float increase = 0;
+        if (attacker == null)
+            return increase;
         if (attacker instanceof PlayerEntity) {
             increase += attacker.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) attacker, att)).orElse(0);
         } else if (attacker.getAttribute(att) != null) {

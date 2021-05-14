@@ -11,12 +11,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.IPacket;
 import net.minecraft.network.play.server.SChangeGameStatePacket;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.network.NetworkHooks;
 
 public class EntityMobArrow extends EntityProjectile {
 
@@ -34,7 +32,7 @@ public class EntityMobArrow extends EntityProjectile {
 
     @Override
     protected boolean onEntityHit(EntityRayTraceResult res) {
-        if (!(this.getOwner() instanceof BaseMonster) || !(res.getEntity() instanceof LivingEntity) || ((BaseMonster) this.getOwner()).attackPred.test((LivingEntity) res.getEntity())) {
+        if (!(this.getOwner() instanceof BaseMonster) || !(res.getEntity() instanceof LivingEntity) || ((BaseMonster) this.getOwner()).hitPred.test((LivingEntity) res.getEntity())) {
             if (CombatUtils.damage(this.getOwner(), res.getEntity(), (CustomDamage) new CustomDamage.Builder(this, this.getOwner()).get().setProjectile(), CombatUtils.getAttributeValue(this.getOwner(), Attributes.GENERIC_ATTACK_DAMAGE, res.getEntity()) * this.damageMultiplier, null)) {
                 if (res.getEntity() instanceof LivingEntity) {
                     LivingEntity livingentity = (LivingEntity) res.getEntity();
@@ -56,10 +54,5 @@ public class EntityMobArrow extends EntityProjectile {
     @Override
     protected void onBlockHit(BlockRayTraceResult blockRayTraceResult) {
         this.remove();
-    }
-
-    @Override
-    public IPacket<?> createSpawnPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

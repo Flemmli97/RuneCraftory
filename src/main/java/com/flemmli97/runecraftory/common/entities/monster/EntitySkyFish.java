@@ -92,12 +92,11 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     @Override
-    public boolean handleFallDamage(float distance, float damageMultiplier) {
-        return false;
+    protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
     @Override
-    protected void playStepSound(BlockPos pos, BlockState blockIn) {
+    protected void updateFallState(double dist, boolean groundLogic, BlockState state, BlockPos pos) {
     }
 
     //==========Water stuff

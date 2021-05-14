@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.common.effects;
 
+import com.flemmli97.runecraftory.common.entities.monster.ai.DisableGoal;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierManager;
@@ -26,7 +27,7 @@ public class SleepEffect extends Effect {
     @Override
     public void applyAttributesModifiersToEntity(LivingEntity entity, AttributeModifierManager manager, int amplifier) {
         if (entity instanceof MobEntity) {
-            //((MobEntity)entity).goalSelector.addGoal(0, (EntityAIBase)new EntityAIDisable((EntityLiving)entity));
+            ((MobEntity) entity).goalSelector.addGoal(-1, new DisableGoal((MobEntity) entity));
             entity.setSilent(true);
         }
         super.applyAttributesModifiersToEntity(entity, manager, amplifier);

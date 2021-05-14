@@ -53,4 +53,9 @@ public class EntityOrc extends BaseMonster {
                 this.setAnimation(melee2);
         }
     }
+
+    @Override
+    public double getMountedYOffset() {
+        return this.getHeight() * 0.85D;
+    }
 }

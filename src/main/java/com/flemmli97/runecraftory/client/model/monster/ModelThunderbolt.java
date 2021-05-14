@@ -199,7 +199,9 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
         AnimatedAction anim = thunderbolt.getAnimation();
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
         if (anim == null) {
-            if (thunderbolt.isMoving())
+            if (thunderbolt.isRunning())
+                this.animations.doAnimation("run", thunderbolt.ticksExisted, partialTicks);
+            else if (thunderbolt.isMoving())
                 this.animations.doAnimation("walk", thunderbolt.ticksExisted, partialTicks);
         } else
             this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);

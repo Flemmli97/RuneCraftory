@@ -19,6 +19,7 @@ import net.minecraft.world.server.ServerBossInfo;
 import java.util.Set;
 
 public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
+
     protected final ServerBossInfo bossInfo = new ServerBossInfo(this.getDisplayName(), BossInfo.Color.GREEN, BossInfo.Overlay.PROGRESS);
     private static final DataParameter<Boolean> enraged = EntityDataManager.createKey(BossMonster.class, DataSerializers.BOOLEAN);
 
@@ -54,9 +55,13 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     @Override
     protected void damageEntity(DamageSource damageSrc, float damageAmount) {
         super.damageEntity(damageSrc, damageAmount);
-        if (!this.isTamed() && this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged()) {
+        if (!this.isTamed() && this.checkRage()) {
             this.setEnraged(true, false);
         }
+    }
+
+    protected boolean checkRage() {
+        return this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged();
     }
 
     @Override
@@ -132,8 +137,8 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     @Override
     protected void onDeathUpdate() {
         super.onDeathUpdate();
-        if(this.world.isRemote && this.deathTime > 1) {
-            for(int i = 0; i < (15 /(float)this.maxDeathTime()*this.deathTime-1); i++) {
+        if (this.world.isRemote && this.deathTime > 1) {
+            for (int i = 0; i < (15 / (float) this.maxDeathTime() * this.deathTime - 1); i++) {
                 this.world.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
                         this.getX() + (this.rand.nextDouble() - 0.5D) * (this.getWidth() + 3),
                         this.getY() + this.rand.nextDouble() * (this.getHeight() + 1),

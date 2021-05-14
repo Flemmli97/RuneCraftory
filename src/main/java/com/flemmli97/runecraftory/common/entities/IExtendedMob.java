@@ -1,13 +1,13 @@
 package com.flemmli97.runecraftory.common.entities;
 
+import com.flemmli97.tenshilib.api.entity.IOwnable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 
 import java.util.Map;
-import java.util.UUID;
 
-public interface IExtendedMob extends IBaseMob {
+public interface IExtendedMob extends IBaseMob, IOwnable<PlayerEntity> {
 
     NonNullList<ItemStack> tamingItem();
 
@@ -18,10 +18,6 @@ public interface IExtendedMob extends IBaseMob {
     boolean isTamed();
 
     boolean ridable();
-
-    UUID ownerUUID();
-
-    PlayerEntity getOwner();
 
     void setOwner(PlayerEntity player);
 

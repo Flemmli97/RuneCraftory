@@ -1077,7 +1077,6 @@ public class ModItems {
     public static final RegistryObject<Item> royalCurry = food("royal_curry");
     public static final RegistryObject<Item> ultimateCurry = food("ultimate_curry");
     public static final RegistryObject<Item> curryRice = food("curry_rice");
-    public static final RegistryObject<Item> stew = food("stew");
     public static final RegistryObject<Item> eggBowl = food("egg_bowl");
     public static final RegistryObject<Item> tempuraBowl = food("tempura_bowl");
     public static final RegistryObject<Item> milkPorridge = food("milk_porridge");

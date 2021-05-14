@@ -22,26 +22,26 @@ public class ColoredParticleData implements IParticleData {
     }
 
     public static final IParticleData.IDeserializer<ColoredParticleData> DESERIALIZER = new IParticleData.IDeserializer<ColoredParticleData>() {
-            @Override
-            public ColoredParticleData deserialize(ParticleType<ColoredParticleData> type, StringReader reader) throws CommandSyntaxException {
-                reader.expect(' ');
-                float r = reader.readFloat();
-                reader.expect(' ');
-                float g = reader.readFloat();
-                reader.expect(' ');
-                float b = reader.readFloat();
-                reader.expect(' ');
-                float a = reader.readFloat();
-                reader.expect(' ');
-                float scale = reader.readFloat();
-                return new ColoredParticleData(type, r, g, b, a, scale);
-            }
+        @Override
+        public ColoredParticleData deserialize(ParticleType<ColoredParticleData> type, StringReader reader) throws CommandSyntaxException {
+            reader.expect(' ');
+            float r = reader.readFloat();
+            reader.expect(' ');
+            float g = reader.readFloat();
+            reader.expect(' ');
+            float b = reader.readFloat();
+            reader.expect(' ');
+            float a = reader.readFloat();
+            reader.expect(' ');
+            float scale = reader.readFloat();
+            return new ColoredParticleData(type, r, g, b, a, scale);
+        }
 
-            @Override
-            public ColoredParticleData read(ParticleType<ColoredParticleData> type, PacketBuffer buffer) {
-                return new ColoredParticleData(type, buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
-            }
-        };
+        @Override
+        public ColoredParticleData read(ParticleType<ColoredParticleData> type, PacketBuffer buffer) {
+            return new ColoredParticleData(type, buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
+        }
+    };
 
 
     private final ParticleType<ColoredParticleData> type;

@@ -195,4 +195,9 @@ public class EntityTortas extends ChargingMonster {
     public double ridingSpeedModifier() {
         return 0.4;
     }
+
+    @Override
+    public double getMountedYOffset() {
+        return this.getHeight() * 0.7D;
+    }
 }

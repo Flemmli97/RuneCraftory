@@ -2,11 +2,13 @@ package com.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.flemmli97.runecraftory.common.entities.AnimationType;
 import com.flemmli97.runecraftory.common.entities.BossMonster;
-import com.flemmli97.runecraftory.common.entities.monster.ai.AmbrosiaAttackGoal;
 import com.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaSleep;
 import com.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
 import com.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
+import com.flemmli97.runecraftory.common.entities.misc.EntityPollen;
+import com.flemmli97.runecraftory.common.entities.monster.ai.AmbrosiaAttackGoal;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
@@ -17,7 +19,10 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class EntityAmbrosia extends BossMonster {
     //Tries kicking target 3 times in a row   
@@ -41,6 +46,9 @@ public class EntityAmbrosia extends BossMonster {
     private static final AnimatedAction[] anims = new AnimatedAction[]{kick_1, butterfly, wave, sleep, pollen, pollen2, kick_2, kick_3, defeat, angry};
 
     public static final ImmutableList<String> nonChoosableAttacks = ImmutableList.of(pollen2.getID(), kick_2.getID(), kick_3.getID());
+
+    private static final List<Vector3f> pollenBase = RayTraceUtils.rotatedVecs(new Vector3d(1, 0, 0), new Vector3d(0, 1, 0), -180, 135, 45);
+    private static final List<Vector3f> pollenInd = RayTraceUtils.rotatedVecs(new Vector3d(0.04, 0.07, 0), new Vector3d(0, 1, 0), -180, 160, 20);
 
     private double[] aiVarHelper;
     public final AmbrosiaAttackGoal attack = new AmbrosiaAttackGoal(this);
@@ -79,10 +87,10 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     public void summonButterfly(double x, double y, double z) {
-        for (int i = 0; i < 2; ++i) {
+        for (int i = 0; i < 1; ++i) {
             if (!this.world.isRemote) {
                 EntityButterfly fly = new EntityButterfly(this.world, this);
-                fly.setPosition(fly.getX() + this.rand.nextFloat() * 2 - 1, fly.getY() + this.rand.nextFloat() * 0.5 - 0.25, fly.getZ() + this.rand.nextFloat() * 2 - 1);
+                fly.setPosition(fly.getX() + this.rand.nextFloat() * 2 - 1, fly.getY() + this.rand.nextFloat() * 0.5 + 0.25, fly.getZ() + this.rand.nextFloat() * 2 - 1);
                 fly.shootAtPosition(x, y, z, 0.3f, 5.0f);
                 this.world.addEntity(fly);
             }
@@ -92,6 +100,7 @@ public class EntityAmbrosia extends BossMonster {
     public void summonWave(int duration) {
         if (!this.world.isRemote) {
             EntityAmbrosiaWave wave = new EntityAmbrosiaWave(this.world, this, duration);
+            wave.setPosition(wave.getX(), wave.getY() + 0.2, wave.getZ());
             this.world.addEntity(wave);
         }
     }
@@ -121,12 +130,7 @@ public class EntityAmbrosia extends BossMonster {
         switch (anim.getID()) {
             case "butterfly":
                 if (anim.getTick() > anim.getAttackTime()) {
-                    float yDec = -1.5f;
-                    if (distanceToTargetSq < 9)
-                        yDec = 1;
-                    else if (distanceToTargetSq < 25)
-                        yDec = 0;
-                    this.summonButterfly(this.aiVarHelper[0], this.aiVarHelper[1] - yDec, this.aiVarHelper[2]);
+                    this.summonButterfly(this.aiVarHelper[0], this.aiVarHelper[1], this.aiVarHelper[2]);
                 }
                 break;
             case "kick_1":
@@ -156,7 +160,9 @@ public class EntityAmbrosia extends BossMonster {
                 this.setMotion(new Vector3d(this.aiVarHelper[0], 0, this.aiVarHelper[2]));
                 if (anim.canAttack()) {
                     this.getNavigator().clearPath();
-                    this.mobAttack(anim, target, this::attackEntityAsMob);
+                    EntityPollen pollen = new EntityPollen(this.world, this);
+                    pollen.setPosition(pollen.getX(), pollen.getY() + 0.5, pollen.getZ());
+                    this.world.addEntity(pollen);
                 }
                 break;
         }
@@ -232,7 +238,7 @@ public class EntityAmbrosia extends BossMonster {
                 case "kick_2":
                     return 3;
             }
-        return 54 + this.getRNG().nextInt(22) - (this.isEnraged() ? 25 : 0) + diffAdd;
+        return 34 + this.getRNG().nextInt(22) - (this.isEnraged() ? 20 : 0) + diffAdd;
     }
 
     @Override
@@ -245,5 +251,17 @@ public class EntityAmbrosia extends BossMonster {
             else
                 this.setAnimation(kick_1);
         }
+    }
+
+    @Override
+    public double getMountedYOffset() {
+        return this.getHeight() * 0.85D;
+    }
+
+    @Override
+    public void setAnimation(AnimatedAction anim) {
+        if (this.getAnimation() != null && this.getAnimation().getID().equals(defeat.getID()) && anim == null) {
+        } else
+            super.setAnimation(anim);
     }
 }

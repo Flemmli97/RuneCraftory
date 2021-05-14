@@ -3,12 +3,14 @@ package com.flemmli97.runecraftory.common.entities;
 import com.flemmli97.runecraftory.common.config.MobConfig;
 import com.flemmli97.runecraftory.common.config.values.EntityProperties;
 import com.flemmli97.runecraftory.common.entities.monster.ai.HurtByTargetPredicate;
+import com.flemmli97.runecraftory.common.entities.monster.ai.RiderAttackTargetGoal;
 import com.flemmli97.runecraftory.common.lib.LibConstants;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
+import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.mixin.MoveControllerAccessor;
 import com.flemmli97.tenshilib.api.entity.IAnimated;
@@ -36,7 +38,6 @@ import net.minecraft.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
-import net.minecraft.entity.merchant.villager.VillagerEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -79,6 +80,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     private static final DataParameter<Optional<UUID>> owner = EntityDataManager.createKey(BaseMonster.class, DataSerializers.OPTIONAL_UNIQUE_ID);
     private static final DataParameter<Integer> mobLevel = EntityDataManager.createKey(BaseMonster.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> levelXP = EntityDataManager.createKey(BaseMonster.class, DataSerializers.VARINT);
+    private static final DataParameter<Byte> moveFlags = EntityDataManager.createKey(BaseMonster.class, DataSerializers.BYTE);
+
     private static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
     private static final UUID foodUUID = UUID.fromString("87A55C28-8C8C-4BFF-AF5F-9972A38CCD9D");
     private static final UUID foodUUIDMulti = UUID.fromString("A05442AC-381B-49DF-B0FA-0136B454157B");
@@ -92,12 +95,39 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     private AnimatedAction currentAnimation;
 
-    public final Predicate<LivingEntity> attackPred = (e) -> {
-        if (!e.equals(BaseMonster.this)) {
-            if (BaseMonster.this.isTamed()) {
-                return e == BaseMonster.this.getAttackTarget() || !(e instanceof BaseMonster) || !((BaseMonster) e).isTamed();
+    public final Predicate<LivingEntity> hitPred = (e) -> {
+        if (e != this) {
+            if (e instanceof MobEntity && this == ((MobEntity) e).getAttackTarget())
+                return true;
+            Entity controller = this.getControllingPassenger();
+            if (this.isTamed()) {
+                if (e == this.getAttackTarget())
+                    return true;
+                UUID owner = EntityUtils.tryGetOwner(e);
+                if (owner != null && (!this.attackOtherTamedMobs() || owner.equals(this.getOwnerUUID())))
+                    return false;
+                if (controller instanceof PlayerEntity)
+                    return true;
+                return e instanceof IMob || (e instanceof MobEntity && ((MobEntity) e).getAttackTarget() == this);
             }
-            return e == BaseMonster.this.getAttackTarget() || e instanceof PlayerEntity || e instanceof INPC || (e instanceof BaseMonster && ((BaseMonster) e).isTamed());
+            boolean riderTarget = false;
+            if (controller != null) {
+                if (controller instanceof BaseMonster)
+                    return ((BaseMonster) this.getControllingPassenger()).hitPred.test(e);
+                riderTarget = controller instanceof MobEntity ? e == ((MobEntity) controller).getAttackTarget() : false;
+            }
+            return riderTarget || e == this.getAttackTarget() || e instanceof INPC || EntityUtils.tryGetOwner(e) != null || e instanceof PlayerEntity;
+        }
+        return false;
+    };
+    public final Predicate<LivingEntity> targetPred = (e) -> {
+        if (e != this) {
+            if (e instanceof MobEntity && this == ((MobEntity) e).getAttackTarget())
+                return true;
+            if (this.isTamed()) {
+                return e instanceof IMob;
+            }
+            return e instanceof INPC || EntityUtils.tryGetOwner(e) != null;
         }
         return false;
     };
@@ -112,14 +142,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         return false;
     };
 
-    public NearestAttackableTargetGoal<PlayerEntity> targetPlayer = new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 5, true, true, player -> !BaseMonster.this.isTamed());//|| player != BaseMonster.this.getOwner());
-    public NearestAttackableTargetGoal<VillagerEntity> targetNPC = new NearestAttackableTargetGoal<>(this, VillagerEntity.class, 5, true, true, mob -> !BaseMonster.this.isTamed());
-    public NearestAttackableTargetGoal<MobEntity> targetMobs = new NearestAttackableTargetGoal<>(this, MobEntity.class, 5, true, true, mob -> {
-        if (BaseMonster.this.isTamed()) {
-            return !(mob instanceof BaseMonster) || !((BaseMonster) mob).isTamed();
-        }
-        return mob instanceof BaseMonster && ((BaseMonster) mob).isTamed();
-    });
+    public NearestAttackableTargetGoal<PlayerEntity> targetPlayer = new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 5, true, true, player -> !this.isTamed());//|| player != BaseMonster.this.getOwner());
+    public NearestAttackableTargetGoal<MobEntity> targetMobs = new NearestAttackableTargetGoal<>(this, MobEntity.class, 5, true, true, this.targetPred);
 
     public SwimGoal swimGoal = new SwimGoal(this);
     public RandomWalkingGoal wander = new RandomWalkingGoal(this, 1.0);
@@ -155,9 +179,9 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     public void addGoal() {
         this.targetSelector.addGoal(1, this.targetPlayer);
-        this.targetSelector.addGoal(2, this.targetNPC);
-        this.targetSelector.addGoal(3, this.targetMobs);
+        this.targetSelector.addGoal(2, this.targetMobs);
         this.targetSelector.addGoal(0, this.hurt);
+        this.targetSelector.addGoal(3, new RiderAttackTargetGoal(this, 15));
 
         this.goalSelector.addGoal(0, new MoveTowardsRestrictionGoal(this, 1.0));
         this.goalSelector.addGoal(2, this.wander);
@@ -172,6 +196,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         this.dataManager.register(owner, Optional.empty());
         this.dataManager.register(mobLevel, LibConstants.baseLevel);
         this.dataManager.register(levelXP, 0);
+        this.dataManager.register(moveFlags, (byte) 0);
     }
 
     @Override
@@ -209,7 +234,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     public int animationCooldown(@Nullable AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
-            return this.getRNG().nextInt(20) + 45 + diffAdd;
+            return this.getRNG().nextInt(20) + 25 + diffAdd;
         return this.getRNG().nextInt(25) + 20 + diffAdd;
     }
 
@@ -240,7 +265,11 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     @Override
     public boolean isTamed() {
-        return this.ownerUUID() != null;
+        return this.getOwnerUUID() != null;
+    }
+
+    public boolean attackOtherTamedMobs() {
+        return false;
     }
 
     @Override
@@ -249,13 +278,13 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     @Override
-    public UUID ownerUUID() {
+    public UUID getOwnerUUID() {
         return this.dataManager.get(owner).orElse(null);
     }
 
     @Override
     public PlayerEntity getOwner() {
-        UUID uuid = this.ownerUUID();
+        UUID uuid = this.getOwnerUUID();
         return uuid == null ? null : this.world.getPlayerByUuid(uuid);
     }
 
@@ -429,11 +458,19 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     public boolean isMoving() {
-        return this.getFlag(2);
+        return this.getMoveFlag() != 0;
     }
 
     public void setMoving(boolean flag) {
-        this.setFlag(2, flag);
+        this.setMoveFlag(flag ? 1 : 0);
+    }
+
+    public void setMoveFlag(int flag) {
+        this.dataManager.set(moveFlags, (byte) flag);
+    }
+
+    public byte getMoveFlag() {
+        return this.dataManager.get(moveFlags);
     }
 
     public void setDoJumping(boolean jump) {
@@ -545,7 +582,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         if (this.deathTime == this.maxDeathTime()) {
             this.remove(false); //Forge keep data until we revive player
 
-            for(int i = 0; i < 20; ++i) {
+            for (int i = 0; i < 20; ++i) {
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 double d2 = this.rand.nextGaussian() * 0.02D;
@@ -583,6 +620,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     public void handleAttack(AnimatedAction anim) {
         if (this.isAnimOfType(anim, AnimationType.MELEE)) {
             this.getNavigator().clearPath();
+            if (anim.getTick() == 1 && this.getAttackTarget() != null)
+                this.getLookController().setLookPositionWithEntity(this.getAttackTarget(), 0, 0);
             if (anim.canAttack()) {
                 this.mobAttack(anim, this.getAttackTarget(), this::attackEntityAsMob);
             }
@@ -591,7 +630,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
         AxisAlignedBB aabb = this.calculateAttackAABB(anim, target);
-        this.world.getEntitiesWithinAABB(LivingEntity.class, aabb, this.attackPred).forEach(cons);
+        this.world.getEntitiesWithinAABB(LivingEntity.class, aabb, this.hitPred).forEach(cons);
         PacketHandler.sendToAll(new S2CAttackDebug(aabb));
     }
 
@@ -725,7 +764,6 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     @Override
     protected void addPassenger(Entity passenger) {
         this.targetSelector.removeGoal(this.targetPlayer);
-        this.targetSelector.removeGoal(this.targetNPC);
         this.targetSelector.removeGoal(this.targetMobs);
         super.addPassenger(passenger);
     }
@@ -733,8 +771,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     @Override
     protected void removePassenger(Entity passenger) {
         this.targetSelector.addGoal(1, this.targetPlayer);
-        this.targetSelector.addGoal(2, this.targetNPC);
-        this.targetSelector.addGoal(3, this.targetMobs);
+        this.targetSelector.addGoal(2, this.targetMobs);
         super.removePassenger(passenger);
     }
 
@@ -816,7 +853,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     public void handleWaterTravel(Vector3d vec) {
-        if (this.isBeingRidden()) {
+        if (this.isBeingRidden() && this.canBeSteered() && this.getControllingPassenger() instanceof LivingEntity) {
             LivingEntity entitylivingbase = (LivingEntity) this.getControllingPassenger();
             if (this.adjustRotFromRider(entitylivingbase)) {
                 this.rotationYaw = entitylivingbase.rotationYaw;
@@ -871,7 +908,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         super.writeAdditional(compound);
         compound.putInt("MobLevel", this.level());
         if (this.isTamed())
-            compound.putUniqueId("Owner", this.ownerUUID());
+            compound.putUniqueId("Owner", this.getOwnerUUID());
 
         compound.putBoolean("Out", this.dead);
         compound.putInt("FeedTime", this.feedTimeOut);

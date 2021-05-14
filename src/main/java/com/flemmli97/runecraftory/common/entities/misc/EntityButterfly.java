@@ -8,6 +8,7 @@ import com.flemmli97.runecraftory.common.utils.CustomDamage;
 import com.flemmli97.tenshilib.common.entity.EntityProjectile;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.network.IPacket;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
@@ -21,10 +22,12 @@ import javax.annotation.Nullable;
 import java.util.function.Predicate;
 
 public class EntityButterfly extends EntityProjectile {
+
     private Vector3d targetPos;
     private double length;
     private boolean turn;
     private Predicate<LivingEntity> pred;
+    private int upDelay = 30;
 
     public EntityButterfly(EntityType<? extends EntityButterfly> type, World worldIn) {
         super(type, worldIn);
@@ -37,7 +40,7 @@ public class EntityButterfly extends EntityProjectile {
     public EntityButterfly(World worldIn, LivingEntity thrower) {
         super(ModEntities.butterfly.get(), worldIn, thrower);
         if (thrower instanceof BaseMonster)
-            this.pred = ((BaseMonster) thrower).attackPred;
+            this.pred = ((BaseMonster) thrower).hitPred;
     }
 
     @Override
@@ -58,21 +61,17 @@ public class EntityButterfly extends EntityProjectile {
         this.shoot(dir.x, dir.y, dir.z, velocity, inaccuracy);
     }
 
-    @Override
-    public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
-        super.shoot(x, y, z, velocity, inaccuracy);
-        this.targetPos = this.getMotion().scale(this.length).add(this.getX(), this.getY(), this.getZ());//.addVector(0, -2, 0);
+    public void setUpDelay(int delay) {
+        this.upDelay = delay;
     }
 
     @Override
     public void tick() {
-        if (this.targetPos != null && this.getDistanceSq(this.targetPos.x, this.targetPos.y, this.targetPos.z) < 7)
-            this.turn = true;
-        if (this.turn && this.getMotion().y < 0.5) {
+        if (this.upDelay-- < 0) {
             double motionY = this.getMotion().y;
-            if (motionY < -2.5)
-                motionY = -2.5;
-            this.setMotion(new Vector3d(this.getMotion().x, motionY + 0.005, this.getMotion().z));
+            if (motionY < -0.7)
+                motionY += 0.25;
+            this.setMotion(new Vector3d(this.getMotion().x, motionY + 0.02, this.getMotion().z));
         }
         super.tick();
     }
@@ -87,17 +86,21 @@ public class EntityButterfly extends EntityProjectile {
         LivingEntity e;
         if (result.getEntity() instanceof LivingEntity && (e = (LivingEntity) result.getEntity()) != this.getOwner()
                 && (this.pred == null || this.pred.test((LivingEntity) result.getEntity()))) {
-            if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e), null)) {//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
+            if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.1f, null)) {//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
                 e.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 60, 3));
-                //this.setDead();
                 return true;
             }
         }
         return false;
     }
 
+    public EntityRayTraceResult res(Vector3d from, Vector3d to) {
+        return ProjectileHelper.rayTraceEntities(this.world, this, from, to, this.getBoundingBox().expand(this.getMotion()).grow(1.0D), e -> true);
+    }
+
     @Override
     protected void onBlockHit(BlockRayTraceResult blockRayTraceResult) {
+        this.upDelay = 0;
     }
 
     @Override
@@ -110,7 +113,7 @@ public class EntityButterfly extends EntityProjectile {
     public LivingEntity getOwner() {
         LivingEntity living = super.getOwner();
         if (living instanceof BaseMonster)
-            this.pred = ((BaseMonster) living).attackPred;
+            this.pred = ((BaseMonster) living).hitPred;
         return living;
     }
 }

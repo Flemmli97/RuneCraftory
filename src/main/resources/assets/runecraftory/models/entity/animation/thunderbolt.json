@@ -1389,7 +1389,7 @@
 			}
 		},
 		"feint": {
-			"animation_length": 2.2,
+			"animation_length": 2,
 			"bones": {
 				"body": {
 					"rotation": {
@@ -1567,7 +1567,7 @@
 			}
 		},
 		"defeat": {
-			"animation_length": 1.88,
+			"animation_length": 3,
 			"bones": {
 				"body": {
 					"rotation": {
@@ -1968,7 +1968,7 @@
 			}
 		},
 		"back_kick": {
-			"animation_length": 0.6,
+			"animation_length": 0.64,
 			"bones": {
 				"body": {
 					"rotation": {
@@ -2117,7 +2117,7 @@
 			}
 		},
 		"laser_x5": {
-			"animation_length": 1.48,
+			"animation_length": 1.44,
 			"bones": {
 				"body": {
 					"rotation": {

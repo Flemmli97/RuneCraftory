@@ -25,8 +25,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDualWeapon, IAOEWeapon {
+
     public ItemGloveBase(Item.Properties props) {
-        super(props);
+        super(props.maxStackSize(1));
     }
 
     @Override

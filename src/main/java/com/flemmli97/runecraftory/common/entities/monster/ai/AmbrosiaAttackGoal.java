@@ -55,7 +55,7 @@ public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttack
                     this.moveDelay = 44 + this.attacker.getRNG().nextInt(10);
                     this.moveFlag = true;
                 } else if (this.moveDelay-- <= 0 || this.attacker.getNavigator().noPath()) {
-                    this.attacker.setAiVarHelper(new double[]{this.target.getX(), this.target.getY() - 2, this.target.getZ()});
+                    this.attacker.setAiVarHelper(new double[]{this.target.getX(), this.target.getEyeY() - this.target.getHeight() * 0.5, this.target.getZ()});
                     this.movementDone = true;
                     this.moveFlag = false;
                 }

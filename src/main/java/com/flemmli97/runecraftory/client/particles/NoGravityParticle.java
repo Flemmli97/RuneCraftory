@@ -6,9 +6,9 @@ import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.world.ClientWorld;
 
-public class WaveParticle extends ColoredParticle {
+public class NoGravityParticle extends ColoredParticle {
 
-    protected WaveParticle(ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ, ColoredParticleData colorData, IAnimatedSprite sprite, int maxAge, float minAgeRand, float maxAgeRand, boolean collide) {
+    protected NoGravityParticle(ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ, ColoredParticleData colorData, IAnimatedSprite sprite, int maxAge, float minAgeRand, float maxAgeRand, boolean collide) {
         super(world, x, y, z, motionX, motionY, motionZ, colorData, sprite, maxAge, minAgeRand, maxAgeRand, collide);
         this.particleScale = colorData.getScale();
     }
@@ -36,7 +36,7 @@ public class WaveParticle extends ColoredParticle {
 
         @Override
         public Particle makeParticle(ColoredParticleData data, ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ) {
-            return new WaveParticle(world, x, y, z, motionX, motionY, motionZ, data, this.sprite, 20, 1, 1, false);
+            return new NoGravityParticle(world, x, y, z, motionX, motionY, motionZ, data, this.sprite, 20, 1, 1, false);
         }
     }
 }
