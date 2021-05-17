@@ -49,26 +49,71 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.magicalPotion.get(), new ItemStat.MutableItemStat(3000, 500, 0));
 
         this.addStat(ModItems.broadSword.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 5));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 4));
         this.addStat(ModItems.steelSword.get(), new ItemStat.MutableItemStat(55, 15, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 9)
-                .addAttribute(ModAttributes.RF_DEFENCE.get(), 2));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 5)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));
         this.addStat(ModItems.steelSwordPlus.get(), new ItemStat.MutableItemStat(100, 25, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 11)
-                .addAttribute(ModAttributes.RF_DEFENCE.get(), 4));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 7)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 2));
         this.addStat(ModItems.cutlass.get(), new ItemStat.MutableItemStat(122, 30, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 16)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 10)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 3)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 1));
 
-        this.addStat(ModItems.cheapBracelet.get(), new ItemStat.MutableItemStat(100, 25, 0)
-                .addAttribute(ModAttributes.RF_DEFENCE.get(), 5));
+        this.addStat(ModItems.claymore.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 6));
+        this.addStat(ModItems.zweihaender.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 7));
+        this.addStat(ModItems.zweihaenderPlus.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 8));
+        this.addStat(ModItems.greatSword.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+
+        this.addStat(ModItems.spear.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 6));
+        this.addStat(ModItems.woodStaff.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 7));
+        this.addStat(ModItems.lance.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 8));
+        this.addStat(ModItems.lancePlus.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+
+        this.addStat(ModItems.battleAxe.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 6));
+
+        this.addStat(ModItems.poleAxe.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 8));
+        this.addStat(ModItems.poleAxePlus.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+
+        this.addStat(ModItems.battleHammer.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 6));
+        this.addStat(ModItems.bat.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 7));
+        this.addStat(ModItems.warHammer.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 8));
+        this.addStat(ModItems.warHammerPlus.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+        this.addStat(ModItems.ironBat.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+
+        this.addStat(ModItems.shortDagger.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+
+        this.addStat(ModItems.leatherGlove.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
 
         this.addStat(ModItems.rod.get(), new ItemStat.MutableItemStat(1000, 50, 0)
-                .addAttribute(ModAttributes.RF_MAGIC.get(), 8)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 5)
                 .addAttribute(ModAttributes.RFDIZ.get(), 15)
                 .setElement(EnumElement.FIRE)
                 .setSpell(ModSpells.FIREBALL.get(), null, null));
+
+        this.addStat(ModItems.cheapBracelet.get(), new ItemStat.MutableItemStat(100, 25, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 1.5));
+        this.addStat(ModItems.cheapBracelet.get(), new ItemStat.MutableItemStat(100, 25, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 1.5));
 
         this.addStat("iron", Tags.Items.INGOTS_IRON, new ItemStat.MutableItemStat(1, 1, 5)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));

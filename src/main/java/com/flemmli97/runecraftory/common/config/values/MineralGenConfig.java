@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.common.config.values;
 
 import com.flemmli97.runecraftory.common.registry.ModFeatures;
 import com.flemmli97.runecraftory.common.world.features.ChancedBlockCluster;
-import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.blockstateprovider.SimpleBlockStateProvider;
@@ -14,6 +13,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 public class MineralGenConfig {
@@ -135,8 +135,8 @@ public class MineralGenConfig {
     public static class Builder {
 
         private ResourceLocation block;
-        private Set<BiomeDictionary.Type> whiteList = Sets.newHashSet();
-        private Set<BiomeDictionary.Type> blackList = Sets.newHashSet();
+        private Set<BiomeDictionary.Type> whiteList = new HashSet<>();
+        private Set<BiomeDictionary.Type> blackList = new HashSet<>();
         private int chance = 1, weight = 1, minAmount = 1, maxAmount = 1, xSpread = 4, ySpread = 3, zSpread = 4;
 
         public Builder(ResourceLocation block) {

@@ -4,7 +4,7 @@
   "upgradeDifficulty": 0,
   "element": "NONE",
   "itemStats": {
-    "minecraft:generic.attack_damage": 5
+    "minecraft:generic.attack_damage": 4.0
   },
   "item": "runecraftory:broad_sword"
 }

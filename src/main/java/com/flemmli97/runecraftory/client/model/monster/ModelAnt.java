@@ -175,8 +175,8 @@ public class ModelAnt<T extends EntityAnt> extends EntityModel<T> implements IRe
     @Override
     public void setAngles(T ant, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
-        this.head.rotateAngleY = netHeadYaw * 0.008726646F;
-        this.head.rotateAngleX = headPitch * 0.008726646F;
+        this.head.rotateAngleY += netHeadYaw * 0.008726646F;
+        this.head.rotateAngleX += headPitch * 0.008726646F;
         this.feelerLeft.rotateAngleZ += MathHelper.cos(ageInTicks * 0.15F) * 0.05F + 0.05F;
         this.feelerRight.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.15F) * 0.05F + 0.05F;
         this.feelerLeft.rotateAngleX += MathHelper.sin(ageInTicks * 0.1F) * 0.05F;

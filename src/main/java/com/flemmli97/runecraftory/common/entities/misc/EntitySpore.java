@@ -23,7 +23,7 @@ public class EntitySpore extends EntityDamageCloud {
 
     private static final List<Vector3f> particleCircle = RayTraceUtils.rotatedVecs(new Vector3d(0.025, 0.065, 0), new Vector3d(0, 1, 0), -180, 160, 20);
 
-    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
+    private Predicate<LivingEntity> pred;
 
     public EntitySpore(EntityType<? extends EntitySpore> type, World world) {
         super(type, world);
@@ -52,7 +52,7 @@ public class EntitySpore extends EntityDamageCloud {
 
     @Override
     protected boolean canHit(LivingEntity entity) {
-        return this.pred == null || this.pred.test(entity);
+        return super.canHit(entity) && (this.pred == null || this.pred.test(entity));
     }
 
     @Override
@@ -62,7 +62,7 @@ public class EntitySpore extends EntityDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity livingEntity) {
-        return CombatUtils.damage(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(20).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), livingEntity), null);
+        return CombatUtils.damage(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(20).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()), null);
     }
 
     @Override

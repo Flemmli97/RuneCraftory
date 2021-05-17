@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.common.crafting;
 
 import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.common.registry.ModCrafting;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -32,7 +32,7 @@ public class RecipeBuilder {
 
     private final ItemStack result;
     private final int level;
-    private final List<Ingredient> ingredients = Lists.newArrayList();
+    private final List<Ingredient> ingredients = new ArrayList<>();
     private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
     private String group;
     private final IRecipeSerializer<?> serializer;

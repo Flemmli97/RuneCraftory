@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.common.crafting;
 
 import com.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
@@ -22,6 +21,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
@@ -45,7 +45,7 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
     @Override
     public boolean matches(PlayerContainerInv inv, World world) {
         RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
-        List<ItemStack> inputs = Lists.newArrayList();
+        List<ItemStack> inputs = new ArrayList<>();
         int i = 0;
 
         for (int j = 0; j < inv.getSizeInventory(); ++j) {

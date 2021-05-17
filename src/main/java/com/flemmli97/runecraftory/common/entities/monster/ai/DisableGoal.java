@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.entities.monster.ai;
 
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
+import com.flemmli97.runecraftory.common.utils.IDisableBrain;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
@@ -22,6 +23,17 @@ public class DisableGoal extends Goal {
 
     @Override
     public boolean shouldContinueExecuting() {
-        return EntityUtils.isDisabled(this.entity);
+        return this.shouldExecute();
+    }
+
+    @Override
+    public void startExecuting() {
+        ((IDisableBrain) this.entity.getBrain()).disableBrain(true);
+        this.entity.getNavigator().clearPath();
+    }
+
+    @Override
+    public void resetTask() {
+        ((IDisableBrain) this.entity.getBrain()).disableBrain(false);
     }
 }

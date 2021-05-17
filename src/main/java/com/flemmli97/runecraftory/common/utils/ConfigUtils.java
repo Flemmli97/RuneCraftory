@@ -17,7 +17,7 @@ public class ConfigUtils {
             if (!dest.exists())
                 dest.createNewFile();
             OutputStream out = new FileOutputStream(dest);
-            InputStream in = ResourceStream.getStream(RuneCraftory.MODID, "configs", conf);
+            InputStream in = ResourceStream.getAssetsStream(RuneCraftory.MODID, "configs", conf);
             IOUtils.copy(in, out);
             in.close();
             out.close();

@@ -9,7 +9,7 @@ import java.util.EnumMap;
 
 public class GeneralConfig {
 
-    public static boolean combatModule;
+    public static boolean disableDefence;
     public static boolean gateSpawning;
     public static boolean disableVanillaSpawning;
     public static boolean randomDamage;
@@ -60,7 +60,7 @@ public class GeneralConfig {
     public static boolean debugAttack;
 
     public static void load() {
-        combatModule = GeneralConfigSpec.generalConf.combatModule.get();
+        disableDefence = GeneralConfigSpec.generalConf.disableDefence.get();
         gateSpawning = GeneralConfigSpec.generalConf.gateSpawning.get();
         disableVanillaSpawning = GeneralConfigSpec.generalConf.disableVanillaSpawning.get();
         randomDamage = GeneralConfigSpec.generalConf.randomDamage.get();

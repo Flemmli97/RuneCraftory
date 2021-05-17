@@ -4,6 +4,7 @@ import com.flemmli97.runecraftory.api.datapack.CropProperties;
 import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.client.gui.widgets.SkillButton;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
@@ -12,12 +13,14 @@ import com.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import com.flemmli97.runecraftory.common.network.C2SRideJump;
 import com.flemmli97.runecraftory.common.network.C2SSpellKey;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
-import com.google.common.collect.Lists;
+import com.flemmli97.runecraftory.common.registry.ModParticles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -30,6 +33,7 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientEvents {
@@ -108,7 +112,7 @@ public class ClientEvents {
     }
 
     private List<ITextComponent> injectAdditionalTooltip(ItemStack stack) {
-        List<ITextComponent> tooltip = Lists.newArrayList();
+        List<ITextComponent> tooltip = new ArrayList<>();
         boolean shift = Screen.hasShiftDown();
         ItemStat stat = DataPackHandler.getStats(stack.getItem());
         if (stat != null) {
@@ -150,4 +154,22 @@ public class ClientEvents {
             }
         }
     }*/
+
+    @SubscribeEvent
+    public void tick(LivingEvent.LivingUpdateEvent event) {
+
+        Entity e = event.getEntity();
+        if (e.world.isRemote && e instanceof LivingEntity) {
+            e.getCapability(CapabilityInsts.EntityCap).ifPresent(cap -> {
+                if (e.ticksExisted % 20 == 0) {
+                    if (cap.isSleeping()) {
+                        e.world.addParticle(ModParticles.sleep.get(), e.getX(), e.getY() + e.getHeight() + 0.1, e.getZ(), 0, 0, 0);
+                    }
+                    if (cap.isPoisoned()) {
+                        e.world.addParticle(ModParticles.poison.get(), e.getX(), e.getY() + e.getHeight() + 0.1, e.getZ(), 0, 0, 0);
+                    }
+                }
+            });
+        }
+    }
 }

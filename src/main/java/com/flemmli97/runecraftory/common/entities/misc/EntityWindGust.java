@@ -74,8 +74,8 @@ public class EntityWindGust extends EntityBeam {
     }
 
     @Override
-    protected boolean check(Entity entity) {
-        return super.check(entity) && (!(entity instanceof LivingEntity) || this.pred.test((LivingEntity) entity));
+    protected boolean check(Entity entity, Vector3d from, Vector3d to) {
+        return super.check(entity, from, to) && (!(entity instanceof LivingEntity) || this.pred.test((LivingEntity) entity));
     }
 
     @Override

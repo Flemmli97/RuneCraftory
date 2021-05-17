@@ -5,13 +5,14 @@ import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,8 +25,11 @@ public class EntityProperties {
             .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 1)
             .xp(5).money(5).tamingChance(0.3f).build();
 
-    private List<String> confAttributes;
+    private Set<String> confAttributes;
+    private Set<String> confGains;
+
     private Map<Attribute, Double> baseValues;
+    private Map<Attribute, Double> levelGains;
     private int xp;
     private int money;
     private float taming;
@@ -34,8 +38,9 @@ public class EntityProperties {
     private boolean ridable;
     private boolean flying;
 
-    public EntityProperties(List<String> baseValues, int xp, int money, float tamingChance, SimpleItemStackWrapper[] tamingItem, Map<SimpleItemStackWrapper, Integer> dailyDrops, boolean ridable, boolean flying) {
+    public EntityProperties(Set<String> baseValues, Set<String> gains, int xp, int money, float tamingChance, SimpleItemStackWrapper[] tamingItem, Map<SimpleItemStackWrapper, Integer> dailyDrops, boolean ridable, boolean flying) {
         this.confAttributes = baseValues;
+        this.confGains = gains;
         this.xp = xp;
         this.money = money;
         this.taming = tamingChance;
@@ -46,7 +51,7 @@ public class EntityProperties {
     }
 
     public List<String> attString() {
-        return this.confAttributes;
+        return Lists.newArrayList(this.confAttributes);
     }
 
     public Map<Attribute, Double> getBaseValues() {
@@ -60,6 +65,23 @@ public class EntityProperties {
             }
         }
         return ImmutableMap.copyOf(this.baseValues);
+    }
+
+    public List<String> gainString() {
+        return Lists.newArrayList(this.confAttributes);
+    }
+
+    public Map<Attribute, Double> getAttributeGains() {
+        if (this.levelGains == null) {
+            this.levelGains = new TreeMap<>(ModAttributes.sorted);
+            for (String s : this.confGains) {
+                String[] sub = s.replace(" ", "").split("-");
+                Attribute att = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(sub[0]));
+                if (att != Attributes.GENERIC_LUCK)
+                    this.levelGains.put(att, Double.parseDouble(sub[1]));
+            }
+        }
+        return ImmutableMap.copyOf(this.levelGains);
     }
 
     public Map<SimpleItemStackWrapper, Integer> dailyDrops() {
@@ -93,7 +115,8 @@ public class EntityProperties {
     public EntityProperties read(EntityPropertySpecs spec) {
         try {
             this.baseValues = null;
-            this.confAttributes = spec.baseValues.get();
+            this.confAttributes = Sets.newHashSet(spec.baseValues.get());
+            this.confGains = Sets.newHashSet(spec.levelGains.get());
             this.xp = spec.xp.get();
             this.money = spec.money.get();
             this.taming = spec.taming.get();
@@ -116,13 +139,13 @@ public class EntityProperties {
     }
     /*@Override
     public EntityProperties config(Configuration config, String configCategory) {
-        List<String> stats = Lists.newArrayList();
+        List<String> stats = new ArrayList<>();
         this.baseValues.forEach((key, value) -> stats.add(key.getName() + ";" + value));
-        List<String> drops = Lists.newArrayList();
+        List<String> drops = new ArrayList<>();
         for (Entry<SimpleItemStackWrapper, Float> mapEntry : this.drops.entrySet()) {
             drops.add(mapEntry.getKey().toString() + ";" + mapEntry.getValue());
         }
-        List<String> daily = Lists.newArrayList();
+        List<String> daily = new ArrayList<>();
         for (Entry<SimpleItemStackWrapper, Integer> mapEntry : this.dailyDrops().entrySet()) {
             daily.add(mapEntry.getKey().toString() + ";" + mapEntry.getValue());
         }
@@ -162,12 +185,13 @@ public class EntityProperties {
 
     public static class Builder {
 
-        private final List<String> baseValues = Lists.newArrayList();
+        private final Set<String> baseValues = new HashSet<>();
+        private final Set<String> gains = new HashSet<>();
         private int xp;
         private int money;
         private float taming;
-        private final Set<SimpleItemStackWrapper> tamingItem = Sets.newHashSet();
-        private final Map<SimpleItemStackWrapper, Integer> daily = Maps.newHashMap();
+        private final Set<SimpleItemStackWrapper> tamingItem = new HashSet<>();
+        private final Map<SimpleItemStackWrapper, Integer> daily = new HashMap<>();
         private boolean ridable;
         private boolean flying;
 
@@ -178,6 +202,16 @@ public class EntityProperties {
 
         public Builder putAttributes(ResourceLocation att, double val) {
             this.baseValues.add(att + " - " + val);
+            return this;
+        }
+
+        public Builder putLevelGains(String att, double val) {
+            this.gains.add(att + " - " + val);
+            return this;
+        }
+
+        public Builder putLevelGains(ResourceLocation att, double val) {
+            this.gains.add(att + " - " + val);
             return this;
         }
 
@@ -217,7 +251,7 @@ public class EntityProperties {
         }
 
         public EntityProperties build() {
-            return new EntityProperties(this.baseValues, this.xp, this.money, this.taming, this.tamingItem.toArray(new SimpleItemStackWrapper[0]), this.daily, this.ridable, this.flying);
+            return new EntityProperties(this.baseValues, this.gains, this.xp, this.money, this.taming, this.tamingItem.toArray(new SimpleItemStackWrapper[0]), this.daily, this.ridable, this.flying);
         }
     }
 }

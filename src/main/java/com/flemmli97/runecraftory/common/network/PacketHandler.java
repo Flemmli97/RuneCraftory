@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkDirection;
@@ -33,6 +34,8 @@ public class PacketHandler {
         dispatcher.registerMessage(id++, C2SOpenInfo.class, C2SOpenInfo::write, C2SOpenInfo::read, C2SOpenInfo::handle);
         dispatcher.registerMessage(id++, C2SSpellKey.class, C2SSpellKey::write, C2SSpellKey::read, C2SSpellKey::handle);
         dispatcher.registerMessage(id++, S2CCapSync.class, S2CCapSync::write, S2CCapSync::read, S2CCapSync::handle);
+        dispatcher.registerMessage(id++, S2CEntityDataSync.class, S2CEntityDataSync::write, S2CEntityDataSync::read, S2CEntityDataSync::handle);
+        dispatcher.registerMessage(id++, S2CEntityDataSyncAll.class, S2CEntityDataSyncAll::write, S2CEntityDataSyncAll::read, S2CEntityDataSyncAll::handle);
     }
 
     public static <T> void sendToClient(T message, ServerPlayerEntity player) {
@@ -45,5 +48,9 @@ public class PacketHandler {
 
     public static <T> void sendToAll(T message) {
         dispatcher.send(PacketDistributor.ALL.noArg(), message);
+    }
+
+    public static <T> void sendToTrackingAndSelf(T message, Entity e) {
+        dispatcher.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> e), message);
     }
 }

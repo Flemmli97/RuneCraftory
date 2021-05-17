@@ -37,6 +37,10 @@ public class RuneCraftoryEggItem extends SpawnEgg {
             }
             ((IBaseMob) e).setLevel(level);
         }
+        //Temporary fix for Forge-Bug-#7730
+        if (e.getWidth() > 0.7 && e.getWidth() < 1) {
+            e.setPosition(e.getX() + 0.05, e.getY(), e.getZ());
+        }
         return super.onEntitySpawned(e, stack, player);
     }
 

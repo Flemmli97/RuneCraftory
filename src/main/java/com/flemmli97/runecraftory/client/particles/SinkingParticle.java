@@ -11,27 +11,12 @@ import net.minecraft.util.math.MathHelper;
 public class SinkingParticle extends ColoredParticle {
 
     protected SinkingParticle(ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ, ColoredParticleData colorData, IAnimatedSprite sprite, int maxAge, float minAgeRand, float maxAgeRand, boolean collide) {
-        super(world, x, y, z, motionX, motionY, motionZ, colorData, sprite, maxAge, minAgeRand, maxAgeRand, collide);
+        super(world, x, y, z, motionX, motionY, motionZ, colorData, sprite, maxAge, minAgeRand, maxAgeRand, collide, false, true);
     }
 
     @Override
     public float getScale(float partialTicks) {
         return this.particleScale * (MathHelper.sin((float) ((this.age + partialTicks) / this.maxAge * Math.PI)) * 0.5f + 0.6f);
-    }
-
-    @Override
-    public void tick() {
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
-        if (this.age++ >= this.maxAge) {
-            this.setExpired();
-        } else {
-            this.selectSpriteWithAge(this.spriteProvider);
-            this.move(this.motionX, this.motionY, this.motionZ);
-            this.motionY -= 0.009F;
-            this.motionY = Math.max(this.motionY, -0.1F);
-        }
     }
 
     @Override

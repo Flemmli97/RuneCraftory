@@ -4,8 +4,8 @@
   "upgradeDifficulty": 5,
   "element": "NONE",
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 5,
-    "runecraftory:attribute.rf.magic_def": 5
+    "runecraftory:attribute.rf.defence": 5.0,
+    "runecraftory:attribute.rf.magic_def": 5.0
   },
   "tier1Spell": "runecraftory:vanilla_evoker_fang",
   "item": "minecraft:totem_of_undying"

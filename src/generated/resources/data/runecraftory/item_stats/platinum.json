@@ -4,7 +4,7 @@
   "upgradeDifficulty": 30,
   "element": "NONE",
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 25
+    "runecraftory:attribute.rf.defence": 25.0
   },
   "tag": "forge:ingots/platinum"
 }

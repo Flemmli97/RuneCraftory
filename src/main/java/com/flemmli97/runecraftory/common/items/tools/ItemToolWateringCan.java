@@ -12,7 +12,6 @@ import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FarmlandBlock;
@@ -43,6 +42,7 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ItemToolWateringCan extends ToolItem implements IItemUsable, IChargeable {
@@ -50,7 +50,7 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
     private final EnumToolTier tier;
 
     public ItemToolWateringCan(EnumToolTier tier, Item.Properties props) {
-        super(0, 0, ItemTiers.tier, Sets.newHashSet(), props);
+        super(0, 0, ItemTiers.tier, new HashSet<>(), props);
         this.tier = tier;
     }
 

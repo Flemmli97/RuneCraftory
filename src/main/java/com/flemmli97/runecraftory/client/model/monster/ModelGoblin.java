@@ -123,8 +123,8 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
     @Override
     public void setAngles(T goblin, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
-        this.head.rotateAngleY = netHeadYaw * 0.017453292F;
-        this.head.rotateAngleX = headPitch * 0.017453292F;
+        this.head.rotateAngleY += netHeadYaw * 0.017453292F;
+        this.head.rotateAngleX += headPitch * 0.017453292F;
 
         this.rightEar.rotateAngleZ += MathHelper.cos(ageInTicks * 0.1F) * 0.04F + 0.05F;
         this.leftEar.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.1F) * 0.04F + 0.05F;

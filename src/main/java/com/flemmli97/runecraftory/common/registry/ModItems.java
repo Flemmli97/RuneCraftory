@@ -731,14 +731,14 @@ public class ModItems {
     public static final RegistryObject<Item> fireBallSmall = spell(() -> ModSpells.FIREBALL, "fireball");
     public static final RegistryObject<Item> fireBallBig = spell(() -> ModSpells.EMPTY, "fireball_big");
     public static final RegistryObject<Item> explosion = spell(() -> ModSpells.EMPTY, "explosion");
-    public static final RegistryObject<Item> waterLaser = spell(() -> ModSpells.EMPTY, "water_laser");
+    public static final RegistryObject<Item> waterLaser = spell(() -> ModSpells.WATERLASER, "water_laser");
     public static final RegistryObject<Item> parallelLaser = spell(() -> ModSpells.EMPTY, "parallel_laser");
     public static final RegistryObject<Item> deltaLaser = spell(() -> ModSpells.EMPTY, "delta_laser");
     public static final RegistryObject<Item> screwRock = spell(() -> ModSpells.EMPTY, "screw_rock");
     public static final RegistryObject<Item> earthSpike = spell(() -> ModSpells.EMPTY, "earth_spike");
     public static final RegistryObject<Item> avengerRock = spell(() -> ModSpells.EMPTY, "avenger_rock");
     public static final RegistryObject<Item> sonicWind = spell(() -> ModSpells.EMPTY, "sonic_wind");
-    public static final RegistryObject<Item> doubleSonic = spell(() -> ModSpells.EMPTY, "double_sonic");
+    public static final RegistryObject<Item> doubleSonic = spell(() -> ModSpells.DOUBLESONIC, "double_sonic");
     public static final RegistryObject<Item> penetrateSonic = spell(() -> ModSpells.EMPTY, "penetrate_sonic");
     public static final RegistryObject<Item> lightBarrier = spell(() -> ModSpells.EMPTY, "light_barrier");
     public static final RegistryObject<Item> shine = spell(() -> ModSpells.EMPTY, "shine");

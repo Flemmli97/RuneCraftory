@@ -121,11 +121,9 @@ public class EntityAmbrosia extends BossMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getAttackTarget();
-        double distanceToTargetSq = 4;
         if (target != null) {
-            distanceToTargetSq = this.getDistanceSq(target);
             if (!anim.getID().equals(pollen.getID()))
-                this.getLookController().setLookPositionWithEntity(target, 30.0f, 30.0f);
+                this.faceEntity(target, 180.0f, 50.0f);
         }
         switch (anim.getID()) {
             case "butterfly":
@@ -139,7 +137,7 @@ public class EntityAmbrosia extends BossMonster {
                 if (target != null) {
                     this.getNavigator().tryMoveToEntityLiving(target, 1.0);
                 }
-                if (anim.canAttack() && distanceToTargetSq <= 5) {
+                if (anim.canAttack()) {
                     this.mobAttack(anim, target, this::attackEntityAsMob);
                 }
                 break;

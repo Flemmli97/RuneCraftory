@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.data;
 
 import com.flemmli97.runecraftory.common.registry.ModParticles;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -17,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +26,7 @@ public class ParticleGen implements IDataProvider {
 
     private final DataGenerator generator;
 
-    protected final Map<ResourceLocation, List<ResourceLocation>> particleTextures = Maps.newLinkedHashMap();
+    protected final Map<ResourceLocation, List<ResourceLocation>> particleTextures = new LinkedHashMap<>();
 
     public ParticleGen(DataGenerator generator) {
         this.generator = generator;
@@ -45,6 +45,9 @@ public class ParticleGen implements IDataProvider {
         this.addTo(ModParticles.wind.get(), new ResourceLocation("effect_7"), new ResourceLocation("effect_6"),
                 new ResourceLocation("effect_5"), new ResourceLocation("effect_4"), new ResourceLocation("effect_3"),
                 new ResourceLocation("effect_2"), new ResourceLocation("effect_1"), new ResourceLocation("effect_0"));
+        this.addTo(ModParticles.sleep.get());
+        this.addTo(ModParticles.poison.get());
+
     }
 
     @Override

@@ -156,8 +156,8 @@ public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements
     @Override
     public void setAngles(T wooly, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
-        this.head.rotateAngleY = netHeadYaw * 0.008453292F;
-        this.head.rotateAngleX = headPitch * 0.012453292F;
+        this.head.rotateAngleY += netHeadYaw * 0.008453292F;
+        this.head.rotateAngleX += headPitch * 0.012453292F;
         this.earLeft.rotateAngleZ += Math.abs(MathHelper.sin(ageInTicks * 0.04F) * 0.1735987755982989F);
         this.earRight.rotateAngleZ -= Math.abs(MathHelper.sin(ageInTicks * 0.04F) * 0.1735987755982989F);
 

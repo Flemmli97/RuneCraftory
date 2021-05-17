@@ -4,7 +4,7 @@
   "upgradeDifficulty": 20,
   "element": "NONE",
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 15
+    "runecraftory:attribute.rf.defence": 15.0
   },
   "tag": "forge:ingots/gold"
 }

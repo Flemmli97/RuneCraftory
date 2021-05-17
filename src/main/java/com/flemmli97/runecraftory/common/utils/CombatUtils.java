@@ -3,7 +3,6 @@ package com.flemmli97.runecraftory.common.utils;
 import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
-import com.flemmli97.runecraftory.common.capability.IPlayerCap;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.entities.IBaseMob;
@@ -37,24 +36,30 @@ import java.util.Random;
 
 public class CombatUtils {
 
-    public static float getAttributeValueRaw(LivingEntity attacker, Attribute att) {
+    /**
+     * For damage calculation target should be null. The damage reduction gets done at the target.
+     */
+    public static int getAttributeValueRaw(LivingEntity attacker, Attribute att) {
         return getAttributeValue(attacker, att, null);
     }
 
-    public static float getAttributeValue(LivingEntity attacker, Attribute att, Entity target) {
-        float increase = 0;
+    /**
+     * For damage calculation target should be null. The damage reduction gets done at the target.
+     */
+    public static int getAttributeValue(LivingEntity attacker, Attribute att, Entity target) {
         if (attacker == null)
-            return increase;
+            return 0;
+        float increase = 0;
         if (attacker instanceof PlayerEntity) {
             increase += attacker.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) attacker, att)).orElse(0);
         } else if (attacker.getAttribute(att) != null) {
             increase += attacker.getAttributeValue(att);
         }
         if (!(target instanceof LivingEntity))
-            return increase;
+            return (int) increase;
         Attribute opp = opposing(att);
         if (opp == null)
-            return increase;
+            return (int) increase;
         if (target instanceof PlayerEntity) {
             increase -= target.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) target, opp)).orElse(0);
         } else {
@@ -62,7 +67,7 @@ public class CombatUtils {
             if (living.getAttribute(opp) != null)
                 increase -= living.getAttributeValue(opp);
         }
-        return increase;
+        return (int) increase;
     }
 
     public static Attribute opposing(Attribute att) {
@@ -99,7 +104,7 @@ public class CombatUtils {
 
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {
         float reduce = 0.0f;
-        if (!source.isDamageAbsolute()) {
+        if (GeneralConfig.disableDefence && !source.isDamageAbsolute()) {
             if (!source.isUnblockable()) {
                 if (source.isMagicDamage())
                     reduce = getAttributeValue(entity, ModAttributes.RF_MAGIC_DEFENCE.get(), null);
@@ -209,13 +214,12 @@ public class CombatUtils {
      * @return if the attack was successful or not
      */
     public static boolean playerAttackWithItem(PlayerEntity player, Entity target, boolean resetCooldown, boolean playSound, boolean levelSkill) {
-        IPlayerCap cap = player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"));
         ItemStack stack = player.getHeldItemMainhand();
         if (!(stack.getItem() instanceof IItemUsable))
             return false;
         IItemUsable item = (IItemUsable) stack.getItem();
         if (target.canBeAttackedWithItem() && !target.hitByEntity(player) && player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f) <= 0) {
-            float damagePhys = cap.getAttributeValue(player, Attributes.GENERIC_ATTACK_DAMAGE);
+            float damagePhys = getAttributeValueRaw(player, Attributes.GENERIC_ATTACK_DAMAGE);
             if (damagePhys > 0) {
                 if (resetCooldown) {
                     player.getCooldownTracker().setCooldown(stack.getItem(), item.itemCoolDownTicks());
@@ -229,7 +233,7 @@ public class CombatUtils {
                     ++i;
                 }
                 Vector3d targetMot = target.getMotion();
-                damagePhys = faintChance ? Float.MAX_VALUE : GeneralConfig.randomDamage ? damagePhys + (float) (player.world.rand.nextGaussian() * damagePhys / 10.0) : damagePhys;
+                damagePhys = faintChance ? Float.MAX_VALUE : GeneralConfig.randomDamage ? (int) (damagePhys + (float) (player.world.rand.nextGaussian() * damagePhys / 10.0)) : damagePhys;
                 boolean ignoreArmor = critChance || faintChance;
                 float knockback = i * 0.5f + 0.1f;
                 if (target instanceof BaseMonster) {
@@ -304,10 +308,10 @@ public class CombatUtils {
 
     public static boolean damage(@Nullable LivingEntity attacker, Entity target, CustomDamage source, float damagePhys, @Nullable ItemStack stack) {
         boolean success = target.attackEntityFrom(source, damagePhys);
-        spawnElementalParticle(target, source.getElement());
         if (success) {
+            spawnElementalParticle(target, source.getElement());
             if (attacker != null) {
-                int drainPercent = (int) getAttributeValue(attacker, ModAttributes.RFDRAIN.get(), target);
+                int drainPercent = getAttributeValue(attacker, ModAttributes.RFDRAIN.get(), target);
                 if (drainPercent > 0f) {
                     if (attacker instanceof PlayerEntity)
                         attacker.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.regenHealth((PlayerEntity) attacker, drainPercent * damagePhys));

@@ -7,7 +7,6 @@ import com.flemmli97.runecraftory.common.entities.monster.ai.AirWanderGoal;
 import com.flemmli97.runecraftory.common.entities.monster.ai.AnimatedRangedGoal;
 import com.flemmli97.runecraftory.common.entities.monster.ai.FloatingFlyNavigator;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-import com.google.common.collect.Lists;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -19,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EntityWeagle extends BaseMonster {
@@ -79,7 +79,7 @@ public class EntityWeagle extends BaseMonster {
             }
         } else if (anim.getID().equals(swoop.getID())) {
             if (this.hitEntity == null)
-                this.hitEntity = Lists.newArrayList();
+                this.hitEntity = new ArrayList<>();
             Vector3d dir;
             if (this.getAttackTarget() != null) {
                 dir = this.getAttackTarget().getPositionVec().subtract(this.getPositionVec()).normalize();
@@ -90,9 +90,9 @@ public class EntityWeagle extends BaseMonster {
             if (anim.getTick() > anim.getAttackTime() && anim.getLength() - anim.getTick() > 3) {
                 this.setMotion(dir.scale(0.55));
                 this.mobAttack(anim, null, e -> {
-                    if (!this.getPassengers().contains(e) && !this.hitEntity.contains(e)) {
-                        this.attackEntityAsMob(e);
+                    if (!this.hitEntity.contains(e)) {
                         this.hitEntity.add(e);
+                        this.attackEntityAsMob(e);
                     }
                 });
             } else {

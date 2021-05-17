@@ -1,8 +1,8 @@
 package com.flemmli97.runecraftory.common.effects;
 
-import com.flemmli97.runecraftory.common.entities.monster.ai.DisableGoal;
+import com.flemmli97.runecraftory.common.network.PacketHandler;
+import com.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
@@ -26,16 +26,19 @@ public class SleepEffect extends Effect {
 
     @Override
     public void applyAttributesModifiersToEntity(LivingEntity entity, AttributeModifierManager manager, int amplifier) {
-        if (entity instanceof MobEntity) {
-            ((MobEntity) entity).goalSelector.addGoal(-1, new DisableGoal((MobEntity) entity));
-            entity.setSilent(true);
-        }
+        entity.setSilent(true);
+        sendSleepPacket(entity, true);
         super.applyAttributesModifiersToEntity(entity, manager, amplifier);
     }
 
     @Override
     public void removeAttributesModifiersFromEntity(LivingEntity entity, AttributeModifierManager manager, int amplifier) {
         entity.setSilent(false);
+        sendSleepPacket(entity, false);
         super.removeAttributesModifiersFromEntity(entity, manager, amplifier);
+    }
+
+    private static void sendSleepPacket(LivingEntity entity, boolean flag) {
+        PacketHandler.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getEntityId(), S2CEntityDataSync.Type.SLEEP, flag), entity);
     }
 }

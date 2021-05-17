@@ -8,6 +8,7 @@ import com.flemmli97.runecraftory.common.utils.CustomDamage;
 import com.flemmli97.tenshilib.common.entity.EntityProjectile;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -15,6 +16,8 @@ import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
 
 public class EntityFireball extends EntityProjectile {
+
+    private float damageMultiplier = 1;
 
     public EntityFireball(EntityType<? extends EntityFireball> type, World world) {
         super(type, world);
@@ -26,7 +29,7 @@ public class EntityFireball extends EntityProjectile {
 
     @Override
     protected boolean onEntityHit(EntityRayTraceResult result) {
-        boolean att = this.getOwner() != null && CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.FIRE).hurtResistant(5).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), result.getEntity()), null);
+        boolean att = this.getOwner() != null && CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.FIRE).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
         this.world.playSound(null, result.getEntity().getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, 1.0f);
         this.remove();
         return att;
@@ -41,5 +44,21 @@ public class EntityFireball extends EntityProjectile {
     @Override
     protected float getGravityVelocity() {
         return 0.0025f;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
+    }
+
+    @Override
+    protected void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+    }
+
+    @Override
+    protected void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 }

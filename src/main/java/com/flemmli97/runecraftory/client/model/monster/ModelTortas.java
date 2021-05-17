@@ -146,8 +146,8 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
     @Override
     public void setAngles(T tortas, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
-        this.neck.rotateAngleY = netHeadYaw * 0.003F;
-        this.neck.rotateAngleX = headPitch * 0.01F;
+        this.neck.rotateAngleY += netHeadYaw * 0.003F;
+        this.neck.rotateAngleX += headPitch * 0.01F;
         AnimatedAction anim = tortas.getAnimation();
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
         if (tortas.isMoving()) {

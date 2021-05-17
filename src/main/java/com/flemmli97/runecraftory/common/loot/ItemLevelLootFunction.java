@@ -3,7 +3,6 @@ package com.flemmli97.runecraftory.common.loot;
 import com.flemmli97.runecraftory.common.registry.ModLootModifier;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.tenshilib.common.utils.JsonUtils;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -19,6 +18,7 @@ import net.minecraft.loot.LootParameters;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.loot.functions.ILootFunction;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
@@ -63,7 +63,7 @@ public class ItemLevelLootFunction extends LootFunction {
 
     public static class Builder extends LootFunction.Builder<ItemLevelLootFunction.Builder> {
 
-        private final List<WeightedLevel> levels = Lists.newArrayList();
+        private final List<WeightedLevel> levels = new ArrayList<>();
 
         @Override
         protected ItemLevelLootFunction.Builder doCast() {
@@ -160,7 +160,7 @@ public class ItemLevelLootFunction extends LootFunction {
     }
 
     public static List<WeightedLevel> deserialize(JsonElement element) {
-        List<WeightedLevel> list = Lists.newArrayList();
+        List<WeightedLevel> list = new ArrayList<>();
         if (!element.isJsonArray())
             throw new JsonParseException("Expected a json array for " + element);
         element.getAsJsonArray().forEach(el -> {

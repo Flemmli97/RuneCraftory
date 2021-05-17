@@ -184,8 +184,8 @@ public class ModelBuffamoo<T extends EntityBuffamoo> extends EntityModel<T> impl
     @Override
     public void setAngles(T buffamoo, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
-        this.head.rotateAngleY = netHeadYaw * 0.008726646F;
-        this.head.rotateAngleX = headPitch * 0.008726646F;
+        this.head.rotateAngleY += netHeadYaw * 0.008726646F;
+        this.head.rotateAngleX += headPitch * 0.008726646F;
 
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
         this.topFur1.rotateAngleZ = (float) (MathHelper.sin(buffamoo.ticksExisted * 0.4f) * 0.1);

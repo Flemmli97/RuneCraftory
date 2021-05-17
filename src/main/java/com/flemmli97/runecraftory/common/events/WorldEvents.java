@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.events;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.common.capability.EntityCapImpl;
 import com.flemmli97.runecraftory.common.capability.PlayerCapImpl;
 import com.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
 import com.flemmli97.runecraftory.common.config.GenerationConfig;
@@ -14,6 +15,7 @@ import com.flemmli97.runecraftory.common.world.WorldHandler;
 import net.minecraft.block.IGrowable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
@@ -52,11 +54,15 @@ public class WorldEvents {
 
     public static final ResourceLocation PlayerCap = new ResourceLocation(RuneCraftory.MODID, "player_cap");
     public static final ResourceLocation StaffCap = new ResourceLocation(RuneCraftory.MODID, "staff_cap");
+    public static final ResourceLocation EntityCap = new ResourceLocation(RuneCraftory.MODID, "entity_cap");
 
     @SubscribeEvent
     public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof PlayerEntity) {
             event.addCapability(PlayerCap, new PlayerCapImpl());
+        }
+        if (event.getObject() instanceof LivingEntity) {
+            event.addCapability(EntityCap, new EntityCapImpl());
         }
     }
 

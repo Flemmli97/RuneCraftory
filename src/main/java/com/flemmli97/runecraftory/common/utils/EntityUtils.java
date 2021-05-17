@@ -1,5 +1,7 @@
 package com.flemmli97.runecraftory.common.utils;
 
+import com.flemmli97.runecraftory.common.config.GeneralConfig;
+import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.registry.ModEffects;
 import com.flemmli97.tenshilib.api.entity.IOwnable;
 import net.minecraft.entity.LivingEntity;
@@ -19,6 +21,10 @@ public class EntityUtils {
         return entity.getActivePotionEffect(ModEffects.paralysis.get()) != null;
     }
 
+    public static boolean sleeping(LivingEntity entity) {
+        return entity.getActivePotionEffect(ModEffects.sleep.get()) != null;
+    }
+
     public static float playerLuck(PlayerEntity player) {
         float luckAtt = player.getLuck();
 
@@ -36,5 +42,9 @@ public class EntityUtils {
         if (entity instanceof IOwnable<?>)
             return ((IOwnable<?>) entity).getOwnerUUID();
         return null;
+    }
+
+    public static float tamingChance(BaseMonster monster, float multiplier) {
+        return monster.tamingChance() * multiplier * GeneralConfig.tamingMultiplier;
     }
 }

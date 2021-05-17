@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.effects;
 
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import com.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectType;
@@ -8,7 +9,7 @@ import net.minecraft.potion.EffectType;
 public class ColdEffect extends PermanentEffect {
 
     public ColdEffect() {
-        super(EffectType.HARMFUL, 0);
+        super(EffectType.HARMFUL, 0, S2CEntityDataSync.Type.COLD);
         this.setTickDelay(60);
     }
 

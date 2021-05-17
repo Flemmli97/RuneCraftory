@@ -98,10 +98,9 @@ public class EntityAmbrosiaSleep extends Entity implements IOwnable<EntityAmbros
             List<LivingEntity> list = this.world.getEntitiesWithinAABB(LivingEntity.class, this.getBoundingBox().grow(0.3), this.pred);
             for (LivingEntity e : list) {
                 if (!e.equals(this.getOwner()) && (this.pred == null || this.pred.test(e))) {
-
-                    if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.3f, null)) {
-                        e.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 80, 1, true, false));
-                        e.addPotionEffect(new EffectInstance(ModEffects.sleep.get(), 80, 1, true, false));
+                    if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * 0.5f, null)) {
+                        e.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 80, 0, true, false));
+                        e.addPotionEffect(new EffectInstance(ModEffects.sleep.get(), 80, 0, true, false));
                         this.remove();
                         break;
                     }

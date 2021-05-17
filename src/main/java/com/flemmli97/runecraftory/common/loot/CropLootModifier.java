@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.common.loot;
 
 import com.flemmli97.runecraftory.api.datapack.CropProperties;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import com.google.common.collect.Lists;
 import com.google.gson.JsonObject;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +14,7 @@ import net.minecraftforge.common.loot.LootModifier;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CropLootModifier extends LootModifier {
@@ -28,7 +28,7 @@ public class CropLootModifier extends LootModifier {
 
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-        List<ItemStack> mod = Lists.newArrayList();
+        List<ItemStack> mod = new ArrayList<>();
         generatedLoot.removeIf(stack -> stack.getItem() == this.remove);
         generatedLoot.removeIf(stack -> this.insertMerge(mod, stack));
         generatedLoot.addAll(mod);

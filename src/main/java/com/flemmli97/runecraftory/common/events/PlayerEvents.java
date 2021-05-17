@@ -13,6 +13,7 @@ import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.common.network.S2CCalendar;
 import com.flemmli97.runecraftory.common.network.S2CCapSync;
 import com.flemmli97.runecraftory.common.network.S2CDataPackSync;
+import com.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModTags;
@@ -64,6 +65,12 @@ public class PlayerEvents {
                 });
             }
         }
+    }
+
+    @SubscribeEvent
+    public void trackEntity(PlayerEvent.StartTracking event) {
+        if (event.getPlayer() instanceof ServerPlayerEntity && event.getTarget() instanceof LivingEntity)
+            PacketHandler.sendToClient(new S2CEntityDataSyncAll((LivingEntity) event.getTarget()), (ServerPlayerEntity) event.getPlayer());
     }
 
     @SubscribeEvent

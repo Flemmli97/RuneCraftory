@@ -136,7 +136,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
                 boolean player = entity instanceof PlayerEntity;
                 boolean success = false;
                 for (Entity e : list) {
-                    float damagePhys = CombatUtils.getAttributeValue(entity, Attributes.GENERIC_ATTACK_DAMAGE, e);
+                    float damagePhys = CombatUtils.getAttributeValueRaw(entity, Attributes.GENERIC_ATTACK_DAMAGE);
                     if (CombatUtils.damage(entity, e, src, damagePhys, stack))
                         success = true;
                 }

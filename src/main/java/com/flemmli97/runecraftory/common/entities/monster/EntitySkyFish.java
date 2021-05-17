@@ -3,9 +3,11 @@ package com.flemmli97.runecraftory.common.entities.monster;
 import com.flemmli97.runecraftory.common.entities.AnimationType;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
+import com.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import com.flemmli97.runecraftory.common.entities.monster.ai.AirWanderGoal;
 import com.flemmli97.runecraftory.common.entities.monster.ai.AnimatedRangedGoal;
 import com.flemmli97.runecraftory.common.entities.monster.ai.FloatingFlyNavigator;
+import com.flemmli97.runecraftory.common.registry.ModSpells;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
@@ -17,6 +19,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
 public class EntitySkyFish extends BaseMonster {
 
@@ -24,7 +27,7 @@ public class EntitySkyFish extends BaseMonster {
 
     public static final AnimatedAction slap = new AnimatedAction(11, 6, "slap");
     public static final AnimatedAction beam = new AnimatedAction(14, 7, "beam");
-    public static final AnimatedAction swipe = new AnimatedAction(16, 5, "swipe");
+    public static final AnimatedAction swipe = new AnimatedAction(16, 4, "swipe");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{slap, beam, swipe};
 
@@ -49,6 +52,7 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     protected void applyAttributes() {
         this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1);
+        this.getAttribute(Attributes.GENERIC_FOLLOW_RANGE).setBaseValue(32);
         super.applyAttributes();
     }
 
@@ -72,13 +76,43 @@ public class EntitySkyFish extends BaseMonster {
 
     @Override
     public void handleRidingCommand(int command) {
+        if (this.getAnimation() == null) {
+            if (command == 2)
+                this.setAnimation(swipe);
+            else if (command == 1)
+                this.setAnimation(beam);
+            else
+                this.setAnimation(slap);
+        }
+    }
 
+    @Override
+    public void handleAttack(AnimatedAction anim) {
+        if (anim.getID().equals(beam.getID())) {
+            this.getNavigator().clearPath();
+            if (anim.canAttack()) {
+                ModSpells.WATERLASER.get().use((ServerWorld) this.world, this, null);
+            }
+        } else if (anim.getID().equals(swipe.getID())) {
+            if (anim.canAttack()) {
+                EntityWaterLaser laser = new EntityWaterLaser(this.world, this, -8).setMaxTicks(5);
+                Vector3d dir;
+                if (this.getAttackTarget() != null) {
+                    dir = this.getAttackTarget().getEyePosition(1).subtract(this.getPositionVec());
+                } else {
+                    dir = this.getLookVec();
+                }
+                laser.setRotationToDirWithOffset(dir.getX(), dir.getY(), dir.getZ(), 0, 20);
+                this.world.addEntity(laser);
+            }
+        } else
+            super.handleAttack(anim);
     }
 
     @Override
     public void livingTick() {
         super.livingTick();
-        if (this.getAttackTarget() == null && !this.isInWater() && this.belowSold()) {
+        if (!this.world.isRemote && this.getAttackTarget() == null && !this.isInWater() && this.belowSoldid()) {
             Vector3d mot = this.getMotion();
             double newY = Math.max(0, mot.y);
             newY += 0.03;
@@ -86,7 +120,7 @@ public class EntitySkyFish extends BaseMonster {
         }
     }
 
-    private boolean belowSold() {
+    private boolean belowSoldid() {
         BlockPos pos = this.getBlockPos().down();
         return this.world.getBlockState(pos).hasSolidTopSurface(this.world, pos, this);
     }

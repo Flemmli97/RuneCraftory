@@ -16,6 +16,7 @@ import net.minecraft.world.BossInfo;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerBossInfo;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
@@ -93,7 +94,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     }
 
     private void updateplayers() {
-        Set<ServerPlayerEntity> set = Sets.newHashSet();
+        Set<ServerPlayerEntity> set = new HashSet<>();
         for (ServerPlayerEntity entityplayermp : this.world.getEntitiesWithinAABB(ServerPlayerEntity.class, this.getBoundingBox().grow(10.0))) {
             this.bossInfo.addPlayer(entityplayermp);
             set.add(entityplayermp);

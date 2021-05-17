@@ -13,8 +13,11 @@ public class ColoredParticle extends SpriteTexturedParticle {
 
     public final IAnimatedSprite spriteProvider;
 
+    protected boolean randomMovements, gravity;
+
     protected ColoredParticle(ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ,
-                              ColoredParticleData colorData, IAnimatedSprite sprite, int maxAge, float minAgeRand, float maxAgeRand, boolean collide) {
+                              ColoredParticleData colorData, IAnimatedSprite sprite, int maxAge, float minAgeRand, float maxAgeRand,
+                              boolean collide, boolean randomMovements, boolean gravity) {
         super(world, x, y, z);
         this.motionX = motionX;
         this.motionY = motionY;
@@ -27,6 +30,13 @@ public class ColoredParticle extends SpriteTexturedParticle {
         this.selectSpriteWithAge(this.spriteProvider);
         this.particleScale *= colorData.getScale();
         this.canCollide = collide;
+        this.randomMovements = randomMovements;
+        this.gravity = gravity;
+    }
+
+    public ColoredParticle setScale(float scale) {
+        this.particleScale = scale;
+        return this;
     }
 
     @Override
@@ -49,19 +59,33 @@ public class ColoredParticle extends SpriteTexturedParticle {
         } else {
             this.selectSpriteWithAge(this.spriteProvider);
             this.move(this.motionX, this.motionY, this.motionZ);
-            if (this.posY == this.prevPosY) {
-                this.motionX *= 1.1D;
-                this.motionZ *= 1.1D;
-            }
+            if (this.randomMovements) {
+                if (this.posY == this.prevPosY) {
+                    this.motionX *= 1.1D;
+                    this.motionZ *= 1.1D;
+                }
 
-            this.motionX *= 0.96F;
-            this.motionY *= 0.96F;
-            this.motionZ *= 0.96F;
-            if (this.onGround) {
-                this.motionX *= 0.7F;
-                this.motionZ *= 0.7F;
+                this.motionX *= 0.96F;
+                this.motionY *= 0.96F;
+                this.motionZ *= 0.96F;
+                if (this.onGround) {
+                    this.motionX *= 0.7F;
+                    this.motionZ *= 0.7F;
+                }
+            }
+            if (this.gravity) {
+                this.motionY = this.gravity();
+                this.motionY = Math.max(this.motionY, this.maxGravity());
             }
         }
+    }
+
+    protected float gravity() {
+        return -0.009f;
+    }
+
+    protected float maxGravity() {
+        return -0.1f;
     }
 
     public static class LightParticleFactory implements IParticleFactory<ColoredParticleData> {
@@ -74,7 +98,21 @@ public class ColoredParticle extends SpriteTexturedParticle {
 
         @Override
         public Particle makeParticle(ColoredParticleData data, ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ) {
-            return new ColoredParticle(world, x, y, z, motionX, motionY, motionZ, data, this.sprite, 40, 0.7f, 1.3f, false);
+            return new ColoredParticle(world, x, y, z, motionX, motionY, motionZ, data, this.sprite, 40, 0.7f, 1.3f, false, true, false);
+        }
+    }
+
+    public static class NoGravityParticleFactory implements IParticleFactory<ColoredParticleData> {
+
+        private final IAnimatedSprite sprite;
+
+        public NoGravityParticleFactory(IAnimatedSprite sprite) {
+            this.sprite = sprite;
+        }
+
+        @Override
+        public Particle makeParticle(ColoredParticleData data, ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ) {
+            return new ColoredParticle(world, x, y, z, motionX, motionY, motionZ, data, this.sprite, 20, 1, 1, false, false, false).setScale(data.getScale());
         }
     }
 }

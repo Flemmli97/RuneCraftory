@@ -15,7 +15,7 @@ public class GeneralConfigSpec {
     public static final ForgeConfigSpec generalSpec;
     public static final GeneralConfigSpec generalConf;
 
-    public final ForgeConfigSpec.BooleanValue combatModule;
+    public final ForgeConfigSpec.BooleanValue disableDefence;
     public final ForgeConfigSpec.BooleanValue gateSpawning;
     public final ForgeConfigSpec.BooleanValue disableVanillaSpawning;
     public final ForgeConfigSpec.BooleanValue randomDamage;
@@ -68,15 +68,15 @@ public class GeneralConfigSpec {
 
     private GeneralConfigSpec(ForgeConfigSpec.Builder builder) {
         builder.push("Modules");
-        this.combatModule = builder.comment("Use this mods combat system.").define("Combat", true);
+        this.disableDefence = builder.comment("If disabled attacks will ignore defence of mobs. Should be near vanilla then except effects like poison attacks etc.").define("Ignore Defence", false);
         this.gateSpawning = builder.comment("Should gates spawn? If disabled will also disable all mobs from this mod to spawn. Needs server restart").define("Gate Spawning", true);
         this.disableVanillaSpawning = builder.comment("If enabled mobs can only spawn through gates.").define("Disable vanilla spawn", false);
         this.randomDamage = builder.comment("If enabled damage gets a +-10% randomness.").define("Random Damage", true);
         builder.pop();
 
         builder.push("Multipliers");
-        this.xpMultiplier = builder.comment("Gain base xp * multiplier").define("XP Multiplier", 1.0);
-        this.skillXpMultiplier = builder.comment("Gain base skill xp * multiplier").define("Skill XP Multiplier", 1.0);
+        this.xpMultiplier = builder.comment("Gain base xp * multiplier. Default 0 for now cause its not balanced").define("XP Multiplier", 0.0);
+        this.skillXpMultiplier = builder.comment("Gain base skill xp * multiplier. Default 0 for now cause its not balanced").define("Skill XP Multiplier", 0.0);
         this.tamingMultiplier = builder.comment("Increase/Decrease global taming chance").define("Taming Chance Multiplier", 1.0);
         this.dropRateMultiplier = builder.comment("Increase/Decrease global drop chance").define("Drop Chance Multiplier", 1.0);
         builder.pop();
@@ -88,11 +88,11 @@ public class GeneralConfigSpec {
 
         builder.comment("Configs for player stats").push("Player Stats");
         this.startingHealth = builder.define("Starting HP", 25);
-        this.startingRP = builder.define("Starting RP", 56);
+        this.startingRP = builder.define("Starting RP", 50);
         this.startingMoney = builder.define("Starting Money", 100);
-        this.startingStr = builder.comment("Starting strength value. 1 strength = 1 attack damage").define("Starting Strength", 5);
-        this.startingVit = builder.comment("Starting vitality value. 1 vitality = 0.5 defence & magic defence").define("Starting Vit", 4);
-        this.startingIntel = builder.comment("Starting intelligence value. 1 intelligence = 1 magic damage").define("Starting Int", 5);
+        this.startingStr = builder.comment("Starting strength value. 1 strength = 1 attack damage").define("Starting Strength", 0);
+        this.startingVit = builder.comment("Starting vitality value. 1 vitality = 0.5 defence & magic defence").define("Starting Vit", 0);
+        this.startingIntel = builder.comment("Starting intelligence value. 1 intelligence = 1 magic damage").define("Starting Int", 1);
         this.hpPerLevel = builder.comment("HP increase per level").define("HP Increase", 10.0);
         this.rpPerLevel = builder.comment("RP increase per level").define("RP Increase", 5);
         this.strPerLevel = builder.comment("Strenghth increase per level").define("Strength Increase", 2.0);

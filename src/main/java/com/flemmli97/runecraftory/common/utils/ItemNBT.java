@@ -72,8 +72,8 @@ public class ItemNBT {
         return map;
     }
 
-    public static Map<Attribute, Integer> statBonusRaw(ItemStack stack) {
-        Map<Attribute, Integer> map = new TreeMap<>(ModAttributes.sorted);
+    public static Map<Attribute, Double> statBonusRaw(ItemStack stack) {
+        Map<Attribute, Double> map = new TreeMap<>(ModAttributes.sorted);
         if (shouldHaveStats(stack)) {
             CompoundNBT compound = getItemNBT(stack);
             if (compound != null && !compound.contains(LibNBT.Stats)) {
@@ -85,7 +85,7 @@ public class ItemNBT {
                 for (String attName : tag.keySet()) {
                     Attribute att = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attName));
                     if (att.getRegistryName().toString().equals(attName))
-                        map.put(att, tag.getInt(attName));
+                        map.put(att, tag.getDouble(attName));
                 }
             }
         } else {
@@ -143,8 +143,8 @@ public class ItemNBT {
             if (!shouldHaveStats(stackToAdd)) {
                 ItemStat stat = DataPackHandler.getStats(stackToAdd.getItem());
                 if (stat != null) {
-                    for (Map.Entry<Attribute, Integer> entry : stat.itemStats().entrySet()) {
-                        updateStatIncrease(entry.getKey(), Math.round(entry.getValue() * efficiency), tag);
+                    for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {
+                        updateStatIncrease(entry.getKey(), entry.getValue() * efficiency, tag);
                     }
                     if (stat.element() != EnumElement.NONE) {
                         if (EnumElement.valueOf(tag.getString(LibNBT.Element)) == EnumElement.NONE) {
@@ -168,9 +168,9 @@ public class ItemNBT {
         }
     }
 
-    public static void updateStatIncrease(Attribute attribute, int amount, CompoundNBT tag) {
-        int oldValue = tag.getCompound(LibNBT.Stats).getInt(attribute.getRegistryName().toString());
-        tag.getCompound(LibNBT.Stats).putInt(attribute.getRegistryName().toString(), oldValue + amount);
+    public static void updateStatIncrease(Attribute attribute, double amount, CompoundNBT tag) {
+        double oldValue = tag.getCompound(LibNBT.Stats).getInt(attribute.getRegistryName().toString());
+        tag.getCompound(LibNBT.Stats).putDouble(attribute.getRegistryName().toString(), oldValue + amount);
     }
 
     @Nullable
@@ -201,8 +201,8 @@ public class ItemNBT {
                 if (stat != null) {
                     if (!compound.contains(LibNBT.Stats)) {
                         CompoundNBT stats = new CompoundNBT();
-                        for (Map.Entry<Attribute, Integer> entry : stat.itemStats().entrySet()) {
-                            stats.putInt(entry.getKey().getRegistryName().toString(), entry.getValue());
+                        for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {
+                            stats.putDouble(entry.getKey().getRegistryName().toString(), entry.getValue());
                         }
                         compound.put(LibNBT.Stats, stats);
                     }

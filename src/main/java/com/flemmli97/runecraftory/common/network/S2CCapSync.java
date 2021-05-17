@@ -4,7 +4,6 @@ import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.client.ClientHandlers;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
-import com.google.common.collect.Maps;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
@@ -12,6 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -25,7 +25,7 @@ public class S2CCapSync {
     private float intel;
     private int[] level = new int[]{1, 0};
 
-    private Map<EnumSkills, int[]> skillMap = Maps.newHashMap();
+    private Map<EnumSkills, int[]> skillMap = new HashMap<>();
     private CompoundNBT spells;
 
     private CompoundNBT foodData;

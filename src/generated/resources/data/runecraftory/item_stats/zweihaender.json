@@ -1,0 +1,10 @@
+{
+  "buyPrice": 25,
+  "sellPrice": 5,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "itemStats": {
+    "minecraft:generic.attack_damage": 7.0
+  },
+  "item": "runecraftory:zweihaender"
+}

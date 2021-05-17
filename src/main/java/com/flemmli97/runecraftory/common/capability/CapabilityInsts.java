@@ -12,6 +12,8 @@ public class CapabilityInsts {
     public static final Capability<IPlayerCap> PlayerCap = null;
     @CapabilityInject(IStaffCap.class)
     public static final Capability<IStaffCap> StaffCap = null;
+    @CapabilityInject(IEntityCap.class)
+    public static final Capability<IEntityCap> EntityCap = null;
 
     public static class PlayerCapNetwork implements Capability.IStorage<IPlayerCap> {
 
@@ -38,4 +40,18 @@ public class CapabilityInsts {
             instance.readFromNBT((CompoundNBT) nbt);
         }
     }
+
+    public static class EntityCapNetwork implements Capability.IStorage<IEntityCap> {
+
+        @Override
+        public INBT writeNBT(Capability<IEntityCap> capability, IEntityCap instance, Direction side) {
+            return null;
+        }
+
+        @Override
+        public void readNBT(Capability<IEntityCap> capability, IEntityCap instance, Direction side, INBT nbt) {
+
+        }
+    }
+
 }

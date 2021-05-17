@@ -9,7 +9,6 @@ import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.tenshilib.common.utils.MapUtils;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.ItemStack;
@@ -21,6 +20,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +39,7 @@ public class ItemStat {
     private int sellPrice;
     private int upgradeDifficulty;
     private EnumElement element;
-    private final Map<Attribute, Integer> itemStats = new TreeMap<>(ModAttributes.sorted);
+    private final Map<Attribute, Double> itemStats = new TreeMap<>(ModAttributes.sorted);
     private Spell tier1Spell;
     private Spell tier2Spell;
     private Spell tier3Spell;
@@ -60,7 +60,7 @@ public class ItemStat {
         return this.element;
     }
 
-    public Map<Attribute, Integer> itemStats() {
+    public Map<Attribute, Double> itemStats() {
         return new LinkedHashMap<>(this.itemStats);
     }
 
@@ -87,7 +87,7 @@ public class ItemStat {
         buffer.writeInt(this.itemStats.size());
         this.itemStats.forEach((att, val) -> {
             buffer.writeRegistryId(att);
-            buffer.writeInt(val);
+            buffer.writeDouble(val);
         });
         buffer.writeBoolean(this.tier1Spell != null);
         if (this.tier1Spell != null)
@@ -108,7 +108,7 @@ public class ItemStat {
         stat.element = buffer.readEnumValue(EnumElement.class);
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
-            stat.itemStats.put(buffer.readRegistryIdSafe(Attribute.class), buffer.readInt());
+            stat.itemStats.put(buffer.readRegistryIdSafe(Attribute.class), buffer.readDouble());
         if (buffer.readBoolean())
             stat.tier1Spell = buffer.readRegistryIdSafe(Spell.class);
         if (buffer.readBoolean())
@@ -119,7 +119,7 @@ public class ItemStat {
     }
 
     public List<ITextComponent> texts(ItemStack stack, boolean showStat) {
-        List<ITextComponent> list = Lists.newArrayList();
+        List<ITextComponent> list = new ArrayList<>();
         CompoundNBT tag = ItemNBT.getItemNBT(stack);
         if (tag != null) {
             if (stack.getItem() instanceof IItemUsable) {
@@ -137,13 +137,13 @@ public class ItemStat {
             price.append(" ").append(new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack)));
             list.add(price);
             if (showStat) {
-                Map<Attribute, Integer> stats = ItemNBT.statBonusRaw(stack);
+                Map<Attribute, Double> stats = ItemNBT.statBonusRaw(stack);
                 if (!stats.isEmpty()) {
                     String prefix = ItemNBT.shouldHaveStats(stack) ? "tooltip.item.equipped" : "tooltip.item.upgrade";
                     list.add(new TranslationTextComponent(prefix));
                 }
-                for (Map.Entry<Attribute, Integer> entry : stats.entrySet()) {
-                    IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + this.format(entry.getKey(), entry.getValue())));
+                for (Map.Entry<Attribute, Double> entry : stats.entrySet()) {
+                    IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + this.format(entry.getKey(), entry.getValue().intValue())));
                     list.add(comp);
                 }
             }
@@ -171,7 +171,7 @@ public class ItemStat {
         private int sellPrice;
         private int upgradeDifficulty;
         private EnumElement element = EnumElement.NONE;
-        private final Map<Attribute, Integer> itemStats = new TreeMap<>(ModAttributes.sorted);
+        private final Map<Attribute, Double> itemStats = new TreeMap<>(ModAttributes.sorted);
         private Spell tier1Spell;
         private Spell tier2Spell;
         private Spell tier3Spell;
@@ -187,7 +187,7 @@ public class ItemStat {
             return this;
         }
 
-        public MutableItemStat addAttribute(Attribute att, int value) {
+        public MutableItemStat addAttribute(Attribute att, double value) {
             this.itemStats.put(att, value);
             return this;
         }

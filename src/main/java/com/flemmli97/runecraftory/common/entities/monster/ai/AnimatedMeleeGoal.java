@@ -4,6 +4,8 @@ import com.flemmli97.runecraftory.common.entities.AnimationType;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.entity.ai.AnimatedAttackGoal;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.AxisAlignedBB;
 
 public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal<T> {
@@ -28,17 +30,31 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
 
     @Override
     public void handlePreAttack() {
-        this.moveToWithDelay(1);
+        if (this.attacker.maxAttackRange(this.next) <= 1)
+            this.moveToEntityNearer(this.target, 1);
+        else
+            this.moveToWithDelay(1);
         if (this.attackMoveDelay <= 0)
             this.attackMoveDelay = this.attacker.getRNG().nextInt(50) + 100;
         AxisAlignedBB aabb = this.attacker.calculateAttackAABB(this.next, this.target);
         //PacketHandler.sendToAll(new S2CAttackDebug(aabb, EnumAABBType.ATTEMPT));
         if (aabb.intersects(this.target.getBoundingBox())) {
             this.movementDone = true;
-            this.attacker.getLookController().setLookPositionWithEntity(this.target, 0, 0);
+            this.attacker.getLookController().setLookPositionWithEntity(this.target, 360, 90);
         } else if (this.attackMoveDelay-- == 1) {
             this.attackMoveDelay = 0;
             this.next = null;
+        }
+    }
+
+    protected void moveToEntityNearer(LivingEntity target, float speed) {
+        if (this.pathFindDelay <= 0) {
+            Path path = this.attacker.getNavigator().getPathToEntityLiving(target, 0);
+            if (path == null || this.attacker.getNavigator().setPath(path, speed)) {
+                this.pathFindDelay += 15;
+            }
+
+            this.pathFindDelay += this.attacker.getRNG().nextInt(10) + 5;
         }
     }
 

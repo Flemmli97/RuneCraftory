@@ -4,10 +4,10 @@ import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.config.values.EntityProperties;
 import com.flemmli97.runecraftory.common.config.values.EntityPropertySpecs;
 import com.flemmli97.tenshilib.common.config.Configuration;
-import com.google.common.collect.Maps;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class MobConfig {
@@ -21,7 +21,7 @@ public class MobConfig {
     public static int gateMoney = 4;
     public static int spawnChance = 150;
 
-    public static Map<ResourceLocation, EntityProperties> propertiesMap = Maps.newHashMap();
+    public static Map<ResourceLocation, EntityProperties> propertiesMap = new HashMap<>();
 
     public static void load(MobConfigSpec spec) {
         disableNaturalSpawn = spec.disableNaturalSpawn.get();
@@ -49,11 +49,11 @@ public class MobConfig {
         private final ForgeConfigSpec.ConfigValue<Integer> gateXP;
         private final ForgeConfigSpec.ConfigValue<Integer> gateMoney;
 
-        private final Map<ResourceLocation, EntityPropertySpecs> mobSpecs = Maps.newHashMap();
+        private final Map<ResourceLocation, EntityPropertySpecs> mobSpecs = new HashMap<>();
 
         private MobConfigSpec(ForgeConfigSpec.Builder builder) {
             builder.push("general");
-            this.disableNaturalSpawn = builder.comment("Disable all spawning not from gates").define("Disable Spawn", true);
+            this.disableNaturalSpawn = builder.comment("Disable all spawning not from gates").define("Disable Spawn", false);
             builder.pop();
 
             builder.comment("Gate Configs").push("gate");

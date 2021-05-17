@@ -1,12 +1,12 @@
 package com.flemmli97.runecraftory.common.config.values;
 
-import com.google.common.collect.Sets;
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 public class HerbGenConfig {
@@ -76,8 +76,8 @@ public class HerbGenConfig {
     public static class Builder {
 
         private ResourceLocation block;
-        private Set<BiomeDictionary.Type> whiteList = Sets.newHashSet();
-        private Set<BiomeDictionary.Type> blackList = Sets.newHashSet();
+        private Set<BiomeDictionary.Type> whiteList = new HashSet<>();
+        private Set<BiomeDictionary.Type> blackList = new HashSet<>();
         private int weight = 1;
 
         public Builder(ResourceLocation block) {

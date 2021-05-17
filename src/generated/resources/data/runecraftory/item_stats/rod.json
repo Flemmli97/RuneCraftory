@@ -4,8 +4,8 @@
   "upgradeDifficulty": 0,
   "element": "FIRE",
   "itemStats": {
-    "runecraftory:attribute.rf.magic_att": 8,
-    "runecraftory:attribute.rf.dizz": 15
+    "runecraftory:attribute.rf.magic_att": 5.0,
+    "runecraftory:attribute.rf.dizz": 15.0
   },
   "tier1Spell": "runecraftory:fireball",
   "item": "runecraftory:rod"

@@ -4,7 +4,7 @@
   "upgradeDifficulty": 10,
   "element": "NONE",
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 70
+    "runecraftory:attribute.rf.defence": 70.0
   },
   "tag": "forge:gems/orichalcum"
 }

@@ -118,10 +118,10 @@ public class ModelCluckadoodle<T extends EntityCluckadoodle> extends EntityModel
     @Override
     public void setAngles(T cluckadoodle, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
-        this.neck.rotateAngleY = netHeadYaw * 0.008726646F * 0.5f;
-        this.neck.rotateAngleX = headPitch * 0.008726646F * 0.5f;
-        this.head.rotateAngleY = netHeadYaw * 0.008726646F * 0.5f;
-        this.head.rotateAngleX = headPitch * 0.008726646F * 0.5f;
+        this.neck.rotateAngleY += netHeadYaw * 0.008726646F * 0.5f;
+        this.neck.rotateAngleX += headPitch * 0.008726646F * 0.5f;
+        this.head.rotateAngleY += netHeadYaw * 0.008726646F * 0.5f;
+        this.head.rotateAngleX += headPitch * 0.008726646F * 0.5f;
 
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
 

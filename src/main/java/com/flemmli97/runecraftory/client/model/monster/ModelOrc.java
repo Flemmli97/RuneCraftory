@@ -147,8 +147,8 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IRe
     @Override
     public void setAngles(T orc, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
-        this.head.rotateAngleY = netHeadYaw * 0.017453292F;
-        this.head.rotateAngleX = headPitch * 0.017453292F;
+        this.head.rotateAngleY += netHeadYaw * 0.017453292F;
+        this.head.rotateAngleX += headPitch * 0.017453292F;
         this.handRightUp.rotateAngleZ += MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
         this.handLeftUp.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
         this.handRightUp.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;

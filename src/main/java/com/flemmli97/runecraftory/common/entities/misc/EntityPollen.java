@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.common.entities.misc;
 
+import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -24,7 +25,7 @@ public class EntityPollen extends EntityDamageCloud {
     private static final List<Vector3f> pollenBase = RayTraceUtils.rotatedVecs(new Vector3d(1, 0, 0), new Vector3d(0, 1, 0), -180, 135, 45);
     private static final List<Vector3f> pollenInd = RayTraceUtils.rotatedVecs(new Vector3d(0.04, 0.07, 0), new Vector3d(0, 1, 0), -180, 160, 20);
 
-    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
+    private Predicate<LivingEntity> pred;
 
     public EntityPollen(EntityType<? extends EntityPollen> type, World world) {
         super(type, world);
@@ -79,6 +80,8 @@ public class EntityPollen extends EntityDamageCloud {
 
     @Override
     protected boolean canHit(LivingEntity e) {
+        if (!super.canHit(e))
+            return false;
         double distSq = e.getDistanceSq(this);
         double offset = e.getWidth() * 0.5 + 0.1;
         return distSq >= this.radiusSqWithOffset(-offset) && distSq <= this.radiusSqWithOffset(offset) && (this.pred == null || this.pred.test(e));
@@ -91,7 +94,7 @@ public class EntityPollen extends EntityDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity e) {
-        return CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(1).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e), null);
+        return CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()), null);
     }
 
     @Override

@@ -2,18 +2,18 @@ package com.flemmli97.runecraftory.client;
 
 import com.flemmli97.runecraftory.common.lib.EnumAABBType;
 import com.flemmli97.tenshilib.client.render.RenderUtils;
-import com.google.common.collect.Lists;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AttackAABBRender {
 
-    private final List<RenderAABB> list = Lists.newArrayList();
-    private final List<RenderAABB> toAdd = Lists.newArrayList();
+    private final List<RenderAABB> list = new ArrayList<>();
+    private final List<RenderAABB> toAdd = new ArrayList<>();
 
     public static AttackAABBRender INST = new AttackAABBRender();
 

@@ -18,7 +18,6 @@ import com.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
 import com.flemmli97.runecraftory.client.model.monster.ModelTortas;
 import com.flemmli97.runecraftory.client.model.monster.ModelWeagle;
 import com.flemmli97.runecraftory.client.particles.ColoredParticle;
-import com.flemmli97.runecraftory.client.particles.NoGravityParticle;
 import com.flemmli97.runecraftory.client.particles.SinkingParticle;
 import com.flemmli97.runecraftory.client.render.RenderGate;
 import com.flemmli97.runecraftory.client.render.RenderMonster;
@@ -46,6 +45,7 @@ import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModParticles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScreenManager;
+import net.minecraft.client.particle.HeartParticle;
 import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
@@ -93,8 +93,12 @@ public class ClientRegister {
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.pollen.get(), EmptyRender::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.ambrosia_wave.get(), EmptyRender::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.butterfly.get(), RenderButterfly::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.lightningOrbBolt.get(), EmptyRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.lightningBeam.get(), EmptyRender::new);
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntities.fireBall.get(), RenderFireball::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.windBlade.get(), EmptyRender::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntities.waterLaser.get(), EmptyRender::new);
 
         ClientHandlers.overlay = new OverlayGui(Minecraft.getInstance());
         ClientHandlers.spellDisplay = new SpellInvOverlayGui(Minecraft.getInstance());
@@ -131,8 +135,11 @@ public class ClientRegister {
         manager.registerFactory(ModParticles.cross.get(), ColoredParticle.LightParticleFactory::new);
         manager.registerFactory(ModParticles.blink.get(), ColoredParticle.LightParticleFactory::new);
         manager.registerFactory(ModParticles.smoke.get(), ColoredParticle.LightParticleFactory::new);
-        manager.registerFactory(ModParticles.staticLight.get(), NoGravityParticle.Factory::new);
-        manager.registerFactory(ModParticles.wind.get(), NoGravityParticle.Factory::new);
+        manager.registerFactory(ModParticles.staticLight.get(), ColoredParticle.NoGravityParticleFactory::new);
+        manager.registerFactory(ModParticles.wind.get(), ColoredParticle.NoGravityParticleFactory::new);
+        manager.registerFactory(ModParticles.sleep.get(), HeartParticle.Factory::new);
+        manager.registerFactory(ModParticles.poison.get(), HeartParticle.Factory::new);
+
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T>> IRenderFactory<? super T> getMonsterRender(M model, ResourceLocation texture) {

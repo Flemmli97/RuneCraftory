@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory.common.registry;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import com.flemmli97.runecraftory.common.particles.ColoredParticleType;
+import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -19,6 +20,8 @@ public class ModParticles {
     public static final RegistryObject<ParticleType<ColoredParticleData>> blink = registerColoredParticleType("blink", false);
     public static final RegistryObject<ParticleType<ColoredParticleData>> staticLight = registerColoredParticleType("static_light", false);
     public static final RegistryObject<ParticleType<ColoredParticleData>> wind = registerColoredParticleType("static_effect", false);
+    public static final RegistryObject<BasicParticleType> sleep = PARTICLES.register("sleep", () -> new BasicParticleType(false));
+    public static final RegistryObject<BasicParticleType> poison = PARTICLES.register("poison", () -> new BasicParticleType(false));
 
     public static final RegistryObject<ParticleType<ColoredParticleData>> registerColoredParticleType(String name, boolean alwaysShow) {
         return PARTICLES.register(name, () -> new ColoredParticleType(alwaysShow));

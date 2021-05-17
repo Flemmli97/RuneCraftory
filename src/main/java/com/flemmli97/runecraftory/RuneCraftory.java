@@ -4,6 +4,8 @@ import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.client.ClientEvents;
 import com.flemmli97.runecraftory.client.ClientRegister;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import com.flemmli97.runecraftory.common.capability.EntityCapImpl;
+import com.flemmli97.runecraftory.common.capability.IEntityCap;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
 import com.flemmli97.runecraftory.common.capability.IStaffCap;
 import com.flemmli97.runecraftory.common.capability.PlayerCapImpl;
@@ -19,6 +21,7 @@ import com.flemmli97.runecraftory.common.events.MobEvents;
 import com.flemmli97.runecraftory.common.events.PlayerEvents;
 import com.flemmli97.runecraftory.common.events.WorldEvents;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
+import com.flemmli97.runecraftory.common.registry.ModActivities;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModContainer;
@@ -54,7 +57,6 @@ import net.minecraftforge.registries.RegistryBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.nio.file.Path;
 
 @Mod(value = RuneCraftory.MODID)
@@ -71,9 +73,6 @@ public class RuneCraftory {
 
     public RuneCraftory() {
         Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
-        File def = confDir.resolve("default").toFile();
-        if (!def.exists())
-            def.mkdirs();
 
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         modBus.addListener(this::clientSetup);
@@ -91,7 +90,7 @@ public class RuneCraftory {
         forgeBus.register(new WorldEvents());
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfigSpec.generalSpec, RuneCraftory.MODID + "/general.toml");
-        spawnConfig = new SpawnConfig(FMLPaths.CONFIGDIR.get().resolve(RuneCraftory.MODID));
+        spawnConfig = new SpawnConfig(confDir);
         MobConfig.MobConfigSpec.config.loadConfig();
         GenerationConfig.GenerationConfigSpec.config.loadConfig();
     }
@@ -112,6 +111,7 @@ public class RuneCraftory {
         ModSpells.SPELLS.register(modBus);
         ModStructures.STRUCTURES.register(modBus);
         ModParticles.PARTICLES.register(modBus);
+        ModActivities.ACTIVITIES.register(modBus);
     }
 
     public void newReg(RegistryEvent.NewRegistry event) {
@@ -132,6 +132,8 @@ public class RuneCraftory {
         });
         CapabilityManager.INSTANCE.register(IPlayerCap.class, new CapabilityInsts.PlayerCapNetwork(), PlayerCapImpl::new);
         CapabilityManager.INSTANCE.register(IStaffCap.class, new CapabilityInsts.StaffCapNetwork(), StaffCapImpl::new);
+        CapabilityManager.INSTANCE.register(IEntityCap.class, new CapabilityInsts.EntityCapNetwork(), EntityCapImpl::new);
+
     }
 
     public void conf(ModConfig.ModConfigEvent event) {

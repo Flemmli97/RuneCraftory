@@ -195,6 +195,10 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
     @Override
     public void setAngles(T thunderbolt, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
+        this.head.rotateAngleY += netHeadYaw * 0.002f;
+        this.head.rotateAngleX += headPitch * 0.002f;
+        this.neck.rotateAngleY += headPitch * 0.005f;
+        this.neck.rotateAngleX += headPitch * 0.003f;
 
         AnimatedAction anim = thunderbolt.getAnimation();
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();

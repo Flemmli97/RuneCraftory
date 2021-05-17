@@ -7,7 +7,6 @@ import com.flemmli97.runecraftory.common.inventory.DummyInventory;
 import com.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import com.flemmli97.runecraftory.common.registry.ModContainer;
 import com.flemmli97.runecraftory.common.utils.CraftingUtils;
-import com.google.common.collect.Lists;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -21,6 +20,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContainerCrafting extends Container {
@@ -164,7 +164,7 @@ public class ContainerCrafting extends Container {
     public static List<SextupleRecipe> getRecipes(PlayerContainerInv inv, EnumCrafting type) {
         if (inv.getPlayer() instanceof ServerPlayerEntity)
             return inv.getPlayer().getServer().getRecipeManager().getRecipes(CraftingUtils.getType(type), inv, ((ServerPlayerEntity) inv.getPlayer()).getServerWorld());
-        return Lists.newArrayList();
+        return new ArrayList<>();
     }
 
     public static TileCrafting getTile(World world, PacketBuffer buffer) {

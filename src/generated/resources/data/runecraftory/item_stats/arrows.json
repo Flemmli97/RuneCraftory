@@ -4,7 +4,7 @@
   "upgradeDifficulty": 5,
   "element": "NONE",
   "itemStats": {
-    "minecraft:generic.attack_damage": 5
+    "minecraft:generic.attack_damage": 5.0
   },
   "tier1Spell": "runecraftory:vanilla_arrow",
   "tag": "minecraft:arrows"

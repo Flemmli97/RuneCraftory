@@ -33,6 +33,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
@@ -43,9 +44,9 @@ public class ModBlocks {
 
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, RuneCraftory.MODID);
     public static final DeferredRegister<TileEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.TILE_ENTITIES, RuneCraftory.MODID);
-    public static final List<RegistryObject<Block>> crops = Lists.newArrayList();
-    public static final List<RegistryObject<Block>> flowers = Lists.newArrayList();
-    public static final List<RegistryObject<Block>> herbs = Lists.newArrayList();
+    public static final List<RegistryObject<Block>> crops = new ArrayList<>();
+    public static final List<RegistryObject<Block>> flowers = new ArrayList<>();
+    public static final List<RegistryObject<Block>> herbs = new ArrayList<>();
     public static final EnumMap<EnumMineralTier, RegistryObject<Block>> mineralMap = new EnumMap<>(EnumMineralTier.class);
     public static final EnumMap<EnumMineralTier, RegistryObject<Block>> brokenMineralMap = new EnumMap<>(EnumMineralTier.class);
 

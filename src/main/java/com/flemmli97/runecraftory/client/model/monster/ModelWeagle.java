@@ -107,8 +107,8 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
     @Override
     public void setAngles(T weagle, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
-        this.head.rotateAngleY = netHeadYaw * 0.003F;
-        this.head.rotateAngleX = headPitch * 0.01F;
+        this.head.rotateAngleY += netHeadYaw * 0.003F;
+        this.head.rotateAngleX += headPitch * 0.01F;
         AnimatedAction anim = weagle.getAnimation();
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
         if (anim == null) {

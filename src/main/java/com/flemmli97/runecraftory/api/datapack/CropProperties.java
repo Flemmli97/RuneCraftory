@@ -1,13 +1,13 @@
 package com.flemmli97.runecraftory.api.datapack;
 
 import com.flemmli97.runecraftory.api.enums.EnumSeason;
-import com.google.common.collect.Lists;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
@@ -78,7 +78,7 @@ public class CropProperties {
 
     public List<ITextComponent> texts() {
         if (this.translationTexts == null) {
-            this.translationTexts = Lists.newArrayList();
+            this.translationTexts = new ArrayList<>();
             if (!this.bestSeason.isEmpty()) {
                 IFormattableTextComponent season = new TranslationTextComponent("tooltip.season.best").append(": ");
                 int i = 0;

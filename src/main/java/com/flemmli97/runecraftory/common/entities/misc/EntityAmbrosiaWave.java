@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.common.entities.misc;
 
+import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -86,7 +87,7 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
 
     @Override
     protected boolean canHit(LivingEntity e) {
-        return e.getDistanceSq(this) <= this.getRadius() * this.getRadius() && (this.pred == null || this.pred.test(e));
+        return super.canHit(e) && e.getDistanceSq(this) <= this.getRadius() * this.getRadius() && (this.pred == null || this.pred.test(e));
     }
 
     @Override
@@ -104,7 +105,7 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity e) {
-        if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(15).get(), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get(), e) * 0.5f, null)) {//RFCalculations.getAttributeValue(this.owner, ItemStatAttributes.RFMAGICATT, null, null) / 2.5f)) {
+        if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(15).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * 0.3f, null)) {
             e.addPotionEffect(new EffectInstance(Effects.SLOWNESS, 10, 6, true, false));
             e.addPotionEffect(new EffectInstance(Effects.JUMP_BOOST, 10, 128, true, false));
             return true;

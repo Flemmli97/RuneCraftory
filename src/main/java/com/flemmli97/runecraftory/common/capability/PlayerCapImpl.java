@@ -24,7 +24,6 @@ import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.WorldUtils;
-import com.google.common.collect.Maps;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -53,6 +52,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<CompoundNBT> {
@@ -66,15 +66,15 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     private float str = GeneralConfig.startingStr;
     private float vit = GeneralConfig.startingVit;
     private float intel = GeneralConfig.startingIntel;
-    private Map<Attribute, Integer> headBonus = Maps.newHashMap();
-    private Map<Attribute, Integer> bodyBonus = Maps.newHashMap();
-    private Map<Attribute, Integer> legsBonus = Maps.newHashMap();
-    private Map<Attribute, Integer> feetBonus = Maps.newHashMap();
-    private Map<Attribute, Integer> mainHandBonus = Maps.newHashMap();
-    private Map<Attribute, Integer> offHandBonus = Maps.newHashMap();
+    private Map<Attribute, Integer> headBonus = new HashMap<>();
+    private Map<Attribute, Integer> bodyBonus = new HashMap<>();
+    private Map<Attribute, Integer> legsBonus = new HashMap<>();
+    private Map<Attribute, Integer> feetBonus = new HashMap<>();
+    private Map<Attribute, Integer> mainHandBonus = new HashMap<>();
+    private Map<Attribute, Integer> offHandBonus = new HashMap<>();
 
-    private Map<ResourceLocation, Integer> shippedItems = Maps.newHashMap();
-    private Map<EnumShop, NonNullList<ItemStack>> shopItems = Maps.newHashMap();
+    private Map<ResourceLocation, Integer> shippedItems = new HashMap<>();
+    private Map<EnumShop, NonNullList<ItemStack>> shopItems = new HashMap<>();
     private long lastUpdated;
 
     /**
@@ -82,7 +82,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
      */
     private int[] level = new int[]{1, 0};
 
-    private Map<EnumSkills, int[]> skillMap = Maps.newHashMap();
+    private Map<EnumSkills, int[]> skillMap = new HashMap<>();
     private InventorySpells spells = new InventorySpells();
     private InventoryShippingBin shipping = new InventoryShippingBin();
 
@@ -91,7 +91,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     //Food buff
     private Item lastFood;
     private int rpFoodBuff;
-    private Map<Attribute, Integer> foodBuffs = Maps.newHashMap();
+    private Map<Attribute, Integer> foodBuffs = new HashMap<>();
     private int foodDuration;
 
     //Weapon and ticker
@@ -467,7 +467,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
                 if (list.isEmpty())
                     continue;
                 NonNullList<ItemStack> shop = NonNullList.create();
-                Set<ExtendedItemStackWrapper> pre = Sets.newHashSet();
+                Set<ExtendedItemStackWrapper> pre = new HashSet<>();
                 for (float chance = 2.0f + list.size() * 0.002f; player.world.rand.nextFloat() < chance; chance -= 0.1f) {
                     pre.add(new ExtendedItemStackWrapper(list.get(player.world.rand.nextInt(list.size()))));
                 }

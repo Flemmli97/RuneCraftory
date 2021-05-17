@@ -7,12 +7,12 @@ import com.flemmli97.runecraftory.common.config.values.MineralGenConfig;
 import com.flemmli97.runecraftory.common.config.values.MineralGenConfigSpec;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.tenshilib.common.config.Configuration;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 public class GenerationConfig {
 
-    private static final List<MineralGenConfig> mineralGen = Lists.newArrayList();
+    private static final List<MineralGenConfig> mineralGen = new ArrayList<>();
 
     public static int overworldHerbChance;
     public static int overworldHerbTries;
@@ -29,7 +29,7 @@ public class GenerationConfig {
     public static int endHerbChance;
     public static int endHerbTries;
 
-    private static final List<HerbGenConfig> herbGen = Lists.newArrayList();
+    private static final List<HerbGenConfig> herbGen = new ArrayList<>();
 
     static {
         mineralGen.add(new MineralGenConfig.Builder(ModBlocks.mineralIron.getId())
@@ -125,8 +125,8 @@ public class GenerationConfig {
 
         public static final Configuration<GenerationConfigSpec> config = new Configuration<>(GenerationConfigSpec::new, (p) -> p.resolve(RuneCraftory.MODID).resolve("generation.toml"), GenerationConfig::load, RuneCraftory.MODID);
 
-        private final Map<String, MineralGenConfigSpec> mineralSpecs = Maps.newHashMap();
-        private final Map<String, HerbGenCofigSpecs> herbSpecs = Maps.newHashMap();
+        private final Map<String, MineralGenConfigSpec> mineralSpecs = new HashMap<>();
+        private final Map<String, HerbGenCofigSpecs> herbSpecs = new HashMap<>();
         private final ForgeConfigSpec.ConfigValue<Integer> overworldHerbChance;
         public ForgeConfigSpec.ConfigValue<Integer> overworldHerbTries;
         private final ForgeConfigSpec.ConfigValue<Integer> netherHerbChance;

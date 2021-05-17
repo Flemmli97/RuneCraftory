@@ -6,7 +6,6 @@ import com.flemmli97.runecraftory.common.config.MobConfig;
 import com.flemmli97.runecraftory.common.lib.LibConstants;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.world.GateSpawning;
-import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ILivingEntityData;
@@ -15,6 +14,7 @@ import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;
@@ -32,6 +32,7 @@ import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
@@ -46,13 +47,14 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 public class GateEntity extends MobEntity implements IBaseMob {
 
-    private List<EntityType<?>> spawnList = Lists.newArrayList();
+    private List<EntityType<?>> spawnList = new ArrayList<>();
     private EnumElement type = EnumElement.NONE;
     public int rotate;
     private static final DataParameter<String> elementType = EntityDataManager.createKey(GateEntity.class, DataSerializers.STRING);
@@ -64,6 +66,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
             this.rotate = ((world.rand.nextInt(2) == 0) ? 1 : -1);
         }
         this.updateAttributes();
+        this.setNoGravity(true);
     }
 
     @Override
@@ -169,6 +172,19 @@ public class GateEntity extends MobEntity implements IBaseMob {
             this.setFlag(6, this.isGlowing());
         }
         this.baseTick();
+        if (this.newPosRotationIncrements > 0) {
+            double d0 = this.getX() + (this.interpTargetX - this.getX()) / (double) this.newPosRotationIncrements;
+            double d2 = this.getY() + (this.interpTargetY - this.getY()) / (double) this.newPosRotationIncrements;
+            double d4 = this.getZ() + (this.interpTargetZ - this.getZ()) / (double) this.newPosRotationIncrements;
+            double d6 = MathHelper.wrapDegrees(this.interpTargetYaw - (double) this.rotationYaw);
+            this.rotationYaw = (float) ((double) this.rotationYaw + d6 / (double) this.newPosRotationIncrements);
+            this.rotationPitch = (float) ((double) this.rotationPitch + (this.interpTargetPitch - (double) this.rotationPitch) / (double) this.newPosRotationIncrements);
+            --this.newPosRotationIncrements;
+            this.setPosition(d0, d2, d4);
+            this.setRotation(this.rotationYaw, this.rotationPitch);
+        } else if (!this.isServerWorld()) {
+            this.setMotion(this.getMotion().scale(0.98D));
+        }
         if (this.rand.nextInt(MobConfig.spawnChance) == 0 && this.world.getDifficulty() != Difficulty.PEACEFUL) {
             this.spawnMobs();
         }
@@ -201,7 +217,8 @@ public class GateEntity extends MobEntity implements IBaseMob {
                             entity.setPositionAndRotation(x, y, z, this.world.rand.nextFloat() * 360.0f, 0.0f);
                             if (ForgeEventFactory.canEntitySpawnSpawner(mob, this.world, (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), null) && this.world.isSpaceEmpty(mob)) {
                                 mob.onInitialSpawn((IServerWorld) this.world, this.world.getDifficultyForLocation(mob.getBlockPos()), SpawnReason.SPAWNER, null, null);
-                                mob.setHomePosAndDistance(this.getBlockPos(), 16);
+                                ModifiableAttributeInstance follow = mob.getAttribute(Attributes.GENERIC_FOLLOW_RANGE);
+                                mob.setHomePosAndDistance(this.getBlockPos(), (int) Math.max(16, follow != null ? follow.getValue() * 0.75 : 0));
                                 this.world.addEntity(entity);
                                 mob.spawnExplosionParticle();
                             }
@@ -246,6 +263,10 @@ public class GateEntity extends MobEntity implements IBaseMob {
                 this.getCombatTracker().trackDamage(damageSrc, f1, damageAmount);
             }
         }
+    }
+
+    @Override
+    public void takeKnockback(float strength, double x, double z) {
     }
 
     protected float reduceDamage(DamageSource damageSrc, float damageAmount) {
@@ -328,6 +349,16 @@ public class GateEntity extends MobEntity implements IBaseMob {
             ++max;
         }
     }*/
+
+    @Override
+    public boolean isEntityInsideOpaqueBlock() {
+        return false;
+    }
+
+    @Override
+    public boolean canBreatheUnderwater() {
+        return true;
+    }
 
     @Override
     public boolean isCollidable() {

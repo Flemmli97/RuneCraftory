@@ -9,7 +9,6 @@ import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.advancements.criterion.EnchantmentPredicate;
 import net.minecraft.advancements.criterion.ItemPredicate;
@@ -36,6 +35,7 @@ import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.ForgeLootTableProvider;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -58,7 +58,7 @@ public class Loottables extends ForgeLootTableProvider {
 
     static class EntityLoot implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
 
-        private final Map<ResourceLocation, LootTable.Builder> lootTables = Maps.newHashMap();
+        private final Map<ResourceLocation, LootTable.Builder> lootTables = new HashMap<>();
 
         private void init() {
             this.registerLootTable(ModEntities.wooly.get(), LootTable.builder()
@@ -94,7 +94,7 @@ public class Loottables extends ForgeLootTableProvider {
 
     static class BlockLoot extends BlockLootTables {
 
-        private final Map<ResourceLocation, LootTable.Builder> loots = Maps.newHashMap();
+        private final Map<ResourceLocation, LootTable.Builder> loots = new HashMap<>();
 
         private static final ILootCondition.IBuilder SILK_TOUCH = MatchTool.builder(ItemPredicate.Builder.create().enchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.IntBound.atLeast(1))));
 

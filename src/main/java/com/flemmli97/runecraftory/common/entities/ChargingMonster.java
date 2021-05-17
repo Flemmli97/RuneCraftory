@@ -1,7 +1,6 @@
 package com.flemmli97.runecraftory.common.entities;
 
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-import com.google.common.collect.Lists;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -11,6 +10,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ChargingMonster extends BaseMonster {
@@ -64,11 +64,11 @@ public abstract class ChargingMonster extends BaseMonster {
                 if (!this.handleChargeMovement())
                     return;
                 if (this.hitEntity == null)
-                    this.hitEntity = Lists.newArrayList();
+                    this.hitEntity = new ArrayList<>();
                 this.mobAttack(anim, null, e -> {
-                    if (!this.getPassengers().contains(e) && !this.hitEntity.contains(e)) {
-                        this.attackEntityAsMob(e);
+                    if (!this.hitEntity.contains(e)) {
                         this.hitEntity.add(e);
+                        this.attackEntityAsMob(e);
                     }
                 });
                 this.doWhileCharge();

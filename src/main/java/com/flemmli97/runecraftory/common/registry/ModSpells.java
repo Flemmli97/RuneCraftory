@@ -3,11 +3,13 @@ package com.flemmli97.runecraftory.common.registry;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.Spell;
 import com.flemmli97.runecraftory.common.spells.ArrowSpell;
+import com.flemmli97.runecraftory.common.spells.DoubleWindBladeSpell;
 import com.flemmli97.runecraftory.common.spells.EmptySpell;
 import com.flemmli97.runecraftory.common.spells.EvokerFangSpell;
 import com.flemmli97.runecraftory.common.spells.FireballSpell;
 import com.flemmli97.runecraftory.common.spells.ParaHealSpell;
 import com.flemmli97.runecraftory.common.spells.PoisonHealSpell;
+import com.flemmli97.runecraftory.common.spells.ShortWaterLaserSpell;
 import com.flemmli97.runecraftory.common.spells.SnowballSpell;
 import com.flemmli97.runecraftory.common.spells.UnsealSpell;
 import com.flemmli97.runecraftory.common.spells.WitherSkullSpell;
@@ -25,6 +27,8 @@ public class ModSpells {
     public static final RegistryObject<Spell> SNOWBALL = SPELLS.register("vanilla_snowball", SnowballSpell::new);
 
     public static final RegistryObject<Spell> FIREBALL = SPELLS.register("fireball", FireballSpell::new);
+    public static final RegistryObject<Spell> WATERLASER = SPELLS.register("water_laser", ShortWaterLaserSpell::new);
+    public static final RegistryObject<Spell> DOUBLESONIC = SPELLS.register("double_sonic", DoubleWindBladeSpell::new);
 
     public static final RegistryObject<Spell> MEDIPOISON = SPELLS.register("medi_poison", PoisonHealSpell::new);
     public static final RegistryObject<Spell> MEDIPARA = SPELLS.register("medi_paralysis", ParaHealSpell::new);

@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.common.effects;
 
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import com.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,7 +10,7 @@ import net.minecraft.potion.EffectType;
 public class PoisonEffect extends PermanentEffect {
 
     public PoisonEffect() {
-        super(EffectType.HARMFUL, 0);
+        super(EffectType.HARMFUL, 0, S2CEntityDataSync.Type.POISON);
         this.setTickDelay(60);
     }
 

@@ -3,7 +3,6 @@ package com.flemmli97.runecraftory.api.datapack;
 import com.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.tenshilib.common.utils.ArrayUtils;
-import com.google.common.collect.Lists;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -13,6 +12,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -126,7 +126,7 @@ public class FoodProperties {
 
     public List<ITextComponent> texts() {
         if (this.translationTexts == null) {
-            this.translationTexts = Lists.newArrayList();
+            this.translationTexts = new ArrayList<>();
             this.translationTexts.add(new TranslationTextComponent("tooltip.item.eaten"));
             StringTextComponent hprp = new StringTextComponent("");
             if (this.getHPGain() != 0)
@@ -193,8 +193,8 @@ public class FoodProperties {
         private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
         private final Map<Attribute, Integer> effects = new TreeMap<>(ModAttributes.sorted);
         private final Map<Attribute, Integer> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
-        private final List<SimpleEffect> potionApply = Lists.newArrayList();
-        private final List<Effect> potionRemove = Lists.newArrayList();
+        private final List<SimpleEffect> potionApply = new ArrayList<>();
+        private final List<Effect> potionRemove = new ArrayList<>();
 
         public MutableFoodProps(int duration) {
             this.duration = duration;

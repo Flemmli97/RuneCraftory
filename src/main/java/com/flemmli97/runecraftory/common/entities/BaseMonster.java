@@ -11,12 +11,10 @@ import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
-import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.mixin.MoveControllerAccessor;
 import com.flemmli97.tenshilib.api.entity.IAnimated;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.item.SpawnEgg;
-import com.google.common.collect.Lists;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -67,6 +65,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +96,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     public final Predicate<LivingEntity> hitPred = (e) -> {
         if (e != this) {
+            if (e.isPassenger(e))
+                return false;
             if (e instanceof MobEntity && this == ((MobEntity) e).getAttackTarget())
                 return true;
             Entity controller = this.getControllingPassenger();
@@ -220,7 +221,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     @Nullable
     public AnimatedAction getRandomAnimation(AnimationType type) {
-        List<AnimatedAction> anims = Lists.newArrayList();
+        List<AnimatedAction> anims = new ArrayList<>();
         for (AnimatedAction anim : this.getAnimations())
             if (this.isAnimOfType(anim, type))
                 anims.add(anim);
@@ -376,24 +377,16 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     //=====Level Handling
 
     public void updateStatsToLevel() {
-        float mult = Math.max((this.level() - LibConstants.baseLevel) * 0.05f, 0);
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
-        ModifiableAttributeInstance health = this.getAttribute(Attributes.GENERIC_MAX_HEALTH);
-        health.removeModifier(attributeLevelMod);
-        health.addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", this.getAttributeBaseValue(Attributes.GENERIC_MAX_HEALTH) * mult, AttributeModifier.Operation.ADDITION));
-        this.setHealth(this.getMaxHealth() - preHealthDiff);
-
-        ModifiableAttributeInstance dmg = this.getAttribute(Attributes.GENERIC_ATTACK_DAMAGE);
-        dmg.removeModifier(attributeLevelMod);
-        dmg.addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", this.getAttributeBaseValue(Attributes.GENERIC_ATTACK_DAMAGE) * mult, AttributeModifier.Operation.ADDITION));
-
-        for (RegistryObject<Attribute> att : ModAttributes.ATTRIBUTES.getEntries()) {
-            if (LevelCalc.shouldStatIncreaseWithLevel(att)) {
-                ModifiableAttributeInstance inst = this.getAttribute(att.get());
+        this.prop.getAttributeGains().forEach((att, val) -> {
+            ModifiableAttributeInstance inst = this.getAttribute(att);
+            if (inst != null) {
                 inst.removeModifier(attributeLevelMod);
-                inst.addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", this.getAttributeBaseValue(att.get()) * mult, AttributeModifier.Operation.ADDITION));
+                inst.addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * val, AttributeModifier.Operation.ADDITION));
+                if (att == Attributes.GENERIC_MAX_HEALTH)
+                    this.setHealth(this.getMaxHealth() - preHealthDiff);
             }
-        }
+        });
     }
     /*
 
@@ -610,7 +603,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     private boolean canAttackFrom(BlockPos pos) {
-        return this.getMaximumHomeDistance() == -1.0f || this.getHomePosition().distanceSq(pos) < (this.getMaximumHomeDistance() + 5.0f) * (this.getMaximumHomeDistance() + 5.0f);
+        return this.getMaximumHomeDistance() == -1.0f || this.getHomePosition().distanceSq(pos) < (this.getMaximumHomeDistance() * this.getMaximumHomeDistance());
     }
 
     public double maxAttackRange(AnimatedAction anim) {
@@ -621,7 +614,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         if (this.isAnimOfType(anim, AnimationType.MELEE)) {
             this.getNavigator().clearPath();
             if (anim.getTick() == 1 && this.getAttackTarget() != null)
-                this.getLookController().setLookPositionWithEntity(this.getAttackTarget(), 0, 0);
+                this.faceEntity(this.getAttackTarget(), 360, 90);
             if (anim.canAttack()) {
                 this.mobAttack(anim, this.getAttackTarget(), this::attackEntityAsMob);
             }
@@ -703,32 +696,31 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             return ActionResultType.PASS;
         ItemStack stack = player.getHeldItemMainhand();
         if (!stack.isEmpty() && player.isSneaking()) {
-            if (stack.getItem() == ModItems.tame.get()) {
+            if (stack.getItem() == ModItems.tame.get() && !this.isTamed()) {
                 this.tameEntity(player);
-            } else if (!this.isTamed() && this.tamingTick == -1 && this.deathTime == 0) {
-                boolean flag = false;
-                if (this.tamingItem() != null)
-                    for (ItemStack item : this.tamingItem())
-                        if (item.getItem() == stack.getItem()) {
-                            flag = true;
-                            break;
-                        }
-                float rightItemMultiplier = flag ? 2 : 1F;
-                if (!player.isCreative())
-                    stack.shrink(1);
-                if (this.rand.nextFloat() <= this.tamingChance() * rightItemMultiplier)//* LevelCalc.tamingMultiplerOnLevel(this.level()))
-                    this.tameEntity(player);
-                if (stack.getItem().isFood())
-                    this.applyFoodEffect(stack);
-                this.tamingTick = 100;
-                this.world.setEntityState(this, (byte) 34);
+            } else if (!this.isTamed()) {
+                if (this.tamingTick == -1 && this.deathTime <= 0) {
+                    boolean flag = false;
+                    if (this.tamingItem() != null)
+                        for (ItemStack item : this.tamingItem())
+                            if (item.getItem() == stack.getItem()) {
+                                flag = true;
+                                break;
+                            }
+                    float rightItemMultiplier = flag ? 2 : 1F;
+                    if (!player.isCreative())
+                        stack.shrink(1);
+                    if (this.rand.nextFloat() <= EntityUtils.tamingChance(this, rightItemMultiplier))
+                        this.tameEntity(player);
+                    if (stack.getItem().isFood())
+                        this.applyFoodEffect(stack);
+                    this.tamingTick = 100;
+                    this.world.setEntityState(this, (byte) 34);
+                }
             } else {
-                //heal
                 if (stack.getItem() == Items.STICK) {
-                    System.out.println("untame");
-                    this.setOwner(null); //for debugging
-
-                    //} else if (stack.getItem() == ModItems.inspector) {
+                    this.setOwner(null);
+                } else if (stack.getItem() == ModItems.inspector.get()) {
                     //open tamed gui
                 } else if (this.feedTimeOut <= 0 && stack.getItem().isFood()) {
                     this.applyFoodEffect(stack);
@@ -736,9 +728,11 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
                 }
             }
             return ActionResultType.SUCCESS;
-        } else if (stack.isEmpty() && !this.world.isRemote && this.isTamed() && this.ridable()) {
+        } else if (stack.isEmpty() && !this.world.isRemote && player == this.getOwner() && this.ridable()) {
             player.startRiding(this);
             return ActionResultType.SUCCESS;
+        } else {
+            //Notify not owned this entity
         }
         return ActionResultType.FAIL;
     }
@@ -912,7 +906,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
         compound.putBoolean("Out", this.dead);
         compound.putInt("FeedTime", this.feedTimeOut);
-        if (!this.detachHome())
+        if (this.detachHome())
             compound.putIntArray("Home", new int[]{this.getHomePosition().getX(), this.getHomePosition().getY(), this.getHomePosition().getZ(), (int) this.getMaximumHomeDistance()});
         compound.putInt("FoodBuffTick", this.foodBuffTick);
     }
