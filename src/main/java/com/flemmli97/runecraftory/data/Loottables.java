@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.loot.GiantLootCondition;
 import com.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
 import com.flemmli97.runecraftory.common.loot.MiningLootCondition;
+import com.flemmli97.runecraftory.common.loot.VanillaDropCondition;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModEntities;
 import com.flemmli97.runecraftory.common.registry.ModItems;
@@ -29,6 +30,7 @@ import net.minecraft.loot.RandomValueRange;
 import net.minecraft.loot.StandaloneLootEntry;
 import net.minecraft.loot.conditions.ILootCondition;
 import net.minecraft.loot.conditions.MatchTool;
+import net.minecraft.loot.conditions.RandomChanceWithLooting;
 import net.minecraft.loot.functions.LootingEnchantBonus;
 import net.minecraft.loot.functions.SetCount;
 import net.minecraft.util.IItemProvider;
@@ -62,13 +64,51 @@ public class Loottables extends ForgeLootTableProvider {
 
         private void init() {
             this.registerLootTable(ModEntities.wooly.get(), LootTable.builder()
-                    .addLootPool(this.create().addEntry(this.add(ModItems.furSmall.get(), 0.4f, 0.2f, 1, 10, 5))));
+                    .addLootPool(this.create().addEntry(this.add(ModItems.furSmall.get(), 0.3f, 0.1f, 2, 1, 10, 5))
+                            .addEntry(this.addVanilla(Items.WHITE_WOOL, 1, 1, 0.5f))
+                            .addEntry(this.addVanilla(Items.MUTTON, 0, 2, 1))));
             this.registerLootTable(ModEntities.ant.get(), LootTable.builder()
-                    .addLootPool(this.create().addEntry(this.add(ModItems.carapaceInsect.get(), 0.3f, 0.2f, 1, 15, 2))
-                            .addEntry(this.add(ModItems.jawInsect.get(), 0.2f, 0.2f, 1, 10, 5))));
+                    .addLootPool(this.create().addEntry(this.add(ModItems.carapaceInsect.get(), 0.3f, 0.2f, 1, 1, 15, 2))
+                            .addEntry(this.add(ModItems.jawInsect.get(), 0.2f, 0.2f, 1, 1, 10, 5))));
             this.registerLootTable(ModEntities.orcArcher.get(), LootTable.builder()
-                    .addLootPool(this.create().addEntry(this.add(ModItems.bladeShard.get(), 0.4f, 0.2f, 1, 10, 5))
-                            .addEntry(this.add(ModItems.clothCheap.get(), 0.6f, 0.3f, 1, 15, 2))));
+                    .addLootPool(this.create().addEntry(this.add(ModItems.bladeShard.get(), 0.4f, 0.2f, 1, 1, 10, 5))
+                            .addEntry(this.add(ModItems.clothCheap.get(), 0.6f, 0.3f, 1, 0, 15, 2))
+                            .addEntry(this.addVanilla(Items.ARROW, -1, 2, 1))));
+            this.registerLootTable(ModEntities.orc.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.cheapBracelet.get(), 0.05f, 0.05f, 0, 1, 10, 5))
+                            .addEntry(this.add(ModItems.glue.get(), 0.6f, 0.3f, 1, 1, 15, 2))));
+            this.registerLootTable(ModEntities.beetle.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.hornInsect.get(), 0.2f, 0.1f, 1, 1, 10, 5))));
+            this.registerLootTable(ModEntities.big_muck.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.spore.get(), 0.2f, 0.05f, 1, 1, 10, 5))));
+            this.registerLootTable(ModEntities.buffamoo.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.milkS.get(), 0.2f, 0.05f, 2, 1, 10, 5))
+                            .addEntry(this.addVanilla(Items.LEATHER, -1, 1, 1))
+                            .addEntry(this.addVanilla(Items.BEEF, -1, 2, 1))));
+            this.registerLootTable(ModEntities.chipsqueek.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.fur.get(), 0.2f, 0.05f, 1, 1, 10, 5))));
+            this.registerLootTable(ModEntities.cluckadoodle.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.eggS.get(), 0.2f, 0.05f, 2, 1, 10, 5))
+                            .addEntry(this.addVanilla(Items.CHICKEN, 0, 1, 0.7f))
+                            .addEntry(this.addVanilla(Items.FEATHER, 0, 2, 1))));
+            this.registerLootTable(ModEntities.pomme_pomme.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(Items.APPLE, 0.2f, 0.05f, 1, 3, 10, 5))));
+            this.registerLootTable(ModEntities.tortas.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.turtleShell.get(), 0.2f, 0.05f, 1, 1, 10, 5))));
+            this.registerLootTable(ModEntities.sky_fish.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.fishFossil.get(), 0.2f, 0.05f, 1, 1, 10, 5))));
+            this.registerLootTable(ModEntities.weagle.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(Items.FEATHER, 0.2f, 0.05f, 2, 1, 10, 5))));
+            this.registerLootTable(ModEntities.goblin.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.bladeShard.get(), 0.2f, 0.05f, 1, 1, 10, 5))));
+            this.registerLootTable(ModEntities.goblinArcher.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.arrowHead.get(), 0.2f, 0.05f, 1, 1, 10, 5))
+                            .addEntry(this.addVanilla(Items.ARROW, -1, 2, 1))));
+
+            this.registerLootTable(ModEntities.ambrosia.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.ambrosiasThorns.get(), 0.65f, 0.1f, 1, 1, 10, 5))));
+            this.registerLootTable(ModEntities.thunderbolt.get(), LootTable.builder()
+                    .addLootPool(this.create().addEntry(this.add(ModItems.lightningMane.get(), 0.65f, 0.1f, 1, 1, 10, 5))));
         }
 
         private LootPool.Builder create() {
@@ -79,10 +119,17 @@ public class Loottables extends ForgeLootTableProvider {
             this.lootTables.put(type.getLootTable(), builder);
         }
 
-        private ItemLootEntry.Builder<?> add(IItemProvider item, float chance, float lootingBonus, int lootingMax, int weight, int quality) {
-            return ItemLootEntry.builder(item).acceptFunction(SetCount.builder(RandomValueRange.of(0, chance)))
-                    .acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(0, lootingBonus)).func_216072_a(lootingMax))
+        private ItemLootEntry.Builder<?> add(IItemProvider item, float chance, float lootingBonus, float lootingCountBonus, int lootingCountMax, int weight, int quality) {
+            return ItemLootEntry.builder(item)
+                    .acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(0, lootingCountBonus)).func_216072_a(lootingCountMax))
+                    .acceptCondition(RandomChanceWithLooting.builder(chance, lootingBonus))
                     .weight(weight).quality(quality);
+        }
+
+        private ItemLootEntry.Builder<?> addVanilla(IItemProvider item, float min, float max, float lootingCountBonus) {
+            return ItemLootEntry.builder(item).acceptFunction(SetCount.builder(new RandomValueRange(min, max)))
+                    .acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(0, lootingCountBonus)))
+                    .acceptCondition(VanillaDropCondition.get());
         }
 
         @Override

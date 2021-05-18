@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.api.enums.EnumSeason;
 import com.flemmli97.runecraftory.client.ClientHandlers;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
+import com.flemmli97.runecraftory.common.config.ClientConfig;
 import com.flemmli97.runecraftory.common.utils.CalendarImpl;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
@@ -25,8 +26,8 @@ public class OverlayGui extends AbstractGui {
     public void renderBar(MatrixStack stack) {
         IPlayerCap cap = this.mc.player.getCapability(CapabilityInsts.PlayerCap).orElse(null);
         CalendarImpl calendar = ClientHandlers.clientCalendar;
-        int xPos = 2;
-        int yPos = 2;
+        int xPos = ClientConfig.healthBarWidgetX;
+        int yPos = ClientConfig.healthBarWidgetY;
         GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
         GL11.glDisable(2896);
         EnumSeason season = calendar.currentSeason();
@@ -38,6 +39,9 @@ public class OverlayGui extends AbstractGui {
             this.drawTexture(stack, xPos + 18, yPos + 3, 18, 30, healthWidth, 9);
             this.drawTexture(stack, xPos + 18, yPos + 17, 18, 40, runePointsWidth, 9);
         }
-        drawCenteredText(stack, this.mc.fontRenderer, new TranslationTextComponent(season.translationKey()).formatted(season.getColor()).append(" " + calendar.date() + " ").append(new TranslationTextComponent(calendar.currentDay().translation())), 50, 50, 0);
+
+        this.drawTexture(stack, ClientConfig.seasonDisplayX, ClientConfig.seasonDisplayY, 0 + season.ordinal() * 32, 227, 32, 29);
+
+        drawCenteredText(stack, this.mc.fontRenderer, new TranslationTextComponent(" " + calendar.date() + " ").append(new TranslationTextComponent(calendar.currentDay().translation())), 50, 50, 0);
     }
 }

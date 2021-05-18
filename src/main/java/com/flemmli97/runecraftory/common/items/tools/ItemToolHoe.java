@@ -23,6 +23,7 @@ import net.minecraft.item.HoeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
+import net.minecraft.item.Rarity;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
@@ -58,6 +59,11 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     @Override
     public int chargeAmount(ItemStack stack) {
         return this.tier.getTierLevel();
+    }
+
+    @Override
+    public Rarity getRarity(ItemStack stack) {
+        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
     }
 
     @Override

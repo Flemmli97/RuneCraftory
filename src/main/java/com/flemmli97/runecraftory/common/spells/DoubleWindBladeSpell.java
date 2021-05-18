@@ -41,13 +41,18 @@ public class DoubleWindBladeSpell extends Spell {
                 EntityWindBlade wind = new EntityWindBlade(world, entity);
                 wind.setDamageMultiplier(1 + (level - 1) / 10);
                 wind.shoot(entity, 0, entity.rotationYaw - (i == 0 ? 1 : -1) * 80, 0, 0.45f, 0);
-                if (entity instanceof MobEntity && ((MobEntity) entity).getAttackTarget() != null)
+                boolean set = false;
+                if (entity instanceof MobEntity && ((MobEntity) entity).getAttackTarget() != null) {
                     wind.setTarget(((MobEntity) entity).getAttackTarget());
-                else if (entity instanceof PlayerEntity) {
+                    set = true;
+                } else if (entity instanceof PlayerEntity) {
                     EntityRayTraceResult res = RayTraceUtils.calculateEntityFromLook(entity, 9);
-                    if (res != null)
+                    if (res != null) {
                         wind.setTarget(res.getEntity());
-                } else {
+                        set = true;
+                    }
+                }
+                if (!set) {
                     RayTraceResult res = RayTraceUtils.entityRayTrace(entity, 8, RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, false, false, null);
                     wind.setTarget(res.getHitVec());
                 }

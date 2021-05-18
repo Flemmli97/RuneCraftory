@@ -11,6 +11,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.FishingRodItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Rarity;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.SoundEvents;
 
@@ -35,6 +36,11 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
         if (this.tier == EnumToolTier.PLATINUM)
             return this.tier.getTierLevel();
         return this.tier.getTierLevel() + 1;
+    }
+
+    @Override
+    public Rarity getRarity(ItemStack stack) {
+        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
     }
 
     @Override

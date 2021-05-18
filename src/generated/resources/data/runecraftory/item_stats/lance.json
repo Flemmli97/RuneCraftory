@@ -4,7 +4,8 @@
   "upgradeDifficulty": 0,
   "element": "NONE",
   "itemStats": {
-    "minecraft:generic.attack_damage": 8.0
+    "minecraft:generic.attack_damage": 8.0,
+    "runecraftory:attribute.rf.defence": 1.0
   },
   "item": "runecraftory:lance"
 }

@@ -1,0 +1,10 @@
+{
+  "buyPrice": 25,
+  "sellPrice": 5,
+  "upgradeDifficulty": 0,
+  "element": "WATER",
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_att": 1.0
+  },
+  "item": "runecraftory:watering_can_scrap"
+}

@@ -34,6 +34,7 @@ public class ShortWaterLaserSpell extends Spell {
         boolean rp = !(entity instanceof PlayerEntity) || entity.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.decreaseRunePoints((PlayerEntity) entity, this.rpCost(), true)).orElse(false);
         if (rp) {
             EntityWaterLaser laser = new EntityWaterLaser(world, entity);
+            laser.setMaxTicks(5);
             laser.setDamageMultiplier(1 + (level - 1) / 10);
             if (entity instanceof MobEntity && ((MobEntity) entity).getAttackTarget() != null) {
                 LivingEntity target = ((MobEntity) entity).getAttackTarget();

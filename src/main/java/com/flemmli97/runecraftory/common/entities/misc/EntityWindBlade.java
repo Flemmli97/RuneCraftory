@@ -104,7 +104,7 @@ public class EntityWindBlade extends EntityProjectile {
                     this.target = res.getEyePosition(1);
             }
             if (this.target != null) {
-                Vector3d dir = this.target.subtract(this.getPositionVec()).normalize().scale(0.1);
+                Vector3d dir = this.target.subtract(this.getPositionVec()).normalize().scale(0.15);
                 this.addVelocity(dir.getX(), dir.getY(), dir.getZ());
             }
         }

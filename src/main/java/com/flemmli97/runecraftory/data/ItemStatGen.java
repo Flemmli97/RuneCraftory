@@ -62,47 +62,59 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 1));
 
         this.addStat(ModItems.claymore.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 6));
-        this.addStat(ModItems.zweihaender.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 7));
-        this.addStat(ModItems.zweihaenderPlus.get(), new ItemStat.MutableItemStat(25, 5, 0)
+        this.addStat(ModItems.zweihaender.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 8));
+        this.addStat(ModItems.zweihaenderPlus.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 10)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));
         this.addStat(ModItems.greatSword.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 14)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 4));
 
         this.addStat(ModItems.spear.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 6));
         this.addStat(ModItems.woodStaff.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 7));
         this.addStat(ModItems.lance.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 8));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 8)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));
         this.addStat(ModItems.lancePlus.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 2));
 
         this.addStat(ModItems.battleAxe.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 6));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 9)
+                .addAttribute(ModAttributes.RFCRIT.get(), 5));
 
         this.addStat(ModItems.poleAxe.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 8));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12)
+                .addAttribute(ModAttributes.RFCRIT.get(), 7));
         this.addStat(ModItems.poleAxePlus.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 15)
+                .addAttribute(ModAttributes.RFCRIT.get(), 7));
 
         this.addStat(ModItems.battleHammer.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 6));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 10)
+                .addAttribute(ModAttributes.RFSTUN.get(), 5));
         this.addStat(ModItems.bat.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 7));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 11)
+                .addAttribute(ModAttributes.RFSTUN.get(), 6));
         this.addStat(ModItems.warHammer.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 8));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 15)
+                .addAttribute(ModAttributes.RFSTUN.get(), 7));
         this.addStat(ModItems.warHammerPlus.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 18)
+                .addAttribute(ModAttributes.RFSTUN.get(), 9));
         this.addStat(ModItems.ironBat.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 20)
+                .addAttribute(ModAttributes.RFSTUN.get(), 11));
 
         this.addStat(ModItems.shortDagger.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 4));
 
         this.addStat(ModItems.leatherGlove.get(), new ItemStat.MutableItemStat(25, 5, 0)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 12));
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 5));
 
         this.addStat(ModItems.rod.get(), new ItemStat.MutableItemStat(1000, 50, 0)
                 .addAttribute(ModAttributes.RF_MAGIC.get(), 5)
@@ -110,10 +122,112 @@ public class ItemStatGen extends ItemStatProvider {
                 .setElement(EnumElement.FIRE)
                 .setSpell(ModSpells.FIREBALL.get(), null, null));
 
+        this.addStat(ModItems.hoeScrap.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 1));
+        this.addStat(ModItems.hoeIron.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 15)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 3));
+        this.addStat(ModItems.hoeSilver.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 34)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 5)
+                .setElement(EnumElement.EARTH));
+        this.addStat(ModItems.hoeGold.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 76)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 15)
+                .setElement(EnumElement.EARTH));
+        this.addStat(ModItems.hoePlatinum.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 111)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 45)
+                .setElement(EnumElement.EARTH));
+
+        this.addStat(ModItems.wateringCanScrap.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 1)
+                .setElement(EnumElement.WATER));
+        this.addStat(ModItems.wateringCanIron.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 7)
+                .setElement(EnumElement.WATER));
+        this.addStat(ModItems.wateringCanSilver.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 19)
+                .setElement(EnumElement.WATER));
+        this.addStat(ModItems.wateringCanGold.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 39)
+                .setElement(EnumElement.WATER));
+        this.addStat(ModItems.wateringCanPlatinum.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 99)
+                .setElement(EnumElement.WATER));
+
+        this.addStat(ModItems.sickleScrap.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 2));
+        this.addStat(ModItems.sickleIron.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 19));
+        this.addStat(ModItems.sickleSilver.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 36));
+        this.addStat(ModItems.sickleGold.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 79)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 5)
+                .setElement(EnumElement.WIND));
+        this.addStat(ModItems.sicklePlatinum.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 134)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 31)
+                .setElement(EnumElement.WIND));
+
+        this.addStat(ModItems.axeScrap.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 3)
+                .addAttribute(ModAttributes.RFCRIT.get(), 5));
+        this.addStat(ModItems.axeIron.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 22)
+                .addAttribute(ModAttributes.RFCRIT.get(), 5));
+        this.addStat(ModItems.axeSilver.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 39)
+                .addAttribute(ModAttributes.RFCRIT.get(), 5));
+        this.addStat(ModItems.axeGold.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 83)
+                .addAttribute(ModAttributes.RFCRIT.get(), 5));
+        this.addStat(ModItems.axePlatinum.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 140)
+                .addAttribute(ModAttributes.RFCRIT.get(), 15));
+
+        this.addStat(ModItems.hammerPlatinum.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 3)
+                .addAttribute(ModAttributes.RFCRIT.get(), -5)
+                .addAttribute(ModAttributes.RFRESSTUN.get(), 10));
+        this.addStat(ModItems.hammerIron.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 23)
+                .addAttribute(ModAttributes.RFCRIT.get(), -5)
+                .addAttribute(ModAttributes.RFRESSTUN.get(), 10));
+        this.addStat(ModItems.hammerSilver.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 47)
+                .addAttribute(ModAttributes.RFCRIT.get(), -5)
+                .addAttribute(ModAttributes.RFRESSTUN.get(), 10));
+        this.addStat(ModItems.hammerGold.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 85)
+                .addAttribute(ModAttributes.RFCRIT.get(), -5)
+                .addAttribute(ModAttributes.RFRESSTUN.get(), 10));
+        this.addStat(ModItems.hammerPlatinum.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 145)
+                .addAttribute(ModAttributes.RFCRIT.get(), -7)
+                .addAttribute(ModAttributes.RFRESSTUN.get(), 10));
+
+        this.addStat(ModItems.fishingRodScrap.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 1)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 5));
+        this.addStat(ModItems.fishingRodIron.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 9)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 14));
+        this.addStat(ModItems.fishingRodSilver.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 26)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 27));
+        this.addStat(ModItems.fishingRodGold.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 66)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 72));
+        this.addStat(ModItems.fishingRodPlatinum.get(), new ItemStat.MutableItemStat(25, 5, 0)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 89)
+                .addAttribute(ModAttributes.RF_MAGIC.get(), 98));
+
         this.addStat(ModItems.cheapBracelet.get(), new ItemStat.MutableItemStat(100, 25, 0)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1.5));
-        this.addStat(ModItems.cheapBracelet.get(), new ItemStat.MutableItemStat(100, 25, 0)
-                .addAttribute(ModAttributes.RF_DEFENCE.get(), 1.5));
+        this.addStat(ModItems.bronzeBracelet.get(), new ItemStat.MutableItemStat(100, 25, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 2));
 
         this.addStat("iron", Tags.Items.INGOTS_IRON, new ItemStat.MutableItemStat(1, 1, 5)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));

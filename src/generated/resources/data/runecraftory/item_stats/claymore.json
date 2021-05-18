@@ -4,7 +4,7 @@
   "upgradeDifficulty": 0,
   "element": "NONE",
   "itemStats": {
-    "minecraft:generic.attack_damage": 6.0
+    "minecraft:generic.attack_damage": 7.0
   },
   "item": "runecraftory:claymore"
 }

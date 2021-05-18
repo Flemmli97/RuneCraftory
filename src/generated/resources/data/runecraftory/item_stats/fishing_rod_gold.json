@@ -1,0 +1,11 @@
+{
+  "buyPrice": 25,
+  "sellPrice": 5,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "itemStats": {
+    "minecraft:generic.attack_damage": 66.0,
+    "runecraftory:attribute.rf.magic_att": 72.0
+  },
+  "item": "runecraftory:fishing_rod_gold"
+}

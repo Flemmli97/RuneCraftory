@@ -694,7 +694,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     protected ActionResultType interactMob(PlayerEntity player, Hand hand) {
         if (this.world.isRemote)
             return ActionResultType.PASS;
-        ItemStack stack = player.getHeldItemMainhand();
+        ItemStack stack = player.getHeldItem(hand);
         if (!stack.isEmpty() && player.isSneaking()) {
             if (stack.getItem() == ModItems.tame.get() && !this.isTamed()) {
                 this.tameEntity(player);

@@ -48,7 +48,7 @@ public class CombatUtils {
      */
     public static int getAttributeValue(LivingEntity attacker, Attribute att, Entity target) {
         if (attacker == null)
-            return 0;
+            return 1;
         float increase = 0;
         if (attacker instanceof PlayerEntity) {
             increase += attacker.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) attacker, att)).orElse(0);
@@ -233,7 +233,7 @@ public class CombatUtils {
                     ++i;
                 }
                 Vector3d targetMot = target.getMotion();
-                damagePhys = faintChance ? Float.MAX_VALUE : GeneralConfig.randomDamage ? (int) (damagePhys + (float) (player.world.rand.nextGaussian() * damagePhys / 10.0)) : damagePhys;
+                damagePhys = faintChance ? Float.MAX_VALUE : damagePhys;
                 boolean ignoreArmor = critChance || faintChance;
                 float knockback = i * 0.5f + 0.1f;
                 if (target instanceof BaseMonster) {
@@ -283,7 +283,7 @@ public class CombatUtils {
             return false;
         if (dmg > 0) {
             boolean faintChance = attacker.world.rand.nextInt(100) < getAttributeValue(attacker, ModAttributes.RFFAINT.get(), target);
-            dmg = faintChance ? Float.MAX_VALUE : GeneralConfig.randomDamage ? dmg + (float) (attacker.world.rand.nextGaussian() * dmg / 10.0) : dmg;
+            dmg = faintChance ? Float.MAX_VALUE : dmg;
             return damage(attacker, target, source, dmg, null);
         }
         return false;
@@ -306,7 +306,8 @@ public class CombatUtils {
         return builder.damageType(ignoreArmor ? CustomDamage.DamageType.IGNOREDEF : CustomDamage.DamageType.NORMAL).knock(CustomDamage.KnockBackType.VANILLA).knockAmount(knockback);
     }
 
-    public static boolean damage(@Nullable LivingEntity attacker, Entity target, CustomDamage source, float damagePhys, @Nullable ItemStack stack) {
+    public static boolean damage(@Nullable LivingEntity attacker, Entity target, CustomDamage source, float damage, @Nullable ItemStack stack) {
+        float damagePhys = GeneralConfig.randomDamage ? (float) Math.floor(damage + (float) (attacker.world.rand.nextGaussian() * damage / 10.0)) : damage;
         boolean success = target.attackEntityFrom(source, damagePhys);
         if (success) {
             spawnElementalParticle(target, source.getElement());

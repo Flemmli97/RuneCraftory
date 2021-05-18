@@ -1,0 +1,11 @@
+{
+  "buyPrice": 25,
+  "sellPrice": 5,
+  "upgradeDifficulty": 0,
+  "element": "WIND",
+  "itemStats": {
+    "minecraft:generic.attack_damage": 79.0,
+    "runecraftory:attribute.rf.magic_att": 5.0
+  },
+  "item": "runecraftory:sickle_gold"
+}

@@ -27,6 +27,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
 import net.minecraft.item.PickaxeItem;
+import net.minecraft.item.Rarity;
 import net.minecraft.item.UseAction;
 import net.minecraft.network.play.server.SChangeBlockPacket;
 import net.minecraft.util.ActionResult;
@@ -65,6 +66,11 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public int chargeAmount(ItemStack stack) {
         return this.tier.getTierLevel();
+    }
+
+    @Override
+    public Rarity getRarity(ItemStack stack) {
+        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
     }
 
     @Override

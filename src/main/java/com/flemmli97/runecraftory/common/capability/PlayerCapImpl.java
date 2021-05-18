@@ -339,6 +339,9 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         }
     }
 
+    /**
+     * On client side player attributes are missing since they are not synced
+     */
     @Override
     public int getAttributeValue(PlayerEntity player, Attribute att) {
         int i = (int) Math.floor(this.headBonus.getOrDefault(att, 0) +

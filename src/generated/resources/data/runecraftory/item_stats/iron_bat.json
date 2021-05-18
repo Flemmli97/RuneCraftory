@@ -4,7 +4,8 @@
   "upgradeDifficulty": 0,
   "element": "NONE",
   "itemStats": {
-    "minecraft:generic.attack_damage": 12.0
+    "minecraft:generic.attack_damage": 20.0,
+    "runecraftory:attribute.rf.stun": 11.0
   },
   "item": "runecraftory:iron_bat"
 }

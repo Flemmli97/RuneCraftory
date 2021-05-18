@@ -10,6 +10,8 @@ import com.flemmli97.runecraftory.common.capability.IPlayerCap;
 import com.flemmli97.runecraftory.common.capability.IStaffCap;
 import com.flemmli97.runecraftory.common.capability.PlayerCapImpl;
 import com.flemmli97.runecraftory.common.capability.StaffCapImpl;
+import com.flemmli97.runecraftory.common.config.ClientConfig;
+import com.flemmli97.runecraftory.common.config.ClientConfigSpec;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.config.GeneralConfigSpec;
 import com.flemmli97.runecraftory.common.config.GenerationConfig;
@@ -90,6 +92,8 @@ public class RuneCraftory {
         forgeBus.register(new WorldEvents());
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfigSpec.generalSpec, RuneCraftory.MODID + "/general.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigSpec.clientSpec, RuneCraftory.MODID + "/client.toml");
+
         spawnConfig = new SpawnConfig(confDir);
         MobConfig.MobConfigSpec.config.loadConfig();
         GenerationConfig.GenerationConfigSpec.config.loadConfig();
@@ -139,5 +143,7 @@ public class RuneCraftory {
     public void conf(ModConfig.ModConfigEvent event) {
         if (event.getConfig().getSpec() == GeneralConfigSpec.generalSpec)
             GeneralConfig.load();
+        if(event.getConfig().getSpec() == ClientConfigSpec.clientSpec)
+            ClientConfig.load();
     }
 }

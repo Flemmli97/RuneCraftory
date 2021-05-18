@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.client.gui.widgets.SkillButton;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import com.flemmli97.runecraftory.common.config.ClientConfig;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.entities.BaseMonster;
@@ -17,6 +18,7 @@ import com.flemmli97.runecraftory.common.registry.ModParticles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.screen.inventory.CreativeScreen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.Entity;
@@ -73,17 +75,17 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void initSkillTab(GuiScreenEvent.InitGuiEvent.Post event) {
-        if (event.getGui() instanceof InventoryScreen || event.getGui() instanceof CreativeScreen) {
-            int x = 0;
-            int y = 0;
+        if (event.getGui() instanceof InventoryScreen || (event.getGui() instanceof CreativeScreen)) {
+            int x = ((ContainerScreen<?>) event.getGui()).getGuiLeft();
+            int y = ((ContainerScreen<?>) event.getGui()).getGuiTop();
             if (event.getGui() instanceof InventoryScreen) {
-                x = (event.getGui().width - 174) / 2 - 28;
-                y = (event.getGui().height - 166) / 2;
+                x += ClientConfig.inventoryOffsetX;
+                y += ClientConfig.inventoryOffsetY;
             } else {
-                x = (event.getGui().width - 192) / 2 - 28;
-                y = (event.getGui().height - 136) / 2;
+                x += ClientConfig.creativeInventoryOffsetX;
+                y += ClientConfig.creativeInventoryOffsetY;
             }
-            event.addWidget(new SkillButton(x, y, b -> PacketHandler.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN))));
+            event.addWidget(new SkillButton(x, y, event.getGui(), b -> PacketHandler.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN))));
         }
     }
 

@@ -13,6 +13,7 @@ public class GeneralConfig {
     public static boolean gateSpawning;
     public static boolean disableVanillaSpawning;
     public static boolean randomDamage;
+    public static boolean dropVanillaLoot = true;
 
     public static boolean crops;
     public static boolean rp;

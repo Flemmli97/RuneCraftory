@@ -17,6 +17,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Rarity;
 import net.minecraft.util.SoundEvents;
 
 public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
@@ -40,6 +41,11 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
         if (this.tier == EnumToolTier.PLATINUM)
             return this.tier.getTierLevel();
         return this.tier.getTierLevel() + 1;
+    }
+
+    @Override
+    public Rarity getRarity(ItemStack stack) {
+        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
     }
 
     @Override
