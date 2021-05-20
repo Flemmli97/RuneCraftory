@@ -24,6 +24,8 @@ import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.WorldUtils;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -66,12 +68,12 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     private float str = GeneralConfig.startingStr;
     private float vit = GeneralConfig.startingVit;
     private float intel = GeneralConfig.startingIntel;
-    private Map<Attribute, Integer> headBonus = new HashMap<>();
-    private Map<Attribute, Integer> bodyBonus = new HashMap<>();
-    private Map<Attribute, Integer> legsBonus = new HashMap<>();
-    private Map<Attribute, Integer> feetBonus = new HashMap<>();
-    private Map<Attribute, Integer> mainHandBonus = new HashMap<>();
-    private Map<Attribute, Integer> offHandBonus = new HashMap<>();
+    private Map<Attribute, Double> headBonus = new HashMap<>();
+    private Map<Attribute, Double> bodyBonus = new HashMap<>();
+    private Map<Attribute, Double> legsBonus = new HashMap<>();
+    private Map<Attribute, Double> feetBonus = new HashMap<>();
+    private Map<Attribute, Double> mainHandBonus = new HashMap<>();
+    private Map<Attribute, Double> offHandBonus = new HashMap<>();
 
     private Map<ResourceLocation, Integer> shippedItems = new HashMap<>();
     private Map<EnumShop, NonNullList<ItemStack>> shopItems = new HashMap<>();
@@ -314,24 +316,50 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
 
     @Override
     public void updateEquipmentStats(PlayerEntity player, EquipmentSlotType slot) {
+        ItemStack stack = player.getItemStackFromSlot(slot);
         switch (slot) {
             case CHEST:
-                this.bodyBonus = ItemNBT.statIncrease(player.getItemStackFromSlot(slot));
+                this.bodyBonus = ItemNBT.statIncrease(stack);
+                if (player.world.isRemote) {
+                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
+                            this.bodyBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
+                }
                 break;
             case FEET:
-                this.feetBonus = ItemNBT.statIncrease(player.getItemStackFromSlot(slot));
+                this.feetBonus = ItemNBT.statIncrease(stack);
+                if (player.world.isRemote) {
+                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
+                            this.feetBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
+                }
                 break;
             case HEAD:
-                this.headBonus = ItemNBT.statIncrease(player.getItemStackFromSlot(slot));
+                this.headBonus = ItemNBT.statIncrease(stack);
+                if (player.world.isRemote) {
+                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
+                            this.headBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
+                }
                 break;
             case LEGS:
-                this.legsBonus = ItemNBT.statIncrease(player.getItemStackFromSlot(slot));
+                this.legsBonus = ItemNBT.statIncrease(stack);
+                if (player.world.isRemote) {
+                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
+                            this.legsBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
+                }
                 break;
             case MAINHAND:
-                this.mainHandBonus = ItemNBT.statIncrease(player.getItemStackFromSlot(slot));
+                this.mainHandBonus = ItemNBT.statIncrease(stack);
+                if (player.world.isRemote) {
+                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
+                            this.mainHandBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
+                    this.mainHandBonus.merge(Attributes.GENERIC_ATTACK_DAMAGE, (double) EnchantmentHelper.getModifierForCreature(stack, CreatureAttribute.UNDEFINED), (prev, v) -> prev += v);
+                }
                 break;
             case OFFHAND:
-                this.offHandBonus = ItemNBT.statIncrease(player.getItemStackFromSlot(slot));
+                this.offHandBonus = ItemNBT.statIncrease(stack);
+                if (player.world.isRemote) {
+                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
+                            this.offHandBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
+                }
                 break;
         }
         if (!player.world.isRemote && player instanceof ServerPlayerEntity) {
@@ -339,30 +367,27 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         }
     }
 
-    /**
-     * On client side player attributes are missing since they are not synced
-     */
     @Override
-    public int getAttributeValue(PlayerEntity player, Attribute att) {
-        int i = (int) Math.floor(this.headBonus.getOrDefault(att, 0) +
-                this.bodyBonus.getOrDefault(att, 0) +
-                this.legsBonus.getOrDefault(att, 0) +
-                this.feetBonus.getOrDefault(att, 0) +
-                this.mainHandBonus.getOrDefault(att, 0) +
-                this.offHandBonus.getOrDefault(att, 0));
+    public double getAttributeValue(PlayerEntity player, Attribute att) {
+        double val = Math.floor(this.headBonus.getOrDefault(att, 0d) +
+                this.bodyBonus.getOrDefault(att, 0d) +
+                this.legsBonus.getOrDefault(att, 0d) +
+                this.feetBonus.getOrDefault(att, 0d) +
+                this.mainHandBonus.getOrDefault(att, 0d) +
+                this.offHandBonus.getOrDefault(att, 0d));
         if (att == Attributes.GENERIC_ATTACK_DAMAGE)
-            i += this.getStr();
+            val += this.getStr();
         if (att == ModAttributes.RF_MAGIC.get())
-            i += this.getIntel();
+            val += this.getIntel();
         if (att == ModAttributes.RF_DEFENCE.get())
-            i += this.getVit() * 0.5;
+            val += this.getVit() * 0.5;
         if (att == ModAttributes.RF_MAGIC_DEFENCE.get())
-            i += this.getVit() * 0.5;
-        i += this.foodBuffs.getOrDefault(att, 0);
+            val += this.getVit() * 0.5;
+        val += this.foodBuffs.getOrDefault(att, 0);
 
         AttributeModifierManager atts = player.getAttributes();
-        i += atts.hasAttribute(att) ? atts.getValue(att) : 0;
-        return i;
+        val += atts.hasAttribute(att) ? atts.getValue(att) : 0;
+        return val;
     }
 
     @Override
@@ -631,7 +656,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         player.setMotion(move.x, player.getMotion().y, move.z);
         for (LivingEntity e : player.world.getEntitiesWithinAABB(LivingEntity.class, player.getBoundingBox().grow(1.0))) {
             if (e != player) {
-                float damagePhys = this.getAttributeValue(player, Attributes.GENERIC_ATTACK_DAMAGE);
+                float damagePhys = (float) this.getAttributeValue(player, Attributes.GENERIC_ATTACK_DAMAGE);
                 this.decreaseRunePoints(player, 2, true);
                 this.increaseSkill(EnumSkills.FIST, player, 5);
                 /*if (!(e instanceof IEntityBase)) {

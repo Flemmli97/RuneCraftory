@@ -27,7 +27,7 @@ public class ChemistryRecipe extends SextupleRecipe {
 
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(ModItems.recoveryPotion.get());
+        return new ItemStack(ModItems.itemBlockChem.get());
     }
 
     public static class Serializer extends SextupleRecipe.Serializer<ChemistryRecipe> {

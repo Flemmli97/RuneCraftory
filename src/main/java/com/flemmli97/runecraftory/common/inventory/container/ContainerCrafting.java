@@ -27,10 +27,10 @@ public class ContainerCrafting extends Container {
 
     private List<SextupleRecipe> matchingRecipes;
     private SextupleRecipe currentRecipe;
-    private int matchingRecipesIndex;
     private final PlayerContainerInv craftingInv;
     private final EnumCrafting type;
     private final DummyInventory outPutInv;
+    private final TileCrafting tile;
 
     public ContainerCrafting(int windowId, PlayerInventory inv, PacketBuffer data) {
         this(windowId, inv, getTile(inv.player.world, data));
@@ -40,8 +40,9 @@ public class ContainerCrafting extends Container {
         super(ModContainer.craftingContainer.get(), windowID);
         this.outPutInv = new DummyInventory(new ItemStackHandler());
         this.craftingInv = PlayerContainerInv.create(this, tile, playerInv.player);
+        this.tile = tile;
         this.type = tile.craftingType();
-        this.addSlot(new CraftingOutputSlot(this.outPutInv, this, this.craftingInv, 0, 116, 34));
+        this.addSlot(new CraftingOutputSlot(this.outPutInv, this, this.craftingInv, 0, 116, 35));
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -54,7 +55,7 @@ public class ContainerCrafting extends Container {
             this.addSlot(new Slot(this.craftingInv, i, 20 + i * 18, 26));
             this.addSlot(new Slot(this.craftingInv, i + 3, 20 + i * 18, 44));
         }
-        this.onCraftMatrixChanged(this.craftingInv);
+        this.initCraftingMatrix(this.craftingInv);
     }
 
     public EnumCrafting craftingType() {
@@ -69,22 +70,33 @@ public class ContainerCrafting extends Container {
     @Override
     public void onCraftMatrixChanged(IInventory inv) {
         if (inv == this.craftingInv)
-            this.updateCraftingOutput();
+            this.updateCraftingOutput(false);
         super.onCraftMatrixChanged(inv);
     }
 
-    public void updateCraftingOutput() {
+    private void initCraftingMatrix(IInventory inv) {
+        if (inv == this.craftingInv)
+            this.updateCraftingOutput(true);
+        super.onCraftMatrixChanged(inv);
+    }
+
+    public void updateCraftingOutput(boolean init) {
         if (this.craftingInv.getPlayer().world.isRemote)
             return;
-        this.matchingRecipes = getRecipes(this.craftingInv, this.type);
-        this.matchingRecipesIndex = 0;
+        if (this.craftingInv.refreshAndSet()) {
+            this.matchingRecipes = getRecipes(this.craftingInv, this.type);
+            if (!init)
+                this.tile.resetIndex();
+        }
         this.updateCraftingSlot();
     }
 
     private void updateCraftingSlot() {
         ItemStack stack;
-        if (this.matchingRecipes != null && this.matchingRecipesIndex < this.matchingRecipes.size()) {
-            this.currentRecipe = this.matchingRecipes.get(this.matchingRecipesIndex);
+        if (this.matchingRecipes != null && this.matchingRecipes.size() > 0) {
+            if (this.tile.craftingIndex() >= this.matchingRecipes.size())
+                this.tile.resetIndex();
+            this.currentRecipe = this.matchingRecipes.get(this.tile.craftingIndex());
             stack = this.currentRecipe.getCraftingResult(this.craftingInv);
         } else {
             stack = ItemStack.EMPTY;
@@ -101,25 +113,31 @@ public class ContainerCrafting extends Container {
     }
 
     public boolean canIncrease() {
-        return this.matchingRecipes != null && this.matchingRecipesIndex < this.matchingRecipes.size() - 1;
+        return this.matchingRecipes != null && this.tile.craftingIndex() < this.matchingRecipes.size() - 1;
     }
 
     public boolean canDecrease() {
-        return this.matchingRecipesIndex > 0;
+        return this.tile.craftingIndex() > 0;
     }
 
     public void increase() {
         if (this.canIncrease()) {
-            this.matchingRecipesIndex++;
-            this.updateCraftingSlot();
+            this.tile.increaseIndex();
         }
+        else {
+            this.tile.resetIndex();
+        }
+        this.updateCraftingSlot();
     }
 
     public void decrease() {
         if (this.canDecrease()) {
-            this.matchingRecipesIndex--;
-            this.updateCraftingSlot();
+            this.tile.decreaseIndex();
+        } else if(this.matchingRecipes != null) {
+            while(this.tile.craftingIndex() < this.matchingRecipes.size())
+                this.tile.increaseIndex();
         }
+        this.updateCraftingSlot();
     }
 
     @Override
@@ -159,6 +177,11 @@ public class ContainerCrafting extends Container {
         }
 
         return itemstack;
+    }
+
+    @Override
+    public void onContainerClosed(PlayerEntity entity) {
+        super.onContainerClosed(entity);
     }
 
     public static List<SextupleRecipe> getRecipes(PlayerContainerInv inv, EnumCrafting type) {

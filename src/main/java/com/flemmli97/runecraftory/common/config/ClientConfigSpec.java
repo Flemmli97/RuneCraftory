@@ -17,6 +17,9 @@ public class ClientConfigSpec {
     public final ForgeConfigSpec.ConfigValue<Integer> creativeInventoryOffsetX;
     public final ForgeConfigSpec.ConfigValue<Integer> creativeInventoryOffsetY;
 
+    public final ForgeConfigSpec.ConfigValue<Integer> tempX;
+    public final ForgeConfigSpec.ConfigValue<Integer> tempY;
+
     private ClientConfigSpec(ForgeConfigSpec.Builder builder) {
         this.healthBarWidgetX = builder.define("X Position of health bar", 2);
         this.healthBarWidgetY = builder.define("Y Position of health bar", 2);
@@ -26,6 +29,9 @@ public class ClientConfigSpec {
         this.inventoryOffsetY = builder.define("Y offset of inventory button", 47);
         this.creativeInventoryOffsetX = builder.define("X offset of inventory button in creative", 20);
         this.creativeInventoryOffsetY = builder.define("Y offset of inventory button in creative", 22);
+
+        this.tempX = builder.define("Temp X", 20);
+        this.tempY = builder.define("Temp Y", 22);
 
     }
 

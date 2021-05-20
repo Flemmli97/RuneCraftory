@@ -32,7 +32,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     private int chargeXP = 25;
 
     public ItemSpearBase(Item.Properties props) {
-        super(props);
+        super(props.maxStackSize(1));
     }
 
     @Override

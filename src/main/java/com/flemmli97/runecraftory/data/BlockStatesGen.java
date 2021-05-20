@@ -86,9 +86,9 @@ public class BlockStatesGen extends BlockStateProvider {
                     );
         });
         this.craftingModel(ModBlocks.forge.get());
-        this.craftingModel(ModBlocks.accessory.get());
-        this.craftingModel(ModBlocks.cooking.get());
-        this.craftingModel(ModBlocks.chemistry.get());
+        this.craftingModelPlaceholder(ModBlocks.accessory.get());
+        this.craftingModelPlaceholder(ModBlocks.cooking.get());
+        this.craftingModelPlaceholder(ModBlocks.chemistry.get());
         this.simpleBlock(ModBlocks.board.get());
         this.simpleBlock(ModBlocks.bossSpawner.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPAWNER.getRegistryName().getPath())));
 
@@ -107,10 +107,20 @@ public class BlockStatesGen extends BlockStateProvider {
         return new ResourceLocation(name.getNamespace(), "blocks" + "/" + name.getPath().replace("broken_", ""));
     }
 
-    private void craftingModel(Block block) {
+    private void craftingModelPlaceholder(Block block) {
         this.getVariantBuilder(block)
                 .forAllStatesExcept(state -> ConfiguredModel.builder()
                                 .modelFile(this.models().cubeAll(block.getRegistryName().toString() + "_" + state.get(BlockCrafting.PART).getString(), new ResourceLocation("block/stone")))
+                                .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle()) % 360)
+                                .build()
+                        //, BlockStateProperties.WATERLOGGED
+                );
+    }
+
+    private void craftingModel(Block block) {
+        this.getVariantBuilder(block)
+                .forAllStatesExcept(state -> ConfiguredModel.builder()
+                                .modelFile(this.models().getExistingFile(new ResourceLocation(block.getRegistryName().getNamespace(), "block/" + block.getRegistryName().getPath() + "_" + state.get(BlockCrafting.PART).getString())))
                                 .rotationY(((int) state.get(BlockStateProperties.HORIZONTAL_FACING).getHorizontalAngle()) % 360)
                                 .build()
                         //, BlockStateProperties.WATERLOGGED

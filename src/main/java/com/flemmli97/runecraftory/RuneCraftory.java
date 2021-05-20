@@ -37,6 +37,9 @@ import com.flemmli97.runecraftory.common.registry.ModParticles;
 import com.flemmli97.runecraftory.common.registry.ModSpells;
 import com.flemmli97.runecraftory.common.registry.ModStructures;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.Attributes;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.Heightmap;
@@ -47,8 +50,10 @@ import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -59,6 +64,8 @@ import net.minecraftforge.registries.RegistryBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 
 @Mod(value = RuneCraftory.MODID)
@@ -73,7 +80,10 @@ public class RuneCraftory {
 
     public static IForgeRegistry<Spell> spellRegistry;
 
+    public static boolean jei;
+
     public RuneCraftory() {
+        jei = ModList.get().isLoaded("jei");
         Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
 
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -137,13 +147,33 @@ public class RuneCraftory {
         CapabilityManager.INSTANCE.register(IPlayerCap.class, new CapabilityInsts.PlayerCapNetwork(), PlayerCapImpl::new);
         CapabilityManager.INSTANCE.register(IStaffCap.class, new CapabilityInsts.StaffCapNetwork(), StaffCapImpl::new);
         CapabilityManager.INSTANCE.register(IEntityCap.class, new CapabilityInsts.EntityCapNetwork(), EntityCapImpl::new);
-
+        this.tweakVanillaAttribute(Attributes.GENERIC_MAX_HEALTH, 250000);
+        this.tweakVanillaAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 250000);
     }
 
     public void conf(ModConfig.ModConfigEvent event) {
         if (event.getConfig().getSpec() == GeneralConfigSpec.generalSpec)
             GeneralConfig.load();
-        if(event.getConfig().getSpec() == ClientConfigSpec.clientSpec)
+        if (event.getConfig().getSpec() == ClientConfigSpec.clientSpec)
             ClientConfig.load();
+    }
+
+    private void tweakVanillaAttribute(Attribute attribute, double value) {
+        if (attribute instanceof RangedAttribute) {
+            try {
+                //maximumValue
+                Field f = ObfuscationReflectionHelper.findField(RangedAttribute.class, "field_111118_b");
+                f.setAccessible(true);
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                modifiersField.setAccessible(true);
+                modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+                f.set(attribute, value);
+                modifiersField.setInt(f, f.getModifiers() & Modifier.FINAL);
+                f.setAccessible(false);
+            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
+                logger.error("Error modifying attribute {}", attribute.getRegistryName());
+                e1.printStackTrace();
+            }
+        }
     }
 }

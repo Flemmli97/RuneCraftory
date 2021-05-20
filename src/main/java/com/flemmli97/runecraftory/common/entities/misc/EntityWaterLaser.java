@@ -72,6 +72,11 @@ public class EntityWaterLaser extends EntityBeam {
     }
 
     @Override
+    public float getRange() {
+        return 9;
+    }
+
+    @Override
     public boolean getHitVecFromShooter() {
         return this.getOwner() instanceof PlayerEntity;
     }

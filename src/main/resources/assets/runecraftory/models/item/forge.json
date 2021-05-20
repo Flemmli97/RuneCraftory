@@ -1,0 +1,205 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "runecraftory:blocks/forge_right",
+		"particle": "runecraftory:blocks/forge_right",
+		"1_0": "runecraftory:blocks/forge_left"
+	},
+	"elements": [
+		{
+			"name": "furnace",
+			"from": [0, 3, 12],
+			"to": [16, 9, 16],
+			"faces": {
+				"north": {"uv": [12, 0, 16, 1.5], "texture": "#0"},
+				"east": {"uv": [4, 0.75, 3, 2.25], "texture": "#0"},
+				"south": {"uv": [0, 0.75, 4, 2.25], "texture": "#0"},
+				"west": {"uv": [3, 0.75, 4, 2.25], "texture": "#0"},
+				"up": {"uv": [0, 3.25, 4, 7.25], "texture": "#0"},
+				"down": {"uv": [4, 3.25, 8, 7.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "furnace",
+			"from": [0, 0, 0],
+			"to": [16, 3, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 5, 8]},
+			"faces": {
+				"north": {"uv": [4, 2.25, 8, 3], "texture": "#0"},
+				"east": {"uv": [4, 2.25, 0, 3], "texture": "#0"},
+				"south": {"uv": [0, 2.25, 4, 3], "texture": "#0"},
+				"west": {"uv": [0, 2.25, 4, 3], "texture": "#0"},
+				"up": {"uv": [8, 3.25, 12, 7.25], "texture": "#0"},
+				"down": {"uv": [4, 3.25, 8, 7.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "furnace",
+			"from": [0, 9, 0],
+			"to": [16, 12, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 14, 8]},
+			"faces": {
+				"north": {"uv": [4, 0, 8, 0.75], "texture": "#0"},
+				"east": {"uv": [4, 0, 0, 0.75], "texture": "#0"},
+				"south": {"uv": [0, 0, 4, 0.75], "texture": "#0"},
+				"west": {"uv": [0, 0, 4, 0.75], "texture": "#0"},
+				"up": {"uv": [0, 3.25, 4, 7.25], "texture": "#0"},
+				"down": {"uv": [8, 7.25, 12, 11.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "furnace",
+			"from": [0, 3, 0],
+			"to": [3, 9, 12],
+			"faces": {
+				"north": {"uv": [7.25, 0.75, 8, 2.25], "texture": "#0"},
+				"east": {"uv": [12, 3.5, 15, 5], "texture": "#0"},
+				"south": {"uv": [0, 14.5, 0.75, 16], "texture": "#0"},
+				"west": {"uv": [0, 0.75, 3, 2.25], "texture": "#0"},
+				"up": {"uv": [0, 3.25, 4, 7.25], "texture": "#0"},
+				"down": {"uv": [4, 3.25, 8, 7.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "furnace",
+			"from": [13, 3, 0],
+			"to": [16, 9, 12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [19, 8, 8]},
+			"faces": {
+				"north": {"uv": [4, 0.75, 4.75, 2.25], "texture": "#0"},
+				"east": {"uv": [3, 0.75, 0, 2.25], "texture": "#0"},
+				"south": {"uv": [0, 14.5, 0.75, 16], "texture": "#0"},
+				"west": {"uv": [12, 3.5, 15, 5], "texture": "#0"},
+				"up": {"uv": [0, 3.25, 4, 7.25], "texture": "#0"},
+				"down": {"uv": [4, 3.25, 8, 7.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "chimney",
+			"from": [4.5, 14, 4.5],
+			"to": [11.5, 16, 11.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.5, 6, 7.5]},
+			"faces": {
+				"north": {"uv": [8, 0, 9.75, 0.5], "texture": "#0"},
+				"east": {"uv": [8, 0, 9.75, 0.5], "texture": "#0"},
+				"south": {"uv": [8, 0, 9.75, 0.5], "texture": "#0"},
+				"west": {"uv": [8, 0, 9.75, 0.5], "texture": "#0"},
+				"up": {"uv": [10, 0, 11.75, 1.75], "texture": "#0"},
+				"down": {"uv": [10, 0, 12, 2], "texture": "#0"}
+			}
+		},
+		{
+			"name": "chimney",
+			"from": [2, 12, 2],
+			"to": [14, 14, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 6, 8]},
+			"faces": {
+				"north": {"uv": [0, 7.25, 3, 7.75], "texture": "#0"},
+				"east": {"uv": [0, 7.25, 3, 7.75], "texture": "#0"},
+				"south": {"uv": [0, 7.25, 3, 7.75], "texture": "#0"},
+				"west": {"uv": [0, 7.25, 3, 7.75], "texture": "#0"},
+				"up": {"uv": [3, 7.25, 6, 10.25], "texture": "#0"},
+				"down": {"uv": [3, 7.25, 6, 10.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "wall",
+			"from": [-16, 5, 11],
+			"to": [0, 6, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 3.75, 4, 4], "texture": "#1_0"},
+				"east": {"uv": [4, 3.75, 4.5, 4], "texture": "#1_0"},
+				"south": {"uv": [0, 3.75, 4, 4], "texture": "#1_0"},
+				"west": {"uv": [4, 3.75, 4.5, 4], "texture": "#1_0"},
+				"up": {"uv": [0, 4, 4, 4.5], "texture": "#1_0"},
+				"down": {"uv": [0, 4, 4, 4.5], "texture": "#1_0"}
+			}
+		},
+		{
+			"name": "wall2",
+			"from": [-16, 5, 4],
+			"to": [0, 6, 6],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 3.75, 4, 4], "texture": "#1_0"},
+				"east": {"uv": [4, 3.75, 4.5, 4], "texture": "#1_0"},
+				"south": {"uv": [0, 3.75, 4, 4], "texture": "#1_0"},
+				"west": {"uv": [4, 3.75, 4.5, 4], "texture": "#1_0"},
+				"up": {"uv": [0, 4, 4, 4.5], "texture": "#1_0"},
+				"down": {"uv": [0, 4, 4, 4.5], "texture": "#1_0"}
+			}
+		},
+		{
+			"name": "wall3",
+			"from": [-16, 5, 6],
+			"to": [-14, 6, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-22, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 4.75, 0.5, 5], "texture": "#1_0"},
+				"east": {"uv": [0, 5, 1.25, 5.25], "texture": "#1_0"},
+				"south": {"uv": [0, 4.75, 0.5, 5], "texture": "#1_0"},
+				"west": {"uv": [0, 5, 1.25, 5.25], "texture": "#1_0"},
+				"up": {"uv": [1.25, 4.75, 1.75, 6], "texture": "#1_0"},
+				"down": {"uv": [1.25, 4.75, 1.75, 6], "texture": "#1_0"}
+			}
+		},
+		{
+			"name": "cast",
+			"from": [-16, 0, 4],
+			"to": [0, 5, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 1.25], "texture": "#1_0"},
+				"east": {"uv": [4, 0, 6.25, 1.25], "texture": "#1_0"},
+				"south": {"uv": [0, 0, 4, 1.25], "texture": "#1_0"},
+				"west": {"uv": [4, 0, 6.25, 1.25], "texture": "#1_0"},
+				"up": {"uv": [0, 1.25, 4, 3.5], "texture": "#1_0"},
+				"down": {"uv": [4, 1.25, 8, 3.5], "texture": "#1_0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 14, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 14, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [-0.375, 0.375, 0.375]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 121.5, 0],
+			"translation": [0, 2.25, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 121.5, 0],
+			"translation": [0, 2.25, 0],
+			"scale": [-0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, 225, 0],
+			"translation": [-2, 0, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"fixed": {
+			"translation": [3.25, 0, -2.5],
+			"scale": [0.53, 0.5, 0.53]
+		}
+	},
+	"groups": [0, 1, 2, 3, 4, 5, 6,
+		{
+			"name": "forge_left",
+			"origin": [8, 8, 8],
+			"children": [7, 8, 9, 10]
+		}
+	]
+}

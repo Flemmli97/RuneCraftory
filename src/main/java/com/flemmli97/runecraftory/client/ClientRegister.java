@@ -32,6 +32,7 @@ import com.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderFireball;
 import com.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow;
 import com.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
+import com.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import com.flemmli97.runecraftory.common.blocks.BlockCrop;
 import com.flemmli97.runecraftory.common.blocks.BlockHerb;
 import com.flemmli97.runecraftory.common.blocks.BlockMineral;
@@ -106,6 +107,8 @@ public class ClientRegister {
         event.enqueueWork(() -> {
             ModBlocks.BLOCKS.getEntries().forEach(reg -> {
                 if (reg.get() instanceof BlockHerb || reg.get() instanceof BlockCrop || reg.get() instanceof BlockMineral || reg.get() instanceof BlockBrokenMineral)
+                    RenderTypeLookup.setRenderLayer(reg.get(), RenderType.getCutout());
+                if (reg.get() instanceof BlockCrafting)
                     RenderTypeLookup.setRenderLayer(reg.get(), RenderType.getCutout());
             });
 

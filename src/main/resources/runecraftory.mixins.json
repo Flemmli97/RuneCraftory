@@ -8,8 +8,7 @@
     "DimStrucSetAccess",
     "FlatGenSettingAccessor",
     "MoveControllerAccessor",
-    "BrainMixin",
-    "LivingEntityMixin"
+    "BrainMixin"
   ],
   "injectors": {
     "defaultRequire": 1

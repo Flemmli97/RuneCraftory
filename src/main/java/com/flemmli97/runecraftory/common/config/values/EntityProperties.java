@@ -5,14 +5,13 @@ import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,8 +24,8 @@ public class EntityProperties {
             .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 1)
             .xp(5).money(5).tamingChance(0.3f).build();
 
-    private Set<String> confAttributes;
-    private Set<String> confGains;
+    private List<String> confAttributes;
+    private List<String> confGains;
 
     private Map<Attribute, Double> baseValues;
     private Map<Attribute, Double> levelGains;
@@ -38,7 +37,7 @@ public class EntityProperties {
     private boolean ridable;
     private boolean flying;
 
-    public EntityProperties(Set<String> baseValues, Set<String> gains, int xp, int money, float tamingChance, SimpleItemStackWrapper[] tamingItem, Map<SimpleItemStackWrapper, Integer> dailyDrops, boolean ridable, boolean flying) {
+    public EntityProperties(List<String> baseValues, List<String> gains, int xp, int money, float tamingChance, SimpleItemStackWrapper[] tamingItem, Map<SimpleItemStackWrapper, Integer> dailyDrops, boolean ridable, boolean flying) {
         this.confAttributes = baseValues;
         this.confGains = gains;
         this.xp = xp;
@@ -68,7 +67,7 @@ public class EntityProperties {
     }
 
     public List<String> gainString() {
-        return Lists.newArrayList(this.confAttributes);
+        return Lists.newArrayList(this.confGains);
     }
 
     public Map<Attribute, Double> getAttributeGains() {
@@ -115,8 +114,9 @@ public class EntityProperties {
     public EntityProperties read(EntityPropertySpecs spec) {
         try {
             this.baseValues = null;
-            this.confAttributes = Sets.newHashSet(spec.baseValues.get());
-            this.confGains = Sets.newHashSet(spec.levelGains.get());
+            this.levelGains = null;
+            this.confAttributes = spec.baseValues.get();
+            this.confGains = spec.levelGains.get();
             this.xp = spec.xp.get();
             this.money = spec.money.get();
             this.taming = spec.taming.get();
@@ -185,13 +185,13 @@ public class EntityProperties {
 
     public static class Builder {
 
-        private final Set<String> baseValues = new HashSet<>();
-        private final Set<String> gains = new HashSet<>();
+        private final Set<String> baseValues = new LinkedHashSet<>();
+        private final Set<String> gains = new LinkedHashSet<>();
         private int xp;
         private int money;
         private float taming;
-        private final Set<SimpleItemStackWrapper> tamingItem = new HashSet<>();
-        private final Map<SimpleItemStackWrapper, Integer> daily = new HashMap<>();
+        private final Set<SimpleItemStackWrapper> tamingItem = new LinkedHashSet<>();
+        private final Map<SimpleItemStackWrapper, Integer> daily = new LinkedHashMap<>();
         private boolean ridable;
         private boolean flying;
 
@@ -251,7 +251,7 @@ public class EntityProperties {
         }
 
         public EntityProperties build() {
-            return new EntityProperties(this.baseValues, this.gains, this.xp, this.money, this.taming, this.tamingItem.toArray(new SimpleItemStackWrapper[0]), this.daily, this.ridable, this.flying);
+            return new EntityProperties(Lists.newArrayList(this.baseValues), Lists.newArrayList(this.gains), this.xp, this.money, this.taming, this.tamingItem.toArray(new SimpleItemStackWrapper[0]), this.daily, this.ridable, this.flying);
         }
     }
 }

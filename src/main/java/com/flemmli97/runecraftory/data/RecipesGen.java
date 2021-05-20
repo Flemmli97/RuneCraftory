@@ -21,6 +21,12 @@ public class RecipesGen extends ForgeRecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.broadSword.get(), 1)
                 .addIngredient(ModTags.minerals)
                 .dummyCriterion().build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.claymore.get(), 1)
+                .addIngredient(ModTags.minerals)
+                .dummyCriterion().build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.spear.get(), 1)
+                .addIngredient(ModTags.minerals)
+                .dummyCriterion().build(consumer);
 
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.cheapBracelet.get(), 1)
                 .addIngredient(ModTags.minerals)

@@ -51,7 +51,7 @@ public class CombatUtils {
             return 1;
         float increase = 0;
         if (attacker instanceof PlayerEntity) {
-            increase += attacker.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) attacker, att)).orElse(0);
+            increase += attacker.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) attacker, att)).orElse(0d);
         } else if (attacker.getAttribute(att) != null) {
             increase += attacker.getAttributeValue(att);
         }
@@ -61,7 +61,7 @@ public class CombatUtils {
         if (opp == null)
             return (int) increase;
         if (target instanceof PlayerEntity) {
-            increase -= target.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) target, opp)).orElse(0);
+            increase -= target.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getAttributeValue((PlayerEntity) target, opp)).orElse(0d);
         } else {
             LivingEntity living = (LivingEntity) target;
             if (living.getAttribute(opp) != null)

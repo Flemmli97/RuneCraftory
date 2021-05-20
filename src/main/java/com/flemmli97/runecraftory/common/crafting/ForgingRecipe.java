@@ -27,7 +27,7 @@ public class ForgingRecipe extends SextupleRecipe {
 
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(ModItems.broadSword.get());
+        return new ItemStack(ModItems.itemBlockForge.get());
     }
 
     public static class Serializer extends SextupleRecipe.Serializer<ForgingRecipe> {

@@ -90,7 +90,7 @@ public interface IPlayerCap {
 
     void updateEquipmentStats(PlayerEntity player, EquipmentSlotType slot);
 
-    int getAttributeValue(PlayerEntity player, Attribute att);
+    double getAttributeValue(PlayerEntity player, Attribute att);
 
     //=====Skills
 

@@ -32,7 +32,7 @@ public class ContainerUpgrade extends Container {
         this.outPutInv = new DummyInventory(new ItemStackHandler());
         this.craftingInv = PlayerContainerInv.create(this, tile, playerInv.player);
         this.type = tile.craftingType();
-        this.addSlot(new UpgradeOutputSlot(this.outPutInv, this, this.craftingInv, 0, 116, 34));
+        this.addSlot(new UpgradeOutputSlot(this.outPutInv, this, this.craftingInv, 0, 116, 35));
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));

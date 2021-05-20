@@ -151,6 +151,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
 
+    //private Map<Attribute, Integer> attributeRandomizer = new HashMap<>();
+
     public BaseMonster(EntityType<? extends BaseMonster> type, World world) {
         super(type, world);
         this.moveController = new NewMoveController(this);
@@ -203,6 +205,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     @Override
     public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance diff, SpawnReason reason, @Nullable ILivingEntityData data, @Nullable CompoundNBT nbt) {
         this.setEquipmentBasedOnDifficulty(diff);
+        //for(Attribute att : this.prop.getAttributeGains().keySet())
+        //    this.attributeRandomizer.put(att, this.rand.nextInt(5)-2);
         return data;
     }
 
@@ -382,7 +386,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             ModifiableAttributeInstance inst = this.getAttribute(att);
             if (inst != null) {
                 inst.removeModifier(attributeLevelMod);
-                inst.addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * val, AttributeModifier.Operation.ADDITION));
+                float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0) * 0.5f;
+                inst.addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * val * (1 + multiplier), AttributeModifier.Operation.ADDITION));
                 if (att == Attributes.GENERIC_MAX_HEALTH)
                     this.setHealth(this.getMaxHealth() - preHealthDiff);
             }
@@ -909,6 +914,9 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         if (this.detachHome())
             compound.putIntArray("Home", new int[]{this.getHomePosition().getX(), this.getHomePosition().getY(), this.getHomePosition().getZ(), (int) this.getMaximumHomeDistance()});
         compound.putInt("FoodBuffTick", this.foodBuffTick);
+        //CompoundNBT genes = new CompoundNBT();
+        //this.attributeRandomizer.forEach((att, val)->genes.putInt(att.getRegistryName().toString(), val));
+        //compound.put("Genes", genes);
     }
 
     @Override
@@ -924,5 +932,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         }
         this.dead = compound.getBoolean("Out");
         this.foodBuffTick = compound.getInt("FoodBuffTick");
+        //CompoundNBT genes = compound.getCompound("Genes");
+        //genes.keySet().forEach(key->this.attributeRandomizer.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(key)), genes.getInt(key)));
     }
 }

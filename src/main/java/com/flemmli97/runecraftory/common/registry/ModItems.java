@@ -829,6 +829,7 @@ public class ModItems {
     public static final RegistryObject<Item> skill = ITEMS.register("skill_item", () -> new ItemSkillUp(new Item.Properties()));
     public static final RegistryObject<Item> tame = ITEMS.register("insta_tame", () -> new ItemDebug(new Item.Properties()));
     public static final RegistryObject<Item> entityLevel = ITEMS.register("entity_level_item", () -> new ItemDebug(new Item.Properties()));
+    public static final RegistryObject<Item> unknown = ITEMS.register("unknown", () -> new Item(new Item.Properties()));
 
     //Crop items
     public static final RegistryObject<Item> turnipSeeds = seed("turnip", () -> ModBlocks.turnip);

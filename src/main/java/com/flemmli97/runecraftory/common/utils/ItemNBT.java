@@ -52,8 +52,8 @@ public class ItemNBT {
         return stack;
     }
 
-    public static Map<Attribute, Integer> statIncrease(ItemStack stack) {
-        Map<Attribute, Integer> map = new TreeMap<>(ModAttributes.sorted);
+    public static Map<Attribute, Double> statIncrease(ItemStack stack) {
+        Map<Attribute, Double> map = new TreeMap<>(ModAttributes.sorted);
         if (shouldHaveStats(stack)) {
             CompoundNBT compound = getItemNBT(stack);
             if (compound != null && !compound.contains(LibNBT.Stats)) {
@@ -65,7 +65,7 @@ public class ItemNBT {
                 for (String attName : tag.keySet()) {
                     Attribute att = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(attName));
                     if (att.getRegistryName().toString().equals(attName))
-                        map.put(att, tag.getInt(attName));
+                        map.put(att, tag.getDouble(attName));
                 }
             }
         }

@@ -1,0 +1,12 @@
+{
+  "type": "runecraftory:forge",
+  "level": 1,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:claymore"
+  }
+}

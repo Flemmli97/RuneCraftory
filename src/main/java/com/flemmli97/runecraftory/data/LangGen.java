@@ -88,6 +88,12 @@ public class LangGen implements IDataProvider {
 
         this.add("level", "Level");
 
+        this.add("runecraftory.jei.forge", "Forging");
+        this.add("runecraftory.jei.cooking", "Cooking");
+        this.add("runecraftory.jei.chemistry", "Pharmacy");
+        this.add("runecraftory.jei.armory", "Equipment");
+        this.add("runecraftory.jei.locked", "Unknown Recipe");
+
         for (EnumSkills s : EnumSkills.values())
             this.add(s.getTranslation(),
                     this.capitalize(s.getTranslation().replace("skill.", "").replace("_", " "),

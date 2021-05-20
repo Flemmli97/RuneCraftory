@@ -46,11 +46,10 @@ public class BlockCrafting extends Block {
     @Override
     public BlockState updatePostPlacement(BlockState state, Direction fromDir, BlockState fromState, IWorld world, BlockPos pos, BlockPos fromPos) {
         Direction dir = state.get(FACING);
-        if (state.get(PART) == EnumPart.LEFT && fromDir == dir.rotateYCCW()) {
-            return !this.isEqual(state, fromState) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(state, fromDir, fromState, world, pos, fromPos);
-        } else if (fromDir == dir.rotateY())
-            return !this.isEqual(state, fromState) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(state, fromDir, fromState, world, pos, fromPos);
-        return super.updatePostPlacement(state, fromDir, fromState, world, pos, fromPos);
+        if (state.get(PART) == EnumPart.LEFT) {
+            return fromDir == dir.rotateY() && !this.isEqual(state, fromState) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(state, fromDir, fromState, world, pos, fromPos);
+        } else
+            return fromDir == dir.rotateYCCW() && !this.isEqual(state, fromState) ? Blocks.AIR.getDefaultState() : super.updatePostPlacement(state, fromDir, fromState, world, pos, fromPos);
     }
 
     private boolean isEqual(BlockState one, BlockState other) {
@@ -63,22 +62,25 @@ public class BlockCrafting extends Block {
     @Nullable
     public BlockState getStateForPlacement(BlockItemUseContext ctx) {
         BlockPos blockpos = ctx.getPos();
-        if (blockpos.getY() < 255 && ctx.getWorld().getBlockState(blockpos.up()).isReplaceable(ctx)) {
-            return this.getDefaultState().with(FACING, ctx.getPlacementHorizontalFacing().getOpposite()).with(PART, EnumPart.LEFT);
-        } else {
-            return null;
+        if (blockpos.getY() < 255 && ctx.getWorld().getBlockState(blockpos).isReplaceable(ctx)) {
+            BlockPos other = blockpos.offset(ctx.getPlacementHorizontalFacing().getOpposite().rotateYCCW());
+            if (ctx.getWorld().getBlockState(other).isReplaceable(ctx))
+                return this.getDefaultState().with(FACING, ctx.getPlacementHorizontalFacing().getOpposite()).with(PART, EnumPart.RIGHT);
         }
+        return null;
     }
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity living, ItemStack stack) {
-        world.setBlockState(pos.offset(living.getHorizontalFacing().getOpposite().rotateYCCW()), state.with(PART, EnumPart.RIGTH), 3);
+        super.onBlockPlacedBy(world, pos, state, living, stack);
+        if (!world.isRemote)
+            world.setBlockState(pos.offset(living.getHorizontalFacing().getOpposite().rotateYCCW()), state.with(PART, EnumPart.LEFT), 3);
     }
 
     @Override
-    public ActionResultType onUse(BlockState p_225533_1_, World world, BlockPos pos, PlayerEntity player, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
+    public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
         if (world.isRemote) {
-            return ActionResultType.PASS;
+            return ActionResultType.CONSUME;
         } else {
             TileEntity tile = world.getTileEntity(pos);
             if (tile instanceof TileCrafting) {
@@ -86,19 +88,19 @@ public class BlockCrafting extends Block {
                     NetworkHooks.openGui((ServerPlayerEntity) player, ((TileCrafting) tile).upgradeMenu(), pos);
                 else
                     NetworkHooks.openGui((ServerPlayerEntity) player, (TileCrafting) tile, pos);
+                return ActionResultType.SUCCESS;
             }
-            return ActionResultType.SUCCESS;
+            return ActionResultType.PASS;
         }
     }
 
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader reader, BlockPos pos) {
-        if (state.get(PART) == EnumPart.LEFT) {
-            BlockState blockstate = reader.getBlockState(pos.offset(state.get(FACING).rotateYCCW()));
-            return blockstate.getMaterial().isReplaceable();
+        if (state.get(PART) == EnumPart.RIGHT) {
+            return true;
         }
         BlockState blockstate = reader.getBlockState(pos.offset(state.get(FACING).rotateY()));
-        return blockstate.isIn(this);
+        return blockstate.isIn(this) && blockstate.get(FACING) == state.get(FACING) && blockstate.get(PART) == EnumPart.LEFT;
     }
 
     @Override
@@ -121,7 +123,7 @@ public class BlockCrafting extends Block {
 
     @Override
     public boolean hasTileEntity(BlockState state) {
-        return state.get(PART) == EnumPart.LEFT;
+        return state.get(PART) == EnumPart.RIGHT;
     }
 
     public BlockPos getOtherPos(BlockPos from, BlockState state) {
@@ -137,7 +139,7 @@ public class BlockCrafting extends Block {
     public enum EnumPart implements IStringSerializable {
 
         LEFT("left"),
-        RIGTH("right");
+        RIGHT("right");
 
         private final String s;
 

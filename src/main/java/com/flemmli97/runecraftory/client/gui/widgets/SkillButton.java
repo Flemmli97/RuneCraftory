@@ -24,11 +24,10 @@ public class SkillButton extends Button {
 
     @Override
     public void renderButton(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
-        if(this.ownerGui instanceof CreativeScreen  && ((CreativeScreen) this.ownerGui).getSelectedTabIndex() != ItemGroup.INVENTORY.getIndex()) {
+        if (this.ownerGui instanceof CreativeScreen && ((CreativeScreen) this.ownerGui).getSelectedTabIndex() != ItemGroup.INVENTORY.getIndex()) {
             this.active = false;
             return;
-        }
-        else
+        } else
             this.active = true;
         Minecraft mc = Minecraft.getInstance();
         mc.getTextureManager().bindTexture(texturepath);

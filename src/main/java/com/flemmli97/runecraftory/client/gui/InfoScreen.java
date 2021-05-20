@@ -68,10 +68,10 @@ public class InfoScreen extends DisplayEffectsScreen<Container> {
         this.client.fontRenderer.draw(stack, this.levelTxt, this.guiLeft + 120, this.guiTop + 42, 0);
         this.drawRightAlignedScaledString(stack, "" + this.cap.getMoney(), this.guiLeft + 195, this.guiTop + 9.25f, 0.6f, 0);
         this.drawRightAlignedScaledString(stack, "" + this.cap.getPlayerLevel()[0], this.guiLeft + 216, this.guiTop + 42, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + (int) CombatUtils.getAttributeValue(this.client.player, Attributes.GENERIC_ATTACK_DAMAGE, null), this.guiLeft + 215, this.guiTop + 59, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + (int) CombatUtils.getAttributeValue(this.client.player, ModAttributes.RF_DEFENCE.get(), null), this.guiLeft + 215, this.guiTop + 72, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + (int) CombatUtils.getAttributeValue(this.client.player, ModAttributes.RF_MAGIC.get(), null), this.guiLeft + 215, this.guiTop + 85, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + (int) CombatUtils.getAttributeValue(this.client.player, ModAttributes.RF_MAGIC_DEFENCE.get(), null), this.guiLeft + 215, this.guiTop + 98, 1.0f, 0);
+        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.client.player, Attributes.GENERIC_ATTACK_DAMAGE, null), this.guiLeft + 215, this.guiTop + 59, 1.0f, 0);
+        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.client.player, ModAttributes.RF_DEFENCE.get(), null), this.guiLeft + 215, this.guiTop + 72, 1.0f, 0);
+        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.client.player, ModAttributes.RF_MAGIC.get(), null), this.guiLeft + 215, this.guiTop + 85, 1.0f, 0);
+        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.client.player, ModAttributes.RF_MAGIC_DEFENCE.get(), null), this.guiLeft + 215, this.guiTop + 98, 1.0f, 0);
         InventoryScreen.drawEntity(this.guiLeft + 58, this.guiTop + 76, 29, this.guiLeft + 58 - mouseX, this.guiTop + 26 - mouseY, this.client.player);
     }
 

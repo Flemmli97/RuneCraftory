@@ -50,10 +50,10 @@ public class ModBlocks {
     public static final EnumMap<EnumMineralTier, RegistryObject<Block>> mineralMap = new EnumMap<>(EnumMineralTier.class);
     public static final EnumMap<EnumMineralTier, RegistryObject<Block>> brokenMineralMap = new EnumMap<>(EnumMineralTier.class);
 
-    public static final RegistryObject<Block> forge = BLOCKS.register("forge", () -> new BlockForge(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
-    public static final RegistryObject<Block> cooking = BLOCKS.register("cooking", () -> new BlockCooking(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
-    public static final RegistryObject<Block> chemistry = BLOCKS.register("chemistry", () -> new BlockChemistry(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
-    public static final RegistryObject<Block> accessory = BLOCKS.register("accessory", () -> new BlockAccessory(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> forge = BLOCKS.register("forge", () -> new BlockForge(AbstractBlock.Properties.create(Material.IRON).nonOpaque().hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> cooking = BLOCKS.register("cooking", () -> new BlockCooking(AbstractBlock.Properties.create(Material.IRON).nonOpaque().hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> chemistry = BLOCKS.register("chemistry", () -> new BlockChemistry(AbstractBlock.Properties.create(Material.IRON).nonOpaque().hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> accessory = BLOCKS.register("accessory", () -> new BlockAccessory(AbstractBlock.Properties.create(Material.IRON).nonOpaque().hardnessAndResistance(3, 100)));
     public static final RegistryObject<Block> farmland = BLOCKS.register("farmland", () -> new BlockFarm(AbstractBlock.Properties.create(Material.EARTH).hardnessAndResistance(0.6F).sound(SoundType.GROUND).blockVision((state, reader, pos) -> true).suffocates((state, reader, pos) -> true)));
 
     public static final RegistryObject<Block> mineralIron = mineral(EnumMineralTier.IRON);

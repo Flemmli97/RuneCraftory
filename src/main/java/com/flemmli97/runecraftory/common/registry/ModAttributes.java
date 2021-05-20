@@ -70,7 +70,7 @@ public class ModAttributes {
     }
 
     public static final Comparator<Attribute> sorted = (o1, o2) -> {
-        if (o1 == Attributes.GENERIC_MAX_HEALTH)
+        if (o1 == Attributes.GENERIC_MAX_HEALTH && o2 != Attributes.GENERIC_MAX_HEALTH)
             return -1;
         if (!(o1 instanceof OrderedAttribute) && !(o2 instanceof OrderedAttribute))
             return o1.getRegistryName().compareTo(o2.getRegistryName());

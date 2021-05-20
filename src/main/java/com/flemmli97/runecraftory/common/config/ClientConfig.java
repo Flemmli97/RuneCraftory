@@ -14,6 +14,8 @@ public class ClientConfig {
     public static int creativeInventoryOffsetX;
     public static int creativeInventoryOffsetY;
 
+    public static int tempX, tempY;
+
     public static void load() {
         healthBarWidgetX = ClientConfigSpec.clientConfig.healthBarWidgetX.get();
         healthBarWidgetY = ClientConfigSpec.clientConfig.healthBarWidgetY.get();
@@ -23,6 +25,9 @@ public class ClientConfig {
         inventoryOffsetY = ClientConfigSpec.clientConfig.inventoryOffsetY.get();
         creativeInventoryOffsetX = ClientConfigSpec.clientConfig.creativeInventoryOffsetX.get();
         creativeInventoryOffsetY = ClientConfigSpec.clientConfig.creativeInventoryOffsetY.get();
+
+        tempX = ClientConfigSpec.clientConfig.tempX.get();
+        tempY = ClientConfigSpec.clientConfig.tempY.get();
     }
 
 }

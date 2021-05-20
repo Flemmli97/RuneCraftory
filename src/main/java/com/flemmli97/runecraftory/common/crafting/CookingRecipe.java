@@ -27,7 +27,7 @@ public class CookingRecipe extends SextupleRecipe {
 
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(ModItems.onigiri.get());
+        return new ItemStack(ModItems.itemBlockCooking.get());
     }
 
     public static class Serializer extends SextupleRecipe.Serializer<CookingRecipe> {

@@ -36,6 +36,8 @@ public class PacketHandler {
         dispatcher.registerMessage(id++, S2CCapSync.class, S2CCapSync::write, S2CCapSync::read, S2CCapSync::handle);
         dispatcher.registerMessage(id++, S2CEntityDataSync.class, S2CEntityDataSync::write, S2CEntityDataSync::read, S2CEntityDataSync::handle);
         dispatcher.registerMessage(id++, S2CEntityDataSyncAll.class, S2CEntityDataSyncAll::write, S2CEntityDataSyncAll::read, S2CEntityDataSyncAll::handle);
+        dispatcher.registerMessage(id++, C2SUpdateCraftingScreen.class, C2SUpdateCraftingScreen::write, C2SUpdateCraftingScreen::read, C2SUpdateCraftingScreen::handle);
+
     }
 
     public static <T> void sendToClient(T message, ServerPlayerEntity player) {

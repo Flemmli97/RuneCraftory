@@ -1,12 +1,16 @@
 package com.flemmli97.runecraftory.client.gui;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.client.gui.widgets.PageButton;
 import com.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
+import com.flemmli97.runecraftory.common.network.C2SUpdateCraftingScreen;
+import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 public class CraftingGui extends ContainerScreen<ContainerCrafting> {
 
@@ -47,5 +51,12 @@ public class CraftingGui extends ContainerScreen<ContainerCrafting> {
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
         super.render(stack, mouseX, mouseY, partialTicks);
         this.drawMouseoverTooltip(stack, mouseX, mouseY);
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+        this.addButton(new PageButton(this.guiLeft + 108, this.guiTop + 60, new StringTextComponent("<"), b -> PacketHandler.sendToServer(new C2SUpdateCraftingScreen(false))));
+        this.addButton(new PageButton(this.guiLeft + 128, this.guiTop + 60, new StringTextComponent(">"), b -> PacketHandler.sendToServer(new C2SUpdateCraftingScreen(true))));
     }
 }

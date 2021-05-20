@@ -3,6 +3,8 @@ package com.flemmli97.runecraftory.client.render.projectiles;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import com.flemmli97.tenshilib.client.render.RenderTexture;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 
@@ -22,5 +24,14 @@ public class RenderFireball extends RenderTexture<EntityFireball> {
     @Override
     public float[] uvOffset(int timer) {
         return super.uvOffset((int) (timer * 0.5));
+    }
+
+
+    @Override
+    public void render(EntityFireball entity, float rotation, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int packedLight) {
+        stack.push();
+        stack.translate(0, this.ySize * 0.25, 0);
+        super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+        stack.pop();
     }
 }

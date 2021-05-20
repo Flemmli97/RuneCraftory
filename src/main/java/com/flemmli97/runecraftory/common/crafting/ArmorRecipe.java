@@ -27,7 +27,7 @@ public class ArmorRecipe extends SextupleRecipe {
 
     @Override
     public ItemStack getIcon() {
-        return new ItemStack(ModItems.cheapBracelet.get());
+        return new ItemStack(ModItems.itemBlockAccess.get());
     }
 
     public static class Serializer extends SextupleRecipe.Serializer<ArmorRecipe> {

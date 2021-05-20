@@ -26,6 +26,7 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
 
     private final NonNullList<ItemStack> inventory;
     private final EnumCrafting type;
+    private int craftingIndex;
 
     public TileCrafting(TileEntityType<?> tileEntityType, EnumCrafting type) {
         super(tileEntityType);
@@ -92,18 +93,36 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
     public void fromTag(BlockState state, CompoundNBT nbt) {
         super.fromTag(state, nbt);
         ItemStackHelper.loadAllItems(nbt, this.inventory);
+        nbt.getInt("Index");
     }
 
     @Override
     public CompoundNBT write(CompoundNBT nbt) {
         super.write(nbt);
         ItemStackHelper.saveAllItems(nbt, this.inventory);
+        nbt.putInt("Index", this.craftingIndex);
         return nbt;
     }
 
     @Override
     public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity player) {
         return new ContainerCrafting(windowID, playerInventory, this);
+    }
+
+    public int craftingIndex() {
+        return this.craftingIndex;
+    }
+
+    public void increaseIndex() {
+        this.craftingIndex++;
+    }
+
+    public void decreaseIndex() {
+        this.craftingIndex--;
+    }
+
+    public void resetIndex() {
+        this.craftingIndex = 0;
     }
 
     public INamedContainerProvider upgradeMenu() {

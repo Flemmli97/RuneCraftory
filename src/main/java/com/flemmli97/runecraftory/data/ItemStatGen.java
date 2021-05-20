@@ -187,7 +187,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 140)
                 .addAttribute(ModAttributes.RFCRIT.get(), 15));
 
-        this.addStat(ModItems.hammerPlatinum.get(), new ItemStat.MutableItemStat(25, 5, 0)
+        this.addStat(ModItems.hammerScrap.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 3)
                 .addAttribute(ModAttributes.RFCRIT.get(), -5)
                 .addAttribute(ModAttributes.RFRESSTUN.get(), 10));
