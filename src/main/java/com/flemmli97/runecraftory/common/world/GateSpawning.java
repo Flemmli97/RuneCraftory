@@ -47,6 +47,10 @@ public class GateSpawning {
         return ret;
     }
 
+    public static boolean hasSpawns(RegistryKey<Biome> biome) {
+        return !spawningMappingBiome.getOrDefault(biome, new ArrayList<>()).isEmpty();
+    }
+
     public static void addSpawn(ResourceLocation loc, SpawnResource s) {
         spawningMappingBiome.merge(RegistryKey.of(Registry.BIOME_KEY, loc), Lists.newArrayList(s), (old, v) -> {
             old.add(s);

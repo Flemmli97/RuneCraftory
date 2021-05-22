@@ -235,7 +235,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
     }
 
     public static boolean canSpawnAt(EntityType<? extends GateEntity> type, IWorld world, SpawnReason reason, BlockPos pos, Random random) {
-        return world.getDifficulty() != Difficulty.PEACEFUL && canSpawnOn(type, world, reason, pos, random) && world.getEntitiesWithinAABB(GateEntity.class, new AxisAlignedBB(pos).grow(48.0)).size() < 2;
+        return world.getDifficulty() != Difficulty.PEACEFUL && GateSpawning.hasSpawns(world.method_31081(pos).orElse(Biomes.PLAINS)) && canSpawnOn(type, world, reason, pos, random) && world.getEntitiesWithinAABB(GateEntity.class, new AxisAlignedBB(pos).grow(48.0)).size() < 2;
     }
 
     @Override

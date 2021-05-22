@@ -23,7 +23,7 @@ public class ClientConfigSpec {
     private ClientConfigSpec(ForgeConfigSpec.Builder builder) {
         this.healthBarWidgetX = builder.define("X Position of health bar", 2);
         this.healthBarWidgetY = builder.define("Y Position of health bar", 2);
-        this.seasonDisplayX = builder.define("X Position of calendar display", 3);
+        this.seasonDisplayX = builder.define("X Position of calendar display", 0);
         this.seasonDisplayY = builder.define("Y Position of calendar display", 35);
         this.inventoryOffsetX = builder.define("X offset of inventory button", 79);
         this.inventoryOffsetY = builder.define("Y offset of inventory button", 47);

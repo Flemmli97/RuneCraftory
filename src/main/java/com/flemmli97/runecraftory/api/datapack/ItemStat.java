@@ -121,31 +121,36 @@ public class ItemStat {
     public List<ITextComponent> texts(ItemStack stack, boolean showStat) {
         List<ITextComponent> list = new ArrayList<>();
         CompoundNBT tag = ItemNBT.getItemNBT(stack);
-        if (tag != null) {
-            if (stack.getItem() instanceof IItemUsable) {
-                try {
-                    EnumElement element = EnumElement.valueOf(tag.getString(LibNBT.Element));
-                    if (element != EnumElement.NONE) {
-                        list.add(new TranslationTextComponent(element.getTranslation()).formatted(element.getColor()));
-                    }
-                } catch (IllegalArgumentException ignored) {
+        if (stack.getItem() instanceof IItemUsable && tag != null) {
+            try {
+                EnumElement element = EnumElement.valueOf(tag.getString(LibNBT.Element));
+                if (element != EnumElement.NONE) {
+                    list.add(new TranslationTextComponent(element.getTranslation()).formatted(element.getColor()));
                 }
+            } catch (IllegalArgumentException ignored) {
             }
-            IFormattableTextComponent price = new TranslationTextComponent("tooltip.item.level", tag.getInt(LibNBT.Level));
-            if (ItemUtils.getBuyPrice(stack, this) > 0)
-                price.append(" ").append(new TranslationTextComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack)));
-            price.append(" ").append(new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack)));
-            list.add(price);
-            if (showStat) {
-                Map<Attribute, Double> stats = ItemNBT.statBonusRaw(stack);
-                if (!stats.isEmpty()) {
-                    String prefix = ItemNBT.shouldHaveStats(stack) ? "tooltip.item.equipped" : "tooltip.item.upgrade";
-                    list.add(new TranslationTextComponent(prefix));
-                }
-                for (Map.Entry<Attribute, Double> entry : stats.entrySet()) {
-                    IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + this.format(entry.getKey(), entry.getValue().intValue())));
-                    list.add(comp);
-                }
+        }
+        IFormattableTextComponent price = tag != null ? new TranslationTextComponent("tooltip.item.level", tag.getInt(LibNBT.Level)) : null;
+        if (ItemUtils.getBuyPrice(stack, this) > 0) {
+            if(price == null)
+                price = new TranslationTextComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack));
+            else
+                price.append(" ").append(new TranslationTextComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack))).append(" ");
+        }
+        if(price == null)
+            price = new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack));
+        else
+            price.append(" ").append(new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack))).append(" ");
+        list.add(price);
+        if (showStat) {
+            Map<Attribute, Double> stats = ItemNBT.statBonusRaw(stack);
+            if (!stats.isEmpty()) {
+                String prefix = ItemNBT.shouldHaveStats(stack) ? "tooltip.item.equipped" : "tooltip.item.upgrade";
+                list.add(new TranslationTextComponent(prefix));
+            }
+            for (Map.Entry<Attribute, Double> entry : stats.entrySet()) {
+                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + this.format(entry.getKey(), entry.getValue().intValue())));
+                list.add(comp);
             }
         }
         return list;

@@ -47,10 +47,10 @@ public class ItemNBT {
     }
 
     public static ItemStack getLeveledItem(ItemStack stack, int level) {
-        CompoundNBT compound = ItemNBT.getItemNBT(stack);
+        /*CompoundNBT compound = ItemNBT.getItemNBT(stack);
         if (compound != null) {
             compound.putInt(LibNBT.Level, MathHelper.clamp(level, 1, 10));
-        }
+        }*/
         return stack;
     }
 
@@ -197,11 +197,12 @@ public class ItemNBT {
     public static boolean initNBT(ItemStack stack, boolean forced) {
         ItemStat stat = DataPackHandler.getStats(stack.getItem());
         if (stat != null || forced) {
+            if (shouldHaveStats(stack)) {
             CompoundNBT stackTag = stack.getOrCreateTag();
             CompoundNBT compound = stackTag.getCompound(RuneCraftory.MODID);
             if (!compound.contains(LibNBT.Level))
                 compound.putInt(LibNBT.Level, 1);
-            if (shouldHaveStats(stack)) {
+
                 if (!compound.contains(LibNBT.Upgrades))
                     compound.put(LibNBT.Upgrades, new ListNBT());
                 if (stat != null) {
@@ -227,10 +228,11 @@ public class ItemNBT {
                         });
                     }
                 }
+                stackTag.put(RuneCraftory.MODID, compound);
+                stack.setTag(stackTag);
+                return true;
             }
-            stackTag.put(RuneCraftory.MODID, compound);
-            stack.setTag(stackTag);
-            return true;
+            return false;
         }
         return false;
     }

@@ -26,7 +26,7 @@ public class OverlayGui extends AbstractGui {
     }
 
     public void renderBar(MatrixStack stack) {
-        IPlayerCap cap = this.mc.player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Capability is null. This shouldn't be"));
+        IPlayerCap cap = this.mc.player.getCapability(CapabilityInsts.PlayerCap).orElse(null);
         CalendarImpl calendar = ClientHandlers.clientCalendar;
         int xPos = ClientConfig.healthBarWidgetX;
         int yPos = ClientConfig.healthBarWidgetY;
