@@ -93,7 +93,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     //Food buff
     private Item lastFood;
     private int rpFoodBuff;
-    private Map<Attribute, Integer> foodBuffs = new HashMap<>();
+    private Map<Attribute, Double> foodBuffs = new HashMap<>();
     private int foodDuration;
 
     //Weapon and ticker
@@ -140,7 +140,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
 
     @Override
     public float getMaxHealth(PlayerEntity player) {
-        return player.getMaxHealth() + (this.foodBuffs.getOrDefault(Attributes.GENERIC_MAX_HEALTH, 0));
+        return (float) (player.getMaxHealth() + (this.foodBuffs.getOrDefault(Attributes.GENERIC_MAX_HEALTH, 0d)));
     }
 
     @Override
@@ -383,7 +383,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
             val += this.getVit() * 0.5;
         if (att == ModAttributes.RF_MAGIC_DEFENCE.get())
             val += this.getVit() * 0.5;
-        val += this.foodBuffs.getOrDefault(att, 0);
+        val += this.foodBuffs.getOrDefault(att, 0d);
 
         AttributeModifierManager atts = player.getAttributes();
         val += atts.hasAttribute(att) ? atts.getValue(att) : 0;
@@ -537,22 +537,22 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     public void applyFoodEffect(PlayerEntity player, ItemStack stack) {
         this.removeFoodEffect(player);
         FoodProperties prop = DataPackHandler.getFoodStat(stack.getItem());
-        Map<Attribute, Integer> gain = prop.effects();
-        prop.effectsMultiplier().forEach((att, f) -> {
-            float percent = f > 0 ? 1 + f * 0.01f : 1 - f * 0.01f;
-            int i = 0;
+        Map<Attribute, Double> gain = prop.effects();
+        prop.effectsMultiplier().forEach((att, d) -> {
+            float percent = (float) (d > 0 ? 1 + d * 0.01f : 1 - d * 0.01f);
+            double mult = 0;
             if (att == Attributes.GENERIC_MAX_HEALTH)
-                i += this.getMaxHealth(player) * percent;
+                mult += this.getMaxHealth(player) * percent;
             else if (att == Attributes.GENERIC_ATTACK_DAMAGE)
-                i += this.str * percent;
+                mult += this.str * percent;
             else if (att == ModAttributes.RF_DEFENCE.get())
-                i += this.vit * 0.5 * percent;
+                mult += this.vit * 0.5 * percent;
             else if (att == ModAttributes.RF_MAGIC.get())
-                i += this.intel * percent;
+                mult += this.intel * percent;
             else if (att == ModAttributes.RF_DEFENCE.get())
-                i += this.vit * 0.5 * percent;
-            i += gain.getOrDefault(att, 0);
-            gain.put(att, i);
+                mult += this.vit * 0.5 * percent;
+            mult += gain.getOrDefault(att, 0d);
+            gain.put(att, mult);
         });
         this.rpFoodBuff = this.runePointsMax * prop.getRpPercentIncrease() + prop.getRpIncrease();
         this.foodBuffs = gain;
@@ -580,7 +580,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     }
 
     @Override
-    public Map<Attribute, Integer> foodEffects() {
+    public Map<Attribute, Double> foodEffects() {
         return this.foodBuffs;
     }
 
@@ -595,8 +595,8 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         if (this.lastFood != null)
             nbt.putString("LastFood", this.lastFood.getRegistryName().toString());
         CompoundNBT compound3 = new CompoundNBT();
-        for (Map.Entry<Attribute, Integer> entry : this.foodBuffs.entrySet()) {
-            compound3.putInt(entry.getKey().getRegistryName().toString(), entry.getValue());
+        for (Map.Entry<Attribute, Double> entry : this.foodBuffs.entrySet()) {
+            compound3.putDouble(entry.getKey().getRegistryName().toString(), entry.getValue());
         }
         nbt.put("FoodBuffs", compound3);
         nbt.putInt("FoodBuffRP", this.rpFoodBuff);
@@ -611,7 +611,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         if (nbt.contains("FoodBuffs")) {
             CompoundNBT tag = nbt.getCompound("FoodBuffs");
             for (String s : tag.keySet()) {
-                this.foodBuffs.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(s)), tag.getInt(s));
+                this.foodBuffs.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(s)), tag.getDouble(s));
             }
         }
         this.rpFoodBuff = nbt.getInt("FoodBuffRP");

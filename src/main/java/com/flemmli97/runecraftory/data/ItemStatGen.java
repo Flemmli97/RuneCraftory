@@ -23,7 +23,7 @@ public class ItemStatGen extends ItemStatProvider {
     @Override
     protected void add() {
         this.addStat("arrows", ItemTags.ARROWS, new ItemStat.MutableItemStat(10, 1, 5)
-                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 5)
+                .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 2)
                 .setSpell(ModSpells.ARROW.get(), null, null));
         this.addStat("snowball", Items.SNOWBALL, new ItemStat.MutableItemStat(1, 0, 5)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 1)
@@ -190,23 +190,23 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.hammerScrap.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 3)
                 .addAttribute(ModAttributes.RFCRIT.get(), -5)
-                .addAttribute(ModAttributes.RFRESSTUN.get(), 10));
+                .addAttribute(ModAttributes.RFSTUN.get(), 10));
         this.addStat(ModItems.hammerIron.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 23)
                 .addAttribute(ModAttributes.RFCRIT.get(), -5)
-                .addAttribute(ModAttributes.RFRESSTUN.get(), 10));
+                .addAttribute(ModAttributes.RFSTUN.get(), 10));
         this.addStat(ModItems.hammerSilver.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 47)
                 .addAttribute(ModAttributes.RFCRIT.get(), -5)
-                .addAttribute(ModAttributes.RFRESSTUN.get(), 10));
+                .addAttribute(ModAttributes.RFSTUN.get(), 10));
         this.addStat(ModItems.hammerGold.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 85)
                 .addAttribute(ModAttributes.RFCRIT.get(), -5)
-                .addAttribute(ModAttributes.RFRESSTUN.get(), 10));
+                .addAttribute(ModAttributes.RFSTUN.get(), 10));
         this.addStat(ModItems.hammerPlatinum.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 145)
                 .addAttribute(ModAttributes.RFCRIT.get(), -7)
-                .addAttribute(ModAttributes.RFRESSTUN.get(), 10));
+                .addAttribute(ModAttributes.RFSTUN.get(), 10));
 
         this.addStat(ModItems.fishingRodScrap.get(), new ItemStat.MutableItemStat(25, 5, 0)
                 .addAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 1)
@@ -232,11 +232,12 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat("iron", Tags.Items.INGOTS_IRON, new ItemStat.MutableItemStat(1, 1, 5)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));
         this.addStat("bronze", ModTags.bronze, new ItemStat.MutableItemStat(25, 3, 10)
-                .addAttribute(ModAttributes.RF_DEFENCE.get(), 3));
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 2.4));
         this.addStat("silver", ModTags.silver, new ItemStat.MutableItemStat(105, 20, 15)
-                .addAttribute(ModAttributes.RF_DEFENCE.get(), 6));
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 5));
         this.addStat("gold", Tags.Items.INGOTS_GOLD, new ItemStat.MutableItemStat(222, 34, 20)
-                .addAttribute(ModAttributes.RF_DEFENCE.get(), 15));
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 4)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 2));
         this.addStat("platinum", ModTags.platinum, new ItemStat.MutableItemStat(643, 111, 30)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 25));
         this.addStat("orichalcum", ModTags.orichalcum, new ItemStat.MutableItemStat(1000, 150, 10)

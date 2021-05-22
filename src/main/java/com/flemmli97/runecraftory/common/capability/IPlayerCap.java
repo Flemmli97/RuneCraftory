@@ -80,7 +80,7 @@ public interface IPlayerCap {
 
     int rpFoodBuff();
 
-    Map<Attribute, Integer> foodEffects();
+    Map<Attribute, Double> foodEffects();
 
     int foodBuffDuration();
 

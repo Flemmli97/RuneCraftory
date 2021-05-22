@@ -4,7 +4,7 @@
   "upgradeDifficulty": 10,
   "element": "NONE",
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 3.0
+    "runecraftory:attribute.rf.defence": 2.4
   },
   "tag": "forge:ingots/bronze"
 }

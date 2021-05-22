@@ -6,7 +6,7 @@
   "itemStats": {
     "minecraft:generic.attack_damage": 85.0,
     "runecraftory:attribute.rf.crit": -5.0,
-    "runecraftory:attribute.rf.res_stun": 10.0
+    "runecraftory:attribute.rf.stun": 10.0
   },
   "item": "runecraftory:hammer_gold"
 }

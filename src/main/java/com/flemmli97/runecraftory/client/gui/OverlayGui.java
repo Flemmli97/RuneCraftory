@@ -26,7 +26,7 @@ public class OverlayGui extends AbstractGui {
     }
 
     public void renderBar(MatrixStack stack) {
-        IPlayerCap cap = this.mc.player.getCapability(CapabilityInsts.PlayerCap).orElse(null);
+        IPlayerCap cap = this.mc.player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Capability is null. This shouldn't be"));
         CalendarImpl calendar = ClientHandlers.clientCalendar;
         int xPos = ClientConfig.healthBarWidgetX;
         int yPos = ClientConfig.healthBarWidgetY;
@@ -34,8 +34,8 @@ public class OverlayGui extends AbstractGui {
         GL11.glDisable(2896);
         EnumSeason season = calendar.currentSeason();
         this.mc.getTextureManager().bindTexture(texturepath);
-        this.drawTexture(stack, xPos, yPos, 0, 0, 96, 29);
         if (cap != null && !this.mc.player.abilities.disableDamage) {
+            this.drawTexture(stack, xPos, yPos, 0, 0, 96, 29);
             int healthWidth = Math.min(75, (int) (cap.getHealth(this.mc.player) / cap.getMaxHealth(this.mc.player) * 75.0f));
             int runePointsWidth = Math.min(75, (int) (cap.getRunePoints() / (float) cap.getMaxRunePoints() * 75.0f));
             this.drawTexture(stack, xPos + 18, yPos + 3, 18, 30, healthWidth, 9);

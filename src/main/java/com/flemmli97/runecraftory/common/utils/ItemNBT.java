@@ -17,9 +17,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolItem;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -128,17 +130,21 @@ public class ItemNBT {
         if (tag != null) {
             tag.putInt(LibNBT.Level, level + 1);
             float efficiency = 1.0f;
-            float similar = 1.0f;
+            int similar = 1;
 
-            CompoundNBT upgrades = tag.getCompound(LibNBT.Upgrades);
+            ListNBT upgrades = tag.getList(LibNBT.Upgrades, Constants.NBT.TAG_COMPOUND);
             //Searches for items, which are already applied to the itemstack. Reduces the efficiency for each identical item found.
-            for (String item : upgrades.keySet()) {
-                if (stackToAdd.getItem().getRegistryName().toString().equals(item)) {
-                    efficiency = (float) Math.max(0.0, efficiency - Math.max(0.25, 0.5 / similar));
+            for (INBT item : upgrades) {
+                CompoundNBT nbt = (CompoundNBT) item;
+                if (stackToAdd.getItem().getRegistryName().toString().equals(nbt.getString("Id"))) {
+                    efficiency = (float) Math.max(0.0, efficiency - Math.max(0.125, 0.5 / similar));
                     ++similar;
                 }
             }
-            upgrades.putInt(stackToAdd.getItem().getRegistryName().toString(), ItemNBT.itemLevel(stackToAdd));
+            CompoundNBT upgradeItem = new CompoundNBT();
+            upgradeItem.putString("Id", stackToAdd.getItem().getRegistryName().toString());
+            upgradeItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
+            upgrades.add(upgradeItem);
             tag.put(LibNBT.Upgrades, upgrades);
             if (!shouldHaveStats(stackToAdd)) {
                 ItemStat stat = DataPackHandler.getStats(stackToAdd.getItem());

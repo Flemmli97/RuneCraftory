@@ -7,11 +7,11 @@
   "rpPercentIncrease": 20,
   "duration": 3000,
   "effects": {
-    "minecraft:generic.attack_damage": 30
+    "minecraft:generic.attack_damage": 30.0
   },
   "effectsPercentage": {
-    "minecraft:generic.attack_damage": 10,
-    "runecraftory:attribute.rf.defence": 10
+    "minecraft:generic.attack_damage": 10.0,
+    "runecraftory:attribute.rf.defence": 10.0
   },
   "potionApply": [],
   "potionRemove": [],

@@ -1146,6 +1146,7 @@
   "attribute.rf.res_Stun": "Stun Res",
   "attribute.rf.res_saint": "Faint Res",
   "attribute.rf.res_drain": "Drain Res",
+  "attribute.rf.res_stun": "Stun Res",
   "entity.runecraftory.wooly": "Wooly",
   "entity.runecraftory.gate": "Gate",
   "entity.runecraftory.orc": "Orc",

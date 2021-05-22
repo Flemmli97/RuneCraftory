@@ -69,7 +69,6 @@ public class ItemRecipeBread extends Item {
                     .limit(amount).collect(Collectors.toList());
             unlocked.forEach(recipe -> {
                 player.getRecipeBook().unlock(recipe);
-                player.sendMessage(new TranslationTextComponent("recipe.eat.unlock", new TranslationTextComponent(recipe.getRecipeOutput().getTranslationKey())), Util.NIL_UUID);
                 success.set(true);
             });
             player.connection.sendPacket(new SRecipeBookPacket(SRecipeBookPacket.State.ADD, unlocked.stream().map(SextupleRecipe::getId).collect(Collectors.toList()), Collections.emptyList(), player.getRecipeBook().getOptions()));
