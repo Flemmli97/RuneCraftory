@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "b s",
+    "ccc",
+    "qqq"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:glass_bottle"
+    },
+    "s": {
+      "item": "minecraft:brewing_stand"
+    },
+    "c": {
+      "item": "minecraft:cyan_terracotta"
+    },
+    "q": {
+      "item": "minecraft:quartz_block"
+    }
+  },
+  "result": {
+    "item": "runecraftory:chemistry"
+  }
+}

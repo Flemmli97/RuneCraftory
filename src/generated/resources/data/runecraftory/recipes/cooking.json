@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "qwq",
+    "lsl"
+  ],
+  "key": {
+    "q": {
+      "item": "minecraft:quartz_block"
+    },
+    "w": {
+      "item": "minecraft:water_bucket"
+    },
+    "s": {
+      "item": "minecraft:smoker"
+    },
+    "l": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "result": {
+    "item": "runecraftory:cooking"
+  }
+}
