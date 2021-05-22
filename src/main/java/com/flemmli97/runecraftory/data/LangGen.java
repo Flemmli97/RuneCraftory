@@ -22,6 +22,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.resources.ResourcePackType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.fml.RegistryObject;
 import org.apache.commons.lang3.text.translate.JavaUnicodeEscaper;
 
 import java.io.BufferedWriter;
@@ -59,8 +60,11 @@ public class LangGen implements IDataProvider {
     }
 
     protected void addTranslations() {
-        for (SpawnEgg egg : SpawnEgg.getEggs())
-            this.add(egg, "%s" + " Spawn Egg");
+        //Static order
+        for(RegistryObject<EntityType<?>> type : ModEntities.ENTITIES.getEntries()) {
+            SpawnEgg.fromType(type.get()).ifPresent(egg-> this.add(egg, "%s" + " Spawn Egg"));
+        }
+
         for (EnumDay day : EnumDay.values())
             this.add(day.translation(), day.toString().substring(0, 3));
         this.add(ModEntities.tortas.get(), "Tortas");
