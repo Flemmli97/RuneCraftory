@@ -19,7 +19,6 @@ import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModTags;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
-import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.world.WorldHandler;
 import com.flemmli97.tenshilib.api.event.AOEAttackEvent;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -55,10 +54,8 @@ public class PlayerEvents {
             PacketHandler.sendToClient(new S2CCalendar(WorldHandler.get((ServerWorld) event.getPlayer().world).getCalendar()), (ServerPlayerEntity) event.getPlayer());
             PacketHandler.sendToClient(new S2CCapSync(event.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"))), (ServerPlayerEntity) event.getPlayer());
             CompoundNBT playerData = event.getPlayer().getPersistentData();
-            if (!playerData.getBoolean(RuneCraftory.MODID + ":starterItems")) {
-                ItemUtils.starterItems(event.getPlayer());
-                playerData.putBoolean(RuneCraftory.MODID + ":starterItems", true);
-
+            if (!playerData.getBoolean(RuneCraftory.MODID + ":starting")) {
+                playerData.putBoolean(RuneCraftory.MODID + ":starting", true);
                 event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
                     cap.setMaxHealth(event.getPlayer(), GeneralConfig.startingHealth);
                     cap.setHealth(event.getPlayer(), cap.getMaxHealth(event.getPlayer()));
