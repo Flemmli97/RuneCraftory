@@ -84,7 +84,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
 
     @Override
     public boolean canPlayerBreakBlockWhileHolding(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        return false;
+        return !player.isCreative();
     }
 
     @Override

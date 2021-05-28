@@ -99,7 +99,7 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
 
     @Override
     public boolean canPlayerBreakBlockWhileHolding(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        return false;
+        return !player.isCreative();
     }
 
     @Override

@@ -99,7 +99,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
 
     @Override
     public boolean canPlayerBreakBlockWhileHolding(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        return false;
+        return !player.isCreative();
     }
 
     @Override

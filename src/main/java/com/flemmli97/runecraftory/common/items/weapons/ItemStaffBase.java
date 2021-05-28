@@ -87,7 +87,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable {
 
     @Override
     public boolean canPlayerBreakBlockWhileHolding(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        return false;
+        return !player.isCreative();
     }
 
     @Override

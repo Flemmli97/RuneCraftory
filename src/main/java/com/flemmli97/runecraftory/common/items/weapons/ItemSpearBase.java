@@ -89,7 +89,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
 
     @Override
     public boolean canPlayerBreakBlockWhileHolding(BlockState state, World world, BlockPos pos, PlayerEntity player) {
-        return false;
+        return !player.isCreative();
     }
 
     @Override
