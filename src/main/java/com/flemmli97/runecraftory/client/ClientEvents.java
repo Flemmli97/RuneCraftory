@@ -15,6 +15,8 @@ import com.flemmli97.runecraftory.common.network.C2SRideJump;
 import com.flemmli97.runecraftory.common.network.C2SSpellKey;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.common.registry.ModParticles;
+import com.flemmli97.tenshilib.api.item.IAOEWeapon;
+import com.flemmli97.tenshilib.common.network.C2SPacketHit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
@@ -32,6 +34,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -53,16 +56,16 @@ public class ClientEvents {
 
     @SubscribeEvent(receiveCanceled = true)
     public void keyEvent(InputEvent.KeyInputEvent event) {
-        if (ClientHandlers.spell1.isPressed()) {
+        if (ClientHandlers.spell1.onPress()) {
             PacketHandler.sendToServer(new C2SSpellKey(0));
         }
-        if (ClientHandlers.spell2.isPressed()) {
+        if (ClientHandlers.spell2.onPress()) {
             PacketHandler.sendToServer(new C2SSpellKey(1));
         }
-        if (ClientHandlers.spell3.isPressed()) {
+        if (ClientHandlers.spell3.onPress()) {
             PacketHandler.sendToServer(new C2SSpellKey(2));
         }
-        if (ClientHandlers.spell4.isPressed()) {
+        if (ClientHandlers.spell4.onPress()) {
             PacketHandler.sendToServer(new C2SSpellKey(3));
         }
     }
@@ -145,6 +148,13 @@ public class ClientEvents {
         }
     }
 
+    @SubscribeEvent
+    public void leftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+        if(event.getPlayer().world.isRemote && event.getPlayer().getHeldItemMainhand().getItem() instanceof IAOEWeapon) {
+            com.flemmli97.tenshilib.common.network.PacketHandler.sendToServer(new C2SPacketHit(C2SPacketHit.HitType.AOE));
+        }
+    }
+
     /*@SubscribeEvent
     public void pathDebug(LivingEvent e) {
         if (e.getEntity() instanceof MobEntity && !e.getEntity().world.isRemote) {
@@ -159,7 +169,6 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void tick(LivingEvent.LivingUpdateEvent event) {
-
         Entity e = event.getEntity();
         if (e.world.isRemote && e instanceof LivingEntity) {
             e.getCapability(CapabilityInsts.EntityCap).ifPresent(cap -> {
