@@ -62,17 +62,22 @@ public class ContainerUpgrade extends Container {
             }
         });
         this.trackInt(this.rpCost = IntReferenceHolder.single());
-        this.rpCost.set(-1);
-        this.onCraftMatrixChanged(this.craftingInv);
+        this.updateOutput();
     }
 
     @Override
     public void onCraftMatrixChanged(IInventory inv) {
-        if (inv == this.craftingInv && !this.craftingInv.getPlayer().world.isRemote) {
-            this.outPutInv.setInventorySlotContents(0, ItemUtils.getUpgradedStack(this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
-            this.rpCost.set(ItemUtils.upgradeCost(this.craftingType(), this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability")), this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
+        if (inv == this.craftingInv) {
+            this.updateOutput();
         }
         super.onCraftMatrixChanged(inv);
+    }
+
+    private void updateOutput(){
+        if(this.craftingInv.getPlayer().world.isRemote)
+            return;
+        this.outPutInv.setInventorySlotContents(0, ItemUtils.getUpgradedStack(this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
+        this.rpCost.set(ItemUtils.upgradeCost(this.craftingType(), this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability")), this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
     }
 
     public EnumCrafting craftingType() {

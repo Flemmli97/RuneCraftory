@@ -26,6 +26,9 @@ import net.minecraftforge.items.ItemStackHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Needs multiplayer testing
+ */
 public class ContainerCrafting extends Container {
 
     private List<SextupleRecipe> matchingRecipes;
@@ -60,7 +63,6 @@ public class ContainerCrafting extends Container {
             this.addSlot(new Slot(this.craftingInv, i + 3, 20 + i * 18, 44));
         }
         this.trackInt(this.rpCost = IntReferenceHolder.single());
-        this.rpCost.set(-1);
         this.initCraftingMatrix(this.craftingInv);
     }
 
@@ -83,7 +85,6 @@ public class ContainerCrafting extends Container {
     private void initCraftingMatrix(IInventory inv) {
         if (inv == this.craftingInv)
             this.updateCraftingOutput(true);
-        super.onCraftMatrixChanged(inv);
     }
 
     public void updateCraftingOutput(boolean init) {
