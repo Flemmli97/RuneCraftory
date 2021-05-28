@@ -2,11 +2,13 @@ package com.flemmli97.runecraftory.common.inventory.container;
 
 import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrafting;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import com.flemmli97.runecraftory.common.inventory.DummyInventory;
 import com.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import com.flemmli97.runecraftory.common.registry.ModContainer;
 import com.flemmli97.runecraftory.common.utils.CraftingUtils;
+import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -17,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SSetSlotPacket;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -31,6 +34,7 @@ public class ContainerCrafting extends Container {
     private final EnumCrafting type;
     private final DummyInventory outPutInv;
     private final TileCrafting tile;
+    private final IntReferenceHolder rpCost;
 
     public ContainerCrafting(int windowId, PlayerInventory inv, PacketBuffer data) {
         this(windowId, inv, getTile(inv.player.world, data));
@@ -55,6 +59,8 @@ public class ContainerCrafting extends Container {
             this.addSlot(new Slot(this.craftingInv, i, 20 + i * 18, 26));
             this.addSlot(new Slot(this.craftingInv, i + 3, 20 + i * 18, 44));
         }
+        this.trackInt(this.rpCost = IntReferenceHolder.single());
+        this.rpCost.set(-1);
         this.initCraftingMatrix(this.craftingInv);
     }
 
@@ -97,15 +103,16 @@ public class ContainerCrafting extends Container {
             if (this.tile.craftingIndex() >= this.matchingRecipes.size())
                 this.tile.resetIndex();
             this.currentRecipe = this.matchingRecipes.get(this.tile.craftingIndex());
+            this.rpCost.set(ItemUtils.craftingCost(this.type, this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting player capability")), this.currentRecipe));
             stack = this.currentRecipe.getCraftingResult(this.craftingInv);
         } else {
             stack = ItemStack.EMPTY;
+            this.rpCost.set(-1);
             this.currentRecipe = null;
         }
         this.outPutInv.setInventorySlotContents(0, stack);
         if (this.craftingInv.getPlayer() instanceof ServerPlayerEntity)
             ((ServerPlayerEntity) this.craftingInv.getPlayer()).connection.sendPacket(new SSetSlotPacket(this.windowId, 0, stack));
-
     }
 
     public SextupleRecipe getCurrentRecipe() {
@@ -138,6 +145,10 @@ public class ContainerCrafting extends Container {
                 this.tile.increaseIndex();
         }
         this.updateCraftingSlot();
+    }
+
+    public int rpCost(){
+        return this.rpCost.get();
     }
 
     @Override

@@ -3,11 +3,9 @@ package com.flemmli97.runecraftory.common.blocks.tile;
 import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
 import com.flemmli97.runecraftory.common.inventory.container.ContainerUpgrade;
-import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -67,14 +65,6 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        if (slot == 6) {
-            if (this.type == EnumCrafting.ARMOR)
-                return stack.getItem().getEquipmentSlot(stack) != EquipmentSlotType.MAINHAND;
-            if (this.type == EnumCrafting.FORGE) {
-                EquipmentSlotType slotType = stack.getItem().getEquipmentSlot(stack);
-                return (slotType == null || slotType == EquipmentSlotType.MAINHAND) && ItemNBT.shouldHaveStats(stack);
-            }
-        }
         return true;
     }
 

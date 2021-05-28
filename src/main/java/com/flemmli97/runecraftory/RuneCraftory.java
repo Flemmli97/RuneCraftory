@@ -50,7 +50,6 @@ import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -80,10 +79,7 @@ public class RuneCraftory {
 
     public static IForgeRegistry<Spell> spellRegistry;
 
-    public static boolean jei;
-
     public RuneCraftory() {
-        jei = ModList.get().isLoaded("jei");
         Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
 
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();

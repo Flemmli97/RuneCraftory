@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.inventory.container;
 
 import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.common.blocks.tile.TileCrafting;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.inventory.DummyInventory;
 import com.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import com.flemmli97.runecraftory.common.registry.ModContainer;
@@ -13,6 +14,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.IntReferenceHolder;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class ContainerUpgrade extends Container {
@@ -20,6 +22,7 @@ public class ContainerUpgrade extends Container {
     private final PlayerContainerInv craftingInv;
     private final EnumCrafting type;
     private final DummyInventory outPutInv;
+    private final IntReferenceHolder rpCost;
 
     public ContainerUpgrade(int windowId, PlayerInventory inv, PacketBuffer data) {
         this(windowId, inv, ContainerCrafting.getTile(inv.player.world, data));
@@ -58,7 +61,8 @@ public class ContainerUpgrade extends Container {
                 return this.inventory.isItemValidForSlot(7, stack);
             }
         });
-
+        this.trackInt(this.rpCost = IntReferenceHolder.single());
+        this.rpCost.set(-1);
         this.onCraftMatrixChanged(this.craftingInv);
     }
 
@@ -66,12 +70,17 @@ public class ContainerUpgrade extends Container {
     public void onCraftMatrixChanged(IInventory inv) {
         if (inv == this.craftingInv && !this.craftingInv.getPlayer().world.isRemote) {
             this.outPutInv.setInventorySlotContents(0, ItemUtils.getUpgradedStack(this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
+            this.rpCost.set(ItemUtils.upgradeCost(this.craftingType(), this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability")), this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
         }
         super.onCraftMatrixChanged(inv);
     }
 
     public EnumCrafting craftingType() {
         return this.type;
+    }
+
+    public int rpCost(){
+        return this.rpCost.get();
     }
 
     @Override

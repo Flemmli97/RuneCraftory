@@ -51,7 +51,8 @@ public class UpgradeOutputSlot extends Slot {
 
     @Override
     public boolean canTakeStack(PlayerEntity player) {
-        return ItemUtils.canUpgrade(player, this.container.craftingType(), this.ingredientInv.getStackInSlot(6), this.ingredientInv.getStackInSlot(7));
+        return ItemUtils.canUpgrade(player, this.container.craftingType(), this.ingredientInv.getStackInSlot(6), this.ingredientInv.getStackInSlot(7))
+                && (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getMaxRunePoints() >= this.container.rpCost()).orElse(false));
     }
 
     @Override
@@ -65,11 +66,11 @@ public class UpgradeOutputSlot extends Slot {
     @Override
     public ItemStack onTake(PlayerEntity player, ItemStack stack) {
         this.onCrafting(stack);
+        if(player.world.isRemote)
+            return ItemStack.EMPTY;
         ItemStack ing1 = this.ingredientInv.getStackInSlot(6);
         ItemStack ing2 = this.ingredientInv.getStackInSlot(7);
-        ItemStack ing1f = ing1;
-        ItemStack ing2f = ing2;
-        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.decreaseRunePoints(player, ItemUtils.upgradeCost(this.container.craftingType(), player, cap, ing1f, ing2f), true));
+        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.decreaseRunePoints(player, this.container.rpCost(), true));
         if (!ing1.isEmpty()) {
             this.ingredientInv.decrStackSize(6, 1);
             ing1 = this.ingredientInv.getStackInSlot(6);

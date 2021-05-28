@@ -1,6 +1,7 @@
 {
   "type": "runecraftory:armor",
   "level": 1,
+  "cost": 15,
   "ingredients": [
     {
       "tag": "runecraftory:mineral"

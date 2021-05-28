@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
+import com.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import net.minecraft.entity.LivingEntity;
@@ -69,18 +70,40 @@ public class ItemUtils {
     }
 
     public static boolean canUpgrade(PlayerEntity player, EnumCrafting type, ItemStack stack, ItemStack ingredient) {
-
-        return upgradeCost(type, player, player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability")), stack, ingredient) >= 0;
+        return upgradeCost(type, player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability")), stack, ingredient, true) >= 0;
     }
 
-    public static int upgradeCost(EnumCrafting type, PlayerEntity player, IPlayerCap cap, ItemStack stack, ItemStack ingredient) {
+    public static int upgradeCost(EnumCrafting type, IPlayerCap cap, ItemStack stack, ItemStack ingredient) {
+        return upgradeCost(type, cap, stack, ingredient, false);
+    }
+
+    public static int upgradeCost(EnumCrafting type, IPlayerCap cap, ItemStack stack, ItemStack ingredient, boolean onlyIngredient) {
         int level = ItemNBT.itemLevel(stack);
         ItemStat stat = DataPackHandler.getStats(ingredient.getItem());
-        if (stat != null) {
+        if ((onlyIngredient || !stack.isEmpty()) && stat != null) {
             int skillLevel = type == EnumCrafting.FORGE ? cap.getSkillLevel(EnumSkills.FORGING)[0] : cap.getSkillLevel(EnumSkills.CRAFTING)[0];
-            return level * (Math.max(1, stat.getDiff() - skillLevel)) * 5;
+            return level * (Math.max(1, stat.getDiff() - skillLevel)) * 3;
         }
         return -1;
+    }
+
+    public static int craftingCost(EnumCrafting type, IPlayerCap cap, SextupleRecipe recipe) {
+        int skillLevel = 0;
+        switch (type) {
+            case FORGE:
+                skillLevel = cap.getSkillLevel(EnumSkills.FORGING)[0];
+                break;
+            case ARMOR:
+                skillLevel = cap.getSkillLevel(EnumSkills.CRAFTING)[0];
+                break;
+            case CHEM:
+                skillLevel = cap.getSkillLevel(EnumSkills.CHEMISTRY)[0];
+                break;
+            case COOKING:
+                skillLevel = cap.getSkillLevel(EnumSkills.COOKING)[0];
+                break;
+        }
+        return Math.max(recipe.getCraftingLevel()-skillLevel, 1) * recipe.getBaseCost();
     }
 
     public static ItemStack getUpgradedStack(ItemStack stack, ItemStack ing) {

@@ -11,8 +11,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class ArmorRecipe extends SextupleRecipe {
 
-    public ArmorRecipe(ResourceLocation id, String group, int level, ItemStack result, NonNullList<Ingredient> ingredients) {
-        super(id, group, level, result, ingredients);
+    public ArmorRecipe(ResourceLocation id, String group, int level, int cost, ItemStack result, NonNullList<Ingredient> ingredients) {
+        super(id, group, level, cost, result, ingredients);
     }
 
     @Override
@@ -33,8 +33,8 @@ public class ArmorRecipe extends SextupleRecipe {
     public static class Serializer extends SextupleRecipe.Serializer<ArmorRecipe> {
 
         @Override
-        public ArmorRecipe get(ResourceLocation id, String group, int level, ItemStack result, NonNullList<Ingredient> ingredients) {
-            return new ArmorRecipe(id, group, level, result, ingredients);
+        public ArmorRecipe get(ResourceLocation id, String group, int level, int cost, ItemStack result, NonNullList<Ingredient> ingredients) {
+            return new ArmorRecipe(id, group, level, cost, result, ingredients);
         }
     }
 }

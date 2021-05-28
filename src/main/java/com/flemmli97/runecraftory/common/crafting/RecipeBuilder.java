@@ -31,15 +31,16 @@ import java.util.function.Consumer;
 public class RecipeBuilder {
 
     private final ItemStack result;
-    private final int level;
+    private final int level, cost;
     private final List<Ingredient> ingredients = new ArrayList<>();
     private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
     private String group;
     private final IRecipeSerializer<?> serializer;
 
-    private RecipeBuilder(ItemStack item, int level, IRecipeSerializer<?> serializer) {
+    private RecipeBuilder(ItemStack item, int level, int cost, IRecipeSerializer<?> serializer) {
         this.result = item;
         this.level = level;
+        this.cost = cost;
         this.serializer = serializer;
     }
 
@@ -48,10 +49,14 @@ public class RecipeBuilder {
     }
 
     public static RecipeBuilder create(EnumCrafting type, IItemProvider item, int count, int level) {
-        return create(type, new ItemStack(item, count), level);
+        return create(type, new ItemStack(item, count), level, 1);
     }
 
-    public static RecipeBuilder create(EnumCrafting type, ItemStack item, int level) {
+    public static RecipeBuilder create(EnumCrafting type, IItemProvider item, int count, int level, int cost) {
+        return create(type, new ItemStack(item, count), level, cost);
+    }
+
+    public static RecipeBuilder create(EnumCrafting type, ItemStack item, int level, int cost) {
         IRecipeSerializer<?> serializer;
         switch (type) {
             case FORGE:
@@ -68,7 +73,7 @@ public class RecipeBuilder {
                 serializer = ModCrafting.COOKINGSERIALIZER.get();
                 break;
         }
-        return new RecipeBuilder(item, level, serializer);
+        return new RecipeBuilder(item, level, cost, serializer);
     }
 
     public RecipeBuilder addIngredient(ITag<Item> tag) {
@@ -127,7 +132,7 @@ public class RecipeBuilder {
     public void build(Consumer<IFinishedRecipe> cons, ResourceLocation res) {
         this.validate(res);
         this.advancementBuilder.withParentId(new ResourceLocation("recipes/root")).withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(res)).withRewards(AdvancementRewards.Builder.recipe(res)).withRequirementsStrategy(IRequirementsStrategy.OR);
-        cons.accept(new Result(res, this.result, this.level, this.group == null ? "" : this.group, this.ingredients, this.advancementBuilder, new ResourceLocation(res.getNamespace(), "recipes/" + this.result.getItem().getGroup().getPath() + "/" + res.getPath())) {
+        cons.accept(new Result(res, this.result, this.level, this.cost, this.group == null ? "" : this.group, this.ingredients, this.advancementBuilder, new ResourceLocation(res.getNamespace(), "recipes/" + this.result.getItem().getGroup().getPath() + "/" + res.getPath())) {
             @Override
             public IRecipeSerializer<?> getSerializer() {
                 return RecipeBuilder.this.serializer;
@@ -146,16 +151,17 @@ public class RecipeBuilder {
 
         private final ResourceLocation id;
         private final ItemStack result;
-        private final int level;
+        private final int level, cost;
         private final String group;
         private final List<Ingredient> ingredients;
         private final Advancement.Builder advancementBuilder;
         private final ResourceLocation advancementId;
 
-        public Result(ResourceLocation res, ItemStack output, int level, String group, List<Ingredient> ingredients, Advancement.Builder advancements, ResourceLocation advancementID) {
+        public Result(ResourceLocation res, ItemStack output, int level, int cost, String group, List<Ingredient> ingredients, Advancement.Builder advancements, ResourceLocation advancementID) {
             this.id = res;
             this.result = output;
             this.level = level;
+            this.cost = cost;
             this.group = group;
             this.ingredients = ingredients;
             this.advancementBuilder = advancements;
@@ -168,6 +174,7 @@ public class RecipeBuilder {
                 obj.addProperty("group", this.group);
             }
             obj.addProperty("level", this.level);
+            obj.addProperty("cost", this.cost);
             JsonArray jsonarray = new JsonArray();
 
             for (Ingredient ingredient : this.ingredients) {

@@ -1,6 +1,7 @@
 {
   "type": "runecraftory:forge",
   "level": 1,
+  "cost": 20,
   "ingredients": [
     {
       "tag": "runecraftory:mineral"

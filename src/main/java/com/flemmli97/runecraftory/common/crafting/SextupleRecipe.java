@@ -32,14 +32,16 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
     private final NonNullList<Ingredient> recipeItems;
     private final boolean isSimple;
     private final int craftingLevel;
+    private final int baseCost;
 
-    public SextupleRecipe(ResourceLocation id, String group, int level, ItemStack result, NonNullList<Ingredient> ingredients) {
+    public SextupleRecipe(ResourceLocation id, String group, int level, int baseCost, ItemStack result, NonNullList<Ingredient> ingredients) {
         this.id = id;
         this.group = group;
         this.recipeOutput = result;
         this.recipeItems = ingredients;
         this.isSimple = ingredients.stream().allMatch(Ingredient::isSimple);
         this.craftingLevel = level;
+        this.baseCost = baseCost;
     }
 
     @Override
@@ -47,8 +49,8 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
         RecipeItemHelper recipeitemhelper = new RecipeItemHelper();
         List<ItemStack> inputs = new ArrayList<>();
         int i = 0;
-
-        for (int j = 0; j < inv.getSizeInventory(); ++j) {
+        int max = Math.min(6, inv.getSizeInventory());
+        for (int j = 0; j < max; ++j) {
             ItemStack itemstack = inv.getStackInSlot(j);
             if (!itemstack.isEmpty()) {
                 ++i;
@@ -99,6 +101,10 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
         return this.craftingLevel;
     }
 
+    public int getBaseCost() {
+        return this.baseCost;
+    }
+
     @Override
     public abstract IRecipeSerializer<?> getSerializer();
 
@@ -120,13 +126,14 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
             String s = JSONUtils.getString(obj, "group", "");
             NonNullList<Ingredient> nonnulllist = readIngredients(JSONUtils.getJsonArray(obj, "ingredients"));
             int level = JSONUtils.getInt(obj, "level", 1);
+            int baseCost = JSONUtils.getInt(obj, "cost", 1);
             if (nonnulllist.isEmpty()) {
                 throw new JsonParseException("No ingredients for shapeless recipe");
             } else if (nonnulllist.size() > 6) {
                 throw new JsonParseException("Too many ingredients for shapeless recipe the max is " + 6);
             } else {
                 ItemStack itemstack = CraftingHelper.getItemStack(JSONUtils.getJsonObject(obj, "result"), true);
-                return this.get(res, s, level, itemstack, nonnulllist);
+                return this.get(res, s, level, baseCost, itemstack, nonnulllist);
             }
         }
 
@@ -146,6 +153,7 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
         @Override
         public T read(ResourceLocation res, PacketBuffer buffer) {
             int level = buffer.readInt();
+            int cost = buffer.readInt();
             String s = buffer.readString(32767);
             int i = buffer.readVarInt();
             NonNullList<Ingredient> nonnulllist = NonNullList.withSize(i, Ingredient.EMPTY);
@@ -153,14 +161,15 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
                 nonnulllist.set(j, Ingredient.read(buffer));
             }
             ItemStack itemstack = buffer.readItemStack();
-            return this.get(res, s, level, itemstack, nonnulllist);
+            return this.get(res, s, level, cost, itemstack, nonnulllist);
         }
 
-        public abstract T get(ResourceLocation id, String group, int level, ItemStack result, NonNullList<Ingredient> ingredients);
+        public abstract T get(ResourceLocation id, String group, int level, int cost, ItemStack result, NonNullList<Ingredient> ingredients);
 
         @Override
         public void write(PacketBuffer buffer, T recipe) {
             buffer.writeInt(recipe.getCraftingLevel());
+            buffer.writeInt(recipe.getBaseCost());
             buffer.writeString(recipe.getGroup());
             buffer.writeVarInt(recipe.getIngredients().size());
 

@@ -11,8 +11,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class ChemistryRecipe extends SextupleRecipe {
 
-    public ChemistryRecipe(ResourceLocation id, String group, int level, ItemStack result, NonNullList<Ingredient> ingredients) {
-        super(id, group, level, result, ingredients);
+    public ChemistryRecipe(ResourceLocation id, String group, int level, int cost, ItemStack result, NonNullList<Ingredient> ingredients) {
+        super(id, group, level, cost, result, ingredients);
     }
 
     @Override
@@ -33,8 +33,8 @@ public class ChemistryRecipe extends SextupleRecipe {
     public static class Serializer extends SextupleRecipe.Serializer<ChemistryRecipe> {
 
         @Override
-        public ChemistryRecipe get(ResourceLocation id, String group, int level, ItemStack result, NonNullList<Ingredient> ingredients) {
-            return new ChemistryRecipe(id, group, level, result, ingredients);
+        public ChemistryRecipe get(ResourceLocation id, String group, int level, int cost, ItemStack result, NonNullList<Ingredient> ingredients) {
+            return new ChemistryRecipe(id, group, level, cost, result, ingredients);
         }
     }
 }

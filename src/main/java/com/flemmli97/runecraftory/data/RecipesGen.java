@@ -73,28 +73,28 @@ public class RecipesGen extends ForgeRecipeProvider {
                 .addCriterion("cooking_recipe", hasItem(Items.SMOKER))
                 .build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.broadSword.get(), 1)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.broadSword.get(), 1, 1, 20)
                 .addIngredient(ModTags.minerals)
                 .dummyCriterion().build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.claymore.get(), 1)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.claymore.get(), 1, 3, 25)
                 .addIngredient(ModTags.minerals)
                 .dummyCriterion().build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.spear.get(), 1)
-                .addIngredient(ModTags.minerals)
-                .dummyCriterion().build(consumer);
-
-        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.cheapBracelet.get(), 1)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.spear.get(), 1, 3, 25)
                 .addIngredient(ModTags.minerals)
                 .dummyCriterion().build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.recoveryPotion.get(), 3)
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.cheapBracelet.get(), 1, 1, 15)
+                .addIngredient(ModTags.minerals)
+                .dummyCriterion().build(consumer);
+
+        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.recoveryPotion.get(), 3, 1, 30)
                 .addIngredient(ModItems.medicinalHerb.get())
                 .dummyCriterion().build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.onigiri.get(), 1)
+        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.onigiri.get(), 1, 1, 10)
                 .addIngredient(ModItems.rice.get())
                 .dummyCriterion().build(consumer);
-        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.squidSashimi.get(), 5)
+        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.squidSashimi.get(), 1, 5, 15)
                 .addIngredient(ModItems.squid.get())
                 .dummyCriterion().build(consumer);
     }

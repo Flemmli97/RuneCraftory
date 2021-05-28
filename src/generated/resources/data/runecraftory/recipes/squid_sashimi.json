@@ -1,6 +1,7 @@
 {
   "type": "runecraftory:cooking",
   "level": 5,
+  "cost": 15,
   "ingredients": [
     {
       "item": "runecraftory:squid"

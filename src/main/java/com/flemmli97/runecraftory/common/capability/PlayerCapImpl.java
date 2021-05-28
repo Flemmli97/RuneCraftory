@@ -171,8 +171,10 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
             else if (damage) {
                 int diff = amount - this.runePoints;
                 this.runePoints = 0;
-                if (!player.world.isRemote)
+                if (!player.world.isRemote) {
                     player.attackEntityFrom(CustomDamage.EXHAUST, (float) (diff * 2));
+                    player.hurtResistantTime = 10;
+                }
             } else
                 return false;
             if (player instanceof ServerPlayerEntity)

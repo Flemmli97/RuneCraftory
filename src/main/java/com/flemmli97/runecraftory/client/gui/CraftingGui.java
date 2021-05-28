@@ -43,8 +43,11 @@ public class CraftingGui extends ContainerScreen<ContainerCrafting> {
                 this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
                 break;
         }*/
+
         this.client.getTextureManager().bindTexture(forging);
         this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
+        if(this.container.rpCost()>=0)
+            OverlayGui.drawStringCenter(stack, this.textRenderer, new StringTextComponent(""+this.container.rpCost()), this.guiLeft+123, this.guiTop+20, 0);
     }
 
     @Override
