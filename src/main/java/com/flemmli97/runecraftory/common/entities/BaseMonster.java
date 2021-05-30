@@ -7,7 +7,6 @@ import com.flemmli97.runecraftory.common.entities.monster.ai.RiderAttackTargetGo
 import com.flemmli97.runecraftory.common.lib.LibConstants;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.common.network.S2CAttackDebug;
-import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -47,7 +46,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -61,7 +59,6 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.IServerWorld;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nullable;
@@ -239,17 +236,17 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     public int animationCooldown(@Nullable AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
-            return this.getRNG().nextInt(20) + 25 + diffAdd;
-        return this.getRNG().nextInt(25) + 20 + diffAdd;
+            return this.getRNG().nextInt(15) + 10 + diffAdd;
+        return this.getRNG().nextInt(17) + 15 + diffAdd;
     }
 
     public int difficultyCooldown() {
-        int diffAdd = 50;
+        int diffAdd = 35;
         Difficulty diff = this.world.getDifficulty();
         if (this.world.getDifficulty() == Difficulty.HARD)
             diffAdd = 0;
         else if (diff == Difficulty.NORMAL)
-            diffAdd = 25;
+            diffAdd = 15;
         return diffAdd;
     }
 
@@ -514,43 +511,6 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     //=====Damage Logic
-
-    @Override
-    protected void damageEntity(DamageSource damageSrc, float damageAmount) {
-        if (!this.isInvulnerableTo(damageSrc)) {
-            damageAmount = ForgeHooks.onLivingHurt(this, damageSrc, damageAmount);
-            if (damageAmount <= 0.0f) {
-                return;
-            }
-            damageAmount = this.reduceDamage(damageSrc, damageAmount);
-            if (damageAmount != 0.0f) {
-                float f1 = this.getHealth();
-                this.setHealth(f1 - damageAmount);
-                this.getCombatTracker().trackDamage(damageSrc, f1, damageAmount);
-            }
-        }
-    }
-
-    protected float reduceDamage(DamageSource damageSrc, float damageAmount) {
-        float reduce = 0.0f;
-        //RFCalculations.elementalReduction(this, damageSrc, damageAmount);
-        if (!damageSrc.isDamageAbsolute()) {
-            if (!damageSrc.isUnblockable()) {
-                if (damageSrc.isMagicDamage())
-                    reduce = (float) this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).getValue();
-                else
-                    reduce = (float) this.getAttribute(ModAttributes.RF_DEFENCE.get()).getValue();
-            }
-            if (this.isPotionActive(Effects.RESISTANCE) && damageSrc != DamageSource.OUT_OF_WORLD) {
-                int i = (this.getActivePotionEffect(Effects.RESISTANCE).getAmplifier() + 1) * 5;
-                int j = 25 - i;
-                float f = damageAmount * (float) j;
-                damageAmount = f / 25.0F;
-            }
-        }
-        float min = reduce > damageAmount * 2 ? 0 : 0.5f;
-        return Math.max(min, damageAmount - reduce);
-    }
 
     @Override
     public boolean attackEntityAsMob(Entity entity) {

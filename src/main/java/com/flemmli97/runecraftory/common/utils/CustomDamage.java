@@ -95,7 +95,7 @@ public class CustomDamage extends EntityDamageSource {
         private Entity trueSource;
         private Entity cause;
         private float knockAmount;
-        private int protection = 20;
+        private int protection = 10;
         private DamageType dmg = DamageType.NORMAL;
 
         public Builder(Entity attacker) {

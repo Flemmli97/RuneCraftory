@@ -181,7 +181,7 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     private void summonLaserAOE() {
-        for (Vector3f vec : RayTraceUtils.rotatedVecs(this.getLookVec(), new Vector3d(0, 1, 0), -180, 140, 40)) {
+        for (Vector3f vec : RayTraceUtils.rotatedVecs(this.getLookVec(), new Vector3d(0, 1, 0), -180, 150, 30)) {
             EntityThunderboltBeam beam = new EntityThunderboltBeam(this.world, this);
             beam.setRotationToDir(vec.getX(), vec.getY(), vec.getZ(), 0);
             this.world.addEntity(beam);

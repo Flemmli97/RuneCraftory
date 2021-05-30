@@ -103,7 +103,7 @@ public class CombatUtils {
     }
 
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {
-        float reduce = 0.0f;
+        int reduce = 0;
         if (!GeneralConfig.disableDefence && !source.isDamageAbsolute()) {
             if (!source.isUnblockable()) {
                 if (source.isMagicDamage())
@@ -112,7 +112,7 @@ public class CombatUtils {
                     reduce = getAttributeValue(entity, ModAttributes.RF_DEFENCE.get(), null);
             }
         }
-        return elementalReduction(entity, source, Math.max(0.0f, amount - reduce));
+        return elementalReduction(entity, source, Math.max(0.03f*amount, amount - reduce));
     }
 
     public static float elementalReduction(LivingEntity entity, DamageSource source, float amount) {
@@ -274,7 +274,7 @@ public class CombatUtils {
     }
 
     public static boolean mobAttack(LivingEntity attacker, Entity target) {
-        CustomDamage source = build(attacker, target, new CustomDamage.Builder(attacker)).get();
+        CustomDamage source = build(attacker, target, new CustomDamage.Builder(attacker)).hurtResistant(5).get();
         return mobAttack(attacker, target, source, CombatUtils.getAttributeValue(attacker, Attributes.GENERIC_ATTACK_DAMAGE, target));
     }
 

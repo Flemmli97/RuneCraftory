@@ -104,10 +104,10 @@ public class GeneralConfig {
     static {
         weaponProps.put(EnumWeaponType.FARM, new WeaponTypeProperties(3, 0, 25, 20));
         weaponProps.put(EnumWeaponType.SHORTSWORD, new WeaponTypeProperties(2.5f, 10, 25, 10));
-        weaponProps.put(EnumWeaponType.LONGSWORD, new WeaponTypeProperties(4.0f, 25, 25, 15));
+        weaponProps.put(EnumWeaponType.LONGSWORD, new WeaponTypeProperties(4.0f, 40, 25, 27));
         weaponProps.put(EnumWeaponType.SPEAR, new WeaponTypeProperties(5.0f, 5, 25, 12));
-        weaponProps.put(EnumWeaponType.HAXE, new WeaponTypeProperties(4.5f, 40, 25, 25));
-        weaponProps.put(EnumWeaponType.DUAL, new WeaponTypeProperties(3.0f, 15, 25, 7));
+        weaponProps.put(EnumWeaponType.HAXE, new WeaponTypeProperties(4.5f, 23, 25, 17));
+        weaponProps.put(EnumWeaponType.DUAL, new WeaponTypeProperties(2.5f, 10, 25, 6));
         weaponProps.put(EnumWeaponType.GLOVE, new WeaponTypeProperties(3.0f, 5, 25, 7));
         weaponProps.put(EnumWeaponType.STAFF, new WeaponTypeProperties(3.5f, 0, 25, 20));
 

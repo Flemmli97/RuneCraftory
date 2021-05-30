@@ -29,6 +29,12 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
     }
 
     @Override
+    public void resetTask() {
+        super.resetTask();
+        this.attacker.setAttackTarget(null);
+    }
+
+    @Override
     public void handlePreAttack() {
         if (this.attacker.maxAttackRange(this.next) <= 1)
             this.moveToEntityNearer(this.target, 1);
