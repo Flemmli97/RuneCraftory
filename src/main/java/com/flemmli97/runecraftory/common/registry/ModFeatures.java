@@ -28,6 +28,7 @@ public class ModFeatures {
     public static ConfiguredFeature<?, ?> CONFIGURED_END_HERBFEATURE;
 
     public static StructureFeature<?, ?> AMBROSIA_FEATURE;
+    public static StructureFeature<?, ?> THUNDERBOLT_FEATURE;
 
     public static void registerConfiguredFeatures() {
         for (MineralGenConfig conf : GenerationConfig.allMineralConfs()) {
@@ -38,6 +39,8 @@ public class ModFeatures {
 
         Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(RuneCraftory.MODID, "ambrosia_feature"), AMBROSIA_FEATURE = ModStructures.AMBROSIA_FOREST.get().configure(IFeatureConfig.NO_FEATURE_CONFIG));
         FlatGenSettingAccessor.getSTRUCTURES().put(ModStructures.AMBROSIA_FOREST.get(), AMBROSIA_FEATURE);
+        Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(RuneCraftory.MODID, "thunderbolt_feature"), THUNDERBOLT_FEATURE = ModStructures.THUNDERBOLT_RUINS.get().configure(IFeatureConfig.NO_FEATURE_CONFIG));
+        FlatGenSettingAccessor.getSTRUCTURES().put(ModStructures.THUNDERBOLT_RUINS.get(), THUNDERBOLT_FEATURE);
 
         ModStructures.setup();
     }

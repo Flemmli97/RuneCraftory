@@ -73,18 +73,18 @@ public class ContainerUpgrade extends Container {
         super.onCraftMatrixChanged(inv);
     }
 
-    private void updateOutput(){
-        if(this.craftingInv.getPlayer().world.isRemote)
+    private void updateOutput() {
+        if (this.craftingInv.getPlayer().world.isRemote)
             return;
         this.outPutInv.setInventorySlotContents(0, ItemUtils.getUpgradedStack(this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
-        this.rpCost.set(ItemUtils.upgradeCost(this.craftingType(), this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting capability")), this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
+        this.rpCost.set(ItemUtils.upgradeCost(this.craftingType(), this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability")), this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
     }
 
     public EnumCrafting craftingType() {
         return this.type;
     }
 
-    public int rpCost(){
+    public int rpCost() {
         return this.rpCost.get();
     }
 

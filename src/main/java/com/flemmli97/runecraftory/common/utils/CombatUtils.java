@@ -104,7 +104,7 @@ public class CombatUtils {
 
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {
         float reduce = 0.0f;
-        if (GeneralConfig.disableDefence && !source.isDamageAbsolute()) {
+        if (!GeneralConfig.disableDefence && !source.isDamageAbsolute()) {
             if (!source.isUnblockable()) {
                 if (source.isMagicDamage())
                     reduce = getAttributeValue(entity, ModAttributes.RF_MAGIC_DEFENCE.get(), null);

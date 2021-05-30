@@ -61,8 +61,8 @@ public class LangGen implements IDataProvider {
 
     protected void addTranslations() {
         //Static order
-        for(RegistryObject<EntityType<?>> type : ModEntities.ENTITIES.getEntries()) {
-            SpawnEgg.fromType(type.get()).ifPresent(egg-> this.add(egg, "%s" + " Spawn Egg"));
+        for (RegistryObject<EntityType<?>> type : ModEntities.ENTITIES.getEntries()) {
+            SpawnEgg.fromType(type.get()).ifPresent(egg -> this.add(egg, "%s" + " Spawn Egg"));
         }
 
         for (EnumDay day : EnumDay.values())

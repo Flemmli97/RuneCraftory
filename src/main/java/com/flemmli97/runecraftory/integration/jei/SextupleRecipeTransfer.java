@@ -34,7 +34,7 @@ public class SextupleRecipeTransfer implements IRecipeTransferInfo<ContainerCraf
     @Override
     public List<Slot> getRecipeSlots(ContainerCrafting containerCrafting) {
         List<Slot> slots = new ArrayList<>();
-        for(int i = 37; i < containerCrafting.inventorySlots.size(); i++)
+        for (int i = 37; i < containerCrafting.inventorySlots.size(); i++)
             slots.add(containerCrafting.getSlot(i));
         return slots;
     }
@@ -42,7 +42,7 @@ public class SextupleRecipeTransfer implements IRecipeTransferInfo<ContainerCraf
     @Override
     public List<Slot> getInventorySlots(ContainerCrafting containerCrafting) {
         List<Slot> slots = new ArrayList<>();
-        for(int i = 1; i < 37; i++)
+        for (int i = 1; i < 37; i++)
             slots.add(containerCrafting.getSlot(i));
         return slots;
     }

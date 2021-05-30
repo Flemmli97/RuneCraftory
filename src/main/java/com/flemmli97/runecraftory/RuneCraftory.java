@@ -36,6 +36,7 @@ import com.flemmli97.runecraftory.common.registry.ModLootModifier;
 import com.flemmli97.runecraftory.common.registry.ModParticles;
 import com.flemmli97.runecraftory.common.registry.ModSpells;
 import com.flemmli97.runecraftory.common.registry.ModStructures;
+import com.flemmli97.runecraftory.common.world.GateSpawning;
 import net.minecraft.entity.EntitySpawnPlacementRegistry;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -145,6 +146,7 @@ public class RuneCraftory {
         CapabilityManager.INSTANCE.register(IEntityCap.class, new CapabilityInsts.EntityCapNetwork(), EntityCapImpl::new);
         this.tweakVanillaAttribute(Attributes.GENERIC_MAX_HEALTH, 250000);
         this.tweakVanillaAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 250000);
+        GateSpawning.setupStructureSpawns();
     }
 
     public void conf(ModConfig.ModConfigEvent event) {

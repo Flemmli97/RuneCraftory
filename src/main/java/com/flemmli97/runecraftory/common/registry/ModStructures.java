@@ -2,7 +2,9 @@ package com.flemmli97.runecraftory.common.registry;
 
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.world.structure.AmbrosiaForestStructure;
+import com.flemmli97.runecraftory.common.world.structure.ThunderboltRuinsStructure;
 import com.flemmli97.runecraftory.common.world.structure.piece.AmbrosiaForestPiece;
+import com.flemmli97.runecraftory.common.world.structure.piece.ThunderboltRuinsPiece;
 import com.flemmli97.runecraftory.mixin.DimStrucSetAccess;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.registry.Registry;
@@ -23,8 +25,10 @@ public class ModStructures {
     public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, RuneCraftory.MODID);
 
     public static final RegistryObject<Structure<NoFeatureConfig>> AMBROSIA_FOREST = register("ambrosia_forest", () -> new AmbrosiaForestStructure(NoFeatureConfig.CODEC), null);
+    public static final RegistryObject<Structure<NoFeatureConfig>> THUNDERBOLT_RUINS = register("thunderbolt_ruins", () -> new ThunderboltRuinsStructure(NoFeatureConfig.CODEC), null);
 
     public static IStructurePieceType AMBROSIA_PIECE;
+    public static IStructurePieceType THUNDERBOLT_PIECE;
 
     public static <T extends IFeatureConfig> RegistryObject<Structure<T>> register(String name, Supplier<Structure<T>> sup, StructureSeparationSettings settings) {
         return STRUCTURES.register(name, sup);
@@ -32,11 +36,15 @@ public class ModStructures {
 
     public static void setup() {
         Registry.register(Registry.STRUCTURE_PIECE, RuneCraftory.MODID + ":ambrosia_piece", AMBROSIA_PIECE = AmbrosiaForestPiece.Piece::new);
-
         Structure.STRUCTURES.put(AMBROSIA_FOREST.get().getRegistryName().toString(), AMBROSIA_FOREST.get());
+
+        Registry.register(Registry.STRUCTURE_PIECE, RuneCraftory.MODID + ":thunderbolt_piece", THUNDERBOLT_PIECE = ThunderboltRuinsPiece.Piece::new);
+        Structure.STRUCTURES.put(THUNDERBOLT_RUINS.get().getRegistryName().toString(), THUNDERBOLT_RUINS.get());
+
         ImmutableMap<Structure<?>, StructureSeparationSettings> map = ImmutableMap.<Structure<?>, StructureSeparationSettings>builder()
                 .putAll(DimensionStructuresSettings.DEFAULT_STRUCTURES)
-                .put(AMBROSIA_FOREST.get(), new StructureSeparationSettings(3, 1, 34645653))
+                .put(AMBROSIA_FOREST.get(), new StructureSeparationSettings(25, 15, 34645653))
+                .put(THUNDERBOLT_RUINS.get(), new StructureSeparationSettings(40, 32, 34645653))
                 .build();
         DimStrucSetAccess.setDEFAULT_STRUCTURES(map);
     }

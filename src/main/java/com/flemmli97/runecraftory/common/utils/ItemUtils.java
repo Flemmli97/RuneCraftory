@@ -103,7 +103,7 @@ public class ItemUtils {
                 skillLevel = cap.getSkillLevel(EnumSkills.COOKING)[0];
                 break;
         }
-        return Math.max(recipe.getCraftingLevel()-skillLevel, 1) * recipe.getBaseCost();
+        return Math.max(recipe.getCraftingLevel() - skillLevel, 1) * recipe.getBaseCost();
     }
 
     public static ItemStack getUpgradedStack(ItemStack stack, ItemStack ing) {

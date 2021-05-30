@@ -4,10 +4,12 @@ import com.flemmli97.runecraftory.common.entities.BaseMonster;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.WorldUtils;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -20,7 +22,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class TileSpawner extends TileEntity implements ITickableTileEntity {
 
-    private int lastUpdateDay;
+    private int lastUpdateDay = -1;
     private EntityType<?> savedEntity;
     private BlockPos structurePos;
     private ResourceLocation structureID;
@@ -51,14 +53,13 @@ public class TileSpawner extends TileEntity implements ITickableTileEntity {
                     ((MobEntity) e).onInitialSpawn((IServerWorld) this.world, this.world.getDifficultyForLocation(e.getBlockPos()), SpawnReason.SPAWNER, null, null);
                 }
                 this.world.addEntity(e);
+                this.lastUpdateDay = WorldUtils.day(this.world);
             }
         }
     }
 
     public void setEntity(ResourceLocation entity) {
         this.savedEntity = ForgeRegistries.ENTITIES.getValue(entity);
-        this.spawnEntity();
-        this.lastUpdateDay = WorldUtils.day(this.world);
     }
 
     @Override
@@ -75,5 +76,20 @@ public class TileSpawner extends TileEntity implements ITickableTileEntity {
                 this.spawnEntity();
             }
         }
+    }
+
+    @Override
+    public void fromTag(BlockState state, CompoundNBT nbt) {
+        super.fromTag(state, nbt);
+        this.lastUpdateDay = nbt.getInt("LastUpdate");
+        this.savedEntity = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(nbt.getString("Entity")));
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT nbt) {
+        super.write(nbt);
+        nbt.putInt("LastUpdate", this.lastUpdateDay);
+        nbt.putString("Entity", this.savedEntity.getRegistryName().toString());
+        return nbt;
     }
 }

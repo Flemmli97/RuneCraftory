@@ -132,12 +132,12 @@ public class ItemStat {
         }
         IFormattableTextComponent price = tag != null ? new TranslationTextComponent("tooltip.item.level", tag.getInt(LibNBT.Level)) : null;
         if (ItemUtils.getBuyPrice(stack, this) > 0) {
-            if(price == null)
+            if (price == null)
                 price = new TranslationTextComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack));
             else
                 price.append(" ").append(new TranslationTextComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack))).append(" ");
         }
-        if(price == null)
+        if (price == null)
             price = new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack));
         else
             price.append(" ").append(new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack))).append(" ");
@@ -158,7 +158,7 @@ public class ItemStat {
 
     private String format(Attribute att, int n) {
         boolean flat = flatAttributes.contains(att.getRegistryName());
-        int val = flat && n < 0 ? - n : n;
+        int val = flat && n < 0 ? -n : n;
         return (val >= 0 ? "+" + val : "" + val) + (flat ? "" : "%");
     }
 

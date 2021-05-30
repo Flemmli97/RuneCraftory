@@ -93,8 +93,8 @@ public class SpawnConfig {
         return this.rawBiomeTypeEntitiesMap.getOrDefault(type.getName(), new ArrayList<>());
     }
 
-    public List<GateSpawning.SpawnResource> getEntityFromStructure(ResourceLocation loc) {
-        return this.rawStructureEntities.getOrDefault(loc.toString(), new ArrayList<>());
+    public Map<String, List<GateSpawning.SpawnResource>> getRawStructureEntities() {
+        return this.rawStructureEntities;
     }
 
     public static void addDefaultData(SpawnData data) {

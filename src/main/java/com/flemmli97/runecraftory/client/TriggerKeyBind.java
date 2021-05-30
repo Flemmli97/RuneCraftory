@@ -11,7 +11,7 @@ public class TriggerKeyBind extends KeyBinding {
     }
 
     public boolean onPress() {
-        if(this.isPressed())
+        if (this.isPressed())
             return ++this.press == 1;
         else
             this.press = 0;

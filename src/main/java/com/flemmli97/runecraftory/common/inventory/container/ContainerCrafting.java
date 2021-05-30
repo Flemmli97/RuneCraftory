@@ -104,7 +104,7 @@ public class ContainerCrafting extends Container {
             if (this.tile.craftingIndex() >= this.matchingRecipes.size())
                 this.tile.resetIndex();
             this.currentRecipe = this.matchingRecipes.get(this.tile.craftingIndex());
-            this.rpCost.set(ItemUtils.craftingCost(this.type, this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(()->new NullPointerException("Error getting player capability")), this.currentRecipe));
+            this.rpCost.set(ItemUtils.craftingCost(this.type, this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting player capability")), this.currentRecipe));
             stack = this.currentRecipe.getCraftingResult(this.craftingInv);
         } else {
             stack = ItemStack.EMPTY;
@@ -131,8 +131,7 @@ public class ContainerCrafting extends Container {
     public void increase() {
         if (this.canIncrease()) {
             this.tile.increaseIndex();
-        }
-        else {
+        } else {
             this.tile.resetIndex();
         }
         this.updateCraftingSlot();
@@ -141,14 +140,14 @@ public class ContainerCrafting extends Container {
     public void decrease() {
         if (this.canDecrease()) {
             this.tile.decreaseIndex();
-        } else if(this.matchingRecipes != null) {
-            while(this.tile.craftingIndex() < this.matchingRecipes.size())
+        } else if (this.matchingRecipes != null) {
+            while (this.tile.craftingIndex() < this.matchingRecipes.size())
                 this.tile.increaseIndex();
         }
         this.updateCraftingSlot();
     }
 
-    public int rpCost(){
+    public int rpCost() {
         return this.rpCost.get();
     }
 

@@ -150,7 +150,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public void leftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        if(event.getPlayer().world.isRemote && event.getPlayer().getHeldItemMainhand().getItem() instanceof IAOEWeapon) {
+        if (event.getPlayer().world.isRemote && event.getPlayer().getHeldItemMainhand().getItem() instanceof IAOEWeapon) {
             com.flemmli97.tenshilib.common.network.PacketHandler.sendToServer(new C2SPacketHit(C2SPacketHit.HitType.AOE));
         }
     }

@@ -32,8 +32,8 @@ public class UpgradeGui extends ContainerScreen<ContainerUpgrade> {
         }*/
         this.client.getTextureManager().bindTexture(forging);
         this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
-        if(this.container.rpCost()>=0)
-            OverlayGui.drawStringCenter(stack, this.textRenderer, new StringTextComponent(""+this.container.rpCost()), this.guiLeft+91, this.guiTop+42, 0);
+        if (this.container.rpCost() >= 0)
+            OverlayGui.drawStringCenter(stack, this.textRenderer, new StringTextComponent("" + this.container.rpCost()), this.guiLeft + 91, this.guiTop + 42, 0);
     }
 
     @Override

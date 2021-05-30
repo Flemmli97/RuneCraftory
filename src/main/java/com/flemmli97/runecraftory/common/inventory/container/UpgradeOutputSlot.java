@@ -66,7 +66,7 @@ public class UpgradeOutputSlot extends Slot {
     @Override
     public ItemStack onTake(PlayerEntity player, ItemStack stack) {
         this.onCrafting(stack);
-        if(player.world.isRemote)
+        if (player.world.isRemote)
             return ItemStack.EMPTY;
         ItemStack ing1 = this.ingredientInv.getStackInSlot(6);
         ItemStack ing2 = this.ingredientInv.getStackInSlot(7);

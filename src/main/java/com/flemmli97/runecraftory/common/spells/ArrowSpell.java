@@ -36,9 +36,9 @@ public class ArrowSpell extends Spell {
     public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
         ArrowEntity arrowentity = new ArrowEntity(world, entity);
         float f = 1;
-        if(stack.getItem() instanceof ItemStaffBase)
+        if (stack.getItem() instanceof ItemStaffBase)
             f = BowItem.getArrowVelocity(72000 - entity.getItemInUseCount());
-        arrowentity.setProperties(entity, entity.rotationPitch, entity.rotationYaw, 0.0F, f*1.5F, 1.0F);
+        arrowentity.setProperties(entity, entity.rotationPitch, entity.rotationYaw, 0.0F, f * 1.5F, 1.0F);
         arrowentity.setDamage(CombatUtils.getAttributeValueRaw(entity, Attributes.GENERIC_ATTACK_DAMAGE) * 0.05 * level);
         arrowentity.setFire(ItemNBT.getElement(stack) == EnumElement.FIRE ? 200 : 0);
         arrowentity.pickupStatus = AbstractArrowEntity.PickupStatus.DISALLOWED;

@@ -198,10 +198,10 @@ public class ItemNBT {
         ItemStat stat = DataPackHandler.getStats(stack.getItem());
         if (stat != null || forced) {
             if (shouldHaveStats(stack)) {
-            CompoundNBT stackTag = stack.getOrCreateTag();
-            CompoundNBT compound = stackTag.getCompound(RuneCraftory.MODID);
-            if (!compound.contains(LibNBT.Level))
-                compound.putInt(LibNBT.Level, 1);
+                CompoundNBT stackTag = stack.getOrCreateTag();
+                CompoundNBT compound = stackTag.getCompound(RuneCraftory.MODID);
+                if (!compound.contains(LibNBT.Level))
+                    compound.putInt(LibNBT.Level, 1);
 
                 if (!compound.contains(LibNBT.Upgrades))
                     compound.put(LibNBT.Upgrades, new ListNBT());

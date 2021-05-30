@@ -41,7 +41,7 @@ public class JEI implements IModPlugin {
 
     @Override
     public void registerRecipes(IRecipeRegistration reg) {
-        if(Minecraft.getInstance() == null || Minecraft.getInstance().world == null)
+        if (Minecraft.getInstance() == null || Minecraft.getInstance().world == null)
             return;
         RecipeManager manager = Minecraft.getInstance().world.getRecipeManager();
         reg.addRecipes(manager.listAllOfType(ModCrafting.FORGE), SextupleRecipeCategory.FORGECATEGORY);

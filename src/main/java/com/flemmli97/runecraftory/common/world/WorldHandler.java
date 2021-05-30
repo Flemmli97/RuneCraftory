@@ -54,7 +54,7 @@ public class WorldHandler extends WorldSavedData {
         int date = WorldUtils.day(world);
         EnumDay day = EnumDay.values()[Math.floorMod(date, EnumDay.values().length)];
         EnumSeason season = EnumSeason.values()[Math.floorMod(date / 30, EnumSeason.values().length)];
-        this.calendar.setDateDayAndSeason(date%30 + 1, day, season);
+        this.calendar.setDateDayAndSeason(date % 30 + 1, day, season);
         PacketHandler.sendToAll(new S2CCalendar(this.calendar));
         this.markDirty();
     }

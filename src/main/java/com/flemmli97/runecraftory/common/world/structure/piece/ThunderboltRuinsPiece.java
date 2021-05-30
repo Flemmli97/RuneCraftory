@@ -31,24 +31,24 @@ import net.minecraft.world.gen.feature.template.TemplateManager;
 import java.util.List;
 import java.util.Random;
 
-public class AmbrosiaForestPiece {
+public class ThunderboltRuinsPiece {
 
-    private static final ResourceLocation piece = new ResourceLocation(RuneCraftory.MODID, "bosses/ambrosia_forest");
+    private static final ResourceLocation piece = new ResourceLocation(RuneCraftory.MODID, "bosses/thunderbolt_ruins");
 
     public static void add(TemplateManager templateManager, BlockPos pos, Rotation rot, List<StructurePiece> pieces, Random rand) {
-        pieces.add(new AmbrosiaForestPiece.Piece(templateManager, pos, rot, -3));
+        pieces.add(new ThunderboltRuinsPiece.Piece(templateManager, pos, rot, -1));
     }
 
     public static class Piece extends TemplateStructurePiece {
 
         public Piece(TemplateManager templateManager, BlockPos pos, Rotation rot, int yoffSet) {
-            super(ModStructures.AMBROSIA_PIECE, 0);
+            super(ModStructures.THUNDERBOLT_PIECE, 0);
             this.templatePosition = pos.add(0, yoffSet, 0);
             this.setup(templateManager, rot);
         }
 
         public Piece(TemplateManager templateManager, CompoundNBT nbt) {
-            super(ModStructures.AMBROSIA_PIECE, nbt);
+            super(ModStructures.THUNDERBOLT_PIECE, nbt);
             this.setup(templateManager, Rotation.valueOf(nbt.getString("Rot")));
         }
 
@@ -67,11 +67,7 @@ public class AmbrosiaForestPiece {
 
         @Override
         public boolean generate(ISeedReader reader, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox mbb, ChunkPos chunk, BlockPos pos) {
-            boolean flag = super.generate(reader, manager, generator, random, mbb, chunk, pos);
-            for (int x = 0; x < this.boundingBox.getXSize(); x++)
-                for (int z = 0; z < this.boundingBox.getZSize(); z++)
-                    this.replaceAirAndLiquidDownwards(reader, Blocks.DIRT.getDefaultState(), x, -1, z, mbb);
-            return flag;
+            return super.generate(reader, manager, generator, random, mbb, chunk, pos);
         }
 
         @Override
@@ -92,7 +88,7 @@ public class AmbrosiaForestPiece {
                 world.setBlockState(pos, ModBlocks.bossSpawner.get().getDefaultState(), 3);
                 TileEntity tile = world.getTileEntity(pos);
                 if (tile instanceof TileSpawner) {
-                    ((TileSpawner) tile).setEntity(LibEntities.ambrosia);
+                    ((TileSpawner) tile).setEntity(LibEntities.thunderbolt);
                 }
             }
         }

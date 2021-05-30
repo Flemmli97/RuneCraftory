@@ -42,6 +42,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.StructureSpawnListGatherEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -101,8 +102,30 @@ public class WorldEvents {
                 event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
                         Feature.FLOWER.configure((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.INSTANCE)).tries(GenerationConfig.overworldHerbTries).build()).applyChance(GenerationConfig.overworldHerbChance).decorate(Features.Placements.SQUARE_HEIGHTMAP));
         }
-        if (types.contains(BiomeDictionary.Type.FOREST))
+        if (types.contains(BiomeDictionary.Type.FOREST) && types.contains(BiomeDictionary.Type.OVERWORLD))
             event.getGeneration().getStructures().add(() -> ModFeatures.AMBROSIA_FEATURE);
+        if (types.contains(BiomeDictionary.Type.OCEAN) && types.contains(BiomeDictionary.Type.OVERWORLD))
+            event.getGeneration().getStructures().add(() -> ModFeatures.THUNDERBOLT_FEATURE);
+    }
+
+    @SubscribeEvent
+    public void worldLoad(WorldEvent.Load event) {
+        if (event.getWorld() instanceof ServerWorld) {
+            ServerWorld serverWorld = (ServerWorld) event.getWorld();
+            if (serverWorld.getChunkProvider().getChunkGenerator() instanceof FlatChunkGenerator &&
+                    serverWorld.getRegistryKey().equals(World.OVERWORLD)) {
+                return;
+            }
+            Map<Structure<?>, StructureSeparationSettings> map = serverWorld.getChunkProvider().generator.getStructuresConfig().getStructures();
+            map.put(ModStructures.AMBROSIA_FOREST.get(), new StructureSeparationSettings(25, 15, 34645653));
+            map.put(ModStructures.THUNDERBOLT_RUINS.get(), new StructureSeparationSettings(40, 32, 34645653));
+        }
+    }
+
+    @SubscribeEvent
+    public void structureSpawns(StructureSpawnListGatherEvent event) {
+        if (GateSpawning.structureShouldSpawn(event.getStructure()))
+            event.addEntitySpawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(ModEntities.gate.get(), 100, 1, 1));
     }
 
     @SubscribeEvent
@@ -119,19 +142,6 @@ public class WorldEvents {
             if (growable.getPlantType(event.getWorld(), event.getPos()) == PlantType.CROP) {
                 event.setResult(Event.Result.DENY);
             }
-        }
-    }
-
-    @SubscribeEvent
-    public void worldLoad(WorldEvent.Load event) {
-        if (event.getWorld() instanceof ServerWorld) {
-            ServerWorld serverWorld = (ServerWorld) event.getWorld();
-            if (serverWorld.getChunkProvider().getChunkGenerator() instanceof FlatChunkGenerator &&
-                    serverWorld.getRegistryKey().equals(World.OVERWORLD)) {
-                return;
-            }
-            Map<Structure<?>, StructureSeparationSettings> map = serverWorld.getChunkProvider().generator.getStructuresConfig().getStructures();
-            map.put(ModStructures.AMBROSIA_FOREST.get(), new StructureSeparationSettings(10, 5, 34645653));
         }
     }
 }

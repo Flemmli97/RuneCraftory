@@ -57,7 +57,7 @@ public class CraftingOutputSlot extends Slot {
 
     @Override
     public boolean canTakeStack(PlayerEntity player) {
-        if(player.world.isRemote)
+        if (player.world.isRemote)
             return true;
         return (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getMaxRunePoints() >= this.container.rpCost()).orElse(false));
     }
@@ -65,10 +65,10 @@ public class CraftingOutputSlot extends Slot {
     @Override
     public ItemStack onTake(PlayerEntity player, ItemStack stack) {
         this.onCrafting(stack);
-        if(player.world.isRemote)
+        if (player.world.isRemote)
             return ItemStack.EMPTY;
         NonNullList<ItemStack> remaining = this.container.getCurrentRecipe() != null ? this.container.getCurrentRecipe().getRemainingItems(this.ingredientInv) : NonNullList.withSize(0, ItemStack.EMPTY);
-        if(this.container.rpCost()>=0)
+        if (this.container.rpCost() >= 0)
             player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.decreaseRunePoints(player, this.container.rpCost(), true));
         boolean refreshRecipe = false;
         for (int i = 0; i < remaining.size(); ++i) {

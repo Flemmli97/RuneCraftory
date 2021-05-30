@@ -136,7 +136,7 @@ public class EntityThunderbolt extends BossMonster {
     @Override
     public void livingTick() {
         super.livingTick();
-        if (!this.world.isRemote && this.getAnimation() != null && this.getAnimation().getID().equals(defeat.getID()) && !this.feintedDeath) {
+        if (!this.world.isRemote && this.getHealth() > 0 && this.getAnimation() != null && this.getAnimation().getID().equals(defeat.getID()) && !this.feintedDeath) {
             if (this.getAnimation().getTick() > this.getAnimation().getLength()) {
                 this.feintedDeath = true;
                 this.setAnimation(feint);

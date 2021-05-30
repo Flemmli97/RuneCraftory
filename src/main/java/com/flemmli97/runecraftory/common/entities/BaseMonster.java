@@ -571,11 +571,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         //if (!this.isTamed()) {
         if (this.deathTime == 0) {
             this.playDeathAnimation();
-            this.deathTime = 1;
         }
-        AnimatedAction anim = this.getAnimation();
-        if (anim != null && anim.getTick() < anim.getAttackTime())
-            return;
         ++this.deathTime;
         if (this.deathTime == this.maxDeathTime()) {
             this.remove(false); //Forge keep data until we revive player

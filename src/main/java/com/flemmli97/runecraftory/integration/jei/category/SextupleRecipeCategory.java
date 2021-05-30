@@ -93,7 +93,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
                 guiStacks.init(ind, true, 0 + x * 18, 5 + y * 18);
             }
 
-        if(player.getRecipeBook().contains(sextupleRecipe.getId())) {
+        if (player.getRecipeBook().contains(sextupleRecipe.getId())) {
             for (int i = 0; i < ing.getInputs(VanillaTypes.ITEM).size(); i++) {
                 guiStacks.set(i, ing.getInputs(VanillaTypes.ITEM).get(i));
             }
@@ -103,8 +103,8 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
         }
         guiStacks.init(7, false, 96, 14);
         guiStacks.set(7, ing.getOutputs(VanillaTypes.ITEM).get(0));
-        guiStacks.addTooltipCallback((slot, input, ingredient, tooltip)->{
-            if(slot == 8) {
+        guiStacks.addTooltipCallback((slot, input, ingredient, tooltip) -> {
+            if (slot == 8) {
                 tooltip.clear();
                 tooltip.add(new TranslationTextComponent("runecraftory.jei.locked"));
             }

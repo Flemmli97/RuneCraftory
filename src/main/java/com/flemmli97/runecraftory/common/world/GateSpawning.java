@@ -1,13 +1,20 @@
 package com.flemmli97.runecraftory.common.world;
 
+import com.flemmli97.runecraftory.RuneCraftory;
 import com.google.common.collect.Lists;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.SectionPos;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.chunk.ChunkStatus;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -16,14 +23,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GateSpawning {
 
     private static Map<RegistryKey<Biome>, List<SpawnResource>> spawningMappingBiome = new HashMap<>();
+    private static Map<Structure<?>, List<SpawnResource>> spawningMappingStructure = new HashMap<>();
 
     public static List<EntityType<?>> pickRandomMobs(ServerWorld world, RegistryKey<Biome> biome, Random rand, int amount, BlockPos pos) {
-        List<SpawnResource> list = Lists.newArrayList(spawningMappingBiome.getOrDefault(biome, new ArrayList<>()));
-        if (list.isEmpty())
+        List<SpawnResource> list = spawningMappingBiome.get(biome);
+        List<SpawnResource> structureList = /*getStructuresAt(world, pos).stream().filter(spawningMappingStructure::containsKey)
+                .map(spawningMappingStructure::get).flatMap(List::stream).collect(Collectors.toList());*/
+                spawningMappingStructure.entrySet().stream()
+                        .filter(e -> world.getStructureAccessor().getStructureAt(pos, true, e.getKey()).isValid())
+                        .map(Map.Entry::getValue).flatMap(List::stream).collect(Collectors.toList());
+        if (!structureList.isEmpty())
+            list = structureList;
+        if (list == null || list.isEmpty())
             return new ArrayList<>();
         list.removeIf(w -> w.distToSpawnSq >= pos.distanceSq(world.getSpawnPos()));
         List<EntityType<?>> ret = new ArrayList<>();
@@ -47,8 +64,34 @@ public class GateSpawning {
         return ret;
     }
 
-    public static boolean hasSpawns(RegistryKey<Biome> biome) {
-        return !spawningMappingBiome.getOrDefault(biome, new ArrayList<>()).isEmpty();
+    public static Set<Structure<?>> getStructuresAt(ServerWorld world, BlockPos pos) {
+        return world.getChunk(pos.getX() >> 4, pos.getZ() >> 4, ChunkStatus.STRUCTURE_REFERENCES)
+                .getStructureReferences().entrySet().stream().filter(e ->
+                        e.getValue().stream().map(l -> SectionPos.from(new ChunkPos(l), 0))
+                                .map(section -> world.getStructureAccessor()
+                                        .getStructureStart(section, e.getKey(), world.getChunk(section.getX(), section.getZ(), ChunkStatus.STRUCTURE_STARTS)))
+                                .filter(start -> start != null && start.isValid() && start.getBoundingBox().isVecInside(pos)
+                                        && start.getComponents().stream().anyMatch(piece -> piece.getBoundingBox().isVecInside(pos))
+                                ).count() > 0
+                ).map(Map.Entry::getKey).collect(Collectors.toSet());
+    }
+
+    public static boolean hasSpawns(IWorld world, BlockPos pos) {
+        List<SpawnResource> list = spawningMappingBiome.get(world.method_31081(pos).orElse(Biomes.PLAINS));
+        if (list != null && !list.isEmpty())
+            return true;
+        if (world instanceof ServerWorld) {
+            //return getStructuresAt((ServerWorld) world, pos).stream().filter(s->!spawningMappingStructure.getOrDefault(s, new ArrayList<>()).isEmpty())
+            //        .count()>0;
+            return hasStructureSpawns((ServerWorld) world, pos);
+        }
+        return false;
+    }
+
+    public static boolean hasStructureSpawns(ServerWorld world, BlockPos pos) {
+        return !spawningMappingStructure.entrySet().stream()
+                .filter(e -> world.getStructureAccessor().getStructureAt(pos, true, e.getKey()).isValid())
+                .map(Map.Entry::getValue).flatMap(List::stream).collect(Collectors.toList()).isEmpty();
     }
 
     public static void addSpawn(ResourceLocation loc, SpawnResource s) {
@@ -56,6 +99,19 @@ public class GateSpawning {
             old.add(s);
             return old;
         });
+    }
+
+    public static void setupStructureSpawns() {
+        RuneCraftory.spawnConfig.getRawStructureEntities().forEach((struc, list) -> {
+            Structure<?> structure = ForgeRegistries.STRUCTURE_FEATURES.getValue(new ResourceLocation(struc));
+            if (struc.equals(Structure.MINESHAFT.getRegistryName().toString()) || structure != Structure.MINESHAFT) {
+                spawningMappingStructure.put(structure, list);
+            }
+        });
+    }
+
+    public static boolean structureShouldSpawn(Structure<?> structure) {
+        return spawningMappingStructure.containsKey(structure);
     }
 
     public static class SpawnResource extends WeightedRandom.Item {
