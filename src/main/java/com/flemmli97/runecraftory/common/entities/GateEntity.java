@@ -5,6 +5,7 @@ import com.flemmli97.runecraftory.api.enums.EnumElement;
 import com.flemmli97.runecraftory.common.config.MobConfig;
 import com.flemmli97.runecraftory.common.lib.LibConstants;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.world.GateSpawning;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -12,6 +13,7 @@ import net.minecraft.entity.ILivingEntityData;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
@@ -51,6 +53,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 public class GateEntity extends MobEntity implements IBaseMob {
 
@@ -59,6 +62,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
     public int rotate;
     private static final DataParameter<String> elementType = EntityDataManager.createKey(GateEntity.class, DataSerializers.STRING);
     private static final DataParameter<Integer> level = EntityDataManager.createKey(GateEntity.class, DataSerializers.VARINT);
+    private static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
 
     public GateEntity(EntityType<? extends GateEntity> type, World world) {
         super(type, world);
@@ -374,9 +378,9 @@ public class GateEntity extends MobEntity implements IBaseMob {
     }
 
     private void updateStatsToLevel() {
-        //this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(LevelCalc.initStatIncreaseLevel(ConfigHandler.MobConfigs.gateHealth, this.level(), false, 1.1f - this.world.rand.nextFloat() * 0.2f));
-        //this.getAttributeMap().getAttributeInstance(ItemStatAttributes.RFDEFENCE).setBaseValue(LevelCalc.initStatIncreaseLevel(ConfigHandler.MobConfigs.gateDef, this.level(), false, 1.1f - this.world.rand.nextFloat() * 0.2f));
-        //this.getAttributeMap().getAttributeInstance(ItemStatAttributes.RFMAGICDEF).setBaseValue(LevelCalc.initStatIncreaseLevel(ConfigHandler.MobConfigs.gateMDef, this.level(), false, 1.1f - this.world.rand.nextFloat() * 0.2f));
+        this.getAttribute(Attributes.GENERIC_MAX_HEALTH).addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.RF_DEFENCE.get()).addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
         this.setHealth(this.getMaxHealth());
     }
 
@@ -385,7 +389,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
         RegistryKey<Biome> key = this.world.method_31081(this.getBlockPos()).orElse(Biomes.PLAINS);
         this.spawnList.addAll(GateSpawning.pickRandomMobs(world.getWorld(), key, this.rand, this.rand.nextInt(4) + 2, this.getBlockPos()));
         this.type = this.getType(world, key);
-        //this.dataManager.set(level, LevelCalc.levelFromDistSpawn(this.world, this.getPosition()));
+        this.dataManager.set(level, LevelCalc.levelFromPos(this.world, this.getBlockPos()));
         this.dataManager.set(elementType, this.type.getTranslation());
         this.setPosition(this.getX(), this.getY() + 1, this.getZ());
         this.updateStatsToLevel();

@@ -14,12 +14,15 @@ public class MobConfig {
 
     public static boolean disableNaturalSpawn;
 
-    public static float gateDef = 5f;
-    public static float gateMDef = 5f;
-    public static float gateHealth = 100;
-    public static int gateXP = 10;
-    public static int gateMoney = 4;
-    public static int spawnChance = 150;
+    public static float gateDef;
+    public static float gateMDef;
+    public static float gateHealth;
+    public static float gateDefGain;
+    public static float gateMDefGain;
+    public static float gateHealthGain;
+    public static int gateXP;
+    public static int gateMoney;
+    public static int spawnChance;
 
     public static Map<ResourceLocation, EntityProperties> propertiesMap = new HashMap<>();
 
@@ -28,6 +31,9 @@ public class MobConfig {
         gateHealth = spec.gateHealth.get();
         gateDef = spec.gateDef.get();
         gateMDef = spec.gateMDef.get();
+        gateHealthGain = spec.gateHealthGain.get();
+        gateDefGain = spec.gateDefGain.get();
+        gateMDefGain = spec.gateMDefGain.get();
         spawnChance = spec.spawnChance.get();
         gateXP = spec.gateXP.get();
         gateMoney = spec.gateMoney.get();
@@ -45,6 +51,9 @@ public class MobConfig {
         private final ForgeConfigSpec.ConfigValue<Integer> gateHealth;
         private final ForgeConfigSpec.ConfigValue<Integer> gateDef;
         private final ForgeConfigSpec.ConfigValue<Integer> gateMDef;
+        private final ForgeConfigSpec.ConfigValue<Integer> gateHealthGain;
+        private final ForgeConfigSpec.ConfigValue<Integer> gateDefGain;
+        private final ForgeConfigSpec.ConfigValue<Integer> gateMDefGain;
         private final ForgeConfigSpec.ConfigValue<Integer> spawnChance;
         private final ForgeConfigSpec.ConfigValue<Integer> gateXP;
         private final ForgeConfigSpec.ConfigValue<Integer> gateMoney;
@@ -57,11 +66,14 @@ public class MobConfig {
             builder.pop();
 
             builder.comment("Gate Configs").push("gate");
-            this.gateHealth = builder.comment("Base health of gates").define("Health", 75);
-            this.gateDef = builder.comment("Base defence of gates").define("Defence", 5);
-            this.gateMDef = builder.comment("Base magic defence of gates").define("Magic Defence", 5);
+            this.gateHealth = builder.comment("Base health of gates").define("Health", 100);
+            this.gateDef = builder.comment("Base defence of gates").define("Defence", 0);
+            this.gateMDef = builder.comment("Base magic defence of gates").define("Magic Defence", 0);
+            this.gateHealthGain = builder.comment("Health gain per level of gates").define("Health Gain", 25);
+            this.gateDefGain = builder.comment("Defence gain per level of gates").define("Defence Gain", 5);
+            this.gateMDefGain = builder.comment("Magic defence gain per level of gates").define("Magic Defence Gain", 5);
             this.spawnChance = builder.comment("Chance for next spawn (1/x chance per tick)").define("Spawn", 150);
-            this.gateXP = builder.comment("Base xp a gate gives").define("XP", 10);
+            this.gateXP = builder.comment("Base xp a gate gives").define("XP", 12);
             this.gateMoney = builder.comment("Money a gate gives").define("Money", 4);
             builder.pop();
             for (Map.Entry<ResourceLocation, EntityProperties> e : MobConfig.propertiesMap.entrySet()) {

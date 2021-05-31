@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.common.entities;
 
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.MobConfig;
 import com.flemmli97.runecraftory.common.config.values.EntityProperties;
 import com.flemmli97.runecraftory.common.entities.monster.ai.HurtByTargetPredicate;
@@ -10,7 +11,9 @@ import com.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.mixin.MoveControllerAccessor;
+import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.flemmli97.tenshilib.api.entity.IAnimated;
 import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.item.SpawnEgg;
@@ -38,6 +41,7 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
@@ -63,6 +67,7 @@ import net.minecraftforge.fml.RegistryObject;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +75,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public abstract class BaseMonster extends CreatureEntity implements IMob, IAnimated, IExtendedMob {
 
@@ -250,14 +257,24 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         return diffAdd;
     }
 
+    private static final Collector<SimpleItemStackWrapper, ?, NonNullList<ItemStack>> itemCollector = Collector.of(NonNullList::create,
+            (l, c)-> l.add(c.getStack()),
+            (l, r)->{
+                l.addAll(r);
+                return l;
+            },
+            Collector.Characteristics.IDENTITY_FINISH);
+
     @Override
     public NonNullList<ItemStack> tamingItem() {
-        return null;
+        return Arrays.stream(this.prop.getTamingItem())
+                .collect(itemCollector);
     }
 
     @Override
     public Map<ItemStack, Integer> dailyDrops() {
-        return null;
+        return this.prop.dailyDrops().entrySet().stream()
+                .collect(Collectors.toMap(e->e.getKey().getStack(), Map.Entry::getValue));
     }
 
     @Override
@@ -533,6 +550,12 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             this.playDeathAnimation();
         }
         ++this.deathTime;
+        if (this.deathTime == (this.maxDeathTime()-5) && this.attackingPlayer instanceof ServerPlayerEntity) {
+            this.attackingPlayer.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->{
+                LevelCalc.addXP((ServerPlayerEntity) this.attackingPlayer, cap, LevelCalc.getMobXP(cap, this));
+                cap.setMoney(this.attackingPlayer, cap.getMoney() + LevelCalc.getMoney(this.baseMoney(), this.level()));
+            });
+        }
         if (this.deathTime == this.maxDeathTime()) {
             this.remove(false); //Forge keep data until we revive player
 
@@ -543,11 +566,6 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
                 this.world.addParticle(ParticleTypes.POOF, this.getParticleX(1.0D), this.getRandomBodyY(), this.getParticleZ(1.0D), d0, d1, d2);
             }
         }
-            /*if (this.deathTime == 5 && this.attackingPlayer != null) {
-                IPlayer cap = this.attackingPlayer.getCapability(PlayerCapProvider.PlayerCap, null);
-                cap.addXp(this.attackingPlayer, LevelCalc.xpFromLevel(this.baseXP(), this.level()));
-                cap.setMoney(this.attackingPlayer, cap.getMoney() + LevelCalc.moneyFromLevel(this.baseMoney(), this.level()));
-            }*/
         //}
     }
 
