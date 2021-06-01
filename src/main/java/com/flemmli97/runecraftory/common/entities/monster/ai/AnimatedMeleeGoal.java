@@ -42,7 +42,7 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
             this.moveToWithDelay(1);
         if (this.attackMoveDelay <= 0)
             this.attackMoveDelay = this.attacker.getRNG().nextInt(50) + 100;
-        AxisAlignedBB aabb = this.attacker.calculateAttackAABB(this.next, this.target);
+        AxisAlignedBB aabb = this.attacker.calculateAttackAABB(this.next, this.target, -0.1);
         //PacketHandler.sendToAll(new S2CAttackDebug(aabb, EnumAABBType.ATTEMPT));
         if (aabb.intersects(this.target.getBoundingBox())) {
             this.movementDone = true;
@@ -73,7 +73,7 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
     public void handleIddle() {
         if (this.iddleMoveDelay <= 0) {
             this.iddleMoveFlag = this.attacker.getRNG().nextInt(3);
-            this.iddleMoveDelay = this.attacker.getRNG().nextInt(35) + 55 - this.iddleMoveFlag * 10;
+            this.iddleMoveDelay = this.attacker.getRNG().nextInt(10) + 7 - this.iddleMoveFlag * 10;
         }
         switch (this.iddleMoveFlag) {
             case 0:

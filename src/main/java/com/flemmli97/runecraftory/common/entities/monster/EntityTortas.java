@@ -69,7 +69,7 @@ public class EntityTortas extends ChargingMonster {
     @Override
     public int animationCooldown(AnimatedAction anim) {
         if (anim != null && anim.getID().equals(spin.getID()))
-            return super.animationCooldown(anim) * 3;
+            return super.animationCooldown(anim) * 2;
         return super.animationCooldown(anim);
     }
 

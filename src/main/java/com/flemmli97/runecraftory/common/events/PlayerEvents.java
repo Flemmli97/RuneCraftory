@@ -81,7 +81,7 @@ public class PlayerEvents {
     @SubscribeEvent
     public void playerAttack(AttackEntityEvent event) {
         PlayerEntity player = event.getPlayer();
-        if (player.getHeldItemMainhand().getItem() instanceof IItemUsable) {
+        if (!player.world.isRemote && player.getHeldItemMainhand().getItem() instanceof IItemUsable) {
             event.setCanceled(true);
             CombatUtils.playerAttackWithItem(player, event.getTarget(), true, true, true);
         }

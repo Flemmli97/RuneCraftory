@@ -27,7 +27,7 @@ public class EntityBuffamoo extends ChargingMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.16);
+        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.18);
         super.applyAttributes();
     }
 

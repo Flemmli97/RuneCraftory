@@ -177,7 +177,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes(Collection<RegistryObject<Attribute>> atts) {
-        AttributeModifierMap.MutableAttribute map = MonsterEntity.createHostileAttributes().add(Attributes.GENERIC_MOVEMENT_SPEED, 0.2);
+        AttributeModifierMap.MutableAttribute map = MonsterEntity.createHostileAttributes().add(Attributes.GENERIC_MOVEMENT_SPEED, 0.22);
         if (atts != null)
             for (RegistryObject<Attribute> att : atts)
                 map.add(att.get());
@@ -244,7 +244,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
             return this.getRNG().nextInt(15) + 10 + diffAdd;
-        return this.getRNG().nextInt(17) + 15 + diffAdd;
+        return this.getRNG().nextInt(17) + 5 + diffAdd;
     }
 
     public int difficultyCooldown() {
@@ -607,6 +607,10 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     public AxisAlignedBB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
+        return this.calculateAttackAABB(anim, target, 0);
+    }
+
+    public AxisAlignedBB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
         double reach = this.maxAttackRange(anim) * 0.5 + this.getWidth() * 0.5;
         Vector3d dir;
         if (target != null && !this.isBeingRidden()) {
@@ -616,7 +620,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             dir = Vector3d.fromPitchYaw(this.rotationPitch, this.rotationYaw);
         }
         Vector3d attackPos = this.getPositionVec().add(dir.scale(reach));
-        return this.attackAABB(anim).offset(attackPos.x, attackPos.y, attackPos.z);
+        return this.attackAABB(anim).grow(grow, 0, grow).offset(attackPos.x, attackPos.y, attackPos.z);
     }
 
     public AxisAlignedBB attackAABB(AnimatedAction anim) {
@@ -814,6 +818,11 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
         } else {
             this.handleLandTravel(vec);
         }
+    }
+
+    @Override
+    protected float getWaterSlowDown() {
+        return 0.83F;
     }
 
     public boolean adjustRotFromRider(LivingEntity rider) {

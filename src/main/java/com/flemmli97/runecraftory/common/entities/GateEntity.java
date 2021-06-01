@@ -200,7 +200,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
         if (!this.spawnList.isEmpty()) {
             int randAmount = this.rand.nextInt(4) + 1;
             List<Entity> nearby = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox().grow(18), entity -> GateEntity.this.spawnList.contains(entity.getType()));
-            if (nearby.size() <= 6) {
+            if (nearby.size() <= 3) {
                 for (int amount = 0; amount < randAmount; ++amount) {
                     double x = this.getX() + this.rand.nextInt(9) - 4.0;
                     double y = this.getY() + this.rand.nextInt(2) - 1.0;

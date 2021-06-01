@@ -52,7 +52,7 @@ public class EntityWooly extends ChargingMonster implements IForgeShearable {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.19);
+        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.2);
         super.applyAttributes();
     }
 
