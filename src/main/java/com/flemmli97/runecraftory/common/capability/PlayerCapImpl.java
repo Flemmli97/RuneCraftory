@@ -22,6 +22,7 @@ import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.utils.CustomDamage;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
+import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -56,6 +57,7 @@ import javax.annotation.Nonnull;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<CompoundNBT> {
 
@@ -74,6 +76,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     private Map<Attribute, Double> feetBonus = new HashMap<>();
     private Map<Attribute, Double> mainHandBonus = new HashMap<>();
     private Map<Attribute, Double> offHandBonus = new HashMap<>();
+    private float shieldEfficiency = -1;
 
     private Map<ResourceLocation, Integer> shippedItems = new HashMap<>();
     private Map<EnumShop, NonNullList<ItemStack>> shopItems = new HashMap<>();
@@ -350,6 +353,10 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
                 break;
             case MAINHAND:
                 this.mainHandBonus = ItemNBT.statIncrease(stack);
+                float eff = this.shieldEfficiency;
+                this.shieldEfficiency = ItemUtils.getShieldEfficiency(player);
+                if(eff != this.shieldEfficiency && !this.offHandBonus.isEmpty())
+                    this.updateEquipmentStats(player, EquipmentSlotType.OFFHAND);
                 if (player.world.isRemote) {
                     stack.getAttributeModifiers(slot).forEach((att, mod) ->
                             this.mainHandBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
@@ -357,7 +364,9 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
                 }
                 break;
             case OFFHAND:
-                this.offHandBonus = ItemNBT.statIncrease(stack);
+                Map<Attribute, Double> inc = stack.getItem().isShield(stack, player) ? ItemNBT.statIncrease(stack) : new TreeMap<>(ModAttributes.sorted);
+                inc.replaceAll((att, val)->this.shieldEfficiency * val);
+                this.offHandBonus = inc;
                 if (player.world.isRemote) {
                     stack.getAttributeModifiers(slot).forEach((att, mod) ->
                             this.offHandBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));

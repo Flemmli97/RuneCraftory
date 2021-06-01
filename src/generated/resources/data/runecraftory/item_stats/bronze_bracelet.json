@@ -1,6 +1,6 @@
 {
-  "buyPrice": 100,
-  "sellPrice": 25,
+  "buyPrice": 150,
+  "sellPrice": 21,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "itemStats": {

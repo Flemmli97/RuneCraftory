@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory.common.utils;
 import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.api.enums.EnumCrafting;
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
+import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
 import com.flemmli97.runecraftory.common.crafting.SextupleRecipe;
@@ -112,5 +113,11 @@ public class ItemUtils {
         ItemStack output = stack.copy();
         ItemNBT.addUpgradeItem(output, ing);
         return output;
+    }
+
+    public static float getShieldEfficiency(PlayerEntity player){
+        if(player.getHeldItemMainhand().getItem() instanceof IItemUsable)
+            return ((IItemUsable)player.getHeldItemMainhand().getItem()).getWeaponType().getShieldEfficiency();
+        return 1;
     }
 }

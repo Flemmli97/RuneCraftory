@@ -39,6 +39,7 @@ import com.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import com.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import com.flemmli97.runecraftory.common.items.weapons.shortsword.ItemSeedSword;
 import net.minecraft.block.Block;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.BlockNamedItem;
@@ -1268,7 +1269,12 @@ public class ModItems {
     }
 
     public static RegistryObject<Item> shield(String name) {
-        return ITEMS.register(name, () -> new ShieldItem(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.equipment)));
+        return ITEMS.register(name, () -> new ShieldItem(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.equipment)){
+            @Override
+            public boolean isShield(ItemStack stack, LivingEntity entity) {
+                return true;
+            }
+        });
     }
 
     public static RegistryObject<Item> blockItem(String name, Supplier<Supplier<Block>> block) {

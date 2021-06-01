@@ -55,7 +55,7 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
 
     @Override
     public EnumWeaponType getWeaponType() {
-        return EnumWeaponType.HAXE;
+        return EnumWeaponType.FARM;
     }
 
     @Override
