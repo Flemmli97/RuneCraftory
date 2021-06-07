@@ -1,8 +1,11 @@
 package com.flemmli97.runecraftory.common.inventory.container;
 
+import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -69,7 +72,25 @@ public class CraftingOutputSlot extends Slot {
             return ItemStack.EMPTY;
         NonNullList<ItemStack> remaining = this.container.getCurrentRecipe() != null ? this.container.getCurrentRecipe().getRemainingItems(this.ingredientInv) : NonNullList.withSize(0, ItemStack.EMPTY);
         if (this.container.rpCost() >= 0)
-            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.decreaseRunePoints(player, this.container.rpCost(), true));
+            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
+                cap.decreaseRunePoints(player, this.container.rpCost(), true);
+                if(this.container.getCurrentRecipe() != null)
+                    switch (this.container.craftingType()){
+                        case FORGE:
+                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.FORGING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel()-cap.getSkillLevel(EnumSkills.FORGING)[0])*0.5f);
+                            break;
+                        case ARMOR:
+                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CRAFTING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel()-cap.getSkillLevel(EnumSkills.CRAFTING)[0])*0.5f);
+                            break;
+                        case CHEM:
+                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CHEMISTRY, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel()-cap.getSkillLevel(EnumSkills.CHEMISTRY)[0])*0.5f);
+                            break;
+                        case COOKING:
+                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.COOKING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel()-cap.getSkillLevel(EnumSkills.COOKING)[0])*0.5f);
+                            break;
+                    }
+            });
+
         boolean refreshRecipe = false;
         for (int i = 0; i < remaining.size(); ++i) {
             ItemStack itemstack = this.ingredientInv.getStackInSlot(i);

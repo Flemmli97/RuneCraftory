@@ -71,13 +71,35 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable {
     @Override
     public void onEntityHit(ServerPlayerEntity player) {
         player.getCapability(CapabilityInsts.PlayerCap)
-                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 1));
+                .ifPresent(cap -> {
+                    switch (this.startElement) {
+                        case WATER:
+                            LevelCalc.levelSkill(player, cap, EnumSkills.WATER, 0.8f);
+                            break;
+                        case EARTH:
+                            LevelCalc.levelSkill(player, cap, EnumSkills.EARTH, 0.8f);
+                            break;
+                        case WIND:
+                            LevelCalc.levelSkill(player, cap, EnumSkills.WIND, 0.8f);
+                            break;
+                        case FIRE:
+                            LevelCalc.levelSkill(player, cap, EnumSkills.FIRE, 0.8f);
+                            break;
+                        case LIGHT:
+                            LevelCalc.levelSkill(player, cap, EnumSkills.LIGHT, 0.8f);
+                            break;
+                        case DARK:
+                            LevelCalc.levelSkill(player, cap, EnumSkills.DARK, 0.8f);
+                            break;
+                        case LOVE:
+                            LevelCalc.levelSkill(player, cap, EnumSkills.LOVE, 0.8f);
+                            break;
+                    }});
     }
 
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
-        player.getCapability(CapabilityInsts.PlayerCap)
-                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, 0.5f));
+
     }
 
     @Override

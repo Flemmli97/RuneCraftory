@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.common.items.tools;
 
+import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import com.flemmli97.runecraftory.api.enums.EnumToolTier;
 import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
@@ -10,6 +11,7 @@ import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.lib.ItemTiers;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.block.BlockState;
@@ -89,12 +91,17 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
 
     @Override
     public void onEntityHit(ServerPlayerEntity player) {
-
+        player.getCapability(CapabilityInsts.PlayerCap)
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.WATER, 0.3f));
     }
 
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
-
+        player.getCapability(CapabilityInsts.PlayerCap)
+                .ifPresent(cap -> {
+                    LevelCalc.levelSkill(player, cap, EnumSkills.FARMING, this.tier.getTierLevel()*0.5f + 1);
+                    LevelCalc.levelSkill(player, cap, EnumSkills.WATER, this.tier.getTierLevel()*0.4f + 0.5f);
+                });
     }
 
     @Override

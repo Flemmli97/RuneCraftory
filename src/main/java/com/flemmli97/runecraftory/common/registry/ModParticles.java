@@ -19,6 +19,7 @@ public class ModParticles {
     public static final RegistryObject<ParticleType<ColoredParticleData>> smoke = registerColoredParticleType("smoke", false);
     public static final RegistryObject<ParticleType<ColoredParticleData>> blink = registerColoredParticleType("blink", false);
     public static final RegistryObject<ParticleType<ColoredParticleData>> staticLight = registerColoredParticleType("static_light", false);
+    public static final RegistryObject<ParticleType<ColoredParticleData>> circlingLight = registerColoredParticleType("circling_light", false);
     public static final RegistryObject<ParticleType<ColoredParticleData>> wind = registerColoredParticleType("static_effect", false);
     public static final RegistryObject<BasicParticleType> sleep = PARTICLES.register("sleep", () -> new BasicParticleType(false));
     public static final RegistryObject<BasicParticleType> poison = PARTICLES.register("poison", () -> new BasicParticleType(false));

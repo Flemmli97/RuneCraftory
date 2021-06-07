@@ -93,11 +93,11 @@ public class GeneralConfigSpec {
         this.startingStr = builder.comment("Starting strength value. 1 strength = 1 attack damage").define("Starting Strength", 0);
         this.startingVit = builder.comment("Starting vitality value. 1 vitality = 0.5 defence & magic defence").define("Starting Vit", 0);
         this.startingIntel = builder.comment("Starting intelligence value. 1 intelligence = 1 magic damage").define("Starting Int", 1);
-        this.hpPerLevel = builder.comment("HP increase per level").define("HP Increase", 10.0);
+        this.hpPerLevel = builder.comment("HP increase per level").define("HP Increase", 4.0);
         this.rpPerLevel = builder.comment("RP increase per level").define("RP Increase", 5);
-        this.strPerLevel = builder.comment("Strenghth increase per level").define("Strength Increase", 2.0);
-        this.vitPerLevel = builder.comment("Vitality increase per level").define("Vit Increase", 2.0);
-        this.intPerLevel = builder.comment("Intelligence increase per level").define("Int Increase", 2.0);
+        this.strPerLevel = builder.comment("Strenghth increase per level").define("Strength Increase", 0.8);
+        this.vitPerLevel = builder.comment("Vitality increase per level").define("Vit Increase", 1.0);
+        this.intPerLevel = builder.comment("Intelligence increase per level").define("Int Increase", 0.8);
         GeneralConfig.skillProps.forEach((type, prop) -> {
             builder.push(type.toString());
             this.skillProps.put(type, new SkillPropertySpecs(builder, prop));

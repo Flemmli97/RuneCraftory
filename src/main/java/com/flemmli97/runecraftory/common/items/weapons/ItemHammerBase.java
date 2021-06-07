@@ -79,7 +79,7 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
         player.getCapability(CapabilityInsts.PlayerCap)
-                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, 0.5f));
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.MINING, 0.5f));
     }
 
     @Override

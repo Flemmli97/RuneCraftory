@@ -17,6 +17,7 @@ import com.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
 import com.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
 import com.flemmli97.runecraftory.client.model.monster.ModelTortas;
 import com.flemmli97.runecraftory.client.model.monster.ModelWeagle;
+import com.flemmli97.runecraftory.client.particles.CirclingParticle;
 import com.flemmli97.runecraftory.client.particles.ColoredParticle;
 import com.flemmli97.runecraftory.client.particles.SinkingParticle;
 import com.flemmli97.runecraftory.client.render.RenderGate;
@@ -138,10 +139,10 @@ public class ClientRegister {
         manager.registerFactory(ModParticles.blink.get(), ColoredParticle.LightParticleFactory::new);
         manager.registerFactory(ModParticles.smoke.get(), ColoredParticle.LightParticleFactory::new);
         manager.registerFactory(ModParticles.staticLight.get(), ColoredParticle.NoGravityParticleFactory::new);
+        manager.registerFactory(ModParticles.circlingLight.get(), CirclingParticle.CirclingFactoryBase::new);
         manager.registerFactory(ModParticles.wind.get(), ColoredParticle.NoGravityParticleFactory::new);
         manager.registerFactory(ModParticles.sleep.get(), HeartParticle.Factory::new);
         manager.registerFactory(ModParticles.poison.get(), HeartParticle.Factory::new);
-
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T>> IRenderFactory<? super T> getMonsterRender(M model, ResourceLocation texture) {

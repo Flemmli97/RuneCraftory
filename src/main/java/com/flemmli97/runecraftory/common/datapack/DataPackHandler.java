@@ -11,6 +11,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.event.AddReloadListenerEvent;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class DataPackHandler {
 
@@ -25,8 +26,8 @@ public class DataPackHandler {
     }
 
     @Nullable
-    public static ItemStat getStats(Item item) {
-        return itemStats.get(item);
+    public static Optional<ItemStat> getStats(Item item) {
+        return Optional.ofNullable(itemStats.get(item));
     }
 
     public static CropProperties getCropStat(Item item) {

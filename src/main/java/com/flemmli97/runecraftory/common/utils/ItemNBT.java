@@ -26,6 +26,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 public class ItemNBT {
@@ -90,13 +91,8 @@ public class ItemNBT {
                         map.put(att, tag.getDouble(attName));
                 }
             }
-        } else {
-            ItemStat stat = DataPackHandler.getStats(stack.getItem());
-            if (stat != null) {
-                return stat.itemStats();
-            }
         }
-        return map;
+        return DataPackHandler.getStats(stack.getItem()).map(ItemStat::itemStats).orElse(map);
     }
 
     public static void setElement(EnumElement element, ItemStack stack) {
@@ -147,10 +143,10 @@ public class ItemNBT {
             upgrades.add(upgradeItem);
             tag.put(LibNBT.Upgrades, upgrades);
             if (!shouldHaveStats(stackToAdd)) {
-                ItemStat stat = DataPackHandler.getStats(stackToAdd.getItem());
-                if (stat != null) {
+                float effRes = efficiency;
+                DataPackHandler.getStats(stackToAdd.getItem()).ifPresent(stat->{
                     for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {
-                        updateStatIncrease(entry.getKey(), entry.getValue() * efficiency, tag);
+                        updateStatIncrease(entry.getKey(), entry.getValue() * effRes, tag);
                     }
                     if (stat.element() != EnumElement.NONE) {
                         if (EnumElement.valueOf(tag.getString(LibNBT.Element)) == EnumElement.NONE) {
@@ -169,7 +165,7 @@ public class ItemNBT {
                                 cap.setTier3Spell(stat.getTier3Spell());
                         });
                     }
-                }
+                });
             }
         }
     }
@@ -195,8 +191,8 @@ public class ItemNBT {
     }
 
     public static boolean initNBT(ItemStack stack, boolean forced) {
-        ItemStat stat = DataPackHandler.getStats(stack.getItem());
-        if (stat != null || forced) {
+        Optional<ItemStat> ostat = DataPackHandler.getStats(stack.getItem());
+        if (ostat.isPresent() || forced) {
             if (shouldHaveStats(stack)) {
                 CompoundNBT stackTag = stack.getOrCreateTag();
                 CompoundNBT compound = stackTag.getCompound(RuneCraftory.MODID);
@@ -205,7 +201,7 @@ public class ItemNBT {
 
                 if (!compound.contains(LibNBT.Upgrades))
                     compound.put(LibNBT.Upgrades, new ListNBT());
-                if (stat != null) {
+                ostat.ifPresent(stat->{
                     if (!compound.contains(LibNBT.Stats)) {
                         CompoundNBT stats = new CompoundNBT();
                         for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {
@@ -227,7 +223,7 @@ public class ItemNBT {
                                 cap.setTier3Spell(stat.getTier3Spell());
                         });
                     }
-                }
+                });
                 stackTag.put(RuneCraftory.MODID, compound);
                 stack.setTag(stackTag);
                 return true;

@@ -47,11 +47,7 @@ public class ItemUtils {
     }
 
     public static int getSellPrice(ItemStack stack) {
-        ItemStat price = DataPackHandler.getStats(stack.getItem());
-        if (price != null) {
-            return getSellPrice(stack, price);
-        }
-        return 0;
+        return DataPackHandler.getStats(stack.getItem()).map(stat->getSellPrice(stack, stat)).orElse(0);
     }
 
     public static int getSellPrice(ItemStack stack, ItemStat stat) {
@@ -59,11 +55,7 @@ public class ItemUtils {
     }
 
     public static int getBuyPrice(ItemStack stack) {
-        ItemStat price = DataPackHandler.getStats(stack.getItem());
-        if (price != null) {
-            return getBuyPrice(stack, price);
-        }
-        return 0;
+        return DataPackHandler.getStats(stack.getItem()).map(stat->getBuyPrice(stack, stat)).orElse(0);
     }
 
     public static int getBuyPrice(ItemStack stack, ItemStat stat) {
@@ -80,12 +72,13 @@ public class ItemUtils {
 
     public static int upgradeCost(EnumCrafting type, IPlayerCap cap, ItemStack stack, ItemStack ingredient, boolean onlyIngredient) {
         int level = ItemNBT.itemLevel(stack);
-        ItemStat stat = DataPackHandler.getStats(ingredient.getItem());
-        if ((onlyIngredient || !stack.isEmpty()) && stat != null) {
-            int skillLevel = type == EnumCrafting.FORGE ? cap.getSkillLevel(EnumSkills.FORGING)[0] : cap.getSkillLevel(EnumSkills.CRAFTING)[0];
-            return level * (Math.max(1, stat.getDiff() - skillLevel)) * 3;
-        }
-        return -1;
+        return DataPackHandler.getStats(ingredient.getItem()).map(stat->{
+            if (onlyIngredient || !stack.isEmpty()) {
+                int skillLevel = type == EnumCrafting.FORGE ? cap.getSkillLevel(EnumSkills.FORGING)[0] : cap.getSkillLevel(EnumSkills.CRAFTING)[0];
+                return level * (Math.max(1, stat.getDiff() - skillLevel)) * 3;
+            }
+            return -1;
+        }).orElse(-1);
     }
 
     public static int craftingCost(EnumCrafting type, IPlayerCap cap, SextupleRecipe recipe) {

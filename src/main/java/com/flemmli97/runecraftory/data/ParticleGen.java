@@ -39,6 +39,7 @@ public class ParticleGen implements IDataProvider {
                 new ResourceLocation("generic_1"), new ResourceLocation("generic_0"));
         this.addTo(ModParticles.light.get());
         this.addTo(ModParticles.staticLight.get(), ModParticles.light.getId());
+        this.addTo(ModParticles.circlingLight.get(), ModParticles.light.getId());
         this.addTo(ModParticles.cross.get());
         this.addTo(ModParticles.blink.get());
         this.addTo(ModParticles.smoke.get(), 4);

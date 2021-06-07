@@ -58,13 +58,12 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     @Override
     public void onEntityHit(ServerPlayerEntity player) {
         player.getCapability(CapabilityInsts.PlayerCap)
-                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 1));
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.FIST, 1));
     }
 
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
-        player.getCapability(CapabilityInsts.PlayerCap)
-                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, 0.5f));
+
     }
 
     @Override

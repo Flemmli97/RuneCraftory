@@ -1,5 +1,6 @@
 package com.flemmli97.runecraftory.common.items.tools;
 
+import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import com.flemmli97.runecraftory.api.enums.EnumToolTier;
 import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
@@ -9,6 +10,7 @@ import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.lib.ItemTiers;
 import com.flemmli97.runecraftory.common.registry.ModTags;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
@@ -89,17 +91,17 @@ public class ItemToolSickle extends ToolItem implements IItemUsable, IChargeable
 
     @Override
     public void onEntityHit(ServerPlayerEntity player) {
-
+        player.getCapability(CapabilityInsts.PlayerCap)
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.WIND, 0.3f));
     }
 
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
-        /*
-        IPlayer cap = player.getCapability(PlayerCapProvider.PlayerCap, null);
-        cap.decreaseRunePoints(player, this.chargeRunes[0]);
-        cap.increaseSkill(EnumSkills.WIND, player, this.tier.getTierLevel() + 1);
-        cap.increaseSkill(EnumSkills.FARMING, player, this.tier.getTierLevel() + 1);
-         */
+        player.getCapability(CapabilityInsts.PlayerCap)
+                .ifPresent(cap -> {
+                    LevelCalc.levelSkill(player, cap, EnumSkills.FARMING, this.tier.getTierLevel()*0.5f + 1);
+                    LevelCalc.levelSkill(player, cap, EnumSkills.WIND, this.tier.getTierLevel()*0.4f + 0.5f);
+                });
     }
 
     @Override

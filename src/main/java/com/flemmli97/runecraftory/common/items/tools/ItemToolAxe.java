@@ -1,12 +1,15 @@
 package com.flemmli97.runecraftory.common.items.tools;
 
+import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import com.flemmli97.runecraftory.api.enums.EnumToolTier;
 import com.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import com.flemmli97.runecraftory.api.items.IChargeable;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.lib.ItemTiers;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.entity.LivingEntity;
@@ -65,12 +68,14 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
 
     @Override
     public void onEntityHit(ServerPlayerEntity player) {
-
+        player.getCapability(CapabilityInsts.PlayerCap)
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 0.5f));
     }
 
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
-
+        player.getCapability(CapabilityInsts.PlayerCap)
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, this.tier.getTierLevel()*0.5f + 1));
     }
 
     @Override

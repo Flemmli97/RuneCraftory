@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.client;
 
 import com.flemmli97.runecraftory.api.datapack.CropProperties;
 import com.flemmli97.runecraftory.api.datapack.FoodProperties;
-import com.flemmli97.runecraftory.api.datapack.ItemStat;
 import com.flemmli97.runecraftory.client.gui.widgets.SkillButton;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.ClientConfig;
@@ -119,10 +118,7 @@ public class ClientEvents {
     private List<ITextComponent> injectAdditionalTooltip(ItemStack stack) {
         List<ITextComponent> tooltip = new ArrayList<>();
         boolean shift = Screen.hasShiftDown();
-        ItemStat stat = DataPackHandler.getStats(stack.getItem());
-        if (stat != null) {
-            tooltip.addAll(stat.texts(stack, shift));
-        }
+        DataPackHandler.getStats(stack.getItem()).ifPresent(stat->tooltip.addAll(stat.texts(stack, shift)));
         CropProperties props = DataPackHandler.getCropStat(stack.getItem());
         if (props != null) {
             tooltip.addAll(props.texts());
