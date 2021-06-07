@@ -3,6 +3,7 @@ package com.flemmli97.runecraftory.common.events;
 import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.api.datapack.FoodProperties;
 import com.flemmli97.runecraftory.api.datapack.SimpleEffect;
+import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -19,6 +20,7 @@ import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModTags;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
 import com.flemmli97.runecraftory.common.utils.EntityUtils;
+import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.world.WorldHandler;
 import com.flemmli97.tenshilib.api.event.AOEAttackEvent;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -40,7 +42,10 @@ import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
+import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
@@ -238,6 +243,23 @@ public class PlayerEvents {
     public void hoeTill(BlockEvent.BlockToolInteractEvent event) {
         if (event.getToolType() == ToolType.HOE && event.getFinalState() != null && event.getFinalState().isIn(ModTags.farmlandTill)) {
             event.setFinalState(ModBlocks.farmland.get().getDefaultState());
+        }
+    }
+
+    @SubscribeEvent
+    public void sleep(SleepingTimeCheckEvent event) {
+        event.setResult(Event.Result.ALLOW);
+    }
+
+    @SubscribeEvent
+    public void wakeUp(PlayerWakeUpEvent event) {
+        if(!event.getPlayer().world.isRemote) {
+            ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->{
+                cap.regenHealth(player, cap.getMaxHealth(player));
+                cap.refreshRunePoints(player, cap.getMaxRunePoints());
+                LevelCalc.levelSkill(player, cap, EnumSkills.SLEEPING, 1);
+            });
         }
     }
 }
