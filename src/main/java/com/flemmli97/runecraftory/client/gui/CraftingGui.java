@@ -25,6 +25,7 @@ public class CraftingGui extends ContainerScreen<ContainerCrafting> {
 
     @Override
     protected void drawBackground(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+
         /*switch (this.container.craftingType()) {
             case ARMOR:
                 this.client.getTextureManager().bindTexture(crafting);
@@ -52,6 +53,7 @@ public class CraftingGui extends ContainerScreen<ContainerCrafting> {
 
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(stack);
         super.render(stack, mouseX, mouseY, partialTicks);
         this.drawMouseoverTooltip(stack, mouseX, mouseY);
     }

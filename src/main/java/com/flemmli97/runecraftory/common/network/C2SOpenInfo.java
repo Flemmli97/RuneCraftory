@@ -3,7 +3,9 @@ package com.flemmli97.runecraftory.common.network;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.inventory.container.ContainerInfoScreen;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.play.server.SSetSlotPacket;
 import net.minecraftforge.fml.network.NetworkEvent;
 import net.minecraftforge.fml.network.NetworkHooks;
 
@@ -38,6 +40,15 @@ public class C2SOpenInfo {
                         PacketHandler.sendToClient(new S2CCapSync(player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"))), player);
                         NetworkHooks.openGui(player, ContainerInfoScreen.createSub());
                         break;
+                    case INV:
+                        ItemStack stack = player.inventory.getItemStack();
+                        player.inventory.setItemStack(ItemStack.EMPTY);
+                        player.closeContainer();
+                        if(!stack.isEmpty()){
+                            player.inventory.setItemStack(stack);
+                            player.connection.sendPacket(new SSetSlotPacket(-1, -1, stack));
+                        }
+                        break;
                 }
             }
         });
@@ -46,6 +57,7 @@ public class C2SOpenInfo {
 
     public enum Type {
         MAIN,
-        SUB
+        SUB,
+        INV
     }
 }

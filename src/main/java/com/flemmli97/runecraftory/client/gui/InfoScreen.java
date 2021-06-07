@@ -15,6 +15,7 @@ import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.StringTextComponent;
@@ -45,6 +46,14 @@ public class InfoScreen extends DisplayEffectsScreen<Container> {
 
     protected void buttons() {
         this.addButton(new PageButton(this.guiLeft + 206, this.guiTop + 5, new StringTextComponent(">"), b -> PacketHandler.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.SUB))));
+        this.addButton(new PageButton(this.guiLeft + 193, this.guiTop + 5, new StringTextComponent("<"), b -> {
+            InventoryScreen inventory = new InventoryScreen(this.client.player);
+            ItemStack stack = this.client.player.inventory.getItemStack();
+            this.client.player.inventory.setItemStack(ItemStack.EMPTY);
+            this.client.displayGuiScreen(inventory);
+            this.client.player.inventory.setItemStack(stack);
+            PacketHandler.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.INV));
+        }));
     }
 
     @Override
@@ -106,6 +115,7 @@ public class InfoScreen extends DisplayEffectsScreen<Container> {
 
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(stack);
         super.render(stack, mouseX, mouseY, partialTicks);
         this.drawMouseoverTooltip(stack, mouseX, mouseY);
     }
