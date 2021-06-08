@@ -6,12 +6,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.ImpossibleTrigger;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
 import net.minecraft.data.IFinishedRecipe;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,7 +27,6 @@ public class RecipeBuilder {
     private final ItemStack result;
     private final int level, cost;
     private final List<Ingredient> ingredients = new ArrayList<>();
-    private final Advancement.Builder advancementBuilder = Advancement.Builder.builder();
     private String group;
     private final IRecipeSerializer<?> serializer;
 
@@ -103,19 +96,6 @@ public class RecipeBuilder {
         return this;
     }
 
-    public RecipeBuilder addCriterion(String name, ICriterionInstance criterion) {
-        this.advancementBuilder.withCriterion(name, criterion);
-        return this;
-    }
-
-    public RecipeBuilder dummyCriterion() {
-        return this.addCriterion("dummy", new ImpossibleTrigger.Instance());
-    }
-
-    public RecipeBuilder dummyCriterion(String name) {
-        return this.addCriterion(name, new ImpossibleTrigger.Instance());
-    }
-
     public RecipeBuilder setGroup(String group) {
         this.group = group;
         return this;
@@ -131,8 +111,7 @@ public class RecipeBuilder {
 
     public void build(Consumer<IFinishedRecipe> cons, ResourceLocation res) {
         this.validate(res);
-        this.advancementBuilder.withParentId(new ResourceLocation("recipes/root")).withCriterion("has_the_recipe", RecipeUnlockedTrigger.create(res)).withRewards(AdvancementRewards.Builder.recipe(res)).withRequirementsStrategy(IRequirementsStrategy.OR);
-        cons.accept(new Result(res, this.result, this.level, this.cost, this.group == null ? "" : this.group, this.ingredients, this.advancementBuilder, new ResourceLocation(res.getNamespace(), "recipes/" + this.result.getItem().getGroup().getPath() + "/" + res.getPath())) {
+        cons.accept(new Result(res, this.result, this.level, this.cost, this.group == null ? "" : this.group, this.ingredients, new ResourceLocation(res.getNamespace(), "recipes/" + this.result.getItem().getGroup().getPath() + "/" + res.getPath())) {
             @Override
             public IRecipeSerializer<?> getSerializer() {
                 return RecipeBuilder.this.serializer;
@@ -141,8 +120,6 @@ public class RecipeBuilder {
     }
 
     private void validate(ResourceLocation res) {
-        if (this.advancementBuilder.getCriteria().isEmpty())
-            throw new IllegalStateException("No way of obtaining recipe " + res);
         if (this.ingredients.size() > 6)
             throw new IllegalStateException("Recipe " + res + " too big. Max size is 6");
     }
@@ -154,17 +131,15 @@ public class RecipeBuilder {
         private final int level, cost;
         private final String group;
         private final List<Ingredient> ingredients;
-        private final Advancement.Builder advancementBuilder;
         private final ResourceLocation advancementId;
 
-        public Result(ResourceLocation res, ItemStack output, int level, int cost, String group, List<Ingredient> ingredients, Advancement.Builder advancements, ResourceLocation advancementID) {
+        public Result(ResourceLocation res, ItemStack output, int level, int cost, String group, List<Ingredient> ingredients, ResourceLocation advancementID) {
             this.id = res;
             this.result = output;
             this.level = level;
             this.cost = cost;
             this.group = group;
             this.ingredients = ingredients;
-            this.advancementBuilder = advancements;
             this.advancementId = advancementID;
         }
 
@@ -208,7 +183,7 @@ public class RecipeBuilder {
         @Override
         @Nullable
         public JsonObject getAdvancementJson() {
-            return this.advancementBuilder.serialize();
+            return null;
         }
 
         @Override

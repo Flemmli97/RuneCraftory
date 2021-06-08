@@ -6,15 +6,15 @@ import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.IFinishedRecipe;
+import net.minecraft.data.RecipeProvider;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.Items;
 import net.minecraft.tags.ItemTags;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.ForgeRecipeProvider;
 
 import java.util.function.Consumer;
 
-public class RecipesGen extends ForgeRecipeProvider {
+public class RecipesGen extends RecipeProvider {
 
     public RecipesGen(DataGenerator generator) {
         super(generator);
@@ -74,28 +74,21 @@ public class RecipesGen extends ForgeRecipeProvider {
                 .build(consumer);
 
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.broadSword.get(), 1, 1, 20)
-                .addIngredient(ModTags.minerals)
-                .dummyCriterion().build(consumer);
+                .addIngredient(ModTags.minerals).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.claymore.get(), 1, 3, 25)
-                .addIngredient(ModTags.minerals)
-                .dummyCriterion().build(consumer);
+                .addIngredient(ModTags.minerals).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.spear.get(), 1, 3, 25)
-                .addIngredient(ModTags.minerals)
-                .dummyCriterion().build(consumer);
+                .addIngredient(ModTags.minerals).build(consumer);
 
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.cheapBracelet.get(), 1, 1, 15)
-                .addIngredient(ModTags.minerals)
-                .dummyCriterion().build(consumer);
+                .addIngredient(ModTags.minerals).build(consumer);
 
         RecipeBuilder.create(EnumCrafting.CHEM, ModItems.recoveryPotion.get(), 3, 1, 30)
-                .addIngredient(ModItems.medicinalHerb.get())
-                .dummyCriterion().build(consumer);
+                .addIngredient(ModItems.medicinalHerb.get()).build(consumer);
 
         RecipeBuilder.create(EnumCrafting.COOKING, ModItems.onigiri.get(), 1, 1, 10)
-                .addIngredient(ModItems.rice.get())
-                .dummyCriterion().build(consumer);
+                .addIngredient(ModItems.rice.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.COOKING, ModItems.squidSashimi.get(), 1, 5, 15)
-                .addIngredient(ModItems.squid.get())
-                .dummyCriterion().build(consumer);
+                .addIngredient(ModItems.squid.get()).build(consumer);
     }
 }

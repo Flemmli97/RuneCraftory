@@ -1,20 +1,21 @@
 package com.flemmli97.runecraftory.data;
 
+import com.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
 import com.flemmli97.runecraftory.common.registry.ModTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.data.BlockTagsProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.tags.BlockTags;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.common.data.ForgeBlockTagsProvider;
 import net.minecraftforge.fml.RegistryObject;
 
-public class BlockTagGen extends ForgeBlockTagsProvider {
+public class BlockTagGen extends BlockTagsProvider {
 
     public BlockTagGen(DataGenerator gen, ExistingFileHelper existingFileHelper) {
-        super(gen, existingFileHelper);
+        super(gen, RuneCraftory.MODID, existingFileHelper);
     }
 
     @Override
