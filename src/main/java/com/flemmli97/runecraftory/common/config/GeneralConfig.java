@@ -14,6 +14,7 @@ public class GeneralConfig {
     public static boolean disableVanillaSpawning;
     public static boolean randomDamage;
     public static boolean dropVanillaLoot = true;
+    public static int recipeSystem = 0;
 
     public static boolean crops;
     public static boolean rp;
@@ -65,6 +66,7 @@ public class GeneralConfig {
         gateSpawning = GeneralConfigSpec.generalConf.gateSpawning.get();
         disableVanillaSpawning = GeneralConfigSpec.generalConf.disableVanillaSpawning.get();
         randomDamage = GeneralConfigSpec.generalConf.randomDamage.get();
+        recipeSystem = GeneralConfigSpec.generalConf.recipeSystem.get();
 
         startingHealth = GeneralConfigSpec.generalConf.startingHealth.get();
         startingRP = GeneralConfigSpec.generalConf.startingRP.get();

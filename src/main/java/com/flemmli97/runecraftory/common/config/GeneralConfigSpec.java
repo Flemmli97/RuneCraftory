@@ -19,6 +19,7 @@ public class GeneralConfigSpec {
     public final ForgeConfigSpec.BooleanValue gateSpawning;
     public final ForgeConfigSpec.BooleanValue disableVanillaSpawning;
     public final ForgeConfigSpec.BooleanValue randomDamage;
+    public final ForgeConfigSpec.ConfigValue<Integer> recipeSystem;
 
     /*
     public final boolean crops;
@@ -72,6 +73,8 @@ public class GeneralConfigSpec {
         this.gateSpawning = builder.comment("Should gates spawn? If disabled will also disable all mobs from this mod to spawn. Needs server restart").define("Gate Spawning", true);
         this.disableVanillaSpawning = builder.comment("If enabled mobs can only spawn through gates.").define("Disable vanilla spawn", false);
         this.randomDamage = builder.comment("If enabled damage gets a +-10% randomness.").define("Random Damage", true);
+        this.recipeSystem = builder.comment("The recipe system to use.", "0 = Only unlocked recipes are craftable and crafting skill influence the rp cost", "1 = Unlocked recipes are craftable and rp cost are the base cost.",
+                "2 = All recipes are craftable without unlocking but crafting skill influence the cost.", "3 = All craftable and only base cost taken into consideration.").define("Recipe System", 0);
         builder.pop();
 
         builder.push("Multipliers");

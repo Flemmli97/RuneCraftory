@@ -6,6 +6,7 @@ import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.api.items.IItemUsable;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.capability.IPlayerCap;
+import com.flemmli97.runecraftory.common.config.GeneralConfig;
 import com.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import com.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import com.flemmli97.runecraftory.common.registry.ModItems;
@@ -82,6 +83,8 @@ public class ItemUtils {
     }
 
     public static int craftingCost(EnumCrafting type, IPlayerCap cap, SextupleRecipe recipe) {
+        if (GeneralConfig.recipeSystem == 1 || GeneralConfig.recipeSystem == 3)
+            return recipe.getBaseCost();
         int skillLevel = 0;
         switch (type) {
             case FORGE:

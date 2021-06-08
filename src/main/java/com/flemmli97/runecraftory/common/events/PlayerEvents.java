@@ -16,6 +16,7 @@ import com.flemmli97.runecraftory.common.network.S2CCapSync;
 import com.flemmli97.runecraftory.common.network.S2CDataPackSync;
 import com.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
 import com.flemmli97.runecraftory.common.registry.ModBlocks;
+import com.flemmli97.runecraftory.common.registry.ModCrafting;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.flemmli97.runecraftory.common.registry.ModTags;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -23,6 +24,7 @@ import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.flemmli97.runecraftory.common.world.WorldHandler;
 import com.flemmli97.tenshilib.api.event.AOEAttackEvent;
+import com.google.common.collect.Sets;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -34,6 +36,7 @@ import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -49,6 +52,7 @@ import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
+import java.util.Set;
 
 public class PlayerEvents {
 
@@ -66,6 +70,18 @@ public class PlayerEvents {
                     cap.setHealth(event.getPlayer(), cap.getMaxHealth(event.getPlayer()));
                 });
             }
+            if (GeneralConfig.recipeSystem > 1) {
+                if (!playerData.getBoolean(RuneCraftory.MODID + ":unlockrecipes")) {
+                    playerData.putBoolean(RuneCraftory.MODID + ":unlockrecipes", true);
+                    Set<ResourceLocation> allRecipes = Sets.newHashSet();
+                    event.getPlayer().world.getRecipeManager().listAllOfType(ModCrafting.FORGE).forEach(r -> allRecipes.add(r.getId()));
+                    event.getPlayer().world.getRecipeManager().listAllOfType(ModCrafting.CHEMISTRY).forEach(r -> allRecipes.add(r.getId()));
+                    event.getPlayer().world.getRecipeManager().listAllOfType(ModCrafting.ARMOR).forEach(r -> allRecipes.add(r.getId()));
+                    event.getPlayer().world.getRecipeManager().listAllOfType(ModCrafting.COOKING).forEach(r -> allRecipes.add(r.getId()));
+                    event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.getRecipeKeeper().unlockRecipesRes(event.getPlayer(), allRecipes));
+                }
+            } else if (playerData.getBoolean(RuneCraftory.MODID + ":unlockrecipes"))
+                playerData.remove(RuneCraftory.MODID + ":unlockrecipes");
         }
     }
 
