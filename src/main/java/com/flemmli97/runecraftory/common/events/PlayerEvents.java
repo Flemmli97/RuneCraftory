@@ -57,7 +57,7 @@ public class PlayerEvents {
         if (!event.getPlayer().world.isRemote) {
             PacketHandler.sendToClient(new S2CDataPackSync(), (ServerPlayerEntity) event.getPlayer());
             PacketHandler.sendToClient(new S2CCalendar(WorldHandler.get((ServerWorld) event.getPlayer().world).getCalendar()), (ServerPlayerEntity) event.getPlayer());
-            PacketHandler.sendToClient(new S2CCapSync(event.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"))), (ServerPlayerEntity) event.getPlayer());
+            PacketHandler.sendToClient(new S2CCapSync(event.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(EntityUtils::capabilityException)), (ServerPlayerEntity) event.getPlayer());
             CompoundNBT playerData = event.getPlayer().getPersistentData();
             if (!playerData.getBoolean(RuneCraftory.MODID + ":starting")) {
                 playerData.putBoolean(RuneCraftory.MODID + ":starting", true);
@@ -152,7 +152,7 @@ public class PlayerEvents {
                 cap.useMoney(event.getOriginal(), (int) (cap.getMoney() * 0.2));
                 event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(newCap -> newCap.readFromNBT(cap.writeToNBT(new CompoundNBT(), event.getOriginal()), event.getPlayer()));
             });
-            PacketHandler.sendToClient(new S2CCapSync(event.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"))), (ServerPlayerEntity) event.getPlayer());
+            PacketHandler.sendToClient(new S2CCapSync(event.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(EntityUtils::capabilityException)), (ServerPlayerEntity) event.getPlayer());
         }
     }
 /*
@@ -253,9 +253,9 @@ public class PlayerEvents {
 
     @SubscribeEvent
     public void wakeUp(PlayerWakeUpEvent event) {
-        if(!event.getPlayer().world.isRemote) {
+        if (!event.getPlayer().world.isRemote) {
             ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
-            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->{
+            player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
                 cap.regenHealth(player, cap.getMaxHealth(player));
                 cap.refreshRunePoints(player, cap.getMaxRunePoints());
                 LevelCalc.levelSkill(player, cap, EnumSkills.SLEEPING, 1);

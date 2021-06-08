@@ -258,8 +258,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     private static final Collector<SimpleItemStackWrapper, ?, NonNullList<ItemStack>> itemCollector = Collector.of(NonNullList::create,
-            (l, c)-> l.add(c.getStack()),
-            (l, r)->{
+            (l, c) -> l.add(c.getStack()),
+            (l, r) -> {
                 l.addAll(r);
                 return l;
             },
@@ -274,7 +274,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     @Override
     public Map<ItemStack, Integer> dailyDrops() {
         return this.prop.dailyDrops().entrySet().stream()
-                .collect(Collectors.toMap(e->e.getKey().getStack(), Map.Entry::getValue));
+                .collect(Collectors.toMap(e -> e.getKey().getStack(), Map.Entry::getValue));
     }
 
     @Override
@@ -550,8 +550,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             this.playDeathAnimation();
         }
         ++this.deathTime;
-        if (this.deathTime == (this.maxDeathTime()-5) && this.attackingPlayer instanceof ServerPlayerEntity) {
-            this.attackingPlayer.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap->{
+        if (this.deathTime == (this.maxDeathTime() - 5) && this.attackingPlayer instanceof ServerPlayerEntity) {
+            this.attackingPlayer.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
                 LevelCalc.addXP((ServerPlayerEntity) this.attackingPlayer, cap, LevelCalc.getMobXP(cap, this));
                 cap.setMoney(this.attackingPlayer, cap.getMoney() + LevelCalc.getMoney(this.baseMoney(), this.level()));
             });

@@ -1,11 +1,11 @@
 package com.flemmli97.runecraftory.common.crafting;
 
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import com.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -59,7 +59,7 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
                 else inputs.add(itemstack);
             }
         }
-        boolean unlocked = inv.getPlayer() instanceof ServerPlayerEntity && ((ServerPlayerEntity) inv.getPlayer()).getRecipeBook().isUnlocked(this);
+        boolean unlocked = inv.getPlayer().getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getRecipeKeeper().isUnlocked(this)).orElse(false);
         return unlocked && i == this.recipeItems.size() && (this.isSimple ? recipeitemhelper.canCraft(this, null) : RecipeMatcher.findMatches(inputs, this.recipeItems) != null);
     }
 

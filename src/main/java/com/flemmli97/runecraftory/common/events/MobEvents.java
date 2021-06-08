@@ -33,13 +33,12 @@ public class MobEvents {
         float damage = CombatUtils.reduceDamageFromStats(event.getEntityLiving(), event.getSource(), event.getAmount());
         if (event.getEntityLiving() instanceof PlayerEntity) {
             event.getEntityLiving().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
-                if(damage < 0)
+                if (damage < 0)
                     cap.regenHealth((PlayerEntity) event.getEntityLiving(), -damage);
-                else if(damage >= 1)
-                    LevelCalc.levelSkill((ServerPlayerEntity) event.getEntityLiving(), cap, EnumSkills.DEFENCE, (float) (0.5+Math.log(damage)));
+                else if (damage >= 1)
+                    LevelCalc.levelSkill((ServerPlayerEntity) event.getEntityLiving(), cap, EnumSkills.DEFENCE, (float) (0.5 + Math.log(damage)));
             });
-        }
-        else if(damage < 0)
+        } else if (damage < 0)
             event.getEntityLiving().heal(-damage);
         event.setAmount(damage);
         if (event.getSource() instanceof CustomDamage)

@@ -94,7 +94,8 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable {
                         case LOVE:
                             LevelCalc.levelSkill(player, cap, EnumSkills.LOVE, 0.8f);
                             break;
-                    }});
+                    }
+                });
     }
 
     @Override

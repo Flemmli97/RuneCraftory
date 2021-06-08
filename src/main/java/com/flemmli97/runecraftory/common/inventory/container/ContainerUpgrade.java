@@ -6,6 +6,7 @@ import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.inventory.DummyInventory;
 import com.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import com.flemmli97.runecraftory.common.registry.ModContainer;
+import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -77,7 +78,7 @@ public class ContainerUpgrade extends Container {
         if (this.craftingInv.getPlayer().world.isRemote)
             return;
         this.outPutInv.setInventorySlotContents(0, ItemUtils.getUpgradedStack(this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
-        this.rpCost.set(ItemUtils.upgradeCost(this.craftingType(), this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability")), this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
+        this.rpCost.set(ItemUtils.upgradeCost(this.craftingType(), this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(EntityUtils::capabilityException), this.craftingInv.getStackInSlot(6), this.craftingInv.getStackInSlot(7)));
     }
 
     public EnumCrafting craftingType() {

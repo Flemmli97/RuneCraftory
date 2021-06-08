@@ -99,8 +99,8 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
     public void onBlockBreak(ServerPlayerEntity player) {
         player.getCapability(CapabilityInsts.PlayerCap)
                 .ifPresent(cap -> {
-                    LevelCalc.levelSkill(player, cap, EnumSkills.FARMING, this.tier.getTierLevel()*0.5f + 1);
-                    LevelCalc.levelSkill(player, cap, EnumSkills.WATER, this.tier.getTierLevel()*0.4f + 0.5f);
+                    LevelCalc.levelSkill(player, cap, EnumSkills.FARMING, this.tier.getTierLevel() * 0.5f + 1);
+                    LevelCalc.levelSkill(player, cap, EnumSkills.WATER, this.tier.getTierLevel() * 0.4f + 0.5f);
                 });
     }
 

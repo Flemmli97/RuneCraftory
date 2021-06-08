@@ -8,6 +8,7 @@ import com.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.runecraftory.common.utils.CombatUtils;
+import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.LevelCalc;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.DisplayEffectsScreen;
@@ -33,7 +34,7 @@ public class InfoScreen extends DisplayEffectsScreen<Container> {
 
     public InfoScreen(Container container, PlayerInventory inv, ITextComponent name) {
         super(container, inv, name);
-        this.cap = inv.player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"));
+        this.cap = inv.player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(EntityUtils::capabilityException);
     }
 
     @Override

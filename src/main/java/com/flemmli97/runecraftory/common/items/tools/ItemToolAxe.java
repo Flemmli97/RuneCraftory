@@ -75,7 +75,7 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
     @Override
     public void onBlockBreak(ServerPlayerEntity player) {
         player.getCapability(CapabilityInsts.PlayerCap)
-                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, this.tier.getTierLevel()*0.5f + 1));
+                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LOGGING, this.tier.getTierLevel() * 0.5f + 1));
     }
 
     @Override

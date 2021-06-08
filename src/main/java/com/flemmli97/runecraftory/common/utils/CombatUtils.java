@@ -112,7 +112,7 @@ public class CombatUtils {
                     reduce = getAttributeValue(entity, ModAttributes.RF_DEFENCE.get(), null);
             }
         }
-        return elementalReduction(entity, source, Math.max(0.03f*amount, amount - reduce));
+        return elementalReduction(entity, source, Math.max(0.03f * amount, amount - reduce));
     }
 
     public static float elementalReduction(LivingEntity entity, DamageSource source, float amount) {

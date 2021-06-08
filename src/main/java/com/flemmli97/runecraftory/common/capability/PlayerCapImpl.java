@@ -82,6 +82,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
     private Map<EnumShop, NonNullList<ItemStack>> shopItems = new HashMap<>();
     private long lastUpdated;
 
+    private RecipeKeeper keeper = new RecipeKeeper();
     /**
      * first number is level, second is the xp a.k.a. percent to next level
      */
@@ -355,7 +356,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
                 this.mainHandBonus = ItemNBT.statIncrease(stack);
                 float eff = this.shieldEfficiency;
                 this.shieldEfficiency = ItemUtils.getShieldEfficiency(player);
-                if(eff != this.shieldEfficiency && !this.offHandBonus.isEmpty())
+                if (eff != this.shieldEfficiency && !this.offHandBonus.isEmpty())
                     this.updateEquipmentStats(player, EquipmentSlotType.OFFHAND);
                 if (player.world.isRemote) {
                     stack.getAttributeModifiers(slot).forEach((att, mod) ->
@@ -365,7 +366,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
                 break;
             case OFFHAND:
                 Map<Attribute, Double> inc = stack.getItem().isShield(stack, player) ? ItemNBT.statIncrease(stack) : new TreeMap<>(ModAttributes.sorted);
-                inc.replaceAll((att, val)->this.shieldEfficiency * val);
+                inc.replaceAll((att, val) -> this.shieldEfficiency * val);
                 this.offHandBonus = inc;
                 if (player.world.isRemote) {
                     stack.getAttributeModifiers(slot).forEach((att, mod) ->
@@ -537,6 +538,11 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         boolean changed = this.shippedItems.compute(item.getItem().getRegistryName().toString(), (k, v) -> v == null ? level : Math.max(v, level)) != level;
         if (!player.world.isRemote && changed)
             PacketHandler.sendToClient(new PacketUpdateShippingItem(item, level), (ServerPlayerEntity) player);*/
+    }
+
+    @Override
+    public RecipeKeeper getRecipeKeeper() {
+        return this.keeper;
     }
 
     @Override
@@ -800,6 +806,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
                     items.add(ItemStack.read((CompoundNBT) comp)));
             this.shopItems.put(shop, items);
         }
+        this.keeper.read(nbt.getCompound("Recipes"));
         this.lastUpdated = nbt.getLong("LastUpdated");
         /*if (nbt.contains("Quest")) {
             this.quest = new QuestMission(nbt.getCompoundTag("Quest"));
@@ -841,11 +848,21 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
             shop.put(entry.getKey().toString(), l);
         }
         nbt.put("ShopItems", shop);
+        nbt.put("Recipes", this.keeper.save());
         nbt.putLong("LastUpdated", this.lastUpdated);
         /*if (this.quest != null) {
             nbt.setTag("Quest", this.quest.writeToNBT(new NBTTagCompound()));
         }*/
         nbt.put("FoodData", this.foodBuffNBT());
+        return nbt;
+    }
+
+    @Override
+    public CompoundNBT resetNBT() {
+        CompoundNBT nbt = new CompoundNBT();
+        CompoundNBT spellNBT = new CompoundNBT();
+        this.spells.writeToNBT(spellNBT);
+        nbt.put("Inventory", spellNBT);
         return nbt;
     }
 

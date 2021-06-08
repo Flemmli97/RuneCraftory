@@ -115,6 +115,8 @@ public interface IPlayerCap {
      */
     CompoundNBT writeToNBT(CompoundNBT nbt, PlayerEntity player);
 
+    CompoundNBT resetNBT();
+
     //=====Inventory
 
     InventorySpells getInv();
@@ -141,6 +143,8 @@ public interface IPlayerCap {
     NonNullList<ItemStack> getShop(EnumShop shop);
 
     void addShippingItem(PlayerEntity player, ItemStack item);
+
+    RecipeKeeper getRecipeKeeper();
 
     //Weapon and ticker
 

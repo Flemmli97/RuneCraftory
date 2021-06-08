@@ -118,7 +118,7 @@ public class ClientEvents {
     private List<ITextComponent> injectAdditionalTooltip(ItemStack stack) {
         List<ITextComponent> tooltip = new ArrayList<>();
         boolean shift = Screen.hasShiftDown();
-        DataPackHandler.getStats(stack.getItem()).ifPresent(stat->tooltip.addAll(stat.texts(stack, shift)));
+        DataPackHandler.getStats(stack.getItem()).ifPresent(stat -> tooltip.addAll(stat.texts(stack, shift)));
         CropProperties props = DataPackHandler.getCropStat(stack.getItem());
         if (props != null) {
             tooltip.addAll(props.texts());

@@ -1,6 +1,7 @@
 package com.flemmli97.runecraftory.integration.jei.category;
 
 import com.flemmli97.runecraftory.RuneCraftory;
+import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import com.flemmli97.runecraftory.common.registry.ModItems;
 import com.google.common.collect.Lists;
@@ -93,7 +94,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
                 guiStacks.init(ind, true, 0 + x * 18, 5 + y * 18);
             }
 
-        if (player.getRecipeBook().contains(sextupleRecipe.getId())) {
+        if (player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getRecipeKeeper().isUnlocked(sextupleRecipe)).orElse(false)) {
             for (int i = 0; i < ing.getInputs(VanillaTypes.ITEM).size(); i++) {
                 guiStacks.set(i, ing.getInputs(VanillaTypes.ITEM).get(i));
             }

@@ -47,7 +47,7 @@ public class ItemUtils {
     }
 
     public static int getSellPrice(ItemStack stack) {
-        return DataPackHandler.getStats(stack.getItem()).map(stat->getSellPrice(stack, stat)).orElse(0);
+        return DataPackHandler.getStats(stack.getItem()).map(stat -> getSellPrice(stack, stat)).orElse(0);
     }
 
     public static int getSellPrice(ItemStack stack, ItemStat stat) {
@@ -55,7 +55,7 @@ public class ItemUtils {
     }
 
     public static int getBuyPrice(ItemStack stack) {
-        return DataPackHandler.getStats(stack.getItem()).map(stat->getBuyPrice(stack, stat)).orElse(0);
+        return DataPackHandler.getStats(stack.getItem()).map(stat -> getBuyPrice(stack, stat)).orElse(0);
     }
 
     public static int getBuyPrice(ItemStack stack, ItemStat stat) {
@@ -63,7 +63,7 @@ public class ItemUtils {
     }
 
     public static boolean canUpgrade(PlayerEntity player, EnumCrafting type, ItemStack stack, ItemStack ingredient) {
-        return upgradeCost(type, player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability")), stack, ingredient, true) >= 0;
+        return upgradeCost(type, player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(EntityUtils::capabilityException), stack, ingredient, true) >= 0;
     }
 
     public static int upgradeCost(EnumCrafting type, IPlayerCap cap, ItemStack stack, ItemStack ingredient) {
@@ -72,7 +72,7 @@ public class ItemUtils {
 
     public static int upgradeCost(EnumCrafting type, IPlayerCap cap, ItemStack stack, ItemStack ingredient, boolean onlyIngredient) {
         int level = ItemNBT.itemLevel(stack);
-        return DataPackHandler.getStats(ingredient.getItem()).map(stat->{
+        return DataPackHandler.getStats(ingredient.getItem()).map(stat -> {
             if (onlyIngredient || !stack.isEmpty()) {
                 int skillLevel = type == EnumCrafting.FORGE ? cap.getSkillLevel(EnumSkills.FORGING)[0] : cap.getSkillLevel(EnumSkills.CRAFTING)[0];
                 return level * (Math.max(1, stat.getDiff() - skillLevel)) * 3;
@@ -108,9 +108,9 @@ public class ItemUtils {
         return output;
     }
 
-    public static float getShieldEfficiency(PlayerEntity player){
-        if(player.getHeldItemMainhand().getItem() instanceof IItemUsable)
-            return ((IItemUsable)player.getHeldItemMainhand().getItem()).getWeaponType().getShieldEfficiency();
+    public static float getShieldEfficiency(PlayerEntity player) {
+        if (player.getHeldItemMainhand().getItem() instanceof IItemUsable)
+            return ((IItemUsable) player.getHeldItemMainhand().getItem()).getWeaponType().getShieldEfficiency();
         return 1;
     }
 }

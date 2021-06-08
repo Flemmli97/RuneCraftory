@@ -7,11 +7,14 @@ import com.flemmli97.runecraftory.common.capability.IPlayerCap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.NetworkEvent;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -30,6 +33,8 @@ public class S2CCapSync {
 
     private CompoundNBT foodData;
 
+    private Collection<ResourceLocation> recipes;
+
     private S2CCapSync() {
     }
 
@@ -45,6 +50,7 @@ public class S2CCapSync {
             this.skillMap.put(skill, cap.getSkillLevel(skill));
         this.spells = cap.getInv().writeToNBT(new CompoundNBT());
         this.foodData = cap.foodBuffNBT();
+        this.recipes = cap.getRecipeKeeper().unlockedRecipes();
     }
 
     public static S2CCapSync read(PacketBuffer buf) {
@@ -63,6 +69,10 @@ public class S2CCapSync {
         }
         pkt.spells = buf.readCompoundTag();
         pkt.foodData = buf.readCompoundTag();
+        pkt.recipes = new HashSet<>();
+        int size = buf.readInt();
+        for (int i = 0; i < size; i++)
+            pkt.recipes.add(buf.readResourceLocation());
         return pkt;
     }
 
@@ -84,6 +94,8 @@ public class S2CCapSync {
         }
         buf.writeCompoundTag(pkt.spells);
         buf.writeCompoundTag(pkt.foodData);
+        buf.writeInt(pkt.recipes.size());
+        pkt.recipes.forEach(buf::writeResourceLocation);
     }
 
     public static void handle(S2CCapSync pkt, Supplier<NetworkEvent.Context> ctx) {
@@ -102,6 +114,7 @@ public class S2CCapSync {
                 pkt.skillMap.forEach((skill, val) -> cap.setSkillLevel(skill, player, val[0], val[1]));
                 cap.getInv().readFromNBT(pkt.spells);
                 cap.readFoodBuffFromNBT(pkt.foodData);
+                cap.getRecipeKeeper().clientUpdate(pkt.recipes);
             });
         });
         ctx.get().setPacketHandled(true);

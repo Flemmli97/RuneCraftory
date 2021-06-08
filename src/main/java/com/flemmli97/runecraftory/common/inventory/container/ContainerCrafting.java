@@ -8,6 +8,7 @@ import com.flemmli97.runecraftory.common.inventory.DummyInventory;
 import com.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import com.flemmli97.runecraftory.common.registry.ModContainer;
 import com.flemmli97.runecraftory.common.utils.CraftingUtils;
+import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import com.flemmli97.runecraftory.common.utils.ItemUtils;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -104,7 +105,7 @@ public class ContainerCrafting extends Container {
             if (this.tile.craftingIndex() >= this.matchingRecipes.size())
                 this.tile.resetIndex();
             this.currentRecipe = this.matchingRecipes.get(this.tile.craftingIndex());
-            this.rpCost.set(ItemUtils.craftingCost(this.type, this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting player capability")), this.currentRecipe));
+            this.rpCost.set(ItemUtils.craftingCost(this.type, this.craftingInv.getPlayer().getCapability(CapabilityInsts.PlayerCap).orElseThrow(EntityUtils::capabilityException), this.currentRecipe));
             stack = this.currentRecipe.getCraftingResult(this.craftingInv);
         } else {
             stack = ItemStack.EMPTY;

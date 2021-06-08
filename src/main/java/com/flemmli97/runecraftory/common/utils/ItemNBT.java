@@ -144,7 +144,7 @@ public class ItemNBT {
             tag.put(LibNBT.Upgrades, upgrades);
             if (!shouldHaveStats(stackToAdd)) {
                 float effRes = efficiency;
-                DataPackHandler.getStats(stackToAdd.getItem()).ifPresent(stat->{
+                DataPackHandler.getStats(stackToAdd.getItem()).ifPresent(stat -> {
                     for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {
                         updateStatIncrease(entry.getKey(), entry.getValue() * effRes, tag);
                     }
@@ -201,7 +201,7 @@ public class ItemNBT {
 
                 if (!compound.contains(LibNBT.Upgrades))
                     compound.put(LibNBT.Upgrades, new ListNBT());
-                ostat.ifPresent(stat->{
+                ostat.ifPresent(stat -> {
                     if (!compound.contains(LibNBT.Stats)) {
                         CompoundNBT stats = new CompoundNBT();
                         for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {

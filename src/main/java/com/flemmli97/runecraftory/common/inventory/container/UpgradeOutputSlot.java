@@ -77,18 +77,18 @@ public class UpgradeOutputSlot extends Slot {
         ItemStack ing2 = this.ingredientInv.getStackInSlot(7);
         player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
             cap.decreaseRunePoints(player, this.container.rpCost(), true);
-            switch (this.container.craftingType()){
+            switch (this.container.craftingType()) {
                 case FORGE:
-                    LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.FORGING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.FORGING)[0])*0.3f);
+                    LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.FORGING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.FORGING)[0]) * 0.3f);
                     break;
                 case ARMOR:
-                    LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CRAFTING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.CRAFTING)[0])*0.3f);
+                    LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CRAFTING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.CRAFTING)[0]) * 0.3f);
                     break;
                 case CHEM:
-                    LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CHEMISTRY, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.CHEMISTRY)[0])*0.3f);
+                    LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CHEMISTRY, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.CHEMISTRY)[0]) * 0.3f);
                     break;
                 case COOKING:
-                    LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.COOKING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.COOKING)[0])*0.3f);
+                    LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.COOKING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.COOKING)[0]) * 0.3f);
                     break;
             }
         });

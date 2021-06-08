@@ -47,4 +47,8 @@ public class EntityUtils {
     public static float tamingChance(BaseMonster monster, float multiplier) {
         return monster.tamingChance() * multiplier * GeneralConfig.tamingMultiplier;
     }
+
+    public static NullPointerException capabilityException() {
+        return new NullPointerException("Player capability is null. This shouldn't be");
+    }
 }

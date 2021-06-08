@@ -4,8 +4,12 @@ import com.flemmli97.runecraftory.client.gui.OverlayGui;
 import com.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import com.flemmli97.runecraftory.common.utils.CalendarImpl;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.toasts.RecipeToast;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.Collection;
 
 public class ClientHandlers {
 
@@ -26,5 +30,8 @@ public class ClientHandlers {
         clientCalendar.fromPacket(buffer);
     }
 
-
+    public static void recipeToast(Collection<ResourceLocation> recipes) {
+        recipes.forEach(res -> Minecraft.getInstance().world.getRecipeManager().getRecipe(res).ifPresent(rec ->
+                RecipeToast.addOrUpdate(Minecraft.getInstance().getToastGui(), rec)));
+    }
 }

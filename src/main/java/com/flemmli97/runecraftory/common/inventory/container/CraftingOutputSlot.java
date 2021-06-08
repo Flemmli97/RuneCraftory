@@ -74,19 +74,19 @@ public class CraftingOutputSlot extends Slot {
         if (this.container.rpCost() >= 0)
             player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
                 cap.decreaseRunePoints(player, this.container.rpCost(), true);
-                if(this.container.getCurrentRecipe() != null)
-                    switch (this.container.craftingType()){
+                if (this.container.getCurrentRecipe() != null)
+                    switch (this.container.craftingType()) {
                         case FORGE:
-                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.FORGING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel()-cap.getSkillLevel(EnumSkills.FORGING)[0])*0.5f);
+                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.FORGING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel() - cap.getSkillLevel(EnumSkills.FORGING)[0]) * 0.5f);
                             break;
                         case ARMOR:
-                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CRAFTING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel()-cap.getSkillLevel(EnumSkills.CRAFTING)[0])*0.5f);
+                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CRAFTING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel() - cap.getSkillLevel(EnumSkills.CRAFTING)[0]) * 0.5f);
                             break;
                         case CHEM:
-                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CHEMISTRY, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel()-cap.getSkillLevel(EnumSkills.CHEMISTRY)[0])*0.5f);
+                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CHEMISTRY, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel() - cap.getSkillLevel(EnumSkills.CHEMISTRY)[0]) * 0.5f);
                             break;
                         case COOKING:
-                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.COOKING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel()-cap.getSkillLevel(EnumSkills.COOKING)[0])*0.5f);
+                            LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.COOKING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel() - cap.getSkillLevel(EnumSkills.COOKING)[0]) * 0.5f);
                             break;
                     }
             });

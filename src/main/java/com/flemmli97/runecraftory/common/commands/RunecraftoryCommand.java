@@ -2,7 +2,6 @@ package com.flemmli97.runecraftory.common.commands;
 
 import com.flemmli97.runecraftory.api.enums.EnumSkills;
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
-import com.flemmli97.runecraftory.common.capability.PlayerCapImpl;
 import com.flemmli97.runecraftory.common.network.PacketHandler;
 import com.flemmli97.runecraftory.common.network.S2CCapSync;
 import com.mojang.brigadier.Command;
@@ -13,7 +12,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.server.command.EnumArgument;
 
@@ -33,6 +31,7 @@ public class RunecraftoryCommand {
                 )
                 .then(Commands.literal("reset").requires(src -> src.hasPermissionLevel(2))
                         .then(Commands.literal("all").executes(RunecraftoryCommand::resetAll))
+                        .then(Commands.literal("recipes").executes(RunecraftoryCommand::resetRecipes))
                 )
         );
     }
@@ -67,9 +66,19 @@ public class RunecraftoryCommand {
     private static int resetAll(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
         ServerPlayerEntity player = ctx.getSource().asPlayer();
         player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
-            cap.readFromNBT(new PlayerCapImpl().writeToNBT(new CompoundNBT(), null), null);
+            cap.readFromNBT(cap.resetNBT(), null);
             PacketHandler.sendToClient(new S2CCapSync(cap), player);
         });
+        ctx.getSource().sendFeedback(new TranslationTextComponent("runecraftory.command.reset.all"), false);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int resetRecipes(CommandContext<CommandSource> ctx) throws CommandSyntaxException {
+        ServerPlayerEntity player = ctx.getSource().asPlayer();
+        player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
+            cap.getRecipeKeeper().lockRecipesRes(player, cap.getRecipeKeeper().unlockedRecipes());
+        });
+        ctx.getSource().sendFeedback(new TranslationTextComponent("runecraftory.command.reset.recipe"), false);
         return Command.SINGLE_SUCCESS;
     }
 }

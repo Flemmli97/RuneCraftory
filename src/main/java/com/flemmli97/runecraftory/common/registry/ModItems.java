@@ -1269,7 +1269,7 @@ public class ModItems {
     }
 
     public static RegistryObject<Item> shield(String name) {
-        return ITEMS.register(name, () -> new ShieldItem(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.equipment)){
+        return ITEMS.register(name, () -> new ShieldItem(new Item.Properties().maxStackSize(1).group(RFCreativeTabs.equipment)) {
             @Override
             public boolean isShield(ItemStack stack, LivingEntity entity) {
                 return true;

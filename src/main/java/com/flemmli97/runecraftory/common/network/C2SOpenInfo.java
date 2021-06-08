@@ -2,6 +2,7 @@ package com.flemmli97.runecraftory.common.network;
 
 import com.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import com.flemmli97.runecraftory.common.inventory.container.ContainerInfoScreen;
+import com.flemmli97.runecraftory.common.utils.EntityUtils;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
@@ -33,18 +34,18 @@ public class C2SOpenInfo {
             if (player != null) {
                 switch (pkt.type) {
                     case MAIN:
-                        PacketHandler.sendToClient(new S2CCapSync(player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"))), player);
+                        PacketHandler.sendToClient(new S2CCapSync(player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(EntityUtils::capabilityException)), player);
                         NetworkHooks.openGui(player, ContainerInfoScreen.create());
                         break;
                     case SUB:
-                        PacketHandler.sendToClient(new S2CCapSync(player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(() -> new NullPointerException("Error getting capability"))), player);
+                        PacketHandler.sendToClient(new S2CCapSync(player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(EntityUtils::capabilityException)), player);
                         NetworkHooks.openGui(player, ContainerInfoScreen.createSub());
                         break;
                     case INV:
                         ItemStack stack = player.inventory.getItemStack();
                         player.inventory.setItemStack(ItemStack.EMPTY);
                         player.closeContainer();
-                        if(!stack.isEmpty()){
+                        if (!stack.isEmpty()) {
                             player.inventory.setItemStack(stack);
                             player.connection.sendPacket(new SSetSlotPacket(-1, -1, stack));
                         }
