@@ -26,7 +26,7 @@ public class LayerWooly<T extends EntityWooly> extends LayerRenderer<T, ModelWoo
             //GlStateManager.color(afloat[0], afloat[1], afloat[2]);
 
             this.woolModel.syncModel(this.getEntityModel());
-            render(this.getEntityModel(), this.woolModel, this.tex, stack, buf, light, wooly, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1, 1, 1, 1);
+            renderCopyCutoutModel(this.getEntityModel(), this.woolModel, this.tex, stack, buf, light, wooly, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, 1, 1, 1, 1);
         }
     }
 }

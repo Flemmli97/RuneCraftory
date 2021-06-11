@@ -160,7 +160,7 @@ public class CombatUtils {
             return;
         Entity attacker = source.getTrueSource();
         float strength = source.knockAmount();
-        strength = (float) (strength * (1.0D - entity.getAttributeValue(Attributes.GENERIC_KNOCKBACK_RESISTANCE)));
+        strength = (float) (strength * (1.0D - entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE)));
         double xRatio = 0.0;
         double zRatio = 0.0;
         double yRatio = strength;
@@ -180,7 +180,7 @@ public class CombatUtils {
             }
         }
         if (source.getKnockBackType() == CustomDamage.KnockBackType.VANILLA && strength > 0) {
-            entity.takeKnockback(strength, xRatio, zRatio);
+            entity.applyKnockback(strength, xRatio, zRatio);
         } else {
             Vector3d mot = entity.getMotion();
             double y = mot.y;
@@ -219,7 +219,7 @@ public class CombatUtils {
             return false;
         IItemUsable item = (IItemUsable) stack.getItem();
         if (target.canBeAttackedWithItem() && !target.hitByEntity(player) && player.getCooldownTracker().getCooldown(stack.getItem(), 0.0f) <= 0) {
-            float damagePhys = getAttributeValueRaw(player, Attributes.GENERIC_ATTACK_DAMAGE);
+            float damagePhys = getAttributeValueRaw(player, Attributes.ATTACK_DAMAGE);
             if (damagePhys > 0) {
                 if (resetCooldown) {
                     player.getCooldownTracker().setCooldown(stack.getItem(), item.itemCoolDownTicks());
@@ -229,7 +229,7 @@ public class CombatUtils {
                 boolean knockBackChance = player.world.rand.nextInt(100) < getAttributeValue(player, ModAttributes.RFKNOCK.get(), target);
                 int i = knockBackChance ? 1 : 0;
                 if (player.isSprinting()) {
-                    player.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundCategory(), 1.0f, 1.0f);
+                    player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, player.getSoundCategory(), 1.0f, 1.0f);
                     ++i;
                 }
                 Vector3d targetMot = target.getMotion();
@@ -255,17 +255,17 @@ public class CombatUtils {
                     }
                     if (critChance) {
                         if (playSound) {
-                            player.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0f, 1.0f);
+                            player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_CRIT, player.getSoundCategory(), 1.0f, 1.0f);
                         }
                         player.onCriticalHit(target);
                         player.onEnchantmentCritical(target);
                     } else if (stack.getItem() instanceof IAOEWeapon && ((IAOEWeapon) stack.getItem()).getFOV() == 0.0f && playSound) {
-                        player.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0f, 1.0f);
+                        player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, player.getSoundCategory(), 1.0f, 1.0f);
                     } else if (playSound) {
-                        player.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0f, 1.0f);
+                        player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0f, 1.0f);
                     }
                 } else if (playSound) {
-                    player.world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, player.getSoundCategory(), 1.0f, 1.0f);
+                    player.world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, player.getSoundCategory(), 1.0f, 1.0f);
                 }
                 return true;
             }
@@ -275,7 +275,7 @@ public class CombatUtils {
 
     public static boolean mobAttack(LivingEntity attacker, Entity target) {
         CustomDamage source = build(attacker, target, new CustomDamage.Builder(attacker)).hurtResistant(5).get();
-        return mobAttack(attacker, target, source, CombatUtils.getAttributeValue(attacker, Attributes.GENERIC_ATTACK_DAMAGE, target));
+        return mobAttack(attacker, target, source, CombatUtils.getAttributeValue(attacker, Attributes.ATTACK_DAMAGE, target));
     }
 
     public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage source, float dmg) {
@@ -295,7 +295,7 @@ public class CombatUtils {
         boolean knockBackChance = attacker.world.rand.nextInt(100) < getAttributeValue(attacker, ModAttributes.RFKNOCK.get(), target);
         int i = knockBackChance ? 2 : 1;
         if (attacker.isSprinting()) {
-            attacker.world.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, attacker.getSoundCategory(), 1.0f, 1.0f);
+            attacker.world.playSound(null, attacker.getPosX(), attacker.getPosY(), attacker.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_KNOCKBACK, attacker.getSoundCategory(), 1.0f, 1.0f);
             ++i;
         }
         boolean ignoreArmor = critChance || faintChance;
@@ -424,7 +424,7 @@ public class CombatUtils {
             double b = (color >> 0 & 0xFF) / 255.0;
             Random rand = new Random();
             for (int i = 0; i < 7; ++i) {
-                ((ServerWorld) target.world).spawnParticle(ParticleTypes.ENTITY_EFFECT, target.getX() + (rand.nextDouble() - 0.5) * target.getWidth(), target.getY() + 0.3 + rand.nextDouble() * target.getHeight(), target.getZ() + (rand.nextDouble() - 0.5) * target.getWidth(), 0, r, g, b, 1);
+                ((ServerWorld) target.world).spawnParticle(ParticleTypes.ENTITY_EFFECT, target.getPosX() + (rand.nextDouble() - 0.5) * target.getWidth(), target.getPosY() + 0.3 + rand.nextDouble() * target.getHeight(), target.getPosZ() + (rand.nextDouble() - 0.5) * target.getWidth(), 0, r, g, b, 1);
             }
         }
     }

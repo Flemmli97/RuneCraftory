@@ -50,11 +50,11 @@ public class ModBlocks {
     public static final EnumMap<EnumMineralTier, RegistryObject<Block>> mineralMap = new EnumMap<>(EnumMineralTier.class);
     public static final EnumMap<EnumMineralTier, RegistryObject<Block>> brokenMineralMap = new EnumMap<>(EnumMineralTier.class);
 
-    public static final RegistryObject<Block> forge = BLOCKS.register("forge", () -> new BlockForge(AbstractBlock.Properties.create(Material.IRON).nonOpaque().hardnessAndResistance(3, 100)));
-    public static final RegistryObject<Block> cooking = BLOCKS.register("cooking", () -> new BlockCooking(AbstractBlock.Properties.create(Material.IRON).nonOpaque().hardnessAndResistance(3, 100)));
-    public static final RegistryObject<Block> chemistry = BLOCKS.register("chemistry", () -> new BlockChemistry(AbstractBlock.Properties.create(Material.IRON).nonOpaque().hardnessAndResistance(3, 100)));
-    public static final RegistryObject<Block> accessory = BLOCKS.register("accessory", () -> new BlockAccessory(AbstractBlock.Properties.create(Material.IRON).nonOpaque().hardnessAndResistance(3, 100)));
-    public static final RegistryObject<Block> farmland = BLOCKS.register("farmland", () -> new BlockFarm(AbstractBlock.Properties.create(Material.EARTH).hardnessAndResistance(0.6F).sound(SoundType.GROUND).blockVision((state, reader, pos) -> true).suffocates((state, reader, pos) -> true)));
+    public static final RegistryObject<Block> forge = BLOCKS.register("forge", () -> new BlockForge(AbstractBlock.Properties.create(Material.IRON).notSolid().hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> cooking = BLOCKS.register("cooking", () -> new BlockCooking(AbstractBlock.Properties.create(Material.IRON).notSolid().hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> chemistry = BLOCKS.register("chemistry", () -> new BlockChemistry(AbstractBlock.Properties.create(Material.IRON).notSolid().hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> accessory = BLOCKS.register("accessory", () -> new BlockAccessory(AbstractBlock.Properties.create(Material.IRON).notSolid().hardnessAndResistance(3, 100)));
+    public static final RegistryObject<Block> farmland = BLOCKS.register("farmland", () -> new BlockFarm(AbstractBlock.Properties.create(Material.EARTH).hardnessAndResistance(0.6F).sound(SoundType.GROUND).setBlocksVision((state, reader, pos) -> true).setSuffocates((state, reader, pos) -> true)));
 
     public static final RegistryObject<Block> mineralIron = mineral(EnumMineralTier.IRON);
     public static final RegistryObject<Block> mineralBronze = mineral(EnumMineralTier.BRONZE);
@@ -84,7 +84,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> brokenMineralEmerald = brokenMineral(EnumMineralTier.EMERALD);
     public static final RegistryObject<Block> brokenMineralSapphire = brokenMineral(EnumMineralTier.SAPPHIRE);
 
-    public static final RegistryObject<Block> bossSpawner = BLOCKS.register("boss_spawner", () -> new BlockBossSpawner(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(30, 9999).nonOpaque()));
+    public static final RegistryObject<Block> bossSpawner = BLOCKS.register("boss_spawner", () -> new BlockBossSpawner(AbstractBlock.Properties.create(Material.IRON).hardnessAndResistance(30, 9999).notSolid()));
     public static final RegistryObject<Block> board = BLOCKS.register("black_board", () -> new Block(AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(5, 5)));
     public static final RegistryObject<Block> shipping = BLOCKS.register("shipping_bin", () -> new BlockShippingBin(AbstractBlock.Properties.create(Material.WOOD).hardnessAndResistance(3, 10)));
 

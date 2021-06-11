@@ -133,8 +133,8 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
         ItemStack itemstack = player.getHeldItem(hand);
         if (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getSkillLevel(EnumSkills.FIST)[0] >= 5).orElse(false)) {
             player.setActiveHand(hand);
-            return ActionResult.success(itemstack);
+            return ActionResult.resultSuccess(itemstack);
         }
-        return ActionResult.pass(itemstack);
+        return ActionResult.resultPass(itemstack);
     }
 }

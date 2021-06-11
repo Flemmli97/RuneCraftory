@@ -131,8 +131,8 @@ public class TileFarm extends TileEntity implements IDailyUpdate {
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundNBT compound) {
-        super.fromTag(state, compound);
+    public void read(BlockState state, CompoundNBT compound) {
+        super.read(state, compound);
         this.health = compound.getInt("Health");
         this.growthMultiplier = compound.getFloat("Growth");
         this.level = compound.getFloat("Level");

@@ -37,8 +37,8 @@ public class TileBrokenMineral extends TileEntity implements IDailyUpdate {
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundNBT nbt) {
-        super.fromTag(state, nbt);
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
         this.lastUpdateDay = nbt.getInt("LastUpdate");
         this.check = true;
     }

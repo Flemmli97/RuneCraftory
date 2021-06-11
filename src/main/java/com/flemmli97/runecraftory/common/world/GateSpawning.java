@@ -36,13 +36,13 @@ public class GateSpawning {
         List<SpawnResource> structureList = /*getStructuresAt(world, pos).stream().filter(spawningMappingStructure::containsKey)
                 .map(spawningMappingStructure::get).flatMap(List::stream).collect(Collectors.toList());*/
                 spawningMappingStructure.entrySet().stream()
-                        .filter(e -> world.getStructureAccessor().getStructureAt(pos, true, e.getKey()).isValid())
+                        .filter(e -> world.getStructureManager().getStructureStart(pos, true, e.getKey()).isValid())
                         .map(Map.Entry::getValue).flatMap(List::stream).collect(Collectors.toList());
         if (!structureList.isEmpty())
             list = structureList;
         if (list == null || list.isEmpty())
             return new ArrayList<>();
-        list.removeIf(w -> w.distToSpawnSq >= pos.distanceSq(world.getSpawnPos()));
+        list.removeIf(w -> w.distToSpawnSq >= pos.distanceSq(world.getSpawnPoint()));
         List<EntityType<?>> ret = new ArrayList<>();
         if (amount > list.size()) {
             list.forEach(w -> {
@@ -68,7 +68,7 @@ public class GateSpawning {
         return world.getChunk(pos.getX() >> 4, pos.getZ() >> 4, ChunkStatus.STRUCTURE_REFERENCES)
                 .getStructureReferences().entrySet().stream().filter(e ->
                         e.getValue().stream().map(l -> SectionPos.from(new ChunkPos(l), 0))
-                                .map(section -> world.getStructureAccessor()
+                                .map(section -> world.getStructureManager()
                                         .getStructureStart(section, e.getKey(), world.getChunk(section.getX(), section.getZ(), ChunkStatus.STRUCTURE_STARTS)))
                                 .filter(start -> start != null && start.isValid() && start.getBoundingBox().isVecInside(pos)
                                         && start.getComponents().stream().anyMatch(piece -> piece.getBoundingBox().isVecInside(pos))
@@ -77,7 +77,7 @@ public class GateSpawning {
     }
 
     public static boolean hasSpawns(IWorld world, BlockPos pos) {
-        List<SpawnResource> list = spawningMappingBiome.get(world.method_31081(pos).orElse(Biomes.PLAINS));
+        List<SpawnResource> list = spawningMappingBiome.get(world.func_242406_i(pos).orElse(Biomes.PLAINS));
         if (list != null && !list.isEmpty())
             return true;
         if (world instanceof ServerWorld) {
@@ -90,12 +90,12 @@ public class GateSpawning {
 
     public static boolean hasStructureSpawns(ServerWorld world, BlockPos pos) {
         return !spawningMappingStructure.entrySet().stream()
-                .filter(e -> world.getStructureAccessor().getStructureAt(pos, true, e.getKey()).isValid())
+                .filter(e -> world.getStructureManager().getStructureStart(pos, true, e.getKey()).isValid())
                 .map(Map.Entry::getValue).flatMap(List::stream).collect(Collectors.toList()).isEmpty();
     }
 
     public static void addSpawn(ResourceLocation loc, SpawnResource s) {
-        spawningMappingBiome.merge(RegistryKey.of(Registry.BIOME_KEY, loc), Lists.newArrayList(s), (old, v) -> {
+        spawningMappingBiome.merge(RegistryKey.getOrCreateKey(Registry.BIOME_KEY, loc), Lists.newArrayList(s), (old, v) -> {
             old.add(s);
             return old;
         });
@@ -126,7 +126,7 @@ public class GateSpawning {
         }
 
         public boolean canSpawn(ServerWorld world, BlockPos pos) {
-            return pos.distanceSq(world.getSpawnPos()) < this.distToSpawnSq;
+            return pos.distanceSq(world.getSpawnPoint()) < this.distToSpawnSq;
         }
 
         @Override

@@ -42,24 +42,24 @@ public class FoodGen extends FoodProvider {
         this.addStat("raw_rabbit", Items.RABBIT, new FoodProperties.MutableFoodProps(600).setHPRegen(5, 5));
 
         this.addStat("bread", Items.BREAD, new FoodProperties.MutableFoodProps(500).setHPRegen(3, 0)
-                .addEffect(Attributes.GENERIC_ATTACK_DAMAGE, 1)
+                .addEffect(Attributes.ATTACK_DAMAGE, 1)
                 .addPotion(Effects.SPEED, 100, 2));
         this.addStat("golden_apple", Items.GOLDEN_APPLE, new FoodProperties.MutableFoodProps(1500)
                 .setHPRegen(50, 10).setRPIncrease(50, 5)
                 .setRPRegen(25, 10)
-                .addEffect(Attributes.GENERIC_ATTACK_DAMAGE, 10)
+                .addEffect(Attributes.ATTACK_DAMAGE, 10)
                 .addPotion(Effects.SPEED, 100, 2)
                 .addPotion(Effects.REGENERATION, 200, 3));
         this.addStat("golden_apple", Items.GOLDEN_APPLE, new FoodProperties.MutableFoodProps(1500)
                 .setHPRegen(50, 10).setRPIncrease(50, 5)
                 .setRPRegen(25, 10)
-                .addEffect(Attributes.GENERIC_ATTACK_DAMAGE, 10)
+                .addEffect(Attributes.ATTACK_DAMAGE, 10)
                 .addEffect(ModAttributes.RF_DEFENCE.get(), 10));
         this.addStat("enchanted_golden_apple", Items.ENCHANTED_GOLDEN_APPLE, new FoodProperties.MutableFoodProps(3000)
                 .setHPRegen(100, 40).setRPIncrease(50, 20)
                 .setRPRegen(50, 15)
-                .addEffect(Attributes.GENERIC_ATTACK_DAMAGE, 30)
-                .addEffectPercentage(Attributes.GENERIC_ATTACK_DAMAGE, 10)
+                .addEffect(Attributes.ATTACK_DAMAGE, 30)
+                .addEffectPercentage(Attributes.ATTACK_DAMAGE, 10)
                 .addEffectPercentage(ModAttributes.RF_DEFENCE.get(), 10));
 
         this.addStat(ModItems.witheredGrass.get(), new FoodProperties.MutableFoodProps(100).setHPRegen(-25, -10).setRPRegen(-10, 0));

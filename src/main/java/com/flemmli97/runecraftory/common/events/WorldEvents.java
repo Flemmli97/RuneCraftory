@@ -75,32 +75,32 @@ public class WorldEvents {
     @SubscribeEvent
     public void biomeLoad(BiomeLoadingEvent event) {
         RuneCraftory.spawnConfig.getEntityFromBiome(event.getName()).forEach(entity -> GateSpawning.addSpawn(event.getName(), entity));
-        Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(RegistryKey.of(Registry.BIOME_KEY, event.getName()));
+        Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(RegistryKey.getOrCreateKey(Registry.BIOME_KEY, event.getName()));
         for (BiomeDictionary.Type type : types)
             RuneCraftory.spawnConfig.getEntityFromBiomeType(type).forEach(entity -> GateSpawning.addSpawn(event.getName(), entity));
-        event.getSpawns().spawn(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(ModEntities.gate.get(), 100, 1, 1));
+        event.getSpawns().withSpawner(EntityClassification.MONSTER, new MobSpawnInfo.Spawners(ModEntities.gate.get(), 100, 1, 1));
 
         List<MineralGenConfig> mineralConf = GenerationConfig.mineralGenFrom(types);
         for (MineralGenConfig conf : mineralConf) {
             if (types.contains(BiomeDictionary.Type.NETHER))
-                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, conf.configuredFeature());
+                event.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, conf.configuredFeature());
             else
-                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION, conf.configuredFeatureNether());
+                event.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION, conf.configuredFeatureNether());
         }
         List<HerbGenConfig> herbConf = GenerationConfig.herbGenFrom(types);
         if (!herbConf.isEmpty()) {
             WeightedBlockStateProvider provider = new WeightedBlockStateProvider();
             for (HerbGenConfig conf : herbConf)
-                provider.addState(conf.getBlock().getDefaultState(), conf.weight());
+                provider.addWeightedBlockstate(conf.getBlock().getDefaultState(), conf.weight());
             if (types.contains(BiomeDictionary.Type.NETHER))
-                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
-                        Feature.FLOWER.configure((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.INSTANCE)).tries(GenerationConfig.netherHerbTries).build()).applyChance(GenerationConfig.netherHerbChance).decorate(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(6))));
+                event.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
+                        Feature.FLOWER.withConfiguration((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.PLACER)).tries(GenerationConfig.netherHerbTries).build()).chance(GenerationConfig.netherHerbChance).withPlacement(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(6))));
             else if (types.contains(BiomeDictionary.Type.END))
-                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
-                        Feature.FLOWER.configure((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.INSTANCE)).tries(GenerationConfig.endHerbTries).build()).applyChance(GenerationConfig.endHerbChance).decorate(Features.Placements.SQUARE_HEIGHTMAP));
+                event.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
+                        Feature.FLOWER.withConfiguration((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.PLACER)).tries(GenerationConfig.endHerbTries).build()).chance(GenerationConfig.endHerbChance).withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT));
             else
-                event.getGeneration().feature(GenerationStage.Decoration.VEGETAL_DECORATION,
-                        Feature.FLOWER.configure((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.INSTANCE)).tries(GenerationConfig.overworldHerbTries).build()).applyChance(GenerationConfig.overworldHerbChance).decorate(Features.Placements.SQUARE_HEIGHTMAP));
+                event.getGeneration().withFeature(GenerationStage.Decoration.VEGETAL_DECORATION,
+                        Feature.FLOWER.withConfiguration((new BlockClusterFeatureConfig.Builder(provider, SimpleBlockPlacer.PLACER)).tries(GenerationConfig.overworldHerbTries).build()).chance(GenerationConfig.overworldHerbChance).withPlacement(Features.Placements.HEIGHTMAP_PLACEMENT));
         }
         if (types.contains(BiomeDictionary.Type.FOREST) && types.contains(BiomeDictionary.Type.OVERWORLD))
             event.getGeneration().getStructures().add(() -> ModFeatures.AMBROSIA_FEATURE);
@@ -113,10 +113,10 @@ public class WorldEvents {
         if (event.getWorld() instanceof ServerWorld) {
             ServerWorld serverWorld = (ServerWorld) event.getWorld();
             if (serverWorld.getChunkProvider().getChunkGenerator() instanceof FlatChunkGenerator &&
-                    serverWorld.getRegistryKey().equals(World.OVERWORLD)) {
+                    serverWorld.getDimensionKey().equals(World.OVERWORLD)) {
                 return;
             }
-            Map<Structure<?>, StructureSeparationSettings> map = serverWorld.getChunkProvider().generator.getStructuresConfig().getStructures();
+            Map<Structure<?>, StructureSeparationSettings> map = serverWorld.getChunkProvider().generator.func_235957_b_().func_236195_a_();
             map.put(ModStructures.AMBROSIA_FOREST.get(), new StructureSeparationSettings(25, 15, 34645653));
             map.put(ModStructures.THUNDERBOLT_RUINS.get(), new StructureSeparationSettings(40, 32, 34645653));
         }
@@ -130,7 +130,7 @@ public class WorldEvents {
 
     @SubscribeEvent
     public void daily(TickEvent.WorldTickEvent e) {
-        if (e.phase == TickEvent.Phase.END && !e.world.isRemote && e.world.getRegistryKey().equals(World.OVERWORLD)) {
+        if (e.phase == TickEvent.Phase.END && !e.world.isRemote && e.world.getDimensionKey().equals(World.OVERWORLD)) {
             WorldHandler.get((ServerWorld) e.world).update((ServerWorld) e.world);
         }
     }

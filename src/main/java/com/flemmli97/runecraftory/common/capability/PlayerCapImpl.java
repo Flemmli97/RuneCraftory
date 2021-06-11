@@ -144,14 +144,14 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
 
     @Override
     public float getMaxHealth(PlayerEntity player) {
-        return (float) (player.getMaxHealth() + (this.foodBuffs.getOrDefault(Attributes.GENERIC_MAX_HEALTH, 0d)));
+        return (float) (player.getMaxHealth() + (this.foodBuffs.getOrDefault(Attributes.MAX_HEALTH, 0d)));
     }
 
     @Override
     public void setMaxHealth(PlayerEntity player, float amount) {
-        ModifiableAttributeInstance health = player.getAttribute(Attributes.GENERIC_MAX_HEALTH);
+        ModifiableAttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
         health.removeModifier(LibConstants.maxHealthModifier);
-        health.addPersistentModifier(new AttributeModifier(LibConstants.maxHealthModifier, "rf.hpModifier", amount - health.getBaseValue(), AttributeModifier.Operation.ADDITION));
+        health.applyPersistentModifier(new AttributeModifier(LibConstants.maxHealthModifier, "rf.hpModifier", amount - health.getBaseValue(), AttributeModifier.Operation.ADDITION));
     }
 
     @Override
@@ -254,7 +254,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
                 this.level[0] += 1;
                 this.level[1] = 0;
                 this.onLevelUp(player);
-                player.world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2f, 1.0f);
+                player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2f, 1.0f);
                 this.addXp(player, diff, true);
             } else {
                 this.level[1] += amount;
@@ -361,7 +361,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
                 if (player.world.isRemote) {
                     stack.getAttributeModifiers(slot).forEach((att, mod) ->
                             this.mainHandBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
-                    this.mainHandBonus.merge(Attributes.GENERIC_ATTACK_DAMAGE, (double) EnchantmentHelper.getModifierForCreature(stack, CreatureAttribute.UNDEFINED), (prev, v) -> prev += v);
+                    this.mainHandBonus.merge(Attributes.ATTACK_DAMAGE, (double) EnchantmentHelper.getModifierForCreature(stack, CreatureAttribute.UNDEFINED), (prev, v) -> prev += v);
                 }
                 break;
             case OFFHAND:
@@ -387,7 +387,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
                 this.feetBonus.getOrDefault(att, 0d) +
                 this.mainHandBonus.getOrDefault(att, 0d) +
                 this.offHandBonus.getOrDefault(att, 0d));
-        if (att == Attributes.GENERIC_ATTACK_DAMAGE)
+        if (att == Attributes.ATTACK_DAMAGE)
             val += this.getStr();
         if (att == ModAttributes.RF_MAGIC.get())
             val += this.getIntel();
@@ -397,8 +397,8 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
             val += this.getVit() * 0.5;
         val += this.foodBuffs.getOrDefault(att, 0d);
 
-        AttributeModifierManager atts = player.getAttributes();
-        val += atts.hasAttribute(att) ? atts.getValue(att) : 0;
+        AttributeModifierManager atts = player.getAttributeManager();
+        val += atts.hasAttributeInstance(att) ? atts.getAttributeValue(att) : 0;
         return val;
     }
 
@@ -431,7 +431,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
                 this.skillMap.get(skill)[0] += 1;
                 this.skillMap.get(skill)[1] = 0;
                 this.onSkillLevelUp(skill, player);
-                player.world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2f, 1.0f);
+                player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.2f, 1.0f);
                 this.increaseSkill(skill, player, diff, true);
             } else {
                 this.skillMap.get(skill)[1] += xp;
@@ -558,9 +558,9 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         prop.effectsMultiplier().forEach((att, d) -> {
             float percent = (float) (d > 0 ? 1 + d * 0.01f : 1 - d * 0.01f);
             double mult = 0;
-            if (att == Attributes.GENERIC_MAX_HEALTH)
+            if (att == Attributes.MAX_HEALTH)
                 mult += this.getMaxHealth(player) * percent;
-            else if (att == Attributes.GENERIC_ATTACK_DAMAGE)
+            else if (att == Attributes.ATTACK_DAMAGE)
                 mult += this.str * percent;
             else if (att == ModAttributes.RF_DEFENCE.get())
                 mult += this.vit * 0.5 * percent;
@@ -673,7 +673,7 @@ public class PlayerCapImpl implements IPlayerCap, ICapabilitySerializable<Compou
         player.setMotion(move.x, player.getMotion().y, move.z);
         for (LivingEntity e : player.world.getEntitiesWithinAABB(LivingEntity.class, player.getBoundingBox().grow(1.0))) {
             if (e != player) {
-                float damagePhys = (float) this.getAttributeValue(player, Attributes.GENERIC_ATTACK_DAMAGE);
+                float damagePhys = (float) this.getAttributeValue(player, Attributes.ATTACK_DAMAGE);
                 this.decreaseRunePoints(player, 2, true);
                 this.increaseSkill(EnumSkills.FIST, player, 5);
                 /*if (!(e instanceof IEntityBase)) {

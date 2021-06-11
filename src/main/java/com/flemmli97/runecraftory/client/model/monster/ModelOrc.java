@@ -43,98 +43,98 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IRe
         this.body = new ModelRendererPlus(this);
         this.body.setDefaultRotPoint(0.0F, 6.0F, 0.0F);
         this.setRotationAngle(this.body, 0.1745F, 0.0F, 0.0F);
-        this.body.setTextureOffset(0, 30).addCuboid(-5.0F, -9.0F, -4.0F, 9.0F, 18.0F, 9.0F, 0.0F, false);
-        this.body.setTextureOffset(36, 30).addCuboid(-5.0F, -9.0F, -4.0F, 9.0F, 18.0F, 9.0F, 0.2F, false);
+        this.body.setTextureOffset(0, 30).addBox(-5.0F, -9.0F, -4.0F, 9.0F, 18.0F, 9.0F, 0.0F, false);
+        this.body.setTextureOffset(36, 30).addBox(-5.0F, -9.0F, -4.0F, 9.0F, 18.0F, 9.0F, 0.2F, false);
 
         this.head = new ModelRendererPlus(this);
         this.head.setDefaultRotPoint(-0.5F, -9.5F, 0.5F);
         this.body.addChild(this.head);
-        this.head.setTextureOffset(0, 0).addCuboid(-5.5F, -10.5F, -5.5F, 11.0F, 11.0F, 11.0F, 0.0F, false);
+        this.head.setTextureOffset(0, 0).addBox(-5.5F, -10.5F, -5.5F, 11.0F, 11.0F, 11.0F, 0.0F, false);
 
         this.headFront = new ModelRendererPlus(this);
         this.headFront.setDefaultRotPoint(0.25F, -1.25F, -3.5F);
         this.head.addChild(this.headFront);
-        this.headFront.setTextureOffset(0, 22).addCuboid(-3.75F, -3.25F, -4.0F, 7.0F, 5.0F, 2.0F, 0.0F, false);
+        this.headFront.setTextureOffset(0, 22).addBox(-3.75F, -3.25F, -4.0F, 7.0F, 5.0F, 2.0F, 0.0F, false);
 
         this.snout = new ModelRendererPlus(this);
         this.snout.setDefaultRotPoint(-0.25F, -0.75F, -2.5F);
         this.headFront.addChild(this.snout);
-        this.snout.setTextureOffset(18, 22).addCuboid(-1.5F, -2.5F, -2.5F, 3.0F, 3.0F, 1.0F, 0.0F, false);
+        this.snout.setTextureOffset(18, 22).addBox(-1.5F, -2.5F, -2.5F, 3.0F, 3.0F, 1.0F, 0.0F, false);
 
         this.earLeft = new ModelRendererPlus(this);
         this.earLeft.setDefaultRotPoint(-3.25F, -9.25F, 0.0F);
         this.headFront.addChild(this.earLeft);
         this.setRotationAngle(this.earLeft, 0.0873F, 0.0F, 0.0F);
-        this.earLeft.setTextureOffset(26, 22).addCuboid(-1.5F, -3.0F, -1.0F, 3.0F, 3.0F, 1.0F, 0.0F, true);
+        this.earLeft.setTextureOffset(26, 22).addBox(-1.5F, -3.0F, -1.0F, 3.0F, 3.0F, 1.0F, 0.0F, true);
 
         this.earRight = new ModelRendererPlus(this);
         this.earRight.setDefaultRotPoint(2.75F, -9.25F, 0.0F);
         this.headFront.addChild(this.earRight);
         this.setRotationAngle(this.earRight, 0.0873F, 0.0F, 0.0F);
-        this.earRight.setTextureOffset(26, 22).addCuboid(-1.5F, -3.0F, -1.0F, 3.0F, 3.0F, 1.0F, 0.0F, false);
+        this.earRight.setTextureOffset(26, 22).addBox(-1.5F, -3.0F, -1.0F, 3.0F, 3.0F, 1.0F, 0.0F, false);
 
         this.handLeftUp = new ModelRendererPlus(this);
         this.handLeftUp.setDefaultRotPoint(4.0F, -3.0F, 0.0F);
         this.body.addChild(this.handLeftUp);
         this.setRotationAngle(this.handLeftUp, -1.0472F, -0.5236F, -0.0873F);
-        this.handLeftUp.setTextureOffset(0, 57).addCuboid(0.0F, -2.0F, -2.0F, 3.0F, 5.0F, 3.0F, 0.0F, false);
+        this.handLeftUp.setTextureOffset(0, 57).addBox(0.0F, -2.0F, -2.0F, 3.0F, 5.0F, 3.0F, 0.0F, false);
 
         this.handLeftDown = new ModelRendererPlus(this);
         this.handLeftDown.setDefaultRotPoint(3.0F, 3.0F, -0.5F);
         this.handLeftUp.addChild(this.handLeftDown);
         this.setRotationAngle(this.handLeftDown, -0.4363F, 0.2618F, 0.2618F);
-        this.handLeftDown.setTextureOffset(12, 57).addCuboid(-3.0F, 0.0F, -1.5F, 3.0F, 9.0F, 3.0F, 0.0F, false);
+        this.handLeftDown.setTextureOffset(12, 57).addBox(-3.0F, 0.0F, -1.5F, 3.0F, 9.0F, 3.0F, 0.0F, false);
 
         this.handRightUp = new ModelRendererPlus(this);
         this.handRightUp.setDefaultRotPoint(-5.0F, -3.0F, 0.0F);
         this.body.addChild(this.handRightUp);
         this.setRotationAngle(this.handRightUp, -1.0472F, 0.5236F, 0.0873F);
-        this.handRightUp.setTextureOffset(0, 57).addCuboid(-3.0F, -2.0F, -2.0F, 3.0F, 5.0F, 3.0F, 0.0F, true);
+        this.handRightUp.setTextureOffset(0, 57).addBox(-3.0F, -2.0F, -2.0F, 3.0F, 5.0F, 3.0F, 0.0F, true);
 
         this.handRightDown = new ModelRendererPlus(this);
         this.handRightDown.setDefaultRotPoint(-3.0F, 3.0F, -0.5F);
         this.handRightUp.addChild(this.handRightDown);
         this.setRotationAngle(this.handRightDown, -0.4363F, -0.2618F, -0.2618F);
-        this.handRightDown.setTextureOffset(12, 57).addCuboid(0.0F, 0.0F, -1.5F, 3.0F, 9.0F, 3.0F, 0.0F, true);
+        this.handRightDown.setTextureOffset(12, 57).addBox(0.0F, 0.0F, -1.5F, 3.0F, 9.0F, 3.0F, 0.0F, true);
 
         this.mazeStick = new ModelRendererPlus(this);
         this.mazeStick.setDefaultRotPoint(0.0F, 0.0F, 0.0F);
         this.handRightDown.addChild(this.mazeStick);
-        this.mazeStick.setTextureOffset(0, 69).addCuboid(1.0F, 7.5F, -13.5F, 1.0F, 1.0F, 12.0F, 0.0F, false);
+        this.mazeStick.setTextureOffset(0, 69).addBox(1.0F, 7.5F, -13.5F, 1.0F, 1.0F, 12.0F, 0.0F, false);
 
         this.mazeHead = new ModelRendererPlus(this);
         this.mazeHead.setDefaultRotPoint(0.0F, 0.0F, 0.0F);
         this.mazeStick.addChild(this.mazeHead);
-        this.mazeHead.setTextureOffset(26, 76).addCuboid(0.0F, 6.5F, -16.0F, 3.0F, 3.0F, 3.0F, 0.0F, false);
+        this.mazeHead.setTextureOffset(26, 76).addBox(0.0F, 6.5F, -16.0F, 3.0F, 3.0F, 3.0F, 0.0F, false);
 
         this.legLeftUp = new ModelRendererPlus(this);
         this.legLeftUp.setDefaultRotPoint(2.4F, 9.0F, 2.0F);
         this.body.addChild(this.legLeftUp);
         this.setRotationAngle(this.legLeftUp, -0.5236F, 0.0F, 0.0F);
-        this.legLeftUp.setTextureOffset(44, 0).addCuboid(-1.5F, 0.0F, -3.0F, 3.0F, 6.0F, 3.0F, 0.0F, false);
+        this.legLeftUp.setTextureOffset(44, 0).addBox(-1.5F, 0.0F, -3.0F, 3.0F, 6.0F, 3.0F, 0.0F, false);
 
         this.legLeftDown = new ModelRendererPlus(this);
         this.legLeftDown.setDefaultRotPoint(0.1F, 6.0F, -3.0F);
         this.legLeftUp.addChild(this.legLeftDown);
         this.setRotationAngle(this.legLeftDown, 0.3491F, 0.0F, 0.0F);
-        this.legLeftDown.setTextureOffset(44, 11).addCuboid(-1.6F, 0.0F, 0.0F, 3.0F, 5.0F, 3.0F, 0.0F, false);
+        this.legLeftDown.setTextureOffset(44, 11).addBox(-1.6F, 0.0F, 0.0F, 3.0F, 5.0F, 3.0F, 0.0F, false);
 
         this.legRightUp = new ModelRendererPlus(this);
         this.legRightUp.setDefaultRotPoint(-3.6F, 9.0F, 2.0F);
         this.body.addChild(this.legRightUp);
         this.setRotationAngle(this.legRightUp, -0.5236F, 0.0F, 0.0F);
-        this.legRightUp.setTextureOffset(44, 0).addCuboid(-1.3F, 0.0F, -3.0F, 3.0F, 6.0F, 3.0F, 0.0F, false);
+        this.legRightUp.setTextureOffset(44, 0).addBox(-1.3F, 0.0F, -3.0F, 3.0F, 6.0F, 3.0F, 0.0F, false);
 
         this.legRightDown = new ModelRendererPlus(this);
         this.legRightDown.setDefaultRotPoint(0.1F, 6.0F, -3.0F);
         this.legRightUp.addChild(this.legRightDown);
         this.setRotationAngle(this.legRightDown, 0.3491F, 0.0F, 0.0F);
-        this.legRightDown.setTextureOffset(44, 11).addCuboid(-1.4F, 0.0F, 0.0F, 3.0F, 5.0F, 3.0F, 0.0F, false);
+        this.legRightDown.setTextureOffset(44, 11).addBox(-1.4F, 0.0F, 0.0F, 3.0F, 5.0F, 3.0F, 0.0F, false);
 
         this.floof = new ModelRendererPlus(this);
         this.floof.setDefaultRotPoint(0.0F, 0.0F, 0.0F);
         this.body.addChild(this.floof);
-        this.floof.setTextureOffset(0, 83).addCuboid(-7.0F, -8.8F, -6.0F, 13.0F, 0.0F, 13.0F, 0.0F, false);
+        this.floof.setTextureOffset(0, 83).addBox(-7.0F, -8.8F, -6.0F, 13.0F, 0.0F, 13.0F, 0.0F, false);
 
         this.animations = new BlockBenchAnimations(this, new ResourceLocation(RuneCraftory.MODID, "models/entity/animation/orc.json"));
     }
@@ -145,7 +145,7 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IRe
     }
 
     @Override
-    public void setAngles(T orc, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(T orc, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
         this.head.rotateAngleY += netHeadYaw * 0.017453292F;
         this.head.rotateAngleX += headPitch * 0.017453292F;
@@ -173,13 +173,13 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IRe
 
     @Override
     public void transform(HandSide side, MatrixStack stack) {
-        this.body.rotate(stack);
+        this.body.translateRotate(stack);
         if (side == HandSide.LEFT) {
-            this.handLeftUp.rotate(stack);
-            this.handLeftDown.rotate(stack);
+            this.handLeftUp.translateRotate(stack);
+            this.handLeftDown.translateRotate(stack);
         } else {
-            this.handRightUp.rotate(stack);
-            this.handRightDown.rotate(stack);
+            this.handRightUp.translateRotate(stack);
+            this.handRightDown.translateRotate(stack);
         }
     }
 

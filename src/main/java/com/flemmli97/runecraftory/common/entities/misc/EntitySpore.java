@@ -78,7 +78,7 @@ public class EntitySpore extends EntityDamageCloud {
         if (id == 64) {
             for (Vector3f dir : particleCircle) {
                 for (int i = 0; i < 3; i++)
-                    this.world.addParticle(new ColoredParticleData(ModParticles.sinkingDust.get(), 168 / 255F, 227 / 255F, 86 / 255F, 1), this.getX(), this.getY() + this.getHeight() * 0.3, this.getZ(), dir.getX(), dir.getY(), dir.getZ());
+                    this.world.addParticle(new ColoredParticleData(ModParticles.sinkingDust.get(), 168 / 255F, 227 / 255F, 86 / 255F, 1), this.getPosX(), this.getPosY() + this.getHeight() * 0.3, this.getPosZ(), dir.getX(), dir.getY(), dir.getZ());
             }
         } else
             super.handleStatusUpdate(id);

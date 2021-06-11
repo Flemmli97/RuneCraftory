@@ -74,10 +74,10 @@ public class PlayerEvents {
                 if (!playerData.getBoolean(RuneCraftory.MODID + ":unlockrecipes")) {
                     playerData.putBoolean(RuneCraftory.MODID + ":unlockrecipes", true);
                     Set<ResourceLocation> allRecipes = Sets.newHashSet();
-                    event.getPlayer().world.getRecipeManager().listAllOfType(ModCrafting.FORGE).forEach(r -> allRecipes.add(r.getId()));
-                    event.getPlayer().world.getRecipeManager().listAllOfType(ModCrafting.CHEMISTRY).forEach(r -> allRecipes.add(r.getId()));
-                    event.getPlayer().world.getRecipeManager().listAllOfType(ModCrafting.ARMOR).forEach(r -> allRecipes.add(r.getId()));
-                    event.getPlayer().world.getRecipeManager().listAllOfType(ModCrafting.COOKING).forEach(r -> allRecipes.add(r.getId()));
+                    event.getPlayer().world.getRecipeManager().getRecipesForType(ModCrafting.FORGE).forEach(r -> allRecipes.add(r.getId()));
+                    event.getPlayer().world.getRecipeManager().getRecipesForType(ModCrafting.CHEMISTRY).forEach(r -> allRecipes.add(r.getId()));
+                    event.getPlayer().world.getRecipeManager().getRecipesForType(ModCrafting.ARMOR).forEach(r -> allRecipes.add(r.getId()));
+                    event.getPlayer().world.getRecipeManager().getRecipesForType(ModCrafting.COOKING).forEach(r -> allRecipes.add(r.getId()));
                     event.getPlayer().getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> cap.getRecipeKeeper().unlockRecipesRes(event.getPlayer(), allRecipes));
                 }
             } else if (playerData.getBoolean(RuneCraftory.MODID + ":unlockrecipes"))

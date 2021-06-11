@@ -36,13 +36,13 @@ public class ModStructures {
 
     public static void setup() {
         Registry.register(Registry.STRUCTURE_PIECE, RuneCraftory.MODID + ":ambrosia_piece", AMBROSIA_PIECE = AmbrosiaForestPiece.Piece::new);
-        Structure.STRUCTURES.put(AMBROSIA_FOREST.get().getRegistryName().toString(), AMBROSIA_FOREST.get());
+        Structure.NAME_STRUCTURE_BIMAP.put(AMBROSIA_FOREST.get().getRegistryName().toString(), AMBROSIA_FOREST.get());
 
         Registry.register(Registry.STRUCTURE_PIECE, RuneCraftory.MODID + ":thunderbolt_piece", THUNDERBOLT_PIECE = ThunderboltRuinsPiece.Piece::new);
-        Structure.STRUCTURES.put(THUNDERBOLT_RUINS.get().getRegistryName().toString(), THUNDERBOLT_RUINS.get());
+        Structure.NAME_STRUCTURE_BIMAP.put(THUNDERBOLT_RUINS.get().getRegistryName().toString(), THUNDERBOLT_RUINS.get());
 
         ImmutableMap<Structure<?>, StructureSeparationSettings> map = ImmutableMap.<Structure<?>, StructureSeparationSettings>builder()
-                .putAll(DimensionStructuresSettings.DEFAULT_STRUCTURES)
+                .putAll(DimensionStructuresSettings.field_236191_b_)
                 .put(AMBROSIA_FOREST.get(), new StructureSeparationSettings(25, 15, 34645653))
                 .put(THUNDERBOLT_RUINS.get(), new StructureSeparationSettings(40, 32, 34645653))
                 .build();

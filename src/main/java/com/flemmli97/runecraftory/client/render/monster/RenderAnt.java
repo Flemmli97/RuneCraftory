@@ -15,8 +15,8 @@ public class RenderAnt<T extends EntityAnt> extends RenderMonster<T, ModelAnt<T>
     }
 
     @Override
-    protected void scale(T entity, MatrixStack stack, float partialTick) {
-        super.scale(entity, stack, partialTick);
+    protected void preRenderCallback(T entity, MatrixStack stack, float partialTick) {
+        super.preRenderCallback(entity, stack, partialTick);
         stack.scale(0.7f, 0.7f, 0.7f);
     }
 }

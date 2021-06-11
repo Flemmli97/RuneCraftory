@@ -61,7 +61,7 @@ public class EntityAmbrosia extends BossMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.29);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.29);
         super.applyAttributes();
     }
 
@@ -90,7 +90,7 @@ public class EntityAmbrosia extends BossMonster {
         for (int i = 0; i < 1; ++i) {
             if (!this.world.isRemote) {
                 EntityButterfly fly = new EntityButterfly(this.world, this);
-                fly.setPosition(fly.getX() + this.rand.nextFloat() * 2 - 1, fly.getY() + this.rand.nextFloat() * 0.5 + 0.25, fly.getZ() + this.rand.nextFloat() * 2 - 1);
+                fly.setPosition(fly.getPosX() + this.rand.nextFloat() * 2 - 1, fly.getPosY() + this.rand.nextFloat() * 0.5 + 0.25, fly.getPosZ() + this.rand.nextFloat() * 2 - 1);
                 fly.shootAtPosition(x, y, z, 0.3f, 5.0f);
                 this.world.addEntity(fly);
             }
@@ -100,7 +100,7 @@ public class EntityAmbrosia extends BossMonster {
     public void summonWave(int duration) {
         if (!this.world.isRemote) {
             EntityAmbrosiaWave wave = new EntityAmbrosiaWave(this.world, this, duration);
-            wave.setPosition(wave.getX(), wave.getY() + 0.2, wave.getZ());
+            wave.setPosition(wave.getPosX(), wave.getPosY() + 0.2, wave.getPosZ());
             this.world.addEntity(wave);
         }
     }
@@ -112,7 +112,7 @@ public class EntityAmbrosia extends BossMonster {
                 double x = Math.cos(angle) * 1.3;
                 double z = Math.sin(angle) * 1.3;
                 EntityAmbrosiaSleep wave = new EntityAmbrosiaSleep(this.world, this);
-                wave.setPosition(this.getX() + x, this.getY() + 0.4, this.getZ() + z);
+                wave.setPosition(this.getPosX() + x, this.getPosY() + 0.4, this.getPosZ() + z);
                 this.world.addEntity(wave);
             }
         }
@@ -159,7 +159,7 @@ public class EntityAmbrosia extends BossMonster {
                 if (anim.canAttack()) {
                     this.getNavigator().clearPath();
                     EntityPollen pollen = new EntityPollen(this.world, this);
-                    pollen.setPosition(pollen.getX(), pollen.getY() + 0.5, pollen.getZ());
+                    pollen.setPosition(pollen.getPosX(), pollen.getPosY() + 0.5, pollen.getPosZ());
                     this.world.addEntity(pollen);
                 }
                 break;

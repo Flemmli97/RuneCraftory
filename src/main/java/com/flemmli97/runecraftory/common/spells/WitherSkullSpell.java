@@ -30,7 +30,7 @@ public class WitherSkullSpell extends Spell {
     public boolean use(ServerWorld world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
         Vector3d look = entity.getLookVec();
         WitherSkullEntity skull = new WitherSkullEntity(world, entity, look.x, look.y, look.z);
-        skull.setPosition(entity.getX(), entity.getEyeY(), entity.getZ());
+        skull.setPosition(entity.getPosX(), entity.getPosYEye(), entity.getPosZ());
         world.addEntity(skull);
         return true;
     }

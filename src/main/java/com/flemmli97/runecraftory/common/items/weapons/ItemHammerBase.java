@@ -136,12 +136,12 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
                 boolean player = entity instanceof PlayerEntity;
                 boolean success = false;
                 for (Entity e : list) {
-                    float damagePhys = CombatUtils.getAttributeValueRaw(entity, Attributes.GENERIC_ATTACK_DAMAGE);
+                    float damagePhys = CombatUtils.getAttributeValueRaw(entity, Attributes.ATTACK_DAMAGE);
                     if (CombatUtils.damage(entity, e, src, damagePhys, stack))
                         success = true;
                 }
                 if (success) {
-                    entity.world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, entity.getSoundCategory(), 1.0f, 1.0f);
+                    entity.world.playSound(null, entity.getPosX(), entity.getPosY(), entity.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_STRONG, entity.getSoundCategory(), 1.0f, 1.0f);
                     if (player)
                         entity.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
 
@@ -156,9 +156,9 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
         ItemStack itemstack = player.getHeldItem(hand);
         if (player.isCreative() || player.getCapability(CapabilityInsts.PlayerCap).map(cap -> cap.getSkillLevel(EnumSkills.HAMMERAXE)[0] >= 5).orElse(false)) {
             player.setActiveHand(hand);
-            return ActionResult.success(itemstack);
+            return ActionResult.resultSuccess(itemstack);
         }
-        return ActionResult.pass(itemstack);
+        return ActionResult.resultPass(itemstack);
     }
 
     @Override

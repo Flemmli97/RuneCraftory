@@ -69,7 +69,7 @@ public class RecipeKeeper {
     public CompoundNBT save() {
         CompoundNBT nbt = new CompoundNBT();
         ListNBT recipes = new ListNBT();
-        this.unlockedRecipes.forEach(res -> recipes.add(StringNBT.of(res.toString())));
+        this.unlockedRecipes.forEach(res -> recipes.add(StringNBT.valueOf(res.toString())));
         nbt.put("Unlocked", recipes);
         return nbt;
     }

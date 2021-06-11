@@ -31,7 +31,7 @@ public class ItemSpell extends Item {
     public void addInformation(ItemStack stack, World world, List<ITextComponent> list, ITooltipFlag flag) {
         super.addInformation(stack, world, list, flag);
         if (this.spell.get() == ModSpells.EMPTY.get())
-            list.add(new StringTextComponent("WIP").formatted(TextFormatting.DARK_RED));
+            list.add(new StringTextComponent("WIP").mergeStyle(TextFormatting.DARK_RED));
     }
 
     @Override
@@ -39,9 +39,9 @@ public class ItemSpell extends Item {
         if (!player.world.isRemote && player.getCooldownTracker().getCooldown(this, 0) <= 0 && this.spell.get().use((ServerWorld) world, player, player.getHeldItem(hand))) {
             player.getCooldownTracker().setCooldown(this, this.getSpell().coolDown());
             this.spell.get().levelSkill((ServerPlayerEntity) player);
-            return ActionResult.success(player.getHeldItem(hand));
+            return ActionResult.resultSuccess(player.getHeldItem(hand));
         }
-        return ActionResult.fail(player.getHeldItem(hand));
+        return ActionResult.resultFail(player.getHeldItem(hand));
     }
 
     public Spell getSpell() {

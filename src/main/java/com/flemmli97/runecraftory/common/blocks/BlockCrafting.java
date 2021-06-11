@@ -78,7 +78,7 @@ public class BlockCrafting extends Block {
     }
 
     @Override
-    public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult result) {
         if (world.isRemote) {
             return ActionResultType.CONSUME;
         } else {
@@ -100,7 +100,7 @@ public class BlockCrafting extends Block {
             return true;
         }
         BlockState blockstate = reader.getBlockState(pos.offset(state.get(FACING).rotateY()));
-        return blockstate.isIn(this) && blockstate.get(FACING) == state.get(FACING) && blockstate.get(PART) == EnumPart.LEFT;
+        return blockstate.matchesBlock(this) && blockstate.get(FACING) == state.get(FACING) && blockstate.get(PART) == EnumPart.LEFT;
     }
 
     @Override
@@ -110,7 +110,7 @@ public class BlockCrafting extends Block {
 
     @Override
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState orig, boolean moving) {
-        if (!state.isIn(orig.getBlock())) {
+        if (!state.matchesBlock(orig.getBlock())) {
             TileEntity tileentity = world.getTileEntity(pos);
             if (tileentity instanceof IInventory) {
                 InventoryHelper.dropInventoryItems(world, pos, (IInventory) tileentity);

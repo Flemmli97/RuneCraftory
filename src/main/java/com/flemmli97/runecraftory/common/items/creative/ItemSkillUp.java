@@ -24,6 +24,6 @@ public class ItemSkillUp extends Item {
                     cap.increaseSkill(skill, player, LevelCalc.xpAmountForSkills(cap.getSkillLevel(skill)[0]) / 2);
             });
         }
-        return ActionResult.success(player.getHeldItem(hand));
+        return ActionResult.resultSuccess(player.getHeldItem(hand));
     }
 }

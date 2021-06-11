@@ -96,13 +96,13 @@ public class TileCrop extends TileEntity {
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        this.fromTag(this.getBlockState(), pkt.getNbtCompound());
+        this.read(this.getBlockState(), pkt.getNbtCompound());
         this.getWorld().notifyBlockUpdate(this.pos, this.getWorld().getBlockState(this.pos), this.getWorld().getBlockState(this.pos), 3);
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundNBT compound) {
-        super.fromTag(state, compound);
+    public void read(BlockState state, CompoundNBT compound) {
+        super.read(state, compound);
         this.age = compound.getFloat("Age");
         this.isGiant = compound.getBoolean("Giant");
         this.level = compound.getFloat("Level");

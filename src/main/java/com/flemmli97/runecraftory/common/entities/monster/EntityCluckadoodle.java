@@ -25,7 +25,7 @@ public class EntityCluckadoodle extends BaseMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.27);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.27);
         super.applyAttributes();
     }
 

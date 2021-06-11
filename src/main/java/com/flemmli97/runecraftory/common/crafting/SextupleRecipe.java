@@ -137,11 +137,11 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
             }
         }
 
-        private static NonNullList<Ingredient> readIngredients(JsonArray p_199568_0_) {
+        private static NonNullList<Ingredient> readIngredients(JsonArray ingredientArray) {
             NonNullList<Ingredient> nonnulllist = NonNullList.create();
 
-            for (int i = 0; i < p_199568_0_.size(); ++i) {
-                Ingredient ingredient = Ingredient.deserialize(p_199568_0_.get(i));
+            for (int i = 0; i < ingredientArray.size(); ++i) {
+                Ingredient ingredient = Ingredient.deserialize(ingredientArray.get(i));
                 if (!ingredient.hasNoMatchingItems()) {
                     nonnulllist.add(ingredient);
                 }
@@ -179,5 +179,5 @@ public abstract class SextupleRecipe implements IRecipe<PlayerContainerInv> {
             buffer.writeItemStack(recipe.getRecipeOutput());
         }
     }
-    //         Optional<ICraftingRecipe> optional = p_217066_1_.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, p_217066_3_, p_217066_1_);
+    //         Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, inventory, world);
 }

@@ -9,6 +9,6 @@ public class ParalysisEffect extends PermanentEffect {
 
     public ParalysisEffect() {
         super(EffectType.HARMFUL, 0, S2CEntityDataSync.Type.COLD);
-        this.addAttributesModifier(Attributes.GENERIC_MOVEMENT_SPEED, "C1400D29-BF42-4F2e-B8C3-F9975B6B41AC", -0.32, AttributeModifier.Operation.MULTIPLY_TOTAL);
+        this.addAttributesModifier(Attributes.MOVEMENT_SPEED, "C1400D29-BF42-4F2e-B8C3-F9975B6B41AC", -0.32, AttributeModifier.Operation.MULTIPLY_TOTAL);
     }
 }

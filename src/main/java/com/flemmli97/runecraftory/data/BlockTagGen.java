@@ -20,19 +20,19 @@ public class BlockTagGen extends BlockTagsProvider {
 
     @Override
     public void registerTags() {
-        this.getOrCreateTagBuilder(ModTags.farmlandTill)
+        this.getOrCreateBuilder(ModTags.farmlandTill)
                 .addTags(Tags.Blocks.DIRT);
 
-        this.getOrCreateTagBuilder(ModTags.sickleDestroyable)
+        this.getOrCreateBuilder(ModTags.sickleDestroyable)
                 .addTags(BlockTags.CORAL_PLANTS, BlockTags.CROPS, BlockTags.FLOWERS, BlockTags.LEAVES,
                         BlockTags.SAPLINGS, BlockTags.TALL_FLOWERS)
                 .add(Blocks.GRASS, Blocks.TALL_GRASS, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS)
                 .add(Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM, Blocks.CRIMSON_FUNGUS, Blocks.WARPED_FUNGUS);
 
-        this.getOrCreateTagBuilder(ModTags.hammerFlattenable)
+        this.getOrCreateBuilder(ModTags.hammerFlattenable)
                 .add(Blocks.FARMLAND, ModBlocks.farmland.get(), Blocks.GRASS_PATH);
 
-        this.getOrCreateTagBuilder(ModTags.hammerBreakable)
+        this.getOrCreateBuilder(ModTags.hammerBreakable)
                 .add(ModBlocks.mineralMap.values().stream().map(RegistryObject::get).toArray(Block[]::new));
     }
 }

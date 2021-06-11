@@ -47,8 +47,8 @@ public class ItemStatManager extends JsonReloadListener {
             try {
                 JsonObject obj = el.getAsJsonObject();
                 if (obj.has("tag")) {
-                    ITag<Item> tag = TagCollectionManager.getTagManager().getItems().get(new ResourceLocation(obj.get("tag").getAsString()));
-                    tag.values().forEach(item -> builder.put(item.getRegistryName(), GSON.fromJson(el, ItemStat.class)));
+                    ITag<Item> tag = TagCollectionManager.getManager().getItemTags().get(new ResourceLocation(obj.get("tag").getAsString()));
+                    tag.getAllElements().forEach(item -> builder.put(item.getRegistryName(), GSON.fromJson(el, ItemStat.class)));
                 } else if (obj.has("item")) {
                     ResourceLocation res = new ResourceLocation(obj.get("item").getAsString());
                     builder.put(res, GSON.fromJson(el, ItemStat.class));

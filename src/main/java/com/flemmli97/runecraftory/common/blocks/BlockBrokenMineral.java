@@ -160,7 +160,7 @@ public class BlockBrokenMineral extends Block implements IWaterLoggable {
 
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader reader, BlockPos pos) {
-        return reader.getBlockState(pos.down()).isSideSolid(reader, pos, Direction.UP, BlockVoxelShape.FULL);
+        return reader.getBlockState(pos.down()).func_242698_a(reader, pos, Direction.UP, BlockVoxelShape.FULL);
     }
 
     @Override
@@ -187,9 +187,9 @@ public class BlockBrokenMineral extends Block implements IWaterLoggable {
 
     public BlockState getMineralState(BlockState state) {
         BlockState blockState = ModBlocks.mineralMap.get(this.tier).get().getDefaultState();
-        if (state.contains(FACING))
+        if (state.hasProperty(FACING))
             state.with(FACING, state.get(FACING));
-        if (state.contains(WATERLOGGED))
+        if (state.hasProperty(WATERLOGGED))
             state.with(WATERLOGGED, state.get(WATERLOGGED));
         return blockState;
     }

@@ -18,15 +18,15 @@ public class SwimWalkMoveController extends NewMoveController {
 
     protected void handleWaterMovement() {
         if (this.action == Action.MOVE_TO && !this.mob.getNavigator().noPath()) {
-            double dX = this.posX - this.mob.getX();
-            double dY = this.posY - this.mob.getY();
-            double dZ = this.posZ - this.mob.getZ();
+            double dX = this.posX - this.mob.getPosX();
+            double dY = this.posY - this.mob.getPosY();
+            double dZ = this.posZ - this.mob.getPosZ();
             double dist = MathHelper.sqrt(dX * dX + dY * dY + dZ * dZ);
             dY = dY / dist;
             float f = (float) (MathHelper.atan2(dZ, dX) * (double) (180F / (float) Math.PI)) - 90.0F;
             this.mob.rotationYaw = this.limitAngle(this.mob.rotationYaw, f, 90.0F);
             this.mob.renderYawOffset = this.mob.rotationYaw;
-            float speed = (float) (this.speed * this.mob.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED));
+            float speed = (float) (this.speed * this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED));
             this.mob.setAIMoveSpeed(MathHelper.lerp(0.125F, this.mob.getAIMoveSpeed(), speed));
             this.mob.setMotion(this.mob.getMotion().add(0.0D, (double) this.mob.getAIMoveSpeed() * dY * 0.1D, 0.0D));
         } else {

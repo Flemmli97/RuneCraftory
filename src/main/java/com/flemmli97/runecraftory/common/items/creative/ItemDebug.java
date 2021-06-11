@@ -24,16 +24,16 @@ public class ItemDebug extends Item {
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand handIn) {
         if (!world.isRemote) {
             long time = System.nanoTime();
-            Set<Structure<?>> structures = GateSpawning.getStructuresAt((ServerWorld) world, player.getBlockPos());
+            Set<Structure<?>> structures = GateSpawning.getStructuresAt((ServerWorld) world, player.getPosition());
             long delta = System.nanoTime() - time;
-            player.sendMessage(new StringTextComponent("" + structures), Util.NIL_UUID);
-            player.sendMessage(new StringTextComponent("check time " + delta), Util.NIL_UUID);
+            player.sendMessage(new StringTextComponent("" + structures), Util.DUMMY_UUID);
+            player.sendMessage(new StringTextComponent("check time " + delta), Util.DUMMY_UUID);
 
             long time2 = System.nanoTime();
-            boolean hasSpawns = GateSpawning.hasStructureSpawns((ServerWorld) world, player.getBlockPos());
+            boolean hasSpawns = GateSpawning.hasStructureSpawns((ServerWorld) world, player.getPosition());
             long delta2 = System.nanoTime() - time2;
-            player.sendMessage(new StringTextComponent("" + hasSpawns), Util.NIL_UUID);
-            player.sendMessage(new StringTextComponent("time " + delta2), Util.NIL_UUID);
+            player.sendMessage(new StringTextComponent("" + hasSpawns), Util.DUMMY_UUID);
+            player.sendMessage(new StringTextComponent("time " + delta2), Util.DUMMY_UUID);
             /*ItemStack stack = new ItemStack(ModItems.recipe);
             //IPlayer capSync = player.getCapability(PlayerCapProvider.PlayerCap, null);
             stack.setTagCompound(new NBTTagCompound());

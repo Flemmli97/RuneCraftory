@@ -39,85 +39,85 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
         this.body = new ModelRendererPlus(this);
         this.body.setDefaultRotPoint(0.0F, 16.8F, 1.5F);
         this.setRotationAngle(this.body, -0.5236F, 0.0F, 0.0F);
-        this.body.setTextureOffset(0, 12).addCuboid(-3.5F, -4.0F, -4.5F, 7.0F, 7.0F, 9.0F, 0.0F, false);
+        this.body.setTextureOffset(0, 12).addBox(-3.5F, -4.0F, -4.5F, 7.0F, 7.0F, 9.0F, 0.0F, false);
 
         this.head = new ModelRendererPlus(this);
         this.head.setDefaultRotPoint(0.0F, -2.5F, -4.0F);
         this.body.addChild(this.head);
         this.setRotationAngle(this.head, 0.6109F, 0.0F, 0.0F);
-        this.head.setTextureOffset(0, 0).addCuboid(-3.0F, -4.0F, -5.5F, 6.0F, 6.0F, 6.0F, 0.0F, false);
+        this.head.setTextureOffset(0, 0).addBox(-3.0F, -4.0F, -5.5F, 6.0F, 6.0F, 6.0F, 0.0F, false);
 
         this.earLeft = new ModelRendererPlus(this);
         this.earLeft.setDefaultRotPoint(1.5F, -2.5F, -2.0F);
         this.head.addChild(this.earLeft);
-        this.earLeft.setTextureOffset(24, 0).addCuboid(-0.5F, -3.5F, -0.5F, 1.0F, 2.0F, 1.0F, 0.0F, false);
+        this.earLeft.setTextureOffset(24, 0).addBox(-0.5F, -3.5F, -0.5F, 1.0F, 2.0F, 1.0F, 0.0F, false);
 
         this.earRight = new ModelRendererPlus(this);
         this.earRight.setDefaultRotPoint(-1.5F, -2.5F, -2.0F);
         this.head.addChild(this.earRight);
-        this.earRight.setTextureOffset(24, 0).addCuboid(-0.5F, -3.5F, -0.5F, 1.0F, 2.0F, 1.0F, 0.0F, true);
+        this.earRight.setTextureOffset(24, 0).addBox(-0.5F, -3.5F, -0.5F, 1.0F, 2.0F, 1.0F, 0.0F, true);
 
         this.tail = new ModelRendererPlus(this);
         this.tail.setDefaultRotPoint(0.0F, -1.0F, 4.5F);
         this.body.addChild(this.tail);
         this.setRotationAngle(this.tail, -0.1745F, 0.0F, 0.0F);
-        this.tail.setTextureOffset(32, 0).addCuboid(-2.5F, -10.5F, 0.0F, 5.0F, 12.0F, 2.0F, 0.0F, false);
+        this.tail.setTextureOffset(32, 0).addBox(-2.5F, -10.5F, 0.0F, 5.0F, 12.0F, 2.0F, 0.0F, false);
 
         this.armLeft = new ModelRendererPlus(this);
         this.armLeft.setDefaultRotPoint(3.5F, 0.5F, -2.5F);
         this.body.addChild(this.armLeft);
         this.setRotationAngle(this.armLeft, 0.0F, 0.0F, 0.1745F);
-        this.armLeft.setTextureOffset(32, 14).addCuboid(-0.5F, 0.0F, -1.0F, 1.0F, 3.0F, 2.0F, 0.0F, false);
+        this.armLeft.setTextureOffset(32, 14).addBox(-0.5F, 0.0F, -1.0F, 1.0F, 3.0F, 2.0F, 0.0F, false);
 
         this.armLeftDown = new ModelRendererPlus(this);
         this.armLeftDown.setDefaultRotPoint(0.0F, 2.5F, 1.0F);
         this.armLeft.addChild(this.armLeftDown);
         this.setRotationAngle(this.armLeftDown, 0.0F, 0.0F, 0.5236F);
-        this.armLeftDown.setTextureOffset(32, 20).addCuboid(-0.5F, 0.5F, -2.0F, 1.0F, 3.0F, 2.0F, 0.0F, false);
+        this.armLeftDown.setTextureOffset(32, 20).addBox(-0.5F, 0.5F, -2.0F, 1.0F, 3.0F, 2.0F, 0.0F, false);
 
         this.armRight = new ModelRendererPlus(this);
         this.armRight.setDefaultRotPoint(-3.5F, 0.5F, -2.5F);
         this.body.addChild(this.armRight);
         this.setRotationAngle(this.armRight, 0.0F, 0.0F, -0.1745F);
-        this.armRight.setTextureOffset(32, 14).addCuboid(-0.5F, 0.0F, -1.0F, 1.0F, 3.0F, 2.0F, 0.0F, true);
+        this.armRight.setTextureOffset(32, 14).addBox(-0.5F, 0.0F, -1.0F, 1.0F, 3.0F, 2.0F, 0.0F, true);
 
         this.armRightDown = new ModelRendererPlus(this);
         this.armRightDown.setDefaultRotPoint(0.0F, 2.5F, 1.0F);
         this.armRight.addChild(this.armRightDown);
         this.setRotationAngle(this.armRightDown, 0.0F, 0.0F, -0.5236F);
-        this.armRightDown.setTextureOffset(32, 20).addCuboid(-0.5F, 0.5F, -2.0F, 1.0F, 3.0F, 2.0F, 0.0F, true);
+        this.armRightDown.setTextureOffset(32, 20).addBox(-0.5F, 0.5F, -2.0F, 1.0F, 3.0F, 2.0F, 0.0F, true);
 
         this.legLeftBase = new ModelRendererPlus(this);
         this.legLeftBase.setDefaultRotPoint(2.0F, 1.75F, 2.75F);
         this.body.addChild(this.legLeftBase);
         this.setRotationAngle(this.legLeftBase, 0.5236F, 0.0F, 0.0F);
-        this.legLeftBase.setTextureOffset(46, 0).addCuboid(0.0F, -1.75F, -1.25F, 2.0F, 4.0F, 3.0F, 0.0F, false);
+        this.legLeftBase.setTextureOffset(46, 0).addBox(0.0F, -1.75F, -1.25F, 2.0F, 4.0F, 3.0F, 0.0F, false);
 
         this.legLeft = new ModelRendererPlus(this);
         this.legLeft.setDefaultRotPoint(1.0F, 2.75F, 1.75F);
         this.legLeftBase.addChild(this.legLeft);
-        this.legLeft.setTextureOffset(46, 7).addCuboid(-1.0F, -0.5F, -2.0F, 2.0F, 2.0F, 2.0F, 0.0F, false);
+        this.legLeft.setTextureOffset(46, 7).addBox(-1.0F, -0.5F, -2.0F, 2.0F, 2.0F, 2.0F, 0.0F, false);
 
         this.feetLeft = new ModelRendererPlus(this);
         this.feetLeft.setDefaultRotPoint(0.0F, 2.0F, -2.0F);
         this.legLeft.addChild(this.feetLeft);
-        this.feetLeft.setTextureOffset(46, 11).addCuboid(-1.0F, -0.5F, -1.0F, 2.0F, 0.0F, 1.0F, 0.0F, false);
+        this.feetLeft.setTextureOffset(46, 11).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 0.0F, 1.0F, 0.0F, false);
 
         this.legRightBase = new ModelRendererPlus(this);
         this.legRightBase.setDefaultRotPoint(-4.0F, 1.75F, 2.75F);
         this.body.addChild(this.legRightBase);
         this.setRotationAngle(this.legRightBase, 0.5236F, 0.0F, 0.0F);
-        this.legRightBase.setTextureOffset(46, 0).addCuboid(0.0F, -1.75F, -1.25F, 2.0F, 4.0F, 3.0F, 0.0F, true);
+        this.legRightBase.setTextureOffset(46, 0).addBox(0.0F, -1.75F, -1.25F, 2.0F, 4.0F, 3.0F, 0.0F, true);
 
         this.legRight = new ModelRendererPlus(this);
         this.legRight.setDefaultRotPoint(1.0F, 2.75F, 1.75F);
         this.legRightBase.addChild(this.legRight);
-        this.legRight.setTextureOffset(46, 7).addCuboid(-1.0F, -0.5F, -2.0F, 2.0F, 2.0F, 2.0F, 0.0F, true);
+        this.legRight.setTextureOffset(46, 7).addBox(-1.0F, -0.5F, -2.0F, 2.0F, 2.0F, 2.0F, 0.0F, true);
 
         this.feetRight = new ModelRendererPlus(this);
         this.feetRight.setDefaultRotPoint(0.0F, 2.0F, -2.0F);
         this.legRight.addChild(this.feetRight);
-        this.feetRight.setTextureOffset(46, 11).addCuboid(-1.0F, -0.5F, -1.0F, 2.0F, 0.0F, 1.0F, 0.0F, false);
+        this.feetRight.setTextureOffset(46, 11).addBox(-1.0F, -0.5F, -1.0F, 2.0F, 0.0F, 1.0F, 0.0F, false);
 
         this.animations = new BlockBenchAnimations(this, new ResourceLocation(RuneCraftory.MODID, "models/entity/animation/chipsqueek.json"));
     }
@@ -128,7 +128,7 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
     }
 
     @Override
-    public void setAngles(T chipsqueek, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(T chipsqueek, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
         this.tail.rotateAngleX += MathHelper.cos(ageInTicks * 0.04F) * 0.25F + 0.05F;
         this.tail.rotateAngleY += MathHelper.sin(ageInTicks * 0.037F) * 0.25F;

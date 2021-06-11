@@ -28,7 +28,7 @@ public class AttackAABBRender {
         this.list.addAll(this.toAdd);
         this.toAdd.clear();
         this.list.removeIf(r -> r.render(stack, buffer));
-        buffer.draw(RenderType.LINES);
+        buffer.finish(RenderType.LINES);
     }
 
     private static class RenderAABB {

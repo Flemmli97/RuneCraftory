@@ -127,7 +127,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
         if (this.tier.getTierLevel() != 0 && !world.isRemote) {
             int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
             int range = Math.min(useTime, this.tier.getTierLevel());
-            BlockPos pos = entity.getBlockPos();
+            BlockPos pos = entity.getPosition();
             AtomicBoolean flag = new AtomicBoolean(false);
             if (range == 0) {
                 if (entity instanceof PlayerEntity) {
@@ -157,9 +157,9 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
         ItemStack itemstack = player.getHeldItem(hand);
         if (this.tier.getTierLevel() != 0) {
             player.setActiveHand(hand);
-            return ActionResult.success(itemstack);
+            return ActionResult.resultSuccess(itemstack);
         }
-        return ActionResult.pass(itemstack);
+        return ActionResult.resultPass(itemstack);
     }
 
     @Override
@@ -193,7 +193,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
                     return true;
                 }
             } else {
-                return world.breakBlock(pos, true, entity, 3);
+                return world.destroyBlock(pos, true, entity, 3);
             }
         } else if (state.isIn(ModTags.hammerFlattenable) && world.getBlockState(pos.up()).getMaterial() == Material.AIR) {
             if (world.setBlockState(pos, Block.nudgeEntitiesWithNewState(state, Blocks.DIRT.getDefaultState(), world, pos))) {

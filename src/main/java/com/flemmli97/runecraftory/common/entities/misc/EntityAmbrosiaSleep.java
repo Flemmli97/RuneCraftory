@@ -40,7 +40,7 @@ public class EntityAmbrosiaSleep extends Entity implements IOwnable<EntityAmbros
         this(ModEntities.sleep_ball.get(), world);
         this.owner = caster;
         this.ownerUUID = caster.getUniqueID();
-        this.setPosition(caster.getX(), caster.getY(), caster.getZ());
+        this.setPosition(caster.getPosX(), caster.getPosY(), caster.getPosZ());
         this.pred = caster.hitPred;
     }
 
@@ -88,7 +88,7 @@ public class EntityAmbrosiaSleep extends Entity implements IOwnable<EntityAmbros
         ++this.livingTick;
         if (this.world.isRemote) {
             for (int i = 0; i < 2; i++) {
-                this.world.addParticle(new ColoredParticleData(ModParticles.light.get(), 207 / 255F, 13 / 255F, 38 / 255F, 1, 2), this.getX() + this.rand.nextGaussian() * 0.15, this.getY() + 0.35 + this.rand.nextGaussian() * 0.07, this.getZ() + this.rand.nextGaussian() * 0.15, this.rand.nextGaussian() * 0.01, Math.abs(this.rand.nextGaussian() * 0.03), this.rand.nextGaussian() * 0.01);
+                this.world.addParticle(new ColoredParticleData(ModParticles.light.get(), 207 / 255F, 13 / 255F, 38 / 255F, 1, 2), this.getPosX() + this.rand.nextGaussian() * 0.15, this.getPosY() + 0.35 + this.rand.nextGaussian() * 0.07, this.getPosZ() + this.rand.nextGaussian() * 0.15, this.rand.nextGaussian() * 0.01, Math.abs(this.rand.nextGaussian() * 0.03), this.rand.nextGaussian() * 0.01);
             }
         }
         if (this.livingTick > 40) {

@@ -40,7 +40,7 @@ public class EntityBigMuck extends BaseMonster {
                 if (i < this.attackPos.size()) {
                     Vector3f vec = this.attackPos.get(i);
                     EntitySpore spore = new EntitySpore(this.world, this);
-                    spore.setPosition(spore.getX() + vec.getX(), spore.getY() + 0.4, spore.getZ() + vec.getZ());
+                    spore.setPosition(spore.getPosX() + vec.getX(), spore.getPosY() + 0.4, spore.getPosZ() + vec.getZ());
                     this.world.addEntity(spore);
                 }
             }

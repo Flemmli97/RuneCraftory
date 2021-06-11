@@ -25,7 +25,7 @@ public class BlockFarm extends FarmlandBlock {
 
     @Override
     public void onFallenUpon(World world, BlockPos pos, Entity entity, float dmg) {
-        entity.handleFallDamage(dmg, 1.0F);
+        entity.onLivingFall(dmg, 1.0F);
     }
 
     @Override

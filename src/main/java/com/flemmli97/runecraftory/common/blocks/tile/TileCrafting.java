@@ -80,8 +80,8 @@ public class TileCrafting extends TileEntity implements IItemHandlerModifiable, 
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundNBT nbt) {
-        super.fromTag(state, nbt);
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
         ItemStackHelper.loadAllItems(nbt, this.inventory);
         nbt.getInt("Index");
     }

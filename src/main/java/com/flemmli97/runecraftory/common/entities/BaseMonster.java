@@ -170,17 +170,17 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             ModifiableAttributeInstance inst = this.getAttribute(att.getKey());
             if (inst != null) {
                 inst.setBaseValue(att.getValue());
-                if (att.getKey() == Attributes.GENERIC_MAX_HEALTH)
+                if (att.getKey() == Attributes.MAX_HEALTH)
                     this.setHealth(this.getMaxHealth());
             }
         }
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes(Collection<RegistryObject<Attribute>> atts) {
-        AttributeModifierMap.MutableAttribute map = MonsterEntity.createHostileAttributes().add(Attributes.GENERIC_MOVEMENT_SPEED, 0.22);
+        AttributeModifierMap.MutableAttribute map = MonsterEntity.func_234295_eP_().createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.22);
         if (atts != null)
             for (RegistryObject<Attribute> att : atts)
-                map.add(att.get());
+                map.createMutableAttribute(att.get());
         return map;
     }
 
@@ -401,8 +401,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             if (inst != null) {
                 inst.removeModifier(attributeLevelMod);
                 float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0) * 0.5f;
-                inst.addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * val * (1 + multiplier), AttributeModifier.Operation.ADDITION));
-                if (att == Attributes.GENERIC_MAX_HEALTH)
+                inst.applyPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * val * (1 + multiplier), AttributeModifier.Operation.ADDITION));
+                if (att == Attributes.MAX_HEALTH)
                     this.setHealth(this.getMaxHealth() - preHealthDiff);
             }
         });
@@ -494,9 +494,9 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     @Override
-    public boolean handleFallDamage(float distance, float damageMultiplier) {
+    public boolean onLivingFall(float distance, float damageMultiplier) {
         if (!this.isFlyingEntity()) {
-            super.handleFallDamage(distance, damageMultiplier);
+            super.onLivingFall(distance, damageMultiplier);
         }
         return false;
     }
@@ -523,7 +523,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             double d0 = this.rand.nextGaussian() * 0.02;
             double d2 = this.rand.nextGaussian() * 0.02;
             double d3 = this.rand.nextGaussian() * 0.02;
-            this.world.addParticle(particle, this.getX() + this.rand.nextFloat() * this.getWidth() * 2.0f - this.getWidth(), this.getY() + 0.5 + this.rand.nextFloat() * this.getHeight(), this.getZ() + this.rand.nextFloat() * this.getWidth() * 2.0f - this.getWidth(), d0, d2, d3);
+            this.world.addParticle(particle, this.getPosX() + this.rand.nextFloat() * this.getWidth() * 2.0f - this.getWidth(), this.getPosY() + 0.5 + this.rand.nextFloat() * this.getHeight(), this.getPosZ() + this.rand.nextFloat() * this.getWidth() * 2.0f - this.getWidth(), d0, d2, d3);
         }
     }
 
@@ -535,8 +535,8 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     @Override
-    public void takeKnockback(float strength, double xRatio, double zRatio) {
-        super.takeKnockback(0, xRatio, zRatio);
+    public void applyKnockback(float strength, double xRatio, double zRatio) {
+        super.applyKnockback(0, xRatio, zRatio);
     }
 
 
@@ -563,7 +563,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 double d2 = this.rand.nextGaussian() * 0.02D;
-                this.world.addParticle(ParticleTypes.POOF, this.getParticleX(1.0D), this.getRandomBodyY(), this.getParticleZ(1.0D), d0, d1, d2);
+                this.world.addParticle(ParticleTypes.POOF, this.getPosXRandom(1.0D), this.getPosYRandom(), this.getPosZRandom(1.0D), d0, d1, d2);
             }
         }
         //}
@@ -578,7 +578,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        return (source.getTrueSource() == null || this.canAttackFrom(source.getTrueSource().getBlockPos())) && super.attackEntityFrom(source, amount);
+        return (source.getTrueSource() == null || this.canAttackFrom(source.getTrueSource().getPosition())) && super.attackEntityFrom(source, amount);
     }
 
     private boolean canAttackFrom(BlockPos pos) {
@@ -674,7 +674,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     @Override
-    protected ActionResultType interactMob(PlayerEntity player, Hand hand) {
+    protected ActionResultType getEntityInteractionResult(PlayerEntity player, Hand hand) {
         if (this.world.isRemote)
             return ActionResultType.PASS;
         ItemStack stack = player.getHeldItem(hand);
@@ -721,7 +721,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     }
 
     protected void tameEntity(PlayerEntity owner) {
-        this.setHomePosAndDistance(this.getBlockPos(), -1);
+        this.setHomePosAndDistance(this.getPosition(), -1);
         this.setOwner(owner);
         this.navigator.clearPath();
         this.setAttackTarget(null);
@@ -803,7 +803,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             }
             this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1f;
             if (this.canPassengerSteer()) {
-                this.setAIMoveSpeed((float) this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED));
+                this.setAIMoveSpeed((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED));
                 this.setMoving(forward != 0 || strafing != 0);
                 forward *= this.ridingSpeedModifier();
                 strafing *= this.ridingSpeedModifier();
@@ -814,7 +814,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             if (this.onGround || this.isFlyingEntity()) {
                 this.doJumping = false;
             }
-            this.method_29242(this, false);
+            this.func_233629_a_(this, false);
         } else {
             this.handleLandTravel(vec);
         }
@@ -858,7 +858,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             }
             this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1f;
             if (this.canPassengerSteer()) {
-                this.setAIMoveSpeed((float) this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED));
+                this.setAIMoveSpeed((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED));
                 this.setMoving(forward != 0 || strafing != 0);
                 vec = new Vector3d(strafing, vec.y, forward);
             } else if (entitylivingbase instanceof PlayerEntity) {
@@ -866,7 +866,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
             }
             vec = vec.add(0, up, 0);
             this.setDoJumping(false);
-            this.method_29242(this, false);
+            this.func_233629_a_(this, false);
         }
 
         this.moveRelative(0.1F, vec);
@@ -882,7 +882,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
      * @return For flying entities: The max speed for flying up
      */
     public double maxAscensionSpeed() {
-        return this.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED) * 2;
+        return this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 2;
     }
 
     @Override

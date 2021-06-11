@@ -44,10 +44,10 @@ public class JEI implements IModPlugin {
         if (Minecraft.getInstance() == null || Minecraft.getInstance().world == null)
             return;
         RecipeManager manager = Minecraft.getInstance().world.getRecipeManager();
-        reg.addRecipes(manager.listAllOfType(ModCrafting.FORGE), SextupleRecipeCategory.FORGECATEGORY);
-        reg.addRecipes(manager.listAllOfType(ModCrafting.ARMOR), SextupleRecipeCategory.ARMORCATEGORY);
-        reg.addRecipes(manager.listAllOfType(ModCrafting.COOKING), SextupleRecipeCategory.COOKINGCATEGORY);
-        reg.addRecipes(manager.listAllOfType(ModCrafting.CHEMISTRY), SextupleRecipeCategory.CHEMISTRYCATEGORY);
+        reg.addRecipes(manager.getRecipesForType(ModCrafting.FORGE), SextupleRecipeCategory.FORGECATEGORY);
+        reg.addRecipes(manager.getRecipesForType(ModCrafting.ARMOR), SextupleRecipeCategory.ARMORCATEGORY);
+        reg.addRecipes(manager.getRecipesForType(ModCrafting.COOKING), SextupleRecipeCategory.COOKINGCATEGORY);
+        reg.addRecipes(manager.getRecipesForType(ModCrafting.CHEMISTRY), SextupleRecipeCategory.CHEMISTRYCATEGORY);
     }
 
     @Override

@@ -33,7 +33,7 @@ public class EntityMobArrow extends EntityProjectile {
     @Override
     protected boolean onEntityHit(EntityRayTraceResult res) {
         if (!(this.getOwner() instanceof BaseMonster) || !(res.getEntity() instanceof LivingEntity) || ((BaseMonster) this.getOwner()).hitPred.test((LivingEntity) res.getEntity())) {
-            if (CombatUtils.damage(this.getOwner(), res.getEntity(), (CustomDamage) new CustomDamage.Builder(this, this.getOwner()).get().setProjectile(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.GENERIC_ATTACK_DAMAGE) * this.damageMultiplier, null)) {
+            if (CombatUtils.damage(this.getOwner(), res.getEntity(), (CustomDamage) new CustomDamage.Builder(this, this.getOwner()).get().setProjectile(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
                 if (res.getEntity() instanceof LivingEntity) {
                     LivingEntity livingentity = (LivingEntity) res.getEntity();
                     livingentity.setArrowCountInEntity(livingentity.getArrowCountInEntity() + 1);
@@ -41,7 +41,7 @@ public class EntityMobArrow extends EntityProjectile {
                     EnchantmentHelper.applyArthropodEnchantments(this.getOwner(), livingentity);
 
                     if (livingentity instanceof PlayerEntity && this.getOwner() instanceof ServerPlayerEntity && !this.isSilent()) {
-                        ((ServerPlayerEntity) this.getOwner()).connection.sendPacket(new SChangeGameStatePacket(SChangeGameStatePacket.PROJECTILE_HIT_PLAYER, 0.0F));
+                        ((ServerPlayerEntity) this.getOwner()).connection.sendPacket(new SChangeGameStatePacket(SChangeGameStatePacket.HIT_PLAYER_ARROW, 0.0F));
                     }
                 }
                 this.remove();

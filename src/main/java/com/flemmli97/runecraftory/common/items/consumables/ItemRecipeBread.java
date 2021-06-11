@@ -36,23 +36,23 @@ public class ItemRecipeBread extends Item {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack p_77661_1_) {
+    public UseAction getUseAction(ItemStack stack) {
         return UseAction.EAT;
     }
 
     @Override
-    public int getUseDuration(ItemStack p_77626_1_) {
+    public int getUseDuration(ItemStack stack) {
         return 32;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World p_77659_1_, PlayerEntity player, Hand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity player, Hand hand) {
         player.setActiveHand(hand);
-        return ActionResult.consume(player.getHeldItem(hand));
+        return ActionResult.resultConsume(player.getHeldItem(hand));
     }
 
     @Override
-    public boolean hasEffect(ItemStack p_77636_1_) {
+    public boolean hasEffect(ItemStack stack) {
         return true;
     }
 
@@ -62,15 +62,15 @@ public class ItemRecipeBread extends Item {
             int amount = Math.max(1, ItemNBT.itemLevel(stack) / 3);
             ServerPlayerEntity player = (ServerPlayerEntity) living;
             IPlayerCap cap = player.getCapability(CapabilityInsts.PlayerCap).orElseThrow(EntityUtils::capabilityException);
-            Collection<SextupleRecipe> unlocked = player.getServer().getRecipeManager().listAllOfType(CraftingUtils.getType(this.type))
+            Collection<SextupleRecipe> unlocked = player.getServer().getRecipeManager().getRecipesForType(CraftingUtils.getType(this.type))
                     .stream().filter(r -> !cap.getRecipeKeeper().isUnlocked(r) && (r.getCraftingLevel() - cap.getSkillLevel(this.getSkill())[0]) <= 5)
                     .sorted(Comparator.comparingInt(SextupleRecipe::getCraftingLevel))
                     .limit(amount).collect(Collectors.toList());
             cap.getRecipeKeeper().unlockRecipes(player, unlocked);
             if (unlocked.isEmpty())
-                player.sendMessage(new TranslationTextComponent("recipe.eat.fail"), Util.NIL_UUID);
+                player.sendMessage(new TranslationTextComponent("recipe.eat.fail"), Util.DUMMY_UUID);
         }
-        world.playSound(null, living.getX(), living.getY(), living.getZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+        world.playSound(null, living.getPosX(), living.getPosY(), living.getPosZ(), SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
         if (!(living instanceof PlayerEntity) || !((PlayerEntity) living).abilities.isCreativeMode) {
             stack.shrink(1);
         }

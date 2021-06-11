@@ -28,6 +28,6 @@ public class ItemModels extends ItemModelProvider {
         this.withExistingParent(ModItems.spawner.get().getRegistryName().getPath(), "block/spawner");
 
         for (SpawnEgg egg : SpawnEgg.getEggs())
-            this.withExistingParent(egg.getRegistryName().getPath(), ModelsResourceUtil.getMinecraftNamespacedItem("template_spawn_egg"));
+            this.withExistingParent(egg.getRegistryName().getPath(), ModelsResourceUtil.func_240224_b_("template_spawn_egg"));
     }
 }

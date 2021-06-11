@@ -142,18 +142,18 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
             if (this.deathTime < 40) {
                 if (this.deathTime % 10 == 0)
                     this.world.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                            this.getX() + (this.rand.nextDouble() - 0.5D) * (this.getWidth()),
-                            this.getY() + this.rand.nextDouble() * (this.getHeight()),
-                            this.getZ() + (this.rand.nextDouble() - 0.5D) * (this.getWidth()),
+                            this.getPosX() + (this.rand.nextDouble() - 0.5D) * (this.getWidth()),
+                            this.getPosY() + this.rand.nextDouble() * (this.getHeight()),
+                            this.getPosZ() + (this.rand.nextDouble() - 0.5D) * (this.getWidth()),
                             this.rand.nextGaussian() * 0.02D,
                             this.rand.nextGaussian() * 0.02D,
                             this.rand.nextGaussian() * 0.02D);
             } else if (this.deathTime < 80) {
                 if (this.deathTime % 2 == 0)
                     this.world.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                            this.getX() + (this.rand.nextDouble() - 0.5D) * (this.getWidth() + 2),
-                            this.getY() + this.rand.nextDouble() * (this.getHeight() + 1),
-                            this.getZ() + (this.rand.nextDouble() - 0.5D) * (this.getWidth() + 2),
+                            this.getPosX() + (this.rand.nextDouble() - 0.5D) * (this.getWidth() + 2),
+                            this.getPosY() + this.rand.nextDouble() * (this.getHeight() + 1),
+                            this.getPosZ() + (this.rand.nextDouble() - 0.5D) * (this.getWidth() + 2),
                             this.rand.nextGaussian() * 0.02D,
                             this.rand.nextGaussian() * 0.02D,
                             this.rand.nextGaussian() * 0.02D);
@@ -161,9 +161,9 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
                 int amount = (this.deathTime - 80) / 10;
                 for (int i = 0; i < amount; i++) {
                     this.world.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                            this.getX() + (this.rand.nextDouble() - 0.5D) * (this.getWidth() + 3),
-                            this.getY() + this.rand.nextDouble() * (this.getHeight() + 1),
-                            this.getZ() + (this.rand.nextDouble() - 0.5D) * (this.getWidth() + 3),
+                            this.getPosX() + (this.rand.nextDouble() - 0.5D) * (this.getWidth() + 3),
+                            this.getPosY() + this.rand.nextDouble() * (this.getHeight() + 1),
+                            this.getPosZ() + (this.rand.nextDouble() - 0.5D) * (this.getWidth() + 3),
                             this.rand.nextGaussian() * 0.02D,
                             this.rand.nextGaussian() * 0.02D,
                             this.rand.nextGaussian() * 0.02D);

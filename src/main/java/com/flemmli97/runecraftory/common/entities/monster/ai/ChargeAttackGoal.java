@@ -16,7 +16,7 @@ public class ChargeAttackGoal<T extends ChargingMonster> extends AnimatedMeleeGo
             AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.MELEE);
             if (this.distanceToTargetSq <= this.attacker.maxAttackRange(anim) * 3)
                 return anim;
-            else if (this.distanceToTargetSq <= (this.attacker.chargingLength() * this.attacker.chargingLength() + 1) && this.attacker.getY() >= this.target.getY())
+            else if (this.distanceToTargetSq <= (this.attacker.chargingLength() * this.attacker.chargingLength() + 1) && this.attacker.getPosY() >= this.target.getPosY())
                 return this.attacker.getRandomAnimation(AnimationType.CHARGE);
         }
         return this.attacker.getRandomAnimation(AnimationType.IDLE);

@@ -23,7 +23,7 @@ public class SkillButton extends Button {
     }
 
     @Override
-    public void renderButton(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+    public void renderWidget(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
         if (this.ownerGui instanceof CreativeScreen && ((CreativeScreen) this.ownerGui).getSelectedTabIndex() != ItemGroup.INVENTORY.getIndex()) {
             this.active = false;
             return;
@@ -32,10 +32,10 @@ public class SkillButton extends Button {
         Minecraft mc = Minecraft.getInstance();
         mc.getTextureManager().bindTexture(texturepath);
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
-        this.hovered = (mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height);
+        this.isHovered = (mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        this.drawTexture(stack, this.x, this.y, 131 + (this.hovered ? 13 : 0), 41, this.width, this.height);
+        this.blit(stack, this.x, this.y, 131 + (this.isHovered ? 13 : 0), 41, this.width, this.height);
     }
 }

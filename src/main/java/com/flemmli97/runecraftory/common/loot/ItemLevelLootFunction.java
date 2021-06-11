@@ -33,7 +33,7 @@ public class ItemLevelLootFunction extends LootFunction {
     }
 
     @Override
-    public LootFunctionType getType() {
+    public LootFunctionType getFunctionType() {
         return ModLootModifier.ITEM_LEVEL;
     }
 
@@ -89,8 +89,8 @@ public class ItemLevelLootFunction extends LootFunction {
         }
 
         @Override
-        public void toJson(JsonObject obj, ItemLevelLootFunction func, JsonSerializationContext context) {
-            super.toJson(obj, func, context);
+        public void serialize(JsonObject obj, ItemLevelLootFunction func, JsonSerializationContext context) {
+            super.serialize(obj, func, context);
             obj.add("level_weight", ItemLevelLootFunction.serialize(func.levels));
         }
     }

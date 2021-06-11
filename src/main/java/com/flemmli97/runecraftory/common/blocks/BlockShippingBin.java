@@ -56,12 +56,12 @@ public class BlockShippingBin extends Block {
     }
 
     @Override
-    public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult rayTraceResult) {
         if (world.isRemote)
             return ActionResultType.SUCCESS;
         InventoryShippingBin shippingInv = player.getCapability(CapabilityInsts.PlayerCap).map(IPlayerCap::getShippingInv).orElse(null);
         if (shippingInv != null) {
-            player.openContainer(new SimpleNamedContainerProvider((p_226928_1_, p_226928_2_, p_226928_3_) -> ChestContainer.createGeneric9X6(p_226928_1_, p_226928_2_, new RecipeWrapper(shippingInv) {
+            player.openContainer(new SimpleNamedContainerProvider((id, inventory, playerIn) -> ChestContainer.createGeneric9X6(id, inventory, new RecipeWrapper(shippingInv) {
                 @Override
                 public int getInventoryStackLimit() {
                     return 64;
@@ -74,6 +74,6 @@ public class BlockShippingBin extends Block {
             }), name));
             return ActionResultType.SUCCESS;
         }
-        return super.onUse(state, world, pos, player, hand, rayTraceResult);
+        return super.onBlockActivated(state, world, pos, player, hand, rayTraceResult);
     }
 }

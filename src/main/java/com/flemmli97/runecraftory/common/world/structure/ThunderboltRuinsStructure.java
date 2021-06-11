@@ -27,7 +27,7 @@ public class ThunderboltRuinsStructure extends Structure<NoFeatureConfig> {
     }
 
     @Override
-    public GenerationStage.Decoration getGenerationStep() {
+    public GenerationStage.Decoration getDecorationStage() {
         return GenerationStage.Decoration.TOP_LAYER_MODIFICATION;
     }
 
@@ -38,10 +38,10 @@ public class ThunderboltRuinsStructure extends Structure<NoFeatureConfig> {
         }
 
         @Override
-        public void init(DynamicRegistries reg, ChunkGenerator gen, TemplateManager templateManager, int chunkX, int chunkZ, Biome biome, NoFeatureConfig conf) {
+        public void func_230364_a_(DynamicRegistries reg, ChunkGenerator gen, TemplateManager templateManager, int chunkX, int chunkZ, Biome biome, NoFeatureConfig conf) {
             int x = chunkX * 16 + this.rand.nextInt(16);
             int z = chunkZ * 16 + this.rand.nextInt(16);
-            int y = gen.func_222531_c(x, z, Heightmap.Type.WORLD_SURFACE_WG);
+            int y = gen.getNoiseHeightMinusOne(x, z, Heightmap.Type.WORLD_SURFACE_WG);
             BlockPos blockpos = new BlockPos(x, y, z);
             Rotation rotation = Rotation.randomRotation(this.rand);
             ThunderboltRuinsPiece.add(templateManager, blockpos, rotation, this.components, this.rand);

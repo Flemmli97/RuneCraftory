@@ -9,7 +9,7 @@ import net.minecraft.world.gen.feature.IFeatureConfig;
 public class ChancedBlockCluster implements IFeatureConfig {
 
     public static final Codec<ChancedBlockCluster> CODEC = RecordCodecBuilder.create(codec -> codec.group(
-            BlockStateProvider.TYPE_CODEC.fieldOf("state_provider").forGetter((cb) -> cb.stateProvider),
+            BlockStateProvider.CODEC.fieldOf("state_provider").forGetter((cb) -> cb.stateProvider),
             Codec.INT.fieldOf("min").orElse(3).forGetter((cb) -> (int) cb.amount.getMin()),
             Codec.INT.fieldOf("max").orElse(3).forGetter((cb) -> (int) cb.amount.getMax()),
             Codec.INT.fieldOf("spread_x").orElse(3).forGetter((cb) -> cb.spreadX),

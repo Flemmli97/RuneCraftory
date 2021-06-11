@@ -20,7 +20,7 @@ public class NewMoveController extends MovementController {
     @Override
     public void tick() {
         if (this.action == MovementController.Action.STRAFE) {
-            float f = (float) this.mob.getAttributeValue(Attributes.GENERIC_MOVEMENT_SPEED);
+            float f = (float) this.mob.getAttributeValue(Attributes.MOVEMENT_SPEED);
             float f1 = (float) this.speed * f;
             float f2 = this.moveForward;
             float f3 = this.moveStrafe;
@@ -41,15 +41,15 @@ public class NewMoveController extends MovementController {
             if (pathnavigate != null) {
                 double len = Math.sqrt(f7 * f7 + f8 * f8);
                 NodeProcessor nodeprocessor = pathnavigate.getNodeProcessor();
-                int x = MathHelper.floor(this.mob.getX() + (double) f7 / len);
-                int y = MathHelper.floor(this.mob.getY());
-                int z = MathHelper.floor(this.mob.getZ() + (double) f8 / len);
-                PathNodeType node = nodeprocessor != null ? nodeprocessor.getPathNodeType(this.mob.world, x, y, z) : PathNodeType.OPEN;
+                int x = MathHelper.floor(this.mob.getPosX() + (double) f7 / len);
+                int y = MathHelper.floor(this.mob.getPosY());
+                int z = MathHelper.floor(this.mob.getPosZ() + (double) f8 / len);
+                PathNodeType node = nodeprocessor != null ? nodeprocessor.getFloorNodeType(this.mob.world, x, y, z) : PathNodeType.OPEN;
                 if (node == PathNodeType.BLOCKED) {
                     int yAdd = 0;
                     while (yAdd < this.mob.stepHeight) {
                         yAdd++;
-                        node = nodeprocessor.getPathNodeType(this.mob.world, x, y + yAdd, z);
+                        node = nodeprocessor.getFloorNodeType(this.mob.world, x, y + yAdd, z);
                         if (node == PathNodeType.WALKABLE) {
                             this.mob.getJumpController().setJumping();
                             break;

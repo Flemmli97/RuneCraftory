@@ -26,7 +26,7 @@ public class InventoryShippingBin extends ItemStackHandler {
                 this.setStackInSlot(i, ItemStack.EMPTY);
             }
             cap.setMoney(player, cap.getMoney() + money);
-            player.sendStatusMessage(new TranslationTextComponent("shipping.money").append("" + money).formatted(TextFormatting.GOLD), true);
+            player.sendStatusMessage(new TranslationTextComponent("shipping.money").appendString("" + money).mergeStyle(TextFormatting.GOLD), true);
         });
     }
 }

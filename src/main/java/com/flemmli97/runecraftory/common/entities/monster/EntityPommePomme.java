@@ -23,7 +23,7 @@ public class EntityPommePomme extends ChargingMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.2);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2);
         super.applyAttributes();
     }
 

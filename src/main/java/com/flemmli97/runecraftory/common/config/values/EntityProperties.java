@@ -59,7 +59,7 @@ public class EntityProperties {
             for (String s : this.confAttributes) {
                 String[] sub = s.replace(" ", "").split("-");
                 Attribute att = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(sub[0]));
-                if (att != Attributes.GENERIC_LUCK)
+                if (att != Attributes.LUCK)
                     this.baseValues.put(att, Double.parseDouble(sub[1]));
             }
         }
@@ -76,7 +76,7 @@ public class EntityProperties {
             for (String s : this.confGains) {
                 String[] sub = s.replace(" ", "").split("-");
                 Attribute att = ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(sub[0]));
-                if (att != Attributes.GENERIC_LUCK)
+                if (att != Attributes.LUCK)
                     this.levelGains.put(att, Double.parseDouble(sub[1]));
             }
         }

@@ -23,16 +23,16 @@ public class ModelButterfly<T extends EntityButterfly> extends EntityModel<T> {
         this.textureHeight = 32;
         this.wingLeft = new ModelRenderer(this, 0, 6);
         this.wingLeft.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.wingLeft.addCuboid(0.0F, 0.0F, -2.5F, 4, 1, 5, 0.0F);
+        this.wingLeft.addBox(0.0F, 0.0F, -2.5F, 4, 1, 5, 0.0F);
         this.setRotateAngle(this.wingLeft, 0.0F, 0.0F, -0.6108652381980153F);
         this.wingRight = new ModelRenderer(this, 0, 0);
         this.wingRight.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.wingRight.addCuboid(-4.0F, 0.0F, -2.5F, 4, 1, 5, 0.0F);
+        this.wingRight.addBox(-4.0F, 0.0F, -2.5F, 4, 1, 5, 0.0F);
         this.wingRight.mirror = true;
         this.setRotateAngle(this.wingRight, 0.0F, 0.0F, 0.6108652381980153F);
         this.body = new ModelRenderer(this, 0, 12);
         this.body.setRotationPoint(0.0F, -3F, 0.0F);
-        this.body.addCuboid(-0.5F, 0.0F, -3.0F, 1, 1, 6, 0.0F);
+        this.body.addBox(-0.5F, 0.0F, -3.0F, 1, 1, 6, 0.0F);
         this.body.addChild(this.wingLeft);
         this.body.addChild(this.wingRight);
     }
@@ -44,7 +44,7 @@ public class ModelButterfly<T extends EntityButterfly> extends EntityModel<T> {
 
 
     @Override
-    public void setAngles(T butterfly, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(T butterfly, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.wingLeft.rotateAngleZ = -MathHelper.cos(ageInTicks * 1.2F) * MathUtils.degToRad(20) - MathUtils.degToRad(30);
         this.wingRight.rotateAngleZ = MathHelper.cos(ageInTicks * 1.2F) * MathUtils.degToRad(20) + MathUtils.degToRad(30);
     }

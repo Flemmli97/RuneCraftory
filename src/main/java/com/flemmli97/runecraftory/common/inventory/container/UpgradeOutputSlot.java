@@ -100,7 +100,7 @@ public class UpgradeOutputSlot extends Slot {
             this.ingredientInv.decrStackSize(7, 1);
             ing2 = this.ingredientInv.getStackInSlot(7);
         }
-        player.world.playSound(null, player.getBlockPos(), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1, 1);
+        player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_ANVIL_USE, SoundCategory.BLOCKS, 1, 1);
         if (ing1.isEmpty() || ing2.isEmpty())
             this.container.onCraftMatrixChanged(this.ingredientInv);
         return stack;

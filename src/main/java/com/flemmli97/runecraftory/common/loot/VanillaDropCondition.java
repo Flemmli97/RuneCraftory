@@ -20,7 +20,7 @@ public class VanillaDropCondition implements ILootCondition {
     }
 
     @Override
-    public LootConditionType getType() {
+    public LootConditionType getConditionType() {
         return ModLootModifier.VANILLADROP;
     }
 
@@ -41,11 +41,11 @@ public class VanillaDropCondition implements ILootCondition {
     public static class Serializer implements ILootSerializer<VanillaDropCondition> {
 
         @Override
-        public void toJson(JsonObject object, VanillaDropCondition condition, JsonSerializationContext context) {
+        public void serialize(JsonObject object, VanillaDropCondition condition, JsonSerializationContext context) {
         }
 
         @Override
-        public VanillaDropCondition fromJson(JsonObject obj, JsonDeserializationContext context) {
+        public VanillaDropCondition deserialize(JsonObject obj, JsonDeserializationContext context) {
             return new VanillaDropCondition();
         }
     }

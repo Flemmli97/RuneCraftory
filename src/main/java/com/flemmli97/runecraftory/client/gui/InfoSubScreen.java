@@ -30,38 +30,38 @@ public class InfoSubScreen extends InfoScreen {
         if (this.page < this.maxPages)
             this.addButton(new PageButton(this.guiLeft + 206, this.guiTop + 5, new StringTextComponent(">"), b -> {
                 this.page++;
-                this.init(this.client, this.width, this.height);
+                this.init(this.minecraft, this.width, this.height);
             }));
         this.addButton(new PageButton(this.guiLeft + 193, this.guiTop + 5, new StringTextComponent("<"), b -> {
             if (this.page == 0)
                 PacketHandler.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN));
             else {
                 this.page--;
-                this.init(this.client, this.width, this.height);
+                this.init(this.minecraft, this.width, this.height);
             }
         }));
     }
 
     @Override
-    protected void drawBackground(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
-        super.drawBackground(stack, partialTicks, mouseX, mouseY);
+    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+        super.drawGuiContainerBackgroundLayer(stack, partialTicks, mouseX, mouseY);
         for (int i = 0; i < 6; ++i) {
             int index = i + this.page * 12;
             if (index < EnumSkills.values().length) {
                 EnumSkills skill = EnumSkills.values()[index];
                 int skillXP = (int) (this.cap.getSkillLevel(skill)[1] / (float) LevelCalc.xpAmountForSkills(this.cap.getSkillLevel(skill)[0]) * 96.0f);
-                this.client.getTextureManager().bindTexture(bars);
-                this.drawTexture(stack, this.guiLeft + 9, this.guiTop + 117 + 13 * i, 2, 80, skillXP, 9);
-                this.client.fontRenderer.draw(stack, new TranslationTextComponent(skill.getTranslation()), this.guiLeft + 11, this.guiTop + 118 + 13 * i, 0xffffff);
+                this.minecraft.getTextureManager().bindTexture(bars);
+                this.blit(stack, this.guiLeft + 9, this.guiTop + 117 + 13 * i, 2, 80, skillXP, 9);
+                this.minecraft.fontRenderer.drawText(stack, new TranslationTextComponent(skill.getTranslation()), this.guiLeft + 11, this.guiTop + 118 + 13 * i, 0xffffff);
                 this.drawRightAlignedScaledString(stack, "" + this.cap.getSkillLevel(skill)[0], this.guiLeft + 104, this.guiTop + 118 + 13 * i, 1.0f, 0xffffff);
             }
             index = i + 6 + this.page * 12;
             if (index < EnumSkills.values().length) {
                 EnumSkills skill2 = EnumSkills.values()[i + 6 + this.page * 12];
                 int skillXP2 = (int) (this.cap.getSkillLevel(skill2)[1] / (float) LevelCalc.xpAmountForSkills(this.cap.getSkillLevel(skill2)[0]) * 96.0f);
-                this.client.getTextureManager().bindTexture(bars);
-                this.drawTexture(stack, this.guiLeft + 119, this.guiTop + 117 + 13 * i, 2, 80, skillXP2, 9);
-                this.client.fontRenderer.draw(stack, new TranslationTextComponent(skill2.getTranslation()), this.guiLeft + 121, this.guiTop + 118 + 13 * i, 0xffffff);
+                this.minecraft.getTextureManager().bindTexture(bars);
+                this.blit(stack, this.guiLeft + 119, this.guiTop + 117 + 13 * i, 2, 80, skillXP2, 9);
+                this.minecraft.fontRenderer.drawText(stack, new TranslationTextComponent(skill2.getTranslation()), this.guiLeft + 121, this.guiTop + 118 + 13 * i, 0xffffff);
                 this.drawRightAlignedScaledString(stack, "" + this.cap.getSkillLevel(skill2)[0], this.guiLeft + 214, this.guiTop + 118 + 13 * i, 1.0f, 0xffffff);
             }
         }

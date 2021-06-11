@@ -43,7 +43,7 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.GENERIC_FOLLOW_RANGE).setBaseValue(32);
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
         super.applyAttributes();
     }
 
@@ -65,7 +65,7 @@ public class EntityWeagle extends BaseMonster {
         if (anim.getID().equals(gale.getID())) {
             if (anim.canAttack()) {
                 EntityWindGust gust = new EntityWindGust(this.world, this);
-                gust.setPosition(gust.getX(), gust.getY() + 1.5, gust.getZ());
+                gust.setPosition(gust.getPosX(), gust.getPosY() + 1.5, gust.getPosZ());
                 if (this.getAttackTarget() != null) {
                     LivingEntity target = this.getAttackTarget();
                     Vector3d dir = target.getPositionVec().subtract(this.getPositionVec());
@@ -73,7 +73,7 @@ public class EntityWeagle extends BaseMonster {
                     if (len > 6)
                         len = 1;
                     dir = new Vector3d(dir.getX(), 0, dir.getZ()).normalize().scale(len);
-                    gust.setRotationTo(target.getX() + dir.getX(), target.getY() + target.getHeight() * 0.3, target.getZ() + dir.getZ(), 0);
+                    gust.setRotationTo(target.getPosX() + dir.getX(), target.getPosY() + target.getHeight() * 0.3, target.getPosZ() + dir.getZ(), 0);
                 }
                 this.world.addEntity(gust);
             }

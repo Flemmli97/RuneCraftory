@@ -33,9 +33,9 @@ public class MineralFeatures extends Feature<ChancedBlockCluster> {
                 y--;
             }
             if (reader.getBlockState(pos).getMaterial().isReplaceable() && state.isValidPosition(reader, pos)) {
-                if (state.contains(BlockStateProperties.HORIZONTAL_FACING))
+                if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING))
                     state = state.with(BlockStateProperties.HORIZONTAL_FACING, Direction.Plane.HORIZONTAL.random(rand));
-                if (state.contains(BlockStateProperties.WATERLOGGED))
+                if (state.hasProperty(BlockStateProperties.WATERLOGGED))
                     state = state.with(BlockStateProperties.WATERLOGGED, reader.getFluidState(pos).getFluid() == Fluids.WATER);
                 reader.setBlockState(pos, state, 3);
             }

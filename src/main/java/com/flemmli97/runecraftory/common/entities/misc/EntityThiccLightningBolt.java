@@ -73,7 +73,7 @@ public class EntityThiccLightningBolt extends EntityProjectile {
         super.tick();
         if (this.world.isRemote) {
             for (int i = 0; i < 6; i++) {
-                this.world.addParticle(new ColoredParticleData(ModParticles.light.get(), 38 / 255F, 133 / 255F, 222 / 255F, 0.2f, 3f), this.getX() + this.rand.nextGaussian() * 0.15, this.getY() + 0.35 + this.rand.nextGaussian() * 0.07, this.getZ() + this.rand.nextGaussian() * 0.15, this.rand.nextGaussian() * 0.01, Math.abs(this.rand.nextGaussian() * 0.03), this.rand.nextGaussian() * 0.01);
+                this.world.addParticle(new ColoredParticleData(ModParticles.light.get(), 38 / 255F, 133 / 255F, 222 / 255F, 0.2f, 3f), this.getPosX() + this.rand.nextGaussian() * 0.15, this.getPosY() + 0.35 + this.rand.nextGaussian() * 0.07, this.getPosZ() + this.rand.nextGaussian() * 0.15, this.rand.nextGaussian() * 0.01, Math.abs(this.rand.nextGaussian() * 0.03), this.rand.nextGaussian() * 0.01);
             }
         } else if (this.livingTicks % 13 == 0) {
             this.checkedEntities.clear();

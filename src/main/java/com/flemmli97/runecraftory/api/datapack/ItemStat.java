@@ -125,7 +125,7 @@ public class ItemStat {
             try {
                 EnumElement element = EnumElement.valueOf(tag.getString(LibNBT.Element));
                 if (element != EnumElement.NONE) {
-                    list.add(new TranslationTextComponent(element.getTranslation()).formatted(element.getColor()));
+                    list.add(new TranslationTextComponent(element.getTranslation()).mergeStyle(element.getColor()));
                 }
             } catch (IllegalArgumentException ignored) {
             }
@@ -135,12 +135,12 @@ public class ItemStat {
             if (price == null)
                 price = new TranslationTextComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack));
             else
-                price.append(" ").append(new TranslationTextComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack))).append(" ");
+                price.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack))).appendString(" ");
         }
         if (price == null)
             price = new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack));
         else
-            price.append(" ").append(new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack))).append(" ");
+            price.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack))).appendString(" ");
         list.add(price);
         if (showStat) {
             Map<Attribute, Double> stats = ItemNBT.statBonusRaw(stack);
@@ -149,7 +149,7 @@ public class ItemStat {
                 list.add(new TranslationTextComponent(prefix));
             }
             for (Map.Entry<Attribute, Double> entry : stats.entrySet()) {
-                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + this.format(entry.getKey(), entry.getValue().intValue())));
+                IFormattableTextComponent comp = new StringTextComponent(" ").appendSibling(new TranslationTextComponent(entry.getKey().getAttributeName())).appendSibling(new StringTextComponent(": " + this.format(entry.getKey(), entry.getValue().intValue())));
                 list.add(comp);
             }
         }

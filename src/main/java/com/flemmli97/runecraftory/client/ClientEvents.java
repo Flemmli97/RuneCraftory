@@ -140,7 +140,7 @@ public class ClientEvents {
         //if(WeatherData.get(Minecraft.getMinecraft().world).currentWeather()== EnumWeather.RUNEY)
         //    this.renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
         if (GeneralConfig.debugAttack) {
-            AttackAABBRender.INST.render(event.getMatrixStack(), Minecraft.getInstance().getBufferBuilders().getEffectVertexConsumers());
+            AttackAABBRender.INST.render(event.getMatrixStack(), Minecraft.getInstance().getRenderTypeBuffers().getCrumblingBufferSource());
         }
     }
 
@@ -170,10 +170,10 @@ public class ClientEvents {
             e.getCapability(CapabilityInsts.EntityCap).ifPresent(cap -> {
                 if (e.ticksExisted % 20 == 0) {
                     if (cap.isSleeping()) {
-                        e.world.addParticle(ModParticles.sleep.get(), e.getX(), e.getY() + e.getHeight() + 0.1, e.getZ(), 0, 0, 0);
+                        e.world.addParticle(ModParticles.sleep.get(), e.getPosX(), e.getPosY() + e.getHeight() + 0.1, e.getPosZ(), 0, 0, 0);
                     }
                     if (cap.isPoisoned()) {
-                        e.world.addParticle(ModParticles.poison.get(), e.getX(), e.getY() + e.getHeight() + 0.1, e.getZ(), 0, 0, 0);
+                        e.world.addParticle(ModParticles.poison.get(), e.getPosX(), e.getPosY() + e.getHeight() + 0.1, e.getPosZ(), 0, 0, 0);
                     }
                 }
             });

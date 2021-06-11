@@ -153,7 +153,7 @@ public class BlockMineral extends Block implements IWaterLoggable {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
+    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
         switch (state.get(FACING)) {
             case WEST:
                 return west;
@@ -200,7 +200,7 @@ public class BlockMineral extends Block implements IWaterLoggable {
 
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader reader, BlockPos pos) {
-        return reader.getBlockState(pos.down()).isSideSolid(reader, pos, Direction.UP, BlockVoxelShape.FULL);
+        return reader.getBlockState(pos.down()).func_242698_a(reader, pos, Direction.UP, BlockVoxelShape.FULL);
     }
 
     @Override
@@ -242,9 +242,9 @@ public class BlockMineral extends Block implements IWaterLoggable {
 
     public BlockState getBrokenState(BlockState state) {
         BlockState blockState = ModBlocks.brokenMineralMap.get(this.tier).get().getDefaultState();
-        if (blockState.contains(FACING))
+        if (blockState.hasProperty(FACING))
             blockState.with(FACING, state.get(FACING));
-        if (blockState.contains(WATERLOGGED))
+        if (blockState.hasProperty(WATERLOGGED))
             blockState.with(WATERLOGGED, state.get(WATERLOGGED));
         return blockState;
     }

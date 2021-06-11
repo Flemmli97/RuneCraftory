@@ -96,7 +96,7 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
         if (this.world.isRemote) {
             if (this.livingTicks < this.dataManager.get(maxTick) && this.livingTicks % 5 == 1) {
                 for (Vector3f vec : circleParticleMotion) {
-                    this.world.addParticle(new ColoredParticleData(ModParticles.staticLight.get(), 200 / 255F, 133 / 255F, 36 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.getX(), vec.getY(), vec.getZ());
+                    this.world.addParticle(new ColoredParticleData(ModParticles.staticLight.get(), 200 / 255F, 133 / 255F, 36 / 255F, 1, 0.4f), this.getPosX(), this.getPosY() + 0.2, this.getPosZ(), vec.getX(), vec.getY(), vec.getZ());
                 }
             }
         } else if ((this.getOwner() != null && !this.getOwner().isAlive()))

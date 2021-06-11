@@ -47,122 +47,122 @@ public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> impl
         this.body = new ModelRendererPlus(this);
         this.body.setDefaultRotPoint(0.0F, -5.0F, 0.0F);
         this.setRotationAngle(this.body, 0.0698F, 0.0F, 0.0F);
-        this.body.setTextureOffset(0, 51).addCuboid(-4.0F, 0.0F, -2.0F, 8.0F, 10.0F, 4.0F, 0.0F, true);
+        this.body.setTextureOffset(0, 51).addBox(-4.0F, 0.0F, -2.0F, 8.0F, 10.0F, 4.0F, 0.0F, true);
 
         this.head = new ModelRendererPlus(this);
         this.head.setDefaultRotPoint(0.0F, 0.0F, 0.0F);
         this.body.addChild(this.head);
-        this.head.setTextureOffset(0, 0).addCuboid(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F, true);
+        this.head.setTextureOffset(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, 0.0F, true);
 
         this.hornFront = new ModelRendererPlus(this);
         this.hornFront.setDefaultRotPoint(0.0F, -8.0F, -2.5F);
         this.head.addChild(this.hornFront);
         this.setRotationAngle(this.hornFront, 0.6009F, 0.0F, 0.0F);
-        this.hornFront.setTextureOffset(0, 16).addCuboid(-0.5F, -5.0F, -0.5F, 1.0F, 5.0F, 1.0F, 0.0F, true);
+        this.hornFront.setTextureOffset(0, 16).addBox(-0.5F, -5.0F, -0.5F, 1.0F, 5.0F, 1.0F, 0.0F, true);
 
         this.hornLeftStick = new ModelRendererPlus(this);
         this.hornLeftStick.setDefaultRotPoint(1.75F, -8.0F, -0.75F);
         this.head.addChild(this.hornLeftStick);
         this.setRotationAngle(this.hornLeftStick, 0.1745F, 0.0F, -0.0524F);
-        this.hornLeftStick.setTextureOffset(4, 16).addCuboid(-0.5F, -3.0F, -0.5F, 1.0F, 3.0F, 1.0F, 0.0F, true);
+        this.hornLeftStick.setTextureOffset(4, 16).addBox(-0.5F, -3.0F, -0.5F, 1.0F, 3.0F, 1.0F, 0.0F, true);
 
         this.hornLeftFlower = new ModelRendererPlus(this);
         this.hornLeftFlower.setDefaultRotPoint(0.0F, -3.0F, 0.0F);
         this.hornLeftStick.addChild(this.hornLeftFlower);
-        this.hornLeftFlower.setTextureOffset(8, 16).addCuboid(-1.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, 0.0F, true);
+        this.hornLeftFlower.setTextureOffset(8, 16).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, 0.0F, true);
 
         this.hornRightStick = new ModelRendererPlus(this);
         this.hornRightStick.setDefaultRotPoint(-1.75F, -8.0F, -0.75F);
         this.head.addChild(this.hornRightStick);
         this.setRotationAngle(this.hornRightStick, 0.1745F, 0.0F, 0.0524F);
-        this.hornRightStick.setTextureOffset(4, 16).addCuboid(-0.5F, -3.0F, -0.5F, 1.0F, 3.0F, 1.0F, 0.0F, false);
+        this.hornRightStick.setTextureOffset(4, 16).addBox(-0.5F, -3.0F, -0.5F, 1.0F, 3.0F, 1.0F, 0.0F, false);
 
         this.hornRightFlower = new ModelRendererPlus(this);
         this.hornRightFlower.setDefaultRotPoint(0.0F, -3.0F, 0.0F);
         this.hornRightStick.addChild(this.hornRightFlower);
-        this.hornRightFlower.setTextureOffset(8, 16).addCuboid(-1.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, 0.0F, false);
+        this.hornRightFlower.setTextureOffset(8, 16).addBox(-1.0F, -2.0F, -1.0F, 2.0F, 2.0F, 2.0F, 0.0F, false);
 
         this.leftUpperWing = new ModelRendererPlus(this);
         this.leftUpperWing.setDefaultRotPoint(0.0F, 5.0F, 2.0F);
         this.body.addChild(this.leftUpperWing);
         this.setRotationAngle(this.leftUpperWing, -0.2618F, 0.0F, 0.0873F);
-        this.leftUpperWing.setTextureOffset(0, 22).addCuboid(0.0F, -15.0F, 0.0F, 17.0F, 15.0F, 0.0F, 0.0F, true);
+        this.leftUpperWing.setTextureOffset(0, 22).addBox(0.0F, -15.0F, 0.0F, 17.0F, 15.0F, 0.0F, 0.0F, true);
 
         this.leftLowerWing = new ModelRendererPlus(this);
         this.leftLowerWing.setDefaultRotPoint(0.0F, 5.0F, 2.0F);
         this.body.addChild(this.leftLowerWing);
         this.setRotationAngle(this.leftLowerWing, 0.2618F, 0.0F, -0.0873F);
-        this.leftLowerWing.setTextureOffset(0, 37).addCuboid(0.0F, 0.0F, 0.0F, 17.0F, 14.0F, 0.0F, 0.0F, true);
+        this.leftLowerWing.setTextureOffset(0, 37).addBox(0.0F, 0.0F, 0.0F, 17.0F, 14.0F, 0.0F, 0.0F, true);
 
         this.rightUpperWing = new ModelRendererPlus(this);
         this.rightUpperWing.setDefaultRotPoint(0.0F, 5.0F, 2.0F);
         this.body.addChild(this.rightUpperWing);
         this.setRotationAngle(this.rightUpperWing, -0.2618F, 0.0F, -0.0873F);
-        this.rightUpperWing.setTextureOffset(0, 22).addCuboid(-17.0F, -15.0F, 0.0F, 17.0F, 15.0F, 0.0F, 0.0F, false);
+        this.rightUpperWing.setTextureOffset(0, 22).addBox(-17.0F, -15.0F, 0.0F, 17.0F, 15.0F, 0.0F, 0.0F, false);
 
         this.rightLowerWing = new ModelRendererPlus(this);
         this.rightLowerWing.setDefaultRotPoint(0.0F, 5.0F, 2.0F);
         this.body.addChild(this.rightLowerWing);
         this.setRotationAngle(this.rightLowerWing, 0.2618F, 0.0F, 0.0873F);
-        this.rightLowerWing.setTextureOffset(0, 37).addCuboid(-17.0F, 0.0F, 0.0F, 17.0F, 14.0F, 0.0F, 0.0F, false);
+        this.rightLowerWing.setTextureOffset(0, 37).addBox(-17.0F, 0.0F, 0.0F, 17.0F, 14.0F, 0.0F, 0.0F, false);
 
         this.leftArm = new ModelRendererPlus(this);
         this.leftArm.setDefaultRotPoint(5.0F, 2.5F, 0.0F);
         this.body.addChild(this.leftArm);
         this.setRotationAngle(this.leftArm, -0.1745F, 0.0F, 0.1F);
-        this.leftArm.setTextureOffset(33, 1).addCuboid(-1.0F, -2.0F, -1.5F, 3.0F, 6.0F, 3.0F, 0.0F, true);
+        this.leftArm.setTextureOffset(33, 1).addBox(-1.0F, -2.0F, -1.5F, 3.0F, 6.0F, 3.0F, 0.0F, true);
 
         this.leftArmDown = new ModelRendererPlus(this);
         this.leftArmDown.setDefaultRotPoint(0.5F, 4.0F, 1.5F);
         this.leftArm.addChild(this.leftArmDown);
         this.setRotationAngle(this.leftArmDown, -0.1745F, 0.0F, 0.0F);
-        this.leftArmDown.setTextureOffset(33, 11).addCuboid(-1.5F, 0.0F, -3.0F, 3.0F, 6.0F, 3.0F, 0.0F, true);
+        this.leftArmDown.setTextureOffset(33, 11).addBox(-1.5F, 0.0F, -3.0F, 3.0F, 6.0F, 3.0F, 0.0F, true);
 
         this.rightArm = new ModelRendererPlus(this);
         this.rightArm.setDefaultRotPoint(-5.0F, 2.5F, 0.0F);
         this.body.addChild(this.rightArm);
         this.setRotationAngle(this.rightArm, -0.1745F, 0.0F, -0.1F);
-        this.rightArm.setTextureOffset(33, 1).addCuboid(-2.0F, -2.0F, -2.0F, 3.0F, 6.0F, 3.0F, 0.0F, false);
+        this.rightArm.setTextureOffset(33, 1).addBox(-2.0F, -2.0F, -2.0F, 3.0F, 6.0F, 3.0F, 0.0F, false);
 
         this.rightArmDown = new ModelRendererPlus(this);
         this.rightArmDown.setDefaultRotPoint(-0.5F, 4.0F, 1.0F);
         this.rightArm.addChild(this.rightArmDown);
         this.setRotationAngle(this.rightArmDown, -0.1745F, 0.0F, 0.0F);
-        this.rightArmDown.setTextureOffset(33, 11).addCuboid(-1.5F, 0.0F, -3.0F, 3.0F, 6.0F, 3.0F, 0.0F, false);
+        this.rightArmDown.setTextureOffset(33, 11).addBox(-1.5F, 0.0F, -3.0F, 3.0F, 6.0F, 3.0F, 0.0F, false);
 
         this.dressUp = new ModelRendererPlus(this);
         this.dressUp.setDefaultRotPoint(0.0F, 10.0F, 0.0F);
         this.body.addChild(this.dressUp);
-        this.dressUp.setTextureOffset(34, 50).addCuboid(-5.0F, 0.0F, -3.0F, 10.0F, 1.0F, 6.0F, 0.0F, true);
+        this.dressUp.setTextureOffset(34, 50).addBox(-5.0F, 0.0F, -3.0F, 10.0F, 1.0F, 6.0F, 0.0F, true);
 
         this.dressDown = new ModelRendererPlus(this);
         this.dressDown.setDefaultRotPoint(0.0F, 1.0F, 0.0F);
         this.dressUp.addChild(this.dressDown);
-        this.dressDown.setTextureOffset(24, 57).addCuboid(-5.5F, 0.0F, -3.5F, 11.0F, 1.0F, 7.0F, 0.0F, true);
+        this.dressDown.setTextureOffset(24, 57).addBox(-5.5F, 0.0F, -3.5F, 11.0F, 1.0F, 7.0F, 0.0F, true);
 
         this.leftLeg = new ModelRendererPlus(this);
         this.leftLeg.setDefaultRotPoint(1.9F, 11.0F, 0.0F);
         this.body.addChild(this.leftLeg);
         this.setRotationAngle(this.leftLeg, -0.0873F, 0.0F, 0.0F);
-        this.leftLeg.setTextureOffset(34, 20).addCuboid(-1.9F, 0.0F, -2.0F, 4.0F, 7.0F, 4.0F, 0.0F, true);
+        this.leftLeg.setTextureOffset(34, 20).addBox(-1.9F, 0.0F, -2.0F, 4.0F, 7.0F, 4.0F, 0.0F, true);
 
         this.leftLegDown = new ModelRendererPlus(this);
         this.leftLegDown.setDefaultRotPoint(0.1F, 7.0F, -2.0F);
         this.leftLeg.addChild(this.leftLegDown);
         this.setRotationAngle(this.leftLegDown, 0.2618F, 0.0F, 0.0F);
-        this.leftLegDown.setTextureOffset(50, 20).addCuboid(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, 0.0F, true);
+        this.leftLegDown.setTextureOffset(50, 20).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, 0.0F, true);
 
         this.rightLeg = new ModelRendererPlus(this);
         this.rightLeg.setDefaultRotPoint(-1.9F, 11.0F, 0.0F);
         this.body.addChild(this.rightLeg);
         this.setRotationAngle(this.rightLeg, -0.0873F, 0.0F, 0.0F);
-        this.rightLeg.setTextureOffset(34, 31).addCuboid(-2.1F, 0.0F, -2.0F, 4.0F, 7.0F, 4.0F, 0.0F, false);
+        this.rightLeg.setTextureOffset(34, 31).addBox(-2.1F, 0.0F, -2.0F, 4.0F, 7.0F, 4.0F, 0.0F, false);
 
         this.rightLegDown = new ModelRendererPlus(this);
         this.rightLegDown.setDefaultRotPoint(-0.1F, 7.0F, -2.0F);
         this.rightLeg.addChild(this.rightLegDown);
         this.setRotationAngle(this.rightLegDown, 0.2618F, 0.0F, 0.0F);
-        this.rightLegDown.setTextureOffset(50, 30).addCuboid(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, 0.0F, true);
+        this.rightLegDown.setTextureOffset(50, 30).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, 0.0F, true);
 
         this.animations = new BlockBenchAnimations(this, new ResourceLocation(RuneCraftory.MODID, "models/entity/animation/ambrosia.json"));
     }
@@ -173,7 +173,7 @@ public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> impl
     }
 
     @Override
-    public void setAngles(T brosia, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(T brosia, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
         AnimatedAction anim = brosia.getAnimation();
         if (brosia.deathTime <= 0) {

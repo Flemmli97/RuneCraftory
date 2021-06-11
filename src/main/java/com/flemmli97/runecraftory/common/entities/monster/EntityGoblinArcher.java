@@ -92,7 +92,7 @@ public class EntityGoblinArcher extends EntityGoblin {
 
     private void shootArrow(LivingEntity target) {
         EntityMobArrow arrow = new EntityMobArrow(this.world, this, 0.8f);
-        Vector3d dir = new Vector3d(target.getX() - arrow.getX(), target.getBodyY(0.33) - arrow.getY(), target.getZ() - arrow.getZ());
+        Vector3d dir = new Vector3d(target.getPosX() - arrow.getPosX(), target.getPosYHeight(0.33) - arrow.getPosY(), target.getPosZ() - arrow.getPosZ());
         double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
         dir = dir.add(0, l * 0.2, 0);
         arrow.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.world.getDifficulty().getId() * 2);
@@ -102,7 +102,7 @@ public class EntityGoblinArcher extends EntityGoblin {
 
     private void shootTripleArrow(LivingEntity target) {
         EntityMobArrow arrow = new EntityMobArrow(this.world, this, 0.8f);
-        Vector3d dir = new Vector3d(target.getX() - arrow.getX(), target.getBodyY(0.33) - arrow.getY(), target.getZ() - arrow.getZ());
+        Vector3d dir = new Vector3d(target.getPosX() - arrow.getPosX(), target.getPosYHeight(0.33) - arrow.getPosY(), target.getPosZ() - arrow.getPosZ());
         double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
         dir = dir.add(0, l * 0.2, 0);
         arrow.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.world.getDifficulty().getId() * 2);
@@ -112,7 +112,7 @@ public class EntityGoblinArcher extends EntityGoblin {
         for (float y = -15; y <= 15; y += 30) {
             Quaternion quaternion = new Quaternion(new Vector3f(up), y, true);
             Vector3f newDir = new Vector3f(dir);
-            newDir.func_214905_a(quaternion);
+            newDir.transform(quaternion);
             EntityMobArrow arrowO = new EntityMobArrow(this.world, this, 0.8f);
             arrowO.shoot(newDir.getX(), newDir.getY(), newDir.getZ(), 1.3f, 7 - this.world.getDifficulty().getId() * 2);
             this.world.addEntity(arrowO);

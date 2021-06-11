@@ -66,8 +66,8 @@ public class AmbrosiaForestPiece {
         }
 
         @Override
-        public boolean generate(ISeedReader reader, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox mbb, ChunkPos chunk, BlockPos pos) {
-            boolean flag = super.generate(reader, manager, generator, random, mbb, chunk, pos);
+        public boolean func_230383_a_(ISeedReader reader, StructureManager manager, ChunkGenerator generator, Random random, MutableBoundingBox mbb, ChunkPos chunk, BlockPos pos) {
+            boolean flag = super.func_230383_a_(reader, manager, generator, random, mbb, chunk, pos);
             for (int x = 0; x < this.boundingBox.getXSize(); x++)
                 for (int z = 0; z < this.boundingBox.getZSize(); z++)
                     this.replaceAirAndLiquidDownwards(reader, Blocks.DIRT.getDefaultState(), x, -1, z, mbb);
@@ -78,7 +78,7 @@ public class AmbrosiaForestPiece {
         protected void handleDataMarker(String id, BlockPos pos, IServerWorld world, Random random, MutableBoundingBox mbb) {
             if (id.startsWith(RuneCraftory.MODID + "_replace_non_air")) {
                 String block = id.replace(RuneCraftory.MODID + "_replace_non_air-", "");
-                if (block.isEmpty() || world.getBlockState(pos).isIn(Blocks.AIR))
+                if (block.isEmpty() || world.getBlockState(pos).matchesBlock(Blocks.AIR))
                     return;
                 try {
                     BlockStateParser parser = new BlockStateParser(new StringReader(block), false);

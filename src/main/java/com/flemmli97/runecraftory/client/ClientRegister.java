@@ -126,7 +126,7 @@ public class ClientRegister {
 
             ModItems.ITEMS.getEntries().forEach(reg -> {
                 if (reg.get() instanceof ItemDualBladeBase || reg.get() instanceof ItemGloveBase)
-                    ItemModelsProperties.register(reg.get(), new ResourceLocation("held"), ItemModelProps.heldMainProp);
+                    ItemModelsProperties.registerProperty(reg.get(), new ResourceLocation("held"), ItemModelProps.heldMainProp);
             });
         });
     }

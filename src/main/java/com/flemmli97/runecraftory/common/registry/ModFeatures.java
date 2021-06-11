@@ -37,9 +37,9 @@ public class ModFeatures {
             Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, RuneCraftory.MODID + ":mineral_gen_nether_" + conf.blockRes().getPath(), conf.configuredFeatureNether());
         }
 
-        Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(RuneCraftory.MODID, "ambrosia_feature"), AMBROSIA_FEATURE = ModStructures.AMBROSIA_FOREST.get().configure(IFeatureConfig.NO_FEATURE_CONFIG));
+        Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(RuneCraftory.MODID, "ambrosia_feature"), AMBROSIA_FEATURE = ModStructures.AMBROSIA_FOREST.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         FlatGenSettingAccessor.getSTRUCTURES().put(ModStructures.AMBROSIA_FOREST.get(), AMBROSIA_FEATURE);
-        Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(RuneCraftory.MODID, "thunderbolt_feature"), THUNDERBOLT_FEATURE = ModStructures.THUNDERBOLT_RUINS.get().configure(IFeatureConfig.NO_FEATURE_CONFIG));
+        Registry.register(WorldGenRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(RuneCraftory.MODID, "thunderbolt_feature"), THUNDERBOLT_FEATURE = ModStructures.THUNDERBOLT_RUINS.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         FlatGenSettingAccessor.getSTRUCTURES().put(ModStructures.THUNDERBOLT_RUINS.get(), THUNDERBOLT_FEATURE);
 
         ModStructures.setup();

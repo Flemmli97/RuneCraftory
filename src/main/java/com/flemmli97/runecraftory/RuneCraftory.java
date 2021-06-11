@@ -144,8 +144,8 @@ public class RuneCraftory {
         CapabilityManager.INSTANCE.register(IPlayerCap.class, new CapabilityInsts.PlayerCapNetwork(), PlayerCapImpl::new);
         CapabilityManager.INSTANCE.register(IStaffCap.class, new CapabilityInsts.StaffCapNetwork(), StaffCapImpl::new);
         CapabilityManager.INSTANCE.register(IEntityCap.class, new CapabilityInsts.EntityCapNetwork(), EntityCapImpl::new);
-        this.tweakVanillaAttribute(Attributes.GENERIC_MAX_HEALTH, 250000);
-        this.tweakVanillaAttribute(Attributes.GENERIC_ATTACK_DAMAGE, 250000);
+        this.tweakVanillaAttribute(Attributes.MAX_HEALTH, 250000);
+        this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE, 250000);
         GateSpawning.setupStructureSpawns();
     }
 
@@ -160,7 +160,7 @@ public class RuneCraftory {
         if (attribute instanceof RangedAttribute) {
             try {
                 //maximumValue
-                Field f = ObfuscationReflectionHelper.findField(RangedAttribute.class, "field_111118_b");
+                Field f = ObfuscationReflectionHelper.findField(RangedAttribute.class, "maximumValue");
                 f.setAccessible(true);
                 Field modifiersField = Field.class.getDeclaredField("modifiers");
                 modifiersField.setAccessible(true);

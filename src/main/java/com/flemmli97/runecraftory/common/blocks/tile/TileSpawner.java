@@ -34,7 +34,7 @@ public class TileSpawner extends TileEntity implements ITickableTileEntity {
 
     public StructureStart<?> getStructure() {
         if (this.structureID != null && this.world instanceof ServerWorld)
-            this.structure = ((ServerWorld) this.world).getStructureAccessor().getStructureAt(this.getPos(), true, ForgeRegistries.STRUCTURE_FEATURES.getValue(this.structureID));
+            this.structure = ((ServerWorld) this.world).getStructureManager().getStructureStart(this.getPos(), true, ForgeRegistries.STRUCTURE_FEATURES.getValue(this.structureID));
         return this.structure;
     }
 
@@ -50,7 +50,7 @@ public class TileSpawner extends TileEntity implements ITickableTileEntity {
                 e.setLocationAndAngles(this.pos.getX() + 0.5, this.pos.getY() + 5, this.pos.getZ() + 0.5, this.world.rand.nextFloat() * 360.0F, 0.0F);
                 if (e instanceof MobEntity) {
                     ((MobEntity) e).setHomePosAndDistance(this.pos, 16);
-                    ((MobEntity) e).onInitialSpawn((IServerWorld) this.world, this.world.getDifficultyForLocation(e.getBlockPos()), SpawnReason.SPAWNER, null, null);
+                    ((MobEntity) e).onInitialSpawn((IServerWorld) this.world, this.world.getDifficultyForLocation(e.getPosition()), SpawnReason.SPAWNER, null, null);
                 }
                 this.world.addEntity(e);
                 this.lastUpdateDay = WorldUtils.day(this.world);
@@ -79,8 +79,8 @@ public class TileSpawner extends TileEntity implements ITickableTileEntity {
     }
 
     @Override
-    public void fromTag(BlockState state, CompoundNBT nbt) {
-        super.fromTag(state, nbt);
+    public void read(BlockState state, CompoundNBT nbt) {
+        super.read(state, nbt);
         this.lastUpdateDay = nbt.getInt("LastUpdate");
         this.savedEntity = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(nbt.getString("Entity")));
     }

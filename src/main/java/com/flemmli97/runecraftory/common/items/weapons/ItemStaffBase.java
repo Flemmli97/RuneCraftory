@@ -160,9 +160,9 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable {
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand) {
         if (this.chargeAmount(player.getHeldItem(hand)) > 0) {
             player.setActiveHand(hand);
-            return ActionResult.success(player.getHeldItem(hand));
+            return ActionResult.resultSuccess(player.getHeldItem(hand));
         }
-        return ActionResult.pass(player.getHeldItem(hand));
+        return ActionResult.resultPass(player.getHeldItem(hand));
     }
 
     @Override

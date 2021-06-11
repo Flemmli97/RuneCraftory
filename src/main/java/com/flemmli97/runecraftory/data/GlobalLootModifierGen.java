@@ -30,8 +30,8 @@ public class GlobalLootModifierGen extends GlobalLootModifierProvider {
 
     public CropLootModifier createForCrop(Block block, Item ignore) {
         if (block instanceof CropsBlock) {
-            return new CropLootModifier(new ILootCondition[]{BlockStateProperty.builder(block).properties(
-                    StatePropertiesPredicate.Builder.create().exactMatch(CropsBlock.AGE, ((CropsBlock) block).getMaxAge())).build()}, ignore);
+            return new CropLootModifier(new ILootCondition[]{BlockStateProperty.builder(block).fromProperties(
+                    StatePropertiesPredicate.Builder.newBuilder().withIntProp(CropsBlock.AGE, ((CropsBlock) block).getMaxAge())).build()}, ignore);
         }
         throw new IllegalArgumentException("Block is not a crop");
     }

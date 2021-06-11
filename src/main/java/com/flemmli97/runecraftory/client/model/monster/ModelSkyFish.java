@@ -37,67 +37,67 @@ public class ModelSkyFish<T extends EntitySkyFish> extends EntityModel<T> implem
 
         this.body = new ModelRendererPlus(this);
         this.body.setDefaultRotPoint(0.5F, 18.0F, 1.0F);
-        this.body.setTextureOffset(0, 0).addCuboid(-3.5F, -5.0F, -9.0F, 6.0F, 10.0F, 17.0F, 0.0F, false);
-        this.body.setTextureOffset(0, 0).addCuboid(2.5F, -3.0F, -8.0F, 1.0F, 6.0F, 16.0F, 0.0F, false);
-        this.body.setTextureOffset(0, 0).addCuboid(-4.5F, -3.0F, -8.0F, 1.0F, 6.0F, 16.0F, 0.0F, false);
-        this.body.setTextureOffset(0, 0).addCuboid(-2.5F, -6.0F, -7.0F, 4.0F, 1.0F, 14.0F, 0.0F, false);
+        this.body.setTextureOffset(0, 0).addBox(-3.5F, -5.0F, -9.0F, 6.0F, 10.0F, 17.0F, 0.0F, false);
+        this.body.setTextureOffset(0, 0).addBox(2.5F, -3.0F, -8.0F, 1.0F, 6.0F, 16.0F, 0.0F, false);
+        this.body.setTextureOffset(0, 0).addBox(-4.5F, -3.0F, -8.0F, 1.0F, 6.0F, 16.0F, 0.0F, false);
+        this.body.setTextureOffset(0, 0).addBox(-2.5F, -6.0F, -7.0F, 4.0F, 1.0F, 14.0F, 0.0F, false);
 
         this.head = new ModelRendererPlus(this);
         this.head.setDefaultRotPoint(-0.5F, -2.0F, -8.5F);
         this.body.addChild(this.head);
-        this.head.setTextureOffset(0, 0).addCuboid(-2.0F, -0.5F, -3.0F, 4.0F, 5.0F, 1.0F, 0.0F, false);
-        this.head.setTextureOffset(0, 0).addCuboid(-2.5F, -2.0F, -2.0F, 5.0F, 8.0F, 2.0F, 0.0F, false);
+        this.head.setTextureOffset(0, 0).addBox(-2.0F, -0.5F, -3.0F, 4.0F, 5.0F, 1.0F, 0.0F, false);
+        this.head.setTextureOffset(0, 0).addBox(-2.5F, -2.0F, -2.0F, 5.0F, 8.0F, 2.0F, 0.0F, false);
 
         this.tail = new ModelRendererPlus(this);
         this.tail.setDefaultRotPoint(-0.5F, -1.5F, 7.0F);
         this.body.addChild(this.tail);
-        this.tail.setTextureOffset(0, 0).addCuboid(-2.5F, -2.0F, 0.0F, 5.0F, 7.0F, 5.0F, 0.0F, false);
-        this.tail.setTextureOffset(0, 0).addCuboid(2.5F, -0.5F, 0.0F, 1.0F, 4.0F, 4.0F, 0.0F, false);
-        this.tail.setTextureOffset(0, 0).addCuboid(-3.5F, -0.5F, 0.0F, 1.0F, 4.0F, 4.0F, 0.0F, false);
+        this.tail.setTextureOffset(0, 0).addBox(-2.5F, -2.0F, 0.0F, 5.0F, 7.0F, 5.0F, 0.0F, false);
+        this.tail.setTextureOffset(0, 0).addBox(2.5F, -0.5F, 0.0F, 1.0F, 4.0F, 4.0F, 0.0F, false);
+        this.tail.setTextureOffset(0, 0).addBox(-3.5F, -0.5F, 0.0F, 1.0F, 4.0F, 4.0F, 0.0F, false);
 
         this.tailTip = new ModelRendererPlus(this);
         this.tailTip.setDefaultRotPoint(0.0F, 0.0F, 4.0F);
         this.tail.addChild(this.tailTip);
-        this.tailTip.setTextureOffset(0, 0).addCuboid(-2.0F, 0.0F, 0.0F, 4.0F, 4.0F, 5.0F, 0.0F, false);
+        this.tailTip.setTextureOffset(0, 0).addBox(-2.0F, 0.0F, 0.0F, 4.0F, 4.0F, 5.0F, 0.0F, false);
 
         this.caudalFin = new ModelRendererPlus(this);
         this.caudalFin.setDefaultRotPoint(0.0F, 0.0F, 5.0F);
         this.tailTip.addChild(this.caudalFin);
-        this.caudalFin.setTextureOffset(0, 0).addCuboid(0.0F, -6.0F, 0.0F, 0.0F, 14.0F, 9.0F, 0.0F, false);
+        this.caudalFin.setTextureOffset(0, 0).addBox(0.0F, -6.0F, 0.0F, 0.0F, 14.0F, 9.0F, 0.0F, false);
 
         this.dorsalFin = new ModelRendererPlus(this);
         this.dorsalFin.setDefaultRotPoint(0.0F, -8.0F, -7.0F);
         this.body.addChild(this.dorsalFin);
-        this.dorsalFin.setTextureOffset(0, 0).addCuboid(-0.5F, -1.0F, 0.0F, 0.0F, 3.0F, 5.0F, 0.0F, false);
+        this.dorsalFin.setTextureOffset(0, 0).addBox(-0.5F, -1.0F, 0.0F, 0.0F, 3.0F, 5.0F, 0.0F, false);
 
         this.adiposeFin = new ModelRendererPlus(this);
         this.adiposeFin.setDefaultRotPoint(-0.5F, -8.0F, 3.0F);
         this.body.addChild(this.adiposeFin);
-        this.adiposeFin.setTextureOffset(0, 0).addCuboid(0.0F, -1.0F, 0.0F, 0.0F, 3.0F, 4.0F, 0.0F, false);
+        this.adiposeFin.setTextureOffset(0, 0).addBox(0.0F, -1.0F, 0.0F, 0.0F, 3.0F, 4.0F, 0.0F, false);
 
         this.leftPectoralFin = new ModelRendererPlus(this);
         this.leftPectoralFin.setDefaultRotPoint(3.5F, 0.0F, -5.0F);
         this.body.addChild(this.leftPectoralFin);
         this.setRotationAngle(this.leftPectoralFin, -0.3054F, 0.4363F, -0.1309F);
-        this.leftPectoralFin.setTextureOffset(0, 0).addCuboid(-0.2366F, 0.9243F, 0.491F, 0.0F, 2.0F, 4.0F, 0.0F, false);
+        this.leftPectoralFin.setTextureOffset(0, 0).addBox(-0.2366F, 0.9243F, 0.491F, 0.0F, 2.0F, 4.0F, 0.0F, false);
 
         this.rightPectoralFin = new ModelRendererPlus(this);
         this.rightPectoralFin.setDefaultRotPoint(-4.5F, 0.0F, -5.0F);
         this.body.addChild(this.rightPectoralFin);
         this.setRotationAngle(this.rightPectoralFin, -0.3054F, -0.4363F, 0.1309F);
-        this.rightPectoralFin.setTextureOffset(0, 0).addCuboid(0.2366F, 0.9243F, 0.491F, 0.0F, 2.0F, 4.0F, 0.0F, false);
+        this.rightPectoralFin.setTextureOffset(0, 0).addBox(0.2366F, 0.9243F, 0.491F, 0.0F, 2.0F, 4.0F, 0.0F, false);
 
         this.leftPelvicFin = new ModelRendererPlus(this);
         this.leftPelvicFin.setDefaultRotPoint(2.5F, 2.0F, 4.0F);
         this.body.addChild(this.leftPelvicFin);
         this.setRotationAngle(this.leftPelvicFin, -0.1745F, 0.3927F, 0.0F);
-        this.leftPelvicFin.setTextureOffset(0, 0).addCuboid(0.0F, 0.9696F, 0.3473F, 0.0F, 2.0F, 4.0F, 0.0F, false);
+        this.leftPelvicFin.setTextureOffset(0, 0).addBox(0.0F, 0.9696F, 0.3473F, 0.0F, 2.0F, 4.0F, 0.0F, false);
 
         this.rightPelvicFin = new ModelRendererPlus(this);
         this.rightPelvicFin.setDefaultRotPoint(-3.5F, 2.0F, 4.0F);
         this.body.addChild(this.rightPelvicFin);
         this.setRotationAngle(this.rightPelvicFin, -0.1745F, -0.3927F, 0.0F);
-        this.rightPelvicFin.setTextureOffset(0, 0).addCuboid(0.0F, 0.9696F, 0.3473F, 0.0F, 2.0F, 4.0F, 0.0F, false);
+        this.rightPelvicFin.setTextureOffset(0, 0).addBox(0.0F, 0.9696F, 0.3473F, 0.0F, 2.0F, 4.0F, 0.0F, false);
 
         this.animations = new BlockBenchAnimations(this, new ResourceLocation(RuneCraftory.MODID, "models/entity/animation/sky_fish.json"));
     }
@@ -108,7 +108,7 @@ public class ModelSkyFish<T extends EntitySkyFish> extends EntityModel<T> implem
     }
 
     @Override
-    public void setAngles(T fish, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(T fish, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
         AnimatedAction anim = fish.getAnimation();
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();

@@ -123,7 +123,7 @@ public abstract class ChargingMonster extends BaseMonster {
     public double[] getChargeTo(AnimatedAction anim, Vector3d pos) {
         int length = anim.getLength();
         Vector3d vec = pos.subtract(this.getPositionVec()).normalize().scale(this.chargingLength());
-        return new double[]{vec.x / length, this.getY(), vec.z / length};
+        return new double[]{vec.x / length, this.getPosY(), vec.z / length};
     }
 
     public void lockYaw(float yaw) {

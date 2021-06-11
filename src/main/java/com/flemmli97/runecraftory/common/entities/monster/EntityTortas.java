@@ -45,7 +45,7 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.16);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.16);
         super.applyAttributes();
     }
 
@@ -62,7 +62,7 @@ public class EntityTortas extends ChargingMonster {
     @Override
     public AxisAlignedBB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
         if (anim != null && anim.getID().equals(spin.getID()))
-            return this.attackAABB(anim).offset(this.getX(), this.getY(), this.getZ());
+            return this.attackAABB(anim).offset(this.getPosX(), this.getPosY(), this.getPosZ());
         return super.calculateAttackAABB(anim, target);
     }
 

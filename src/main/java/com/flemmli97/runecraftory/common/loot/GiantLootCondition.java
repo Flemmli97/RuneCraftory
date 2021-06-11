@@ -25,7 +25,7 @@ public class GiantLootCondition implements ILootCondition {
     }
 
     @Override
-    public LootConditionType getType() {
+    public LootConditionType getConditionType() {
         return ModLootModifier.GIANTCROP;
     }
 
@@ -48,12 +48,12 @@ public class GiantLootCondition implements ILootCondition {
     public static class Serializer implements ILootSerializer<GiantLootCondition> {
 
         @Override
-        public void toJson(JsonObject object, GiantLootCondition condition, JsonSerializationContext context) {
+        public void serialize(JsonObject object, GiantLootCondition condition, JsonSerializationContext context) {
             object.addProperty("giant", condition.isGiant);
         }
 
         @Override
-        public GiantLootCondition fromJson(JsonObject obj, JsonDeserializationContext context) {
+        public GiantLootCondition deserialize(JsonObject obj, JsonDeserializationContext context) {
             return new GiantLootCondition(JsonUtils.get(obj, "giant", false));
         }
     }

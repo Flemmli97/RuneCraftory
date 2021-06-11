@@ -119,14 +119,14 @@ public class Loottables extends ForgeLootTableProvider {
             this.lootTables.put(type.getLootTable(), builder);
         }
 
-        private ItemLootEntry.Builder<?> add(IItemProvider item, float chance, float lootingBonus, float lootingCountBonus, int lootingCountMax, int weight, int quality) {
+        private StandaloneLootEntry.Builder<?> add(IItemProvider item, float chance, float lootingBonus, float lootingCountBonus, int lootingCountMax, int weight, int quality) {
             return ItemLootEntry.builder(item)
                     .acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(0, lootingCountBonus)).func_216072_a(lootingCountMax))
                     .acceptCondition(RandomChanceWithLooting.builder(chance, lootingBonus))
                     .weight(weight).quality(quality);
         }
 
-        private ItemLootEntry.Builder<?> addVanilla(IItemProvider item, float min, float max, float lootingCountBonus) {
+        private StandaloneLootEntry.Builder<?> addVanilla(IItemProvider item, float min, float max, float lootingCountBonus) {
             return ItemLootEntry.builder(item).acceptFunction(SetCount.builder(new RandomValueRange(min, max)))
                     .acceptFunction(LootingEnchantBonus.builder(RandomValueRange.of(0, lootingCountBonus)))
                     .acceptCondition(VanillaDropCondition.get());

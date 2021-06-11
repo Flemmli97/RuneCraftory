@@ -26,18 +26,18 @@ public class SpellInvOverlayGui extends AbstractGui {
             InventorySpells inv = this.mc.player.getCapability(CapabilityInsts.PlayerCap).map(IPlayerCap::getInv).orElse(null);
             if (inv != null) {
                 this.mc.getTextureManager().bindTexture(WIDGETS_TEX_PATH);
-                int scaledWidth = this.mc.getWindow().getScaledWidth();
-                int scaledHeight = this.mc.getWindow().getScaledHeight();
+                int scaledWidth = this.mc.getMainWindow().getScaledWidth();
+                int scaledHeight = this.mc.getMainWindow().getScaledHeight();
                 int i = scaledWidth / 2;
-                int j = this.getZOffset();
-                this.setZOffset(-90);
+                int j = this.getBlitOffset();
+                this.setBlitOffset(-90);
                 for (int a = 0; a < 2; ++a) {
-                    this.drawTexture(stack, i + 114 + 29 * a, scaledHeight - 47, 24, 23, 22, 22);
+                    this.blit(stack, i + 114 + 29 * a, scaledHeight - 47, 24, 23, 22, 22);
                 }
                 for (int a = 0; a < 2; ++a) {
-                    this.drawTexture(stack, i + 114 + 29 * a, scaledHeight - 23, 24, 23, 22, 22);
+                    this.blit(stack, i + 114 + 29 * a, scaledHeight - 23, 24, 23, 22, 22);
                 }
-                this.setZOffset(j);
+                this.setBlitOffset(j);
                 RenderSystem.enableRescaleNormal();
                 RenderSystem.enableBlend();
                 RenderSystem.defaultBlendFunc();
@@ -52,23 +52,23 @@ public class SpellInvOverlayGui extends AbstractGui {
 
     }
 
-    private void renderHotbarItem(MatrixStack matrixStack, int p_184044_1_, int p_184044_2_, float p_184044_3_, PlayerEntity player, ItemStack stack) {
+    private void renderHotbarItem(MatrixStack matrixStack, int x, int y, float partialTicks, PlayerEntity player, ItemStack stack) {
         if (!stack.isEmpty()) {
-            float f = (float) stack.getAnimationsToGo() - p_184044_3_;
+            float f = (float) stack.getAnimationsToGo() - partialTicks;
             if (f > 0.0F) {
                 matrixStack.push();
                 float f1 = 1.0F + f / 5.0F;
-                matrixStack.translate((float) (p_184044_1_ + 8), (float) (p_184044_2_ + 12), 0.0F);
+                matrixStack.translate((float) (x + 8), (float) (y + 12), 0.0F);
                 matrixStack.scale(1.0F / f1, (f1 + 1.0F) / 2.0F, 1.0F);
-                matrixStack.translate((float) (-(p_184044_1_ + 8)), (float) (-(p_184044_2_ + 12)), 0.0F);
+                matrixStack.translate((float) (-(x + 8)), (float) (-(y + 12)), 0.0F);
             }
 
-            this.mc.getItemRenderer().renderItemAndEffectIntoGUI(player, stack, p_184044_1_, p_184044_2_);
+            this.mc.getItemRenderer().renderItemAndEffectIntoGUI(player, stack, x, y);
             if (f > 0.0F) {
                 matrixStack.pop();
             }
 
-            this.mc.getItemRenderer().renderItemOverlays(this.mc.fontRenderer, stack, p_184044_1_, p_184044_2_);
+            this.mc.getItemRenderer().renderItemOverlays(this.mc.fontRenderer, stack, x, y);
         }
     }
 }

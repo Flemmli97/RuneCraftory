@@ -86,7 +86,7 @@ public class EntityWindBlade extends EntityProjectile {
         super.tick();
         if (this.world.isRemote) {
             for (int i = 0; i < 1; i++) {
-                this.world.addParticle(new ColoredParticleData(ModParticles.cross.get(), 55 / 255F, 200 / 255F, 38 / 255F, 1, 2.3f), this.getX() + this.rand.nextGaussian() * 0.15, this.getY() + 0.35 + this.rand.nextGaussian() * 0.07, this.getZ() + this.rand.nextGaussian() * 0.15, this.rand.nextGaussian() * 0.01, Math.abs(this.rand.nextGaussian() * 0.03), this.rand.nextGaussian() * 0.01);
+                this.world.addParticle(new ColoredParticleData(ModParticles.cross.get(), 55 / 255F, 200 / 255F, 38 / 255F, 1, 2.3f), this.getPosX() + this.rand.nextGaussian() * 0.15, this.getPosY() + 0.35 + this.rand.nextGaussian() * 0.07, this.getPosZ() + this.rand.nextGaussian() * 0.15, this.rand.nextGaussian() * 0.01, Math.abs(this.rand.nextGaussian() * 0.03), this.rand.nextGaussian() * 0.01);
             }
         } else {
             if (this.target == null) {

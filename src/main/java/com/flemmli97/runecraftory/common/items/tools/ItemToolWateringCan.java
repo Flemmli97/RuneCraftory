@@ -159,7 +159,7 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
         if (this.tier.getTierLevel() != 0 && !world.isRemote) {
             int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
             int range = Math.min(useTime, this.tier.getTierLevel());
-            BlockPos pos = entity.getBlockPos();
+            BlockPos pos = entity.getPosition();
             AtomicBoolean flag = new AtomicBoolean(false);
             if (range == 0) {
                 if (entity instanceof PlayerEntity) {
@@ -197,14 +197,14 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
                 itemstack.getOrCreateTag().putInt("Water", this.maxWater());
                 world.setBlockState(ray.getPos(), Blocks.AIR.getDefaultState(), 3);
                 player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0f, 1.0f);
-                return ActionResult.success(itemstack);
+                return ActionResult.resultSuccess(itemstack);
             }
         }
         if (this.tier.getTierLevel() != 0) {
             player.setActiveHand(hand);
-            return ActionResult.success(itemstack);
+            return ActionResult.resultSuccess(itemstack);
         }
-        return ActionResult.pass(itemstack);
+        return ActionResult.resultPass(itemstack);
     }
 
     @Override
@@ -237,7 +237,7 @@ public class ItemToolWateringCan extends ToolItem implements IItemUsable, ICharg
             ItemNBT.initNBT(stack);
         }
         int water = stack.getOrCreateTag().getInt("Water");
-        if ((creative || water > 0) && state.isIn(ModBlocks.farmland.get()) && state.get(FarmlandBlock.MOISTURE) == 0) {
+        if ((creative || water > 0) && state.matchesBlock(ModBlocks.farmland.get()) && state.get(FarmlandBlock.MOISTURE) == 0) {
             world.spawnParticle(ParticleTypes.FISHING, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 4, 0.0, 0.01, 0.0, 0.1D);
             world.setBlockState(pos, state.with(FarmlandBlock.MOISTURE, 7), 3);
             world.playSound(null, pos, SoundEvents.ENTITY_BOAT_PADDLE_WATER, SoundCategory.BLOCKS, 1.0f, 1.1f);

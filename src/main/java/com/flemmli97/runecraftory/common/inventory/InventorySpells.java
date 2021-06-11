@@ -92,7 +92,7 @@ public class InventorySpells implements IItemHandlerModifiable {
     public void dropItemsAt(LivingEntity entity) {
         if (!entity.world.isRemote) {
             for (ItemStack stack : this.inventory) {
-                ItemEntity item = new ItemEntity(entity.world, entity.getX(), entity.getY(), entity.getZ(), stack);
+                ItemEntity item = new ItemEntity(entity.world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), stack);
                 item.setPickupDelay(0);
                 entity.world.addEntity(item);
             }

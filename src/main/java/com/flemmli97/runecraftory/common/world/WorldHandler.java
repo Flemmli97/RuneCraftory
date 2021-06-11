@@ -37,7 +37,7 @@ public class WorldHandler extends WorldSavedData {
     }
 
     public static WorldHandler get(ServerWorld world) {
-        return world.getServer().getOverworld().getSavedData().getOrCreate(WorldHandler::new, id);
+        return world.getServer().func_241755_D_().getSavedData().getOrCreate(WorldHandler::new, id);
     }
 
     public CalendarImpl getCalendar() {

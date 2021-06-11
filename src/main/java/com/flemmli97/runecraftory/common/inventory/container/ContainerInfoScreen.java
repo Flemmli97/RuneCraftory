@@ -26,7 +26,7 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 public class ContainerInfoScreen extends Container {
 
-    private static final ResourceLocation[] ARMOR_SLOT_TEXTURES = new ResourceLocation[]{PlayerContainer.EMPTY_BOOTS_SLOT_TEXTURE, PlayerContainer.EMPTY_LEGGINGS_SLOT_TEXTURE, PlayerContainer.EMPTY_CHESTPLATE_SLOT_TEXTURE, PlayerContainer.EMPTY_HELMET_SLOT_TEXTURE};
+    private static final ResourceLocation[] ARMOR_SLOT_TEXTURES = new ResourceLocation[]{PlayerContainer.EMPTY_ARMOR_SLOT_BOOTS, PlayerContainer.EMPTY_ARMOR_SLOT_LEGGINGS, PlayerContainer.EMPTY_ARMOR_SLOT_CHESTPLATE, PlayerContainer.EMPTY_ARMOR_SLOT_HELMET};
     private static final EquipmentSlotType[] VALID_EQUIPMENT_SLOTS = new EquipmentSlotType[]{EquipmentSlotType.HEAD, EquipmentSlotType.CHEST, EquipmentSlotType.LEGS, EquipmentSlotType.FEET};
 
     private final boolean main;
@@ -80,16 +80,16 @@ public class ContainerInfoScreen extends Container {
 
                 @Override
                 @OnlyIn(Dist.CLIENT)
-                public Pair<ResourceLocation, ResourceLocation> getBackgroundSprite() {
-                    return Pair.of(PlayerContainer.BLOCK_ATLAS_TEXTURE, ARMOR_SLOT_TEXTURES[equipmentslottype.getIndex()]);
+                public Pair<ResourceLocation, ResourceLocation> getBackground() {
+                    return Pair.of(PlayerContainer.LOCATION_BLOCKS_TEXTURE, ARMOR_SLOT_TEXTURES[equipmentslottype.getIndex()]);
                 }
             });
         }
         this.addSlot(new Slot(playerInventory, 40, 49, 85) {
             @Override
             @OnlyIn(Dist.CLIENT)
-            public Pair<ResourceLocation, ResourceLocation> getBackgroundSprite() {
-                return Pair.of(PlayerContainer.BLOCK_ATLAS_TEXTURE, PlayerContainer.EMPTY_OFFHAND_ARMOR_SLOT);
+            public Pair<ResourceLocation, ResourceLocation> getBackground() {
+                return Pair.of(PlayerContainer.LOCATION_BLOCKS_TEXTURE, PlayerContainer.EMPTY_ARMOR_SLOT_SHIELD);
             }
         });
         for (int m = 0; m < 4; ++m) {

@@ -27,7 +27,7 @@ public class ItemUtils {
     }
 
     public static void spawnItemAtEntity(LivingEntity entity, ItemStack stack) {
-        spawnItemAt(entity.world, entity.getBlockPos(), stack);
+        spawnItemAt(entity.world, entity.getPosition(), stack);
     }
 
     public static void spawnItemAt(World world, BlockPos pos, ItemStack stack) {
@@ -41,7 +41,7 @@ public class ItemUtils {
 
     public static void spawnLeveledItem(LivingEntity entity, ItemStack stack, int level) {
         if (!entity.world.isRemote) {
-            ItemEntity item = new ItemEntity(entity.world, entity.getX(), entity.getY(), entity.getZ(), ItemNBT.getLeveledItem(stack, level));
+            ItemEntity item = new ItemEntity(entity.world, entity.getPosX(), entity.getPosY(), entity.getPosZ(), ItemNBT.getLeveledItem(stack, level));
             item.setPickupDelay(0);
             entity.world.addEntity(item);
         }

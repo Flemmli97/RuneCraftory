@@ -102,11 +102,11 @@ public class GateEntity extends MobEntity implements IBaseMob {
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes() {
-        return MobEntity.createMobAttributes().add(ModAttributes.RF_DEFENCE.get()).add(ModAttributes.RF_MAGIC_DEFENCE.get());
+        return MobEntity.func_233666_p_().createMutableAttribute(ModAttributes.RF_DEFENCE.get()).createMutableAttribute(ModAttributes.RF_MAGIC_DEFENCE.get());
     }
 
     private void updateAttributes() {
-        this.getAttribute(Attributes.GENERIC_MAX_HEALTH).setBaseValue(MobConfig.gateHealth);
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(MobConfig.gateHealth);
         this.getAttribute(ModAttributes.RF_DEFENCE.get()).setBaseValue(MobConfig.gateDef);
         this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).setBaseValue(MobConfig.gateMDef);
         this.setHealth(this.getMaxHealth());
@@ -124,7 +124,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
         super.writeAdditional(compound);
         compound.putInt("MobLevel", this.dataManager.get(level));
         ListNBT list = new ListNBT();
-        this.spawnList.forEach(type -> list.add(StringNBT.of(type.getRegistryName().toString())));
+        this.spawnList.forEach(type -> list.add(StringNBT.valueOf(type.getRegistryName().toString())));
         compound.put("Spawns", list);
         compound.putString("Element", this.type.toString());
     }
@@ -177,9 +177,9 @@ public class GateEntity extends MobEntity implements IBaseMob {
         }
         this.baseTick();
         if (this.newPosRotationIncrements > 0) {
-            double d0 = this.getX() + (this.interpTargetX - this.getX()) / (double) this.newPosRotationIncrements;
-            double d2 = this.getY() + (this.interpTargetY - this.getY()) / (double) this.newPosRotationIncrements;
-            double d4 = this.getZ() + (this.interpTargetZ - this.getZ()) / (double) this.newPosRotationIncrements;
+            double d0 = this.getPosX() + (this.interpTargetX - this.getPosX()) / (double) this.newPosRotationIncrements;
+            double d2 = this.getPosY() + (this.interpTargetY - this.getPosY()) / (double) this.newPosRotationIncrements;
+            double d4 = this.getPosZ() + (this.interpTargetZ - this.getPosZ()) / (double) this.newPosRotationIncrements;
             double d6 = MathHelper.wrapDegrees(this.interpTargetYaw - (double) this.rotationYaw);
             this.rotationYaw = (float) ((double) this.rotationYaw + d6 / (double) this.newPosRotationIncrements);
             this.rotationPitch = (float) ((double) this.rotationPitch + (this.interpTargetPitch - (double) this.rotationPitch) / (double) this.newPosRotationIncrements);
@@ -202,9 +202,9 @@ public class GateEntity extends MobEntity implements IBaseMob {
             List<Entity> nearby = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox().grow(18), entity -> GateEntity.this.spawnList.contains(entity.getType()));
             if (nearby.size() <= 3) {
                 for (int amount = 0; amount < randAmount; ++amount) {
-                    double x = this.getX() + this.rand.nextInt(9) - 4.0;
-                    double y = this.getY() + this.rand.nextInt(2) - 1.0;
-                    double z = this.getZ() + this.rand.nextInt(9) - 4.0;
+                    double x = this.getPosX() + this.rand.nextInt(9) - 4.0;
+                    double y = this.getPosY() + this.rand.nextInt(2) - 1.0;
+                    double z = this.getPosZ() + this.rand.nextInt(9) - 4.0;
                     int entityLevel = this.dataManager.get(level);
                     int levelRand = Math.round(this.dataManager.get(level) + (this.rand.nextFloat() - 0.5f) * Math.round(entityLevel * 0.1f));
                     EntityType<?> type = this.spawnList.get(this.rand.nextInt(this.spawnList.size()));
@@ -219,10 +219,10 @@ public class GateEntity extends MobEntity implements IBaseMob {
                             if (mob instanceof BaseMonster)
                                 ((BaseMonster) mob).setLevel(levelRand);
                             entity.setPositionAndRotation(x, y, z, this.world.rand.nextFloat() * 360.0f, 0.0f);
-                            if (ForgeEventFactory.canEntitySpawnSpawner(mob, this.world, (float) entity.getX(), (float) entity.getY(), (float) entity.getZ(), null) && this.world.isSpaceEmpty(mob)) {
-                                mob.onInitialSpawn((IServerWorld) this.world, this.world.getDifficultyForLocation(mob.getBlockPos()), SpawnReason.SPAWNER, null, null);
-                                ModifiableAttributeInstance follow = mob.getAttribute(Attributes.GENERIC_FOLLOW_RANGE);
-                                mob.setHomePosAndDistance(this.getBlockPos(), (int) Math.max(16, follow != null ? follow.getValue() * 0.75 : 0));
+                            if (ForgeEventFactory.canEntitySpawnSpawner(mob, this.world, (float) entity.getPosX(), (float) entity.getPosY(), (float) entity.getPosZ(), null) && this.world.hasNoCollisions(mob)) {
+                                mob.onInitialSpawn((IServerWorld) this.world, this.world.getDifficultyForLocation(mob.getPosition()), SpawnReason.SPAWNER, null, null);
+                                ModifiableAttributeInstance follow = mob.getAttribute(Attributes.FOLLOW_RANGE);
+                                mob.setHomePosAndDistance(this.getPosition(), (int) Math.max(16, follow != null ? follow.getValue() * 0.75 : 0));
                                 this.world.addEntity(entity);
                                 mob.spawnExplosionParticle();
                             }
@@ -270,7 +270,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
     }
 
     @Override
-    public void takeKnockback(float strength, double x, double z) {
+    public void applyKnockback(float strength, double x, double z) {
     }
 
     protected float reduceDamage(DamageSource damageSrc, float damageAmount) {
@@ -365,7 +365,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
     }
 
     @Override
-    public boolean isCollidable() {
+    public boolean func_241845_aY() {
         return true;
     }
 
@@ -378,20 +378,20 @@ public class GateEntity extends MobEntity implements IBaseMob {
     }
 
     private void updateStatsToLevel() {
-        this.getAttribute(Attributes.GENERIC_MAX_HEALTH).addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(ModAttributes.RF_DEFENCE.get()).addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).addPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.MAX_HEALTH).applyPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.RF_DEFENCE.get()).applyPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).applyPersistentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
         this.setHealth(this.getMaxHealth());
     }
 
     @Override
     public ILivingEntityData onInitialSpawn(IServerWorld world, DifficultyInstance difficulty, SpawnReason reason, @Nullable ILivingEntityData data, @Nullable CompoundNBT nbt) {
-        RegistryKey<Biome> key = this.world.method_31081(this.getBlockPos()).orElse(Biomes.PLAINS);
-        this.spawnList.addAll(GateSpawning.pickRandomMobs(world.getWorld(), key, this.rand, this.rand.nextInt(4) + 2, this.getBlockPos()));
+        RegistryKey<Biome> key = this.world.func_242406_i(this.getPosition()).orElse(Biomes.PLAINS);
+        this.spawnList.addAll(GateSpawning.pickRandomMobs(world.getWorld(), key, this.rand, this.rand.nextInt(4) + 2, this.getPosition()));
         this.type = this.getType(world, key);
-        this.dataManager.set(level, LevelCalc.levelFromPos(this.world, this.getBlockPos()));
+        this.dataManager.set(level, LevelCalc.levelFromPos(this.world, this.getPosition()));
         this.dataManager.set(elementType, this.type.getTranslation());
-        this.setPosition(this.getX(), this.getY() + 1, this.getZ());
+        this.setPosition(this.getPosX(), this.getPosY() + 1, this.getPosZ());
         this.updateStatsToLevel();
         return data;
     }

@@ -25,15 +25,15 @@ public class RenderMobArrow<T extends EntityMobArrow> extends EntityRenderer<T> 
     @Override
     public void render(T entity, float rotation, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int packedLight) {
         stack.push();
-        stack.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(MathHelper.lerp(partialTicks, entity.prevRotationYaw, entity.rotationYaw) - 90.0F));
-        stack.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(MathHelper.lerp(partialTicks, entity.prevRotationPitch, entity.rotationPitch)));
+        stack.rotate(Vector3f.YP.rotationDegrees(MathHelper.lerp(partialTicks, entity.prevRotationYaw, entity.rotationYaw) - 90.0F));
+        stack.rotate(Vector3f.ZP.rotationDegrees(MathHelper.lerp(partialTicks, entity.prevRotationPitch, entity.rotationPitch)));
 
-        stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(45.0F));
+        stack.rotate(Vector3f.XP.rotationDegrees(45.0F));
         stack.scale(0.05625F, 0.05625F, 0.05625F);
         stack.translate(-4.0D, 0.0D, 0.0D);
         IVertexBuilder ivertexbuilder = buffer.getBuffer(RenderType.getEntityCutout(this.getEntityTexture(entity)));
-        MatrixStack.Entry matrixstack$entry = stack.peek();
-        Matrix4f matrix4f = matrixstack$entry.getModel();
+        MatrixStack.Entry matrixstack$entry = stack.getLast();
+        Matrix4f matrix4f = matrixstack$entry.getMatrix();
         Matrix3f matrix3f = matrixstack$entry.getNormal();
         this.buildVertex(matrix4f, matrix3f, ivertexbuilder, -7, -2, -2, 0.0F, 0.15625F, -1, 0, 0, packedLight);
         this.buildVertex(matrix4f, matrix3f, ivertexbuilder, -7, -2, 2, 0.15625F, 0.15625F, -1, 0, 0, packedLight);
@@ -45,7 +45,7 @@ public class RenderMobArrow<T extends EntityMobArrow> extends EntityRenderer<T> 
         this.buildVertex(matrix4f, matrix3f, ivertexbuilder, -7, -2, -2, 0.0F, 0.3125F, 1, 0, 0, packedLight);
 
         for (int j = 0; j < 4; ++j) {
-            stack.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(90.0F));
+            stack.rotate(Vector3f.XP.rotationDegrees(90.0F));
             this.buildVertex(matrix4f, matrix3f, ivertexbuilder, -8, -2, 0, 0.0F, 0.0F, 0, 1, 0, packedLight);
             this.buildVertex(matrix4f, matrix3f, ivertexbuilder, 8, -2, 0, 0.5F, 0.0F, 0, 1, 0, packedLight);
             this.buildVertex(matrix4f, matrix3f, ivertexbuilder, 8, 2, 0, 0.5F, 0.15625F, 0, 1, 0, packedLight);
@@ -57,11 +57,11 @@ public class RenderMobArrow<T extends EntityMobArrow> extends EntityRenderer<T> 
     }
 
     @Override
-    public ResourceLocation getEntityTexture(T p_110775_1_) {
+    public ResourceLocation getEntityTexture(T entity) {
         return ARROW;
     }
 
     public void buildVertex(Matrix4f matrix4f, Matrix3f matrix3f, IVertexBuilder builder, int x, int y, int z, float u, float v, int normalX, int normalZ, int normalY, int packedLight) {
-        builder.vertex(matrix4f, x, y, z).color(255, 255, 255, 255).texture(u, v).overlay(OverlayTexture.DEFAULT_UV).light(packedLight).normal(matrix3f, normalX, normalY, normalZ).endVertex();
+        builder.pos(matrix4f, x, y, z).color(255, 255, 255, 255).tex(u, v).overlay(OverlayTexture.NO_OVERLAY).lightmap(packedLight).normal(matrix3f, normalX, normalY, normalZ).endVertex();
     }
 }

@@ -27,7 +27,7 @@ public class MiningLootCondition implements ILootCondition {
     }
 
     @Override
-    public LootConditionType getType() {
+    public LootConditionType getConditionType() {
         return ModLootModifier.INT_CHECK;
     }
 
@@ -53,12 +53,12 @@ public class MiningLootCondition implements ILootCondition {
     public static class Serializer implements ILootSerializer<MiningLootCondition> {
 
         @Override
-        public void toJson(JsonObject object, MiningLootCondition condition, JsonSerializationContext context) {
+        public void serialize(JsonObject object, MiningLootCondition condition, JsonSerializationContext context) {
             object.addProperty("min_required_level", condition.min);
         }
 
         @Override
-        public MiningLootCondition fromJson(JsonObject obj, JsonDeserializationContext context) {
+        public MiningLootCondition deserialize(JsonObject obj, JsonDeserializationContext context) {
             return new MiningLootCondition(JsonUtils.get(obj, "min_required_level", 0));
         }
     }

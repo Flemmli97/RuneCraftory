@@ -86,7 +86,7 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.31);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.31);
         super.applyAttributes();
     }
 
@@ -165,7 +165,7 @@ public class EntityThunderbolt extends BossMonster {
         if (!state.getMaterial().isLiquid()) {
             BlockState blockstate = this.world.getBlockState(pos.up());
             SoundType soundtype = state.getSoundType(world, pos, this);
-            if (blockstate.isIn(Blocks.SNOW)) {
+            if (blockstate.matchesBlock(Blocks.SNOW)) {
                 soundtype = blockstate.getSoundType(world, pos, this);
             }
             this.playSound(SoundEvents.ENTITY_HORSE_GALLOP, soundtype.getVolume() * 0.15F, soundtype.getPitch());
@@ -214,7 +214,7 @@ public class EntityThunderbolt extends BossMonster {
     public double[] getChargeTo(AnimatedAction anim, Vector3d dir) {
         int length = anim.getLength() - anim.getAttackTime() - 6; //stop charging 6 ticks earlier
         Vector3d vec = dir.normalize().scale(7);
-        return new double[]{vec.x / length, this.getY(), vec.z / length};
+        return new double[]{vec.x / length, this.getPosY(), vec.z / length};
     }
 
     @Override
@@ -232,7 +232,7 @@ public class EntityThunderbolt extends BossMonster {
                         if (this.attackEntityAsMob(e)) {
                             e.setMotion(0, 0.05, 0);
                             e.isAirBorne = true;
-                            e.takeKnockback(0.7f, this.getX() - e.getX(), this.getZ() - e.getZ());
+                            e.applyKnockback(0.7f, this.getPosX() - e.getPosX(), this.getPosZ() - e.getPosZ());
                         }
                     });
                 }

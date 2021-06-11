@@ -10,12 +10,12 @@ public class FluidHotSpring extends ForgeFlowingFluid {
     }
 
     @Override
-    public boolean isSource(FluidState p_207193_1_) {
+    public boolean isSource(FluidState state) {
         return false;
     }
 
     @Override
-    public int getLevel(FluidState p_207192_1_) {
+    public int getLevel(FluidState state) {
         return 0;
     }
 }

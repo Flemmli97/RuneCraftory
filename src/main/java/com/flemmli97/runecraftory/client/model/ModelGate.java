@@ -23,25 +23,25 @@ public class ModelGate extends EntityModel<GateEntity> {
         this.textureHeight = 48;
         this.shape2_2 = new ModelRenderer(this, 61, 4);
         this.shape2_2.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.shape2_2.addCuboid(8.0F, -6.0F, -6.0F, 2, 13, 13, 0.0F);
+        this.shape2_2.addBox(8.0F, -6.0F, -6.0F, 2, 13, 13, 0.0F);
         this.shape2 = new ModelRenderer(this, 0, 31);
         this.shape2.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.shape2.addCuboid(-6.0F, 8.0F, -6.0F, 13, 2, 13, 0.0F);
+        this.shape2.addBox(-6.0F, 8.0F, -6.0F, 13, 2, 13, 0.0F);
         this.shape2_4 = new ModelRenderer(this, 53, 31);
         this.shape2_4.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.shape2_4.addCuboid(-6.0F, -6.0F, 8.0F, 13, 13, 2, 0.0F);
+        this.shape2_4.addBox(-6.0F, -6.0F, 8.0F, 13, 13, 2, 0.0F);
         this.core = new ModelRenderer(this, 0, 0);
         this.core.setRotationPoint(0.0F, 16.0F, 0.0F);
-        this.core.addCuboid(-7.0F, -7.0F, -7.0F, 15, 15, 15, 0.0F);
+        this.core.addBox(-7.0F, -7.0F, -7.0F, 15, 15, 15, 0.0F);
         this.shape2_1 = new ModelRenderer(this, 0, 31);
         this.shape2_1.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.shape2_1.addCuboid(-6.0F, -9.0F, -6.0F, 13, 2, 13, 0.0F);
+        this.shape2_1.addBox(-6.0F, -9.0F, -6.0F, 13, 2, 13, 0.0F);
         this.shape2_3 = new ModelRenderer(this, 61, 4);
         this.shape2_3.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.shape2_3.addCuboid(-9.0F, -6.0F, -6.0F, 2, 13, 13, 0.0F);
+        this.shape2_3.addBox(-9.0F, -6.0F, -6.0F, 2, 13, 13, 0.0F);
         this.shape2_5 = new ModelRenderer(this, 53, 31);
         this.shape2_5.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.shape2_5.addCuboid(-6.0F, -6.0F, -9.0F, 13, 13, 2, 0.0F);
+        this.shape2_5.addBox(-6.0F, -6.0F, -9.0F, 13, 13, 2, 0.0F);
         this.core.addChild(this.shape2_2);
         this.core.addChild(this.shape2);
         this.core.addChild(this.shape2_4);
@@ -56,7 +56,7 @@ public class ModelGate extends EntityModel<GateEntity> {
     }
 
     @Override
-    public void setAngles(GateEntity gate, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(GateEntity gate, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.core.rotateAngleY = gate.rotate * ageInTicks / 50.0F;
     }
 

@@ -80,11 +80,11 @@ public class CropProperties {
         if (this.translationTexts == null) {
             this.translationTexts = new ArrayList<>();
             if (!this.bestSeason.isEmpty()) {
-                IFormattableTextComponent season = new TranslationTextComponent("tooltip.season.best").append(": ");
+                IFormattableTextComponent season = new TranslationTextComponent("tooltip.season.best").appendString(": ");
                 int i = 0;
                 for (EnumSeason seas : this.bestSeasons()) {
-                    season.append(i != 0 ? "/" : "").formatted(TextFormatting.GRAY)
-                            .append(new TranslationTextComponent(seas.translationKey()).formatted(seas.getColor()));
+                    season.appendString(i != 0 ? "/" : "").mergeStyle(TextFormatting.GRAY)
+                            .appendSibling(new TranslationTextComponent(seas.translationKey()).mergeStyle(seas.getColor()));
                     i++;
                 }
                 this.translationTexts.add(season);
@@ -92,18 +92,18 @@ public class CropProperties {
             EnumSet<EnumSeason> badSeasons = EnumSet.copyOf(this.badSeason);
             badSeasons.removeAll(this.bestSeasons());
             if (!badSeasons.isEmpty()) {
-                IFormattableTextComponent season = new TranslationTextComponent("tooltip.season.bad").append(": ");
+                IFormattableTextComponent season = new TranslationTextComponent("tooltip.season.bad").appendString(": ");
                 int i = 0;
                 for (EnumSeason seas : badSeasons) {
-                    season.append(i != 0 ? "/" : "").formatted(TextFormatting.GRAY)
-                            .append(new TranslationTextComponent(seas.translationKey()).formatted(seas.getColor()));
+                    season.appendString(i != 0 ? "/" : "").mergeStyle(TextFormatting.GRAY)
+                            .appendSibling(new TranslationTextComponent(seas.translationKey()).mergeStyle(seas.getColor()));
                     i++;
                 }
                 this.translationTexts.add(season);
             }
             IFormattableTextComponent growth = new TranslationTextComponent("tooltip.growth", this.growth());
             ITextComponent harvest = new TranslationTextComponent("tooltip.harvested", this.maxDrops());
-            this.translationTexts.add(growth.append("  ").append(harvest));
+            this.translationTexts.add(growth.appendString("  ").appendSibling(harvest));
         }
         return this.translationTexts;
     }

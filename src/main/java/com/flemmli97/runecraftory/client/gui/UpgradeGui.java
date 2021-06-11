@@ -19,7 +19,7 @@ public class UpgradeGui extends ContainerScreen<ContainerUpgrade> {
     }
 
     @Override
-    protected void drawBackground(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
         /*switch (this.container.craftingType()) {
             case ARMOR:
                 this.client.getTextureManager().bindTexture(crafting);
@@ -30,16 +30,16 @@ public class UpgradeGui extends ContainerScreen<ContainerUpgrade> {
                 this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
                 break;
         }*/
-        this.client.getTextureManager().bindTexture(forging);
-        this.drawTexture(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
+        this.minecraft.getTextureManager().bindTexture(forging);
+        this.blit(stack, this.guiLeft, this.guiTop, 0, 0, 176, 166);
         if (this.container.rpCost() >= 0)
-            OverlayGui.drawStringCenter(stack, this.textRenderer, new StringTextComponent("" + this.container.rpCost()), this.guiLeft + 91, this.guiTop + 42, 0);
+            OverlayGui.drawStringCenter(stack, this.font, new StringTextComponent("" + this.container.rpCost()), this.guiLeft + 91, this.guiTop + 42, 0);
     }
 
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(stack);
         super.render(stack, mouseX, mouseY, partialTicks);
-        this.drawMouseoverTooltip(stack, mouseX, mouseY);
+        this.renderHoveredTooltip(stack, mouseX, mouseY);
     }
 }

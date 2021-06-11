@@ -27,7 +27,7 @@ public class EntityBuffamoo extends ChargingMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.18);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.18);
         super.applyAttributes();
     }
 
@@ -64,7 +64,7 @@ public class EntityBuffamoo extends ChargingMonster {
     @Override
     public void doWhileCharge() {
         if (this.ticksExisted % 3 == 0)
-            this.world.playSound(null, this.getBlockPos(), SoundEvents.ENTITY_COW_STEP, SoundCategory.HOSTILE, 1, this.getRNG().nextFloat() * 0.2F);
+            this.world.playSound(null, this.getPosition(), SoundEvents.ENTITY_COW_STEP, SoundCategory.HOSTILE, 1, this.getRNG().nextFloat() * 0.2F);
     }
 
     @Override

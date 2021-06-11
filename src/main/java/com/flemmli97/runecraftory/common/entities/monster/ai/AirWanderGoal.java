@@ -20,7 +20,7 @@ public class AirWanderGoal extends RandomWalkingGoal {
         Vector3d vec = super.getPosition();
         //this.creature.setPathPriority(PathNodeType.OPEN, this.prevPrio);
         BlockPos pos;
-        if (vec != null && this.creature.world.getBlockState(pos = new BlockPos(vec).down()).hasSolidTopSurface(this.creature.world, pos, this.creature)) {
+        if (vec != null && this.creature.world.getBlockState(pos = new BlockPos(vec).down()).canSpawnMobs(this.creature.world, pos, this.creature)) {
             return vec.add(0, 1, 0);
         }
         return vec;

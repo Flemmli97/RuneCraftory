@@ -35,21 +35,21 @@ public class OverlayGui extends AbstractGui {
         EnumSeason season = calendar.currentSeason();
         this.mc.getTextureManager().bindTexture(texturepath);
         if (cap != null && !this.mc.player.abilities.disableDamage) {
-            this.drawTexture(stack, xPos, yPos, 0, 0, 96, 29);
+            this.blit(stack, xPos, yPos, 0, 0, 96, 29);
             int healthWidth = Math.min(75, (int) (cap.getHealth(this.mc.player) / cap.getMaxHealth(this.mc.player) * 75.0f));
             int runePointsWidth = Math.min(75, (int) (cap.getRunePoints() / (float) cap.getMaxRunePoints() * 75.0f));
-            this.drawTexture(stack, xPos + 18, yPos + 3, 18, 30, healthWidth, 9);
-            this.drawTexture(stack, xPos + 18, yPos + 17, 18, 40, runePointsWidth, 9);
+            this.blit(stack, xPos + 18, yPos + 3, 18, 30, healthWidth, 9);
+            this.blit(stack, xPos + 18, yPos + 17, 18, 40, runePointsWidth, 9);
         }
 
-        this.drawTexture(stack, ClientConfig.seasonDisplayX, ClientConfig.seasonDisplayY, 50, 176, 37, 36);
-        this.drawTexture(stack, ClientConfig.seasonDisplayX + 3, ClientConfig.seasonDisplayY + 3, 0 + season.ordinal() * 32, 226, 32, 30);
-        this.drawTexture(stack, ClientConfig.seasonDisplayX, ClientConfig.seasonDisplayY + 39, 0, 176, 48, 17);
+        this.blit(stack, ClientConfig.seasonDisplayX, ClientConfig.seasonDisplayY, 50, 176, 37, 36);
+        this.blit(stack, ClientConfig.seasonDisplayX + 3, ClientConfig.seasonDisplayY + 3, 0 + season.ordinal() * 32, 226, 32, 30);
+        this.blit(stack, ClientConfig.seasonDisplayX, ClientConfig.seasonDisplayY + 39, 0, 176, 48, 17);
 
-        drawStringCenter(stack, this.mc.fontRenderer, new TranslationTextComponent(calendar.currentDay().translation()).append(new TranslationTextComponent(" " + calendar.date())), ClientConfig.seasonDisplayX + 26, ClientConfig.seasonDisplayY + 39 + 5, 0xbd1600);
+        drawStringCenter(stack, this.mc.fontRenderer, new TranslationTextComponent(calendar.currentDay().translation()).appendSibling(new TranslationTextComponent(" " + calendar.date())), ClientConfig.seasonDisplayX + 26, ClientConfig.seasonDisplayY + 39 + 5, 0xbd1600);
     }
 
     public static void drawStringCenter(MatrixStack stack, FontRenderer fontRenderer, ITextComponent component, float x, float y, int color) {
-        fontRenderer.draw(stack, component, x - fontRenderer.getWidth(component) / 2f, y, color);
+        fontRenderer.drawText(stack, component, x - fontRenderer.getStringPropertyWidth(component) / 2f, y, color);
     }
 }

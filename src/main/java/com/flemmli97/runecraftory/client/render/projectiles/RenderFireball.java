@@ -17,7 +17,7 @@ public class RenderFireball extends RenderTexture<EntityFireball> {
     }
 
     @Override
-    public ResourceLocation getEntityTexture(EntityFireball p_110775_1_) {
+    public ResourceLocation getEntityTexture(EntityFireball entity) {
         return tex;
     }
 

@@ -63,7 +63,7 @@ public class BlockCrop extends BushBlock implements IGrowable {
     }
 
     @Override
-    public ActionResultType onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult res) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult res) {
         if (this.isMaxAge(state, world, pos)) {
             TileEntity tile = world.getTileEntity(pos);
             spawnDrops(state, world, pos, tile);
@@ -110,7 +110,7 @@ public class BlockCrop extends BushBlock implements IGrowable {
 
     @Override
     public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
-        return (world.getBaseLightLevel(pos, 0) >= 8 || world.isSkyVisible(pos)) && super.isValidPosition(state, world, pos);
+        return (world.getLightSubtracted(pos, 0) >= 8 || world.canSeeSky(pos)) && super.isValidPosition(state, world, pos);
     }
 
     @Override

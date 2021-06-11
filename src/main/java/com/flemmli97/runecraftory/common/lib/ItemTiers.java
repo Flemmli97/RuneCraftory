@@ -43,12 +43,12 @@ public class ItemTiers {
 
     public static final IArmorMaterial armor = new IArmorMaterial() {
         @Override
-        public int getDurability(EquipmentSlotType p_200896_1_) {
+        public int getDurability(EquipmentSlotType slotIn) {
             return 0;
         }
 
         @Override
-        public int getDamageReductionAmount(EquipmentSlotType p_200902_1_) {
+        public int getDamageReductionAmount(EquipmentSlotType slotIn) {
             return 0;
         }
 

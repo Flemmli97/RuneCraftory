@@ -21,6 +21,6 @@ public class ItemLevelUp extends Item {
             player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap ->
                     cap.addXp(player, LevelCalc.xpAmountForLevelUp(cap.getPlayerLevel()[0]) - cap.getPlayerLevel()[1]));
         }
-        return ActionResult.success(player.getHeldItem(hand));
+        return ActionResult.resultSuccess(player.getHeldItem(hand));
     }
 }

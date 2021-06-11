@@ -80,9 +80,9 @@ public class MineralGenConfig {
     public void bake() {
         if (this.bakedConf == null) {
             this.bakedConf = ModFeatures.MINERALFEATURE.get()
-                    .configure(new ChancedBlockCluster(new SimpleBlockStateProvider(this.getBlock().getDefaultState()), this.minAmount(), this.maxAmount(), this.xSpread(), this.ySpread(), this.zSpread())).applyChance(this.chance()).decorate(Features.Placements.SQUARE_TOP_SOLID_HEIGHTMAP);
+                    .withConfiguration(new ChancedBlockCluster(new SimpleBlockStateProvider(this.getBlock().getDefaultState()), this.minAmount(), this.maxAmount(), this.xSpread(), this.ySpread(), this.zSpread())).chance(this.chance()).withPlacement(Features.Placements.SEAGRASS_DISK_PLACEMENT);
             this.bakedConfNether = ModFeatures.MINERALFEATURE.get()
-                    .configure(new ChancedBlockCluster(new SimpleBlockStateProvider(this.getBlock().getDefaultState()), this.minAmount(), this.maxAmount(), this.xSpread(), this.ySpread(), this.zSpread())).applyChance(this.chance()).decorate(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(6)));
+                    .withConfiguration(new ChancedBlockCluster(new SimpleBlockStateProvider(this.getBlock().getDefaultState()), this.minAmount(), this.maxAmount(), this.xSpread(), this.ySpread(), this.zSpread())).chance(this.chance()).withPlacement(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(6)));
         } else
             throw new IllegalStateException("Feature already configured");
     }

@@ -51,8 +51,8 @@ public class EntitySkyFish extends BaseMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.GENERIC_MOVEMENT_SPEED).setBaseValue(0.13);
-        this.getAttribute(Attributes.GENERIC_FOLLOW_RANGE).setBaseValue(32);
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.13);
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
         super.applyAttributes();
     }
 
@@ -121,8 +121,8 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     private boolean belowSoldid() {
-        BlockPos pos = this.getBlockPos().down();
-        return this.world.getBlockState(pos).hasSolidTopSurface(this.world, pos, this);
+        BlockPos pos = this.getPosition().down();
+        return this.world.getBlockState(pos).canSpawnMobs(this.world, pos, this);
     }
 
     @Override

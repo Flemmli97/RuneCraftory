@@ -55,7 +55,7 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
 
     protected void moveToEntityNearer(LivingEntity target, float speed) {
         if (this.pathFindDelay <= 0) {
-            Path path = this.attacker.getNavigator().getPathToEntityLiving(target, 0);
+            Path path = this.attacker.getNavigator().pathfind(target, 0);
             if (path == null || this.attacker.getNavigator().setPath(path, speed)) {
                 this.pathFindDelay += 15;
             }

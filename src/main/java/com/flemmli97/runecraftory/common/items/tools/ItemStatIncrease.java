@@ -18,8 +18,8 @@ public class ItemStatIncrease extends Item {
 
     private final Stat stat;
 
-    public ItemStatIncrease(Stat stat, Properties p_i48487_1_) {
-        super(p_i48487_1_);
+    public ItemStatIncrease(Stat stat, Properties properties) {
+        super(properties);
         this.stat = stat;
     }
 
@@ -37,7 +37,7 @@ public class ItemStatIncrease extends Item {
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, LivingEntity entityLiving) {
         if (entityLiving instanceof ServerPlayerEntity) {
             ServerPlayerEntity entityplayer = (ServerPlayerEntity) entityLiving;
-            worldIn.playSound(null, entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+            worldIn.playSound(null, entityplayer.getPosX(), entityplayer.getPosY(), entityplayer.getPosZ(), SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
             this.increaseStat(stack, worldIn, entityplayer);
             entityplayer.addStat(Stats.ITEM_USED.get(this));
             CriteriaTriggers.CONSUME_ITEM.trigger(entityplayer, stack);

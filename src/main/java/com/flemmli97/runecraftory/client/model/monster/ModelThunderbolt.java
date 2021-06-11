@@ -48,142 +48,142 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
 
         body = new ModelRendererPlus(this);
         body.setDefaultRotPoint(0.0F, 4.0F, 0.0F);
-        body.setTextureOffset(0, 0).addCuboid(-6.5F, -7.0F, -13.0F, 13.0F, 13.0F, 26.0F, 0.0F, false);
+        body.setTextureOffset(0, 0).addBox(-6.5F, -7.0F, -13.0F, 13.0F, 13.0F, 26.0F, 0.0F, false);
 
         backFur = new ModelRendererPlus(this);
         backFur.setDefaultRotPoint(0.0F, -7.0F, 3.0F);
         body.addChild(backFur);
-        backFur.setTextureOffset(0, 0).addCuboid(-0.5F, -2.0F, -12.0F, 1.0F, 3.0F, 24.0F, 0.0F, false);
+        backFur.setTextureOffset(0, 0).addBox(-0.5F, -2.0F, -12.0F, 1.0F, 3.0F, 24.0F, 0.0F, false);
 
         neck = new ModelRendererPlus(this);
         neck.setDefaultRotPoint(-1.0F, 0.0F, -13.0F);
         body.addChild(neck);
         setRotationAngle(neck, 0.5236F, 0.0F, 0.0F);
-        neck.setTextureOffset(0, 0).addCuboid(-2.5F, -12.0F, 0.0F, 7.0F, 12.0F, 9.0F, 0.0F, false);
-        neck.setTextureOffset(0, 0).addCuboid(0.5F, -12.0F, 3.0F, 1.0F, 12.0F, 10.0F, 0.0F, false);
+        neck.setTextureOffset(0, 0).addBox(-2.5F, -12.0F, 0.0F, 7.0F, 12.0F, 9.0F, 0.0F, false);
+        neck.setTextureOffset(0, 0).addBox(0.5F, -12.0F, 3.0F, 1.0F, 12.0F, 10.0F, 0.0F, false);
 
         head = new ModelRendererPlus(this);
         head.setDefaultRotPoint(1.0F, -13.0F, 0.0F);
         neck.addChild(head);
-        head.setTextureOffset(0, 0).addCuboid(-5.0F, -9.0F, -2.5F, 10.0F, 10.0F, 13.0F, 0.0F, false);
-        head.setTextureOffset(0, 0).addCuboid(-0.5F, -12.0F, 3.5F, 1.0F, 13.0F, 10.0F, 0.0F, false);
-        head.setTextureOffset(0, 0).addCuboid(-3.5F, -9.0F, -6.5F, 7.0F, 10.0F, 4.0F, 0.0F, false);
-        head.setTextureOffset(0, 0).addCuboid(-2.5F, -8.5F, -12.5F, 5.0F, 9.0F, 6.0F, 0.0F, false);
+        head.setTextureOffset(0, 0).addBox(-5.0F, -9.0F, -2.5F, 10.0F, 10.0F, 13.0F, 0.0F, false);
+        head.setTextureOffset(0, 0).addBox(-0.5F, -12.0F, 3.5F, 1.0F, 13.0F, 10.0F, 0.0F, false);
+        head.setTextureOffset(0, 0).addBox(-3.5F, -9.0F, -6.5F, 7.0F, 10.0F, 4.0F, 0.0F, false);
+        head.setTextureOffset(0, 0).addBox(-2.5F, -8.5F, -12.5F, 5.0F, 9.0F, 6.0F, 0.0F, false);
 
         horn = new ModelRendererPlus(this);
         horn.setDefaultRotPoint(0.0F, -12.0F, -2.0F);
         head.addChild(horn);
-        horn.setTextureOffset(0, 0).addCuboid(-1.5F, -6.0F, 0.5F, 3.0F, 9.0F, 3.0F, 0.0F, false);
+        horn.setTextureOffset(0, 0).addBox(-1.5F, -6.0F, 0.5F, 3.0F, 9.0F, 3.0F, 0.0F, false);
 
         leftFrontLegBase = new ModelRendererPlus(this);
         leftFrontLegBase.setDefaultRotPoint(4.5F, 4.0F, -13.0F);
         body.addChild(leftFrontLegBase);
-        leftFrontLegBase.setTextureOffset(0, 0).addCuboid(-1.5F, -1.0F, -0.5F, 4.0F, 4.0F, 4.0F, 0.0F, false);
+        leftFrontLegBase.setTextureOffset(0, 0).addBox(-1.5F, -1.0F, -0.5F, 4.0F, 4.0F, 4.0F, 0.0F, false);
 
         leftFrontLeg = new ModelRendererPlus(this);
         leftFrontLeg.setDefaultRotPoint(0.0F, 3.0F, 3.0F);
         leftFrontLegBase.addChild(leftFrontLeg);
-        leftFrontLeg.setTextureOffset(0, 0).addCuboid(-1.0F, 0.0F, -3.0F, 3.0F, 5.0F, 3.0F, 0.0F, false);
+        leftFrontLeg.setTextureOffset(0, 0).addBox(-1.0F, 0.0F, -3.0F, 3.0F, 5.0F, 3.0F, 0.0F, false);
 
         leftFrontLegDown = new ModelRendererPlus(this);
         leftFrontLegDown.setDefaultRotPoint(0.5F, 5.0F, -3.0F);
         leftFrontLeg.addChild(leftFrontLegDown);
-        leftFrontLegDown.setTextureOffset(0, 0).addCuboid(-1.5F, 0.0F, 0.0F, 3.0F, 7.0F, 3.0F, 0.0F, false);
+        leftFrontLegDown.setTextureOffset(0, 0).addBox(-1.5F, 0.0F, 0.0F, 3.0F, 7.0F, 3.0F, 0.0F, false);
 
         leftFrontLegFur = new ModelRendererPlus(this);
         leftFrontLegFur.setDefaultRotPoint(0.0F, 0.0F, 3.0F);
         leftFrontLegDown.addChild(leftFrontLegFur);
-        leftFrontLegFur.setTextureOffset(0, 0).addCuboid(0.0F, -1.0F, 0.0F, 0.0F, 4.0F, 5.0F, 0.0F, false);
+        leftFrontLegFur.setTextureOffset(0, 0).addBox(0.0F, -1.0F, 0.0F, 0.0F, 4.0F, 5.0F, 0.0F, false);
 
         leftFrontHoove = new ModelRendererPlus(this);
         leftFrontHoove.setDefaultRotPoint(0.0F, 6.0F, 1.5F);
         leftFrontLegDown.addChild(leftFrontHoove);
-        leftFrontHoove.setTextureOffset(0, 0).addCuboid(-2.0F, 0.0F, -2.0F, 4.0F, 2.0F, 4.0F, 0.0F, false);
+        leftFrontHoove.setTextureOffset(0, 0).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 2.0F, 4.0F, 0.0F, false);
 
         rightFrontLegBase = new ModelRendererPlus(this);
         rightFrontLegBase.setDefaultRotPoint(-5.5F, 4.0F, -13.0F);
         body.addChild(rightFrontLegBase);
-        rightFrontLegBase.setTextureOffset(0, 0).addCuboid(-1.5F, -1.0F, -0.5F, 4.0F, 4.0F, 4.0F, 0.0F, false);
+        rightFrontLegBase.setTextureOffset(0, 0).addBox(-1.5F, -1.0F, -0.5F, 4.0F, 4.0F, 4.0F, 0.0F, false);
 
         rightFrontLeg = new ModelRendererPlus(this);
         rightFrontLeg.setDefaultRotPoint(0.0F, 3.0F, 3.0F);
         rightFrontLegBase.addChild(rightFrontLeg);
-        rightFrontLeg.setTextureOffset(0, 0).addCuboid(-1.0F, 0.0F, -3.0F, 3.0F, 5.0F, 3.0F, 0.0F, false);
+        rightFrontLeg.setTextureOffset(0, 0).addBox(-1.0F, 0.0F, -3.0F, 3.0F, 5.0F, 3.0F, 0.0F, false);
 
         rightFrontLegDown = new ModelRendererPlus(this);
         rightFrontLegDown.setDefaultRotPoint(0.5F, 5.0F, -3.0F);
         rightFrontLeg.addChild(rightFrontLegDown);
-        rightFrontLegDown.setTextureOffset(0, 0).addCuboid(-1.5F, 0.0F, 0.0F, 3.0F, 7.0F, 3.0F, 0.0F, false);
+        rightFrontLegDown.setTextureOffset(0, 0).addBox(-1.5F, 0.0F, 0.0F, 3.0F, 7.0F, 3.0F, 0.0F, false);
 
         rightFrontLegFur = new ModelRendererPlus(this);
         rightFrontLegFur.setDefaultRotPoint(0.0F, 0.0F, 3.0F);
         rightFrontLegDown.addChild(rightFrontLegFur);
-        rightFrontLegFur.setTextureOffset(0, 0).addCuboid(0.0F, -1.0F, 0.0F, 0.0F, 4.0F, 5.0F, 0.0F, false);
+        rightFrontLegFur.setTextureOffset(0, 0).addBox(0.0F, -1.0F, 0.0F, 0.0F, 4.0F, 5.0F, 0.0F, false);
 
         rightFrontHoove = new ModelRendererPlus(this);
         rightFrontHoove.setDefaultRotPoint(0.0F, 6.0F, 1.5F);
         rightFrontLegDown.addChild(rightFrontHoove);
-        rightFrontHoove.setTextureOffset(0, 0).addCuboid(-2.0F, 0.0F, -2.0F, 4.0F, 2.0F, 4.0F, 0.0F, false);
+        rightFrontHoove.setTextureOffset(0, 0).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 2.0F, 4.0F, 0.0F, false);
 
         leftBackLegBase = new ModelRendererPlus(this);
         leftBackLegBase.setDefaultRotPoint(4.5F, 4.0F, 9.6F);
         body.addChild(leftBackLegBase);
-        leftBackLegBase.setTextureOffset(0, 0).addCuboid(-2.5F, -4.0F, -3.5F, 5.0F, 7.0F, 7.0F, 0.0F, false);
+        leftBackLegBase.setTextureOffset(0, 0).addBox(-2.5F, -4.0F, -3.5F, 5.0F, 7.0F, 7.0F, 0.0F, false);
 
         leftBackLeg = new ModelRendererPlus(this);
         leftBackLeg.setDefaultRotPoint(0.0F, 3.0F, -1.5F);
         leftBackLegBase.addChild(leftBackLeg);
         setRotationAngle(leftBackLeg, 0.3927F, 0.0F, 0.0F);
-        leftBackLeg.setTextureOffset(0, 0).addCuboid(-1.5F, 0.0F, 0.0F, 3.0F, 6.0F, 4.0F, 0.0F, false);
+        leftBackLeg.setTextureOffset(0, 0).addBox(-1.5F, 0.0F, 0.0F, 3.0F, 6.0F, 4.0F, 0.0F, false);
 
         leftBackLegDown = new ModelRendererPlus(this);
         leftBackLegDown.setDefaultRotPoint(0.0F, 6.0F, 4.0F);
         leftBackLeg.addChild(leftBackLegDown);
         setRotationAngle(leftBackLegDown, -0.3927F, 0.0F, 0.0F);
-        leftBackLegDown.setTextureOffset(0, 0).addCuboid(-1.5F, 0.0F, -3.0F, 3.0F, 8.0F, 3.0F, 0.0F, false);
-        leftBackLegDown.setTextureOffset(0, 0).addCuboid(0.0F, 0.0F, -1.0F, 0.0F, 3.0F, 6.0F, 0.0F, false);
+        leftBackLegDown.setTextureOffset(0, 0).addBox(-1.5F, 0.0F, -3.0F, 3.0F, 8.0F, 3.0F, 0.0F, false);
+        leftBackLegDown.setTextureOffset(0, 0).addBox(0.0F, 0.0F, -1.0F, 0.0F, 3.0F, 6.0F, 0.0F, false);
 
         leftBackHoove = new ModelRendererPlus(this);
         leftBackHoove.setDefaultRotPoint(-0.5F, 7.3007F, -1.5463F);
         leftBackLegDown.addChild(leftBackHoove);
-        leftBackHoove.setTextureOffset(0, 0).addCuboid(-1.5F, -0.3007F, -1.9537F, 4.0F, 2.0F, 4.0F, 0.0F, false);
+        leftBackHoove.setTextureOffset(0, 0).addBox(-1.5F, -0.3007F, -1.9537F, 4.0F, 2.0F, 4.0F, 0.0F, false);
 
         rightBackLegBase = new ModelRendererPlus(this);
         rightBackLegBase.setDefaultRotPoint(-4.5F, 4.0F, 9.6F);
         body.addChild(rightBackLegBase);
-        rightBackLegBase.setTextureOffset(0, 0).addCuboid(-2.5F, -4.0F, -3.5F, 5.0F, 7.0F, 7.0F, 0.0F, false);
+        rightBackLegBase.setTextureOffset(0, 0).addBox(-2.5F, -4.0F, -3.5F, 5.0F, 7.0F, 7.0F, 0.0F, false);
 
         rightBackLeg = new ModelRendererPlus(this);
         rightBackLeg.setDefaultRotPoint(0.0F, 3.0F, -1.5F);
         rightBackLegBase.addChild(rightBackLeg);
         setRotationAngle(rightBackLeg, 0.3927F, 0.0F, 0.0F);
-        rightBackLeg.setTextureOffset(0, 0).addCuboid(-1.5F, 0.0F, 0.0F, 3.0F, 6.0F, 4.0F, 0.0F, false);
+        rightBackLeg.setTextureOffset(0, 0).addBox(-1.5F, 0.0F, 0.0F, 3.0F, 6.0F, 4.0F, 0.0F, false);
 
         rightBackLegDown = new ModelRendererPlus(this);
         rightBackLegDown.setDefaultRotPoint(0.0F, 6.0F, 4.0F);
         rightBackLeg.addChild(rightBackLegDown);
         setRotationAngle(rightBackLegDown, -0.3927F, 0.0F, 0.0F);
-        rightBackLegDown.setTextureOffset(0, 0).addCuboid(-1.5F, 0.0F, -3.0F, 3.0F, 8.0F, 3.0F, 0.0F, false);
-        rightBackLegDown.setTextureOffset(0, 0).addCuboid(0.0F, 0.0F, -1.0F, 0.0F, 3.0F, 6.0F, 0.0F, false);
+        rightBackLegDown.setTextureOffset(0, 0).addBox(-1.5F, 0.0F, -3.0F, 3.0F, 8.0F, 3.0F, 0.0F, false);
+        rightBackLegDown.setTextureOffset(0, 0).addBox(0.0F, 0.0F, -1.0F, 0.0F, 3.0F, 6.0F, 0.0F, false);
 
         rightBackHoove = new ModelRendererPlus(this);
         rightBackHoove.setDefaultRotPoint(0.0F, 7.0F, -1.5F);
         rightBackLegDown.addChild(rightBackHoove);
-        rightBackHoove.setTextureOffset(0, 0).addCuboid(-2.0F, 0.0F, -2.0F, 4.0F, 2.0F, 4.0F, 0.0F, false);
+        rightBackHoove.setTextureOffset(0, 0).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 2.0F, 4.0F, 0.0F, false);
 
         tail = new ModelRendererPlus(this);
         tail.setDefaultRotPoint(0.5F, -5.5F, 13.0F);
         body.addChild(tail);
         setRotationAngle(tail, 0.6545F, 0.0F, 0.0F);
-        tail.setTextureOffset(0, 0).addCuboid(-2.5F, 0.0F, -1.0F, 4.0F, 6.0F, 4.0F, 0.0F, false);
-        tail.setTextureOffset(0, 0).addCuboid(-1.0F, -1.0F, 0.0F, 1.0F, 7.0F, 4.0F, 0.0F, false);
+        tail.setTextureOffset(0, 0).addBox(-2.5F, 0.0F, -1.0F, 4.0F, 6.0F, 4.0F, 0.0F, false);
+        tail.setTextureOffset(0, 0).addBox(-1.0F, -1.0F, 0.0F, 1.0F, 7.0F, 4.0F, 0.0F, false);
 
         tailTip = new ModelRendererPlus(this);
         tailTip.setDefaultRotPoint(0.0F, 6.0F, 3.0F);
         tail.addChild(tailTip);
         setRotationAngle(tailTip, -0.5236F, 0.0F, 0.0F);
-        tailTip.setTextureOffset(0, 0).addCuboid(-1.5F, 0.0F, -3.5F, 2.0F, 13.0F, 3.0F, 0.0F, false);
-        tailTip.setTextureOffset(0, 0).addCuboid(-1.0F, -1.0F, -3.5F, 1.0F, 14.0F, 4.0F, 0.0F, false);
+        tailTip.setTextureOffset(0, 0).addBox(-1.5F, 0.0F, -3.5F, 2.0F, 13.0F, 3.0F, 0.0F, false);
+        tailTip.setTextureOffset(0, 0).addBox(-1.0F, -1.0F, -3.5F, 1.0F, 14.0F, 4.0F, 0.0F, false);
         this.animations = new BlockBenchAnimations(this, new ResourceLocation(RuneCraftory.MODID, "models/entity/animation/thunderbolt.json"));
     }
 
@@ -193,7 +193,7 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
     }
 
     @Override
-    public void setAngles(T thunderbolt, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(T thunderbolt, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
         this.head.rotateAngleY += netHeadYaw * 0.002f;
         this.head.rotateAngleX += headPitch * 0.002f;

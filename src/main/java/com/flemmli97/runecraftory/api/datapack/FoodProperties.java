@@ -130,28 +130,28 @@ public class FoodProperties {
             this.translationTexts.add(new TranslationTextComponent("tooltip.item.eaten"));
             StringTextComponent hprp = new StringTextComponent("");
             if (this.getHPGain() != 0)
-                hprp.append(" ").append(new TranslationTextComponent("tooltip.food.hp", this.format(this.getHPGain())));
+                hprp.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.food.hp", this.format(this.getHPGain())));
             if (this.getHpPercentGain() != 0)
-                hprp.append(" ").append(new TranslationTextComponent("tooltip.food.hp.percent", this.format(this.getHpPercentGain())));
+                hprp.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.food.hp.percent", this.format(this.getHpPercentGain())));
             if (this.getRPRegen() != 0)
-                hprp.append(" ").append(new TranslationTextComponent("tooltip.food.rp", this.format(this.getRPRegen())));
+                hprp.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.food.rp", this.format(this.getRPRegen())));
             if (this.getRpPercentRegen() != 0)
-                hprp.append(" ").append(new TranslationTextComponent("tooltip.food.rp.percent", this.format(this.getRpPercentRegen())));
+                hprp.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.food.rp.percent", this.format(this.getRpPercentRegen())));
             if (!hprp.getSiblings().isEmpty())
                 this.translationTexts.add(hprp);
             StringTextComponent rpIncrease = new StringTextComponent("");
             if (this.getRpIncrease() != 0)
-                rpIncrease.append(" ").append(new TranslationTextComponent("tooltip.food.rpmax", this.format(this.getRpIncrease())));
+                rpIncrease.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.food.rpmax", this.format(this.getRpIncrease())));
             if (this.getRpPercentIncrease() != 0)
-                rpIncrease.append(" ").append(new TranslationTextComponent("tooltip.food.rpmax.percent", this.format(this.getRpPercentIncrease())));
+                rpIncrease.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.food.rpmax.percent", this.format(this.getRpPercentIncrease())));
             if (!rpIncrease.getSiblings().isEmpty())
                 this.translationTexts.add(rpIncrease);
             for (Map.Entry<Attribute, Double> entry : this.effects().entrySet()) {
-                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + this.format(entry.getValue())));
+                IFormattableTextComponent comp = new StringTextComponent(" ").appendSibling(new TranslationTextComponent(entry.getKey().getAttributeName())).appendSibling(new StringTextComponent(": " + this.format(entry.getValue())));
                 this.translationTexts.add(comp);
             }
             for (Map.Entry<Attribute, Double> entry : this.effectsMultiplier().entrySet()) {
-                IFormattableTextComponent comp = new StringTextComponent(" ").append(new TranslationTextComponent(entry.getKey().getTranslationKey())).append(new StringTextComponent(": " + this.format(entry.getValue()) + "%"));
+                IFormattableTextComponent comp = new StringTextComponent(" ").appendSibling(new TranslationTextComponent(entry.getKey().getAttributeName())).appendSibling(new StringTextComponent(": " + this.format(entry.getValue()) + "%"));
                 this.translationTexts.add(comp);
             }
         }
@@ -163,14 +163,14 @@ public class FoodProperties {
         StringTextComponent hprp = new StringTextComponent("");
         int hpRegen = medicine.healthRegen(stack, this);
         if (hpRegen != 0)
-            hprp.append(" ").append(new TranslationTextComponent("tooltip.food.hp", this.format(hpRegen)));
+            hprp.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.food.hp", this.format(hpRegen)));
         int hpPercent = medicine.healthRegenPercent(stack, this);
         if (hpPercent != 0)
-            hprp.append(" ").append(new TranslationTextComponent("tooltip.food.hp.percent", this.format(hpPercent)));
+            hprp.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.food.hp.percent", this.format(hpPercent)));
         if (this.getRPRegen() != 0)
-            hprp.append(" ").append(new TranslationTextComponent("tooltip.food.rp", this.format(this.getRPRegen())));
+            hprp.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.food.rp", this.format(this.getRPRegen())));
         if (this.getRpPercentRegen() != 0)
-            hprp.append(" ").append(new TranslationTextComponent("tooltip.food.rp.percent", this.format(this.getRpPercentRegen())));
+            hprp.appendString(" ").appendSibling(new TranslationTextComponent("tooltip.food.rp.percent", this.format(this.getRpPercentRegen())));
         if (!hprp.getSiblings().isEmpty())
             translationTexts.set(1, hprp);
         return translationTexts;

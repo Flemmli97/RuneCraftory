@@ -17,24 +17,24 @@ public class ItemTagGen extends ItemTagsProvider {
 
     @Override
     protected void registerTags() {
-        this.getOrCreateTagBuilder(ModTags.minerals)
-                .add(ModItems.scrapPlus.get())
+        this.getOrCreateBuilder(ModTags.minerals)
+                .addItemEntry(ModItems.scrapPlus.get())
                 .addTags(Tags.Items.INGOTS_IRON, Tags.Items.INGOTS_GOLD)
-                .add(ModItems.bronze.get())
-                .add(ModItems.silver.get())
-                .add(ModItems.platinum.get())
-                .add(ModItems.orichalcum.get())
-                .add(ModItems.dragonic.get());
+                .addItemEntry(ModItems.bronze.get())
+                .addItemEntry(ModItems.silver.get())
+                .addItemEntry(ModItems.platinum.get())
+                .addItemEntry(ModItems.orichalcum.get())
+                .addItemEntry(ModItems.dragonic.get());
 
-        this.getOrCreateTagBuilder(ModTags.bronze)
-                .add(ModItems.bronze.get());
-        this.getOrCreateTagBuilder(ModTags.silver)
-                .add(ModItems.silver.get());
-        this.getOrCreateTagBuilder(ModTags.platinum)
-                .add(ModItems.platinum.get());
-        this.getOrCreateTagBuilder(ModTags.orichalcum)
-                .add(ModItems.orichalcum.get());
-        this.getOrCreateTagBuilder(ModTags.dragonic)
-                .add(ModItems.dragonic.get());
+        this.getOrCreateBuilder(ModTags.bronze)
+                .addItemEntry(ModItems.bronze.get());
+        this.getOrCreateBuilder(ModTags.silver)
+                .addItemEntry(ModItems.silver.get());
+        this.getOrCreateBuilder(ModTags.platinum)
+                .addItemEntry(ModItems.platinum.get());
+        this.getOrCreateBuilder(ModTags.orichalcum)
+                .addItemEntry(ModItems.orichalcum.get());
+        this.getOrCreateBuilder(ModTags.dragonic)
+                .addItemEntry(ModItems.dragonic.get());
     }
 }

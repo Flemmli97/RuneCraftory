@@ -15,8 +15,8 @@ public class ItemFertilizer extends Item {
 
     private final IFertilizerOnUse use;
 
-    public ItemFertilizer(IFertilizerOnUse use, Properties p_i48487_1_) {
-        super(p_i48487_1_);
+    public ItemFertilizer(IFertilizerOnUse use, Properties properties) {
+        super(properties);
         this.use = use;
     }
 

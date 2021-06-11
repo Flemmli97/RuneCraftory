@@ -25,42 +25,42 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> {
         this.body = new ModelRendererPlus(this);
         this.body.setDefaultRotPoint(0.0F, 0.0F, 0.0F);
         this.bodyCenter.addChild(this.body);
-        this.body.setTextureOffset(0, 31).addCuboid(-3.5F, -7.0F, -4.5F, 7, 13, 9, 0.25F, true);
-        this.body.setTextureOffset(32, 30).addCuboid(-4.5F, -7.0F, -3.5F, 1, 13, 7, 0.25F, true);
-        this.body.setTextureOffset(32, 30).addCuboid(3.5F, -7.0F, -3.5F, 1, 13, 7, 0.25F, false);
+        this.body.setTextureOffset(0, 31).addBox(-3.5F, -7.0F, -4.5F, 7, 13, 9, 0.25F, true);
+        this.body.setTextureOffset(32, 30).addBox(-4.5F, -7.0F, -3.5F, 1, 13, 7, 0.25F, true);
+        this.body.setTextureOffset(32, 30).addBox(3.5F, -7.0F, -3.5F, 1, 13, 7, 0.25F, false);
 
         this.bodyUp = new ModelRendererPlus(this);
         this.bodyUp.setDefaultRotPoint(0.0F, -8.0F, 0.0F);
         this.body.addChild(this.bodyUp);
-        this.bodyUp.setTextureOffset(32, 14).addCuboid(-2.5F, -1.0F, -3.5F, 5, 2, 7, 0.25F, true);
-        this.bodyUp.setTextureOffset(28, 23).addCuboid(2.5F, -1.0F, -2.5F, 1, 2, 5, 0.25F, false);
-        this.bodyUp.setTextureOffset(28, 23).addCuboid(-3.5F, -1.0F, -2.5F, 1, 2, 5, 0.25F, true);
+        this.bodyUp.setTextureOffset(32, 14).addBox(-2.5F, -1.0F, -3.5F, 5, 2, 7, 0.25F, true);
+        this.bodyUp.setTextureOffset(28, 23).addBox(2.5F, -1.0F, -2.5F, 1, 2, 5, 0.25F, false);
+        this.bodyUp.setTextureOffset(28, 23).addBox(-3.5F, -1.0F, -2.5F, 1, 2, 5, 0.25F, true);
 
         this.armLeftBase = new ModelRendererPlus(this);
         this.armLeftBase.setDefaultRotPoint(3.75F, -3.0F, 0.0F);
         this.body.addChild(this.armLeftBase);
         this.setRotationAngle(this.armLeftBase, 0.1745F, 0.0F, 0.0F);
-        this.armLeftBase.setTextureOffset(34, 50).addCuboid(0.25F, -1.0F, -1.0F, 2, 2, 2, 0.25F, false);
+        this.armLeftBase.setTextureOffset(34, 50).addBox(0.25F, -1.0F, -1.0F, 2, 2, 2, 0.25F, false);
 
         this.armRightBase = new ModelRendererPlus(this);
         this.armRightBase.setDefaultRotPoint(-3.75F, -3.0F, 0.0F);
         this.body.addChild(this.armRightBase);
         this.setRotationAngle(this.armRightBase, 0.1745F, 0.0F, 0.0F);
-        this.armRightBase.setTextureOffset(34, 50).addCuboid(-2.25F, -1.0F, -1.0F, 2, 2, 2, 0.25F, false);
+        this.armRightBase.setTextureOffset(34, 50).addBox(-2.25F, -1.0F, -1.0F, 2, 2, 2, 0.25F, false);
 
         this.feetLeftBase = new ModelRendererPlus(this);
         this.feetLeftBase.setDefaultRotPoint(4.0F, 4.75F, 0.0F);
         this.body.addChild(this.feetLeftBase);
-        this.feetLeftBase.setTextureOffset(42, 50).addCuboid(-1.5F, -5.5F, -2.5F, 3, 7, 5, 0.25F, false);
+        this.feetLeftBase.setTextureOffset(42, 50).addBox(-1.5F, -5.5F, -2.5F, 3, 7, 5, 0.25F, false);
 
         this.feetRightBase = new ModelRendererPlus(this);
         this.feetRightBase.setDefaultRotPoint(-4.0F, 4.75F, 0.0F);
         this.body.addChild(this.feetRightBase);
-        this.feetRightBase.setTextureOffset(42, 50).addCuboid(-1.5F, -5.5F, -2.5F, 3, 7, 5, 0.25F, true);
+        this.feetRightBase.setTextureOffset(42, 50).addBox(-1.5F, -5.5F, -2.5F, 3, 7, 5, 0.25F, true);
     }
 
     @Override
-    public void setAngles(T wooly, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setRotationAngles(T wooly, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 
     @Override

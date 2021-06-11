@@ -86,6 +86,6 @@ public abstract class CropProvider implements IDataProvider {
     public void addStat(String id, ITag<Item> tag, CropProperties.MutableCropProps builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
-        this.item.put(res, obj -> obj.addProperty("tag", TagCollectionManager.getTagManager().getItems().getTagId(tag).toString()));
+        this.item.put(res, obj -> obj.addProperty("tag", TagCollectionManager.getManager().getItemTags().getValidatedIdFromTag(tag).toString()));
     }
 }

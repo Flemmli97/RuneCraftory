@@ -71,7 +71,7 @@ public class EntityPollen extends EntityDamageCloud {
             for (Vector3f base : pollenBase) {
                 for (Vector3f dir : pollenInd) {
                     for (int i = 0; i < 3; i++)
-                        this.world.addParticle(new ColoredParticleData(ModParticles.sinkingDust.get(), 10 / 255F, 138 / 255F, 12 / 255F, 1), this.getX() + base.getX(), this.getY() + 0.05, this.getZ() + base.getZ(), dir.getX() + base.getX() * 0.02, dir.getY(), dir.getZ() + base.getZ() * 0.02);
+                        this.world.addParticle(new ColoredParticleData(ModParticles.sinkingDust.get(), 10 / 255F, 138 / 255F, 12 / 255F, 1), this.getPosX() + base.getX(), this.getPosY() + 0.05, this.getPosZ() + base.getZ(), dir.getX() + base.getX() * 0.02, dir.getY(), dir.getZ() + base.getZ() * 0.02);
                 }
             }
         } else

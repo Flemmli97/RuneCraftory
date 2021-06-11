@@ -122,7 +122,7 @@ public class ModItems {
     public static final RegistryObject<Item> wettablePowder = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.wettable, new Item.Properties().group(RFCreativeTabs.weaponToolTab)));
     public static final RegistryObject<Item> objectX = ITEMS.register("object_x", () -> new Item(new Item.Properties().food(foodProp).group(RFCreativeTabs.medicine)) {
         @Override
-        public UseAction getUseAction(ItemStack p_77661_1_) {
+        public UseAction getUseAction(ItemStack stack) {
             return UseAction.DRINK;
         }
     });
@@ -1306,7 +1306,7 @@ public class ModItems {
     public static RegistryObject<Item> drinkable(String name) {
         return ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).maxStackSize(16).group(RFCreativeTabs.medicine)) {
             @Override
-            public UseAction getUseAction(ItemStack p_77661_1_) {
+            public UseAction getUseAction(ItemStack stack) {
                 return UseAction.DRINK;
             }
         });

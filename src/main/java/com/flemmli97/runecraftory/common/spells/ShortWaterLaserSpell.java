@@ -38,7 +38,7 @@ public class ShortWaterLaserSpell extends Spell {
             laser.setDamageMultiplier(1 + (level - 1) / 10);
             if (entity instanceof MobEntity && ((MobEntity) entity).getAttackTarget() != null) {
                 LivingEntity target = ((MobEntity) entity).getAttackTarget();
-                laser.setRotationTo(target.getX(), target.getEyeY(), target.getZ(), 0);
+                laser.setRotationTo(target.getPosX(), target.getPosYEye(), target.getPosZ(), 0);
             }
             world.addEntity(laser);
             return true;

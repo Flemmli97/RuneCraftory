@@ -125,7 +125,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
         if (this.tier.getTierLevel() != 0 && !world.isRemote) {
             int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
             int range = Math.min(useTime, this.tier.getTierLevel());
-            BlockPos pos = entity.getBlockPos();
+            BlockPos pos = entity.getPosition();
             AtomicBoolean flag = new AtomicBoolean(false);
             if (range == 0) {
                 if (entity instanceof PlayerEntity) {
@@ -155,9 +155,9 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
         ItemStack itemstack = player.getHeldItem(hand);
         if (this.tier.getTierLevel() != 0) {
             player.setActiveHand(hand);
-            return ActionResult.success(itemstack);
+            return ActionResult.resultSuccess(itemstack);
         }
-        return ActionResult.pass(itemstack);
+        return ActionResult.resultPass(itemstack);
     }
 
     @Override

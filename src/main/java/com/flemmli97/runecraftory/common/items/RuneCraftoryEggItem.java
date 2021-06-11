@@ -39,7 +39,7 @@ public class RuneCraftoryEggItem extends SpawnEgg {
         }
         //Temporary fix for Forge-Bug-#7730
         if (e.getWidth() > 0.7 && e.getWidth() < 1) {
-            e.setPosition(e.getX() + 0.05, e.getY(), e.getZ());
+            e.setPosition(e.getPosX() + 0.05, e.getPosY(), e.getPosZ());
         }
         return super.onEntitySpawned(e, stack, player);
     }
@@ -60,7 +60,7 @@ public class RuneCraftoryEggItem extends SpawnEgg {
 
     @Override
     public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag flag) {
-        tooltip.add(new TranslationTextComponent("tooltip.item.spawn").formatted(TextFormatting.GOLD));
+        tooltip.add(new TranslationTextComponent("tooltip.item.spawn").mergeStyle(TextFormatting.GOLD));
         super.addInformation(stack, world, tooltip, flag);
     }
 
