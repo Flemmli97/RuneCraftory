@@ -1,0 +1,89 @@
+package io.github.flemmli97.runecraftory.common;
+
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraftforge.registries.ForgeRegistries;
+
+public class RFCreativeTabs {
+
+    public static CreativePlus weaponToolTab = new CreativePlus("runecraftory.weapons_tools") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModItems.icon0.get());
+        }
+    };
+
+    public static CreativePlus equipment = new CreativePlus("runecraftory.equipment") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModItems.cheapBracelet.get());
+        }
+    };
+
+    public static CreativePlus upgradeItems = new CreativePlus("runecraftory.upgrade") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModItems.dragonic.get());
+        }
+    };
+
+    public static CreativePlus blocks = new CreativePlus("runecraftory.blocks") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModItems.mineralIron.get());
+        }
+    };
+
+    public static CreativePlus medicine = new CreativePlus("runecraftory.medicine") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModItems.recoveryPotion.get());
+        }
+    };
+
+    public static CreativePlus cast = new CreativePlus("runecraftory.cast") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModItems.teleport.get());
+        }
+    };
+
+    public static CreativePlus food = new CreativePlus("runecraftory.food") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModItems.onigiri.get());
+        }
+    };
+
+    public static CreativePlus crops = new CreativePlus("runecraftory.crops") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModItems.turnipSeeds.get());
+        }
+    };
+
+    public static CreativePlus monsters = new CreativePlus("runecraftory.monsters") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(ModItems.icon1.get());
+        }
+    };
+
+    private static abstract class CreativePlus extends ItemGroup {
+
+        public CreativePlus(String label) {
+            super(label);
+        }
+
+        @Override
+        public void fill(NonNullList<ItemStack> list) {
+            for (Item item : ForgeRegistries.ITEMS)
+                item.fillItemGroup(this, list);
+            list.forEach(ItemNBT::initNBT);
+        }
+    }
+}
