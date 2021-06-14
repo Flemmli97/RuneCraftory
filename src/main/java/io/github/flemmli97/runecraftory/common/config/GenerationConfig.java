@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.common.config;
 
+import com.flemmli97.tenshilib.common.config.Configuration;
+import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.values.HerbGenCofigSpecs;
 import io.github.flemmli97.runecraftory.common.config.values.HerbGenConfig;
 import io.github.flemmli97.runecraftory.common.config.values.MineralGenConfig;
 import io.github.flemmli97.runecraftory.common.config.values.MineralGenConfigSpec;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import com.flemmli97.tenshilib.common.config.Configuration;
-import com.google.common.collect.Sets;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeConfigSpec;
 

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import com.flemmli97.tenshilib.common.utils.ResourceStream;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import org.apache.commons.compress.utils.IOUtils;
 
 import java.io.File;

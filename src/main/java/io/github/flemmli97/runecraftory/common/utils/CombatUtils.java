@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import com.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.capability.CapabilityInsts;
@@ -9,7 +10,6 @@ import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.IExtendedMob;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import com.flemmli97.tenshilib.api.item.IAOEWeapon;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

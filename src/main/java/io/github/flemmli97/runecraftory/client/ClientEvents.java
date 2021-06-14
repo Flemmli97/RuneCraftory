@@ -14,8 +14,6 @@ import io.github.flemmli97.runecraftory.common.network.C2SRideJump;
 import io.github.flemmli97.runecraftory.common.network.C2SSpellKey;
 import io.github.flemmli97.runecraftory.common.network.PacketHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
-import com.flemmli97.tenshilib.api.item.IAOEWeapon;
-import com.flemmli97.tenshilib.common.network.C2SPacketHit;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
@@ -33,7 +31,6 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -141,13 +138,6 @@ public class ClientEvents {
         //    this.renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
         if (GeneralConfig.debugAttack) {
             AttackAABBRender.INST.render(event.getMatrixStack(), Minecraft.getInstance().getRenderTypeBuffers().getCrumblingBufferSource());
-        }
-    }
-
-    @SubscribeEvent
-    public void leftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
-        if (event.getPlayer().world.isRemote && event.getPlayer().getHeldItemMainhand().getItem() instanceof IAOEWeapon) {
-            com.flemmli97.tenshilib.common.network.PacketHandler.sendToServer(new C2SPacketHit(C2SPacketHit.HitType.AOE));
         }
     }
 

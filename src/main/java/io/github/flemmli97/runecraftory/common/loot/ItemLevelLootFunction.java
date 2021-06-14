@@ -1,7 +1,5 @@
 package io.github.flemmli97.runecraftory.common.loot;
 
-import io.github.flemmli97.runecraftory.common.registry.ModLootModifier;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.flemmli97.tenshilib.common.utils.JsonUtils;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -9,6 +7,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
+import io.github.flemmli97.runecraftory.common.registry.ModLootModifier;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;

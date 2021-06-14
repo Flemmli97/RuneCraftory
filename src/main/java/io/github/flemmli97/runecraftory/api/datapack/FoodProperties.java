@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.api.datapack;
 
+import com.flemmli97.tenshilib.common.utils.ArrayUtils;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import com.flemmli97.tenshilib.common.utils.ArrayUtils;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;

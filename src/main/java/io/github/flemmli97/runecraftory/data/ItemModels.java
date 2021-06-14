@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.data;
 
+import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.ModelsResourceUtil;
 import net.minecraft.util.ResourceLocation;

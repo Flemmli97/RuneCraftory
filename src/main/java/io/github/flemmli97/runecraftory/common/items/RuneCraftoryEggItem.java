@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.items;
 
+import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.runecraftory.common.blocks.tile.TileSpawner;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
-import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;

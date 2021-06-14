@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
+import com.google.common.collect.Lists;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.common.blocks.BlockAccessory;
@@ -21,7 +22,6 @@ import io.github.flemmli97.runecraftory.common.blocks.tile.TileCrop;
 import io.github.flemmli97.runecraftory.common.blocks.tile.TileFarm;
 import io.github.flemmli97.runecraftory.common.blocks.tile.TileForge;
 import io.github.flemmli97.runecraftory.common.blocks.tile.TileSpawner;
-import com.google.common.collect.Lists;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;

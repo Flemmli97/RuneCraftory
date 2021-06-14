@@ -1,5 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
+import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
+import com.flemmli97.tenshilib.api.entity.IAnimated;
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
@@ -13,10 +17,6 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.mixin.MoveControllerAccessor;
-import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
-import com.flemmli97.tenshilib.api.entity.IAnimated;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

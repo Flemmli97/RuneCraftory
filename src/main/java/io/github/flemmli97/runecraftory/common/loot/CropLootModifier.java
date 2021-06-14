@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.loot;
 
+import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import com.google.gson.JsonObject;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootContext;

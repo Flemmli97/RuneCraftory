@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.world;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import com.google.common.collect.Lists;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;

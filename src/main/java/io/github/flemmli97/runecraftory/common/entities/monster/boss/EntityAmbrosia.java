@@ -1,5 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import com.google.common.collect.ImmutableList;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaSleep;
@@ -7,9 +10,6 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollen;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.AmbrosiaAttackGoal;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
-import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

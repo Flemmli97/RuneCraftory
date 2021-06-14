@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.config.values;
 
-import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.util.ResourceLocation;

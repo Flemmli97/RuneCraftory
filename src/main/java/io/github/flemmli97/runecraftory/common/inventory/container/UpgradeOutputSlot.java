@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.IInventory;
@@ -79,16 +78,16 @@ public class UpgradeOutputSlot extends Slot {
         player.getCapability(CapabilityInsts.PlayerCap).ifPresent(cap -> {
             cap.decreaseRunePoints(player, this.container.rpCost(), true);
             switch (this.container.craftingType()) {
-                case EnumCrafting.FORGE:
+                case FORGE:
                     LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.FORGING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.FORGING)[0]) * 0.3f);
                     break;
-                case EnumCrafting.ARMOR:
+                case ARMOR:
                     LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CRAFTING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.CRAFTING)[0]) * 0.3f);
                     break;
-                case EnumCrafting.CHEM:
+                case CHEM:
                     LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.CHEMISTRY, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.CHEMISTRY)[0]) * 0.3f);
                     break;
-                case EnumCrafting.COOKING:
+                case COOKING:
                     LevelCalc.levelSkill((ServerPlayerEntity) player, cap, EnumSkills.COOKING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getStackInSlot(7).getItem()).map(ItemStat::getDiff).orElse(0) - cap.getSkillLevel(EnumSkills.COOKING)[0]) * 0.3f);
                     break;
             }

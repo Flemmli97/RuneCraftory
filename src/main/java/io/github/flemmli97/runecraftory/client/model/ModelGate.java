@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.client.model;
 
-import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 

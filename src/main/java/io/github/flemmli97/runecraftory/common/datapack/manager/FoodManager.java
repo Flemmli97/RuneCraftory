@@ -1,14 +1,14 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
-import io.github.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
+import io.github.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import net.minecraft.client.resources.JsonReloadListener;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.Item;

@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.client.gui.widgets;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;

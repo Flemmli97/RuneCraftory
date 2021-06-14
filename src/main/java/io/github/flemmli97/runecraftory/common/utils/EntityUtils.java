@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import com.flemmli97.tenshilib.api.entity.IOwnable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
-import com.flemmli97.tenshilib.api.entity.IOwnable;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;

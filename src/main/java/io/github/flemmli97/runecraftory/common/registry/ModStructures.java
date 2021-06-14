@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
+import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.world.structure.AmbrosiaForestStructure;
 import io.github.flemmli97.runecraftory.common.world.structure.ThunderboltRuinsStructure;
 import io.github.flemmli97.runecraftory.common.world.structure.piece.AmbrosiaForestPiece;
 import io.github.flemmli97.runecraftory.common.world.structure.piece.ThunderboltRuinsPiece;
 import io.github.flemmli97.runecraftory.mixin.DimStrucSetAccess;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;

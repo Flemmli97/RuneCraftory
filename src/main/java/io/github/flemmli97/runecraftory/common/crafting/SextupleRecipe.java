@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.crafting;
 
-import io.github.flemmli97.runecraftory.common.capability.CapabilityInsts;
-import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import io.github.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;

@@ -12,11 +12,11 @@ import java.util.Map;
 @Mixin(DimensionStructuresSettings.class)
 public interface DimStrucSetAccess {
 
-    @Accessor
+    @Accessor("field_236191_b_")
     static void setDEFAULT_STRUCTURES(ImmutableMap<Structure<?>, StructureSeparationSettings> map) {
         throw new IllegalStateException();
     }
 
-    @Accessor
+    @Accessor("field_236193_d_")
     void setStructures(Map<Structure<?>, StructureSeparationSettings> map);
 }

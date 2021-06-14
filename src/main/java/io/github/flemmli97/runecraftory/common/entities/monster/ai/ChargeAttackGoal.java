@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.ai;
 
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 
 public class ChargeAttackGoal<T extends ChargingMonster> extends AnimatedMeleeGoal<T> {
 

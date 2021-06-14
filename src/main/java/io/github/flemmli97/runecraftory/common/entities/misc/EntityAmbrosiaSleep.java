@@ -1,5 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
+import com.flemmli97.tenshilib.api.entity.IOwnable;
+import com.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData;
@@ -9,8 +11,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import com.flemmli97.tenshilib.api.entity.IOwnable;
-import com.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;

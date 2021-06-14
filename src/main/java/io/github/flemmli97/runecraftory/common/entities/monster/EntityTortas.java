@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.ChargeAttackGoal;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.EntityType;

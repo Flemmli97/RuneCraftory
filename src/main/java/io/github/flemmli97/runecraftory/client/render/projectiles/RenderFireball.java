@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.client.render.projectiles;
 
-import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import com.flemmli97.tenshilib.client.render.RenderTexture;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;

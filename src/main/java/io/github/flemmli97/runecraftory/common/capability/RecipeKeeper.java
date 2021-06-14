@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.capability;
 
-import io.github.flemmli97.runecraftory.common.network.PacketHandler;
-import io.github.flemmli97.runecraftory.common.network.S2CRecipe;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import io.github.flemmli97.runecraftory.common.network.PacketHandler;
+import io.github.flemmli97.runecraftory.common.network.S2CRecipe;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.crafting.IRecipe;

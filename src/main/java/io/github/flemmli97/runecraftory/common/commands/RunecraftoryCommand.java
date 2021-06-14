@@ -1,14 +1,14 @@
 package io.github.flemmli97.runecraftory.common.commands;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.capability.CapabilityInsts;
-import io.github.flemmli97.runecraftory.common.network.PacketHandler;
-import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.capability.CapabilityInsts;
+import io.github.flemmli97.runecraftory.common.network.PacketHandler;
+import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;

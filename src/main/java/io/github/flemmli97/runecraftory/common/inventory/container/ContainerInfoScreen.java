@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import io.github.flemmli97.runecraftory.common.capability.IPlayerCap;
 import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.registry.ModContainer;
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpore;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.AnimatedMeleeGoal;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3f;

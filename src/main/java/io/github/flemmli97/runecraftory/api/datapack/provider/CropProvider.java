@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.api.datapack.provider;
 
-import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;

@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.client.model;
 
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
 import com.flemmli97.tenshilib.common.utils.MathUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.util.math.MathHelper;

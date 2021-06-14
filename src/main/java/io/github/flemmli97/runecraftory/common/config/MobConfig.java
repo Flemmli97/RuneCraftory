@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.config;
 
+import com.flemmli97.tenshilib.common.config.Configuration;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
 import io.github.flemmli97.runecraftory.common.config.values.EntityPropertySpecs;
-import com.flemmli97.tenshilib.common.config.Configuration;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 

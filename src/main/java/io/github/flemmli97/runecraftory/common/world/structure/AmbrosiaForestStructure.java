@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.world.structure;
 
-import io.github.flemmli97.runecraftory.common.world.structure.piece.AmbrosiaForestPiece;
 import com.mojang.serialization.Codec;
+import io.github.flemmli97.runecraftory.common.world.structure.piece.AmbrosiaForestPiece;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MutableBoundingBox;

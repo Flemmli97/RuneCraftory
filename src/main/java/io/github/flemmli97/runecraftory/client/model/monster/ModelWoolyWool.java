@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.client.model.monster;
 
-import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 
 public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> {

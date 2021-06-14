@@ -1,14 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import com.google.common.collect.ImmutableList;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThiccLightningBolt;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThunderboltBeam;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.ThunderboltAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
-import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
-import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SoundType;

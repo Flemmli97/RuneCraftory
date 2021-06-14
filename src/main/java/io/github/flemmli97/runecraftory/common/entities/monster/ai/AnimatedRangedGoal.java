@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.ai;
 
+import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 
 import java.util.function.Predicate;
 

@@ -1,5 +1,7 @@
 package io.github.flemmli97.runecraftory.common.items.weapons;
 
+import com.flemmli97.tenshilib.api.item.IAOEWeapon;
+import com.flemmli97.tenshilib.api.item.IDualWeapon;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
@@ -8,8 +10,6 @@ import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import com.flemmli97.tenshilib.api.item.IAOEWeapon;
-import com.flemmli97.tenshilib.api.item.IDualWeapon;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.LivingEntity;

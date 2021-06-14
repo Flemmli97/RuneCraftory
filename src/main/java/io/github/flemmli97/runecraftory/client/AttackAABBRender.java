@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.client;
 
-import io.github.flemmli97.runecraftory.common.lib.EnumAABBType;
 import com.flemmli97.tenshilib.client.render.RenderUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
+import io.github.flemmli97.runecraftory.common.lib.EnumAABBType;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.math.AxisAlignedBB;

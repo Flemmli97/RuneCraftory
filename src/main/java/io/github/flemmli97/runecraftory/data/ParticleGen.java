@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.data;
 
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DirectoryCache;
 import net.minecraft.data.IDataProvider;

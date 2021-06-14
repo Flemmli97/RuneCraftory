@@ -1,5 +1,7 @@
 package io.github.flemmli97.runecraftory.api.datapack;
 
+import com.flemmli97.tenshilib.common.utils.MapUtils;
+import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
@@ -8,8 +10,6 @@ import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
-import com.flemmli97.tenshilib.common.utils.MapUtils;
-import com.google.common.collect.Sets;
 import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;

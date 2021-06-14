@@ -1,5 +1,7 @@
 package io.github.flemmli97.runecraftory.common.events;
 
+import com.flemmli97.tenshilib.api.event.AOEAttackEvent;
+import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
@@ -23,8 +25,6 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
-import com.flemmli97.tenshilib.api.event.AOEAttackEvent;
-import com.google.common.collect.Sets;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;

@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.common.world.structure.piece;
 
+import com.mojang.brigadier.StringReader;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.tile.TileSpawner;
 import io.github.flemmli97.runecraftory.common.lib.LibEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.block.Blocks;
 import net.minecraft.command.arguments.BlockStateParser;
 import net.minecraft.nbt.CompoundNBT;

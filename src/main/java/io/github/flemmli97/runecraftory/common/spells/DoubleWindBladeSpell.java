@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
+import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
