@@ -4,21 +4,23 @@ import net.minecraft.util.text.TextFormatting;
 
 public enum EnumElement {
 
-    NONE(TextFormatting.GRAY, "element_none"),
-    WATER(TextFormatting.DARK_BLUE, "element_water"),
-    EARTH(TextFormatting.YELLOW, "element_earth"),
-    WIND(TextFormatting.GREEN, "element_wind"),
-    FIRE(TextFormatting.DARK_RED, "element_fire"),
-    LIGHT(TextFormatting.WHITE, "element_light"),
-    DARK(TextFormatting.DARK_PURPLE, "element_dark"),
-    LOVE(TextFormatting.RED, "element_love");
+    NONE(TextFormatting.GRAY, "element_none", 0xffffff),
+    WATER(TextFormatting.DARK_BLUE, "element_water", 0x0505aa),
+    EARTH(TextFormatting.YELLOW, "element_earth", 0xe6e605),
+    WIND(TextFormatting.GREEN, "element_wind", 0x55ff55),
+    FIRE(TextFormatting.DARK_RED, "element_fire", 0xaa0505),
+    LIGHT(TextFormatting.WHITE, "element_light", 0xffff69),
+    DARK(TextFormatting.DARK_PURPLE, "element_dark", 0x820582),
+    LOVE(TextFormatting.RED, "element_love", 0xfcc0fc);
 
     private final String translation;
     private final TextFormatting color;
+    private final int particleColor;
 
-    EnumElement(TextFormatting color, String name) {
+    EnumElement(TextFormatting color, String name, int particleColor) {
         this.color = color;
         this.translation = name;
+        this.particleColor = particleColor;
     }
 
     public String getTranslation() {
@@ -27,6 +29,10 @@ public enum EnumElement {
 
     public TextFormatting getColor() {
         return this.color;
+    }
+
+    public int getParticleColor() {
+        return this.particleColor;
     }
 
     public static EnumElement opposing(EnumElement element) {

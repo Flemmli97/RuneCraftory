@@ -20,6 +20,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelWeagle;
 import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
 import io.github.flemmli97.runecraftory.client.particles.ColoredParticle;
 import io.github.flemmli97.runecraftory.client.particles.SinkingParticle;
+import io.github.flemmli97.runecraftory.client.particles.VortexParticle;
 import io.github.flemmli97.runecraftory.client.render.RenderGate;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
@@ -140,6 +141,7 @@ public class ClientRegister {
         manager.registerFactory(ModParticles.smoke.get(), ColoredParticle.LightParticleFactory::new);
         manager.registerFactory(ModParticles.staticLight.get(), ColoredParticle.NoGravityParticleFactory::new);
         manager.registerFactory(ModParticles.circlingLight.get(), CirclingParticle.CirclingFactoryBase::new);
+        manager.registerFactory(ModParticles.vortex.get(), VortexParticle.VortexFactoryBase::new);
         manager.registerFactory(ModParticles.wind.get(), ColoredParticle.NoGravityParticleFactory::new);
         manager.registerFactory(ModParticles.sleep.get(), HeartParticle.Factory::new);
         manager.registerFactory(ModParticles.poison.get(), HeartParticle.Factory::new);

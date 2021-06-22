@@ -44,18 +44,18 @@ public class ColoredParticleData implements IParticleData {
     };
 
 
-    private final ParticleType<ColoredParticleData> type;
+    private final ParticleType<? extends ColoredParticleData> type;
     private float red;
     private float green;
     private float blue;
     private float alpha;
     private float scale;
 
-    public ColoredParticleData(ParticleType<ColoredParticleData> type, float red, float green, float blue, float alpha) {
+    public ColoredParticleData(ParticleType<? extends ColoredParticleData> type, float red, float green, float blue, float alpha) {
         this(type, red, green, blue, alpha, 1);
     }
 
-    public ColoredParticleData(ParticleType<ColoredParticleData> type, float red, float green, float blue, float alpha, float scale) {
+    public ColoredParticleData(ParticleType<? extends ColoredParticleData> type, float red, float green, float blue, float alpha, float scale) {
         this.type = type;
         this.red = red;
         this.green = green;

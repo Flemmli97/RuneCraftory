@@ -93,6 +93,11 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
+    public boolean doSweepingAttack() {
+        return false;
+    }
+
+    @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return false;
     }

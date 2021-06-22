@@ -82,6 +82,11 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     @Override
+    public boolean doSweepingAttack() {
+        return false;
+    }
+
+    @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return false;
     }

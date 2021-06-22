@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.world.structure.piece.AmbrosiaFor
 import io.github.flemmli97.runecraftory.common.world.structure.piece.ThunderboltRuinsPiece;
 import io.github.flemmli97.runecraftory.mixin.DimStrucSetAccess;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.IStructurePieceType;
@@ -18,6 +19,8 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class ModStructures {
@@ -41,11 +44,22 @@ public class ModStructures {
         Registry.register(Registry.STRUCTURE_PIECE, RuneCraftory.MODID + ":thunderbolt_piece", THUNDERBOLT_PIECE = ThunderboltRuinsPiece.Piece::new);
         Structure.NAME_STRUCTURE_BIMAP.put(THUNDERBOLT_RUINS.get().getRegistryName().toString(), THUNDERBOLT_RUINS.get());
 
+        Map<Structure<?>, StructureSeparationSettings> register = new HashMap<>();
+        register.put(AMBROSIA_FOREST.get(), new StructureSeparationSettings(25, 15, 34645653));
+        register.put(THUNDERBOLT_RUINS.get(), new StructureSeparationSettings(40, 32, 34645653));
+
+
         ImmutableMap<Structure<?>, StructureSeparationSettings> map = ImmutableMap.<Structure<?>, StructureSeparationSettings>builder()
                 .putAll(DimensionStructuresSettings.field_236191_b_)
-                .put(AMBROSIA_FOREST.get(), new StructureSeparationSettings(25, 15, 34645653))
-                .put(THUNDERBOLT_RUINS.get(), new StructureSeparationSettings(40, 32, 34645653))
+                .putAll(register)
                 .build();
         DimStrucSetAccess.setDEFAULT_STRUCTURES(map);
+
+        WorldGenRegistries.NOISE_SETTINGS.getEntries().forEach(settings -> {
+            Map<Structure<?>, StructureSeparationSettings> structureMap = settings.getValue().getStructures().func_236195_a_();
+            Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(structureMap);
+            tempMap.putAll(register);
+            ((DimStrucSetAccess) settings.getValue().getStructures()).setStructures(tempMap);
+        });
     }
 }

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.client.particles;
 
 import com.flemmli97.tenshilib.common.utils.MathUtils;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData;
+import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData4f;
 import net.minecraft.client.particle.IAnimatedSprite;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
@@ -49,7 +50,7 @@ public class CirclingParticle extends ColoredParticle {
         }
     }
 
-    public static class CirclingFactoryBase implements IParticleFactory<ColoredParticleData> {
+    public static class CirclingFactoryBase implements IParticleFactory<ColoredParticleData4f> {
 
         private final IAnimatedSprite sprite;
 
@@ -58,8 +59,8 @@ public class CirclingParticle extends ColoredParticle {
         }
 
         @Override
-        public Particle makeParticle(ColoredParticleData data, ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ) {
-            return new CirclingParticle(world, x, y, z, motionX, motionY, motionZ, data, this.sprite, 25, 1, 1, 0.6, 0.24, 0, 80).setScale(data.getScale());
+        public Particle makeParticle(ColoredParticleData4f data, ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ) {
+            return new CirclingParticle(world, x, y, z, motionX, motionY, motionZ, data, this.sprite, 25, 0.9f, 1.1f, data.getRadius(), data.getInc(), data.getOffset(), data.getAngle()).setScale(data.getScale());
         }
     }
 }

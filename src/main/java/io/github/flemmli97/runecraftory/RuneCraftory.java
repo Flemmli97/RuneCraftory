@@ -160,7 +160,7 @@ public class RuneCraftory {
         if (attribute instanceof RangedAttribute) {
             try {
                 //maximumValue
-                Field f = ObfuscationReflectionHelper.findField(RangedAttribute.class, "maximumValue");
+                Field f = ObfuscationReflectionHelper.findField(RangedAttribute.class, "field_111118_b");
                 f.setAccessible(true);
                 Field modifiersField = Field.class.getDeclaredField("modifiers");
                 modifiersField.setAccessible(true);

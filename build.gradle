@@ -132,6 +132,7 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:' + "${mcversion}-${forge_version}"
+    annotationProcessor 'org.spongepowered:mixin:0.8.2:processor'
 
     compileOnly fg.deobf("${jei_dep}:api")
     runtimeOnly fg.deobf(jei_dep)

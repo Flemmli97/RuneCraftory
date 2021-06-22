@@ -42,7 +42,6 @@ public class ModelButterfly<T extends EntityButterfly> extends EntityModel<T> {
         this.body.render(matrixStack, buffer, packedLight, packedOverlay);
     }
 
-
     @Override
     public void setRotationAngles(T butterfly, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.wingLeft.rotateAngleZ = -MathHelper.cos(ageInTicks * 1.2F) * MathUtils.degToRad(20) - MathUtils.degToRad(30);

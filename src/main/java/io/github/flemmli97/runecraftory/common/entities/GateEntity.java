@@ -59,8 +59,10 @@ public class GateEntity extends MobEntity implements IBaseMob {
 
     private List<EntityType<?>> spawnList = new ArrayList<>();
     private EnumElement type = EnumElement.NONE;
-    public int rotate;
+    public int rotate, clientParticles;
+    public boolean clientParticleFlag;
     private static final DataParameter<String> elementType = EntityDataManager.createKey(GateEntity.class, DataSerializers.STRING);
+    private static final DataParameter<Integer> element = EntityDataManager.createKey(GateEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> level = EntityDataManager.createKey(GateEntity.class, DataSerializers.VARINT);
     private static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
 
@@ -117,6 +119,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
         super.registerData();
         this.dataManager.register(elementType, "none");
         this.dataManager.register(level, LibConstants.baseLevel);
+        this.dataManager.register(element, 0);
     }
 
     @Override
@@ -141,6 +144,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
         try {
             this.type = EnumElement.valueOf(el);
             this.dataManager.set(elementType, this.type.getTranslation());
+            this.dataManager.set(element, this.type.ordinal());
         } catch (IllegalArgumentException e) {
             RuneCraftory.logger.error("Unable to set element type for gate entity {}", this);
         }
@@ -174,6 +178,9 @@ public class GateEntity extends MobEntity implements IBaseMob {
         if (net.minecraftforge.common.ForgeHooks.onLivingUpdate(this)) return;
         if (!this.world.isRemote) {
             this.setFlag(6, this.isGlowing());
+        } else {
+            this.clientParticles += 10;
+            this.clientParticleFlag = true;
         }
         this.baseTick();
         if (this.newPosRotationIncrements > 0) {
@@ -374,6 +381,9 @@ public class GateEntity extends MobEntity implements IBaseMob {
         if (key.equals(level)) {
             this.updateStatsToLevel();
         }
+        if (key.equals(element)) {
+            this.type = EnumElement.values()[this.dataManager.get(element)];
+        }
         super.notifyDataManagerChange(key);
     }
 
@@ -391,6 +401,7 @@ public class GateEntity extends MobEntity implements IBaseMob {
         this.type = this.getType(world, key);
         this.dataManager.set(level, LevelCalc.levelFromPos(this.world, this.getPosition()));
         this.dataManager.set(elementType, this.type.getTranslation());
+        this.dataManager.set(element, this.type.ordinal());
         this.setPosition(this.getPosX(), this.getPosY() + 1, this.getPosZ());
         this.updateStatsToLevel();
         return data;

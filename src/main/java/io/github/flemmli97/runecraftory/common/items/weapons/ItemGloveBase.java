@@ -77,6 +77,11 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     }
 
     @Override
+    public boolean doSweepingAttack() {
+        return false;
+    }
+
+    @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return false;
     }

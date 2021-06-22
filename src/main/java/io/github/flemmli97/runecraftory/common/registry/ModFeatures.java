@@ -9,7 +9,6 @@ import io.github.flemmli97.runecraftory.mixin.FlatGenSettingAccessor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.StructureFeature;
@@ -22,10 +21,6 @@ public class ModFeatures {
     public static final DeferredRegister<Feature<?>> FEATURES = DeferredRegister.create(ForgeRegistries.FEATURES, RuneCraftory.MODID);
 
     public static final RegistryObject<MineralFeatures> MINERALFEATURE = FEATURES.register("mineral_feature", () -> new MineralFeatures(ChancedBlockCluster.CODEC));
-
-    public static ConfiguredFeature<?, ?> CONFIGURED_HERBFEATURE;
-    public static ConfiguredFeature<?, ?> CONFIGURED_NETHER_HERBFEATURE;
-    public static ConfiguredFeature<?, ?> CONFIGURED_END_HERBFEATURE;
 
     public static StructureFeature<?, ?> AMBROSIA_FEATURE;
     public static StructureFeature<?, ?> THUNDERBOLT_FEATURE;

@@ -93,6 +93,11 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     }
 
     @Override
+    public boolean doSweepingAttack() {
+        return false;
+    }
+
+    @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return false;
     }

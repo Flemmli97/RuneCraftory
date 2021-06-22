@@ -90,6 +90,11 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
     }
 
     @Override
+    public boolean doSweepingAttack() {
+        return false;
+    }
+
+    @Override
     public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
         return false;
     }

@@ -56,7 +56,7 @@ public class ModEntities {
 
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, RuneCraftory.MODID);
 
-    public static final RegistryObject<EntityType<GateEntity>> gate = reg(EntityType.Builder.create(GateEntity::new, EntityClassification.MONSTER).size(1, 1).trackingRange(8), LibEntities.gate);
+    public static final RegistryObject<EntityType<GateEntity>> gate = reg(EntityType.Builder.create(GateEntity::new, EntityClassification.MONSTER).size(0.9f, 0.9f).trackingRange(8), LibEntities.gate);
     public static final RegistryObject<EntityType<EntityWooly>> wooly = regMonster(EntityType.Builder.create(EntityWooly::new, EntityClassification.MONSTER).size(0.7f, 1.55f).trackingRange(8), LibEntities.wooly,
             0xffffcc, 0xffffff,
             new EntityProperties.Builder()

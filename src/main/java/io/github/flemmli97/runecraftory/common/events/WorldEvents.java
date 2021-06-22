@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.world.GateSpawning;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.mixin.DimStrucSetAccess;
 import net.minecraft.block.IGrowable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityClassification;
@@ -32,6 +33,7 @@ import net.minecraft.world.gen.feature.FeatureSpreadConfig;
 import net.minecraft.world.gen.feature.Features;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.BiomeDictionary;
@@ -46,7 +48,9 @@ import net.minecraftforge.event.world.StructureSpawnListGatherEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.RegistryObject;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -116,9 +120,12 @@ public class WorldEvents {
                     serverWorld.getDimensionKey().equals(World.OVERWORLD)) {
                 return;
             }
-            Map<Structure<?>, StructureSeparationSettings> map = serverWorld.getChunkProvider().generator.func_235957_b_().func_236195_a_();
-            map.put(ModStructures.AMBROSIA_FOREST.get(), new StructureSeparationSettings(25, 15, 34645653));
-            map.put(ModStructures.THUNDERBOLT_RUINS.get(), new StructureSeparationSettings(40, 32, 34645653));
+            DimensionStructuresSettings settings = serverWorld.getChunkProvider().generator.func_235957_b_();
+            Map<Structure<?>, StructureSeparationSettings> map = new HashMap<>(settings.func_236195_a_());
+            for (RegistryObject<Structure<?>> struct : ModStructures.STRUCTURES.getEntries()) {
+                map.putIfAbsent(struct.get(), DimensionStructuresSettings.field_236191_b_.get(struct.get()));
+            }
+            ((DimStrucSetAccess) settings).setStructures(map);
         }
     }
 
