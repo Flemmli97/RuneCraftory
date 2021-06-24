@@ -2,19 +2,25 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import com.flemmli97.tenshilib.common.entity.EntityBeam;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
+import java.util.function.Predicate;
+
 public class EntityThunderboltBeam extends EntityBeam {
+
+    private Predicate<LivingEntity> pred;
 
     public EntityThunderboltBeam(EntityType<? extends EntityThunderboltBeam> type, World world) {
         super(type, world);
@@ -22,6 +28,8 @@ public class EntityThunderboltBeam extends EntityBeam {
 
     public EntityThunderboltBeam(World world, LivingEntity shooter) {
         super(ModEntities.lightningBeam.get(), world, shooter);
+        if(shooter instanceof BaseMonster)
+            this.pred = ((BaseMonster) shooter).hitPred;
     }
 
     @Override
@@ -63,7 +71,20 @@ public class EntityThunderboltBeam extends EntityBeam {
     }
 
     @Override
+    protected boolean check(Entity e, Vector3d from, Vector3d to) {
+        return (!(e instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) e)) && super.check(e, from, to);
+    }
+
+    @Override
     public void onImpact(EntityRayTraceResult res) {
         CombatUtils.damage(this.getOwner(), res.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(20).element(EnumElement.WIND).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()), null);
+    }
+
+    @Override
+    public LivingEntity getOwner() {
+        LivingEntity owner = super.getOwner();
+        if (owner instanceof BaseMonster)
+            this.pred = ((BaseMonster) owner).hitPred;
+        return owner;
     }
 }

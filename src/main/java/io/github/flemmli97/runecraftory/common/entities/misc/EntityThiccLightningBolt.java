@@ -50,7 +50,7 @@ public class EntityThiccLightningBolt extends EntityProjectile {
 
     @Override
     protected boolean canHit(Entity entity) {
-        return super.canHit(entity) && (!(entity instanceof LivingEntity) || this.pred.test((LivingEntity) entity));
+        return super.canHit(entity) && (!(entity instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) entity));
     }
 
     @Override

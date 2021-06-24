@@ -2,10 +2,12 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import com.flemmli97.tenshilib.common.entity.EntityProjectile;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -15,9 +17,12 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.world.World;
 
+import java.util.function.Predicate;
+
 public class EntityFireball extends EntityProjectile {
 
     private float damageMultiplier = 1;
+    private Predicate<LivingEntity> pred;
 
     public EntityFireball(EntityType<? extends EntityFireball> type, World world) {
         super(type, world);
@@ -25,6 +30,13 @@ public class EntityFireball extends EntityProjectile {
 
     public EntityFireball(World world, LivingEntity shooter) {
         super(ModEntities.fireBall.get(), world, shooter);
+        if(shooter instanceof BaseMonster)
+            this.pred = ((BaseMonster) shooter).hitPred;
+    }
+
+    @Override
+    protected boolean canHit(Entity entity) {
+        return (!(entity instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) entity)) && super.canHit(entity);
     }
 
     @Override
@@ -60,5 +72,13 @@ public class EntityFireball extends EntityProjectile {
     protected void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.putFloat("DamageMultiplier", this.damageMultiplier);
+    }
+
+    @Override
+    public LivingEntity getOwner() {
+        LivingEntity owner = super.getOwner();
+        if (owner instanceof BaseMonster)
+            this.pred = ((BaseMonster) owner).hitPred;
+        return owner;
     }
 }

@@ -73,12 +73,13 @@ public class RenderGate extends LivingRenderer<GateEntity, ModelGate> {
         } else
             super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);*/
         matrixStackIn.push();
+        float scale = 1.2f+ MathHelper.sin(entity.ticksExisted * 0.1f) * 0.04f;
+        matrixStackIn.scale(scale, scale, scale);
+        matrixStackIn.translate(0, entity.getHeight() * 0.5-0.1, 0);
         matrixStackIn.rotate(this.renderManager.getCameraOrientation());
         matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F));
         matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(entity.clientParticles * 0.1f));
-        matrixStackIn.translate(0, 0, 0.01);
-        float scale = 1+ MathHelper.sin(entity.ticksExisted * 0.1f) * 0.04f;
-        matrixStackIn.scale(scale, scale, scale);
+
         this.textureBuilder.setOverlay(getPackedOverlay(entity, this.getOverlayProgress(entity, partialTicks)));
         this.textureBuilder.setLight(packedLightIn);
         RenderUtils.renderTexture(matrixStackIn, bufferIn.getBuffer(RenderType.getEntityCutoutNoCull(this.getEntityTexture(entity))), 1, 1, this.textureBuilder);

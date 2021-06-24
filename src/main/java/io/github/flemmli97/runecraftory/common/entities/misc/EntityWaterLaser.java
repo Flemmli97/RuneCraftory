@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import com.flemmli97.tenshilib.common.entity.EntityBeam;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -22,6 +23,7 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class EntityWaterLaser extends EntityBeam {
 
@@ -30,6 +32,8 @@ public class EntityWaterLaser extends EntityBeam {
 
     private List<Entity> hitEntities = new ArrayList<>();
     private float damageMultiplier = 1;
+
+    private Predicate<LivingEntity> pred;
 
     public EntityWaterLaser(EntityType<? extends EntityBeam> type, World world) {
         super(type, world);
@@ -42,6 +46,8 @@ public class EntityWaterLaser extends EntityBeam {
     public EntityWaterLaser(World world, LivingEntity shooter, float yawMotion) {
         super(ModEntities.waterLaser.get(), world, shooter);
         this.dataManager.set(yawMotionVal, yawMotion);
+        if(shooter instanceof BaseMonster)
+            this.pred = ((BaseMonster) shooter).hitPred;
     }
 
     @Override
@@ -112,6 +118,11 @@ public class EntityWaterLaser extends EntityBeam {
     }
 
     @Override
+    protected boolean check(Entity e, Vector3d from, Vector3d to) {
+        return (!(e instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) e)) && super.check(e, from, to);
+    }
+
+    @Override
     public void onImpact(EntityRayTraceResult res) {
         Entity e = res.getEntity();
         if (!this.hitEntities.contains(e) && CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).element(EnumElement.WATER).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null))
@@ -132,5 +143,13 @@ public class EntityWaterLaser extends EntityBeam {
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.putFloat("DamageMultiplier", this.damageMultiplier);
+    }
+
+    @Override
+    public LivingEntity getOwner() {
+        LivingEntity owner = super.getOwner();
+        if (owner instanceof BaseMonster)
+            this.pred = ((BaseMonster) owner).hitPred;
+        return owner;
     }
 }
