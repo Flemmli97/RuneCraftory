@@ -5,13 +5,13 @@ import net.minecraft.util.text.TextFormatting;
 public enum EnumElement {
 
     NONE(TextFormatting.GRAY, "element_none", 0xffffff),
-    WATER(TextFormatting.DARK_BLUE, "element_water", 0x0505aa),
-    EARTH(TextFormatting.YELLOW, "element_earth", 0xe6e605),
+    WATER(TextFormatting.DARK_BLUE, "element_water", 0x101099),
+    EARTH(TextFormatting.YELLOW, "element_earth", 0xe6e610),
     WIND(TextFormatting.GREEN, "element_wind", 0x55ff55),
-    FIRE(TextFormatting.DARK_RED, "element_fire", 0xaa0505),
-    LIGHT(TextFormatting.WHITE, "element_light", 0xffff69),
-    DARK(TextFormatting.DARK_PURPLE, "element_dark", 0x820582),
-    LOVE(TextFormatting.RED, "element_love", 0xfcc0fc);
+    FIRE(TextFormatting.DARK_RED, "element_fire", 0x991010),
+    LIGHT(TextFormatting.WHITE, "element_light", 0xffff60),
+    DARK(TextFormatting.DARK_PURPLE, "element_dark", 0x821082),
+    LOVE(TextFormatting.RED, "element_love", 0xfc60fc);
 
     private final String translation;
     private final TextFormatting color;

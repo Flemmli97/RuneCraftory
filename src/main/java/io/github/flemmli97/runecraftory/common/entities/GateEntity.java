@@ -440,10 +440,6 @@ public class GateEntity extends MobEntity implements IBaseMob {
         return element;
     }
 
-    public EnumElement entityElement() {
-        return this.type;
-    }
-
     @Override
     public void applyFoodEffect(ItemStack stack) {
     }

@@ -21,7 +21,7 @@ public class ParticleRenderTypes {
             RenderSystem.depthMask(false);
             RenderSystem.enableBlend();
             RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-            RenderSystem.alphaFunc(GL11.GL_GREATER, 0.003921569F);
+            RenderSystem.alphaFunc(GL11.GL_GREATER, 1/255f);
             manager.bindTexture(AtlasTexture.LOCATION_PARTICLES_TEXTURE);
             manager.getTexture(AtlasTexture.LOCATION_PARTICLES_TEXTURE).setBlurMipmap(true, false);
             builder.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);

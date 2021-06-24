@@ -169,6 +169,6 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
 
     @Override
     public void postTransform(boolean leftSide, MatrixStack stack) {
-        stack.translate(leftSide ? 1 : -1 / 16d, 2 / 16d, -4 / 16d);
+        stack.translate((leftSide ? 1 : -1) / 16d, 2 / 16d, -4 / 16d);
     }
 }
