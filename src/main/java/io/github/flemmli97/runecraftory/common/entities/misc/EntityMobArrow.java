@@ -32,7 +32,7 @@ public class EntityMobArrow extends EntityProjectile {
     public EntityMobArrow(World world, LivingEntity shooter, float dmgMulti) {
         super(ModEntities.arrow.get(), world, shooter);
         this.damageMultiplier = dmgMulti;
-        if(shooter instanceof BaseMonster)
+        if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
     }
 

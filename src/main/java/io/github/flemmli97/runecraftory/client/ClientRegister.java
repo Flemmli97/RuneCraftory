@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.client;
 
+import com.flemmli97.tenshilib.client.particles.ColoredParticle;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.InfoScreen;
@@ -18,7 +19,6 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelTortas;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWeagle;
 import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
-import io.github.flemmli97.runecraftory.client.particles.ColoredParticle;
 import io.github.flemmli97.runecraftory.client.particles.SinkingParticle;
 import io.github.flemmli97.runecraftory.client.particles.VortexParticle;
 import io.github.flemmli97.runecraftory.client.render.RenderGate;

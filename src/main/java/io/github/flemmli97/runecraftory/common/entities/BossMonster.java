@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
 import com.flemmli97.tenshilib.api.entity.IOverlayEntityRender;
+import com.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import com.google.common.collect.Sets;
-import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;

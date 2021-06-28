@@ -16,14 +16,14 @@ import net.minecraft.util.math.vector.Vector3f;
 
 public class RenderGate extends LivingRenderer<GateEntity, ModelGate> {
 
-    private static final ResourceLocation none =  new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_none.png");
-    private static final ResourceLocation fire =  new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_fire.png");
-    private static final ResourceLocation water =  new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_water.png");
-    private static final ResourceLocation earth =  new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_earth.png");
-    private static final ResourceLocation wind =  new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_wind.png");
-    private static final ResourceLocation light =  new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_light.png");
-    private static final ResourceLocation dark =  new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_dark.png");
-    private static final ResourceLocation love =  new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_love.png");
+    private static final ResourceLocation none = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_none.png");
+    private static final ResourceLocation fire = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_fire.png");
+    private static final ResourceLocation water = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_water.png");
+    private static final ResourceLocation earth = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_earth.png");
+    private static final ResourceLocation wind = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_wind.png");
+    private static final ResourceLocation light = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_light.png");
+    private static final ResourceLocation dark = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_dark.png");
+    private static final ResourceLocation love = new ResourceLocation(RuneCraftory.MODID, "textures/entity/gate_love.png");
     protected final RenderUtils.TextureBuilder textureBuilder = new RenderUtils.TextureBuilder();
 
     public RenderGate(EntityRendererManager renderManager) {
@@ -33,14 +33,22 @@ public class RenderGate extends LivingRenderer<GateEntity, ModelGate> {
     @Override
     public ResourceLocation getEntityTexture(GateEntity entity) {
         switch (entity.getElement()) {
-            case NONE: return none;
-            case WATER: return water;
-            case EARTH: return earth;
-            case WIND: return wind;
-            case FIRE: return  fire;
-            case LIGHT: return light;
-            case DARK: return dark;
-            case LOVE:return love;
+            case NONE:
+                return none;
+            case WATER:
+                return water;
+            case EARTH:
+                return earth;
+            case WIND:
+                return wind;
+            case FIRE:
+                return fire;
+            case LIGHT:
+                return light;
+            case DARK:
+                return dark;
+            case LOVE:
+                return love;
         }
         return none;
     }
@@ -73,9 +81,9 @@ public class RenderGate extends LivingRenderer<GateEntity, ModelGate> {
         } else
             super.render(entity, entityYaw, partialTicks, matrixStackIn, bufferIn, packedLightIn);*/
         matrixStackIn.push();
-        float scale = 1.2f+ MathHelper.sin(entity.ticksExisted * 0.1f) * 0.04f;
+        float scale = 1.2f + MathHelper.sin(entity.ticksExisted * 0.1f) * 0.04f;
         matrixStackIn.scale(scale, scale, scale);
-        matrixStackIn.translate(0, entity.getHeight() * 0.5-0.1, 0);
+        matrixStackIn.translate(0, entity.getHeight() * 0.5 - 0.1, 0);
         matrixStackIn.rotate(this.renderManager.getCameraOrientation());
         matrixStackIn.rotate(Vector3f.YP.rotationDegrees(180.0F));
         matrixStackIn.rotate(Vector3f.ZP.rotationDegrees(entity.clientParticles * 0.1f));

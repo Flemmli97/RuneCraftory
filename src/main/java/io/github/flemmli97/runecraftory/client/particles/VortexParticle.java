@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.client.particles;
 
+import com.flemmli97.tenshilib.client.particles.ParticleRenderTypes;
+import com.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import com.flemmli97.tenshilib.common.utils.MathUtils;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData4f;
 import net.minecraft.client.particle.IAnimatedSprite;
 import net.minecraft.client.particle.IParticleFactory;

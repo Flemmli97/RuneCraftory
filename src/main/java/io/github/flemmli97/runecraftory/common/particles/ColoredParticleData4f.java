@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.particles;
 
+import com.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;

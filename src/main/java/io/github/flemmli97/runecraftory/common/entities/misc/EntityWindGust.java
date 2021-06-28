@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import com.flemmli97.tenshilib.common.entity.EntityBeam;
+import com.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import net.minecraft.entity.Entity;

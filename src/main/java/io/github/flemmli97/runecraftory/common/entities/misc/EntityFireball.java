@@ -30,7 +30,7 @@ public class EntityFireball extends EntityProjectile {
 
     public EntityFireball(World world, LivingEntity shooter) {
         super(ModEntities.fireBall.get(), world, shooter);
-        if(shooter instanceof BaseMonster)
+        if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
     }
 

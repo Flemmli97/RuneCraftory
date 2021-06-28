@@ -1,10 +1,10 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
+import com.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import com.flemmli97.tenshilib.common.particle.ColoredParticleType;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticle4fType;
-import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData4f;
-import io.github.flemmli97.runecraftory.common.particles.ColoredParticleType;
 import net.minecraft.particles.BasicParticleType;
 import net.minecraft.particles.ParticleType;
 import net.minecraftforge.fml.RegistryObject;

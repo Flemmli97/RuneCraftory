@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.client.particles;
 
-import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData;
+import com.flemmli97.tenshilib.client.particles.ColoredParticle;
+import com.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.client.particle.IAnimatedSprite;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.IParticleRenderType;
