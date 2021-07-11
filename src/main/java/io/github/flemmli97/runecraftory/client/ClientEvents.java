@@ -31,6 +31,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -41,7 +42,9 @@ public class ClientEvents {
 
     public static void register() {
         MinecraftForge.EVENT_BUS.register(new ClientEvents());
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientRegister::registerParticles);
+        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modBus.addListener(ClientRegister::registerParticles);
+        modBus.addListener(ClientRegister::registerRender);
     }
 
     @SubscribeEvent

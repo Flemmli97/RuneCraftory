@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.client.ClientEvents;
-import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import io.github.flemmli97.runecraftory.common.capability.EntityCapImpl;
 import io.github.flemmli97.runecraftory.common.capability.IEntityCap;
@@ -55,7 +54,6 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -84,7 +82,6 @@ public class RuneCraftory {
         Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
 
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modBus.addListener(this::clientSetup);
         modBus.addListener(this::common);
         modBus.addListener(this::newReg);
         modBus.addListener(this::conf);
@@ -128,10 +125,6 @@ public class RuneCraftory {
     public void newReg(RegistryEvent.NewRegistry event) {
         spellRegistry = new RegistryBuilder<Spell>().setName(new ResourceLocation(RuneCraftory.MODID, "spell_registry"))
                 .setType(Spell.class).setDefaultKey(new ResourceLocation(RuneCraftory.MODID, "empty_spell")).create();
-    }
-
-    public void clientSetup(FMLClientSetupEvent event) {
-        ClientRegister.registerRender(event);
     }
 
     public void common(FMLCommonSetupEvent event) {
