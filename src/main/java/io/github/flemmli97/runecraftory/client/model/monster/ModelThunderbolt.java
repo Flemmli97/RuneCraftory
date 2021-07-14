@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.client.model.monster;
 
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -200,7 +200,7 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
         this.neck.rotateAngleY += headPitch * 0.005f;
         this.neck.rotateAngleX += headPitch * 0.003f;
 
-        AnimatedAction anim = thunderbolt.getAnimation();
+        AnimatedAction anim = thunderbolt.getAnimationHandler().getAnimation().orElse(null);
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
         if (anim == null) {
             if (thunderbolt.isRunning())

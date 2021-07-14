@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import com.google.common.collect.ImmutableList;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
@@ -47,6 +49,9 @@ public class EntityAmbrosia extends BossMonster {
 
     public static final ImmutableList<String> nonChoosableAttacks = ImmutableList.of(pollen2.getID(), kick_2.getID(), kick_3.getID());
 
+    private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, anims)
+            .setAnimationChangeFunc(anim -> anim == null && this.getAnimationHandler().isCurrentAnim(defeat.getID()));
+
     private static final List<Vector3f> pollenBase = RayTraceUtils.rotatedVecs(new Vector3d(1, 0, 0), new Vector3d(0, 1, 0), -180, 135, 45);
     private static final List<Vector3f> pollenInd = RayTraceUtils.rotatedVecs(new Vector3d(0.04, 0.07, 0), new Vector3d(0, 1, 0), -180, 160, 20);
 
@@ -72,14 +77,14 @@ public class EntityAmbrosia extends BossMonster {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        return (this.getAnimation() == null || !(this.getAnimation().getID().equals(wave.getID()) || this.getAnimation().getID().equals(angry.getID()))) && super.attackEntityFrom(source, amount);
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(wave.getID(), angry.getID()))) && super.attackEntityFrom(source, amount);
     }
 
     @Override
     public void setEnraged(boolean flag, boolean load) {
         super.setEnraged(flag, load);
         if (flag && !load)
-            this.setAnimation(angry);
+            this.getAnimationHandler().setAnimation(angry);
     }
 
     public void setAiVarHelper(double[] aiVarHelper) {
@@ -168,7 +173,7 @@ public class EntityAmbrosia extends BossMonster {
 
     @Override
     public void applyEntityCollision(Entity entityIn) {
-        if (this.getAnimation() != null && this.getAnimation().getID().equals(pollen.getID()))
+        if (this.getAnimationHandler().isCurrentAnim(pollen.getID()))
             return;
         super.applyEntityCollision(entityIn);
     }
@@ -186,13 +191,13 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntityAmbrosia> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
     protected void playDeathAnimation() {
-        this.setAnimation(defeat);
+        this.getAnimationHandler().setAnimation(defeat);
     }
 
     @Override
@@ -241,25 +246,18 @@ public class EntityAmbrosia extends BossMonster {
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
+        if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.setAnimation(wave);
+                this.getAnimationHandler().setAnimation(wave);
             else if (command == 1)
-                this.setAnimation(sleep);
+                this.getAnimationHandler().setAnimation(sleep);
             else
-                this.setAnimation(kick_1);
+                this.getAnimationHandler().setAnimation(kick_1);
         }
     }
 
     @Override
     public double getMountedYOffset() {
         return this.getHeight() * 0.85D;
-    }
-
-    @Override
-    public void setAnimation(AnimatedAction anim) {
-        if (this.getAnimation() != null && this.getAnimation().getID().equals(defeat.getID()) && anim == null) {
-        } else
-            super.setAnimation(anim);
     }
 }

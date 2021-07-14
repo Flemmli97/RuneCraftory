@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import com.google.common.collect.ImmutableList;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
@@ -70,6 +72,20 @@ public class EntityThunderbolt extends BossMonster {
     private static final AnimatedAction[] anims = new AnimatedAction[]{back_kick, laser_x5, stomp, horn_attack, back_kick_horn, charge, charge_2, charge_3,
             laser_aoe, laser_kick, laser_kick_2, wind_blade, laser_kick_3, feint, defeat, neigh};
 
+    private final AnimationHandler<EntityThunderbolt> animationHandler = new AnimationHandler<>(this, anims)
+            .setAnimationChangeFunc(anim -> {
+                if (anim == null && this.getAnimationHandler().isCurrentAnim(defeat.getID()))
+                    return true;
+                if (!this.world.isRemote) {
+                    if (this.hornAttackSuccess && anim != null) {
+                        this.hornAttackSuccess = false;
+                    }
+                    if (this.chargeAttackSuccess && anim != null)
+                        this.chargeAttackSuccess = false;
+                }
+                return false;
+            });
+
     private static final DataParameter<Float> lockedYaw = EntityDataManager.createKey(EntityThunderbolt.class, DataSerializers.FLOAT);
 
     public final ThunderboltAttackGoal attack = new ThunderboltAttackGoal(this);
@@ -100,9 +116,9 @@ public class EntityThunderbolt extends BossMonster {
     public void setEnraged(boolean flag, boolean load) {
         if (flag && !load) {
             if (!this.isEnraged())
-                this.setAnimation(neigh);
+                this.getAnimationHandler().setAnimation(neigh);
             else
-                this.setAnimation(defeat);
+                this.getAnimationHandler().setAnimation(defeat);
         }
         super.setEnraged(flag, load);
     }
@@ -121,7 +137,7 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        return (this.getAnimation() == null || !(this.getAnimation().getID().equals(feint.getID()) || this.getAnimation().getID().equals(defeat.getID())) || this.getAnimation().getID().equals(neigh.getID())) && super.attackEntityFrom(source, amount);
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID(), neigh.getID()))) && super.attackEntityFrom(source, amount);
     }
 
     @Override
@@ -136,16 +152,13 @@ public class EntityThunderbolt extends BossMonster {
     @Override
     public void livingTick() {
         super.livingTick();
-        if (!this.world.isRemote && this.getHealth() > 0 && this.getAnimation() != null && this.getAnimation().getID().equals(defeat.getID()) && !this.feintedDeath) {
-            if (this.getAnimation().getTick() > this.getAnimation().getLength()) {
+        if (!this.world.isRemote && this.getHealth() > 0 && this.getAnimationHandler().isCurrentAnim(defeat.getID()) && !this.feintedDeath) {
+            if (this.getAnimationHandler().getAnimation().map(anim -> anim.getTick() > anim.getLength()).orElse(false)) {
                 this.feintedDeath = true;
-                this.setAnimation(feint);
+                this.getAnimationHandler().setAnimation(feint);
             }
         }
-        if (this.getAnimation() != null &&
-                (this.getAnimation().getID().equals(charge.getID())
-                        || this.getAnimation().getID().equals(charge_2.getID())
-                        || this.getAnimation().getID().equals(charge_3.getID()))) {
+        if (this.getAnimationHandler().isCurrentAnim(charge.getID(), charge_2.getID(), charge_3.getID())) {
             this.rotationPitch = 0;
             this.rotationYaw = this.dataManager.get(lockedYaw);
         }
@@ -318,25 +331,25 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntityThunderbolt> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
+        if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.setAnimation(laser_x5);
+                this.getAnimationHandler().setAnimation(laser_x5);
             else if (command == 1)
-                this.setAnimation(stomp);
+                this.getAnimationHandler().setAnimation(stomp);
             else
-                this.setAnimation(horn_attack);
+                this.getAnimationHandler().setAnimation(horn_attack);
         }
     }
 
     @Override
     protected void playDeathAnimation() {
-        this.setAnimation(defeat);
+        this.getAnimationHandler().setAnimation(defeat);
     }
 
     @Override
@@ -407,20 +420,5 @@ public class EntityThunderbolt extends BossMonster {
 
     public void lockYaw(float yaw) {
         this.dataManager.set(lockedYaw, yaw);
-    }
-
-    @Override
-    public void setAnimation(AnimatedAction anim) {
-        if (this.getAnimation() != null && this.getAnimation().getID().equals(defeat.getID()) && anim == null) {
-        } else {
-            if (!this.world.isRemote) {
-                if (this.hornAttackSuccess && anim != null) {
-                    this.hornAttackSuccess = false;
-                }
-                if (this.chargeAttackSuccess && anim != null)
-                    this.chargeAttackSuccess = false;
-            }
-            super.setAnimation(anim);
-        }
     }
 }

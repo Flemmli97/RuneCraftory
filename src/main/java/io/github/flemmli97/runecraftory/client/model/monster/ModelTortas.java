@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -148,7 +147,6 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
         this.resetModel();
         this.neck.rotateAngleY += netHeadYaw * 0.003F;
         this.neck.rotateAngleX += headPitch * 0.01F;
-        AnimatedAction anim = tortas.getAnimation();
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
         if (tortas.isMoving()) {
             if (tortas.isSwimming())
@@ -156,8 +154,7 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
             else
                 this.animations.doAnimation("walk", tortas.ticksExisted, partialTicks);
         }
-        if (anim != null)
-            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
+        tortas.getAnimationHandler().getAnimation().ifPresent(anim -> this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks));
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

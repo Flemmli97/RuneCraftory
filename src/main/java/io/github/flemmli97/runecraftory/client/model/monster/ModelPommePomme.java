@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.client.model.monster;// Made with Blockbench 3.5.2
 
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -105,7 +105,7 @@ public class ModelPommePomme<T extends EntityPommePomme> extends EntityModel<T> 
         this.animations.doAnimation("iddle", pommePomme.ticksExisted, partialTicks);
         if (pommePomme.isMoving())
             this.animations.doAnimation("walk", pommePomme.ticksExisted, partialTicks);
-        AnimatedAction anim = pommePomme.getAnimation();
+        AnimatedAction anim = pommePomme.getAnimationHandler().getAnimation().orElse(null);
         if (anim != null) {
             if (anim.getID().equals("roll")) {
                 if (anim.getTick() > anim.getAttackTime())

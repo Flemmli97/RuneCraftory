@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.AnimatedMeleeGoal;
@@ -14,6 +16,8 @@ public class EntityAnt extends BaseMonster {
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee};
 
+    private final AnimationHandler<EntityAnt> animationHandler = new AnimationHandler<>(this, anims);
+
     public EntityAnt(EntityType<? extends EntityAnt> type, World world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
@@ -25,19 +29,19 @@ public class EntityAnt extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
-    }
-
-    @Override
     public double maxAttackRange(AnimatedAction anim) {
         return 0.7;
     }
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null)
-            this.setAnimation(melee);
+        if (!this.getAnimationHandler().hasAnimation())
+            this.getAnimationHandler().setAnimation(melee);
+    }
+
+    @Override
+    public AnimationHandler<EntityAnt> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override

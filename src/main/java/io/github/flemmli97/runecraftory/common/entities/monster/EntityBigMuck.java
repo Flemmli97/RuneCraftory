@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import com.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
@@ -20,11 +22,15 @@ public class EntityBigMuck extends BaseMonster {
     public static final AnimatedAction sporeAttack = new AnimatedAction(44, 18, "spore");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{slapAttack, sporeAttack};
+
+    private final AnimationHandler<EntityBigMuck> animationHandler = new AnimationHandler<>(this, anims);
+
     private List<Vector3f> attackPos;
 
     public EntityBigMuck(EntityType<? extends EntityBigMuck> type, World world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.ai);
+        this.getAnimationHandler().setAnimationChangeCons(a -> this.attackPos = null);
     }
 
     @Override
@@ -54,8 +60,8 @@ public class EntityBigMuck extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntityBigMuck> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -73,18 +79,12 @@ public class EntityBigMuck extends BaseMonster {
     }
 
     @Override
-    public void setAnimation(AnimatedAction anim) {
-        super.setAnimation(anim);
-        this.attackPos = null;
-    }
-
-    @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
+        if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.setAnimation(sporeAttack);
+                this.getAnimationHandler().setAnimation(sporeAttack);
             else
-                this.setAnimation(slapAttack);
+                this.getAnimationHandler().setAnimation(slapAttack);
         }
     }
 }

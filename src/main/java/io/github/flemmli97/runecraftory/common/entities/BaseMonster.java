@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
 import com.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
 import com.flemmli97.tenshilib.api.entity.IAnimated;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.runecraftory.common.capability.CapabilityInsts;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
@@ -95,8 +95,6 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
     protected int feedTimeOut;
     private boolean doJumping = false;
     private int foodBuffTick;
-
-    private AnimatedAction currentAnimation;
 
     public final Predicate<LivingEntity> hitPred = (e) -> {
         if (e != this) {
@@ -216,21 +214,10 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     //=====Animation Stuff
 
-    @Override
-    public AnimatedAction getAnimation() {
-        return this.currentAnimation;
-    }
-
-    @Override
-    public void setAnimation(AnimatedAction anim) {
-        this.currentAnimation = anim == null ? null : anim.create();
-        IAnimated.sentToClient(this);
-    }
-
     @Nullable
     public AnimatedAction getRandomAnimation(AnimationType type) {
         List<AnimatedAction> anims = new ArrayList<>();
-        for (AnimatedAction anim : this.getAnimations())
+        for (AnimatedAction anim : this.getAnimationHandler().getAnimations())
             if (this.isAnimOfType(anim, type))
                 anims.add(anim);
         if (anims.isEmpty())
@@ -639,7 +626,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
 
     @Override
     public void livingTick() {
-        this.tickAnimation();
+        this.getAnimationHandler().tick();
         if (!this.dead) {
             super.livingTick();
             if (!this.world.isRemote) {
@@ -661,9 +648,7 @@ public abstract class BaseMonster extends CreatureEntity implements IMob, IAnima
                 if (this.foodBuffTick == 0) {
                     this.removeFoodEffect();
                 }
-                AnimatedAction anim = this.getAnimation();
-                if (anim != null)
-                    this.handleAttack(anim);
+                this.getAnimationHandler().getAnimation().ifPresent(this::handleAttack);
             }
         }
     }

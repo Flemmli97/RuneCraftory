@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.ChargeAttackGoal;
@@ -14,6 +16,8 @@ public class EntityChipsqueek extends ChargingMonster {
     public static final AnimatedAction roll = new AnimatedAction(12, 2, "roll");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, roll};
+
+    private final AnimationHandler<EntityChipsqueek> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntityChipsqueek(EntityType<? extends EntityChipsqueek> type, World world) {
         super(type, world);
@@ -36,8 +40,8 @@ public class EntityChipsqueek extends ChargingMonster {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntityChipsqueek> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -53,11 +57,11 @@ public class EntityChipsqueek extends ChargingMonster {
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
+        if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.setAnimation(roll);
+                this.getAnimationHandler().setAnimation(roll);
             else
-                this.setAnimation(melee);
+                this.getAnimationHandler().setAnimation(melee);
         }
     }
 }

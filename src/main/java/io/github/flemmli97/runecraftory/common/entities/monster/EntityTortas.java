@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
@@ -27,6 +29,8 @@ public class EntityTortas extends ChargingMonster {
     //public static final AnimatedAction walk = new AnimatedAction(21, 5, "walk");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{bite, spin};
+
+    private final AnimationHandler<EntityTortas> animationHandler = new AnimationHandler<>(this, anims);
 
     protected final SwimmerPathNavigator waterNavigator;
     protected final GroundPathNavigator groundNavigator;
@@ -55,8 +59,8 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntityTortas> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -133,11 +137,11 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
+        if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.setAnimation(spin);
+                this.getAnimationHandler().setAnimation(spin);
             else
-                this.setAnimation(bite);
+                this.getAnimationHandler().setAnimation(bite);
         }
     }
 

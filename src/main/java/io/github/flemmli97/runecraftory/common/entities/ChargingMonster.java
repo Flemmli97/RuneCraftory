@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -12,6 +13,7 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public abstract class ChargingMonster extends BaseMonster {
 
@@ -20,8 +22,28 @@ public abstract class ChargingMonster extends BaseMonster {
     private float prevStepHeight = -1;
     private static final DataParameter<Float> lockedYaw = EntityDataManager.createKey(ChargingMonster.class, DataSerializers.FLOAT);
 
+    private final Function<AnimatedAction, Boolean> chargingAnim = anim -> {
+        if (!this.world.isRemote) {
+            if (anim != null && this.isAnimOfType(anim, AnimationType.CHARGE)) {
+                this.prevStepHeight = this.stepHeight;
+                this.stepHeight = Math.max(1.5f, 1f + this.stepHeight);
+                if (this.isBeingRidden()) {
+                    this.setChargeMotion(this.getChargeTo(anim, this.getPositionVec().add(this.getLookVec())));
+                }
+            } else if (this.prevStepHeight != -1) {
+                this.stepHeight = this.prevStepHeight;
+                this.prevStepHeight = -1;
+            }
+            if (this.getAnimationHandler().getAnimation().map(a -> this.isAnimOfType(a, AnimationType.CHARGE)).orElse(false)) {
+                this.hitEntity = null;
+            }
+        }
+        return false;
+    };
+
     public ChargingMonster(EntityType<? extends ChargingMonster> type, World world) {
         super(type, world);
+        this.getAnimationHandler().setAnimationChangeFunc(this.chargingAnim);
     }
 
     @Override
@@ -37,8 +59,7 @@ public abstract class ChargingMonster extends BaseMonster {
     @Override
     public void livingTick() {
         super.livingTick();
-        AnimatedAction anim = this.getAnimation();
-        if (anim != null && this.isAnimOfType(anim, AnimationType.CHARGE)) {
+        if (this.getAnimationHandler().getAnimation().map(anim -> this.isAnimOfType(anim, AnimationType.CHARGE)).orElse(false)) {
             this.rotationPitch = 0;
             this.rotationYaw = this.chargingYaw();
         }
@@ -50,7 +71,7 @@ public abstract class ChargingMonster extends BaseMonster {
 
     @Override
     public void applyEntityCollision(Entity entity) {
-        if (this.getAnimation() != null && this.isAnimOfType(this.getAnimation(), AnimationType.CHARGE))
+        if (this.getAnimationHandler().getAnimation().map(anim -> this.isAnimOfType(anim, AnimationType.CHARGE)).orElse(false))
             return;
         super.applyEntityCollision(entity);
     }
@@ -92,28 +113,7 @@ public abstract class ChargingMonster extends BaseMonster {
 
     @Override
     public boolean adjustRotFromRider(LivingEntity rider) {
-        AnimatedAction anim = this.getAnimation();
-        return anim == null || !this.isAnimOfType(anim, AnimationType.CHARGE);
-    }
-
-    @Override
-    public void setAnimation(AnimatedAction anim) {
-        if (!this.world.isRemote) {
-            if (anim != null && this.isAnimOfType(anim, AnimationType.CHARGE)) {
-                this.prevStepHeight = this.stepHeight;
-                this.stepHeight = Math.max(1.5f, 1f + this.stepHeight);
-                if (this.isBeingRidden()) {
-                    this.setChargeMotion(this.getChargeTo(anim, this.getPositionVec().add(this.getLookVec())));
-                }
-            } else if (this.prevStepHeight != -1) {
-                this.stepHeight = this.prevStepHeight;
-                this.prevStepHeight = -1;
-            }
-            if (this.getAnimation() != null && this.isAnimOfType(this.getAnimation(), AnimationType.CHARGE)) {
-                this.hitEntity = null;
-            }
-        }
-        super.setAnimation(anim);
+        return this.getAnimationHandler().getAnimation().map(anim -> !this.isAnimOfType(anim, AnimationType.CHARGE)).orElse(true);
     }
 
     public float chargingLength() {

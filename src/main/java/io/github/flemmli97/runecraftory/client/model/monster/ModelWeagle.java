@@ -3,10 +3,10 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 // Paste this class into your mod and generate all required imports
 
 
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -109,7 +109,7 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
         this.resetModel();
         this.head.rotateAngleY += netHeadYaw * 0.003F;
         this.head.rotateAngleX += headPitch * 0.01F;
-        AnimatedAction anim = weagle.getAnimation();
+        AnimatedAction anim = weagle.getAnimationHandler().getAnimation().orElse(null);
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
         if (anim == null) {
             if (weagle.isMoving()) {

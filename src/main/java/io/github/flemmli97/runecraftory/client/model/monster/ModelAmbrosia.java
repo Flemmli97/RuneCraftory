@@ -1,9 +1,9 @@
 package io.github.flemmli97.runecraftory.client.model.monster;// Made with Blockbench 3.5.2
 
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.flemmli97.tenshilib.common.utils.MathUtils;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
@@ -175,7 +175,7 @@ public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> impl
     @Override
     public void setRotationAngles(T brosia, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
-        AnimatedAction anim = brosia.getAnimation();
+        AnimatedAction anim = brosia.getAnimationHandler().getAnimation().orElse(null);
         if (brosia.deathTime <= 0) {
             this.head.rotateAngleY = netHeadYaw * 0.017453292F;
             this.head.rotateAngleX = headPitch * 0.017453292F;

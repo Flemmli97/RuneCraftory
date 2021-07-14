@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
@@ -30,6 +32,8 @@ public class EntitySkyFish extends BaseMonster {
     public static final AnimatedAction swipe = new AnimatedAction(16, 4, "swipe");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{slap, beam, swipe};
+
+    private final AnimationHandler<EntitySkyFish> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntitySkyFish(EntityType<? extends BaseMonster> type, World world) {
         super(type, world);
@@ -70,19 +74,19 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntitySkyFish> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
+        if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.setAnimation(swipe);
+                this.getAnimationHandler().setAnimation(swipe);
             else if (command == 1)
-                this.setAnimation(beam);
+                this.getAnimationHandler().setAnimation(beam);
             else
-                this.setAnimation(slap);
+                this.getAnimationHandler().setAnimation(slap);
         }
     }
 

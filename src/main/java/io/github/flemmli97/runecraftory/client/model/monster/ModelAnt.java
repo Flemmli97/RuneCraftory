@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -186,9 +185,7 @@ public class ModelAnt<T extends EntityAnt> extends EntityModel<T> implements IRe
         if (ant.isMoving())
             this.animations.doAnimation("walk", ant.ticksExisted, partialTicks);
 
-        AnimatedAction anim = ant.getAnimation();
-        if (anim != null)
-            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
+        ant.getAnimationHandler().getAnimation().ifPresent(anim -> this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks));
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

@@ -3,10 +3,10 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 // Paste this class into your mod and generate all required imports
 
 
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -110,7 +110,7 @@ public class ModelSkyFish<T extends EntitySkyFish> extends EntityModel<T> implem
     @Override
     public void setRotationAngles(T fish, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.resetModel();
-        AnimatedAction anim = fish.getAnimation();
+        AnimatedAction anim = fish.getAnimationHandler().getAnimation().orElse(null);
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
         if (anim == null) {
             this.animations.doAnimation("swim", fish.ticksExisted, partialTicks);

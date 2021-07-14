@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -86,9 +85,7 @@ public class ModelBigMuck<T extends EntityBigMuck> extends EntityModel<T> implem
         this.tail.rotateAngleX += MathHelper.cos(ageInTicks * 0.09F) * 0.15F + 0.05F;
         this.tail.rotateAngleY += MathHelper.sin(ageInTicks * 0.067F) * 0.15F;
 
-        AnimatedAction anim = mushroom.getAnimation();
-        if (anim != null)
-            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
+        mushroom.getAnimationHandler().getAnimation().ifPresent(anim -> this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks));
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

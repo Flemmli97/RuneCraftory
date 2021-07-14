@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.AnimatedMeleeGoal;
@@ -17,6 +19,8 @@ public class EntityCluckadoodle extends BaseMonster {
     public static final AnimatedAction melee = new AnimatedAction(16, 10, "attack");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee};
+
+    private final AnimationHandler<EntityCluckadoodle> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntityCluckadoodle(EntityType<? extends EntityCluckadoodle> type, World world) {
         super(type, world);
@@ -55,8 +59,8 @@ public class EntityCluckadoodle extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntityCluckadoodle> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -76,8 +80,8 @@ public class EntityCluckadoodle extends BaseMonster {
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
-            this.setAnimation(melee);
+        if (!this.getAnimationHandler().hasAnimation()) {
+            this.getAnimationHandler().setAnimation(melee);
         }
     }
 }

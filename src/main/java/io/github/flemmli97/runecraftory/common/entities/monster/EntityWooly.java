@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.ChargeAttackGoal;
@@ -35,6 +37,8 @@ public class EntityWooly extends ChargingMonster implements IForgeShearable {
     public static final AnimatedAction headbutt = new AnimatedAction(16, 7, "headbutt");
 
     public static final AnimatedAction[] anims = new AnimatedAction[]{slap, kick, headbutt};
+
+    private final AnimationHandler<EntityWooly> animationHandler = new AnimationHandler<>(this, anims);
 
     public ChargeAttackGoal<EntityWooly> attack = new ChargeAttackGoal<>(this);
 
@@ -99,8 +103,8 @@ public class EntityWooly extends ChargingMonster implements IForgeShearable {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntityWooly> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -168,13 +172,13 @@ public class EntityWooly extends ChargingMonster implements IForgeShearable {
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
+        if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.setAnimation(kick);
+                this.getAnimationHandler().setAnimation(kick);
             else if (command == 1)
-                this.setAnimation(headbutt);
+                this.getAnimationHandler().setAnimation(headbutt);
             else
-                this.setAnimation(slap);
+                this.getAnimationHandler().setAnimation(slap);
         }
     }
 }

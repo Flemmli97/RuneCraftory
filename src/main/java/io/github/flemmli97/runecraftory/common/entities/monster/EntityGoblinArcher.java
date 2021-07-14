@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.AnimatedRangedGoal;
@@ -20,12 +22,14 @@ import net.minecraft.world.World;
 
 public class EntityGoblinArcher extends EntityGoblin {
 
-    public AnimatedRangedGoal<EntityGoblinArcher> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getHeldItemMainhand().getItem() instanceof BowItem);
+    public AnimatedRangedGoal<EntityGoblin> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getHeldItemMainhand().getItem() instanceof BowItem);
     private static final AnimatedAction bow = new AnimatedAction(15, 9, "bow");
     private static final AnimatedAction triple = new AnimatedAction(15, 9, "triple", "bow");
     private static final AnimatedAction kick = new AnimatedAction(11, 7, "kick");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{bow, triple, kick};
+
+    private final AnimationHandler<EntityGoblinArcher> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntityGoblinArcher(EntityType<? extends EntityGoblin> type, World world) {
         super(type, world);
@@ -55,8 +59,8 @@ public class EntityGoblinArcher extends EntityGoblin {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntityGoblinArcher> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -80,13 +84,13 @@ public class EntityGoblinArcher extends EntityGoblin {
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
+        if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.setAnimation(triple);
+                this.getAnimationHandler().setAnimation(triple);
             else if (command == 1)
-                this.setAnimation(bow);
+                this.getAnimationHandler().setAnimation(bow);
             else
-                this.setAnimation(kick);
+                this.getAnimationHandler().setAnimation(kick);
         }
     }
 

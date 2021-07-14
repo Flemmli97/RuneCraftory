@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.ChargeAttackGoal;
@@ -15,6 +17,8 @@ public class EntityBeetle extends ChargingMonster {
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, chargeAttack};
 
+    private final AnimationHandler<EntityBeetle> animationHandler = new AnimationHandler<>(this, anims);
+
     public EntityBeetle(EntityType<? extends EntityBeetle> type, World world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.ai);
@@ -26,8 +30,8 @@ public class EntityBeetle extends ChargingMonster {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntityBeetle> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -48,11 +52,11 @@ public class EntityBeetle extends ChargingMonster {
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
+        if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.setAnimation(chargeAttack);
+                this.getAnimationHandler().setAnimation(chargeAttack);
             else
-                this.setAnimation(melee);
+                this.getAnimationHandler().setAnimation(melee);
         }
     }
 }

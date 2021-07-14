@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.AnimatedRangedGoal;
@@ -22,6 +24,8 @@ public class EntityOrcArcher extends EntityOrc {
     private static final AnimatedAction ranged = new AnimatedAction(20, 12, "bow");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, ranged};
+
+    private final AnimationHandler<EntityOrcArcher> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntityOrcArcher(EntityType<? extends EntityOrcArcher> type, World world) {
         super(type, world);
@@ -51,8 +55,8 @@ public class EntityOrcArcher extends EntityOrc {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntityOrcArcher> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -73,11 +77,11 @@ public class EntityOrcArcher extends EntityOrc {
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
+        if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.setAnimation(melee);
+                this.getAnimationHandler().setAnimation(melee);
             else
-                this.setAnimation(ranged);
+                this.getAnimationHandler().setAnimation(ranged);
         }
     }
 

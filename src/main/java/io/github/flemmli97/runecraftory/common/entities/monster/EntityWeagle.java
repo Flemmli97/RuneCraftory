@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
+
+import com.flemmli97.tenshilib.api.entity.AnimatedAction;
+import com.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindGust;
@@ -29,6 +31,9 @@ public class EntityWeagle extends BaseMonster {
     public static final AnimatedAction swoop = new AnimatedAction(14, 4, "swoop");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{gale, swoop};
+
+    private final AnimationHandler<EntityWeagle> animationHandler = new AnimationHandler<>(this, anims)
+            .setAnimationChangeCons(anim -> this.hitEntity = null);
 
     protected List<LivingEntity> hitEntity;
 
@@ -120,22 +125,22 @@ public class EntityWeagle extends BaseMonster {
     }
 
     @Override
-    public AnimatedAction[] getAnimations() {
-        return anims;
+    public AnimationHandler<EntityWeagle> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
     public void handleRidingCommand(int command) {
-        if (this.getAnimation() == null) {
+        if (!this.getAnimationHandler().hasAnimation()) {
             switch (command) {
                 case 2:
-                    this.setAnimation(gale);
+                    this.getAnimationHandler().setAnimation(gale);
                     break;
                 case 1:
-                    this.setAnimation(swoop);
+                    this.getAnimationHandler().setAnimation(swoop);
                     break;
                 default:
-                    this.setAnimation(peck);
+                    this.getAnimationHandler().setAnimation(peck);
                     break;
             }
         }
@@ -156,15 +161,5 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-    }
-
-    @Override
-    public void setAnimation(AnimatedAction anim) {
-        if (!this.world.isRemote) {
-            if (this.getAnimation() != null && this.getAnimation().getID().equals(swoop.getID())) {
-                this.hitEntity = null;
-            }
-        }
-        super.setAnimation(anim);
     }
 }

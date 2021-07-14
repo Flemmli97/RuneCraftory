@@ -7,7 +7,6 @@ import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IItemArmModel;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -140,9 +139,7 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
         if (goblin.isMoving())
             this.animations.doAnimation("walk", goblin.ticksExisted, partialTicks);
 
-        AnimatedAction anim = goblin.getAnimation();
-        if (anim != null)
-            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
+        goblin.getAnimationHandler().getAnimation().ifPresent(anim -> this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks));
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {

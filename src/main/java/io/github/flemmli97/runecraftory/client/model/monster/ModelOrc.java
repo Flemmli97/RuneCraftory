@@ -4,7 +4,6 @@ import com.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import com.flemmli97.tenshilib.client.model.IItemArmModel;
 import com.flemmli97.tenshilib.client.model.IResetModel;
 import com.flemmli97.tenshilib.client.model.ModelRendererPlus;
-import com.flemmli97.tenshilib.common.entity.AnimatedAction;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
@@ -156,9 +155,7 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements IRe
         float partialTicks = Minecraft.getInstance().getRenderPartialTicks();
         if (orc.isMoving())
             this.animations.doAnimation("walk", orc.ticksExisted, partialTicks);
-        AnimatedAction anim = orc.getAnimation();
-        if (anim != null)
-            this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks);
+        orc.getAnimationHandler().getAnimation().ifPresent(anim -> this.animations.doAnimation(anim.getAnimationClient(), anim.getTick(), partialTicks));
     }
 
     public void setRotationAngle(ModelRendererPlus modelRenderer, float x, float y, float z) {
