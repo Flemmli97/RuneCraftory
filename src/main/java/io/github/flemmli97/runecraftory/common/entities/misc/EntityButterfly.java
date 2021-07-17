@@ -67,7 +67,7 @@ public class EntityButterfly extends EntityProjectile {
     }
 
     @Override
-    protected boolean onEntityHit(EntityRayTraceResult result) {
+    protected boolean entityRayTraceHit(EntityRayTraceResult result) {
         if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * 0.1f, null)) {//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
             if (result.getEntity() instanceof LivingEntity)
                 ((LivingEntity) result.getEntity()).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 60, 3));
@@ -94,9 +94,9 @@ public class EntityButterfly extends EntityProjectile {
     @Nullable
     @Override
     public LivingEntity getOwner() {
-        LivingEntity living = super.getOwner();
-        if (living instanceof BaseMonster)
-            this.pred = ((BaseMonster) living).hitPred;
-        return living;
+        LivingEntity owner = super.getOwner();
+        if (owner instanceof BaseMonster)
+            this.pred = ((BaseMonster) owner).hitPred;
+        return owner;
     }
 }

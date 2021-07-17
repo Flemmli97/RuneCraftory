@@ -40,7 +40,7 @@ public class EntityFireball extends EntityProjectile {
     }
 
     @Override
-    protected boolean onEntityHit(EntityRayTraceResult result) {
+    protected boolean entityRayTraceHit(EntityRayTraceResult result) {
         boolean att = this.getOwner() != null && CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.FIRE).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
         this.world.playSound(null, result.getEntity().getPosition(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1.0f, 1.0f);
         this.remove();

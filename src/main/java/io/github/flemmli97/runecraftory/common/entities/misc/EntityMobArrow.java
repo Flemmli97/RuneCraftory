@@ -42,7 +42,7 @@ public class EntityMobArrow extends EntityProjectile {
     }
 
     @Override
-    protected boolean onEntityHit(EntityRayTraceResult res) {
+    protected boolean entityRayTraceHit(EntityRayTraceResult res) {
         if (CombatUtils.damage(this.getOwner(), res.getEntity(), (CustomDamage) new CustomDamage.Builder(this, this.getOwner()).get().setProjectile(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
             if (res.getEntity() instanceof LivingEntity) {
                 LivingEntity livingentity = (LivingEntity) res.getEntity();
