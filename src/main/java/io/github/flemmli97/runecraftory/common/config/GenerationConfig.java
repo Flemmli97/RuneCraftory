@@ -1,20 +1,14 @@
 package io.github.flemmli97.runecraftory.common.config;
 
-import com.flemmli97.tenshilib.common.config.Configuration;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
-import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.config.values.HerbGenCofigSpecs;
 import io.github.flemmli97.runecraftory.common.config.values.HerbGenConfig;
 import io.github.flemmli97.runecraftory.common.config.values.MineralGenConfig;
-import io.github.flemmli97.runecraftory.common.config.values.MineralGenConfigSpec;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -111,7 +105,7 @@ public class GenerationConfig {
     }
 
     public static List<MineralGenConfig> allMineralConfs() {
-        return mineralGen;
+        return ImmutableList.copyOf(mineralGen);
     }
 
     public static List<HerbGenConfig> herbGenFrom(Set<BiomeDictionary.Type> types) {
@@ -121,41 +115,7 @@ public class GenerationConfig {
         ).collect(Collectors.toList());
     }
 
-    public static class GenerationConfigSpec {
-
-        public static final Configuration<GenerationConfigSpec> config = new Configuration<>(GenerationConfigSpec::new, (p) -> p.resolve(RuneCraftory.MODID).resolve("generation.toml"), GenerationConfig::load, RuneCraftory.MODID);
-
-        private final Map<String, MineralGenConfigSpec> mineralSpecs = new HashMap<>();
-        private final Map<String, HerbGenCofigSpecs> herbSpecs = new HashMap<>();
-        private final ForgeConfigSpec.ConfigValue<Integer> overworldHerbChance;
-        public ForgeConfigSpec.ConfigValue<Integer> overworldHerbTries;
-        private final ForgeConfigSpec.ConfigValue<Integer> netherHerbChance;
-        public ForgeConfigSpec.ConfigValue<Integer> netherHerbTries;
-        public ForgeConfigSpec.ConfigValue<Integer> endHerbChance;
-        public ForgeConfigSpec.ConfigValue<Integer> endHerbTries;
-
-        private GenerationConfigSpec(ForgeConfigSpec.Builder builder) {
-            builder.push("mineral");
-            for (MineralGenConfig conf : mineralGen) {
-                builder.push(conf.blockRes().toString());
-                this.mineralSpecs.put(conf.blockRes().toString(), new MineralGenConfigSpec(builder, conf));
-                builder.pop();
-            }
-            builder.pop();
-
-            builder.push("herbs");
-            this.overworldHerbChance = builder.comment("1/x Chance for herb to generate in overworld").define("Herb Chance", 10);
-            this.overworldHerbTries = builder.comment("Generation tries for overworld").define("Herb Tries", 64);
-            this.netherHerbChance = builder.comment("1/x Chance for herb to generate in the nether").define("Nether Herb Chance", 35);
-            this.netherHerbTries = builder.comment("Generation tries for the nether").define("Nether Herb Tries", 64);
-            this.endHerbChance = builder.comment("1/x Chance for herb to generate in the end").define("End Herb Chance", 7);
-            this.endHerbTries = builder.comment("Generation tries for the end").define("End Herb Tries", 32);
-            for (HerbGenConfig conf : herbGen) {
-                builder.push(conf.blockRes().toString());
-                this.herbSpecs.put(conf.blockRes().toString(), new HerbGenCofigSpecs(builder, conf));
-                builder.pop();
-            }
-            builder.pop();
-        }
+    public static List<HerbGenConfig> allHerbConfs() {
+        return ImmutableList.copyOf(herbGen);
     }
 }

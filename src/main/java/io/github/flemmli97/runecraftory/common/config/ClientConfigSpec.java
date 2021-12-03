@@ -5,8 +5,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class ClientConfigSpec {
 
-    public static final ForgeConfigSpec clientSpec;
-    public static final ClientConfigSpec clientConfig;
+    public static final Pair<ClientConfigSpec, ForgeConfigSpec> spec = new ForgeConfigSpec.Builder().configure(ClientConfigSpec::new);
 
     public final ForgeConfigSpec.ConfigValue<Integer> healthBarWidgetX;
     public final ForgeConfigSpec.ConfigValue<Integer> healthBarWidgetY;
@@ -32,13 +31,5 @@ public class ClientConfigSpec {
 
         this.tempX = builder.define("Temp X", 20);
         this.tempY = builder.define("Temp Y", 22);
-
-    }
-
-
-    static {
-        Pair<ClientConfigSpec, ForgeConfigSpec> specPair2 = new ForgeConfigSpec.Builder().configure(ClientConfigSpec::new);
-        clientSpec = specPair2.getRight();
-        clientConfig = specPair2.getLeft();
     }
 }

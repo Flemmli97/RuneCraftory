@@ -22,6 +22,7 @@ public abstract class ChargingMonster extends BaseMonster {
     private float prevStepHeight = -1;
     private static final DataParameter<Float> lockedYaw = EntityDataManager.createKey(ChargingMonster.class, DataSerializers.FLOAT);
 
+    private boolean initAnim;
     private final Function<AnimatedAction, Boolean> chargingAnim = anim -> {
         if (!this.world.isRemote) {
             if (anim != null && this.isAnimOfType(anim, AnimationType.CHARGE)) {
@@ -43,7 +44,6 @@ public abstract class ChargingMonster extends BaseMonster {
 
     public ChargingMonster(EntityType<? extends ChargingMonster> type, World world) {
         super(type, world);
-        this.getAnimationHandler().setAnimationChangeFunc(this.chargingAnim);
     }
 
     @Override
@@ -59,6 +59,10 @@ public abstract class ChargingMonster extends BaseMonster {
     @Override
     public void livingTick() {
         super.livingTick();
+        if(!this.initAnim) {
+            this.getAnimationHandler().setAnimationChangeFunc(this.chargingAnim);
+            this.initAnim = true;
+        }
         if (this.getAnimationHandler().getAnimation().map(anim -> this.isAnimOfType(anim, AnimationType.CHARGE)).orElse(false)) {
             this.rotationPitch = 0;
             this.rotationYaw = this.chargingYaw();

@@ -12,8 +12,7 @@ import java.util.EnumMap;
 
 public class GeneralConfigSpec {
 
-    public static final ForgeConfigSpec generalSpec;
-    public static final GeneralConfigSpec generalConf;
+    public static final Pair<GeneralConfigSpec, ForgeConfigSpec> spec = new ForgeConfigSpec.Builder().configure(GeneralConfigSpec::new);
 
     public final ForgeConfigSpec.BooleanValue disableDefence;
     public final ForgeConfigSpec.BooleanValue gateSpawning;
@@ -128,11 +127,5 @@ public class GeneralConfigSpec {
             builder.pop();
         });
         builder.pop();
-    }
-
-    static {
-        Pair<GeneralConfigSpec, ForgeConfigSpec> specPair2 = new ForgeConfigSpec.Builder().configure(GeneralConfigSpec::new);
-        generalSpec = specPair2.getRight();
-        generalConf = specPair2.getLeft();
     }
 }

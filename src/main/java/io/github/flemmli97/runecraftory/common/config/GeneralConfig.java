@@ -61,46 +61,46 @@ public class GeneralConfig {
     public static boolean debugMode;
     public static boolean debugAttack;
 
-    public static void load() {
-        disableDefence = GeneralConfigSpec.generalConf.disableDefence.get();
-        gateSpawning = GeneralConfigSpec.generalConf.gateSpawning.get();
-        disableVanillaSpawning = GeneralConfigSpec.generalConf.disableVanillaSpawning.get();
-        randomDamage = GeneralConfigSpec.generalConf.randomDamage.get();
-        recipeSystem = GeneralConfigSpec.generalConf.recipeSystem.get();
+    public static void load(GeneralConfigSpec spec) {
+        disableDefence = spec.disableDefence.get();
+        gateSpawning = spec.gateSpawning.get();
+        disableVanillaSpawning = spec.disableVanillaSpawning.get();
+        randomDamage = spec.randomDamage.get();
+        recipeSystem = spec.recipeSystem.get();
 
-        startingHealth = GeneralConfigSpec.generalConf.startingHealth.get();
-        startingRP = GeneralConfigSpec.generalConf.startingRP.get();
-        startingMoney = GeneralConfigSpec.generalConf.startingMoney.get();
-        startingStr = GeneralConfigSpec.generalConf.startingStr.get();
-        startingVit = GeneralConfigSpec.generalConf.startingVit.get();
-        startingIntel = GeneralConfigSpec.generalConf.startingIntel.get();
-        hpPerLevel = GeneralConfigSpec.generalConf.hpPerLevel.get().floatValue();
-        rpPerLevel = GeneralConfigSpec.generalConf.rpPerLevel.get();
-        strPerLevel = GeneralConfigSpec.generalConf.strPerLevel.get().floatValue();
-        vitPerLevel = GeneralConfigSpec.generalConf.vitPerLevel.get().floatValue();
-        intPerLevel = GeneralConfigSpec.generalConf.intPerLevel.get().floatValue();
-        GeneralConfigSpec.generalConf.skillProps.forEach((type, specs) -> skillProps.compute(type, (t, val) -> val == null ? new SkillProperties(specs) : val.read(specs)));
+        startingHealth = spec.startingHealth.get();
+        startingRP = spec.startingRP.get();
+        startingMoney = spec.startingMoney.get();
+        startingStr = spec.startingStr.get();
+        startingVit = spec.startingVit.get();
+        startingIntel = spec.startingIntel.get();
+        hpPerLevel = spec.hpPerLevel.get().floatValue();
+        rpPerLevel = spec.rpPerLevel.get();
+        strPerLevel = spec.strPerLevel.get().floatValue();
+        vitPerLevel = spec.vitPerLevel.get().floatValue();
+        intPerLevel = spec.intPerLevel.get().floatValue();
+        spec.skillProps.forEach((type, specs) -> skillProps.compute(type, (t, val) -> val == null ? new SkillProperties(specs) : val.read(specs)));
 
-        scrapMultiplier = GeneralConfigSpec.generalConf.scrapMultiplier.get().floatValue();
-        ironMultiplier = GeneralConfigSpec.generalConf.ironMultiplier.get().floatValue();
-        silverMultiplier = GeneralConfigSpec.generalConf.silverMultiplier.get().floatValue();
-        goldMultiplier = GeneralConfigSpec.generalConf.goldMultiplier.get().floatValue();
-        platinumMultiplier = GeneralConfigSpec.generalConf.platinumMultiplier.get().floatValue();
-        platinumChargeTime = GeneralConfigSpec.generalConf.platinumChargeTime.get().floatValue();
-        scrapWateringCanWater = GeneralConfigSpec.generalConf.scrapWateringCanWater.get();
-        ironWateringCanWater = GeneralConfigSpec.generalConf.ironWateringCanWater.get();
-        silverWateringCanWater = GeneralConfigSpec.generalConf.silverWateringCanWater.get();
-        goldWateringCanWater = GeneralConfigSpec.generalConf.goldWateringCanWater.get();
-        platinumWateringCanWater = GeneralConfigSpec.generalConf.platinumWateringCanWater.get();
-        GeneralConfigSpec.generalConf.weaponProps.forEach((type, specs) -> weaponProps.compute(type, (t, val) -> val == null ? new WeaponTypeProperties(specs) : val.read(specs)));
+        scrapMultiplier = spec.scrapMultiplier.get().floatValue();
+        ironMultiplier = spec.ironMultiplier.get().floatValue();
+        silverMultiplier = spec.silverMultiplier.get().floatValue();
+        goldMultiplier = spec.goldMultiplier.get().floatValue();
+        platinumMultiplier = spec.platinumMultiplier.get().floatValue();
+        platinumChargeTime = spec.platinumChargeTime.get().floatValue();
+        scrapWateringCanWater = spec.scrapWateringCanWater.get();
+        ironWateringCanWater = spec.ironWateringCanWater.get();
+        silverWateringCanWater = spec.silverWateringCanWater.get();
+        goldWateringCanWater = spec.goldWateringCanWater.get();
+        platinumWateringCanWater = spec.platinumWateringCanWater.get();
+        spec.weaponProps.forEach((type, specs) -> weaponProps.compute(type, (t, val) -> val == null ? new WeaponTypeProperties(specs) : val.read(specs)));
 
-        xpMultiplier = GeneralConfigSpec.generalConf.xpMultiplier.get().floatValue();
-        skillXpMultiplier = GeneralConfigSpec.generalConf.skillXpMultiplier.get().floatValue();
-        tamingMultiplier = GeneralConfigSpec.generalConf.tamingMultiplier.get().floatValue();
-        dropRateMultiplier = GeneralConfigSpec.generalConf.dropRateMultiplier.get().floatValue();
+        xpMultiplier = spec.xpMultiplier.get().floatValue();
+        skillXpMultiplier = spec.skillXpMultiplier.get().floatValue();
+        tamingMultiplier = spec.tamingMultiplier.get().floatValue();
+        dropRateMultiplier = spec.dropRateMultiplier.get().floatValue();
 
-        debugMode = GeneralConfigSpec.generalConf.debugMode.get();
-        debugAttack = GeneralConfigSpec.generalConf.debugAttack.get();
+        debugMode = spec.debugMode.get();
+        debugAttack = spec.debugAttack.get();
     }
 
     static {

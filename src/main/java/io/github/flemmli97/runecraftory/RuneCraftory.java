@@ -9,12 +9,7 @@ import io.github.flemmli97.runecraftory.common.capability.IPlayerCap;
 import io.github.flemmli97.runecraftory.common.capability.IStaffCap;
 import io.github.flemmli97.runecraftory.common.capability.PlayerCapImpl;
 import io.github.flemmli97.runecraftory.common.capability.StaffCapImpl;
-import io.github.flemmli97.runecraftory.common.config.ClientConfig;
-import io.github.flemmli97.runecraftory.common.config.ClientConfigSpec;
-import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.config.GeneralConfigSpec;
-import io.github.flemmli97.runecraftory.common.config.GenerationConfig;
-import io.github.flemmli97.runecraftory.common.config.MobConfig;
+import io.github.flemmli97.runecraftory.common.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.common.config.SpawnConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
@@ -44,6 +39,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
@@ -65,6 +61,7 @@ import org.apache.logging.log4j.Logger;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.file.Path;
+import java.util.Map;
 
 @Mod(value = RuneCraftory.MODID)
 public class RuneCraftory {
@@ -95,12 +92,12 @@ public class RuneCraftory {
         forgeBus.register(new PlayerEvents());
         forgeBus.register(new WorldEvents());
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GeneralConfigSpec.generalSpec, RuneCraftory.MODID + "/general.toml");
-        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfigSpec.clientSpec, RuneCraftory.MODID + "/client.toml");
+        for (Map.Entry<ForgeConfigSpec, ConfigHolder<?>> confs : ConfigHolder.configs.entrySet()) {
+            ConfigHolder<?> loader = confs.getValue();
+            ModLoadingContext.get().registerConfig(loader.configType, confs.getKey(), loader.configName);
+        }
 
         spawnConfig = new SpawnConfig(confDir);
-        MobConfig.MobConfigSpec.config.loadConfig();
-        GenerationConfig.GenerationConfigSpec.config.loadConfig();
     }
 
     public static void registries(IEventBus modBus) {
@@ -143,10 +140,9 @@ public class RuneCraftory {
     }
 
     public void conf(ModConfig.ModConfigEvent event) {
-        if (event.getConfig().getSpec() == GeneralConfigSpec.generalSpec)
-            GeneralConfig.load();
-        if (event.getConfig().getSpec() == ClientConfigSpec.clientSpec)
-            ClientConfig.load();
+        ConfigHolder<?> holder = ConfigHolder.configs.get(event.getConfig().getSpec());
+        if (holder != null)
+            holder.reloadConfig();
     }
 
     private void tweakVanillaAttribute(Attribute attribute, double value) {

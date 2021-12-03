@@ -16,18 +16,18 @@ public class ClientConfig {
 
     public static int tempX, tempY;
 
-    public static void load() {
-        healthBarWidgetX = ClientConfigSpec.clientConfig.healthBarWidgetX.get();
-        healthBarWidgetY = ClientConfigSpec.clientConfig.healthBarWidgetY.get();
-        seasonDisplayX = ClientConfigSpec.clientConfig.seasonDisplayX.get();
-        seasonDisplayY = ClientConfigSpec.clientConfig.seasonDisplayY.get();
-        inventoryOffsetX = ClientConfigSpec.clientConfig.inventoryOffsetX.get();
-        inventoryOffsetY = ClientConfigSpec.clientConfig.inventoryOffsetY.get();
-        creativeInventoryOffsetX = ClientConfigSpec.clientConfig.creativeInventoryOffsetX.get();
-        creativeInventoryOffsetY = ClientConfigSpec.clientConfig.creativeInventoryOffsetY.get();
+    public static void load(ClientConfigSpec spec) {
+        healthBarWidgetX = spec.healthBarWidgetX.get();
+        healthBarWidgetY = spec.healthBarWidgetY.get();
+        seasonDisplayX = spec.seasonDisplayX.get();
+        seasonDisplayY = spec.seasonDisplayY.get();
+        inventoryOffsetX = spec.inventoryOffsetX.get();
+        inventoryOffsetY = spec.inventoryOffsetY.get();
+        creativeInventoryOffsetX = spec.creativeInventoryOffsetX.get();
+        creativeInventoryOffsetY = spec.creativeInventoryOffsetY.get();
 
-        tempX = ClientConfigSpec.clientConfig.tempX.get();
-        tempY = ClientConfigSpec.clientConfig.tempY.get();
+        tempX = spec.tempX.get();
+        tempY = spec.tempY.get();
     }
 
 }
