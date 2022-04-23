@@ -227,9 +227,9 @@ public class EntityCalls {
      * Forge call is also not implemented for hoes so rn this is useless
      */
     public static BlockState hoeTill(Supplier<Boolean> match, BlockState state) {
-        if (match.get() && state.is(ModTags.farmlandTill)) {
+        /*if (GeneralConfig.disableDatapack && match.get() && state.is(ModTags.farmlandTill)) {
             return ModBlocks.farmland.get().defaultBlockState();
-        }
+        }*/
         return state;
     }
 

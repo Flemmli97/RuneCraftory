@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
-import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.TagsProvider;
@@ -23,7 +22,7 @@ public class BiomeTagGen extends TagsProvider<Biome> {
 
     @SuppressWarnings("deprecation")
     public BiomeTagGen(DataGenerator arg, ExistingFileHelper fileHelper) {
-        super(arg, BuiltinRegistries.BIOME, RuneCraftory.MODID, fileHelper, Registry.BIOME_REGISTRY.location().getPath());
+        super(arg, BuiltinRegistries.BIOME, RuneCraftory.MODID, fileHelper);
     }
 
     @Override

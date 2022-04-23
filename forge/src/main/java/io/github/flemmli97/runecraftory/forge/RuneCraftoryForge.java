@@ -91,7 +91,7 @@ public class RuneCraftoryForge {
         ModAttributes.ATTRIBUTES.registerContent();
         ModEffects.EFFECTS.registerContent();
         ModCrafting.RECIPESERIALIZER.registerContent();
-        ModLootModifier.SERIALZER.registerContent();
+        ModLootModifier.SERIALZER.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModFeatures.FEATURES.registerContent();
         ModSpells.SPELLS.registerContent();
         ModStructures.STRUCTURES.registerContent();

@@ -11,6 +11,7 @@
     "LivingDeathEvent",
     "LivingEntityMixin",
     "LivingHurtEvent",
+    "LootTableMixin",
     "MilkBucketMixin",
     "NaturalSpawnerMixin",
     "PhantomSpawnerMixin",

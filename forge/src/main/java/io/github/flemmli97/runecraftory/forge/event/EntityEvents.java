@@ -75,8 +75,9 @@ public class EntityEvents {
     }
 
     @SubscribeEvent
-    public void hoeTill(BlockEvent.BlockToolInteractEvent event) {
-        event.setFinalState(EntityCalls.hoeTill(() -> ToolActions.DEFAULT_HOE_ACTIONS.contains(ToolActions.HOE_DIG), event.getFinalState()));
+    public void hoeTill(BlockEvent.BlockToolModificationEvent event) {
+        if (event.isSimulated())
+            event.setFinalState(EntityCalls.hoeTill(() -> ToolActions.DEFAULT_HOE_ACTIONS.contains(ToolActions.HOE_DIG), event.getFinalState()));
     }
 
     @SubscribeEvent
