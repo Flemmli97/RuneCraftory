@@ -1,0 +1,37 @@
+{
+  "name": "runecraftory.patchouli.entry.crafting",
+  "category": "runecraftory:category.main",
+  "icon": "runecraftory:forge",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.crafting.1"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:forge",
+      "text": "runecraftory.patchouli.entry.crafting.forge"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:accessory_workbench",
+      "text": "runecraftory.patchouli.entry.crafting.accessory"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:cooking_table",
+      "text": "runecraftory.patchouli.entry.crafting.cooking"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:chemistry_set",
+      "text": "runecraftory.patchouli.entry.crafting.chemistry"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:accessory_workbench",
+      "text": "runecraftory.patchouli.entry.crafting.armor"
+    }
+  ],
+  "sortnum": 0
+}

@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
+import com.google.common.collect.ImmutableList;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.RFCreativeTabs;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
@@ -56,11 +57,18 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class ModEntities {
 
     public static final PlatformRegistry<EntityType<?>> ENTITIES = PlatformUtils.INSTANCE.of(Registry.ENTITY_TYPE_REGISTRY, RuneCraftory.MODID);
+    private static final List<RegistryEntrySupplier<EntityType<?>>> MONSTERS = new ArrayList<>();
+
+    public static List<RegistryEntrySupplier<EntityType<?>>> getMonsters() {
+        return ImmutableList.copyOf(MONSTERS);
+    }
 
     public static final RegistryEntrySupplier<EntityType<GateEntity>> gate = reg(EntityType.Builder.of(GateEntity::new, MobCategory.MONSTER).sized(0.9f, 0.9f).clientTrackingRange(8), LibEntities.gate);
     public static final RegistryEntrySupplier<EntityType<EntityWooly>> wooly = regMonster(EntityType.Builder.of(EntityWooly::new, MobCategory.MONSTER).sized(0.7f, 1.55f).clientTrackingRange(8), LibEntities.wooly,
@@ -291,9 +299,12 @@ public class ModEntities {
         return reg;
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<V>> regMonster(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, EntityProperties props) {
         MobConfig.propertiesMap.put(name, props);
-        return regWithEgg(v, name, primary, secondary);
+        RegistryEntrySupplier<EntityType<V>> sup = regWithEgg(v, name, primary, secondary);
+        MONSTERS.add((RegistryEntrySupplier) sup);
+        return sup;
     }
 
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<V>> regMonster(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, EntityProperties props, SpawnConfig.SpawnData.Builder builder) {

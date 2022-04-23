@@ -1,0 +1,8 @@
+{
+  "name": "runecraftory_book",
+  "landing_text": "runecraftory.patchouli.landing",
+  "show_progress": false,
+  "version": "1.0",
+  "creative_tab": "runecraftory.weapons_tools",
+  "i18n": true
+}

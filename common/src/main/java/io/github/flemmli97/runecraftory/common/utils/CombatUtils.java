@@ -106,7 +106,11 @@ public class CombatUtils {
                     reduce = getAttributeValue(entity, ModAttributes.RF_DEFENCE.get(), null);
             }
         }
-        return elementalReduction(entity, source, Math.max(0.02f * amount, amount - reduce));
+        float dmg = Math.max(0.02f * amount, amount - reduce);
+        if(source instanceof CustomDamage && GeneralConfig.randomDamage) {
+            dmg = (float) Math.floor(dmg + (entity.level.random.nextGaussian() * dmg / 10.0));
+        }
+        return elementalReduction(entity, source, dmg);
     }
 
     public static float elementalReduction(LivingEntity entity, DamageSource source, float amount) {
@@ -306,17 +310,16 @@ public class CombatUtils {
     }
 
     public static boolean damage(@Nullable Entity attacker, Entity target, CustomDamage source, float damage, @Nullable ItemStack stack) {
-        float damagePhys = GeneralConfig.randomDamage && attacker != null ? (float) Math.floor(damage + (float) (attacker.level.random.nextGaussian() * damage / 10.0)) : damage;
-        boolean success = target.hurt(source, damagePhys);
+        boolean success = target.hurt(source, damage);
         if (success) {
             spawnElementalParticle(target, source.getElement());
             if (attacker instanceof LivingEntity livingAttacker) {
                 int drainPercent = getAttributeValue(attacker, ModAttributes.RFDRAIN.get(), target);
                 if (drainPercent > 0f) {
                     if (livingAttacker instanceof Player player)
-                        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.regenHealth((Player) attacker, drainPercent * damagePhys));
+                        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.regenHealth((Player) attacker, drainPercent * damage));
                     else
-                        livingAttacker.heal(drainPercent * damagePhys);
+                        livingAttacker.heal(drainPercent * damage);
                 }
                 livingAttacker.setLastHurtMob(target);
             }

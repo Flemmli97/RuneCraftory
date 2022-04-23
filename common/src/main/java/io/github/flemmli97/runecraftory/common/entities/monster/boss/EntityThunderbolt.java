@@ -207,12 +207,12 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public boolean isAlive() {
-        return super.isAlive() && !this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID());
+        return super.isAlive() && (this.getAnimationHandler() == null || !this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID()));
     }
 
     @Override
     protected boolean isImmobile() {
-        return this.isDeadOrDying() && !this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID());
+        return super.isImmobile() && !this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID());
     }
 
     @Override

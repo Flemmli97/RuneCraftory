@@ -270,6 +270,38 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.jei.armory", "Equipment");
         this.add("runecraftory.jei.locked", "Unknown Recipe");
 
+        this.add("runecraftory_book", "Runepedia");
+        this.add("runecraftory.patchouli.landing", "");
+        this.add("runecraftory.patchouli.main.start", "General");
+        this.add("runecraftory.patchouli.main.start.desc", "General");
+        this.add("runecraftory.patchouli.entry.crafting", "Crafting");
+        this.add("runecraftory.patchouli.entry.crafting.1", "To use any of the crafting devices you need to 1. have unlocked the recipe and 2. have enough rp. " +
+                "Upon crafting an item the amount of rp shown will be used up");
+        this.add("runecraftory.patchouli.entry.crafting.forge", "The forge is used to craft all weapons and tools");
+        this.add("runecraftory.patchouli.entry.crafting.armor", "Use the accessory table to make various armor pieces");
+        this.add("runecraftory.patchouli.entry.crafting.cooking", "The cooking table is as the name implies used to make all kinds of food");
+        this.add("runecraftory.patchouli.entry.crafting.chemistry", "A chemistry set allows you to create potions and other pharmacy items");
+        this.add("runecraftory.patchouli.entry.entities", "Monsters");
+
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:wooly", "Sheep like creature that is rather passive. Shearable.");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:orc", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:orc_archer", "An orc but with a bow");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:ant", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:beetle", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:big_muck", "Mushroom like create that attacks using spores");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:buffamoo", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:chipsqueek", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:cluckadoodle", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:pomme_pomme", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:tortas", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:sky_fish", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:weagle", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:goblin", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:goblin_archer", "");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:ambrosia", "Butterfly boss monster. Spawns in forest groves and can be fought once a day");
+        this.add("runecraftory.patchouli.entry.entity.runecraftory:thunderbolt", "Horse said to be as fast as lightning. Spawns in water ruins");
+
+
         for (EnumSkills s : EnumSkills.values())
             this.add(s.getTranslation(),
                     this.capitalize(s.getTranslation().replace("skill.", "").replace("_", " "),

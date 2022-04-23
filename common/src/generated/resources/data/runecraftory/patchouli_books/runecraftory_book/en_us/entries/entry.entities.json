@@ -1,0 +1,160 @@
+{
+  "name": "runecraftory.patchouli.entry.entities",
+  "category": "runecraftory:category.main",
+  "icon": "runecraftory:boss_spawner",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:ambrosia",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:ambrosia"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:ant",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:ant"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:beetle",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:beetle"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:big_muck",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:big_muck"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:buffamoo",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:buffamoo"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:chipsqueek",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:chipsqueek"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:cluckadoodle",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:cluckadoodle"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:goblin",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:goblin"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:goblin_archer",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:goblin_archer"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:orc",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:orc"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:orc_archer",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:orc_archer"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:pomme_pomme",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:pomme_pomme"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:sky_fish",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:sky_fish"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:thunderbolt",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:thunderbolt"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:tortas",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:tortas"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:weagle",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:weagle"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:wooly",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:wooly"
+    }
+  ]
+}

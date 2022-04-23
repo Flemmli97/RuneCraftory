@@ -109,7 +109,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public final Predicate<LivingEntity> hitPred = (e) -> {
         if (e != this) {
-            if (e.hasPassenger(e))
+            if (this.hasPassenger(e))
                 return false;
             if (e instanceof Mob && this == ((Mob) e).getTarget())
                 return true;
@@ -736,7 +736,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() && this.isVehicle();
+        return super.isImmobile() && this.isVehicle() && this.tamingTick <= 0;
     }
 
     @Nullable
