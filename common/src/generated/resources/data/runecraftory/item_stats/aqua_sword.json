@@ -1,0 +1,11 @@
+{
+  "buyPrice": 152,
+  "sellPrice": 45,
+  "upgradeDifficulty": 0,
+  "element": "WATER",
+  "itemStats": {
+    "minecraft:generic.attack_damage": 11.0,
+    "runecraftory:attribute.rf.magic_att": 3.0
+  },
+  "item": "runecraftory:aqua_sword"
+}

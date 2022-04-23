@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:crop_giant",
+              "giant": false
+            }
+          ],
+          "name": "runecraftory:crop_golden_potato"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:crop_giant",
+              "giant": true
+            }
+          ],
+          "name": "runecraftory:crop_golden_potato_giant"
+        }
+      ]
+    }
+  ]
+}

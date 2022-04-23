@@ -1,0 +1,9 @@
+accessWidener	v1	named
+accessible field net/minecraft/world/entity/ai/control/MoveControl operation Lnet/minecraft/world/entity/ai/control/MoveControl$Operation;
+accessible class net/minecraft/world/entity/ai/control/MoveControl$Operation
+
+accessible field net/minecraft/world/entity/Mob goalSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+accessible field net/minecraft/world/entity/Mob targetSelector Lnet/minecraft/world/entity/ai/goal/GoalSelector;
+
+accessible class net/minecraft/world/inventory/MenuType$MenuSupplier
+accessible method net/minecraft/world/inventory/MenuType <init> (Lnet/minecraft/world/inventory/MenuType$MenuSupplier;)V

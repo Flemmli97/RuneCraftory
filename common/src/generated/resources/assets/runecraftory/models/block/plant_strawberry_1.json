@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "runecraftory:block/plant_strawberry_1",
+    "particle": "runecraftory:block/plant_strawberry_1"
+  }
+}

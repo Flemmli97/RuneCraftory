@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/ore_broken_platinum",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "runecraftory:block/ore_broken_platinum"
+    },
+    "facing=west": {
+      "model": "runecraftory:block/ore_broken_platinum",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "runecraftory:block/ore_broken_platinum",
+      "y": 270
+    }
+  }
+}

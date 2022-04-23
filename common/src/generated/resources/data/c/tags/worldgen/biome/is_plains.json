@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:plains",
+    "minecraft:snowy_plains",
+    "minecraft:meadow",
+    "minecraft:sunflower_plains",
+    {
+      "id": "byg:is_plains",
+      "required": false
+    }
+  ]
+}

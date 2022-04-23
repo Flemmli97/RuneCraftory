@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "boss": "runecraftory:thunderbolt",
+      "processor_type": "runecraftory:boss_processor"
+    }
+  ]
+}

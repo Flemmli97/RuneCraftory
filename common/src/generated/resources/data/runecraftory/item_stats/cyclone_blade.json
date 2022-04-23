@@ -1,0 +1,11 @@
+{
+  "buyPrice": 197,
+  "sellPrice": 98,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "itemStats": {
+    "minecraft:generic.attack_damage": 19.0,
+    "runecraftory:attribute.rf.dizz": 13.0
+  },
+  "item": "runecraftory:cyclone_blade"
+}

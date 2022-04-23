@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "weight": 1,
+      "structure": "runecraftory:thunderbolt_ruins"
+    }
+  ],
+  "placement": {
+    "salt": 1224567480,
+    "spacing": 16,
+    "separation": 8,
+    "type": "minecraft:random_spread"
+  }
+}

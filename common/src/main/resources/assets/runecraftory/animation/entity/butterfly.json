@@ -1,0 +1,17 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation": {
+			"loop": true,
+			"animation_length": 4,
+			"bones": {
+				"wingLeft": {
+					"rotation": [0, 0, "math.cos(time*720)*15+5"]
+				},
+				"wingRight": {
+					"rotation": [0, 0, "-math.cos(time*720)*15-5"]
+				}
+			}
+		}
+	}
+}

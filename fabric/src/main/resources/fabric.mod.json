@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "runecraftory",
+  "version": "${version}",
+  "name": "RuneCraftory",
+  "description": "A minecrafty Harvest Moon",
+  "authors": [
+    "Flemmli97"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/runecraftory-fabric",
+    "issues": "https://github.com/Flemmli97/RuneCraftory/issues",
+    "sources": "https://github.com/Flemmli97/RuneCraftory"
+  },
+  "license": "ARR",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "io.github.flemmli97.runecraftory.fabric.RuneCraftoryFabric"
+    ],
+    "client": [
+      "io.github.flemmli97.runecraftory.fabric.client.RuneCraftoryFabricClient"
+    ],
+    "modmenu": [
+      "io.github.flemmli97.runecraftory.fabric.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "runecraftory.mixins.json",
+    "runecraftory.fabric.mixins.json"
+  ],
+  "accessWidener": "runecraftory.accesswidener",
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.18.2",
+    "tenshilib": ">=1.18.2-1.6.7"
+  }
+}

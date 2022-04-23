@@ -1,0 +1,8 @@
+{
+  "buyPrice": 3000,
+  "sellPrice": 500,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "itemStats": {},
+  "item": "runecraftory:magical_potion"
+}

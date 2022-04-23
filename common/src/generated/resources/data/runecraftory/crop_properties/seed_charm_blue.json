@@ -1,0 +1,12 @@
+{
+  "bestSeason": [
+    "FALL"
+  ],
+  "badSeason": [
+    "WINTER"
+  ],
+  "growth": 8,
+  "maxDrops": 3,
+  "regrowable": false,
+  "item": "runecraftory:seed_charm_blue"
+}

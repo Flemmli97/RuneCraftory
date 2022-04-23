@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "runecraftory:block/plant_spinach_0"
+    },
+    "age=1": {
+      "model": "runecraftory:block/plant_spinach_1"
+    },
+    "age=2": {
+      "model": "runecraftory:block/plant_spinach_2"
+    },
+    "age=3": {
+      "model": "runecraftory:block/plant_spinach_3"
+    }
+  }
+}

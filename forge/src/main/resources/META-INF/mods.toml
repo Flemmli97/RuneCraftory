@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[40,)"
+license="ARR"
+issueTrackerURL="https://github.com/Flemmli97/RuneCraftory/issues"
+[[mods]]
+modId="runecraftory"
+version="${version}"
+displayName="RuneCraftory"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/runecraftory"
+logoFile="icon.png"
+authors="Flemmli97"
+description='''A minecrafty Harvest Moon'''
+[[dependencies.runecraftory]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.18.2,)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.runecraftory]]
+modId="tenshilib"
+mandatory=true
+versionRange="[1.18.2-1.6.7,)"
+ordering="NONE"
+side="BOTH"

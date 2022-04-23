@@ -1,0 +1,10 @@
+{
+  "buyPrice": 25,
+  "sellPrice": 3,
+  "upgradeDifficulty": 10,
+  "element": "NONE",
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 2.4
+  },
+  "tag": "runecraftory:bronze_ingots"
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/ore_ruby",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "runecraftory:block/ore_ruby"
+    },
+    "facing=west": {
+      "model": "runecraftory:block/ore_ruby",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "runecraftory:block/ore_ruby",
+      "y": 270
+    }
+  }
+}

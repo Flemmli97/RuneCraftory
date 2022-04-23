@@ -1,0 +1,20 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "runecraftory:item/fist_of_earth"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "runecraftory:glove_held": 2.0
+      },
+      "model": "runecraftory:item/fist_of_earth_held_s"
+    },
+    {
+      "predicate": {
+        "runecraftory:glove_held": 1.0
+      },
+      "model": "runecraftory:item/fist_of_earth_held"
+    }
+  ]
+}

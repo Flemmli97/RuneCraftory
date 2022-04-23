@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.flemmli97.runecraftory.fabric.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "CatSpawnerMixin",
+    "DamageSourceAccessor",
+    "GrowEvent",
+    "ItemStackMixin",
+    "LivingDeathEvent",
+    "LivingEntityMixin",
+    "LivingHurtEvent",
+    "MilkBucketMixin",
+    "NaturalSpawnerMixin",
+    "PhantomSpawnerMixin",
+    "PlayerMixin",
+    "ServerPlayerGameModeMixin"
+  ],
+  "client": [
+    "GuiMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

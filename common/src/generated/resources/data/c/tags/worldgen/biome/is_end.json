@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:the_end",
+    "minecraft:small_end_islands",
+    "minecraft:end_midlands",
+    "minecraft:end_highlands",
+    "minecraft:end_barrens",
+    {
+      "id": "byg:is_end",
+      "required": false
+    }
+  ]
+}

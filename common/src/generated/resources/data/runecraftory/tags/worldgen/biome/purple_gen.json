@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#c:is_wet",
+    {
+      "id": "#c:is_magical",
+      "required": false
+    }
+  ]
+}

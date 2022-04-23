@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "runecraftory:block/plant_moondrop_flower_1",
+    "particle": "runecraftory:block/plant_moondrop_flower_1"
+  }
+}

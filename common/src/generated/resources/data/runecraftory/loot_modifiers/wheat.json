@@ -1,0 +1,13 @@
+{
+  "conditions": [
+    {
+      "condition": "minecraft:block_state_property",
+      "block": "minecraft:wheat",
+      "properties": {
+        "age": "7"
+      }
+    }
+  ],
+  "exclude": "minecraft:wheat_seeds",
+  "type": "runecraftory:crop_modifier"
+}

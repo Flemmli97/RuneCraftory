@@ -1,0 +1,8 @@
+{
+  "buyPrice": 150,
+  "sellPrice": 10,
+  "upgradeDifficulty": 1,
+  "element": "NONE",
+  "itemStats": {},
+  "item": "runecraftory:medicinal_herb"
+}

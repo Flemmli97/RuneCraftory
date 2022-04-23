@@ -1,0 +1,12 @@
+{
+  "bestSeason": [
+    "FALL"
+  ],
+  "badSeason": [
+    "WINTER"
+  ],
+  "growth": 14,
+  "maxDrops": 3,
+  "regrowable": false,
+  "item": "runecraftory:seed_pom_pom_grass"
+}

@@ -1,0 +1,11 @@
+{
+  "buyPrice": 243,
+  "sellPrice": 122,
+  "upgradeDifficulty": 0,
+  "element": "WATER",
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_att": 11.0,
+    "runecraftory:attribute.rf.dizz": 15.0
+  },
+  "item": "runecraftory:aquamarine_rod"
+}

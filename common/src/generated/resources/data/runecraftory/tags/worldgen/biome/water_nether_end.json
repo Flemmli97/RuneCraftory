@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#runecraftory:nether_end",
+    "#c:is_water"
+  ]
+}

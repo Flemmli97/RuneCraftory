@@ -1,0 +1,11 @@
+{
+  "buyPrice": 87,
+  "sellPrice": 34,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "itemStats": {
+    "minecraft:generic.attack_damage": 15.0,
+    "runecraftory:attribute.rf.crit": 7.0
+  },
+  "item": "runecraftory:pole_axe_plus"
+}

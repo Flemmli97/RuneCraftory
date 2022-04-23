@@ -1,0 +1,10 @@
+{
+  "buyPrice": 643,
+  "sellPrice": 111,
+  "upgradeDifficulty": 30,
+  "element": "NONE",
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 25.0
+  },
+  "tag": "runecraftory:platinum_ingots"
+}

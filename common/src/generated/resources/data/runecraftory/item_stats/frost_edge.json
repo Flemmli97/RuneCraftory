@@ -1,0 +1,11 @@
+{
+  "buyPrice": 25,
+  "sellPrice": 5,
+  "upgradeDifficulty": 0,
+  "element": "WATER",
+  "itemStats": {
+    "minecraft:generic.attack_damage": 7.0,
+    "runecraftory:attribute.rf.magic_att": 3.0
+  },
+  "item": "runecraftory:frost_edge"
+}

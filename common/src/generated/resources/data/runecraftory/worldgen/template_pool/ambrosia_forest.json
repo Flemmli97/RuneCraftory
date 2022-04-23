@@ -1,0 +1,15 @@
+{
+  "name": "runecraftory:ambrosia_forest",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "runecraftory:ambrosia_forest",
+        "processors": "runecraftory:ambrosia_forest_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

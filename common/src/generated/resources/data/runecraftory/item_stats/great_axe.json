@@ -1,0 +1,11 @@
+{
+  "buyPrice": 145,
+  "sellPrice": 68,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "itemStats": {
+    "minecraft:generic.attack_damage": 18.0,
+    "runecraftory:attribute.rf.crit": 11.0
+  },
+  "item": "runecraftory:great_axe"
+}

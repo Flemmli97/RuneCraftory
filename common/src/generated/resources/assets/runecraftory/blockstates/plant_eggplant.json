@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "runecraftory:block/plant_eggplant_0"
+    },
+    "age=1": {
+      "model": "runecraftory:block/plant_eggplant_1"
+    },
+    "age=2": {
+      "model": "runecraftory:block/plant_eggplant_2"
+    },
+    "age=3": {
+      "model": "runecraftory:block/plant_eggplant_3"
+    }
+  }
+}

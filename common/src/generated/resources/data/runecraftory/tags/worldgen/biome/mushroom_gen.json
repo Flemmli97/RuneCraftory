@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:is_forest",
+    "#c:is_mushroom",
+    {
+      "id": "#c:is_magical",
+      "required": false
+    }
+  ]
+}

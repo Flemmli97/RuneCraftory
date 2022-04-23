@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/sickle",
+  "textures": {
+    "layer0": "runecraftory:item/sickle_silver"
+  }
+}

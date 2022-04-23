@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:block/ore",
+  "textures": {
+    "ore": "runecraftory:block/ore_platinum"
+  }
+}

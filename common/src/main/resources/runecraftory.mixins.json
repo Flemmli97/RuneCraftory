@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "io.github.flemmli97.runecraftory.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "AttributeAccessor",
+    "AttributeMapAccessor",
+    "BrainMixin",
+    "ContainerScreenAccessor"
+  ],
+  "client": [
+    "MinecraftMixin",
+    "AtlasMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

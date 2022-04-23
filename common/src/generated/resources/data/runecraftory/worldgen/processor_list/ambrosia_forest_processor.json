@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "boss": "runecraftory:ambrosia",
+      "processor_type": "runecraftory:boss_processor"
+    }
+  ]
+}

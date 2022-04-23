@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "#c:is_beach",
+    {
+      "id": "#c:is_magical",
+      "required": false
+    },
+    "#minecraft:is_river",
+    "#c:is_swamp"
+  ]
+}

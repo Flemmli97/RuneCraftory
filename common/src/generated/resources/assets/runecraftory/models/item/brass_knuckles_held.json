@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/fist",
+  "textures": {
+    "layer0": "runecraftory:item/brass_knuckles_held"
+  }
+}

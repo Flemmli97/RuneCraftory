@@ -1,0 +1,16 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [
+    "runecraftory:cold"
+  ],
+  "rpPercentIncrease": 0,
+  "duration": 100,
+  "effects": {},
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "hpRegen": 500,
+  "rpRegen": 0,
+  "item": "runecraftory:cold_medicine"
+}

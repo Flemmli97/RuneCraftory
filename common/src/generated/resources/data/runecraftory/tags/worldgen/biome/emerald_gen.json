@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#c:is_plains",
+    "#c:is_wasteland",
+    "#c:is_sparse",
+    "#minecraft:is_hill"
+  ]
+}

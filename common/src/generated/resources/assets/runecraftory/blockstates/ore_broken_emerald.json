@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "runecraftory:block/ore_broken_emerald",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "runecraftory:block/ore_broken_emerald"
+    },
+    "facing=west": {
+      "model": "runecraftory:block/ore_broken_emerald",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "runecraftory:block/ore_broken_emerald",
+      "y": 270
+    }
+  }
+}

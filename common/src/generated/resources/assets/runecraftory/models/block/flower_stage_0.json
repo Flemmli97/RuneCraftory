@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "runecraftory:block/flower_stage_0",
+    "particle": "runecraftory:block/flower_stage_0"
+  }
+}

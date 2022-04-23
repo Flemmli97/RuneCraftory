@@ -1,0 +1,10 @@
+{
+  "buyPrice": 25,
+  "sellPrice": 5,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "itemStats": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "item": "runecraftory:hoe_scrap"
+}

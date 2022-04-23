@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:is_jungle",
+    "#c:is_lush",
+    "#c:is_dense/overworld"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "runecraftory:thunderbolt_ruins",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "runecraftory:thunderbolt_ruins",
+        "processors": "runecraftory:thunderbolt_ruins_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

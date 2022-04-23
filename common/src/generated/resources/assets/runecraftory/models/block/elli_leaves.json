@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "runecraftory:item/elli_leaves",
+    "particle": "runecraftory:item/elli_leaves"
+  }
+}

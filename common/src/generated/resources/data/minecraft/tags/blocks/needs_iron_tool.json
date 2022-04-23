@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:ore_iron",
+    "runecraftory:ore_bronze",
+    "runecraftory:ore_silver",
+    "runecraftory:ore_gold",
+    "runecraftory:ore_diamond",
+    "runecraftory:ore_platinum",
+    "runecraftory:ore_orichalcum",
+    "runecraftory:ore_dragonic",
+    "runecraftory:ore_amethyst",
+    "runecraftory:ore_aquamarine",
+    "runecraftory:ore_ruby",
+    "runecraftory:ore_emerald",
+    "runecraftory:ore_sapphire",
+    "runecraftory:ore_broken_iron",
+    "runecraftory:ore_broken_bronze",
+    "runecraftory:ore_broken_silver",
+    "runecraftory:ore_broken_gold",
+    "runecraftory:ore_broken_diamond",
+    "runecraftory:ore_broken_platinum",
+    "runecraftory:ore_broken_orichalcum",
+    "runecraftory:ore_broken_dragonic",
+    "runecraftory:ore_broken_amethyst",
+    "runecraftory:ore_broken_aquamarine",
+    "runecraftory:ore_broken_ruby",
+    "runecraftory:ore_broken_emerald",
+    "runecraftory:ore_broken_sapphire"
+  ]
+}

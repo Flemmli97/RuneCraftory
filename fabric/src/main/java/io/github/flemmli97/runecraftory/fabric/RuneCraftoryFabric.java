@@ -1,0 +1,211 @@
+package io.github.flemmli97.runecraftory.fabric;
+
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientCalls;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.config.SpawnConfig;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.entities.GateEntity;
+import io.github.flemmli97.runecraftory.common.events.EntityCalls;
+import io.github.flemmli97.runecraftory.common.events.WorldCalls;
+import io.github.flemmli97.runecraftory.common.registry.ModActivities;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.ModContainer;
+import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
+import io.github.flemmli97.runecraftory.common.registry.ModEffects;
+import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
+import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.ModStructures;
+import io.github.flemmli97.runecraftory.common.world.GateSpawning;
+import io.github.flemmli97.runecraftory.fabric.config.ConfigHolder;
+import io.github.flemmli97.runecraftory.fabric.config.GeneralConfigSpec;
+import io.github.flemmli97.runecraftory.fabric.config.MobConfigSpec;
+import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
+import io.github.flemmli97.runecraftory.fabric.network.ServerPacketHandler;
+import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
+import io.github.flemmli97.tenshilib.fabric.events.AOEAttackEvent;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
+import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
+import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.mixin.object.builder.SpawnRestrictionAccessor;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.RangedAttribute;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.levelgen.Heightmap;
+
+import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicReference;
+
+public class RuneCraftoryFabric implements ModInitializer {
+
+    public static final Path confDir = FabricLoader.getInstance().getConfigDir().resolve(RuneCraftory.MODID);
+
+    @Override
+    public void onInitialize() {
+        this.initContent();
+        ConfigHolder.configs.get(GeneralConfigSpec.spec.getLeft())
+                .reloadConfig();
+        ConfigHolder.configs.get(MobConfigSpec.spec.getLeft())
+                .reloadConfig();
+        SpawnConfig.spawnConfig = new SpawnConfig(confDir);
+        ServerPacketHandler.registerServer();
+
+        SpawnRestrictionAccessor.callRegister(ModEntities.gate.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
+
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
+            @Override
+            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
+                DataPackHandler.reloadItemStats(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
+                return ret.get();
+            }
+
+            @Override
+            public ResourceLocation getFabricId() {
+                return new ResourceLocation(RuneCraftory.MODID, "item_stats");
+            }
+        });
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
+            @Override
+            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
+                DataPackHandler.reloadCropManager(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
+                return ret.get();
+            }
+
+            @Override
+            public ResourceLocation getFabricId() {
+                return new ResourceLocation(RuneCraftory.MODID, "crop_manager");
+            }
+        });
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
+            @Override
+            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
+                DataPackHandler.reloadFoodManager(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
+                return ret.get();
+            }
+
+            @Override
+            public ResourceLocation getFabricId() {
+                return new ResourceLocation(RuneCraftory.MODID, "food_manager");
+            }
+        });
+
+        ModEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
+
+        //MobCalls
+        ServerEntityEvents.ENTITY_LOAD.register(((entity, world) -> {
+            if (entity instanceof LivingEntity living)
+                EntityCalls.onSpawn(living);
+        }));
+
+        //PlayerCalls
+        EntityTrackingEvents.START_TRACKING.register((trackedEntity, player) -> EntityCalls.trackEntity(player, trackedEntity));
+        AOEAttackEvent.ATTACK.register(EntityCalls::playerAoeAttack);
+        EntitySleepEvents.ALLOW_SLEEP_TIME.register(((player, sleepingPos, vanillaResult) -> GeneralConfig.modifyBed ? InteractionResult.CONSUME : InteractionResult.PASS));
+        EntitySleepEvents.STOP_SLEEPING.register((entity, sleepingPos) -> {
+            if (GeneralConfig.modifyBed && entity instanceof Player player)
+                EntityCalls.wakeUp(player);
+        });
+        ServerPlayerEvents.COPY_FROM.register(EntityCalls::clone);
+        ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> EntityCalls.joinPlayer(handler.getPlayer())));
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (EntityCalls.playerAttack(player, entity))
+                return InteractionResult.FAIL;
+            return InteractionResult.PASS;
+        });
+
+        //WorldCalls
+        ServerLifecycleEvents.SERVER_STARTED.register(GateSpawning::setupStructureSpawns);
+        CommandRegistrationCallback.EVENT.register(((dispatcher, dedicated) -> WorldCalls.command(dispatcher)));
+        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), d, feature.unwrapKey().get())),
+                Biome.BiomeCategory.THEEND);
+        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInTheNether(), d, feature.unwrapKey().get())),
+                Biome.BiomeCategory.THEEND);
+        WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), d, feature.unwrapKey().get())),
+                Biome.BiomeCategory.NONE);
+        BiomeModifications.addSpawn(t -> true, MobCategory.MONSTER, ModEntities.gate.get(), 100, 1, 1);
+        ServerTickEvents.END_WORLD_TICK.register(world -> {
+            if (world.dimension() == Level.OVERWORLD) {
+                WorldCalls.daily(world);
+            }
+        });
+        CropGrowEvent.EVENT.register(((level, state, pos) -> state.getBlock() instanceof CropBlock));
+    }
+
+    public void initContent() {
+        ModBlocks.BLOCKS.getEntries();
+        ModItems.ITEMS.getEntries();
+        ModEntities.ENTITIES.registerContent();
+        ModBlocks.BLOCKS.registerContent();
+        ModItems.ITEMS.registerContent();
+
+        ModBlocks.TILES.registerContent();
+        ModContainer.CONTAINERS.registerContent();
+        ModAttributes.ATTRIBUTES.registerContent();
+        ModEffects.EFFECTS.registerContent();
+        ModCrafting.RECIPESERIALIZER.registerContent();
+        ModFeatures.FEATURES.registerContent();
+        ModSpells.SPELLS.registerContent();
+        ModStructures.STRUCTURES.registerContent();
+        ModParticles.PARTICLES.registerContent();
+        ModActivities.ACTIVITIES.registerContent();
+
+        ModLootCondition.LOOTFUNCTION.registerContent();
+        ModLootCondition.LOOTCONDITIONS.registerContent();
+        ModStructures.STRUCTURESPROCESSORS.registerContent();
+        ModCrafting.RECIPETYPE.registerContent();
+
+        this.tweakVanillaAttribute(Attributes.MAX_HEALTH, Double.MAX_VALUE);
+        this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE, Double.MAX_VALUE);
+        ModFeatures.registerConfiguredMineralFeatures();
+    }
+
+
+    private void tweakVanillaAttribute(Attribute attribute, double value) {
+        if (attribute instanceof RangedAttribute) {
+            ((AttributeAccessor) attribute).setMaxValue(value);
+        }
+    }
+
+    public static void entityTick(LivingEntity entity) {
+        if (entity instanceof Player player) {
+            EntityCalls.updateLivingTick(player);
+        }
+        if (entity.level.isClientSide)
+            ClientCalls.tick(entity);
+    }
+}

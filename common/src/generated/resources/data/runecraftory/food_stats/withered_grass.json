@@ -1,0 +1,20 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [
+    {
+      "potion": "runecraftory:poison",
+      "duration": 60,
+      "amplifier": 0
+    }
+  ],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 100,
+  "effects": {},
+  "hpRegenPercent": 0,
+  "rpRegenPercent": -35,
+  "rpIncrease": 0,
+  "hpRegen": 0,
+  "rpRegen": 0,
+  "item": "runecraftory:withered_grass"
+}

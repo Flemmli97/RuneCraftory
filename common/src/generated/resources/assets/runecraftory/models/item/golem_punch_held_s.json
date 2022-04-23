@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/fist_s",
+  "textures": {
+    "layer0": "runecraftory:item/golem_punch_held"
+  }
+}

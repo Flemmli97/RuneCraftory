@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "runecraftory:item/crop_lamp_grass",
+    "particle": "runecraftory:item/crop_lamp_grass"
+  }
+}

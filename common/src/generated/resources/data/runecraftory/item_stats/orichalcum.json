@@ -1,0 +1,10 @@
+{
+  "buyPrice": 1000,
+  "sellPrice": 150,
+  "upgradeDifficulty": 10,
+  "element": "NONE",
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 70.0
+  },
+  "tag": "runecraftory:gems/orichalcum"
+}

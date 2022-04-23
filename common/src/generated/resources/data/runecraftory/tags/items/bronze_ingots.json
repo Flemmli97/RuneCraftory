@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:bronze",
+    {
+      "id": "#forge:ingots/bronze",
+      "required": false
+    }
+  ]
+}

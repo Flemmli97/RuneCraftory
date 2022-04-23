@@ -1,0 +1,11 @@
+{
+  "buyPrice": 25,
+  "sellPrice": 5,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "itemStats": {
+    "minecraft:generic.attack_damage": 19.0,
+    "runecraftory:attribute.rf.stun": 11.0
+  },
+  "item": "runecraftory:great_hammer"
+}

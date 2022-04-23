@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/watering_can",
+  "textures": {
+    "layer0": "runecraftory:item/watering_can_iron"
+  }
+}

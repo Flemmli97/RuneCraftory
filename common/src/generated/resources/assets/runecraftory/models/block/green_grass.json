@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "runecraftory:item/green_grass",
+    "particle": "runecraftory:item/green_grass"
+  }
+}

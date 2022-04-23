@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:coral_plants",
+    "#minecraft:crops",
+    "#minecraft:flowers",
+    "#minecraft:leaves",
+    "#minecraft:saplings",
+    "#minecraft:tall_flowers",
+    "minecraft:grass",
+    "minecraft:tall_grass",
+    "minecraft:seagrass",
+    "minecraft:tall_seagrass",
+    "minecraft:brown_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:crimson_fungus",
+    "minecraft:warped_fungus"
+  ]
+}

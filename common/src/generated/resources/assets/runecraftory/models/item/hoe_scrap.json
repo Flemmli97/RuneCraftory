@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/hoe",
+  "textures": {
+    "layer0": "runecraftory:item/hoe_scrap"
+  }
+}

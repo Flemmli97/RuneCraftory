@@ -1,0 +1,10 @@
+{
+  "config": {
+    "size": 1,
+    "start_pool": "runecraftory:thunderbolt_ruins"
+  },
+  "biomes": "#minecraft:is_ocean",
+  "adapt_noise": true,
+  "spawn_overrides": {},
+  "type": "runecraftory:thunderbolt_ruins"
+}

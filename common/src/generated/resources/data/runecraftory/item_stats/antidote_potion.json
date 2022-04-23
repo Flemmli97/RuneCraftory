@@ -1,0 +1,8 @@
+{
+  "buyPrice": 750,
+  "sellPrice": 50,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "itemStats": {},
+  "item": "runecraftory:antidote_potion"
+}

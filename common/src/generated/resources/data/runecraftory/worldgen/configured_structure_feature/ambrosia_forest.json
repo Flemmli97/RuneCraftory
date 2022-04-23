@@ -1,0 +1,10 @@
+{
+  "config": {
+    "size": 1,
+    "start_pool": "runecraftory:ambrosia_forest"
+  },
+  "biomes": "#minecraft:is_forest",
+  "adapt_noise": true,
+  "spawn_overrides": {},
+  "type": "runecraftory:ambrosia_forest"
+}

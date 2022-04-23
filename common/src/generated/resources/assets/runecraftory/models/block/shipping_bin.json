@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/orientable_vertical",
+  "textures": {
+    "side": "runecraftory:block/shipping_bin",
+    "front": "runecraftory:block/shipping_bin_top"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:desert",
+    "minecraft:badlands",
+    "minecraft:wooded_badlands",
+    {
+      "id": "byg:is_sandy",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:snowy_plains",
+    {
+      "id": "byg:is_wasteland",
+      "required": false
+    }
+  ]
+}
