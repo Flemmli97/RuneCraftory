@@ -17,12 +17,15 @@ public class ModTags {
     public static final TagKey<Item> platinumF = forge("ingots/platinum");
 
     //Items
-    public static final TagKey<Item> bronze = tag("bronze_ingots");
-    public static final TagKey<Item> silver = tag("silver_ingots");
-    public static final TagKey<Item> platinum = tag("platinum_ingots");
-    public static final TagKey<Item> orichalcum = tag("gems/orichalcum");
-    public static final TagKey<Item> dragonic = tag("gems/dragonic");
-    public static final TagKey<Item> minerals = tag("mineral");
+    public static final TagKey<Item> iron = tagCommon("iron_ingots");
+    public static final TagKey<Item> gold = tagCommon("gold_ingots");
+
+    public static final TagKey<Item> bronze = tagCommon("bronze_ingots");
+    public static final TagKey<Item> silver = tagCommon("silver_ingots");
+    public static final TagKey<Item> platinum = tagCommon("platinum_ingots");
+    public static final TagKey<Item> orichalcum = tagCommon("orichalcum");
+    public static final TagKey<Item> dragonic = tagCommon("dragonic");
+    public static final TagKey<Item> minerals = tagCommon("mineral");
 
     public static final TagKey<Item> woolyTamer = tag("wooly_tame");
 
@@ -91,6 +94,10 @@ public class ModTags {
 
     private static TagKey<Item> tag(String name) {
         return PlatformUtils.INSTANCE.itemTag(new ResourceLocation(RuneCraftory.MODID, name));
+    }
+
+    private static TagKey<Item> tagCommon(String name) {
+        return PlatformUtils.INSTANCE.itemTag(new ResourceLocation("c", name));
     }
 
     private static TagKey<Item> forge(String name) {

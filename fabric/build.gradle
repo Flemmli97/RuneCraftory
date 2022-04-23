@@ -41,6 +41,10 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
     modImplementation "${mod_menu}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${rei_version}"
+    modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}") {
+        exclude(group: "net.fabricmc.fabric-api")
+    }
 }
 
 processResources {

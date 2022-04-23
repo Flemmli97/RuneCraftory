@@ -805,7 +805,7 @@ public class PlayerData {
             this.quest = new QuestMission(nbt.getCompoundTag("Quest"));
         }*/
         this.readFoodBuffFromNBT(nbt.getCompound("FoodData"));
-        if (player instanceof ServerPlayer serverPlayer) {
+        if (player instanceof ServerPlayer serverPlayer && serverPlayer.connection != null) {
             this.recalculateStats(serverPlayer, false);
         }
     }

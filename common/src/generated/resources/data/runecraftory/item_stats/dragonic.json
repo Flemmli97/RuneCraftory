@@ -7,5 +7,5 @@
     "runecraftory:attribute.rf.defence": 130.0,
     "runecraftory:attribute.rf.magic_def": 90.0
   },
-  "tag": "runecraftory:gems/dragonic"
+  "tag": "c:dragonic"
 }

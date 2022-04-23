@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
@@ -17,15 +18,22 @@ public class ItemTagGen extends ItemTagsProvider {
 
     @Override
     protected void addTags() {
+        this.tag(ModTags.iron)
+                .add(Items.IRON_INGOT)
+                .addOptional(Tags.Items.INGOTS_IRON.location());
+        this.tag(ModTags.gold)
+                .add(Items.GOLD_INGOT)
+                .addOptional(Tags.Items.INGOTS_GOLD.location());
+
         this.tag(ModTags.minerals)
                 .add(ModItems.scrapPlus.get())
-                .addTag(Tags.Items.INGOTS_IRON)
-                .addTag(Tags.Items.INGOTS_GOLD)
-                .add(ModItems.bronze.get())
-                .add(ModItems.silver.get())
-                .add(ModItems.platinum.get())
-                .add(ModItems.orichalcum.get())
-                .add(ModItems.dragonic.get());
+                .addTag(ModTags.iron)
+                .addTag(ModTags.gold)
+                .addTag(ModTags.bronze)
+                .addTag(ModTags.silver)
+                .addTag(ModTags.platinum)
+                .addTag(ModTags.orichalcum)
+                .addTag(ModTags.dragonic);
 
         this.tag(ModTags.bronze)
                 .add(ModItems.bronze.get())

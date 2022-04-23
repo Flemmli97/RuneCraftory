@@ -52,6 +52,7 @@ repositories {
         name = "JEI"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
+    maven { url "https://maven.shedaniel.me" }
 }
 
 dependencies {
@@ -64,7 +65,7 @@ dependencies {
     modImplementation patchouli
     modImplementation patchouli_datagen
     modCompileOnly "${jei_dep}:api"
-    //modRuntimeOnly jei_dep
+    modRuntimeOnly jei_dep
 }
 
 processResources {

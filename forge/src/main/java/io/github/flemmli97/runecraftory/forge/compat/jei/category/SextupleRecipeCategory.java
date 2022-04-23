@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.forge.integration.jei.category;
+package io.github.flemmli97.runecraftory.forge.compat.jei.category;
 
 import com.google.common.collect.Lists;
 import io.github.flemmli97.runecraftory.RuneCraftory;

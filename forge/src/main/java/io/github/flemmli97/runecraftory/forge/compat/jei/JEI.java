@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.forge.integration.jei;
+package io.github.flemmli97.runecraftory.forge.compat.jei;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.crafting.ArmorRecipe;
@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.common.crafting.CookingRecipe;
 import io.github.flemmli97.runecraftory.common.crafting.ForgingRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.forge.integration.jei.category.SextupleRecipeCategory;
+import io.github.flemmli97.runecraftory.forge.compat.jei.category.SextupleRecipeCategory;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
