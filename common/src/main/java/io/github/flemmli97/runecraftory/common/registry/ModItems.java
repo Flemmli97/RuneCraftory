@@ -63,8 +63,8 @@ public class ModItems {
     public static final PlatformRegistry<Item> ITEMS = PlatformUtils.INSTANCE.of(Registry.ITEM_REGISTRY, RuneCraftory.MODID);
     public static final List<RegistryEntrySupplier<Item>> NOTEX = new ArrayList<>();
     private static final FoodProperties lowFoodProp = new FoodProperties.Builder().nutrition(1).saturationMod(1).alwaysEat().build();
-    private static final FoodProperties foodProp = new FoodProperties.Builder().nutrition(2).saturationMod(3).alwaysEat().build();
-    private static final FoodProperties highFoodProp = new FoodProperties.Builder().nutrition(6).saturationMod(8).alwaysEat().build();
+    private static final FoodProperties foodProp = new FoodProperties.Builder().nutrition(2).saturationMod(1).alwaysEat().build();
+    private static final FoodProperties highFoodProp = new FoodProperties.Builder().nutrition(6).saturationMod(1.5f).alwaysEat().build();
 
     public static final RegistryEntrySupplier<Item> hoeScrap = hoe(EnumToolTier.SCRAP);
     public static final RegistryEntrySupplier<Item> hoeIron = hoe(EnumToolTier.IRON);
