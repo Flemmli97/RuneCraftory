@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.common.events;
 
 import com.mojang.brigadier.CommandDispatcher;
+import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.commands.RunecraftoryCommand;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.world.GateSpawning;
@@ -12,6 +14,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.CropBlock;
@@ -59,7 +62,11 @@ public class WorldCalls {
         }
     }
 
-    public static boolean disableVanillaCrop(BlockState state, BlockPos pos) {
-        return state.getBlock() instanceof CropBlock;
+    public static boolean disableVanillaCrop(LevelAccessor level, BlockState state, BlockPos pos) {
+        if (state.getBlock() instanceof CropBlock crop) {
+            CropProperties prop = DataPackHandler.getCropStat(crop.getCloneItemStack(level, pos, state).getItem());
+            return prop != null;
+        }
+        return false;
     }
 }

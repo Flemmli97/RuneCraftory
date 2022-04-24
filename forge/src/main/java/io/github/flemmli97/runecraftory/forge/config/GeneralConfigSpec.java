@@ -26,7 +26,9 @@ public class GeneralConfigSpec {
     public final ForgeConfigSpec.BooleanValue disableHunger;
     public final ForgeConfigSpec.BooleanValue modifyWeather;
     public final ForgeConfigSpec.BooleanValue modifyBed;
-    public final ForgeConfigSpec.BooleanValue disableDatapack;
+    public final ForgeConfigSpec.BooleanValue disableFoodSystem;
+    public final ForgeConfigSpec.BooleanValue disableItemStatSystem;
+    public final ForgeConfigSpec.BooleanValue disableCropSystem;
 
     public final boolean waila = true;
     public final boolean jei = true;
@@ -85,7 +87,9 @@ public class GeneralConfigSpec {
         this.disableHunger = builder.comment("Disable mc hunger system. Makes it so you can always eat food").define("Disable Hunger", false);
         this.modifyWeather = builder.comment("If true weather will change only at specific time.", "Morning, mid day, evening and mid night").define("Modify Weather", false);
         this.modifyBed = builder.comment("If true players can sleep anytime and upon waking up will restore all health and rp").define("Modify Bed", false);
-        this.disableDatapack = builder.comment("If true food, itemstats and crop data will be disabled. ", "Note: Crops from this mod will not function anymore").define("Disable Datapack", true);
+        this.disableFoodSystem = builder.comment("If true food will not provide benefits such as hp restoration etc defined per datapack. ", "Note: Crops from this mod will not function anymore").define("Disable Food System", true);
+        this.disableItemStatSystem = builder.comment("If true item get no stats assigned as defined per datapack. ", "Note: Weapons will then do no damage").define("Disable Item Stat System", true);
+        this.disableCropSystem = builder.comment("If true crop data will be disabled.", "Note: Crops from this mod will not function anymore").define("Disable Crop System", true);
         builder.pop();
 
         builder.push("Multipliers");

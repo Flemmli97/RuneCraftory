@@ -69,7 +69,7 @@ public class WorldEvents {
 
     @SubscribeEvent
     public void disableVanillaCrop(BlockEvent.CropGrowEvent.Pre event) {
-        if (WorldCalls.disableVanillaCrop(event.getState(), event.getPos()))
+        if (WorldCalls.disableVanillaCrop(event.getWorld(), event.getState(), event.getPos()))
             event.setResult(Event.Result.DENY);
     }
 }

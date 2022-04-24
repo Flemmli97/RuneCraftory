@@ -21,7 +21,9 @@ public class GeneralConfig {
     public static boolean disableHunger;
     public static boolean modifyWeather;
     public static boolean modifyBed;
-    public static boolean disableDatapack;
+    public static boolean disableFoodSystem;
+    public static boolean disableItemStatSystem;
+    public static boolean disableCropSystem;
 
     public static boolean waila = true;
     public static boolean jei = true;

@@ -82,7 +82,7 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
             if (cropState.getBlock() instanceof BlockCrop crop) {
                 //Let the crop tile entity handle growth
                 CropBlockEntity tile = (CropBlockEntity) level.getBlockEntity(cropPos);
-                float season = crop.properties().seasonMultiplier(WorldHandler.get(level.getServer()).currentSeason());
+                float season = crop.properties().map(p -> p.seasonMultiplier(WorldHandler.get(level.getServer()).currentSeason())).orElse(1f);
                 float runeyBonus = WorldHandler.get(level.getServer()).currentWeather() == EnumWeather.RUNEY ? 7 : 1;
                 if (!tile.isFullyGrown(crop))
                     tile.growCrop(level, cropPos, cropState, this.growthMultiplier * runeyBonus, this.farmLevel, season);

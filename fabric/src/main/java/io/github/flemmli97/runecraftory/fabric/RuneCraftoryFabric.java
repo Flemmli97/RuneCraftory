@@ -60,7 +60,6 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.nio.file.Path;
@@ -163,7 +162,7 @@ public class RuneCraftoryFabric implements ModInitializer {
                 WorldCalls.daily(world);
             }
         });
-        CropGrowEvent.EVENT.register(((level, state, pos) -> state.getBlock() instanceof CropBlock));
+        CropGrowEvent.EVENT.register((WorldCalls::disableVanillaCrop));
     }
 
     public void initContent() {

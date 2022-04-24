@@ -51,7 +51,7 @@ public class ModFeatures {
         )));
         PLACEDNETHERHERBFEATURE = BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, "placed_nether_herb_feature", new PlacedFeature(CONFIGUREDHERBFEATURE, List.of(
                 CountOnEveryLayerPlacement.of(6),
-                RarityFilter.onAverageOnceEvery(2),
+                RarityFilter.onAverageOnceEvery(6),
                 InSquarePlacement.spread()
         )));
         PLACEDENDHERBFEATURE = BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, "placed_end_herb_feature", new PlacedFeature(CONFIGUREDHERBFEATURE, List.of(
@@ -71,7 +71,7 @@ public class ModFeatures {
         registerMineralFeatures(builder, nether, ModBlocks.mineralDragonic, ModTags.IS_END, null, 25, 1, 2);
         registerMineralFeatures(builder, nether, ModBlocks.mineralAquamarine, ModTags.aquamarine_gen, ModTags.nether_end, 15, 2, 3);
         registerMineralFeatures(builder, nether, ModBlocks.mineralAmethyst, ModTags.amethyst_gen, ModTags.water_nether_end, 66, 2, 3);
-        registerMineralFeatures(builder, nether, ModBlocks.mineralRuby, ModTags.ruby_gen, ModTags.water_nether_end, 66, 2, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.mineralRuby, ModTags.ruby_gen, null, 44, 2, 3);
         registerMineralFeatures(builder, nether, ModBlocks.mineralEmerald, ModTags.emerald_gen, ModTags.water_nether_end, 66, 1, 3);
         registerMineralFeatures(builder, nether, ModBlocks.mineralSapphire, ModTags.sapphire_gen, ModTags.water_nether_end, 66, 2, 3);
         PLACEDMINERALFEATURES = builder.build();

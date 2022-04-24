@@ -56,12 +56,12 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .build()
                 .build();
 
-        for(RegistryEntrySupplier<EntityType<?>> sup : ModEntities.getMonsters()
+        for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.getMonsters()
                 .stream().sorted(Comparator.comparing(RegistryEntrySupplier::getID)).toList()) {
             builder.addEntityPage(sup.getID())
                     .setScale(0.7f)
                     .build()
-                    .addSimpleTextPage("runecraftory.patchouli.entry.entity."+sup.getID());
+                    .addSimpleTextPage("runecraftory.patchouli.entry.entity." + sup.getID());
         }
         consumer.accept(book);
     }

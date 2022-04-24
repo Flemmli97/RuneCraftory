@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.blocks.tile;
 
+import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
@@ -48,7 +49,7 @@ public class CropBlockEntity extends BlockEntity {
     }
 
     public boolean isFullyGrown(BlockCrop block) {
-        return this.age >= block.properties().growth();
+        return block.properties().map(p -> this.age >= p.growth()).orElse(false);
     }
 
     public boolean canGrow() {
@@ -60,8 +61,9 @@ public class CropBlockEntity extends BlockEntity {
         this.age += speed * seasonModifier;
         BlockState newState = state;
         if (block instanceof BlockCrop crop) {
-            this.age = Math.min(((BlockCrop) block).properties().growth(), this.age);
-            int stateAge = (int) (this.age * 3 / (float) crop.properties().growth());
+            float max = crop.properties().map(CropProperties::growth).orElse(0);
+            this.age = Math.min(crop.properties().map(CropProperties::growth).orElse(0), this.age);
+            int stateAge = (int) (this.age * 3 / max);
             newState = state.setValue(BlockCrop.AGE, Mth.clamp(stateAge, 0, 3));
         }
         level.sendBlockUpdated(pos, state, newState, Block.UPDATE_ALL);

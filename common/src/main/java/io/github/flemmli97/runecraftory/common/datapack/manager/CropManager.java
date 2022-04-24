@@ -32,7 +32,7 @@ public class CropManager extends SimpleJsonResourceReloadListener {
     }
 
     public CropProperties get(Item item) {
-        if (GeneralConfig.disableDatapack)
+        if (GeneralConfig.disableCropSystem)
             return null;
         ResourceLocation res = PlatformUtils.INSTANCE.items().getIDFrom(item);
         CropProperties props = this.crops.get(res);

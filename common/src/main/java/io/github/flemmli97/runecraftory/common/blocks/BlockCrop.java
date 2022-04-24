@@ -33,6 +33,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -65,7 +66,7 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
         if (this.isMaxAge(state, level, pos)) {
             BlockEntity tile = level.getBlockEntity(pos);
             dropResources(state, level, pos, tile);
-            if (tile instanceof CropBlockEntity && this.properties().regrowable()) {
+            if (tile instanceof CropBlockEntity && this.properties().map(CropProperties::regrowable).orElse(false)) {
                 ((CropBlockEntity) tile).resetAge();
                 level.setBlockAndUpdate(pos, state.setValue(AGE, 0));
             } else
@@ -84,11 +85,8 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
         return SHAPE_BY_AGE[state.getValue(AGE)];
     }
 
-    public CropProperties properties() {
-        CropProperties prop = DataPackHandler.getCropStat(this.seed.get());
-        if (prop == null)
-            prop = CropProperties.defaultProp;
-        return prop;
+    public Optional<CropProperties> properties() {
+        return Optional.ofNullable(DataPackHandler.getCropStat(this.seed.get()));
     }
 
     @Override
@@ -105,7 +103,7 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> list = super.getDrops(state, builder);
         BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (blockEntity instanceof CropBlockEntity crop && crop.age() >= this.properties().growth())
+        if (blockEntity instanceof CropBlockEntity crop && this.properties().map(p -> crop.age() >= p.growth()).orElse(false))
             list.forEach(stack -> this.modifyStack(stack, crop));
         else
             list.clear();

@@ -107,7 +107,7 @@ public class CombatUtils {
             }
         }
         float dmg = Math.max(0.02f * amount, amount - reduce);
-        if(source instanceof CustomDamage && GeneralConfig.randomDamage) {
+        if (source instanceof CustomDamage && GeneralConfig.randomDamage) {
             dmg = (float) Math.floor(dmg + (entity.level.random.nextGaussian() * dmg / 10.0));
         }
         return elementalReduction(entity, source, dmg);

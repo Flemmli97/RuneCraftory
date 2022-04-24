@@ -40,7 +40,9 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.disableHunger = spec.disableHunger.get();
         GeneralConfig.modifyWeather = spec.modifyWeather.get();
         GeneralConfig.modifyBed = spec.modifyBed.get();
-        GeneralConfig.disableDatapack = spec.disableDatapack.get();
+        GeneralConfig.disableFoodSystem = spec.disableFoodSystem.get();
+        GeneralConfig.disableItemStatSystem = spec.disableItemStatSystem.get();
+        GeneralConfig.disableCropSystem = spec.disableCropSystem.get();
 
         GeneralConfig.maxLevel = spec.maxLevel.get();
         GeneralConfig.maxSkillLevel = spec.maxSkillLevel.get();
