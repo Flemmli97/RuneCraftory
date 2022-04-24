@@ -1,12 +1,12 @@
 {
   "bestSeason": [
-    "SPRING"
-  ],
-  "badSeason": [
     "WINTER"
   ],
-  "growth": 8,
+  "badSeason": [
+    "SUMMER"
+  ],
+  "growth": 90,
   "maxDrops": 3,
   "regrowable": false,
-  "item": "runecraftory:seed_turnip_pink"
+  "item": "runecraftory:seed_golden_turnip"
 }

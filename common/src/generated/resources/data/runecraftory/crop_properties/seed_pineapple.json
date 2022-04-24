@@ -1,0 +1,14 @@
+{
+  "bestSeason": [
+    "SUMMER"
+  ],
+  "badSeason": [
+    "SPRING",
+    "FALL",
+    "WINTER"
+  ],
+  "growth": 30,
+  "maxDrops": 2,
+  "regrowable": true,
+  "item": "runecraftory:seed_pineapple"
+}

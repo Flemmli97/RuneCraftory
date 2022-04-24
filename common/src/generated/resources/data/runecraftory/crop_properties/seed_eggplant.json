@@ -1,0 +1,13 @@
+{
+  "bestSeason": [
+    "SPRING",
+    "SUMMER"
+  ],
+  "badSeason": [
+    "WINTER"
+  ],
+  "growth": 7,
+  "maxDrops": 4,
+  "regrowable": true,
+  "item": "runecraftory:seed_eggplant"
+}

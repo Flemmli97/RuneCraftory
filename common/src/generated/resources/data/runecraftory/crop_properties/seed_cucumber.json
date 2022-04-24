@@ -1,0 +1,13 @@
+{
+  "bestSeason": [
+    "SPRING",
+    "SUMMER"
+  ],
+  "badSeason": [
+    "WINTER"
+  ],
+  "growth": 5,
+  "maxDrops": 5,
+  "regrowable": true,
+  "item": "runecraftory:seed_cucumber"
+}

@@ -3,8 +3,8 @@
     "FALL"
   ],
   "badSeason": [],
-  "growth": 6,
-  "maxDrops": 3,
+  "growth": 2,
+  "maxDrops": 2,
   "regrowable": false,
-  "item": "minecraft:carrot"
+  "item": "runecraftory:seed_spinach"
 }

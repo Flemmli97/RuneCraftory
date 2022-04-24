@@ -1,0 +1,13 @@
+{
+  "bestSeason": [
+    "SPRING",
+    "FALL"
+  ],
+  "badSeason": [
+    "SUMMER"
+  ],
+  "growth": 10,
+  "maxDrops": 2,
+  "regrowable": false,
+  "item": "runecraftory:seed_leek"
+}

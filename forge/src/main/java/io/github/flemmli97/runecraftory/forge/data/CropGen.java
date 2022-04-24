@@ -16,10 +16,10 @@ public class CropGen extends CropProvider {
 
     @Override
     protected void add() {
-        this.addStat(Items.WHEAT_SEEDS, new CropProperties.MutableCropProps(7, 4, true).addGoodSeason(EnumSeason.FALL));
-        this.addStat(Items.CARROT, new CropProperties.MutableCropProps(10, 3, false).addGoodSeason(EnumSeason.FALL));
-        this.addStat(Items.POTATO, new CropProperties.MutableCropProps(10, 3, false).addGoodSeason(EnumSeason.FALL));
-        this.addStat(Items.BEETROOT_SEEDS, new CropProperties.MutableCropProps(10, 3, false).addGoodSeason(EnumSeason.FALL));
+        this.addStat(Items.WHEAT_SEEDS, new CropProperties.MutableCropProps(5, 4, true).addGoodSeason(EnumSeason.FALL));
+        this.addStat(Items.CARROT, new CropProperties.MutableCropProps(6, 3, false).addGoodSeason(EnumSeason.FALL));
+        this.addStat(Items.POTATO, new CropProperties.MutableCropProps(6, 3, false).addGoodSeason(EnumSeason.SUMMER));
+        this.addStat(Items.BEETROOT_SEEDS, new CropProperties.MutableCropProps(5, 3, false).addGoodSeason(EnumSeason.SPRING));
 
         this.addStat(ModItems.toyherbSeeds.get(), new CropProperties.MutableCropProps(4, 2, false).addGoodSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.WINTER));
         this.addStat(ModItems.moondropSeeds.get(), new CropProperties.MutableCropProps(7, 4, false).addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER));
@@ -39,7 +39,32 @@ public class CropGen extends CropProvider {
         this.addStat(ModItems.whiteCrystalSeeds.get(), new CropProperties.MutableCropProps(90, 3, false).addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.FALL));
         this.addStat(ModItems.emeryFlowerSeeds.get(), new CropProperties.MutableCropProps(120, 2, false));
 
-        this.addStat(ModItems.turnipPinkSeeds.get(), new CropProperties.MutableCropProps(4, 2, false).addGoodSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.WINTER));
+        this.addStat(ModItems.turnipSeeds.get(), new CropProperties.MutableCropProps(4, 3, false).addGoodSeason(EnumSeason.SUMMER).addGoodSeason(EnumSeason.FALL));
+        this.addStat(ModItems.turnipPinkSeeds.get(), new CropProperties.MutableCropProps(8, 3, false).addGoodSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.WINTER));
+        this.addStat(ModItems.cabbageSeeds.get(), new CropProperties.MutableCropProps(7, 3, false).addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER));
+        this.addStat(ModItems.pinkMelonSeeds.get(), new CropProperties.MutableCropProps(7, 2, true).addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER));
+        this.addStat(ModItems.hotHotSeeds.get(), new CropProperties.MutableCropProps(31, 5, false).addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER));
+        this.addStat(ModItems.goldTurnipSeeds.get(), new CropProperties.MutableCropProps(90, 3, false).addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER));
+        this.addStat(ModItems.goldPotatoSeeds.get(), new CropProperties.MutableCropProps(50, 3, false).addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER));
+        this.addStat(ModItems.goldPumpkinSeeds.get(), new CropProperties.MutableCropProps(75, 3, true).addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER));
+        this.addStat(ModItems.goldCabbageSeeds.get(), new CropProperties.MutableCropProps(75, 3, false).addGoodSeason(EnumSeason.WINTER).addBadSeason(EnumSeason.SUMMER));
+        this.addStat(ModItems.bokChoySeeds.get(), new CropProperties.MutableCropProps(5, 4, false).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.SUMMER));
+        this.addStat(ModItems.leekSeeds.get(), new CropProperties.MutableCropProps(10, 2, false).addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.SUMMER));
+        this.addStat(ModItems.radishSeeds.get(), new CropProperties.MutableCropProps(4, 1, false).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.SUMMER));
+        this.addStat(ModItems.greenPepperSeeds.get(), new CropProperties.MutableCropProps(8, 5, true).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER));
+        this.addStat(ModItems.spinachSeeds.get(), new CropProperties.MutableCropProps(2, 2, false).addGoodSeason(EnumSeason.FALL));
+        this.addStat(ModItems.yamSeeds.get(), new CropProperties.MutableCropProps(9, 5, false).addGoodSeason(EnumSeason.SUMMER).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER));
+        this.addStat(ModItems.eggplantSeeds.get(), new CropProperties.MutableCropProps(7, 4, true).addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER));
+        this.addStat(ModItems.pineappleSeeds.get(), new CropProperties.MutableCropProps(30, 2, true).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.SPRING).addBadSeason(EnumSeason.FALL).addBadSeason(EnumSeason.WINTER));
+        this.addStat(ModItems.onionSeeds.get(), new CropProperties.MutableCropProps(20, 6, false).addGoodSeason(EnumSeason.FALL).addBadSeason(EnumSeason.SUMMER));
+        this.addStat(ModItems.cornSeeds.get(), new CropProperties.MutableCropProps(5, 1, false).addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER));
+        this.addStat(ModItems.tomatoSeeds.get(), new CropProperties.MutableCropProps(8, 2, true).addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER));
+        this.addStat(ModItems.strawberrySeeds.get(), new CropProperties.MutableCropProps(15, 5, true).addGoodSeason(EnumSeason.SUMMER).addGoodSeason(EnumSeason.FALL));
+        this.addStat(ModItems.cucumberSeeds.get(), new CropProperties.MutableCropProps(5, 5, true).addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER));
+        this.addStat(ModItems.fodderSeeds.get(), new CropProperties.MutableCropProps(5, 1, true));
 
+        this.addStat(ModItems.shieldSeeds.get(), new CropProperties.MutableCropProps(15, 1, true));
+        this.addStat(ModItems.swordSeeds.get(), new CropProperties.MutableCropProps(15, 1, true));
+        this.addStat(ModItems.dungeonSeeds.get(), new CropProperties.MutableCropProps(25, 1, true));
     }
 }

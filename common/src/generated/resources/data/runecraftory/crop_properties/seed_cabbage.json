@@ -1,12 +1,13 @@
 {
   "bestSeason": [
-    "SPRING"
+    "SPRING",
+    "FALL"
   ],
   "badSeason": [
     "WINTER"
   ],
-  "growth": 8,
+  "growth": 7,
   "maxDrops": 3,
   "regrowable": false,
-  "item": "runecraftory:seed_turnip_pink"
+  "item": "runecraftory:seed_cabbage"
 }

@@ -1,0 +1,12 @@
+{
+  "bestSeason": [
+    "WINTER"
+  ],
+  "badSeason": [
+    "SUMMER"
+  ],
+  "growth": 31,
+  "maxDrops": 5,
+  "regrowable": false,
+  "item": "runecraftory:seed_hot_hot_fruit"
+}

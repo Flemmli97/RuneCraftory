@@ -1,0 +1,12 @@
+{
+  "bestSeason": [
+    "FALL"
+  ],
+  "badSeason": [
+    "SUMMER"
+  ],
+  "growth": 20,
+  "maxDrops": 6,
+  "regrowable": false,
+  "item": "runecraftory:seed_onion"
+}
