@@ -51,7 +51,7 @@ public class ModFeatures {
         )));
         PLACEDNETHERHERBFEATURE = BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, "placed_nether_herb_feature", new PlacedFeature(CONFIGUREDHERBFEATURE, List.of(
                 CountOnEveryLayerPlacement.of(6),
-                RarityFilter.onAverageOnceEvery(6),
+                RarityFilter.onAverageOnceEvery(8),
                 InSquarePlacement.spread()
         )));
         PLACEDENDHERBFEATURE = BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, "placed_end_herb_feature", new PlacedFeature(CONFIGUREDHERBFEATURE, List.of(
@@ -71,7 +71,7 @@ public class ModFeatures {
         registerMineralFeatures(builder, nether, ModBlocks.mineralDragonic, ModTags.IS_END, null, 25, 1, 2);
         registerMineralFeatures(builder, nether, ModBlocks.mineralAquamarine, ModTags.aquamarine_gen, ModTags.nether_end, 15, 2, 3);
         registerMineralFeatures(builder, nether, ModBlocks.mineralAmethyst, ModTags.amethyst_gen, ModTags.water_nether_end, 66, 2, 3);
-        registerMineralFeatures(builder, nether, ModBlocks.mineralRuby, ModTags.ruby_gen, null, 44, 2, 3);
+        registerMineralFeatures(builder, nether, ModBlocks.mineralRuby, ModTags.ruby_gen, null, 50, 2, 3);
         registerMineralFeatures(builder, nether, ModBlocks.mineralEmerald, ModTags.emerald_gen, ModTags.water_nether_end, 66, 1, 3);
         registerMineralFeatures(builder, nether, ModBlocks.mineralSapphire, ModTags.sapphire_gen, ModTags.water_nether_end, 66, 2, 3);
         PLACEDMINERALFEATURES = builder.build();
@@ -92,8 +92,8 @@ public class ModFeatures {
         builder.add(new HerbFeature.Entry(ModBlocks.yellowGrass.get(), ModTags.yellow_gen, ModTags.water_end, 30));
         builder.add(new HerbFeature.Entry(ModBlocks.redGrass.get(), BiomeTags.IS_NETHER, null, 30));
         builder.add(new HerbFeature.Entry(ModBlocks.orangeGrass.get(), ModTags.orange_gen, ModTags.water_end, 30));
-        builder.add(new HerbFeature.Entry(ModBlocks.blackGrass.get(), ModTags.IS_END, ModTags.water_nether_end, 75));
-        builder.add(new HerbFeature.Entry(ModBlocks.elliLeaves.get(), ModTags.IS_END, ModTags.water_nether_end, 10));
+        builder.add(new HerbFeature.Entry(ModBlocks.blackGrass.get(), ModTags.IS_END, null, 75));
+        builder.add(new HerbFeature.Entry(ModBlocks.elliLeaves.get(), ModTags.IS_END, null, 10));
         builder.add(new HerbFeature.Entry(ModBlocks.antidoteGrass.get(), ModTags.general_herb, ModTags.water_nether_end, 75));
         builder.add(new HerbFeature.Entry(ModBlocks.medicinalHerb.get(), ModTags.general_herb, ModTags.water_nether_end, 75));
         builder.add(new HerbFeature.Entry(ModBlocks.bambooSprout.get(), ModTags.bamboo_gen, ModTags.water_nether_end, 66));

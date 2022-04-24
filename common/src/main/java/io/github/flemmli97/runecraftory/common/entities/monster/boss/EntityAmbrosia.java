@@ -80,6 +80,11 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
+    protected boolean isImmobile() {
+        return super.isImmobile() && !this.getAnimationHandler().isCurrentAnim(angry.getID(), defeat.getID());
+    }
+
+    @Override
     public void setEnraged(boolean flag, boolean load) {
         super.setEnraged(flag, load);
         if (flag && !load)

@@ -9,6 +9,7 @@ import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class BlockTagGen extends BlockTagsProvider {
@@ -19,6 +20,10 @@ public class BlockTagGen extends BlockTagsProvider {
 
     @Override
     public void addTags() {
+        this.tag(ModTags.ENDSTONES)
+                .add(Blocks.END_STONE)
+                .addOptional(Tags.Blocks.END_STONES.location());
+
         this.tag(ModTags.farmlandTill)
                 .addTag(BlockTags.DIRT);
 
