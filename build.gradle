@@ -127,7 +127,7 @@ curseforge {
             txt = txt + "\n\n" + "For past versions see: ${project.full_changelog}"
             changelog = txt
             changelogType = "markdown"
-            releaseType = 'release'
+            releaseType = 'beta'
         }
         relations {
             "${project.curse_dep_fabric}".split(', ').each {
@@ -146,13 +146,13 @@ curseforge {
             txt = txt + "\n\n" + "For past versions see: ${project.full_changelog}"
             changelog = txt
             changelogType = "markdown"
-            releaseType = 'release'
+            releaseType = 'beta'
         }
-        /*relations {
+        relations {
             "${project.curse_dep_forge}".split(', ').each {
                 requiredDependency "${it}"
             }
-        }*/
+        }
     }
 }
 
