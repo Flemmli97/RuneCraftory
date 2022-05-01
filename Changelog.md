@@ -1,3 +1,8 @@
+RuneCraftory 1.0.3
+================
+- Add more configs for gate spawning
+- Make not tamed monster able to despawn
+
 RuneCraftory 1.0.2
 ================
 - Add missing crop data

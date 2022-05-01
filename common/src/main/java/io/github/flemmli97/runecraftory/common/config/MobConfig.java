@@ -19,6 +19,9 @@ public class MobConfig {
     public static int gateXP;
     public static int gateMoney;
     public static int spawnChance;
+    public static double minDist;
+    public static int maxGroup;
+    public static int maxNearby;
 
     public static Map<ResourceLocation, EntityProperties> propertiesMap = new HashMap<>();
 }

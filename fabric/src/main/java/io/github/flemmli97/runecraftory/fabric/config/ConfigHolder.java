@@ -100,9 +100,12 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         MobConfig.gateHealthGain = spec.gateHealthGain.get();
         MobConfig.gateDefGain = spec.gateDefGain.get();
         MobConfig.gateMDefGain = spec.gateMDefGain.get();
-        MobConfig.spawnChance = spec.spawnChance.get();
         MobConfig.gateXP = spec.gateXP.get();
         MobConfig.gateMoney = spec.gateMoney.get();
+        MobConfig.spawnChance = spec.spawnChance.get();
+        MobConfig.minDist = spec.minDist.get();
+        MobConfig.maxGroup = spec.maxGroup.get();
+        MobConfig.maxNearby = spec.maxNearby.get();
 
         for (Map.Entry<ResourceLocation, EntityPropertySpecs> e : spec.mobSpecs.entrySet()) {
             MobConfig.propertiesMap.put(e.getKey(), EntityPropertySpecs.ofSpec(e.getValue()));

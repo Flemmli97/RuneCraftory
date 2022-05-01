@@ -200,12 +200,12 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     private void spawnMobs() {
-        if (!(this.level instanceof ServerLevel serverLevel))
+        if (!(this.level instanceof ServerLevel serverLevel) || serverLevel.getDifficulty() == Difficulty.PEACEFUL)
             return;
         if (!this.spawnList.isEmpty()) {
-            int randAmount = this.random.nextInt(4) + 1;
+            int randAmount = this.random.nextInt(2) + 1;
             List<Entity> nearby = this.level.getEntities(this, this.getBoundingBox().inflate(18), entity -> GateEntity.this.spawnList.contains(entity.getType()));
-            if (nearby.size() <= 3) {
+            if (nearby.size() <= MobConfig.maxNearby) {
                 for (int amount = 0; amount < randAmount; ++amount) {
                     double x = this.getX() + this.random.nextInt(9) - 4.0;
                     double y = this.getY() + this.random.nextInt(2) - 1.0;
@@ -243,7 +243,7 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
-        return level.getDifficulty() != Difficulty.PEACEFUL && GateSpawning.hasSpawns(level, pos) && checkMobSpawnRules(type, level, reason, pos, random) && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(48.0)).size() < 2;
+        return level.getDifficulty() != Difficulty.PEACEFUL && GateSpawning.hasSpawns(level, pos) && checkMobSpawnRules(type, level, reason, pos, random) && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
     }
 
     @Override
