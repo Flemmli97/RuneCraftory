@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "runecraftory:item/fishing_rod",
   "textures": {
     "layer0": "runecraftory:item/fishing_rod_silver"
   }

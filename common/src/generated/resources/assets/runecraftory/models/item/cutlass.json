@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "runecraftory:item/handheld_reverse",
   "textures": {
     "layer0": "runecraftory:item/cutlass"
   }

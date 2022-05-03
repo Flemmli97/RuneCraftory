@@ -4,7 +4,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 
 public class ItemAccessoireBase extends ItemArmorBase {
 
-    private EquipmentSlot renderSlot;
+    private final EquipmentSlot renderSlot;
 
     public ItemAccessoireBase(Properties properties) {
         super(EquipmentSlot.LEGS, properties);

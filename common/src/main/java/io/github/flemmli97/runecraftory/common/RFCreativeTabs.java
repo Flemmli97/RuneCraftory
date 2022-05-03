@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 
 public class RFCreativeTabs {
 
-    public static CreativeModeTab weaponToolTab = Platform.INSTANCE.tab("weapons_tools", () -> new ItemStack(ModItems.icon0.get()));
+    public static CreativeModeTab weaponToolTab = Platform.INSTANCE.tab("weapons_tools", () -> new ItemStack(ModItems.shortDagger.get()));
 
     public static CreativeModeTab equipment = Platform.INSTANCE.tab("equipment", () -> new ItemStack(ModItems.cheapBracelet.get()));
 
@@ -23,5 +23,5 @@ public class RFCreativeTabs {
 
     public static CreativeModeTab crops = Platform.INSTANCE.tab("crops", () -> new ItemStack(ModItems.turnipSeeds.get()));
 
-    public static CreativeModeTab monsters = Platform.INSTANCE.tab("monsters", () -> new ItemStack(ModItems.icon1.get()));
+    public static CreativeModeTab monsters = Platform.INSTANCE.tab("monsters", () -> new ItemStack(ModItems.icon0.get()));
 }

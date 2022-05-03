@@ -628,7 +628,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> strongVine = mat("strong_vine", Texture.N);
     public static final RegistryEntrySupplier<Item> threadPretty = mat("pretty_thread", Texture.N);
     public static final RegistryEntrySupplier<Item> tailChimera = mat("chimera_tail", Texture.N);
-    public static final RegistryEntrySupplier<Item> arrowHead = mat("arrowhead", Texture.N);
+    public static final RegistryEntrySupplier<Item> arrowHead = mat("arrowhead", Texture.Y);
     public static final RegistryEntrySupplier<Item> bladeShard = mat("blade_shard", Texture.Y);
     public static final RegistryEntrySupplier<Item> brokenHilt = mat("broken_hilt", Texture.N);
     public static final RegistryEntrySupplier<Item> brokenBox = mat("broken_box", Texture.N);
@@ -826,7 +826,6 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> masuTrout = fish("masu_trout", Texture.N);
 
     public static final RegistryEntrySupplier<Item> icon0 = ITEMS.register("icon_0", () -> new Item(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> icon1 = ITEMS.register("icon_1", () -> new Item(new Item.Properties()));
 
     public static final RegistryEntrySupplier<Item> debug = ITEMS.register("debug_item", () -> new ItemDebug(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> level = ITEMS.register("level_item", () -> new ItemLevelUp(new Item.Properties()));

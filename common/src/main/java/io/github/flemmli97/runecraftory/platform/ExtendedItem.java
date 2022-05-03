@@ -9,7 +9,5 @@ public interface ExtendedItem {
 
     String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type);
 
-    default boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
-        return false;
-    }
+    boolean onEntitySwing(ItemStack stack, LivingEntity entity);
 }
