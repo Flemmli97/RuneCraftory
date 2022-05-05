@@ -2,11 +2,13 @@ package io.github.flemmli97.runecraftory.forge.loot;
 
 import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
@@ -19,6 +21,9 @@ import java.util.List;
 
 public class CropLootModifier extends LootModifier {
 
+    /**
+     * The seed to remove
+     */
     private final Item remove;
 
     public CropLootModifier(LootItemCondition[] conditionsIn, Item ignore) {
@@ -28,15 +33,19 @@ public class CropLootModifier extends LootModifier {
 
     @Override
     protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-        List<ItemStack> mod = new ArrayList<>();
-        generatedLoot.removeIf(stack -> stack.getItem() == this.remove);
-        generatedLoot.removeIf(stack -> this.insertMerge(mod, stack));
-        generatedLoot.addAll(mod);
+        if (!GeneralConfig.disableCropSystem) {
+            List<ItemStack> mod = new ArrayList<>();
+            generatedLoot.removeIf(stack -> stack.getItem() == this.remove);
+            generatedLoot.removeIf(stack -> this.insertMerge(mod, stack));
+            generatedLoot.addAll(mod);
+        }
         return generatedLoot;
     }
 
     private boolean insertMerge(List<ItemStack> list, ItemStack stack) {
-        CropProperties prop = DataPackHandler.getCropStat(stack.getItem());
+        if (this.remove == null || this.remove == Items.AIR)
+            return false;
+        CropProperties prop = DataPackHandler.getCropStat(this.remove);
         if (prop != null) {
             for (ItemStack s : list) {
                 if (ItemHandlerHelper.canItemStacksStack(s, stack)) {
