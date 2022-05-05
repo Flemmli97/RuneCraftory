@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.fabric.mixin;
 
-import io.github.flemmli97.runecraftory.fabric.mixinhelper.LootModifier;
+import io.github.flemmli97.runecraftory.fabric.loot.CropLootModifiers;
+import io.github.flemmli97.runecraftory.fabric.mixinhelper.LootTableID;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -13,14 +14,24 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import java.util.List;
 
 @Mixin(LootTable.class)
-public class LootTableMixin {
+public class LootTableMixin implements LootTableID {
 
     @Unique
-    private ResourceLocation tableID;
+    private ResourceLocation lootTableID;
 
     @ModifyVariable(method = "getRandomItems(Lnet/minecraft/world/level/storage/loot/LootContext;)Ljava/util/List;", at = @At("RETURN"))
     private List<ItemStack> modify(List<ItemStack> list, LootContext ctx) {
-        LootModifier.modify((LootTable) (Object) this, list, ctx, this.tableID, res -> this.tableID = res);
+        CropLootModifiers.modify((LootTable) (Object) this, list, ctx, this.getLootTableId());
         return list;
+    }
+
+    @Override
+    public ResourceLocation getLootTableId() {
+        return this.lootTableID;
+    }
+
+    @Override
+    public void setLootTableId(ResourceLocation id) {
+        this.lootTableID = id;
     }
 }

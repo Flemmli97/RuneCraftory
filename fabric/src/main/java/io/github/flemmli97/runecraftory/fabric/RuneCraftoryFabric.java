@@ -26,6 +26,7 @@ import io.github.flemmli97.runecraftory.fabric.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.fabric.config.GeneralConfigSpec;
 import io.github.flemmli97.runecraftory.fabric.config.MobConfigSpec;
 import io.github.flemmli97.runecraftory.fabric.event.CropGrowEvent;
+import io.github.flemmli97.runecraftory.fabric.loot.CropLootModifiers;
 import io.github.flemmli97.runecraftory.fabric.network.ServerPacketHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.fabric.events.AOEAttackEvent;
@@ -122,6 +123,7 @@ public class RuneCraftoryFabric implements ModInitializer {
                 return new ResourceLocation(RuneCraftory.MODID, "food_manager");
             }
         });
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(CropLootModifiers.INSTANCE);
 
         ModEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
 
