@@ -149,5 +149,6 @@ public class GeneralConfigSpec {
             builder.pop();
         });
         builder.pop();
+        builder.registerReloadHandler(() -> ConfigHolder.loadGeneral(this));
     }
 }

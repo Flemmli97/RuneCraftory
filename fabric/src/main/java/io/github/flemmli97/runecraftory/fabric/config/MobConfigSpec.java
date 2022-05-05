@@ -59,5 +59,6 @@ public class MobConfigSpec {
             this.mobSpecs.put(e.getKey(), new EntityPropertySpecs(builder, e.getValue()));
             builder.pop();
         }
+        builder.registerReloadHandler(() -> ConfigHolder.loadMobs(this));
     }
 }
