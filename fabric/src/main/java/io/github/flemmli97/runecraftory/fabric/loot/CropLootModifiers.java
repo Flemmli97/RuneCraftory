@@ -48,7 +48,7 @@ public class CropLootModifiers extends SimpleJsonResourceReloadListener implemen
             try {
                 JsonObject obj = el.getAsJsonObject();
                 String type = GsonHelper.getAsString(obj, "type", "none");
-                if (type.equals("runecraftory:crop_modifier")) {
+                if (type.equals("runecraftory:crop_modifier")) { //Only care about crop loot modifier. Not implementing the whole forge system
                     builder.put(fres, CropLootModifier.SERIALIZER.read(fres, obj));
                 }
             } catch (JsonSyntaxException | IllegalStateException ex) {
