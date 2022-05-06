@@ -3,6 +3,10 @@ RuneCraftory 1.0.3
 - Add more configs for gate spawning
 - Make not tamed monster able to despawn
 - Add lots of missing textures
+- Fabric: Fix modmenu saving not getting applied
+- Implement crop loot modifier on fabric
+- Fix vanilla crops not plantable on custom farmland
+- Item rarity
 
 RuneCraftory 1.0.2
 ================
