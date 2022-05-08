@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:forge",
+  "level": 8,
+  "cost": 25,
+  "ingredients": [
+    {
+      "tag": "c:bronze_ingots"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:bat"
+  }
+}

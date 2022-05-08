@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "runecraftory:cooking_table"
+    ]
+  },
+  "criteria": {
+    "cooking_recipe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:smoker"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "runecraftory:cooking_table"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "cooking_recipe",
+      "has_the_recipe"
+    ]
+  ]
+}

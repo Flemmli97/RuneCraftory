@@ -80,21 +80,21 @@ public class GeneralConfigSpec {
         this.disableVanillaSpawning = builder.comment("If enabled mobs can only spawn through gates.").define("Disable vanilla spawn", false);
         this.randomDamage = builder.comment("If enabled damage gets a +-10% randomness.").define("Random Damage", true);
         this.recipeSystem = builder.comment("The recipe system to use.", "0 = Only unlocked recipes are craftable and crafting skill influence the rp cost", "1 = Unlocked recipes are craftable and rp cost are the base cost.",
-                "2 = All recipes are craftable without unlocking but crafting skill influence the cost.", "3 = All craftable and only base cost taken into consideration.").defineInRange("Recipe System", 0, 0, 3);
+                "2 = All recipes are craftable without unlocking but crafting skill influence the cost.", "3 = All craftable and only base cost taken into consideration.").defineInRange("Recipe System", 3, 0, 3);
         this.useRP = builder.comment("If actions consume rune points").define("Use RunePoints", false);
         this.deathHPPercent = builder.comment("Percent of HP that will be regenerated on death").defineInRange("Death HP Percent", 1d, 0, 1);
         this.deathRPPercent = builder.comment("Percent of RP that will be regenerated on death").defineInRange("Death RP Percent", 1d, 0, 1);
         this.disableHunger = builder.comment("Disable mc hunger system. Makes it so you can always eat food").define("Disable Hunger", false);
         this.modifyWeather = builder.comment("If true weather will change only at specific time.", "Morning, mid day, evening and mid night").define("Modify Weather", false);
         this.modifyBed = builder.comment("If true players can sleep anytime and upon waking up will restore all health and rp").define("Modify Bed", false);
-        this.disableFoodSystem = builder.comment("If true food will not provide benefits such as hp restoration etc defined per datapack. ", "Note: Crops from this mod will not function anymore").define("Disable Food System", true);
-        this.disableItemStatSystem = builder.comment("If true item get no stats assigned as defined per datapack. ", "Note: Weapons will then do no damage").define("Disable Item Stat System", true);
+        this.disableFoodSystem = builder.comment("If true food will not provide benefits such as hp restoration etc defined per datapack. ", "Note: Crops from this mod will not function anymore").define("Disable Food System", false);
+        this.disableItemStatSystem = builder.comment("If true item get no stats assigned as defined per datapack. ", "Note: Weapons will then do no damage").define("Disable Item Stat System", false);
         this.disableCropSystem = builder.comment("If true crop data will be disabled.", "Note: Crops from this mod will not function anymore").define("Disable Crop System", true);
         builder.pop();
 
         builder.push("Multipliers");
-        this.xpMultiplier = builder.comment("Gain base xp * multiplier. Default 0 for now cause its not balanced").defineInRange("XP Multiplier", 1.0, 0, Double.MAX_VALUE);
-        this.skillXpMultiplier = builder.comment("Gain base skill xp * multiplier. Default 0 for now cause its not balanced").defineInRange("Skill XP Multiplier", 1.0, 0, Double.MAX_VALUE);
+        this.xpMultiplier = builder.comment("Gain base xp * multiplier. Default 0 for now cause its not balanced").defineInRange("XP Multiplier", 0, 0, Double.MAX_VALUE);
+        this.skillXpMultiplier = builder.comment("Gain base skill xp * multiplier. Default 0 for now cause its not balanced").defineInRange("Skill XP Multiplier", 0, 0, Double.MAX_VALUE);
         this.tamingMultiplier = builder.comment("Increase/Decrease global taming chance").defineInRange("Taming Chance Multiplier", 1.0, 0, Double.MAX_VALUE);
         this.dropRateMultiplier = builder.comment("Increase/Decrease global drop chance").defineInRange("Drop Chance Multiplier", 1.0, 0, Double.MAX_VALUE);
         builder.pop();
@@ -107,7 +107,7 @@ public class GeneralConfigSpec {
         builder.comment("Configs for player stats").push("Player Stats");
         this.maxLevel = builder.defineInRange("Max Level", 100, 1, Integer.MAX_VALUE);
         this.maxSkillLevel = builder.defineInRange("Max Skill Level", 100, 1, Integer.MAX_VALUE);
-        this.startingHealth = builder.defineInRange("Starting HP", 25, 0, Integer.MAX_VALUE);
+        this.startingHealth = builder.defineInRange("Starting HP", 20, 0, Integer.MAX_VALUE);
         this.startingRP = builder.defineInRange("Starting RP", 50, 0, Integer.MAX_VALUE);
         this.startingMoney = builder.defineInRange("Starting Money", 100, 0, Integer.MAX_VALUE);
         this.startingStr = builder.comment("Starting strength value. 1 strength = 1 attack damage").defineInRange("Starting Strength", 0, 0, Integer.MAX_VALUE);

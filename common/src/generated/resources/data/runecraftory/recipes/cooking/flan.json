@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 15,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "c:eggs"
+    },
+    {
+      "tag": "c:milks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:flan"
+  }
+}

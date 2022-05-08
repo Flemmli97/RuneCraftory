@@ -1,0 +1,26 @@
+{
+  "type": "runecraftory:chemistry",
+  "level": 45,
+  "cost": 30,
+  "ingredients": [
+    {
+      "item": "runecraftory:medicinal_herb"
+    },
+    {
+      "item": "runecraftory:medicinal_herb"
+    },
+    {
+      "item": "runecraftory:medicinal_herb"
+    },
+    {
+      "item": "runecraftory:medicinal_herb"
+    },
+    {
+      "item": "runecraftory:elli_leaves"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:magical_potion",
+    "count": 3
+  }
+}

@@ -7,15 +7,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "runecraftory:accessory_workbench",
-              "properties": {
-                "part": "left"
-              }
-            }
-          ],
           "name": "runecraftory:accessory_workbench"
         }
       ],

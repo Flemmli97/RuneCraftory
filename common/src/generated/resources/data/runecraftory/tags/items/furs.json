@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:fur_s",
+    "runecraftory:fur_m",
+    "runecraftory:fur_l",
+    "runecraftory:fur",
+    "runecraftory:wooly_furball",
+    "runecraftory:yellow_down",
+    "runecraftory:quality_puffy_fur",
+    "runecraftory:penguin_down",
+    "runecraftory:lightning_mane",
+    "runecraftory:red_lion_fur",
+    "runecraftory:blue_lion_fur",
+    "runecraftory:chest_hair"
+  ]
+}

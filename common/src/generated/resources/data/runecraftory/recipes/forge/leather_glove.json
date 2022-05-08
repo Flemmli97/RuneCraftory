@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 3,
+  "cost": 25,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:leather_glove"
+  }
+}

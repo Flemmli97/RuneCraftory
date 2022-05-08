@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.ExtendedItem;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.api.item.IExtendedWeapon;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,7 +31,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ItemStaffBase extends Item implements IItemUsable, IChargeable, ExtendedItem {
+public class ItemStaffBase extends Item implements IItemUsable, IChargeable, ExtendedItem, IExtendedWeapon {
 
     public final EnumElement startElement;
     public final int amount;
@@ -80,6 +81,11 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     @Override
     public int itemCoolDownTicks() {
         return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
+    }
+
+    @Override
+    public float getRange() {
+        return GeneralConfig.weaponProps.get(this.getWeaponType()).range();
     }
 
     @Override

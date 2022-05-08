@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 11,
+  "cost": 25,
+  "ingredients": [
+    {
+      "item": "runecraftory:aquamarine"
+    },
+    {
+      "item": "runecraftory:aquamarine"
+    },
+    {
+      "tag": "runecraftory:liquids"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:frost_edge"
+  }
+}

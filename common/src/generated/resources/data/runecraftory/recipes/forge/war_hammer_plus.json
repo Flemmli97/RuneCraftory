@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 17,
+  "cost": 25,
+  "ingredients": [
+    {
+      "item": "runecraftory:war_hammer"
+    },
+    {
+      "tag": "runecraftory:liquids"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:war_hammer_plus"
+  }
+}

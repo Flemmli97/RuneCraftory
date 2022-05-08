@@ -1,0 +1,23 @@
+{
+  "type": "runecraftory:chemistry",
+  "level": 45,
+  "cost": 30,
+  "ingredients": [
+    {
+      "item": "runecraftory:medicinal_herb"
+    },
+    {
+      "item": "runecraftory:medicinal_herb"
+    },
+    {
+      "item": "runecraftory:medicinal_herb"
+    },
+    {
+      "item": "runecraftory:white_grass"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:mystery_potion",
+    "count": 3
+  }
+}

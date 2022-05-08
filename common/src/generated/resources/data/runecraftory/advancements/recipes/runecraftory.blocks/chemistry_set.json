@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "runecraftory:chemistry_set"
+    ]
+  },
+  "criteria": {
+    "chemistry_recipe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:brewing_stand"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "runecraftory:chemistry_set"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "chemistry_recipe",
+      "has_the_recipe"
+    ]
+  ]
+}

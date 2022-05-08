@@ -25,7 +25,25 @@ public class ModTags {
     public static final TagKey<Item> platinum = tagCommon("platinum_ingots");
     public static final TagKey<Item> orichalcum = tagCommon("orichalcum");
     public static final TagKey<Item> dragonic = tagCommon("dragonic");
-    public static final TagKey<Item> minerals = tagCommon("mineral");
+
+    public static final TagKey<Item> eggs = tagCommon("eggs");
+    public static final TagKey<Item> milk = tagCommon("milks");
+
+    public static final TagKey<Item> minerals = tag("mineral");
+    public static final TagKey<Item> jewels = tag("jewels");
+    public static final TagKey<Item> crystals = tag("crystals");
+    public static final TagKey<Item> sticks = tag("sticks");
+    public static final TagKey<Item> liquids = tag("liquids");
+    public static final TagKey<Item> feathers = tagCommon("feathers");
+    public static final TagKey<Item> shellBone = tag("shells_bones");
+    public static final TagKey<Item> stones = tag("stones");
+    public static final TagKey<Item> strings = tagCommon("string");
+    public static final TagKey<Item> shards = tag("shards");
+    public static final TagKey<Item> furs = tag("furs");
+    public static final TagKey<Item> powders = tag("powders");
+    public static final TagKey<Item> cloths = tag("cloths");
+    public static final TagKey<Item> clawFangs = tag("claws_fangs");
+    public static final TagKey<Item> scales = tag("scales");
 
     public static final TagKey<Item> woolyTamer = tag("wooly_tame");
 

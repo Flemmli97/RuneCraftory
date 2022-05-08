@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "runecraftory:shipping_bin"
+    ]
+  },
+  "criteria": {
+    "shipping_bin": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:chest"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "runecraftory:shipping_bin"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "shipping_bin",
+      "has_the_recipe"
+    ]
+  ]
+}

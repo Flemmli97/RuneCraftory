@@ -1,0 +1,24 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:insect_jaw",
+    "runecraftory:panther_claw",
+    "runecraftory:magic_claw",
+    "runecraftory:wolf_fang",
+    "runecraftory:gold_wolf_fang",
+    "runecraftory:palm_claw",
+    "runecraftory:malm_claw",
+    "runecraftory:giants_nail",
+    "runecraftory:chimeras_claw",
+    "runecraftory:ivory_tusk",
+    "runecraftory:unbroken_tusk",
+    "runecraftory:scorpion_pincer",
+    "runecraftory:dangerous_scissors",
+    "runecraftory:cheap_propeller",
+    "runecraftory:quality_propeller",
+    "runecraftory:dragon_fang",
+    "runecraftory:queens_jaw",
+    "runecraftory:dragon_fang",
+    "runecraftory:big_giants_nail"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "type": "runecraftory:chemistry",
+  "level": 20,
+  "cost": 30,
+  "ingredients": [
+    {
+      "item": "runecraftory:medicinal_herb"
+    },
+    {
+      "item": "runecraftory:medicinal_herb"
+    },
+    {
+      "item": "runecraftory:red_grass"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:healing_potion",
+    "count": 3
+  }
+}

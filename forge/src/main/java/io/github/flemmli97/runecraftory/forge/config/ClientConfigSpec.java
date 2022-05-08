@@ -28,6 +28,6 @@ public class ClientConfigSpec {
         this.creativeInventoryOffsetX = builder.defineInRange("X offset of inventory button in creative", 20, Integer.MIN_VALUE, Integer.MAX_VALUE);
         this.creativeInventoryOffsetY = builder.defineInRange("Y offset of inventory button in creative", 22, Integer.MIN_VALUE, Integer.MAX_VALUE);
         this.renderOverlay = builder.define("Render Overlay", false);
-        this.inventoryButton = builder.define("Add Button", false);
+        this.inventoryButton = builder.define("Add Button", true);
     }
 }

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ccc",
+    "ibi",
+    "clc"
+  ],
+  "key": {
+    "c": {
+      "tag": "forge:cobblestone"
+    },
+    "i": {
+      "tag": "forge:ingots/iron"
+    },
+    "b": {
+      "item": "minecraft:blast_furnace"
+    },
+    "l": {
+      "item": "minecraft:lava_bucket"
+    }
+  },
+  "result": {
+    "item": "runecraftory:forge"
+  }
+}

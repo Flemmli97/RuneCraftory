@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:water_crystal",
+    "runecraftory:earth_crystal",
+    "runecraftory:fire_crystal",
+    "runecraftory:wind_crystal",
+    "runecraftory:light_crystal",
+    "runecraftory:dark_crystal",
+    "runecraftory:love_crystal",
+    "runecraftory:small_crystal",
+    "runecraftory:big_crystal",
+    "runecraftory:magic_crystal",
+    "runecraftory:rune_crystal",
+    "runecraftory:electro_crystal"
+  ]
+}

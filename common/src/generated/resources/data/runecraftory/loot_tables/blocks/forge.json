@@ -7,15 +7,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "runecraftory:forge",
-              "properties": {
-                "part": "left"
-              }
-            }
-          ],
           "name": "runecraftory:forge"
         }
       ],

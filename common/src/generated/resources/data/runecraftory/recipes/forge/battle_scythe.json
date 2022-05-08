@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 9,
+  "cost": 25,
+  "ingredients": [
+    {
+      "tag": "c:bronze_ingots"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:battle_scythe"
+  }
+}

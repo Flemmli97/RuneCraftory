@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 7,
+  "cost": 30,
+  "ingredients": [
+    {
+      "item": "runecraftory:zweihaender"
+    },
+    {
+      "tag": "c:bronze_ingots"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:zweihaender_plus"
+  }
+}

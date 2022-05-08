@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:feather",
+    "runecraftory:black_feather",
+    "runecraftory:thunder_feather",
+    "runecraftory:yellow_feather",
+    "runecraftory:dragon_fin"
+  ]
+}

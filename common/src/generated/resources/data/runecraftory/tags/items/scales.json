@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:wet_scale",
+    "runecraftory:grimoire_scale",
+    "runecraftory:dragon_scale",
+    "runecraftory:crimson_scale",
+    "runecraftory:blue_scale",
+    "runecraftory:glitter_scale",
+    "runecraftory:love_scale",
+    "runecraftory:black_scale",
+    "runecraftory:fire_wyrm_scale",
+    "runecraftory:earth_wyrm_scale",
+    "runecraftory:legendary_scale"
+  ]
+}

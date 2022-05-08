@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 3,
+  "cost": 12,
+  "ingredients": [
+    {
+      "item": "minecraft:apple"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:baked_apple"
+  }
+}

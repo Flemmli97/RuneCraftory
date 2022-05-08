@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " s ",
+    "aaa",
+    "lcl"
+  ],
+  "key": {
+    "s": {
+      "tag": "forge:shears"
+    },
+    "a": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "c": {
+      "item": "minecraft:crafting_table"
+    },
+    "l": {
+      "tag": "minecraft:logs"
+    }
+  },
+  "result": {
+    "item": "runecraftory:accessory_workbench"
+  }
+}

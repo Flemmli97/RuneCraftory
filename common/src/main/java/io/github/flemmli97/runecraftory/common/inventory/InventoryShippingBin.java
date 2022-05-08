@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.inventory;
 
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.runecraftory.platform.SaveItemContainer;
@@ -12,6 +13,11 @@ public class InventoryShippingBin extends SaveItemContainer {
 
     public InventoryShippingBin() {
         super(54);
+    }
+
+    @Override
+    public boolean canPlaceItem(int index, ItemStack stack) {
+        return DataPackHandler.getStats(stack.getItem()).isPresent();
     }
 
     public void shipItems(Player player) {

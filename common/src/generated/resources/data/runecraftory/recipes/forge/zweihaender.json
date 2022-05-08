@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 5,
+  "cost": 30,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:zweihaender"
+  }
+}

@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.forge.data;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
-import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.loot.GiantLootCondition;
 import io.github.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
@@ -173,10 +172,10 @@ public class Loottables extends LootTableProvider {
             this.add(ModBlocks.medicinalHerb.get(), LootTable.lootTable().withPool(herbLoot(ModItems.medicinalHerb.get())));
             this.add(ModBlocks.bambooSprout.get(), LootTable.lootTable().withPool(herbLoot(ModItems.bambooSprout.get())));
 
-            this.add(ModBlocks.forge.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.cooking.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.chemistry.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.accessory.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.dropSelf(ModBlocks.forge.get());
+            this.dropSelf(ModBlocks.cooking.get());
+            this.dropSelf(ModBlocks.chemistry.get());
+            this.dropSelf(ModBlocks.accessory.get());
 
             this.dropSelf(ModBlocks.board.get());
             this.dropSelf(ModBlocks.shipping.get());

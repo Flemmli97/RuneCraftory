@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:amethyst",
+    "runecraftory:aquamarine",
+    "runecraftory:ruby",
+    "runecraftory:sapphire",
+    "runecraftory:red_core",
+    "runecraftory:blue_core",
+    "runecraftory:yellow_core",
+    "runecraftory:green_core",
+    "runecraftory:crystal_skull",
+    {
+      "id": "#forge:gems",
+      "required": false
+    },
+    "minecraft:emerald",
+    "minecraft:diamond"
+  ]
+}

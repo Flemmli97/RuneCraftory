@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 20,
+  "cost": 25,
+  "ingredients": [
+    {
+      "item": "runecraftory:crop_cabbage"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:fried_veggies"
+  }
+}

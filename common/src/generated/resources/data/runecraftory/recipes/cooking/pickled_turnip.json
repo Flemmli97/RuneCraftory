@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 5,
+  "cost": 12,
+  "ingredients": [
+    {
+      "item": "runecraftory:crop_turnip"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:pickled_turnip"
+  }
+}

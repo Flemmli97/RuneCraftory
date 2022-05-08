@@ -1,0 +1,14 @@
+{
+  "type": "runecraftory:chemistry",
+  "level": 1,
+  "cost": 30,
+  "ingredients": [
+    {
+      "item": "runecraftory:medicinal_herb"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:recovery_potion",
+    "count": 3
+  }
+}

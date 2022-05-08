@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:string",
+    "runecraftory:yarn",
+    "runecraftory:old_bandage",
+    "runecraftory:ambrosias_thorns",
+    "runecraftory:spider_thread",
+    "runecraftory:puppetry_strings",
+    "runecraftory:vine",
+    "runecraftory:scorpion_tail",
+    "runecraftory:strong_vine",
+    "runecraftory:pretty_thread",
+    "runecraftory:chimera_tail"
+  ]
+}

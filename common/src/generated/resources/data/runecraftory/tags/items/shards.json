@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:flint",
+    "runecraftory:arrowhead",
+    "runecraftory:blade_shard",
+    "runecraftory:broken_hilt",
+    "runecraftory:broken_box",
+    "runecraftory:glistening_blade",
+    "runecraftory:great_hammer_shard",
+    "runecraftory:hammer_piece",
+    "runecraftory:shoulder_piece",
+    "runecraftory:pirates_armor",
+    "runecraftory:rusty_screw",
+    "runecraftory:shiny_screw",
+    "runecraftory:left_rock_shard",
+    "runecraftory:right_rock_shard",
+    "runecraftory:mtgu_plate",
+    "runecraftory:broken_ice_wall"
+  ]
+}

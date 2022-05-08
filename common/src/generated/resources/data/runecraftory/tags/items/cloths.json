@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:leather",
+    "runecraftory:cheap_cloth",
+    "runecraftory:quality_cloth",
+    "runecraftory:quality_worn_cloth",
+    "runecraftory:silk_cloth",
+    "runecraftory:ghost_hood",
+    "runecraftory:giants_glove",
+    "runecraftory:blue_giants_glove",
+    "runecraftory:insect_carapace",
+    "runecraftory:pretty_carapace",
+    "runecraftory:ancient_orc_cloth"
+  ]
+}

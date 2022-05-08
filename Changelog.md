@@ -7,13 +7,15 @@ RuneCraftory 1.0.3
 - Implement crop loot modifier on fabric
 - Fix vanilla crops not plantable on custom farmland
 - Item rarity
+- Add recipes for some items
+- Some more features are now enabled by default
 
 RuneCraftory 1.0.2
 ================
 - Add missing crop data
 - Split disableDatack into disable(Food/ItemStat/Crop)
 - Fix no generation in the end
-- 
+
 RuneCraftory 1.0.1
 ================
 - Add a patchouli guidebook (WIP)

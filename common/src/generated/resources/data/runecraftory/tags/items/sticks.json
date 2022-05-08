@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "#forge:rods/wooden",
+      "required": false
+    },
+    "minecraft:stick",
+    "runecraftory:thick_stick",
+    "runecraftory:insect_horn",
+    "runecraftory:rigid_horn",
+    "runecraftory:devil_horn",
+    "runecraftory:plant_stem",
+    "runecraftory:bulls_horn",
+    "runecraftory:moving_branch"
+  ]
+}

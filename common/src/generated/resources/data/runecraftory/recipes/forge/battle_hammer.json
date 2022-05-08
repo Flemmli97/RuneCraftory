@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:forge",
+  "level": 3,
+  "cost": 25,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:battle_hammer"
+  }
+}

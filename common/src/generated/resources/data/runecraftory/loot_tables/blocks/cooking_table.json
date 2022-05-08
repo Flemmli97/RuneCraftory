@@ -7,15 +7,6 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:block_state_property",
-              "block": "runecraftory:cooking_table",
-              "properties": {
-                "part": "left"
-              }
-            }
-          ],
           "name": "runecraftory:cooking_table"
         }
       ],

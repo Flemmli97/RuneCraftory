@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:spore",
+    "runecraftory:poison_powder",
+    "runecraftory:holy_spore",
+    "runecraftory:fairy_dust",
+    "runecraftory:fairy_elixier",
+    "runecraftory:root",
+    "runecraftory:magic_powder",
+    "runecraftory:mysterious_powder",
+    "runecraftory:magic",
+    "runecraftory:earth_dragon_ash",
+    "runecraftory:fire_dragon_ash",
+    "runecraftory:water_dragon_ash",
+    "runecraftory:turnips_miracle",
+    "runecraftory:melody_bottle"
+  ]
+}

@@ -32,7 +32,6 @@ public class DataPackHandler {
         cons.accept(foods);
     }
 
-    @Nullable
     public static Optional<ItemStat> getStats(Item item) {
         return Optional.ofNullable(itemStats.get(item));
     }
