@@ -2,10 +2,67 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
+		"0": "runecraftory:block/forge_left",
 		"1": "runecraftory:block/forge_right",
-		"particle": "runecraftory:block/forge_right"
+		"particle": "runecraftory:block/forge_left"
 	},
 	"elements": [
+		{
+			"name": "wall",
+			"from": [-16, 5, 11],
+			"to": [0, 6, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 3.75, 4, 4], "texture": "#0"},
+				"east": {"uv": [4, 3.75, 4.5, 4], "texture": "#0"},
+				"south": {"uv": [0, 3.75, 4, 4], "texture": "#0"},
+				"west": {"uv": [4, 3.75, 4.5, 4], "texture": "#0"},
+				"up": {"uv": [0, 4, 4, 4.5], "texture": "#0"},
+				"down": {"uv": [0, 4, 4, 4.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "wall2",
+			"from": [-16, 5, 4],
+			"to": [0, 6, 6],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 3.75, 4, 4], "texture": "#0"},
+				"east": {"uv": [4, 3.75, 4.5, 4], "texture": "#0"},
+				"south": {"uv": [0, 3.75, 4, 4], "texture": "#0"},
+				"west": {"uv": [4, 3.75, 4.5, 4], "texture": "#0"},
+				"up": {"uv": [0, 4, 4, 4.5], "texture": "#0"},
+				"down": {"uv": [0, 4, 4, 4.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "wall3",
+			"from": [-16, 5, 6],
+			"to": [-14, 6, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 4.75, 0.5, 5], "texture": "#0"},
+				"east": {"uv": [0, 5, 1.25, 5.25], "texture": "#0"},
+				"south": {"uv": [0, 4.75, 0.5, 5], "texture": "#0"},
+				"west": {"uv": [0, 5, 1.25, 5.25], "texture": "#0"},
+				"up": {"uv": [1.25, 4.75, 1.75, 6], "texture": "#0"},
+				"down": {"uv": [1.25, 4.75, 1.75, 6], "texture": "#0"}
+			}
+		},
+		{
+			"name": "cast",
+			"from": [-16, 0, 4],
+			"to": [0, 5, 13],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 4, 8.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 1.25], "texture": "#0"},
+				"east": {"uv": [4, 0, 6.25, 1.25], "texture": "#0"},
+				"south": {"uv": [0, 0, 4, 1.25], "texture": "#0"},
+				"west": {"uv": [4, 0, 6.25, 1.25], "texture": "#0"},
+				"up": {"uv": [0, 1.25, 4, 3.5], "texture": "#0"},
+				"down": {"uv": [4, 1.25, 8, 3.5], "texture": "#0"}
+			}
+		},
 		{
 			"name": "furnace",
 			"from": [0, 0, 0],
@@ -199,7 +256,13 @@
 			"name": "group",
 			"origin": [8, 8, 8],
 			"color": 0,
-			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+			"children": [0, 1, 2, 3]
+		},
+		{
+			"name": "group",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 		}
 	]
 }
