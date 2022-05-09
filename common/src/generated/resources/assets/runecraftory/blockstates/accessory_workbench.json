@@ -1,34 +1,34 @@
 {
   "variants": {
     "facing=north,part=left": {
-      "model": "runecraftory:block/accessory_workbench_left",
-      "y": 180
+      "model": "runecraftory:block/accessory_workbench_left"
     },
     "facing=south,part=left": {
-      "model": "runecraftory:block/accessory_workbench_left"
+      "model": "runecraftory:block/accessory_workbench_left",
+      "y": 180
     },
     "facing=west,part=left": {
       "model": "runecraftory:block/accessory_workbench_left",
-      "y": 90
+      "y": 270
     },
     "facing=east,part=left": {
       "model": "runecraftory:block/accessory_workbench_left",
-      "y": 270
+      "y": 90
     },
     "facing=north,part=right": {
+      "model": "runecraftory:block/accessory_workbench_right"
+    },
+    "facing=south,part=right": {
       "model": "runecraftory:block/accessory_workbench_right",
       "y": 180
     },
-    "facing=south,part=right": {
-      "model": "runecraftory:block/accessory_workbench_right"
-    },
     "facing=west,part=right": {
       "model": "runecraftory:block/accessory_workbench_right",
-      "y": 90
+      "y": 270
     },
     "facing=east,part=right": {
       "model": "runecraftory:block/accessory_workbench_right",
-      "y": 270
+      "y": 90
     }
   }
 }

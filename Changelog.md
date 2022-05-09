@@ -1,3 +1,8 @@
+RuneCraftory 1.0.4
+================
+- Fix crafting block models gone missing
+- Decrease saturation of food
+
 RuneCraftory 1.0.3
 ================
 - Add more configs for gate spawning

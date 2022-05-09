@@ -40,7 +40,8 @@ public class ItemModels extends ItemModelProvider {
     @Override
     protected void registerModels() {
         for (RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
-            if (sup == ModItems.medicinalHerb)
+            if (sup == ModItems.medicinalHerb || sup == ModItems.itemBlockForge || sup == ModItems.itemBlockAccess
+                    || sup == ModItems.itemBlockChem || sup == ModItems.itemBlockCooking)
                 continue;
             if (sup == ModItems.farmland)
                 this.withExistingParent(sup.getID().getPath(), "block/farmland");

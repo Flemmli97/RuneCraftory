@@ -28,8 +28,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.BooleanOp;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nullable;
+import java.util.stream.Stream;
 
 public abstract class BlockCrafting extends Block implements EntityBlock {
 
@@ -46,7 +50,7 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
     @Override
     public BlockState updateShape(BlockState state, Direction fromDir, BlockState fromState, LevelAccessor level, BlockPos pos, BlockPos fromPos) {
         Direction dir = state.getValue(FACING);
-        if (state.getValue(PART) == EnumPart.LEFT) {
+        if (state.getValue(PART) == EnumPart.RIGHT) {
             return fromDir == dir.getClockWise() && !this.isEqual(state, fromState) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, fromDir, fromState, level, pos, fromPos);
         } else
             return fromDir == dir.getCounterClockWise() && !this.isEqual(state, fromState) ? Blocks.AIR.defaultBlockState() : super.updateShape(state, fromDir, fromState, level, pos, fromPos);
@@ -65,16 +69,27 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
         if (blockpos.getY() < 255 && ctx.getLevel().getBlockState(blockpos).canBeReplaced(ctx)) {
             BlockPos other = blockpos.relative(ctx.getHorizontalDirection().getOpposite().getCounterClockWise());
             if (ctx.getLevel().getBlockState(other).canBeReplaced(ctx))
-                return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite()).setValue(PART, EnumPart.RIGHT);
+                return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite()).setValue(PART, EnumPart.LEFT);
         }
         return null;
+    }
+
+    @Override
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        BlockPos blockPos = this.getOtherPos(pos, state);
+        BlockState other;
+        if (!level.isClientSide && player.isCreative() && state.getValue(PART) == EnumPart.RIGHT && (other = level.getBlockState(blockPos)).is(this) && other.getValue(PART) == EnumPart.LEFT) {
+            level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+            level.levelEvent(player, 2001, blockPos, Block.getId(other));
+        }
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, LivingEntity living, ItemStack stack) {
         super.setPlacedBy(level, pos, state, living, stack);
         if (!level.isClientSide)
-            level.setBlock(pos.relative(living.getDirection().getOpposite().getCounterClockWise()), state.setValue(PART, EnumPart.LEFT), 3);
+            level.setBlock(pos.relative(living.getDirection().getOpposite().getCounterClockWise()), state.setValue(PART, EnumPart.RIGHT), Block.UPDATE_ALL);
     }
 
     @Override
@@ -96,11 +111,11 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader reader, BlockPos pos) {
-        if (state.getValue(PART) == EnumPart.RIGHT) {
+        if (state.getValue(PART) == EnumPart.LEFT) {
             return true;
         }
-        BlockState blockstate = reader.getBlockState(pos.relative(state.getValue(FACING).getClockWise()));
-        return blockstate.is(this) && blockstate.getValue(FACING) == state.getValue(FACING) && blockstate.getValue(PART) == EnumPart.LEFT;
+        BlockState blockstate = reader.getBlockState(this.getOtherPos(pos, state));
+        return blockstate.is(this) && blockstate.getValue(FACING) == state.getValue(FACING) && blockstate.getValue(PART) == EnumPart.RIGHT;
     }
 
     @Override
@@ -123,7 +138,7 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
 
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        if (state.getValue(PART) == EnumPart.RIGHT)
+        if (state.getValue(PART) == EnumPart.LEFT)
             return this.createNewBlockEntity(pos, state);
         return null;
     }
@@ -131,7 +146,7 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
     protected abstract BlockEntity createNewBlockEntity(BlockPos pos, BlockState state);
 
     public BlockPos getOtherPos(BlockPos from, BlockState state) {
-        if (state.getValue(PART) == EnumPart.LEFT)
+        if (state.getValue(PART) == EnumPart.RIGHT)
             return from.relative(state.getValue(FACING).getClockWise());
         return from.relative(state.getValue(FACING).getCounterClockWise());
     }
@@ -155,5 +170,39 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
         public String getSerializedName() {
             return this.s;
         }
+    }
+
+    public record ShapeBuilder(double x1, double y1, double z1, double x2, double y2, double z2) {
+        public static ShapeBuilder of(double x1, double y1, double z1, double x2, double y2, double z2) {
+            return new ShapeBuilder(x1, y1, z1, x2, y2, z2);
+        }
+    }
+
+    public static VoxelShape[] joinedOrDirs(ShapeBuilder... shapes) {
+        return new VoxelShape[]{
+                joinedOr(Direction.SOUTH, shapes),
+                joinedOr(Direction.WEST, shapes),
+                joinedOr(Direction.NORTH, shapes),
+                joinedOr(Direction.EAST, shapes)
+        };
+    }
+
+    public static VoxelShape joinedOr(Direction direction, ShapeBuilder... shapes) {
+        return Stream.of(shapes)
+                .map(s -> {
+                    switch (direction) {
+                        case EAST -> {
+                            return Block.box(16 - s.z2, s.y1, s.x1, 16 - s.z1, s.y2, s.x2);
+                        }
+                        case SOUTH -> {
+                            return Block.box(16 - s.x2, s.y1, 16 - s.z2, 16 - s.x1, s.y2, 16 - s.z1);
+                        }
+                        case WEST -> {
+                            return Block.box(s.z1, s.y1, 16 - s.x2, s.z2, s.y2, 16 - s.x1);
+                        }
+                    }
+                    return Block.box(s.x1, s.y1, s.z1, s.x2, s.y2, s.z2);
+                })
+                .reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
     }
 }
