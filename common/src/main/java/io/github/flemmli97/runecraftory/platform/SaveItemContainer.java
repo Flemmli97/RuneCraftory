@@ -59,7 +59,7 @@ public class SaveItemContainer implements Container, StackedContentsCompatible {
     @Override
     public void setItem(int index, ItemStack stack) {
         this.validateSlotIndex(index);
-        if (!this.canPlaceItem(index, stack))
+        if (!stack.isEmpty() && !this.canPlaceItem(index, stack))
             return;
         int max = this.getMaxStackSize(index);
         if (stack.getCount() < max) {

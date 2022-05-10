@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.InfoScreen;
 import io.github.flemmli97.runecraftory.client.gui.InfoSubScreen;
+import io.github.flemmli97.runecraftory.client.gui.MaxChestScreen;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.UpgradeGui;
@@ -49,6 +50,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStone;
+import io.github.flemmli97.runecraftory.common.inventory.container.ShippingContainer;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -131,6 +133,7 @@ public class ClientRegister {
         factory.register(ModContainer.upgradeContainer.get(), UpgradeGui::new);
         factory.register(ModContainer.infoContainer.get(), InfoScreen::new);
         factory.register(ModContainer.infoSubContainer.get(), InfoSubScreen::new);
+        factory.register(ModContainer.shippingContainer.get(), MaxChestScreen<ShippingContainer>::new);
     }
 
     public static <T extends Entity> void registerRenderers(EntityRendererRegister consumer) {

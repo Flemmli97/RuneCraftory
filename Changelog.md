@@ -1,3 +1,7 @@
+RuneCraftory 1.0.5
+================
+- Fix shipping bin being broken
+
 RuneCraftory 1.0.4
 ================
 - Fix crafting block models gone missing

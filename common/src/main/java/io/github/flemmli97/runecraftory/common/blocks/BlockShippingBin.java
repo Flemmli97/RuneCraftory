@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.blocks;
 
 import io.github.flemmli97.runecraftory.common.attachment.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
+import io.github.flemmli97.runecraftory.common.inventory.container.ShippingContainer;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -11,7 +12,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -60,7 +60,7 @@ public class BlockShippingBin extends Block {
             return InteractionResult.SUCCESS;
         InventoryShippingBin shippingInv = Platform.INSTANCE.getPlayerData(player).map(PlayerData::getShippingInv).orElse(null);
         if (shippingInv != null) {
-            player.openMenu(new SimpleMenuProvider((id, inventory, playerIn) -> ChestMenu.sixRows(id, inventory, shippingInv), name));
+            player.openMenu(new SimpleMenuProvider((id, inventory, playerIn) -> new ShippingContainer(id, inventory, shippingInv), name));
             return InteractionResult.SUCCESS;
         }
         return super.use(state, level, pos, player, hand, result);
