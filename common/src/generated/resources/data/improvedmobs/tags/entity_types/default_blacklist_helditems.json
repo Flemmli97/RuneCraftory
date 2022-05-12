@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:wooly",
+    "runecraftory:orc",
+    "runecraftory:orc_archer",
+    "runecraftory:ant",
+    "runecraftory:beetle",
+    "runecraftory:big_muck",
+    "runecraftory:buffamoo",
+    "runecraftory:chipsqueek",
+    "runecraftory:cluckadoodle",
+    "runecraftory:pomme_pomme",
+    "runecraftory:tortas",
+    "runecraftory:sky_fish",
+    "runecraftory:weagle",
+    "runecraftory:goblin",
+    "runecraftory:goblin_archer",
+    "runecraftory:ambrosia",
+    "runecraftory:thunderbolt"
+  ]
+}
