@@ -1,6 +1,7 @@
 RuneCraftory 1.0.5
 ================
 - Fix shipping bin being broken
+- Forge: Fixing problems with capability loading on player clone
 
 RuneCraftory 1.0.4
 ================

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.forge.event;
 
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.forge.events.AOEAttackEvent;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -58,8 +59,12 @@ public class EntityEvents {
 
     @SubscribeEvent
     public void clone(PlayerEvent.Clone event) {
-        event.getOriginal().reviveCaps();
+        boolean rev = Platform.INSTANCE.getPlayerData(event.getOriginal()).isPresent();
+        if (!rev)
+            event.getOriginal().reviveCaps();
         EntityCalls.clone(event.getOriginal(), event.getPlayer(), event.isWasDeath());
+        if (!rev)
+            event.getOriginal().invalidateCaps();
     }
 
     @SubscribeEvent
