@@ -1,7 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "runecraftory:block/cross_tinted",
   "textures": {
-    "cross": "runecraftory:item/crop_moondrop_flower",
-    "particle": "runecraftory:item/crop_moondrop_flower"
+    "cross": "runecraftory:item/crop_moondrop_flower"
   }
 }

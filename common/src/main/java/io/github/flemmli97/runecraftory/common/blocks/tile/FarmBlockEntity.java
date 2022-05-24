@@ -61,6 +61,15 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
         this.setChanged();
     }
 
+    public boolean canUseBonemeal() {
+        return this.growthMultiplier < 2.45;
+    }
+
+    public void applyBonemeal() {
+        if (this.growthMultiplier < 2.45)
+            this.applyGrowthFertilizer(0.05f);
+    }
+
     public void applyHealth(int amount) {
         this.health = Math.min(255, this.health + amount);
         this.setChanged();
@@ -76,6 +85,12 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
         boolean isWet = level.getBlockState(this.worldPosition).getValue(FarmBlock.MOISTURE) > 0;
         BlockPos cropPos = this.worldPosition.above();
         BlockState cropState = level.getBlockState(cropPos);
+        boolean vanilla = cropState.getBlock() instanceof CropBlock;
+        if (!vanilla || ((CropBlock) cropState.getBlock()).isMaxAge(cropState)) {
+            this.age = 0;
+            if (vanilla)
+                return;
+        }
         boolean didCropGrow = false;
         if (isWet) {
             level.setBlockAndUpdate(this.worldPosition, this.getBlockState().setValue(FarmBlock.MOISTURE, 0));
@@ -89,26 +104,33 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
                 didCropGrow = true;
                 Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
             } else if (cropState.getBlock() instanceof CropBlock crop) {
-                CropProperties props = DataPackHandler.getCropStat(crop.asItem());
-                if (props != null) {
-                    float season = props.seasonMultiplier(WorldHandler.get(level.getServer()).currentSeason());
-                    float runeyBonus = WorldHandler.get(level.getServer()).currentWeather() == EnumWeather.RUNEY ? 7 : 1;
-                    float speed = this.growthMultiplier * season * runeyBonus;
-                    this.age += Math.min(props.growth(), speed);
-                    //The blockstates maxAge
-                    int maxAge = crop.getMaxAge();
-
-                    int stage = Math.round(this.age * maxAge) / props.growth();
-                    //Update the blockstate according to the growth age from this tile
-                    level.setBlock(cropPos, crop.getStateForAge(Math.min(stage, maxAge)), 3);
+                if (crop.isMaxAge(cropState)) {
+                    this.age = 0;
                 } else {
-                    //if not increase block state age by one per day with reduced bonus from growth multiplier
-                    int age = cropState.getValue(CropBlock.AGE);
-                    level.setBlock(cropPos, crop.getStateForAge(Math.min((int) (age + Math.max(1, this.growthMultiplier / 2.4)), crop.getMaxAge())), 2);
+                    CropProperties props = DataPackHandler.getCropStat(crop.asItem());
+                    if (props != null) {
+                        float season = props.seasonMultiplier(WorldHandler.get(level.getServer()).currentSeason());
+                        float runeyBonus = WorldHandler.get(level.getServer()).currentWeather() == EnumWeather.RUNEY ? 7 : 1;
+                        float speed = this.growthMultiplier * season * runeyBonus;
+                        this.age += Math.min(props.growth(), speed);
+                        //The blockstates maxAge
+                        int maxAge = crop.getMaxAge();
+
+                        int stage = Math.round(this.age * maxAge) / props.growth();
+                        //Update the blockstate according to the growth age from this tile
+                        level.setBlock(cropPos, crop.getStateForAge(Math.min(stage, maxAge)), 3);
+                    } else {
+                        //if not increase block state age by one per day with reduced bonus from growth multiplier
+                        int age = cropState.getValue(CropBlock.AGE);
+                        level.setBlock(cropPos, crop.getStateForAge(Math.min((int) (age + Math.max(1, this.growthMultiplier / 2.4)), crop.getMaxAge())), 2);
+                    }
+                    didCropGrow = true;
+                    Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
                 }
-                didCropGrow = true;
-                Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
             }
+        } else if (cropState.getBlock() instanceof BlockCrop) {
+            CropBlockEntity tile = (CropBlockEntity) level.getBlockEntity(cropPos);
+            tile.tryWitherCrop(level.random);
         }
 
         if (didCropGrow) {
@@ -122,6 +144,7 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
                 this.growthMultiplier = Math.min(this.growthMultiplier + 0.2F, 1F);
             }
         }
+        this.setChanged();
     }
 
     @Override

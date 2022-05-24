@@ -29,12 +29,16 @@ public class ItemFertilizer extends Item {
         BlockEntity blockEntity = world.getBlockEntity(blockpos);
         if (blockEntity instanceof FarmBlockEntity && this.use.useItemOnFarmland(ctx.getItemInHand(), world, (FarmBlockEntity) blockEntity, ctx.getPlayer())) {
             world.levelEvent(2005, blockpos, 0);
+            if (ctx.getPlayer() != null && ctx.getPlayer().isCreative())
+                ctx.getItemInHand().shrink(1);
             return InteractionResult.SUCCESS;
         } else if (world.getBlockState(blockpos).getBlock() instanceof BushBlock) {
             blockpos = blockpos.below();
             blockEntity = world.getBlockEntity(blockpos);
             if (blockEntity instanceof FarmBlockEntity && this.use.useItemOnFarmland(ctx.getItemInHand(), world, (FarmBlockEntity) blockEntity, ctx.getPlayer())) {
                 world.levelEvent(2005, blockpos, 0);
+                if (ctx.getPlayer() != null && ctx.getPlayer().isCreative())
+                    ctx.getItemInHand().shrink(1);
                 return InteractionResult.SUCCESS;
             }
         }

@@ -18,6 +18,9 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class BlockStatesGen extends BlockStateProvider {
 
+    private static final ResourceLocation cropTinted = new ResourceLocation(RuneCraftory.MODID, "block/crop_tinted");
+    private static final ResourceLocation crossTinted = new ResourceLocation(RuneCraftory.MODID, "block/cross_tinted");
+
     public BlockStatesGen(DataGenerator gen, ExistingFileHelper helper) {
         super(gen, RuneCraftory.MODID, helper);
     }
@@ -36,24 +39,22 @@ public class BlockStatesGen extends BlockStateProvider {
         });
         ModBlocks.flowers.forEach(reg -> {
             Block block = reg.get();
-            this.getVariantBuilder(block).forAllStates(state -> {
+            this.getVariantBuilder(block).forAllStatesExcept(state -> {
                 int stage = state.getValue(BlockCrop.AGE);
                 String name = stage == 0 ? "runecraftory:flower_stage_0" : block.getRegistryName().toString() + "_" + stage;
                 ResourceLocation texture = stage == 0 ? this.blockTexture(RuneCraftory.MODID, "flower_stage_0")
                         : stage == 3 ? this.itemCropTexture(block) : this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
-                return ConfiguredModel.builder().modelFile(this.models().cross(name, texture)
-                        .texture("particle", texture)).build();
-            });
+                return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, crossTinted, "cross", texture)).build();
+            }, BlockCrop.WILTED);
         });
         ModBlocks.crops.forEach(reg -> {
             Block block = reg.get();
-            this.getVariantBuilder(block).forAllStates(state -> {
+            this.getVariantBuilder(block).forAllStatesExcept(state -> {
                 int stage = state.getValue(BlockCrop.AGE);
                 String name = block.getRegistryName().toString() + "_" + stage;
                 ResourceLocation texture = this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
-                return ConfiguredModel.builder().modelFile(this.models().crop(name, texture)
-                        .texture("particle", texture)).build();
-            });
+                return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, cropTinted, "crop", texture)).build();
+            }, BlockCrop.WILTED);
         });
         ModBlocks.mineralMap.values().forEach(reg -> {
             Block block = reg.get();

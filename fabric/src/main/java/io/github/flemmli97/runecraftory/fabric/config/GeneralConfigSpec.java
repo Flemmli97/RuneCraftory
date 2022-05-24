@@ -33,6 +33,7 @@ public class GeneralConfigSpec {
     public final CommentedJsonConfig.CommentedVal<Boolean> disableFoodSystem;
     public final CommentedJsonConfig.CommentedVal<Boolean> disableItemStatSystem;
     public final CommentedJsonConfig.CommentedVal<Boolean> disableCropSystem;
+    public final CommentedJsonConfig.DoubleVal witherChance;
 
     public final boolean waila = true;
     public final boolean jei = true;
@@ -71,7 +72,6 @@ public class GeneralConfigSpec {
     public final CommentedJsonConfig.DoubleVal xpMultiplier;
     public final CommentedJsonConfig.DoubleVal skillXpMultiplier;
     public final CommentedJsonConfig.DoubleVal tamingMultiplier;
-    public final CommentedJsonConfig.DoubleVal dropRateMultiplier;
 
     public final CommentedJsonConfig.CommentedVal<Boolean> debugMode;
     public final CommentedJsonConfig.CommentedVal<Boolean> debugAttack;
@@ -94,13 +94,13 @@ public class GeneralConfigSpec {
         this.disableFoodSystem = builder.comment("If true food will not provide benefits such as hp restoration etc defined per datapack. ", "Note: Crops from this mod will not function anymore").define("Disable Food System", false);
         this.disableItemStatSystem = builder.comment("If true item get no stats assigned as defined per datapack. ", "Note: Weapons will then do no damage").define("Disable Item Stat System", false);
         this.disableCropSystem = builder.comment("If true crop data will be disabled.", "Note: Crops from this mod will not function anymore").define("Disable Crop System", true);
+        this.witherChance = builder.comment("Change for a crop to wither if its not been watered", "If crop is already withered it and it doesnt get watered it will turn into withered grass").defineInRange("Wither Chance", 0.5, 0, 1);
         builder.pop();
 
         builder.push("Multipliers");
         this.xpMultiplier = builder.comment("Gain base xp * multiplier. Default 0 for now cause its not balanced").defineInRange("XP Multiplier", 0, 0, Double.MAX_VALUE);
         this.skillXpMultiplier = builder.comment("Gain base skill xp * multiplier. Default 0 for now cause its not balanced").defineInRange("Skill XP Multiplier", 0, 0, Double.MAX_VALUE);
         this.tamingMultiplier = builder.comment("Increase/Decrease global taming chance").defineInRange("Taming Chance Multiplier", 1.0, 0, Double.MAX_VALUE);
-        this.dropRateMultiplier = builder.comment("Increase/Decrease global drop chance").defineInRange("Drop Chance Multiplier", 1.0, 0, Double.MAX_VALUE);
         builder.pop();
 
         builder.comment("Debug configs").push("Debug");

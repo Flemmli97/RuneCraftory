@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
@@ -41,6 +42,7 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
         ClientRegister.registerKeyBinding(KeyBindingHelper::registerKeyBinding);
         ClientRegister.setupRenderLayers(BlockRenderLayerMap.INSTANCE::putBlock);
         ClientRegister.registerItemProps(FabricModelPredicateProviderRegistry::register);
+        ClientRegister.registerBlockColors(ColorProviderRegistry.BLOCK::register);
         ClientRegister.registerScreen(new ClientRegister.MenuScreenRegister() {
             @Override
             public <M extends AbstractContainerMenu, U extends Screen & MenuAccess<M>> void register(MenuType<? extends M> type, ClientRegister.ScreenConstructor<M, U> provider) {

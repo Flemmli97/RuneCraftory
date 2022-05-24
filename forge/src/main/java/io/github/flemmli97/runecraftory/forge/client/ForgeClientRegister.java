@@ -15,6 +15,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.client.ClientRegistry;
+import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -38,6 +39,11 @@ public class ForgeClientRegister {
                 }
             });
         });
+    }
+
+    @SubscribeEvent
+    public static void blockColors(ColorHandlerEvent.Block event) {
+        ClientRegister.registerBlockColors(event.getBlockColors()::register);
     }
 
     @SubscribeEvent

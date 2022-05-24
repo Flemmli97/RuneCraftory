@@ -2,6 +2,8 @@ RuneCraftory 1.0.5
 ================
 - Fix shipping bin being broken
 - Forge: Fixing problems with capability loading on player clone
+- Crops from this mod can now wilt if not watered.  
+  After wilting there is a chance the crop will, unless watered, turn into withered grass
 
 RuneCraftory 1.0.4
 ================

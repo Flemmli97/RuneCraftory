@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.blocks;
 
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.blocks.tile.CropBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.tile.FarmBlockEntity;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -43,6 +45,7 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
     private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
 
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
+    public static final BooleanProperty WILTED = BooleanProperty.create("wilted");
 
     private final Supplier<Item> crop;
     private final Supplier<Item> giant;
@@ -50,7 +53,7 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
 
     public BlockCrop(BlockBehaviour.Properties prop, Supplier<Item> crop, Supplier<Item> giant, Supplier<Item> seed) {
         super(prop);
-        this.registerDefaultState(this.defaultBlockState().setValue(AGE, 0));
+        this.registerDefaultState(this.defaultBlockState().setValue(AGE, 0).setValue(WILTED, false));
         this.crop = crop;
         this.giant = giant;
         this.seed = seed;
@@ -58,7 +61,7 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(AGE);
+        builder.add(AGE).add(WILTED);
     }
 
     @Override
@@ -103,7 +106,8 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         List<ItemStack> list = super.getDrops(state, builder);
         BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (blockEntity instanceof CropBlockEntity crop && this.properties().map(p -> crop.age() >= p.growth()).orElse(false))
+        if (blockEntity instanceof CropBlockEntity crop && this.properties().map(p -> crop.age() >= p.growth()).orElse(false)
+                && !crop.isWilted())
             list.forEach(stack -> this.modifyStack(stack, crop));
         else
             list.clear();
@@ -111,34 +115,24 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
     }
 
     private void modifyStack(ItemStack stack, CropBlockEntity tile) {
-        CropProperties prop = DataPackHandler.getCropStat(this.crop.get());
-        if (prop != null)
-            stack.setCount(prop.maxDrops());
+        this.properties().ifPresent(prop -> stack.setCount(prop.maxDrops()));
         ItemNBT.getLeveledItem(stack, tile.level());
     }
 
-    /**
-     * Whether this IGrowable can grow
-     */
     @Override
     public boolean isValidBonemealTarget(BlockGetter level, BlockPos pos, BlockState state, boolean isClient) {
-        return !((CropBlockEntity) level.getBlockEntity(pos)).isFullyGrown(this);
+        return level.getBlockEntity(pos.below()) instanceof FarmBlockEntity farm && farm.canUseBonemeal();
     }
 
-    /**
-     * Use as a soil fertilizer?
-     */
     @Override
     public boolean isBonemealSuccess(Level level, Random rand, BlockPos pos, BlockState state) {
         return true;
     }
 
-    /**
-     * Used for bonemeal items.
-     */
     @Override
     public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
-
+        if (level.getBlockEntity(pos.below()) instanceof FarmBlockEntity farm)
+            farm.applyBonemeal();
     }
 
     @Override

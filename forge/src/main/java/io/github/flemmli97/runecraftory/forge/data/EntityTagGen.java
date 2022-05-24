@@ -17,6 +17,7 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
     public static final TagKey<EntityType<?>> held = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_helditems"));
     public static final TagKey<EntityType<?>> use = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_useitem"));
 
+    @SuppressWarnings("deprecation")
     public EntityTagGen(DataGenerator arg, @Nullable ExistingFileHelper existingFileHelper) {
         super(arg, Registry.ENTITY_TYPE, RuneCraftory.MODID, existingFileHelper);
     }

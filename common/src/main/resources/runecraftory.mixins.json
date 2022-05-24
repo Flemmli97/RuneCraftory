@@ -7,12 +7,13 @@
     "AttributeAccessor",
     "AttributeMapAccessor",
     "BrainMixin",
+    "ConfiguredStructureMixin",
     "ContainerScreenAccessor",
     "CropBlockMixin"
   ],
   "client": [
-    "MinecraftMixin",
-    "AtlasMixin"
+    "AtlasMixin",
+    "MinecraftMixin"
   ],
   "injectors": {
     "defaultRequire": 1

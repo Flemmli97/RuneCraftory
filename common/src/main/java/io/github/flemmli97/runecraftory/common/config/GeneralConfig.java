@@ -24,6 +24,7 @@ public class GeneralConfig {
     public static boolean disableFoodSystem;
     public static boolean disableItemStatSystem;
     public static boolean disableCropSystem;
+    public static float witherChance;
 
     public static boolean waila = true;
     public static boolean jei = true;

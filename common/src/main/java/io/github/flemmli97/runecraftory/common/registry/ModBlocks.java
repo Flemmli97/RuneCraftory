@@ -57,7 +57,7 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> cooking = BLOCKS.register("cooking_table", () -> new BlockCooking(BlockBehaviour.Properties.of(Material.METAL).noOcclusion().strength(3, 100)));
     public static final RegistryEntrySupplier<Block> chemistry = BLOCKS.register("chemistry_set", () -> new BlockChemistry(BlockBehaviour.Properties.of(Material.METAL).noOcclusion().strength(3, 100)));
     public static final RegistryEntrySupplier<Block> accessory = BLOCKS.register("accessory_workbench", () -> new BlockAccessory(BlockBehaviour.Properties.of(Material.METAL).noOcclusion().strength(3, 100)));
-    public static final RegistryEntrySupplier<Block> farmland = BLOCKS.register("farmland", () -> new BlockFarm(BlockBehaviour.Properties.of(Material.DIRT).strength(0.6F).sound(SoundType.GRAVEL).isViewBlocking((state, reader, pos) -> true).isSuffocating((state, reader, pos) -> true)));
+    public static final RegistryEntrySupplier<Block> farmland = BLOCKS.register("farmland", () -> new BlockFarm(BlockBehaviour.Properties.of(Material.DIRT).strength(0.6F).randomTicks().sound(SoundType.GRAVEL).isViewBlocking((state, reader, pos) -> true).isSuffocating((state, reader, pos) -> true)));
 
     public static final RegistryEntrySupplier<Block> mineralIron = mineral(EnumMineralTier.IRON);
     public static final RegistryEntrySupplier<Block> mineralBronze = mineral(EnumMineralTier.BRONZE);

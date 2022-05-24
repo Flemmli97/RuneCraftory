@@ -49,6 +49,7 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         GeneralConfig.disableFoodSystem = spec.disableFoodSystem.get();
         GeneralConfig.disableItemStatSystem = spec.disableItemStatSystem.get();
         GeneralConfig.disableCropSystem = spec.disableCropSystem.get();
+        GeneralConfig.witherChance = spec.witherChance.get().floatValue();
 
         GeneralConfig.maxLevel = spec.maxLevel.get();
         GeneralConfig.maxSkillLevel = spec.maxSkillLevel.get();

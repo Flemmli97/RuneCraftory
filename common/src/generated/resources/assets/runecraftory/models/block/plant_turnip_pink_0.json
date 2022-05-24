@@ -1,7 +1,6 @@
 {
-  "parent": "minecraft:block/crop",
+  "parent": "runecraftory:block/crop_tinted",
   "textures": {
-    "crop": "runecraftory:block/plant_turnip_pink_0",
-    "particle": "runecraftory:block/plant_turnip_pink_0"
+    "crop": "runecraftory:block/plant_turnip_pink_0"
   }
 }

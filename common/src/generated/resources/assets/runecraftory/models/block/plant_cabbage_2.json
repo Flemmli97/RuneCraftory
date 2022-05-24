@@ -1,7 +1,6 @@
 {
-  "parent": "minecraft:block/crop",
+  "parent": "runecraftory:block/crop_tinted",
   "textures": {
-    "crop": "runecraftory:block/plant_cabbage_2",
-    "particle": "runecraftory:block/plant_cabbage_2"
+    "crop": "runecraftory:block/plant_cabbage_2"
   }
 }

@@ -1,7 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "runecraftory:block/cross_tinted",
   "textures": {
-    "cross": "runecraftory:block/plant_pom_pom_grass_2",
-    "particle": "runecraftory:block/plant_pom_pom_grass_2"
+    "cross": "runecraftory:block/plant_pom_pom_grass_2"
   }
 }

@@ -1,7 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "runecraftory:block/cross_tinted",
   "textures": {
-    "cross": "runecraftory:item/crop_pink_cat",
-    "particle": "runecraftory:item/crop_pink_cat"
+    "cross": "runecraftory:item/crop_pink_cat"
   }
 }

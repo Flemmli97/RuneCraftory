@@ -63,6 +63,7 @@ import io.github.flemmli97.tenshilib.client.render.RenderProjectileItem;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.model.EntityModel;
@@ -126,6 +127,17 @@ public class ClientRegister {
             else if (reg.get() instanceof ItemGloveBase)
                 register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "glove_held"), ItemModelProps.heldMainGlove);
         });
+    }
+
+    private static final BlockColor cropColor = (blockState, blockAndTintGetter, blockPos, i) -> {
+        if (blockState.getValue(BlockCrop.WILTED))
+            return 0xdc680a;
+        return -1;
+    };
+
+    public static void registerBlockColors(BiConsumer<BlockColor, Block> cons) {
+        ModBlocks.crops.forEach(reg -> cons.accept(cropColor, reg.get()));
+        ModBlocks.flowers.forEach(reg -> cons.accept(cropColor, reg.get()));
     }
 
     public static void registerScreen(MenuScreenRegister factory) {

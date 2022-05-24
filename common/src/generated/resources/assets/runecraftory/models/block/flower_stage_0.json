@@ -1,7 +1,6 @@
 {
-  "parent": "minecraft:block/cross",
+  "parent": "runecraftory:block/cross_tinted",
   "textures": {
-    "cross": "runecraftory:block/flower_stage_0",
-    "particle": "runecraftory:block/flower_stage_0"
+    "cross": "runecraftory:block/flower_stage_0"
   }
 }
