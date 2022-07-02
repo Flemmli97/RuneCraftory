@@ -9,6 +9,10 @@
     {
       "id": "byg:is_dry/overworld",
       "required": false
+    },
+    {
+      "id": "forge:is_dry/overworld",
+      "required": false
     }
   ]
 }

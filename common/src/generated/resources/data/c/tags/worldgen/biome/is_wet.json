@@ -10,6 +10,10 @@
     {
       "id": "byg:is_wet",
       "required": false
+    },
+    {
+      "id": "forge:is_wet",
+      "required": false
     }
   ]
 }

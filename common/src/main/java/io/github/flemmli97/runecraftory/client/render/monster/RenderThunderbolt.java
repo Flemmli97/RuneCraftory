@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderThunderbolt<T extends EntityThunderbolt> extends RenderMonster<T, ModelThunderbolt<T>> {
 
     public RenderThunderbolt(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelThunderbolt<>(ctx.bakeLayer(ModelThunderbolt.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/thunderbolt.png"));
+        super(ctx, new ModelThunderbolt<>(ctx.bakeLayer(ModelThunderbolt.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/thunderbolt.png"), 0.5f);
     }
 
     @Override

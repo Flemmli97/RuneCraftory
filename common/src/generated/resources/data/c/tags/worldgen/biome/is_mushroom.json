@@ -5,6 +5,10 @@
     {
       "id": "byg:is_mushroom",
       "required": false
+    },
+    {
+      "id": "forge:is_mushroom",
+      "required": false
     }
   ]
 }

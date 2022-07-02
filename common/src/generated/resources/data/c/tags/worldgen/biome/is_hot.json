@@ -19,6 +19,10 @@
     {
       "id": "byg:is_hot",
       "required": false
+    },
+    {
+      "id": "forge:is_hot",
+      "required": false
     }
   ]
 }

@@ -111,6 +111,20 @@ public class Loottables extends LootTableProvider {
             this.registerLootTable(ModEntities.goblinArcher.get(), LootTable.lootTable()
                     .withPool(this.create().add(this.add(ModItems.arrowHead.get(), 0.2f, 0.05f, 1, 1, 10, 5))
                             .add(this.addVanilla(Items.ARROW, -1, 2, 1))));
+            this.registerLootTable(ModEntities.duck.get(), LootTable.lootTable()
+                    .withPool(this.create().add(this.add(ModItems.downYellow.get(), 0.4f, 0.05f, 1, 1, 10, 5))));
+            this.registerLootTable(ModEntities.fairy.get(), LootTable.lootTable()
+                    .withPool(this.create().add(this.add(ModItems.fairyDust.get(), 0.2f, 0.05f, 1, 1, 10, 5))));
+            this.registerLootTable(ModEntities.ghost.get(), LootTable.lootTable()
+                    .withPool(this.create().add(this.add(ModItems.ghostHood.get(), 0.3f, 0.05f, 1, 1, 15, 5))
+                            .add(this.add(ModItems.stickThick.get(), 0.5f, 0.05f, 1, 1, 20, 2))
+                            .add(this.add(ModItems.skull.get(), 0.3f, 0.05f, 1, 1, 15, 5))));
+            this.registerLootTable(ModEntities.spirit.get(), LootTable.lootTable()
+                    .withPool(this.create().add(this.add(ModItems.crystalDark.get(), 0.15f, 0.05f, 1, 1, 15, 5))
+                            .add(this.add(ModItems.crystalMagic.get(), 0.1f, 0.05f, 1, 1, 10, 2))));
+            this.registerLootTable(ModEntities.ghostRay.get(), LootTable.lootTable()
+                    .withPool(this.create().add(this.add(ModItems.ghostHood.get(), 0.33f, 0.05f, 1, 1, 15, 5))
+                            .add(this.add(ModItems.stickThick.get(), 0.5f, 0.05f, 1, 1, 20, 2))));
 
             this.registerLootTable(ModEntities.ambrosia.get(), LootTable.lootTable()
                     .withPool(this.create().add(this.add(ModItems.ambrosiasThorns.get(), 0.65f, 0.1f, 1, 1, 10, 5))));

@@ -38,6 +38,7 @@ public class ParticleGen implements DataProvider {
                 new ResourceLocation("generic_4"), new ResourceLocation("generic_3"), new ResourceLocation("generic_2"),
                 new ResourceLocation("generic_1"), new ResourceLocation("generic_0"));
         this.addTo(ModParticles.light.get());
+        this.addTo(ModParticles.shortLight.get(), ModParticles.light.getID());
         this.addTo(ModParticles.staticLight.get(), ModParticles.light.getID());
         this.addTo(ModParticles.circlingLight.get(), ModParticles.light.getID());
         this.addTo(ModParticles.vortex.get(), ModParticles.light.getID());

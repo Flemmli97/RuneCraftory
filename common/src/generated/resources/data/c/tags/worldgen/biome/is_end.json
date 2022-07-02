@@ -9,6 +9,10 @@
     {
       "id": "byg:is_end",
       "required": false
+    },
+    {
+      "id": "forge:is_end",
+      "required": false
     }
   ]
 }

@@ -156,8 +156,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return false;
     };
 
-    public NearestAttackableTargetGoal<Player> targetPlayer = new NearestAttackableTargetGoal<>(this, Player.class, 5, true, true, player -> !this.isTamed());//|| player != BaseMonster.this.getOwner());
-    public NearestAttackableTargetGoal<Mob> targetMobs = new NearestAttackableTargetGoal<>(this, Mob.class, 5, true, true, this.targetPred);
+    public NearestAttackableTargetGoal<Player> targetPlayer = this.createTargetGoalPlayer();//|| player != BaseMonster.this.getOwner());
+    public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
 
     public FloatGoal swimGoal = new FloatGoal(this);
     public RandomStrollGoal wander = new WaterAvoidingRandomStrollGoal(this, 1.0);
@@ -208,6 +208,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.goalSelector.addGoal(7, new FollowOwnerGoalMonster(this, 1, 16, 3));
     }
 
+    protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
+        return new NearestAttackableTargetGoal<>(this, Player.class, 5, true, true, player -> !this.isTamed());
+    }
+
+    protected NearestAttackableTargetGoal<Mob> createTargetGoalMobs() {
+        return new NearestAttackableTargetGoal<>(this, Mob.class, 5, true, true, this.targetPred);
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -224,6 +232,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         //for(Attribute att : this.prop.getAttributeGains().keySet())
         //    this.attributeRandomizer.put(att, this.rand.nextInt(5)-2);
         return spawnData;
+    }
+
+    @Override
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
     }
 
     //=====Animation Stuff

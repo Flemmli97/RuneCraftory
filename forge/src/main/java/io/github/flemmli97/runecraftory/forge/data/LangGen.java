@@ -157,6 +157,11 @@ public class LangGen implements DataProvider {
         this.add(ModEntities.weagle.get(), "Weagle");
         this.add(ModEntities.goblin.get(), "Goblin");
         this.add(ModEntities.goblinArcher.get(), "Goblin Archer");
+        this.add(ModEntities.duck.get(), "Duck");
+        this.add(ModEntities.fairy.get(), "Fairy");
+        this.add(ModEntities.ghost.get(), "Ghost");
+        this.add(ModEntities.spirit.get(), "Spirit");
+        this.add(ModEntities.ghostRay.get(), "Ghost Ray");
 
         this.add(ModAttributes.RF_DEFENCE.get().getDescriptionId(), "DEF");
         this.add(ModAttributes.RF_MAGIC.get().getDescriptionId(), "M. ATT");

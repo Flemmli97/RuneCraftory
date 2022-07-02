@@ -68,6 +68,42 @@
     },
     {
       "type": "patchouli:entity",
+      "entity": "runecraftory:duck",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:duck"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:fairy",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:fairy"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:ghost",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:ghost"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:ghost_ray",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:ghost_ray"
+    },
+    {
+      "type": "patchouli:entity",
       "entity": "runecraftory:goblin",
       "scale": 0.7
     },
@@ -119,6 +155,15 @@
     {
       "type": "patchouli:text",
       "text": "runecraftory.patchouli.entry.entity.runecraftory:sky_fish"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:spirit",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:spirit"
     },
     {
       "type": "patchouli:entity",

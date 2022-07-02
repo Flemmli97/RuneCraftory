@@ -49,7 +49,7 @@ public class EntityBaseSpellBall extends EntityProjectile {
 
     @Override
     public int livingTickMax() {
-        return 8;
+        return 6;
     }
 
     public EnumElement getElement() {

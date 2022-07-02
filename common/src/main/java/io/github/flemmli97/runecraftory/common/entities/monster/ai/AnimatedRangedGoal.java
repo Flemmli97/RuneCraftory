@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster.ai;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import net.minecraft.world.phys.AABB;
 
 import java.util.function.Predicate;
 
@@ -27,8 +28,8 @@ public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal
         if (this.attacker.getRandom().nextFloat() < this.attacker.attackChance(AnimationType.GENERICATTACK)) {
             if (this.attacker.getRandom().nextFloat() < this.attacker.attackChance(AnimationType.MELEE)) {
                 AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.MELEE);
-                double reach = this.attacker.maxAttackRange(anim) + this.attacker.getBbWidth() * 0.5 + this.target.getBbWidth() * 0.5;
-                if (reach * reach > this.distanceToTargetSq)
+                AABB aabb = this.attacker.calculateAttackAABB(anim, this.target, 1);
+                if (aabb.intersects(this.target.getBoundingBox()))
                     return anim;
                 else if (this.distanceToTargetSq <= this.reachSq && this.canRanged.test(this.attacker))
                     return this.attacker.getRandomAnimation(AnimationType.RANGED);

@@ -9,6 +9,10 @@
     {
       "id": "byg:is_slope",
       "required": false
+    },
+    {
+      "id": "forge:is_slope",
+      "required": false
     }
   ]
 }

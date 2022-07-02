@@ -5,6 +5,10 @@
     {
       "id": "byg:is_spooky",
       "required": false
+    },
+    {
+      "id": "forge:is_spooky",
+      "required": false
     }
   ]
 }

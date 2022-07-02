@@ -2,14 +2,22 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.Spell;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
 import io.github.flemmli97.runecraftory.common.spells.ArrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.BaseStaffSpell;
+import io.github.flemmli97.runecraftory.common.spells.DarkBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWindBladeSpell;
 import io.github.flemmli97.runecraftory.common.spells.EmptySpell;
 import io.github.flemmli97.runecraftory.common.spells.EvokerFangSpell;
 import io.github.flemmli97.runecraftory.common.spells.FireballSpell;
+import io.github.flemmli97.runecraftory.common.spells.HealT1Spell;
+import io.github.flemmli97.runecraftory.common.spells.HealT2Spell;
+import io.github.flemmli97.runecraftory.common.spells.HealT3Spell;
+import io.github.flemmli97.runecraftory.common.spells.LightBarrierSpell;
 import io.github.flemmli97.runecraftory.common.spells.ParaHealSpell;
 import io.github.flemmli97.runecraftory.common.spells.PoisonHealSpell;
+import io.github.flemmli97.runecraftory.common.spells.PrismSpell;
+import io.github.flemmli97.runecraftory.common.spells.ShineSpell;
 import io.github.flemmli97.runecraftory.common.spells.ShortWaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.SnowballSpell;
 import io.github.flemmli97.runecraftory.common.spells.UnsealSpell;
@@ -43,6 +51,17 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> FIREBALL = SPELLS.register("fireball", FireballSpell::new);
     public static final RegistryEntrySupplier<Spell> WATERLASER = SPELLS.register("water_laser", ShortWaterLaserSpell::new);
     public static final RegistryEntrySupplier<Spell> DOUBLESONIC = SPELLS.register("double_sonic", DoubleWindBladeSpell::new);
+
+    public static final RegistryEntrySupplier<Spell> LIGHTBARRIER = SPELLS.register("light_barrier", LightBarrierSpell::new);
+    public static final RegistryEntrySupplier<Spell> SHINE = SPELLS.register("shine", ShineSpell::new);
+    public static final RegistryEntrySupplier<Spell> PRISM = SPELLS.register("prism", PrismSpell::new);
+
+    public static final RegistryEntrySupplier<Spell> DARKSNAKE = SPELLS.register("dark_snake", () -> new DarkBallSpell(EntityDarkBall.Type.SNAKE));
+    public static final RegistryEntrySupplier<Spell> DARKBALL = SPELLS.register("dark_ball", () -> new DarkBallSpell(EntityDarkBall.Type.BALL));
+
+    public static final RegistryEntrySupplier<Spell> CURE = SPELLS.register("cure", HealT1Spell::new);
+    public static final RegistryEntrySupplier<Spell> CUREALL = SPELLS.register("cure_all", HealT2Spell::new);
+    public static final RegistryEntrySupplier<Spell> MASTERCURE = SPELLS.register("master_cure", HealT3Spell::new);
 
     public static final RegistryEntrySupplier<Spell> MEDIPOISON = SPELLS.register("medi_poison", PoisonHealSpell::new);
     public static final RegistryEntrySupplier<Spell> MEDIPARA = SPELLS.register("medi_paralysis", ParaHealSpell::new);

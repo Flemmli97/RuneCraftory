@@ -17,6 +17,9 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelBigMuck;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelBuffamoo;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelChipsqueek;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelCluckadoodle;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelDuck;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelFairy;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelGhost;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelGoblin;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelOrc;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
@@ -24,6 +27,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelThunderbolt;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelTortas;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWeagle;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelWisp;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWooly;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWoolyWool;
 import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
@@ -33,6 +37,7 @@ import io.github.flemmli97.runecraftory.client.render.RenderGate;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderAnt;
+import io.github.flemmli97.runecraftory.client.render.monster.RenderGhostRay;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGoblin;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderOrcArcher;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderThunderbolt;
@@ -43,6 +48,8 @@ import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFireball
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderStaffBall;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWaterLaser;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWindBlade;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWispFlame;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
@@ -164,6 +171,11 @@ public class ClientRegister {
         register(consumer, ModEntities.tortas.get(), ModelTortas::new, ModelTortas.LAYER_LOCATION);
         register(consumer, ModEntities.sky_fish.get(), ModelSkyFish::new, ModelSkyFish.LAYER_LOCATION);
         register(consumer, ModEntities.weagle.get(), ModelWeagle::new, ModelWeagle.LAYER_LOCATION);
+        register(consumer, ModEntities.duck.get(), ModelDuck::new, ModelDuck.LAYER_LOCATION);
+        register(consumer, ModEntities.fairy.get(), ModelFairy::new, ModelFairy.LAYER_LOCATION);
+        register(consumer, ModEntities.ghost.get(), ModelGhost::new, ModelGhost.LAYER_LOCATION, 0);
+        register(consumer, ModEntities.spirit.get(), ModelWisp::new, ModelWisp.LAYER_LOCATION, 0);
+        consumer.register(ModEntities.ghostRay.get(), RenderGhostRay::new);
 
         consumer.register(ModEntities.goblin.get(), RenderGoblin::new);
         consumer.register(ModEntities.goblinArcher.get(), RenderGoblin::new);
@@ -193,19 +205,26 @@ public class ClientRegister {
         consumer.register(ModEntities.butterfly.get(), RenderButterfly::new);
         consumer.register(ModEntities.lightningOrbBolt.get(), EmptyRender::new);
         consumer.register(ModEntities.lightningBeam.get(), EmptyRender::new);
+        consumer.register(ModEntities.wispFlame.get(), RenderWispFlame::new);
 
         consumer.register(ModEntities.staffThrown.get(), RenderStaffBall::new);
         consumer.register(ModEntities.fireBall.get(), RenderFireball::new);
-        consumer.register(ModEntities.windBlade.get(), EmptyRender::new);
+        consumer.register(ModEntities.windBlade.get(), RenderWindBlade::new);
         consumer.register(ModEntities.waterLaser.get(), RenderWaterLaser::new);
+        consumer.register(ModEntities.lightBall.get(), EmptyRender::new);
+        consumer.register(ModEntities.darkBall.get(), EmptyRender::new);
     }
 
-    private static <T extends BaseMonster, M extends EntityModel<T>> EntityRendererProvider<? super T> getMonsterRender(Function<ModelPart, M> model, ModelLayerLocation layerLocation, ResourceLocation texture) {
-        return manager -> new RenderMonster<>(manager, model.apply(manager.bakeLayer(layerLocation)), texture);
+    private static <T extends BaseMonster, M extends EntityModel<T>> EntityRendererProvider<? super T> getMonsterRender(Function<ModelPart, M> model, ModelLayerLocation layerLocation, ResourceLocation texture, float shadow) {
+        return manager -> new RenderMonster<>(manager, model.apply(manager.bakeLayer(layerLocation)), texture, shadow);
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T>> void register(EntityRendererRegister consumer, EntityType<T> reg, Function<ModelPart, M> model, ModelLayerLocation layerLocation) {
-        consumer.register(reg, getMonsterRender(model, layerLocation, mobTexture(reg)));
+        register(consumer, reg, model, layerLocation, 0.5f);
+    }
+
+    private static <T extends BaseMonster, M extends EntityModel<T>> void register(EntityRendererRegister consumer, EntityType<T> reg, Function<ModelPart, M> model, ModelLayerLocation layerLocation, float shadow) {
+        consumer.register(reg, getMonsterRender(model, layerLocation, mobTexture(reg), shadow));
     }
 
     public static <T extends BaseMonster> ResourceLocation mobTexture(EntityType<T> reg) {
@@ -227,6 +246,10 @@ public class ClientRegister {
         consumer.accept(ModelSkyFish.LAYER_LOCATION, ModelSkyFish::createBodyLayer);
         consumer.accept(ModelGoblin.LAYER_LOCATION, ModelGoblin::createBodyLayer);
         consumer.accept(ModelWeagle.LAYER_LOCATION, ModelWeagle::createBodyLayer);
+        consumer.accept(ModelDuck.LAYER_LOCATION, ModelDuck::createBodyLayer);
+        consumer.accept(ModelFairy.LAYER_LOCATION, ModelFairy::createBodyLayer);
+        consumer.accept(ModelGhost.LAYER_LOCATION, ModelGhost::createBodyLayer);
+        consumer.accept(ModelWisp.LAYER_LOCATION, ModelWisp::createBodyLayer);
 
         consumer.accept(ModelAmbrosia.LAYER_LOCATION, ModelAmbrosia::createBodyLayer);
         consumer.accept(ModelThunderbolt.LAYER_LOCATION, ModelThunderbolt::createBodyLayer);
@@ -238,6 +261,7 @@ public class ClientRegister {
     public static <T extends ParticleOptions> void registerParticles(PartileRegister consumer) {
         consumer.register(ModParticles.sinkingDust.get(), SinkingParticle.Factory::new);
         consumer.register(ModParticles.light.get(), ColoredParticle.LightParticleFactory::new);
+        consumer.register(ModParticles.shortLight.get(), ParticleFactories.ShortLightParticleFactory::new);
         consumer.register(ModParticles.cross.get(), ColoredParticle.LightParticleFactory::new);
         consumer.register(ModParticles.blink.get(), ColoredParticle.LightParticleFactory::new);
         consumer.register(ModParticles.smoke.get(), ColoredParticle.LightParticleFactory::new);

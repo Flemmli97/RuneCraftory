@@ -7,6 +7,10 @@
     {
       "id": "byg:is_savanna",
       "required": false
+    },
+    {
+      "id": "forge:is_savanna",
+      "required": false
     }
   ]
 }

@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderAnt<T extends EntityAnt> extends RenderMonster<T, ModelAnt<T>> {
 
     public RenderAnt(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelAnt<>(ctx.bakeLayer(ModelAnt.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/ant.png"));
+        super(ctx, new ModelAnt<>(ctx.bakeLayer(ModelAnt.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/ant.png"), 0.5f);
     }
 
     @Override

@@ -212,7 +212,7 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() && !this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID());
+        return super.isImmobile() && this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID());
     }
 
     @Override

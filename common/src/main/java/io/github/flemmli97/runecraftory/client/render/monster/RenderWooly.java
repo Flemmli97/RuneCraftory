@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderWooly<T extends EntityWooly> extends RenderMonster<T, ModelWooly<T>> {
 
     public RenderWooly(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelWooly<>(ctx.bakeLayer(ModelWooly.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/wooly.png"));
+        super(ctx, new ModelWooly<>(ctx.bakeLayer(ModelWooly.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/wooly.png"), 0.5f);
         this.layers.add(new LayerWooly<>(this, new ModelWoolyWool<>(ctx.bakeLayer(ModelWoolyWool.LAYER_LOCATION))));
     }
 

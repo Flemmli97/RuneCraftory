@@ -12,7 +12,9 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaSleep
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBaseSpellBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityLightBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollen;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpore;
@@ -22,12 +24,17 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityThunderboltBe
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindGust;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityWispFlame;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityAnt;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBeetle;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBigMuck;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBuffamoo;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityChipsqueek;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityCluckadoodle;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityDuck;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityFairy;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityGhost;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityGhostRay;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblin;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblinArcher;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrc;
@@ -39,6 +46,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityWeagle;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
+import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntitySpirit;
 import io.github.flemmli97.runecraftory.common.items.RuneCraftoryEggItem;
 import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
 import io.github.flemmli97.runecraftory.common.lib.LibEntities;
@@ -226,6 +234,56 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 5.4)
                     .xp(7).money(8).tamingChance(0.009f).setRidable().build(),
             new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA, ModTags.IS_SANDY));
+    public static final RegistryEntrySupplier<EntityType<EntityDuck>> duck = regMonster(EntityType.Builder.of(EntityDuck::new, MobCategory.MONSTER).sized(0.65f, 1.45f).clientTrackingRange(8), LibEntities.duck,
+            0xdabf33, 0x845242,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 19).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 6.7)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 6).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 3.6)
+                    .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 2.6)
+                    .putAttributes(LibAttributes.rf_magic, 2).putLevelGains(LibAttributes.rf_magic, 4)
+                    .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 4.8)
+                    .xp(5).money(5).tamingChance(0.01f).setRidable().build(),
+            new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(30, ModTags.IS_PLAINS, ModTags.IS_WATER, BiomeTags.IS_BEACH));
+    public static final RegistryEntrySupplier<EntityType<EntityFairy>> fairy = regMonster(EntityType.Builder.of(EntityFairy::new, MobCategory.MONSTER).sized(0.45f, 1.1f).clientTrackingRange(8), LibEntities.fairy,
+            0x4dad2a, 0xcdc41f,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 16).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 4.5)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 3).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 3)
+                    .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 2.2)
+                    .putAttributes(LibAttributes.rf_magic, 7.3).putLevelGains(LibAttributes.rf_magic, 5.5)
+                    .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 4.9)
+                    .xp(8).money(6).tamingChance(0.007f).build(),
+            new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, ModTags.IS_MAGICAL));
+    public static final RegistryEntrySupplier<EntityType<EntityGhost>> ghost = regMonster(EntityType.Builder.of(EntityGhost::new, MobCategory.MONSTER).sized(0.8f, 2.1f).clientTrackingRange(8), LibEntities.ghost,
+            0x4d3d35, 0x838383,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 22).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 5.2)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 6.6).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 4.3)
+                    .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 3.7)
+                    .putAttributes(LibAttributes.rf_magic, 5).putLevelGains(LibAttributes.rf_magic, 3.8)
+                    .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 4.4)
+                    .xp(9).money(7).tamingChance(0.006f).build(),
+            new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(60, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
+    public static final RegistryEntrySupplier<EntityType<EntitySpirit>> spirit = regMonster(EntityType.Builder.of(EntitySpirit::new, MobCategory.MONSTER).sized(0.5f, 0.5f).clientTrackingRange(8), LibEntities.spirit,
+            0xfdfdfd, 0xc3f8f7,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 17).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 4.6)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 4).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 2)
+                    .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 3.3)
+                    .putAttributes(LibAttributes.rf_magic, 7.1).putLevelGains(LibAttributes.rf_magic, 3.4)
+                    .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 6.1)
+                    .xp(10).money(5).tamingChance(0.004f).build(),
+            new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA, ModTags.IS_SANDY));
+    public static final RegistryEntrySupplier<EntityType<EntityGhostRay>> ghostRay = regMonster(EntityType.Builder.of(EntityGhostRay::new, MobCategory.MONSTER).sized(1f, 3.2f).clientTrackingRange(8), LibEntities.ghostRay,
+            0x552217, 0x905a5a,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 30).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 7.6)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 9.3).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 7.1)
+                    .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 4.8)
+                    .putAttributes(LibAttributes.rf_magic, 8).putLevelGains(LibAttributes.rf_magic, 4.2)
+                    .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 4.9)
+                    .xp(13).money(9).tamingChance(0.003f).build(),
+            new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
 
     public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> ambrosia = regMonster(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), LibEntities.ambrosia,
             0x00ff00, 0xe600e6,
@@ -261,11 +319,14 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityPollen>> pollen = reg(EntityType.Builder.<EntityPollen>of(EntityPollen::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.pollen);
     public static final RegistryEntrySupplier<EntityType<EntityThiccLightningBolt>> lightningOrbBolt = reg(EntityType.Builder.<EntityThiccLightningBolt>of(EntityThiccLightningBolt::new, MobCategory.MISC).sized(0.8f, 0.8f).clientTrackingRange(4), LibEntities.lightningOrbBolt);
     public static final RegistryEntrySupplier<EntityType<EntityThunderboltBeam>> lightningBeam = reg(EntityType.Builder.<EntityThunderboltBeam>of(EntityThunderboltBeam::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), LibEntities.lightningBeam);
+    public static final RegistryEntrySupplier<EntityType<EntityWispFlame>> wispFlame = reg(EntityType.Builder.<EntityWispFlame>of(EntityWispFlame::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.wispFlame);
 
     public static final RegistryEntrySupplier<EntityType<EntityBaseSpellBall>> staffThrown = reg(EntityType.Builder.<EntityBaseSpellBall>of(EntityBaseSpellBall::new, MobCategory.MISC).sized(0.2f, 0.2f).clientTrackingRange(4), LibEntities.baseStaffThrown);
     public static final RegistryEntrySupplier<EntityType<EntityWindBlade>> windBlade = reg(EntityType.Builder.<EntityWindBlade>of(EntityWindBlade::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.windBlade);
     public static final RegistryEntrySupplier<EntityType<EntityFireball>> fireBall = reg(EntityType.Builder.<EntityFireball>of(EntityFireball::new, MobCategory.MISC).sized(0.2f, 0.2f).clientTrackingRange(4), LibEntities.fireball);
     public static final RegistryEntrySupplier<EntityType<EntityWaterLaser>> waterLaser = reg(EntityType.Builder.<EntityWaterLaser>of(EntityWaterLaser::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.waterLaser);
+    public static final RegistryEntrySupplier<EntityType<EntityLightBall>> lightBall = reg(EntityType.Builder.<EntityLightBall>of(EntityLightBall::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.lightBall);
+    public static final RegistryEntrySupplier<EntityType<EntityDarkBall>> darkBall = reg(EntityType.Builder.<EntityDarkBall>of(EntityDarkBall::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.darkBall);
 
     public static void registerAttributes(BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier.Builder> cons) {
         cons.accept(gate.get(), GateEntity.createAttributes());
@@ -284,6 +345,11 @@ public class ModEntities {
         cons.accept(weagle.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).add(Attributes.FLYING_SPEED));
         cons.accept(goblin.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
         cons.accept(goblinArcher.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
+        cons.accept(duck.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
+        cons.accept(fairy.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).add(Attributes.FLYING_SPEED));
+        cons.accept(ghost.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).add(Attributes.FLYING_SPEED));
+        cons.accept(spirit.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).add(Attributes.FLYING_SPEED));
+        cons.accept(ghostRay.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).add(Attributes.FLYING_SPEED));
 
         cons.accept(ambrosia.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
         cons.accept(thunderbolt.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));

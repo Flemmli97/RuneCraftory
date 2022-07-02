@@ -1,0 +1,111 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "iddle": {
+      "loop": true,
+      "animation_length": 8,
+      "bones": {
+        "main": {
+          "position": [
+            0,
+            "math.sin(time*90)*0.3",
+            0
+          ]
+        },
+        "floaty": {
+          "rotation": [
+            0,
+            "-time*90",
+            0
+          ]
+        },
+        "floaty2": {
+          "rotation": [
+            0,
+            "time*90",
+            0
+          ]
+        },
+        "floaty3": {
+          "rotation": [
+            0,
+            "time*180",
+            0
+          ]
+        },
+        "floaty4": {
+          "rotation": [
+            0,
+            "time*45",
+            0
+          ]
+        },
+        "floaty5": {
+          "rotation": [
+            0,
+            "-time*90",
+            0
+          ]
+        },
+        "floaty6": {
+          "rotation": [
+            0,
+            "time*45",
+            0
+          ]
+        }
+      }
+    },
+    "attack": {
+      "animation_length": 0.48,
+      "bones": {
+        "main": {
+          "rotation": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.12": [
+              -17.5,
+              0,
+              0
+            ],
+            "0.36": [
+              20,
+              0,
+              0
+            ],
+            "0.48": [
+              0,
+              0,
+              0
+            ]
+          },
+          "position": {
+            "0.0": [
+              0,
+              0,
+              0
+            ],
+            "0.12": [
+              0,
+              2,
+              0
+            ],
+            "0.36": [
+              0,
+              -1,
+              0
+            ],
+            "0.48": [
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "runecraftory:item/fairy_elixier"
+    "layer0": "runecraftory:item/fairy_elixir"
   }
 }

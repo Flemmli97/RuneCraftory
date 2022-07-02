@@ -149,7 +149,7 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.powderPoison.get(),
                         ModItems.sporeHoly.get(),
                         ModItems.fairyDust.get(),
-                        ModItems.fairyElixier.get(),
+                        ModItems.fairyElixir.get(),
                         ModItems.root.get(),
                         ModItems.powderMagic.get(),
                         ModItems.powderMysterious.get(),

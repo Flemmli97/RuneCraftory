@@ -4,11 +4,9 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -83,11 +81,7 @@ public class EntityWindBlade extends EntityProjectile {
     @Override
     public void tick() {
         super.tick();
-        if (this.level.isClientSide) {
-            for (int i = 0; i < 1; i++) {
-                this.level.addParticle(new ColoredParticleData(ModParticles.cross.get(), 55 / 255F, 200 / 255F, 38 / 255F, 1, 2.3f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + 0.35 + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
-            }
-        } else {
+        if (!this.level.isClientSide) {
             if (this.target == null) {
                 List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(16).expandTowards(this.getDeltaMovement()), e -> !(e instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) e));
                 double distSq = Double.MAX_VALUE;

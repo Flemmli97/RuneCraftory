@@ -19,6 +19,7 @@ public class ModParticles {
 
     public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> sinkingDust = registerColoredParticleType("sinking_dust", false);
     public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> light = registerColoredParticleType("light", false);
+    public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> shortLight = registerColoredParticleType("short_light", false);
     public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> cross = registerColoredParticleType("cross", false);
     public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> smoke = registerColoredParticleType("smoke", false);
     public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> blink = registerColoredParticleType("blink", false);

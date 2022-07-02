@@ -99,6 +99,7 @@ public class BiomeTagGen extends TagsProvider<Biome> {
                 .addTag(BiomeTags.IS_FOREST).addTag(BiomeTags.IS_HILL);
 
         this.addedTags.forEach(tag -> this.tag(tag).addOptional(new ResourceLocation("byg", tag.location().getPath())));
+        this.addedTags.forEach(tag -> this.tag(tag).addOptional(new ResourceLocation("forge", tag.location().getPath())));
     }
 
     @SafeVarargs

@@ -10,8 +10,8 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T>> exte
 
     private final ResourceLocation tex;
 
-    public RenderMonster(EntityRendererProvider.Context ctx, M model, ResourceLocation texture) {
-        super(ctx, model, 0.5f);
+    public RenderMonster(EntityRendererProvider.Context ctx, M model, ResourceLocation texture, float shadow) {
+        super(ctx, model, shadow);
         this.tex = texture;
     }
 

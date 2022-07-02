@@ -23,6 +23,11 @@ public class LibEntities {
     public static final ResourceLocation weagle = new ResourceLocation(RuneCraftory.MODID, "weagle");
     public static final ResourceLocation goblin = new ResourceLocation(RuneCraftory.MODID, "goblin");
     public static final ResourceLocation goblinArcher = new ResourceLocation(RuneCraftory.MODID, "goblin_archer");
+    public static final ResourceLocation duck = new ResourceLocation(RuneCraftory.MODID, "duck");
+    public static final ResourceLocation fairy = new ResourceLocation(RuneCraftory.MODID, "fairy");
+    public static final ResourceLocation ghost = new ResourceLocation(RuneCraftory.MODID, "ghost");
+    public static final ResourceLocation spirit = new ResourceLocation(RuneCraftory.MODID, "spirit");
+    public static final ResourceLocation ghostRay = new ResourceLocation(RuneCraftory.MODID, "ghost_ray");
 
     public static final ResourceLocation ambrosia = new ResourceLocation(RuneCraftory.MODID, "ambrosia");
     public static final ResourceLocation thunderbolt = new ResourceLocation(RuneCraftory.MODID, "thunderbolt");
@@ -38,10 +43,13 @@ public class LibEntities {
     public static final ResourceLocation pollen = new ResourceLocation(RuneCraftory.MODID, "pollen");
     public static final ResourceLocation lightningOrbBolt = new ResourceLocation(RuneCraftory.MODID, "lightning_orb_bolt");
     public static final ResourceLocation lightningBeam = new ResourceLocation(RuneCraftory.MODID, "lightning_beam");
+    public static final ResourceLocation wispFlame = new ResourceLocation(RuneCraftory.MODID, "wisp_flame");
 
     public static final ResourceLocation baseStaffThrown = new ResourceLocation(RuneCraftory.MODID, "staff_thrown_ball");
     public static final ResourceLocation fireball = new ResourceLocation(RuneCraftory.MODID, "fireball");
     public static final ResourceLocation windBlade = new ResourceLocation(RuneCraftory.MODID, "wind_blade");
     public static final ResourceLocation waterLaser = new ResourceLocation(RuneCraftory.MODID, "water_laser");
+    public static final ResourceLocation lightBall = new ResourceLocation(RuneCraftory.MODID, "light_ball");
+    public static final ResourceLocation darkBall = new ResourceLocation(RuneCraftory.MODID, "dark_ball");
 
 }

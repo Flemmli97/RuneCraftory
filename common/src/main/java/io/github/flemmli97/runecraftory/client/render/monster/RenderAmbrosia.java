@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderAmbrosia<T extends EntityAmbrosia> extends RenderMonster<T, ModelAmbrosia<T>> {
 
     public RenderAmbrosia(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelAmbrosia<>(ctx.bakeLayer(ModelAmbrosia.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/ambrosia.png"));
+        super(ctx, new ModelAmbrosia<>(ctx.bakeLayer(ModelAmbrosia.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/ambrosia.png"), 0.5f);
     }
 
     @Override
