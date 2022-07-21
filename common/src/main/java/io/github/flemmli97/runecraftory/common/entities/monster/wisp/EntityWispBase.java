@@ -66,6 +66,7 @@ public abstract class EntityWispBase extends BaseMonster {
     @Override
     protected void applyAttributes() {
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
+        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
         super.applyAttributes();
     }
 

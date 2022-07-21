@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.effects.ParalysisEffect;
 import io.github.flemmli97.runecraftory.common.effects.PermanentEffect;
 import io.github.flemmli97.runecraftory.common.effects.PoisonEffect;
 import io.github.flemmli97.runecraftory.common.effects.SleepEffect;
+import io.github.flemmli97.runecraftory.common.effects.TrueInvis;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
@@ -24,5 +25,7 @@ public class ModEffects {
     public static final RegistryEntrySupplier<MobEffect> seal = EFFECTS.register("seal", () -> new PermanentEffect(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.Type.SEAL));
     public static final RegistryEntrySupplier<MobEffect> fatigue = EFFECTS.register("fatigue", () -> new PermanentEffect(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.Type.FATIGUE));
     public static final RegistryEntrySupplier<MobEffect> cold = EFFECTS.register("cold", ColdEffect::new);
+
+    public static final RegistryEntrySupplier<MobEffect> trueInvis = EFFECTS.register("true_invis", TrueInvis::new);
 
 }

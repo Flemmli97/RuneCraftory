@@ -65,7 +65,7 @@ public class EntityThunderbolt extends BossMonster {
     private static final AnimatedAction laser_kick_3 = new AnimatedAction(16, 6, "laser_kick_3", "laser_kick");
 
     private static final AnimatedAction feint = new AnimatedAction(40, 2, "feint");
-    private static final AnimatedAction defeat = new AnimatedAction(80, 60, "defeat");
+    private static final AnimatedAction defeat = new AnimatedAction(80, 60, "defeat", "defeat", 1, false);
 
     private static final AnimatedAction neigh = new AnimatedAction(24, 9, "neigh");
 
@@ -75,9 +75,7 @@ public class EntityThunderbolt extends BossMonster {
             laser_aoe, laser_kick, laser_kick_2, wind_blade, laser_kick_3, feint, defeat, neigh};
 
     private final AnimationHandler<EntityThunderbolt> animationHandler = new AnimationHandler<>(this, anims)
-            .setAnimationChangeFunc(anim -> {
-                if (anim == null && this.getAnimationHandler().isCurrentAnim(defeat.getID()))
-                    return true;
+            .setAnimationChangeCons(anim -> {
                 if (!this.level.isClientSide) {
                     if (this.hornAttackSuccess && anim != null) {
                         this.hornAttackSuccess = false;
@@ -85,7 +83,6 @@ public class EntityThunderbolt extends BossMonster {
                     if (this.chargeAttackSuccess && anim != null)
                         this.chargeAttackSuccess = false;
                 }
-                return false;
             });
 
     private static final EntityDataAccessor<Float> lockedYaw = SynchedEntityData.defineId(EntityThunderbolt.class, EntityDataSerializers.FLOAT);

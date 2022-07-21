@@ -12,7 +12,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public class ShortWaterLaserSpell extends Spell {
+public class WaterLaserSpell extends Spell {
 
     @Override
     public void update(Player player, ItemStack stack) {
@@ -26,7 +26,7 @@ public class ShortWaterLaserSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 20;
+        return 50;
     }
 
     @Override
@@ -34,8 +34,8 @@ public class ShortWaterLaserSpell extends Spell {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.WATER)).orElse(false);
         if (rp) {
             EntityWaterLaser laser = new EntityWaterLaser(world, entity);
-            laser.setMaxTicks(15);
-            laser.setDamageMultiplier(1 + (level - 1) / 10);
+            laser.setMaxTicks(entity instanceof Player ? 44 : 15);
+            laser.setDamageMultiplier(0.95f + level * 0.5f);
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 LivingEntity target = mob.getTarget();
                 laser.setRotationTo(target.getX(), target.getEyeY(), target.getZ(), 0);

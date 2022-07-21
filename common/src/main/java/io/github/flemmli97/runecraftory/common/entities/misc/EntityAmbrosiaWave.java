@@ -42,7 +42,7 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
     }
 
     public EntityAmbrosiaWave(Level level, LivingEntity shooter, int maxLivingTick) {
-        super(ModEntities.ambrosia_wave.get(), level, shooter);
+        super(ModEntities.ambrosiaWave.get(), level, shooter);
         this.entityData.set(maxTick, maxLivingTick);
         if (shooter instanceof BaseMonster)
             this.pred = (e) -> !e.equals(this.getOwner()) && ((BaseMonster) shooter).hitPred.test(e);

@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.OverlayRegistry;
@@ -55,5 +56,11 @@ public class ClientEvents {
     @SubscribeEvent
     public static void tick(LivingEvent.LivingUpdateEvent event) {
         ClientCalls.tick(event.getEntityLiving());
+    }
+
+    @SubscribeEvent
+    public static void render(RenderLivingEvent.Pre event) {
+        if(ClientCalls.invis(event.getEntity()))
+            event.setCanceled(true);
     }
 }

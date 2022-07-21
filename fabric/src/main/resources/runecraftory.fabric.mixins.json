@@ -20,7 +20,8 @@
     "ServerPlayerGameModeMixin"
   ],
   "client": [
-    "GuiMixin"
+    "GuiMixin",
+    "LivingRenderMixin"
   ],
   "injectors": {
     "defaultRequire": 1

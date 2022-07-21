@@ -31,6 +31,8 @@ public class RenderFireball extends RenderTexture<EntityFireball> {
     public void render(EntityFireball entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.translate(0, this.ySize * 0.25, 0);
+        if (entity.big())
+            stack.scale(1.3f, 1.3f, 1.3f);
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
         stack.popPose();
     }

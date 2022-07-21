@@ -12,7 +12,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 public abstract class ChargingMonster extends BaseMonster {
 
@@ -22,7 +22,7 @@ public abstract class ChargingMonster extends BaseMonster {
     private static final EntityDataAccessor<Float> lockedYaw = SynchedEntityData.defineId(ChargingMonster.class, EntityDataSerializers.FLOAT);
 
     private boolean initAnim;
-    private final Function<AnimatedAction, Boolean> chargingAnim = anim -> {
+    private final Consumer<AnimatedAction> chargingAnim = anim -> {
         if (!this.level.isClientSide) {
             if (anim != null && this.isAnimOfType(anim, AnimationType.CHARGE)) {
                 this.prevStepHeight = this.maxUpStep;
@@ -38,7 +38,6 @@ public abstract class ChargingMonster extends BaseMonster {
                 this.hitEntity = null;
             }
         }
-        return false;
     };
 
     public ChargingMonster(EntityType<? extends ChargingMonster> type, Level level) {
@@ -59,7 +58,7 @@ public abstract class ChargingMonster extends BaseMonster {
     public void tick() {
         super.tick();
         if (!this.initAnim) {
-            this.getAnimationHandler().setAnimationChangeFunc(this.chargingAnim);
+            this.getAnimationHandler().setAnimationChangeCons(this.chargingAnim);
             this.initAnim = true;
         }
         if (this.isChargingAnimation()) {

@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -23,8 +24,10 @@ public class EntityWindBlade extends EntityProjectile {
 
     private Predicate<LivingEntity> pred;
 
-    private Vec3 target;
+    private Entity target;
     private float damageMultiplier = 1;
+    private boolean piercing = false;
+    private int collisionCooldown;
 
     public EntityWindBlade(EntityType<? extends EntityWindBlade> type, Level world) {
         super(type, world);
@@ -37,21 +40,21 @@ public class EntityWindBlade extends EntityProjectile {
     }
 
     public void setTarget(Entity entity) {
-        this.target = entity.getEyePosition(1);
+        this.target = entity;
     }
 
-    public void setTarget(Vec3 vec) {
-        this.target = vec;
+    public void setPiercing() {
+        this.piercing = true;
     }
 
     @Override
     public boolean isPiercing() {
-        return false;
+        return this.piercing;
     }
 
     @Override
     public int livingTickMax() {
-        return 30;
+        return this.isPiercing() ? 50 : 30;
     }
 
     @Override
@@ -62,7 +65,8 @@ public class EntityWindBlade extends EntityProjectile {
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
         if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).element(EnumElement.WIND).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
-            this.remove(RemovalReason.KILLED);
+            if (!this.isPiercing())
+                this.remove(RemovalReason.KILLED);
             return true;
         }
         return false;
@@ -70,7 +74,19 @@ public class EntityWindBlade extends EntityProjectile {
 
     @Override
     protected void onBlockHit(BlockHitResult blockRayTraceResult) {
-        this.remove(RemovalReason.KILLED);
+        if (!this.isPiercing())
+            this.remove(RemovalReason.KILLED);
+        else if (--this.collisionCooldown <= 0) {
+            Vec3 newMot;
+            Vec3 mot = this.getDeltaMovement();
+            switch (blockRayTraceResult.getDirection()) {
+                case DOWN, UP -> newMot = new Vec3(mot.x(), -mot.y(), mot.z());
+                case WEST, EAST -> newMot = new Vec3(-mot.x(), mot.y(), mot.z());
+                default -> newMot = new Vec3(mot.x(), mot.y(), -mot.z());
+            }
+            this.setDeltaMovement(newMot);
+            this.collisionCooldown = 2;
+        }
     }
 
     @Override
@@ -82,8 +98,13 @@ public class EntityWindBlade extends EntityProjectile {
     public void tick() {
         super.tick();
         if (!this.level.isClientSide) {
-            if (this.target == null) {
-                List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(16).expandTowards(this.getDeltaMovement()), e -> !(e instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) e));
+            if (this.target == null && !this.piercing) {
+                List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(16).expandTowards(this.getDeltaMovement()), e -> {
+                    if (e == this.getOwner() || (e instanceof OwnableEntity ownable && ownable.getOwner() == this.getOwner())) {
+                        return false;
+                    }
+                    return !(e instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) e);
+                });
                 double distSq = Double.MAX_VALUE;
                 Entity res = null;
                 for (Entity e : list) {
@@ -94,11 +115,11 @@ public class EntityWindBlade extends EntityProjectile {
                     }
                 }
                 if (res != null)
-                    this.target = res.getEyePosition(1);
+                    this.target = res;
             }
             if (this.target != null) {
-                Vec3 dir = this.target.subtract(this.position()).normalize().scale(0.15);
-                this.push(dir.x(), dir.y(), dir.z());
+                Vec3 dir = this.target.getEyePosition().subtract(this.position()).normalize().scale(0.08);
+                this.setDeltaMovement(this.getDeltaMovement().scale(0.95).add(dir));
             }
         }
     }

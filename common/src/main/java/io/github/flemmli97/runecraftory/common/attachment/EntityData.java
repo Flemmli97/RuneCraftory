@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class EntityData {
 
-    private boolean sleeping, paralysis, cold, poison;
+    private boolean sleeping, paralysis, cold, poison, invis;
 
     public void setSleeping(LivingEntity entity, boolean flag) {
         this.sleeping = flag;
@@ -50,5 +50,16 @@ public class EntityData {
 
     public boolean isParalysed() {
         return this.paralysis;
+    }
+
+    public void setInvis(LivingEntity entity, boolean flag) {
+        this.invis = flag;
+        if (!entity.level.isClientSide) {
+            Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.INVIS, this.invis), entity);
+        }
+    }
+
+    public boolean isInvis() {
+        return this.invis;
     }
 }

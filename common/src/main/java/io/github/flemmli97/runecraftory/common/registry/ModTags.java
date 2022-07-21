@@ -47,6 +47,11 @@ public class ModTags {
 
     public static final TagKey<Item> woolyTamer = tag("wooly_tame");
 
+    public static final TagKey<Item> chest_t1 = tag("chest_t1");
+    public static final TagKey<Item> chest_t2 = tag("chest_t2");
+    public static final TagKey<Item> chest_t3 = tag("chest_t3");
+    public static final TagKey<Item> chest_t4 = tag("chest_t4");
+
     //Blocks
     public static final TagKey<Block> farmland = blockCommon("farmland");
     public static final TagKey<Block> farmlandTill = blockCommon("farmland_tillable");

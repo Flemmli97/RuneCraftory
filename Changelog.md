@@ -1,13 +1,22 @@
+RuneCraftory 1.2.0
+================
+- Added: spider, shadow panther, monster box, gobble box
+- All magic skills are now functional
+- Boss: Marionetta. Spawns in theater ruins
+- Added treasure chest. Has a chance of spawning when a gate spawns.  
+  Right clicking it opens it while left clicking/attacking just destroys it
+  Drops a pletora of loot when opened including currently only this way obtainable items
+- Fix stat boosting item giving +10 instead of +1
+- Fix stat boost from items not getting saved
+
 RuneCraftory 1.1.0
 ================
-
 - Added: duck, fairy, ghost, spirit, ghost ray
 - Added spells: cure, cureall, master cure, light barrier, shine, prism dark ball, dark snake
 - Fixed mobs getting equipment when they shouldn't have
 
 RuneCraftory 1.0.5
 ================
-
 - Fix shipping bin being broken
 - Forge: Fixing problems with capability loading on player clone
 - Crops from this mod can now wilt if not watered.  

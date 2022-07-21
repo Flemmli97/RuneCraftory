@@ -8,6 +8,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -39,15 +41,24 @@ public class ItemStatIncrease extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entityLiving) {
+        boolean shrink = true;
         if (entityLiving instanceof ServerPlayer serverPlayer) {
             level.playSound(null, serverPlayer.getX(), serverPlayer.getY(), serverPlayer.getZ(), SoundEvents.BREWING_STAND_BREW, SoundSource.PLAYERS, 0.5F, level.random.nextFloat() * 0.1F + 0.9F);
             this.increaseStat(stack, level, serverPlayer);
             serverPlayer.awardStat(Stats.ITEM_USED.get(this));
             CriteriaTriggers.CONSUME_ITEM.trigger(serverPlayer, stack);
+            if (serverPlayer.isCreative())
+                shrink = false;
         }
-
-        stack.shrink(1);
+        if (shrink)
+            stack.shrink(1);
         return stack;
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+        player.startUsingItem(usedHand);
+        return InteractionResultHolder.consume(player.getItemInHand(usedHand));
     }
 
     private void increaseStat(ItemStack stack, Level level, Player player) {

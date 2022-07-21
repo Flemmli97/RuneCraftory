@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
+import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -7,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityBeam;
+import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -19,16 +21,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Predicate;
 
 public class EntityWaterLaser extends EntityBeam {
 
     private static final EntityDataAccessor<Float> yawMotionVal = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Integer> maxLivingTick = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> yawOffset = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> positionYawOffset = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
 
-    private List<Entity> hitEntities = new ArrayList<>();
     private float damageMultiplier = 1;
 
     private Predicate<LivingEntity> pred;
@@ -53,6 +54,8 @@ public class EntityWaterLaser extends EntityBeam {
         super.defineSynchedData();
         this.entityData.define(yawMotionVal, 0f);
         this.entityData.define(maxLivingTick, 20);
+        this.entityData.define(yawOffset, 0f);
+        this.entityData.define(positionYawOffset, 0f);
     }
 
     public void setRotationToDirWithOffset(double dirX, double dirY, double dirZ, float acc, float yawOffset) {
@@ -63,6 +66,14 @@ public class EntityWaterLaser extends EntityBeam {
     public EntityWaterLaser setMaxTicks(int ticks) {
         this.entityData.set(maxLivingTick, ticks);
         return this;
+    }
+
+    public void setYawOffset(float offset) {
+        this.entityData.set(yawOffset, offset);
+    }
+
+    public void setPositionYawOffset(float offset) {
+        this.entityData.set(positionYawOffset, offset);
     }
 
     @Override
@@ -92,7 +103,20 @@ public class EntityWaterLaser extends EntityBeam {
 
     @Override
     public int attackCooldown() {
-        return 0;
+        return 19;
+    }
+
+    @Override
+    public void updateYawPitch() {
+        if (this.getHitVecFromShooter() && this.getOwner() != null) {
+            Entity e = this.getOwner();
+            this.setXRot(e.getXRot());
+            this.setYRot(e.getYRot() + this.entityData.get(yawOffset));
+            this.xRotO = e.xRotO;
+            this.yRotO = e.yRotO + this.entityData.get(yawOffset);
+            Vector3f vec = RayTraceUtils.rotatedAround(e.getLookAngle(), Vector3f.YP, this.entityData.get(positionYawOffset));
+            this.setPos(e.getX() + vec.x(), e.getY() + (double) e.getEyeHeight() - 0.10000000149011612D + vec.y(), e.getZ() + vec.z());
+        }
     }
 
     @Override
@@ -112,8 +136,7 @@ public class EntityWaterLaser extends EntityBeam {
     @Override
     public void onImpact(EntityHitResult res) {
         Entity e = res.getEntity();
-        if (!this.hitEntities.contains(e) && CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).element(EnumElement.WATER).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null))
-            this.hitEntities.add(res.getEntity());
+        CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).element(EnumElement.WATER).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
     }
 
     public void setDamageMultiplier(float damageMultiplier) {
@@ -124,12 +147,14 @@ public class EntityWaterLaser extends EntityBeam {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.damageMultiplier = compound.getFloat("DamageMultiplier");
+        this.entityData.set(yawOffset, compound.getFloat("YawOffset"));
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putFloat("DamageMultiplier", this.damageMultiplier);
+        compound.putFloat("YawOffset", this.entityData.get(yawOffset));
     }
 
     @Override

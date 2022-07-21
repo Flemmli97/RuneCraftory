@@ -28,9 +28,16 @@ public class LibEntities {
     public static final ResourceLocation ghost = new ResourceLocation(RuneCraftory.MODID, "ghost");
     public static final ResourceLocation spirit = new ResourceLocation(RuneCraftory.MODID, "spirit");
     public static final ResourceLocation ghostRay = new ResourceLocation(RuneCraftory.MODID, "ghost_ray");
+    public static final ResourceLocation spider = new ResourceLocation(RuneCraftory.MODID, "spider");
+    public static final ResourceLocation shadowPanther = new ResourceLocation(RuneCraftory.MODID, "shadow_panther");
+    public static final ResourceLocation monsterBox = new ResourceLocation(RuneCraftory.MODID, "monster_box");
+    public static final ResourceLocation gobbleBox = new ResourceLocation(RuneCraftory.MODID, "gobble_box");
 
     public static final ResourceLocation ambrosia = new ResourceLocation(RuneCraftory.MODID, "ambrosia");
     public static final ResourceLocation thunderbolt = new ResourceLocation(RuneCraftory.MODID, "thunderbolt");
+    public static final ResourceLocation marionetta = new ResourceLocation(RuneCraftory.MODID, "marionetta");
+
+    public static final ResourceLocation treasureChest = new ResourceLocation(RuneCraftory.MODID, "treasure_chest");
 
     public static final ResourceLocation arrow = new ResourceLocation(RuneCraftory.MODID, "arrow");
     public static final ResourceLocation spore = new ResourceLocation(RuneCraftory.MODID, "spore");
@@ -44,12 +51,20 @@ public class LibEntities {
     public static final ResourceLocation lightningOrbBolt = new ResourceLocation(RuneCraftory.MODID, "lightning_orb_bolt");
     public static final ResourceLocation lightningBeam = new ResourceLocation(RuneCraftory.MODID, "lightning_beam");
     public static final ResourceLocation wispFlame = new ResourceLocation(RuneCraftory.MODID, "wisp_flame");
+    public static final ResourceLocation spiderWeb = new ResourceLocation(RuneCraftory.MODID, "spider_web");
+    public static final ResourceLocation darkBeam = new ResourceLocation(RuneCraftory.MODID, "dark_beam");
+    public static final ResourceLocation cards = new ResourceLocation(RuneCraftory.MODID, "cards");
+    public static final ResourceLocation furniture = new ResourceLocation(RuneCraftory.MODID, "thrown_furniture");
+    public static final ResourceLocation trapChest = new ResourceLocation(RuneCraftory.MODID, "trap_chest");
 
     public static final ResourceLocation baseStaffThrown = new ResourceLocation(RuneCraftory.MODID, "staff_thrown_ball");
     public static final ResourceLocation fireball = new ResourceLocation(RuneCraftory.MODID, "fireball");
+    public static final ResourceLocation explosion = new ResourceLocation(RuneCraftory.MODID, "explosion");
     public static final ResourceLocation windBlade = new ResourceLocation(RuneCraftory.MODID, "wind_blade");
+    public static final ResourceLocation rockSpear = new ResourceLocation(RuneCraftory.MODID, "rock_spear");
     public static final ResourceLocation waterLaser = new ResourceLocation(RuneCraftory.MODID, "water_laser");
     public static final ResourceLocation lightBall = new ResourceLocation(RuneCraftory.MODID, "light_ball");
     public static final ResourceLocation darkBall = new ResourceLocation(RuneCraftory.MODID, "dark_ball");
+    public static final ResourceLocation darkness = new ResourceLocation(RuneCraftory.MODID, "darkness");
 
 }

@@ -162,6 +162,13 @@ public class LangGen implements DataProvider {
         this.add(ModEntities.ghost.get(), "Ghost");
         this.add(ModEntities.spirit.get(), "Spirit");
         this.add(ModEntities.ghostRay.get(), "Ghost Ray");
+        this.add(ModEntities.spider.get(), "Spider");
+        this.add(ModEntities.shadowPanther.get(), "Shadow Panther");
+        this.add(ModEntities.monsterBox.get(), "Monster Box");
+        this.add(ModEntities.gobbleBox.get(), "Gobble Box");
+        this.add(ModEntities.marionetta.get(), "Marionetta");
+
+        this.add(ModEntities.treasureChest.get(), "Treasure Chest");
 
         this.add(ModAttributes.RF_DEFENCE.get().getDescriptionId(), "DEF");
         this.add(ModAttributes.RF_MAGIC.get().getDescriptionId(), "M. ATT");
@@ -253,6 +260,8 @@ public class LangGen implements DataProvider {
         this.add("sleep", "Sleep");
         this.add("monster.interact.sit", "Entity is now staying");
         this.add("monster.interact.follow", "Entity is now following you");
+        this.add("tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
+        this.add("tooltip.item.treasure_level", "Chest tier lvl: %s");
 
         this.add("crafting.rpMax.missing", "Missing total rp");
 

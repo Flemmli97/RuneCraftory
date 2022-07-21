@@ -41,15 +41,14 @@ public class EntityAmbrosia extends BossMonster {
     public static final AnimatedAction pollen = new AnimatedAction(15, 5, "pollen");
     public static final AnimatedAction pollen2 = new AnimatedAction(15, 5, "pollen_2", "pollen");
 
-    public static final AnimatedAction defeat = new AnimatedAction(204, 150, "defeat");
+    public static final AnimatedAction defeat = new AnimatedAction(204, 150, "defeat", "defeat", 1, false);
     public static final AnimatedAction angry = new AnimatedAction(48, 0, "angry");
 
     private static final AnimatedAction[] anims = new AnimatedAction[]{kick_1, butterfly, wave, sleep, pollen, pollen2, kick_2, kick_3, defeat, angry};
 
     public static final ImmutableList<String> nonChoosableAttacks = ImmutableList.of(pollen2.getID(), kick_2.getID(), kick_3.getID());
 
-    private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, anims)
-            .setAnimationChangeFunc(anim -> anim == null && this.getAnimationHandler().isCurrentAnim(defeat.getID()));
+    private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, anims);
 
     private static final List<Vector3f> pollenBase = RayTraceUtils.rotatedVecs(new Vec3(1, 0, 0), new Vec3(0, 1, 0), -180, 135, 45);
     private static final List<Vector3f> pollenInd = RayTraceUtils.rotatedVecs(new Vec3(0.04, 0.07, 0), new Vec3(0, 1, 0), -180, 160, 20);

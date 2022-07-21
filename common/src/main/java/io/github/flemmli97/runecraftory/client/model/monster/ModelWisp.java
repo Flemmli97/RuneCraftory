@@ -19,6 +19,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implements ExtendedModel {
@@ -29,7 +30,7 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
     protected final BlockBenchAnimations anim;
 
     public ModelWisp(ModelPart root) {
-        super();
+        super(RenderType::entityTranslucentCull);
         this.model = new ModelPartHandler(root, "main");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "wisp"));
     }
@@ -60,7 +61,7 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         //poseStack.scale(0.85f, 0.85f, 0.85f);
         //poseStack.translate(0, 0.2, 0);
-        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay);
+        this.model.getMainPart().render(poseStack, buffer, 0xff00ff, packedOverlay, red, green, blue, 0.8f);
     }
 
     @Override

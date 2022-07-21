@@ -104,6 +104,15 @@
     },
     {
       "type": "patchouli:entity",
+      "entity": "runecraftory:gobble_box",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:gobble_box"
+    },
+    {
+      "type": "patchouli:entity",
       "entity": "runecraftory:goblin",
       "scale": 0.7
     },
@@ -119,6 +128,24 @@
     {
       "type": "patchouli:text",
       "text": "runecraftory.patchouli.entry.entity.runecraftory:goblin_archer"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:marionetta",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:marionetta"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:monster_box",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:monster_box"
     },
     {
       "type": "patchouli:entity",
@@ -149,12 +176,30 @@
     },
     {
       "type": "patchouli:entity",
+      "entity": "runecraftory:shadow_panther",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:shadow_panther"
+    },
+    {
+      "type": "patchouli:entity",
       "entity": "runecraftory:sky_fish",
       "scale": 0.7
     },
     {
       "type": "patchouli:text",
       "text": "runecraftory.patchouli.entry.entity.runecraftory:sky_fish"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:spider",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:spider"
     },
     {
       "type": "patchouli:entity",

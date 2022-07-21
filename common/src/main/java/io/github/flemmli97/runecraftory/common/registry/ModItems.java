@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.RFCreativeTabs;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemGiantCrops;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMushroom;
+import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemRecipeBread;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemDebug;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemLevelUp;
@@ -126,7 +127,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> greenifier = ITEMS.register("greenifier", () -> new ItemFertilizer(ItemFertilizer.greenifier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
     public static final RegistryEntrySupplier<Item> greenifierPlus = ITEMS.register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.greenifierPlus, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
     public static final RegistryEntrySupplier<Item> wettablePowder = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.wettable, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryEntrySupplier<Item> objectX = ITEMS.register("object_x", () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.medicine)) {
+    public static final RegistryEntrySupplier<Item> objectX = ITEMS.register("object_x", () -> new ItemObjectX(new Item.Properties().food(foodProp).tab(RFCreativeTabs.medicine)) {
         @Override
         public UseAnim getUseAnimation(ItemStack stack) {
             return UseAnim.DRINK;
@@ -734,23 +735,23 @@ public class ModItems {
 
     //Skills and Magic
     public static final RegistryEntrySupplier<Item> fireBallSmall = spell(() -> ModSpells.FIREBALL, "fireball");
-    public static final RegistryEntrySupplier<Item> fireBallBig = spell(() -> ModSpells.EMPTY, "fireball_big");
-    public static final RegistryEntrySupplier<Item> explosion = spell(() -> ModSpells.EMPTY, "explosion");
+    public static final RegistryEntrySupplier<Item> fireBallBig = spell(() -> ModSpells.BIGFIREBALL, "fireball_big");
+    public static final RegistryEntrySupplier<Item> explosion = spell(() -> ModSpells.EXPLOSION, "explosion");
     public static final RegistryEntrySupplier<Item> waterLaser = spell(() -> ModSpells.WATERLASER, "water_laser");
-    public static final RegistryEntrySupplier<Item> parallelLaser = spell(() -> ModSpells.EMPTY, "parallel_laser");
-    public static final RegistryEntrySupplier<Item> deltaLaser = spell(() -> ModSpells.EMPTY, "delta_laser");
-    public static final RegistryEntrySupplier<Item> screwRock = spell(() -> ModSpells.EMPTY, "screw_rock");
+    public static final RegistryEntrySupplier<Item> parallelLaser = spell(() -> ModSpells.PARALLELLASER, "parallel_laser");
+    public static final RegistryEntrySupplier<Item> deltaLaser = spell(() -> ModSpells.DELTALASER, "delta_laser");
+    public static final RegistryEntrySupplier<Item> screwRock = spell(() -> ModSpells.SCREWROCK, "screw_rock");
     public static final RegistryEntrySupplier<Item> earthSpike = spell(() -> ModSpells.EMPTY, "earth_spike");
-    public static final RegistryEntrySupplier<Item> avengerRock = spell(() -> ModSpells.EMPTY, "avenger_rock");
-    public static final RegistryEntrySupplier<Item> sonicWind = spell(() -> ModSpells.EMPTY, "sonic_wind");
+    public static final RegistryEntrySupplier<Item> avengerRock = spell(() -> ModSpells.AVENGERROCK, "avenger_rock");
+    public static final RegistryEntrySupplier<Item> sonicWind = spell(() -> ModSpells.SONIC, "sonic_wind");
     public static final RegistryEntrySupplier<Item> doubleSonic = spell(() -> ModSpells.DOUBLESONIC, "double_sonic");
-    public static final RegistryEntrySupplier<Item> penetrateSonic = spell(() -> ModSpells.EMPTY, "penetrate_sonic");
+    public static final RegistryEntrySupplier<Item> penetrateSonic = spell(() -> ModSpells.PENETRATESONIC, "penetrate_sonic");
     public static final RegistryEntrySupplier<Item> lightBarrier = spell(() -> ModSpells.LIGHTBARRIER, "light_barrier");
     public static final RegistryEntrySupplier<Item> shine = spell(() -> ModSpells.SHINE, "shine");
     public static final RegistryEntrySupplier<Item> prism = spell(() -> ModSpells.PRISM, "prism");
     public static final RegistryEntrySupplier<Item> darkSnake = spell(() -> ModSpells.DARKSNAKE, "dark_snake");
     public static final RegistryEntrySupplier<Item> darkBall = spell(() -> ModSpells.DARKBALL, "dark_ball");
-    public static final RegistryEntrySupplier<Item> darkness = spell(() -> ModSpells.EMPTY, "darkness");
+    public static final RegistryEntrySupplier<Item> darkness = spell(() -> ModSpells.DARKNESS, "darkness");
     public static final RegistryEntrySupplier<Item> cure = spell(() -> ModSpells.CURE, "cure");
     public static final RegistryEntrySupplier<Item> cureAll = spell(() -> ModSpells.CUREALL, "cure_all");
     public static final RegistryEntrySupplier<Item> cureMaster = spell(() -> ModSpells.MASTERCURE, "cure_master");

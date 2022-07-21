@@ -14,6 +14,12 @@ import net.minecraft.world.item.ItemStack;
 
 public class FireballSpell extends Spell {
 
+    public final boolean big;
+
+    public FireballSpell(boolean big) {
+        this.big = big;
+    }
+
     @Override
     public void update(Player player, ItemStack stack) {
 
@@ -33,21 +39,31 @@ public class FireballSpell extends Spell {
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.FIRE)).orElse(false);
         if (rp) {
-            EntityFireball ball = new EntityFireball(world, entity);
+            EntityFireball ball = new EntityFireball(world, entity, this.big);
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 LivingEntity target = mob.getTarget();
                 ball.shootAtEntity(target, 1, 0, 0.2f);
             } else
                 ball.shoot(entity, entity.getXRot(), entity.getYRot(), 0, 1, 0);
-            ball.setDamageMultiplier(1 + (level - 1) / 10f);
+            ball.setDamageMultiplier(0.95f + level * 0.5f + (this.big ? 0.1f : 0));
             world.addFreshEntity(ball);
             if (entity instanceof Player player) {
                 boolean cooldown = Platform.INSTANCE.getPlayerData(player).map(cap -> {
-                    cap.setSpellFlag(cap.spellFlag() + 1, this.coolDown());
-                    return cap.spellFlag() >= 3;
+                    if (this.big) {
+                        cap.setBigFireballSpellFlag(cap.bigFireballSpellFlag() + 1, this.coolDown());
+                        return cap.bigFireballSpellFlag() >= 2;
+                    }
+                    cap.setFireballSpellFlag(cap.fireballSpellFlag() + 1, this.coolDown());
+                    return cap.fireballSpellFlag() >= 3;
                 }).orElse(false);
                 if (cooldown)
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.setSpellFlag(0, -1));
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                        if (this.big) {
+                            data.setBigFireballSpellFlag(0, -1);
+                        } else {
+                            data.setFireballSpellFlag(0, -1);
+                        }
+                    });
                 return cooldown;
             }
             return true;

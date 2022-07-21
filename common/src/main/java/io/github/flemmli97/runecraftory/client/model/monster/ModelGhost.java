@@ -19,6 +19,7 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
 public class ModelGhost<T extends EntityGhost> extends EntityModel<T> implements ExtendedModel {
@@ -29,7 +30,7 @@ public class ModelGhost<T extends EntityGhost> extends EntityModel<T> implements
     protected final BlockBenchAnimations anim;
 
     public ModelGhost(ModelPart root) {
-        super();
+        super(RenderType::entityTranslucentCull);
         this.model = new ModelPartHandler(root, "body");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "ghost"));
     }
@@ -81,7 +82,7 @@ public class ModelGhost<T extends EntityGhost> extends EntityModel<T> implements
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.scale(0.85f, 0.85f, 0.85f);
         poseStack.translate(0, 0.2, 0);
-        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay);
+        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, 0.85f);
     }
 
     @Override

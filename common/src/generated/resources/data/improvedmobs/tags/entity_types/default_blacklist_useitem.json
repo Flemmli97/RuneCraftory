@@ -21,7 +21,12 @@
     "runecraftory:ghost",
     "runecraftory:spirit",
     "runecraftory:ghost_ray",
+    "runecraftory:spider",
+    "runecraftory:shadow_panther",
+    "runecraftory:monster_box",
+    "runecraftory:gobble_box",
     "runecraftory:ambrosia",
-    "runecraftory:thunderbolt"
+    "runecraftory:thunderbolt",
+    "runecraftory:marionetta"
   ]
 }

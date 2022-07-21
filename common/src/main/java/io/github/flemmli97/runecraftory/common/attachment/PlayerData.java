@@ -101,7 +101,7 @@ public class PlayerData {
     private int foodDuration;
 
     //Weapon and ticker
-    private int spellFlag;
+    private int fireballSpellFlag, bigFireballSpellFlag;
     private int spellTicker;
 
     private int ticker = 0;
@@ -328,17 +328,17 @@ public class PlayerData {
     public void consumeStatBoostItem(Player player, ItemStatIncrease.Stat type) {
         switch (type) {
             case STR -> {
-                this.strAdd += 10;
+                this.strAdd += 1;
                 if (player instanceof ServerPlayer serverPlayer)
                     Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type), serverPlayer);
             }
             case INT -> {
-                this.intAdd += 10;
+                this.intAdd += 1;
                 if (player instanceof ServerPlayer serverPlayer)
                     Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type), serverPlayer);
             }
             case VIT -> {
-                this.vitAdd += 10;
+                this.vitAdd += 1;
                 if (player instanceof ServerPlayer serverPlayer)
                     Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type), serverPlayer);
             }
@@ -664,12 +664,21 @@ public class PlayerData {
         this.foodDuration = nbt.getInt("FoodBuffDuration");
     }
 
-    public int spellFlag() {
-        return this.spellFlag;
+    public int fireballSpellFlag() {
+        return this.fireballSpellFlag;
     }
 
-    public void setSpellFlag(int flag, int resetTime) {
-        this.spellFlag = flag;
+    public void setFireballSpellFlag(int flag, int resetTime) {
+        this.fireballSpellFlag = flag;
+        this.spellTicker = resetTime;
+    }
+
+    public int bigFireballSpellFlag() {
+        return this.bigFireballSpellFlag;
+    }
+
+    public void setBigFireballSpellFlag(int flag, int resetTime) {
+        this.bigFireballSpellFlag = flag;
         this.spellTicker = resetTime;
     }
 
@@ -689,7 +698,8 @@ public class PlayerData {
                 this.lastUpdated = player.level.getGameTime();
             }
             if (--this.spellTicker == 0) {
-                this.spellFlag = 0;
+                this.fireballSpellFlag = 0;
+                this.bigFireballSpellFlag = 0;
             }
             this.updateGlove(player);
             --this.spearTicker;
@@ -782,6 +792,9 @@ public class PlayerData {
         this.vit = nbt.getFloat("Vitality");
         this.intel = nbt.getFloat("Intelligence");
         this.level = nbt.getIntArray("Level");
+        this.strAdd = nbt.getFloat("StrengthBonus");
+        this.vitAdd = nbt.getFloat("VitalityBonus");
+        this.intAdd = nbt.getFloat("IntelligenceBonus");
         CompoundTag compound = nbt.getCompound("Skills");
         for (EnumSkills skill : EnumSkills.values()) {
             this.skillMap.put(skill, compound.getIntArray(skill.toString()));
@@ -828,6 +841,9 @@ public class PlayerData {
         nbt.putFloat("Vitality", this.vit);
         nbt.putFloat("Intelligence", this.intel);
         nbt.putIntArray("Level", this.level);
+        nbt.putFloat("StrengthBonus", this.strAdd);
+        nbt.putFloat("VitalityBonus", this.vitAdd);
+        nbt.putFloat("IntelligenceBonus", this.intAdd);
         CompoundTag compound = new CompoundTag();
         for (EnumSkills skill : EnumSkills.values()) {
             compound.putIntArray(skill.toString(), this.skillMap.get(skill));

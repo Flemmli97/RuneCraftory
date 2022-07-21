@@ -12,15 +12,24 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaSleep
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBaseSpellBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityCards;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBeam;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkness;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityExplosionSpell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityFurniture;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityLightBall;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityMarionettaTrap;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollen;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityRockSpear;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpiderWeb;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpore;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStone;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThiccLightningBolt;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThunderboltBeam;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindGust;
@@ -37,17 +46,22 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityGhost;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGhostRay;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblin;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblinArcher;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityMimic;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrc;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrcArcher;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityPanther;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityPommePomme;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntitySkyFish;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntitySpider;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityTortas;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWeagle;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityMarionetta;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntitySpirit;
 import io.github.flemmli97.runecraftory.common.items.RuneCraftoryEggItem;
+import io.github.flemmli97.runecraftory.common.items.TreasureChestSpawnegg;
 import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
 import io.github.flemmli97.runecraftory.common.lib.LibEntities;
 import io.github.flemmli97.tenshilib.api.config.ItemTagWrapper;
@@ -284,6 +298,46 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 4.9)
                     .xp(13).money(9).tamingChance(0.003f).build(),
             new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
+    public static final RegistryEntrySupplier<EntityType<EntitySpider>> spider = regMonster(EntityType.Builder.of(EntitySpider::new, MobCategory.MONSTER).sized(0.9f, 0.7f).clientTrackingRange(8), LibEntities.spider,
+            0x6f6751, 0x404148,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 30).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 7.6)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 9.3).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 7.1)
+                    .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 4.8)
+                    .putAttributes(LibAttributes.rf_magic, 8).putLevelGains(LibAttributes.rf_magic, 4.2)
+                    .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 4.9)
+                    .xp(13).money(9).tamingChance(0.003f).build(),
+            new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
+    public static final RegistryEntrySupplier<EntityType<EntityPanther>> shadowPanther = regMonster(EntityType.Builder.of(EntityPanther::new, MobCategory.MONSTER).sized(1.3f, 2.2f).clientTrackingRange(8), LibEntities.shadowPanther,
+            0x27375b, 0x733838,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 30).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 7.6)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 9.3).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 7.1)
+                    .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 4.8)
+                    .putAttributes(LibAttributes.rf_magic, 8).putLevelGains(LibAttributes.rf_magic, 4.2)
+                    .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 4.9)
+                    .xp(13).money(9).tamingChance(0.003f).build(),
+            new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
+    public static final RegistryEntrySupplier<EntityType<EntityMimic>> monsterBox = regMonster(EntityType.Builder.of(EntityMimic::new, MobCategory.MONSTER).sized(1, 1).clientTrackingRange(8), LibEntities.monsterBox,
+            0xac935e, 0x462f10,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 30).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 7.6)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 9.3).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 7.1)
+                    .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 4.8)
+                    .putAttributes(LibAttributes.rf_magic, 8).putLevelGains(LibAttributes.rf_magic, 4.2)
+                    .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 4.9)
+                    .xp(13).money(9).tamingChance(0.003f).build(),
+            new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
+    public static final RegistryEntrySupplier<EntityType<EntityMimic>> gobbleBox = regMonster(EntityType.Builder.of(EntityMimic::new, MobCategory.MONSTER).sized(1, 1).clientTrackingRange(8), LibEntities.gobbleBox,
+            0x8f9cc4, 0x343843,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 30).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 7.6)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 9.3).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 7.1)
+                    .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 4.8)
+                    .putAttributes(LibAttributes.rf_magic, 8).putLevelGains(LibAttributes.rf_magic, 4.2)
+                    .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 4.9)
+                    .xp(13).money(9).tamingChance(0.003f).build(),
+            new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
 
     public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> ambrosia = regMonster(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), LibEntities.ambrosia,
             0x00ff00, 0xe600e6,
@@ -307,26 +361,47 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_res_wind, 25)
                     .setTamingItem(new ItemTagWrapper(ModItems.carrotGiant.getID().toString(), 1))
                     .xp(25).money(75).tamingChance(0.0008f).setRidable().build());
+    public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> marionetta = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.5f).clientTrackingRange(8), LibEntities.marionetta,
+            0xb86b13, 0xd8d7d7,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 250).putLevelGains(LibAttributes.rf_magic_defence, 23)
+                    .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 16).putLevelGains(LibAttributes.rf_magic_defence, 10.4)
+                    .putAttributes(LibAttributes.rf_defence, 4).putLevelGains(LibAttributes.rf_magic_defence, 6.3)
+                    .putAttributes(LibAttributes.rf_magic, 13).putLevelGains(LibAttributes.rf_magic_defence, 8.7)
+                    .putAttributes(LibAttributes.rf_magic_defence, 2).putLevelGains(LibAttributes.rf_magic_defence, 5.2)
+                    .putAttributes(LibAttributes.rf_res_wind, 25)
+                    .setTamingItem(new ItemTagWrapper(ModItems.carrotGiant.getID().toString(), 1))
+                    .xp(25).money(75).tamingChance(0.0008f).setRidable().build());
+
+    public static final RegistryEntrySupplier<EntityType<EntityTreasureChest>> treasureChest = treasureChest(EntityType.Builder.<EntityTreasureChest>of(EntityTreasureChest::new, MobCategory.MISC).sized(1, 1).clientTrackingRange(4), LibEntities.treasureChest);
 
     public static final RegistryEntrySupplier<EntityType<EntityMobArrow>> arrow = reg(EntityType.Builder.<EntityMobArrow>of(EntityMobArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20), LibEntities.arrow);
     public static final RegistryEntrySupplier<EntityType<EntitySpore>> spore = reg(EntityType.Builder.<EntitySpore>of(EntitySpore::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), LibEntities.spore);
     public static final RegistryEntrySupplier<EntityType<EntityWindGust>> gust = reg(EntityType.Builder.<EntityWindGust>of(EntityWindGust::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), LibEntities.gust);
     public static final RegistryEntrySupplier<EntityType<EntityStone>> stone = reg(EntityType.Builder.<EntityStone>of(EntityStone::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.stone);
 
-    public static final RegistryEntrySupplier<EntityType<EntityAmbrosiaSleep>> sleep_ball = reg(EntityType.Builder.<EntityAmbrosiaSleep>of(EntityAmbrosiaSleep::new, MobCategory.MISC).sized(0.4f, 0.6f).clientTrackingRange(4), LibEntities.ambrosia_sleep);
-    public static final RegistryEntrySupplier<EntityType<EntityAmbrosiaWave>> ambrosia_wave = reg(EntityType.Builder.<EntityAmbrosiaWave>of(EntityAmbrosiaWave::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.ambrosia_wave);
+    public static final RegistryEntrySupplier<EntityType<EntityAmbrosiaSleep>> sleepBall = reg(EntityType.Builder.<EntityAmbrosiaSleep>of(EntityAmbrosiaSleep::new, MobCategory.MISC).sized(0.4f, 0.6f).clientTrackingRange(4), LibEntities.ambrosia_sleep);
+    public static final RegistryEntrySupplier<EntityType<EntityAmbrosiaWave>> ambrosiaWave = reg(EntityType.Builder.<EntityAmbrosiaWave>of(EntityAmbrosiaWave::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.ambrosia_wave);
     public static final RegistryEntrySupplier<EntityType<EntityButterfly>> butterfly = reg(EntityType.Builder.<EntityButterfly>of(EntityButterfly::new, MobCategory.MISC).sized(0.2f, 0.2f).clientTrackingRange(4), LibEntities.butterfly);
     public static final RegistryEntrySupplier<EntityType<EntityPollen>> pollen = reg(EntityType.Builder.<EntityPollen>of(EntityPollen::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.pollen);
     public static final RegistryEntrySupplier<EntityType<EntityThiccLightningBolt>> lightningOrbBolt = reg(EntityType.Builder.<EntityThiccLightningBolt>of(EntityThiccLightningBolt::new, MobCategory.MISC).sized(0.8f, 0.8f).clientTrackingRange(4), LibEntities.lightningOrbBolt);
     public static final RegistryEntrySupplier<EntityType<EntityThunderboltBeam>> lightningBeam = reg(EntityType.Builder.<EntityThunderboltBeam>of(EntityThunderboltBeam::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), LibEntities.lightningBeam);
     public static final RegistryEntrySupplier<EntityType<EntityWispFlame>> wispFlame = reg(EntityType.Builder.<EntityWispFlame>of(EntityWispFlame::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.wispFlame);
+    public static final RegistryEntrySupplier<EntityType<EntitySpiderWeb>> spiderWeb = reg(EntityType.Builder.<EntitySpiderWeb>of(EntitySpiderWeb::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), LibEntities.spiderWeb);
+    public static final RegistryEntrySupplier<EntityType<EntityDarkBeam>> darkBeam = reg(EntityType.Builder.<EntityDarkBeam>of(EntityDarkBeam::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.darkBeam);
+    public static final RegistryEntrySupplier<EntityType<EntityCards>> cards = reg(EntityType.Builder.<EntityCards>of(EntityCards::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), LibEntities.cards);
+    public static final RegistryEntrySupplier<EntityType<EntityFurniture>> furniture = reg(EntityType.Builder.<EntityFurniture>of(EntityFurniture::new, MobCategory.MISC).sized(0.9f, 0.9f).clientTrackingRange(4), LibEntities.furniture);
+    public static final RegistryEntrySupplier<EntityType<EntityMarionettaTrap>> trapChest = reg(EntityType.Builder.<EntityMarionettaTrap>of(EntityMarionettaTrap::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), LibEntities.trapChest);
 
     public static final RegistryEntrySupplier<EntityType<EntityBaseSpellBall>> staffThrown = reg(EntityType.Builder.<EntityBaseSpellBall>of(EntityBaseSpellBall::new, MobCategory.MISC).sized(0.2f, 0.2f).clientTrackingRange(4), LibEntities.baseStaffThrown);
-    public static final RegistryEntrySupplier<EntityType<EntityWindBlade>> windBlade = reg(EntityType.Builder.<EntityWindBlade>of(EntityWindBlade::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.windBlade);
     public static final RegistryEntrySupplier<EntityType<EntityFireball>> fireBall = reg(EntityType.Builder.<EntityFireball>of(EntityFireball::new, MobCategory.MISC).sized(0.2f, 0.2f).clientTrackingRange(4), LibEntities.fireball);
+    public static final RegistryEntrySupplier<EntityType<EntityExplosionSpell>> explosion = reg(EntityType.Builder.<EntityExplosionSpell>of(EntityExplosionSpell::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), LibEntities.explosion);
     public static final RegistryEntrySupplier<EntityType<EntityWaterLaser>> waterLaser = reg(EntityType.Builder.<EntityWaterLaser>of(EntityWaterLaser::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.waterLaser);
+    public static final RegistryEntrySupplier<EntityType<EntityRockSpear>> rockSpear = reg(EntityType.Builder.<EntityRockSpear>of(EntityRockSpear::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.rockSpear);
+    public static final RegistryEntrySupplier<EntityType<EntityWindBlade>> windBlade = reg(EntityType.Builder.<EntityWindBlade>of(EntityWindBlade::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.windBlade);
     public static final RegistryEntrySupplier<EntityType<EntityLightBall>> lightBall = reg(EntityType.Builder.<EntityLightBall>of(EntityLightBall::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.lightBall);
     public static final RegistryEntrySupplier<EntityType<EntityDarkBall>> darkBall = reg(EntityType.Builder.<EntityDarkBall>of(EntityDarkBall::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.darkBall);
+    public static final RegistryEntrySupplier<EntityType<EntityDarkness>> darkness = reg(EntityType.Builder.<EntityDarkness>of(EntityDarkness::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.darkness);
 
     public static void registerAttributes(BiConsumer<EntityType<? extends LivingEntity>, AttributeSupplier.Builder> cons) {
         cons.accept(gate.get(), GateEntity.createAttributes());
@@ -350,9 +425,14 @@ public class ModEntities {
         cons.accept(ghost.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).add(Attributes.FLYING_SPEED));
         cons.accept(spirit.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).add(Attributes.FLYING_SPEED));
         cons.accept(ghostRay.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()).add(Attributes.FLYING_SPEED));
+        cons.accept(spider.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
+        cons.accept(shadowPanther.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
+        cons.accept(monsterBox.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
+        cons.accept(gobbleBox.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
 
         cons.accept(ambrosia.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
         cons.accept(thunderbolt.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
+        cons.accept(marionetta.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
     }
 
     public static <V extends Entity> RegistryEntrySupplier<EntityType<V>> reg(EntityType.Builder<V> v, ResourceLocation name) {
@@ -362,6 +442,12 @@ public class ModEntities {
     public static <V extends Entity> RegistryEntrySupplier<EntityType<V>> regWithEgg(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary) {
         RegistryEntrySupplier<EntityType<V>> reg = reg(v, name);
         ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new RuneCraftoryEggItem(reg, primary, secondary, new Item.Properties().tab(RFCreativeTabs.monsters)));
+        return reg;
+    }
+
+    public static <V extends Entity> RegistryEntrySupplier<EntityType<V>> treasureChest(EntityType.Builder<V> v, ResourceLocation name) {
+        RegistryEntrySupplier<EntityType<V>> reg = reg(v, name);
+        ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new TreasureChestSpawnegg(reg, new Item.Properties().tab(RFCreativeTabs.monsters)));
         return reg;
     }
 

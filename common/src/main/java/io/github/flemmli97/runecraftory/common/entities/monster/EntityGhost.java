@@ -70,6 +70,7 @@ public class EntityGhost extends ChargingMonster {
     protected void applyAttributes() {
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
         this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.55);
+        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
         super.applyAttributes();
     }
 
