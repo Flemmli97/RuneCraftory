@@ -22,6 +22,13 @@ public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttack
     }
 
     @Override
+    public void stop() {
+        super.stop();
+        this.moveDelay = 0;
+        this.moveFlag = false;
+    }
+
+    @Override
     public AnimatedAction randomAttack() {
         AnimatedAction anim = this.attacker.chainAnim(this.prevAnim);
         if (anim == null) {
@@ -33,18 +40,6 @@ public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttack
             return anim;
         }
         return this.randomAttack();
-    }
-
-    @Override
-    public int coolDown(AnimatedAction anim) {
-        return this.attacker.animationCooldown(this.next);
-    }
-
-    @Override
-    public void stop() {
-        super.stop();
-        this.moveDelay = 0;
-        this.moveFlag = false;
     }
 
     @Override
@@ -128,6 +123,11 @@ public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttack
             this.iddleFlag = true;
         }
         this.circleAroundTargetFacing(7, this.clockwise, 1);
+    }
+
+    @Override
+    public int coolDown(AnimatedAction anim) {
+        return this.attacker.animationCooldown(this.next);
     }
 
 }

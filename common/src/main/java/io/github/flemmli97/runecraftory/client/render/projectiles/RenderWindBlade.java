@@ -22,16 +22,16 @@ public class RenderWindBlade extends RenderTexture<EntityWindBlade> {
     }
 
     @Override
-    public float[] uvOffset(int timer) {
-        return super.uvOffset((int) (timer * 0.7));
-    }
-
-    @Override
     public void render(EntityWindBlade entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.scale(0.75f, 0.75f, 0.75f);
         stack.translate(0, this.ySize * 0.35, 0);
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
         stack.popPose();
+    }
+
+    @Override
+    public float[] uvOffset(int timer) {
+        return super.uvOffset((int) (timer * 0.7));
     }
 }

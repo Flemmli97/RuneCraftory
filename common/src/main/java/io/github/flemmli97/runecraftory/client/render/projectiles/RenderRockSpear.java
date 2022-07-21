@@ -26,11 +26,6 @@ public class RenderRockSpear extends EntityRenderer<EntityRockSpear> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityRockSpear entity) {
-        return entity.bigRock() ? big : small;
-    }
-
-    @Override
     public void render(EntityRockSpear entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         float size = entity.getRange() + 0.5f;
         float yaw = -(entity.yRotO + (entity.getYRot() - entity.yRotO) * partialTicks) - 90.0F;
@@ -54,5 +49,10 @@ public class RenderRockSpear extends EntityRenderer<EntityRockSpear> {
         }
         stack.popPose();
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(EntityRockSpear entity) {
+        return entity.bigRock() ? big : small;
     }
 }

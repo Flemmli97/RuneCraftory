@@ -21,6 +21,13 @@ public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends Animated
     }
 
     @Override
+    public void stop() {
+        super.stop();
+        this.moveDelay = 0;
+        this.moveFlag = false;
+    }
+
+    @Override
     public AnimatedAction randomAttack() {
         AnimatedAction anim = this.attacker.chainAnim(this.prevAnim);
         if (anim == null) {
@@ -32,22 +39,6 @@ public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends Animated
             return anim;
         }
         return this.randomAttack();
-    }
-
-    @Override
-    public int coolDown(AnimatedAction anim) {
-        return this.attacker.animationCooldown(this.next);
-    }
-
-    @Override
-    public void stop() {
-        super.stop();
-        this.moveDelay = 0;
-        this.moveFlag = false;
-    }
-
-    public void setIddleTime(int time) {
-        this.iddleTime = time;
     }
 
     @Override
@@ -145,6 +136,15 @@ public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends Animated
         }
         if (this.iddleData != 0)
             this.circleAroundTargetFacing(7, this.iddleData == 1, 1.1f);
+    }
+
+    @Override
+    public int coolDown(AnimatedAction anim) {
+        return this.attacker.animationCooldown(this.next);
+    }
+
+    public void setIddleTime(int time) {
+        this.iddleTime = time;
     }
 
 }

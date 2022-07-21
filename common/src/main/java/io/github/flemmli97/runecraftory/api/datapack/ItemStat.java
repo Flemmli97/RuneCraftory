@@ -37,15 +37,33 @@ public class ItemStat {
             LibAttributes.rf_defence,
             LibAttributes.rf_magic,
             LibAttributes.rf_magic_defence);
-
+    private final Map<Attribute, Double> itemStats = new TreeMap<>(ModAttributes.sorted);
     private int buyPrice;
     private int sellPrice;
     private int upgradeDifficulty;
     private EnumElement element;
-    private final Map<Attribute, Double> itemStats = new TreeMap<>(ModAttributes.sorted);
     private Spell tier1Spell;
     private Spell tier2Spell;
     private Spell tier3Spell;
+
+    public static ItemStat fromPacket(FriendlyByteBuf buffer) {
+        ItemStat stat = new ItemStat();
+        stat.buyPrice = buffer.readInt();
+        stat.sellPrice = buffer.readInt();
+        stat.upgradeDifficulty = buffer.readInt();
+        stat.element = buffer.readEnum(EnumElement.class);
+        int size = buffer.readInt();
+        for (int i = 0; i < size; i++)
+            stat.itemStats.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
+        SimpleRegistryWrapper<Spell> spellRegistry = PlatformUtils.INSTANCE.registry(ModSpells.SPELLREGISTRY_KEY);
+        if (buffer.readBoolean())
+            stat.tier1Spell = spellRegistry.getFromId(buffer.readResourceLocation());
+        if (buffer.readBoolean())
+            stat.tier2Spell = spellRegistry.getFromId(buffer.readResourceLocation());
+        if (buffer.readBoolean())
+            stat.tier3Spell = spellRegistry.getFromId(buffer.readResourceLocation());
+        return stat;
+    }
 
     public int getBuy() {
         return this.buyPrice;
@@ -103,25 +121,6 @@ public class ItemStat {
             buffer.writeResourceLocation(this.tier3Spell.getRegistryName());
     }
 
-    public static ItemStat fromPacket(FriendlyByteBuf buffer) {
-        ItemStat stat = new ItemStat();
-        stat.buyPrice = buffer.readInt();
-        stat.sellPrice = buffer.readInt();
-        stat.upgradeDifficulty = buffer.readInt();
-        stat.element = buffer.readEnum(EnumElement.class);
-        int size = buffer.readInt();
-        for (int i = 0; i < size; i++)
-            stat.itemStats.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
-        SimpleRegistryWrapper<Spell> spellRegistry = PlatformUtils.INSTANCE.registry(ModSpells.SPELLREGISTRY_KEY);
-        if (buffer.readBoolean())
-            stat.tier1Spell = spellRegistry.getFromId(buffer.readResourceLocation());
-        if (buffer.readBoolean())
-            stat.tier2Spell = spellRegistry.getFromId(buffer.readResourceLocation());
-        if (buffer.readBoolean())
-            stat.tier3Spell = spellRegistry.getFromId(buffer.readResourceLocation());
-        return stat;
-    }
-
     public List<Component> texts(ItemStack stack, boolean showStat) {
         List<Component> list = new ArrayList<>();
         CompoundTag tag = ItemNBT.getItemNBT(stack);
@@ -176,11 +175,11 @@ public class ItemStat {
      */
     public static class MutableItemStat {
 
+        private final Map<Attribute, Double> itemStats = new TreeMap<>(ModAttributes.sorted);
         private int buyPrice;
         private int sellPrice;
         private int upgradeDifficulty;
         private EnumElement element = EnumElement.NONE;
-        private final Map<Attribute, Double> itemStats = new TreeMap<>(ModAttributes.sorted);
         private Spell tier1Spell;
         private Spell tier2Spell;
         private Spell tier3Spell;

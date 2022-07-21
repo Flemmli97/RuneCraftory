@@ -62,6 +62,7 @@ import java.util.function.Function;
 
 public class PlayerData {
 
+    public boolean starting, unlockedRecipes;
     //max runepoints possible: 2883
     private int money = GeneralConfig.startingMoney;
     private float runePointsMax = GeneralConfig.startingRP;
@@ -77,46 +78,36 @@ public class PlayerData {
     private Map<Attribute, Double> mainHandBonus = new HashMap<>();
     private Map<Attribute, Double> offHandBonus = new HashMap<>();
     private float shieldEfficiency = -1;
-
     private Map<ResourceLocation, Integer> shippedItems = new HashMap<>();
     private Map<EnumShop, NonNullList<ItemStack>> shopItems = new HashMap<>();
     private long lastUpdated;
-
     private RecipeKeeper keeper = new RecipeKeeper();
     /**
      * first number is level, second is the xp a.k.a. percent to next level
      */
     private int[] level = new int[]{1, 0};
-
     private Map<EnumSkills, int[]> skillMap = new HashMap<>();
     private InventorySpells spells = new InventorySpells();
-    private InventoryShippingBin shipping = new InventoryShippingBin();
 
     //private QuestMission quest;
-
+    private InventoryShippingBin shipping = new InventoryShippingBin();
     //Food buff
     private Item lastFood;
     private int rpFoodBuff;
     private Map<Attribute, Double> foodBuffs = new HashMap<>();
     private int foodDuration;
-
     //Weapon and ticker
     private int fireballSpellFlag, bigFireballSpellFlag;
     private int spellTicker;
-
     private int ticker = 0;
     private WeaponSwing weapon;
     private int swings, timeSinceLastSwing;
-
     //Gloves charge
     private int gloveTick;
     private ItemStack glove = ItemStack.EMPTY;
-
     //Spear charge
     private int spearUseCounter = 0;
     private int spearTicker = 0;
-
-    public boolean starting, unlockedRecipes;
 
     public PlayerData() {
         for (EnumSkills skill : EnumSkills.values()) {
@@ -885,7 +876,7 @@ public class PlayerData {
         DUAL(5),
         GLOVE(5);
 
-        private int swingAmount;
+        private final int swingAmount;
 
         WeaponSwing(int swingAmount) {
             this.swingAmount = swingAmount;

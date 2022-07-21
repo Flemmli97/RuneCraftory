@@ -15,11 +15,11 @@ import net.minecraft.world.inventory.MenuType;
 public class ModContainer {
 
     public static final PlatformRegistry<MenuType<?>> CONTAINERS = PlatformUtils.INSTANCE.of(Registry.MENU_REGISTRY, RuneCraftory.MODID);
-
-    public static final RegistryEntrySupplier<MenuType<ContainerCrafting>> craftingContainer = CONTAINERS.register("crafting_container", () -> Platform.INSTANCE.menuType(ContainerCrafting::new));
-    public static final RegistryEntrySupplier<MenuType<ContainerUpgrade>> upgradeContainer = CONTAINERS.register("upgrade_container", () -> Platform.INSTANCE.menuType(ContainerUpgrade::new));
     public static final RegistryEntrySupplier<MenuType<ContainerInfoScreen>> infoContainer = CONTAINERS.register("info_container", () -> Platform.INSTANCE.menuType((windowID, inv) -> new ContainerInfoScreen(windowID, inv, true)));
-    public static final RegistryEntrySupplier<MenuType<ContainerInfoScreen>> infoSubContainer = CONTAINERS.register("info_sub_container", () -> Platform.INSTANCE.menuType((windowID, inv) -> new ContainerInfoScreen(windowID, inv, false)));
+    public static final RegistryEntrySupplier<MenuType<ContainerInfoScreen>> infoSubContainer = CONTAINERS.register("info_sub_container", () -> Platform.INSTANCE.menuType((windowID, inv) -> new ContainerInfoScreen(windowID, inv, false)));    public static final RegistryEntrySupplier<MenuType<ContainerCrafting>> craftingContainer = CONTAINERS.register("crafting_container", () -> Platform.INSTANCE.menuType(ContainerCrafting::new));
     public static final RegistryEntrySupplier<MenuType<ShippingContainer>> shippingContainer = CONTAINERS.register("shipping_container", () -> Platform.INSTANCE.menuType((windowID, inv) -> new ShippingContainer(windowID, inv)));
+    public static final RegistryEntrySupplier<MenuType<ContainerUpgrade>> upgradeContainer = CONTAINERS.register("upgrade_container", () -> Platform.INSTANCE.menuType(ContainerUpgrade::new));
+
+
 
 }

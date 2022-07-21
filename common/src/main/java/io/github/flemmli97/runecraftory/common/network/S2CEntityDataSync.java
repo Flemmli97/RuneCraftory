@@ -15,18 +15,6 @@ public record S2CEntityDataSync(int entityID,
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_entity_data_sync");
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.entityID);
-        buf.writeEnum(this.type);
-        buf.writeBoolean(this.flag);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CEntityDataSync read(FriendlyByteBuf buf) {
         return new S2CEntityDataSync(buf.readInt(), buf.readEnum(Type.class), buf.readBoolean());
     }
@@ -47,6 +35,18 @@ public record S2CEntityDataSync(int entityID,
                 }
             });
         }
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(this.entityID);
+        buf.writeEnum(this.type);
+        buf.writeBoolean(this.flag);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 
     public enum Type {

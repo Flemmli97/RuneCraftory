@@ -31,16 +31,6 @@ public class RenderStaffBall extends EntityRenderer<EntityBaseSpellBall> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityBaseSpellBall entity) {
-        return switch (entity.getElement()) {
-            case WATER -> water;
-            case LOVE -> love;
-            case EARTH -> earth;
-            default -> fire;
-        };
-    }
-
-    @Override
     public void render(EntityBaseSpellBall entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.mulPose(this.entityRenderDispatcher.cameraOrientation());
         stack.mulPose(Vector3f.YP.rotationDegrees(180));
@@ -55,6 +45,16 @@ public class RenderStaffBall extends EntityRenderer<EntityBaseSpellBall> {
         this.textureBuilder.setLight(packedLight);
         RenderUtils.renderTexture(stack, buffer.getBuffer(this.getRenderType(entity, this.getTextureLocation(entity))), this.xSize, this.ySize, this.textureBuilder);
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(EntityBaseSpellBall entity) {
+        return switch (entity.getElement()) {
+            case WATER -> water;
+            case LOVE -> love;
+            case EARTH -> earth;
+            default -> fire;
+        };
     }
 
     protected RenderType getRenderType(EntityBaseSpellBall entity, ResourceLocation loc) {

@@ -55,21 +55,19 @@ public class EntityTreasureChest extends Entity implements IAnimated {
     }
 
     @Override
-    public boolean isPickable() {
-        return true;
-    }
-
-    @Override
     protected void defineSynchedData() {
         this.entityData.define(TIER, 0);
     }
 
-    public void setTier(int tier) {
-        this.entityData.set(TIER, Mth.clamp(tier, 0, MaxTier));
-    }
-
-    public int tier() {
-        return this.entityData.get(TIER);
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        this.getAnimationHandler().tick();
+        AnimatedAction anim = this.getAnimationHandler().getAnimation();
+        if (!this.isRemoved() && !this.level.isClientSide && anim != null && anim.getID().equals(open.getID()) && anim.canAttack()) {
+            this.dropRandomItems();
+            this.kill();
+        }
     }
 
     @Override
@@ -90,6 +88,21 @@ public class EntityTreasureChest extends Entity implements IAnimated {
     }
 
     @Override
+    public boolean isPickable() {
+        return true;
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        this.setTier(compound.getInt("ChestTier"));
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        compound.putInt("ChestTier", this.entityData.get(TIER));
+    }
+
+    @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (!this.level.isClientSide) {
             this.getAnimationHandler().setAnimation(open);
@@ -99,14 +112,26 @@ public class EntityTreasureChest extends Entity implements IAnimated {
     }
 
     @Override
-    public void baseTick() {
-        super.baseTick();
-        this.getAnimationHandler().tick();
-        AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        if (!this.isRemoved() && !this.level.isClientSide && anim != null && anim.getID().equals(open.getID()) && anim.canAttack()) {
-            this.dropRandomItems();
-            this.kill();
-        }
+    public boolean canBeCollidedWith() {
+        return true;
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return new ClientboundAddEntityPacket(this);
+    }
+
+    @Override
+    public ItemStack getPickResult() {
+        return SpawnEgg.fromType(this.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
+    }
+
+    public void setTier(int tier) {
+        this.entityData.set(TIER, Mth.clamp(tier, 0, MaxTier));
+    }
+
+    public int tier() {
+        return this.entityData.get(TIER);
     }
 
     protected void dropRandomItems() {
@@ -146,32 +171,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
-        this.setTier(compound.getInt("ChestTier"));
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
-        compound.putInt("ChestTier", this.entityData.get(TIER));
-    }
-
-    @Override
-    public ItemStack getPickResult() {
-        return SpawnEgg.fromType(this.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
-    }
-
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
-    }
-
-    @Override
     public AnimationHandler<?> getAnimationHandler() {
         return this.animationHandler;
-    }
-
-    @Override
-    public boolean canBeCollidedWith() {
-        return true;
     }
 }

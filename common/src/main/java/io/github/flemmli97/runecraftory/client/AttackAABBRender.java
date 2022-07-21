@@ -12,13 +12,11 @@ import java.util.List;
 
 public class AttackAABBRender {
 
-    private final List<RenderAABB> list = new ArrayList<>();
-    private final List<RenderAABB> toAdd = new ArrayList<>();
-
-    public static AttackAABBRender INST = new AttackAABBRender();
-
     private static final float[] attackRGB = new float[]{18 / 255f, 181 / 255f, 51 / 255f};
     private static final float[] attemptRGB = new float[]{19 / 255f, 56 / 255f, 191 / 255f};
+    public static AttackAABBRender INST = new AttackAABBRender();
+    private final List<RenderAABB> list = new ArrayList<>();
+    private final List<RenderAABB> toAdd = new ArrayList<>();
 
     public void addNewAABB(AABB aabb, int duration, EnumAABBType type) {
         this.toAdd.add(new RenderAABB(aabb, duration, type));
@@ -34,8 +32,8 @@ public class AttackAABBRender {
     private static class RenderAABB {
 
         private final AABB aabb;
-        private int duration;
         private final EnumAABBType type;
+        private int duration;
 
         public RenderAABB(AABB aabb, int duration, EnumAABBType type) {
             this.aabb = aabb;

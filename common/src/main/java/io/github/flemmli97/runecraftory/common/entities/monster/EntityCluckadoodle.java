@@ -14,11 +14,9 @@ import net.minecraft.world.level.Level;
 
 public class EntityCluckadoodle extends BaseMonster {
 
-    public final AnimatedMeleeGoal<EntityCluckadoodle> attack = new AnimatedMeleeGoal<>(this);
     public static final AnimatedAction melee = new AnimatedAction(16, 10, "attack");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee};
-
+    public final AnimatedMeleeGoal<EntityCluckadoodle> attack = new AnimatedMeleeGoal<>(this);
     private final AnimationHandler<EntityCluckadoodle> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntityCluckadoodle(EntityType<? extends EntityCluckadoodle> type, Level world) {
@@ -30,6 +28,28 @@ public class EntityCluckadoodle extends BaseMonster {
     protected void applyAttributes() {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.27);
         super.applyAttributes();
+    }
+
+    @Override
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        return type == AnimationType.MELEE && anim.getID().equals(melee.getID());
+    }
+
+    @Override
+    public int animationCooldown(AnimatedAction anim) {
+        return this.getRandom().nextInt(10) + 30;
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return 0.8;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            this.getAnimationHandler().setAnimation(melee);
+        }
     }
 
     @Override
@@ -60,27 +80,5 @@ public class EntityCluckadoodle extends BaseMonster {
     @Override
     public AnimationHandler<EntityCluckadoodle> getAnimationHandler() {
         return this.animationHandler;
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 0.8;
-    }
-
-    @Override
-    public int animationCooldown(AnimatedAction anim) {
-        return this.getRandom().nextInt(10) + 30;
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type == AnimationType.MELEE && anim.getID().equals(melee.getID());
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            this.getAnimationHandler().setAnimation(melee);
-        }
     }
 }

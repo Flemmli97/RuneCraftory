@@ -14,11 +14,11 @@ import java.util.EnumSet;
 
 public class FollowOwnerGoalMonster extends Goal {
     private final BaseMonster monster;
-    private Entity owner;
     private final double speedModifier;
-    private int timeToRecalcPath;
     private final float stopDistance;
     private final float startDistance;
+    private Entity owner;
+    private int timeToRecalcPath;
     private float oldWaterCost;
 
     public FollowOwnerGoalMonster(BaseMonster monster, double speed, float startDist, float stopDist) {

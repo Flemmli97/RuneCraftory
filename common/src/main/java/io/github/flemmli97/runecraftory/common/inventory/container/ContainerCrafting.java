@@ -31,13 +31,13 @@ import java.util.List;
  */
 public class ContainerCrafting extends AbstractContainerMenu {
 
-    private List<SextupleRecipe> matchingRecipes;
-    private SextupleRecipe currentRecipe;
     private final PlayerContainerInv craftingInv;
     private final EnumCrafting type;
     private final DummyInventory outPutInv;
     private final CraftingBlockEntity tile;
     private final DataSlot rpCost;
+    private List<SextupleRecipe> matchingRecipes;
+    private SextupleRecipe currentRecipe;
 
     public ContainerCrafting(int windowId, Inventory inv, FriendlyByteBuf data) {
         this(windowId, inv, getTile(inv.player.level, data));
@@ -66,20 +66,22 @@ public class ContainerCrafting extends AbstractContainerMenu {
         this.initCraftingMatrix(this.craftingInv);
     }
 
+    public static List<SextupleRecipe> getRecipes(PlayerContainerInv inv, EnumCrafting type) {
+        if (inv.getPlayer() instanceof ServerPlayer serverPlayer)
+            return inv.getPlayer().getServer().getRecipeManager().getRecipesFor(CraftingUtils.getType(type), inv, serverPlayer.getLevel());
+        return new ArrayList<>();
+    }
+
+    public static CraftingBlockEntity getTile(Level world, FriendlyByteBuf buffer) {
+        BlockEntity blockEntity = world.getBlockEntity(buffer.readBlockPos());
+        if (blockEntity instanceof CraftingBlockEntity) {
+            return (CraftingBlockEntity) blockEntity;
+        }
+        throw new IllegalStateException("Expected tile entity of type TileCrafting but got " + blockEntity);
+    }
+
     public EnumCrafting craftingType() {
         return this.type;
-    }
-
-    @Override
-    public boolean stillValid(Player player) {
-        return true;
-    }
-
-    @Override
-    public void slotsChanged(Container inv) {
-        if (inv == this.craftingInv)
-            this.updateCraftingOutput(false);
-        super.slotsChanged(inv);
     }
 
     private void initCraftingMatrix(Container inv) {
@@ -195,17 +197,15 @@ public class ContainerCrafting extends AbstractContainerMenu {
         super.removed(entity);
     }
 
-    public static List<SextupleRecipe> getRecipes(PlayerContainerInv inv, EnumCrafting type) {
-        if (inv.getPlayer() instanceof ServerPlayer serverPlayer)
-            return inv.getPlayer().getServer().getRecipeManager().getRecipesFor(CraftingUtils.getType(type), inv, serverPlayer.getLevel());
-        return new ArrayList<>();
+    @Override
+    public void slotsChanged(Container inv) {
+        if (inv == this.craftingInv)
+            this.updateCraftingOutput(false);
+        super.slotsChanged(inv);
     }
 
-    public static CraftingBlockEntity getTile(Level world, FriendlyByteBuf buffer) {
-        BlockEntity blockEntity = world.getBlockEntity(buffer.readBlockPos());
-        if (blockEntity instanceof CraftingBlockEntity) {
-            return (CraftingBlockEntity) blockEntity;
-        }
-        throw new IllegalStateException("Expected tile entity of type TileCrafting but got " + blockEntity);
+    @Override
+    public boolean stillValid(Player player) {
+        return true;
     }
 }

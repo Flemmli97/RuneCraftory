@@ -22,16 +22,16 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
     }
 
     @Override
+    public void stop() {
+        super.stop();
+        this.attacker.setTarget(null);
+    }
+
+    @Override
     public AnimatedAction randomAttack() {
         if (this.attacker.getRandom().nextFloat() < this.attacker.attackChance(AnimationType.GENERICATTACK))
             return this.attacker.getRandomAnimation(AnimationType.MELEE);
         return this.attacker.getRandomAnimation(AnimationType.IDLE);
-    }
-
-    @Override
-    public void stop() {
-        super.stop();
-        this.attacker.setTarget(null);
     }
 
     @Override
@@ -50,17 +50,6 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
         } else if (this.attackMoveDelay-- == 1) {
             this.attackMoveDelay = 0;
             this.next = null;
-        }
-    }
-
-    protected void moveToEntityNearer(LivingEntity target, float speed) {
-        if (this.pathFindDelay <= 0) {
-            Path path = this.attacker.getNavigation().createPath(target, 0);
-            if (path == null || this.attacker.getNavigation().moveTo(path, speed)) {
-                this.pathFindDelay += 15;
-            }
-
-            this.pathFindDelay += this.attacker.getRandom().nextInt(10) + 5;
         }
     }
 
@@ -90,5 +79,16 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
     public void tick() {
         super.tick();
         this.iddleMoveDelay--;
+    }
+
+    protected void moveToEntityNearer(LivingEntity target, float speed) {
+        if (this.pathFindDelay <= 0) {
+            Path path = this.attacker.getNavigation().createPath(target, 0);
+            if (path == null || this.attacker.getNavigation().moveTo(path, speed)) {
+                this.pathFindDelay += 15;
+            }
+
+            this.pathFindDelay += this.attacker.getRandom().nextInt(10) + 5;
+        }
     }
 }

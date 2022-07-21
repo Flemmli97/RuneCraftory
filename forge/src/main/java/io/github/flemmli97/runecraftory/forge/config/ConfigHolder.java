@@ -30,10 +30,6 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
                 MobConfigSpec.spec.getLeft(), ConfigHolder::loadMobs));
     }
 
-    public void reloadConfig() {
-        this.loader.accept(this.configSpec);
-    }
-
     public static void loadGeneral(GeneralConfigSpec spec) {
         GeneralConfig.disableDefence = spec.disableDefence.get();
         GeneralConfig.gateSpawning = spec.gateSpawning.get();
@@ -117,5 +113,9 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         for (Map.Entry<ResourceLocation, EntityPropertySpecs> e : spec.mobSpecs.entrySet()) {
             MobConfig.propertiesMap.put(e.getKey(), EntityPropertySpecs.ofSpec(e.getValue()));
         }
+    }
+
+    public void reloadConfig() {
+        this.loader.accept(this.configSpec);
     }
 }

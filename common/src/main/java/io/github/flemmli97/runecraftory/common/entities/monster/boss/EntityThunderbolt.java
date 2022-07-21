@@ -63,17 +63,14 @@ public class EntityThunderbolt extends BossMonster {
     private static final AnimatedAction wind_blade = new AnimatedAction(15, 8, "wind_blade");
     //Used after feinting death
     private static final AnimatedAction laser_kick_3 = new AnimatedAction(16, 6, "laser_kick_3", "laser_kick");
-
+    public static final ImmutableList<String> nonChoosableAttacks = ImmutableList.of(charge_2.getID(), charge_3.getID(), laser_kick_2.getID(), laser_kick_3.getID(), back_kick_horn.getID());
     private static final AnimatedAction feint = new AnimatedAction(40, 2, "feint");
     private static final AnimatedAction defeat = new AnimatedAction(80, 60, "defeat", "defeat", 1, false);
-
     private static final AnimatedAction neigh = new AnimatedAction(24, 9, "neigh");
-
-    public static final ImmutableList<String> nonChoosableAttacks = ImmutableList.of(charge_2.getID(), charge_3.getID(), laser_kick_2.getID(), laser_kick_3.getID(), back_kick_horn.getID());
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{back_kick, laser_x5, stomp, horn_attack, back_kick_horn, charge, charge_2, charge_3,
             laser_aoe, laser_kick, laser_kick_2, wind_blade, laser_kick_3, feint, defeat, neigh};
-
+    private static final EntityDataAccessor<Float> lockedYaw = SynchedEntityData.defineId(EntityThunderbolt.class, EntityDataSerializers.FLOAT);
+    public final ThunderboltAttackGoal<EntityThunderbolt> attack = new ThunderboltAttackGoal<>(this);
     private final AnimationHandler<EntityThunderbolt> animationHandler = new AnimationHandler<>(this, anims)
             .setAnimationChangeCons(anim -> {
                 if (!this.level.isClientSide) {
@@ -84,11 +81,6 @@ public class EntityThunderbolt extends BossMonster {
                         this.chargeAttackSuccess = false;
                 }
             });
-
-    private static final EntityDataAccessor<Float> lockedYaw = SynchedEntityData.defineId(EntityThunderbolt.class, EntityDataSerializers.FLOAT);
-
-    public final ThunderboltAttackGoal<EntityThunderbolt> attack = new ThunderboltAttackGoal<>(this);
-
     protected boolean feintedDeath, hornAttackSuccess, chargeAttackSuccess;
     private double[] chargeMotion;
 
@@ -107,112 +99,6 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(lockedYaw, 0f);
-    }
-
-    @Override
-    public void setEnraged(boolean flag, boolean load) {
-        if (flag && !load) {
-            if (!this.isEnraged()) {
-                this.getAnimationHandler().setAnimation(neigh);
-                this.getNavigation().stop();
-            } else {
-                this.getAnimationHandler().setAnimation(defeat);
-                this.getNavigation().stop();
-                this.bossInfo.setProgress(0);
-            }
-        }
-        super.setEnraged(flag, load);
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID(), neigh.getID()))) && super.hurt(source, amount);
-    }
-
-    @Override
-    protected boolean checkRage() {
-        if (this.getHealth() / this.getMaxHealth() < 0.3)
-            return !this.feintedDeath;
-        if (this.getHealth() / this.getMaxHealth() < 0.7)
-            return !this.isEnraged();
-        return false;
-    }
-
-    @Override
-    protected void updateBossBar() {
-        if (!this.feintedDeath)
-            this.bossInfo.setProgress((this.getHealth() - (this.getMaxHealth() * 0.3f)) / (this.getMaxHealth() * 0.7f));
-        else
-            this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (!this.level.isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrentAnim(defeat.getID()) && !this.feintedDeath) {
-            AnimatedAction anim = this.getAnimationHandler().getAnimation();
-            if (anim.getTick() > anim.getLength()) {
-                this.feintedDeath = true;
-                this.getAnimationHandler().setAnimation(feint);
-            }
-        }
-        if (this.getAnimationHandler().isCurrentAnim(charge.getID(), charge_2.getID(), charge_3.getID())) {
-            this.setXRot(0);
-            this.setYRot(this.entityData.get(lockedYaw));
-        }
-        if (this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID())) {
-            Vec3 delta = this.getDeltaMovement();
-            this.setDeltaMovement(0, delta.y, 0);
-            if (this.getAnimationHandler().getAnimation().checkID(defeat)) {
-                int tick = this.getAnimationHandler().getAnimation().getTick();
-                if (tick < 40) {
-                    if (tick % 10 == 0)
-                        this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                                this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
-                                this.getY() + this.random.nextDouble() * (this.getBbHeight()),
-                                this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D);
-                } else if (tick < 80) {
-                    if (tick % 2 == 0)
-                        this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                                this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
-                                this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
-                                this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D);
-                } else {
-                    int amount = (tick - 80) / 10;
-                    for (int i = 0; i < amount; i++) {
-                        this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
-                                this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
-                                this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
-                                this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D,
-                                this.random.nextGaussian() * 0.02D);
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public boolean isAlive() {
-        return super.isAlive() && (this.getAnimationHandler() == null || !this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID()));
-    }
-
-    @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() && this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID());
-    }
-
-    @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (anim.getID().equals(neigh.getID()) || anim.getID().equals(feint.getID()) || anim.getID().equals(defeat.getID()))
             return type == AnimationType.IDLE;
@@ -222,60 +108,38 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    protected void playStepSound(BlockPos pos, BlockState state) {
-        if (!state.getMaterial().isLiquid()) {
-            BlockState blockstate = this.level.getBlockState(pos.above());
-            SoundType soundtype = Platform.INSTANCE.getSoundType(state, this.level, pos, this);
-            if (blockstate.is(Blocks.SNOW)) {
-                soundtype = Platform.INSTANCE.getSoundType(blockstate, this.level, pos, this);
+    public int animationCooldown(AnimatedAction anim) {
+        int diffAdd = this.difficultyCooldown() / 2;
+        if (anim != null)
+            switch (anim.getID()) {
+                case "laser_kick_2":
+                case "laser_kick_3":
+                case "charge":
+                case "charge_2":
+                case "charge_3":
+                    return 1;
             }
-            this.playSound(SoundEvents.HORSE_GALLOP, soundtype.getVolume() * 0.15F, soundtype.getPitch());
-        }
+        return 18 + this.getRandom().nextInt(22) - (this.isEnraged() ? 12 : 0) + diffAdd;
     }
 
-    private void summonLaserx5() {
-        for (Vector3f vec : RayTraceUtils.rotatedVecs(this.getLookAngle(), new Vec3(0, 1, 0), -50, 50, 25)) {
-            EntityThunderboltBeam beam = new EntityThunderboltBeam(this.level, this);
-            beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);
-            this.level.addFreshEntity(beam);
-        }
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID(), neigh.getID()))) && super.hurt(source, amount);
     }
 
-    private void summonLaserAOE() {
-        for (Vector3f vec : RayTraceUtils.rotatedVecs(this.getLookAngle(), new Vec3(0, 1, 0), -180, 150, 30)) {
-            EntityThunderboltBeam beam = new EntityThunderboltBeam(this.level, this);
-            beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);
-            this.level.addFreshEntity(beam);
-        }
+    @Override
+    protected boolean isImmobile() {
+        return super.isImmobile() && this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID());
     }
 
-    private void summonLaserBolt(LivingEntity target) {
-        if (!this.level.isClientSide) {
-            EntityThiccLightningBolt bolt = new EntityThiccLightningBolt(this.level, this);
-            if (target != null) {
-                double y = -Mth.sin(17 * 0.017453292F);
-                Vec3 dir = target.position().subtract(this.position()).normalize();
-                bolt.shoot(dir.x(), y, dir.z(), 0.15f, 0);
-            } else
-                bolt.shoot(this, 17, this.getYRot(), 0, 0.15f, 0);
-            this.level.addFreshEntity(bolt);
-        }
+    @Override
+    protected void playDeathAnimation() {
+        this.getAnimationHandler().setAnimation(defeat);
     }
 
-    private void summonWind(LivingEntity target) {
-        if (!this.level.isClientSide) {
-            ModSpells.DOUBLESONIC.get().use((ServerLevel) this.level, this);
-        }
-    }
-
-    public void setChargeMotion(double[] charge) {
-        this.chargeMotion = charge;
-    }
-
-    public double[] getChargeTo(AnimatedAction anim, Vec3 dir) {
-        int length = anim.getLength() - anim.getAttackTime() - 6; //stop charging 6 ticks earlier
-        Vec3 vec = dir.normalize().scale(7);
-        return new double[]{vec.x / length, this.getY(), vec.z / length};
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return this.getBbWidth() * 0.8;
     }
 
     @Override
@@ -369,21 +233,6 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return this.getBbWidth() * 0.8;
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
-    }
-
-    @Override
-    public AnimationHandler<EntityThunderbolt> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
@@ -396,23 +245,189 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    protected void playDeathAnimation() {
-        this.getAnimationHandler().setAnimation(defeat);
+    public double ridingSpeedModifier() {
+        return 1.1;
     }
 
     @Override
-    public int animationCooldown(AnimatedAction anim) {
-        int diffAdd = this.difficultyCooldown() / 2;
-        if (anim != null)
-            switch (anim.getID()) {
-                case "laser_kick_2":
-                case "laser_kick_3":
-                case "charge":
-                case "charge_2":
-                case "charge_3":
-                    return 1;
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(lockedYaw, 0f);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!this.level.isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrentAnim(defeat.getID()) && !this.feintedDeath) {
+            AnimatedAction anim = this.getAnimationHandler().getAnimation();
+            if (anim.getTick() > anim.getLength()) {
+                this.feintedDeath = true;
+                this.getAnimationHandler().setAnimation(feint);
             }
-        return 18 + this.getRandom().nextInt(22) - (this.isEnraged() ? 12 : 0) + diffAdd;
+        }
+        if (this.getAnimationHandler().isCurrentAnim(charge.getID(), charge_2.getID(), charge_3.getID())) {
+            this.setXRot(0);
+            this.setYRot(this.entityData.get(lockedYaw));
+        }
+        if (this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID())) {
+            Vec3 delta = this.getDeltaMovement();
+            this.setDeltaMovement(0, delta.y, 0);
+            if (this.getAnimationHandler().getAnimation().checkID(defeat)) {
+                int tick = this.getAnimationHandler().getAnimation().getTick();
+                if (tick < 40) {
+                    if (tick % 10 == 0)
+                        this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                                this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
+                                this.getY() + this.random.nextDouble() * (this.getBbHeight()),
+                                this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth()),
+                                this.random.nextGaussian() * 0.02D,
+                                this.random.nextGaussian() * 0.02D,
+                                this.random.nextGaussian() * 0.02D);
+                } else if (tick < 80) {
+                    if (tick % 2 == 0)
+                        this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                                this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
+                                this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
+                                this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 2),
+                                this.random.nextGaussian() * 0.02D,
+                                this.random.nextGaussian() * 0.02D,
+                                this.random.nextGaussian() * 0.02D);
+                } else {
+                    int amount = (tick - 80) / 10;
+                    for (int i = 0; i < amount; i++) {
+                        this.level.addParticle(new ColoredParticleData(ModParticles.blink.get(), 71 / 255F, 237 / 255F, 255 / 255F, 1),
+                                this.getX() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
+                                this.getY() + this.random.nextDouble() * (this.getBbHeight() + 1),
+                                this.getZ() + (this.random.nextDouble() - 0.5D) * (this.getBbWidth() + 3),
+                                this.random.nextGaussian() * 0.02D,
+                                this.random.nextGaussian() * 0.02D,
+                                this.random.nextGaussian() * 0.02D);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putBoolean("Feint", this.feintedDeath);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.feintedDeath = compound.getBoolean("Feint");
+    }
+
+    @Override
+    public void setEnraged(boolean flag, boolean load) {
+        if (flag && !load) {
+            if (!this.isEnraged()) {
+                this.getAnimationHandler().setAnimation(neigh);
+                this.getNavigation().stop();
+            } else {
+                this.getAnimationHandler().setAnimation(defeat);
+                this.getNavigation().stop();
+                this.bossInfo.setProgress(0);
+            }
+        }
+        super.setEnraged(flag, load);
+    }
+
+    @Override
+    protected void updateBossBar() {
+        if (!this.feintedDeath)
+            this.bossInfo.setProgress((this.getHealth() - (this.getMaxHealth() * 0.3f)) / (this.getMaxHealth() * 0.7f));
+        else
+            this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
+
+    @Override
+    protected boolean checkRage() {
+        if (this.getHealth() / this.getMaxHealth() < 0.3)
+            return !this.feintedDeath;
+        if (this.getHealth() / this.getMaxHealth() < 0.7)
+            return !this.isEnraged();
+        return false;
+    }
+
+    @Override
+    public boolean isAlive() {
+        return super.isAlive() && (this.getAnimationHandler() == null || !this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID()));
+    }
+
+    @Override
+    protected void playStepSound(BlockPos pos, BlockState state) {
+        if (!state.getMaterial().isLiquid()) {
+            BlockState blockstate = this.level.getBlockState(pos.above());
+            SoundType soundtype = Platform.INSTANCE.getSoundType(state, this.level, pos, this);
+            if (blockstate.is(Blocks.SNOW)) {
+                soundtype = Platform.INSTANCE.getSoundType(blockstate, this.level, pos, this);
+            }
+            this.playSound(SoundEvents.HORSE_GALLOP, soundtype.getVolume() * 0.15F, soundtype.getPitch());
+        }
+    }
+
+    @Override
+    public double getPassengersRidingOffset() {
+
+        return this.getBbHeight() * 0.825D;
+    }
+
+    private void summonLaserx5() {
+        for (Vector3f vec : RayTraceUtils.rotatedVecs(this.getLookAngle(), new Vec3(0, 1, 0), -50, 50, 25)) {
+            EntityThunderboltBeam beam = new EntityThunderboltBeam(this.level, this);
+            beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);
+            this.level.addFreshEntity(beam);
+        }
+    }
+
+    private void summonLaserAOE() {
+        for (Vector3f vec : RayTraceUtils.rotatedVecs(this.getLookAngle(), new Vec3(0, 1, 0), -180, 150, 30)) {
+            EntityThunderboltBeam beam = new EntityThunderboltBeam(this.level, this);
+            beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);
+            this.level.addFreshEntity(beam);
+        }
+    }
+
+    private void summonLaserBolt(LivingEntity target) {
+        if (!this.level.isClientSide) {
+            EntityThiccLightningBolt bolt = new EntityThiccLightningBolt(this.level, this);
+            if (target != null) {
+                double y = -Mth.sin(17 * 0.017453292F);
+                Vec3 dir = target.position().subtract(this.position()).normalize();
+                bolt.shoot(dir.x(), y, dir.z(), 0.15f, 0);
+            } else
+                bolt.shoot(this, 17, this.getYRot(), 0, 0.15f, 0);
+            this.level.addFreshEntity(bolt);
+        }
+    }
+
+    private void summonWind(LivingEntity target) {
+        if (!this.level.isClientSide) {
+            ModSpells.DOUBLESONIC.get().use((ServerLevel) this.level, this);
+        }
+    }
+
+    public void setChargeMotion(double[] charge) {
+        this.chargeMotion = charge;
+    }
+
+    public double[] getChargeTo(AnimatedAction anim, Vec3 dir) {
+        int length = anim.getLength() - anim.getAttackTime() - 6; //stop charging 6 ticks earlier
+        Vec3 vec = dir.normalize().scale(7);
+        return new double[]{vec.x / length, this.getY(), vec.z / length};
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return 1;
+    }
+
+    @Override
+    public AnimationHandler<EntityThunderbolt> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     public boolean isAnimEqual(String prev, AnimatedAction other) {
@@ -436,29 +451,6 @@ public class EntityThunderbolt extends BossMonster {
             case "charge_2" -> this.isEnraged() && !this.chargeAttackSuccess ? charge_3 : null;
             default -> null;
         };
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putBoolean("Feint", this.feintedDeath);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.feintedDeath = compound.getBoolean("Feint");
-    }
-
-    @Override
-    public double ridingSpeedModifier() {
-        return 1.1;
-    }
-
-    @Override
-    public double getPassengersRidingOffset() {
-
-        return this.getBbHeight() * 0.825D;
     }
 
     public void lockYaw(float yaw) {

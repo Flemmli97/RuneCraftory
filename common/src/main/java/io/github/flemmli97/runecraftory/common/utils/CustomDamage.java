@@ -60,17 +60,17 @@ public class CustomDamage extends EntityDamageSource {
     }
 
     @Override
-    public Entity getDirectEntity() {
-        return this.entity;
-    }
-
-    @Override
     public Component getLocalizedDeathMessage(LivingEntity entityLivingBaseIn) {
         Entity source = this.getEntity() != null ? this.getEntity() : this.getDirectEntity();
         ItemStack itemstack = source instanceof LivingEntity ? ((LivingEntity) source).getMainHandItem() : ItemStack.EMPTY;
         String s = "death.attack." + this.msgId;
         String s1 = s + ".item";
         return !itemstack.isEmpty() && itemstack.hasCustomHoverName() && I18n.exists(s1) ? new TranslatableComponent(s1, entityLivingBaseIn.getDisplayName(), source.getDisplayName(), itemstack.getDisplayName()) : new TranslatableComponent(s, entityLivingBaseIn.getDisplayName(), source.getDisplayName());
+    }
+
+    @Override
+    public Entity getDirectEntity() {
+        return this.entity;
     }
 
     public enum DamageType {

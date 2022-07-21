@@ -44,8 +44,8 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargeable {
 
-    public final EnumToolTier tier;
     private static AABB farmlandTop = new AABB(0.0, 0.9375, 0.0, 1.0, 1.0, 1.0);
+    public final EnumToolTier tier;
     private int[] chargeRunes = new int[]{1, 5, 15, 50, 100};
 
     public ItemToolHammer(EnumToolTier tier, Properties props) {
@@ -63,11 +63,6 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public int chargeAmount(ItemStack stack) {
         return this.tier.getTierLevel();
-    }
-
-    @Override
-    public Rarity getRarity(ItemStack stack) {
-        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
     }
 
     @Override
@@ -99,8 +94,28 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        int duration = stack.getUseDuration() - remainingUseDuration;
+        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext ctx) {
+        if (this.tier.getTierLevel() == 0) {
+            return this.useOnBlock(ctx, false);
+        }
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        if (this.tier.getTierLevel() != 0) {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(itemstack);
+        }
+        return InteractionResultHolder.pass(itemstack);
     }
 
     @Override
@@ -111,13 +126,6 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public int getUseDuration(ItemStack stack) {
         return 72000;
-    }
-
-    @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
-            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
     @Override
@@ -147,21 +155,13 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        if (this.tier.getTierLevel() != 0) {
-            player.startUsingItem(hand);
-            return InteractionResultHolder.consume(itemstack);
-        }
-        return InteractionResultHolder.pass(itemstack);
+    public Rarity getRarity(ItemStack stack) {
+        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext ctx) {
-        if (this.tier.getTierLevel() == 0) {
-            return this.useOnBlock(ctx, false);
-        }
-        return InteractionResult.PASS;
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
     }
 
     private InteractionResult useOnBlock(UseOnContext ctx, boolean canHammer) {

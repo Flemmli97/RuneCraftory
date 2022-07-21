@@ -59,8 +59,8 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void render(RenderLivingEvent.Pre event) {
-        if(ClientCalls.invis(event.getEntity()))
+    public static void render(RenderLivingEvent.Pre<?, ?> event) {
+        if (ClientCalls.invis(event.getEntity()))
             event.setCanceled(true);
     }
 }

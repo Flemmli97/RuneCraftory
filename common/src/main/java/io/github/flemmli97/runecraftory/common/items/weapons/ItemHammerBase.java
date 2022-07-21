@@ -96,26 +96,6 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
-        return !player.isCreative();
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack) {
-        return 72000;
-    }
-
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
     public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (entityLiving instanceof ServerPlayer && this.getDestroySpeed(stack, state) == this.speed) {
             this.onBlockBreak((ServerPlayer) entityLiving);
@@ -124,10 +104,40 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
+        return ImmutableMultimap.of();
+    }
+
+    @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
         int duration = stack.getUseDuration() - remainingUseDuration;
         if (duration == this.getChargeTime(stack))
             livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+    }
+
+    @Override
+    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
+        return !player.isCreative();
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.HAMMERAXE)[0] >= 5).orElse(false)) {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(itemstack);
+        }
+        return InteractionResultHolder.pass(itemstack);
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return 72000;
     }
 
     @Override
@@ -154,17 +164,7 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.HAMMERAXE)[0] >= 5).orElse(false)) {
-            player.startUsingItem(hand);
-            return InteractionResultHolder.consume(itemstack);
-        }
-        return InteractionResultHolder.pass(itemstack);
-    }
-
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return ImmutableMultimap.of();
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
     }
 }

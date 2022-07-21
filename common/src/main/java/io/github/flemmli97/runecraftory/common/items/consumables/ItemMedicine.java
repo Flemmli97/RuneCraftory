@@ -16,13 +16,13 @@ public class ItemMedicine extends Item {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
-        return 3;
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.DRINK;
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.DRINK;
+    public int getUseDuration(ItemStack stack) {
+        return 3;
     }
 
     public int healthRegen(ItemStack stack, FoodProperties prop) {

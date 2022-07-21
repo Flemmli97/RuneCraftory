@@ -28,17 +28,14 @@ import java.util.List;
 
 public class EntityWeagle extends BaseMonster {
 
-    public AnimatedRangedGoal<EntityWeagle> rangedGoal = new AnimatedRangedGoal<>(this, 8, e -> true);
     public static final AnimatedAction gale = new AnimatedAction(19, 5, "gale");
     public static final AnimatedAction peck = new AnimatedAction(11, 4, "peck");
     public static final AnimatedAction swoop = new AnimatedAction(14, 4, "swoop");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{gale, swoop};
-
+    public AnimatedRangedGoal<EntityWeagle> rangedGoal = new AnimatedRangedGoal<>(this, 8, e -> true);
+    protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityWeagle> animationHandler = new AnimationHandler<>(this, anims)
             .setAnimationChangeCons(anim -> this.hitEntity = null);
-
-    protected List<LivingEntity> hitEntity;
 
     public EntityWeagle(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
@@ -53,11 +50,6 @@ public class EntityWeagle extends BaseMonster {
     protected void applyAttributes() {
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
         super.applyAttributes();
-    }
-
-    @Override
-    protected PathNavigation createNavigation(Level level) {
-        return new FloatingFlyNavigator(this, level);
     }
 
     @Override
@@ -76,6 +68,20 @@ public class EntityWeagle extends BaseMonster {
             return anim.getID().equals(gale.getID());
         }
         return type == AnimationType.MELEE && (anim.getID().equals(peck.getID()) || anim.getID().equals(swoop.getID()));
+    }
+
+    @Override
+    public void travel(Vec3 vec) {
+        if (this.isEffectiveAi() && this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity) {
+            this.handleWaterTravel(vec);
+        } else {
+            super.travel(vec);
+        }
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return 1.5;
     }
 
     @Override
@@ -128,21 +134,6 @@ public class EntityWeagle extends BaseMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        return 1;
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1.5;
-    }
-
-    @Override
-    public AnimationHandler<EntityWeagle> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             switch (command) {
@@ -154,16 +145,22 @@ public class EntityWeagle extends BaseMonster {
     }
 
     @Override
-    protected void checkFallDamage(double dist, boolean groundLogic, BlockState state, BlockPos pos) {
+    protected PathNavigation createNavigation(Level level) {
+        return new FloatingFlyNavigator(this, level);
     }
 
     @Override
-    public void travel(Vec3 vec) {
-        if (this.isEffectiveAi() && this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity) {
-            this.handleWaterTravel(vec);
-        } else {
-            super.travel(vec);
-        }
+    public float attackChance(AnimationType type) {
+        return 1;
+    }
+
+    @Override
+    public AnimationHandler<EntityWeagle> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    protected void checkFallDamage(double dist, boolean groundLogic, BlockState state, BlockPos pos) {
     }
 
     @Override

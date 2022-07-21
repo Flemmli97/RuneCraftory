@@ -118,6 +118,12 @@ import java.util.function.Supplier;
 
 public class ClientRegister {
 
+    private static final BlockColor cropColor = (blockState, blockAndTintGetter, blockPos, i) -> {
+        if (blockState.getValue(BlockCrop.WILTED))
+            return 0xdc680a;
+        return -1;
+    };
+
     public static void init() {
         ClientHandlers.overlay = new OverlayGui(Minecraft.getInstance());
         ClientHandlers.spellDisplay = new SpellInvOverlayGui(Minecraft.getInstance());
@@ -149,12 +155,6 @@ public class ClientRegister {
                 register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "glove_held"), ItemModelProps.heldMainGlove);
         });
     }
-
-    private static final BlockColor cropColor = (blockState, blockAndTintGetter, blockPos, i) -> {
-        if (blockState.getValue(BlockCrop.WILTED))
-            return 0xdc680a;
-        return -1;
-    };
 
     public static void registerBlockColors(BiConsumer<BlockColor, Block> cons) {
         ModBlocks.crops.forEach(reg -> cons.accept(cropColor, reg.get()));

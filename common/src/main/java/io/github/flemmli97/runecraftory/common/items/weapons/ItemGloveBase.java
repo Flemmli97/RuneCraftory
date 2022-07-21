@@ -82,26 +82,6 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
-        return !player.isCreative();
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack) {
-        return 72000;
-    }
-
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
         int duration = stack.getUseDuration() - remainingUseDuration;
         if (duration == this.getChargeTime(stack))
@@ -109,11 +89,8 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     }
 
     @Override
-    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (entity instanceof ServerPlayer serverPlayer && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
-            Platform.INSTANCE.getPlayerData(serverPlayer)
-                    .ifPresent(d -> d.startGlove(stack));
-        }
+    public boolean canAttackBlock(BlockState state, Level world, BlockPos pos, Player player) {
+        return !player.isCreative();
     }
 
     @Override
@@ -128,5 +105,28 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
             return InteractionResultHolder.consume(itemstack);
         }
         return InteractionResultHolder.pass(itemstack);
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return 72000;
+    }
+
+    @Override
+    public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
+        if (entity instanceof ServerPlayer serverPlayer && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
+            Platform.INSTANCE.getPlayerData(serverPlayer)
+                    .ifPresent(d -> d.startGlove(stack));
+        }
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
     }
 }

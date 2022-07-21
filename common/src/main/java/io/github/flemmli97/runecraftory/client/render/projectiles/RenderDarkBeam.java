@@ -24,8 +24,8 @@ public class RenderDarkBeam extends RenderBeam<EntityDarkBeam> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityDarkBeam entity) {
-        return tex;
+    public float widthFunc(EntityDarkBeam entity) {
+        return (float) (this.radius * (Math.sin(Math.sqrt(entity.tickCount / (float) entity.livingTickMax()) * Math.PI))) + 0.2f;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class RenderDarkBeam extends RenderBeam<EntityDarkBeam> {
     }
 
     @Override
-    public float widthFunc(EntityDarkBeam entity) {
-        return (float) (this.radius * (Math.sin(Math.sqrt(entity.tickCount / (float) entity.livingTickMax()) * Math.PI))) + 0.2f;
+    public ResourceLocation getTextureLocation(EntityDarkBeam entity) {
+        return tex;
     }
 }

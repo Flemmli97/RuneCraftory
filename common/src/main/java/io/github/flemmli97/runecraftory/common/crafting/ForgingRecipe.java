@@ -16,8 +16,8 @@ public class ForgingRecipe extends SextupleRecipe {
     }
 
     @Override
-    public RecipeType<? extends SextupleRecipe> getType() {
-        return ModCrafting.FORGE.get();
+    public ItemStack getToastSymbol() {
+        return new ItemStack(ModItems.itemBlockForge.get());
     }
 
     @Override
@@ -26,8 +26,8 @@ public class ForgingRecipe extends SextupleRecipe {
     }
 
     @Override
-    public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.itemBlockForge.get());
+    public RecipeType<? extends SextupleRecipe> getType() {
+        return ModCrafting.FORGE.get();
     }
 
     public static class Serializer extends SextupleRecipe.Serializer<ForgingRecipe> {

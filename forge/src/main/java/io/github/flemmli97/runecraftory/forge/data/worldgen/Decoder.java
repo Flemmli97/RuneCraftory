@@ -26,6 +26,10 @@ public class Decoder {
     public record StructureSetData(
             List<Pair<ResourceLocation, Integer>> structures, StructurePlacement placement) {
 
+        public static final Codec<StructureSetData> CODEC = RecordCodecBuilder.create((instance) ->
+                instance.group(new PairCodec<>(ResourceLocation.CODEC.fieldOf("structure").codec(), ExtraCodecs.POSITIVE_INT.fieldOf("weight").codec()).listOf().fieldOf("structures").forGetter(StructureSetData::structures),
+                        StructurePlacement.CODEC.fieldOf("placement").forGetter(StructureSetData::placement)).apply(instance, StructureSetData::new));
+
         public StructureSetData(Pair<ResourceLocation, Integer> pair, StructurePlacement placement) {
             this(List.of(pair), placement);
         }
@@ -34,10 +38,6 @@ public class Decoder {
             this.structures = structures;
             this.placement = placement;
         }
-
-        public static final Codec<StructureSetData> CODEC = RecordCodecBuilder.create((instance) ->
-                instance.group(new PairCodec<>(ResourceLocation.CODEC.fieldOf("structure").codec(), ExtraCodecs.POSITIVE_INT.fieldOf("weight").codec()).listOf().fieldOf("structures").forGetter(StructureSetData::structures),
-                        StructurePlacement.CODEC.fieldOf("placement").forGetter(StructureSetData::placement)).apply(instance, StructureSetData::new));
 
     }
 
@@ -54,10 +54,9 @@ public class Decoder {
 
     public static class StructurePoolElementData {
 
-        public static final Codec<StructurePoolElementData> CODEC = Registry.STRUCTURE_POOL_ELEMENT.byNameCodec()
+        protected final StructurePoolElementType<?> type;        public static final Codec<StructurePoolElementData> CODEC = Registry.STRUCTURE_POOL_ELEMENT.byNameCodec()
                 .dispatch("element_type", d -> d.type, StructurePoolElementData::of);
-
-        private static final Map<StructurePoolElementType<?>, Codec<StructurePoolElementData>> CODECS = Map.of(
+        protected final StructureTemplatePool.Projection projection;        private static final Map<StructurePoolElementType<?>, Codec<StructurePoolElementData>> CODECS = Map.of(
                 StructurePoolElementType.EMPTY, Codec.unit(StructurePoolElementData::new),
                 StructurePoolElementType.SINGLE, RecordCodecBuilder.create((instance) ->
                         instance.group(ResourceLocation.CODEC.fieldOf("location").forGetter(d -> d.val),
@@ -73,6 +72,38 @@ public class Decoder {
                                 StructurePoolElementData.projectionCodec()).apply(instance, (l, proc, proj) -> new StructurePoolElementData(StructurePoolElementType.FEATURE, l, proc, proj))),
                 StructurePoolElementType.LIST, RecordCodecBuilder.create((instance) ->
                         instance.group(CODEC.listOf().fieldOf("elements").forGetter(arg -> arg.list)).apply(instance, StructurePoolElementData::new)));
+        protected final ResourceLocation val;
+        protected final ResourceLocation processors;
+        protected final List<StructurePoolElementData> list;
+
+        public StructurePoolElementData() {
+            this.type = StructurePoolElementType.EMPTY;
+            this.projection = null;
+            this.val = null;
+            this.list = null;
+            this.processors = null;
+        }
+        public StructurePoolElementData(ResourceLocation val, ResourceLocation processors, StructureTemplatePool.Projection projection) {
+            this.type = StructurePoolElementType.SINGLE;
+            this.val = val;
+            this.projection = projection;
+            this.list = null;
+            this.processors = processors;
+        }
+        public StructurePoolElementData(StructurePoolElementType<?> type, ResourceLocation val, ResourceLocation processors, StructureTemplatePool.Projection projection) {
+            this.type = type;
+            this.val = val;
+            this.projection = projection;
+            this.list = null;
+            this.processors = processors;
+        }
+        public StructurePoolElementData(List<StructurePoolElementData> list) {
+            this.type = StructurePoolElementType.LIST;
+            this.list = list;
+            this.projection = null;
+            this.val = null;
+            this.processors = null;
+        }
 
         private static Codec<StructurePoolElementData> of(StructurePoolElementType<?> type) {
             return CODECS.get(type);
@@ -86,43 +117,9 @@ public class Decoder {
             return StructureTemplatePool.Projection.CODEC.fieldOf("projection").forGetter(d -> d.projection);
         }
 
-        protected final StructurePoolElementType<?> type;
-        protected final StructureTemplatePool.Projection projection;
-        protected final ResourceLocation val;
-        protected final ResourceLocation processors;
-        protected final List<StructurePoolElementData> list;
 
-        public StructurePoolElementData() {
-            this.type = StructurePoolElementType.EMPTY;
-            this.projection = null;
-            this.val = null;
-            this.list = null;
-            this.processors = null;
-        }
 
-        public StructurePoolElementData(ResourceLocation val, ResourceLocation processors, StructureTemplatePool.Projection projection) {
-            this.type = StructurePoolElementType.SINGLE;
-            this.val = val;
-            this.projection = projection;
-            this.list = null;
-            this.processors = processors;
-        }
 
-        public StructurePoolElementData(StructurePoolElementType<?> type, ResourceLocation val, ResourceLocation processors, StructureTemplatePool.Projection projection) {
-            this.type = type;
-            this.val = val;
-            this.projection = projection;
-            this.list = null;
-            this.processors = processors;
-        }
-
-        public StructurePoolElementData(List<StructurePoolElementData> list) {
-            this.type = StructurePoolElementType.LIST;
-            this.list = list;
-            this.projection = null;
-            this.val = null;
-            this.processors = null;
-        }
     }
 
     public static class ConfiguredJigsawStructureFeatureData {

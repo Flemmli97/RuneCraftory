@@ -18,13 +18,11 @@ import net.minecraft.world.level.Level;
 
 public class EntityOrcArcher extends EntityOrc {
 
-    public AnimatedRangedGoal<EntityOrc> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getMainHandItem().getItem() instanceof BowItem);
     private static final AnimatedAction melee = new AnimatedAction(19, 13, "kick");
     private static final AnimatedAction ranged = new AnimatedAction(20, 12, "bow");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, ranged};
-
     private final AnimationHandler<EntityOrcArcher> animationHandler = new AnimationHandler<>(this, anims);
+    public AnimatedRangedGoal<EntityOrc> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getMainHandItem().getItem() instanceof BowItem);
 
     public EntityOrcArcher(EntityType<? extends EntityOrcArcher> type, Level level) {
         super(type, level);
@@ -35,27 +33,6 @@ public class EntityOrcArcher extends EntityOrc {
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.getID().equals(melee.getID());
-        if (type == AnimationType.RANGED)
-            return anim.getID().equals(ranged.getID());
-        return false;
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return 0.6f;
-        return 0.85f;
-    }
-
-    @Override
-    public AnimationHandler<EntityOrcArcher> getAnimationHandler() {
-        return this.animationHandler;
     }
 
     @Override
@@ -72,6 +49,27 @@ public class EntityOrcArcher extends EntityOrc {
             }
         } else
             super.handleAttack(anim);
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        if (type == AnimationType.MELEE)
+            return 0.6f;
+        return 0.85f;
+    }
+
+    @Override
+    public AnimationHandler<EntityOrcArcher> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        if (type == AnimationType.MELEE)
+            return anim.getID().equals(melee.getID());
+        if (type == AnimationType.RANGED)
+            return anim.getID().equals(ranged.getID());
+        return false;
     }
 
     @Override

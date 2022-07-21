@@ -19,28 +19,11 @@ public class InfoSubScreen extends InfoScreen {
 
     private static final ResourceLocation page2 = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_2.png");
     private static final ResourceLocation pageEnd = new ResourceLocation(RuneCraftory.MODID, "textures/gui/skills_3.png");
-    private int page;
     private final int maxPages = EnumSkills.values().length / 12;
+    private int page;
 
     public InfoSubScreen(AbstractContainerMenu container, Inventory inv, Component name) {
         super(container, inv, name);
-    }
-
-    @Override
-    protected void buttons() {
-        if (this.page < this.maxPages)
-            this.addRenderableWidget(new PageButton(this.leftPos + 206, this.topPos + 5, new TextComponent(">"), b -> {
-                this.page++;
-                this.init(this.minecraft, this.width, this.height);
-            }));
-        this.addRenderableWidget(new PageButton(this.leftPos + 193, this.topPos + 5, new TextComponent("<"), b -> {
-            if (this.page == 0)
-                Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN));
-            else {
-                this.page--;
-                this.init(this.minecraft, this.width, this.height);
-            }
-        }));
     }
 
     @Override
@@ -66,6 +49,23 @@ public class InfoSubScreen extends InfoScreen {
                 this.drawRightAlignedScaledString(stack, "" + this.data.getSkillLevel(skill2)[0], this.leftPos + 214, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
             }
         }
+    }
+
+    @Override
+    protected void buttons() {
+        if (this.page < this.maxPages)
+            this.addRenderableWidget(new PageButton(this.leftPos + 206, this.topPos + 5, new TextComponent(">"), b -> {
+                this.page++;
+                this.init(this.minecraft, this.width, this.height);
+            }));
+        this.addRenderableWidget(new PageButton(this.leftPos + 193, this.topPos + 5, new TextComponent("<"), b -> {
+            if (this.page == 0)
+                Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN));
+            else {
+                this.page--;
+                this.init(this.minecraft, this.width, this.height);
+            }
+        }));
     }
 
     @Override

@@ -25,6 +25,10 @@ public class MiningLootCondition implements LootItemCondition {
         this.min = required;
     }
 
+    public static LootItemCondition.Builder get(int val) {
+        return () -> new MiningLootCondition(val);
+    }
+
     @Override
     public LootItemConditionType getType() {
         return ModLootCondition.INT_CHECK.get();
@@ -42,10 +46,6 @@ public class MiningLootCondition implements LootItemCondition {
             level = Platform.INSTANCE.getPlayerData(player).map(data -> data.getSkillLevel(EnumSkills.MINING)[0]).orElse(0);
         }
         return level >= this.min;
-    }
-
-    public static LootItemCondition.Builder get(int val) {
-        return () -> new MiningLootCondition(val);
     }
 
     public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<MiningLootCondition> {

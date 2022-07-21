@@ -16,8 +16,8 @@ public class ChemistryRecipe extends SextupleRecipe {
     }
 
     @Override
-    public RecipeType<? extends SextupleRecipe> getType() {
-        return ModCrafting.CHEMISTRY.get();
+    public ItemStack getToastSymbol() {
+        return new ItemStack(ModItems.itemBlockChem.get());
     }
 
     @Override
@@ -26,8 +26,8 @@ public class ChemistryRecipe extends SextupleRecipe {
     }
 
     @Override
-    public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.itemBlockChem.get());
+    public RecipeType<? extends SextupleRecipe> getType() {
+        return ModCrafting.CHEMISTRY.get();
     }
 
     public static class Serializer extends SextupleRecipe.Serializer<ChemistryRecipe> {

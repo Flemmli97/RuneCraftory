@@ -42,15 +42,15 @@ public enum EnumSkills {
         this.translation = translation;
     }
 
-    public String getTranslation() {
-        return this.translation;
-    }
-
     public static EnumSkills read(String s) {
         try {
             return EnumSkills.valueOf(s);
         } catch (IllegalArgumentException ignored) {
         }
         return null;
+    }
+
+    public String getTranslation() {
+        return this.translation;
     }
 }

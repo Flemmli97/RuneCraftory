@@ -25,11 +25,6 @@ public class RenderDarkness extends EntityRenderer<EntityDarkness> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityDarkness entity) {
-        return tex;
-    }
-
-    @Override
     public void render(EntityDarkness entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         float size = 1.2f + entity.getRadius() + Mth.sin((entity.tickCount + partialTicks) * 0.3f) * 0.06f;
         this.textureBuilder.setLight(packedLight);
@@ -48,5 +43,10 @@ public class RenderDarkness extends EntityRenderer<EntityDarkness> {
         }
         stack.popPose();
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(EntityDarkness entity) {
+        return tex;
     }
 }

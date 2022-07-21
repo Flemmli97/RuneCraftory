@@ -63,11 +63,6 @@ public class VortexParticle extends TextureSheetParticle {
     }
 
     @Override
-    public float getQuadSize(float partialTicks) {
-        return this.quadSize * Mth.sin((this.age + partialTicks) * (float) (Math.PI / this.lifetime * 2));//Mth.clamp(((float) this.age + partialTicks) / (float) this.maxAge * 8.0F, 0.0F, 1.0F);
-    }
-
-    @Override
     public ParticleRenderType getRenderType() {
         return ParticleRenderTypes.TRANSLUCENTADD;
     }
@@ -123,6 +118,11 @@ public class VortexParticle extends TextureSheetParticle {
                 buffer.vertex(opposite[3].x(), opposite[3].y(), opposite[3].z()).uv(f7, f6).color(this.rCol, this.gCol, this.bCol, this.alpha).uv2(j).endVertex();
             }
         }
+    }
+
+    @Override
+    public float getQuadSize(float partialTicks) {
+        return this.quadSize * Mth.sin((this.age + partialTicks) * (float) (Math.PI / this.lifetime * 2));//Mth.clamp(((float) this.age + partialTicks) / (float) this.maxAge * 8.0F, 0.0F, 1.0F);
     }
 
     public record VortexFactoryBase(

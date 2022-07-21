@@ -24,13 +24,37 @@ import java.util.TreeMap;
 
 public class FoodProperties {
 
-    private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
     private final Map<Attribute, Double> effects = new TreeMap<>(ModAttributes.sorted);
     private final Map<Attribute, Double> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
+    private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
     private SimpleEffect[] potionApply = new SimpleEffect[0];
     private MobEffect[] potionRemove = new MobEffect[0];
 
     private transient List<Component> translationTexts;
+
+    public static FoodProperties fromPacket(FriendlyByteBuf buffer) {
+        FoodProperties prop = new FoodProperties();
+        prop.hpRegen = buffer.readInt();
+        prop.rpRegen = buffer.readInt();
+        prop.hpRegenPercent = buffer.readInt();
+        prop.rpRegenPercent = buffer.readInt();
+        prop.duration = buffer.readInt();
+        int size = buffer.readInt();
+        for (int i = 0; i < size; i++)
+            prop.effects.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
+        size = buffer.readInt();
+        for (int i = 0; i < size; i++)
+            prop.effectsPercentage.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
+        size = buffer.readInt();
+        prop.potionRemove = new MobEffect[size];
+        for (int i = 0; i < size; i++)
+            prop.potionRemove[i] = PlatformUtils.INSTANCE.effects().getFromId(buffer.readResourceLocation());
+        size = buffer.readInt();
+        prop.potionApply = new SimpleEffect[size];
+        for (int i = 0; i < size; i++)
+            prop.potionApply[i] = new SimpleEffect(PlatformUtils.INSTANCE.effects().getFromId(buffer.readResourceLocation()), buffer.readInt(), buffer.readInt());
+        return prop;
+    }
 
     public int getHPGain() {
         return this.hpRegen;
@@ -102,30 +126,6 @@ public class FoodProperties {
             buffer.writeInt(eff.getDuration());
             buffer.writeInt(eff.getAmplifier());
         }
-    }
-
-    public static FoodProperties fromPacket(FriendlyByteBuf buffer) {
-        FoodProperties prop = new FoodProperties();
-        prop.hpRegen = buffer.readInt();
-        prop.rpRegen = buffer.readInt();
-        prop.hpRegenPercent = buffer.readInt();
-        prop.rpRegenPercent = buffer.readInt();
-        prop.duration = buffer.readInt();
-        int size = buffer.readInt();
-        for (int i = 0; i < size; i++)
-            prop.effects.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
-        size = buffer.readInt();
-        for (int i = 0; i < size; i++)
-            prop.effectsPercentage.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
-        size = buffer.readInt();
-        prop.potionRemove = new MobEffect[size];
-        for (int i = 0; i < size; i++)
-            prop.potionRemove[i] = PlatformUtils.INSTANCE.effects().getFromId(buffer.readResourceLocation());
-        size = buffer.readInt();
-        prop.potionApply = new SimpleEffect[size];
-        for (int i = 0; i < size; i++)
-            prop.potionApply[i] = new SimpleEffect(PlatformUtils.INSTANCE.effects().getFromId(buffer.readResourceLocation()), buffer.readInt(), buffer.readInt());
-        return prop;
     }
 
     public List<Component> texts() {
@@ -216,12 +216,11 @@ public class FoodProperties {
                     prop.potionRemove.addAll(potionRem);
                     return prop;
                 }));
-
-        private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
         private final TreeMap<Attribute, Double> effects = new TreeMap<>(ModAttributes.sorted);
         private final TreeMap<Attribute, Double> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
         private final List<SimpleEffect> potionApply = new ArrayList<>();
         private final List<MobEffect> potionRemove = new ArrayList<>();
+        private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
 
         public MutableFoodProps(int duration) {
             this.duration = duration;

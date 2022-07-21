@@ -6,8 +6,8 @@ import net.minecraft.world.entity.ai.goal.Goal;
 public class RiderAttackTargetGoal extends Goal {
 
     protected final Mob goalOwner;
-    private Mob controller;
     private final int updateChance;
+    private Mob controller;
 
     public RiderAttackTargetGoal(Mob entity, int updateChance) {
         this.goalOwner = entity;

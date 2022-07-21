@@ -22,12 +22,6 @@ public class RenderFireball extends RenderTexture<EntityFireball> {
     }
 
     @Override
-    public float[] uvOffset(int timer) {
-        return super.uvOffset((int) (timer * 0.5));
-    }
-
-
-    @Override
     public void render(EntityFireball entity, float rotation, float partialTicks, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.pushPose();
         stack.translate(0, this.ySize * 0.25, 0);
@@ -35,5 +29,10 @@ public class RenderFireball extends RenderTexture<EntityFireball> {
             stack.scale(1.3f, 1.3f, 1.3f);
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
         stack.popPose();
+    }
+
+    @Override
+    public float[] uvOffset(int timer) {
+        return super.uvOffset((int) (timer * 0.5));
     }
 }

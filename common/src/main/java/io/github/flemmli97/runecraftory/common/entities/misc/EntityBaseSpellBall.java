@@ -18,8 +18,8 @@ import net.minecraft.world.phys.EntityHitResult;
 
 public class EntityBaseSpellBall extends EntityProjectile {
 
-    private EnumElement element = EnumElement.NONE;
     protected static final EntityDataAccessor<Integer> elementData = SynchedEntityData.defineId(EntityBaseSpellBall.class, EntityDataSerializers.INT);
+    private EnumElement element = EnumElement.NONE;
 
     public EntityBaseSpellBall(EntityType<? extends EntityBaseSpellBall> type, Level world) {
         super(type, world);
@@ -29,12 +29,6 @@ public class EntityBaseSpellBall extends EntityProjectile {
         super(ModEntities.staffThrown.get(), world, shooter);
         this.element = element;
         this.entityData.set(elementData, this.element.ordinal());
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(elementData, 0);
     }
 
     @Override
@@ -52,8 +46,15 @@ public class EntityBaseSpellBall extends EntityProjectile {
         return 6;
     }
 
-    public EnumElement getElement() {
-        return this.element;
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(elementData, 0);
+    }
+
+    @Override
+    protected float getGravityVelocity() {
+        return 0;
     }
 
     @Override
@@ -61,11 +62,6 @@ public class EntityBaseSpellBall extends EntityProjectile {
         boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(this.element).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * 0.8f, null);
         this.remove(RemovalReason.KILLED);
         return att;
-    }
-
-    @Override
-    protected float getGravityVelocity() {
-        return 0;
     }
 
     @Override
@@ -86,5 +82,9 @@ public class EntityBaseSpellBall extends EntityProjectile {
     protected void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Element", this.element.ordinal());
+    }
+
+    public EnumElement getElement() {
+        return this.element;
     }
 }

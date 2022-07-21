@@ -49,15 +49,6 @@ public class EntityWaterLaser extends EntityBeam {
             this.pred = ((BaseMonster) shooter).hitPred;
     }
 
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(yawMotionVal, 0f);
-        this.entityData.define(maxLivingTick, 20);
-        this.entityData.define(yawOffset, 0f);
-        this.entityData.define(positionYawOffset, 0f);
-    }
-
     public void setRotationToDirWithOffset(double dirX, double dirY, double dirZ, float acc, float yawOffset) {
         super.setRotationToDir(dirX, dirY, dirZ, acc);
         this.setYRot(this.getYRot() + yawOffset);
@@ -77,6 +68,11 @@ public class EntityWaterLaser extends EntityBeam {
     }
 
     @Override
+    public float getRange() {
+        return 9;
+    }
+
+    @Override
     public float radius() {
         return 0.5f;
     }
@@ -87,23 +83,8 @@ public class EntityWaterLaser extends EntityBeam {
     }
 
     @Override
-    public float getRange() {
-        return 9;
-    }
-
-    @Override
-    public boolean getHitVecFromShooter() {
-        return this.getOwner() instanceof Player;
-    }
-
-    @Override
     public int livingTickMax() {
         return this.entityData.get(maxLivingTick);
-    }
-
-    @Override
-    public int attackCooldown() {
-        return 19;
     }
 
     @Override
@@ -117,6 +98,20 @@ public class EntityWaterLaser extends EntityBeam {
             Vector3f vec = RayTraceUtils.rotatedAround(e.getLookAngle(), Vector3f.YP, this.entityData.get(positionYawOffset));
             this.setPos(e.getX() + vec.x(), e.getY() + (double) e.getEyeHeight() - 0.10000000149011612D + vec.y(), e.getZ() + vec.z());
         }
+    }
+
+    @Override
+    public boolean getHitVecFromShooter() {
+        return this.getOwner() instanceof Player;
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(yawMotionVal, 0f);
+        this.entityData.define(maxLivingTick, 20);
+        this.entityData.define(yawOffset, 0f);
+        this.entityData.define(positionYawOffset, 0f);
     }
 
     @Override
@@ -139,8 +134,9 @@ public class EntityWaterLaser extends EntityBeam {
         CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).element(EnumElement.WATER).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
     }
 
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
+    @Override
+    public int attackCooldown() {
+        return 19;
     }
 
     @Override
@@ -163,5 +159,9 @@ public class EntityWaterLaser extends EntityBeam {
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 }

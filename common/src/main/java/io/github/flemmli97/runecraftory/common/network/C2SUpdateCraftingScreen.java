@@ -10,16 +10,6 @@ public record C2SUpdateCraftingScreen(boolean increase) implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "c2s_crafting_screen");
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeBoolean(this.increase);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static C2SUpdateCraftingScreen read(FriendlyByteBuf buf) {
         return new C2SUpdateCraftingScreen(buf.readBoolean());
     }
@@ -31,5 +21,15 @@ public record C2SUpdateCraftingScreen(boolean increase) implements Packet {
             else
                 ((ContainerCrafting) sender.containerMenu).decrease();
 
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeBoolean(this.increase);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

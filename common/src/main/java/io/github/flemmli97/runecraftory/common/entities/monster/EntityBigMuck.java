@@ -16,12 +16,10 @@ import java.util.List;
 
 public class EntityBigMuck extends BaseMonster {
 
-    public final AnimatedMeleeGoal<EntityBigMuck> ai = new AnimatedMeleeGoal<>(this);
     public static final AnimatedAction slapAttack = new AnimatedAction(24, 7, "slap");
     public static final AnimatedAction sporeAttack = new AnimatedAction(44, 18, "spore");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{slapAttack, sporeAttack};
-
+    public final AnimatedMeleeGoal<EntityBigMuck> ai = new AnimatedMeleeGoal<>(this);
     private final AnimationHandler<EntityBigMuck> animationHandler = new AnimationHandler<>(this, anims);
 
     private List<Vector3f> attackPos;
@@ -30,6 +28,30 @@ public class EntityBigMuck extends BaseMonster {
         super(type, world);
         this.goalSelector.addGoal(2, this.ai);
         this.getAnimationHandler().setAnimationChangeCons(a -> this.attackPos = null);
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return 0.9f;
+    }
+
+    @Override
+    public AnimationHandler<EntityBigMuck> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        if (type == AnimationType.MELEE)
+            return anim.getID().equals(slapAttack.getID()) || anim.getID().equals(sporeAttack.getID());
+        return false;
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        if (anim.getID().equals(sporeAttack.getID()))
+            return 1.7;
+        return 0.8;
     }
 
     @Override
@@ -51,30 +73,6 @@ public class EntityBigMuck extends BaseMonster {
             }
         } else
             super.handleAttack(anim);
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 0.9f;
-    }
-
-    @Override
-    public AnimationHandler<EntityBigMuck> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        if (anim.getID().equals(sporeAttack.getID()))
-            return 1.7;
-        return 0.8;
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.getID().equals(slapAttack.getID()) || anim.getID().equals(sporeAttack.getID());
-        return false;
     }
 
     @Override

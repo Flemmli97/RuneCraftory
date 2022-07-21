@@ -57,12 +57,12 @@ public class Loottables extends LootTableProvider {
     }
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationtracker) {
+    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
+        return this.loot;
     }
 
     @Override
-    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
-        return this.loot;
+    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationtracker) {
     }
 
     static class EntityLoot implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
@@ -162,52 +162,8 @@ public class Loottables extends LootTableProvider {
 
     static class BlockLootData extends BlockLoot {
 
-        private final Map<ResourceLocation, LootTable.Builder> loots = new HashMap<>();
-
         private static final LootItemCondition.Builder SILK_TOUCH = MatchTool.toolMatches(ItemPredicate.Builder.item().hasEnchantment(new EnchantmentPredicate(Enchantments.SILK_TOUCH, MinMaxBounds.Ints.atLeast(1))));
-
-        @Override
-        public void accept(BiConsumer<ResourceLocation, LootTable.Builder> cons) {
-            this.dropOther(ModBlocks.farmland.get(), Blocks.DIRT);
-            this.add(ModBlocks.mushroom.get(), LootTable.lootTable().withPool(herbLoot(ModItems.mushroom.get())));
-            this.add(ModBlocks.monarchMushroom.get(), LootTable.lootTable().withPool(herbLoot(ModItems.monarchMushroom.get())));
-            this.add(ModBlocks.elliLeaves.get(), LootTable.lootTable().withPool(herbLoot(ModItems.elliLeaves.get())));
-            this.add(ModBlocks.witheredGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.witheredGrass.get())));
-            this.add(ModBlocks.weeds.get(), LootTable.lootTable().withPool(herbLoot(ModItems.weeds.get())));
-            this.add(ModBlocks.whiteGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.whiteGrass.get())));
-            this.add(ModBlocks.indigoGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.indigoGrass.get())));
-            this.add(ModBlocks.purpleGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.purpleGrass.get())));
-            this.add(ModBlocks.greenGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.greenGrass.get())));
-            this.add(ModBlocks.blueGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.blueGrass.get())));
-            this.add(ModBlocks.yellowGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.yellowGrass.get())));
-            this.add(ModBlocks.redGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.redGrass.get())));
-            this.add(ModBlocks.orangeGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.orangeGrass.get())));
-            this.add(ModBlocks.blackGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.blackGrass.get())));
-            this.add(ModBlocks.antidoteGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.antidoteGrass.get())));
-            this.add(ModBlocks.medicinalHerb.get(), LootTable.lootTable().withPool(herbLoot(ModItems.medicinalHerb.get())));
-            this.add(ModBlocks.bambooSprout.get(), LootTable.lootTable().withPool(herbLoot(ModItems.bambooSprout.get())));
-
-            this.add(ModBlocks.forge.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.cooking.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.chemistry.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-            this.add(ModBlocks.accessory.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
-
-            this.dropSelf(ModBlocks.board.get());
-            this.dropSelf(ModBlocks.shipping.get());
-
-            ModBlocks.crops.forEach(reg -> {
-                Block block = reg.get();
-                if (block instanceof BlockCrop)
-                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot((BlockCrop) block)));
-            });
-            ModBlocks.flowers.forEach(reg -> {
-                Block block = reg.get();
-                if (block instanceof BlockCrop)
-                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot((BlockCrop) block)));
-            });
-            ModBlocks.mineralMap.forEach((tier, reg) -> this.add(reg.get(), LootTable.lootTable().withPool(oreLootPool(tier))));
-            this.loots.forEach(cons);
-        }
+        private final Map<ResourceLocation, LootTable.Builder> loots = new HashMap<>();
 
         protected static LootPool.Builder herbLoot(ItemLike item) {
             LootPool.Builder build = LootPool.lootPool().setRolls(ConstantValue.exactly(1));
@@ -305,6 +261,49 @@ public class Loottables extends LootTableProvider {
 
         private static LootPoolSingletonContainer.Builder<?> ore(int weight, int quality, ItemLike item, int minMiningLevel) {
             return ore(weight, quality, item).when(MiningLootCondition.get(minMiningLevel));
+        }
+
+        @Override
+        public void accept(BiConsumer<ResourceLocation, LootTable.Builder> cons) {
+            this.dropOther(ModBlocks.farmland.get(), Blocks.DIRT);
+            this.add(ModBlocks.mushroom.get(), LootTable.lootTable().withPool(herbLoot(ModItems.mushroom.get())));
+            this.add(ModBlocks.monarchMushroom.get(), LootTable.lootTable().withPool(herbLoot(ModItems.monarchMushroom.get())));
+            this.add(ModBlocks.elliLeaves.get(), LootTable.lootTable().withPool(herbLoot(ModItems.elliLeaves.get())));
+            this.add(ModBlocks.witheredGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.witheredGrass.get())));
+            this.add(ModBlocks.weeds.get(), LootTable.lootTable().withPool(herbLoot(ModItems.weeds.get())));
+            this.add(ModBlocks.whiteGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.whiteGrass.get())));
+            this.add(ModBlocks.indigoGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.indigoGrass.get())));
+            this.add(ModBlocks.purpleGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.purpleGrass.get())));
+            this.add(ModBlocks.greenGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.greenGrass.get())));
+            this.add(ModBlocks.blueGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.blueGrass.get())));
+            this.add(ModBlocks.yellowGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.yellowGrass.get())));
+            this.add(ModBlocks.redGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.redGrass.get())));
+            this.add(ModBlocks.orangeGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.orangeGrass.get())));
+            this.add(ModBlocks.blackGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.blackGrass.get())));
+            this.add(ModBlocks.antidoteGrass.get(), LootTable.lootTable().withPool(herbLoot(ModItems.antidoteGrass.get())));
+            this.add(ModBlocks.medicinalHerb.get(), LootTable.lootTable().withPool(herbLoot(ModItems.medicinalHerb.get())));
+            this.add(ModBlocks.bambooSprout.get(), LootTable.lootTable().withPool(herbLoot(ModItems.bambooSprout.get())));
+
+            this.add(ModBlocks.forge.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.cooking.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.chemistry.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+            this.add(ModBlocks.accessory.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
+
+            this.dropSelf(ModBlocks.board.get());
+            this.dropSelf(ModBlocks.shipping.get());
+
+            ModBlocks.crops.forEach(reg -> {
+                Block block = reg.get();
+                if (block instanceof BlockCrop)
+                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot((BlockCrop) block)));
+            });
+            ModBlocks.flowers.forEach(reg -> {
+                Block block = reg.get();
+                if (block instanceof BlockCrop)
+                    this.add(reg.get(), LootTable.lootTable().withPool(cropLoot((BlockCrop) block)));
+            });
+            ModBlocks.mineralMap.forEach((tier, reg) -> this.add(reg.get(), LootTable.lootTable().withPool(oreLootPool(tier))));
+            this.loots.forEach(cons);
         }
 
         @Override

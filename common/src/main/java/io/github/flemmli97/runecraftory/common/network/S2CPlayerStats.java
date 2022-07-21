@@ -26,18 +26,6 @@ public class S2CPlayerStats implements Packet {
         this.vit = data.getVit();
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeFloat(this.strength);
-        buf.writeFloat(this.intel);
-        buf.writeFloat(this.vit);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CPlayerStats read(FriendlyByteBuf buf) {
         return new S2CPlayerStats(buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
@@ -51,5 +39,17 @@ public class S2CPlayerStats implements Packet {
             data.setIntel(player, pkt.intel);
             data.setVit(player, pkt.vit);
         });
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeFloat(this.strength);
+        buf.writeFloat(this.intel);
+        buf.writeFloat(this.vit);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

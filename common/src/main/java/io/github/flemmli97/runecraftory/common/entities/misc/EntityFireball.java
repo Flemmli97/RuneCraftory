@@ -40,12 +40,6 @@ public class EntityFireball extends EntityProjectile {
         this.entityData.set(BIG, big);
     }
 
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(BIG, false);
-    }
-
     public boolean big() {
         return this.entityData.get(BIG);
     }
@@ -56,8 +50,19 @@ public class EntityFireball extends EntityProjectile {
     }
 
     @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(BIG, false);
+    }
+
+    @Override
     protected boolean canHit(Entity entity) {
         return (!(entity instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) entity)) && super.canHit(entity);
+    }
+
+    @Override
+    protected float getGravityVelocity() {
+        return 0.0025f;
     }
 
     @Override
@@ -72,15 +77,6 @@ public class EntityFireball extends EntityProjectile {
     protected void onBlockHit(BlockHitResult result) {
         this.level.playSound(null, result.getLocation().x, result.getLocation().y, result.getLocation().z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0f, 1.0f);
         this.remove(RemovalReason.KILLED);
-    }
-
-    @Override
-    protected float getGravityVelocity() {
-        return 0.0025f;
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -103,5 +99,9 @@ public class EntityFireball extends EntityProjectile {
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 }

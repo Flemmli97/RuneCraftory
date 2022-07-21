@@ -30,13 +30,9 @@ public class ItemStatIncrease extends Item {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.DRINK;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack) {
-        return 32;
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
+        player.startUsingItem(usedHand);
+        return InteractionResultHolder.consume(player.getItemInHand(usedHand));
     }
 
     @Override
@@ -56,9 +52,13 @@ public class ItemStatIncrease extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
-        player.startUsingItem(usedHand);
-        return InteractionResultHolder.consume(player.getItemInHand(usedHand));
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.DRINK;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return 32;
     }
 
     private void increaseStat(ItemStack stack, Level level, Player player) {

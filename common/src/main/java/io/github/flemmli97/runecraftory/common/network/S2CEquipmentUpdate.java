@@ -12,16 +12,6 @@ public record S2CEquipmentUpdate(EquipmentSlot slot) implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_equipment");
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeEnum(this.slot);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CEquipmentUpdate read(FriendlyByteBuf buf) {
         return new S2CEquipmentUpdate(buf.readEnum(EquipmentSlot.class));
     }
@@ -31,5 +21,15 @@ public record S2CEquipmentUpdate(EquipmentSlot slot) implements Packet {
         if (player == null)
             return;
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.updateEquipmentStats(player, pkt.slot));
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeEnum(this.slot);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

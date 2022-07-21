@@ -91,8 +91,10 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        int duration = stack.getUseDuration() - remainingUseDuration;
+        if (duration == this.getChargeTime(stack))
+            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
     @Override
@@ -101,8 +103,18 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
-        return 72000;
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        if (!(player instanceof ServerPlayer))
+            return InteractionResultHolder.pass(itemstack);
+        return Platform.INSTANCE.getPlayerData(player)
+                .map(data -> {
+                    if (hand == InteractionHand.MAIN_HAND && (data.getSkillLevel(EnumSkills.SPEAR)[0] >= 5 || player.isCreative())) {
+                        player.startUsingItem(hand);
+                        return InteractionResultHolder.consume(itemstack);
+                    }
+                    return InteractionResultHolder.pass(itemstack);
+                }).orElse(InteractionResultHolder.pass(itemstack));
     }
 
     @Override
@@ -111,10 +123,8 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration == this.getChargeTime(stack))
-            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+    public int getUseDuration(ItemStack stack) {
+        return 72000;
     }
 
     @Override
@@ -133,18 +143,13 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        if (!(player instanceof ServerPlayer))
-            return InteractionResultHolder.pass(itemstack);
-        return Platform.INSTANCE.getPlayerData(player)
-                .map(data -> {
-                    if (hand == InteractionHand.MAIN_HAND && (data.getSkillLevel(EnumSkills.SPEAR)[0] >= 5 || player.isCreative())) {
-                        player.startUsingItem(hand);
-                        return InteractionResultHolder.consume(itemstack);
-                    }
-                    return InteractionResultHolder.pass(itemstack);
-                }).orElse(InteractionResultHolder.pass(itemstack));
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
+        return ImmutableMultimap.of();
     }
 
     private void useSpear(ServerPlayer player, PlayerData data) {
@@ -156,10 +161,5 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
             list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.3f, false, false, false));
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
         }
-    }
-
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return ImmutableMultimap.of();
     }
 }

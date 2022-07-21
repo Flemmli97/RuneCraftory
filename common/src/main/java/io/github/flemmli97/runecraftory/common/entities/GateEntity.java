@@ -55,14 +55,14 @@ import java.util.UUID;
 
 public class GateEntity extends Mob implements IBaseMob {
 
-    private List<EntityType<?>> spawnList = new ArrayList<>();
-    private EnumElement type = EnumElement.NONE;
-    public int rotate, clientParticles;
-    public boolean clientParticleFlag;
     private static final EntityDataAccessor<String> elementType = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> element = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> mobLevel = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
     private static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
+    public int rotate, clientParticles;
+    public boolean clientParticleFlag;
+    private List<EntityType<?>> spawnList = new ArrayList<>();
+    private EnumElement type = EnumElement.NONE;
 
     public GateEntity(EntityType<? extends GateEntity> type, Level level) {
         super(type, level);
@@ -71,6 +71,14 @@ public class GateEntity extends Mob implements IBaseMob {
         }
         this.updateAttributes();
         this.setNoGravity(true);
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        return Mob.createMobAttributes().add(ModAttributes.RF_DEFENCE.get()).add(ModAttributes.RF_MAGIC_DEFENCE.get());
+    }
+
+    public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
+        return level.getDifficulty() != Difficulty.PEACEFUL && GateSpawning.hasSpawns(level, pos) && checkMobSpawnRules(type, level, reason, pos, random) && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
     }
 
     @Override
@@ -83,14 +91,6 @@ public class GateEntity extends Mob implements IBaseMob {
         this.entityData.set(mobLevel, Math.min(10000, lvl));
     }
 
-    public EnumElement getElement() {
-        return this.type;
-    }
-
-    public String elementName() {
-        return this.entityData.get(elementType);
-    }
-
     @Override
     public int baseXP() {
         return MobConfig.gateXP;
@@ -101,8 +101,20 @@ public class GateEntity extends Mob implements IBaseMob {
         return MobConfig.gateMoney;
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(ModAttributes.RF_DEFENCE.get()).add(ModAttributes.RF_MAGIC_DEFENCE.get());
+    @Override
+    public void applyFoodEffect(ItemStack stack) {
+    }
+
+    @Override
+    public void removeFoodEffect() {
+    }
+
+    public EnumElement getElement() {
+        return this.type;
+    }
+
+    public String elementName() {
+        return this.entityData.get(elementType);
     }
 
     private void updateAttributes() {
@@ -118,6 +130,34 @@ public class GateEntity extends Mob implements IBaseMob {
         this.entityData.define(elementType, "none");
         this.entityData.define(mobLevel, LibConstants.baseLevel);
         this.entityData.define(element, 0);
+    }
+
+    @Override
+    public void tick() {
+        if (Platform.INSTANCE.onLivingUpdate(this)) return;
+        if (!this.level.isClientSide) {
+            this.setSharedFlag(6, this.isCurrentlyGlowing());
+        } else {
+            this.clientParticles += 10;
+            this.clientParticleFlag = true;
+        }
+        this.baseTick();
+        if (this.lerpSteps > 0) {
+            double d0 = this.getX() + (this.lerpX - this.getX()) / (double) this.lerpSteps;
+            double d2 = this.getY() + (this.lerpY - this.getY()) / (double) this.lerpSteps;
+            double d4 = this.getZ() + (this.lerpZ - this.getZ()) / (double) this.lerpSteps;
+            double d6 = Mth.wrapDegrees(this.lerpYRot - (double) this.getYRot());
+            this.setYRot((float) ((double) this.getYRot() + d6 / (double) this.lerpSteps));
+            this.setXRot((float) ((double) this.getXRot() + (this.lerpXRot - (double) this.getXRot()) / (double) this.lerpSteps));
+            --this.lerpSteps;
+            this.setPos(d0, d2, d4);
+            this.setRot(this.getYRot(), this.getXRot());
+        } else if (!this.isEffectiveAi()) {
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.98D));
+        }
+        if (this.random.nextInt(MobConfig.spawnChance) == 0 && this.level.getDifficulty() != Difficulty.PEACEFUL) {
+            this.spawnMobs();
+        }
     }
 
     @Override
@@ -149,11 +189,13 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
+    protected LootContext.Builder createLootContext(boolean useLuck, DamageSource src) {
+        return super.createLootContext(useLuck, src);
     }
 
     @Override
-    public void heal(float healAmount) {
+    public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
+        return true;//this.world.getDifficulty() != Difficulty.PEACEFUL && super.canSpawn(world, reason) && this.world.getEntitiesWithinAABB(GateEntity.class, this.getBoundingBox().grow(48.0)).size() < 2;
     }
 
     @Override
@@ -167,36 +209,25 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    public HumanoidArm getMainArm() {
-        return HumanoidArm.RIGHT;
+    public void setItemSlot(EquipmentSlot slotIn, ItemStack stack) {
     }
 
     @Override
-    public void tick() {
-        if (Platform.INSTANCE.onLivingUpdate(this)) return;
-        if (!this.level.isClientSide) {
-            this.setSharedFlag(6, this.isCurrentlyGlowing());
-        } else {
-            this.clientParticles += 10;
-            this.clientParticleFlag = true;
-        }
-        this.baseTick();
-        if (this.lerpSteps > 0) {
-            double d0 = this.getX() + (this.lerpX - this.getX()) / (double) this.lerpSteps;
-            double d2 = this.getY() + (this.lerpY - this.getY()) / (double) this.lerpSteps;
-            double d4 = this.getZ() + (this.lerpZ - this.getZ()) / (double) this.lerpSteps;
-            double d6 = Mth.wrapDegrees(this.lerpYRot - (double) this.getYRot());
-            this.setYRot((float) ((double) this.getYRot() + d6 / (double) this.lerpSteps));
-            this.setXRot((float) ((double) this.getXRot() + (this.lerpXRot - (double) this.getXRot()) / (double) this.lerpSteps));
-            --this.lerpSteps;
-            this.setPos(d0, d2, d4);
-            this.setRot(this.getYRot(), this.getXRot());
-        } else if (!this.isEffectiveAi()) {
-            this.setDeltaMovement(this.getDeltaMovement().scale(0.98D));
-        }
-        if (this.random.nextInt(MobConfig.spawnChance) == 0 && this.level.getDifficulty() != Difficulty.PEACEFUL) {
-            this.spawnMobs();
-        }
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+        Holder<Biome> biome = this.level.getBiome(this.blockPosition());
+        this.spawnList.addAll(GateSpawning.pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(4) + 2, this.blockPosition()));
+        this.type = this.getType(level, biome);
+        this.entityData.set(mobLevel, LevelCalc.levelFromPos(this.level, this.blockPosition()));
+        this.entityData.set(elementType, this.type.getTranslation());
+        this.entityData.set(element, this.type.ordinal());
+        this.setPos(this.getX(), this.getY() + 1, this.getZ());
+        this.updateStatsToLevel();
+        return spawnData;
+    }
+
+    @Override
+    public HumanoidArm getMainArm() {
+        return HumanoidArm.RIGHT;
     }
 
     private void spawnMobs() {
@@ -237,46 +268,6 @@ public class GateEntity extends Mob implements IBaseMob {
         }
     }
 
-    @Override
-    public boolean checkSpawnRules(LevelAccessor level, MobSpawnType spawnReason) {
-        return true;//this.world.getDifficulty() != Difficulty.PEACEFUL && super.canSpawn(world, reason) && this.world.getEntitiesWithinAABB(GateEntity.class, this.getBoundingBox().grow(48.0)).size() < 2;
-    }
-
-    public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
-        return level.getDifficulty() != Difficulty.PEACEFUL && GateSpawning.hasSpawns(level, pos) && checkMobSpawnRules(type, level, reason, pos, random) && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
-    }
-
-    @Override
-    protected void tickDeath() {
-        /*if (this.deathTime == 5 && this.attackingPlayer != null) {
-            IPlayer cap = this.attackingPlayer.getCapability(PlayerCapProvider.PlayerCap, null);
-            cap.addXp(this.attackingPlayer, LevelCalc.xpFromLevel(this.baseXP(), this.level()));
-            cap.setMoney(this.attackingPlayer, cap.getMoney() + LevelCalc.xpFromLevel(this.baseMoney(), this.level()));
-        }*/
-        super.tickDeath();
-    }
-
-    @Override
-    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
-        super.actuallyHurt(damageSrc, damageAmount);
-        if (!this.isInvulnerableTo(damageSrc)) {
-            damageAmount = Platform.INSTANCE.onLivingHurt(this, damageSrc, damageAmount);
-            if (damageAmount <= 0.0f) {
-                return;
-            }
-            damageAmount = this.reduceDamage(damageSrc, damageAmount);
-            if (damageAmount != 0.0f) {
-                float f1 = this.getHealth();
-                this.setHealth(f1 - damageAmount);
-                this.getCombatTracker().recordDamage(damageSrc, f1, damageAmount);
-            }
-        }
-    }
-
-    @Override
-    public void knockback(double strength, double x, double z) {
-    }
-
     protected float reduceDamage(DamageSource damageSrc, float damageAmount) {
         float reduce = 0.0f;
         if (!damageSrc.isBypassMagic() && !damageSrc.isBypassArmor()) {
@@ -291,8 +282,8 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    protected LootContext.Builder createLootContext(boolean useLuck, DamageSource src) {
-        return super.createLootContext(useLuck, src);
+    public boolean canBreatheUnderwater() {
+        return true;
     }
 
     /*@Override
@@ -359,18 +350,38 @@ public class GateEntity extends Mob implements IBaseMob {
     }*/
 
     @Override
-    public boolean isInWall() {
-        return false;
+    protected void tickDeath() {
+        /*if (this.deathTime == 5 && this.attackingPlayer != null) {
+            IPlayer cap = this.attackingPlayer.getCapability(PlayerCapProvider.PlayerCap, null);
+            cap.addXp(this.attackingPlayer, LevelCalc.xpFromLevel(this.baseXP(), this.level()));
+            cap.setMoney(this.attackingPlayer, cap.getMoney() + LevelCalc.xpFromLevel(this.baseMoney(), this.level()));
+        }*/
+        super.tickDeath();
     }
 
     @Override
-    public boolean canBreatheUnderwater() {
-        return true;
+    public void heal(float healAmount) {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
-        return true;
+    public void knockback(double strength, double x, double z) {
+    }
+
+    @Override
+    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
+        super.actuallyHurt(damageSrc, damageAmount);
+        if (!this.isInvulnerableTo(damageSrc)) {
+            damageAmount = Platform.INSTANCE.onLivingHurt(this, damageSrc, damageAmount);
+            if (damageAmount <= 0.0f) {
+                return;
+            }
+            damageAmount = this.reduceDamage(damageSrc, damageAmount);
+            if (damageAmount != 0.0f) {
+                float f1 = this.getHealth();
+                this.setHealth(f1 - damageAmount);
+                this.getCombatTracker().recordDamage(damageSrc, f1, damageAmount);
+            }
+        }
     }
 
     @Override
@@ -384,6 +395,16 @@ public class GateEntity extends Mob implements IBaseMob {
         super.onSyncedDataUpdated(key);
     }
 
+    @Override
+    public boolean isInWall() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return true;
+    }
+
     private void updateStatsToLevel() {
         this.getAttribute(Attributes.MAX_HEALTH).removeModifier(attributeLevelMod);
         this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADDITION));
@@ -392,19 +413,6 @@ public class GateEntity extends Mob implements IBaseMob {
         this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).removeModifier(attributeLevelMod);
         this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
         this.setHealth(this.getMaxHealth());
-    }
-
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        Holder<Biome> biome = this.level.getBiome(this.blockPosition());
-        this.spawnList.addAll(GateSpawning.pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(4) + 2, this.blockPosition()));
-        this.type = this.getType(level, biome);
-        this.entityData.set(mobLevel, LevelCalc.levelFromPos(this.level, this.blockPosition()));
-        this.entityData.set(elementType, this.type.getTranslation());
-        this.entityData.set(element, this.type.ordinal());
-        this.setPos(this.getX(), this.getY() + 1, this.getZ());
-        this.updateStatsToLevel();
-        return spawnData;
     }
 
     private EnumElement getType(ServerLevelAccessor level, Holder<Biome> key) {
@@ -438,13 +446,5 @@ public class GateEntity extends Mob implements IBaseMob {
             }
         }
         return element;
-    }
-
-    @Override
-    public void applyFoodEffect(ItemStack stack) {
-    }
-
-    @Override
-    public void removeFoodEffect() {
     }
 }

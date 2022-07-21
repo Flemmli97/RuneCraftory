@@ -29,28 +29,29 @@ import java.util.List;
 public class EntityMimic extends ChargingMonster {
 
     private static final EntityDataAccessor<Boolean> awake = SynchedEntityData.defineId(EntityMimic.class, EntityDataSerializers.BOOLEAN);
-
-    private int sleepTick = -1;
-
-    public ChargeAttackGoal<EntityMimic> attack = new ChargeAttackGoal<>(this);
     private static final AnimatedAction melee = new AnimatedAction(12, 9, "attack");
     private static final AnimatedAction leap = new AnimatedAction(12, 3, "leap");
-
     private static final AnimatedAction close = new AnimatedAction(6, 6, "close");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap, close};
-
+    public ChargeAttackGoal<EntityMimic> attack = new ChargeAttackGoal<>(this);
+    protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityMimic> animationHandler = new AnimationHandler<>(this, anims)
             .setAnimationChangeCons(a -> {
                 if (!leap.checkID(a))
                     this.hitEntity = null;
             });
-    protected List<LivingEntity> hitEntity;
+    private int sleepTick = -1;
 
     public EntityMimic(EntityType<? extends EntityMimic> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
         this.moveControl = new JumpingMover(this);
+    }
+
+    @Override
+    protected void applyAttributes() {
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5);
+        super.applyAttributes();
     }
 
     @Override
@@ -67,74 +68,12 @@ public class EntityMimic extends ChargingMonster {
     }
 
     @Override
-    protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5);
-        super.applyAttributes();
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(awake, false);
-    }
-
-    @Override
-    public void setTarget(@Nullable LivingEntity livingEntity) {
-        super.setTarget(livingEntity);
-        if (livingEntity != null) {
-            this.setAwake();
-        }
-    }
-
-    public void setAwake() {
-        this.entityData.set(awake, true);
-        this.sleepTick = 200;
-    }
-
-    @Override
-    protected float getJumpPower() {
-        return 0.48f * this.getBlockJumpFactor();
-    }
-
-    @Override
-    protected void jumpFromGround() {
-        Vec3 vec3 = this.getDeltaMovement();
-        this.setDeltaMovement(vec3.x, this.getJumpPower(), vec3.z);
-        this.hasImpulse = true;
-    }
-
-    public boolean isAwake() {
-        return this.entityData.get(awake);
-    }
-
-    @Override
-    public void baseTick() {
-        super.baseTick();
-        if (!this.level.isClientSide) {
-            if (this.getTarget() == null) {
-                this.sleepTick--;
-            }
-            if (this.sleepTick == 0) {
-                this.entityData.set(awake, false);
-                this.getAnimationHandler().setAnimation(close);
-                this.getNavigation().stop();
-            }
-        }
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
-    }
-
-    @Override
-    public AnimationHandler<? extends EntityMimic> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1;
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        if (type == AnimationType.MELEE)
+            return anim.getID().equals(melee.getID());
+        if (type == AnimationType.CHARGE)
+            return anim.getID().equals(leap.getID());
+        return false;
     }
 
     @Override
@@ -143,6 +82,27 @@ public class EntityMimic extends ChargingMonster {
         if (ret)
             this.setAwake();
         return ret;
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return 1;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (command == 1)
+                this.getAnimationHandler().setAnimation(leap);
+            else
+                this.getAnimationHandler().setAnimation(melee);
+        }
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(awake, false);
     }
 
     @Override
@@ -169,22 +129,57 @@ public class EntityMimic extends ChargingMonster {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.getID().equals(melee.getID());
-        if (type == AnimationType.CHARGE)
-            return anim.getID().equals(leap.getID());
-        return false;
+    public void setTarget(@Nullable LivingEntity livingEntity) {
+        super.setTarget(livingEntity);
+        if (livingEntity != null) {
+            this.setAwake();
+        }
     }
 
     @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 1)
-                this.getAnimationHandler().setAnimation(leap);
-            else
-                this.getAnimationHandler().setAnimation(melee);
+    public void baseTick() {
+        super.baseTick();
+        if (!this.level.isClientSide) {
+            if (this.getTarget() == null) {
+                this.sleepTick--;
+            }
+            if (this.sleepTick == 0) {
+                this.entityData.set(awake, false);
+                this.getAnimationHandler().setAnimation(close);
+                this.getNavigation().stop();
+            }
         }
+    }
+
+    public void setAwake() {
+        this.entityData.set(awake, true);
+        this.sleepTick = 200;
+    }
+
+    @Override
+    protected float getJumpPower() {
+        return 0.48f * this.getBlockJumpFactor();
+    }
+
+    @Override
+    protected void jumpFromGround() {
+        Vec3 vec3 = this.getDeltaMovement();
+        this.setDeltaMovement(vec3.x, this.getJumpPower(), vec3.z);
+        this.hasImpulse = true;
+    }
+
+    public boolean isAwake() {
+        return this.entityData.get(awake);
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return 1;
+    }
+
+    @Override
+    public AnimationHandler<? extends EntityMimic> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     private int getJumpDelay() {
@@ -198,9 +193,9 @@ public class EntityMimic extends ChargingMonster {
 
     protected static class JumpingMover extends MoveControl {
 
+        private final EntityMimic mimic;
         private float yRot;
         private int jumpDelay;
-        private final EntityMimic mimic;
 
         public JumpingMover(EntityMimic mimic) {
             super(mimic);

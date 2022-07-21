@@ -15,11 +15,6 @@ public class StayGoal extends Goal {
     }
 
     @Override
-    public boolean canContinueToUse() {
-        return this.mob.isStaying();
-    }
-
-    @Override
     public boolean canUse() {
         if (!this.mob.isTamed()) {
             return false;
@@ -34,6 +29,11 @@ public class StayGoal extends Goal {
         if (livingEntity == null) {
             return true;
         }
+        return this.mob.isStaying();
+    }
+
+    @Override
+    public boolean canContinueToUse() {
         return this.mob.isStaying();
     }
 

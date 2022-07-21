@@ -103,6 +103,12 @@ public class BlockStatesGen extends BlockStateProvider {
                 .build());
     }
 
+    @Override
+    public ResourceLocation blockTexture(Block block) {
+        ResourceLocation name = block.getRegistryName();
+        return new ResourceLocation(name.getNamespace(), "block" + "/" + name.getPath());
+    }
+
     public ResourceLocation mineralTexture(Block block) {
         ResourceLocation name = block.getRegistryName();
         return new ResourceLocation(name.getNamespace(), "block" + "/" + name.getPath().replace("broken_", ""));
@@ -116,12 +122,6 @@ public class BlockStatesGen extends BlockStateProvider {
                                 .build()
                         //, BlockStateProperties.WATERLOGGED
                 );
-    }
-
-    @Override
-    public ResourceLocation blockTexture(Block block) {
-        ResourceLocation name = block.getRegistryName();
-        return new ResourceLocation(name.getNamespace(), "block" + "/" + name.getPath());
     }
 
     public ResourceLocation blockTexture(String nameSpace, String block) {

@@ -11,16 +11,6 @@ public record C2SSpellKey(int num) implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "c2s_cast_spell");
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.num);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static C2SSpellKey read(FriendlyByteBuf buf) {
         return new C2SSpellKey(buf.readInt());
     }
@@ -32,5 +22,15 @@ public record C2SSpellKey(int num) implements Packet {
             else
                 Platform.INSTANCE.getPlayerData(sender).ifPresent(cap -> cap.getInv().useSkill(sender, pkt.num));
         }
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(this.num);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

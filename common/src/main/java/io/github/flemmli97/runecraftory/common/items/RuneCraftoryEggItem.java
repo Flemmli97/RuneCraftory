@@ -61,17 +61,17 @@ public class RuneCraftoryEggItem extends SpawnEgg {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(new TranslatableComponent("tooltip.item.spawn").withStyle(ChatFormatting.GOLD));
-        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
-    }
-
-    @Override
     public InteractionResult onBlockUse(ItemStack stack, BlockPos pos, BlockState state, @Nullable BlockEntity tile) {
         if (tile instanceof BossSpawnerBlockEntity) {
             ((BossSpawnerBlockEntity) tile).setEntity(PlatformUtils.INSTANCE.entities().getIDFrom(this.getType(stack.getTag())));
             return InteractionResult.SUCCESS;
         }
         return super.onBlockUse(stack, pos, state, tile);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+        tooltipComponents.add(new TranslatableComponent("tooltip.item.spawn").withStyle(ChatFormatting.GOLD));
+        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 }

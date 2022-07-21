@@ -15,18 +15,16 @@ import java.util.List;
 
 public class EntityPanther extends ChargingMonster {
 
-    public ChargeAttackGoal<EntityPanther> attack = new ChargeAttackGoal<>(this);
     private static final AnimatedAction melee = new AnimatedAction(16, 9, "attack");
     private static final AnimatedAction leap = new AnimatedAction(23, 6, "leap");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap};
-
+    public ChargeAttackGoal<EntityPanther> attack = new ChargeAttackGoal<>(this);
+    protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityPanther> animationHandler = new AnimationHandler<>(this, anims)
             .setAnimationChangeCons(a -> {
                 if (!leap.checkID(a))
                     this.hitEntity = null;
             });
-    protected List<LivingEntity> hitEntity;
 
     public EntityPanther(EntityType<? extends EntityPanther> type, Level world) {
         super(type, world);
@@ -41,13 +39,6 @@ public class EntityPanther extends ChargingMonster {
     @Override
     public AnimationHandler<? extends EntityPanther> getAnimationHandler() {
         return this.animationHandler;
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        if (leap.checkID(anim))
-            return 2;
-        return 1.4;
     }
 
     @Override
@@ -80,6 +71,13 @@ public class EntityPanther extends ChargingMonster {
         if (type == AnimationType.CHARGE)
             return anim.getID().equals(leap.getID());
         return false;
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        if (leap.checkID(anim))
+            return 2;
+        return 1.4;
     }
 
     @Override

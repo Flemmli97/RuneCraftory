@@ -16,12 +16,10 @@ import java.util.function.Consumer;
 
 public abstract class ChargingMonster extends BaseMonster {
 
+    private static final EntityDataAccessor<Float> lockedYaw = SynchedEntityData.defineId(ChargingMonster.class, EntityDataSerializers.FLOAT);
     protected List<LivingEntity> hitEntity;
     protected double[] chargeMotion;
     private float prevStepHeight = -1;
-    private static final EntityDataAccessor<Float> lockedYaw = SynchedEntityData.defineId(ChargingMonster.class, EntityDataSerializers.FLOAT);
-
-    private boolean initAnim;
     private final Consumer<AnimatedAction> chargingAnim = anim -> {
         if (!this.level.isClientSide) {
             if (anim != null && this.isAnimOfType(anim, AnimationType.CHARGE)) {
@@ -39,6 +37,7 @@ public abstract class ChargingMonster extends BaseMonster {
             }
         }
     };
+    private boolean initAnim;
 
     public ChargingMonster(EntityType<? extends ChargingMonster> type, Level level) {
         super(type, level);
@@ -48,10 +47,6 @@ public abstract class ChargingMonster extends BaseMonster {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(lockedYaw, 0f);
-    }
-
-    public void setChargeMotion(double[] chargeMotion) {
-        this.chargeMotion = chargeMotion;
     }
 
     @Override
@@ -65,17 +60,6 @@ public abstract class ChargingMonster extends BaseMonster {
             this.setXRot(0);
             this.setYRot(this.chargingYaw());
         }
-    }
-
-    public float chargingYaw() {
-        return this.isVehicle() ? this.getYRot() : this.entityData.get(lockedYaw);
-    }
-
-    @Override
-    public void push(Entity entity) {
-        if (this.isChargingAnimation())
-            return;
-        super.push(entity);
     }
 
     @Override
@@ -101,6 +85,26 @@ public abstract class ChargingMonster extends BaseMonster {
         }
     }
 
+    @Override
+    public boolean adjustRotFromRider(LivingEntity rider) {
+        return !this.isChargingAnimation();
+    }
+
+    public void setChargeMotion(double[] chargeMotion) {
+        this.chargeMotion = chargeMotion;
+    }
+
+    public float chargingYaw() {
+        return this.isVehicle() ? this.getYRot() : this.entityData.get(lockedYaw);
+    }
+
+    @Override
+    public void push(Entity entity) {
+        if (this.isChargingAnimation())
+            return;
+        super.push(entity);
+    }
+
     public boolean handleChargeMovement() {
         if (this.chargeMotion != null) {
             this.setDeltaMovement(this.chargeMotion[0], this.getDeltaMovement().y, this.chargeMotion[2]);
@@ -111,11 +115,6 @@ public abstract class ChargingMonster extends BaseMonster {
 
     public void doWhileCharge() {
 
-    }
-
-    @Override
-    public boolean adjustRotFromRider(LivingEntity rider) {
-        return !this.isChargingAnimation();
     }
 
     public float chargingLength() {

@@ -25,6 +25,13 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
     }
 
     @Override
+    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(stack);
+        super.render(stack, mouseX, mouseY, partialTicks);
+        this.renderTooltip(stack, mouseX, mouseY);
+    }
+
+    @Override
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = forging;
         //if(this.menu.craftingType() == EnumCrafting.ARMOR)
@@ -39,12 +46,5 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
             }
             OverlayGui.drawStringCenter(stack, this.font, cost, this.leftPos + 91, this.topPos + 42, 0);
         }
-    }
-
-    @Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(stack);
-        super.render(stack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(stack, mouseX, mouseY);
     }
 }

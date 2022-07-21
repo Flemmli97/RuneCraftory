@@ -51,11 +51,6 @@ public class EntityDarkBeam extends EntityBeam {
     }
 
     @Override
-    public int attackCooldown() {
-        return this.livingTickMax();
-    }
-
-    @Override
     protected boolean check(Entity e, Vec3 from, Vec3 to) {
         return (!(e instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) e)) && super.check(e, from, to);
     }
@@ -63,6 +58,11 @@ public class EntityDarkBeam extends EntityBeam {
     @Override
     public void onImpact(EntityHitResult res) {
         CombatUtils.damage(this.getOwner(), res.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).element(EnumElement.DARK).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()), null);
+    }
+
+    @Override
+    public int attackCooldown() {
+        return this.livingTickMax();
     }
 
     @Override

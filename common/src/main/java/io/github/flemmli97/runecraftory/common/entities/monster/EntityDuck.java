@@ -16,12 +16,11 @@ import java.util.List;
 
 public class EntityDuck extends ChargingMonster {
 
-    public ChargeAttackGoal<EntityDuck> attack = new ChargeAttackGoal<>(this);
     private static final AnimatedAction melee = new AnimatedAction(15, 8, "slap");
     private static final AnimatedAction dive = new AnimatedAction(48, 22, "dive");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, dive};
-
+    public ChargeAttackGoal<EntityDuck> attack = new ChargeAttackGoal<>(this);
+    protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityDuck> animationHandler = new AnimationHandler<>(this, anims)
             .setAnimationChangeCons(a -> {
                 if (!dive.checkID(a)) {
@@ -31,16 +30,10 @@ public class EntityDuck extends ChargingMonster {
                     this.setNoGravity(true);
                 }
             });
-    protected List<LivingEntity> hitEntity;
 
     public EntityDuck(EntityType<? extends EntityDuck> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
-    }
-
-    @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
-        return false;
     }
 
     @Override
@@ -51,11 +44,6 @@ public class EntityDuck extends ChargingMonster {
     @Override
     public AnimationHandler<? extends EntityDuck> getAnimationHandler() {
         return this.animationHandler;
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1;
     }
 
     @Override
@@ -91,6 +79,16 @@ public class EntityDuck extends ChargingMonster {
         if (type == AnimationType.CHARGE)
             return anim.getID().equals(dive.getID());
         return false;
+    }
+
+    @Override
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+        return false;
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return 1;
     }
 
     @Override

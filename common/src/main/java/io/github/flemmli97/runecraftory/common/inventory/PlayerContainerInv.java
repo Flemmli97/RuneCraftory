@@ -17,24 +17,27 @@ public class PlayerContainerInv extends DummyInventory {
         this.container = container;
     }
 
+    public static PlayerContainerInv create(AbstractContainerMenu container, Container inv, Player player) {
+        return new PlayerContainerInv(container, inv, player);
+    }
+
     public Player getPlayer() {
         return this.player;
-    }
-
-    @Override
-    public boolean stillValid(Player player) {
-        return true;
-    }
-
-    @Override
-    public int getMaxStackSize() {
-        return 64;
     }
 
     @Override
     public ItemStack removeItem(int slot, int count) {
         ItemStack stack = super.removeItem(slot, count);
         if (this.getItem(slot).isEmpty())
+            this.refreshFlag = true;
+        this.container.slotsChanged(this);
+        return stack;
+    }
+
+    @Override
+    public ItemStack removeItemNoUpdate(int index) {
+        ItemStack stack = super.removeItemNoUpdate(index);
+        if (!stack.isEmpty())
             this.refreshFlag = true;
         this.container.slotsChanged(this);
         return stack;
@@ -49,21 +52,18 @@ public class PlayerContainerInv extends DummyInventory {
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int index) {
-        ItemStack stack = super.removeItemNoUpdate(index);
-        if (!stack.isEmpty())
-            this.refreshFlag = true;
-        this.container.slotsChanged(this);
-        return stack;
+    public int getMaxStackSize() {
+        return 64;
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return true;
     }
 
     public boolean refreshAndSet() {
         boolean refresh = this.refreshFlag;
         this.refreshFlag = false;
         return refresh;
-    }
-
-    public static PlayerContainerInv create(AbstractContainerMenu container, Container inv, Player player) {
-        return new PlayerContainerInv(container, inv, player);
     }
 }

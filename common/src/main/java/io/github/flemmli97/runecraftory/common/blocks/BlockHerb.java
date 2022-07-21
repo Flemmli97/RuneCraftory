@@ -39,19 +39,9 @@ public class BlockHerb extends BushBlock implements IBlockModifyLevel {
     }
 
     @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(LEVEL);
-    }
-
-    @Override
     public int getLevel(BlockState state, BlockEntity blockEntity, ItemLevelLootFunction func, LootContext ctx) {
         int level = state.getValue(LEVEL);
         return level == 0 ? func.getLevel(ctx) : level;
-    }
-
-    @Override
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        return ItemNBT.getLeveledItem(super.getCloneItemStack(level, pos, state), 1);
     }
 
     @Override
@@ -82,6 +72,16 @@ public class BlockHerb extends BushBlock implements IBlockModifyLevel {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return super.getStateForPlacement(context).setValue(LEVEL, ItemNBT.itemLevel(context.getItemInHand()));
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+        return ItemNBT.getLeveledItem(super.getCloneItemStack(level, pos, state), 1);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(LEVEL);
     }
 
     public enum GroundTypes {

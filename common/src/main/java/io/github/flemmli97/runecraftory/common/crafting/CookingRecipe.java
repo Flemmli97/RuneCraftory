@@ -16,8 +16,8 @@ public class CookingRecipe extends SextupleRecipe {
     }
 
     @Override
-    public RecipeType<? extends SextupleRecipe> getType() {
-        return ModCrafting.COOKING.get();
+    public ItemStack getToastSymbol() {
+        return new ItemStack(ModItems.itemBlockCooking.get());
     }
 
     @Override
@@ -26,8 +26,8 @@ public class CookingRecipe extends SextupleRecipe {
     }
 
     @Override
-    public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.itemBlockCooking.get());
+    public RecipeType<? extends SextupleRecipe> getType() {
+        return ModCrafting.COOKING.get();
     }
 
     public static class Serializer extends SextupleRecipe.Serializer<CookingRecipe> {

@@ -13,16 +13,6 @@ public record S2CItemStatBoost(
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_item_stat_boost");
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeEnum(this.stat);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CItemStatBoost read(FriendlyByteBuf buf) {
         return new S2CItemStatBoost(buf.readEnum(ItemStatIncrease.Stat.class));
     }
@@ -32,5 +22,15 @@ public record S2CItemStatBoost(
         if (player == null)
             return;
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.consumeStatBoostItem(player, pkt.stat));
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeEnum(this.stat);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

@@ -27,14 +27,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntityGhost extends ChargingMonster {
 
-    public final GhostAttackGoal<EntityGhost> attack = new GhostAttackGoal<>(this);
     public static final AnimatedAction darkBall = new AnimatedAction(13, 5, "darkball");
     public static final AnimatedAction charge = new AnimatedAction(24, 7, "charge");
     public static final AnimatedAction swing = new AnimatedAction(11, 6, "swing");
     public static final AnimatedAction vanish = new AnimatedAction(100, 50, "vanish");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{darkBall, charge, swing, vanish};
-
+    public final GhostAttackGoal<EntityGhost> attack = new GhostAttackGoal<>(this);
     private boolean vanishNext;
 
     private final AnimationHandler<EntityGhost> animationHandler = new AnimationHandler<>(this, anims)
@@ -57,16 +55,6 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
-    protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
-        return new NearestTargetNoLoS<>(this, Player.class, 5, false, player -> !this.isTamed());
-    }
-
-    @Override
-    protected NearestAttackableTargetGoal<Mob> createTargetGoalMobs() {
-        return new NearestTargetNoLoS<>(this, Mob.class, 5, false, this.targetPred);
-    }
-
-    @Override
     protected void applyAttributes() {
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
         this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.55);
@@ -75,23 +63,13 @@ public class EntityGhost extends ChargingMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        return 1;
+    protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
+        return new NearestTargetNoLoS<>(this, Player.class, 5, false, player -> !this.isTamed());
     }
 
     @Override
-    public AnimationHandler<EntityGhost> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1.4;
-    }
-
-    @Override
-    public int animationCooldown(AnimatedAction anim) {
-        return this.getRandom().nextInt(10) + 30;
+    protected NearestAttackableTargetGoal<Mob> createTargetGoalMobs() {
+        return new NearestTargetNoLoS<>(this, Mob.class, 5, false, this.targetPred);
     }
 
     @Override
@@ -103,6 +81,46 @@ public class EntityGhost extends ChargingMonster {
         if (type == AnimationType.MELEE)
             return anim.getID().equals(swing.getID());
         return false;
+    }
+
+    @Override
+    public int animationCooldown(AnimatedAction anim) {
+        return this.getRandom().nextInt(10) + 30;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (this.getAnimationHandler().isCurrentAnim(vanish.getID()))
+            return false;
+        boolean ret = super.hurt(source, amount);
+        if (ret)
+            this.vanishNext = this.getRandom().nextFloat() < 0.4;
+        return ret;
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return 1.4;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (command == 1)
+                this.getAnimationHandler().setAnimation(darkBall);
+            else
+                this.getAnimationHandler().setAnimation(swing);
+        }
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return 1;
+    }
+
+    @Override
+    public AnimationHandler<EntityGhost> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -153,26 +171,6 @@ public class EntityGhost extends ChargingMonster {
             y = this.getY();
         }
         this.teleportTo(x, y + 1, z);
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (this.getAnimationHandler().isCurrentAnim(vanish.getID()))
-            return false;
-        boolean ret = super.hurt(source, amount);
-        if (ret)
-            this.vanishNext = this.getRandom().nextFloat() < 0.4;
-        return ret;
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 1)
-                this.getAnimationHandler().setAnimation(darkBall);
-            else
-                this.getAnimationHandler().setAnimation(swing);
-        }
     }
 
     public boolean shouldVanishNext(String prev) {

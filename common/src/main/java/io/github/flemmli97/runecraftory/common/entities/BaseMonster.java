@@ -98,16 +98,32 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
     private static final UUID foodUUID = UUID.fromString("87A55C28-8C8C-4BFF-AF5F-9972A38CCD9D");
     private static final UUID foodUUIDMulti = UUID.fromString("A05442AC-381B-49DF-B0FA-0136B454157B");
+    public final Predicate<LivingEntity> targetPred = (e) -> {
+        if (e != this) {
+            if (e instanceof Mob && this == ((Mob) e).getTarget())
+                return true;
+            if (this.isTamed()) {
+                return e instanceof Enemy;
+            }
+            return e instanceof Npc || EntityUtils.tryGetOwner(e) != null;
+        }
+        return false;
+    };
+    public final Predicate<LivingEntity> defendPred = (e) -> {
+        if (!e.equals(BaseMonster.this)) {
+            if (BaseMonster.this.isTamed()) {
+                return !e.equals(BaseMonster.this.getOwner());
+            }
+            return true;
+        }
+        return false;
+    };
     private final EntityProperties prop;
-
-    protected int tamingTick = -1;
-
-    protected int feedTimeOut;
-    private boolean doJumping = false;
-    private int foodBuffTick;
-    private Set<Attribute> foodAtts;
-
-    public final Predicate<LivingEntity> hitPred = (e) -> {
+    public NearestAttackableTargetGoal<Player> targetPlayer = this.createTargetGoalPlayer();//|| player != BaseMonster.this.getOwner());
+    public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
+    public FloatGoal swimGoal = new FloatGoal(this);
+    public RandomStrollGoal wander = new WaterAvoidingRandomStrollGoal(this, 1.0);
+    public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);    public final Predicate<LivingEntity> hitPred = (e) -> {
         if (e != this) {
             if (this.hasPassenger(e))
                 return false;
@@ -134,38 +150,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
         return false;
     };
-    public final Predicate<LivingEntity> targetPred = (e) -> {
-        if (e != this) {
-            if (e instanceof Mob && this == ((Mob) e).getTarget())
-                return true;
-            if (this.isTamed()) {
-                return e instanceof Enemy;
-            }
-            return e instanceof Npc || EntityUtils.tryGetOwner(e) != null;
-        }
-        return false;
-    };
-
-    public final Predicate<LivingEntity> defendPred = (e) -> {
-        if (!e.equals(BaseMonster.this)) {
-            if (BaseMonster.this.isTamed()) {
-                return !e.equals(BaseMonster.this.getOwner());
-            }
-            return true;
-        }
-        return false;
-    };
-
-    public NearestAttackableTargetGoal<Player> targetPlayer = this.createTargetGoalPlayer();//|| player != BaseMonster.this.getOwner());
-    public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
-
-    public FloatGoal swimGoal = new FloatGoal(this);
-    public RandomStrollGoal wander = new WaterAvoidingRandomStrollGoal(this, 1.0);
-
-    public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
-
-    //private Map<Attribute, Integer> attributeRandomizer = new HashMap<>();
-
+    protected int tamingTick = -1;
+    protected int feedTimeOut;
+    private boolean doJumping = false;
+    private int foodBuffTick;
+    private Set<Attribute> foodAtts;
     public BaseMonster(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
         this.moveControl = new NewMoveController(this);
@@ -173,6 +162,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.applyAttributes();
         this.addGoal();
     }
+
+    public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {
+        AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.22);
+        if (atts != null)
+            for (RegistryEntrySupplier<Attribute> att : atts)
+                map.add(att.get());
+        return map;
+    }
+
+    //private Map<Attribute, Integer> attributeRandomizer = new HashMap<>();
 
     protected void applyAttributes() {
         for (Map.Entry<Attribute, Double> att : this.prop.getBaseValues().entrySet()) {
@@ -183,14 +182,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     this.setHealth(this.getMaxHealth());
             }
         }
-    }
-
-    public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {
-        AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.22);
-        if (atts != null)
-            for (RegistryEntrySupplier<Attribute> att : atts)
-                map.add(att.get());
-        return map;
     }
 
     public void addGoal() {
@@ -226,6 +217,121 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.entityData.define(staying, false);
     }
 
+    //=====Client
+    @Override
+    public void handleEntityEvent(byte id) {
+        if (id == 10) {
+            this.playTameEffect(true);
+        } else if (id == 11) {
+            this.playTameEffect(false);
+        } else if (id == 34) {
+            this.tamingTick = 120;
+        }
+        super.handleEntityEvent(id);
+    }
+
+    @Override
+    public void tick() {
+        this.getAnimationHandler().tick();
+        super.tick();
+        if (!this.level.isClientSide) {
+            if (this.tamingTick > 0) {
+                --this.tamingTick;
+            }
+            if (this.tamingTick == 0) {
+                if (this.isTamed()) {
+                    this.level.broadcastEntityEvent(this, (byte) 10);
+                } else {
+                    this.level.broadcastEntityEvent(this, (byte) 11);
+                }
+                this.tamingTick = -1;
+            }
+            if (this.feedTimeOut > 0) {
+                --this.feedTimeOut;
+            }
+            this.foodBuffTick = Math.max(-1, --this.foodBuffTick);
+            if (this.foodBuffTick == 0) {
+                this.removeFoodEffect();
+            }
+            this.getAnimationHandler().runIfNotNull(this::handleAttack);
+        }
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("MobLevel", this.level());
+        if (this.isTamed())
+            compound.putUUID("Owner", this.getOwnerUUID());
+
+        compound.putBoolean("Out", this.dead);
+        compound.putInt("FeedTime", this.feedTimeOut);
+        if (this.hasRestriction())
+            compound.putIntArray("Home", new int[]{this.getRestrictCenter().getX(), this.getRestrictCenter().getY(), this.getRestrictCenter().getZ(), (int) this.getRestrictRadius()});
+        compound.putInt("FoodBuffTick", this.foodBuffTick);
+        //CompoundTag genes = new CompoundTag();
+        //this.attributeRandomizer.forEach((att, val)->genes.putInt(att.getRegistryName().toString(), val));
+        //compound.put("Genes", genes);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.entityData.set(mobLevel, compound.getInt("MobLevel"));
+        if (compound.contains("Owner"))
+            this.entityData.set(owner, Optional.of(compound.getUUID("Owner")));
+        this.feedTimeOut = compound.getInt("FeedTime");
+        if (compound.contains("Home")) {
+            int[] home = compound.getIntArray("Home");
+            this.restrictTo(new BlockPos(home[0], home[1], home[2]), home[3]);
+        }
+        this.dead = compound.getBoolean("Out");
+        this.foodBuffTick = compound.getInt("FoodBuffTick");
+        //CompoundTag genes = compound.getCompound("Genes");
+        //genes.keySet().forEach(key->this.attributeRandomizer.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(key)), genes.getInt(key)));
+    }
+
+    //=====Animation Stuff
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return !this.isTamed();
+    }
+
+    @Override
+    public boolean requiresCustomPersistence() {
+        return super.requiresCustomPersistence() || this.isTamed();
+    }
+
+    @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        if (!this.isPassenger() && this.getMoveControl().operation != MoveControl.Operation.WAIT
+                && this.getDeltaMovement().lengthSqr() > 0.007) {
+            this.setMoving(true);
+            double d0 = this.getMoveControl().getSpeedModifier();
+            if (d0 > 1) {
+                this.setShiftKeyDown(false);
+                this.setSprinting(true);
+            } else if (d0 >= 0.6D) {
+                this.setShiftKeyDown(true);
+                this.setSprinting(false);
+            } else {
+                this.setShiftKeyDown(false);
+                this.setSprinting(false);
+            }
+            this.updateMoveAnimation();
+        } else {
+            this.setMoving(false);
+            this.setShiftKeyDown(false);
+            this.setSprinting(false);
+        }
+    }
+
+    @Override
+    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    }
+
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         this.populateDefaultEquipmentSlots(difficulty);
@@ -235,10 +341,74 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     @Override
-    protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
+    public boolean canBeControlledByRider() {
+        return this.isTamed() && this.ridable();
     }
 
-    //=====Animation Stuff
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        if (this.level.isClientSide)
+            return InteractionResult.PASS;
+        ItemStack stack = player.getItemInHand(hand);
+        if (!stack.isEmpty() && player.isShiftKeyDown()) {
+            if (stack.getItem() == ModItems.tame.get() && !this.isTamed()) {
+                this.tameEntity(player);
+            } else if (!this.isTamed()) {
+                if (this.tamingTick == -1 && this.isAlive()) {
+                    float rightItemMultiplier = this.tamingMultiplier(stack);
+                    if (rightItemMultiplier == 0)
+                        return InteractionResult.PASS;
+                    if (!player.isCreative())
+                        stack.shrink(1);
+                    if (this.random.nextFloat() <= EntityUtils.tamingChance(this, rightItemMultiplier))
+                        this.tameEntity(player);
+                    if (stack.getItem().isEdible())
+                        this.applyFoodEffect(stack);
+                    this.tamingTick = 100;
+                    this.level.broadcastEntityEvent(this, (byte) 34);
+                }
+            } else {
+                if (stack.getItem() == Items.STICK) {
+                    this.setOwner(null);
+                } else if (stack.getItem() == ModItems.inspector.get()) {
+                    //open tamed gui
+                } else if (this.feedTimeOut <= 0 && stack.getItem().isEdible()) {
+                    this.applyFoodEffect(stack);
+                    this.feedTimeOut = 24000;
+                }
+            }
+            return InteractionResult.SUCCESS;
+        } else if (stack.isEmpty() && player.isShiftKeyDown()) {
+            this.setStaying(!this.isStaying());
+            if (player instanceof ServerPlayer serverPlayer)
+                serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 1, 1));
+            if (this.isStaying()) {
+                player.sendMessage(new TranslatableComponent("monster.interact.sit"), Util.NIL_UUID);
+            } else
+                player.sendMessage(new TranslatableComponent("monster.interact.follow"), Util.NIL_UUID);
+        } else if (stack.isEmpty() && !this.level.isClientSide && player == this.getOwner() && this.ridable()) {
+            player.startRiding(this);
+            return InteractionResult.SUCCESS;
+        } else {
+            //Notify not owned this entity
+        }
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    public boolean isControlledByLocalInstance() {
+        return this.canBeControlledByRider() && !this.level.isClientSide;
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity entity) {
+        return CombatUtils.mobAttack(this, entity);
+    }
+
+    @Override
+    public ItemStack getPickResult() {
+        return SpawnEgg.fromType(this.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
+    }
 
     @Nullable
     public AnimatedAction getRandomAnimation(AnimationType type) {
@@ -291,14 +461,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return this.getOwnerUUID() != null;
     }
 
-    public boolean attackOtherTamedMobs() {
-        return false;
-    }
-
     @Override
     public boolean ridable() {
         return this.prop.ridable();
     }
+
+    public boolean attackOtherTamedMobs() {
+        return false;
+    }
+
+    //=====Level Handling
 
     @Override
     public UUID getOwnerUUID() {
@@ -323,6 +495,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public boolean isFlyingEntity() {
         return this.prop.flying();
     }
+
+    //=====Movement Handling
 
     @Override
     public int level() {
@@ -384,8 +558,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 });
     }
 
-    //=====Level Handling
-
     public void updateStatsToLevel() {
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
         this.prop.getAttributeGains().forEach((att, val) -> {
@@ -421,35 +593,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
     }
 
-    //=====Movement Handling
-
-    @Override
-    public void customServerAiStep() {
-        super.customServerAiStep();
-        if (!this.isPassenger() && this.getMoveControl().operation != MoveControl.Operation.WAIT
-                && this.getDeltaMovement().lengthSqr() > 0.007) {
-            this.setMoving(true);
-            double d0 = this.getMoveControl().getSpeedModifier();
-            if (d0 > 1) {
-                this.setShiftKeyDown(false);
-                this.setSprinting(true);
-            } else if (d0 >= 0.6D) {
-                this.setShiftKeyDown(true);
-                this.setSprinting(false);
-            } else {
-                this.setShiftKeyDown(false);
-                this.setSprinting(false);
-            }
-            this.updateMoveAnimation();
-        } else {
-            this.setMoving(false);
-            this.setShiftKeyDown(false);
-            this.setSprinting(false);
-        }
-    }
-
     public void updateMoveAnimation() {
     }
+
+    //=====Damage Logic
 
     public boolean isMoving() {
         return this.getMoveFlag() != 0;
@@ -459,12 +606,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.setMoveFlag(flag ? 1 : 0);
     }
 
-    public void setMoveFlag(int flag) {
-        this.entityData.set(moveFlags, (byte) flag);
-    }
+    //=====Combat stuff
 
     public byte getMoveFlag() {
         return this.entityData.get(moveFlags);
+    }
+
+    public void setMoveFlag(int flag) {
+        this.entityData.set(moveFlags, (byte) flag);
     }
 
     public void setDoJumping(boolean jump) {
@@ -473,27 +622,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public boolean doJumping() {
         return this.doJumping;
-    }
-
-    @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
-        if (!this.isFlyingEntity()) {
-            super.causeFallDamage(fallDistance, multiplier, source);
-        }
-        return false;
-    }
-
-    //=====Client
-    @Override
-    public void handleEntityEvent(byte id) {
-        if (id == 10) {
-            this.playTameEffect(true);
-        } else if (id == 11) {
-            this.playTameEffect(false);
-        } else if (id == 34) {
-            this.tamingTick = 120;
-        }
-        super.handleEntityEvent(id);
     }
 
     private void playTameEffect(boolean play) {
@@ -508,20 +636,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.level.addParticle(particle, this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), this.getY() + 0.5 + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), d0, d2, d3);
         }
     }
-
-    //=====Damage Logic
-
-    @Override
-    public boolean doHurtTarget(Entity entity) {
-        return CombatUtils.mobAttack(this, entity);
-    }
-
-    @Override
-    public void knockback(double strength, double xRatio, double zRatio) {
-        super.knockback(0, xRatio, zRatio);
-    }
-
-    //=====Combat stuff
 
     //TODO: Redo Death animation. if server lagging behind client finished animation
     @Override
@@ -550,205 +664,22 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         //}
     }
 
-    public int maxDeathTime() {
-        return 20;
-    }
-
-    protected void playDeathAnimation() {
-    }
-
     @Override
     public boolean hurt(DamageSource source, float amount) {
         return (source.getEntity() == null || this.canAttackFrom(source.getEntity().blockPosition())) && super.hurt(source, amount);
     }
 
-    private boolean canAttackFrom(BlockPos pos) {
-        return this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distSqr(pos) < (this.getRestrictRadius() * this.getRestrictRadius());
+    @Override
+    public void knockback(double strength, double xRatio, double zRatio) {
+        super.knockback(0, xRatio, zRatio);
     }
 
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1;
-    }
-
-    public void handleAttack(AnimatedAction anim) {
-        if (this.isAnimOfType(anim, AnimationType.MELEE)) {
-            this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
-            if (anim.canAttack()) {
-                this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
-            }
+    @Override
+    public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
+        if (!this.isFlyingEntity()) {
+            super.causeFallDamage(fallDistance, multiplier, source);
         }
-    }
-
-    public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
-        AABB aabb = this.calculateAttackAABB(anim, target);
-        this.level.getEntitiesOfClass(LivingEntity.class, aabb, this.hitPred).forEach(cons);
-        if (this.getServer() != null)
-            Platform.INSTANCE.sendToAll(new S2CAttackDebug(aabb), this.getServer());
-    }
-
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        return this.calculateAttackAABB(anim, target, 0);
-    }
-
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
-        double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
-        Vec3 dir;
-        if (target != null && !this.isVehicle()) {
-            reach = Math.min(reach, this.distanceTo(target));
-            dir = target.position().subtract(this.position()).normalize();
-        } else {
-            dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot());
-        }
-        Vec3 attackPos = this.position().add(dir.scale(reach));
-        return this.attackAABB(anim).inflate(grow, 0, grow).move(attackPos.x, attackPos.y, attackPos.z);
-    }
-
-    public AABB attackAABB(AnimatedAction anim) {
-        double range = this.maxAttackRange(anim) * 0.5;
-        return new AABB(-range, -0.02, -range, range, this.getBbHeight() + 0.02, range);
-    }
-
-    public abstract void handleRidingCommand(int command);
-
-    //=====Interaction
-
-    public void setStaying(boolean flag) {
-        this.entityData.set(staying, flag);
-    }
-
-    public boolean isStaying() {
-        return this.entityData.get(staying);
-    }
-
-    @Override
-    public boolean requiresCustomPersistence() {
-        return super.requiresCustomPersistence() || this.isTamed();
-    }
-
-    @Override
-    public void tick() {
-        this.getAnimationHandler().tick();
-        super.tick();
-        if (!this.level.isClientSide) {
-            if (this.tamingTick > 0) {
-                --this.tamingTick;
-            }
-            if (this.tamingTick == 0) {
-                if (this.isTamed()) {
-                    this.level.broadcastEntityEvent(this, (byte) 10);
-                } else {
-                    this.level.broadcastEntityEvent(this, (byte) 11);
-                }
-                this.tamingTick = -1;
-            }
-            if (this.feedTimeOut > 0) {
-                --this.feedTimeOut;
-            }
-            this.foodBuffTick = Math.max(-1, --this.foodBuffTick);
-            if (this.foodBuffTick == 0) {
-                this.removeFoodEffect();
-            }
-            this.getAnimationHandler().runIfNotNull(this::handleAttack);
-        }
-    }
-
-    @Override
-    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return !this.isTamed();
-    }
-
-    @Override
-    public ItemStack getPickResult() {
-        return SpawnEgg.fromType(this.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
-    }
-
-    @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (this.level.isClientSide)
-            return InteractionResult.PASS;
-        ItemStack stack = player.getItemInHand(hand);
-        if (!stack.isEmpty() && player.isShiftKeyDown()) {
-            if (stack.getItem() == ModItems.tame.get() && !this.isTamed()) {
-                this.tameEntity(player);
-            } else if (!this.isTamed()) {
-                if (this.tamingTick == -1 && this.isAlive()) {
-                    float rightItemMultiplier = this.tamingMultiplier(stack);
-                    if (rightItemMultiplier == 0)
-                        return InteractionResult.PASS;
-                    if (!player.isCreative())
-                        stack.shrink(1);
-                    if (this.random.nextFloat() <= EntityUtils.tamingChance(this, rightItemMultiplier))
-                        this.tameEntity(player);
-                    if (stack.getItem().isEdible())
-                        this.applyFoodEffect(stack);
-                    this.tamingTick = 100;
-                    this.level.broadcastEntityEvent(this, (byte) 34);
-                }
-            } else {
-                if (stack.getItem() == Items.STICK) {
-                    this.setOwner(null);
-                } else if (stack.getItem() == ModItems.inspector.get()) {
-                    //open tamed gui
-                } else if (this.feedTimeOut <= 0 && stack.getItem().isEdible()) {
-                    this.applyFoodEffect(stack);
-                    this.feedTimeOut = 24000;
-                }
-            }
-            return InteractionResult.SUCCESS;
-        } else if (stack.isEmpty() && player.isShiftKeyDown()) {
-            this.setStaying(!this.isStaying());
-            if (player instanceof ServerPlayer serverPlayer)
-                serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 1, 1));
-            if (this.isStaying()) {
-                player.sendMessage(new TranslatableComponent("monster.interact.sit"), Util.NIL_UUID);
-            } else
-                player.sendMessage(new TranslatableComponent("monster.interact.follow"), Util.NIL_UUID);
-        } else if (stack.isEmpty() && !this.level.isClientSide && player == this.getOwner() && this.ridable()) {
-            player.startRiding(this);
-            return InteractionResult.SUCCESS;
-        } else {
-            //Notify not owned this entity
-        }
-        return InteractionResult.PASS;
-    }
-
-    protected float tamingMultiplier(ItemStack stack) {
-        boolean flag = this.tamingItem().match(stack);
-        return flag ? 2 : 1;
-    }
-
-    protected void tameEntity(Player owner) {
-        this.restrictTo(this.blockPosition(), -1);
-        this.setOwner(owner);
-        this.navigation.stop();
-        this.setTarget(null);
-        this.level.broadcastEntityEvent(this, (byte) 10);
-    }
-
-    @Override
-    public boolean canBeControlledByRider() {
-        return this.isTamed() && this.ridable();
-    }
-
-    @Override
-    public boolean isControlledByLocalInstance() {
-        return this.canBeControlledByRider() && !this.level.isClientSide;
-    }
-
-    @Override
-    protected void addPassenger(Entity passenger) {
-        this.targetSelector.removeGoal(this.targetPlayer);
-        this.targetSelector.removeGoal(this.targetMobs);
-        super.addPassenger(passenger);
-    }
-
-    @Override
-    protected void removePassenger(Entity passenger) {
-        this.targetSelector.addGoal(1, this.targetPlayer);
-        this.targetSelector.addGoal(2, this.targetMobs);
-        super.removePassenger(passenger);
+        return false;
     }
 
     @Override
@@ -756,10 +687,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return super.isImmobile() && this.isVehicle() && this.tamingTick <= 0;
     }
 
-    @Nullable
     @Override
-    public Entity getControllingPassenger() {
-        return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
+    protected float getWaterSlowDown() {
+        return 0.83F;
     }
 
     @Override
@@ -818,9 +748,104 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
     }
 
+    //=====Interaction
+
+    public int maxDeathTime() {
+        return 20;
+    }
+
+    protected void playDeathAnimation() {
+    }
+
+    private boolean canAttackFrom(BlockPos pos) {
+        return this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distSqr(pos) < (this.getRestrictRadius() * this.getRestrictRadius());
+    }
+
+    public double maxAttackRange(AnimatedAction anim) {
+        return 1;
+    }
+
+    public void handleAttack(AnimatedAction anim) {
+        if (this.isAnimOfType(anim, AnimationType.MELEE)) {
+            this.getNavigation().stop();
+            if (anim.getTick() == 1 && this.getTarget() != null)
+                this.lookAt(this.getTarget(), 360, 90);
+            if (anim.canAttack()) {
+                this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
+            }
+        }
+    }
+
+    public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
+        AABB aabb = this.calculateAttackAABB(anim, target);
+        this.level.getEntitiesOfClass(LivingEntity.class, aabb, this.hitPred).forEach(cons);
+        if (this.getServer() != null)
+            Platform.INSTANCE.sendToAll(new S2CAttackDebug(aabb), this.getServer());
+    }
+
+    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
+        return this.calculateAttackAABB(anim, target, 0);
+    }
+
+    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
+        double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
+        Vec3 dir;
+        if (target != null && !this.isVehicle()) {
+            reach = Math.min(reach, this.distanceTo(target));
+            dir = target.position().subtract(this.position()).normalize();
+        } else {
+            dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot());
+        }
+        Vec3 attackPos = this.position().add(dir.scale(reach));
+        return this.attackAABB(anim).inflate(grow, 0, grow).move(attackPos.x, attackPos.y, attackPos.z);
+    }
+
+    public AABB attackAABB(AnimatedAction anim) {
+        double range = this.maxAttackRange(anim) * 0.5;
+        return new AABB(-range, -0.02, -range, range, this.getBbHeight() + 0.02, range);
+    }
+
+    public abstract void handleRidingCommand(int command);
+
+    public boolean isStaying() {
+        return this.entityData.get(staying);
+    }
+
+    public void setStaying(boolean flag) {
+        this.entityData.set(staying, flag);
+    }
+
+    protected float tamingMultiplier(ItemStack stack) {
+        boolean flag = this.tamingItem().match(stack);
+        return flag ? 2 : 1;
+    }
+
+    protected void tameEntity(Player owner) {
+        this.restrictTo(this.blockPosition(), -1);
+        this.setOwner(owner);
+        this.navigation.stop();
+        this.setTarget(null);
+        this.level.broadcastEntityEvent(this, (byte) 10);
+    }
+
     @Override
-    protected float getWaterSlowDown() {
-        return 0.83F;
+    protected void addPassenger(Entity passenger) {
+        this.targetSelector.removeGoal(this.targetPlayer);
+        this.targetSelector.removeGoal(this.targetMobs);
+        super.addPassenger(passenger);
+    }
+
+    @Override
+    protected void removePassenger(Entity passenger) {
+        this.targetSelector.addGoal(1, this.targetPlayer);
+        this.targetSelector.addGoal(2, this.targetMobs);
+        super.removePassenger(passenger);
+    }
+
+    @Nullable
+    @Override
+    public Entity getControllingPassenger() {
+        return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
     }
 
     public boolean adjustRotFromRider(LivingEntity rider) {
@@ -882,37 +907,4 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 2;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putInt("MobLevel", this.level());
-        if (this.isTamed())
-            compound.putUUID("Owner", this.getOwnerUUID());
-
-        compound.putBoolean("Out", this.dead);
-        compound.putInt("FeedTime", this.feedTimeOut);
-        if (this.hasRestriction())
-            compound.putIntArray("Home", new int[]{this.getRestrictCenter().getX(), this.getRestrictCenter().getY(), this.getRestrictCenter().getZ(), (int) this.getRestrictRadius()});
-        compound.putInt("FoodBuffTick", this.foodBuffTick);
-        //CompoundTag genes = new CompoundTag();
-        //this.attributeRandomizer.forEach((att, val)->genes.putInt(att.getRegistryName().toString(), val));
-        //compound.put("Genes", genes);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.entityData.set(mobLevel, compound.getInt("MobLevel"));
-        if (compound.contains("Owner"))
-            this.entityData.set(owner, Optional.of(compound.getUUID("Owner")));
-        this.feedTimeOut = compound.getInt("FeedTime");
-        if (compound.contains("Home")) {
-            int[] home = compound.getIntArray("Home");
-            this.restrictTo(new BlockPos(home[0], home[1], home[2]), home[3]);
-        }
-        this.dead = compound.getBoolean("Out");
-        this.foodBuffTick = compound.getInt("FoodBuffTick");
-        //CompoundTag genes = compound.getCompound("Genes");
-        //genes.keySet().forEach(key->this.attributeRandomizer.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(key)), genes.getInt(key)));
-    }
 }

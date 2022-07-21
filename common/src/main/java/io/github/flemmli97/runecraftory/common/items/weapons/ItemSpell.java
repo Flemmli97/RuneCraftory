@@ -27,13 +27,6 @@ public class ItemSpell extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag flag) {
-        super.appendHoverText(stack, world, list, flag);
-        if (this.spell.get() == ModSpells.EMPTY.get())
-            list.add(new TextComponent("WIP").withStyle(ChatFormatting.DARK_RED));
-    }
-
-    @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if (player instanceof ServerPlayer serverPlayer && player.getCooldowns().getCooldownPercent(this, 0) <= 0 && this.spell.get().use(serverPlayer.getLevel(), player, player.getItemInHand(hand))) {
             player.getCooldowns().addCooldown(this, this.getSpell().coolDown());
@@ -41,6 +34,13 @@ public class ItemSpell extends Item {
             return InteractionResultHolder.success(player.getItemInHand(hand));
         }
         return InteractionResultHolder.fail(player.getItemInHand(hand));
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Level world, List<Component> list, TooltipFlag flag) {
+        super.appendHoverText(stack, world, list, flag);
+        if (this.spell.get() == ModSpells.EMPTY.get())
+            list.add(new TextComponent("WIP").withStyle(ChatFormatting.DARK_RED));
     }
 
     public Spell getSpell() {

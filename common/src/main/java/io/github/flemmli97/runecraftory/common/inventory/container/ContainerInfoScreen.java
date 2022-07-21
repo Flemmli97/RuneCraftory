@@ -61,24 +61,24 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
             this.addSlot(new Slot(playerInventory, 36 + (3 - k), 14, 13 + k * 18) {
 
                 @Override
+                public boolean mayPlace(ItemStack stack) {
+                    return Platform.INSTANCE.canEquip(stack, equipmentslottype, playerInventory.player);
+                }
+
+                @Override
                 public int getMaxStackSize() {
                     return 1;
                 }
 
                 @Override
-                public boolean mayPlace(ItemStack stack) {
-                    return Platform.INSTANCE.canEquip(stack, equipmentslottype, playerInventory.player);
+                public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
+                    return Pair.of(InventoryMenu.BLOCK_ATLAS, ARMOR_SLOT_TEXTURES[equipmentslottype.getIndex()]);
                 }
 
                 @Override
                 public boolean mayPickup(Player player) {
                     ItemStack itemstack = this.getItem();
                     return (itemstack.isEmpty() || player.isCreative() || !EnchantmentHelper.hasBindingCurse(itemstack)) && super.mayPickup(player);
-                }
-
-                @Override
-                public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-                    return Pair.of(InventoryMenu.BLOCK_ATLAS, ARMOR_SLOT_TEXTURES[equipmentslottype.getIndex()]);
                 }
             });
         }
@@ -98,15 +98,32 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
         }
     }
 
-    @Override
-    public boolean stillValid(Player player) {
-        return true;
+    public static MenuProvider create() {
+        return new MenuProvider() {
+            @Override
+            public Component getDisplayName() {
+                return new TranslatableComponent("container.info");
+            }
+
+            @Override
+            public AbstractContainerMenu createMenu(int windowID, Inventory inv, Player player) {
+                return new ContainerInfoScreen(windowID, inv, true);
+            }
+        };
     }
 
-    @Override
-    public void clicked(int slot, int mode, ClickType type, Player player) {
-        if (this.main)
-            super.clicked(slot, mode, type, player);
+    public static MenuProvider createSub() {
+        return new MenuProvider() {
+            @Override
+            public Component getDisplayName() {
+                return new TranslatableComponent("container.info.sub");
+            }
+
+            @Override
+            public AbstractContainerMenu createMenu(int windowID, Inventory inv, Player player) {
+                return new ContainerInfoScreen(windowID, inv, false);
+            }
+        };
     }
 
     @Override
@@ -158,31 +175,14 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
         return ItemStack.EMPTY;
     }
 
-    public static MenuProvider create() {
-        return new MenuProvider() {
-            @Override
-            public Component getDisplayName() {
-                return new TranslatableComponent("container.info");
-            }
-
-            @Override
-            public AbstractContainerMenu createMenu(int windowID, Inventory inv, Player player) {
-                return new ContainerInfoScreen(windowID, inv, true);
-            }
-        };
+    @Override
+    public void clicked(int slot, int mode, ClickType type, Player player) {
+        if (this.main)
+            super.clicked(slot, mode, type, player);
     }
 
-    public static MenuProvider createSub() {
-        return new MenuProvider() {
-            @Override
-            public Component getDisplayName() {
-                return new TranslatableComponent("container.info.sub");
-            }
-
-            @Override
-            public AbstractContainerMenu createMenu(int windowID, Inventory inv, Player player) {
-                return new ContainerInfoScreen(windowID, inv, false);
-            }
-        };
+    @Override
+    public boolean stillValid(Player player) {
+        return true;
     }
 }

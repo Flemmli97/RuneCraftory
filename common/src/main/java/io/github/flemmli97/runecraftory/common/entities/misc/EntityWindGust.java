@@ -19,11 +19,8 @@ import java.util.function.Predicate;
 
 public class EntityWindGust extends EntityBeam {
 
-    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
-
     private Vec3 pMotion, up, side;
-    private double maxX, maxY, maxZ, minX, minY, minZ;
-
+    private double maxX, maxY, maxZ, minX, minY, minZ;    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
     public EntityWindGust(EntityType<? extends EntityWindGust> type, Level world) {
         super(type, world);
     }
@@ -35,8 +32,23 @@ public class EntityWindGust extends EntityBeam {
     }
 
     @Override
+    public float getRange() {
+        return 8;
+    }
+
+    @Override
     public float radius() {
         return 1.5f;
+    }
+
+    @Override
+    public boolean piercing() {
+        return true;
+    }
+
+    @Override
+    public int livingTickMax() {
+        return 15;
     }
 
     @Override
@@ -64,6 +76,11 @@ public class EntityWindGust extends EntityBeam {
     }
 
     @Override
+    protected boolean check(Entity entity, Vec3 from, Vec3 to) {
+        return super.check(entity, from, to) && (!(entity instanceof LivingEntity) || this.pred.test((LivingEntity) entity));
+    }
+
+    @Override
     public void onImpact(EntityHitResult entityRayTraceResult) {
         Entity e = entityRayTraceResult.getEntity();
         if (e instanceof LivingEntity) {
@@ -74,28 +91,8 @@ public class EntityWindGust extends EntityBeam {
     }
 
     @Override
-    protected boolean check(Entity entity, Vec3 from, Vec3 to) {
-        return super.check(entity, from, to) && (!(entity instanceof LivingEntity) || this.pred.test((LivingEntity) entity));
-    }
-
-    @Override
-    public float getRange() {
-        return 8;
-    }
-
-    @Override
-    public int livingTickMax() {
-        return 15;
-    }
-
-    @Override
     public int attackCooldown() {
         return 1;
-    }
-
-    @Override
-    public boolean piercing() {
-        return true;
     }
 
     @Override
@@ -105,4 +102,8 @@ public class EntityWindGust extends EntityBeam {
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
     }
+
+
+
+
 }

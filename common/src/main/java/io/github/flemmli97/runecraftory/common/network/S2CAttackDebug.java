@@ -31,6 +31,18 @@ public class S2CAttackDebug implements Packet {
         this.type = type;
     }
 
+    public static S2CAttackDebug read(FriendlyByteBuf buf) {
+        AABB aabb = new AABB(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
+        return new S2CAttackDebug(aabb, buf.readInt(), buf.readEnum(EnumAABBType.class));
+    }
+
+    public static void handle(S2CAttackDebug pkt) {
+        Player player = ClientHandlers.getPlayer();
+        if (player == null)
+            return;
+        AttackAABBRender.INST.addNewAABB(pkt.aabb, pkt.duration, pkt.type);
+    }
+
     @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeDouble(this.aabb.maxX);
@@ -46,17 +58,5 @@ public class S2CAttackDebug implements Packet {
     @Override
     public ResourceLocation getID() {
         return ID;
-    }
-
-    public static S2CAttackDebug read(FriendlyByteBuf buf) {
-        AABB aabb = new AABB(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
-        return new S2CAttackDebug(aabb, buf.readInt(), buf.readEnum(EnumAABBType.class));
-    }
-
-    public static void handle(S2CAttackDebug pkt) {
-        Player player = ClientHandlers.getPlayer();
-        if (player == null)
-            return;
-        AttackAABBRender.INST.addNewAABB(pkt.aabb, pkt.duration, pkt.type);
     }
 }

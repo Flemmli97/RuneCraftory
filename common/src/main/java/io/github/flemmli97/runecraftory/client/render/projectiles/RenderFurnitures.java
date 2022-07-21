@@ -137,6 +137,11 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
         super.render(entity, rotation, partialTicks, stack, buffer, packedLight);
     }
 
+    @Override
+    public ResourceLocation getTextureLocation(EntityFurniture entity) {
+        return null;
+    }
+
     private void renderBlockModel(BlockState state, PoseStack stack, MultiBufferSource buffer, int packedLight) {
         stack.translate(-0.5, 0, -0.5);
         BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
@@ -149,10 +154,5 @@ public class RenderFurnitures extends EntityRenderer<EntityFurniture> {
         VertexConsumer ivertexbuilder = buffer.getBuffer(RenderType.entityCutout(tex));
         for (ModelPart part : parts)
             part.render(stack, ivertexbuilder, packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
-    }
-
-    @Override
-    public ResourceLocation getTextureLocation(EntityFurniture entity) {
-        return null;
     }
 }

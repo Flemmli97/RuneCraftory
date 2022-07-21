@@ -67,30 +67,12 @@ public class EntityPollen extends EntityDamageCloud {
     }
 
     @Override
-    public void handleEntityEvent(byte id) {
-        if (id == 64) {
-            for (Vector3f base : pollenBase) {
-                for (Vector3f dir : pollenInd) {
-                    for (int i = 0; i < 3; i++)
-                        this.level.addParticle(new ColoredParticleData(ModParticles.sinkingDust.get(), 10 / 255F, 138 / 255F, 12 / 255F, 1), this.getX() + base.x(), this.getY() + 0.05, this.getZ() + base.z(), dir.x() + base.x() * 0.02, dir.y(), dir.z() + base.z() * 0.02);
-                }
-            }
-        } else
-            super.handleEntityEvent(id);
-    }
-
-    @Override
     protected boolean canHit(LivingEntity e) {
         if (!super.canHit(e))
             return false;
         double distSq = e.distanceToSqr(this);
         double offset = e.getBbWidth() * 0.5 + 0.1;
         return distSq >= this.radiusSqWithOffset(-offset) && distSq <= this.radiusSqWithOffset(offset) && (this.pred == null || this.pred.test(e));
-    }
-
-    private double radiusSqWithOffset(double offset) {
-        double r = Math.max(0, this.getRadius() + offset);
-        return r * r;
     }
 
     @Override
@@ -109,5 +91,23 @@ public class EntityPollen extends EntityDamageCloud {
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
+    }
+
+    @Override
+    public void handleEntityEvent(byte id) {
+        if (id == 64) {
+            for (Vector3f base : pollenBase) {
+                for (Vector3f dir : pollenInd) {
+                    for (int i = 0; i < 3; i++)
+                        this.level.addParticle(new ColoredParticleData(ModParticles.sinkingDust.get(), 10 / 255F, 138 / 255F, 12 / 255F, 1), this.getX() + base.x(), this.getY() + 0.05, this.getZ() + base.z(), dir.x() + base.x() * 0.02, dir.y(), dir.z() + base.z() * 0.02);
+                }
+            }
+        } else
+            super.handleEntityEvent(id);
+    }
+
+    private double radiusSqWithOffset(double offset) {
+        double r = Math.max(0, this.getRadius() + offset);
+        return r * r;
     }
 }

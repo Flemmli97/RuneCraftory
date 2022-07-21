@@ -34,22 +34,6 @@ public class S2CLevelPkt implements Packet {
         this.vit = data.getVit();
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.level[0]);
-        buf.writeInt(this.level[1]);
-        buf.writeInt(this.rp);
-        buf.writeFloat(this.rpMax);
-        buf.writeFloat(this.str);
-        buf.writeFloat(this.intel);
-        buf.writeFloat(this.vit);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CLevelPkt read(FriendlyByteBuf buf) {
         return new S2CLevelPkt(new int[]{buf.readInt(), buf.readInt()}, buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
@@ -66,6 +50,22 @@ public class S2CLevelPkt implements Packet {
             data.setIntel(player, pkt.intel);
             data.setVit(player, pkt.vit);
         });
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(this.level[0]);
+        buf.writeInt(this.level[1]);
+        buf.writeInt(this.rp);
+        buf.writeFloat(this.rpMax);
+        buf.writeFloat(this.str);
+        buf.writeFloat(this.intel);
+        buf.writeFloat(this.vit);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 
 }

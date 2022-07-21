@@ -45,16 +45,9 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         this.buttons();
     }
 
-    protected void buttons() {
-        this.addRenderableWidget(new PageButton(this.leftPos + 206, this.topPos + 5, new TextComponent(">"), b -> Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.SUB))));
-        this.addRenderableWidget(new PageButton(this.leftPos + 193, this.topPos + 5, new TextComponent("<"), b -> {
-            InventoryScreen inventory = new InventoryScreen(this.minecraft.player);
-            ItemStack stack = this.minecraft.player.containerMenu.getCarried();
-            this.minecraft.player.containerMenu.setCarried(ItemStack.EMPTY);
-            this.minecraft.setScreen(inventory);
-            this.minecraft.player.containerMenu.setCarried(stack);
-            Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.INV));
-        }));
+    @Override
+    protected void renderLabels(PoseStack stack, int mouseX, int mouseY) {
+
     }
 
     @Override
@@ -85,6 +78,18 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         InventoryScreen.renderEntityInInventory(this.leftPos + 58, this.topPos + 76, 29, this.leftPos + 58 - mouseX, this.topPos + 26 - mouseY, this.minecraft.player);
     }
 
+    protected void buttons() {
+        this.addRenderableWidget(new PageButton(this.leftPos + 206, this.topPos + 5, new TextComponent(">"), b -> Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.SUB))));
+        this.addRenderableWidget(new PageButton(this.leftPos + 193, this.topPos + 5, new TextComponent("<"), b -> {
+            InventoryScreen inventory = new InventoryScreen(this.minecraft.player);
+            ItemStack stack = this.minecraft.player.containerMenu.getCarried();
+            this.minecraft.player.containerMenu.setCarried(ItemStack.EMPTY);
+            this.minecraft.setScreen(inventory);
+            this.minecraft.player.containerMenu.setCarried(stack);
+            Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.INV));
+        }));
+    }
+
     protected ResourceLocation texture() {
         return texturepath;
     }
@@ -107,11 +112,6 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         int yScaled = (int) (y / scale);
         this.minecraft.font.draw(stack, string, xScaled, yScaled, color);
         stack.popPose();
-    }
-
-    @Override
-    protected void renderLabels(PoseStack stack, int mouseX, int mouseY) {
-
     }
 
     @Override

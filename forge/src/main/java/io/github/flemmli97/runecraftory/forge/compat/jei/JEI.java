@@ -34,11 +34,13 @@ public class JEI implements IModPlugin {
     }
 
     @Override
-    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockForge.get()), SextupleRecipeCategory.FORGECATEGORY);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockAccess.get()), SextupleRecipeCategory.ARMORCATEGORY);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockCooking.get()), SextupleRecipeCategory.COOKINGCATEGORY);
-        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockChem.get()), SextupleRecipeCategory.CHEMISTRYCATEGORY);
+    public void registerCategories(IRecipeCategoryRegistration registration) {
+        registration.addRecipeCategories(
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), ForgingRecipe.class, SextupleRecipeCategory.FORGECATEGORY, ModItems.itemBlockForge.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CookingRecipe.class, SextupleRecipeCategory.COOKINGCATEGORY, ModItems.itemBlockCooking.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), ArmorRecipe.class, SextupleRecipeCategory.ARMORCATEGORY, ModItems.itemBlockAccess.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), ChemistryRecipe.class, SextupleRecipeCategory.CHEMISTRYCATEGORY, ModItems.itemBlockChem.get())
+        );
     }
 
     @Override
@@ -55,20 +57,18 @@ public class JEI implements IModPlugin {
     }
 
     @Override
-    public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), ForgingRecipe.class, SextupleRecipeCategory.FORGECATEGORY, ModItems.itemBlockForge.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CookingRecipe.class, SextupleRecipeCategory.COOKINGCATEGORY, ModItems.itemBlockCooking.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), ArmorRecipe.class, SextupleRecipeCategory.ARMORCATEGORY, ModItems.itemBlockAccess.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), ChemistryRecipe.class, SextupleRecipeCategory.CHEMISTRYCATEGORY, ModItems.itemBlockChem.get())
-        );
-    }
-
-    @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(new SextupleRecipeTransfer(SextupleRecipeCategory.FORGECATEGORY));
         registration.addRecipeTransferHandler(new SextupleRecipeTransfer(SextupleRecipeCategory.COOKINGCATEGORY));
         registration.addRecipeTransferHandler(new SextupleRecipeTransfer(SextupleRecipeCategory.ARMORCATEGORY));
         registration.addRecipeTransferHandler(new SextupleRecipeTransfer(SextupleRecipeCategory.CHEMISTRYCATEGORY));
+    }
+
+    @Override
+    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockForge.get()), SextupleRecipeCategory.FORGECATEGORY);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockAccess.get()), SextupleRecipeCategory.ARMORCATEGORY);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockCooking.get()), SextupleRecipeCategory.COOKINGCATEGORY);
+        registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockChem.get()), SextupleRecipeCategory.CHEMISTRYCATEGORY);
     }
 }

@@ -25,14 +25,14 @@ public class TrueInvis extends MobEffect implements ExtendedEffect {
     }
 
     @Override
-    public void addAttributeModifiers(LivingEntity entity, AttributeMap manager, int amplifier) {
-        Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.INVIS, true), entity);
-        super.addAttributeModifiers(entity, manager, amplifier);
-    }
-
-    @Override
     public void removeAttributeModifiers(LivingEntity entity, AttributeMap manager, int amplifier) {
         Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.INVIS, false), entity);
         super.removeAttributeModifiers(entity, manager, amplifier);
+    }
+
+    @Override
+    public void addAttributeModifiers(LivingEntity entity, AttributeMap manager, int amplifier) {
+        Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.INVIS, true), entity);
+        super.addAttributeModifiers(entity, manager, amplifier);
     }
 }

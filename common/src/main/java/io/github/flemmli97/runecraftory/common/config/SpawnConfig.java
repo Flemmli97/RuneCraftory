@@ -31,12 +31,9 @@ import java.util.Map;
 public class SpawnConfig {
 
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-
-    public static SpawnConfig spawnConfig;
-
-    private final Path directory;
     private static final List<SpawnData> defaultData = new ArrayList<>();
-
+    public static SpawnConfig spawnConfig;
+    private final Path directory;
     private final Map<TagKey<Biome>, List<GateSpawning.SpawnResource>> biomeTagEntitiesMap = new HashMap<>();
     private final Map<String, List<GateSpawning.SpawnResource>> rawStructureEntities = new HashMap<>();
 
@@ -88,12 +85,12 @@ public class SpawnConfig {
         this.biomeTagEntitiesMap.forEach((tag, list) -> list.forEach(res -> GateSpawning.addSpawn(tag, res)));
     }
 
-    public Map<String, List<GateSpawning.SpawnResource>> getRawStructureEntities() {
-        return this.rawStructureEntities;
-    }
-
     public static void addDefaultData(SpawnData data) {
         defaultData.add(data);
+    }
+
+    public Map<String, List<GateSpawning.SpawnResource>> getRawStructureEntities() {
+        return this.rawStructureEntities;
     }
 
     public record SpawnData(ResourceLocation entity, int minDistanceFromSpawn,

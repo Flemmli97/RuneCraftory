@@ -21,13 +21,11 @@ import java.util.Map;
 public abstract class WorldGenData<T> implements DataProvider {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-
+    protected final Map<ResourceLocation, T> elements = new HashMap<>();
     private final ResourceKey<? extends Registry<?>> registryKey;
     private final Codec<T> elementCodec;
     private final String modid;
     private final DataGenerator generator;
-
-    protected final Map<ResourceLocation, T> elements = new HashMap<>();
 
     public WorldGenData(DataGenerator generator, String modid, ResourceKey<? extends Registry<?>> registryKey, Codec<T> elementCodec) {
         this.generator = generator;
@@ -44,7 +42,7 @@ public abstract class WorldGenData<T> implements DataProvider {
     }
 
     @Override
-    public void run(HashCache cache) throws IOException {
+    public void run(HashCache cache) {
         this.elements.clear();
         this.gen();
         this.elements.forEach((res, e) -> {
@@ -56,7 +54,12 @@ public abstract class WorldGenData<T> implements DataProvider {
         });
     }
 
-    public void runExternal(HashCache cache) throws IOException {
+    @Override
+    public String getName() {
+        return this.registryKey + " Data Gen";
+    }
+
+    public void runExternal(HashCache cache) {
         this.elements.forEach((res, e) -> {
             try {
                 this.save(cache, res, e);
@@ -74,10 +77,5 @@ public abstract class WorldGenData<T> implements DataProvider {
 
     protected Path getPath(ResourceLocation id) {
         return this.generator.getOutputFolder().resolve("data/" + id.getNamespace() + "/" + this.registryKey.location().getPath().replace(":", "/") + "/" + id.getPath() + ".json");
-    }
-
-    @Override
-    public String getName() {
-        return this.registryKey + " Data Gen";
     }
 }

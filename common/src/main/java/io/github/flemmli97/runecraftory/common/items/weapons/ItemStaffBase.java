@@ -43,20 +43,6 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     }
 
     @Override
-    public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
-        if (entity.level instanceof ServerLevel serverLevel) {
-            if (!(entity instanceof Player player) || !player.getCooldowns().isOnCooldown(this)) {
-                ModSpells.STAFFCAST.get().use(serverLevel, entity, stack, 1, 1, 1);
-                if (entity instanceof Player player) {
-                    player.getCooldowns().addCooldown(stack.getItem(), this.itemCoolDownTicks());
-                }
-                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
-            }
-        }
-        return false;
-    }
-
-    @Override
     public int getChargeTime(ItemStack stack) {
         return Platform.INSTANCE.getStaffData(stack).map(cap ->
                 cap.getTier1Spell() != null ? cap.getTier1Spell().coolDown() : cap.getTier2Spell() != null ? cap.getTier1Spell().coolDown() : cap.getTier3Spell() != null ? cap.getTier3Spell().coolDown() : 0).orElse(GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime());
@@ -84,11 +70,6 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     }
 
     @Override
-    public float getRange() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).range();
-    }
-
-    @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
         Platform.INSTANCE.getPlayerData(player)
                 .ifPresent(cap -> {
@@ -109,8 +90,15 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
+    public float getRange() {
+        return GeneralConfig.weaponProps.get(this.getWeaponType()).range();
+    }
+
+    @Override
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        int duration = stack.getUseDuration() - remainingUseDuration;
+        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
     @Override
@@ -119,8 +107,12 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
-        return 72000;
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        if (this.chargeAmount(player.getItemInHand(hand)) > 0) {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(player.getItemInHand(hand));
+        }
+        return InteractionResultHolder.pass(player.getItemInHand(hand));
     }
 
     @Override
@@ -129,10 +121,8 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     }
 
     @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
-            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+    public int getUseDuration(ItemStack stack) {
+        return 72000;
     }
 
     @Override
@@ -148,6 +138,11 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
         }
     }
 
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
+    }
+
     public Spell getSpell(ItemStack stack, int level) {
         StaffData cap = Platform.INSTANCE.getStaffData(stack).orElseThrow(() -> new NullPointerException("Error getting capability for staff item"));
         return switch (level) {
@@ -159,17 +154,22 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        if (this.chargeAmount(player.getItemInHand(hand)) > 0) {
-            player.startUsingItem(hand);
-            return InteractionResultHolder.consume(player.getItemInHand(hand));
-        }
-        return InteractionResultHolder.pass(player.getItemInHand(hand));
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+        return null;
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return null;
+    public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
+        if (entity.level instanceof ServerLevel serverLevel) {
+            if (!(entity instanceof Player player) || !player.getCooldowns().isOnCooldown(this)) {
+                ModSpells.STAFFCAST.get().use(serverLevel, entity, stack, 1, 1, 1);
+                if (entity instanceof Player player) {
+                    player.getCooldowns().addCooldown(stack.getItem(), this.itemCoolDownTicks());
+                }
+                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
+            }
+        }
+        return false;
     }
 }
 

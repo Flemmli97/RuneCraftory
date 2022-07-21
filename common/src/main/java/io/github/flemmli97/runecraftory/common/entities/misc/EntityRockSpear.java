@@ -32,12 +32,6 @@ public class EntityRockSpear extends EntityBeam {
         this.entityData.set(BIG, big);
     }
 
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(BIG, false);
-    }
-
     public boolean bigRock() {
         return this.entityData.get(BIG);
     }
@@ -47,13 +41,18 @@ public class EntityRockSpear extends EntityBeam {
     }
 
     @Override
+    public float getRange() {
+        return this.bigRock() ? 8 : 4;
+    }
+
+    @Override
     public float radius() {
         return this.bigRock() ? 0.8f : 0.5f;
     }
 
     @Override
-    public float getRange() {
-        return this.bigRock() ? 8 : 4;
+    public boolean piercing() {
+        return true;
     }
 
     @Override
@@ -62,8 +61,9 @@ public class EntityRockSpear extends EntityBeam {
     }
 
     @Override
-    public boolean piercing() {
-        return true;
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(BIG, false);
     }
 
     @Override

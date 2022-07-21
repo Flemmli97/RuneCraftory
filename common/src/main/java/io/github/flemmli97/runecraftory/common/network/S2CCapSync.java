@@ -18,7 +18,7 @@ import java.util.Map;
 public class S2CCapSync implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_player_data_sync");
-
+    private final Map<EnumSkills, int[]> skillMap = new HashMap<>();
     private int money;
     private int runePoints;
     private float runePointsMax;
@@ -26,8 +26,6 @@ public class S2CCapSync implements Packet {
     private float vit;
     private float intel;
     private int[] level = new int[]{1, 0};
-
-    private final Map<EnumSkills, int[]> skillMap = new HashMap<>();
     private CompoundTag spells;
 
     private CompoundTag foodData;
@@ -50,35 +48,6 @@ public class S2CCapSync implements Packet {
         this.spells = data.getInv().save();
         this.foodData = data.foodBuffNBT();
         this.recipes = data.getRecipeKeeper().unlockedRecipes();
-    }
-
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.money);
-        buf.writeInt(this.runePoints);
-        buf.writeFloat(this.runePointsMax);
-        buf.writeFloat(this.str);
-        buf.writeFloat(this.intel);
-        buf.writeFloat(this.vit);
-        buf.writeInt(this.level[0]);
-        buf.writeInt(this.level[1]);
-        buf.writeInt(EnumSkills.values().length);
-        for (EnumSkills skill : EnumSkills.values()) {
-            buf.writeEnum(skill);
-            int[] i = this.skillMap.getOrDefault(skill, new int[]{1, 0});
-            buf.writeInt(i[0]);
-            buf.writeInt(i[1]);
-        }
-        buf.writeNbt(this.spells);
-        buf.writeNbt(this.foodData);
-        buf.writeInt(this.recipes.size());
-        this.recipes.forEach(buf::writeResourceLocation);
-    }
-
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
     }
 
     public static S2CCapSync read(FriendlyByteBuf buf) {
@@ -121,5 +90,33 @@ public class S2CCapSync implements Packet {
             data.readFoodBuffFromNBT(pkt.foodData);
             data.getRecipeKeeper().clientUpdate(pkt.recipes);
         });
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(this.money);
+        buf.writeInt(this.runePoints);
+        buf.writeFloat(this.runePointsMax);
+        buf.writeFloat(this.str);
+        buf.writeFloat(this.intel);
+        buf.writeFloat(this.vit);
+        buf.writeInt(this.level[0]);
+        buf.writeInt(this.level[1]);
+        buf.writeInt(EnumSkills.values().length);
+        for (EnumSkills skill : EnumSkills.values()) {
+            buf.writeEnum(skill);
+            int[] i = this.skillMap.getOrDefault(skill, new int[]{1, 0});
+            buf.writeInt(i[0]);
+            buf.writeInt(i[1]);
+        }
+        buf.writeNbt(this.spells);
+        buf.writeNbt(this.foodData);
+        buf.writeInt(this.recipes.size());
+        this.recipes.forEach(buf::writeResourceLocation);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

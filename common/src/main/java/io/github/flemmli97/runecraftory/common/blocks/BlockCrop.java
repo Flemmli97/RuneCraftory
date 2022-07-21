@@ -41,12 +41,10 @@ import java.util.function.Supplier;
 
 public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlock {
 
-    private static final AABB[] CROPS_AABB = new AABB[]{new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
-    private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
-
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
     public static final BooleanProperty WILTED = BooleanProperty.create("wilted");
-
+    private static final AABB[] CROPS_AABB = new AABB[]{new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
+    private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
     private final Supplier<Item> crop;
     private final Supplier<Item> giant;
     private final Supplier<Item> seed;
@@ -57,11 +55,6 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
         this.crop = crop;
         this.giant = giant;
         this.seed = seed;
-    }
-
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(AGE).add(WILTED);
     }
 
     @Override
@@ -79,13 +72,25 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
         return InteractionResult.PASS;
     }
 
-    public boolean isMaxAge(BlockState state, Level level, BlockPos pos) {
-        return state.getValue(AGE) == 3;
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        List<ItemStack> list = super.getDrops(state, builder);
+        BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+        if (blockEntity instanceof CropBlockEntity crop && this.properties().map(p -> crop.age() >= p.growth()).orElse(false)
+                && !crop.isWilted())
+            list.forEach(stack -> this.modifyStack(stack, crop));
+        else
+            list.clear();
+        return list;
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE_BY_AGE[state.getValue(AGE)];
+    }
+
+    public boolean isMaxAge(BlockState state, Level level, BlockPos pos) {
+        return state.getValue(AGE) == 3;
     }
 
     public Optional<CropProperties> properties() {
@@ -100,18 +105,6 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         return (level.getRawBrightness(pos, 0) >= 8 || level.canSeeSky(pos)) && super.canSurvive(state, level, pos);
-    }
-
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        List<ItemStack> list = super.getDrops(state, builder);
-        BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (blockEntity instanceof CropBlockEntity crop && this.properties().map(p -> crop.age() >= p.growth()).orElse(false)
-                && !crop.isWilted())
-            list.forEach(stack -> this.modifyStack(stack, crop));
-        else
-            list.clear();
-        return list;
     }
 
     private void modifyStack(ItemStack stack, CropBlockEntity tile) {
@@ -138,6 +131,11 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
     @Override
     public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
         return ItemNBT.getLeveledItem(super.getCloneItemStack(level, pos, state), 1);
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(AGE).add(WILTED);
     }
 
     public Item getCrop() {

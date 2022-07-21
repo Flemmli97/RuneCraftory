@@ -21,18 +21,15 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntityTortas extends ChargingMonster {
 
-    public final ChargeAttackGoal<EntityTortas> ai = new ChargeAttackGoal<>(this);
     public static final AnimatedAction bite = new AnimatedAction(11, 6, "bite");
     public static final AnimatedAction spin = new AnimatedAction(51, 0, "spin");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{bite, spin};
     //public static final AnimatedAction swim = new AnimatedAction(32, 6, "swim");
     //public static final AnimatedAction walk = new AnimatedAction(21, 5, "walk");
-
-    private static final AnimatedAction[] anims = new AnimatedAction[]{bite, spin};
-
-    private final AnimationHandler<EntityTortas> animationHandler = new AnimationHandler<>(this, anims);
-
+    public final ChargeAttackGoal<EntityTortas> ai = new ChargeAttackGoal<>(this);
     protected final WaterBoundPathNavigation waterNavigator;
     protected final GroundPathNavigation groundNavigator;
+    private final AnimationHandler<EntityTortas> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntityTortas(EntityType<? extends EntityTortas> type, Level world) {
         super(type, world);
@@ -53,20 +50,11 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        return 0.7f;
-    }
-
-    @Override
-    public AnimationHandler<EntityTortas> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim != null && anim.getID().equals(spin.getID()))
-            return this.attackAABB(anim).move(this.getX(), this.getY(), this.getZ());
-        return super.calculateAttackAABB(anim, target);
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        if (type == AnimationType.CHARGE) {
+            return anim.getID().equals(spin.getID());
+        }
+        return type == AnimationType.MELEE && anim.getID().equals(bite.getID());
     }
 
     @Override
@@ -77,10 +65,63 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public void doWhileCharge() {
-        if (this.tickCount % 10 == 0) {
-            this.hitEntity.clear();
+    public void setDoJumping(boolean jump) {
+    }
+
+    @Override
+    public void travel(Vec3 vec) {
+        if (this.isEffectiveAi() && this.isInWater()) {
+            this.handleWaterTravel(vec);
+        } else {
+            super.travel(vec);
         }
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return 1;
+    }
+
+    @Override
+    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
+        if (anim != null && anim.getID().equals(spin.getID()))
+            return this.attackAABB(anim).move(this.getX(), this.getY(), this.getZ());
+        return super.calculateAttackAABB(anim, target);
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (command == 2)
+                this.getAnimationHandler().setAnimation(spin);
+            else
+                this.getAnimationHandler().setAnimation(bite);
+        }
+    }
+
+    @Override
+    public double ridingSpeedModifier() {
+        return 0.4;
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return 0.7f;
+    }
+
+    @Override
+    public AnimationHandler<EntityTortas> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public boolean adjustRotFromRider(LivingEntity rider) {
+        return true;
+    }
+
+    @Override
+    public float chargingYaw() {
+        return this.getYRot();
     }
 
     @Override
@@ -103,19 +144,13 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public boolean adjustRotFromRider(LivingEntity rider) {
-        return true;
+    public void doWhileCharge() {
+        if (this.tickCount % 10 == 0) {
+            this.hitEntity.clear();
+        }
     }
 
-    @Override
-    public float chargingYaw() {
-        return this.getYRot();
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1;
-    }
+    //==========Water stuff
 
     @Override
     public float chargingLength() {
@@ -123,51 +158,7 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.CHARGE) {
-            return anim.getID().equals(spin.getID());
-        }
-        return type == AnimationType.MELEE && anim.getID().equals(bite.getID());
-    }
-
-    @Override
-    public void setDoJumping(boolean jump) {
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(spin);
-            else
-                this.getAnimationHandler().setAnimation(bite);
-        }
-    }
-
-    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
-    }
-
-    //==========Water stuff
-
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
-
-    @Override
-    public boolean isPushedByFluid() {
-        return false;
-    }
-
-    @Override
-    public boolean rideableUnderWater() {
-        return false;
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.WATER;
     }
 
     @Override
@@ -186,21 +177,27 @@ public class EntityTortas extends ChargingMonster {
     }
 
     @Override
-    public void travel(Vec3 vec) {
-        if (this.isEffectiveAi() && this.isInWater()) {
-            this.handleWaterTravel(vec);
-        } else {
-            super.travel(vec);
-        }
-    }
-
-    @Override
-    public double ridingSpeedModifier() {
-        return 0.4;
-    }
-
-    @Override
     public double getPassengersRidingOffset() {
         return this.getBbHeight() * 0.7D;
+    }
+
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
+
+    @Override
+    public boolean canBreatheUnderwater() {
+        return true;
+    }
+
+    @Override
+    public boolean rideableUnderWater() {
+        return false;
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.WATER;
     }
 }

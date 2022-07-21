@@ -41,17 +41,13 @@ public class EntityButterfly extends EntityProjectile {
     }
 
     @Override
-    public int livingTickMax() {
-        return 50;
-    }
-
-    @Override
     public boolean isPiercing() {
         return true;
     }
 
-    public void setUpDelay(int delay) {
-        this.upDelay = delay;
+    @Override
+    public int livingTickMax() {
+        return 50;
     }
 
     @Override
@@ -66,6 +62,16 @@ public class EntityButterfly extends EntityProjectile {
     }
 
     @Override
+    protected boolean canHit(Entity entity) {
+        return super.canHit(entity) && (this.pred == null || (entity instanceof LivingEntity && this.pred.test((LivingEntity) entity)));
+    }
+
+    @Override
+    protected float getGravityVelocity() {
+        return 0.0f;
+    }
+
+    @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
         if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(3).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * 0.1f, null)) {//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
             if (result.getEntity() instanceof LivingEntity)
@@ -76,18 +82,8 @@ public class EntityButterfly extends EntityProjectile {
     }
 
     @Override
-    protected boolean canHit(Entity entity) {
-        return super.canHit(entity) && (this.pred == null || (entity instanceof LivingEntity && this.pred.test((LivingEntity) entity)));
-    }
-
-    @Override
     protected void onBlockHit(BlockHitResult blockRayTraceResult) {
         this.upDelay = 0;
-    }
-
-    @Override
-    protected float getGravityVelocity() {
-        return 0.0f;
     }
 
     @Override
@@ -96,5 +92,9 @@ public class EntityButterfly extends EntityProjectile {
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
+    }
+
+    public void setUpDelay(int delay) {
+        this.upDelay = delay;
     }
 }

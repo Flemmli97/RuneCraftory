@@ -61,25 +61,6 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
-        this.livingTick = compound.getInt("livingTick");
-        if (compound.contains("owner"))
-            this.ownerUUID = compound.getUUID("owner");
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
-        compound.putInt("livingTick", this.livingTick);
-        if (this.owner != null)
-            compound.putUUID("owner", this.owner.getUUID());
-    }
-
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
-    }
-
-    @Override
     protected void defineSynchedData() {
 
     }
@@ -108,5 +89,24 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        this.livingTick = compound.getInt("livingTick");
+        if (compound.contains("owner"))
+            this.ownerUUID = compound.getUUID("owner");
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        compound.putInt("livingTick", this.livingTick);
+        if (this.owner != null)
+            compound.putUUID("owner", this.owner.getUUID());
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return new ClientboundAddEntityPacket(this);
     }
 }

@@ -38,14 +38,14 @@ public class BossSpawnerProcessor extends StructureProcessor {
         return relativeBlockInfo;
     }
 
+    @Override
+    protected StructureProcessorType<?> getType() {
+        return ModStructures.BOSS_PROCESSOR.get();
+    }
+
     private boolean isNormalPigSpawner(CompoundTag tag) {
         if (tag == null)
             return false;
         return tag.getCompound("SpawnData").getCompound("entity").getString("id").equals("minecraft:pig");
-    }
-
-    @Override
-    protected StructureProcessorType<?> getType() {
-        return ModStructures.BOSS_PROCESSOR.get();
     }
 }

@@ -18,6 +18,11 @@ public class DummyInventory implements Container {
     }
 
     @Override
+    public boolean isEmpty() {
+        return this.inv.isEmpty();
+    }
+
+    @Override
     public ItemStack getItem(int slot) {
         return this.inv.getItem(slot);
     }
@@ -28,28 +33,13 @@ public class DummyInventory implements Container {
     }
 
     @Override
-    public void setItem(int slot, ItemStack stack) {
-        this.inv.setItem(slot, stack);
-    }
-
-    @Override
     public ItemStack removeItemNoUpdate(int index) {
         return this.inv.removeItemNoUpdate(index);
     }
 
     @Override
-    public boolean isEmpty() {
-        return this.inv.isEmpty();
-    }
-
-    @Override
-    public boolean canPlaceItem(int slot, ItemStack stack) {
-        return this.inv.canPlaceItem(slot, stack);
-    }
-
-    @Override
-    public void clearContent() {
-        this.inv.clearContent();
+    public void setItem(int slot, ItemStack stack) {
+        this.inv.setItem(slot, stack);
     }
 
     @Override
@@ -75,5 +65,15 @@ public class DummyInventory implements Container {
     @Override
     public void stopOpen(Player player) {
         this.inv.stopOpen(player);
+    }
+
+    @Override
+    public boolean canPlaceItem(int slot, ItemStack stack) {
+        return this.inv.canPlaceItem(slot, stack);
+    }
+
+    @Override
+    public void clearContent() {
+        this.inv.clearContent();
     }
 }

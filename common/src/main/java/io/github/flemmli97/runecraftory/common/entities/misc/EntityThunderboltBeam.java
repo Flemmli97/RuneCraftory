@@ -53,11 +53,6 @@ public class EntityThunderboltBeam extends EntityBeam {
     }
 
     @Override
-    public int attackCooldown() {
-        return this.livingTickMax();
-    }
-
-    @Override
     public void tick() {
         super.tick();
         if (this.level.isClientSide) {
@@ -78,6 +73,11 @@ public class EntityThunderboltBeam extends EntityBeam {
     @Override
     public void onImpact(EntityHitResult res) {
         CombatUtils.damage(this.getOwner(), res.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).element(EnumElement.WIND).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()), null);
+    }
+
+    @Override
+    public int attackCooldown() {
+        return this.livingTickMax();
     }
 
     @Override

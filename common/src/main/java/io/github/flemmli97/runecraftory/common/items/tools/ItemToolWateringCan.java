@@ -65,11 +65,6 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
     }
 
     @Override
-    public Rarity getRarity(ItemStack stack) {
-        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
-    }
-
-    @Override
     public EnumToolCharge chargeType(ItemStack stack) {
         return EnumToolCharge.CHARGECAN;
     }
@@ -98,32 +93,6 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
         });
     }
 
-    @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.BOW;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack) {
-        return 72000;
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        return (int) (this.getWater(stack) / (float) this.maxWater() * 13);
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        float f = Math.max(0.0f, this.getWater(stack) / (float) this.maxWater());
-        return Mth.hsvToRgb(f / 3.0f, 1.0f, 1.0f);
-    }
-
     public int maxWater() {
         return switch (this.tier) {
             case IRON -> GeneralConfig.ironWateringCanWater;
@@ -142,15 +111,65 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
     }
 
     @Override
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        int duration = stack.getUseDuration() - remainingUseDuration;
+        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext ctx) {
+        if (this.tier.getTierLevel() == 0) {
+            return this.useOnBlock(ctx);
+        }
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        BlockHitResult ray = getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
+        ItemStack itemstack = player.getItemInHand(hand);
+        BlockState state = world.getBlockState(ray.getBlockPos());
+        if (state.getFluidState().getType() == Fluids.WATER) {
+            if (!itemstack.hasTag()) {
+                ItemNBT.initNBT(itemstack);
+            }
+            itemstack.getOrCreateTag().putInt("Water", this.maxWater());
+            world.setBlock(ray.getBlockPos(), state.getFluidState().createLegacyBlock(), 3);
+            player.playSound(SoundEvents.BUCKET_FILL, 1.0f, 1.0f);
+            return InteractionResultHolder.success(itemstack);
+        }
+        if (this.tier.getTierLevel() != 0) {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(itemstack);
+        }
+        return InteractionResultHolder.pass(itemstack);
+    }
+
+    @Override
     public boolean isBarVisible(ItemStack stack) {
         return true;
     }
 
     @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
-            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+    public int getBarWidth(ItemStack stack) {
+        return (int) (this.getWater(stack) / (float) this.maxWater() * 13);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        float f = Math.max(0.0f, this.getWater(stack) / (float) this.maxWater());
+        return Mth.hsvToRgb(f / 3.0f, 1.0f, 1.0f);
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.BOW;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return 72000;
     }
 
     @Override
@@ -183,32 +202,18 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        BlockHitResult ray = getPlayerPOVHitResult(world, player, ClipContext.Fluid.SOURCE_ONLY);
-        ItemStack itemstack = player.getItemInHand(hand);
-        BlockState state = world.getBlockState(ray.getBlockPos());
-        if (state.getFluidState().getType() == Fluids.WATER) {
-            if (!itemstack.hasTag()) {
-                ItemNBT.initNBT(itemstack);
-            }
-            itemstack.getOrCreateTag().putInt("Water", this.maxWater());
-            world.setBlock(ray.getBlockPos(), state.getFluidState().createLegacyBlock(), 3);
-            player.playSound(SoundEvents.BUCKET_FILL, 1.0f, 1.0f);
-            return InteractionResultHolder.success(itemstack);
-        }
-        if (this.tier.getTierLevel() != 0) {
-            player.startUsingItem(hand);
-            return InteractionResultHolder.consume(itemstack);
-        }
-        return InteractionResultHolder.pass(itemstack);
+    public Rarity getRarity(ItemStack stack) {
+        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext ctx) {
-        if (this.tier.getTierLevel() == 0) {
-            return this.useOnBlock(ctx);
-        }
-        return InteractionResult.PASS;
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
+        return ImmutableMultimap.of();
     }
 
     private InteractionResult useOnBlock(UseOnContext ctx) {
@@ -243,10 +248,5 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
             return true;
         }
         return false;
-    }
-
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
-        return ImmutableMultimap.of();
     }
 }

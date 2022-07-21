@@ -13,16 +13,6 @@ public record C2SOpenInfo(C2SOpenInfo.Type type) implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "c2s_open_info");
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeEnum(this.type);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static C2SOpenInfo read(FriendlyByteBuf buf) {
         return new C2SOpenInfo(buf.readEnum(Type.class));
     }
@@ -49,6 +39,16 @@ public record C2SOpenInfo(C2SOpenInfo.Type type) implements Packet {
                 }
             }
         }
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeEnum(this.type);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 
     public enum Type {

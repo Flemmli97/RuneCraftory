@@ -27,15 +27,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntitySkyFish extends BaseMonster {
 
-    public AnimatedRangedGoal<EntitySkyFish> rangedGoal = new AnimatedRangedGoal<>(this, 8, e -> true);
-
     public static final AnimatedAction slap = new AnimatedAction(11, 6, "slap");
     public static final AnimatedAction beam = new AnimatedAction(14, 7, "beam");
     public static final AnimatedAction swipe = new AnimatedAction(16, 4, "swipe");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{slap, beam, swipe};
-
     private final AnimationHandler<EntitySkyFish> animationHandler = new AnimationHandler<>(this, anims);
+    public AnimatedRangedGoal<EntitySkyFish> rangedGoal = new AnimatedRangedGoal<>(this, 8, e -> true);
 
     public EntitySkyFish(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
@@ -56,6 +53,13 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     @Override
+    protected void applyAttributes() {
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.13);
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
+        super.applyAttributes();
+    }
+
+    @Override
     protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
         return new NearestTargetHorizontal<>(this, Player.class, 5, true, true, player -> !this.isTamed());
     }
@@ -66,10 +70,14 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     @Override
-    protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.13);
-        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        super.applyAttributes();
+    public void tick() {
+        super.tick();
+        if (!this.level.isClientSide && this.getTarget() == null && !this.isInWater() && this.belowSoldid()) {
+            Vec3 mot = this.getDeltaMovement();
+            double newY = Math.max(0, mot.y);
+            newY += 0.03;
+            this.setDeltaMovement(mot.x, Math.min(0.3, newY), mot.z);
+        }
     }
 
     @Override
@@ -81,25 +89,8 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        return 0.75f;
-    }
-
-    @Override
-    public AnimationHandler<EntitySkyFish> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(swipe);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(beam);
-            else
-                this.getAnimationHandler().setAnimation(slap);
-        }
+    public void travel(Vec3 vec) {
+        this.handleWaterTravel(vec);
     }
 
     @Override
@@ -126,14 +117,25 @@ public class EntitySkyFish extends BaseMonster {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (!this.level.isClientSide && this.getTarget() == null && !this.isInWater() && this.belowSoldid()) {
-            Vec3 mot = this.getDeltaMovement();
-            double newY = Math.max(0, mot.y);
-            newY += 0.03;
-            this.setDeltaMovement(mot.x, Math.min(0.3, newY), mot.z);
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (command == 2)
+                this.getAnimationHandler().setAnimation(swipe);
+            else if (command == 1)
+                this.getAnimationHandler().setAnimation(beam);
+            else
+                this.getAnimationHandler().setAnimation(slap);
         }
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return 0.75f;
+    }
+
+    @Override
+    public AnimationHandler<EntitySkyFish> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     private boolean belowSoldid() {
@@ -145,20 +147,20 @@ public class EntitySkyFish extends BaseMonster {
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
     }
 
-    @Override
-    protected void checkFallDamage(double dist, boolean groundLogic, BlockState state, BlockPos pos) {
-    }
-
     //==========Water stuff
-
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
 
     @Override
     public boolean isPushedByFluid() {
         return false;
+    }
+
+    @Override
+    protected void checkFallDamage(double dist, boolean groundLogic, BlockState state, BlockPos pos) {
+    }
+
+    @Override
+    public boolean canBreatheUnderwater() {
+        return true;
     }
 
     @Override
@@ -169,11 +171,6 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     public MobType getMobType() {
         return MobType.WATER;
-    }
-
-    @Override
-    public void travel(Vec3 vec) {
-        this.handleWaterTravel(vec);
     }
 
     static class FlySwimMoveController extends SwimWalkMoveController {

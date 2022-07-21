@@ -13,6 +13,38 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ItemFertilizer extends Item {
 
+    public static final IFertilizerOnUse formularA = ((stack, world, tile, player) -> {
+        tile.applyGrowthFertilizer(0.4f);
+        return true;
+    });
+    public static final IFertilizerOnUse formularB = ((stack, world, tile, player) -> {
+        tile.applyGrowthFertilizer(1);
+        return true;
+    });
+    public static final IFertilizerOnUse formularC = ((stack, world, tile, player) -> {
+        tile.applyGrowthFertilizer(2);
+        return true;
+    });
+    public static final IFertilizerOnUse greenifier = ((stack, world, tile, player) -> {
+        tile.applyLevelFertilizer(0.2f);
+        return true;
+    });
+    public static final IFertilizerOnUse greenifierPlus = ((stack, world, tile, player) -> {
+        tile.applyLevelFertilizer(0.5f);
+        return true;
+    });
+    public static final IFertilizerOnUse giantizer = ((stack, world, tile, player) -> {
+        tile.applySizeFertilizer(true);
+        return true;
+    });
+    public static final IFertilizerOnUse minimizer = ((stack, world, tile, player) -> {
+        tile.applySizeFertilizer(false);
+        return true;
+    });
+    public static final IFertilizerOnUse wettable = ((stack, world, tile, player) -> {
+        tile.applyHealth(50);
+        return true;
+    });
     private final IFertilizerOnUse use;
 
     public ItemFertilizer(IFertilizerOnUse use, Properties properties) {
@@ -49,37 +81,4 @@ public class ItemFertilizer extends Item {
         boolean useItemOnFarmland(ItemStack stack, Level world, FarmBlockEntity tile, Player player);
 
     }
-
-    public static final IFertilizerOnUse formularA = ((stack, world, tile, player) -> {
-        tile.applyGrowthFertilizer(0.4f);
-        return true;
-    });
-    public static final IFertilizerOnUse formularB = ((stack, world, tile, player) -> {
-        tile.applyGrowthFertilizer(1);
-        return true;
-    });
-    public static final IFertilizerOnUse formularC = ((stack, world, tile, player) -> {
-        tile.applyGrowthFertilizer(2);
-        return true;
-    });
-    public static final IFertilizerOnUse greenifier = ((stack, world, tile, player) -> {
-        tile.applyLevelFertilizer(0.2f);
-        return true;
-    });
-    public static final IFertilizerOnUse greenifierPlus = ((stack, world, tile, player) -> {
-        tile.applyLevelFertilizer(0.5f);
-        return true;
-    });
-    public static final IFertilizerOnUse giantizer = ((stack, world, tile, player) -> {
-        tile.applySizeFertilizer(true);
-        return true;
-    });
-    public static final IFertilizerOnUse minimizer = ((stack, world, tile, player) -> {
-        tile.applySizeFertilizer(false);
-        return true;
-    });
-    public static final IFertilizerOnUse wettable = ((stack, world, tile, player) -> {
-        tile.applyHealth(50);
-        return true;
-    });
 }

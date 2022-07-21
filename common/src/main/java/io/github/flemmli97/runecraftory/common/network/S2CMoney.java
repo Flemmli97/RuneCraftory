@@ -22,16 +22,6 @@ public class S2CMoney implements Packet {
         this.money = data.getMoney();
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.money);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CMoney read(FriendlyByteBuf buf) {
         return new S2CMoney(buf.readInt());
     }
@@ -41,5 +31,15 @@ public class S2CMoney implements Packet {
         if (player == null)
             return;
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.setMoney(player, pkt.money));
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(this.money);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

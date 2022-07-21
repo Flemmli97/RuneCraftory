@@ -24,10 +24,6 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         configs.put(MobConfigSpec.spec.getLeft(), new ConfigHolder<>(MobConfigSpec.spec.getRight(), ConfigHolder::loadMobs));
     }
 
-    public void reloadConfig() {
-        this.loader.accept(this.configSpec);
-    }
-
     public static void loadGeneral(GeneralConfigSpec spec) {
         GeneralConfig.disableDefence = spec.disableDefence.get();
         GeneralConfig.gateSpawning = spec.gateSpawning.get();
@@ -111,5 +107,9 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         for (Map.Entry<ResourceLocation, EntityPropertySpecs> e : spec.mobSpecs.entrySet()) {
             MobConfig.propertiesMap.put(e.getKey(), EntityPropertySpecs.ofSpec(e.getValue()));
         }
+    }
+
+    public void reloadConfig() {
+        this.loader.accept(this.configSpec);
     }
 }

@@ -33,6 +33,21 @@ public class BossSpawnerBlockEntity extends BlockEntity {
         super(ModBlocks.bossSpawnerTile.get(), blockPos, blockState);
     }
 
+    public static void tick(Level level, BlockPos blockPos, BlockState blockState, BossSpawnerBlockEntity blockEntity) {
+        if (level.hasNearbyAlivePlayer(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5, 16)) {
+            boolean flag = blockEntity.lastUpdateDay == -1 || WorldUtils.canUpdateDaily(level) || Math.abs(blockEntity.lastUpdateDay - WorldUtils.day(level)) >= 1;
+            /*if(this.structure!=null)
+                for(EntityPlayer player : this.world.playerEntities)
+                    if(this.base.isInside(player.getPosition()))
+                    {
+
+                    }*/
+            if (blockEntity.savedEntity != null && flag) {
+                blockEntity.spawnEntity();
+            }
+        }
+    }
+
     public StructureStart getStructure() {
         if (this.structureID != null && this.level instanceof ServerLevel serverLevel)
             this.structure = serverLevel.structureFeatureManager().getStructureAt(this.getBlockPos(), PlatformUtils.INSTANCE.registry(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY).getFromId(this.structureID));
@@ -61,21 +76,6 @@ public class BossSpawnerBlockEntity extends BlockEntity {
 
     public void setEntity(ResourceLocation entity) {
         this.savedEntity = PlatformUtils.INSTANCE.entities().getFromId(entity);
-    }
-
-    public static void tick(Level level, BlockPos blockPos, BlockState blockState, BossSpawnerBlockEntity blockEntity) {
-        if (level.hasNearbyAlivePlayer(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5, 16)) {
-            boolean flag = blockEntity.lastUpdateDay == -1 || WorldUtils.canUpdateDaily(level) || Math.abs(blockEntity.lastUpdateDay - WorldUtils.day(level)) >= 1;
-            /*if(this.structure!=null)
-                for(EntityPlayer player : this.world.playerEntities)
-                    if(this.base.isInside(player.getPosition()))
-                    {
-
-                    }*/
-            if (blockEntity.savedEntity != null && flag) {
-                blockEntity.spawnEntity();
-            }
-        }
     }
 
     @Override

@@ -52,13 +52,16 @@ public class EntitySpore extends EntityDamageCloud {
     }
 
     @Override
-    protected boolean canHit(LivingEntity entity) {
-        return super.canHit(entity) && (this.pred == null || this.pred.test(entity));
+    public void tick() {
+        super.tick();
+        if (!this.level.isClientSide && this.livingTicks == 1) {
+            this.level.broadcastEntityEvent(this, (byte) 64);
+        }
     }
 
     @Override
-    protected AABB damageBoundingBox() {
-        return super.damageBoundingBox().inflate(0, 0.1, 0);
+    protected boolean canHit(LivingEntity entity) {
+        return super.canHit(entity) && (this.pred == null || this.pred.test(entity));
     }
 
     @Override
@@ -67,11 +70,16 @@ public class EntitySpore extends EntityDamageCloud {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-        if (!this.level.isClientSide && this.livingTicks == 1) {
-            this.level.broadcastEntityEvent(this, (byte) 64);
-        }
+    protected AABB damageBoundingBox() {
+        return super.damageBoundingBox().inflate(0, 0.1, 0);
+    }
+
+    @Override
+    public Entity getOwner() {
+        Entity owner = super.getOwner();
+        if (owner instanceof BaseMonster)
+            this.pred = ((BaseMonster) owner).hitPred;
+        return owner;
     }
 
     @Override
@@ -83,13 +91,5 @@ public class EntitySpore extends EntityDamageCloud {
             }
         } else
             super.handleEntityEvent(id);
-    }
-
-    @Override
-    public Entity getOwner() {
-        Entity owner = super.getOwner();
-        if (owner instanceof BaseMonster)
-            this.pred = ((BaseMonster) owner).hitPred;
-        return owner;
     }
 }

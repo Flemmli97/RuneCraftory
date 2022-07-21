@@ -26,13 +26,11 @@ import java.util.function.Predicate;
 
 public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
 
-    public final AnimatedRangedGoal<EntityFairy> attack = new AnimatedRangedGoal<>(this, 8, e -> true);
     public static final AnimatedAction light = new AnimatedAction(15, 6, "light");
     public static final AnimatedAction wind = new AnimatedAction(15, 10, "wind");
     public static final AnimatedAction heal = new AnimatedAction(15, 6, "heal", "light");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{light, wind, heal};
-
+    public final AnimatedRangedGoal<EntityFairy> attack = new AnimatedRangedGoal<>(this, 8, e -> true);
     private final AnimationHandler<EntityFairy> animationHandler = new AnimationHandler<>(this, anims);
 
     private final Predicate<LivingEntity> healingPredicate = e -> {
@@ -59,6 +57,12 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     }
 
     @Override
+    protected void applyAttributes() {
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
+        super.applyAttributes();
+    }
+
+    @Override
     protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
         return new NearestTargetHorizontal<>(this, Player.class, 5, true, true, player -> !this.isTamed());
     }
@@ -69,24 +73,10 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     }
 
     @Override
-    protected void applyAttributes() {
-        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        super.applyAttributes();
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return type != AnimationType.MELEE ? 1f : 0;
-    }
-
-    @Override
-    public AnimationHandler<EntityFairy> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 0.8;
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        if (type == AnimationType.RANGED)
+            return anim.getID().equals(light.getID()) || anim.getID().equals(wind.getID());
+        return false;
     }
 
     @Override
@@ -95,10 +85,8 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED)
-            return anim.getID().equals(light.getID()) || anim.getID().equals(wind.getID());
-        return false;
+    public double maxAttackRange(AnimatedAction anim) {
+        return 0.8;
     }
 
     @Override
@@ -129,6 +117,16 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
             else
                 this.getAnimationHandler().setAnimation(wind);
         }
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return type != AnimationType.MELEE ? 1f : 0;
+    }
+
+    @Override
+    public AnimationHandler<EntityFairy> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override

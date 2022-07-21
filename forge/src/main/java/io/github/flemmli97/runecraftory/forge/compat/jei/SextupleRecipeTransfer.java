@@ -20,16 +20,6 @@ public record SextupleRecipeTransfer(
     }
 
     @Override
-    public Class<SextupleRecipe> getRecipeClass() {
-        return SextupleRecipe.class;
-    }
-
-    @Override
-    public ResourceLocation getRecipeCategoryUid() {
-        return this.category;
-    }
-
-    @Override
     public RecipeType<SextupleRecipe> getRecipeType() {
         return new RecipeType<>(this.category, SextupleRecipe.class);
     }
@@ -53,5 +43,15 @@ public record SextupleRecipeTransfer(
         for (int i = 1; i < 37; i++)
             slots.add(containerCrafting.getSlot(i));
         return slots;
+    }
+
+    @Override
+    public Class<SextupleRecipe> getRecipeClass() {
+        return SextupleRecipe.class;
+    }
+
+    @Override
+    public ResourceLocation getRecipeCategoryUid() {
+        return this.category;
     }
 }

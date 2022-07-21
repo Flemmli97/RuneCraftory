@@ -24,6 +24,20 @@ public class CropProperties {
 
     private transient List<Component> translationTexts;
 
+    public static CropProperties fromPacket(FriendlyByteBuf buffer) {
+        CropProperties prop = new CropProperties();
+        prop.growth = buffer.readInt();
+        prop.maxDrops = buffer.readInt();
+        prop.regrowable = buffer.readBoolean();
+        int size = buffer.readInt();
+        for (int i = 0; i < size; i++)
+            prop.bestSeason.add(buffer.readEnum(EnumSeason.class));
+        size = buffer.readInt();
+        for (int i = 0; i < size; i++)
+            prop.badSeason.add(buffer.readEnum(EnumSeason.class));
+        return prop;
+    }
+
     public Set<EnumSeason> bestSeasons() {
         return this.bestSeason;
     }
@@ -60,20 +74,6 @@ public class CropProperties {
         this.bestSeason.forEach(buffer::writeEnum);
         buffer.writeInt(this.badSeason.size());
         this.badSeason.forEach(buffer::writeEnum);
-    }
-
-    public static CropProperties fromPacket(FriendlyByteBuf buffer) {
-        CropProperties prop = new CropProperties();
-        prop.growth = buffer.readInt();
-        prop.maxDrops = buffer.readInt();
-        prop.regrowable = buffer.readBoolean();
-        int size = buffer.readInt();
-        for (int i = 0; i < size; i++)
-            prop.bestSeason.add(buffer.readEnum(EnumSeason.class));
-        size = buffer.readInt();
-        for (int i = 0; i < size; i++)
-            prop.badSeason.add(buffer.readEnum(EnumSeason.class));
-        return prop;
     }
 
     public List<Component> texts() {

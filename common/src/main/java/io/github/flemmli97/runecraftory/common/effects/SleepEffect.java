@@ -15,9 +15,8 @@ public class SleepEffect extends MobEffect {
         super(MobEffectCategory.HARMFUL, 0);
     }
 
-    @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
-        return true;
+    private static void sendSleepPacket(LivingEntity entity, boolean flag) {
+        Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.SLEEP, flag), entity);
     }
 
     @Override
@@ -28,10 +27,8 @@ public class SleepEffect extends MobEffect {
     }
 
     @Override
-    public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        entity.setSilent(true);
-        sendSleepPacket(entity, true);
-        super.addAttributeModifiers(entity, attributeMap, amplifier);
+    public boolean isDurationEffectTick(int duration, int amplifier) {
+        return true;
     }
 
     @Override
@@ -41,7 +38,10 @@ public class SleepEffect extends MobEffect {
         super.removeAttributeModifiers(entity, attributeMap, amplifier);
     }
 
-    private static void sendSleepPacket(LivingEntity entity, boolean flag) {
-        Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.SLEEP, flag), entity);
+    @Override
+    public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
+        entity.setSilent(true);
+        sendSleepPacket(entity, true);
+        super.addAttributeModifiers(entity, attributeMap, amplifier);
     }
 }

@@ -48,26 +48,6 @@ public class EntityThiccLightningBolt extends EntityProjectile {
     }
 
     @Override
-    protected boolean canHit(Entity entity) {
-        return super.canHit(entity) && (!(entity instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) entity));
-    }
-
-    @Override
-    protected boolean entityRayTraceHit(EntityHitResult result) {
-        return CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(2).element(EnumElement.WIND).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()), null);//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {;
-    }
-
-    @Override
-    protected void onBlockHit(BlockHitResult blockRayTraceResult) {
-        this.remove(RemovalReason.KILLED);
-    }
-
-    @Override
-    protected float getGravityVelocity() {
-        return 0;
-    }
-
-    @Override
     public void tick() {
         super.tick();
         if (this.level.isClientSide) {
@@ -78,6 +58,26 @@ public class EntityThiccLightningBolt extends EntityProjectile {
             this.checkedEntities.clear();
             this.attackedEntities.clear();
         }
+    }
+
+    @Override
+    protected boolean canHit(Entity entity) {
+        return super.canHit(entity) && (!(entity instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) entity));
+    }
+
+    @Override
+    protected float getGravityVelocity() {
+        return 0;
+    }
+
+    @Override
+    protected boolean entityRayTraceHit(EntityHitResult result) {
+        return CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(2).element(EnumElement.WIND).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()), null);//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {;
+    }
+
+    @Override
+    protected void onBlockHit(BlockHitResult blockRayTraceResult) {
+        this.remove(RemovalReason.KILLED);
     }
 
     @Override

@@ -28,14 +28,12 @@ import java.util.UUID;
 
 public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnimated {
 
+    private static final AnimatedAction[] anims = new AnimatedAction[0];
     private final List<LivingEntity> caughtEntities = new ArrayList<>();
-
+    private final AnimationHandler<EntityMarionettaTrap> animationHandler = new AnimationHandler<>(this, anims);
     private int tickLeft = 100;
     private LivingEntity shooter;
     private UUID shooterUUID;
-
-    private static final AnimatedAction[] anims = new AnimatedAction[0];
-    private final AnimationHandler<EntityMarionettaTrap> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntityMarionettaTrap(EntityType<? extends EntityMarionettaTrap> entityType, Level level) {
         super(entityType, level);
@@ -48,16 +46,16 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
         this.setPos(shooter.getX(), shooter.getEyeY(), shooter.getZ());
     }
 
+    public static double horizontalMag(Vec3 vec) {
+        return vec.x * vec.x + vec.z * vec.z;
+    }
+
     public void addCaughtEntity(LivingEntity entity) {
         this.caughtEntities.add(entity);
     }
 
     @Override
     protected void defineSynchedData() {
-    }
-
-    public int getTickLeft() {
-        return this.tickLeft;
     }
 
     @Override
@@ -96,8 +94,26 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
         }
     }
 
-    public static double horizontalMag(Vec3 vec) {
-        return vec.x * vec.x + vec.z * vec.z;
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+    }
+
+    @Override
+    public boolean canBeCollidedWith() {
+        return true;
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return new ClientboundAddEntityPacket(this);
+    }
+
+    public int getTickLeft() {
+        return this.tickLeft;
     }
 
     private float updateRotation(float prev, float current) {
@@ -113,24 +129,6 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
-    }
-
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        return new ClientboundAddEntityPacket(this);
-    }
-
-    @Override
-    public boolean canBeCollidedWith() {
-        return true;
-    }
-
-    @Override
     public UUID getOwnerUUID() {
         return this.shooterUUID;
     }
@@ -138,14 +136,12 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
     @Override
     @Nullable
     public LivingEntity getOwner() {
-        if (this.shooter != null && !this.shooter.isRemoved()) {
-            return this.shooter;
-        } else {
+        if (this.shooter == null || this.shooter.isRemoved()) {
             UUID uuid = this.getOwnerUUID();
             if (uuid != null)
                 this.shooter = EntityUtil.findFromUUID(LivingEntity.class, this.level, uuid);
-            return this.shooter;
         }
+        return this.shooter;
     }
 
     @Override

@@ -12,18 +12,6 @@ public record S2CFoodPkt(ItemStack stack) implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_food");
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeBoolean(this.stack != null);
-        if (this.stack != null)
-            buf.writeItem(this.stack);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CFoodPkt read(FriendlyByteBuf buf) {
         if (buf.readBoolean())
             return new S2CFoodPkt(buf.readItem());
@@ -40,5 +28,17 @@ public record S2CFoodPkt(ItemStack stack) implements Packet {
             else
                 data.applyFoodEffect(player, pkt.stack);
         });
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeBoolean(this.stack != null);
+        if (this.stack != null)
+            buf.writeItem(this.stack);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

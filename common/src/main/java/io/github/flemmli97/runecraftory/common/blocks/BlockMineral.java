@@ -153,29 +153,16 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return switch (state.getValue(FACING)) {
-            case WEST -> west;
-            case EAST -> east;
-            case SOUTH -> south;
-            default -> north;
-        };
-    }
-
-    @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         FluidState fluidstate = ctx.getLevel().getFluidState(ctx.getClickedPos());
         return this.defaultBlockState().setValue(FACING, ctx.getPlayer() != null ? ctx.getPlayer().getDirection().getOpposite() : Direction.NORTH).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot) {
-        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
-    }
-
-    @Override
-    public BlockState mirror(BlockState state, Mirror mirror) {
-        return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        super.playerWillDestroy(level, pos, state, player);
+        if (!level.isClientSide)
+            level.levelEvent(null, 2001, pos, Block.getId(state));
     }
 
     @Override
@@ -194,13 +181,48 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
     }
 
     @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot) {
+        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
+    }
+
+    @Override
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
+        Entity entity = builder.getOptionalParameter(LootContextParams.THIS_ENTITY);
+        if (entity instanceof Player player) {
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                float addChance = data.getSkillLevel(EnumSkills.MINING)[0] * 0.1f;
+                if (player.getMainHandItem().getItem() instanceof ItemToolHammer item) {
+                    addChance += item.tier.getTierLevel() * 0.75;
+                }
+                builder.withLuck(addChance + EntityUtils.playerLuck(player));
+            });
+        }
+        return super.getDrops(state, builder);
+    }
+
+    @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         return level.getBlockState(pos.below()).isFaceSturdy(level, pos, Direction.UP, SupportType.FULL);
     }
 
     @Override
-    public FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(FACING)) {
+            case WEST -> west;
+            case EAST -> east;
+            case SOUTH -> south;
+            default -> north;
+        };
     }
 
     @Override
@@ -228,13 +250,6 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
         return false;
     }
 
-    @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        super.playerWillDestroy(level, pos, state, player);
-        if (!level.isClientSide)
-            level.levelEvent(null, 2001, pos, Block.getId(state));
-    }
-
     public BlockState getBrokenState(BlockState state) {
         BlockState blockState = ModBlocks.brokenMineralMap.get(this.tier).get().defaultBlockState();
         if (blockState.hasProperty(FACING))
@@ -242,20 +257,5 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
         if (blockState.hasProperty(WATERLOGGED))
             blockState.setValue(WATERLOGGED, state.getValue(WATERLOGGED));
         return blockState;
-    }
-
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        Entity entity = builder.getOptionalParameter(LootContextParams.THIS_ENTITY);
-        if (entity instanceof Player player) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                float addChance = data.getSkillLevel(EnumSkills.MINING)[0] * 0.1f;
-                if (player.getMainHandItem().getItem() instanceof ItemToolHammer item) {
-                    addChance += item.tier.getTierLevel() * 0.75;
-                }
-                builder.withLuck(addChance + EntityUtils.playerLuck(player));
-            });
-        }
-        return super.getDrops(state, builder);
     }
 }

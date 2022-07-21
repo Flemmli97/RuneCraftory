@@ -38,23 +38,6 @@ public class S2CSkillLevelPkt implements Packet {
         this.vit = cap.getVit();
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeEnum(this.skill);
-        buf.writeInt(this.level[0]);
-        buf.writeInt(this.level[1]);
-        buf.writeInt(this.rp);
-        buf.writeFloat(this.rpMax);
-        buf.writeFloat(this.str);
-        buf.writeFloat(this.intel);
-        buf.writeFloat(this.vit);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CSkillLevelPkt read(FriendlyByteBuf buf) {
         return new S2CSkillLevelPkt(buf.readEnum(EnumSkills.class), new int[]{buf.readInt(), buf.readInt()}, buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
@@ -71,5 +54,22 @@ public class S2CSkillLevelPkt implements Packet {
             data.setIntel(player, pkt.intel);
             data.setVit(player, pkt.vit);
         });
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeEnum(this.skill);
+        buf.writeInt(this.level[0]);
+        buf.writeInt(this.level[1]);
+        buf.writeInt(this.rp);
+        buf.writeFloat(this.rpMax);
+        buf.writeFloat(this.str);
+        buf.writeFloat(this.intel);
+        buf.writeFloat(this.vit);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

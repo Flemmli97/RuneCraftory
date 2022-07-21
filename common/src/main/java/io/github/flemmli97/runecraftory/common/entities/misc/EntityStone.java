@@ -17,8 +17,6 @@ import java.util.function.Predicate;
 
 public class EntityStone extends EntityProjectile {
 
-    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
-
     public EntityStone(EntityType<? extends EntityProjectile> type, Level world) {
         super(type, world);
     }
@@ -27,7 +25,7 @@ public class EntityStone extends EntityProjectile {
         super(ModEntities.stone.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
-    }
+    }    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
 
     @Override
     public int livingTickMax() {
@@ -40,15 +38,15 @@ public class EntityStone extends EntityProjectile {
     }
 
     @Override
+    protected float getGravityVelocity() {
+        return 0.01f;
+    }
+
+    @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
         boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * 0.8f, null);
         this.remove(RemovalReason.KILLED);
         return att;
-    }
-
-    @Override
-    protected float getGravityVelocity() {
-        return 0.01f;
     }
 
     @Override
@@ -63,4 +61,8 @@ public class EntityStone extends EntityProjectile {
             this.pred = ((BaseMonster) living).hitPred;
         return living;
     }
+
+
+
+
 }

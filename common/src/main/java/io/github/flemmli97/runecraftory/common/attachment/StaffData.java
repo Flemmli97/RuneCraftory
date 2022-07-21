@@ -13,20 +13,20 @@ public class StaffData {
         return this.tier1;
     }
 
-    public Spell getTier2Spell() {
-        return this.tier2;
-    }
-
-    public Spell getTier3Spell() {
-        return this.tier3;
-    }
-
     public void setTier1Spell(Spell spell) {
         this.tier1 = spell;
     }
 
+    public Spell getTier2Spell() {
+        return this.tier2;
+    }
+
     public void setTier2Spell(Spell spell) {
         this.tier2 = spell;
+    }
+
+    public Spell getTier3Spell() {
+        return this.tier3;
     }
 
     public void setTier3Spell(Spell spell) {

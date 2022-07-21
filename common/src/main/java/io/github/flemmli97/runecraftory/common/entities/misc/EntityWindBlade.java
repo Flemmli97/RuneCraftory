@@ -58,43 +58,6 @@ public class EntityWindBlade extends EntityProjectile {
     }
 
     @Override
-    protected boolean canHit(Entity entity) {
-        return super.canHit(entity) && (this.pred == null || (entity instanceof LivingEntity && this.pred.test((LivingEntity) entity)));
-    }
-
-    @Override
-    protected boolean entityRayTraceHit(EntityHitResult result) {
-        if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).element(EnumElement.WIND).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
-            if (!this.isPiercing())
-                this.remove(RemovalReason.KILLED);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected void onBlockHit(BlockHitResult blockRayTraceResult) {
-        if (!this.isPiercing())
-            this.remove(RemovalReason.KILLED);
-        else if (--this.collisionCooldown <= 0) {
-            Vec3 newMot;
-            Vec3 mot = this.getDeltaMovement();
-            switch (blockRayTraceResult.getDirection()) {
-                case DOWN, UP -> newMot = new Vec3(mot.x(), -mot.y(), mot.z());
-                case WEST, EAST -> newMot = new Vec3(-mot.x(), mot.y(), mot.z());
-                default -> newMot = new Vec3(mot.x(), mot.y(), -mot.z());
-            }
-            this.setDeltaMovement(newMot);
-            this.collisionCooldown = 2;
-        }
-    }
-
-    @Override
-    protected float getGravityVelocity() {
-        return 0;
-    }
-
-    @Override
     public void tick() {
         super.tick();
         if (!this.level.isClientSide) {
@@ -125,15 +88,40 @@ public class EntityWindBlade extends EntityProjectile {
     }
 
     @Override
-    public Entity getOwner() {
-        Entity living = super.getOwner();
-        if (living instanceof BaseMonster)
-            this.pred = ((BaseMonster) living).hitPred;
-        return living;
+    protected boolean canHit(Entity entity) {
+        return super.canHit(entity) && (this.pred == null || (entity instanceof LivingEntity && this.pred.test((LivingEntity) entity)));
     }
 
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
+    @Override
+    protected float getGravityVelocity() {
+        return 0;
+    }
+
+    @Override
+    protected boolean entityRayTraceHit(EntityHitResult result) {
+        if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).element(EnumElement.WIND).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
+            if (!this.isPiercing())
+                this.remove(RemovalReason.KILLED);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onBlockHit(BlockHitResult blockRayTraceResult) {
+        if (!this.isPiercing())
+            this.remove(RemovalReason.KILLED);
+        else if (--this.collisionCooldown <= 0) {
+            Vec3 newMot;
+            Vec3 mot = this.getDeltaMovement();
+            switch (blockRayTraceResult.getDirection()) {
+                case DOWN, UP -> newMot = new Vec3(mot.x(), -mot.y(), mot.z());
+                case WEST, EAST -> newMot = new Vec3(-mot.x(), mot.y(), mot.z());
+                default -> newMot = new Vec3(mot.x(), mot.y(), -mot.z());
+            }
+            this.setDeltaMovement(newMot);
+            this.collisionCooldown = 2;
+        }
     }
 
     @Override
@@ -146,5 +134,17 @@ public class EntityWindBlade extends EntityProjectile {
     protected void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putFloat("DamageMultiplier", this.damageMultiplier);
+    }
+
+    @Override
+    public Entity getOwner() {
+        Entity living = super.getOwner();
+        if (living instanceof BaseMonster)
+            this.pred = ((BaseMonster) living).hitPred;
+        return living;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 }

@@ -25,8 +25,8 @@ public class RenderWaterLaser extends RenderBeam<EntityWaterLaser> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(EntityWaterLaser entity) {
-        return tex;
+    public float widthFunc(EntityWaterLaser entity) {
+        return (float) (this.radius * (Math.sin(Math.sqrt(entity.tickCount / (float) entity.livingTickMax()) * Math.PI))) + 0.2f;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class RenderWaterLaser extends RenderBeam<EntityWaterLaser> {
     }
 
     @Override
-    public float widthFunc(EntityWaterLaser entity) {
-        return (float) (this.radius * (Math.sin(Math.sqrt(entity.tickCount / (float) entity.livingTickMax()) * Math.PI))) + 0.2f;
+    public ResourceLocation getTextureLocation(EntityWaterLaser entity) {
+        return tex;
     }
 }

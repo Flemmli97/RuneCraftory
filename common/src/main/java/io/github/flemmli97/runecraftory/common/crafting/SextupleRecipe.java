@@ -85,9 +85,18 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
     }
 
     @Override
+    public abstract ItemStack getToastSymbol();
+
+    @Override
     public ResourceLocation getId() {
         return this.id;
     }
+
+    @Override
+    public abstract RecipeSerializer<?> getSerializer();
+
+    @Override
+    public abstract RecipeType<?> getType();
 
     public int getCraftingLevel() {
         return this.craftingLevel;
@@ -98,20 +107,24 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
     }
 
     @Override
-    public abstract RecipeSerializer<?> getSerializer();
-
-    @Override
-    public abstract ItemStack getToastSymbol();
-
-    @Override
-    public abstract RecipeType<?> getType();
-
-    @Override
     public String toString() {
         return String.format("Result: %s; Required Level: %d; ID: %s", this.recipeOutput, this.craftingLevel, this.id);
     }
 
     public static abstract class Serializer<T extends SextupleRecipe> extends CustomRegistryEntry<Serializer<T>> implements RecipeSerializer<T> {
+
+        private static NonNullList<Ingredient> readIngredients(JsonArray ingredientArray) {
+            NonNullList<Ingredient> nonnulllist = NonNullList.create();
+
+            for (int i = 0; i < ingredientArray.size(); ++i) {
+                Ingredient ingredient = Ingredient.fromJson(ingredientArray.get(i));
+                if (!ingredient.isEmpty()) {
+                    nonnulllist.add(ingredient);
+                }
+            }
+
+            return nonnulllist;
+        }
 
         @Override
         public T fromJson(ResourceLocation res, JsonObject obj) {
@@ -129,19 +142,6 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
             }
         }
 
-        private static NonNullList<Ingredient> readIngredients(JsonArray ingredientArray) {
-            NonNullList<Ingredient> nonnulllist = NonNullList.create();
-
-            for (int i = 0; i < ingredientArray.size(); ++i) {
-                Ingredient ingredient = Ingredient.fromJson(ingredientArray.get(i));
-                if (!ingredient.isEmpty()) {
-                    nonnulllist.add(ingredient);
-                }
-            }
-
-            return nonnulllist;
-        }
-
         @Override
         public T fromNetwork(ResourceLocation res, FriendlyByteBuf buffer) {
             int level = buffer.readInt();
@@ -156,8 +156,6 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
             return this.get(res, s, level, cost, itemstack, nonnulllist);
         }
 
-        public abstract T get(ResourceLocation id, String group, int level, int cost, ItemStack result, NonNullList<Ingredient> ingredients);
-
         @Override
         public void toNetwork(FriendlyByteBuf buffer, T recipe) {
             buffer.writeInt(recipe.getCraftingLevel());
@@ -170,5 +168,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
             }
             buffer.writeItem(recipe.getResultItem());
         }
+
+        public abstract T get(ResourceLocation id, String group, int level, int cost, ItemStack result, NonNullList<Ingredient> ingredients);
     }
 }

@@ -26,9 +26,6 @@ public class EntityProperties {
 
     private final List<String> confAttributes;
     private final List<String> confGains;
-
-    private Map<Attribute, Double> baseValues;
-    private Map<Attribute, Double> levelGains;
     private final int xp;
     private final int money;
     private final float taming;
@@ -36,6 +33,8 @@ public class EntityProperties {
     private final Map<SimpleItemStackWrapper, Integer> daily;
     private final boolean ridable;
     private final boolean flying;
+    private Map<Attribute, Double> baseValues;
+    private Map<Attribute, Double> levelGains;
 
     private EntityProperties(List<String> baseValues, List<String> gains, int xp, int money, float tamingChance, ItemTagWrapper tamingItem, Map<SimpleItemStackWrapper, Integer> dailyDrops, boolean ridable, boolean flying) {
         this.confAttributes = baseValues;
@@ -115,11 +114,11 @@ public class EntityProperties {
 
         private final Set<String> baseValues = new LinkedHashSet<>();
         private final Set<String> gains = new LinkedHashSet<>();
+        private final Map<SimpleItemStackWrapper, Integer> daily = new LinkedHashMap<>();
         private int xp;
         private int money;
         private float taming;
         private ItemTagWrapper tamingItem = new ItemTagWrapper("", 1);
-        private final Map<SimpleItemStackWrapper, Integer> daily = new LinkedHashMap<>();
         private boolean ridable;
         private boolean flying;
 

@@ -23,18 +23,6 @@ public enum EnumElement {
         this.particleColor = particleColor;
     }
 
-    public String getTranslation() {
-        return this.translation;
-    }
-
-    public ChatFormatting getColor() {
-        return this.color;
-    }
-
-    public int getParticleColor() {
-        return this.particleColor;
-    }
-
     public static EnumElement opposing(EnumElement element) {
         switch (element) {
             case DARK -> {
@@ -62,5 +50,17 @@ public enum EnumElement {
                 return EnumElement.NONE;
             }
         }
+    }
+
+    public String getTranslation() {
+        return this.translation;
+    }
+
+    public ChatFormatting getColor() {
+        return this.color;
+    }
+
+    public int getParticleColor() {
+        return this.particleColor;
     }
 }

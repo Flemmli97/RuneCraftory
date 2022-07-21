@@ -16,18 +16,6 @@ public record S2CRecipe(Collection<ResourceLocation> recipes,
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_recipe");
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeBoolean(this.remove);
-        buf.writeInt(this.recipes.size());
-        this.recipes.forEach(buf::writeResourceLocation);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CRecipe read(FriendlyByteBuf buf) {
         boolean remove = buf.readBoolean();
         Set<ResourceLocation> recs = new HashSet<>();
@@ -49,5 +37,17 @@ public record S2CRecipe(Collection<ResourceLocation> recipes,
                 ClientHandlers.recipeToast(pkt.recipes);
             }
         });
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeBoolean(this.remove);
+        buf.writeInt(this.recipes.size());
+        this.recipes.forEach(buf::writeResourceLocation);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

@@ -26,8 +26,8 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public class BlockShippingBin extends Block {
 
-    private static final Component name = new TranslatableComponent("container.shipping_bin");
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    private static final Component name = new TranslatableComponent("container.shipping_bin");
 
     public BlockShippingBin(BlockBehaviour.Properties props) {
         super(props);
@@ -37,16 +37,6 @@ public class BlockShippingBin extends Block {
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         return this.defaultBlockState().setValue(FACING, ctx.getPlayer() != null ? ctx.getPlayer().getDirection().getOpposite() : Direction.NORTH);
-    }
-
-    @Override
-    public BlockState rotate(BlockState state, Rotation rot) {
-        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
-    }
-
-    @Override
-    public BlockState mirror(BlockState state, Mirror mirror) {
-        return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
     }
 
     @Override
@@ -64,5 +54,15 @@ public class BlockShippingBin extends Block {
             return InteractionResult.SUCCESS;
         }
         return super.use(state, level, pos, player, hand, result);
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot) {
+        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
     }
 }

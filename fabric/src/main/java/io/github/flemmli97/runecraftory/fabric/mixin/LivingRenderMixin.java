@@ -15,7 +15,7 @@ public class LivingRenderMixin<T extends LivingEntity> {
 
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
     private void renderCheck(T entity, float entityYaw, float partialTicks, PoseStack matrixStack, MultiBufferSource buffer, int packedLight, CallbackInfo info) {
-        if(ClientCalls.invis(entity))
+        if (ClientCalls.invis(entity))
             info.cancel();
     }
 }

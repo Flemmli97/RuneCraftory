@@ -153,6 +153,21 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
     }
 
     @Override
+    public void setLevel(Level level) {
+        super.setLevel(level);
+        if (this.level instanceof ServerLevel serverLevel) {
+            WorldHandler.get(serverLevel.getServer()).addToTracker(this);
+            if (this.check && Math.abs(this.lastUpdateDay - WorldUtils.day(serverLevel)) > 0) {
+                serverLevel.getServer().tell(new TickTask(1, () -> this.update(serverLevel)));
+            } else {
+                this.lastUpdateDay = WorldUtils.day(serverLevel);
+                this.check = false;
+                serverLevel.getServer().tell(new TickTask(1, this::setChanged));
+            }
+        }
+    }
+
+    @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
         this.health = nbt.getInt("Health");
@@ -173,21 +188,6 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
         nbt.putFloat("Age", this.age);
         nbt.putBoolean("Giant", this.growGiant);
         nbt.putInt("LastUpdate", this.lastUpdateDay);
-    }
-
-    @Override
-    public void setLevel(Level level) {
-        super.setLevel(level);
-        if (this.level instanceof ServerLevel serverLevel) {
-            WorldHandler.get(serverLevel.getServer()).addToTracker(this);
-            if (this.check && Math.abs(this.lastUpdateDay - WorldUtils.day(serverLevel)) > 0) {
-                serverLevel.getServer().tell(new TickTask(1, () -> this.update(serverLevel)));
-            } else {
-                this.lastUpdateDay = WorldUtils.day(serverLevel);
-                this.check = false;
-                serverLevel.getServer().tell(new TickTask(1, this::setChanged));
-            }
-        }
     }
 
     @Override

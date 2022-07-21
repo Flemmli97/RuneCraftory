@@ -49,16 +49,6 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
     }
 
     @Override
-    public ResourceLocation getUid() {
-        return this.id;
-    }
-
-    @Override
-    public Class<? extends T> getRecipeClass() {
-        return this.clss;
-    }
-
-    @Override
     public Component getTitle() {
         return this.title;
     }
@@ -71,6 +61,16 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
     @Override
     public IDrawable getIcon() {
         return this.icon;
+    }
+
+    @Override
+    public ResourceLocation getUid() {
+        return this.id;
+    }
+
+    @Override
+    public Class<? extends T> getRecipeClass() {
+        return this.clss;
     }
 
     @Override

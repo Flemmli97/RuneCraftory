@@ -41,11 +41,6 @@ public class EntityCards extends EntityProjectile {
     }
 
     @Override
-    protected boolean canHit(Entity e) {
-        return (!(e instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) e)) && super.canHit(e);
-    }
-
-    @Override
     public int livingTickMax() {
         return 60;
     }
@@ -54,6 +49,11 @@ public class EntityCards extends EntityProjectile {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(cardType, 0);
+    }
+
+    @Override
+    protected boolean canHit(Entity e) {
+        return (!(e instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) e)) && super.canHit(e);
     }
 
     @Override

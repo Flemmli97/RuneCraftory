@@ -25,14 +25,14 @@ public class BlockBossSpawner extends BaseEntityBlock {
         return new BossSpawnerBlockEntity(pos, state);
     }
 
-    @Override
-    public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.MODEL;
-    }
-
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> blockEntityType) {
         return level.isClientSide ? null : BaseEntityBlock.createTickerHelper(blockEntityType, ModBlocks.bossSpawnerTile.get(), BossSpawnerBlockEntity::tick);
+    }
+
+    @Override
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
     }
 }

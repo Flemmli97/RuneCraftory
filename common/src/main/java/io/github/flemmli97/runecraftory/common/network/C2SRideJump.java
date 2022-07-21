@@ -10,15 +10,6 @@ public class C2SRideJump implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "c2s_ride_jump");
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static C2SRideJump read(FriendlyByteBuf buf) {
         return new C2SRideJump();
     }
@@ -26,5 +17,14 @@ public class C2SRideJump implements Packet {
     public static void handle(C2SRideJump pkt, ServerPlayer sender) {
         if (sender != null && sender.isPassenger() && sender.getVehicle() instanceof BaseMonster)
             ((BaseMonster) sender.getVehicle()).setDoJumping(true);
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

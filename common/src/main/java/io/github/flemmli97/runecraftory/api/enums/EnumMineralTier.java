@@ -26,16 +26,16 @@ public enum EnumMineralTier implements StringRepresentable {
         this.name = name;
     }
 
-    @Override
-    public String getSerializedName() {
-        return this.name;
-    }
-
     public static EnumMineralTier randomNonElemental(Random rand) {
         return values()[rand.nextInt(8)];
     }
 
     public static boolean isElemental(EnumMineralTier tier) {
         return tier.ordinal() > 7;
+    }
+
+    @Override
+    public String getSerializedName() {
+        return this.name;
     }
 }

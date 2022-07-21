@@ -20,16 +20,6 @@ public class S2CDataPackSync implements Packet {
     public S2CDataPackSync() {
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        DataPackHandler.toPacket(buf);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CDataPackSync read(FriendlyByteBuf buf) {
         return new S2CDataPackSync(new FriendlyByteBuf(buf.copy()));
     }
@@ -39,5 +29,15 @@ public class S2CDataPackSync implements Packet {
         if (player == null)
             return;
         DataPackHandler.fromPacket(pkt.buffer);
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        DataPackHandler.toPacket(buf);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

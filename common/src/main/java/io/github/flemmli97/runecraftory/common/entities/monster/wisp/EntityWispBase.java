@@ -25,13 +25,11 @@ import net.minecraft.world.phys.Vec3;
 
 public abstract class EntityWispBase extends BaseMonster {
 
-    public final WispAttackGoal<EntityWispBase> attack = new WispAttackGoal<>(this, 36);
     public static final AnimatedAction attackFar = new AnimatedAction(15, 6, "attack");
     public static final AnimatedAction attackClose = new AnimatedAction(15, 10, "attack");
     public static final AnimatedAction vanish = new AnimatedAction(100, 50, "vanish");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{attackFar, attackClose, vanish};
-
+    public final WispAttackGoal<EntityWispBase> attack = new WispAttackGoal<>(this, 36);
     private boolean vanishNext;
 
     private final AnimationHandler<EntityWispBase> animationHandler = new AnimationHandler<>(this, anims)
@@ -54,6 +52,13 @@ public abstract class EntityWispBase extends BaseMonster {
     }
 
     @Override
+    protected void applyAttributes() {
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
+        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+        super.applyAttributes();
+    }
+
+    @Override
     protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
         return new NearestTargetNoLoS<>(this, Player.class, 5, false, player -> !this.isTamed());
     }
@@ -64,20 +69,10 @@ public abstract class EntityWispBase extends BaseMonster {
     }
 
     @Override
-    protected void applyAttributes() {
-        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
-        super.applyAttributes();
-    }
-
-    @Override
-    public float attackChance(AnimationType type) {
-        return 1;
-    }
-
-    @Override
-    public AnimationHandler<EntityWispBase> getAnimationHandler() {
-        return this.animationHandler;
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        if (type == AnimationType.RANGED)
+            return anim.getID().equals(attackFar.getID()) || anim.getID().equals(attackClose.getID());
+        return false;
     }
 
     @Override
@@ -86,10 +81,13 @@ public abstract class EntityWispBase extends BaseMonster {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED)
-            return anim.getID().equals(attackFar.getID()) || anim.getID().equals(attackClose.getID());
-        return false;
+    public boolean hurt(DamageSource source, float amount) {
+        if (this.getAnimationHandler().isCurrentAnim(vanish.getID()))
+            return false;
+        boolean ret = super.hurt(source, amount);
+        if (ret)
+            this.vanishNext = this.getRandom().nextFloat() < 0.4;
+        return ret;
     }
 
     @Override
@@ -124,6 +122,26 @@ public abstract class EntityWispBase extends BaseMonster {
         }
     }
 
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (command == 1)
+                this.getAnimationHandler().setAnimation(attackClose);
+            else
+                this.getAnimationHandler().setAnimation(attackFar);
+        }
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return 1;
+    }
+
+    @Override
+    public AnimationHandler<EntityWispBase> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
     private void teleportTowards(Entity entity) {
         Vec3 look = new Vec3(entity.getLookAngle().x, 0, entity.getLookAngle().z).normalize().scale(-2.5);
         Vec3 behindEntity = entity.position().add(look);
@@ -148,26 +166,6 @@ public abstract class EntityWispBase extends BaseMonster {
             y = this.getY();
         }
         this.teleportTo(x, y + 1, z);
-    }
-
-    @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (this.getAnimationHandler().isCurrentAnim(vanish.getID()))
-            return false;
-        boolean ret = super.hurt(source, amount);
-        if (ret)
-            this.vanishNext = this.getRandom().nextFloat() < 0.4;
-        return ret;
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 1)
-                this.getAnimationHandler().setAnimation(attackClose);
-            else
-                this.getAnimationHandler().setAnimation(attackFar);
-        }
     }
 
     public abstract void attackFar(LivingEntity target);

@@ -14,9 +14,9 @@ import net.minecraft.world.item.ItemStack;
 
 public class CraftingOutputSlot extends Slot {
 
-    private int amountCrafted;
     private final PlayerContainerInv ingredientInv;
     private final ContainerCrafting container;
+    private int amountCrafted;
 
     public CraftingOutputSlot(Container output, ContainerCrafting container, PlayerContainerInv ingredientInv, int id, int x, int y) {
         super(output, id, x, y);
@@ -31,6 +31,12 @@ public class CraftingOutputSlot extends Slot {
     }
 
     @Override
+    protected void onSwapCraft(int amount) {
+        super.onSwapCraft(amount);
+        this.amountCrafted += amount;
+    }
+
+    @Override
     protected void checkTakeAchievements(ItemStack stack) {
         Player player = this.ingredientInv.getPlayer();
         if (this.amountCrafted > 0) {
@@ -38,32 +44,6 @@ public class CraftingOutputSlot extends Slot {
             Platform.INSTANCE.craftingEvent(player, stack, this.ingredientInv);
         }
         this.amountCrafted = 0;
-    }
-
-    @Override
-    protected void onSwapCraft(int amount) {
-        super.onSwapCraft(amount);
-        this.amountCrafted += amount;
-    }
-
-    @Override
-    public boolean mayPlace(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public ItemStack remove(int amount) {
-        if (this.hasItem()) {
-            this.amountCrafted += Math.min(amount, this.getItem().getCount());
-        }
-        return super.remove(amount);
-    }
-
-    @Override
-    public boolean mayPickup(Player player) {
-        if (player.level.isClientSide || !GeneralConfig.useRP)
-            return true;
-        return (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(data -> data.getMaxRunePoints() >= this.container.rpCost()).orElse(false));
     }
 
     @Override
@@ -109,5 +89,25 @@ public class CraftingOutputSlot extends Slot {
         if (refreshRecipe)
             this.container.slotsChanged(this.ingredientInv);
         super.onTake(player, stack);
+    }
+
+    @Override
+    public boolean mayPlace(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public ItemStack remove(int amount) {
+        if (this.hasItem()) {
+            this.amountCrafted += Math.min(amount, this.getItem().getCount());
+        }
+        return super.remove(amount);
+    }
+
+    @Override
+    public boolean mayPickup(Player player) {
+        if (player.level.isClientSide || !GeneralConfig.useRP)
+            return true;
+        return (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(data -> data.getMaxRunePoints() >= this.container.rpCost()).orElse(false));
     }
 }

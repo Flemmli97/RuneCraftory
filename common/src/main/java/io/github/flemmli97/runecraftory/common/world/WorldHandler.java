@@ -41,6 +41,16 @@ public class WorldHandler extends SavedData {
         return server.overworld().getDataStorage().computeIfAbsent(WorldHandler::new, WorldHandler::new, id);
     }
 
+    public static boolean canUpdateWeather(Level world, EnumWeather currentWeather) {
+        if (GeneralConfig.modifyWeather && world.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
+            if (currentWeather == EnumWeather.RUNEY || currentWeather == EnumWeather.STORM)
+                return WorldUtils.dayTime(world) == 1;
+            long time = WorldUtils.dayTime(world);
+            return time == 1 || time == 6001 || time == 12001 || time == 18001;
+        }
+        return false;
+    }
+
     public CalendarImpl getCalendar() {
         return this.calendar;
     }
@@ -125,15 +135,5 @@ public class WorldHandler extends SavedData {
     @Override
     public CompoundTag save(CompoundTag compoundNBT) {
         return this.calendar.write(compoundNBT);
-    }
-
-    public static boolean canUpdateWeather(Level world, EnumWeather currentWeather) {
-        if (GeneralConfig.modifyWeather && world.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
-            if (currentWeather == EnumWeather.RUNEY || currentWeather == EnumWeather.STORM)
-                return WorldUtils.dayTime(world) == 1;
-            long time = WorldUtils.dayTime(world);
-            return time == 1 || time == 6001 || time == 12001 || time == 18001;
-        }
-        return false;
     }
 }

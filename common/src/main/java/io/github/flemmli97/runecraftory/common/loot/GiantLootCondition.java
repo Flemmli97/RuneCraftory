@@ -17,6 +17,10 @@ import java.util.Set;
 
 public record GiantLootCondition(boolean isGiant) implements LootItemCondition {
 
+    public static LootItemCondition.Builder get(boolean giant) {
+        return () -> new GiantLootCondition(giant);
+    }
+
     @Override
     public LootItemConditionType getType() {
         return ModLootCondition.GIANTCROP.get();
@@ -32,10 +36,6 @@ public record GiantLootCondition(boolean isGiant) implements LootItemCondition {
         if (ctx.getParamOrNull(LootContextParams.BLOCK_ENTITY) instanceof CropBlockEntity crop)
             return crop.isGiant() == this.isGiant;
         return false;
-    }
-
-    public static LootItemCondition.Builder get(boolean giant) {
-        return () -> new GiantLootCondition(giant);
     }
 
     public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<GiantLootCondition> {

@@ -86,12 +86,6 @@ public class CropBlockEntity extends BlockEntity {
         }
     }
 
-    public void setWilted(boolean flag) {
-        this.wilted = flag;
-        if (this.level != null)
-            this.level.setBlock(this.getBlockPos(), this.level.getBlockState(this.getBlockPos()).setValue(BlockCrop.WILTED, flag), Block.UPDATE_ALL);
-    }
-
     private void updateState() {
         if (!(this.level instanceof ServerLevel))
             return;
@@ -110,14 +104,10 @@ public class CropBlockEntity extends BlockEntity {
         return this.wilted;
     }
 
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
-
-    @Override
-    public CompoundTag getUpdateTag() {
-        return this.saveWithoutMetadata();
+    public void setWilted(boolean flag) {
+        this.wilted = flag;
+        if (this.level != null)
+            this.level.setBlock(this.getBlockPos(), this.level.getBlockState(this.getBlockPos()).setValue(BlockCrop.WILTED, flag), Block.UPDATE_ALL);
     }
 
     @Override
@@ -137,5 +127,15 @@ public class CropBlockEntity extends BlockEntity {
         nbt.putBoolean("Giant", this.isGiant);
         nbt.putFloat("Level", this.cropLvl);
         nbt.putBoolean("Wilted", this.wilted);
+    }
+
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return this.saveWithoutMetadata();
     }
 }

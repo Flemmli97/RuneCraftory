@@ -72,6 +72,14 @@ public class RuneCraftoryFabric implements ModInitializer {
 
     public static final Path confDir = FabricLoader.getInstance().getConfigDir().resolve(RuneCraftory.MODID);
 
+    public static void entityTick(LivingEntity entity) {
+        if (entity instanceof Player player) {
+            EntityCalls.updateLivingTick(player);
+        }
+        if (entity.level.isClientSide)
+            ClientCalls.tick(entity);
+    }
+
     @Override
     public void onInitialize() {
         this.initContent();
@@ -195,18 +203,9 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModFeatures.registerConfiguredMineralFeatures();
     }
 
-
     private void tweakVanillaAttribute(Attribute attribute, double value) {
         if (attribute instanceof RangedAttribute) {
             ((AttributeAccessor) attribute).setMaxValue(value);
         }
-    }
-
-    public static void entityTick(LivingEntity entity) {
-        if (entity instanceof Player player) {
-            EntityCalls.updateLivingTick(player);
-        }
-        if (entity.level.isClientSide)
-            ClientCalls.tick(entity);
     }
 }

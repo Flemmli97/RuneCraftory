@@ -12,8 +12,8 @@ import net.minecraft.client.particle.SpriteSet;
 public class CirclingParticle extends ColoredParticle {
 
     private final double motionAX, motionAY, motionAZ, speedMod;
-    private double[] point;
     private final float radInc;
+    private double[] point;
 
     public CirclingParticle(ClientLevel world, double x, double y, double z, double dirX, double dirY, double dirZ, ColoredParticleData colorData, SpriteSet sprite, int maxAge, float minAgeRand, float maxAgeRand, double radius, double speedMod, float radAdd, float radInc) {
         super(world, x, y, z, 0, 0, 0, colorData, sprite, maxAge, minAgeRand, maxAgeRand, false, false, false);

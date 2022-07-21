@@ -10,11 +10,9 @@ import net.minecraft.world.level.Level;
 
 public class EntityAnt extends BaseMonster {
 
-    public final AnimatedMeleeGoal<EntityAnt> attack = new AnimatedMeleeGoal<>(this);
     public static final AnimatedAction melee = new AnimatedAction(23, 12, "attack");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee};
-
+    public final AnimatedMeleeGoal<EntityAnt> attack = new AnimatedMeleeGoal<>(this);
     private final AnimationHandler<EntityAnt> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntityAnt(EntityType<? extends EntityAnt> type, Level world) {
@@ -28,6 +26,16 @@ public class EntityAnt extends BaseMonster {
     }
 
     @Override
+    public AnimationHandler<EntityAnt> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        return type == AnimationType.MELEE && anim.getID().equals(melee.getID());
+    }
+
+    @Override
     public double maxAttackRange(AnimatedAction anim) {
         return 0.7;
     }
@@ -36,15 +44,5 @@ public class EntityAnt extends BaseMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation())
             this.getAnimationHandler().setAnimation(melee);
-    }
-
-    @Override
-    public AnimationHandler<EntityAnt> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type == AnimationType.MELEE && anim.getID().equals(melee.getID());
     }
 }

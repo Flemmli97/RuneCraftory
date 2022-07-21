@@ -22,16 +22,6 @@ public class S2CRunePoints implements Packet {
         this.rp = data.getRunePoints();
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.rp);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CRunePoints read(FriendlyByteBuf buf) {
         return new S2CRunePoints(buf.readInt());
     }
@@ -41,5 +31,15 @@ public class S2CRunePoints implements Packet {
         if (player == null)
             return;
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.setRunePoints(player, pkt.rp));
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(this.rp);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

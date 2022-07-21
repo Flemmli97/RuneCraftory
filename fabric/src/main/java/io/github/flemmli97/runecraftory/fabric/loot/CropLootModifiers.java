@@ -22,12 +22,10 @@ import java.util.Map;
 
 public class CropLootModifiers extends SimpleJsonResourceReloadListener implements IdentifiableResourceReloadListener {
 
+    public static final CropLootModifiers INSTANCE = new CropLootModifiers();
     private static final Gson GSON = Deserializers.createFunctionSerializer().create();
-
     private final ResourceLocation id = new ResourceLocation(RuneCraftory.MODID, "crop_modifiers");
     private Map<ResourceLocation, CropLootModifier> modifiers = ImmutableMap.of();
-
-    public static final CropLootModifiers INSTANCE = new CropLootModifiers();
 
     public CropLootModifiers() {
         super(GSON, "loot_modifiers");

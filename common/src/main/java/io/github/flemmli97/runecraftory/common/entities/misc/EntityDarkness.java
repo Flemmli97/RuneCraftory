@@ -28,11 +28,6 @@ public class EntityDarkness extends EntityDamageCloud {
     }
 
     @Override
-    public void tick() {
-        super.tick();
-    }
-
-    @Override
     public int livingTickMax() {
         return 46;
     }
@@ -48,13 +43,18 @@ public class EntityDarkness extends EntityDamageCloud {
     }
 
     @Override
-    protected AABB damageBoundingBox() {
-        float radius = this.getRadius();
-        return this.getBoundingBox().inflate(radius, 0.4, radius);
+    public void tick() {
+        super.tick();
     }
 
     @Override
     protected boolean damageEntity(LivingEntity livingEntity) {
         return CombatUtils.damage(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.DARK).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
+    }
+
+    @Override
+    protected AABB damageBoundingBox() {
+        float radius = this.getRadius();
+        return this.getBoundingBox().inflate(radius, 0.4, radius);
     }
 }

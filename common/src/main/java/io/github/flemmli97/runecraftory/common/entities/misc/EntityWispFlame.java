@@ -48,12 +48,6 @@ public class EntityWispFlame extends EntityDamageCloud {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(elementData, 0);
-    }
-
-    @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         if (key.equals(elementData)) {
             this.element = EnumElement.values()[this.entityData.get(elementData)];
@@ -73,6 +67,61 @@ public class EntityWispFlame extends EntityDamageCloud {
     @Override
     public int livingTickMax() {
         return 100;
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(elementData, 0);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        Vec3 motion = this.getDeltaMovement();
+        double newX = this.getX() + motion.x;
+        double newY = this.getY() + motion.y;
+        double newZ = this.getZ() + motion.z;
+        this.setPos(newX, newY, newZ);
+    }
+
+    @Override
+    protected boolean canHit(LivingEntity entity) {
+        return super.canHit(entity) && (this.pred == null || this.pred.test(entity));
+    }
+
+    @Override
+    protected boolean damageEntity(LivingEntity target) {
+        if (CombatUtils.damage(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).element(this.element).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
+            target.knockback(0.5, this.getX() - target.getX(), this.getZ() - target.getZ());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        try {
+            this.setElement(EnumElement.valueOf(compound.getString("Element")));
+        } catch (IllegalArgumentException ignored) {
+        }
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Type", this.element.toString());
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
+    }
+
+    @Override
+    public Entity getOwner() {
+        Entity owner = super.getOwner();
+        if (owner instanceof BaseMonster)
+            this.pred = ((BaseMonster) owner).hitPred;
+        return owner;
     }
 
     public void shootAtEntity(Entity target, float velocity, float inaccuracy, float yOffsetModifier, double heighMod) {
@@ -101,56 +150,7 @@ public class EntityWispFlame extends EntityDamageCloud {
         this.xRotO = this.getXRot();
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-        Vec3 motion = this.getDeltaMovement();
-        double newX = this.getX() + motion.x;
-        double newY = this.getY() + motion.y;
-        double newZ = this.getZ() + motion.z;
-        this.setPos(newX, newY, newZ);
-    }
-
-    @Override
-    protected boolean damageEntity(LivingEntity target) {
-        if (CombatUtils.damage(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).element(this.element).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
-            target.knockback(0.5, this.getX() - target.getX(), this.getZ() - target.getZ());
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected boolean canHit(LivingEntity entity) {
-        return super.canHit(entity) && (this.pred == null || this.pred.test(entity));
-    }
-
-    @Override
-    public Entity getOwner() {
-        Entity owner = super.getOwner();
-        if (owner instanceof BaseMonster)
-            this.pred = ((BaseMonster) owner).hitPred;
-        return owner;
-    }
-
     public void setDamageMultiplier(float damageMultiplier) {
         this.damageMultiplier = damageMultiplier;
-    }
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        try {
-            this.setElement(EnumElement.valueOf(compound.getString("Element")));
-        } catch (IllegalArgumentException ignored) {
-        }
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putString("Type", this.element.toString());
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 }

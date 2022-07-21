@@ -48,11 +48,6 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
     }
 
     @Override
-    public Rarity getRarity(ItemStack stack) {
-        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
-    }
-
-    @Override
     public EnumToolCharge chargeType(ItemStack stack) {
         return EnumToolCharge.CHARGEUPWEAPON;
     }
@@ -78,15 +73,20 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
-    }
-
-    @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
         int duration = stack.getUseDuration() - remainingUseDuration;
         if (duration != 0 && duration / this.getChargeTime(stack) < this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
             livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+    }
+
+    @Override
+    public Rarity getRarity(ItemStack stack) {
+        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
     }
 
     @Override

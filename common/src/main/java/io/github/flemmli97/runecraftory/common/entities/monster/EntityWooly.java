@@ -31,20 +31,15 @@ import java.util.List;
 
 public class EntityWooly extends ChargingMonster {
 
-    private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
-
-    private int shearTick;
-
     public static final AnimatedAction slap = new AnimatedAction(16, 7, "slap");
     public static final AnimatedAction kick = new AnimatedAction(20, 3, "kick");
     public static final AnimatedAction headbutt = new AnimatedAction(16, 7, "headbutt");
-
     public static final AnimatedAction[] anims = new AnimatedAction[]{slap, kick, headbutt};
-
+    private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
     private final AnimationHandler<EntityWooly> animationHandler = new AnimationHandler<>(this, anims);
-
     public ChargeAttackGoal<EntityWooly> attack = new ChargeAttackGoal<>(this);
+    private int shearTick;
 
     public EntityWooly(EntityType<? extends EntityWooly> type, Level level) {
         super(type, level);
@@ -59,12 +54,6 @@ public class EntityWooly extends ChargingMonster {
     }
 
     @Override
-    protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2);
-        super.applyAttributes();
-    }
-
-    @Override
     public void tick() {
         super.tick();
         if (!this.entityData.get(SPAWNSHEARED)) {
@@ -72,6 +61,73 @@ public class EntityWooly extends ChargingMonster {
             if (this.shearTick == 1) {
                 this.setSheared(false);
             }
+        }
+    }
+
+    @Override
+    public float chargingLength() {
+        return 3;
+    }
+
+    @Override
+    protected void applyAttributes() {
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2);
+        super.applyAttributes();
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putBoolean("Sheared", this.isSheared());
+        compound.putBoolean("SpawnedSheared", this.entityData.get(SPAWNSHEARED));
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.setSheared(compound.getBoolean("Sheared"));
+        this.entityData.set(SPAWNSHEARED, compound.getBoolean("SpawnedSheared"));
+    }
+
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        ItemStack itemStack = player.getItemInHand(hand);
+        if (itemStack.is(Items.SHEARS)) {
+            if (!this.level.isClientSide && !this.isSheared()) {
+                this.shear(player, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
+                itemStack.hurtAndBreak(1, player, (playerx) -> playerx.broadcastBreakEvent(hand));
+                return InteractionResult.SUCCESS;
+            } else {
+                return InteractionResult.CONSUME;
+            }
+        } else {
+            return super.mobInteract(player, hand);
+        }
+    }
+
+    @Override
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        if (type == AnimationType.CHARGE)
+            return anim.getID().equals(kick.getID());
+        else if (type == AnimationType.MELEE)
+            return anim.getID().equals(slap.getID()) || anim.getID().equals(headbutt.getID());
+        return false;
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return 0.8;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (command == 2)
+                this.getAnimationHandler().setAnimation(kick);
+            else if (command == 1)
+                this.getAnimationHandler().setAnimation(headbutt);
+            else
+                this.getAnimationHandler().setAnimation(slap);
         }
     }
 
@@ -111,20 +167,6 @@ public class EntityWooly extends ChargingMonster {
         return this.animationHandler;
     }
 
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 0.8;
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.CHARGE)
-            return anim.getID().equals(kick.getID());
-        else if (type == AnimationType.MELEE)
-            return anim.getID().equals(slap.getID()) || anim.getID().equals(headbutt.getID());
-        return false;
-    }
-
     public boolean isSheared() {
         return this.entityData.get(SHEARED);
     }
@@ -153,54 +195,6 @@ public class EntityWooly extends ChargingMonster {
             if (itemEntity != null) {
                 itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().add((this.random.nextFloat() - this.random.nextFloat()) * 0.1F, this.random.nextFloat() * 0.05F, (this.random.nextFloat() - this.random.nextFloat()) * 0.1F));
             }
-        }
-    }
-
-
-    @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        ItemStack itemStack = player.getItemInHand(hand);
-        if (itemStack.is(Items.SHEARS)) {
-            if (!this.level.isClientSide && !this.isSheared()) {
-                this.shear(player, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
-                itemStack.hurtAndBreak(1, player, (playerx) -> playerx.broadcastBreakEvent(hand));
-                return InteractionResult.SUCCESS;
-            } else {
-                return InteractionResult.CONSUME;
-            }
-        } else {
-            return super.mobInteract(player, hand);
-        }
-    }
-
-    @Override
-    public float chargingLength() {
-        return 3;
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putBoolean("Sheared", this.isSheared());
-        compound.putBoolean("SpawnedSheared", this.entityData.get(SPAWNSHEARED));
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.setSheared(compound.getBoolean("Sheared"));
-        this.entityData.set(SPAWNSHEARED, compound.getBoolean("SpawnedSheared"));
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(kick);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(headbutt);
-            else
-                this.getAnimationHandler().setAnimation(slap);
         }
     }
 }

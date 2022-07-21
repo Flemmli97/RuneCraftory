@@ -36,20 +36,6 @@ public class S2CEntityDataSyncAll implements Packet {
         this.poison = poison;
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.entityID);
-        buf.writeBoolean(this.sleeping);
-        buf.writeBoolean(this.paralysis);
-        buf.writeBoolean(this.cold);
-        buf.writeBoolean(this.poison);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CEntityDataSyncAll read(FriendlyByteBuf buf) {
         return new S2CEntityDataSyncAll(buf.readInt(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean());
     }
@@ -67,5 +53,19 @@ public class S2CEntityDataSyncAll implements Packet {
                 data.setPoison(living, pkt.poison);
             });
         }
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeInt(this.entityID);
+        buf.writeBoolean(this.sleeping);
+        buf.writeBoolean(this.paralysis);
+        buf.writeBoolean(this.cold);
+        buf.writeBoolean(this.poison);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

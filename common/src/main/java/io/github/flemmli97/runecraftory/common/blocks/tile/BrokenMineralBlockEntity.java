@@ -38,19 +38,6 @@ public class BrokenMineralBlockEntity extends BlockEntity implements IDailyUpdat
     }
 
     @Override
-    public void load(CompoundTag nbt) {
-        super.load(nbt);
-        this.lastUpdateDay = nbt.getInt("LastUpdate");
-        this.check = true;
-    }
-
-    @Override
-    public void saveAdditional(CompoundTag nbt) {
-        super.saveAdditional(nbt);
-        nbt.putInt("LastUpdate", this.lastUpdateDay);
-    }
-
-    @Override
     public void setLevel(Level level) {
         super.setLevel(level);
         if (this.level instanceof ServerLevel serverLevel) {
@@ -63,6 +50,19 @@ public class BrokenMineralBlockEntity extends BlockEntity implements IDailyUpdat
                 this.level.getServer().tell(new TickTask(1, this::setChanged));
             }
         }
+    }
+
+    @Override
+    public void load(CompoundTag nbt) {
+        super.load(nbt);
+        this.lastUpdateDay = nbt.getInt("LastUpdate");
+        this.check = true;
+    }
+
+    @Override
+    public void saveAdditional(CompoundTag nbt) {
+        super.saveAdditional(nbt);
+        nbt.putInt("LastUpdate", this.lastUpdateDay);
     }
 
     @Override

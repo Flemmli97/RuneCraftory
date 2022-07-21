@@ -34,24 +34,9 @@ public class ItemRecipeBread extends Item {
     }
 
     @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.EAT;
-    }
-
-    @Override
-    public int getUseDuration(ItemStack stack) {
-        return 32;
-    }
-
-    @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         player.startUsingItem(hand);
         return InteractionResultHolder.consume(player.getItemInHand(hand));
-    }
-
-    @Override
-    public boolean isFoil(ItemStack stack) {
-        return true;
     }
 
     @Override
@@ -74,6 +59,21 @@ public class ItemRecipeBread extends Item {
             stack.shrink(1);
         }
         return stack;
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.EAT;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return 32;
+    }
+
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return true;
     }
 
     private EnumSkills getSkill() {

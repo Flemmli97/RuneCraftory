@@ -11,20 +11,6 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public class ColoredParticleData4f extends ColoredParticleData {
 
-    public static Codec<ColoredParticleData4f> codec4f(ParticleType<ColoredParticleData4f> type) {
-        return RecordCodecBuilder.create((builder) -> builder.group(
-                        Codec.FLOAT.fieldOf("r").forGetter(ColoredParticleData::getRed),
-                        Codec.FLOAT.fieldOf("g").forGetter(ColoredParticleData::getGreen),
-                        Codec.FLOAT.fieldOf("b").forGetter(ColoredParticleData::getBlue),
-                        Codec.FLOAT.fieldOf("alpha").forGetter(ColoredParticleData::getAlpha),
-                        Codec.FLOAT.fieldOf("scale").forGetter(ColoredParticleData::getScale),
-                        Codec.FLOAT.fieldOf("radius").forGetter(ColoredParticleData4f::getRadius),
-                        Codec.FLOAT.fieldOf("inc").forGetter(ColoredParticleData4f::getInc),
-                        Codec.FLOAT.fieldOf("offset").forGetter(ColoredParticleData4f::getOffset),
-                        Codec.FLOAT.fieldOf("angleInc").forGetter(ColoredParticleData4f::getAngle))
-                .apply(builder, (r, g, b, a, scale, radius, inc, offset, angle) -> new ColoredParticleData4f(type, r, g, b, a, scale, radius, inc, offset, angle)));
-    }
-
     public static final ParticleOptions.Deserializer<ColoredParticleData4f> DESERIALIZER = new ParticleOptions.Deserializer<>() {
         @Override
         public ColoredParticleData4f fromCommand(ParticleType<ColoredParticleData4f> type, StringReader reader) throws CommandSyntaxException {
@@ -54,7 +40,6 @@ public class ColoredParticleData4f extends ColoredParticleData {
             return new ColoredParticleData4f(type, buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat());
         }
     };
-
     private float radius, inc, offset, angle;
 
     public ColoredParticleData4f(ParticleType<ColoredParticleData4f> type, float red, float green, float blue, float alpha) {
@@ -67,6 +52,20 @@ public class ColoredParticleData4f extends ColoredParticleData {
         this.inc = inc;
         this.offset = offset;
         this.angle = angleInc;
+    }
+
+    public static Codec<ColoredParticleData4f> codec4f(ParticleType<ColoredParticleData4f> type) {
+        return RecordCodecBuilder.create((builder) -> builder.group(
+                        Codec.FLOAT.fieldOf("r").forGetter(ColoredParticleData::getRed),
+                        Codec.FLOAT.fieldOf("g").forGetter(ColoredParticleData::getGreen),
+                        Codec.FLOAT.fieldOf("b").forGetter(ColoredParticleData::getBlue),
+                        Codec.FLOAT.fieldOf("alpha").forGetter(ColoredParticleData::getAlpha),
+                        Codec.FLOAT.fieldOf("scale").forGetter(ColoredParticleData::getScale),
+                        Codec.FLOAT.fieldOf("radius").forGetter(ColoredParticleData4f::getRadius),
+                        Codec.FLOAT.fieldOf("inc").forGetter(ColoredParticleData4f::getInc),
+                        Codec.FLOAT.fieldOf("offset").forGetter(ColoredParticleData4f::getOffset),
+                        Codec.FLOAT.fieldOf("angleInc").forGetter(ColoredParticleData4f::getAngle))
+                .apply(builder, (r, g, b, a, scale, radius, inc, offset, angle) -> new ColoredParticleData4f(type, r, g, b, a, scale, radius, inc, offset, angle)));
     }
 
     @Override

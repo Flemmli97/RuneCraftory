@@ -16,8 +16,8 @@ public class ArmorRecipe extends SextupleRecipe {
     }
 
     @Override
-    public RecipeType<? extends SextupleRecipe> getType() {
-        return ModCrafting.ARMOR.get();
+    public ItemStack getToastSymbol() {
+        return new ItemStack(ModItems.itemBlockAccess.get());
     }
 
     @Override
@@ -26,8 +26,8 @@ public class ArmorRecipe extends SextupleRecipe {
     }
 
     @Override
-    public ItemStack getToastSymbol() {
-        return new ItemStack(ModItems.itemBlockAccess.get());
+    public RecipeType<? extends SextupleRecipe> getType() {
+        return ModCrafting.ARMOR.get();
     }
 
     public static class Serializer extends SextupleRecipe.Serializer<ArmorRecipe> {

@@ -29,6 +29,20 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
     }
 
     @Override
+    protected void init() {
+        super.init();
+        this.addRenderableWidget(new PageButton(this.leftPos + 108, this.topPos + 60, new TextComponent("<"), b -> Platform.INSTANCE.sendToServer(new C2SUpdateCraftingScreen(false))));
+        this.addRenderableWidget(new PageButton(this.leftPos + 128, this.topPos + 60, new TextComponent(">"), b -> Platform.INSTANCE.sendToServer(new C2SUpdateCraftingScreen(true))));
+    }
+
+    @Override
+    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(stack);
+        super.render(stack, mouseX, mouseY, partialTicks);
+        this.renderTooltip(stack, mouseX, mouseY);
+    }
+
+    @Override
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
         ResourceLocation texture = forging;
         /*texture = switch (this.menu.craftingType()) {
@@ -47,19 +61,5 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             }
             OverlayGui.drawStringCenter(stack, this.font, cost, this.leftPos + 123, this.topPos + 20, 0);
         }
-    }
-
-    @Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(stack);
-        super.render(stack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(stack, mouseX, mouseY);
-    }
-
-    @Override
-    protected void init() {
-        super.init();
-        this.addRenderableWidget(new PageButton(this.leftPos + 108, this.topPos + 60, new TextComponent("<"), b -> Platform.INSTANCE.sendToServer(new C2SUpdateCraftingScreen(false))));
-        this.addRenderableWidget(new PageButton(this.leftPos + 128, this.topPos + 60, new TextComponent(">"), b -> Platform.INSTANCE.sendToServer(new C2SUpdateCraftingScreen(true))));
     }
 }

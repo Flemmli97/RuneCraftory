@@ -44,6 +44,11 @@ public class EntitySpiderWeb extends EntityProjectile {
     }
 
     @Override
+    protected float getGravityVelocity() {
+        return 0.025f;
+    }
+
+    @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
         boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
         if (att && result.getEntity() instanceof LivingEntity living)
@@ -55,15 +60,6 @@ public class EntitySpiderWeb extends EntityProjectile {
     @Override
     protected void onBlockHit(BlockHitResult result) {
         this.remove(RemovalReason.KILLED);
-    }
-
-    @Override
-    protected float getGravityVelocity() {
-        return 0.025f;
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -84,5 +80,9 @@ public class EntitySpiderWeb extends EntityProjectile {
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 }

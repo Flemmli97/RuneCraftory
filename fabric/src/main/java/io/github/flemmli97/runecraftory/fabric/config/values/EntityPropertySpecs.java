@@ -33,13 +33,6 @@ public class EntityPropertySpecs {
         this.flying = builder.define("Can Fly", def.flying());
     }
 
-    private List<String> toList(SimpleItemStackWrapper[] arr) {
-        List<String> list = new ArrayList<>();
-        for (SimpleItemStackWrapper stack : arr)
-            list.add(stack.toString());
-        return list;
-    }
-
     public static EntityProperties ofSpec(EntityPropertySpecs spec) {
         EntityProperties.Builder builder = new EntityProperties.Builder();
         for (String s : spec.baseValues.get()) {
@@ -71,5 +64,12 @@ public class EntityPropertySpecs {
         if (spec.flying.get())
             builder.setFlying();
         return builder.build();
+    }
+
+    private List<String> toList(SimpleItemStackWrapper[] arr) {
+        List<String> list = new ArrayList<>();
+        for (SimpleItemStackWrapper stack : arr)
+            list.add(stack.toString());
+        return list;
     }
 }

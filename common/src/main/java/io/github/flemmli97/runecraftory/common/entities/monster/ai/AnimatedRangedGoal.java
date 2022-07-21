@@ -9,12 +9,11 @@ import java.util.function.Predicate;
 
 public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal<T> {
 
-    private int rangedMove = 40;
     private final float reach, reachSq;
+    private final Predicate<T> canRanged;
+    private int rangedMove = 40;
     private boolean moveTo, clockWise;
     private boolean canSee;
-
-    private final Predicate<T> canRanged;
 
     public AnimatedRangedGoal(T entity, float rangedReach, Predicate<T> canRangedAttack) {
         super(entity);

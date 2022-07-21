@@ -23,8 +23,8 @@ import java.util.Set;
 
 public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
 
-    protected final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
     private static final EntityDataAccessor<Boolean> enraged = SynchedEntityData.defineId(BossMonster.class, EntityDataSerializers.BOOLEAN);
+    protected final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
 
     public BossMonster(EntityType<? extends BossMonster> type, Level level) {
         super(type, level);
@@ -36,14 +36,6 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         this.entityData.define(enraged, false);
     }
 
-    public boolean isEnraged() {
-        return this.isAlive() && !this.isTamed() && this.entityData.get(enraged);
-    }
-
-    public void setEnraged(boolean flag, boolean load) {
-        this.entityData.set(enraged, flag);
-    }
-
     @Override
     public void tick() {
         super.tick();
@@ -53,28 +45,6 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
                 this.updateBossBar();
             }
         }
-    }
-
-    protected void updateBossBar() {
-        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-    }
-
-    @Override
-    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
-        super.actuallyHurt(damageSrc, damageAmount);
-        if (!this.isTamed() && this.checkRage()) {
-            this.setEnraged(true, false);
-        }
-    }
-
-    protected boolean checkRage() {
-        return this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged();
-    }
-
-    @Override
-    protected void tameEntity(Player owner) {
-        super.tameEntity(owner);
-        this.setEnraged(false, false);
     }
 
     @Override
@@ -97,54 +67,6 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
                 this.bossInfo.removePlayer(sPlayer);
             }
         }
-    }
-
-    private void updateplayers() {
-        Set<ServerPlayer> set = new HashSet<>();
-        for (ServerPlayer entityplayermp : this.level.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(10.0))) {
-            this.bossInfo.addPlayer(entityplayermp);
-            set.add(entityplayermp);
-        }
-        Set<ServerPlayer> set2 = Sets.newHashSet(this.bossInfo.getPlayers());
-        set2.removeAll(set);
-        for (ServerPlayer entityplayermp2 : set2) {
-            this.bossInfo.removePlayer(entityplayermp2);
-        }
-    }
-
-    @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        super.startSeenByPlayer(player);
-    }
-
-    @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
-        super.stopSeenByPlayer(player);
-        this.bossInfo.removePlayer(player);
-    }
-
-    @Override
-    public void remove(Entity.RemovalReason reason) {
-        super.remove(reason);
-        for (ServerPlayer entityplayermp1 : this.bossInfo.getPlayers()) {
-            this.stopSeenByPlayer(entityplayermp1);
-        }
-    }
-
-    @Override
-    public int overlayU(int orig) {
-        return this.isEnraged() ? (int) (Math.sin(this.tickCount / 7F) * 5 + 5) : orig;
-    }
-
-    @Override
-    public int overlayV(int orig) {
-        return this.isEnraged() ? 0 : orig;
-    }
-
-    @Override
-    protected float tamingMultiplier(ItemStack stack) {
-        boolean flag = this.tamingItem().match(stack);
-        return flag ? 1 : 0;
     }
 
     @Override
@@ -189,5 +111,83 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     @Override
     public int maxDeathTime() {
         return 160;
+    }
+
+    @Override
+    protected float tamingMultiplier(ItemStack stack) {
+        boolean flag = this.tamingItem().match(stack);
+        return flag ? 1 : 0;
+    }
+
+    @Override
+    protected void tameEntity(Player owner) {
+        super.tameEntity(owner);
+        this.setEnraged(false, false);
+    }
+
+    public boolean isEnraged() {
+        return this.isAlive() && !this.isTamed() && this.entityData.get(enraged);
+    }
+
+    public void setEnraged(boolean flag, boolean load) {
+        this.entityData.set(enraged, flag);
+    }
+
+    protected void updateBossBar() {
+        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
+
+    @Override
+    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
+        super.actuallyHurt(damageSrc, damageAmount);
+        if (!this.isTamed() && this.checkRage()) {
+            this.setEnraged(true, false);
+        }
+    }
+
+    protected boolean checkRage() {
+        return this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged();
+    }
+
+    private void updateplayers() {
+        Set<ServerPlayer> set = new HashSet<>();
+        for (ServerPlayer entityplayermp : this.level.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(10.0))) {
+            this.bossInfo.addPlayer(entityplayermp);
+            set.add(entityplayermp);
+        }
+        Set<ServerPlayer> set2 = Sets.newHashSet(this.bossInfo.getPlayers());
+        set2.removeAll(set);
+        for (ServerPlayer entityplayermp2 : set2) {
+            this.bossInfo.removePlayer(entityplayermp2);
+        }
+    }
+
+    @Override
+    public void remove(Entity.RemovalReason reason) {
+        super.remove(reason);
+        for (ServerPlayer entityplayermp1 : this.bossInfo.getPlayers()) {
+            this.stopSeenByPlayer(entityplayermp1);
+        }
+    }
+
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+    }
+
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossInfo.removePlayer(player);
+    }
+
+    @Override
+    public int overlayU(int orig) {
+        return this.isEnraged() ? (int) (Math.sin(this.tickCount / 7F) * 5 + 5) : orig;
+    }
+
+    @Override
+    public int overlayV(int orig) {
+        return this.isEnraged() ? 0 : orig;
     }
 }

@@ -39,11 +39,6 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
     }
 
     @Override
-    public Rarity getRarity(ItemStack stack) {
-        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
-    }
-
-    @Override
     public EnumToolCharge chargeType(ItemStack stack) {
         return EnumToolCharge.CHARGEFISHING;
     }
@@ -69,11 +64,6 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
-    }
-
-    @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
         int duration = stack.getUseDuration() - remainingUseDuration;
         if (duration != 0 && duration / this.getChargeTime(stack) < this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
@@ -88,5 +78,15 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
     @Override
     public int getUseDuration(ItemStack stack) {
         return 72000;
+    }
+
+    @Override
+    public Rarity getRarity(ItemStack stack) {
+        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
     }
 }

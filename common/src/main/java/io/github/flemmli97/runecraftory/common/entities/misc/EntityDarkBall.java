@@ -48,9 +48,77 @@ public class EntityDarkBall extends EntityDamageCloud {
         this.setRadius(1.5f);
     }
 
+    private static float[] calcSinPoints() {
+        float[] arr = new float[16];
+        float step = 2 * Mth.PI / 16;
+        for (int i = 0; i < 16; i++)
+            arr[i] = Mth.cos((i + 8) * step) * 0.2f;
+        return arr;
+    }
+
     @Override
     public int livingTickMax() {
         return this.type == Type.BALL ? 100 : 60;
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        Vec3 motion = this.getDeltaMovement();
+        double newX = this.getX() + motion.x;
+        double newY = this.getY() + motion.y;
+        double newZ = this.getZ() + motion.z;
+        this.setPos(newX, newY, newZ);
+        if (this.level.isClientSide) {
+            for (int i = 0; i < 5; i++) {
+                this.level.addParticle(new ColoredParticleData(ModParticles.shortLight.get(), 65 / 255F, 2 / 255F, 105 / 255F, 0.2f, 5.5f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+            }
+            for (int i = 0; i < 3; i++)
+                this.level.addParticle(new ColoredParticleData(ModParticles.shortLight.get(), 170 / 255F, 93 / 255F, 212 / 255F, 0.2f, 5.5f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
+        } else {
+            if (this.type == Type.SNAKE && this.dir != null && this.side != null) {
+                int t = this.livingTicks % 16;
+                float sT = sinPoints[t];
+                this.setDeltaMovement(this.dir.x + this.side.x * sT, this.dir.y + this.side.y * sT, this.dir.z + this.side.z * sT);
+                this.hasImpulse = true;
+            }
+        }
+    }
+
+    @Override
+    protected boolean canHit(LivingEntity entity) {
+        return super.canHit(entity) && (this.pred == null || this.pred.test(entity));
+    }
+
+    @Override
+    protected boolean damageEntity(LivingEntity target) {
+        return CombatUtils.damage(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).element(EnumElement.DARK).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        try {
+            this.type = Type.valueOf(compound.getString("Type"));
+        } catch (IllegalArgumentException e) {
+            this.type = Type.BALL;
+        }
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Type", this.type.toString());
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
+    }
+
+    @Override
+    public Entity getOwner() {
+        Entity owner = super.getOwner();
+        if (owner instanceof BaseMonster)
+            this.pred = ((BaseMonster) owner).hitPred;
+        return owner;
     }
 
     public void shootAtEntity(Entity target, float velocity, float inaccuracy, float yOffsetModifier, double heighMod) {
@@ -82,79 +150,8 @@ public class EntityDarkBall extends EntityDamageCloud {
         this.side = new Vec3(RayTraceUtils.rotatedAround(this.dir, new Vector3f(up), 90)).normalize();
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-        Vec3 motion = this.getDeltaMovement();
-        double newX = this.getX() + motion.x;
-        double newY = this.getY() + motion.y;
-        double newZ = this.getZ() + motion.z;
-        this.setPos(newX, newY, newZ);
-        if (this.level.isClientSide) {
-            for (int i = 0; i < 5; i++) {
-                this.level.addParticle(new ColoredParticleData(ModParticles.shortLight.get(), 65 / 255F, 2 / 255F, 105 / 255F, 0.2f, 5.5f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
-            }
-            for (int i = 0; i < 3; i++)
-                this.level.addParticle(new ColoredParticleData(ModParticles.shortLight.get(), 170 / 255F, 93 / 255F, 212 / 255F, 0.2f, 5.5f), this.getX() + this.random.nextGaussian() * 0.15, this.getY() + this.random.nextGaussian() * 0.07, this.getZ() + this.random.nextGaussian() * 0.15, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
-        } else {
-            if (this.type == Type.SNAKE && this.dir != null && this.side != null) {
-                int t = this.livingTicks % 16;
-                float sT = sinPoints[t];
-                this.setDeltaMovement(this.dir.x + this.side.x * sT, this.dir.y + this.side.y * sT, this.dir.z + this.side.z * sT);
-                this.hasImpulse = true;
-            }
-        }
-    }
-
-    @Override
-    protected boolean damageEntity(LivingEntity target) {
-        if (CombatUtils.damage(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).element(EnumElement.DARK).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected boolean canHit(LivingEntity entity) {
-        return super.canHit(entity) && (this.pred == null || this.pred.test(entity));
-    }
-
-    @Override
-    public Entity getOwner() {
-        Entity owner = super.getOwner();
-        if (owner instanceof BaseMonster)
-            this.pred = ((BaseMonster) owner).hitPred;
-        return owner;
-    }
-
     public void setDamageMultiplier(float damageMultiplier) {
         this.damageMultiplier = damageMultiplier;
-    }
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        try {
-            this.type = Type.valueOf(compound.getString("Type"));
-        } catch (IllegalArgumentException e) {
-            this.type = Type.BALL;
-        }
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putString("Type", this.type.toString());
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
-    }
-
-    private static float[] calcSinPoints() {
-        float[] arr = new float[16];
-        float step = 2 * Mth.PI / 16;
-        for (int i = 0; i < 16; i++)
-            arr[i] = Mth.cos((i + 8) * step) * 0.2f;
-        return arr;
     }
 
     public enum Type {

@@ -51,6 +51,11 @@ public class MainWorldGenData implements DataProvider {
         this.structureSetGen.runExternal(cache);
     }
 
+    @Override
+    public String getName() {
+        return "World Gen";
+    }
+
     protected void addBossStructure(ResourceLocation id, StructurePlacement placement, StructureFeature<?> feature, TagKey<Biome> biomeTag, ResourceLocation boss, boolean adapt) {
         ResourceLocation processorID = new ResourceLocation(id.getNamespace(), id.getPath() + "_processor");
         this.processorListGen.addElement(processorID, new StructureProcessorList(List.of(new BossSpawnerProcessor(boss))));
@@ -60,10 +65,5 @@ public class MainWorldGenData implements DataProvider {
         this.structureSetGen.addElement(id, new Decoder.StructureSetData(Pair.of(id, 1), placement));
         this.configuredStructureFeatureGen.addElement(id, new Decoder.ConfiguredJigsawStructureFeatureData(feature, id,
                 1, biomeTag, Map.of(), adapt));
-    }
-
-    @Override
-    public String getName() {
-        return "World Gen";
     }
 }

@@ -43,18 +43,13 @@ public class EntityAmbrosia extends BossMonster {
 
     public static final AnimatedAction defeat = new AnimatedAction(204, 150, "defeat", "defeat", 1, false);
     public static final AnimatedAction angry = new AnimatedAction(48, 0, "angry");
-
-    private static final AnimatedAction[] anims = new AnimatedAction[]{kick_1, butterfly, wave, sleep, pollen, pollen2, kick_2, kick_3, defeat, angry};
-
     public static final ImmutableList<String> nonChoosableAttacks = ImmutableList.of(pollen2.getID(), kick_2.getID(), kick_3.getID());
-
-    private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, anims);
-
+    private static final AnimatedAction[] anims = new AnimatedAction[]{kick_1, butterfly, wave, sleep, pollen, pollen2, kick_2, kick_3, defeat, angry};
     private static final List<Vector3f> pollenBase = RayTraceUtils.rotatedVecs(new Vec3(1, 0, 0), new Vec3(0, 1, 0), -180, 135, 45);
     private static final List<Vector3f> pollenInd = RayTraceUtils.rotatedVecs(new Vec3(0.04, 0.07, 0), new Vec3(0, 1, 0), -180, 160, 20);
-
-    private double[] aiVarHelper;
     public final AmbrosiaAttackGoal<EntityAmbrosia> attack = new AmbrosiaAttackGoal<>(this);
+    private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, anims);
+    private double[] aiVarHelper;
 
     public EntityAmbrosia(EntityType<? extends EntityAmbrosia> type, Level world) {
         super(type, world);
@@ -69,8 +64,25 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        return 1;
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        if (anim.getID().equals(defeat.getID()) || anim.getID().equals(angry.getID()))
+            return type == AnimationType.IDLE;
+        if (type == AnimationType.GENERICATTACK)
+            return this.isEnraged() || !anim.getID().equals(pollen.getID());
+        return false;
+    }
+
+    @Override
+    public int animationCooldown(AnimatedAction anim) {
+        int diffAdd = this.difficultyCooldown();
+        if (anim != null)
+            switch (anim.getID()) {
+                case "kick_1":
+                case "pollen":
+                case "kick_2":
+                    return 3;
+            }
+        return 34 + this.getRandom().nextInt(22) - (this.isEnraged() ? 20 : 0) + diffAdd;
     }
 
     @Override
@@ -84,46 +96,8 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
-    public void setEnraged(boolean flag, boolean load) {
-        super.setEnraged(flag, load);
-        if (flag && !load)
-            this.getAnimationHandler().setAnimation(angry);
-    }
-
-    public void setAiVarHelper(double[] aiVarHelper) {
-        this.aiVarHelper = aiVarHelper;
-    }
-
-    public void summonButterfly(double x, double y, double z) {
-        for (int i = 0; i < 1; ++i) {
-            if (!this.level.isClientSide) {
-                EntityButterfly fly = new EntityButterfly(this.level, this);
-                fly.setPos(fly.getX() + this.random.nextFloat() * 2 - 1, fly.getY() + this.random.nextFloat() * 0.5 + 0.25, fly.getZ() + this.random.nextFloat() * 2 - 1);
-                fly.shootAtPosition(x, y, z, 0.3f, 5.0f);
-                this.level.addFreshEntity(fly);
-            }
-        }
-    }
-
-    public void summonWave(int duration) {
-        if (!this.level.isClientSide) {
-            EntityAmbrosiaWave wave = new EntityAmbrosiaWave(this.level, this, duration);
-            wave.setPos(wave.getX(), wave.getY() + 0.2, wave.getZ());
-            this.level.addFreshEntity(wave);
-        }
-    }
-
-    public void summonSleepBalls() {
-        if (!this.level.isClientSide) {
-            for (int i = 0; i < 4; ++i) {
-                double angle = i / 4.0 * 3.141592653589793 * 2.0 + Math.toRadians(this.getYRot());
-                double x = Math.cos(angle) * 1.3;
-                double z = Math.sin(angle) * 1.3;
-                EntityAmbrosiaSleep wave = new EntityAmbrosiaSleep(this.level, this);
-                wave.setPos(this.getX() + x, this.getY() + 0.4, this.getZ() + z);
-                this.level.addFreshEntity(wave);
-            }
-        }
+    protected void playDeathAnimation() {
+        this.getAnimationHandler().setAnimation(defeat);
     }
 
     @Override
@@ -175,13 +149,6 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
-    public void push(Entity entityIn) {
-        if (this.getAnimationHandler().isCurrentAnim(pollen.getID()))
-            return;
-        super.push(entityIn);
-    }
-
-    @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
         if (anim.getID().equals(pollen.getID())) {
             return this.getBoundingBox().inflate(2.0);
@@ -190,26 +157,84 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (command == 2)
+                this.getAnimationHandler().setAnimation(wave);
+            else if (command == 1)
+                this.getAnimationHandler().setAnimation(sleep);
+            else
+                this.getAnimationHandler().setAnimation(kick_1);
+        }
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return 1;
+    }
+
+    @Override
+    public void setEnraged(boolean flag, boolean load) {
+        super.setEnraged(flag, load);
+        if (flag && !load)
+            this.getAnimationHandler().setAnimation(angry);
+    }
+
+    public void setAiVarHelper(double[] aiVarHelper) {
+        this.aiVarHelper = aiVarHelper;
+    }
+
+    public void summonButterfly(double x, double y, double z) {
+        for (int i = 0; i < 1; ++i) {
+            if (!this.level.isClientSide) {
+                EntityButterfly fly = new EntityButterfly(this.level, this);
+                fly.setPos(fly.getX() + this.random.nextFloat() * 2 - 1, fly.getY() + this.random.nextFloat() * 0.5 + 0.25, fly.getZ() + this.random.nextFloat() * 2 - 1);
+                fly.shootAtPosition(x, y, z, 0.3f, 5.0f);
+                this.level.addFreshEntity(fly);
+            }
+        }
+    }
+
+    public void summonWave(int duration) {
+        if (!this.level.isClientSide) {
+            EntityAmbrosiaWave wave = new EntityAmbrosiaWave(this.level, this, duration);
+            wave.setPos(wave.getX(), wave.getY() + 0.2, wave.getZ());
+            this.level.addFreshEntity(wave);
+        }
+    }
+
+    public void summonSleepBalls() {
+        if (!this.level.isClientSide) {
+            for (int i = 0; i < 4; ++i) {
+                double angle = i / 4.0 * 3.141592653589793 * 2.0 + Math.toRadians(this.getYRot());
+                double x = Math.cos(angle) * 1.3;
+                double z = Math.sin(angle) * 1.3;
+                EntityAmbrosiaSleep wave = new EntityAmbrosiaSleep(this.level, this);
+                wave.setPos(this.getX() + x, this.getY() + 0.4, this.getZ() + z);
+                this.level.addFreshEntity(wave);
+            }
+        }
+    }
+
+    @Override
+    public void push(Entity entityIn) {
+        if (this.getAnimationHandler().isCurrentAnim(pollen.getID()))
+            return;
+        super.push(entityIn);
+    }
+
+    @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
+    }
+
+    @Override
+    public double getPassengersRidingOffset() {
+        return this.getBbHeight() * 0.85D;
     }
 
     @Override
     public AnimationHandler<EntityAmbrosia> getAnimationHandler() {
         return this.animationHandler;
-    }
-
-    @Override
-    protected void playDeathAnimation() {
-        this.getAnimationHandler().setAnimation(defeat);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(defeat.getID()) || anim.getID().equals(angry.getID()))
-            return type == AnimationType.IDLE;
-        if (type == AnimationType.GENERICATTACK)
-            return this.isEnraged() || !anim.getID().equals(pollen.getID());
-        return false;
     }
 
     public boolean isAnimEqual(String prev, AnimatedAction other) {
@@ -229,35 +254,5 @@ public class EntityAmbrosia extends BossMonster {
             case "pollen" -> pollen2;
             default -> null;
         };
-    }
-
-    @Override
-    public int animationCooldown(AnimatedAction anim) {
-        int diffAdd = this.difficultyCooldown();
-        if (anim != null)
-            switch (anim.getID()) {
-                case "kick_1":
-                case "pollen":
-                case "kick_2":
-                    return 3;
-            }
-        return 34 + this.getRandom().nextInt(22) - (this.isEnraged() ? 20 : 0) + diffAdd;
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(wave);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(sleep);
-            else
-                this.getAnimationHandler().setAnimation(kick_1);
-        }
-    }
-
-    @Override
-    public double getPassengersRidingOffset() {
-        return this.getBbHeight() * 0.85D;
     }
 }

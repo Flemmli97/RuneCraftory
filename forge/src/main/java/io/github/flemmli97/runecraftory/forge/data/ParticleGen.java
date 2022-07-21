@@ -23,10 +23,8 @@ import java.util.Map;
 public class ParticleGen implements DataProvider {
 
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-
-    private final DataGenerator generator;
-
     protected final Map<ResourceLocation, List<ResourceLocation>> particleTextures = new LinkedHashMap<>();
+    private final DataGenerator generator;
 
     public ParticleGen(DataGenerator generator) {
         this.generator = generator;
@@ -54,7 +52,7 @@ public class ParticleGen implements DataProvider {
     }
 
     @Override
-    public void run(HashCache cache) throws IOException {
+    public void run(HashCache cache) {
         this.particleTextures.clear();
         this.add();
         this.particleTextures.forEach((particle, list) -> {
@@ -69,6 +67,11 @@ public class ParticleGen implements DataProvider {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    @Override
+    public String getName() {
+        return "Particle Jsons";
     }
 
     public void addTo(ParticleType<?> type, ResourceLocation... textures) {
@@ -86,11 +89,6 @@ public class ParticleGen implements DataProvider {
             list.add(new ResourceLocation(typeRes.getNamespace(), typeRes.getPath() + "_" + i));
         }
         this.particleTextures.put(typeRes, list);
-    }
-
-    @Override
-    public String getName() {
-        return "Particle Jsons";
     }
 
     private Path getPath(ResourceLocation particle) {

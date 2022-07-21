@@ -18,6 +18,10 @@ public class VanillaDropCondition implements LootItemCondition {
     private VanillaDropCondition() {
     }
 
+    public static LootItemCondition.Builder get() {
+        return VanillaDropCondition::new;
+    }
+
     @Override
     public LootItemConditionType getType() {
         return ModLootCondition.VANILLADROP.get();
@@ -31,10 +35,6 @@ public class VanillaDropCondition implements LootItemCondition {
     @Override
     public boolean test(LootContext ctx) {
         return GeneralConfig.dropVanillaLoot;
-    }
-
-    public static LootItemCondition.Builder get() {
-        return VanillaDropCondition::new;
     }
 
     public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<VanillaDropCondition> {

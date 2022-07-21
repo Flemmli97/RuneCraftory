@@ -14,9 +14,9 @@ import java.util.List;
 
 public class PermanentEffect extends MobEffect implements ExtendedEffect {
 
-    private int tickDelay;
     private final S2CEntityDataSync.Type packetType;
     private final List<ItemStack> empty = List.of();
+    private int tickDelay;
 
     public PermanentEffect(MobEffectCategory type, int color, S2CEntityDataSync.Type packetType) {
         super(type, color);
@@ -24,14 +24,13 @@ public class PermanentEffect extends MobEffect implements ExtendedEffect {
         this.packetType = packetType;
     }
 
+    private static void sendPacket(LivingEntity entity, S2CEntityDataSync.Type type, boolean flag) {
+        Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), type, flag), entity);
+    }
+
     public PermanentEffect setTickDelay(int value) {
         this.tickDelay = value;
         return this;
-    }
-
-    @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
-        return duration % this.tickDelay == 0;
     }
 
     @Override
@@ -41,8 +40,14 @@ public class PermanentEffect extends MobEffect implements ExtendedEffect {
     }
 
     @Override
-    public List<ItemStack> getCurativeItems() {
-        return this.empty;
+    public boolean isDurationEffectTick(int duration, int amplifier) {
+        return duration % this.tickDelay == 0;
+    }
+
+    @Override
+    public void removeAttributeModifiers(LivingEntity entity, AttributeMap manager, int amplifier) {
+        sendPacket(entity, this.packetType, false);
+        super.removeAttributeModifiers(entity, manager, amplifier);
     }
 
     @Override
@@ -52,12 +57,7 @@ public class PermanentEffect extends MobEffect implements ExtendedEffect {
     }
 
     @Override
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap manager, int amplifier) {
-        sendPacket(entity, this.packetType, false);
-        super.removeAttributeModifiers(entity, manager, amplifier);
-    }
-
-    private static void sendPacket(LivingEntity entity, S2CEntityDataSync.Type type, boolean flag) {
-        Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), type, flag), entity);
+    public List<ItemStack> getCurativeItems() {
+        return this.empty;
     }
 }

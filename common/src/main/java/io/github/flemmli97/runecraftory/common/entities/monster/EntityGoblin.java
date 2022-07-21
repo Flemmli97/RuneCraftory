@@ -21,19 +21,17 @@ import java.util.List;
 
 public class EntityGoblin extends ChargingMonster {
 
-    public ChargeAttackGoal<EntityGoblin> attack = new ChargeAttackGoal<>(this);
     private static final AnimatedAction melee = new AnimatedAction(12, 7, "slash");
     private static final AnimatedAction leap = new AnimatedAction(19, 6, "leap");
     private static final AnimatedAction stone = new AnimatedAction(14, 9, "throw");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap, stone};
-
+    public ChargeAttackGoal<EntityGoblin> attack = new ChargeAttackGoal<>(this);
+    protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityGoblin> animationHandler = new AnimationHandler<>(this, anims)
             .setAnimationChangeCons(a -> {
                 if (!leap.checkID(a))
                     this.hitEntity = null;
             });
-    protected List<LivingEntity> hitEntity;
 
     public EntityGoblin(EntityType<? extends EntityGoblin> type, Level world) {
         super(type, world);
@@ -46,13 +44,12 @@ public class EntityGoblin extends ChargingMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        return 0.85f;
-    }
-
-    @Override
-    public AnimationHandler<? extends EntityGoblin> getAnimationHandler() {
-        return this.animationHandler;
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        if (type == AnimationType.MELEE)
+            return anim.getID().equals(melee.getID()) || anim.getID().equals(stone.getID());
+        if (type == AnimationType.CHARGE)
+            return anim.getID().equals(leap.getID());
+        return false;
     }
 
     @Override
@@ -60,6 +57,28 @@ public class EntityGoblin extends ChargingMonster {
         if (anim.getID().equals(stone.getID()))
             return 8;
         return 1;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (command == 2)
+                this.getAnimationHandler().setAnimation(stone);
+            else if (command == 1)
+                this.getAnimationHandler().setAnimation(leap);
+            else
+                this.getAnimationHandler().setAnimation(melee);
+        }
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return 0.85f;
+    }
+
+    @Override
+    public AnimationHandler<? extends EntityGoblin> getAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -100,26 +119,5 @@ public class EntityGoblin extends ChargingMonster {
         stone.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
         this.playSound(SoundEvents.FISHING_BOBBER_THROW, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(stone);
-    }
-
-    @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE)
-            return anim.getID().equals(melee.getID()) || anim.getID().equals(stone.getID());
-        if (type == AnimationType.CHARGE)
-            return anim.getID().equals(leap.getID());
-        return false;
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(stone);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(leap);
-            else
-                this.getAnimationHandler().setAnimation(melee);
-        }
     }
 }

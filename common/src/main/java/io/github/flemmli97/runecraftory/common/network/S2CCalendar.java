@@ -22,16 +22,6 @@ public class S2CCalendar implements Packet {
         this.calendar = calendar;
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        this.calendar.toPacket(buf);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CCalendar read(FriendlyByteBuf buf) {
         return new S2CCalendar(new FriendlyByteBuf(buf.copy()));
     }
@@ -41,5 +31,15 @@ public class S2CCalendar implements Packet {
         if (player == null)
             return;
         ClientHandlers.updateClientCalendar(pkt.buffer);
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        this.calendar.toPacket(buf);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

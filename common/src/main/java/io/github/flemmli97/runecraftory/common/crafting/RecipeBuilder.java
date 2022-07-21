@@ -27,9 +27,9 @@ public class RecipeBuilder {
     private final ItemStack result;
     private final int level, cost;
     private final List<Ingredient> ingredients = new ArrayList<>();
-    private String group;
     private final RecipeSerializer<?> serializer;
     private final EnumCrafting type;
+    private String group;
 
     private RecipeBuilder(EnumCrafting type, ItemStack item, int level, int cost, RecipeSerializer<?> serializer) {
         this.type = type;
@@ -150,24 +150,14 @@ public class RecipeBuilder {
             obj.add("result", this.itemStackToJson(this.result));
         }
 
-        private JsonElement itemStackToJson(ItemStack stack) {
-            JsonObject obj = new JsonObject();
-            obj.addProperty("item", PlatformUtils.INSTANCE.items().getIDFrom(stack.getItem()).toString());
-            if (stack.getCount() > 1)
-                obj.addProperty("count", stack.getCount());
-            if (stack.hasTag())
-                CompoundTag.CODEC.encode(stack.getTag(), JsonOps.INSTANCE, new JsonObject()).result().ifPresent(e -> obj.add("nbt", e));
-            return obj;
+        @Override
+        public ResourceLocation getId() {
+            return this.id;
         }
 
         @Override
         public RecipeSerializer<?> getType() {
             return RecipeSerializer.SHAPELESS_RECIPE;
-        }
-
-        @Override
-        public ResourceLocation getId() {
-            return this.id;
         }
 
         @Override
@@ -180,6 +170,16 @@ public class RecipeBuilder {
         @Nullable
         public ResourceLocation getAdvancementId() {
             return null;
+        }
+
+        private JsonElement itemStackToJson(ItemStack stack) {
+            JsonObject obj = new JsonObject();
+            obj.addProperty("item", PlatformUtils.INSTANCE.items().getIDFrom(stack.getItem()).toString());
+            if (stack.getCount() > 1)
+                obj.addProperty("count", stack.getCount());
+            if (stack.hasTag())
+                CompoundTag.CODEC.encode(stack.getTag(), JsonOps.INSTANCE, new JsonObject()).result().ifPresent(e -> obj.add("nbt", e));
+            return obj;
         }
     }
 }

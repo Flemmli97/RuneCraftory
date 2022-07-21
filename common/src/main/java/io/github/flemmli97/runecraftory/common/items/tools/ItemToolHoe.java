@@ -67,11 +67,6 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     }
 
     @Override
-    public Rarity getRarity(ItemStack stack) {
-        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
-    }
-
-    @Override
     public EnumToolCharge chargeType(ItemStack stack) {
         return EnumToolCharge.CHARGEUPTOOL;
     }
@@ -101,8 +96,20 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        int duration = stack.getUseDuration() - remainingUseDuration;
+        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        if (this.tier.getTierLevel() != 0) {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(itemstack);
+        }
+        return InteractionResultHolder.pass(itemstack);
     }
 
     @Override
@@ -113,13 +120,6 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     @Override
     public int getUseDuration(ItemStack stack) {
         return 72000;
-    }
-
-    @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
-            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
     @Override
@@ -150,13 +150,13 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        if (this.tier.getTierLevel() != 0) {
-            player.startUsingItem(hand);
-            return InteractionResultHolder.consume(itemstack);
-        }
-        return InteractionResultHolder.pass(itemstack);
+    public Rarity getRarity(ItemStack stack) {
+        return this.tier == EnumToolTier.PLATINUM ? Rarity.EPIC : Rarity.COMMON;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
     }
 
     @Override

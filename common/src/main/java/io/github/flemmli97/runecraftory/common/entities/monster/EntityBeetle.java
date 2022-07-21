@@ -10,12 +10,10 @@ import net.minecraft.world.level.Level;
 
 public class EntityBeetle extends ChargingMonster {
 
-    public final ChargeAttackGoal<EntityBeetle> ai = new ChargeAttackGoal<>(this);
     public static final AnimatedAction chargeAttack = new AnimatedAction(30, 2, "ramm");
     public static final AnimatedAction melee = new AnimatedAction(15, 8, "attack");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, chargeAttack};
-
+    public final ChargeAttackGoal<EntityBeetle> ai = new ChargeAttackGoal<>(this);
     private final AnimationHandler<EntityBeetle> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntityBeetle(EntityType<? extends EntityBeetle> type, Level world) {

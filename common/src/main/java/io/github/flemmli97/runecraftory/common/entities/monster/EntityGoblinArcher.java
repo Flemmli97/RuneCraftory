@@ -21,14 +21,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntityGoblinArcher extends EntityGoblin {
 
-    public AnimatedRangedGoal<EntityGoblin> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getMainHandItem().getItem() instanceof BowItem);
     private static final AnimatedAction bow = new AnimatedAction(15, 9, "bow");
     private static final AnimatedAction triple = new AnimatedAction(15, 9, "triple", "bow");
     private static final AnimatedAction kick = new AnimatedAction(11, 7, "kick");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{bow, triple, kick};
-
     private final AnimationHandler<EntityGoblinArcher> animationHandler = new AnimationHandler<>(this, anims);
+    public AnimatedRangedGoal<EntityGoblin> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getMainHandItem().getItem() instanceof BowItem);
 
     public EntityGoblinArcher(EntityType<? extends EntityGoblin> type, Level level) {
         super(type, level);
@@ -48,6 +46,18 @@ public class EntityGoblinArcher extends EntityGoblin {
         if (type == AnimationType.MELEE)
             return anim.getID().equals(kick.getID());
         return false;
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (command == 2)
+                this.getAnimationHandler().setAnimation(triple);
+            else if (command == 1)
+                this.getAnimationHandler().setAnimation(bow);
+            else
+                this.getAnimationHandler().setAnimation(kick);
+        }
     }
 
     @Override
@@ -79,18 +89,6 @@ public class EntityGoblinArcher extends EntityGoblin {
             }
         } else
             super.handleAttack(anim);
-    }
-
-    @Override
-    public void handleRidingCommand(int command) {
-        if (!this.getAnimationHandler().hasAnimation()) {
-            if (command == 2)
-                this.getAnimationHandler().setAnimation(triple);
-            else if (command == 1)
-                this.getAnimationHandler().setAnimation(bow);
-            else
-                this.getAnimationHandler().setAnimation(kick);
-        }
     }
 
     private void shootArrow(LivingEntity target) {

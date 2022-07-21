@@ -66,14 +66,6 @@ public class ContainerUpgrade extends AbstractContainerMenu {
         this.updateOutput();
     }
 
-    @Override
-    public void slotsChanged(Container inv) {
-        if (inv == this.craftingInv) {
-            this.updateOutput();
-        }
-        super.slotsChanged(inv);
-    }
-
     private void updateOutput() {
         if (this.craftingInv.getPlayer().level.isClientSide)
             return;
@@ -87,11 +79,6 @@ public class ContainerUpgrade extends AbstractContainerMenu {
 
     public int rpCost() {
         return this.rpCost.get();
-    }
-
-    @Override
-    public boolean stillValid(Player player) {
-        return true;
     }
 
     @Override
@@ -131,5 +118,18 @@ public class ContainerUpgrade extends AbstractContainerMenu {
         }
 
         return itemstack;
+    }
+
+    @Override
+    public void slotsChanged(Container inv) {
+        if (inv == this.craftingInv) {
+            this.updateOutput();
+        }
+        super.slotsChanged(inv);
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return true;
     }
 }

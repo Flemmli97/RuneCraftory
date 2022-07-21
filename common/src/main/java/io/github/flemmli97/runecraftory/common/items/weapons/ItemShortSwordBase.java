@@ -93,13 +93,20 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return false;
+    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
+        int duration = stack.getUseDuration() - remainingUseDuration;
+        if (duration == this.getChargeTime(stack))
+            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
-        return 72000;
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        ItemStack itemstack = player.getItemInHand(hand);
+        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.SHORTSWORD)[0] >= 5).orElse(false)) {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(itemstack);
+        }
+        return InteractionResultHolder.pass(itemstack);
     }
 
     @Override
@@ -108,10 +115,8 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
     }
 
     @Override
-    public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
-        int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration == this.getChargeTime(stack))
-            livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
+    public int getUseDuration(ItemStack stack) {
+        return 72000;
     }
 
     @Override
@@ -138,13 +143,8 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
-        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.SHORTSWORD)[0] >= 5).orElse(false)) {
-            player.startUsingItem(hand);
-            return InteractionResultHolder.consume(itemstack);
-        }
-        return InteractionResultHolder.pass(itemstack);
+    public boolean isEnchantable(ItemStack stack) {
+        return false;
     }
 
     @Override

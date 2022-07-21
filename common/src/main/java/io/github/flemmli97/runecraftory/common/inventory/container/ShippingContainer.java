@@ -47,11 +47,6 @@ public class ShippingContainer extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player player) {
-        return this.container.stillValid(player);
-    }
-
-    @Override
     public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
@@ -74,6 +69,11 @@ public class ShippingContainer extends AbstractContainerMenu {
     public void removed(Player player) {
         super.removed(player);
         this.container.stopOpen(player);
+    }
+
+    @Override
+    public boolean stillValid(Player player) {
+        return this.container.stillValid(player);
     }
 
     public Container getContainer() {

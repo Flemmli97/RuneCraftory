@@ -46,8 +46,8 @@ public class FoodManager extends SimpleJsonResourceReloadListener {
         }
         if (!this.food.isEmpty()) {
             return item.builtInRegistryHolder().tags()
-                    .filter(this.food::containsKey)
-                    .findFirst().map(this.food::get)
+                    .filter(tag -> this.food.containsKey(tag.location()))
+                    .findFirst().map(tag -> this.food.get(tag.location()))
                     .orElse(null);
         }
         return null;

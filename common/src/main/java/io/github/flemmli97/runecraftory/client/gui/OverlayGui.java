@@ -25,6 +25,10 @@ public class OverlayGui extends GuiComponent {
         this.mc = mc;
     }
 
+    public static void drawStringCenter(PoseStack stack, Font fontRenderer, Component component, float x, float y, int color) {
+        fontRenderer.draw(stack, component, x - fontRenderer.width(component) / 2f, y, color);
+    }
+
     public void renderBar(PoseStack stack) {
         PlayerData data = Platform.INSTANCE.getPlayerData(this.mc.player).orElse(null);
         CalendarImpl calendar = ClientHandlers.clientCalendar;
@@ -46,9 +50,5 @@ public class OverlayGui extends GuiComponent {
         this.blit(stack, ClientConfig.seasonDisplayX, ClientConfig.seasonDisplayY + 39, 0, 176, 48, 17);
 
         drawStringCenter(stack, this.mc.font, new TranslatableComponent(calendar.currentDay().translation()).append(new TranslatableComponent(" " + calendar.date())), ClientConfig.seasonDisplayX + 26, ClientConfig.seasonDisplayY + 39 + 5, 0xbd1600);
-    }
-
-    public static void drawStringCenter(PoseStack stack, Font fontRenderer, Component component, float x, float y, int color) {
-        fontRenderer.draw(stack, component, x - fontRenderer.width(component) / 2f, y, color);
     }
 }

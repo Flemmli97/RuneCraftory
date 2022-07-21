@@ -31,20 +31,6 @@ public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(GateEntity entity) {
-        return switch (entity.getElement()) {
-            case NONE -> none;
-            case WATER -> water;
-            case EARTH -> earth;
-            case WIND -> wind;
-            case FIRE -> fire;
-            case LIGHT -> light;
-            case DARK -> dark;
-            case LOVE -> love;
-        };
-    }
-
-    @Override
     public void render(GateEntity entity, float entityYaw, float partialTicks, PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn) {
         /*ParticleStatus status = Minecraft.getInstance().gameSettings.particles;
         if (status == ParticleStatus.ALL) {
@@ -86,8 +72,13 @@ public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
     }
 
     @Override
-    protected int getBlockLightLevel(GateEntity entityIn, BlockPos pos) {
-        return 15;
+    protected float getFlipDegrees(GateEntity entityLivingBaseIn) {
+        return 0;
+    }
+
+    @Override
+    protected boolean shouldShowName(GateEntity entity) {
+        return false;
     }
 
     /*@Override
@@ -99,12 +90,21 @@ public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
     }*/
 
     @Override
-    protected boolean shouldShowName(GateEntity entity) {
-        return false;
+    protected int getBlockLightLevel(GateEntity entityIn, BlockPos pos) {
+        return 15;
     }
 
     @Override
-    protected float getFlipDegrees(GateEntity entityLivingBaseIn) {
-        return 0;
+    public ResourceLocation getTextureLocation(GateEntity entity) {
+        return switch (entity.getElement()) {
+            case NONE -> none;
+            case WATER -> water;
+            case EARTH -> earth;
+            case WIND -> wind;
+            case FIRE -> fire;
+            case LIGHT -> light;
+            case DARK -> dark;
+            case LOVE -> love;
+        };
     }
 }

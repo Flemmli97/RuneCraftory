@@ -14,13 +14,11 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntitySpider extends BaseMonster {
 
-    public AnimatedRangedGoal<EntitySpider> attack = new AnimatedRangedGoal<>(this, 7, (e) -> true);
     public static final AnimatedAction melee = new AnimatedAction(13, 9, "attack");
     public static final AnimatedAction webshot = new AnimatedAction(14, 6, "webshot");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, webshot};
-
     private final AnimationHandler<EntitySpider> animationHandler = new AnimationHandler<>(this, anims);
+    public AnimatedRangedGoal<EntitySpider> attack = new AnimatedRangedGoal<>(this, 7, (e) -> true);
 
     public EntitySpider(EntityType<? extends EntitySpider> type, Level world) {
         super(type, world);
@@ -38,8 +36,12 @@ public class EntitySpider extends BaseMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1;
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        if (type == AnimationType.RANGED)
+            return anim.getID().equals(webshot.getID());
+        if (type == AnimationType.MELEE)
+            return anim.getID().equals(melee.getID());
+        return false;
     }
 
     @Override
@@ -48,12 +50,8 @@ public class EntitySpider extends BaseMonster {
     }
 
     @Override
-    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED)
-            return anim.getID().equals(webshot.getID());
-        if (type == AnimationType.MELEE)
-            return anim.getID().equals(melee.getID());
-        return false;
+    public double maxAttackRange(AnimatedAction anim) {
+        return 1;
     }
 
     @Override
@@ -69,16 +67,6 @@ public class EntitySpider extends BaseMonster {
             super.handleAttack(anim);
     }
 
-    private void shootWeb(LivingEntity target) {
-        EntitySpiderWeb web = new EntitySpiderWeb(this.level, this);
-        Vec3 dir = new Vec3(target.getX() - web.getX(), target.getY(0.33) - web.getY(), target.getZ() - web.getZ());
-        double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
-        dir = dir.add(0, l * 0.2, 0);
-        web.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
-        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(web);
-    }
-
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
@@ -87,5 +75,15 @@ public class EntitySpider extends BaseMonster {
             else
                 this.getAnimationHandler().setAnimation(melee);
         }
+    }
+
+    private void shootWeb(LivingEntity target) {
+        EntitySpiderWeb web = new EntitySpiderWeb(this.level, this);
+        Vec3 dir = new Vec3(target.getX() - web.getX(), target.getY(0.33) - web.getY(), target.getZ() - web.getZ());
+        double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
+        dir = dir.add(0, l * 0.2, 0);
+        web.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
+        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level.addFreshEntity(web);
     }
 }

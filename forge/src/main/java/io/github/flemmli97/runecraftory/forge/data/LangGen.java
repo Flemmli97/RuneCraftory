@@ -52,12 +52,11 @@ import java.util.stream.Stream;
 public class LangGen implements DataProvider {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    private static final Comparator<String> order = Comparator.comparingInt(o -> LangType.get(o).ordinal());
     private final Map<String, String> data = new LinkedHashMap<>();
     private final DataGenerator gen;
     private final String modid;
     private final String locale;
-
-    private static final Comparator<String> order = Comparator.comparingInt(o -> LangType.get(o).ordinal());
 
     public LangGen(DataGenerator gen, ExistingFileHelper existing) {
         this.gen = gen;

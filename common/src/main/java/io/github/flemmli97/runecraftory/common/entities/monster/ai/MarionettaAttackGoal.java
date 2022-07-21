@@ -21,20 +21,15 @@ public class MarionettaAttackGoal<T extends EntityMarionetta> extends AnimatedAt
     }
 
     @Override
-    public AnimatedAction randomAttack() {
-        return this.attacker.getRandomAnimation(AnimationType.GENERICATTACK);
-    }
-
-    @Override
-    public int coolDown(AnimatedAction anim) {
-        return this.attacker.animationCooldown(this.next);
-    }
-
-    @Override
     public void stop() {
         super.stop();
         this.moveDelay = 0;
         this.moveFlag = false;
+    }
+
+    @Override
+    public AnimatedAction randomAttack() {
+        return this.attacker.getRandomAnimation(AnimationType.GENERICATTACK);
     }
 
     @Override
@@ -122,6 +117,11 @@ public class MarionettaAttackGoal<T extends EntityMarionetta> extends AnimatedAt
             }
         }
         this.circleAroundTargetFacing(7, this.clockwise, 1);
+    }
+
+    @Override
+    public int coolDown(AnimatedAction anim) {
+        return this.attacker.animationCooldown(this.next);
     }
 
 }

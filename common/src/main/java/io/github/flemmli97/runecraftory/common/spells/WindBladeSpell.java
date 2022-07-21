@@ -38,15 +38,12 @@ public class WindBladeSpell extends Spell {
             EntityWindBlade wind = new EntityWindBlade(world, entity);
             wind.setDamageMultiplier(0.95f + level * 0.5f);
             wind.shoot(entity, 0, entity.getYRot(), 0, 0.45f, 0);
-            boolean set = false;
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 wind.setTarget(mob.getTarget());
-                set = true;
             } else if (entity instanceof Player) {
                 EntityHitResult res = RayTraceUtils.calculateEntityFromLook(entity, 9);
                 if (res != null) {
                     wind.setTarget(res.getEntity());
-                    set = true;
                 }
             }
             world.addFreshEntity(wind);

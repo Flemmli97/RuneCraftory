@@ -22,16 +22,6 @@ public class S2CMaxRunePoints implements Packet {
         this.rpMax = data.getMaxRunePointsRaw();
     }
 
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeFloat(this.rpMax);
-    }
-
-    @Override
-    public ResourceLocation getID() {
-        return ID;
-    }
-
     public static S2CMaxRunePoints read(FriendlyByteBuf buf) {
         return new S2CMaxRunePoints(buf.readFloat());
     }
@@ -41,5 +31,15 @@ public class S2CMaxRunePoints implements Packet {
         if (player == null)
             return;
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.setMaxRunePoints(player, pkt.rpMax));
+    }
+
+    @Override
+    public void write(FriendlyByteBuf buf) {
+        buf.writeFloat(this.rpMax);
+    }
+
+    @Override
+    public ResourceLocation getID() {
+        return ID;
     }
 }

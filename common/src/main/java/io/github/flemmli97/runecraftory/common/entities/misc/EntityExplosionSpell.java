@@ -47,16 +47,21 @@ public class EntityExplosionSpell extends EntityProjectile {
     }
 
     @Override
-    protected boolean canHit(Entity entity) {
-        return (!(entity instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) entity)) && super.canHit(entity);
-    }
-
-    @Override
     public void tick() {
         super.tick();
         if (this.level.isClientSide) {
             this.level.addParticle(new ColoredParticleData(ModParticles.light.get(), 246 / 255F, 52 / 255F, 52 / 255F, 0.5f, 3f), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
         }
+    }
+
+    @Override
+    protected boolean canHit(Entity entity) {
+        return (!(entity instanceof LivingEntity) || this.pred == null || this.pred.test((LivingEntity) entity)) && super.canHit(entity);
+    }
+
+    @Override
+    protected float getGravityVelocity() {
+        return 0.0025f;
     }
 
     @Override
@@ -72,6 +77,26 @@ public class EntityExplosionSpell extends EntityProjectile {
         this.doExplosion(null);
         this.level.playSound(null, result.getLocation().x, result.getLocation().y, result.getLocation().z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0f, 1.0f);
         this.remove(RemovalReason.KILLED);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
+    }
+
+    @Override
+    public Entity getOwner() {
+        Entity owner = super.getOwner();
+        if (owner instanceof BaseMonster)
+            this.pred = ((BaseMonster) owner).hitPred;
+        return owner;
     }
 
     protected void doExplosion(Entity hit) {
@@ -93,32 +118,7 @@ public class EntityExplosionSpell extends EntityProjectile {
             serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 2, 1.0, 0.0, 0.0, 1);
     }
 
-    @Override
-    protected float getGravityVelocity() {
-        return 0.0025f;
-    }
-
     public void setDamageMultiplier(float damageMultiplier) {
         this.damageMultiplier = damageMultiplier;
-    }
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
-    }
-
-    @Override
-    public Entity getOwner() {
-        Entity owner = super.getOwner();
-        if (owner instanceof BaseMonster)
-            this.pred = ((BaseMonster) owner).hitPred;
-        return owner;
     }
 }

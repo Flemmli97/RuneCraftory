@@ -28,15 +28,10 @@ import java.util.function.Predicate;
 
 public class EntityAmbrosiaWave extends EntityDamageCloud {
 
-    private static final EntityDataAccessor<Integer> maxTick = SynchedEntityData.defineId(EntityAmbrosiaWave.class, EntityDataSerializers.INT);
-
-    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
-
     public static final float circleInc = 0.2f;
     public static final int timeTillFull = 25;
-
+    private static final EntityDataAccessor<Integer> maxTick = SynchedEntityData.defineId(EntityAmbrosiaWave.class, EntityDataSerializers.INT);    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
     private static final List<Vector3f> circleParticleMotion = RayTraceUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
-
     public EntityAmbrosiaWave(EntityType<? extends EntityAmbrosiaWave> type, Level level) {
         super(type, level);
     }
@@ -46,24 +41,6 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
         this.entityData.set(maxTick, maxLivingTick);
         if (shooter instanceof BaseMonster)
             this.pred = (e) -> !e.equals(this.getOwner()) && ((BaseMonster) shooter).hitPred.test(e);
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(maxTick, 200);
-    }
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.entityData.set(maxTick, compound.getInt("MaxTick"));
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putInt("MaxTick", this.entityData.get(maxTick));
     }
 
     @Override
@@ -77,18 +54,19 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
     }
 
     @Override
-    public boolean canStartDamage() {
-        return true;
-    }
-
-    @Override
     public int livingTickMax() {
         return this.entityData.get(maxTick);
     }
 
     @Override
-    protected boolean canHit(LivingEntity e) {
-        return super.canHit(e) && e.distanceToSqr(this) <= this.getRadius() * this.getRadius() && (this.pred == null || this.pred.test(e));
+    public boolean canStartDamage() {
+        return true;
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(maxTick, 200);
     }
 
     @Override
@@ -105,6 +83,11 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
     }
 
     @Override
+    protected boolean canHit(LivingEntity e) {
+        return super.canHit(e) && e.distanceToSqr(this) <= this.getRadius() * this.getRadius() && (this.pred == null || this.pred.test(e));
+    }
+
+    @Override
     protected boolean damageEntity(LivingEntity e) {
         if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(4).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * 0.3f, null)) {
             e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 6, true, false));
@@ -115,10 +98,26 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
     }
 
     @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.entityData.set(maxTick, compound.getInt("MaxTick"));
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("MaxTick", this.entityData.get(maxTick));
+    }
+
+    @Override
     public Entity getOwner() {
         Entity owner = super.getOwner();
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
     }
+
+
+
+
 }

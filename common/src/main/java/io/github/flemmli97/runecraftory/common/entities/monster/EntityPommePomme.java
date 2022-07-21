@@ -11,12 +11,10 @@ import net.minecraft.world.level.Level;
 
 public class EntityPommePomme extends ChargingMonster {
 
-    public final ChargeAttackGoal<EntityPommePomme> ai = new ChargeAttackGoal<>(this);
     public static final AnimatedAction chargeAttack = new AnimatedAction(34, 2, "roll");
     public static final AnimatedAction kick = new AnimatedAction(17, 11, "kick");
-
     private static final AnimatedAction[] anims = new AnimatedAction[]{kick, chargeAttack};
-
+    public final ChargeAttackGoal<EntityPommePomme> ai = new ChargeAttackGoal<>(this);
     private final AnimationHandler<EntityPommePomme> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntityPommePomme(EntityType<? extends EntityPommePomme> type, Level world) {
@@ -31,31 +29,16 @@ public class EntityPommePomme extends ChargingMonster {
     }
 
     @Override
-    public float attackChance(AnimationType type) {
-        return 0.9f;
-    }
-
-    @Override
-    public AnimationHandler<EntityPommePomme> getAnimationHandler() {
-        return this.animationHandler;
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 0.8;
-    }
-
-    @Override
-    public float chargingLength() {
-        return 7;
-    }
-
-    @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.CHARGE) {
             return anim.getID().equals(chargeAttack.getID());
         }
         return type == AnimationType.MELEE && anim.getID().equals(kick.getID());
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return 0.8;
     }
 
     @Override
@@ -66,5 +49,20 @@ public class EntityPommePomme extends ChargingMonster {
             else
                 this.getAnimationHandler().setAnimation(kick);
         }
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return 0.9f;
+    }
+
+    @Override
+    public AnimationHandler<EntityPommePomme> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public float chargingLength() {
+        return 7;
     }
 }

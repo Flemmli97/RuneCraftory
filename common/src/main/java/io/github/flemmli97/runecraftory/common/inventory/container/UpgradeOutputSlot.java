@@ -17,9 +17,9 @@ import net.minecraft.world.item.ItemStack;
 
 public class UpgradeOutputSlot extends Slot {
 
-    private int amountCrafted;
     private final PlayerContainerInv ingredientInv;
     private final ContainerUpgrade container;
+    private int amountCrafted;
 
     public UpgradeOutputSlot(Container output, ContainerUpgrade container, PlayerContainerInv ingredientInv, int id, int x, int y) {
         super(output, id, x, y);
@@ -34,6 +34,12 @@ public class UpgradeOutputSlot extends Slot {
     }
 
     @Override
+    protected void onSwapCraft(int amount) {
+        super.onSwapCraft(amount);
+        this.amountCrafted += amount;
+    }
+
+    @Override
     protected void checkTakeAchievements(ItemStack stack) {
         Player player = this.ingredientInv.getPlayer();
         if (this.amountCrafted > 0) {
@@ -41,31 +47,6 @@ public class UpgradeOutputSlot extends Slot {
             Platform.INSTANCE.craftingEvent(player, stack, this.ingredientInv);
         }
         this.amountCrafted = 0;
-    }
-
-    @Override
-    protected void onSwapCraft(int amount) {
-        super.onSwapCraft(amount);
-        this.amountCrafted += amount;
-    }
-
-    @Override
-    public boolean mayPlace(ItemStack stack) {
-        return false;
-    }
-
-    @Override
-    public boolean mayPickup(Player player) {
-        return CraftingUtils.canUpgrade(player, this.container.craftingType(), this.ingredientInv.getItem(6), this.ingredientInv.getItem(7))
-                && (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(data -> data.getMaxRunePoints() >= this.container.rpCost()).orElse(false));
-    }
-
-    @Override
-    public ItemStack remove(int amount) {
-        if (this.hasItem()) {
-            this.amountCrafted += Math.min(amount, this.getItem().getCount());
-        }
-        return super.remove(amount);
     }
 
     @Override
@@ -95,5 +76,24 @@ public class UpgradeOutputSlot extends Slot {
         player.level.playSound(null, player.blockPosition(), SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 1, 1);
         if (ing1.isEmpty() || ing2.isEmpty())
             this.container.slotsChanged(this.ingredientInv);
+    }
+
+    @Override
+    public boolean mayPlace(ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public ItemStack remove(int amount) {
+        if (this.hasItem()) {
+            this.amountCrafted += Math.min(amount, this.getItem().getCount());
+        }
+        return super.remove(amount);
+    }
+
+    @Override
+    public boolean mayPickup(Player player) {
+        return CraftingUtils.canUpgrade(player, this.container.craftingType(), this.ingredientInv.getItem(6), this.ingredientInv.getItem(7))
+                && (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(data -> data.getMaxRunePoints() >= this.container.rpCost()).orElse(false));
     }
 }

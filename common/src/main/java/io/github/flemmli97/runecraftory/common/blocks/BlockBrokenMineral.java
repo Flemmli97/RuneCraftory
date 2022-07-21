@@ -114,29 +114,16 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return switch (state.getValue(FACING)) {
-            case WEST -> west;
-            case EAST -> east;
-            case SOUTH -> south;
-            default -> north;
-        };
-    }
-
-    @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         FluidState fluidstate = ctx.getLevel().getFluidState(ctx.getClickedPos());
         return this.defaultBlockState().setValue(FACING, ctx.getPlayer() != null ? ctx.getPlayer().getDirection().getOpposite() : Direction.NORTH).setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
     }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot) {
-        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
-    }
-
-    @Override
-    public BlockState mirror(BlockState state, Mirror mirror) {
-        return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        super.playerWillDestroy(level, pos, state, player);
+        if (!level.isClientSide)
+            level.levelEvent(null, 2001, pos, Block.getId(state));
     }
 
     @Override
@@ -155,13 +142,33 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
     }
 
     @Override
+    public FluidState getFluidState(BlockState state) {
+        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rot) {
+        return state.setValue(FACING, rot.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
+    }
+
+    @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
         return level.getBlockState(pos.below()).isFaceSturdy(level, pos, Direction.UP, SupportType.FULL);
     }
 
     @Override
-    public FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(FACING)) {
+            case WEST -> west;
+            case EAST -> east;
+            case SOUTH -> south;
+            default -> north;
+        };
     }
 
     @Override
@@ -173,13 +180,6 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
             return level.setBlock(pos, fluid.createLegacyBlock(), Block.UPDATE_ALL);
         }
         return false;
-    }
-
-    @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
-        super.playerWillDestroy(level, pos, state, player);
-        if (!level.isClientSide)
-            level.levelEvent(null, 2001, pos, Block.getId(state));
     }
 
     public BlockState getMineralState(BlockState state) {

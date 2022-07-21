@@ -24,9 +24,9 @@ import java.util.List;
 
 public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
 
+    public static final ResourceLocation GUI = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forgec.png");
     private final EnumCrafting type;
     private final ResourceLocation res;
-    public static final ResourceLocation GUI = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forgec.png");
 
     public SextupleCategory(EnumCrafting type) {
         this.type = type;
@@ -46,11 +46,6 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
     @Override
     public Component getTitle() {
         return new TranslatableComponent("tile.crafting." + this.type.getId());
-    }
-
-    @Override
-    public CategoryIdentifier<? extends SextupleDisplay> getCategoryIdentifier() {
-        return CategoryIdentifier.of(this.res);
     }
 
     @Override
@@ -84,5 +79,10 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
     @Override
     public int getDisplayWidth(SextupleDisplay display) {
         return 119;
+    }
+
+    @Override
+    public CategoryIdentifier<? extends SextupleDisplay> getCategoryIdentifier() {
+        return CategoryIdentifier.of(this.res);
     }
 }
