@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.world.structure.BossSpawnerProcessor;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -45,6 +46,9 @@ public class MainWorldGenData implements DataProvider {
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "thunderbolt_ruins"),
                 new RandomSpreadStructurePlacement(16, 8, RandomSpreadType.LINEAR, 1224567480),
                 ModStructures.THUNDERBOLT_RUINS.get(), BiomeTags.IS_OCEAN, ModEntities.thunderbolt.getID(), true);
+        this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "theater_ruins"),
+                new RandomSpreadStructurePlacement(21, 7, RandomSpreadType.LINEAR, 1226867120),
+                ModStructures.THEATER_RUINS.get(), ModTags.IS_SPOOKY, ModEntities.marionetta.getID(), true);
         this.templatePoolGen.runExternal(cache);
         this.processorListGen.runExternal(cache);
         this.configuredStructureFeatureGen.runExternal(cache);

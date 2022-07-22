@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "boss": "runecraftory:marionetta",
+      "processor_type": "runecraftory:boss_processor"
+    }
+  ]
+}

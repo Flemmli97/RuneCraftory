@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.world.structure.AmbrosiaForestStructure;
 import io.github.flemmli97.runecraftory.common.world.structure.BossSpawnerProcessor;
+import io.github.flemmli97.runecraftory.common.world.structure.TheaterRuinsStructure;
 import io.github.flemmli97.runecraftory.common.world.structure.ThunderboltRuinsStructure;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
@@ -23,6 +24,7 @@ public class ModStructures {
 
     public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> AMBROSIA_FOREST = register("ambrosia_forest", () -> new AmbrosiaForestStructure(JigsawConfiguration.CODEC));
     public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> THUNDERBOLT_RUINS = register("thunderbolt_ruins", () -> new ThunderboltRuinsStructure(JigsawConfiguration.CODEC));
+    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> THEATER_RUINS = register("theater_ruins", () -> new TheaterRuinsStructure(JigsawConfiguration.CODEC));
 
     public static final RegistryEntrySupplier<StructureProcessorType<BossSpawnerProcessor>> BOSS_PROCESSOR = STRUCTURESPROCESSORS.register("boss_processor", () -> () -> BossSpawnerProcessor.CODEC);
 

@@ -15,10 +15,10 @@ import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class AmbrosiaForestStructure extends StructureFeature<JigsawConfiguration> {
+public class TheaterRuinsStructure extends StructureFeature<JigsawConfiguration> {
 
-    public AmbrosiaForestStructure(Codec<JigsawConfiguration> codec) {
-        super(codec, ctx -> createPiecesGenerator(ctx, AmbrosiaForestStructure::isFeatureChunk), PostPlacementProcessor.NONE);
+    public TheaterRuinsStructure(Codec<JigsawConfiguration> codec) {
+        super(codec, ctx -> createPiecesGenerator(ctx, TheaterRuinsStructure::isFeatureChunk), PostPlacementProcessor.NONE);
     }
 
     public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context,

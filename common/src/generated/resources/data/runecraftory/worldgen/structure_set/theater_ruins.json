@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "weight": 1,
+      "structure": "runecraftory:theater_ruins"
+    }
+  ],
+  "placement": {
+    "salt": 1226867120,
+    "spacing": 21,
+    "separation": 7,
+    "type": "minecraft:random_spread"
+  }
+}

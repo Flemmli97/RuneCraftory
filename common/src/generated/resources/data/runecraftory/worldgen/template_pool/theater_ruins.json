@@ -1,0 +1,15 @@
+{
+  "name": "runecraftory:theater_ruins",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "runecraftory:theater_ruins",
+        "processors": "runecraftory:theater_ruins_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}
