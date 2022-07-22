@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -20,6 +22,20 @@ public class ItemTagGen extends ItemTagsProvider {
 
     @Override
     protected void addTags() {
+        for(RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
+            if(ModItems.NOTEX.contains(sup))
+                continue;
+            if(sup.get() instanceof IItemUsable)
+                this.tag(ModTags.chest_t3)
+                        .add(sup.get());
+            else if(sup.get().getFoodProperties() != null)
+                this.tag(ModTags.chest_t2)
+                        .add(sup.get());
+            else
+                this.tag(ModTags.chest_t1)
+                        .add(sup.get());
+        }
+
         this.tag(ModTags.iron)
                 .add(Items.IRON_INGOT)
                 .addOptional(Tags.Items.INGOTS_IRON.location());

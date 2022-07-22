@@ -125,11 +125,32 @@ public class Loottables extends LootTableProvider {
             this.registerLootTable(ModEntities.ghostRay.get(), LootTable.lootTable()
                     .withPool(this.create().add(this.add(ModItems.ghostHood.get(), 0.33f, 0.05f, 1, 1, 15, 5))
                             .add(this.add(ModItems.stickThick.get(), 0.5f, 0.05f, 1, 1, 20, 2))));
+            this.registerLootTable(ModEntities.spider.get(), LootTable.lootTable()
+                    .withPool(this.create().add(this.add(ModItems.jawInsect.get(), 0.23f, 0.05f, 1, 1, 15, 5))
+                            .add(this.add(ModItems.threadSpider.get(), 0.3f, 0.05f, 1, 1, 20, 2))));
+            this.registerLootTable(ModEntities.shadowPanther.get(), LootTable.lootTable()
+                    .withPool(this.create().add(this.add(ModItems.clawPanther.get(), 0.23f, 0.05f, 1, 1, 15, 5))
+                            .add(this.add(ModItems.furQuality.get(), 0.3f, 0.05f, 1, 1, 20, 2))));
+            this.registerLootTable(ModEntities.monsterBox.get(), LootTable.lootTable()
+                    .withPool(this.create().add(this.add(ModItems.brokenHilt.get(), 0.25f, 0.05f, 1, 1, 15, 5))
+                            .add(this.add(ModItems.failedDish.get(), 0.2f, 0.05f, 1, 1, 20, 2))
+                            .add(this.add(ModItems.disastrousDish.get(), 0.05f, 0.03f, 1, 1, 20, 2))));
+            this.registerLootTable(ModEntities.gobbleBox.get(), LootTable.lootTable()
+                    .withPool(this.create().add(this.add(ModItems.brokenHilt.get(), 0.4f, 0.05f, 1, 1, 15, 5))
+                            .add(this.add(ModItems.failedDish.get(), 0.25f, 0.05f, 1, 1, 20, 2))
+                            .add(this.add(ModItems.disastrousDish.get(), 0.1f, 0.03f, 1, 1, 20, 2))
+                            .add(this.add(ModItems.brokenBox.get(), 0.25f, 0.07f, 1, 1, 20, 2))));
 
             this.registerLootTable(ModEntities.ambrosia.get(), LootTable.lootTable()
                     .withPool(this.create().add(this.add(ModItems.ambrosiasThorns.get(), 0.65f, 0.1f, 1, 1, 10, 5))));
             this.registerLootTable(ModEntities.thunderbolt.get(), LootTable.lootTable()
                     .withPool(this.create().add(this.add(ModItems.lightningMane.get(), 0.65f, 0.1f, 1, 1, 10, 5))));
+            this.registerLootTable(ModEntities.marionetta.get(), LootTable.lootTable()
+                    .withPool(this.create().add(this.add(ModItems.cursedDoll.get(), 0.65f, 0.1f, 1, 1, 15, 5))
+                            .add(this.add(ModItems.puppetryStrings.get(), 0.2f, 0.1f, 1, 1, 20, 2))
+                            .add(this.add(ModItems.furSmall.get(), 0.5f, 0.05f, 1, 1, 20, 2))
+                            .add(this.add(ModItems.furMedium.get(), 0.5f, 0.05f, 1, 1, 20, 2))));
+
         }
 
         private LootPool.Builder create() {

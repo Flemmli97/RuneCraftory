@@ -3,7 +3,9 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -69,6 +71,10 @@ public class LevelCalc {
 
     public static int getMobXP(PlayerData data, BaseMonster monster) {
         return (int) (Math.min(monster.level() / (float) data.getPlayerLevel()[0], 1) * monster.baseXP());
+    }
+
+    public static int gateXP(PlayerData data, GateEntity gate) {
+        return (int) (Math.min(gate.level() / (float) data.getPlayerLevel()[0], 1) * MobConfig.gateXP);
     }
 
     public static int getMoney(int base, int level) {

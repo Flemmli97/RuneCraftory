@@ -3,8 +3,10 @@ package io.github.flemmli97.runecraftory.common.entities;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.GateSpawning;
@@ -23,6 +25,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
@@ -63,6 +66,7 @@ public class GateEntity extends Mob implements IBaseMob {
     public boolean clientParticleFlag;
     private List<EntityType<?>> spawnList = new ArrayList<>();
     private EnumElement type = EnumElement.NONE;
+    private boolean initialSpawn = true;
 
     public GateEntity(EntityType<? extends GateEntity> type, Level level) {
         super(type, level);
@@ -168,6 +172,7 @@ public class GateEntity extends Mob implements IBaseMob {
         this.spawnList.forEach(type -> list.add(StringTag.valueOf(PlatformUtils.INSTANCE.entities().getIDFrom(type).toString())));
         compound.put("Spawns", list);
         compound.putString("Element", this.type.toString());
+        compound.putBoolean("FirstSpawn", this.initialSpawn);
     }
 
     @Override
@@ -186,6 +191,7 @@ public class GateEntity extends Mob implements IBaseMob {
         } catch (IllegalArgumentException e) {
             RuneCraftory.logger.error("Unable to set element type for gate entity {}", this);
         }
+        this.initialSpawn = compound.getBoolean("FirstSpawn");
     }
 
     @Override
@@ -235,7 +241,11 @@ public class GateEntity extends Mob implements IBaseMob {
             return;
         if (!this.spawnList.isEmpty()) {
             int randAmount = this.random.nextInt(2) + 1;
-            List<Entity> nearby = this.level.getEntities(this, this.getBoundingBox().inflate(18), entity -> GateEntity.this.spawnList.contains(entity.getType()));
+            List<Entity> nearby = this.level.getEntities(this, this.getBoundingBox().inflate(18), entity ->
+                    entity.getType() == ModEntities.treasureChest.get() ||
+                            entity.getType() == ModEntities.monsterBox.get() ||
+                            entity.getType() == ModEntities.gobbleBox.get() ||
+                            GateEntity.this.spawnList.contains(entity.getType()));
             if (nearby.size() <= MobConfig.maxNearby) {
                 for (int amount = 0; amount < randAmount; ++amount) {
                     double x = this.getX() + this.random.nextInt(9) - 4.0;
@@ -244,8 +254,32 @@ public class GateEntity extends Mob implements IBaseMob {
                     int entityLevel = this.entityData.get(mobLevel);
                     int levelRand = Math.round(this.entityData.get(mobLevel) + (this.random.nextFloat() - 0.5f) * Math.round(entityLevel * 0.1f));
                     EntityType<?> type = this.spawnList.get(this.random.nextInt(this.spawnList.size()));
+                    if (this.initialSpawn) {
+                        this.initialSpawn = false;
+                        if (this.getRandom().nextFloat() < 0.05) {
+                            if (this.getRandom().nextFloat() < 0.4) {
+                                if (this.getRandom().nextFloat() < 0.3)
+                                    type = ModEntities.gobbleBox.get();
+                                else
+                                    type = ModEntities.monsterBox.get();
+                            } else
+                                type = ModEntities.treasureChest.get();
+                        }
+                    }
                     Entity entity = type.create(this.level);
-                    if (entity instanceof Mob mob) {
+                    if (entity instanceof EntityTreasureChest chest) {
+                        entity.absMoveTo(x, y, z, this.level.random.nextFloat() * 360.0f, 0.0f);
+                        if (this.level.noCollision(chest)) {
+                            int rand = this.random.nextInt(100);
+                            if (rand < 10)
+                                chest.setTier(3);
+                            else if (rand < 30)
+                                chest.setTier(2);
+                            else if (rand < 60)
+                                chest.setTier(1);
+                            this.level.addFreshEntity(entity);
+                        }
+                    } else if (entity instanceof Mob mob) {
                         BlockPos pos = new BlockPos(x, y, z);
                         boolean notSolid;
                         while ((notSolid = !this.level.getBlockState(pos.below()).entityCanStandOnFace(this.level, pos, entity, Direction.UP)) && pos.distToCenterSqr(x, y, z) < 16)
@@ -286,76 +320,14 @@ public class GateEntity extends Mob implements IBaseMob {
         return true;
     }
 
-    /*@Override
-    protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
-        int max = 0;
-        float luck = 0.0f;
-        if (source.getTrueSource() instanceof EntityPlayer) {
-            luck = RFCalculations.getAttributeValue((EntityPlayer) source.getTrueSource(), ItemStatAttributes.RFRLUCK, null, null);
-        }
-        while (luck >= 1.0f) {
-            luck -= 0.8;
-            --max;
-        }
-        float dropChance = 0.25F;
-        ItemStack drop = ItemStack.EMPTY;
-        int maxDrop = 2;
-        switch (this.type) {
-            case DARK:
-                maxDrop = 2;
-                drop = new ItemStack(ModItems.crystalDark);
-                dropChance = 0.1F;
-                break;
-            case EARTH:
-                maxDrop = 2;
-                drop = new ItemStack(ModItems.crystalEarth);
-                dropChance = 0.25F;
-                break;
-            case FIRE:
-                maxDrop = 2;
-                drop = new ItemStack(ModItems.crystalFire);
-                dropChance = 0.25F;
-                break;
-            case LIGHT:
-                maxDrop = 2;
-                drop = new ItemStack(ModItems.crystalLight);
-                dropChance = 0.1F;
-                break;
-            case LOVE:
-                maxDrop = 1;
-                drop = new ItemStack(ModItems.crystalLove);
-                dropChance = 0.05F;
-                break;
-            case WATER:
-                maxDrop = 2;
-                drop = new ItemStack(ModItems.crystalWater);
-                dropChance = 0.3F;
-                break;
-            case WIND:
-                maxDrop = 2;
-                drop = new ItemStack(ModItems.crystalWind);
-                dropChance = 0.3F;
-                break;
-            case NONE:
-                break;
-        }
-        while (max < maxDrop)
-        {
-            if (this.rand.nextFloat() < dropChance + luck)
-            {
-                ItemUtils.spawnItemAtEntity(this, drop);
-            }
-            ++max;
-        }
-    }*/
-
     @Override
     protected void tickDeath() {
-        /*if (this.deathTime == 5 && this.attackingPlayer != null) {
-            IPlayer cap = this.attackingPlayer.getCapability(PlayerCapProvider.PlayerCap, null);
-            cap.addXp(this.attackingPlayer, LevelCalc.xpFromLevel(this.baseXP(), this.level()));
-            cap.setMoney(this.attackingPlayer, cap.getMoney() + LevelCalc.xpFromLevel(this.baseMoney(), this.level()));
-        }*/
+        if (this.deathTime == 5 && this.lastHurtByPlayer instanceof ServerPlayer) {
+            Platform.INSTANCE.getPlayerData(this.lastHurtByPlayer).ifPresent(data -> {
+                LevelCalc.addXP((ServerPlayer) this.lastHurtByPlayer, data, LevelCalc.gateXP(data, this));
+                data.setMoney(this.lastHurtByPlayer, data.getMoney() + LevelCalc.getMoney(this.baseMoney(), this.level()));
+            });
+        }
         super.tickDeath();
     }
 
