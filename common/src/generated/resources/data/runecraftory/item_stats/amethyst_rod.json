@@ -1,11 +1,11 @@
 {
-  "buyPrice": 155,
-  "sellPrice": 50,
-  "upgradeDifficulty": 0,
-  "element": "EARTH",
   "itemStats": {
     "runecraftory:attribute.rf.magic_att": 8.0,
     "runecraftory:attribute.rf.dizz": 15.0
   },
+  "buyPrice": 155,
+  "sellPrice": 50,
+  "upgradeDifficulty": 0,
+  "element": "EARTH",
   "item": "runecraftory:amethyst_rod"
 }

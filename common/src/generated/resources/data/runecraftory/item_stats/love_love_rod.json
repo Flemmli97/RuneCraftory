@@ -1,11 +1,11 @@
 {
-  "buyPrice": 455,
-  "sellPrice": 197,
-  "upgradeDifficulty": 0,
-  "element": "LOVE",
   "itemStats": {
     "runecraftory:attribute.rf.magic_att": 18.0,
     "runecraftory:attribute.rf.dizz": 15.0
   },
+  "buyPrice": 455,
+  "sellPrice": 197,
+  "upgradeDifficulty": 0,
+  "element": "LOVE",
   "item": "runecraftory:love_love_rod"
 }

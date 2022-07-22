@@ -1,0 +1,83 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.25,
+              "looting_multiplier": 0.05
+            }
+          ],
+          "weight": 15,
+          "quality": 5,
+          "functions": [
+            {
+              "function": "minecraft:looting_enchant",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 1.0
+              },
+              "limit": 1
+            }
+          ],
+          "name": "runecraftory:broken_hilt"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.2,
+              "looting_multiplier": 0.05
+            }
+          ],
+          "weight": 20,
+          "quality": 2,
+          "functions": [
+            {
+              "function": "minecraft:looting_enchant",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 1.0
+              },
+              "limit": 1
+            }
+          ],
+          "name": "runecraftory:failed_dish"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.05,
+              "looting_multiplier": 0.03
+            }
+          ],
+          "weight": 20,
+          "quality": 2,
+          "functions": [
+            {
+              "function": "minecraft:looting_enchant",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 1.0
+              },
+              "limit": 1
+            }
+          ],
+          "name": "runecraftory:disastrous_dish"
+        }
+      ]
+    }
+  ]
+}

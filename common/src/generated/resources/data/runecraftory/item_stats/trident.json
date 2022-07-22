@@ -1,11 +1,11 @@
 {
-  "buyPrice": 134,
-  "sellPrice": 58,
-  "upgradeDifficulty": 0,
-  "element": "NONE",
   "itemStats": {
     "minecraft:generic.attack_damage": 16.0,
     "runecraftory:attribute.rf.defence": 6.0
   },
+  "buyPrice": 134,
+  "sellPrice": 58,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
   "item": "runecraftory:trident"
 }

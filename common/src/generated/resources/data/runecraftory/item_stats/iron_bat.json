@@ -1,11 +1,11 @@
 {
-  "buyPrice": 25,
-  "sellPrice": 5,
-  "upgradeDifficulty": 0,
-  "element": "NONE",
   "itemStats": {
     "minecraft:generic.attack_damage": 17.0,
     "runecraftory:attribute.rf.stun": 9.0
   },
+  "buyPrice": 25,
+  "sellPrice": 5,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
   "item": "runecraftory:iron_bat"
 }

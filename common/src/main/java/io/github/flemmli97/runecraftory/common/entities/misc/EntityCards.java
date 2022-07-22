@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -34,6 +35,7 @@ public class EntityCards extends EntityProjectile {
         super(ModEntities.cards.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
+        this.entityData.set(cardType, Mth.clamp(type, 0, 7));
     }
 
     public void setDamageMultiplier(float damageMultiplier) {
@@ -67,7 +69,7 @@ public class EntityCards extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
+        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(1).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
         this.remove(RemovalReason.KILLED);
         return att;
     }

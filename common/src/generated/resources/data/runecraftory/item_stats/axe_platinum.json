@@ -1,11 +1,11 @@
 {
-  "buyPrice": 25,
-  "sellPrice": 5,
-  "upgradeDifficulty": 0,
-  "element": "NONE",
   "itemStats": {
     "minecraft:generic.attack_damage": 140.0,
     "runecraftory:attribute.rf.crit": 15.0
   },
+  "buyPrice": 25,
+  "sellPrice": 5,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
   "item": "runecraftory:axe_platinum"
 }

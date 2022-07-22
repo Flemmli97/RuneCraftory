@@ -1,12 +1,12 @@
 {
-  "buyPrice": 1,
-  "sellPrice": 0,
-  "upgradeDifficulty": 5,
-  "element": "NONE",
   "itemStats": {
     "minecraft:generic.attack_damage": 1.0,
     "runecraftory:attribute.rf.magic_att": 1.0
   },
+  "buyPrice": 1,
+  "sellPrice": 0,
+  "upgradeDifficulty": 5,
+  "element": "NONE",
   "tier1Spell": "runecraftory:vanilla_snowball",
   "item": "minecraft:snowball"
 }

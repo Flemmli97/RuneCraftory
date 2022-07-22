@@ -234,7 +234,7 @@ public class EntityMarionetta extends BossMonster {
     public void cardAttack() {
         if (!this.level.isClientSide) {
             for (Vector3f vec : RayTraceUtils.rotatedVecs(this.getLookAngle(), new Vec3(0, 1, 0), -80, 80, 10)) {
-                EntityCards cards = new EntityCards(this.level, this, 0);
+                EntityCards cards = new EntityCards(this.level, this, this.random.nextInt(8));
                 cards.shoot(vec.x(), vec.y(), vec.z(), 1.5f, 0);
                 this.level.addFreshEntity(cards);
             }
@@ -247,10 +247,11 @@ public class EntityMarionetta extends BossMonster {
             for (int i = 0; i < amount; ++i) {
                 EntityFurniture furniture = new EntityFurniture(this.level, this, this.random.nextBoolean() ? EntityFurniture.Type.WOOLYPLUSH : EntityFurniture.Type.CHIPSQUEEKPLUSH);
                 LivingEntity target = this.getTarget();
-                if (target != null)
-                    furniture.shootAtPosition(target.getX(), target.getY() + 9, target.getZ(), 0.6f + this.random.nextFloat() * 0.2f, 8);
-                else
-                    furniture.shoot(this, this.yHeadRot, this.getXRot(), 55, 0.6f + this.random.nextFloat() * 0.2f, 8);
+                if (target != null) {
+                    Vec3 dir = target.position().subtract(this.position()).scale(0.6);
+                    furniture.shootAtPosition(this.getX() + dir.x(), target.getY() + 12, this.getZ() + dir.z(), 0.95f + this.random.nextFloat() * 0.2f, 9);
+                } else
+                    furniture.shoot(this, this.yHeadRot, this.getXRot(), -55, 0.95f + this.random.nextFloat() * 0.2f, 9);
                 this.level.addFreshEntity(furniture);
             }
         }

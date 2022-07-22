@@ -1,8 +1,8 @@
 {
+  "itemStats": {},
   "buyPrice": 100,
   "sellPrice": 1,
   "upgradeDifficulty": 1,
   "element": "NONE",
-  "itemStats": {},
   "item": "runecraftory:withered_grass"
 }

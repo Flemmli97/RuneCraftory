@@ -1,11 +1,11 @@
 {
-  "buyPrice": 66,
-  "sellPrice": 26,
-  "upgradeDifficulty": 0,
-  "element": "NONE",
   "itemStats": {
     "minecraft:generic.attack_damage": 9.0,
     "runecraftory:attribute.rf.defence": 1.0
   },
+  "buyPrice": 66,
+  "sellPrice": 26,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
   "item": "runecraftory:lance"
 }

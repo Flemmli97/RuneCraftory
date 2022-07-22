@@ -43,6 +43,7 @@ import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.Registry;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
@@ -57,13 +58,17 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class ModItems {
 
     public static final PlatformRegistry<Item> ITEMS = PlatformUtils.INSTANCE.of(Registry.ITEM_REGISTRY, RuneCraftory.MODID);
     public static final List<RegistryEntrySupplier<Item>> NOTEX = new ArrayList<>();
+    public static final Map<TagKey<Item>, List<RegistryEntrySupplier<Item>>> TREASURE = new HashMap<>();
+
     public static final RegistryEntrySupplier<Item> hoeScrap = hoe(EnumToolTier.SCRAP);
     public static final RegistryEntrySupplier<Item> hoeIron = hoe(EnumToolTier.IRON);
     public static final RegistryEntrySupplier<Item> hoeSilver = hoe(EnumToolTier.SILVER);
@@ -1165,27 +1170,33 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> mealyApple = food("mealy_apple", Texture.N);
 
     public static RegistryEntrySupplier<Item> hoe(EnumToolTier tier) {
-        return ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> wateringCan(EnumToolTier tier) {
-        return ITEMS.register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> sickle(EnumToolTier tier) {
-        return ITEMS.register("sickle_" + tier.getName(), () -> new ItemToolSickle(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register("sickle_" + tier.getName(), () -> new ItemToolSickle(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> hammerTool(EnumToolTier tier) {
-        return ITEMS.register("hammer_" + tier.getName(), () -> new ItemToolHammer(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register("hammer_" + tier.getName(), () -> new ItemToolHammer(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> axeTool(EnumToolTier tier) {
-        return ITEMS.register("axe_" + tier.getName(), () -> new ItemToolAxe(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register("axe_" + tier.getName(), () -> new ItemToolAxe(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> fishingRod(EnumToolTier tier) {
-        return ITEMS.register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> shortSword(String name, Texture texture) {
@@ -1194,7 +1205,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> longSword(String name, Texture texture) {
@@ -1203,7 +1219,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> spear(String name, Texture texture) {
@@ -1212,7 +1233,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> axe(String name, Texture texture) {
@@ -1221,7 +1247,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> hammer(String name, Texture texture) {
@@ -1230,7 +1261,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> dualBlade(String name, Texture texture) {
@@ -1239,7 +1275,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> gloves(String name, Texture texture) {
@@ -1248,7 +1289,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> staff(String name, EnumElement starterElement, int amount, Texture texture) {
@@ -1257,7 +1303,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> Platform.INSTANCE.staff(starterElement, amount, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.staff(starterElement, amount, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> accessoire(String name, Texture texture) {
@@ -1266,7 +1317,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new ItemAccessoireBase(new Item.Properties().tab(RFCreativeTabs.equipment)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAccessoireBase(new Item.Properties().tab(RFCreativeTabs.equipment)));
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> accessoire(String name, EquipmentSlot renderSlot, Texture texture) {
@@ -1275,7 +1331,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new ItemAccessoireBase(renderSlot, new Item.Properties().tab(RFCreativeTabs.equipment)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAccessoireBase(renderSlot, new Item.Properties().tab(RFCreativeTabs.equipment)));
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> equipment(EquipmentSlot slot, String name, Texture texture) {
@@ -1284,7 +1345,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new ItemArmorBase(slot, new Item.Properties().tab(RFCreativeTabs.equipment)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemArmorBase(slot, new Item.Properties().tab(RFCreativeTabs.equipment)));
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> shield(String name, Texture texture) {
@@ -1297,11 +1363,16 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new ShieldItem(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.equipment)) {
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ShieldItem(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.equipment)) {
             public boolean isShield(ItemStack stack, LivingEntity entity) {
                 return true;
             }
         });
+        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> blockItem(String name, Supplier<Supplier<Block>> block) {
@@ -1332,24 +1403,44 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new Item(new Item.Properties().rarity(rarity).tab(RFCreativeTabs.upgradeItems)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().rarity(rarity).tab(RFCreativeTabs.upgradeItems)));
+        TREASURE.merge(ModTags.chest_t1, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> medicine(String name, boolean affectStats) {
-        return ITEMS.register(name, () -> new ItemMedicine(affectStats, new Item.Properties().food(foodProp).stacksTo(16).tab(RFCreativeTabs.medicine)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemMedicine(affectStats, new Item.Properties().food(foodProp).stacksTo(16).tab(RFCreativeTabs.medicine)));
+        TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> drinkable(String name) {
-        return ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).stacksTo(16).tab(RFCreativeTabs.medicine)) {
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).stacksTo(16).tab(RFCreativeTabs.medicine)) {
             @Override
             public UseAnim getUseAnimation(ItemStack stack) {
                 return UseAnim.DRINK;
             }
         });
+        TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> spell(Supplier<Supplier<Spell>> sup, String name) {
-        return ITEMS.register(name, () -> new ItemSpell(sup.get(), new Item.Properties().stacksTo(1).tab(RFCreativeTabs.cast)));
+        RegistryEntrySupplier<Item> ret = ITEMS.register(name, () -> new ItemSpell(sup.get(), new Item.Properties().stacksTo(1).tab(RFCreativeTabs.cast)));
+        TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
+            lo.add(ret);
+            return lo;
+        });
+        return ret;
     }
 
     public static RegistryEntrySupplier<Item> fish(String name, Texture texture) {
@@ -1358,7 +1449,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new Item(new Item.Properties().tab(RFCreativeTabs.food)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().tab(RFCreativeTabs.food)));
+        TREASURE.merge(ModTags.chest_t1, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> seed(String name, Supplier<Supplier<Block>> block) {
@@ -1375,14 +1471,25 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
+        RegistryEntrySupplier<Item> sup;
         if (giant)
-            return ITEMS.register("crop_" + name + "_giant", () -> new ItemGiantCrops(new Item.Properties().food(foodProp).tab(RFCreativeTabs.crops)));
+            sup = ITEMS.register("crop_" + name + "_giant", () -> new ItemGiantCrops(new Item.Properties().food(foodProp).tab(RFCreativeTabs.crops)));
         else
-            return ITEMS.register("crop_" + name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.crops)));
+            sup = ITEMS.register("crop_" + name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.crops)));
+        TREASURE.merge(ModTags.chest_t1, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> herb(String name, Supplier<Supplier<Block>> block) {
-        return ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(lowFoodProp).tab(RFCreativeTabs.medicine)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(lowFoodProp).tab(RFCreativeTabs.medicine)));
+        TREASURE.merge(ModTags.chest_t1, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> food(String name, Texture texture) {
@@ -1391,7 +1498,12 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        return ITEMS.register(name, () -> new Item(new Item.Properties().food(highFoodProp).tab(RFCreativeTabs.food)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(highFoodProp).tab(RFCreativeTabs.food)));
+        TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
     }
 
     //Here till all items have a texture

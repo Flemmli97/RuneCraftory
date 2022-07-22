@@ -1,10 +1,10 @@
 {
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 5.0
+  },
   "buyPrice": 105,
   "sellPrice": 20,
   "upgradeDifficulty": 15,
   "element": "NONE",
-  "itemStats": {
-    "runecraftory:attribute.rf.defence": 5.0
-  },
   "tag": "c:silver_ingots"
 }
