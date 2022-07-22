@@ -30,9 +30,8 @@ public class EntityWaterLaser extends EntityBeam {
     private static final EntityDataAccessor<Float> yawOffset = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> positionYawOffset = SynchedEntityData.defineId(EntityWaterLaser.class, EntityDataSerializers.FLOAT);
 
-    private float damageMultiplier = 1;
-
     private Predicate<LivingEntity> pred;
+    private float damageMultiplier = 1;
 
     public EntityWaterLaser(EntityType<? extends EntityBeam> type, Level level) {
         super(type, level);
@@ -65,6 +64,10 @@ public class EntityWaterLaser extends EntityBeam {
 
     public void setPositionYawOffset(float offset) {
         this.entityData.set(positionYawOffset, offset);
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -159,9 +162,5 @@ public class EntityWaterLaser extends EntityBeam {
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
     }
 }

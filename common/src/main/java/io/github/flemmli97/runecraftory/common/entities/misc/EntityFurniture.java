@@ -1,18 +1,19 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
@@ -24,9 +25,9 @@ public class EntityFurniture extends EntityProjectile {
     private static final EntityDataAccessor<Integer> furnitureTypeSync = SynchedEntityData.defineId(EntityFurniture.class, EntityDataSerializers.INT);
 
     private Type furnitureType = Type.BARREL;
-    private float damageMultiplier;
 
     private Predicate<LivingEntity> pred;
+    private float damageMultiplier = 1;
 
     public EntityFurniture(EntityType<? extends EntityProjectile> type, Level world) {
         super(type, world);
@@ -71,7 +72,7 @@ public class EntityFurniture extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
+        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
         this.remove(RemovalReason.KILLED);
         return att;
     }
@@ -98,6 +99,18 @@ public class EntityFurniture extends EntityProjectile {
             if (id > 0 && id < Type.values().length)
                 this.furnitureType = Type.values()[this.entityData.get(furnitureTypeSync)];
         }
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 
     public Type getFurnitureType() {

@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,6 +22,7 @@ import java.util.function.Predicate;
 public class EntityThiccLightningBolt extends EntityProjectile {
 
     private Predicate<LivingEntity> pred;
+    private float damageMultiplier = 1;
 
     public EntityThiccLightningBolt(EntityType<? extends EntityThiccLightningBolt> type, Level world) {
         super(type, world);
@@ -30,6 +32,10 @@ public class EntityThiccLightningBolt extends EntityProjectile {
         super(ModEntities.lightningOrbBolt.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -72,7 +78,7 @@ public class EntityThiccLightningBolt extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        return CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(2).element(EnumElement.WIND).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()), null);//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {;
+        return CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(2).element(EnumElement.WIND).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
     }
 
     @Override
@@ -86,5 +92,17 @@ public class EntityThiccLightningBolt extends EntityProjectile {
         if (living instanceof BaseMonster)
             this.pred = ((BaseMonster) living).hitPred;
         return living;
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 }

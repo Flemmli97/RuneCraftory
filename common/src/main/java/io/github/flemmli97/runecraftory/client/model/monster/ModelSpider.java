@@ -101,8 +101,10 @@ public class ModelSpider<T extends EntitySpider> extends EntityModel<T> implemen
         this.model.resetPoses();
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        if (entity.isMoving())
-            this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks);
+        if (entity.deathTime <= 0) {
+            if (entity.isMoving())
+                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks);
+        }
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
     }

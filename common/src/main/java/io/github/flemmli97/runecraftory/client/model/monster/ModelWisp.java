@@ -70,7 +70,9 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
         this.model.getMainPart().visible = true;
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
+        if (entity.deathTime <= 0) {
+            this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
+        }
         if (anim != null) {
             if (anim.getID().equals(EntityWispBase.vanish.getID())) {
                 int tick = anim.getTick();

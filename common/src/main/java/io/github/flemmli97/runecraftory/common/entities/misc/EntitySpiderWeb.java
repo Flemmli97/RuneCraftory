@@ -20,8 +20,8 @@ import java.util.function.Predicate;
 
 public class EntitySpiderWeb extends EntityProjectile {
 
-    private float damageMultiplier = 1;
     private Predicate<LivingEntity> pred;
+    private float damageMultiplier = 1;
 
     public EntitySpiderWeb(EntityType<? extends EntitySpiderWeb> type, Level level) {
         super(type, level);
@@ -31,6 +31,10 @@ public class EntitySpiderWeb extends EntityProjectile {
         super(ModEntities.spiderWeb.get(), level, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -80,9 +84,5 @@ public class EntitySpiderWeb extends EntityProjectile {
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
     }
 }

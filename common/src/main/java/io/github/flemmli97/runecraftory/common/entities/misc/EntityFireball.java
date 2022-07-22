@@ -26,8 +26,8 @@ public class EntityFireball extends EntityProjectile {
 
     private static final EntityDataAccessor<Boolean> BIG = SynchedEntityData.defineId(EntityRockSpear.class, EntityDataSerializers.BOOLEAN);
 
-    private float damageMultiplier = 1;
     private Predicate<LivingEntity> pred;
+    private float damageMultiplier = 1;
 
     public EntityFireball(EntityType<? extends EntityFireball> type, Level level) {
         super(type, level);
@@ -42,6 +42,10 @@ public class EntityFireball extends EntityProjectile {
 
     public boolean big() {
         return this.entityData.get(BIG);
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -99,9 +103,5 @@ public class EntityFireball extends EntityProjectile {
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
     }
 }

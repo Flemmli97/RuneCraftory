@@ -314,13 +314,6 @@ public class CombatUtils {
         if (success) {
             spawnElementalParticle(target, source.getElement());
             if (attacker instanceof LivingEntity livingAttacker) {
-                int drainPercent = getAttributeValue(attacker, ModAttributes.RFDRAIN.get(), target);
-                if (drainPercent > 0f) {
-                    if (livingAttacker instanceof Player player)
-                        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.regenHealth((Player) attacker, drainPercent * damage));
-                    else
-                        livingAttacker.heal(drainPercent * damage);
-                }
                 livingAttacker.setLastHurtMob(target);
             }
             if (target instanceof LivingEntity livingTarget) {

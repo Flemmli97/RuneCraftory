@@ -90,9 +90,11 @@ public class ModelCluckadoodle<T extends EntityCluckadoodle> extends EntityModel
         this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.25f;
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
-        if (entity.isMoving())
-            this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks);
+        if (entity.deathTime <= 0) {
+            this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
+            if (entity.isMoving())
+                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks);
+        }
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
     }

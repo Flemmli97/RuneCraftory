@@ -17,10 +17,12 @@ public class ModelMimic<T extends EntityMimic> extends ModelChest<T> {
         this.model.resetPoses();
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        if (entity.isAwake())
-            this.anim.doAnimation(this, "open_iddle", entity.tickCount, partialTicks);
-        if (entity.isMoving())
-            this.anim.doAnimation(this, "move", entity.tickCount, partialTicks);
+        if (entity.deathTime <= 0) {
+            if (entity.isAwake())
+                this.anim.doAnimation(this, "open_iddle", entity.tickCount, partialTicks);
+            if (entity.isMoving())
+                this.anim.doAnimation(this, "move", entity.tickCount, partialTicks);
+        }
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
     }

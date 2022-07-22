@@ -39,7 +39,7 @@ public class RockSpearSpell extends Spell {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.EARTH)).orElse(false);
         if (rp) {
             EntityRockSpear spear = new EntityRockSpear(world, entity, this.big);
-            spear.setDamageMultiplier(0.95f + level * 0.5f + (this.big ? 0.1f : 0));
+            spear.setDamageMultiplier(0.95f + level * 0.05f + (this.big ? 0.1f : 0));
             world.addFreshEntity(spear);
             return true;
         }

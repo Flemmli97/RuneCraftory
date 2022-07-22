@@ -8,6 +8,7 @@ RuneCraftory 1.2.0
   Drops a pletora of loot when opened including currently only this way obtainable items
 - Fix stat boosting item giving +10 instead of +1
 - Fix stat boost from items not getting saved
+- Balancing Changes: tweaked mob stats, magic dmg etc.
 
 RuneCraftory 1.1.0
 ================

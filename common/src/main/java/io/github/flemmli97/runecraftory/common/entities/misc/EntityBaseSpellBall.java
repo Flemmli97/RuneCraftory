@@ -20,6 +20,7 @@ public class EntityBaseSpellBall extends EntityProjectile {
 
     protected static final EntityDataAccessor<Integer> elementData = SynchedEntityData.defineId(EntityBaseSpellBall.class, EntityDataSerializers.INT);
     private EnumElement element = EnumElement.NONE;
+    private float damageMultiplier = 0.8f;
 
     public EntityBaseSpellBall(EntityType<? extends EntityBaseSpellBall> type, Level world) {
         super(type, world);
@@ -29,6 +30,14 @@ public class EntityBaseSpellBall extends EntityProjectile {
         super(ModEntities.staffThrown.get(), world, shooter);
         this.element = element;
         this.entityData.set(elementData, this.element.ordinal());
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
+    }
+
+    public EnumElement getElement() {
+        return this.element;
     }
 
     @Override
@@ -59,7 +68,7 @@ public class EntityBaseSpellBall extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(this.element).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * 0.8f, null);
+        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(this.element).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
         this.remove(RemovalReason.KILLED);
         return att;
     }
@@ -70,21 +79,19 @@ public class EntityBaseSpellBall extends EntityProjectile {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(elementData, compound.getInt("Element"));
         int i = this.entityData.get(elementData);
         if (i < EnumElement.values().length)
             this.element = EnumElement.values()[i];
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Element", this.element.ordinal());
-    }
-
-    public EnumElement getElement() {
-        return this.element;
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 }

@@ -27,8 +27,8 @@ import java.util.function.Predicate;
 
 public class EntityExplosionSpell extends EntityProjectile {
 
-    private float damageMultiplier = 1;
     private Predicate<LivingEntity> pred;
+    private float damageMultiplier = 1;
 
     public EntityExplosionSpell(EntityType<? extends EntityExplosionSpell> type, Level level) {
         super(type, level);
@@ -39,6 +39,10 @@ public class EntityExplosionSpell extends EntityProjectile {
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
         this.tickCount = 5;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -79,26 +83,6 @@ public class EntityExplosionSpell extends EntityProjectile {
         this.remove(RemovalReason.KILLED);
     }
 
-    @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
-    }
-
-    @Override
-    public Entity getOwner() {
-        Entity owner = super.getOwner();
-        if (owner instanceof BaseMonster)
-            this.pred = ((BaseMonster) owner).hitPred;
-        return owner;
-    }
-
     protected void doExplosion(Entity hit) {
         List<Entity> list = this.level.getEntities(this, new AABB(-5, -5, -5, 5, 5, 5).move(this.position()));
         for (Entity e : list) {
@@ -118,7 +102,23 @@ public class EntityExplosionSpell extends EntityProjectile {
             serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 2, 1.0, 0.0, 0.0, 1);
     }
 
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
+    }
+
+    @Override
+    public Entity getOwner() {
+        Entity owner = super.getOwner();
+        if (owner instanceof BaseMonster)
+            this.pred = ((BaseMonster) owner).hitPred;
+        return owner;
     }
 }

@@ -6,25 +6,31 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.UUID;
 import java.util.function.Predicate;
 
 public class EntityButterfly extends EntityProjectile {
+
+    private static final UUID attributeMod = UUID.fromString("5c8e5c2d-1eb0-434a-858f-8ab81f51832c");
 
     private Vec3 targetPos;
     private double length;
     private boolean turn;
     private Predicate<LivingEntity> pred;
     private int upDelay = 30;
+    private float damageMultiplier = 0.15f;
 
     public EntityButterfly(EntityType<? extends EntityButterfly> type, Level level) {
         super(type, level);
@@ -38,6 +44,14 @@ public class EntityButterfly extends EntityProjectile {
         super(ModEntities.butterfly.get(), level, thrower);
         if (thrower instanceof BaseMonster)
             this.pred = ((BaseMonster) thrower).hitPred;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
+    }
+
+    public void setUpDelay(int delay) {
+        this.upDelay = delay;
     }
 
     @Override
@@ -73,7 +87,14 @@ public class EntityButterfly extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(3).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * 0.1f, null)) {//RFCalculations.getAttributeValue(this.getShooter(), ItemStatAttributes.RFMAGICATT, null, null) / 6.0f)) {
+        Entity owner = this.getOwner();
+        boolean living = owner instanceof LivingEntity;
+        if (living)
+            ((LivingEntity) owner).getAttribute(ModAttributes.RFDRAIN.get())
+                    .addTransientModifier(new AttributeModifier(attributeMod, "butterfly_mod", 100, AttributeModifier.Operation.ADDITION));
+        if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(3).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
+            if (living)
+                ((LivingEntity) owner).getAttribute(ModAttributes.RFDRAIN.get()).removeModifier(attributeMod);
             if (result.getEntity() instanceof LivingEntity)
                 ((LivingEntity) result.getEntity()).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 3));
             return true;
@@ -94,7 +115,15 @@ public class EntityButterfly extends EntityProjectile {
         return owner;
     }
 
-    public void setUpDelay(int delay) {
-        this.upDelay = delay;
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 }

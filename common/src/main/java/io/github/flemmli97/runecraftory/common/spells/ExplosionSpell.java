@@ -33,7 +33,7 @@ public class ExplosionSpell extends Spell {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.FIRE)).orElse(false);
         if (rp) {
             EntityExplosionSpell spell = new EntityExplosionSpell(world, entity);
-            spell.setDamageMultiplier(1.1f + level * 0.1f);
+            spell.setDamageMultiplier(1.1f + (level - 1) * 0.05f);
             spell.shoot(entity, entity.getXRot(), entity.getYRot(), 0, 1, 0);
             world.addFreshEntity(spell);
             return true;

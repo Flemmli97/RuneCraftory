@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundGameEventPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -21,12 +22,11 @@ import java.util.function.Predicate;
 
 public class EntityMobArrow extends EntityProjectile {
 
-    private final float damageMultiplier;
     private Predicate<LivingEntity> pred;
+    private float damageMultiplier = 1;
 
     public EntityMobArrow(EntityType<? extends EntityMobArrow> type, Level world) {
         super(type, world);
-        this.damageMultiplier = 1;
     }
 
     public EntityMobArrow(Level world, LivingEntity shooter, float dmgMulti) {
@@ -34,6 +34,10 @@ public class EntityMobArrow extends EntityProjectile {
         this.damageMultiplier = dmgMulti;
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -71,5 +75,17 @@ public class EntityMobArrow extends EntityProjectile {
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 }

@@ -123,7 +123,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
     public FloatGoal swimGoal = new FloatGoal(this);
     public RandomStrollGoal wander = new WaterAvoidingRandomStrollGoal(this, 1.0);
-    public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);    public final Predicate<LivingEntity> hitPred = (e) -> {
+    public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
+    public final Predicate<LivingEntity> hitPred = (e) -> {
         if (e != this) {
             if (this.hasPassenger(e))
                 return false;
@@ -155,6 +156,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private boolean doJumping = false;
     private int foodBuffTick;
     private Set<Attribute> foodAtts;
+
     public BaseMonster(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
         this.moveControl = new NewMoveController(this);

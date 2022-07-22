@@ -87,7 +87,6 @@ public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal
             if (path == null || this.attacker.getNavigation().moveTo(path, speed)) {
                 this.pathFindDelay += 15;
             }
-
             this.pathFindDelay += this.attacker.getRandom().nextInt(10) + 5;
         }
     }

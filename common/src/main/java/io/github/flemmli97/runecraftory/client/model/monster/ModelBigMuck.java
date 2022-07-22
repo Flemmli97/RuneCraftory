@@ -71,9 +71,11 @@ public class ModelBigMuck<T extends EntityBigMuck> extends EntityModel<T> implem
         this.model.resetPoses();
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
-        if (entity.isMoving())
-            this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks);
+        if (entity.deathTime <= 0) {
+            this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
+            if (entity.isMoving())
+                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks);
+        }
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
     }

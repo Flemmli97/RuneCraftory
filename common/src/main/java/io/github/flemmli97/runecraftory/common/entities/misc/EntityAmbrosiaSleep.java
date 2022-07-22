@@ -32,6 +32,7 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
     private Entity owner;
     private int livingTick;
     private Predicate<LivingEntity> pred;
+    private float damageMultiplier = 0.6f;
 
     public EntityAmbrosiaSleep(EntityType<? extends EntityAmbrosiaSleep> type, Level world) {
         super(type, world);
@@ -43,6 +44,10 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
         this.ownerUUID = caster.getUUID();
         this.setPos(caster.getX(), caster.getY(), caster.getZ());
         this.pred = caster.hitPred;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -80,7 +85,7 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
             List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3), this.pred);
             for (LivingEntity e : list) {
                 if (!e.equals(this.getOwner()) && (this.pred == null || this.pred.test(e))) {
-                    if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * 0.5f, null)) {
+                    if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
                         e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 80, 0, true, false));
                         e.addEffect(new MobEffectInstance(ModEffects.sleep.get(), 80, 0, true, false));
                         this.remove(RemovalReason.KILLED);
@@ -92,17 +97,19 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         this.livingTick = compound.getInt("livingTick");
         if (compound.contains("owner"))
             this.ownerUUID = compound.getUUID("owner");
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         compound.putInt("livingTick", this.livingTick);
         if (this.owner != null)
             compound.putUUID("owner", this.owner.getUUID());
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 
     @Override

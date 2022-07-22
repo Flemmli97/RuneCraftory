@@ -87,7 +87,7 @@ public class GeneralConfigSpec {
         this.disableHunger = builder.comment("Disable mc hunger system. Makes it so you can always eat food").define("Disable Hunger", false);
         this.modifyWeather = builder.comment("If true weather will change only at specific time.", "Morning, mid day, evening and mid night").define("Modify Weather", false);
         this.modifyBed = builder.comment("If true players can sleep anytime and upon waking up will restore all health and rp").define("Modify Bed", false);
-        this.disableFoodSystem = builder.comment("If true food will not provide benefits such as hp restoration etc defined per datapack. ", "Note: Crops from this mod will not function anymore").define("Disable Food System", false);
+        this.disableFoodSystem = builder.comment("If true food will not provide benefits such as hp restoration etc defined per datapack.").define("Disable Food System", false);
         this.disableItemStatSystem = builder.comment("If true item get no stats assigned as defined per datapack. ", "Note: Weapons will then do no damage").define("Disable Item Stat System", false);
         this.disableCropSystem = builder.comment("If true crop data will be disabled.", "Note: Crops from this mod will not function anymore").define("Disable Crop System", true);
         this.witherChance = builder.comment("Change for a crop to wither if its not been watered", "If crop is already withered it and it doesnt get watered it will turn into withered grass").defineInRange("Wither Chance", 0.5, 0, 1);

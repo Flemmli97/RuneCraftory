@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.tenshilib.common.utils.MapUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.SimpleRegistryWrapper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -144,16 +145,16 @@ public class ItemStat {
             price = new TranslatableComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack));
         else
             price.append(" ").append(new TranslatableComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack))).append(" ");
-        list.add(price);
+        list.add(price.withStyle(ChatFormatting.YELLOW));
         if (showStat) {
             Map<Attribute, Double> stats = ItemNBT.statBonusRaw(stack);
             if (!stats.isEmpty()) {
                 String prefix = ItemNBT.shouldHaveStats(stack) ? "tooltip.item.equipped" : "tooltip.item.upgrade";
-                list.add(new TranslatableComponent(prefix));
+                list.add(new TranslatableComponent(prefix).withStyle(ChatFormatting.GRAY));
             }
             for (Map.Entry<Attribute, Double> entry : stats.entrySet()) {
                 MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(entry.getKey(), entry.getValue().intValue())));
-                list.add(comp);
+                list.add(comp.withStyle(ChatFormatting.BLUE));
             }
         }
         return list;

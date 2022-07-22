@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -106,6 +107,11 @@ public class EntityEvents {
     @SubscribeEvent
     public void damageCalculation(LivingHurtEvent event) {
         event.setAmount(EntityCalls.damageCalculation(event.getEntityLiving(), event.getSource(), event.getAmount()));
+    }
+
+    @SubscribeEvent
+    public void postDamageCalculation(LivingDamageEvent event) {
+        EntityCalls.postDamage(event.getEntityLiving(), event.getSource(), event.getAmount());
     }
 
     @SubscribeEvent

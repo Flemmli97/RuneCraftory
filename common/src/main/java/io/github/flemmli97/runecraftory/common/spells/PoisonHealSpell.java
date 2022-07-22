@@ -34,13 +34,10 @@ public class PoisonHealSpell extends Spell {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.LOVE)).orElse(false);
         if (rp) {
             if (level >= 10) {
-
+                entity.removeEffect(ModEffects.seal.get());
             }
-            if (level >= 7) {
-
-            }
-            if (level >= 3) {
-
+            if (level >= 5) {
+                entity.removeEffect(ModEffects.paralysis.get());
             }
             entity.removeEffect(MobEffects.POISON);
             entity.removeEffect(ModEffects.poison.get());

@@ -46,7 +46,8 @@ public class EntityMarionetta extends BossMonster {
     private static final EntityDataAccessor<Boolean> CAUGHT = SynchedEntityData.defineId(EntityMarionetta.class, EntityDataSerializers.BOOLEAN);
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, spin, card_attack, chest_attack, chest_throw, stuffed_animals, dark_beam, furniture, defeat, angry};
     public final MarionettaAttackGoal<EntityMarionetta> attack = new MarionettaAttackGoal<>(this);
-    private final List<LivingEntity> caughtEntities = new ArrayList<>();    private final AnimationHandler<EntityMarionetta> animationHandler = new AnimationHandler<>(this, anims)
+    private final List<LivingEntity> caughtEntities = new ArrayList<>();
+    private final AnimationHandler<EntityMarionetta> animationHandler = new AnimationHandler<>(this, anims)
             .setAnimationChangeFunc(anim -> {
                 if (this.entityData.get(CAUGHT)) {
                     if (!this.level.isClientSide) {
@@ -58,6 +59,7 @@ public class EntityMarionetta extends BossMonster {
                 return false;
             });
     private double[] aiVarHelper;
+
     public EntityMarionetta(EntityType<? extends EntityMarionetta> type, Level world) {
         super(type, world);
         if (!world.isClientSide)
@@ -112,8 +114,10 @@ public class EntityMarionetta extends BossMonster {
     }
 
     @Override
-    protected boolean isImmobile() {
-        return super.isImmobile() && this.getAnimationHandler().isCurrentAnim(angry.getID(), defeat.getID());
+    public void aiStep() {
+        if (this.getAnimationHandler().isCurrentAnim(angry.getID(), defeat.getID()))
+            return;
+        super.aiStep();
     }
 
     @Override
@@ -317,8 +321,6 @@ public class EntityMarionetta extends BossMonster {
     public double getPassengersRidingOffset() {
         return this.getBbHeight() * 0.85D;
     }
-
-
 
 
 }

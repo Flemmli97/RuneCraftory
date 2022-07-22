@@ -101,8 +101,8 @@ public class CropProperties {
                 }
                 this.translationTexts.add(season);
             }
-            MutableComponent growth = new TranslatableComponent("tooltip.growth", this.growth());
-            Component harvest = new TranslatableComponent("tooltip.harvested", this.maxDrops());
+            MutableComponent growth = new TranslatableComponent("tooltip.growth", this.growth()).withStyle(ChatFormatting.GOLD);
+            Component harvest = new TranslatableComponent("tooltip.harvested", this.maxDrops()).withStyle(ChatFormatting.GOLD);
             this.translationTexts.add(growth.append("  ").append(harvest));
         }
         return this.translationTexts;

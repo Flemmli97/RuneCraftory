@@ -38,7 +38,7 @@ public class HealT2Spell extends Spell {
     @Override
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data ->
-                LevelCalc.useRP(player, data, (int) (data.getMaxRunePoints() * 0.15), false, true, true, 1, EnumSkills.WIND)).orElse(false);
+                LevelCalc.useRP(player, data, (int) (data.getMaxRunePoints() * 0.15), false, true, true, 1, EnumSkills.LOVE)).orElse(false);
         if (rp) {
             List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(8), e -> {
                 if (e == entity)

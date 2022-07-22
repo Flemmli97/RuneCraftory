@@ -30,10 +30,10 @@ public class DarknessSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.EARTH)).orElse(false);
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.DARK)).orElse(false);
         if (rp) {
             EntityDarkness darkness = new EntityDarkness(world, entity);
-            darkness.setDamageMultiplier(0.95f + level * 0.5f);
+            darkness.setDamageMultiplier(1 + level * 0.1f);
             world.addFreshEntity(darkness);
             return true;
         }

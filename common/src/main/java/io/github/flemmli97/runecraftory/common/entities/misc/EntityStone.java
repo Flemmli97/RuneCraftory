@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,6 +18,9 @@ import java.util.function.Predicate;
 
 public class EntityStone extends EntityProjectile {
 
+    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
+    private float damageMultiplier = 1;
+
     public EntityStone(EntityType<? extends EntityProjectile> type, Level world) {
         super(type, world);
     }
@@ -25,7 +29,7 @@ public class EntityStone extends EntityProjectile {
         super(ModEntities.stone.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
-    }    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
+    }
 
     @Override
     public int livingTickMax() {
@@ -44,7 +48,7 @@ public class EntityStone extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * 0.8f, null);
+        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
         this.remove(RemovalReason.KILLED);
         return att;
     }
@@ -62,7 +66,15 @@ public class EntityStone extends EntityProjectile {
         return living;
     }
 
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+    }
 
-
-
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
+    }
 }

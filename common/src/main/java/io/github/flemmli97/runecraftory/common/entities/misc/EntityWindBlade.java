@@ -47,6 +47,10 @@ public class EntityWindBlade extends EntityProjectile {
         this.piercing = true;
     }
 
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
+    }
+
     @Override
     public boolean isPiercing() {
         return this.piercing;
@@ -142,9 +146,5 @@ public class EntityWindBlade extends EntityProjectile {
         if (living instanceof BaseMonster)
             this.pred = ((BaseMonster) living).hitPred;
         return living;
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
     }
 }

@@ -36,7 +36,7 @@ public class WindBladeSpell extends Spell {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.WIND)).orElse(false);
         if (rp) {
             EntityWindBlade wind = new EntityWindBlade(world, entity);
-            wind.setDamageMultiplier(0.95f + level * 0.5f);
+            wind.setDamageMultiplier(0.95f + level * 0.05f);
             wind.shoot(entity, 0, entity.getYRot(), 0, 0.45f, 0);
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 wind.setTarget(mob.getTarget());

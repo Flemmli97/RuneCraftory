@@ -45,7 +45,7 @@ public class FireballSpell extends Spell {
                 ball.shootAtEntity(target, 1, 0, 0.2f);
             } else
                 ball.shoot(entity, entity.getXRot(), entity.getYRot(), 0, 1, 0);
-            ball.setDamageMultiplier(0.95f + level * 0.5f + (this.big ? 0.1f : 0));
+            ball.setDamageMultiplier(0.95f + level * 0.05f + (this.big ? 0.1f : 0));
             world.addFreshEntity(ball);
             if (entity instanceof Player player) {
                 boolean cooldown = Platform.INSTANCE.getPlayerData(player).map(cap -> {

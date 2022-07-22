@@ -34,6 +34,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
     private int tickLeft = 100;
     private LivingEntity shooter;
     private UUID shooterUUID;
+    private float damageMultiplier = 0.7f;
 
     public EntityMarionettaTrap(EntityType<? extends EntityMarionettaTrap> entityType, Level level) {
         super(entityType, level);
@@ -52,6 +53,10 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
 
     public void addCaughtEntity(LivingEntity entity) {
         this.caughtEntities.add(entity);
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -86,7 +91,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
                 if (this.getOwner() != null && this.tickLeft % 3 == 0)
                     this.caughtEntities.forEach(e -> {
                         CustomDamage source = CombatUtils.build(this.getOwner(), e, new CustomDamage.Builder(this)).hurtResistant(this.tickLeft == 7 ? 10 : 0).get();
-                        CombatUtils.mobAttack(this.getOwner(), e, source, CombatUtils.getAttributeValue(this, Attributes.ATTACK_DAMAGE, e) * 0.7f);
+                        CombatUtils.mobAttack(this.getOwner(), e, source, CombatUtils.getAttributeValue(this, Attributes.ATTACK_DAMAGE, e) * this.damageMultiplier);
                     });
             }
             if (this.tickLeft <= 0)
@@ -95,11 +100,13 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 
     @Override

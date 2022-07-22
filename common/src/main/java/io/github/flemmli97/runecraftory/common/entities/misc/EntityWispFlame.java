@@ -47,12 +47,30 @@ public class EntityWispFlame extends EntityDamageCloud {
         this.setRadius(1.5f);
     }
 
-    @Override
-    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
-        if (key.equals(elementData)) {
-            this.element = EnumElement.values()[this.entityData.get(elementData)];
-        }
-        super.onSyncedDataUpdated(key);
+    public void shootAtEntity(Entity target, float velocity, float inaccuracy, float yOffsetModifier, double heighMod) {
+        Vec3 dir = (new Vec3(target.getX() - this.getX(), target.getY(heighMod) - this.getY(), target.getZ() - this.getZ()));
+        double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
+        this.shoot(dir.x, dir.y + l * yOffsetModifier, dir.z, velocity, inaccuracy);
+    }
+
+    public void shoot(Entity entityThrower, float rotationPitchIn, float rotationYawIn, float pitchOffset, float velocity, float inaccuracy) {
+        float f = -Mth.sin(rotationYawIn * 0.017453292F) * Mth.cos(rotationPitchIn * 0.017453292F);
+        float f1 = -Mth.sin((rotationPitchIn + pitchOffset) * 0.017453292F);
+        float f2 = Mth.cos(rotationYawIn * 0.017453292F) * Mth.cos(rotationPitchIn * 0.017453292F);
+        this.shoot(f, f1, f2, velocity, inaccuracy);
+        Vec3 throwerMotion = entityThrower.getDeltaMovement();
+        this.setDeltaMovement(this.getDeltaMovement().add(throwerMotion.x, entityThrower.isOnGround() ? 0.0D : throwerMotion.y, throwerMotion.z));
+        this.getDeltaMovement().add(throwerMotion.x, 0, throwerMotion.z);
+    }
+
+    public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
+        Vec3 vector3d = (new Vec3(x, y, z)).normalize().add(this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy).scale(velocity);
+        this.setDeltaMovement(vector3d);
+        double f = Math.sqrt(EntityProjectile.horizontalMag(vector3d));
+        this.setYRot((float) (Mth.atan2(vector3d.x, vector3d.z) * (180F / (float) Math.PI)));
+        this.setXRot((float) (Mth.atan2(vector3d.y, f) * (180F / (float) Math.PI)));
+        this.yRotO = this.getYRot();
+        this.xRotO = this.getXRot();
     }
 
     protected void setElement(EnumElement element) {
@@ -62,6 +80,18 @@ public class EntityWispFlame extends EntityDamageCloud {
 
     public EnumElement element() {
         return this.element;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        if (key.equals(elementData)) {
+            this.element = EnumElement.values()[this.entityData.get(elementData)];
+        }
+        super.onSyncedDataUpdated(key);
     }
 
     @Override
@@ -122,35 +152,5 @@ public class EntityWispFlame extends EntityDamageCloud {
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
-    }
-
-    public void shootAtEntity(Entity target, float velocity, float inaccuracy, float yOffsetModifier, double heighMod) {
-        Vec3 dir = (new Vec3(target.getX() - this.getX(), target.getY(heighMod) - this.getY(), target.getZ() - this.getZ()));
-        double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
-        this.shoot(dir.x, dir.y + l * yOffsetModifier, dir.z, velocity, inaccuracy);
-    }
-
-    public void shoot(Entity entityThrower, float rotationPitchIn, float rotationYawIn, float pitchOffset, float velocity, float inaccuracy) {
-        float f = -Mth.sin(rotationYawIn * 0.017453292F) * Mth.cos(rotationPitchIn * 0.017453292F);
-        float f1 = -Mth.sin((rotationPitchIn + pitchOffset) * 0.017453292F);
-        float f2 = Mth.cos(rotationYawIn * 0.017453292F) * Mth.cos(rotationPitchIn * 0.017453292F);
-        this.shoot(f, f1, f2, velocity, inaccuracy);
-        Vec3 throwerMotion = entityThrower.getDeltaMovement();
-        this.setDeltaMovement(this.getDeltaMovement().add(throwerMotion.x, entityThrower.isOnGround() ? 0.0D : throwerMotion.y, throwerMotion.z));
-        this.getDeltaMovement().add(throwerMotion.x, 0, throwerMotion.z);
-    }
-
-    public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
-        Vec3 vector3d = (new Vec3(x, y, z)).normalize().add(this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy, this.random.nextGaussian() * 0.0075F * inaccuracy).scale(velocity);
-        this.setDeltaMovement(vector3d);
-        double f = Math.sqrt(EntityProjectile.horizontalMag(vector3d));
-        this.setYRot((float) (Mth.atan2(vector3d.x, vector3d.z) * (180F / (float) Math.PI)));
-        this.setXRot((float) (Mth.atan2(vector3d.y, f) * (180F / (float) Math.PI)));
-        this.yRotO = this.getYRot();
-        this.xRotO = this.getXRot();
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
     }
 }

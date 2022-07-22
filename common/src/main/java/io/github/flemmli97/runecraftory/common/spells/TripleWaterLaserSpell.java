@@ -40,7 +40,7 @@ public class TripleWaterLaserSpell extends Spell {
                 EntityWaterLaser laser = new EntityWaterLaser(world, entity);
                 laser.setPos(laser.getX() + vec.x(), laser.getY() + vec.y(), laser.getZ() + vec.z());
                 laser.setMaxTicks(entity instanceof Player ? 44 : 15);
-                laser.setDamageMultiplier(0.95f + level * 0.5f);
+                laser.setDamageMultiplier(0.95f + level * 0.05f);
                 laser.setYawOffset(-i * 130);
                 laser.setPositionYawOffset(posYawOff);
                 world.addFreshEntity(laser);

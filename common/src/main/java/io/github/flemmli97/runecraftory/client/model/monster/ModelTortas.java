@@ -102,12 +102,14 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
         this.neck.xRot += headPitch * Mth.DEG_TO_RAD * 0.1f;
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
-        if (entity.isMoving()) {
-            if (entity.isSwimming())
-                this.anim.doAnimation(this, "swim", entity.tickCount, partialTicks);
-            else
-                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks);
+        if (entity.deathTime <= 0) {
+            this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
+            if (entity.isMoving()) {
+                if (entity.isSwimming())
+                    this.anim.doAnimation(this, "swim", entity.tickCount, partialTicks);
+                else
+                    this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks);
+            }
         }
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);

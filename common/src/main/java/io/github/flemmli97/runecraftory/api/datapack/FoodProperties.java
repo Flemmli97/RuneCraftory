@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.tenshilib.common.utils.ArrayUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -131,7 +132,7 @@ public class FoodProperties {
     public List<Component> texts() {
         if (this.translationTexts == null) {
             this.translationTexts = new ArrayList<>();
-            this.translationTexts.add(new TranslatableComponent("tooltip.item.eaten"));
+            this.translationTexts.add(new TranslatableComponent("tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
             TextComponent hprp = new TextComponent("");
             if (this.getHPGain() != 0)
                 hprp.append(" ").append(new TranslatableComponent("tooltip.food.hp", this.format(this.getHPGain())));
@@ -142,21 +143,21 @@ public class FoodProperties {
             if (this.getRpPercentRegen() != 0)
                 hprp.append(" ").append(new TranslatableComponent("tooltip.food.rp.percent", this.format(this.getRpPercentRegen())));
             if (!hprp.getSiblings().isEmpty())
-                this.translationTexts.add(hprp);
+                this.translationTexts.add(hprp.withStyle(ChatFormatting.AQUA));
             TextComponent rpIncrease = new TextComponent("");
             if (this.getRpIncrease() != 0)
                 rpIncrease.append(" ").append(new TranslatableComponent("tooltip.food.rpmax", this.format(this.getRpIncrease())));
             if (this.getRpPercentIncrease() != 0)
                 rpIncrease.append(" ").append(new TranslatableComponent("tooltip.food.rpmax.percent", this.format(this.getRpPercentIncrease())));
             if (!rpIncrease.getSiblings().isEmpty())
-                this.translationTexts.add(rpIncrease);
+                this.translationTexts.add(rpIncrease.withStyle(ChatFormatting.AQUA));
             for (Map.Entry<Attribute, Double> entry : this.effects().entrySet()) {
                 MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(entry.getValue())));
-                this.translationTexts.add(comp);
+                this.translationTexts.add(comp.withStyle(ChatFormatting.AQUA));
             }
             for (Map.Entry<Attribute, Double> entry : this.effectsMultiplier().entrySet()) {
                 MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(entry.getValue()) + "%"));
-                this.translationTexts.add(comp);
+                this.translationTexts.add(comp.withStyle(ChatFormatting.AQUA));
             }
         }
         return this.translationTexts;

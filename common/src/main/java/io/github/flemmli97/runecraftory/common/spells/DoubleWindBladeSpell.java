@@ -37,7 +37,7 @@ public class DoubleWindBladeSpell extends Spell {
         if (rp) {
             for (int i = 0; i < 2; i++) {
                 EntityWindBlade wind = new EntityWindBlade(world, entity);
-                wind.setDamageMultiplier(0.95f + level * 0.5f);
+                wind.setDamageMultiplier(0.95f + level * 0.05f);
                 wind.shoot(entity, 0, entity.getYRot() - (i == 0 ? 1 : -1) * 40, 0, 0.45f, 0);
                 if (entity instanceof Mob mob && mob.getTarget() != null) {
                     wind.setTarget(mob.getTarget());

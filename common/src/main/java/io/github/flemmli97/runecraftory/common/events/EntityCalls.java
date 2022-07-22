@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -262,6 +263,19 @@ public class EntityCalls {
         if (source instanceof CustomDamage)
             entity.invulnerableTime = ((CustomDamage) source).hurtProtection() + 10;
         return damage;
+    }
+
+    public static void postDamage(LivingEntity entity, DamageSource src, float amount) {
+        Entity attacker = src.getEntity();
+        if (amount > 0 && attacker instanceof LivingEntity living) {
+            float drainPercent = CombatUtils.getAttributeValue(attacker, ModAttributes.RFDRAIN.get(), entity) * 0.1f;
+            if (drainPercent > 0f) {
+                if (attacker instanceof Player player)
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.regenHealth((Player) attacker, drainPercent * amount));
+                else
+                    living.heal(drainPercent * amount);
+            }
+        }
     }
 
     public static void onSpawn(LivingEntity living) {

@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.PlayerDataGetter;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -34,6 +35,11 @@ public abstract class PlayerMixin implements PlayerDataGetter {
     @ModifyVariable(method = "actuallyHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getDamageAfterArmorAbsorb(Lnet/minecraft/world/damagesource/DamageSource;F)F"), argsOnly = true)
     private float tickCall(float origin, DamageSource source) {
         return EntityCalls.damageCalculation((Player) (Object) this, source, origin);
+    }
+
+    @Inject(method = "actuallyHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setHealth(F)V"))
+    private void tickCall(DamageSource damageSrc, float damageAmount, CallbackInfo info) {
+        EntityCalls.postDamage((LivingEntity) (Object) this, damageSrc, damageAmount);
     }
 
     @Override

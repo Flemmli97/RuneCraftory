@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityDamageCloud;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,6 +26,7 @@ public class EntitySpore extends EntityDamageCloud {
     private static final List<Vector3f> particleCircle = RayTraceUtils.rotatedVecs(new Vec3(0.025, 0.065, 0), new Vec3(0, 1, 0), -180, 160, 20);
 
     private Predicate<LivingEntity> pred;
+    private float damageMultiplier = 1;
 
     public EntitySpore(EntityType<? extends EntitySpore> type, Level world) {
         super(type, world);
@@ -34,6 +36,10 @@ public class EntitySpore extends EntityDamageCloud {
         super(ModEntities.spore.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = (e) -> ((BaseMonster) shooter).hitPred.test(e);
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -66,7 +72,7 @@ public class EntitySpore extends EntityDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity livingEntity) {
-        return CombatUtils.damage(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()), null);
+        return CombatUtils.damage(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
     }
 
     @Override
@@ -91,5 +97,17 @@ public class EntitySpore extends EntityDamageCloud {
             }
         } else
             super.handleEntityEvent(id);
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 }

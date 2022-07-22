@@ -30,8 +30,11 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
 
     public static final float circleInc = 0.2f;
     public static final int timeTillFull = 25;
-    private static final EntityDataAccessor<Integer> maxTick = SynchedEntityData.defineId(EntityAmbrosiaWave.class, EntityDataSerializers.INT);    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
+    private static final EntityDataAccessor<Integer> maxTick = SynchedEntityData.defineId(EntityAmbrosiaWave.class, EntityDataSerializers.INT);
+    private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
     private static final List<Vector3f> circleParticleMotion = RayTraceUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
+    private float damageMultiplier = 0.3f;
+
     public EntityAmbrosiaWave(EntityType<? extends EntityAmbrosiaWave> type, Level level) {
         super(type, level);
     }
@@ -41,6 +44,10 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
         this.entityData.set(maxTick, maxLivingTick);
         if (shooter instanceof BaseMonster)
             this.pred = (e) -> !e.equals(this.getOwner()) && ((BaseMonster) shooter).hitPred.test(e);
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -89,7 +96,7 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity e) {
-        if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(4).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * 0.3f, null)) {
+        if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(4).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
             e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 6, true, false));
             e.addEffect(new MobEffectInstance(MobEffects.JUMP, 10, 128, true, false));
             return true;
@@ -98,15 +105,17 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
     }
 
     @Override
-    protected void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(maxTick, compound.getInt("MaxTick"));
+        this.damageMultiplier = compound.getFloat("DamageMultiplier");
     }
 
     @Override
-    protected void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("MaxTick", this.entityData.get(maxTick));
+        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 
     @Override
@@ -116,8 +125,6 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
     }
-
-
 
 
 }

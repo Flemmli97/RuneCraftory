@@ -24,8 +24,8 @@ public class EntityLightBall extends EntityDamageCloud {
 
     private Type lightType = Type.LONG;
     private Predicate<LivingEntity> pred;
-    private int angleOffset;
     private float damageMultiplier = 1;
+    private int angleOffset;
     private int firstDmg = -1;
 
     public EntityLightBall(EntityType<? extends EntityLightBall> type, Level level) {
@@ -66,6 +66,14 @@ public class EntityLightBall extends EntityDamageCloud {
             ball.setAngleOffset(90 * i);
             level.addFreshEntity(ball);
         }
+    }
+
+    public void setAngleOffset(int angleOffset) {
+        this.angleOffset = angleOffset;
+    }
+
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -165,14 +173,6 @@ public class EntityLightBall extends EntityDamageCloud {
         if (owner instanceof BaseMonster)
             this.pred = ((BaseMonster) owner).hitPred;
         return owner;
-    }
-
-    public void setAngleOffset(int angleOffset) {
-        this.angleOffset = angleOffset;
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
     }
 
     public enum Type {

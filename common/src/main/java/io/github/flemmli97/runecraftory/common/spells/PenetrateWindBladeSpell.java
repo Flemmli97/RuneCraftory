@@ -34,7 +34,7 @@ public class PenetrateWindBladeSpell extends Spell {
         if (rp) {
             for (int i = 0; i < 3; i++) {
                 EntityWindBlade wind = new EntityWindBlade(world, entity);
-                wind.setDamageMultiplier(1 + level * 0.5f);
+                wind.setDamageMultiplier(1.1f + (level - 1) * 0.05f);
                 wind.setPiercing();
                 wind.shoot(entity, entity.getXRot(), entity.getYRot() - (i - 1) * 50, 0, 0.35f, 0);
                 world.addFreshEntity(wind);

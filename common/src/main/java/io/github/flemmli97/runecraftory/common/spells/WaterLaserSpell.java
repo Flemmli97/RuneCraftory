@@ -35,7 +35,7 @@ public class WaterLaserSpell extends Spell {
         if (rp) {
             EntityWaterLaser laser = new EntityWaterLaser(world, entity);
             laser.setMaxTicks(entity instanceof Player ? 44 : 15);
-            laser.setDamageMultiplier(0.95f + level * 0.5f);
+            laser.setDamageMultiplier(0.95f + level * 0.05f);
             if (entity instanceof Mob mob && mob.getTarget() != null) {
                 LivingEntity target = mob.getTarget();
                 laser.setRotationTo(target.getX(), target.getEyeY(), target.getZ(), 0);
