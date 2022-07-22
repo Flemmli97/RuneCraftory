@@ -46,6 +46,7 @@ public class ModTags {
     public static final TagKey<Item> scales = tag("scales");
 
     public static final TagKey<Item> woolyTamer = tag("wooly_tame");
+    public static final TagKey<Item> marionettaTamer = tag("marionetta_tame");
 
     public static final TagKey<Item> chest_t1 = tag("chest_t1");
     public static final TagKey<Item> chest_t2 = tag("chest_t2");
@@ -73,7 +74,6 @@ public class ModTags {
     public static final TagKey<Biome> IS_DRY_OVERWORLD = biomeCommon("is_dry/overworld");
 
     public static final TagKey<Biome> IS_SAVANNA = biomeCommon("is_savanna");
-    public static final TagKey<Biome> IS_JUNGLE = biomeCommon("is_jungle");
 
     public static final TagKey<Biome> IS_SPOOKY = biomeCommon("is_spooky");
     public static final TagKey<Biome> IS_DEAD = biomeCommon("is_dead");

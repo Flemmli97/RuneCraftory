@@ -213,6 +213,12 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.milkM.get())
                 .add(ModItems.milkL.get())
                 .add(Items.MILK_BUCKET);
+
+        this.tag(ModTags.marionettaTamer)
+                .add(Items.CAKE)
+                .add(ModItems.cheesecake.get())
+                .add(ModItems.chocolateCake.get())
+                .add(ModItems.applePie.get());
     }
 
     protected void forgeAndCommonTag(TagKey<Item> forge, TagKey<Item> common, Item... items) {

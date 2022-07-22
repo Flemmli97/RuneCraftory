@@ -54,9 +54,11 @@ public class Decoder {
 
     public static class StructurePoolElementData {
 
-        protected final StructurePoolElementType<?> type;        public static final Codec<StructurePoolElementData> CODEC = Registry.STRUCTURE_POOL_ELEMENT.byNameCodec()
+        protected final StructurePoolElementType<?> type;
+        public static final Codec<StructurePoolElementData> CODEC = Registry.STRUCTURE_POOL_ELEMENT.byNameCodec()
                 .dispatch("element_type", d -> d.type, StructurePoolElementData::of);
-        protected final StructureTemplatePool.Projection projection;        private static final Map<StructurePoolElementType<?>, Codec<StructurePoolElementData>> CODECS = Map.of(
+        protected final StructureTemplatePool.Projection projection;
+        private static final Map<StructurePoolElementType<?>, Codec<StructurePoolElementData>> CODECS = Map.of(
                 StructurePoolElementType.EMPTY, Codec.unit(StructurePoolElementData::new),
                 StructurePoolElementType.SINGLE, RecordCodecBuilder.create((instance) ->
                         instance.group(ResourceLocation.CODEC.fieldOf("location").forGetter(d -> d.val),
@@ -83,6 +85,7 @@ public class Decoder {
             this.list = null;
             this.processors = null;
         }
+
         public StructurePoolElementData(ResourceLocation val, ResourceLocation processors, StructureTemplatePool.Projection projection) {
             this.type = StructurePoolElementType.SINGLE;
             this.val = val;
@@ -90,6 +93,7 @@ public class Decoder {
             this.list = null;
             this.processors = processors;
         }
+
         public StructurePoolElementData(StructurePoolElementType<?> type, ResourceLocation val, ResourceLocation processors, StructureTemplatePool.Projection projection) {
             this.type = type;
             this.val = val;
@@ -97,6 +101,7 @@ public class Decoder {
             this.list = null;
             this.processors = processors;
         }
+
         public StructurePoolElementData(List<StructurePoolElementData> list) {
             this.type = StructurePoolElementType.LIST;
             this.list = list;
@@ -116,8 +121,6 @@ public class Decoder {
         private static <E extends StructurePoolElementData> RecordCodecBuilder<E, StructureTemplatePool.Projection> projectionCodec() {
             return StructureTemplatePool.Projection.CODEC.fieldOf("projection").forGetter(d -> d.projection);
         }
-
-
 
 
     }
