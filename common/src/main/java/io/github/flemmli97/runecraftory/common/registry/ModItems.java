@@ -589,7 +589,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> oldBandage = mat("old_bandage", Texture.Y);
     public static final RegistryEntrySupplier<Item> ambrosiasThorns = mat("ambrosias_thorns", Rarity.RARE, Texture.Y);
     public static final RegistryEntrySupplier<Item> threadSpider = mat("spider_thread", Texture.N);
-    public static final RegistryEntrySupplier<Item> puppetryStrings = mat("puppetry_strings", Texture.N);
+    public static final RegistryEntrySupplier<Item> puppetryStrings = mat("puppetry_strings", Texture.Y);
     public static final RegistryEntrySupplier<Item> vine = mat("vine", Texture.N);
     public static final RegistryEntrySupplier<Item> tailScorpion = mat("scorpion_tail", Texture.N);
     public static final RegistryEntrySupplier<Item> strongVine = mat("strong_vine", Texture.N);
@@ -597,8 +597,8 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> tailChimera = mat("chimera_tail", Rarity.RARE, Texture.N);
     public static final RegistryEntrySupplier<Item> arrowHead = mat("arrowhead", Texture.Y);
     public static final RegistryEntrySupplier<Item> bladeShard = mat("blade_shard", Texture.Y);
-    public static final RegistryEntrySupplier<Item> brokenHilt = mat("broken_hilt", Texture.N);
-    public static final RegistryEntrySupplier<Item> brokenBox = mat("broken_box", Texture.N);
+    public static final RegistryEntrySupplier<Item> brokenHilt = mat("broken_hilt", Texture.Y);
+    public static final RegistryEntrySupplier<Item> brokenBox = mat("broken_box", Texture.Y);
     public static final RegistryEntrySupplier<Item> bladeGlistening = mat("glistening_blade", Texture.N);
     public static final RegistryEntrySupplier<Item> greatHammerShard = mat("great_hammer_shard", Texture.N);
     public static final RegistryEntrySupplier<Item> hammerPiece = mat("hammer_piece", Texture.N);
@@ -647,7 +647,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> carapacePretty = mat("pretty_carapace", Texture.Y);
     public static final RegistryEntrySupplier<Item> clothAncientOrc = mat("ancient_orc_cloth", Texture.N);
     public static final RegistryEntrySupplier<Item> jawInsect = mat("insect_jaw", Texture.Y);
-    public static final RegistryEntrySupplier<Item> clawPanther = mat("panther_claw", Texture.N);
+    public static final RegistryEntrySupplier<Item> clawPanther = mat("panther_claw", Texture.Y);
     public static final RegistryEntrySupplier<Item> clawMagic = mat("magic_claw", Texture.Y);
     public static final RegistryEntrySupplier<Item> fangWolf = mat("wolf_fang", Texture.N);
     public static final RegistryEntrySupplier<Item> fangGoldWolf = mat("gold_wolf_fang", Texture.N);
@@ -1159,8 +1159,8 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> rainbowSashimi = food("rainbow_sashimi", Texture.N);
     public static final RegistryEntrySupplier<Item> charSashimi = food("char_sashimi", Texture.N);
     public static final RegistryEntrySupplier<Item> troutSashimi = food("trout_sashimi", Texture.N);
-    public static final RegistryEntrySupplier<Item> disastrousDish = food("disastrous_dish", Texture.N);
-    public static final RegistryEntrySupplier<Item> failedDish = food("failed_dish", Texture.N);
+    public static final RegistryEntrySupplier<Item> disastrousDish = food("disastrous_dish", Texture.Y);
+    public static final RegistryEntrySupplier<Item> failedDish = food("failed_dish", Texture.Y);
     public static final RegistryEntrySupplier<Item> mixedHerbs = food("mixed_herbs", Texture.N);
     public static final RegistryEntrySupplier<Item> sourDrop = food("sour_drop", Texture.N);
     public static final RegistryEntrySupplier<Item> sweetPowder = food("sweet_powder", Texture.N);

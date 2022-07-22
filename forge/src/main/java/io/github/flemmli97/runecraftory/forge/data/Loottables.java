@@ -127,7 +127,7 @@ public class Loottables extends LootTableProvider {
                             .add(this.add(ModItems.stickThick.get(), 0.5f, 0.05f, 1, 1, 20, 2))));
             this.registerLootTable(ModEntities.spider.get(), LootTable.lootTable()
                     .withPool(this.create().add(this.add(ModItems.jawInsect.get(), 0.23f, 0.05f, 1, 1, 15, 5))
-                            .add(this.add(ModItems.threadSpider.get(), 0.3f, 0.05f, 1, 1, 20, 2))));
+                            .add(this.add(Items.STRING, 0.4f, 0.05f, 1, 1, 20, 2))));
             this.registerLootTable(ModEntities.shadowPanther.get(), LootTable.lootTable()
                     .withPool(this.create().add(this.add(ModItems.clawPanther.get(), 0.23f, 0.05f, 1, 1, 15, 5))
                             .add(this.add(ModItems.furQuality.get(), 0.3f, 0.05f, 1, 1, 20, 2))));
