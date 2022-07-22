@@ -25,7 +25,7 @@ public class EntityCards extends EntityProjectile {
     private static final EntityDataAccessor<Integer> cardType = SynchedEntityData.defineId(EntityCards.class, EntityDataSerializers.INT);
 
     private Predicate<LivingEntity> pred;
-    private float damageMultiplier = 1;
+    private float damageMultiplier = 0.6f;
 
     public EntityCards(EntityType<? extends EntityCards> type, Level world) {
         super(type, world);

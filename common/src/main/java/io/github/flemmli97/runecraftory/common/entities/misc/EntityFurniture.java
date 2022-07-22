@@ -46,7 +46,7 @@ public class EntityFurniture extends EntityProjectile {
 
     @Override
     public int livingTickMax() {
-        return 800;
+        return this.isNoGravity() ? 400 : 200;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class EntityFurniture extends EntityProjectile {
 
     @Override
     protected float motionReduction(boolean inWater) {
-        return this.isNoGravity() ? 0 : super.motionReduction(inWater);
+        return this.isNoGravity() ? 1 : super.motionReduction(inWater);
     }
 
     @Override

@@ -281,7 +281,6 @@ public class ClientRegister {
         consumer.accept(ModelWisp.LAYER_LOCATION, ModelWisp::createBodyLayer);
         consumer.accept(ModelSpider.LAYER_LOCATION, ModelSpider::createBodyLayer);
         consumer.accept(ModelPanther.LAYER_LOCATION, ModelPanther::createBodyLayer);
-        consumer.accept(ModelMimic.LAYER_LOCATION, ModelMimic::createBodyLayer);
 
         consumer.accept(ModelChest.LAYER_LOCATION, ModelChest::createBodyLayer);
 

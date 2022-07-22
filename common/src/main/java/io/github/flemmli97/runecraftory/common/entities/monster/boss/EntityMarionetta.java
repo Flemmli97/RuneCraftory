@@ -275,14 +275,14 @@ public class EntityMarionetta extends BossMonster {
                 EntityFurniture furniture = new EntityFurniture(this.level, this, randType);
                 furniture.setNoGravity(true);
                 double xRand = this.getX() + (this.random.nextDouble() - 0.5) * 13;
-                double yRand = this.getY() + (this.random.nextDouble() - 0.5) * 2;
+                double yRand = this.getY() + (this.random.nextDouble()) * 2;
                 double zRand = this.getZ() + (this.random.nextDouble() - 0.5) * 13;
                 furniture.setPos(xRand, yRand, zRand);
                 LivingEntity target = this.getTarget();
                 if (target != null)
-                    furniture.shootAtPosition(target.getX(), target.getY(), target.getZ(), 0.05f, 1.2f);
+                    furniture.shootAtPosition(target.getX(), target.getY() + target.getBbHeight() * 0.5, target.getZ(), 0.1f, 1.2f);
                 else
-                    furniture.shoot(this, this.yHeadRot, this.getXRot(), 0, 0.05f, 1.2f);
+                    furniture.shoot(this, this.yHeadRot, this.getXRot(), 0, 0.09f, 1.2f);
                 this.level.addFreshEntity(furniture);
             }
         }
