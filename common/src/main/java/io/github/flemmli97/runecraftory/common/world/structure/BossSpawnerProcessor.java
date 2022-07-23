@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
@@ -34,6 +35,25 @@ public class BossSpawnerProcessor extends StructureProcessor {
             tag.putString("Entity", this.boss.toString());
             tag.putInt("LastUpdate", -1);
             return new StructureTemplate.StructureBlockInfo(relativeBlockInfo.pos, state, tag);
+        }
+        if (relativeBlockInfo.state.is(Blocks.OAK_SIGN)) {
+            if (relativeBlockInfo.nbt == null || !relativeBlockInfo.nbt.getString("Text1").equals("{\"text\":\"Boss\"}"))
+                return relativeBlockInfo;
+            Component txt2 = Component.Serializer.fromJson(relativeBlockInfo.nbt.getString("Text2"));
+            int off = 0;
+            try {
+                if (txt2 != null) {
+                    String s = txt2.getString();
+                    if (!s.isEmpty())
+                        off = Integer.parseInt(s);
+                }
+            } catch (NumberFormatException ignored) {
+            }
+            BlockState state = ModBlocks.bossSpawner.get().defaultBlockState();
+            CompoundTag tag = new CompoundTag();
+            tag.putString("Entity", this.boss.toString());
+            tag.putInt("LastUpdate", -1);
+            return new StructureTemplate.StructureBlockInfo(relativeBlockInfo.pos.above(off), state, tag);
         }
         return relativeBlockInfo;
     }

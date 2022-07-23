@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.world.structure;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.levelgen.GenerationStep;
-import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
@@ -27,15 +26,13 @@ public class TheaterRuinsStructure extends StructureFeature<JigsawConfiguration>
             return Optional.empty();
         }
 
-        BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
-        int topLandY = context.chunkGenerator().getFirstFreeHeight(blockpos.getX(), blockpos.getZ(), Heightmap.Types.WORLD_SURFACE_WG, context.heightAccessor());
-        blockpos = blockpos.above(topLandY - 2);
+        BlockPos blockpos = new BlockPos(context.chunkPos().getMinBlockX(), 0, context.chunkPos().getMinBlockZ());
         return JigsawPlacement.addPieces(
                 context,
                 PoolElementStructurePiece::new,
                 blockpos,
                 false,
-                false
+                true
         );
     }
 

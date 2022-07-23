@@ -589,7 +589,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> oldBandage = mat("old_bandage", Texture.Y);
     public static final RegistryEntrySupplier<Item> ambrosiasThorns = mat("ambrosias_thorns", Rarity.RARE, Texture.Y);
     public static final RegistryEntrySupplier<Item> threadSpider = mat("spider_thread", Texture.N);
-    public static final RegistryEntrySupplier<Item> puppetryStrings = mat("puppetry_strings", Texture.Y);
+    public static final RegistryEntrySupplier<Item> puppetryStrings = mat("puppetry_strings", Rarity.RARE, Texture.Y);
     public static final RegistryEntrySupplier<Item> vine = mat("vine", Texture.N);
     public static final RegistryEntrySupplier<Item> tailScorpion = mat("scorpion_tail", Texture.N);
     public static final RegistryEntrySupplier<Item> strongVine = mat("strong_vine", Texture.N);
