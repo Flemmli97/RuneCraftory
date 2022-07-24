@@ -3,6 +3,9 @@
     {
       "boss": "runecraftory:marionetta",
       "processor_type": "runecraftory:boss_processor"
+    },
+    {
+      "processor_type": "runecraftory:water_unlog_processor"
     }
   ]
 }

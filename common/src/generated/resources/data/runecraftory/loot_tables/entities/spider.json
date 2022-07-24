@@ -34,7 +34,7 @@
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.3,
+              "chance": 0.4,
               "looting_multiplier": 0.05
             }
           ],
@@ -51,7 +51,7 @@
               "limit": 1
             }
           ],
-          "name": "runecraftory:spider_thread"
+          "name": "minecraft:string"
         }
       ]
     }
