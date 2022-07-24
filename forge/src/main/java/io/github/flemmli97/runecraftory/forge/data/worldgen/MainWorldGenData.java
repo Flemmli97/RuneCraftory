@@ -5,7 +5,8 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
-import io.github.flemmli97.runecraftory.common.world.structure.BossSpawnerProcessor;
+import io.github.flemmli97.runecraftory.common.world.structure.processors.BossSpawnerProcessor;
+import io.github.flemmli97.runecraftory.common.world.structure.processors.WaterUnlogProcessor;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -42,13 +43,17 @@ public class MainWorldGenData implements DataProvider {
     public void run(HashCache cache) throws IOException {
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "ambrosia_forest"),
                 new RandomSpreadStructurePlacement(20, 8, RandomSpreadType.LINEAR, 1224466880),
-                ModStructures.AMBROSIA_FOREST.get(), BiomeTags.IS_FOREST, ModEntities.ambrosia.getID(), true);
+                ModStructures.AMBROSIA_FOREST.get(), BiomeTags.IS_FOREST, true,
+                this.simple(ModEntities.ambrosia.getID()));
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "thunderbolt_ruins"),
                 new RandomSpreadStructurePlacement(16, 8, RandomSpreadType.LINEAR, 1224567480),
-                ModStructures.THUNDERBOLT_RUINS.get(), BiomeTags.IS_OCEAN, ModEntities.thunderbolt.getID(), true);
+                ModStructures.THUNDERBOLT_RUINS.get(), BiomeTags.IS_OCEAN, true,
+                this.simple(ModEntities.thunderbolt.getID()));
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "theater_ruins"),
                 new RandomSpreadStructurePlacement(21, 7, RandomSpreadType.LINEAR, 1226867120),
-                ModStructures.THEATER_RUINS.get(), ModTags.IS_SPOOKY, ModEntities.marionetta.getID(), true);
+                ModStructures.THEATER_RUINS.get(), ModTags.IS_SPOOKY, true,
+                new StructureProcessorList(List.of(new BossSpawnerProcessor(ModEntities.marionetta.getID()),
+                        WaterUnlogProcessor.INST)));
         this.templatePoolGen.runExternal(cache);
         this.processorListGen.runExternal(cache);
         this.configuredStructureFeatureGen.runExternal(cache);
@@ -60,14 +65,19 @@ public class MainWorldGenData implements DataProvider {
         return "World Gen";
     }
 
-    protected void addBossStructure(ResourceLocation id, StructurePlacement placement, StructureFeature<?> feature, TagKey<Biome> biomeTag, ResourceLocation boss, boolean adapt) {
+    protected void addBossStructure(ResourceLocation id, StructurePlacement placement, StructureFeature<?> feature, TagKey<Biome> biomeTag, boolean adapt,
+                                    StructureProcessorList list) {
         ResourceLocation processorID = new ResourceLocation(id.getNamespace(), id.getPath() + "_processor");
-        this.processorListGen.addElement(processorID, new StructureProcessorList(List.of(new BossSpawnerProcessor(boss))));
+        this.processorListGen.addElement(processorID, list);
         this.templatePoolGen.addElement(id, new Decoder.TemplatePoolData(id, new ResourceLocation("empty"), List.of(
                 Pair.of(new Decoder.StructurePoolElementData(id, processorID,
                         StructureTemplatePool.Projection.RIGID), 1))));
         this.structureSetGen.addElement(id, new Decoder.StructureSetData(Pair.of(id, 1), placement));
         this.configuredStructureFeatureGen.addElement(id, new Decoder.ConfiguredJigsawStructureFeatureData(feature, id,
                 1, biomeTag, Map.of(), adapt));
+    }
+
+    protected StructureProcessorList simple(ResourceLocation boss) {
+        return new StructureProcessorList(List.of(new BossSpawnerProcessor(boss)));
     }
 }

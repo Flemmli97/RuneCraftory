@@ -9,7 +9,8 @@
     "BrainMixin",
     "ConfiguredStructureMixin",
     "ContainerScreenAccessor",
-    "CropBlockMixin"
+    "CropBlockMixin",
+    "StructureTemplateMixin"
   ],
   "client": [
     "AtlasMixin",

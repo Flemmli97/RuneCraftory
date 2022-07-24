@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.world.structure;
+package io.github.flemmli97.runecraftory.common.world.structure.processors;
 
 import com.mojang.serialization.Codec;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;

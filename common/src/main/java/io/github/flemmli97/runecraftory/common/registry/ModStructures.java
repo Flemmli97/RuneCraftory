@@ -2,9 +2,10 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.world.structure.AmbrosiaForestStructure;
-import io.github.flemmli97.runecraftory.common.world.structure.BossSpawnerProcessor;
 import io.github.flemmli97.runecraftory.common.world.structure.TheaterRuinsStructure;
 import io.github.flemmli97.runecraftory.common.world.structure.ThunderboltRuinsStructure;
+import io.github.flemmli97.runecraftory.common.world.structure.processors.BossSpawnerProcessor;
+import io.github.flemmli97.runecraftory.common.world.structure.processors.WaterUnlogProcessor;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
@@ -27,6 +28,7 @@ public class ModStructures {
     public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> THEATER_RUINS = register("theater_ruins", () -> new TheaterRuinsStructure(JigsawConfiguration.CODEC));
 
     public static final RegistryEntrySupplier<StructureProcessorType<BossSpawnerProcessor>> BOSS_PROCESSOR = STRUCTURESPROCESSORS.register("boss_processor", () -> () -> BossSpawnerProcessor.CODEC);
+    public static final RegistryEntrySupplier<StructureProcessorType<WaterUnlogProcessor>> WATERUNLOG_PROCESSOR = STRUCTURESPROCESSORS.register("water_unlog_processor", () -> () -> WaterUnlogProcessor.CODEC);
 
     public static <T extends FeatureConfiguration> RegistryEntrySupplier<StructureFeature<T>> register(String name, Supplier<StructureFeature<T>> sup) {
         return STRUCTURES.register(name, sup);
