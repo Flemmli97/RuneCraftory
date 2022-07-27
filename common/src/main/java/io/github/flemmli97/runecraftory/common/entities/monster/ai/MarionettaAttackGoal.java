@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityMarionetta;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.common.entity.ai.AnimatedAttackGoal;
+import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import net.minecraft.world.phys.Vec3;
 
 public class MarionettaAttackGoal<T extends EntityMarionetta> extends AnimatedAttackGoal<T> {
@@ -111,12 +112,24 @@ public class MarionettaAttackGoal<T extends EntityMarionetta> extends AnimatedAt
         if (!this.iddleFlag) {
             this.clockwise = this.attacker.getRandom().nextBoolean();
             this.iddleFlag = true;
-            if (this.distanceToTargetSq < 5 && this.attacker.getRandom().nextBoolean()) {
-                Vec3 dir = this.target.position().subtract(this.attacker.position()).normalize();
-                this.attacker.setDeltaMovement(-dir.x(), 0.2, -dir.z());
-            }
+            this.jumpAround();
         }
+        if (this.attacker.getRandom().nextFloat() < 0.0015)
+            this.jumpAround();
         this.circleAroundTargetFacing(7, this.clockwise, 1);
+    }
+
+
+    private void jumpAround() {
+        if (this.distanceToTargetSq < 6 && this.attacker.getRandom().nextBoolean()) {
+            Vec3 dir = this.target.position().subtract(this.attacker.position()).normalize();
+            this.attacker.setDeltaMovement(-dir.x(), 0.2, -dir.z());
+        } else if (this.attacker.getRandom().nextFloat() < 0.45) {
+            Vec3 dir = this.target.position().subtract(this.attacker.position());
+            dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(0.6);
+            dir = MathUtils.rotate(new Vec3(0, 1, 0), dir, this.attacker.getRandom().nextBoolean() ? 90 : -90);
+            this.attacker.setDeltaMovement(-dir.x(), 0.22, -dir.z());
+        }
     }
 
     @Override
