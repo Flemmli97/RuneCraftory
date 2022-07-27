@@ -38,6 +38,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
 
     public EntityMarionettaTrap(EntityType<? extends EntityMarionettaTrap> entityType, Level level) {
         super(entityType, level);
+        this.noCulling = true;
     }
 
     public EntityMarionettaTrap(Level world, LivingEntity shooter) {
@@ -81,9 +82,9 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
         this.caughtEntities.forEach(e -> {
             if (e.isAlive()) {
                 if (e instanceof ServerPlayer player)
-                    player.moveTo(this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ());
+                    player.moveTo(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
                 else
-                    e.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.2, this.getZ());
+                    e.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
             }
         });
         if (!this.level.isClientSide) {
@@ -91,7 +92,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
                 if (this.getOwner() != null && this.tickLeft % 3 == 0)
                     this.caughtEntities.forEach(e -> {
                         CustomDamage source = CombatUtils.build(this.getOwner(), e, new CustomDamage.Builder(this)).hurtResistant(this.tickLeft == 7 ? 10 : 0).get();
-                        CombatUtils.mobAttack(this.getOwner(), e, source, CombatUtils.getAttributeValue(this, Attributes.ATTACK_DAMAGE, e) * this.damageMultiplier);
+                        CombatUtils.mobAttack(this.getOwner(), e, source, CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE, e) * this.damageMultiplier);
                     });
             }
             if (this.tickLeft <= 0)
