@@ -298,7 +298,6 @@ public class CombatUtils {
         boolean knockBackChance = attacker.level.random.nextInt(100) < getAttributeValue(attacker, ModAttributes.RFKNOCK.get(), target);
         int i = knockBackChance ? 2 : 1;
         if (attacker.isSprinting()) {
-            attacker.level.playSound(null, attacker.getX(), attacker.getY(), attacker.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, attacker.getSoundSource(), 1.0f, 1.0f);
             ++i;
         }
         boolean ignoreArmor = critChance || faintChance;

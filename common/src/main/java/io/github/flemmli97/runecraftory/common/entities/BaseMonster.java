@@ -126,7 +126,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
     public final Predicate<LivingEntity> hitPred = (e) -> {
         if (e != this) {
-            if (this.hasPassenger(e))
+            if (this.hasPassenger(e) || !e.canBeSeenAsEnemy())
                 return false;
             if (e instanceof Mob && this == ((Mob) e).getTarget())
                 return true;

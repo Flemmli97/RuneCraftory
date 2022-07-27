@@ -103,7 +103,7 @@ public class EntityMarionetta extends BossMonster {
     @Override
     public int animationCooldown(AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
-        return 34 + this.getRandom().nextInt(22) - (this.isEnraged() ? 20 : 0) + diffAdd;
+        return 30 + this.getRandom().nextInt(22) - (this.isEnraged() ? 20 : 0) + diffAdd;
     }
 
     @Override
