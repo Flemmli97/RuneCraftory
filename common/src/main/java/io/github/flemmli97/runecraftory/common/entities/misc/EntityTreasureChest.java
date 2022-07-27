@@ -105,8 +105,10 @@ public class EntityTreasureChest extends Entity implements IAnimated {
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (!this.level.isClientSide) {
-            this.getAnimationHandler().setAnimation(open);
-            this.playSound(SoundEvents.CHEST_OPEN, 0.7f, 1);
+            if (!this.getAnimationHandler().isCurrentAnim(open.getID())) {
+                this.getAnimationHandler().setAnimation(open);
+                this.playSound(SoundEvents.CHEST_OPEN, 0.7f, 1);
+            }
         }
         return InteractionResult.CONSUME;
     }
