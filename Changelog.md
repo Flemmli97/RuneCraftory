@@ -1,3 +1,14 @@
+RuneCraftory 1.2.1
+================
+- Better structure placement
+- Fix mobs trying to attack creative players
+- Fix sound playing during attacks when it shouldn't
+- Fix chest trap from marionetta doing no dmg
+- Treasure chest interaction fix
+- Make marionetta jump around more
+- Fix crash with butterflys
+- Fix mobs floating when they playing defeated animation
+
 RuneCraftory 1.2.0
 ================
 - Added: spider, shadow panther, monster box, gobble box
