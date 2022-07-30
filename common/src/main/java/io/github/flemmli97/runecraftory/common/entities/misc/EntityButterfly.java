@@ -12,6 +12,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -87,19 +88,33 @@ public class EntityButterfly extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        Entity owner = this.getOwner();
-        boolean living = owner instanceof LivingEntity;
-        if (living)
-            ((LivingEntity) owner).getAttribute(ModAttributes.RFDRAIN.get())
-                    .addTransientModifier(new AttributeModifier(attributeMod, "butterfly_mod", 100, AttributeModifier.Operation.ADDITION));
+        LivingEntity owner = null;
+        if (this.getOwner() instanceof LivingEntity ow)
+            owner = ow;
+        if (owner != null)
+            this.applyAttribute(owner);
         if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(3).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
-            if (living)
-                ((LivingEntity) owner).getAttribute(ModAttributes.RFDRAIN.get()).removeModifier(attributeMod);
+            if (owner != null)
+                this.removeAttribute(owner);
             if (result.getEntity() instanceof LivingEntity)
                 ((LivingEntity) result.getEntity()).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 3));
             return true;
         }
+        if (owner != null)
+            this.removeAttribute(owner);
         return false;
+    }
+
+    private void applyAttribute(LivingEntity entity) {
+        AttributeInstance inst = entity.getAttribute(ModAttributes.RFDRAIN.get());
+        if (inst != null && inst.getModifier(attributeMod) == null)
+            inst.addTransientModifier(new AttributeModifier(attributeMod, "butterfly_mod", 100, AttributeModifier.Operation.ADDITION));
+    }
+
+    private void removeAttribute(LivingEntity entity) {
+        AttributeInstance inst = entity.getAttribute(ModAttributes.RFDRAIN.get());
+        if (inst != null)
+            inst.removeModifier(attributeMod);
     }
 
     @Override
