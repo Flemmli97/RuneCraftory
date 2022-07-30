@@ -15,8 +15,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
@@ -72,9 +74,35 @@ public class EntityFurniture extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(2).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
+        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(1).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
         this.remove(RemovalReason.KILLED);
         return att;
+    }
+
+    @Override
+    protected EntityHitResult getEntityHit(Vec3 from, Vec3 to) {
+        if (!this.isAlive()) {
+            return null;
+        } else {
+            return this.entityCollision(from, to, this::canHit);
+        }
+    }
+
+    private EntityHitResult entityCollision(Vec3 from, Vec3 to, Predicate<Entity> pred) {
+        double distVar = Double.MAX_VALUE;
+        Entity ret = null;
+        AABB entityBB = this.getBoundingBox();
+        for (Entity entity1 : this.level.getEntities(this, this.getBoundingBox().expandTowards(this.getDeltaMovement()), pred)) {
+            AABB axisalignedbb = entity1.getBoundingBox().inflate(0.3F);
+            if (entityBB.intersects(axisalignedbb)) {
+                double dist = this.position().distanceToSqr(entity1.position());
+                if (dist < distVar) {
+                    ret = entity1;
+                    distVar = dist;
+                }
+            }
+        }
+        return ret == null ? null : new EntityHitResult(ret);
     }
 
     @Override
