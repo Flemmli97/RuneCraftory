@@ -141,7 +141,8 @@ public class EntityTreasureChest extends Entity implements IAnimated {
         Registry.ITEM.getTag(this.lootTagFromTier()).map(n -> n.stream().map(Holder::value))
                 .map(s -> items.addAll(s.toList()));
         if (!items.isEmpty()) {
-            int rand = Math.min(items.size(), this.random.nextInt(3) + this.tier() < 2 ? 2 : 0);
+            int rand = this.tier() < 2 ? 2 : 1;
+            rand = Math.min(items.size(), rand + this.random.nextInt(this.tier() < 2 ? 3 : 2));
             for (int i = 0; i < rand; i++) {
                 this.spawnAtLocation(items.get(this.random.nextInt(items.size())));
             }

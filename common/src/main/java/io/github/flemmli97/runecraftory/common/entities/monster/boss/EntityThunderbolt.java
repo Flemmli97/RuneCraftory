@@ -26,6 +26,7 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -109,7 +110,7 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public int animationCooldown(AnimatedAction anim) {
-        int diffAdd = this.difficultyCooldown() / 2;
+        int diffAdd = this.difficultyCooldown();
         if (anim != null)
             switch (anim.getID()) {
                 case "laser_kick_2":
@@ -119,7 +120,7 @@ public class EntityThunderbolt extends BossMonster {
                 case "charge_3":
                     return 1;
             }
-        return 18 + this.getRandom().nextInt(22) - (this.isEnraged() ? 12 : 0) + diffAdd;
+        return 24 + this.getRandom().nextInt(22) - (this.isEnraged() ? 15 : 0) + diffAdd;
     }
 
     @Override
@@ -129,8 +130,15 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public void aiStep() {
-        if (this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID()))
+        if (this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID())) {
+            double g = -0.2;
+            if (this.isInWater())
+                g /= 16;
+            else if (this.isInLava())
+                g /= 8;
+            this.move(MoverType.SELF, new Vec3(0, g, 0));
             return;
+        }
         super.aiStep();
     }
 

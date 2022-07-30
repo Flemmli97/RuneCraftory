@@ -23,6 +23,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -115,8 +116,15 @@ public class EntityMarionetta extends BossMonster {
 
     @Override
     public void aiStep() {
-        if (this.getAnimationHandler().isCurrentAnim(angry.getID(), defeat.getID()))
+        if (this.getAnimationHandler().isCurrentAnim(angry.getID(), defeat.getID())) {
+            double g = -0.2;
+            if (this.isInWater())
+                g /= 16;
+            else if (this.isInLava())
+                g /= 8;
+            this.move(MoverType.SELF, new Vec3(0, g, 0));
             return;
+        }
         super.aiStep();
     }
 
@@ -204,8 +212,11 @@ public class EntityMarionetta extends BossMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim.getID().equals(spin.getID()) || anim.getID().equals(chest_attack.getID())) {
-            return this.getBoundingBox().inflate(1.5, 0, 1.5);
+        if (anim.getID().equals(spin.getID())) {
+            return this.getBoundingBox().inflate(1.6, 0, 1.6);
+        }
+        if (anim.getID().equals(chest_attack.getID())) {
+            return this.getBoundingBox().inflate(1.2, 0, 1.2);
         }
         return super.calculateAttackAABB(anim, target);
     }
