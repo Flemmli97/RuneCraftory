@@ -67,6 +67,6 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void shaking(EntityViewRenderEvent.CameraSetup event) {
-        ClientCalls.renderShaking(event.getYaw(), event.getPitch(), event.getRoll(), event.getPartialTicks(), event::setYaw, event::setPitch, event::setRoll);
+        ClientCalls.renderShaking(event.getCamera(), event.getYaw(), event.getPitch(), event.getRoll(), (float) event.getPartialTicks(), event::setYaw, event::setPitch, event::setRoll);
     }
 }

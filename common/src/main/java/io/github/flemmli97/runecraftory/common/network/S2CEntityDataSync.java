@@ -32,6 +32,7 @@ public record S2CEntityDataSync(int entityID,
                     case PARALYSIS -> cap.setParalysis(living, pkt.flag);
                     case COLD -> cap.setCold(living, pkt.flag);
                     case INVIS -> cap.setInvis(living, pkt.flag);
+                    case ORTHOVIEW -> cap.setOrthoView(living, pkt.flag);
                 }
             });
         }
@@ -57,6 +58,7 @@ public record S2CEntityDataSync(int entityID,
         COLD,
         FATIGUE,
         SEAL,
-        INVIS
+        INVIS,
+        ORTHOVIEW
     }
 }

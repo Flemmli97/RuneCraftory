@@ -10,7 +10,7 @@ public class CameraInject {
 
     public static void modifyCam(Camera camera, PoseStack stack, float partialTicks) {
         CameraAccessor acc = (CameraAccessor) camera;
-        ClientCalls.renderShaking(camera.getYRot(), camera.getXRot(), 0, partialTicks,
+        ClientCalls.renderShaking(camera, camera.getYRot(), camera.getXRot(), 0, partialTicks,
                 acc::setYRot, acc::setXRot, f -> stack.mulPose(Vector3f.ZP.rotationDegrees(f)));
     }
 }

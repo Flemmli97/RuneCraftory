@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
@@ -85,6 +86,10 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
                     player.moveTo(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
                 else
                     e.setPos(this.getX(), this.getY() + this.getBbHeight() + 0.05, this.getZ());
+                Platform.INSTANCE.getEntityData(e).ifPresent(data -> {
+                    if (!data.isOrthoView())
+                        data.setOrthoView(e, true);
+                });
             }
         });
         if (!this.level.isClientSide) {
@@ -95,8 +100,10 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
                         CombatUtils.mobAttack(this.getOwner(), e, source, CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE, e) * this.damageMultiplier);
                     });
             }
-            if (this.tickLeft <= 0)
+            if (this.tickLeft <= 0) {
+                this.caughtEntities.forEach(e -> Platform.INSTANCE.getEntityData(e).ifPresent(data -> data.setOrthoView(e, false)));
                 this.remove(RemovalReason.KILLED);
+            }
         }
     }
 

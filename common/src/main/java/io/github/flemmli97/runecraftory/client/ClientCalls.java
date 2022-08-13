@@ -17,6 +17,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.mixin.ContainerScreenAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
@@ -149,12 +150,23 @@ public class ClientCalls {
         return Platform.INSTANCE.getEntityData(entity).map(EntityData::isInvis).orElse(false);
     }
 
-    public static void renderShaking(float yaw, float pitch, float roll, double partialTicks,
+    public static void renderShaking(Camera camera, float yaw, float pitch, float roll, float partialTicks,
                                      Consumer<Float> setYaw, Consumer<Float> setPitch, Consumer<Float> setRoll) {
+        /*if(ClientHandlers.orthorgraphicCam()) {
+            Entity entity = Minecraft.getInstance().getCameraEntity();
+            if(entity != null) {
+                camera.setRotation(entity.getViewYRot(partialTicks), entity.getViewXRot(partialTicks));
+                camera.setPosition(Mth.lerp(partialTicks, entity.xo, entity.getX()),
+                        Mth.lerp(partialTicks, entity.yo, entity.getY()) + Mth.lerp(partialTicks, camera.eyeHeightOld, camera.eyeHeight),
+                        Mth.lerp(partialTicks, entity.zo, entity.getZ()));
+                camera.move(-camera.getMaxZoom(4.0), 3.0, 0.0);
+                camera.setRotation(camera.getYRot(), camera.getXRot());
+            }
+        }*/
         int t = ClientHandlers.shakeTick;
         if (t <= 0)
             return;
-        float pT = (float) (t * 2 - partialTicks);
+        float pT = t * 2 - partialTicks;
         setPitch.accept(pitch + Mth.sin(pT * pT) * 2);
         setRoll.accept(roll + Mth.sin(pT * 2) * 2);
     }

@@ -1,15 +1,17 @@
 package io.github.flemmli97.runecraftory.common.attachment;
 
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.entity.LivingEntity;
 
 public class EntityData {
 
-    private boolean sleeping, paralysis, cold, poison, invis;
+    private boolean sleeping, paralysis, cold, poison, invis, orthoView;
 
     public void setSleeping(LivingEntity entity, boolean flag) {
         this.sleeping = flag;
+        this.setOrthoView(entity, flag);
         if (!entity.level.isClientSide) {
             Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.SLEEP, this.sleeping), entity);
         }
@@ -61,5 +63,17 @@ public class EntityData {
 
     public boolean isInvis() {
         return this.invis;
+    }
+
+    public void setOrthoView(LivingEntity entity, boolean flag) {
+        this.orthoView = flag;
+        if (!entity.level.isClientSide) {
+            Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.ORTHOVIEW, this.orthoView), entity);
+        } else
+            ClientHandlers.trySetPerspective(entity, flag);
+    }
+
+    public boolean isOrthoView() {
+        return this.orthoView;
     }
 }
