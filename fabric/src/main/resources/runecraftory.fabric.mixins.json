@@ -21,7 +21,10 @@
   ],
   "client": [
     "GuiMixin",
-    "LivingRenderMixin"
+    "LivingRenderMixin",
+    "CameraAccessor",
+    "GameRendererMixin",
+    "LocalPlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

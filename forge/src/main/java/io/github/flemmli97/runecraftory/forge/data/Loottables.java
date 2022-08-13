@@ -210,7 +210,7 @@ public class Loottables extends LootTableProvider {
                 case BRONZE -> {
                     build.add(ore(60, 0, ModItems.scrap.get()));
                     build.add(ore(40, 10, Items.IRON_INGOT));
-                    build.add(ore(30, 10, ModItems.bronze.get()));
+                    build.add(ore(30, 10, Items.COPPER_INGOT));
                     build.add(ore(5, 5, ModItems.crystalSmall.get(), 40));
                     build.add(ore(3, 4, ModItems.crystalSmall.get(), 40));
                 }

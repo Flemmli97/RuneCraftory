@@ -13,7 +13,7 @@ import java.util.Queue;
 
 //Make Texture warning from this mod go away
 @Mixin(value = TextureAtlas.class, remap = false)
-public class AtlasMixin {
+public abstract class AtlasMixin {
 
     //IDK why but using unobfuscated name does not remap properly
     @Inject(method = {"m_174717_", "method_18160"}, at = @At(value = "INVOKE", target = "Lorg/slf4j/Logger;error(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V", ordinal = 1), require = 0, cancellable = true)

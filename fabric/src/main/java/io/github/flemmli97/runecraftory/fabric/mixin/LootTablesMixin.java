@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Map;
 
 @Mixin(LootTables.class)
-public class LootTablesMixin {
+public abstract class LootTablesMixin {
 
     @Shadow
     private Map<ResourceLocation, LootTable> tables;

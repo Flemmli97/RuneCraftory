@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.fabric.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.fabric.network.ClientPacketHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
@@ -61,7 +62,7 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
 
         //ClientCalls
         HudRenderCallback.EVENT.register(ClientCalls::renderRunePoints);
-        ClientCalls.keyEvent();
+        ClientTickEvents.END_CLIENT_TICK.register(client -> ClientCalls.keyEvent());
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> ClientCalls.initSkillTab(screen, Screens.getButtons(screen)::add));
         ItemTooltipCallback.EVENT.register((stack, context, lines) -> ClientCalls.tooltipEvent(stack, lines));
         WorldRenderEvents.END.register(ctx -> ClientCalls.worldRender(ctx.matrixStack()));

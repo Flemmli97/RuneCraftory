@@ -22,6 +22,8 @@ public class ClientHandlers {
     public static TriggerKeyBind spell3;
     public static TriggerKeyBind spell4;
 
+    public static int shakeTick;
+
     public static Player getPlayer() {
         return Minecraft.getInstance().player;
     }

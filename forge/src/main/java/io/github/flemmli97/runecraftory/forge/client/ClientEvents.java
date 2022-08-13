@@ -2,7 +2,9 @@ package io.github.flemmli97.runecraftory.forge.client;
 
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -10,7 +12,6 @@ import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.OverlayRegistry;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -28,6 +29,11 @@ public class ClientEvents {
     @SubscribeEvent(receiveCanceled = true)
     public static void keyEvent(InputEvent.KeyInputEvent event) {
         ClientCalls.keyEvent();
+    }
+
+    @SubscribeEvent
+    public static void disableHandle(MovementInputUpdateEvent event) {
+        ClientCalls.handleInputUpdate(event.getPlayer(), event.getInput());
     }
 
     @SubscribeEvent
@@ -54,13 +60,13 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void tick(LivingEvent.LivingUpdateEvent event) {
-        ClientCalls.tick(event.getEntityLiving());
-    }
-
-    @SubscribeEvent
     public static void render(RenderLivingEvent.Pre<?, ?> event) {
         if (ClientCalls.invis(event.getEntity()))
             event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public static void shaking(EntityViewRenderEvent.CameraSetup event) {
+        ClientCalls.renderShaking(event.getYaw(), event.getPitch(), event.getRoll(), event.getPartialTicks(), event::setYaw, event::setPitch, event::setRoll);
     }
 }

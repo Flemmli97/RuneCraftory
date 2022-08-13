@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Random;
 
 @Mixin(StructureTemplate.class)
-public class StructureTemplateMixin {
+public abstract class StructureTemplateMixin {
 
     @Inject(method = "placeInWorld", at = @At(value = "HEAD"))
     private void stopWaterLog(ServerLevelAccessor accessor, BlockPos pos1, BlockPos pos2, StructurePlaceSettings settings,

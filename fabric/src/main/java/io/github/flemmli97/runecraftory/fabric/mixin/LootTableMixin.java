@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import java.util.List;
 
 @Mixin(LootTable.class)
-public class LootTableMixin implements LootTableID {
+public abstract class LootTableMixin implements LootTableID {
 
     @Unique
     private ResourceLocation lootTableID;

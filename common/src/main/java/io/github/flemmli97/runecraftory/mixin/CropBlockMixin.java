@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(CropBlock.class)
-public class CropBlockMixin {
+public abstract class CropBlockMixin {
 
     @Inject(method = "mayPlaceOn", at = @At("HEAD"), cancellable = true)
     private void checkPlace(BlockState state, BlockGetter level, BlockPos pos, CallbackInfoReturnable<Boolean> info) {

@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.network.C2SRideJump;
 import io.github.flemmli97.runecraftory.common.network.C2SSpellKey;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.mixin.ContainerScreenAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.Minecraft;
@@ -21,9 +22,12 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -61,6 +65,19 @@ public class ClientCalls {
                 }
                 cons.accept(new SkillButton(x, y, screen, b -> Platform.INSTANCE.sendToServer(new C2SOpenInfo(C2SOpenInfo.Type.MAIN))));
             }
+        }
+    }
+
+    public static void handleInputUpdate(Player player, Input input) {
+        if (EntityUtils.isDisabled(player)) {
+            input.leftImpulse = 0;
+            input.forwardImpulse = 0;
+            input.up = false;
+            input.down = false;
+            input.left = false;
+            input.right = false;
+            input.jumping = false;
+            input.shiftKeyDown = false;
         }
     }
 
@@ -124,9 +141,21 @@ public class ClientCalls {
         });
         if (entity instanceof LocalPlayer player && entity.getVehicle() instanceof BaseMonster && player.input.jumping)
             Platform.INSTANCE.sendToServer(new C2SRideJump());
+        if (entity == Minecraft.getInstance().player)
+            ClientHandlers.shakeTick--;
     }
 
     public static boolean invis(LivingEntity entity) {
         return Platform.INSTANCE.getEntityData(entity).map(EntityData::isInvis).orElse(false);
+    }
+
+    public static void renderShaking(float yaw, float pitch, float roll, double partialTicks,
+                                     Consumer<Float> setYaw, Consumer<Float> setPitch, Consumer<Float> setRoll) {
+        int t = ClientHandlers.shakeTick;
+        if (t <= 0)
+            return;
+        float pT = (float) (t * 2 - partialTicks);
+        setPitch.accept(pitch + Mth.sin(pT * pT) * 2);
+        setRoll.accept(roll + Mth.sin(pT * 2) * 2);
     }
 }

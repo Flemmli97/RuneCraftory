@@ -198,7 +198,7 @@ public class EntityAmbrosia extends BossMonster {
         for (int i = 0; i < 1; ++i) {
             if (!this.level.isClientSide) {
                 EntityButterfly fly = new EntityButterfly(this.level, this);
-                fly.setPos(fly.getX() + this.random.nextFloat() * 2 - 1, fly.getY() + this.random.nextFloat() * 0.5 + 0.25, fly.getZ() + this.random.nextFloat() * 2 - 1);
+                fly.setPos(fly.getX() + this.random.nextFloat() * 2 - 1, fly.getY() + this.random.nextFloat() * 0.25 + 0.25, fly.getZ() + this.random.nextFloat() * 2 - 1);
                 fly.shootAtPosition(x, y, z, 0.3f, 5.0f);
                 this.level.addFreshEntity(fly);
             }

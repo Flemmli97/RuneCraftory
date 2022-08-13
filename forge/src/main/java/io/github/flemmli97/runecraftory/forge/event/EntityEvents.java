@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.forge.event;
 
+import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -73,6 +74,8 @@ public class EntityEvents {
         if (event.getEntityLiving() instanceof Player player) {
             EntityCalls.updateLivingTick(player);
         }
+        if (event.getEntityLiving().level.isClientSide)
+            ClientCalls.tick(event.getEntityLiving());
     }
 
     @SubscribeEvent

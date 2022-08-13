@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(MilkBucketItem.class)
-public class MilkBucketMixin {
+public abstract class MilkBucketMixin {
 
     @Redirect(method = "finishUsingItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;removeAllEffects()Z"))
     public boolean finishUsingItem(LivingEntity livingEntity, ItemStack stack) {
