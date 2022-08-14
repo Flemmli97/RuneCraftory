@@ -167,7 +167,8 @@ public class ModBlocks {
     //Trees
 
     public static RegistryEntrySupplier<Block> mineral(EnumMineralTier name) {
-        RegistryEntrySupplier<Block> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new BlockMineral(name, BlockBehaviour.Properties.of(Material.STONE).strength(3, 5)));
+        RegistryEntrySupplier<Block> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new BlockMineral(name, BlockBehaviour.Properties.of(Material.STONE).strength(5, 10)
+                .requiresCorrectToolForDrops()));
         mineralMap.put(name, reg);
         return reg;
     }    /*public static final RegistryEntrySupplier<Block> appleTree = new BlockTreeBase("apple_tree_base");
