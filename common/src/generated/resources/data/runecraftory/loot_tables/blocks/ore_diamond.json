@@ -7,8 +7,15 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 50,
+          "weight": 100,
+          "quality": 3,
           "name": "runecraftory:scrap"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 3,
+          "quality": 3,
+          "name": "minecraft:diamond"
         },
         {
           "type": "minecraft:item",

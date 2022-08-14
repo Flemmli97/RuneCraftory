@@ -7,8 +7,21 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 70,
+          "weight": 100,
+          "quality": 3,
           "name": "runecraftory:scrap"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:mining_check",
+              "min_required_level": 20
+            }
+          ],
+          "weight": 4,
+          "quality": 5,
+          "name": "runecraftory:orichalcum"
         },
         {
           "type": "minecraft:item",

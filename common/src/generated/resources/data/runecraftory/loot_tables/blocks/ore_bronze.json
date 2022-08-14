@@ -7,7 +7,8 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 60,
+          "weight": 100,
+          "quality": 3,
           "name": "runecraftory:scrap"
         },
         {
@@ -18,21 +19,9 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 30,
+          "weight": 25,
           "quality": 10,
-          "name": "runecraftory:bronze"
-        },
-        {
-          "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "runecraftory:mining_check",
-              "min_required_level": 40
-            }
-          ],
-          "weight": 5,
-          "quality": 5,
-          "name": "runecraftory:small_crystal"
+          "name": "minecraft:copper_ingot"
         },
         {
           "type": "minecraft:item",
@@ -43,7 +32,7 @@
             }
           ],
           "weight": 3,
-          "quality": 4,
+          "quality": 5,
           "name": "runecraftory:small_crystal"
         }
       ],

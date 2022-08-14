@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 70,
+          "weight": 100,
           "quality": 3,
           "name": "runecraftory:scrap"
         },

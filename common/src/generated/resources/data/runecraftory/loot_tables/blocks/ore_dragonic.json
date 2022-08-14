@@ -7,8 +7,21 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 90,
+          "weight": 100,
+          "quality": 3,
           "name": "runecraftory:scrap"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:mining_check",
+              "min_required_level": 20
+            }
+          ],
+          "weight": 6,
+          "quality": 4,
+          "name": "runecraftory:dragonic_stone"
         },
         {
           "type": "minecraft:item",
