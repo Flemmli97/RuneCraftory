@@ -21,6 +21,8 @@ public class ClientConfigSpec {
     public final CommentedJsonConfig.IntVal creativeInventoryOffsetY;
     public final CommentedJsonConfig.CommentedVal<Boolean> renderOverlay;
     public final CommentedJsonConfig.CommentedVal<Boolean> inventoryButton;
+    public final CommentedJsonConfig.CommentedVal<Boolean> grassColor;
+    public final CommentedJsonConfig.CommentedVal<Boolean> foliageColor;
 
     private ClientConfigSpec(CommentedJsonConfig.Builder builder) {
         this.healthBarWidgetX = builder.defineInRange("X Position of health bar", 2, 0, Integer.MAX_VALUE);
@@ -33,6 +35,8 @@ public class ClientConfigSpec {
         this.creativeInventoryOffsetY = builder.defineInRange("Y offset of inventory button in creative", 22, Integer.MIN_VALUE, Integer.MAX_VALUE);
         this.renderOverlay = builder.define("Render Overlay", false);
         this.inventoryButton = builder.define("Add Button", true);
+        this.grassColor = builder.define("Adjust grass color to current season", true);
+        this.foliageColor = builder.define("Adjust foliage color to current season", true);
         builder.registerReloadHandler(() -> ConfigHolder.loadClient(this));
     }
 }

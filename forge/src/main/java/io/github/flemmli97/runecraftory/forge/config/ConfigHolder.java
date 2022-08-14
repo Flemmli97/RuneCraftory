@@ -93,6 +93,8 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         ClientConfig.creativeInventoryOffsetY = spec.creativeInventoryOffsetY.get();
         ClientConfig.renderOverlay = spec.renderOverlay.get();
         ClientConfig.inventoryButton = spec.inventoryButton.get();
+        ClientConfig.grassColor = spec.grassColor.get();
+        ClientConfig.foliageColor = spec.foliageColor.get();
     }
 
     public static void loadMobs(MobConfigSpec spec) {

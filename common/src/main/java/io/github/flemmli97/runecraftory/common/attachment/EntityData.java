@@ -15,7 +15,7 @@ public class EntityData {
         if (!entity.level.isClientSide) {
             Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.SLEEP, this.sleeping), entity);
         } else
-            ClientHandlers.grabMouse();
+            ClientHandlers.grabMouse(entity);
     }
 
     public boolean isSleeping() {

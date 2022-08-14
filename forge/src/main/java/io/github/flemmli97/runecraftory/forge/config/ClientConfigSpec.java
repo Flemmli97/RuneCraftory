@@ -17,6 +17,8 @@ public class ClientConfigSpec {
     public final ForgeConfigSpec.IntValue creativeInventoryOffsetY;
     public final ForgeConfigSpec.BooleanValue renderOverlay;
     public final ForgeConfigSpec.BooleanValue inventoryButton;
+    public final ForgeConfigSpec.BooleanValue grassColor;
+    public final ForgeConfigSpec.BooleanValue foliageColor;
 
     private ClientConfigSpec(ForgeConfigSpec.Builder builder) {
         this.healthBarWidgetX = builder.defineInRange("X Position of health bar", 2, 0, Integer.MAX_VALUE);
@@ -29,5 +31,7 @@ public class ClientConfigSpec {
         this.creativeInventoryOffsetY = builder.defineInRange("Y offset of inventory button in creative", 22, Integer.MIN_VALUE, Integer.MAX_VALUE);
         this.renderOverlay = builder.define("Render Overlay", false);
         this.inventoryButton = builder.define("Add Button", true);
+        this.grassColor = builder.define("Adjust grass color to current season", true);
+        this.foliageColor = builder.define("Adjust foliage color to current season", true);
     }
 }

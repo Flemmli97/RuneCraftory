@@ -25,7 +25,7 @@ public abstract class MouseHandlerMixin {
             this.accumulatedDX = 0;
             this.accumulatedDY = 0;
             MouseHandler handler = (MouseHandler) (Object) this;
-            if(handler.isMouseGrabbed())
+            if (handler.isMouseGrabbed())
                 handler.releaseMouse();
             info.cancel();
         }

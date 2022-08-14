@@ -15,7 +15,8 @@
   "client": [
     "AtlasMixin",
     "MinecraftMixin",
-    "MouseHandlerMixin"
+    "MouseHandlerMixin",
+    "BiomeColorsMixin"
   ],
   "injectors": {
     "defaultRequire": 1

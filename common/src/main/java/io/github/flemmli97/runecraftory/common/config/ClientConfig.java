@@ -16,4 +16,7 @@ public class ClientConfig {
 
     public static boolean renderOverlay;
     public static boolean inventoryButton;
+
+    public static boolean grassColor;
+    public static boolean foliageColor;
 }
