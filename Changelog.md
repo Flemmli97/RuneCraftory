@@ -2,6 +2,7 @@ RuneCraftory 1.2.2
 ================
 - Make bronze mineral drop copper instead of bronze cause more logical and balanced  
 - Make sleep effect now actually affect players by freezing them
+- Grass and foliage now change colors according to current season.
 
 RuneCraftory 1.2.1
 ================
