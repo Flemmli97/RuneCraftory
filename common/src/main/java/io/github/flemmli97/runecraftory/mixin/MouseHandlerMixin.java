@@ -24,6 +24,9 @@ public abstract class MouseHandlerMixin {
         if (this.minecraft.player != null && EntityUtils.isDisabled(this.minecraft.player)) {
             this.accumulatedDX = 0;
             this.accumulatedDY = 0;
+            MouseHandler handler = (MouseHandler) (Object) this;
+            if(handler.isMouseGrabbed())
+                handler.releaseMouse();
             info.cancel();
         }
     }

@@ -39,6 +39,10 @@ public class ClientHandlers {
         clientCalendar.fromPacket(buffer);
     }
 
+    public static void grabMouse() {
+        Minecraft.getInstance().mouseHandler.grabMouse();
+    }
+
     public static void recipeToast(Collection<ResourceLocation> recipes) {
         recipes.forEach(res -> Minecraft.getInstance().level.getRecipeManager().byKey(res).ifPresent(rec ->
                 RecipeToast.addOrUpdate(Minecraft.getInstance().getToasts(), rec)));

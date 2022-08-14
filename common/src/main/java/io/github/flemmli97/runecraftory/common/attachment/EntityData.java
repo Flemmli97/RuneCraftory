@@ -14,7 +14,8 @@ public class EntityData {
         this.setOrthoView(entity, flag);
         if (!entity.level.isClientSide) {
             Platform.INSTANCE.sendToTrackingAndSelf(new S2CEntityDataSync(entity.getId(), S2CEntityDataSync.Type.SLEEP, this.sleeping), entity);
-        }
+        } else
+            ClientHandlers.grabMouse();
     }
 
     public boolean isSleeping() {
