@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 15,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "c:copper_ingots"
+    },
+    {
+      "tag": "c:iron_ingots"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:hammer_iron"
+  }
+}

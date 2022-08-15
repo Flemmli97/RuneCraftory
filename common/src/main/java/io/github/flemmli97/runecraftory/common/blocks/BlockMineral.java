@@ -200,7 +200,7 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
         Entity entity = builder.getOptionalParameter(LootContextParams.THIS_ENTITY);
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                float addChance = data.getSkillLevel(EnumSkills.MINING)[0] * 0.1f;
+                float addChance = data.getSkillLevel(EnumSkills.MINING)[0] * 0.03f;
                 if (player.getMainHandItem().getItem() instanceof ItemToolHammer item) {
                     addChance += item.tier.getTierLevel() * 0.75;
                 }
@@ -234,9 +234,9 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
             return level.setBlock(pos, fluid.createLegacyBlock(), Block.UPDATE_ALL);
         } else if (player.hasCorrectToolForDrops(state)) {
             pos = pos.immutable();
-            float breakChance = 0.5F;
+            float breakChance = 0.45F;
             if (player.getMainHandItem().getItem() instanceof ItemToolHammer hammer) {
-                breakChance -= hammer.tier.getTierLevel() * 0.1F;
+                breakChance -= hammer.tier.getTierLevel() * 0.075F;
             }
             this.playerWillDestroy(level, pos, state, player);
             if (level.random.nextFloat() < breakChance) {

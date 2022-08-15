@@ -14,13 +14,13 @@
         {
           "type": "minecraft:item",
           "weight": 50,
-          "quality": 10,
+          "quality": 15,
           "name": "runecraftory:sapphire"
         },
         {
           "type": "minecraft:item",
           "weight": 3,
-          "quality": 7,
+          "quality": 17,
           "name": "runecraftory:love_crystal"
         }
       ],

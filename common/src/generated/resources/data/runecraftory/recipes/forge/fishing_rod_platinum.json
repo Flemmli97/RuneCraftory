@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 80,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "c:platinum_ingots"
+    },
+    {
+      "tag": "c:string"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:fishing_rod_platinum"
+  }
+}

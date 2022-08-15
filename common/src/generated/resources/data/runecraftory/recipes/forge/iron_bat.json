@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 21,
+  "cost": 40,
+  "ingredients": [
+    {
+      "item": "runecraftory:bat"
+    },
+    {
+      "tag": "c:silver_ingots"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:iron_bat"
+  }
+}

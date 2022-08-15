@@ -1,13 +1,13 @@
 {
   "type": "runecraftory:forge",
   "level": 13,
-  "cost": 25,
+  "cost": 35,
   "ingredients": [
     {
       "item": "runecraftory:lance"
     },
     {
-      "tag": "c:bronze_ingots"
+      "tag": "c:copper_ingots"
     }
   ],
   "result": {

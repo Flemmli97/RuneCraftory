@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:forge",
+  "level": 20,
+  "cost": 40,
+  "ingredients": [
+    {
+      "tag": "c:gold_ingots"
+    },
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:wind_edge"
+  }
+}

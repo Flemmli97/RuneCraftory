@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 18,
+  "cost": 40,
+  "ingredients": [
+    {
+      "tag": "c:gold_ingots"
+    },
+    {
+      "item": "minecraft:emerald"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:cyclone_blade"
+  }
+}

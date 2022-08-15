@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 15,
+  "cost": 40,
+  "ingredients": [
+    {
+      "tag": "c:silver_ingots"
+    },
+    {
+      "item": "runecraftory:aquamarine"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:sea_cutter"
+  }
+}

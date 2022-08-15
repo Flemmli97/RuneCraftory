@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 16,
+  "cost": 40,
+  "ingredients": [
+    {
+      "tag": "runecraftory:sticks"
+    },
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:needle_spear"
+  }
+}

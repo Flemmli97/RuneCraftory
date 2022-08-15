@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 17,
+  "cost": 40,
+  "ingredients": [
+    {
+      "tag": "c:iron_ingots"
+    },
+    {
+      "tag": "c:iron_ingots"
+    },
+    {
+      "tag": "c:silver_ingots"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:thief_knife"
+  }
+}

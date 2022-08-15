@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 80,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "c:platinum_ingots"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:watering_can_platinum"
+  }
+}

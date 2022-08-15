@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 15,
+  "cost": 30,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:mineral"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:iron_edge"
+  }
+}

@@ -20,7 +20,7 @@
             }
           ],
           "weight": 6,
-          "quality": 4,
+          "quality": 9,
           "name": "runecraftory:dragonic_stone"
         },
         {
@@ -32,7 +32,7 @@
             }
           ],
           "weight": 10,
-          "quality": 5,
+          "quality": 26,
           "name": "runecraftory:dragonic_stone"
         },
         {
@@ -44,7 +44,7 @@
             }
           ],
           "weight": 3,
-          "quality": 5,
+          "quality": 9,
           "name": "runecraftory:small_crystal"
         }
       ],

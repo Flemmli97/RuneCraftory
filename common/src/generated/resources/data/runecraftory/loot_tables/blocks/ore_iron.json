@@ -14,7 +14,7 @@
         {
           "type": "minecraft:item",
           "weight": 40,
-          "quality": 10,
+          "quality": 17,
           "name": "minecraft:iron_ingot"
         },
         {
@@ -25,7 +25,7 @@
               "min_required_level": 40
             }
           ],
-          "quality": 3,
+          "quality": 7,
           "name": "runecraftory:small_crystal"
         }
       ],

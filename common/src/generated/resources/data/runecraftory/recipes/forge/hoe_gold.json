@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:forge",
+  "level": 45,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "c:gold_ingots"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:hoe_gold"
+  }
+}

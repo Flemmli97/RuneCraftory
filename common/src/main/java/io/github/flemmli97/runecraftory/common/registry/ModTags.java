@@ -20,6 +20,7 @@ public class ModTags {
     public static final TagKey<Item> iron = tagCommon("iron_ingots");
     public static final TagKey<Item> gold = tagCommon("gold_ingots");
 
+    public static final TagKey<Item> copper = tagCommon("copper_ingots");
     public static final TagKey<Item> bronze = tagCommon("bronze_ingots");
     public static final TagKey<Item> silver = tagCommon("silver_ingots");
     public static final TagKey<Item> platinum = tagCommon("platinum_ingots");

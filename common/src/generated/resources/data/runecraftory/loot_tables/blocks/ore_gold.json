@@ -20,7 +20,7 @@
         {
           "type": "minecraft:item",
           "weight": 20,
-          "quality": 10,
+          "quality": 31,
           "name": "minecraft:gold_ingot"
         },
         {
@@ -32,7 +32,7 @@
             }
           ],
           "weight": 3,
-          "quality": 5,
+          "quality": 8,
           "name": "runecraftory:small_crystal"
         }
       ],

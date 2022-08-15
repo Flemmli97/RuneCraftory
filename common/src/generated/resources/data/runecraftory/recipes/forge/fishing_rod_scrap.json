@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 5,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "c:string"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:fishing_rod_scrap"
+  }
+}

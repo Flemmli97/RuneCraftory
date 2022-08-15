@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 80,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "c:platinum_ingots"
+    },
+    {
+      "tag": "c:iron_ingots"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:hammer_platinum"
+  }
+}

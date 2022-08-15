@@ -20,7 +20,7 @@
             }
           ],
           "weight": 4,
-          "quality": 5,
+          "quality": 8,
           "name": "runecraftory:orichalcum"
         },
         {
@@ -32,7 +32,7 @@
             }
           ],
           "weight": 10,
-          "quality": 5,
+          "quality": 27,
           "name": "runecraftory:orichalcum"
         },
         {
@@ -44,7 +44,7 @@
             }
           ],
           "weight": 5,
-          "quality": 5,
+          "quality": 11,
           "name": "runecraftory:big_crystal"
         }
       ],

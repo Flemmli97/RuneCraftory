@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 5,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:shards"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:sickle_scrap"
+  }
+}

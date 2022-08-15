@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 5,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "c:iron_ingots"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:axe_scrap"
+  }
+}

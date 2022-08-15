@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:forge",
+  "level": 5,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:hoe_scrap"
+  }
+}

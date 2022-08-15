@@ -4,7 +4,7 @@
   "cost": 25,
   "ingredients": [
     {
-      "tag": "c:bronze_ingots"
+      "tag": "c:copper_ingots"
     },
     {
       "tag": "runecraftory:shards"

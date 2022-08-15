@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 15,
+  "cost": 25,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:pole_axe"
+  }
+}

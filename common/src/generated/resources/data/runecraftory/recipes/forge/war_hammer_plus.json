@@ -1,7 +1,7 @@
 {
   "type": "runecraftory:forge",
   "level": 17,
-  "cost": 25,
+  "cost": 35,
   "ingredients": [
     {
       "item": "runecraftory:war_hammer"

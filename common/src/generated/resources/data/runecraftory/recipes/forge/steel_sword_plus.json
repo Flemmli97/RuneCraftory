@@ -1,7 +1,7 @@
 {
   "type": "runecraftory:forge",
   "level": 6,
-  "cost": 40,
+  "cost": 30,
   "ingredients": [
     {
       "item": "runecraftory:steel_sword"

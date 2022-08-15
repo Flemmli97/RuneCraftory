@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 8,
+  "cost": 40,
+  "ingredients": [
+    {
+      "tag": "c:copper_ingots"
+    },
+    {
+      "tag": "runecraftory:claws_fangs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:cutlass"
+  }
+}

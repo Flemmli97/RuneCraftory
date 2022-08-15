@@ -14,13 +14,13 @@
         {
           "type": "minecraft:item",
           "weight": 40,
-          "quality": 10,
+          "quality": 15,
           "name": "minecraft:emerald"
         },
         {
           "type": "minecraft:item",
           "weight": 10,
-          "quality": 7,
+          "quality": 17,
           "name": "runecraftory:wind_crystal"
         }
       ],

@@ -14,7 +14,7 @@
         {
           "type": "minecraft:item",
           "weight": 4,
-          "quality": 5,
+          "quality": 12,
           "name": "runecraftory:platinum"
         },
         {
@@ -26,7 +26,7 @@
             }
           ],
           "weight": 20,
-          "quality": 5,
+          "quality": 29,
           "name": "runecraftory:platinum"
         },
         {
@@ -38,7 +38,7 @@
             }
           ],
           "weight": 3,
-          "quality": 5,
+          "quality": 8,
           "name": "runecraftory:small_crystal"
         }
       ],

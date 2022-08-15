@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 13,
+  "cost": 40,
+  "ingredients": [
+    {
+      "tag": "c:copper_ingots"
+    },
+    {
+      "tag": "runecraftory:liquids"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:great_sword"
+  }
+}

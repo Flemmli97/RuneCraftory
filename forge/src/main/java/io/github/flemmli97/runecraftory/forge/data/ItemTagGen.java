@@ -28,6 +28,9 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(ModTags.gold)
                 .add(Items.GOLD_INGOT)
                 .addOptional(Tags.Items.INGOTS_GOLD.location());
+        this.tag(ModTags.copper)
+                .add(Items.COPPER_INGOT)
+                .addOptional(Tags.Items.INGOTS_COPPER.location());
         this.forgeAndCommonTag(ModTags.bronzeF, ModTags.bronze, ModItems.bronze.get());
         this.forgeAndCommonTag(ModTags.silverF, ModTags.silver, ModItems.silver.get());
         this.forgeAndCommonTag(ModTags.platinumF, ModTags.platinum, ModItems.platinum.get());
