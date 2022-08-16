@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.commands;
 
+import com.google.common.collect.Sets;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -8,13 +9,16 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
+import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.Set;
 import java.util.stream.Stream;
 
 public class RunecraftoryCommand {
@@ -31,6 +35,7 @@ public class RunecraftoryCommand {
                         .then(Commands.literal("set").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::setLevel)))
                         .then(Commands.literal("xp").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addXP)))
                 )
+                .then(Commands.literal("unlockRecipes").requires(src -> src.hasPermission(2)).executes(RunecraftoryCommand::unlockRecipes))
                 .then(Commands.literal("reset").requires(src -> src.hasPermission(2))
                         .then(Commands.literal("all").executes(RunecraftoryCommand::resetAll))
                         .then(Commands.literal("recipes").executes(RunecraftoryCommand::resetRecipes))
@@ -45,7 +50,7 @@ public class RunecraftoryCommand {
             return 0;
         int amount = IntegerArgumentType.getInteger(ctx, "amount");
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.increaseSkill(skill, player, amount));
-        ctx.getSource().sendSuccess(new TranslatableComponent("command.skill.add", skill, amount), false);
+        ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.add", skill, amount), false);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -58,12 +63,15 @@ public class RunecraftoryCommand {
         ServerPlayer player = ctx.getSource().getPlayerOrException();
         int amount = IntegerArgumentType.getInteger(ctx, "amount");
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.addXp(player, amount));
-        ctx.getSource().sendSuccess(new TranslatableComponent("command.xp.add", amount), false);
+        ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.xp.add", amount), false);
         return Command.SINGLE_SUCCESS;
     }
 
-    private static int setLevel(CommandContext<CommandSourceStack> ctx) {
-
+    private static int setLevel(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer player = ctx.getSource().getPlayerOrException();
+        int amount = IntegerArgumentType.getInteger(ctx, "amount");
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.setPlayerLevel(player, amount, 0, true));
+        ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.xp.set", amount), false);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -74,6 +82,18 @@ public class RunecraftoryCommand {
             Platform.INSTANCE.sendToClient(new S2CCapSync(data), player);
         });
         ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.reset.all"), false);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int unlockRecipes(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer player = ctx.getSource().getPlayerOrException();
+        Set<ResourceLocation> allRecipes = Sets.newHashSet();
+        player.level.getRecipeManager().getAllRecipesFor(ModCrafting.FORGE.get()).forEach(r -> allRecipes.add(r.getId()));
+        player.level.getRecipeManager().getAllRecipesFor(ModCrafting.CHEMISTRY.get()).forEach(r -> allRecipes.add(r.getId()));
+        player.level.getRecipeManager().getAllRecipesFor(ModCrafting.ARMOR.get()).forEach(r -> allRecipes.add(r.getId()));
+        player.level.getRecipeManager().getAllRecipesFor(ModCrafting.COOKING.get()).forEach(r -> allRecipes.add(r.getId()));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getRecipeKeeper().unlockRecipesRes(player, allRecipes));
+        ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.unlock.recipes"), false);
         return Command.SINGLE_SUCCESS;
     }
 

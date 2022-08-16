@@ -277,6 +277,13 @@ public class LangGen implements DataProvider {
         this.add("itemGroup.runecraftory.crops", "Farming");
         this.add("itemGroup.runecraftory.monsters", "Monsters");
 
+        this.add("runecraftory.command.skill.add", "Added %s XP to skill %s");
+        this.add("runecraftory.command.xp.add", "Gave %s xp to player");
+        this.add("runecraftory.command.xp.set", "Set level to %s");
+        this.add("runecraftory.command.reset.all", "Reset all player data");
+        this.add("runecraftory.command.unlock.recipes", "Unlocked all crafting recipes");
+        this.add("runecraftory.command.reset.recipe", "Locked all crafting recipes again");
+
         this.add("runecraftory.jei.forge", "Forging");
         this.add("runecraftory.jei.cooking", "Cooking");
         this.add("runecraftory.jei.chemistry", "Pharmacy");
