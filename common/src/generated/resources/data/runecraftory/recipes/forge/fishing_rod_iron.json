@@ -4,7 +4,7 @@
   "cost": 20,
   "ingredients": [
     {
-      "tag": "c:copper_ingots"
+      "tag": "c:copper_blocks"
     },
     {
       "tag": "c:string"

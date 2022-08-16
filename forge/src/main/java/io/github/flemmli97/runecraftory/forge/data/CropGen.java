@@ -63,8 +63,8 @@ public class CropGen extends CropProvider {
         this.addStat(ModItems.cucumberSeeds.get(), new CropProperties.MutableCropProps(5, 5, true).addGoodSeason(EnumSeason.SPRING).addGoodSeason(EnumSeason.SUMMER).addBadSeason(EnumSeason.WINTER));
         this.addStat(ModItems.fodderSeeds.get(), new CropProperties.MutableCropProps(5, 1, true));
 
-        this.addStat(ModItems.shieldSeeds.get(), new CropProperties.MutableCropProps(15, 1, true));
-        this.addStat(ModItems.swordSeeds.get(), new CropProperties.MutableCropProps(15, 1, true));
-        this.addStat(ModItems.dungeonSeeds.get(), new CropProperties.MutableCropProps(25, 1, true));
+        this.addStat(ModItems.shieldSeeds.get(), new CropProperties.MutableCropProps(15, 1, false));
+        this.addStat(ModItems.swordSeeds.get(), new CropProperties.MutableCropProps(15, 1, false));
+        this.addStat(ModItems.dungeonSeeds.get(), new CropProperties.MutableCropProps(25, 1, false));
     }
 }

@@ -10,10 +10,10 @@
       "tag": "minecraft:logs"
     },
     "e": {
-      "tag": "forge:gems/emerald"
+      "tag": "c:emeralds"
     },
     "c": {
-      "tag": "forge:chests"
+      "tag": "c:chest"
     },
     "l": {
       "tag": "minecraft:planks"

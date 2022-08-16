@@ -1,7 +1,7 @@
 {
   "itemStats": {},
-  "buyPrice": 1,
-  "sellPrice": 1,
+  "buyPrice": 45,
+  "sellPrice": 2,
   "upgradeDifficulty": 20,
   "element": "NONE",
   "tag": "forge:gems/emerald"

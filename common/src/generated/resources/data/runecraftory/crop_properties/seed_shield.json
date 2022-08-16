@@ -3,6 +3,6 @@
   "badSeason": [],
   "growth": 15,
   "maxDrops": 1,
-  "regrowable": true,
+  "regrowable": false,
   "item": "runecraftory:seed_shield"
 }

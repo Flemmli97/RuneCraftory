@@ -7,10 +7,10 @@
   ],
   "key": {
     "c": {
-      "tag": "forge:cobblestone"
+      "tag": "c:cobblestone"
     },
     "i": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:iron_ingots"
     },
     "b": {
       "item": "minecraft:blast_furnace"

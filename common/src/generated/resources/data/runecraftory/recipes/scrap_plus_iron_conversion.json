@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "runecraftory:scrap_plus"
+    },
+    {
+      "item": "runecraftory:scrap_plus"
+    }
+  ],
+  "result": {
+    "item": "minecraft:iron_nugget"
+  }
+}
