@@ -143,7 +143,7 @@ public class ClientCalls {
         if (entity instanceof LocalPlayer player && entity.getVehicle() instanceof BaseMonster && player.input.jumping)
             Platform.INSTANCE.sendToServer(new C2SRideJump());
         if (entity == Minecraft.getInstance().player)
-            ClientHandlers.shakeTick--;
+            ShakeHandler.shakeTick--;
     }
 
     public static boolean invis(LivingEntity entity) {
@@ -163,7 +163,7 @@ public class ClientCalls {
                 camera.setRotation(camera.getYRot(), camera.getXRot());
             }
         }*/
-        int t = ClientHandlers.shakeTick;
+        int t = ShakeHandler.shakeTick;
         if (t <= 0)
             return;
         float pT = t * 2 - partialTicks;

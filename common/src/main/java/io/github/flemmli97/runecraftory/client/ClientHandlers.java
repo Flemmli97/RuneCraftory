@@ -29,8 +29,6 @@ public class ClientHandlers {
     public static TriggerKeyBind spell3;
     public static TriggerKeyBind spell4;
 
-    public static int shakeTick;
-
     private static CameraType pastType = CameraType.FIRST_PERSON;
 
     public static Player getPlayer() {

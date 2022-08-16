@@ -259,7 +259,7 @@ public class EntityMarionetta extends BossMonster {
                 EntityFurniture furniture = new EntityFurniture(this.level, this, this.random.nextBoolean() ? EntityFurniture.Type.WOOLYPLUSH : EntityFurniture.Type.CHIPSQUEEKPLUSH);
                 LivingEntity target = this.getTarget();
                 if (target != null) {
-                    Vec3 dir = target.position().subtract(this.position()).scale(0.6);
+                    Vec3 dir = target.position().subtract(this.position()).scale(0.45 + this.random.nextDouble() * 0.2);
                     furniture.shootAtPosition(this.getX() + dir.x(), target.getY() + 12, this.getZ() + dir.z(), 0.95f + this.random.nextFloat() * 0.2f, 9);
                 } else
                     furniture.shoot(this, this.yHeadRot, this.getXRot(), -55, 0.95f + this.random.nextFloat() * 0.2f, 9);

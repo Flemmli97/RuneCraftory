@@ -24,7 +24,7 @@ import java.util.function.Predicate;
 
 public class EntityFireball extends EntityProjectile {
 
-    private static final EntityDataAccessor<Boolean> BIG = SynchedEntityData.defineId(EntityRockSpear.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> BIG = SynchedEntityData.defineId(EntityFireball.class, EntityDataSerializers.BOOLEAN);
 
     private Predicate<LivingEntity> pred;
     private float damageMultiplier = 1;
