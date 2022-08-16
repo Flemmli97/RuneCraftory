@@ -12,7 +12,6 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.Tags;
 
 import java.util.function.Consumer;
 
@@ -36,14 +35,22 @@ public class RecipesGen extends RecipeProvider {
                 .requires(ModItems.furLarge.get())
                 .unlockedBy("wool", has(ItemTags.WOOL))
                 .save(consumer, RuneCraftory.MODID + ":large_fur_conversion");
+        ShapelessRecipeBuilder.shapeless(Items.IRON_NUGGET, 1)
+                .requires(ModItems.scrap.get(), 3)
+                .unlockedBy("iron", has(Items.IRON_INGOT))
+                .save(consumer, RuneCraftory.MODID + ":scrap_iron_conversion");
+        ShapelessRecipeBuilder.shapeless(Items.IRON_NUGGET, 1)
+                .requires(ModItems.scrapPlus.get(), 2)
+                .unlockedBy("iron", has(Items.IRON_INGOT))
+                .save(consumer, RuneCraftory.MODID + ":scrap_plus_iron_conversion");
 
         ShapedRecipeBuilder.shaped(ModItems.shippingBin.get())
                 .pattern("ses")
                 .pattern("scs")
                 .pattern("sls")
                 .define('s', ItemTags.LOGS)
-                .define('e', Tags.Items.GEMS_EMERALD)
-                .define('c', Tags.Items.CHESTS)
+                .define('e', ModTags.emerald)
+                .define('c', ModTags.chest)
                 .define('l', ItemTags.PLANKS)
                 .unlockedBy("shipping_bin", has(Items.CHEST))
                 .save(consumer);
@@ -51,8 +58,8 @@ public class RecipesGen extends RecipeProvider {
                 .pattern("ccc")
                 .pattern("ibi")
                 .pattern("clc")
-                .define('c', Tags.Items.COBBLESTONE)
-                .define('i', Tags.Items.INGOTS_IRON)
+                .define('c', ModTags.cobblestone)
+                .define('i', ModTags.iron)
                 .define('b', Items.BLAST_FURNACE)
                 .define('l', Items.LAVA_BUCKET)
                 .unlockedBy("forge_recipe", has(Items.LAVA_BUCKET))
@@ -61,7 +68,7 @@ public class RecipesGen extends RecipeProvider {
                 .pattern(" s ")
                 .pattern("aaa")
                 .pattern("lcl")
-                .define('s', Tags.Items.SHEARS)
+                .define('s', ModTags.shears)
                 .define('a', ItemTags.WOODEN_SLABS)
                 .define('c', Items.CRAFTING_TABLE)
                 .define('l', ItemTags.LOGS)
@@ -91,7 +98,7 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hoeScrap.get(), 1, 5, 20)
                 .addIngredient(ModTags.minerals).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hoeIron.get(), 1, 15, 20)
-                .addIngredient(ModTags.copper).build(consumer);
+                .addIngredient(ModTags.copperBlock).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hoeSilver.get(), 1, 30, 20)
                 .addIngredient(ModTags.silver).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hoeGold.get(), 1, 45, 20)
@@ -103,7 +110,7 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(ModTags.minerals)
                 .addIngredient(ModTags.cloths).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.wateringCanIron.get(), 1, 15, 20)
-                .addIngredient(ModTags.copper)
+                .addIngredient(ModTags.copperBlock)
                 .addIngredient(ModTags.cloths).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.wateringCanSilver.get(), 1, 30, 20)
                 .addIngredient(ModTags.silver)
@@ -119,7 +126,7 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(ModTags.minerals)
                 .addIngredient(ModTags.shards).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.sickleIron.get(), 1, 15, 20)
-                .addIngredient(ModTags.copper)
+                .addIngredient(ModTags.copperBlock)
                 .addIngredient(ModTags.shards).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.sickleSilver.get(), 1, 30, 20)
                 .addIngredient(ModTags.silver)
@@ -135,7 +142,7 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(ModTags.iron)
                 .addIngredient(ModTags.sticks).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hammerIron.get(), 1, 15, 20)
-                .addIngredient(ModTags.copper)
+                .addIngredient(ModTags.copperBlock)
                 .addIngredient(ModTags.iron)
                 .addIngredient(ModTags.sticks).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hammerSilver.get(), 1, 30, 20)
@@ -156,7 +163,7 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(ModTags.sticks)
                 .addIngredient(ModTags.sticks).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.axeIron.get(), 1, 15, 20)
-                .addIngredient(ModTags.copper)
+                .addIngredient(ModTags.copperBlock)
                 .addIngredient(ModTags.sticks)
                 .addIngredient(ModTags.sticks).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.axeSilver.get(), 1, 30, 20)
@@ -176,7 +183,7 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(ModTags.strings)
                 .addIngredient(ModTags.sticks).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.fishingRodIron.get(), 1, 15, 20)
-                .addIngredient(ModTags.copper)
+                .addIngredient(ModTags.copperBlock)
                 .addIngredient(ModTags.strings)
                 .addIngredient(ModTags.sticks).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.fishingRodSilver.get(), 1, 30, 20)
@@ -199,7 +206,7 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.steelSwordPlus.get(), 1, 6, 30)
                 .addIngredient(ModItems.steelSword.get()).addIngredient(ModTags.minerals).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.cutlass.get(), 1, 8, 40)
-                .addIngredient(ModTags.copper).addIngredient(ModTags.clawFangs).build(consumer);
+                .addIngredient(ModTags.copperBlock).addIngredient(ModTags.clawFangs).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.aquaSword.get(), 1, 12, 40)
                 .addIngredient(ModTags.silver).addIngredient(ModItems.aquamarine.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.invisiBlade.get(), 1, 16, 40)
@@ -210,9 +217,9 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.zweihaender.get(), 1, 5, 30)
                 .addIngredient(ModTags.minerals).addIngredient(ModTags.clawFangs).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.zweihaenderPlus.get(), 1, 7, 30)
-                .addIngredient(ModItems.zweihaender.get()).addIngredient(ModTags.copper).build(consumer);
+                .addIngredient(ModItems.zweihaender.get()).addIngredient(ModTags.copperBlock).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.greatSword.get(), 1, 13, 40)
-                .addIngredient(ModTags.copper).addIngredient(ModTags.liquids).build(consumer);
+                .addIngredient(ModTags.copperBlock).addIngredient(ModTags.liquids).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.seaCutter.get(), 1, 15, 40)
                 .addIngredient(ModTags.silver).addIngredient(ModItems.aquamarine.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.cycloneBlade.get(), 1, 18, 40)
@@ -225,7 +232,7 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.lance.get(), 1, 10, 25)
                 .addIngredient(ModTags.sticks).addIngredient(ModTags.minerals).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.lancePlus.get(), 1, 13, 35)
-                .addIngredient(ModItems.lance.get()).addIngredient(ModTags.copper).build(consumer);
+                .addIngredient(ModItems.lance.get()).addIngredient(ModTags.copperBlock).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.needleSpear.get(), 1, 16, 40)
                 .addIngredient(ModTags.sticks).addIngredient(ModTags.minerals)
                 .addIngredient(ModTags.clawFangs).build(consumer);
@@ -235,7 +242,7 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.battleAxe.get(), 1, 5, 25)
                 .addIngredient(ModTags.minerals).addIngredient(ModTags.clawFangs).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.battleScythe.get(), 1, 9, 25)
-                .addIngredient(ModTags.copper).addIngredient(ModTags.clawFangs).build(consumer);
+                .addIngredient(ModTags.copperBlock).addIngredient(ModTags.clawFangs).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.poleAxe.get(), 1, 15, 25)
                 .addIngredient(ModTags.minerals).addIngredient(ModTags.clawFangs).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.poleAxePlus.get(), 1, 19, 35)
@@ -248,9 +255,9 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.battleHammer.get(), 1, 3, 25)
                 .addIngredient(ModTags.minerals).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.bat.get(), 1, 8, 25)
-                .addIngredient(ModTags.copper).build(consumer);
+                .addIngredient(ModTags.copperBlock).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.warHammer.get(), 1, 14, 25)
-                .addIngredient(ModTags.copper).addIngredient(ModTags.shards).build(consumer);
+                .addIngredient(ModTags.copperBlock).addIngredient(ModTags.shards).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.warHammerPlus.get(), 1, 17, 35)
                 .addIngredient(ModItems.warHammer.get()).addIngredient(ModTags.liquids).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.ironBat.get(), 1, 21, 40)
@@ -261,7 +268,7 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.shortDagger.get(), 1, 3, 25)
                 .addIngredient(ModTags.minerals).addIngredient(ModTags.minerals).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.steelEdge.get(), 1, 7, 25)
-                .addIngredient(ModTags.iron).addIngredient(ModTags.iron).addIngredient(ModTags.copper).build(consumer);
+                .addIngredient(ModTags.iron).addIngredient(ModTags.iron).addIngredient(ModTags.copperBlock).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.frostEdge.get(), 1, 11, 25)
                 .addIngredient(ModItems.aquamarine.get()).addIngredient(ModItems.aquamarine.get()).addIngredient(ModTags.liquids).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.ironEdge.get(), 1, 15, 30)

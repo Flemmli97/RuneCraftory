@@ -19,8 +19,16 @@ public class ModTags {
     //Items
     public static final TagKey<Item> iron = tagCommon("iron_ingots");
     public static final TagKey<Item> gold = tagCommon("gold_ingots");
-
     public static final TagKey<Item> copper = tagCommon("copper_ingots");
+    public static final TagKey<Item> copperBlock = tagCommon("copper_blocks");
+
+    public static final TagKey<Item> emerald = tagCommon("emeralds");
+
+    public static final TagKey<Item> shears = tagCommon("shears");
+
+    public static final TagKey<Item> cobblestone = tagCommon("cobblestone");
+    public static final TagKey<Item> chest = tagCommon("chest");
+
     public static final TagKey<Item> bronze = tagCommon("bronze_ingots");
     public static final TagKey<Item> silver = tagCommon("silver_ingots");
     public static final TagKey<Item> platinum = tagCommon("platinum_ingots");

@@ -22,6 +22,7 @@ public class ItemTagGen extends ItemTagsProvider {
     protected void addTags() {
         ModItems.TREASURE.forEach((key, supList) -> supList.forEach(sup -> this.tag(key).add(sup.get())));
 
+        //Forge copy tags
         this.tag(ModTags.iron)
                 .add(Items.IRON_INGOT)
                 .addOptional(Tags.Items.INGOTS_IRON.location());
@@ -31,9 +32,33 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(ModTags.copper)
                 .add(Items.COPPER_INGOT)
                 .addOptional(Tags.Items.INGOTS_COPPER.location());
+        this.tag(ModTags.copperBlock)
+                .add(Items.COPPER_BLOCK)
+                .add(Items.CUT_COPPER)
+                .addOptional(Tags.Items.STORAGE_BLOCKS_COPPER.location());
+        this.tag(ModTags.emerald)
+                .add(Items.EMERALD)
+                .addOptional(Tags.Items.GEMS_EMERALD.location());
+        this.tag(ModTags.chest)
+                .add(Items.ENDER_CHEST)
+                .add(Items.TRAPPED_CHEST)
+                .add(Items.CHEST)
+                .add(Items.TRAPPED_CHEST)
+                .addOptional(Tags.Items.CHESTS.location());
+        this.tag(ModTags.shears)
+                .add(Items.SHEARS)
+                .addOptional(Tags.Items.SHEARS.location());
+        this.tag(ModTags.cobblestone)
+                .add(Items.COBBLESTONE)
+                .add(Items.INFESTED_COBBLESTONE)
+                .add(Items.MOSSY_COBBLESTONE)
+                .add(Items.COBBLED_DEEPSLATE)
+                .addOptional(Tags.Items.COBBLESTONE.location());
+
         this.forgeAndCommonTag(ModTags.bronzeF, ModTags.bronze, ModItems.bronze.get());
         this.forgeAndCommonTag(ModTags.silverF, ModTags.silver, ModItems.silver.get());
         this.forgeAndCommonTag(ModTags.platinumF, ModTags.platinum, ModItems.platinum.get());
+
         this.tag(ModTags.orichalcum)
                 .add(ModItems.orichalcum.get());
         this.tag(ModTags.dragonic)
@@ -43,6 +68,7 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.scrapPlus.get())
                 .addTag(ModTags.iron)
                 .addTag(ModTags.gold)
+                .addTag(ModTags.copper)
                 .addTag(ModTags.bronze)
                 .addTag(ModTags.silver)
                 .addTag(ModTags.platinum)
