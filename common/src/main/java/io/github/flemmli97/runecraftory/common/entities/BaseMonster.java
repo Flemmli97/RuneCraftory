@@ -99,6 +99,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private static final UUID foodUUIDMulti = UUID.fromString("A05442AC-381B-49DF-B0FA-0136B454157B");
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
+            if (this.getControllingPassenger() instanceof Player)
+                return false;
             if (this.isTamed()) {
                 return e instanceof Enemy && EntityUtils.tryGetOwner(e) == null;
             }
@@ -109,10 +111,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return false;
     };
     public final Predicate<LivingEntity> defendPred = (e) -> {
-        if (!e.equals(BaseMonster.this)) {
-            if (BaseMonster.this.isTamed()) {
-                return !e.equals(BaseMonster.this.getOwner());
-            }
+        if (e != this) {
+            if (this.getControllingPassenger() instanceof Player)
+                return false;
+            if (this.isTamed())
+                return this.getOwnerUUID().equals(EntityUtils.tryGetOwner(e));
             return true;
         }
         return false;
@@ -405,7 +408,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                             this.applyFoodEffect(stack);
                         this.tamingTick = 100;
                         this.delayedTaming = () -> {
-                            if (this.random.nextFloat() < EntityUtils.tamingChance(this, rightItemMultiplier)) {
+                            if (this.random.nextFloat() < EntityUtils.tamingChance(this, player, rightItemMultiplier)) {
                                 this.tameEntity(player);
                             } else {
                                 this.level.broadcastEntityEvent(this, (byte) 11);

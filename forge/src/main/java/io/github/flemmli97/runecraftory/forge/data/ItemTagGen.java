@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -248,6 +249,9 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.milkL.get())
                 .add(Items.MILK_BUCKET);
 
+        this.tag(ModTags.woolyTamer)
+                .addTag(ModTags.shears)
+                .addTag(ItemTags.WOOL);
         this.tag(ModTags.marionettaTamer)
                 .add(Items.CAKE)
                 .add(ModItems.cheesecake.get())

@@ -18,7 +18,6 @@ public class RiderAttackTargetGoal extends Goal {
     public boolean canUse() {
         if (this.goalOwner.getControllingPassenger() instanceof Mob) {
             this.controller = (Mob) this.goalOwner.getControllingPassenger();
-
             return this.goalOwner.getRandom().nextInt(this.updateChance) == 0;
         }
         return false;
