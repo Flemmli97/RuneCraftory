@@ -258,6 +258,7 @@ public class LangGen implements DataProvider {
         this.add("tooltip.season.bad", "Bad Season");
         this.add("sleep", "Sleep");
         this.add("monster.interact.sit", "Entity is now staying");
+        this.add("monster.interact.move", "Entity is now moving freely in this area");
         this.add("monster.interact.follow", "Entity is now following you");
         this.add("tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
         this.add("tooltip.item.treasure_level", "Chest tier lvl: %s");
@@ -277,12 +278,14 @@ public class LangGen implements DataProvider {
         this.add("itemGroup.runecraftory.crops", "Farming");
         this.add("itemGroup.runecraftory.monsters", "Monsters");
 
-        this.add("runecraftory.command.skill.add", "Added %s XP to skill %s");
-        this.add("runecraftory.command.xp.add", "Gave %s xp to player");
-        this.add("runecraftory.command.xp.set", "Set level to %s");
-        this.add("runecraftory.command.reset.all", "Reset all player data");
-        this.add("runecraftory.command.unlock.recipes", "Unlocked all crafting recipes");
-        this.add("runecraftory.command.reset.recipe", "Locked all crafting recipes again");
+        this.add("runecraftory.command.skill.lvl.add", "Added %3$s %1$s skill level to %2$s");
+        this.add("runecraftory.command.skill.xp.add", "Added %3$s %1$s skill xp points to %2$s");
+        this.add("runecraftory.command.skill.lvl.set", "Set level of skill %1$s to %3$s for %2$s");
+        this.add("runecraftory.command.lvl.xp.add", "Added %1$s xp points to %2$s");
+        this.add("runecraftory.command.lvl.set", "Set level of %1$s to %2$s");
+        this.add("runecraftory.command.reset.all", "Reset all player data for %s");
+        this.add("runecraftory.command.unlock.recipes", "Unlocked all crafting recipes for %s");
+        this.add("runecraftory.command.reset.recipe", "Locked all crafting recipes for %s again");
 
         this.add("runecraftory.jei.forge", "Forging");
         this.add("runecraftory.jei.cooking", "Cooking");
