@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:ruby",
+    {
+      "id": "#forge:gems/ruby",
+      "required": false
+    }
+  ]
+}

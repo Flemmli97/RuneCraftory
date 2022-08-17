@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 12,
+  "cost": 35,
+  "ingredients": [
+    {
+      "tag": "c:aquamarines"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:aquamarine_rod"
+  }
+}

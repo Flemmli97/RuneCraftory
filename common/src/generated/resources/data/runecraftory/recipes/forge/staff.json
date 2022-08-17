@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 22,
+  "cost": 40,
+  "ingredients": [
+    {
+      "item": "runecraftory:magic_crystal"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:staff"
+  }
+}

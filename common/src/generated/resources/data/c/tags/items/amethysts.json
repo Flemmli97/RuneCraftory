@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:amethyst",
+    {
+      "id": "#forge:gems/amethyst",
+      "required": false
+    }
+  ]
+}

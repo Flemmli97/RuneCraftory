@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:forge",
+  "level": 19,
+  "cost": 40,
+  "ingredients": [
+    {
+      "item": "runecraftory:friendly_rod"
+    },
+    {
+      "item": "runecraftory:love_crystal"
+    },
+    {
+      "item": "runecraftory:love_crystal"
+    },
+    {
+      "item": "runecraftory:love_crystal"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:love_love_rod"
+  }
+}

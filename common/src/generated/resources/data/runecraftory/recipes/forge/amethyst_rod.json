@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 6,
+  "cost": 25,
+  "ingredients": [
+    {
+      "tag": "c:amethysts"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:amethyst_rod"
+  }
+}

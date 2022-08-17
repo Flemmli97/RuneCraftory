@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:forge",
+  "level": 16,
+  "cost": 35,
+  "ingredients": [
+    {
+      "item": "runecraftory:love_crystal"
+    },
+    {
+      "tag": "runecraftory:sticks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:friendly_rod"
+  }
+}
