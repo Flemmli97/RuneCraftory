@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster.ai;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.LeavesBlock;
@@ -17,7 +17,7 @@ public class FollowOwnerGoalMonster extends Goal {
     private final double speedModifier;
     private final float stopDistance;
     private final float startDistance;
-    private Entity owner;
+    private LivingEntity owner;
     private int timeToRecalcPath;
     private float oldWaterCost;
 
@@ -38,7 +38,7 @@ public class FollowOwnerGoalMonster extends Goal {
         if (livingEntity.isSpectator()) {
             return false;
         }
-        if (this.monster.isStaying()) {
+        if (this.monster.behaviourState() != 2) {
             return false;
         }
         if (this.monster.distanceToSqr(livingEntity) < (double) (this.startDistance * this.startDistance)) {

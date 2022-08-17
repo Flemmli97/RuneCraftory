@@ -81,7 +81,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -93,18 +92,18 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private static final EntityDataAccessor<Integer> mobLevel = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> levelXP = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> moveFlags = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Boolean> staying = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> behaviour = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
 
     private static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
     private static final UUID foodUUID = UUID.fromString("87A55C28-8C8C-4BFF-AF5F-9972A38CCD9D");
     private static final UUID foodUUIDMulti = UUID.fromString("A05442AC-381B-49DF-B0FA-0136B454157B");
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
+            if (this.isTamed()) {
+                return e instanceof Enemy && EntityUtils.tryGetOwner(e) == null;
+            }
             if (e instanceof Mob && this == ((Mob) e).getTarget())
                 return true;
-            if (this.isTamed()) {
-                return e instanceof Enemy;
-            }
             return e instanceof Npc || EntityUtils.tryGetOwner(e) != null;
         }
         return false;
@@ -155,7 +154,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     protected int feedTimeOut;
     private boolean doJumping = false;
     private int foodBuffTick;
-    private Set<Attribute> foodAtts;
 
     public BaseMonster(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
@@ -192,13 +190,27 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.targetSelector.addGoal(0, this.hurt);
         this.targetSelector.addGoal(3, new RiderAttackTargetGoal(this, 15));
 
+        this.goalSelector.addGoal(0, this.swimGoal);
         this.goalSelector.addGoal(0, new StayGoal(this));
-        this.goalSelector.addGoal(2, new MoveTowardsRestrictionGoal(this, 1.0));
-        this.goalSelector.addGoal(3, this.wander);
-        this.goalSelector.addGoal(4, this.swimGoal);
-        this.goalSelector.addGoal(5, new RandomLookGoalAlive(this));
-        this.goalSelector.addGoal(6, new LookAtAliveGoal(this, Player.class, 8.0f));
-        this.goalSelector.addGoal(7, new FollowOwnerGoalMonster(this, 1, 16, 3));
+        this.goalSelector.addGoal(1, new RandomLookGoalAlive(this));
+        this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
+        this.goalSelector.addGoal(3, new FollowOwnerGoalMonster(this, 1.05, 9, 3));
+        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0));
+        this.goalSelector.addGoal(6, this.wander);
+    }
+
+    private void updateAI() {
+        switch (this.behaviourState()) {
+            case 0 -> this.goalSelector.removeGoal(this.wander);
+            case 1 -> {
+                this.restrictTo(this.blockPosition(), 9);
+                this.goalSelector.addGoal(6, this.wander);
+            }
+            case 2 -> {
+                this.clearRestriction();
+                this.goalSelector.addGoal(6, this.wander);
+            }
+        }
     }
 
     protected NearestAttackableTargetGoal<Player> createTargetGoalPlayer() {
@@ -216,7 +228,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.entityData.define(mobLevel, LibConstants.baseLevel);
         this.entityData.define(levelXP, 0);
         this.entityData.define(moveFlags, (byte) 0);
-        this.entityData.define(staying, false);
+        this.entityData.define(behaviour, (byte) 0);
     }
 
     //=====Client
@@ -265,7 +277,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         compound.putInt("MobLevel", this.level());
         if (this.isTamed())
             compound.putUUID("Owner", this.getOwnerUUID());
-
+        compound.putInt("Behaviour", this.behaviourState());
         compound.putBoolean("Out", this.dead);
         compound.putInt("FeedTime", this.feedTimeOut);
         if (this.hasRestriction())
@@ -282,6 +294,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.entityData.set(mobLevel, compound.getInt("MobLevel"));
         if (compound.contains("Owner"))
             this.entityData.set(owner, Optional.of(compound.getUUID("Owner")));
+        this.setBehaviour(compound.getInt("Behaviour"));
         this.feedTimeOut = compound.getInt("FeedTime");
         if (compound.contains("Home")) {
             int[] home = compound.getIntArray("Home");
@@ -351,48 +364,68 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (this.level.isClientSide)
             return InteractionResult.PASS;
+        if (this.isTamed() && !this.getOwnerUUID().equals(player.getUUID())) {
+            player.sendMessage(new TranslatableComponent("monster.interact.notowner"), Util.NIL_UUID);
+            return InteractionResult.CONSUME;
+        }
         ItemStack stack = player.getItemInHand(hand);
-        if (!stack.isEmpty() && player.isShiftKeyDown()) {
-            if (stack.getItem() == ModItems.tame.get() && !this.isTamed()) {
-                this.tameEntity(player);
-            } else if (!this.isTamed()) {
-                if (this.tamingTick == -1 && this.isAlive()) {
-                    float rightItemMultiplier = this.tamingMultiplier(stack);
-                    if (rightItemMultiplier == 0)
-                        return InteractionResult.PASS;
-                    if (!player.isCreative())
-                        stack.shrink(1);
-                    if (this.random.nextFloat() <= EntityUtils.tamingChance(this, rightItemMultiplier))
-                        this.tameEntity(player);
-                    if (stack.getItem().isEdible())
-                        this.applyFoodEffect(stack);
-                    this.tamingTick = 100;
-                    this.level.broadcastEntityEvent(this, (byte) 34);
+        if (hand == InteractionHand.MAIN_HAND) {
+            if (stack.isEmpty()) {
+                if (player.isShiftKeyDown()) {
+                    this.setBehaviour((byte) (this.behaviourState() + 1));
+                    if (player instanceof ServerPlayer serverPlayer)
+                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.5f, 0.4f));
+                    switch (this.behaviourState()) {
+                        case 0 -> player.sendMessage(new TranslatableComponent("monster.interact.sit"), Util.NIL_UUID);
+                        case 1 -> player.sendMessage(new TranslatableComponent("monster.interact.move"), Util.NIL_UUID);
+                        case 2 -> player.sendMessage(new TranslatableComponent("monster.interact.follow"), Util.NIL_UUID);
+                    }
+                    return InteractionResult.SUCCESS;
+                } else if (player.getUUID().equals(this.getOwnerUUID()) && this.ridable()) {
+                    player.startRiding(this);
+                    return InteractionResult.SUCCESS;
+                }
+            }
+        }
+        if (player.isShiftKeyDown() && !stack.isEmpty()) {
+            if (!this.isTamed()) {
+                if (stack.getItem() == ModItems.tame.get()) {
+                    this.tameEntity(player);
+                    return InteractionResult.CONSUME;
+                } else {
+                    if (this.tamingTick == -1 && this.isAlive()) {
+                        if (player instanceof ServerPlayer serverPlayer)
+                            serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+                        float rightItemMultiplier = this.tamingMultiplier(stack);
+                        if (rightItemMultiplier == 0)
+                            return InteractionResult.PASS;
+                        if (!player.isCreative())
+                            stack.shrink(1);
+                        if (this.random.nextFloat() < EntityUtils.tamingChance(this, rightItemMultiplier))
+                            this.tameEntity(player);
+                        if (stack.getItem().isEdible())
+                            this.applyFoodEffect(stack);
+                        this.tamingTick = 100;
+                        this.level.broadcastEntityEvent(this, (byte) 34);
+                        return InteractionResult.CONSUME;
+                    }
                 }
             } else {
                 if (stack.getItem() == Items.STICK) {
                     this.setOwner(null);
+                    if (player instanceof ServerPlayer serverPlayer)
+                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 1, 1));
+                    return InteractionResult.CONSUME;
                 } else if (stack.getItem() == ModItems.inspector.get()) {
                     //open tamed gui
                 } else if (this.feedTimeOut <= 0 && stack.getItem().isEdible()) {
+                    if (player instanceof ServerPlayer serverPlayer)
+                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
                     this.applyFoodEffect(stack);
                     this.feedTimeOut = 24000;
+                    return InteractionResult.CONSUME;
                 }
             }
-            return InteractionResult.SUCCESS;
-        } else if (stack.isEmpty() && player.isShiftKeyDown()) {
-            this.setStaying(!this.isStaying());
-            if (player instanceof ServerPlayer serverPlayer)
-                serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 1, 1));
-            if (this.isStaying()) {
-                player.sendMessage(new TranslatableComponent("monster.interact.sit"), Util.NIL_UUID);
-            } else
-                player.sendMessage(new TranslatableComponent("monster.interact.follow"), Util.NIL_UUID);
-        } else if (stack.isEmpty() && !this.level.isClientSide && player == this.getOwner() && this.ridable()) {
-            player.startRiding(this);
-            return InteractionResult.SUCCESS;
-        } else {
-            //Notify not owned this entity
         }
         return InteractionResult.PASS;
     }
@@ -810,11 +843,21 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public abstract void handleRidingCommand(int command);
 
     public boolean isStaying() {
-        return this.entityData.get(staying);
+        return this.entityData.get(behaviour) == 0;
     }
 
-    public void setStaying(boolean flag) {
-        this.entityData.set(staying, flag);
+    public void setBehaviour(int flag) {
+        byte b = (byte) (flag % 3);
+        this.entityData.set(behaviour, b);
+        if (!this.level.isClientSide)
+            this.updateAI();
+    }
+
+    /**
+     * 0: Sit, 1: Move, 2: Follow
+     */
+    public byte behaviourState() {
+        return this.entityData.get(behaviour);
     }
 
     protected float tamingMultiplier(ItemStack stack) {

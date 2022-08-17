@@ -40,7 +40,7 @@ public class EntityWeagle extends BaseMonster {
     public EntityWeagle(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
         this.goalSelector.removeGoal(this.wander);
-        this.goalSelector.addGoal(2, this.wander = new AirWanderGoal(this));
+        this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
         this.goalSelector.addGoal(2, this.rangedGoal);
         this.moveControl = new FlyingMoveControl(this, 20, true);
         this.setNoGravity(true);

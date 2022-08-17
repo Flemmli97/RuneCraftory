@@ -37,7 +37,7 @@ public class EntitySkyFish extends BaseMonster {
     public EntitySkyFish(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
         this.goalSelector.removeGoal(this.wander);
-        this.goalSelector.addGoal(2, this.wander = new AirWanderGoal(this));
+        this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
         this.setPathfindingMalus(BlockPathTypes.WATER, 0.0F);
         //this.setPathPriority(BlockPathTypes.OPEN, 0.5f);
         this.goalSelector.addGoal(2, this.rangedGoal);
