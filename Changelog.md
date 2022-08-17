@@ -4,6 +4,9 @@ RuneCraftory 1.2.2
 - Make sleep effect now actually affect players by freezing them
 - Grass and foliage now change colors according to current season.
 - Adjusting loot tables and recipes
+- Fix fireballs not spawnable
+- Rewritten commands
+- Fix monster interaction being broken
 
 RuneCraftory 1.2.1
 ================

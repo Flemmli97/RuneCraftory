@@ -281,8 +281,20 @@ public class RecipesGen extends RecipeProvider {
 
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.leatherGlove.get(), 1, 3, 25)
                 .addIngredient(ModTags.minerals).addIngredient(ModTags.cloths).build(consumer);
+
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.rod.get(), 1, 3, 25)
                 .addIngredient(ModTags.sticks).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.amethystRod.get(), 1, 6, 25)
+                .addIngredient(ModTags.amethyst).addIngredient(ModTags.sticks).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.aquamarineRod.get(), 1, 12, 35)
+                .addIngredient(ModTags.aquamarine).addIngredient(ModTags.sticks).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.friendlyRod.get(), 1, 16, 35)
+                .addIngredient(ModItems.crystalLove.get()).addIngredient(ModTags.sticks).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.loveLoveRod.get(), 1, 19, 40)
+                .addIngredient(ModItems.friendlyRod.get()).addIngredient(ModItems.crystalLove.get())
+                .addIngredient(ModItems.crystalLove.get()).addIngredient(ModItems.crystalLove.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.staff.get(), 1, 22, 40)
+                .addIngredient(ModItems.crystalMagic.get()).addIngredient(ModTags.sticks).build(consumer);
 
         //RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.cheapBracelet.get(), 1, 1, 15)
         //        .addIngredient(ModTags.minerals).build(consumer);

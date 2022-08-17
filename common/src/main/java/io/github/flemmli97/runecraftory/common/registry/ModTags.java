@@ -16,6 +16,11 @@ public class ModTags {
     public static final TagKey<Item> silverF = forge("ingots/silver");
     public static final TagKey<Item> platinumF = forge("ingots/platinum");
 
+    public static final TagKey<Item> amethystF = forge("gems/amethyst");
+    public static final TagKey<Item> aquamarineF = forge("gems/aquamarine");
+    public static final TagKey<Item> rubyF = forge("gems/ruby");
+    public static final TagKey<Item> sapphireF = forge("gems/sapphire");
+
     //Items
     public static final TagKey<Item> iron = tagCommon("iron_ingots");
     public static final TagKey<Item> gold = tagCommon("gold_ingots");
@@ -34,6 +39,11 @@ public class ModTags {
     public static final TagKey<Item> platinum = tagCommon("platinum_ingots");
     public static final TagKey<Item> orichalcum = tagCommon("orichalcum");
     public static final TagKey<Item> dragonic = tagCommon("dragonic");
+
+    public static final TagKey<Item> amethyst = tagCommon("amethysts");
+    public static final TagKey<Item> aquamarine = tagCommon("aquamarines");
+    public static final TagKey<Item> ruby = tagCommon("rubies");
+    public static final TagKey<Item> sapphire = tagCommon("sapphires");
 
     public static final TagKey<Item> eggs = tagCommon("eggs");
     public static final TagKey<Item> milk = tagCommon("milks");
