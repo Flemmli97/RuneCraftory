@@ -826,7 +826,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        return this.calculateAttackAABB(anim, target, 0);
+        return this.calculateAttackAABB(anim, target, 0.2);
     }
 
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
