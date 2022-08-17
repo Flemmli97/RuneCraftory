@@ -151,6 +151,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return false;
     };
     protected int tamingTick = -1;
+    private Runnable delayedTaming;
     protected int feedTimeOut;
     private boolean doJumping = false;
     private int foodBuffTick;
@@ -253,10 +254,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 --this.tamingTick;
             }
             if (this.tamingTick == 0) {
-                if (this.isTamed()) {
-                    this.level.broadcastEntityEvent(this, (byte) 10);
-                } else {
-                    this.level.broadcastEntityEvent(this, (byte) 11);
+                if (this.delayedTaming != null) {
+                    this.delayedTaming.run();
+                    this.delayedTaming = null;
                 }
                 this.tamingTick = -1;
             }
@@ -401,11 +401,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                             return InteractionResult.PASS;
                         if (!player.isCreative())
                             stack.shrink(1);
-                        if (this.random.nextFloat() < EntityUtils.tamingChance(this, rightItemMultiplier))
-                            this.tameEntity(player);
                         if (stack.getItem().isEdible())
                             this.applyFoodEffect(stack);
                         this.tamingTick = 100;
+                        this.delayedTaming = () -> {
+                            if (this.random.nextFloat() < EntityUtils.tamingChance(this, rightItemMultiplier)) {
+                                this.tameEntity(player);
+                            } else {
+                                this.level.broadcastEntityEvent(this, (byte) 11);
+                            }
+                        };
                         this.level.broadcastEntityEvent(this, (byte) 34);
                         return InteractionResult.CONSUME;
                     }
@@ -661,10 +666,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     private void playTameEffect(boolean play) {
         SimpleParticleType particle = ParticleTypes.HEART;
+        int amount = 13;
         if (!play) {
             particle = ParticleTypes.SMOKE;
+            amount += 5;
         }
-        for (int i = 0; i < 7; ++i) {
+        for (int i = 0; i < amount; ++i) {
             double d0 = this.random.nextGaussian() * 0.02;
             double d2 = this.random.nextGaussian() * 0.02;
             double d3 = this.random.nextGaussian() * 0.02;
