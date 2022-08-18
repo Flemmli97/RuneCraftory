@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.forge.config.values;
 import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
 import io.github.flemmli97.tenshilib.api.config.ItemTagWrapper;
 import io.github.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
-import io.github.flemmli97.tenshilib.common.utils.MapUtils;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class EntityPropertySpecs {
         this.money = builder.comment("Money this mob drops").defineInRange("Money", def.getMoney(), 0, Integer.MAX_VALUE);
         this.taming = builder.comment("Base chance to tame this mob").defineInRange("Taming Chance", def.tamingChance(), 0, 1);
         this.tamingItem = builder.comment("Items that boost the taming chance").define("Taming Items", def.getTamingItem().writeToString());
-        this.daily = builder.comment("Daily Products this mob gives").define("Daily", MapUtils.toListKey(def.dailyDrops(), SimpleItemStackWrapper::writeToString));
+        this.daily = builder.comment("Daily Products this mob gives").define("Daily", EntityProperties.dailyToString(def.dailyDrops()));
         this.ridable = builder.define("Ridable", def.ridable());
         this.flying = builder.define("Can Fly", def.flying());
     }

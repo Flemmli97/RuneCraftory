@@ -103,6 +103,10 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
             return InteractionResult.CONSUME;
         } else {
             BlockEntity tile = level.getBlockEntity(pos);
+            if (!(tile instanceof CraftingBlockEntity)) {
+                pos = this.getOtherPos(pos, state);
+                tile = level.getBlockEntity(pos);
+            }
             if (tile instanceof CraftingBlockEntity) {
                 if (player.isShiftKeyDown() && this.hasUpgradeScreen())
                     Platform.INSTANCE.openGuiMenu((ServerPlayer) player, ((CraftingBlockEntity) tile).upgradeMenu(), pos);

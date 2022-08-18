@@ -38,7 +38,7 @@ public class FollowOwnerGoalMonster extends Goal {
         if (livingEntity.isSpectator()) {
             return false;
         }
-        if (this.monster.behaviourState() != 2) {
+        if (this.monster.behaviourState() != 1) {
             return false;
         }
         if (this.monster.distanceToSqr(livingEntity) < (double) (this.startDistance * this.startDistance)) {

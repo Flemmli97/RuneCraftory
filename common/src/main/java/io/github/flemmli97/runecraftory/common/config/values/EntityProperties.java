@@ -10,6 +10,7 @@ import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -46,6 +47,13 @@ public class EntityProperties {
         this.daily = dailyDrops;
         this.ridable = ridable;
         this.flying = flying;
+    }
+
+    public static List<String> dailyToString(Map<SimpleItemStackWrapper, Integer> map) {
+        List<String> list = new ArrayList<>();
+        for (Map.Entry<SimpleItemStackWrapper, Integer> e : map.entrySet())
+            list.add(e.getKey().writeToString() + "-" + e.getValue());
+        return list;
     }
 
     public List<String> attString() {

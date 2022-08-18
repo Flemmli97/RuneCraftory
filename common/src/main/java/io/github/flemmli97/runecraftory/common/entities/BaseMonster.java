@@ -73,6 +73,7 @@ import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -211,15 +212,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     private void updateAI() {
-        switch (this.behaviourState()) {
-            case 0 -> this.goalSelector.removeGoal(this.wander);
-            case 1 -> {
-                this.restrictTo(this.blockPosition(), 9);
-                this.goalSelector.addGoal(6, this.wander);
-            }
-            case 2 -> {
-                this.clearRestriction();
-                this.goalSelector.addGoal(6, this.wander);
+        if (this.isTamed()) {
+            switch (this.behaviourState()) {
+                case 0 -> {
+                    this.restrictTo(this.blockPosition(), 9);
+                    this.goalSelector.addGoal(6, this.wander);
+                }
+                case 1 -> {
+                    this.clearRestriction();
+                    this.goalSelector.addGoal(6, this.wander);
+                }
+                case 2 -> this.goalSelector.removeGoal(this.wander);
             }
         }
     }
@@ -260,18 +263,20 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.getAnimationHandler().tick();
         super.tick();
         if (!this.level.isClientSide) {
-            int day = WorldUtils.day(this.level);
-            if (Math.abs(this.lastUpdateDay - day) >= 1) {
-                this.lastUpdateDay = day;
-                int i = -1;
-                ItemStack drop = ItemStack.EMPTY;
-                for (Map.Entry<ItemStack, Integer> e : this.dailyDrops().entrySet()) {
-                    if (this.friendlyPoints[0] >= e.getValue() && i > e.getValue()) {
-                        drop = e.getKey();
-                        i = e.getValue();
+            if (this.isTamed()) {
+                int day = WorldUtils.day(this.level);
+                if (Math.abs(this.lastUpdateDay - day) >= 1) {
+                    this.lastUpdateDay = day;
+                    int i = -1;
+                    ItemStack drop = ItemStack.EMPTY;
+                    for (Map.Entry<ItemStack, Integer> e : this.dailyDrops().entrySet()) {
+                        if (this.friendlyPoints[0] >= e.getValue() && i > e.getValue()) {
+                            drop = e.getKey();
+                            i = e.getValue();
+                        }
                     }
+                    this.spawnAtLocation(drop.copy());
                 }
-                this.spawnAtLocation(drop.copy());
             }
             if (this.tamingTick > 0) {
                 --this.tamingTick;
@@ -405,9 +410,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     if (player instanceof ServerPlayer serverPlayer)
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.5f, 0.4f));
                     switch (this.behaviourState()) {
-                        case 0 -> player.sendMessage(new TranslatableComponent("monster.interact.sit"), Util.NIL_UUID);
-                        case 1 -> player.sendMessage(new TranslatableComponent("monster.interact.move"), Util.NIL_UUID);
-                        case 2 -> player.sendMessage(new TranslatableComponent("monster.interact.follow"), Util.NIL_UUID);
+                        case 0 -> player.sendMessage(new TranslatableComponent("monster.interact.move"), Util.NIL_UUID);
+                        case 1 -> player.sendMessage(new TranslatableComponent("monster.interact.follow"), Util.NIL_UUID);
+                        case 2 -> player.sendMessage(new TranslatableComponent("monster.interact.sit"), Util.NIL_UUID);
                     }
                     return InteractionResult.SUCCESS;
                 } else if (player.getUUID().equals(this.getOwnerUUID()) && this.ridable()) {
@@ -727,7 +732,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
     }
 
-    //TODO: Redo Death animation. if server lagging behind client finished animation
+    @Override
+    public void die(DamageSource cause) {
+        if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer) {
+            this.getOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
+        }
+        super.die(cause);
+    }
+
     @Override
     protected void tickDeath() {
         //if (!this.isTamed()) {
@@ -743,7 +755,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             });
         }
         if (this.deathTime >= this.maxDeathTime()) {
-            this.remove(RemovalReason.KILLED);
+            if (!this.level.isClientSide)
+                this.remove(RemovalReason.KILLED);
             for (int i = 0; i < 20; ++i) {
                 double d0 = this.random.nextGaussian() * 0.02D;
                 double d1 = this.random.nextGaussian() * 0.02D;
@@ -898,9 +911,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public abstract void handleRidingCommand(int command);
 
     public boolean isStaying() {
-        return this.entityData.get(behaviour) == 0;
+        return this.entityData.get(behaviour) == 2;
     }
 
+    /**
+     * 0: Move, 1: Follow, 2: Stay
+     */
     public void setBehaviour(int flag) {
         byte b = (byte) (flag % 3);
         this.entityData.set(behaviour, b);
@@ -909,7 +925,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     /**
-     * 0: Sit, 1: Move, 2: Follow
+     * 0: Move, 1: Follow, 2: Stay
      */
     public byte behaviourState() {
         return this.entityData.get(behaviour);
@@ -926,6 +942,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.navigation.stop();
         this.setTarget(null);
         this.level.broadcastEntityEvent(this, (byte) 10);
+        this.lastUpdateDay = WorldUtils.day(this.level);
+        this.setBehaviour(1);
     }
 
     @Override
@@ -937,7 +955,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     protected void removePassenger(Entity passenger) {
         if (passenger == this.getOwner())
-            this.setBehaviour(2);
+            this.setBehaviour(1);
         super.removePassenger(passenger);
     }
 
