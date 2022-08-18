@@ -193,6 +193,10 @@ public class EntityCalls {
 
     public static void foodHandling(LivingEntity entity, ItemStack stack) {
         if (!entity.level.isClientSide) {
+            if (entity instanceof IBaseMob) {
+                ((IBaseMob) entity).applyFoodEffect(stack);
+                return;
+            }
             FoodProperties prop = DataPackHandler.getFoodStat(stack.getItem());
             if (prop == null)
                 return;
@@ -208,8 +212,9 @@ public class EntityCalls {
                     data.regenHealth(player, data.getMaxHealth(player) * healthPercent * 0.01F);
                     data.refreshRunePoints(player, (int) (data.getMaxRunePoints() * prop.getRpPercentRegen() * 0.01));
                 });
-            } else if (entity instanceof IBaseMob) {
-                ((IBaseMob) entity).applyFoodEffect(stack);
+            } else {
+                entity.heal(prop.getHPGain());
+                entity.heal(entity.getMaxHealth() * prop.getHpPercentGain() * 0.01F);
             }
             if (prop.potionHeals() != null)
                 for (MobEffect s : prop.potionHeals()) {

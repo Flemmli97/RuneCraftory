@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities;
 
 import com.google.common.collect.ImmutableSet;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
+import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
@@ -45,6 +46,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -431,6 +433,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
                     this.applyFoodEffect(stack);
                     this.feedTimeOut = 24000;
+                    if (!player.isCreative())
+                        stack.shrink(1);
                     return InteractionResult.CONSUME;
                 }
             }
@@ -566,10 +570,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void applyFoodEffect(ItemStack stack) {
         if (this.level.isClientSide)
             return;
+        this.eat(this.level, stack);
         this.removeFoodEffect();
         FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
-        if (food == null)
+        if (food == null) {
+            net.minecraft.world.food.FoodProperties mcFood = stack.getItem().getFoodProperties();
+            if (mcFood != null) {
+                this.heal(mcFood.getNutrition() * 0.5f);
+            }
             return;
+        }
         ImmutableSet.Builder<Attribute> builder = new ImmutableSet.Builder<>();
         for (Map.Entry<Attribute, Double> entry : food.effectsMultiplier().entrySet()) {
             AttributeInstance inst = this.getAttribute(entry.getKey());
@@ -590,6 +600,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.foodBuffTick = food.duration();
         this.heal(food.getHPGain());
         this.heal(this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
+        if (food.potionHeals() != null)
+            for (MobEffect s : food.potionHeals()) {
+                this.removeEffect(s);
+            }
+        if (food.potionApply() != null)
+            for (SimpleEffect s : food.potionApply()) {
+                this.addEffect(s.create());
+            }
     }
 
     @Override

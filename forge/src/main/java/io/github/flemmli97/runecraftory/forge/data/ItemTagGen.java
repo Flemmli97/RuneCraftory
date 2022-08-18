@@ -60,8 +60,9 @@ public class ItemTagGen extends ItemTagsProvider {
                 .addOptional(Tags.Items.RODS_WOODEN.location());
         this.tag(ModTags.slime)
                 .add(Items.SLIME_BALL)
-                .add(ModItems.glue.get())
                 .addOptional(Tags.Items.SLIMEBALLS.location());
+
+        this.forgeAndCommonTag(Tags.Items.SLIMEBALLS, ModTags.slime, ModItems.glue.get());
 
         this.forgeAndCommonTag(ModTags.bronzeF, ModTags.bronze, ModItems.bronze.get());
         this.forgeAndCommonTag(ModTags.silverF, ModTags.silver, ModItems.silver.get());
