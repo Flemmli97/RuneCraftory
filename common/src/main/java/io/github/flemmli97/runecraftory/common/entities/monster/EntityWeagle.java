@@ -120,7 +120,7 @@ public class EntityWeagle extends BaseMonster {
                     }
                 });
             } else {
-                this.setDeltaMovement(dir.multiply(-0.3, -0.5, -0.3));
+                this.setDeltaMovement(dir.multiply(-0.3, -0.225, -0.3));
             }
         } else
             super.handleAttack(anim);

@@ -7,6 +7,7 @@ RuneCraftory 1.2.2
 - Fix fireballs not spawnable
 - Rewritten commands
 - Fix monster interaction being broken
+- Add daily drops for mobs
 
 RuneCraftory 1.2.1
 ================

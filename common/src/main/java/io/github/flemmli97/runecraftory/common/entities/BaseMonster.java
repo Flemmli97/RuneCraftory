@@ -19,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.config.ItemTagWrapper;
@@ -161,6 +162,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private boolean doJumping = false;
     private int foodBuffTick;
 
+    private int[] friendlyPoints = {0, 0};
+    private Map<ItemStack, Integer> dailyDrops;
+    private int lastUpdateDay;
+
     public BaseMonster(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
         this.moveControl = new NewMoveController(this);
@@ -255,6 +260,19 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.getAnimationHandler().tick();
         super.tick();
         if (!this.level.isClientSide) {
+            int day = WorldUtils.day(this.level);
+            if (Math.abs(this.lastUpdateDay - day) >= 1) {
+                this.lastUpdateDay = day;
+                int i = -1;
+                ItemStack drop = ItemStack.EMPTY;
+                for (Map.Entry<ItemStack, Integer> e : this.dailyDrops().entrySet()) {
+                    if (this.friendlyPoints[0] >= e.getValue() && i > e.getValue()) {
+                        drop = e.getKey();
+                        i = e.getValue();
+                    }
+                }
+                this.spawnAtLocation(drop.copy());
+            }
             if (this.tamingTick > 0) {
                 --this.tamingTick;
             }
@@ -288,6 +306,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.hasRestriction())
             compound.putIntArray("Home", new int[]{this.getRestrictCenter().getX(), this.getRestrictCenter().getY(), this.getRestrictCenter().getZ(), (int) this.getRestrictRadius()});
         compound.putInt("FoodBuffTick", this.foodBuffTick);
+        compound.putIntArray("FriendlyPoints", this.friendlyPoints);
+        compound.putInt("LastUpdateDay", this.lastUpdateDay);
         //CompoundTag genes = new CompoundTag();
         //this.attributeRandomizer.forEach((att, val)->genes.putInt(att.getRegistryName().toString(), val));
         //compound.put("Genes", genes);
@@ -307,6 +327,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
         this.dead = compound.getBoolean("Out");
         this.foodBuffTick = compound.getInt("FoodBuffTick");
+        this.friendlyPoints = compound.getIntArray("FriendlyPoints");
+        if (this.friendlyPoints.length != 2)
+            this.friendlyPoints = new int[]{0, 0};
+        this.lastUpdateDay = compound.getInt("LastUpdateDay");
         //CompoundTag genes = compound.getCompound("Genes");
         //genes.keySet().forEach(key->this.attributeRandomizer.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(key)), genes.getInt(key)));
     }
@@ -492,8 +516,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public Map<ItemStack, Integer> dailyDrops() {
-        return this.prop.dailyDrops().entrySet().stream()
-                .collect(Collectors.toMap(e -> e.getKey().getStack(), Map.Entry::getValue));
+        if (this.dailyDrops == null)
+            this.dailyDrops = this.prop.dailyDrops().entrySet().stream()
+                    .collect(Collectors.toMap(e -> e.getKey().getStack(), Map.Entry::getValue));
+        ;
+        return this.dailyDrops;
     }
 
     @Override
@@ -903,15 +930,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     protected void addPassenger(Entity passenger) {
-        this.targetSelector.removeGoal(this.targetPlayer);
-        this.targetSelector.removeGoal(this.targetMobs);
+        this.getNavigation().stop();
         super.addPassenger(passenger);
     }
 
     @Override
     protected void removePassenger(Entity passenger) {
-        this.targetSelector.addGoal(1, this.targetPlayer);
-        this.targetSelector.addGoal(2, this.targetMobs);
+        if (passenger == this.getOwner())
+            this.setBehaviour(2);
         super.removePassenger(passenger);
     }
 
