@@ -11,7 +11,7 @@ public class TriggerKeyBind extends KeyMapping {
     }
 
     public boolean onPress() {
-        if (this.consumeClick())
+        if (this.isDown())
             return ++this.press == 1;
         else
             this.press = 0;
