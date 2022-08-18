@@ -22,6 +22,10 @@ public class ModTags {
     public static final TagKey<Item> sapphireF = forge("gems/sapphire");
 
     //Items
+
+    public static final TagKey<Item> wood_rod = tagCommon("wooden_rods");
+    public static final TagKey<Item> slime = tagCommon("slime_balls");
+
     public static final TagKey<Item> iron = tagCommon("iron_ingots");
     public static final TagKey<Item> gold = tagCommon("gold_ingots");
     public static final TagKey<Item> copper = tagCommon("copper_ingots");

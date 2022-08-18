@@ -10,11 +10,11 @@
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.7,
-              "looting_multiplier": 0.05
+              "chance": 0.25,
+              "looting_multiplier": 0.1
             }
           ],
-          "name": "minecraft:apple"
+          "name": "runecraftory:water_crystal"
         }
       ]
     },
@@ -35,12 +35,12 @@
               "count": {
                 "type": "minecraft:uniform",
                 "min": 0.0,
-                "max": 0.7
+                "max": 0.35
               },
-              "limit": 3
+              "limit": 2
             }
           ],
-          "name": "minecraft:apple"
+          "name": "runecraftory:water_crystal"
         }
       ]
     }

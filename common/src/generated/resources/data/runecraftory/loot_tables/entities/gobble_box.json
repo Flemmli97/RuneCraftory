@@ -6,34 +6,15 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:group",
-          "children": [
+          "type": "minecraft:item",
+          "conditions": [
             {
-              "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:random_chance_with_looting",
-                  "chance": 0.4,
-                  "looting_multiplier": 0.05
-                }
-              ],
-              "name": "runecraftory:broken_hilt"
-            },
-            {
-              "type": "minecraft:item",
-              "functions": [
-                {
-                  "function": "minecraft:looting_enchant",
-                  "count": {
-                    "type": "minecraft:uniform",
-                    "min": 0.0,
-                    "max": 0.3
-                  }
-                }
-              ],
-              "name": "runecraftory:broken_hilt"
+              "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.4,
+              "looting_multiplier": 0.05
             }
-          ]
+          ],
+          "name": "runecraftory:broken_hilt"
         }
       ]
     },
@@ -42,34 +23,23 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:group",
-          "children": [
+          "type": "minecraft:item",
+          "functions": [
             {
-              "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:random_chance_with_looting",
-                  "chance": 0.25,
-                  "looting_multiplier": 0.05
-                }
-              ],
-              "name": "runecraftory:failed_dish"
+              "function": "minecraft:set_count",
+              "count": 0.0,
+              "add": false
             },
             {
-              "type": "minecraft:item",
-              "functions": [
-                {
-                  "function": "minecraft:looting_enchant",
-                  "count": {
-                    "type": "minecraft:uniform",
-                    "min": 0.0,
-                    "max": 0.2
-                  }
-                }
-              ],
-              "name": "runecraftory:failed_dish"
+              "function": "minecraft:looting_enchant",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 0.35
+              }
             }
-          ]
+          ],
+          "name": "runecraftory:broken_hilt"
         }
       ]
     },
@@ -78,34 +48,15 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:group",
-          "children": [
+          "type": "minecraft:item",
+          "conditions": [
             {
-              "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:random_chance_with_looting",
-                  "chance": 0.1,
-                  "looting_multiplier": 0.03
-                }
-              ],
-              "name": "runecraftory:disastrous_dish"
-            },
-            {
-              "type": "minecraft:item",
-              "functions": [
-                {
-                  "function": "minecraft:looting_enchant",
-                  "count": {
-                    "type": "minecraft:uniform",
-                    "min": 0.0,
-                    "max": 0.2
-                  }
-                }
-              ],
-              "name": "runecraftory:disastrous_dish"
+              "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.25,
+              "looting_multiplier": 0.05
             }
-          ]
+          ],
+          "name": "runecraftory:failed_dish"
         }
       ]
     },
@@ -114,34 +65,107 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:group",
-          "children": [
+          "type": "minecraft:item",
+          "functions": [
             {
-              "type": "minecraft:item",
-              "conditions": [
-                {
-                  "condition": "minecraft:random_chance_with_looting",
-                  "chance": 0.25,
-                  "looting_multiplier": 0.07
-                }
-              ],
-              "name": "runecraftory:broken_box"
+              "function": "minecraft:set_count",
+              "count": 0.0,
+              "add": false
             },
             {
-              "type": "minecraft:item",
-              "functions": [
-                {
-                  "function": "minecraft:looting_enchant",
-                  "count": {
-                    "type": "minecraft:uniform",
-                    "min": 0.0,
-                    "max": 0.2
-                  }
-                }
-              ],
-              "name": "runecraftory:broken_box"
+              "function": "minecraft:looting_enchant",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 0.3
+              }
             }
-          ]
+          ],
+          "name": "runecraftory:failed_dish"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.1,
+              "looting_multiplier": 0.03
+            }
+          ],
+          "name": "runecraftory:disastrous_dish"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 0.0,
+              "add": false
+            },
+            {
+              "function": "minecraft:looting_enchant",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 0.3
+              }
+            }
+          ],
+          "name": "runecraftory:disastrous_dish"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.25,
+              "looting_multiplier": 0.05
+            }
+          ],
+          "name": "runecraftory:broken_box"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": 0.0,
+              "add": false
+            },
+            {
+              "function": "minecraft:looting_enchant",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 0.3
+              }
+            }
+          ],
+          "name": "runecraftory:broken_box"
         }
       ]
     }

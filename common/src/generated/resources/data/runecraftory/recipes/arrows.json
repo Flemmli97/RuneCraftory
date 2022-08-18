@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "runecraftory:arrowhead"
+    },
+    {
+      "tag": "c:wooden_rods"
+    },
+    {
+      "tag": "c:feathers"
+    }
+  ],
+  "result": {
+    "item": "minecraft:arrow"
+  }
+}

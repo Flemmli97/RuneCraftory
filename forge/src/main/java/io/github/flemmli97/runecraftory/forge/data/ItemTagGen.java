@@ -55,6 +55,13 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(Items.MOSSY_COBBLESTONE)
                 .add(Items.COBBLED_DEEPSLATE)
                 .addOptional(Tags.Items.COBBLESTONE.location());
+        this.tag(ModTags.wood_rod)
+                .add(Items.STICK)
+                .addOptional(Tags.Items.RODS_WOODEN.location());
+        this.tag(ModTags.slime)
+                .add(Items.SLIME_BALL)
+                .add(ModItems.glue.get())
+                .addOptional(Tags.Items.SLIMEBALLS.location());
 
         this.forgeAndCommonTag(ModTags.bronzeF, ModTags.bronze, ModItems.bronze.get());
         this.forgeAndCommonTag(ModTags.silverF, ModTags.silver, ModItems.silver.get());
@@ -124,7 +131,8 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.featherBlack.get(),
                         ModItems.featherThunder.get(),
                         ModItems.featherYellow.get(),
-                        ModItems.dragonFin.get());
+                        ModItems.dragonFin.get())
+                .addOptionalTag(Tags.Items.FEATHERS.location());
         this.tag(ModTags.shellBone)
                 .add(ModItems.turtleShell.get(),
                         ModItems.fishFossil.get(),

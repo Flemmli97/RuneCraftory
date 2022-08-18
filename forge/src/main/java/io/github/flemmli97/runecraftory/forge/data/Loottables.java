@@ -2,9 +2,11 @@ package io.github.flemmli97.runecraftory.forge.data;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
+import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.loot.GiantLootCondition;
 import io.github.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
 import io.github.flemmli97.runecraftory.common.loot.MiningLootCondition;
@@ -28,7 +30,6 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.functions.LootingEnchantFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
@@ -70,86 +71,107 @@ public class Loottables extends LootTableProvider {
         private final Map<ResourceLocation, LootTable.Builder> lootTables = new HashMap<>();
 
         private void init() {
-            this.registerLootTable(ModEntities.wooly.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.furSmall.get(), 0.3f, 0.1f, 0.4f, 0)))
-                    .withPool(this.create().add(this.add(Items.WHITE_WOOL, 0.3f, 0.1f, 0.4f, 0)))
-                    .withPool(this.create().add(this.add(Items.MUTTON, 0.3f, 0.1f, 1, 0))));
-            this.registerLootTable(ModEntities.ant.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.carapaceInsect.get(), 0.3f, 0.2f, 0.5f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.jawInsect.get(), 0.2f, 0.2f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.orcArcher.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.bladeShard.get(), 0.4f, 0.2f, 0.5f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.clothCheap.get(), 0.6f, 0.2f, 0.5f, 0)))
+            this.registerLootTable(ModEntities.wooly.get(), this.table(
+                    new ItemLootData(ModItems.furSmall.get(), 0.3f, 0.05f, 0.55f, 0),
+                    new ItemLootData(Items.WHITE_WOOL, 0.3f, 0.05f, 0.55f, 0),
+                    new ItemLootData(Items.MUTTON, 0.3f, 0.05f, 1, 0)));
+            this.registerLootTable(ModEntities.ant.get(), this.table(
+                    new ItemLootData(ModItems.carapaceInsect.get(), 0.3f, 0.05f, 0.55f, 0),
+                    new ItemLootData(ModItems.jawInsect.get(), 0.2f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.orcArcher.get(), this.table(
+                            new ItemLootData(ModItems.bladeShard.get(), 0.4f, 0.05f, 0.55f, 0),
+                            new ItemLootData(ModItems.clothCheap.get(), 0.6f, 0.05f, 0.55f, 0))
                     .withPool(this.create().add(this.addWithCount(Items.ARROW, 0, 1, 1))));
-            this.registerLootTable(ModEntities.orc.get(), LootTable.lootTable()
-                    .withPool(this.create())//.add(this.add(ModItems.cheapBracelet.get(), 0.05f, 0.05f, 0, 1))
-                    .withPool(this.create().add(this.add(ModItems.glue.get(), 0.5f, 0.3f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.beetle.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.hornInsect.get(), 0.4f, 0.1f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.big_muck.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.spore.get(), 0.4f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.buffamoo.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.milkS.get(), 0.3f, 0.05f, 0.5f, 0)))
+            this.registerLootTable(ModEntities.orc.get(), this.table(//.add(this.add(ModItems.cheapBracelet.get(), 0.05f, 0.05f, 0, 1))
+                    new ItemLootData(ModItems.glue.get(), 0.5f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.beetle.get(), this.table(
+                    new ItemLootData(ModItems.carapaceInsect.get(), 0.3f, 0.05f, 0.55f, 0),
+                    new ItemLootData(ModItems.hornInsect.get(), 0.4f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.big_muck.get(), this.table(
+                    new ItemLootData(ModItems.spore.get(), 0.4f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.buffamoo.get(), this.table(
+                            new ItemLootData(ModItems.milkS.get(), 0.3f, 0.05f, 0.55f, 0))
                     .withPool(this.create().add(this.addWithCount(Items.LEATHER, -1, 1, 1)))
                     .withPool(this.create().add(this.addWithCount(Items.BEEF, -1, 2, 1))));
-            this.registerLootTable(ModEntities.chipsqueek.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.fur.get(), 0.6f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.cluckadoodle.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.eggS.get(), 0.3f, 0.05f, 0.5f, 0)))
+            this.registerLootTable(ModEntities.chipsqueek.get(), this.table(
+                    new ItemLootData(ModItems.fur.get(), 0.6f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.cluckadoodle.get(), this.table(
+                            new ItemLootData(ModItems.eggS.get(), 0.3f, 0.05f, 0.55f, 0))
                     .withPool(this.create().add(this.addWithCount(Items.CHICKEN, 0, 1, 1)))
                     .withPool(this.create().add(this.addWithCount(Items.FEATHER, 0, 2, 1))));
-            this.registerLootTable(ModEntities.pomme_pomme.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(Items.APPLE, 0.7f, 0.05f, 0.7f, 3))));
-            this.registerLootTable(ModEntities.tortas.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.turtleShell.get(), 0.5f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.sky_fish.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.fishFossil.get(), 0.5f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.weagle.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(Items.FEATHER, 0.6f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.goblin.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.bladeShard.get(), 0.4f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.goblinArcher.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.arrowHead.get(), 0.4f, 0.05f, 0.5f, 0)))
+            this.registerLootTable(ModEntities.pomme_pomme.get(), this.table(
+                    new ItemLootData(Items.APPLE, 0.7f, 0.05f, 0.7f, 3)));
+            this.registerLootTable(ModEntities.tortas.get(), this.table(
+                    new ItemLootData(ModItems.turtleShell.get(), 0.5f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.sky_fish.get(), this.table(
+                    new ItemLootData(ModItems.fishFossil.get(), 0.5f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.weagle.get(), this.table(
+                    new ItemLootData(Items.FEATHER, 0.6f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.goblin.get(), this.table(
+                    new ItemLootData(ModItems.bladeShard.get(), 0.4f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.goblinArcher.get(), this.table(
+                            new ItemLootData(ModItems.arrowHead.get(), 0.4f, 0.05f, 0.55f, 0))
                     .withPool(this.create().add(this.addWithCount(Items.ARROW, -1, 2, 1))));
-            this.registerLootTable(ModEntities.duck.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.downYellow.get(), 0.4f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.fairy.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.fairyDust.get(), 0.4f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.ghost.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.ghostHood.get(), 0.35f, 0.05f, 0.5f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.stickThick.get(), 0.5f, 0.05f, 0.5f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.skull.get(), 0.35f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.spirit.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.crystalDark.get(), 0.35f, 0.05f, 0.5f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.crystalMagic.get(), 0.3f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.ghostRay.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.ghostHood.get(), 0.45f, 0.05f, 0.5f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.stickThick.get(), 0.8f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.spider.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.jawInsect.get(), 0.33f, 0.05f, 0.5f, 0)))
-                    .withPool(this.create().add(this.add(Items.STRING, 0.4f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.shadowPanther.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.clawPanther.get(), 0.33f, 0.05f, 0.5f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.furQuality.get(), 0.5f, 0.05f, 0.5f, 0))));
-            this.registerLootTable(ModEntities.monsterBox.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.brokenHilt.get(), 0.45f, 0.05f, 0.3f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.failedDish.get(), 0.2f, 0.05f, 0.2f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.disastrousDish.get(), 0.05f, 0.03f, 0.2f, 0))));
-            this.registerLootTable(ModEntities.gobbleBox.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.brokenHilt.get(), 0.4f, 0.05f, 0.3f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.failedDish.get(), 0.25f, 0.05f, 0.2f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.disastrousDish.get(), 0.1f, 0.03f, 0.2f, 0)))
-                    .withPool(this.create().add(this.add(ModItems.brokenBox.get(), 0.25f, 0.07f, 0.2f, 0))));
+            this.registerLootTable(ModEntities.duck.get(), this.table(
+                    new ItemLootData(ModItems.downYellow.get(), 0.4f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.fairy.get(), this.table(
+                    new ItemLootData(ModItems.fairyDust.get(), 0.4f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.ghost.get(), this.table(
+                    new ItemLootData(ModItems.ghostHood.get(), 0.35f, 0.05f, 0.55f, 0),
+                    new ItemLootData(ModItems.stickThick.get(), 0.5f, 0.05f, 0.55f, 0),
+                    new ItemLootData(ModItems.skull.get(), 0.35f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.spirit.get(), this.table(
+                    new ItemLootData(ModItems.crystalDark.get(), 0.35f, 0.05f, 0.55f, 0),
+                    new ItemLootData(ModItems.crystalMagic.get(), 0.3f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.ghostRay.get(), this.table(
+                    new ItemLootData(ModItems.ghostHood.get(), 0.45f, 0.05f, 0.55f, 0),
+                    new ItemLootData(ModItems.stickThick.get(), 0.8f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.spider.get(), this.table(
+                    new ItemLootData(ModItems.jawInsect.get(), 0.33f, 0.05f, 0.55f, 0),
+                    new ItemLootData(Items.STRING, 0.4f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.shadowPanther.get(), this.table(
+                    new ItemLootData(ModItems.clawPanther.get(), 0.33f, 0.05f, 0.55f, 0),
+                    new ItemLootData(ModItems.furQuality.get(), 0.5f, 0.05f, 0.55f, 0)));
+            this.registerLootTable(ModEntities.monsterBox.get(), this.table(
+                    new ItemLootData(ModItems.brokenHilt.get(), 0.45f, 0.05f, 0.35f, 0),
+                    new ItemLootData(ModItems.failedDish.get(), 0.2f, 0.05f, 0.3f, 0),
+                    new ItemLootData(ModItems.disastrousDish.get(), 0.05f, 0.03f, 0.3f, 0)));
+            this.registerLootTable(ModEntities.gobbleBox.get(), this.table(
+                    new ItemLootData(ModItems.brokenHilt.get(), 0.4f, 0.05f, 0.35f, 0),
+                    new ItemLootData(ModItems.failedDish.get(), 0.25f, 0.05f, 0.3f, 0),
+                    new ItemLootData(ModItems.disastrousDish.get(), 0.1f, 0.03f, 0.3f, 0),
+                    new ItemLootData(ModItems.brokenBox.get(), 0.25f, 0.05f, 0.3f, 0)));
 
-            this.registerLootTable(ModEntities.ambrosia.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.ambrosiasThorns.get(), 0.65f, 0.1f, 0.3f, 1))));
-            this.registerLootTable(ModEntities.thunderbolt.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.lightningMane.get(), 0.65f, 0.1f, 0.3f, 1))));
-            this.registerLootTable(ModEntities.marionetta.get(), LootTable.lootTable()
-                    .withPool(this.create().add(this.add(ModItems.cursedDoll.get(), 0.65f, 0.1f, 0.3f, 1)))
-                    .withPool(this.create().add(this.add(ModItems.puppetryStrings.get(), 0.2f, 0.1f, 0.3f, 1)))
-                    .withPool(this.create().add(this.add(ModItems.furSmall.get(), 0.5f, 0.05f, 1, 0)))
-                    .withPool(this.create().add(this.add(ModItems.furMedium.get(), 0.5f, 0.05f, 1, 0))));
+            this.registerLootTable(ModEntities.ambrosia.get(), this.table(
+                    new ItemLootData(ModItems.ambrosiasThorns.get(), 0.65f, 0.1f, 0.3f, 1)));
+            this.registerLootTable(ModEntities.thunderbolt.get(), this.table(
+                    new ItemLootData(ModItems.lightningMane.get(), 0.65f, 0.1f, 0.3f, 1)));
+            this.registerLootTable(ModEntities.marionetta.get(), this.table(
+                    new ItemLootData(ModItems.cursedDoll.get(), 0.65f, 0.1f, 0.3f, 1),
+                    new ItemLootData(ModItems.puppetryStrings.get(), 0.2f, 0.1f, 0.3f, 1),
+                    new ItemLootData(ModItems.furSmall.get(), 0.5f, 0.05f, 1, 0),
+                    new ItemLootData(ModItems.furMedium.get(), 0.5f, 0.05f, 1, 0)));
+
+            this.registerGateLoot();
+        }
+
+        private void registerGateLoot() {
+            for (EnumElement element : EnumElement.values()) {
+                this.lootTables.put(GateEntity.getGateLootLocation(element), this.gateLoot(element));
+            }
+        }
+
+        private LootTable.Builder gateLoot(EnumElement element) {
+            return switch (element) {
+                case WATER -> this.table(new ItemLootData(ModItems.crystalWater.get(), 0.25f, 0.1f, 0.35f, 2));
+                case EARTH -> this.table(new ItemLootData(ModItems.crystalEarth.get(), 0.25f, 0.1f, 0.35f, 2));
+                case WIND -> this.table(new ItemLootData(ModItems.crystalWind.get(), 0.25f, 0.1f, 0.35f, 2));
+                case FIRE -> this.table(new ItemLootData(ModItems.crystalFire.get(), 0.25f, 0.1f, 0.35f, 2));
+                case LIGHT -> this.table(new ItemLootData(ModItems.crystalLight.get(), 0.1f, 0.05f, 0.3f, 2));
+                case DARK -> this.table(new ItemLootData(ModItems.crystalDark.get(), 0.1f, 0.05f, 0.3f, 2));
+                case LOVE -> this.table(new ItemLootData(ModItems.crystalLove.get(), 0.05f, 0.05f, 0.3f, 2));
+                default -> this.table();
+            };
         }
 
         private LootPool.Builder create() {
@@ -160,14 +182,17 @@ public class Loottables extends LootTableProvider {
             this.lootTables.put(type.getDefaultLootTable(), builder);
         }
 
-        private LootPoolEntryContainer.Builder<?> add(ItemLike item, float chance, float lootingBonus, float lootingCountBonus, int lootingCountMax) {
-            LootPoolSingletonContainer.Builder<?> base = LootItem.lootTableItem(item)
-                    .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(chance, lootingBonus));
-            if (lootingCountBonus <= 0)
-                return base;
-            LootPoolSingletonContainer.Builder<?> looting = LootItem.lootTableItem(item)
-                    .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, lootingCountBonus)).setLimit(lootingCountMax));
-            return base.append(looting);
+        private LootTable.Builder table(ItemLootData... datas) {
+            LootTable.Builder builder = new LootTable.Builder();
+            for (ItemLootData data : datas) {
+                builder.withPool(this.create().add(LootItem.lootTableItem(data.item)
+                        .when(LootItemRandomChanceWithLootingCondition.randomChanceAndLootingBoost(data.chance, data.lootingBonus))));
+                if (data.lootingCountBonus > 0)
+                    builder.withPool(this.create().add(LootItem.lootTableItem(data.item)
+                            .apply(SetItemCountFunction.setCount(ConstantValue.exactly(0)))
+                            .apply(LootingEnchantFunction.lootingMultiplier(UniformGenerator.between(0, data.lootingCountBonus)).setLimit(data.lootingCountMax))));
+            }
+            return builder;
         }
 
         private LootPoolSingletonContainer.Builder<?> addWithCount(ItemLike item, float min, float max, float lootingCountBonus) {
@@ -179,6 +204,10 @@ public class Loottables extends LootTableProvider {
         public void accept(BiConsumer<ResourceLocation, LootTable.Builder> cons) {
             this.init();
             this.lootTables.forEach(cons);
+        }
+
+        record ItemLootData(ItemLike item, float chance, float lootingBonus, float lootingCountBonus,
+                            int lootingCountMax) {
         }
     }
 

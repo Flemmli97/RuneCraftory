@@ -929,9 +929,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 forward *= 0.25f;
             } else {
                 vert = Math.min(0, entitylivingbase.getLookAngle().y + 0.45);
-                if(entitylivingbase.getXRot() > 85)
+                if (entitylivingbase.getXRot() > 85)
                     forward = 0;
-                else if(vert < 0)
+                else if (vert < 0)
                     forward = (float) Math.sqrt(forward * forward - vert * vert);
             }
             if (this.doJumping()) {

@@ -5,6 +5,10 @@
     "runecraftory:black_feather",
     "runecraftory:thunder_feather",
     "runecraftory:yellow_feather",
-    "runecraftory:dragon_fin"
+    "runecraftory:dragon_fin",
+    {
+      "id": "#forge:feathers",
+      "required": false
+    }
   ]
 }

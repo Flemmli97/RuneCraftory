@@ -52,11 +52,15 @@ import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
 public class GateEntity extends Mob implements IBaseMob {
+
+    private static final Map<EnumElement, ResourceLocation> lootRes = new HashMap<>();
 
     private static final EntityDataAccessor<String> elementType = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> element = SynchedEntityData.defineId(GateEntity.class, EntityDataSerializers.INT);
@@ -83,6 +87,12 @@ public class GateEntity extends Mob implements IBaseMob {
 
     public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
         return level.getDifficulty() != Difficulty.PEACEFUL && GateSpawning.hasSpawns(level, pos) && checkMobSpawnRules(type, level, reason, pos, random) && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
+    }
+
+    public static ResourceLocation getGateLootLocation(EnumElement element) {
+        ResourceLocation def = ModEntities.gate.get().getDefaultLootTable();
+        return lootRes.computeIfAbsent(element, e -> new ResourceLocation(def.getNamespace(),
+                def.getPath() + "_" + e.getTranslation().replace("element_", "")));
     }
 
     @Override
@@ -195,8 +205,13 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    protected LootContext.Builder createLootContext(boolean useLuck, DamageSource src) {
-        return super.createLootContext(useLuck, src);
+    protected LootContext.Builder createLootContext(boolean attackedRecently, DamageSource src) {
+        return super.createLootContext(attackedRecently, src);
+    }
+
+    @Override
+    protected ResourceLocation getDefaultLootTable() {
+        return getGateLootLocation(this.getElement());
     }
 
     @Override

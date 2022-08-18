@@ -43,6 +43,12 @@ public class RecipesGen extends RecipeProvider {
                 .requires(ModItems.scrapPlus.get(), 2)
                 .unlockedBy("iron", has(Items.IRON_INGOT))
                 .save(consumer, RuneCraftory.MODID + ":scrap_plus_iron_conversion");
+        ShapelessRecipeBuilder.shapeless(Items.ARROW, 1)
+                .requires(ModItems.arrowHead.get())
+                .requires(ModTags.wood_rod)
+                .requires(ModTags.feathers)
+                .unlockedBy("iron", has(Items.ARROW))
+                .save(consumer, RuneCraftory.MODID + ":arrows");
 
         ShapedRecipeBuilder.shaped(ModItems.shippingBin.get())
                 .pattern("ses")
