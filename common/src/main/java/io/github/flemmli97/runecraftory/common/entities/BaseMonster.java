@@ -406,8 +406,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                             return InteractionResult.PASS;
                         if (!player.isCreative())
                             stack.shrink(1);
-                        if (stack.getItem().isEdible())
-                            this.applyFoodEffect(stack);
+                        this.applyFoodEffect(stack);
                         this.tamingTick = 100;
                         this.delayedTaming = () -> {
                             if (this.random.nextFloat() < EntityUtils.tamingChance(this, player, rightItemMultiplier)) {
@@ -428,13 +427,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     return InteractionResult.CONSUME;
                 } else if (stack.getItem() == ModItems.inspector.get()) {
                     //open tamed gui
-                } else if (this.feedTimeOut <= 0 && stack.getItem().isEdible()) {
+                } else if (this.feedTimeOut <= 0 && this.applyFoodEffect(stack)) {
                     if (player instanceof ServerPlayer serverPlayer)
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                    this.applyFoodEffect(stack);
-                    this.feedTimeOut = 24000;
                     if (!player.isCreative())
                         stack.shrink(1);
+                    //this.feedTimeOut = 24000;
                     return InteractionResult.CONSUME;
                 }
             }
@@ -567,9 +565,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     @Override
-    public void applyFoodEffect(ItemStack stack) {
+    public boolean applyFoodEffect(ItemStack stack) {
         if (this.level.isClientSide)
-            return;
+            return false;
         this.eat(this.level, stack);
         this.removeFoodEffect();
         FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
@@ -577,8 +575,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             net.minecraft.world.food.FoodProperties mcFood = stack.getItem().getFoodProperties();
             if (mcFood != null) {
                 this.heal(mcFood.getNutrition() * 0.5f);
+                return true;
             }
-            return;
+            return false;
         }
         ImmutableSet.Builder<Attribute> builder = new ImmutableSet.Builder<>();
         for (Map.Entry<Attribute, Double> entry : food.effectsMultiplier().entrySet()) {
@@ -608,6 +607,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             for (SimpleEffect s : food.potionApply()) {
                 this.addEffect(s.create());
             }
+        return true;
     }
 
     @Override

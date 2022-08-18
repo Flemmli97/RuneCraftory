@@ -12,7 +12,7 @@ public interface IBaseMob {
 
     int baseMoney();
 
-    void applyFoodEffect(ItemStack stack);
+    boolean applyFoodEffect(ItemStack stack);
 
     void removeFoodEffect();
 }

@@ -116,7 +116,8 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    public void applyFoodEffect(ItemStack stack) {
+    public boolean applyFoodEffect(ItemStack stack) {
+        return false;
     }
 
     @Override
