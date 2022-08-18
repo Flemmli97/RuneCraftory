@@ -912,7 +912,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         super.travel(vec);
     }
 
-    public void handleWaterTravel(Vec3 vec) {
+    public void handleNoGravTravel(Vec3 vec) {
         if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entitylivingbase) {
             if (this.adjustRotFromRider(entitylivingbase)) {
                 this.setYRot(entitylivingbase.getYRot());
@@ -924,14 +924,18 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.yHeadRot = this.yBodyRot;
             float strafing = entitylivingbase.xxa * 0.5f;
             float forward = entitylivingbase.zza;
-            double up = 0;
+            double vert = 0;
             if (forward <= 0.0f) {
                 forward *= 0.25f;
             } else {
-                up = Math.min(0, entitylivingbase.getLookAngle().y + 0.45);
+                vert = Math.min(0, entitylivingbase.getLookAngle().y + 0.45);
+                if(entitylivingbase.getXRot() > 85)
+                    forward = 0;
+                else if(vert < 0)
+                    forward = (float) Math.sqrt(forward * forward - vert * vert);
             }
             if (this.doJumping()) {
-                up += Math.min(this.getDeltaMovement().y + 0.5, this.maxAscensionSpeed());
+                vert += Math.min(this.getDeltaMovement().y + 0.5, this.maxAscensionSpeed());
             }
             this.flyingSpeed = this.getSpeed() * 0.1f;
             if (this.isControlledByLocalInstance()) {
@@ -941,7 +945,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             } else if (entitylivingbase instanceof Player) {
                 vec = Vec3.ZERO;
             }
-            vec = vec.add(0, up, 0);
+            vec = vec.add(0, vert, 0);
             this.setDoJumping(false);
             this.calculateEntityAnimation(this, false);
         }

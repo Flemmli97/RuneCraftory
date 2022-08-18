@@ -71,7 +71,7 @@ public class EntityTortas extends ChargingMonster {
     @Override
     public void travel(Vec3 vec) {
         if (this.isEffectiveAi() && this.isInWater()) {
-            this.handleWaterTravel(vec);
+            this.handleNoGravTravel(vec);
         } else {
             super.travel(vec);
         }

@@ -73,7 +73,7 @@ public class EntityWeagle extends BaseMonster {
     @Override
     public void travel(Vec3 vec) {
         if (this.isEffectiveAi() && this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity) {
-            this.handleWaterTravel(vec);
+            this.handleNoGravTravel(vec);
         } else {
             super.travel(vec);
         }

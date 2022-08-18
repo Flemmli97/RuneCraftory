@@ -90,7 +90,7 @@ public class EntitySkyFish extends BaseMonster {
 
     @Override
     public void travel(Vec3 vec) {
-        this.handleWaterTravel(vec);
+        this.handleNoGravTravel(vec);
     }
 
     @Override
