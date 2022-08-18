@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.ghost",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:ghost_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:ghost",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:ghost"
+    }
+  ]
+}

@@ -303,34 +303,73 @@ public class LangGen implements DataProvider {
         this.add("runecraftory_book", "Runepedia");
         this.add("runecraftory.patchouli.landing", "");
         this.add("runecraftory.patchouli.main.start", "General");
-        this.add("runecraftory.patchouli.main.start.desc", "General");
+        this.add("runecraftory.patchouli.main.start.desc", "");
         this.add("runecraftory.patchouli.entry.crafting", "Crafting");
-        this.add("runecraftory.patchouli.entry.crafting.1", "To use any of the crafting devices you need to 1. have unlocked the recipe and 2. have enough rp. " +
-                "Upon crafting an item the amount of rp shown will be used up");
+        this.add("runecraftory.patchouli.entry.crafting.1", "To use any of the crafting devices you need to (depending on the config) " +
+                "$(li)unlocked the recipe $(li)enough rp to craft it $(br) " +
+                "Then using the correct crafting device you can make the desired item. " +
+                "Upon crafting an item the amount of rp shown will be used up. You can learn new recipes by eating recipe breads which (currently) " +
+                "can be obtain only via treasure chests");
         this.add("runecraftory.patchouli.entry.crafting.forge", "The forge is used to craft all weapons and tools");
         this.add("runecraftory.patchouli.entry.crafting.armor", "Use the accessory table to make various armor pieces");
         this.add("runecraftory.patchouli.entry.crafting.cooking", "The cooking table is as the name implies used to make all kinds of food");
         this.add("runecraftory.patchouli.entry.crafting.chemistry", "A chemistry set allows you to create potions and other pharmacy items");
+        this.add("runecraftory.patchouli.entry.minerals", "Minerals");
+        this.add("runecraftory.patchouli.entry.minerals.1", "Cluster of minerals spawn all over the world. These mineral clusters can be mined with an iron pickaxe or above but its best mined with " +
+                "the $(item)mining hammers$() from this mod. Better hammers and mining skill decrease the chance of the mineral breaking and increase the chance to get rarer materials from it.");
+        this.add("runecraftory.patchouli.entry.minerals.2", "Some materials even are impossible to get unless you have a high enough mining skill. " +
+                "$(br)Minerals regenerate after a day. $(br)If you want to completly get rid of a mineral mine a broken one while shifting.");
+        this.add("runecraftory.patchouli.entry.shipping", "Shipping Items");
+        this.add("runecraftory.patchouli.entry.shipping.1", "You can craft a shipping bin to sell items. Every morning all sellable items in the shipping bin will be sold. The shipping bin inventory is global for each player." +
+                "$(br)Note: ATM money is useless");
         this.add("runecraftory.patchouli.entry.entities", "Monsters");
+        this.add("runecraftory.patchouli.entry.entities.1", "The mobs in this mod don't spawn by themself but through gates that appear through the world. $(br)" +
+                "The type of monster a gate spawns depends on the biome and a gate will continue to spawn monsters till it is destroyed. Gates can drop their corresponding crystals upon destruction. " +
+                "$(br)Bosses spawn in their structures only and can be fought once every day.");
+        this.add("runecraftory.patchouli.entry.entities.2", "Monsters are able to be tamed by simple holding any item and shift-right-click them. This will consume the item and after a while $(bold)heart$(reset) particles" +
+                " appear if the taming was successful and $(bold)smoke$() particles appear if otherwise. Monsters might have one or more favorite items that doubles " +
+                "the taming chance and bosses can $(#ff0000)only$() be tamed by giving them their favorite items.");
+        this.add("runecraftory.patchouli.entry.entities.3", "You can interact with a tamed monster using the following actions: $(li)S$(thing)hift-right-clicking with an empty hand$() to change the behavior to follow, wander or stay mode." +
+                "$(li)$(thing)Right-click with an empty$() hand to (if possible) ride it." +
+                "$(li)While ridden press any of the following keys $(thing)$(k:runecraftory.key.spell_1), $(k:runecraftory.key.spell_2), $(k:runecraftory.key.spell_3), $(k:runecraftory.key.spell_4)$() to perform an attack." +
+                "$(li)$(thing)Right-click$() while holding a food item to feed it. ");
+        this.add("runecraftory.patchouli.entry.entities.4", "Food without additional benefits simply heals it while the other apply their benefits like they would to a player");
+        this.add("runecraftory.patchouli.entry.equipment", "Equipment");
+        this.add("runecraftory.patchouli.entry.equipment.1", "WIP");
+        this.add("runecraftory.patchouli.entry.spellskills", "Spells and Skills");
+        this.add("runecraftory.patchouli.entry.spellskills.1", "WIP");
+        this.add("runecraftory.patchouli.entry.farming", "Farming");
+        this.add("runecraftory.patchouli.entry.farming.1", "WIP");
 
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:wooly", "Sheep like creature that is rather passive. Shearable.");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:orc", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:orc_archer", "An orc but with a bow");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:ant", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:beetle", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:big_muck", "Mushroom like create that attacks using spores");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:buffamoo", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:chipsqueek", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:cluckadoodle", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:pomme_pomme", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:tortas", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:sky_fish", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:weagle", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:goblin", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:goblin_archer", "");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:ambrosia", "Butterfly boss monster. Spawns in forest groves and can be fought once a day");
-        this.add("runecraftory.patchouli.entry.entity.runecraftory:thunderbolt", "Horse said to be as fast as lightning. Spawns in water ruins");
+        this.add("runecraftory.patchouli.entry.entities.desc", "List of all monsters");
+        this.add(patchouliEntity(ModEntities.wooly.getID()), "Sheep like creature that is rather passive. Shearable.");
+        this.add(patchouliEntity(ModEntities.orc.getID()), "");
+        this.add(patchouliEntity(ModEntities.orcArcher.getID()), "An orc but with a bow");
+        this.add(patchouliEntity(ModEntities.ant.getID()), "");
+        this.add(patchouliEntity(ModEntities.beetle.getID()), "");
+        this.add(patchouliEntity(ModEntities.big_muck.getID()), "Mushroom like create that attacks using spores");
+        this.add(patchouliEntity(ModEntities.buffamoo.getID()), "");
+        this.add(patchouliEntity(ModEntities.chipsqueek.getID()), "");
+        this.add(patchouliEntity(ModEntities.cluckadoodle.getID()), "");
+        this.add(patchouliEntity(ModEntities.pomme_pomme.getID()), "");
+        this.add(patchouliEntity(ModEntities.tortas.getID()), "");
+        this.add(patchouliEntity(ModEntities.sky_fish.getID()), "");
+        this.add(patchouliEntity(ModEntities.weagle.getID()), "");
+        this.add(patchouliEntity(ModEntities.goblin.getID()), "");
+        this.add(patchouliEntity(ModEntities.goblinArcher.getID()), "");
+        this.add(patchouliEntity(ModEntities.duck.getID()), "");
+        this.add(patchouliEntity(ModEntities.fairy.getID()), "");
+        this.add(patchouliEntity(ModEntities.ghost.getID()), "");
+        this.add(patchouliEntity(ModEntities.spirit.getID()), "");
+        this.add(patchouliEntity(ModEntities.ghostRay.getID()), "");
+        this.add(patchouliEntity(ModEntities.spider.getID()), "");
+        this.add(patchouliEntity(ModEntities.shadowPanther.getID()), "");
+        this.add(patchouliEntity(ModEntities.gobbleBox.getID()), "");
+        this.add(patchouliEntity(ModEntities.monsterBox.getID()), "");
 
+        this.add(patchouliEntity(ModEntities.ambrosia.getID()), "Butterfly boss monster. Spawns in forest groves and can be fought once a day");
+        this.add(patchouliEntity(ModEntities.thunderbolt.getID()), "Horse said to be as fast as lightning. Spawns in water ruins");
+        this.add(patchouliEntity(ModEntities.marionetta.getID()), "Spooky old doll that spawns in theater ruins");
 
         for (EnumSkills s : EnumSkills.values())
             this.add(s.getTranslation(),
@@ -362,6 +401,10 @@ public class LangGen implements DataProvider {
                 .filter(word -> word.length() > 0)
                 .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1))
                 .collect(Collectors.joining(" ")).replace("Plus", "+");
+    }
+
+    private static String patchouliEntity(ResourceLocation res) {
+        return "runecraftory.patchouli.entry.entity." + res;
     }
 
     private String capitalize(String s, List<String> dont) {

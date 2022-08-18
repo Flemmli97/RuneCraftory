@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.pomme_pomme",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:pomme_pomme_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:pomme_pomme",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:pomme_pomme"
+    }
+  ]
+}

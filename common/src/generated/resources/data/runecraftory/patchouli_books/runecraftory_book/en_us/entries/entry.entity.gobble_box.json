@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.gobble_box",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:gobble_box_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:gobble_box",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:gobble_box"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.spider",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:spider_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:spider",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:spider"
+    }
+  ]
+}

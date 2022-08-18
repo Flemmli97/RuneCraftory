@@ -1,0 +1,12 @@
+{
+  "name": "runecraftory.patchouli.entry.spellskills",
+  "category": "runecraftory:category.main",
+  "icon": "runecraftory:teleport",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.spellskills.1"
+    }
+  ],
+  "sortnum": 5
+}

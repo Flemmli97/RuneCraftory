@@ -1,0 +1,6 @@
+{
+  "name": "runecraftory.patchouli.entry.entities",
+  "description": "runecraftory.patchouli.entry.entities.desc",
+  "icon": "runecraftory:boss_spawner",
+  "sortnum": 1
+}

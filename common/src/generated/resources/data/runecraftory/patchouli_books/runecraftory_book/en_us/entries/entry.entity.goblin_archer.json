@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.goblin_archer",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:goblin_archer_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:goblin_archer",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:goblin_archer"
+    }
+  ]
+}

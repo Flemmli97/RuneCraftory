@@ -1,0 +1,16 @@
+{
+  "name": "runecraftory.patchouli.entry.minerals",
+  "category": "runecraftory:category.main",
+  "icon": "runecraftory:ore_iron",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.minerals.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.minerals.2"
+    }
+  ],
+  "sortnum": 1
+}

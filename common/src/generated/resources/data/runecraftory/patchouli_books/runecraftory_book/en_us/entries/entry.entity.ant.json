@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.ant",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:ant_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:ant",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:ant"
+    }
+  ]
+}

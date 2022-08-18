@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.weagle",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:weagle_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:weagle",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:weagle"
+    }
+  ]
+}

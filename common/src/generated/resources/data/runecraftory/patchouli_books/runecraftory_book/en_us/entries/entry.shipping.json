@@ -1,0 +1,12 @@
+{
+  "name": "runecraftory.patchouli.entry.shipping",
+  "category": "runecraftory:category.main",
+  "icon": "runecraftory:shipping_bin",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.shipping.1"
+    }
+  ],
+  "sortnum": 2
+}

@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.marionetta",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:marionetta_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:marionetta",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:marionetta"
+    }
+  ]
+}

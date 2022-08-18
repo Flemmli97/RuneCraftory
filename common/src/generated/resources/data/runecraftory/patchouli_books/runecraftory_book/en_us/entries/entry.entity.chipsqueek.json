@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.chipsqueek",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:chipsqueek_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:chipsqueek",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:chipsqueek"
+    }
+  ]
+}

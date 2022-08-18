@@ -14,11 +14,6 @@
     },
     {
       "type": "patchouli:spotlight",
-      "item": "runecraftory:accessory_workbench",
-      "text": "runecraftory.patchouli.entry.crafting.accessory"
-    },
-    {
-      "type": "patchouli:spotlight",
       "item": "runecraftory:cooking_table",
       "text": "runecraftory.patchouli.entry.crafting.cooking"
     },

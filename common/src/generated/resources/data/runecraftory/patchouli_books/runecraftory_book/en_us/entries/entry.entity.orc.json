@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.orc",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:orc_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:orc",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:orc"
+    }
+  ]
+}

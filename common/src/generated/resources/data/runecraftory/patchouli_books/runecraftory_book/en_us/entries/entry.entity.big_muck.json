@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.big_muck",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:big_muck_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:big_muck",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:big_muck"
+    }
+  ]
+}

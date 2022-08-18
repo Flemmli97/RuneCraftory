@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.thunderbolt",
+  "category": "runecraftory:entry.entities",
+  "icon": "runecraftory:thunderbolt_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:thunderbolt",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:thunderbolt"
+    }
+  ]
+}

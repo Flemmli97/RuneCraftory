@@ -1,0 +1,12 @@
+{
+  "name": "runecraftory.patchouli.entry.farming",
+  "category": "runecraftory:category.main",
+  "icon": "runecraftory:seed_turnip",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.farming.1"
+    }
+  ],
+  "sortnum": 6
+}
