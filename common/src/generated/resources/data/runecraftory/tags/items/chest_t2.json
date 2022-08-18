@@ -78,6 +78,10 @@
     "runecraftory:baked_apple",
     "runecraftory:fried_veggies",
     "runecraftory:disastrous_dish",
-    "runecraftory:failed_dish"
+    "runecraftory:failed_dish",
+    "runecraftory:forging_bread",
+    "runecraftory:armory_bread",
+    "runecraftory:chemistry_bread",
+    "runecraftory:cooking_bread"
   ]
 }

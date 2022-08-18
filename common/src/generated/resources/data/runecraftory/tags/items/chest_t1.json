@@ -126,6 +126,10 @@
     "runecraftory:crop_cherry_grass",
     "runecraftory:crop_charm_blue",
     "runecraftory:crop_pink_cat",
-    "runecraftory:crop_toyherb"
+    "runecraftory:crop_toyherb",
+    "runecraftory:forging_bread",
+    "runecraftory:armory_bread",
+    "runecraftory:chemistry_bread",
+    "runecraftory:cooking_bread"
   ]
 }

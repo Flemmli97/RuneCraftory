@@ -72,9 +72,9 @@ public class Loottables extends LootTableProvider {
 
         private void init() {
             this.registerLootTable(ModEntities.wooly.get(), this.table(
-                    new ItemLootData(ModItems.furSmall.get(), 0.3f, 0.05f, 0.55f, 0),
-                    new ItemLootData(Items.WHITE_WOOL, 0.3f, 0.05f, 0.55f, 0),
-                    new ItemLootData(Items.MUTTON, 0.3f, 0.05f, 1, 0)));
+                            new ItemLootData(ModItems.furSmall.get(), 0.3f, 0.05f, 0.55f, 0))
+                    .withPool(this.create().add(this.addWithCount(Items.WHITE_WOOL, -2, 1, 0)))
+                    .withPool(this.create().add(this.addWithCount(Items.MUTTON, -4, 1, 1))));
             this.registerLootTable(ModEntities.ant.get(), this.table(
                     new ItemLootData(ModItems.carapaceInsect.get(), 0.3f, 0.05f, 0.55f, 0),
                     new ItemLootData(ModItems.jawInsect.get(), 0.2f, 0.05f, 0.55f, 0)));
@@ -91,27 +91,27 @@ public class Loottables extends LootTableProvider {
                     new ItemLootData(ModItems.spore.get(), 0.4f, 0.05f, 0.55f, 0)));
             this.registerLootTable(ModEntities.buffamoo.get(), this.table(
                             new ItemLootData(ModItems.milkS.get(), 0.3f, 0.05f, 0.55f, 0))
-                    .withPool(this.create().add(this.addWithCount(Items.LEATHER, -1, 1, 1)))
-                    .withPool(this.create().add(this.addWithCount(Items.BEEF, -1, 2, 1))));
+                    .withPool(this.create().add(this.addWithCount(Items.LEATHER, -4, 1, 1)))
+                    .withPool(this.create().add(this.addWithCount(Items.BEEF, -5, 2, 1))));
             this.registerLootTable(ModEntities.chipsqueek.get(), this.table(
                     new ItemLootData(ModItems.fur.get(), 0.6f, 0.05f, 0.55f, 0)));
             this.registerLootTable(ModEntities.cluckadoodle.get(), this.table(
                             new ItemLootData(ModItems.eggS.get(), 0.3f, 0.05f, 0.55f, 0))
-                    .withPool(this.create().add(this.addWithCount(Items.CHICKEN, 0, 1, 1)))
-                    .withPool(this.create().add(this.addWithCount(Items.FEATHER, 0, 2, 1))));
+                    .withPool(this.create().add(this.addWithCount(Items.CHICKEN, -4, 1, 1)))
+                    .withPool(this.create().add(this.addWithCount(Items.FEATHER, -3, 2, 1))));
             this.registerLootTable(ModEntities.pomme_pomme.get(), this.table(
-                    new ItemLootData(Items.APPLE, 0.7f, 0.05f, 0.7f, 3)));
+                    new ItemLootData(Items.APPLE, 0.5f, 0.05f, 0.7f, 3)));
             this.registerLootTable(ModEntities.tortas.get(), this.table(
                     new ItemLootData(ModItems.turtleShell.get(), 0.5f, 0.05f, 0.55f, 0)));
             this.registerLootTable(ModEntities.sky_fish.get(), this.table(
                     new ItemLootData(ModItems.fishFossil.get(), 0.5f, 0.05f, 0.55f, 0)));
             this.registerLootTable(ModEntities.weagle.get(), this.table(
-                    new ItemLootData(Items.FEATHER, 0.6f, 0.05f, 0.55f, 0)));
+                    new ItemLootData(Items.FEATHER, 0.5f, 0.05f, 0.55f, 0)));
             this.registerLootTable(ModEntities.goblin.get(), this.table(
                     new ItemLootData(ModItems.bladeShard.get(), 0.4f, 0.05f, 0.55f, 0)));
             this.registerLootTable(ModEntities.goblinArcher.get(), this.table(
                             new ItemLootData(ModItems.arrowHead.get(), 0.4f, 0.05f, 0.55f, 0))
-                    .withPool(this.create().add(this.addWithCount(Items.ARROW, -1, 2, 1))));
+                    .withPool(this.create().add(this.addWithCount(Items.ARROW, -2, 2, 1))));
             this.registerLootTable(ModEntities.duck.get(), this.table(
                     new ItemLootData(ModItems.downYellow.get(), 0.4f, 0.05f, 0.55f, 0)));
             this.registerLootTable(ModEntities.fairy.get(), this.table(

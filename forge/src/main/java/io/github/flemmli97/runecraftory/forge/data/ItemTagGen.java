@@ -22,6 +22,16 @@ public class ItemTagGen extends ItemTagsProvider {
     @Override
     protected void addTags() {
         ModItems.TREASURE.forEach((key, supList) -> supList.forEach(sup -> this.tag(key).add(sup.get())));
+        this.tag(ModTags.chest_t1)
+                .add(ModItems.forgingBread.get())
+                .add(ModItems.armorBread.get())
+                .add(ModItems.chemistryBread.get())
+                .add(ModItems.cookingBread.get());
+        this.tag(ModTags.chest_t2)
+                .add(ModItems.forgingBread.get())
+                .add(ModItems.armorBread.get())
+                .add(ModItems.chemistryBread.get())
+                .add(ModItems.cookingBread.get());
 
         //Forge copy tags
         this.tag(ModTags.iron)
