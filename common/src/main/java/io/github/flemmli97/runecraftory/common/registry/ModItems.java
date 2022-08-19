@@ -997,19 +997,19 @@ public class ModItems {
     //Food
     public static final RegistryEntrySupplier<Item> riceFlour = food("rice_flour", Texture.N, lowFoodProp);
     public static final RegistryEntrySupplier<Item> curryPowder = food("curry_powder", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> oil = food("oil", Texture.N, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> oil = drinkable("oil", Texture.N, lowFoodProp);
     public static final RegistryEntrySupplier<Item> flour = food("flour", Texture.N, lowFoodProp);
     public static final RegistryEntrySupplier<Item> honey = food("honey", Texture.N, foodProp);
     public static final RegistryEntrySupplier<Item> yogurt = food("yogurt", Texture.N);
     public static final RegistryEntrySupplier<Item> cheese = food("cheese", Texture.N, lowFoodProp);
     public static final RegistryEntrySupplier<Item> mayonnaise = food("mayonnaise", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> eggL = food("egg_l", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> eggM = food("egg_m", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> eggS = food("egg_s", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> milkL = food("milk_l", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> milkM = food("milk_m", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> milkS = food("milk_s", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> wine = food("wine", Texture.N, foodProp);
+    public static final RegistryEntrySupplier<Item> eggL = food("egg_l", Texture.Y, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> eggM = food("egg_m", Texture.Y, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> eggS = food("egg_s", Texture.Y, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> milkL = drinkable("milk_l", Texture.Y, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> milkM = drinkable("milk_m", Texture.Y, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> milkS = drinkable("milk_s", Texture.Y, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> wine = drinkable("wine", Texture.N, foodProp);
     public static final RegistryEntrySupplier<Item> chocolate = food("chocolate", Texture.N);
     public static final RegistryEntrySupplier<Item> rice = food("rice", Texture.N, foodProp);
     public static final RegistryEntrySupplier<Item> turnipHeaven = food("turnip_heaven", Texture.N);
@@ -1037,23 +1037,23 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> meatDumpling = food("meat_dumpling", Texture.N);
     public static final RegistryEntrySupplier<Item> cheeseBread = food("cheese_bread", Texture.N);
     public static final RegistryEntrySupplier<Item> steamedBread = food("steamed_bread", Texture.N);
-    public static final RegistryEntrySupplier<Item> hotJuice = food("hot_juice", Texture.N);
-    public static final RegistryEntrySupplier<Item> preludetoLove = food("prelude_to_love", Texture.N);
-    public static final RegistryEntrySupplier<Item> goldJuice = food("gold_juice", Texture.N);
+    public static final RegistryEntrySupplier<Item> hotJuice = drinkable("hot_juice", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> preludetoLove = drinkable("prelude_to_love", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> goldJuice = drinkable("gold_juice", Texture.N, highFoodProp);
     public static final RegistryEntrySupplier<Item> butter = food("butter", Texture.N, lowFoodProp);
     public static final RegistryEntrySupplier<Item> ketchup = food("ketchup", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> mixedSmoothie = food("mixed_smoothie", Texture.N);
-    public static final RegistryEntrySupplier<Item> mixedJuice = food("mixed_juice", Texture.N);
-    public static final RegistryEntrySupplier<Item> veggieSmoothie = food("veggie_smoothie", Texture.N);
-    public static final RegistryEntrySupplier<Item> vegetableJuice = food("vegetable_juice", Texture.N);
-    public static final RegistryEntrySupplier<Item> fruitSmoothie = food("fruit_smoothie", Texture.N);
-    public static final RegistryEntrySupplier<Item> fruitJuice = food("fruit_juice", Texture.N);
-    public static final RegistryEntrySupplier<Item> strawberryMilk = food("strawberry_milk", Texture.N);
-    public static final RegistryEntrySupplier<Item> appleJuice = food("apple_juice", Texture.N);
-    public static final RegistryEntrySupplier<Item> orangeJuice = food("orange_juice", Texture.N);
-    public static final RegistryEntrySupplier<Item> grapeJuice = food("grape_juice", Texture.N);
-    public static final RegistryEntrySupplier<Item> tomatoJuice = food("tomato_juice", Texture.N);
-    public static final RegistryEntrySupplier<Item> pineappleJuice = food("pineapple_juice", Texture.N);
+    public static final RegistryEntrySupplier<Item> mixedSmoothie = drinkable("mixed_smoothie", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> mixedJuice = drinkable("mixed_juice", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> veggieSmoothie = drinkable("veggie_smoothie", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> vegetableJuice = drinkable("vegetable_juice", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> fruitSmoothie = drinkable("fruit_smoothie", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> fruitJuice = drinkable("fruit_juice", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> strawberryMilk = drinkable("strawberry_milk", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> appleJuice = drinkable("apple_juice", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> orangeJuice = drinkable("orange_juice", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> grapeJuice = drinkable("grape_juice", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> tomatoJuice = drinkable("tomato_juice", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> pineappleJuice = drinkable("pineapple_juice", Texture.N, highFoodProp);
     public static final RegistryEntrySupplier<Item> applePie = food("apple_pie", Texture.N);
     public static final RegistryEntrySupplier<Item> cheesecake = food("cheesecake", Texture.N);
     public static final RegistryEntrySupplier<Item> chocolateCake = food("chocolate_cake", Texture.N);
@@ -1097,9 +1097,9 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> boiledEgg = food("boiled_egg", Texture.N);
     public static final RegistryEntrySupplier<Item> boiledSpinach = food("boiled_spinach", Texture.N);
     public static final RegistryEntrySupplier<Item> boiledPumpkin = food("boiled_pumpkin", Texture.N);
-    public static final RegistryEntrySupplier<Item> grapeLiqueur = food("grape_liqueur", Texture.N);
-    public static final RegistryEntrySupplier<Item> hotChocolate = food("hot_chocolate", Texture.Y);
-    public static final RegistryEntrySupplier<Item> hotMilk = food("hot_milk", Texture.Y);
+    public static final RegistryEntrySupplier<Item> grapeLiqueur = drinkable("grape_liqueur", Texture.N, highFoodProp);
+    public static final RegistryEntrySupplier<Item> hotChocolate = drinkable("hot_chocolate", Texture.Y, highFoodProp);
+    public static final RegistryEntrySupplier<Item> hotMilk = drinkable("hot_milk", Texture.Y, highFoodProp);
     public static final RegistryEntrySupplier<Item> grilledSandFlounder = food("grilled_sand_flounder", Texture.N);
     public static final RegistryEntrySupplier<Item> grilledShrimp = food("grilled_shrimp", Texture.N);
     public static final RegistryEntrySupplier<Item> grilledLobster = food("grilled_lobster", Texture.N);
@@ -1521,6 +1521,30 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(highFoodProp).tab(RFCreativeTabs.food)));
+        TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
+            lo.add(sup);
+            return lo;
+        });
+        return sup;
+    }
+
+    public static RegistryEntrySupplier<Item> drinkable(String name, Texture texture, FoodProperties foodProp) {
+        if (texture == Texture.N) {
+            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp)) {
+                @Override
+                public UseAnim getUseAnimation(ItemStack stack) {
+                    return UseAnim.DRINK;
+                }
+            });
+            NOTEX.add(sup);
+            return sup;
+        }
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(highFoodProp).tab(RFCreativeTabs.food)) {
+            @Override
+            public UseAnim getUseAnimation(ItemStack stack) {
+                return UseAnim.DRINK;
+            }
+        });
         TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
             lo.add(sup);
             return lo;

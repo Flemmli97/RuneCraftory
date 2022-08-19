@@ -43,6 +43,8 @@ public class EntityUtils {
     }
 
     public static float tamingChance(BaseMonster monster, Player player, float multiplier) {
+        if (multiplier == 0)
+            return 0;
         int lvl = Platform.INSTANCE.getPlayerData(player).map(d -> d.getPlayerLevel()[0]).orElse(1) + 1;
         float lvlPenalty = (float) Math.pow(0.89, Math.max(0, monster.level() - lvl));
         return monster.tamingChance() * multiplier * GeneralConfig.tamingMultiplier * lvlPenalty;

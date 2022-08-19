@@ -8,6 +8,8 @@ RuneCraftory 1.2.2
 - Rewritten commands
 - Fix monster interaction being broken
 - Add daily drops for mobs
+- Gates now dont spawn near meeting POI (e.g. bell blocks) in a 48 radius
+- Fix dying mobs still attacking
 
 RuneCraftory 1.2.1
 ================

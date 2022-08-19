@@ -110,7 +110,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     @Override
     public int maxDeathTime() {
-        return 160;
+        return 200;
     }
 
     @Override

@@ -138,6 +138,9 @@ public class LangGen implements DataProvider {
             if (sup.get() instanceof BlockCrop)
                 this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
+        this.add(ModBlocks.mushroom.get(), "Mushroom");
+        this.add(ModBlocks.monarchMushroom.get(), "Monach Mushroom");
+
         this.add(ModEntities.wooly.get(), "Wooly");
         this.add(ModEntities.gate.get(), "Gate");
         this.add(ModEntities.orc.get(), "Orc");
@@ -333,7 +336,8 @@ public class LangGen implements DataProvider {
                 "$(li)$(thing)Right-click with an empty$() hand to (if possible) ride it." +
                 "$(li)While ridden press any of the following keys $(thing)$(k:runecraftory.key.spell_1), $(k:runecraftory.key.spell_2), $(k:runecraftory.key.spell_3), $(k:runecraftory.key.spell_4)$() to perform an attack." +
                 "$(li)$(thing)Right-click$() while holding a food item to feed it. ");
-        this.add("runecraftory.patchouli.entry.entities.4", "Food without additional benefits simply heals it while the other apply their benefits like they would to a player");
+        this.add("runecraftory.patchouli.entry.entities.4", "Food without additional benefits simply heals it while the other apply their benefits like they would to a player." +
+                "$(br)$(br)Placing a $(thing)bell block$() (or other meeting POI type blocks) will prevent gates from spawning in a 48 block radius around it");
         this.add("runecraftory.patchouli.entry.equipment", "Equipment");
         this.add("runecraftory.patchouli.entry.equipment.1", "WIP");
         this.add("runecraftory.patchouli.entry.spellskills", "Spells and Skills");

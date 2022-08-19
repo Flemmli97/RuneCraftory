@@ -26,7 +26,6 @@ import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -129,17 +128,15 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    public void aiStep() {
-        if (this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID())) {
-            double g = -0.2;
-            if (this.isInWater())
-                g /= 16;
-            else if (this.isInLava())
-                g /= 8;
-            this.move(MoverType.SELF, new Vec3(0, g, 0));
+    protected boolean isImmobile() {
+        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID());
+    }
+
+    @Override
+    public void push(double x, double y, double z) {
+        if (this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID()))
             return;
-        }
-        super.aiStep();
+        super.push(x, y, z);
     }
 
     @Override

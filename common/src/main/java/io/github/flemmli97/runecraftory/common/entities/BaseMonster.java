@@ -253,7 +253,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         } else if (id == 11) {
             this.playTameEffect(false);
         } else if (id == 34) {
-            this.tamingTick = 120;
+            for (int i = 0; i < 4; ++i) {
+                this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX() - this.getBbWidth() * 0.25 + this.random.nextFloat() * this.getBbWidth() * 0.25f, this.getY() + this.getBbHeight() + this.random.nextFloat() * 0.3, this.getZ() - this.getBbWidth() * 0.25 + this.random.nextFloat() * this.getBbWidth() * 0.25f, 0, 0, 0);
+            }
         }
         super.handleEntityEvent(id);
     }
@@ -431,20 +433,20 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         if (player instanceof ServerPlayer serverPlayer)
                             serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
                         float rightItemMultiplier = this.tamingMultiplier(stack);
-                        if (rightItemMultiplier == 0)
-                            return InteractionResult.PASS;
                         if (!player.isCreative())
                             stack.shrink(1);
                         this.applyFoodEffect(stack);
                         this.tamingTick = 100;
+                        float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier);
                         this.delayedTaming = () -> {
-                            if (this.random.nextFloat() < EntityUtils.tamingChance(this, player, rightItemMultiplier)) {
+                            if (chance == 0)
+                                this.level.broadcastEntityEvent(this, (byte) 34);
+                            else if (this.random.nextFloat() < chance) {
                                 this.tameEntity(player);
                             } else {
                                 this.level.broadcastEntityEvent(this, (byte) 11);
                             }
                         };
-                        this.level.broadcastEntityEvent(this, (byte) 34);
                         return InteractionResult.CONSUME;
                     }
                 }
@@ -722,7 +724,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         int amount = 13;
         if (!play) {
             particle = ParticleTypes.SMOKE;
-            amount += 5;
+            amount += 9;
         }
         for (int i = 0; i < amount; ++i) {
             double d0 = this.random.nextGaussian() * 0.02;
@@ -734,8 +736,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public void die(DamageSource cause) {
-        if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer) {
-            this.getOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
+        if (!this.level.isClientSide) {
+            if (this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
+                this.getOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
+            this.getAnimationHandler().setAnimation(null);
         }
         super.die(cause);
     }
@@ -787,7 +791,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() && this.isVehicle() && this.tamingTick <= 0;
+        return super.isImmobile() || this.isVehicle();
     }
 
     @Override
@@ -797,6 +801,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public void travel(Vec3 vec) {
+        if (this.shouldFreezeTravel())
+            return;
         if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entitylivingbase) {
             if (this.adjustRotFromRider(entitylivingbase)) {
                 this.setYRot(entitylivingbase.getYRot());
@@ -810,6 +816,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             float forward = entitylivingbase.zza;
             if (forward <= 0.0f) {
                 forward *= 0.25f;
+            }
+            if (this.getAnimationHandler().hasAnimation()) {
+                strafing = 0;
+                forward = 0;
             }
             if (this.doJumping) {
                 if (this.onGround && !this.isFlyingEntity()) {
@@ -849,6 +859,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         } else {
             this.handleLandTravel(vec);
         }
+    }
+
+    public boolean shouldFreezeTravel() {
+        return false;
     }
 
     //=====Interaction
@@ -949,6 +963,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     protected void addPassenger(Entity passenger) {
         this.getNavigation().stop();
+        this.setDeltaMovement(Vec3.ZERO);
         super.addPassenger(passenger);
     }
 
@@ -975,7 +990,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void handleNoGravTravel(Vec3 vec) {
-        if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entitylivingbase) {
+        if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entitylivingbase
+                && !this.getAnimationHandler().hasAnimation()) {
             if (this.adjustRotFromRider(entitylivingbase)) {
                 this.setYRot(entitylivingbase.getYRot());
                 this.setXRot(entitylivingbase.getXRot() * 0.5f);
