@@ -1041,7 +1041,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> preludetoLove = drinkable("prelude_to_love", Texture.N, highFoodProp);
     public static final RegistryEntrySupplier<Item> goldJuice = drinkable("gold_juice", Texture.N, highFoodProp);
     public static final RegistryEntrySupplier<Item> butter = food("butter", Texture.N, lowFoodProp);
-    public static final RegistryEntrySupplier<Item> ketchup = food("ketchup", Texture.N, lowFoodProp);
+    public static final RegistryEntrySupplier<Item> ketchup = drinkable("ketchup", Texture.N, lowFoodProp);
     public static final RegistryEntrySupplier<Item> mixedSmoothie = drinkable("mixed_smoothie", Texture.N, highFoodProp);
     public static final RegistryEntrySupplier<Item> mixedJuice = drinkable("mixed_juice", Texture.N, highFoodProp);
     public static final RegistryEntrySupplier<Item> veggieSmoothie = drinkable("veggie_smoothie", Texture.N, highFoodProp);
@@ -1520,7 +1520,7 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(highFoodProp).tab(RFCreativeTabs.food)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.food)));
         TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
             lo.add(sup);
             return lo;
@@ -1539,7 +1539,7 @@ public class ModItems {
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(highFoodProp).tab(RFCreativeTabs.food)) {
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.food)) {
             @Override
             public UseAnim getUseAnimation(ItemStack stack) {
                 return UseAnim.DRINK;

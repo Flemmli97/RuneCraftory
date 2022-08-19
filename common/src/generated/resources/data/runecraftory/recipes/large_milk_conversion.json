@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "runecraftory:milk_l"
+    }
+  ],
+  "result": {
+    "item": "minecraft:milk_bucket"
+  }
+}

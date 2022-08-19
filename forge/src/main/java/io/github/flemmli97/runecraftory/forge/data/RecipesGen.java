@@ -49,6 +49,18 @@ public class RecipesGen extends RecipeProvider {
                 .requires(ModTags.feathers)
                 .unlockedBy("iron", has(Items.ARROW))
                 .save(consumer, RuneCraftory.MODID + ":arrows");
+        ShapelessRecipeBuilder.shapeless(Items.MILK_BUCKET)
+                .requires(ModItems.milkS.get(), 3)
+                .unlockedBy("wool", has(ItemTags.WOOL))
+                .save(consumer, RuneCraftory.MODID + ":small_milk_conversion");
+        ShapelessRecipeBuilder.shapeless(Items.MILK_BUCKET)
+                .requires(ModItems.milkM.get(), 2)
+                .unlockedBy("wool", has(ItemTags.WOOL))
+                .save(consumer, RuneCraftory.MODID + ":medium_milk_conversion");
+        ShapelessRecipeBuilder.shapeless(Items.MILK_BUCKET)
+                .requires(ModItems.milkL.get())
+                .unlockedBy("wool", has(ItemTags.WOOL))
+                .save(consumer, RuneCraftory.MODID + ":large_milk_conversion");
 
         ShapedRecipeBuilder.shaped(ModItems.shippingBin.get())
                 .pattern("ses")
