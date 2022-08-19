@@ -42,6 +42,8 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.village.poi.PoiManager;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -86,7 +88,10 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
-        return level.getDifficulty() != Difficulty.PEACEFUL && GateSpawning.hasSpawns(level, pos) && checkMobSpawnRules(type, level, reason, pos, random) && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
+        return level.getDifficulty() != Difficulty.PEACEFUL && GateSpawning.hasSpawns(level, pos)
+                && level.getLevel().getPoiManager().find(p -> p == PoiType.MEETING, p -> true, pos, 48, PoiManager.Occupancy.ANY).isPresent()
+                && checkMobSpawnRules(type, level, reason, pos, random)
+                && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
     }
 
     public static ResourceLocation getGateLootLocation(EnumElement element) {
