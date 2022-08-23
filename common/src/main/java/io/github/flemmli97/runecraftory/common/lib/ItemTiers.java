@@ -17,7 +17,7 @@ public class ItemTiers {
 
         @Override
         public float getSpeed() {
-            return 7;
+            return 9;
         }
 
         @Override

@@ -200,7 +200,7 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
         Entity entity = builder.getOptionalParameter(LootContextParams.THIS_ENTITY);
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                float addChance = data.getSkillLevel(EnumSkills.MINING)[0] * 0.03f;
+                float addChance = data.getSkillLevel(EnumSkills.MINING).getLevel() * 0.03f;
                 if (player.getMainHandItem().getItem() instanceof ItemToolHammer item) {
                     addChance += item.tier.getTierLevel() * 0.75;
                 }

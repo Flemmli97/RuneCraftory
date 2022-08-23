@@ -1,6 +1,6 @@
 package io.github.flemmli97.runecraftory.forge.capability;
 
-import io.github.flemmli97.runecraftory.common.attachment.PlayerData;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;

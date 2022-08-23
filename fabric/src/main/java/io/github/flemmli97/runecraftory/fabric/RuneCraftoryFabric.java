@@ -146,7 +146,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         AOEAttackEvent.ATTACK.register(EntityCalls::playerAoeAttack);
         EntitySleepEvents.ALLOW_SLEEP_TIME.register(((player, sleepingPos, vanillaResult) -> GeneralConfig.modifyBed ? InteractionResult.CONSUME : InteractionResult.PASS));
         EntitySleepEvents.STOP_SLEEPING.register((entity, sleepingPos) -> {
-            if (GeneralConfig.modifyBed && entity instanceof Player player)
+            if (entity instanceof Player player)
                 EntityCalls.wakeUp(player);
         });
         ServerPlayerEvents.COPY_FROM.register(EntityCalls::clone);

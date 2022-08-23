@@ -14,6 +14,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -177,5 +178,10 @@ public abstract class EntityWispBase extends BaseMonster {
         if (target != null && target.distanceToSqr(this) > 140)
             return true;
         return !prev.equals(vanish.getID()) && this.vanishNext;
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEAD;
     }
 }

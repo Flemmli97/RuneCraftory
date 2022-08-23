@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.common.items.consumables;
 
+import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -18,10 +20,10 @@ public class ItemObjectX extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
-        if (this.isEdible()) {
+        if (this.isEdible() && !livingEntity.level.isClientSide) {
             ItemStack eat = livingEntity.eat(level, stack);
             List<MobEffect> list = PlatformUtils.INSTANCE.effects().values()
-                    .stream().filter(effect -> !effect.isBeneficial()).toList();
+                    .stream().filter(effect -> effect.getCategory() == MobEffectCategory.HARMFUL).toList();
             if (!list.isEmpty()) {
                 int r = livingEntity.getRandom().nextInt(5) + 1;
                 for (int i = 0; i < r; i++) {
@@ -30,7 +32,8 @@ public class ItemObjectX extends Item {
                     MobEffectInstance inst = livingEntity.getEffect(effect);
                     if (inst != null)
                         amp += inst.getAmplifier();
-                    livingEntity.addEffect(new MobEffectInstance(effect, 600, amp));
+                    int duration = effect == ModEffects.sleep.get() ? 80 : 600;
+                    livingEntity.addEffect(new MobEffectInstance(effect, duration, amp));
                 }
             }
             return eat;

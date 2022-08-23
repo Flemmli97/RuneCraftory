@@ -1,0 +1,19 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 4800,
+  "effects": {
+    "minecraft:generic.attack_damage": 1.0,
+    "runecraftory:attribute.rf.defence": 1.0,
+    "runecraftory:attribute.rf.magic_att": 1.0,
+    "runecraftory:attribute.rf.magic_def": 1.0
+  },
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 2,
+  "rpIncrease": 0,
+  "hpRegen": 30,
+  "rpRegen": 15,
+  "item": "runecraftory:baked_apple"
+}

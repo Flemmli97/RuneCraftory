@@ -33,20 +33,20 @@ public class InfoSubScreen extends InfoScreen {
             int index = i + this.page * 12;
             if (index < EnumSkills.values().length) {
                 EnumSkills skill = EnumSkills.values()[index];
-                int skillXP = (int) (this.data.getSkillLevel(skill)[1] / (float) LevelCalc.xpAmountForSkills(this.data.getSkillLevel(skill)[0]) * 96.0f);
+                int skillXP = (int) (this.data.getSkillLevel(skill).getXp() / (float) LevelCalc.xpAmountForSkillLevelUp(skill, this.data.getSkillLevel(skill).getLevel()) * 96.0f);
                 RenderSystem.setShaderTexture(0, bars);
                 this.blit(stack, this.leftPos + 9, this.topPos + 117 + 13 * i, 2, 80, skillXP, 9);
                 this.minecraft.font.draw(stack, new TranslatableComponent(skill.getTranslation()), this.leftPos + 11, this.topPos + 118 + 13 * i, 0xffffff);
-                this.drawRightAlignedScaledString(stack, "" + this.data.getSkillLevel(skill)[0], this.leftPos + 104, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
+                this.drawRightAlignedScaledString(stack, "" + this.data.getSkillLevel(skill).getLevel(), this.leftPos + 104, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
             }
             index = i + 6 + this.page * 12;
             if (index < EnumSkills.values().length) {
                 EnumSkills skill2 = EnumSkills.values()[i + 6 + this.page * 12];
-                int skillXP2 = (int) (this.data.getSkillLevel(skill2)[1] / (float) LevelCalc.xpAmountForSkills(this.data.getSkillLevel(skill2)[0]) * 96.0f);
+                int skillXP2 = (int) (this.data.getSkillLevel(skill2).getXp() / (float) LevelCalc.xpAmountForSkillLevelUp(skill2, this.data.getSkillLevel(skill2).getLevel()) * 96.0f);
                 RenderSystem.setShaderTexture(0, bars);
                 this.blit(stack, this.leftPos + 119, this.topPos + 117 + 13 * i, 2, 80, skillXP2, 9);
                 this.minecraft.font.draw(stack, new TranslatableComponent(skill2.getTranslation()), this.leftPos + 121, this.topPos + 118 + 13 * i, 0xffffff);
-                this.drawRightAlignedScaledString(stack, "" + this.data.getSkillLevel(skill2)[0], this.leftPos + 214, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
+                this.drawRightAlignedScaledString(stack, "" + this.data.getSkillLevel(skill2).getLevel(), this.leftPos + 214, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
             }
         }
     }

@@ -10,6 +10,13 @@ RuneCraftory 1.2.2
 - Add daily drops for mobs
 - Gates now dont spawn near meeting POI (e.g. bell blocks) in a 48 radius
 - Fix dying mobs still attacking
+- Make owned monster immune to dmg from their owners unless the player is sneaking
+- Make treasure chest only drop equipment the player can craft with their current level + 3
+- Fix reset player data command corrupting player
+- Split render overlay config into calender, hp bar and food bar
+- (Nearly) all skills are now properly tracked. Fishing, bathing and leadership still WIP
+- Gate level now adjustable and not just on level 1. See mob config
+- Lots of other bugfixes and balancing changes
 
 RuneCraftory 1.2.1
 ================

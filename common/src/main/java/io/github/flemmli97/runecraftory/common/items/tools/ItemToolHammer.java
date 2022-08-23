@@ -89,7 +89,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             LevelCalc.useRP(player, data, 7, true, false, true, 1, EnumSkills.MINING);
-            LevelCalc.levelSkill(player, data, EnumSkills.MINING, this.tier.getTierLevel() * 0.5f + 1);
+            LevelCalc.levelSkill(player, data, EnumSkills.MINING, 10);
         });
     }
 
@@ -147,8 +147,10 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
                         .filter(p -> this.hammer((ServerLevel) world, p, stack, entity, true))
                         .count();
                 if (entity instanceof ServerPlayer player && amount > 0)
-                    Platform.INSTANCE.getPlayerData(player)
-                            .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.MINING, (this.tier.getTierLevel() * 0.5f + 1) * amount * 0.7f));
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                        LevelCalc.useRP(player, data, this.tier.getTierLevel() * this.tier.getTierLevel() * 30, true, false, true, 1, EnumSkills.MINING);
+                        LevelCalc.levelSkill(player, data, EnumSkills.MINING, (range + 1) * 10);
+                    });
             }
         }
         super.releaseUsing(stack, world, entity, timeLeft);

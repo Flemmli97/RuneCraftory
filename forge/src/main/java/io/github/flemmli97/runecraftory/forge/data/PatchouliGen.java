@@ -26,6 +26,7 @@ public class PatchouliGen extends PatchouliBookProvider {
     @Override
     protected void addBooks(Consumer<BookBuilder> consumer) {
         BookBuilder book = this.createBookBuilder("runecraftory_book", "runecraftory_book", "runecraftory.patchouli.landing")
+                //.setSubtitle("runecraftory.patchouli.subtitle")
                 .setCreativeTab(RFCreativeTabs.weaponToolTab.getRecipeFolderName())
                 .setVersion("1.0")
                 .setI18n(true)

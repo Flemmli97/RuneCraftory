@@ -21,7 +21,7 @@ public class ItemSkillUp extends Item {
         if (!world.isClientSide) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                 for (EnumSkills skill : EnumSkills.values())
-                    data.increaseSkill(skill, player, LevelCalc.xpAmountForSkills(data.getSkillLevel(skill)[0]) / 2);
+                    data.increaseSkill(skill, player, LevelCalc.xpAmountForSkillLevelUp(skill, data.getSkillLevel(skill).getLevel()) / 2);
             });
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));

@@ -71,7 +71,7 @@ public class ItemStatIncrease extends Item {
                     health.removeModifier(LibConstants.maxHealthItemIncrease);
                     health.addPermanentModifier(new AttributeModifier(LibConstants.maxHealthModifier, "rf.item.hpModifier", val + 10, AttributeModifier.Operation.ADDITION));
                 }
-                case LEVEL -> data.addXp(player, LevelCalc.xpAmountForLevelUp(data.getPlayerLevel()[0]) - data.getPlayerLevel()[1]);
+                case LEVEL -> data.addXp(player, LevelCalc.xpAmountForLevelUp(data.getPlayerLevel().getLevel()) - data.getPlayerLevel().getXp());
                 case STR, INT, VIT -> data.consumeStatBoostItem(player, this.stat);
             }
         });

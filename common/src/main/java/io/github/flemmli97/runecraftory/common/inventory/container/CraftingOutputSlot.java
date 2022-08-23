@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.inventory.container;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
@@ -57,10 +57,10 @@ public class CraftingOutputSlot extends Slot {
                 data.decreaseRunePoints(player, this.container.rpCost(), true);
                 if (this.container.getCurrentRecipe() != null)
                     switch (this.container.craftingType()) {
-                        case FORGE -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.FORGING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel() - data.getSkillLevel(EnumSkills.FORGING)[0]) * 0.5f);
-                        case ARMOR -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.CRAFTING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel() - data.getSkillLevel(EnumSkills.CRAFTING)[0]) * 0.5f);
-                        case CHEM -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.CHEMISTRY, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel() - data.getSkillLevel(EnumSkills.CHEMISTRY)[0]) * 0.5f);
-                        case COOKING -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.COOKING, 1 + Math.min(0, this.container.getCurrentRecipe().getCraftingLevel() - data.getSkillLevel(EnumSkills.COOKING)[0]) * 0.5f);
+                        case FORGE -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.FORGING, this.container.getCurrentRecipe());
+                        case ARMOR -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CRAFTING, this.container.getCurrentRecipe());
+                        case CHEM -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CHEMISTRY, this.container.getCurrentRecipe());
+                        case COOKING -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.COOKING, this.container.getCurrentRecipe());
                     }
             });
 

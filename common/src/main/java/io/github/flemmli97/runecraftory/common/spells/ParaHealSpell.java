@@ -48,6 +48,6 @@ public class ParaHealSpell extends Spell {
 
     @Override
     public int rpCost() {
-        return 20;
+        return 50;
     }
 }

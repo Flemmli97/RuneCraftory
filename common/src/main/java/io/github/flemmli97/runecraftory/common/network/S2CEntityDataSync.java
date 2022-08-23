@@ -25,14 +25,14 @@ public record S2CEntityDataSync(int entityID,
             return;
         Entity e = player.level.getEntity(pkt.entityID);
         if (e instanceof LivingEntity living) {
-            Platform.INSTANCE.getEntityData(living).ifPresent(cap -> {
+            Platform.INSTANCE.getEntityData(living).ifPresent(data -> {
                 switch (pkt.type) {
-                    case POISON -> cap.setPoison(living, pkt.flag);
-                    case SLEEP -> cap.setSleeping(living, pkt.flag);
-                    case PARALYSIS -> cap.setParalysis(living, pkt.flag);
-                    case COLD -> cap.setCold(living, pkt.flag);
-                    case INVIS -> cap.setInvis(living, pkt.flag);
-                    case ORTHOVIEW -> cap.setOrthoView(living, pkt.flag);
+                    case POISON -> data.setPoison(living, pkt.flag);
+                    case SLEEP -> data.setSleeping(living, pkt.flag);
+                    case PARALYSIS -> data.setParalysis(living, pkt.flag);
+                    case COLD -> data.setCold(living, pkt.flag);
+                    case INVIS -> data.setInvis(living, pkt.flag);
+                    case ORTHOVIEW -> data.setOrthoView(living, pkt.flag);
                 }
             });
         }

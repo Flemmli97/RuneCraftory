@@ -1,0 +1,16 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 4800,
+  "effects": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "hpRegen": 20,
+  "rpRegen": 30,
+  "item": "runecraftory:onigiri"
+}

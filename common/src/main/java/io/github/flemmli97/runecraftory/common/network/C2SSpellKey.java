@@ -20,7 +20,7 @@ public record C2SSpellKey(int num) implements Packet {
             if (sender.getVehicle() instanceof BaseMonster)
                 ((BaseMonster) sender.getVehicle()).handleRidingCommand(pkt.num);
             else
-                Platform.INSTANCE.getPlayerData(sender).ifPresent(cap -> cap.getInv().useSkill(sender, pkt.num));
+                Platform.INSTANCE.getPlayerData(sender).ifPresent(data -> data.getInv().useSkill(sender, pkt.num));
         }
     }
 

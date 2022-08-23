@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
-import com.google.common.collect.ImmutableSet;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
+import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
@@ -61,6 +61,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
@@ -165,7 +166,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     private int[] friendlyPoints = {0, 0};
     private Map<ItemStack, Integer> dailyDrops;
-    private int lastUpdateDay;
+
+    private final DailyMonsterUpdater updater = new DailyMonsterUpdater(this);
 
     public BaseMonster(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
@@ -265,21 +267,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.getAnimationHandler().tick();
         super.tick();
         if (!this.level.isClientSide) {
-            if (this.isTamed()) {
-                int day = WorldUtils.day(this.level);
-                if (Math.abs(this.lastUpdateDay - day) >= 1) {
-                    this.lastUpdateDay = day;
-                    int i = -1;
-                    ItemStack drop = ItemStack.EMPTY;
-                    for (Map.Entry<ItemStack, Integer> e : this.dailyDrops().entrySet()) {
-                        if (this.friendlyPoints[0] >= e.getValue() && i > e.getValue()) {
-                            drop = e.getKey();
-                            i = e.getValue();
-                        }
-                    }
-                    this.spawnAtLocation(drop.copy());
-                }
-            }
+            this.updater.tick();
             if (this.tamingTick > 0) {
                 --this.tamingTick;
             }
@@ -314,7 +302,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             compound.putIntArray("Home", new int[]{this.getRestrictCenter().getX(), this.getRestrictCenter().getY(), this.getRestrictCenter().getZ(), (int) this.getRestrictRadius()});
         compound.putInt("FoodBuffTick", this.foodBuffTick);
         compound.putIntArray("FriendlyPoints", this.friendlyPoints);
-        compound.putInt("LastUpdateDay", this.lastUpdateDay);
+        compound.put("DailyUpdater", this.updater.save());
         //CompoundTag genes = new CompoundTag();
         //this.attributeRandomizer.forEach((att, val)->genes.putInt(att.getRegistryName().toString(), val));
         //compound.put("Genes", genes);
@@ -337,7 +325,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.friendlyPoints = compound.getIntArray("FriendlyPoints");
         if (this.friendlyPoints.length != 2)
             this.friendlyPoints = new int[]{0, 0};
-        this.lastUpdateDay = compound.getInt("LastUpdateDay");
+        this.updater.read(compound.getCompound("DailyUpdater"));
         //CompoundTag genes = compound.getCompound("Genes");
         //genes.keySet().forEach(key->this.attributeRandomizer.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(key)), genes.getInt(key)));
     }
@@ -406,7 +394,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
         ItemStack stack = player.getItemInHand(hand);
         if (hand == InteractionHand.MAIN_HAND) {
-            if (stack.isEmpty()) {
+            if (stack.isEmpty() && player.getUUID().equals(this.getOwnerUUID())) {
                 if (player.isShiftKeyDown()) {
                     this.setBehaviour((byte) (this.behaviourState() + 1));
                     if (player instanceof ServerPlayer serverPlayer)
@@ -417,7 +405,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         case 2 -> player.sendMessage(new TranslatableComponent("monster.interact.sit"), Util.NIL_UUID);
                     }
                     return InteractionResult.SUCCESS;
-                } else if (player.getUUID().equals(this.getOwnerUUID()) && this.ridable()) {
+                } else if (this.ridable()) {
                     player.startRiding(this);
                     return InteractionResult.SUCCESS;
                 }
@@ -433,8 +421,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         if (player instanceof ServerPlayer serverPlayer)
                             serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
                         float rightItemMultiplier = this.tamingMultiplier(stack);
-                        if (!player.isCreative())
-                            stack.shrink(1);
                         this.applyFoodEffect(stack);
                         this.tamingTick = 100;
                         float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier);
@@ -459,11 +445,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 } else if (stack.getItem() == ModItems.inspector.get()) {
                     //open tamed gui
                 } else if (this.feedTimeOut <= 0 && this.applyFoodEffect(stack)) {
-                    if (player instanceof ServerPlayer serverPlayer)
+                    if (player instanceof ServerPlayer serverPlayer) {
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                    if (!player.isCreative())
-                        stack.shrink(1);
+                        Platform.INSTANCE.getPlayerData(serverPlayer)
+                                .ifPresent(data -> data.getDailyUpdater().onGiveMonsterItem(serverPlayer));
+                    }
                     //this.feedTimeOut = 24000;
+                    this.feedTimeOut = 20;
                     return InteractionResult.CONSUME;
                 }
             }
@@ -575,8 +563,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return this.prop.flying();
     }
 
-    //=====Movement Handling
-
     @Override
     public int level() {
         return this.entityData.get(mobLevel);
@@ -584,7 +570,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public void setLevel(int level) {
-        this.entityData.set(mobLevel, Math.min(10000, level));
+        this.entityData.set(mobLevel, Mth.clamp(level, 1, LibConstants.maxMonsterLevel));
         this.updateStatsToLevel();
     }
 
@@ -613,14 +599,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             return false;
         }
-        ImmutableSet.Builder<Attribute> builder = new ImmutableSet.Builder<>();
         for (Map.Entry<Attribute, Double> entry : food.effectsMultiplier().entrySet()) {
             AttributeInstance inst = this.getAttribute(entry.getKey());
             if (inst == null)
                 continue;
             inst.removeModifier(foodUUIDMulti);
             inst.addPermanentModifier(new AttributeModifier(foodUUIDMulti, "foodBuffMulti_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
-            builder.add(entry.getKey());
         }
         for (Map.Entry<Attribute, Double> entry : food.effects().entrySet()) {
             AttributeInstance inst = this.getAttribute(entry.getKey());
@@ -628,11 +612,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 continue;
             inst.removeModifier(foodUUID);
             inst.addPermanentModifier(new AttributeModifier(foodUUID, "foodBuff_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.ADDITION));
-            builder.add(entry.getKey());
         }
         this.foodBuffTick = food.duration();
-        this.heal(food.getHPGain());
-        this.heal(this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
+        EntityUtils.foodHealing(this, food.getHPGain());
+        EntityUtils.foodHealing(this, this.getMaxHealth() * food.getHpPercentGain() * 0.01F);
         if (food.potionHeals() != null)
             for (MobEffect s : food.potionHeals()) {
                 this.removeEffect(s);
@@ -659,7 +642,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             AttributeInstance inst = this.getAttribute(att);
             if (inst != null) {
                 inst.removeModifier(attributeLevelMod);
-                float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0) * 0.5f;
+                float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
                 inst.addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
                 if (att == Attributes.MAX_HEALTH)
                     this.setHealth(this.getMaxHealth() - preHealthDiff);
@@ -689,6 +672,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void updateMoveAnimation() {
+    }
+
+    /**
+     * @return int[] in form of {level, xp}
+     */
+    public int[] getFriendlyPoints() {
+        return this.friendlyPoints;
     }
 
     //=====Damage Logic
@@ -773,6 +763,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (source.getEntity() instanceof Player player && player.getUUID().equals(this.getOwnerUUID())
+                && !player.isShiftKeyDown()) {
+            return false;
+        }
         return (source.getEntity() == null || this.canAttackFrom(source.getEntity().blockPosition())) && super.hurt(source, amount);
     }
 
@@ -781,12 +775,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         super.knockback(0, xRatio, zRatio);
     }
 
+    //=====Movement Handling
+
     @Override
     public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
-        if (!this.isFlyingEntity()) {
-            super.causeFallDamage(fallDistance, multiplier, source);
+        if (this.isFlyingEntity() || this.getMoveControl() instanceof FlyingMoveControl) {
+            return false;
         }
-        return false;
+        return super.causeFallDamage(fallDistance, multiplier, source);
     }
 
     @Override
@@ -956,14 +952,19 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.navigation.stop();
         this.setTarget(null);
         this.level.broadcastEntityEvent(this, (byte) 10);
-        this.lastUpdateDay = WorldUtils.day(this.level);
+        this.updater.setLastUpdateDay(WorldUtils.day(this.level));
         this.setBehaviour(1);
+        if (owner instanceof ServerPlayer serverPlayer)
+            Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.TAMING, 10));
     }
 
     @Override
     protected void addPassenger(Entity passenger) {
         this.getNavigation().stop();
         this.setDeltaMovement(Vec3.ZERO);
+        this.setYya(0);
+        this.setZza(0);
+        this.setXxa(0);
         super.addPassenger(passenger);
     }
 
@@ -978,6 +979,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public Entity getControllingPassenger() {
         return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
+    }
+
+    @Override
+    public boolean rideableUnderWater() {
+        return this.canBreatheUnderwater();
     }
 
     public boolean adjustRotFromRider(LivingEntity rider) {

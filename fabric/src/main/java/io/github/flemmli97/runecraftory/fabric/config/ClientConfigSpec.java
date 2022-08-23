@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.fabric.config;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.tenshilib.common.config.CommentedJsonConfig;
 import io.github.flemmli97.tenshilib.common.config.JsonConfig;
 import net.fabricmc.loader.api.FabricLoader;
@@ -19,24 +20,26 @@ public class ClientConfigSpec {
     public final CommentedJsonConfig.IntVal inventoryOffsetY;
     public final CommentedJsonConfig.IntVal creativeInventoryOffsetX;
     public final CommentedJsonConfig.IntVal creativeInventoryOffsetY;
-    public final CommentedJsonConfig.CommentedVal<Boolean> renderOverlay;
+    public final CommentedJsonConfig.CommentedVal<ClientConfig.HealthRPRenderType> renderHealthRPBar;
+    public final CommentedJsonConfig.CommentedVal<Boolean> renderCalendar;
     public final CommentedJsonConfig.CommentedVal<Boolean> inventoryButton;
     public final CommentedJsonConfig.CommentedVal<Boolean> grassColor;
     public final CommentedJsonConfig.CommentedVal<Boolean> foliageColor;
 
     private ClientConfigSpec(CommentedJsonConfig.Builder builder) {
-        this.healthBarWidgetX = builder.defineInRange("X Position of health bar", 2, 0, Integer.MAX_VALUE);
-        this.healthBarWidgetY = builder.defineInRange("Y Position of health bar", 2, 0, Integer.MAX_VALUE);
-        this.seasonDisplayX = builder.defineInRange("X Position of calendar display", 0, 0, Integer.MAX_VALUE);
-        this.seasonDisplayY = builder.defineInRange("Y Position of calendar display", 35, 0, Integer.MAX_VALUE);
-        this.inventoryOffsetX = builder.defineInRange("X offset of inventory button", 79, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        this.inventoryOffsetY = builder.defineInRange("Y offset of inventory button", 47, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        this.creativeInventoryOffsetX = builder.defineInRange("X offset of inventory button in creative", 20, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        this.creativeInventoryOffsetY = builder.defineInRange("Y offset of inventory button in creative", 22, Integer.MIN_VALUE, Integer.MAX_VALUE);
-        this.renderOverlay = builder.define("Render Overlay", false);
-        this.inventoryButton = builder.define("Add Button", true);
-        this.grassColor = builder.define("Adjust grass color to current season", true);
-        this.foliageColor = builder.define("Adjust foliage color to current season", true);
+        this.healthBarWidgetX = builder.defineInRange("X Position of health bar", ClientConfig.healthBarWidgetX, 0, Integer.MAX_VALUE);
+        this.healthBarWidgetY = builder.defineInRange("Y Position of health bar", ClientConfig.healthBarWidgetY, 0, Integer.MAX_VALUE);
+        this.seasonDisplayX = builder.defineInRange("X Position of calendar display", ClientConfig.seasonDisplayX, 0, Integer.MAX_VALUE);
+        this.seasonDisplayY = builder.defineInRange("Y Position of calendar display", ClientConfig.seasonDisplayY, 0, Integer.MAX_VALUE);
+        this.inventoryOffsetX = builder.defineInRange("X offset of inventory button", ClientConfig.inventoryOffsetX, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.inventoryOffsetY = builder.defineInRange("Y offset of inventory button", ClientConfig.inventoryOffsetY, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.creativeInventoryOffsetX = builder.defineInRange("X offset of inventory button in creative", ClientConfig.creativeInventoryOffsetX, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.creativeInventoryOffsetY = builder.defineInRange("Y offset of inventory button in creative", ClientConfig.creativeInventoryOffsetY, Integer.MIN_VALUE, Integer.MAX_VALUE);
+        this.renderHealthRPBar = builder.define("Render Health and RP bars", ClientConfig.renderHealthRPBar);
+        this.renderCalendar = builder.define("Render Calendar", ClientConfig.renderCalendar);
+        this.inventoryButton = builder.define("Add Button", ClientConfig.inventoryButton);
+        this.grassColor = builder.define("Adjust grass color to current season", ClientConfig.grassColor);
+        this.foliageColor = builder.define("Adjust foliage color to current season", ClientConfig.foliageColor);
         builder.registerReloadHandler(() -> ConfigHolder.loadClient(this));
     }
 }

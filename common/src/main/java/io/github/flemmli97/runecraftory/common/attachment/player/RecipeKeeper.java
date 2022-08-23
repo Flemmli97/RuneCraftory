@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.attachment;
+package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;

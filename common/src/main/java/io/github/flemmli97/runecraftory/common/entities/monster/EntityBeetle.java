@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.ai.ChargeAttackG
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.level.Level;
 
 public class EntityBeetle extends ChargingMonster {
@@ -53,5 +54,10 @@ public class EntityBeetle extends ChargingMonster {
             else
                 this.getAnimationHandler().setAnimation(melee);
         }
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.ARTHROPOD;
     }
 }

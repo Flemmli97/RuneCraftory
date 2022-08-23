@@ -56,11 +56,6 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.intPerLevel = spec.intPerLevel.get().floatValue();
         spec.skillProps.forEach((type, specs) -> GeneralConfig.skillProps.put(type, SkillPropertySpecs.ofSpec(specs)));
 
-        GeneralConfig.scrapMultiplier = spec.scrapMultiplier.get().floatValue();
-        GeneralConfig.ironMultiplier = spec.ironMultiplier.get().floatValue();
-        GeneralConfig.silverMultiplier = spec.silverMultiplier.get().floatValue();
-        GeneralConfig.goldMultiplier = spec.goldMultiplier.get().floatValue();
-        GeneralConfig.platinumMultiplier = spec.platinumMultiplier.get().floatValue();
         GeneralConfig.platinumChargeTime = spec.platinumChargeTime.get().floatValue();
         GeneralConfig.scrapWateringCanWater = spec.scrapWateringCanWater.get();
         GeneralConfig.ironWateringCanWater = spec.ironWateringCanWater.get();
@@ -85,7 +80,8 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         ClientConfig.inventoryOffsetY = spec.inventoryOffsetY.get();
         ClientConfig.creativeInventoryOffsetX = spec.creativeInventoryOffsetX.get();
         ClientConfig.creativeInventoryOffsetY = spec.creativeInventoryOffsetY.get();
-        ClientConfig.renderOverlay = spec.renderOverlay.get();
+        ClientConfig.renderHealthRPBar = spec.renderHealthRPBar.get();
+        ClientConfig.renderCalendar = spec.renderCalendar.get();
         ClientConfig.inventoryButton = spec.inventoryButton.get();
         ClientConfig.grassColor = spec.grassColor.get();
         ClientConfig.foliageColor = spec.foliageColor.get();
@@ -105,6 +101,8 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         MobConfig.minDist = spec.minDist.get();
         MobConfig.maxGroup = spec.maxGroup.get();
         MobConfig.maxNearby = spec.maxNearby.get();
+        MobConfig.baseGateLevel = spec.baseGateLevel.get();
+        MobConfig.gateLevelType = spec.gateLevelType.get();
 
         for (Map.Entry<ResourceLocation, EntityPropertySpecs> e : spec.mobSpecs.entrySet()) {
             MobConfig.propertiesMap.put(e.getKey(), EntityPropertySpecs.ofSpec(e.getValue()));

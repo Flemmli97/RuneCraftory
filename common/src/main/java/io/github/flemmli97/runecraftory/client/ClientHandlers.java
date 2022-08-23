@@ -5,10 +5,13 @@ import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.toasts.RecipeToast;
+import net.minecraft.client.gui.screens.ChatScreen;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -52,8 +55,23 @@ public class ClientHandlers {
     }
 
     public static void grabMouse(LivingEntity entity) {
-        if (entity == Minecraft.getInstance().player)
+        if (entity == Minecraft.getInstance().player && Minecraft.getInstance().screen == null)
             Minecraft.getInstance().mouseHandler.grabMouse();
+    }
+
+    public static boolean disableMouse() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.player != null && EntityUtils.isDisabled(mc.player) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
+    }
+
+    public static boolean disableKeys(int key, int scanCode) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || mc.screen instanceof ChatScreen)
+            return false;
+        return key != 256
+                && !mc.options.keyInventory.matches(key, scanCode)
+                && !mc.options.keyChat.matches(key, scanCode)
+                && !mc.options.keyCommand.matches(key, scanCode) && EntityUtils.isDisabled(mc.player);
     }
 
     public static void recipeToast(Collection<ResourceLocation> recipes) {

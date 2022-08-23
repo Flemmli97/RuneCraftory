@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.fabric.mixin;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.attachment.PlayerData;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.PlayerDataGetter;
 import net.minecraft.nbt.CompoundTag;

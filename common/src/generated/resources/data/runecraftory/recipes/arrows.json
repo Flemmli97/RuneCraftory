@@ -1,17 +1,23 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "runecraftory:arrowhead"
-    },
-    {
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X",
+    "#",
+    "Y"
+  ],
+  "key": {
+    "#": {
       "tag": "c:wooden_rods"
     },
-    {
+    "X": {
+      "item": "runecraftory:arrowhead"
+    },
+    "Y": {
       "tag": "c:feathers"
     }
-  ],
+  },
   "result": {
-    "item": "minecraft:arrow"
+    "item": "minecraft:arrow",
+    "count": 4
   }
 }

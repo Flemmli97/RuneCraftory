@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.forge.capability;
 
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
-import io.github.flemmli97.runecraftory.common.attachment.PlayerData;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;

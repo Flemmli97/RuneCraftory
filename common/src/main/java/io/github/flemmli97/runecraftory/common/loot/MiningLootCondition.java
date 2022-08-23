@@ -43,7 +43,7 @@ public class MiningLootCondition implements LootItemCondition {
     public boolean test(LootContext ctx) {
         int level = 0;
         if (ctx.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof Player player) {
-            level = Platform.INSTANCE.getPlayerData(player).map(data -> data.getSkillLevel(EnumSkills.MINING)[0]).orElse(0);
+            level = Platform.INSTANCE.getPlayerData(player).map(data -> data.getSkillLevel(EnumSkills.MINING).getLevel()).orElse(0);
         }
         return level >= this.min;
     }

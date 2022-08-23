@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.GateSpawning;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -107,7 +108,7 @@ public class GateEntity extends Mob implements IBaseMob {
 
     @Override
     public void setLevel(int lvl) {
-        this.entityData.set(mobLevel, Math.min(10000, lvl));
+        this.entityData.set(mobLevel, Mth.clamp(lvl, 1, LibConstants.maxMonsterLevel));
     }
 
     @Override
@@ -241,10 +242,10 @@ public class GateEntity extends Mob implements IBaseMob {
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
-        Holder<Biome> biome = this.level.getBiome(this.blockPosition());
+        Holder<Biome> biome = level.getBiome(this.blockPosition());
         this.spawnList.addAll(GateSpawning.pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(4) + 2, this.blockPosition()));
         this.type = this.getType(level, biome);
-        this.entityData.set(mobLevel, LevelCalc.levelFromPos(this.level, this.blockPosition()));
+        this.entityData.set(mobLevel, LevelCalc.levelFromPos(level.getLevel(), this.position()));
         this.entityData.set(elementType, this.type.getTranslation());
         this.entityData.set(element, this.type.ordinal());
         this.setPos(this.getX(), this.getY() + 1, this.getZ());
@@ -272,32 +273,20 @@ public class GateEntity extends Mob implements IBaseMob {
                     double x = this.getX() + this.random.nextInt(9) - 4.0;
                     double y = this.getY() + this.random.nextInt(2) - 1.0;
                     double z = this.getZ() + this.random.nextInt(9) - 4.0;
-                    int entityLevel = this.entityData.get(mobLevel);
-                    int levelRand = Math.round(this.entityData.get(mobLevel) + (this.random.nextFloat() - 0.5f) * Math.round(entityLevel * 0.1f));
+                    int levelRand = LevelCalc.randomizedLevel(this.random, this.entityData.get(mobLevel));
                     EntityType<?> type = this.spawnList.get(this.random.nextInt(this.spawnList.size()));
                     if (this.initialSpawn) {
                         this.initialSpawn = false;
-                        if (this.getRandom().nextFloat() < 0.05) {
-                            if (this.getRandom().nextFloat() < 0.4) {
-                                if (this.getRandom().nextFloat() < 0.3)
-                                    type = ModEntities.gobbleBox.get();
-                                else
-                                    type = ModEntities.monsterBox.get();
-                            } else
-                                type = ModEntities.treasureChest.get();
+                        EntityType<?> chest = EntityUtils.trySpawnTreasureChest(this);
+                        if (chest != null) {
+                            type = chest;
                         }
                     }
                     Entity entity = type.create(this.level);
                     if (entity instanceof EntityTreasureChest chest) {
                         entity.absMoveTo(x, y, z, this.level.random.nextFloat() * 360.0f, 0.0f);
                         if (this.level.noCollision(chest)) {
-                            int rand = this.random.nextInt(100);
-                            if (rand < 10)
-                                chest.setTier(3);
-                            else if (rand < 30)
-                                chest.setTier(2);
-                            else if (rand < 60)
-                                chest.setTier(1);
+                            EntityUtils.tieredTreasureChest(this, chest);
                             this.level.addFreshEntity(entity);
                         }
                     } else if (entity instanceof Mob mob) {

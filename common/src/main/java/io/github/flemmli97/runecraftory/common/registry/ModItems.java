@@ -1422,10 +1422,11 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().rarity(rarity).tab(RFCreativeTabs.upgradeItems)));
-        TREASURE.merge(ModTags.chest_t1, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        if (rarity == Rarity.COMMON)
+            TREASURE.merge(ModTags.chest_t1, new ArrayList<>(), (lo, l) -> {
+                lo.add(sup);
+                return lo;
+            });
         return sup;
     }
 

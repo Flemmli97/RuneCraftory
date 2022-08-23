@@ -75,6 +75,7 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
         });
         this.itemstat = builder.build();
         this.itemstatTag = tagBuilder.build();
+        ItemCraftingLevelManager.reset();
     }
 
     public void toPacket(FriendlyByteBuf buffer) {

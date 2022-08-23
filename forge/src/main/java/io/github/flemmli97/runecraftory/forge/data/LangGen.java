@@ -304,8 +304,9 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.jei.locked", "Unknown Recipe");
 
         this.add("runecraftory_book", "Runepedia");
-        this.add("runecraftory.patchouli.landing", "");
-        this.add("runecraftory.patchouli.main.start", "General");
+        this.add("runecraftory.patchouli.subtitle", "");
+        this.add("runecraftory.patchouli.landing", "WIP Guidebook for the mod");
+        this.add("runecraftory.patchouli.main.start", "Introduction");
         this.add("runecraftory.patchouli.main.start.desc", "");
         this.add("runecraftory.patchouli.entry.crafting", "Crafting");
         this.add("runecraftory.patchouli.entry.crafting.1", "To use any of the crafting devices you need to (depending on the config) " +

@@ -1,0 +1,20 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [
+    {
+      "potion": "minecraft:speed",
+      "duration": 100,
+      "amplifier": 1
+    }
+  ],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 4800,
+  "effects": {},
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 1,
+  "rpIncrease": 20,
+  "hpRegen": 40,
+  "rpRegen": 70,
+  "item": "runecraftory:hot_milk"
+}

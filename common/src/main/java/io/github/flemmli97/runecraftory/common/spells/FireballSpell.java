@@ -27,7 +27,7 @@ public class FireballSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FIRE, 1));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FIRE, this.big ? 1.2f : 1));
     }
 
     @Override
@@ -50,18 +50,18 @@ public class FireballSpell extends Spell {
             if (entity instanceof Player player) {
                 boolean cooldown = Platform.INSTANCE.getPlayerData(player).map(cap -> {
                     if (this.big) {
-                        cap.setBigFireballSpellFlag(cap.bigFireballSpellFlag() + 1, this.coolDown());
-                        return cap.bigFireballSpellFlag() >= 2;
+                        cap.getWeaponHandler().setBigFireballSpellFlag(cap.getWeaponHandler().bigFireballSpellFlag() + 1, this.coolDown());
+                        return cap.getWeaponHandler().bigFireballSpellFlag() >= 2;
                     }
-                    cap.setFireballSpellFlag(cap.fireballSpellFlag() + 1, this.coolDown());
-                    return cap.fireballSpellFlag() >= 3;
+                    cap.getWeaponHandler().setFireballSpellFlag(cap.getWeaponHandler().fireballSpellFlag() + 1, this.coolDown());
+                    return cap.getWeaponHandler().fireballSpellFlag() >= 3;
                 }).orElse(false);
                 if (cooldown)
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                         if (this.big) {
-                            data.setBigFireballSpellFlag(0, -1);
+                            data.getWeaponHandler().setBigFireballSpellFlag(0, -1);
                         } else {
-                            data.setFireballSpellFlag(0, -1);
+                            data.getWeaponHandler().setFireballSpellFlag(0, -1);
                         }
                     });
                 return cooldown;
@@ -73,6 +73,6 @@ public class FireballSpell extends Spell {
 
     @Override
     public int rpCost() {
-        return 10;
+        return this.big ? 15 : 10;
     }
 }

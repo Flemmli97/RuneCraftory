@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
-import io.github.flemmli97.runecraftory.common.entities.IExtendedMob;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -25,6 +25,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -33,8 +35,11 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.Random;
+import java.util.UUID;
 
 public class CombatUtils {
+
+    private static final UUID attributeMod = UUID.fromString("5c8e5c2d-1eb0-434a-858f-8ab81f51832c");
 
     /**
      * For damage calculation target should be null. The damage reduction gets done at the target.
@@ -346,41 +351,62 @@ public class CombatUtils {
 
     //TODO: Need to look more into stun and dizzy
     public static void applyStatusEffects(LivingEntity attackingEntity, LivingEntity target) {
-        if (target instanceof Player || target instanceof IExtendedMob) {
-            boolean poisonChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFPOISON.get(), target);
-            boolean sleepChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFSLEEP.get(), target);
-            boolean fatigueChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFFAT.get(), target);
-            boolean coldChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFCOLD.get(), target);
-            boolean paraChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFPARA.get(), target);
-            boolean sealChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFSEAL.get(), target);
-            boolean dizzyChance = attackingEntity.level.random.nextInt(1000) < getAttributeValue(attackingEntity, ModAttributes.RFDIZ.get(), target);
-            boolean stunChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFSTUN.get(), target);
-            if (poisonChance) {
-                target.addEffect(new MobEffectInstance(ModEffects.poison.get()));
-            }
-            if (fatigueChance) {
-                target.addEffect(new MobEffectInstance(ModEffects.fatigue.get()));
-            }
-            if (coldChance) {
-                target.addEffect(new MobEffectInstance(ModEffects.cold.get()));
-            }
-            if (paraChance) {
-                target.addEffect(new MobEffectInstance(ModEffects.paralysis.get()));
-            }
-            if (sealChance) {
-                target.addEffect(new MobEffectInstance(ModEffects.seal.get()));
-            }
-            if (dizzyChance) {
-                target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 1, true, false));
-            }
-            if (stunChance) {
-                target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 4, true, false));
-                target.addEffect(new MobEffectInstance(MobEffects.JUMP, 80, 1, true, false));
-            }
-            if (sleepChance) {
-                target.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 80, 1, true, false));
-                target.addEffect(new MobEffectInstance(ModEffects.sleep.get(), 80, 1, true, false));
-            }
+        boolean poisonChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFPOISON.get(), target);
+        boolean sleepChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFSLEEP.get(), target);
+        boolean fatigueChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFFAT.get(), target);
+        boolean coldChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFCOLD.get(), target);
+        boolean paraChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFPARA.get(), target);
+        boolean sealChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFSEAL.get(), target);
+        boolean dizzyChance = attackingEntity.level.random.nextInt(1000) < getAttributeValue(attackingEntity, ModAttributes.RFDIZ.get(), target);
+        boolean stunChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFSTUN.get(), target);
+        if (poisonChance) {
+            target.addEffect(new MobEffectInstance(ModEffects.poison.get()));
+            if (attackingEntity instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPOISON, 1));
+            if (target instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPOISON, 2));
+        }
+        if (fatigueChance) {
+            target.addEffect(new MobEffectInstance(ModEffects.fatigue.get()));
+            if (attackingEntity instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESFAT, 1));
+            if (target instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESFAT, 2));
+        }
+        if (coldChance) {
+            target.addEffect(new MobEffectInstance(ModEffects.cold.get()));
+            if (attackingEntity instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESCOLD, 1));
+            if (target instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESCOLD, 2));
+        }
+        if (paraChance) {
+            target.addEffect(new MobEffectInstance(ModEffects.paralysis.get()));
+            if (attackingEntity instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPARA, 1));
+            if (target instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPARA, 2));
+        }
+        if (sealChance) {
+            target.addEffect(new MobEffectInstance(ModEffects.seal.get()));
+            if (attackingEntity instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSEAL, 1));
+            if (target instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSEAL, 2));
+        }
+        if (dizzyChance) {
+            target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 1, true, false));
+        }
+        if (stunChance) {
+            target.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 4, true, false));
+            target.addEffect(new MobEffectInstance(MobEffects.JUMP, 80, 1, true, false));
+        }
+        if (sleepChance) {
+            target.addEffect(new MobEffectInstance(ModEffects.sleep.get(), 80, 0, true, false));
+            if (attackingEntity instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSLEEP, 1));
+            if (target instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSLEEP, 2));
         }
     }
 
@@ -406,5 +432,17 @@ public class CombatUtils {
                 serverLevel.sendParticles(ParticleTypes.ENTITY_EFFECT, target.getX() + (rand.nextDouble() - 0.5) * target.getBbWidth(), target.getY() + 0.3 + rand.nextDouble() * target.getBbHeight(), target.getZ() + (rand.nextDouble() - 0.5) * target.getBbWidth(), 0, r, g, b, 1);
             }
         }
+    }
+
+    public static void applyTempAttribute(LivingEntity entity, Attribute att, double val) {
+        AttributeInstance inst = entity.getAttribute(att);
+        if (inst != null && inst.getModifier(attributeMod) == null)
+            inst.addTransientModifier(new AttributeModifier(attributeMod, "temp_mod", val, AttributeModifier.Operation.ADDITION));
+    }
+
+    public static void removeAttribute(LivingEntity entity, Attribute att) {
+        AttributeInstance inst = entity.getAttribute(att);
+        if (inst != null)
+            inst.removeModifier(attributeMod);
     }
 }

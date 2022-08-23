@@ -3,7 +3,8 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.common.attachment.PlayerData;
+import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -14,13 +15,15 @@ public class S2CSkillLevelPkt implements Packet {
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_skill_level");
 
     private final EnumSkills skill;
-    private final int[] level;
+    private final LevelExpPair level;
     private int rp;
     private float rpMax, str, intel, vit;
 
-    private S2CSkillLevelPkt(EnumSkills skill, int[] level, int rp, float rpMax, float str, float intel, float vit) {
+    private S2CSkillLevelPkt(EnumSkills skill, int level, float xp, int rp, float rpMax, float str, float intel, float vit) {
         this.skill = skill;
-        this.level = level;
+        this.level = new LevelExpPair();
+        this.level.setLevel(level);
+        this.level.setXp(xp);
         this.rp = rp;
         this.rpMax = rpMax;
         this.str = str;
@@ -39,7 +42,7 @@ public class S2CSkillLevelPkt implements Packet {
     }
 
     public static S2CSkillLevelPkt read(FriendlyByteBuf buf) {
-        return new S2CSkillLevelPkt(buf.readEnum(EnumSkills.class), new int[]{buf.readInt(), buf.readInt()}, buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
+        return new S2CSkillLevelPkt(buf.readEnum(EnumSkills.class), buf.readInt(), buf.readFloat(), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
 
     public static void handle(S2CSkillLevelPkt pkt) {
@@ -47,7 +50,7 @@ public class S2CSkillLevelPkt implements Packet {
         if (player == null)
             return;
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            data.setSkillLevel(pkt.skill, player, pkt.level[0], pkt.level[1], false);
+            data.setSkillLevel(pkt.skill, player, pkt.level.getLevel(), pkt.level.getXp(), false);
             data.setRunePoints(player, pkt.rp);
             data.setMaxRunePoints(player, pkt.rpMax);
             data.setStr(player, pkt.str);
@@ -59,8 +62,8 @@ public class S2CSkillLevelPkt implements Packet {
     @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeEnum(this.skill);
-        buf.writeInt(this.level[0]);
-        buf.writeInt(this.level[1]);
+        buf.writeInt(this.level.getLevel());
+        buf.writeFloat(this.level.getXp());
         buf.writeInt(this.rp);
         buf.writeFloat(this.rpMax);
         buf.writeFloat(this.str);

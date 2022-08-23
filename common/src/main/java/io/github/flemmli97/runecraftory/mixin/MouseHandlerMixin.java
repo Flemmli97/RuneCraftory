@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.mixin;
 
-import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import com.mojang.blaze3d.platform.InputConstants;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,26 +23,30 @@ public abstract class MouseHandlerMixin {
 
     @Inject(method = "turnPlayer", at = @At("HEAD"), cancellable = true)
     private void disableMouse(CallbackInfo info) {
-        if (this.minecraft.player != null && EntityUtils.isDisabled(this.minecraft.player)) {
+        if (ClientHandlers.disableMouse()) {
             this.accumulatedDX = 0;
             this.accumulatedDY = 0;
             MouseHandler handler = (MouseHandler) (Object) this;
-            if (handler.isMouseGrabbed())
+            if (handler.isMouseGrabbed()) {
+                KeyMapping.set(InputConstants.Type.MOUSE.getOrCreate(0), false);
+                KeyMapping.set(InputConstants.Type.MOUSE.getOrCreate(1), false);
+                KeyMapping.set(InputConstants.Type.MOUSE.getOrCreate(2), false);
                 handler.releaseMouse();
+            }
             info.cancel();
         }
     }
 
     @Inject(method = "onPress", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getOverlay()Lnet/minecraft/client/gui/screens/Overlay;"), cancellable = true)
     private void disableMousePress(long windowPointer, int button, int action, int modifiers, CallbackInfo info) {
-        if (this.minecraft.player != null && EntityUtils.isDisabled(this.minecraft.player)) {
+        if (ClientHandlers.disableMouse()) {
             info.cancel();
         }
     }
 
     @Inject(method = "onScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getOverlay()Lnet/minecraft/client/gui/screens/Overlay;"), cancellable = true)
     private void disableMouseScroll(CallbackInfo info) {
-        if (this.minecraft.player != null && EntityUtils.isDisabled(this.minecraft.player)) {
+        if (ClientHandlers.disableMouse()) {
             info.cancel();
         }
     }

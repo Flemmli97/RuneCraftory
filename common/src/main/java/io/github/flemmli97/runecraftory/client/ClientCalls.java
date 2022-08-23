@@ -83,7 +83,7 @@ public class ClientCalls {
     }
 
     public static void renderRunePoints(PoseStack stack, float partialTicks) {
-        if (ClientHandlers.overlay != null && ClientConfig.renderOverlay)
+        if (ClientHandlers.overlay != null)
             ClientHandlers.overlay.renderBar(stack);
         if (ClientHandlers.spellDisplay != null && ClientConfig.inventoryButton)
             ClientHandlers.spellDisplay.render(stack, partialTicks);
@@ -130,14 +130,14 @@ public class ClientCalls {
     }
 
     public static void tick(LivingEntity entity) {
-        Platform.INSTANCE.getEntityData(entity).ifPresent(cap -> {
-            if (entity.tickCount % 20 == 0) {
-                if (cap.isSleeping()) {
-                    entity.level.addParticle(ModParticles.sleep.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
-                }
-                if (cap.isPoisoned()) {
-                    entity.level.addParticle(ModParticles.poison.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
-                }
+        Platform.INSTANCE.getEntityData(entity).ifPresent(data -> {
+            int mod = entity.tickCount % 20;
+            if (mod == 0 && data.isSleeping()) {
+                entity.level.addParticle(ModParticles.sleep.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
+
+            }
+            if (mod == 3 && data.isPoisoned()) {
+                entity.level.addParticle(ModParticles.poison.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
             }
         });
         if (entity instanceof LocalPlayer player && entity.getVehicle() instanceof BaseMonster && player.input.jumping)

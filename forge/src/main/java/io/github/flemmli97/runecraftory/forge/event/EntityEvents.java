@@ -97,8 +97,7 @@ public class EntityEvents {
 
     @SubscribeEvent
     public void wakeUp(PlayerWakeUpEvent event) {
-        if (GeneralConfig.modifyBed)
-            EntityCalls.wakeUp(event.getPlayer());
+        EntityCalls.wakeUp(event.getPlayer());
     }
 
     @SubscribeEvent

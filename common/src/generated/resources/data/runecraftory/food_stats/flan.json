@@ -1,0 +1,24 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [
+    {
+      "potion": "minecraft:speed",
+      "duration": 200,
+      "amplifier": 1
+    }
+  ],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 4800,
+  "effects": {
+    "runecraftory:attribute.rf.defence": 1.0,
+    "runecraftory:attribute.rf.res_fatigue": 15.0,
+    "runecraftory:attribute.rf.res_cold": 15.0
+  },
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "hpRegen": 100,
+  "rpRegen": 30,
+  "item": "runecraftory:flan"
+}

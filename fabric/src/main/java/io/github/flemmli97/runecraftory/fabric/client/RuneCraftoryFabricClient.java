@@ -18,12 +18,12 @@ import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
-import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
-import net.fabricmc.fabric.api.object.builder.v1.client.model.FabricModelPredicateProviderRegistry;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.particle.ParticleProvider;
 import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -42,12 +42,12 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
 
         ClientRegister.registerKeyBinding(KeyBindingHelper::registerKeyBinding);
         ClientRegister.setupRenderLayers(BlockRenderLayerMap.INSTANCE::putBlock);
-        ClientRegister.registerItemProps(FabricModelPredicateProviderRegistry::register);
+        ClientRegister.registerItemProps(ItemProperties::register);
         ClientRegister.registerBlockColors(ColorProviderRegistry.BLOCK::register);
         ClientRegister.registerScreen(new ClientRegister.MenuScreenRegister() {
             @Override
             public <M extends AbstractContainerMenu, U extends Screen & MenuAccess<M>> void register(MenuType<? extends M> type, ClientRegister.ScreenConstructor<M, U> provider) {
-                ScreenRegistry.register(type, provider::create);
+                MenuScreens.register(type, provider::create);
             }
         });
         ClientRegister.registerRenderers(EntityRendererRegistry::register);

@@ -69,7 +69,7 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
 
     @Override
     public void onBlockBreak(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOGGING, this.tier.getTierLevel() * 0.5f + 1));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOGGING, 1));
     }
 
     @Override

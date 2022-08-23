@@ -6,13 +6,23 @@
     ]
   },
   "criteria": {
-    "iron": {
+    "feather": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "c:feathers"
+          }
+        ]
+      }
+    },
+    "arrowhead": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:arrow"
+              "runecraftory:arrowhead"
             ]
           }
         ]
@@ -27,7 +37,8 @@
   },
   "requirements": [
     [
-      "iron",
+      "feather",
+      "arrowhead",
       "has_the_recipe"
     ]
   ]

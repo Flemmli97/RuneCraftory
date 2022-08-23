@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.ai.AnimatedMelee
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.level.Level;
 
 public class EntityAnt extends BaseMonster {
@@ -44,5 +45,10 @@ public class EntityAnt extends BaseMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation())
             this.getAnimationHandler().setAnimation(melee);
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.ARTHROPOD;
     }
 }

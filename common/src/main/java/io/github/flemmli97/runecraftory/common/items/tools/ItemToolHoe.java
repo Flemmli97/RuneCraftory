@@ -83,15 +83,15 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
 
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 0.3f));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 0.6f));
     }
 
     @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            LevelCalc.useRP(player, data, 7, true, false, true, 1, EnumSkills.FARMING);
-            LevelCalc.levelSkill(player, data, EnumSkills.FARMING, this.tier.getTierLevel() * 0.5f + 1);
-            LevelCalc.levelSkill(player, data, EnumSkills.EARTH, this.tier.getTierLevel() * 0.4f + 0.5f);
+            LevelCalc.useRP(player, data, 7, true, false, true, 1, EnumSkills.FARMING, EnumSkills.EARTH);
+            LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3);
+            LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 0.6f);
         });
     }
 
@@ -139,11 +139,12 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
                 int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
                         .filter(p -> this.hoeBlock(new UseOnContext(player, entity.getUsedItemHand(), hit.apply(p))))
                         .count();
-                Platform.INSTANCE.getPlayerData(player)
-                        .ifPresent(data -> {
-                            LevelCalc.levelSkill(player, data, EnumSkills.FARMING, (this.tier.getTierLevel() * 0.5f + 1) * amount * 0.7f);
-                            LevelCalc.levelSkill(player, data, EnumSkills.EARTH, (this.tier.getTierLevel() * 0.4f + 0.5f) * amount * 0.7f);
-                        });
+                if (amount > 0)
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                        LevelCalc.useRP(player, data, this.tier.getTierLevel() * this.tier.getTierLevel() * 40, true, false, true, 1, EnumSkills.FARMING, EnumSkills.EARTH);
+                        LevelCalc.levelSkill(player, data, EnumSkills.FARMING, range * 15);
+                        LevelCalc.levelSkill(player, data, EnumSkills.EARTH, range * 0.8f);
+                    });
             }
         }
         super.releaseUsing(stack, world, entity, timeLeft);

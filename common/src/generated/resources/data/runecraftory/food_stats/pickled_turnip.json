@@ -1,0 +1,18 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 4800,
+  "effects": {
+    "minecraft:generic.attack_damage": 3.0,
+    "runecraftory:attribute.rf.defence": 1.0,
+    "runecraftory:attribute.rf.magic_att": 2.0
+  },
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "hpRegen": 150,
+  "rpRegen": 60,
+  "item": "runecraftory:pickled_turnip"
+}

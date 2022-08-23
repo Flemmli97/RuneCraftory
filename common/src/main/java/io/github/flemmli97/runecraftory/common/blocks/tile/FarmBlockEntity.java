@@ -157,10 +157,11 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
         super.setLevel(level);
         if (this.level instanceof ServerLevel serverLevel) {
             WorldHandler.get(serverLevel.getServer()).addToTracker(this);
-            if (this.check && Math.abs(this.lastUpdateDay - WorldUtils.day(serverLevel)) > 0) {
+            int day = WorldUtils.day(this.level);
+            if (this.check && Math.abs(this.lastUpdateDay - day) > 0) {
                 serverLevel.getServer().tell(new TickTask(1, () -> this.update(serverLevel)));
             } else {
-                this.lastUpdateDay = WorldUtils.day(serverLevel);
+                this.lastUpdateDay = day;
                 this.check = false;
                 serverLevel.getServer().tell(new TickTask(1, this::setChanged));
             }

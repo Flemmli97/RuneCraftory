@@ -8,20 +8,29 @@ import java.util.Map;
 
 public class MobConfig {
 
-    public static boolean disableNaturalSpawn;
+    public static boolean disableNaturalSpawn = false;
 
-    public static double gateDef;
-    public static double gateMDef;
-    public static double gateHealth;
-    public static double gateDefGain;
-    public static double gateMDefGain;
-    public static double gateHealthGain;
-    public static int gateXP;
-    public static int gateMoney;
-    public static int spawnChance;
-    public static double minDist;
-    public static int maxGroup;
-    public static int maxNearby;
+    public static double gateHealth = 100;
+    public static double gateDef = 0;
+    public static double gateMDef = 0;
+    public static double gateHealthGain = 25;
+    public static double gateDefGain = 5;
+    public static double gateMDefGain = 5;
+    public static int gateXP = 12;
+    public static int gateMoney = 5;
+    public static int spawnChance = 150;
+    public static double minDist = 48;
+    public static int maxGroup = 2;
+    public static int maxNearby = 4;
+    public static int baseGateLevel = 1;
+    public static GateLevelType gateLevelType = GateLevelType.CONSTANT;
 
     public static Map<ResourceLocation, EntityProperties> propertiesMap = new HashMap<>();
+
+    public enum GateLevelType {
+        CONSTANT,
+        DISTANCESPAWN,
+        PLAYERLEVELMAX,
+        PLAYERLEVELMEAN
+    }
 }

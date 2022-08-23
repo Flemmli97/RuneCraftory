@@ -18,8 +18,8 @@ public class PoisonEffect extends PermanentEffect {
     public void applyEffectTick(LivingEntity living, int amplifier) {
         if (living instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                float amount = data.getMaxHealth(player) * 0.05f;
-                amount = ((data.getHealth(player) - amount <= 0.0f) ? (data.getHealth(player) - 1.0f) : amount);
+                float amount = player.getMaxHealth() * 0.05f;
+                amount = ((player.getHealth() - amount <= 0.0f) ? (player.getHealth() - 1.0f) : amount);
                 player.hurt(CustomDamage.EXHAUST, amount);
             });
         }

@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -14,8 +13,6 @@ import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -85,12 +82,17 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
             List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3), this.pred);
             for (LivingEntity e : list) {
                 if (!e.equals(this.getOwner()) && (this.pred == null || this.pred.test(e))) {
+                    LivingEntity owner = this.getOwner() instanceof LivingEntity living ? living : null;
+                    if (owner != null)
+                        CombatUtils.applyTempAttribute(owner, ModAttributes.RFSLEEP.get(), 100);
                     if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
-                        e.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 80, 0, true, false));
-                        e.addEffect(new MobEffectInstance(ModEffects.sleep.get(), 80, 0, true, false));
                         this.remove(RemovalReason.KILLED);
+                        if (owner != null)
+                            CombatUtils.removeAttribute(owner, ModAttributes.RFSLEEP.get());
                         break;
                     }
+                    if (owner != null)
+                        CombatUtils.removeAttribute(owner, ModAttributes.RFSLEEP.get());
                 }
             }
         }

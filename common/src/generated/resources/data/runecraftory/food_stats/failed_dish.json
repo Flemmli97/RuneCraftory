@@ -1,0 +1,19 @@
+{
+  "effectsPercentage": {
+    "minecraft:generic.attack_damage": -10.0,
+    "runecraftory:attribute.rf.defence": -10.0,
+    "runecraftory:attribute.rf.magic_att": -10.0,
+    "runecraftory:attribute.rf.magic_def": -10.0
+  },
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": -10,
+  "duration": 7200,
+  "effects": {},
+  "hpRegenPercent": -20,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "hpRegen": 0,
+  "rpRegen": 0,
+  "item": "runecraftory:failed_dish"
+}

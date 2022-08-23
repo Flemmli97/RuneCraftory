@@ -1,0 +1,14 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 100,
+  "effects": {},
+  "hpRegenPercent": 1,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "hpRegen": 5,
+  "rpRegen": 10,
+  "item": "runecraftory:mushroom"
+}

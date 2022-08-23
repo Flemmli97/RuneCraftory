@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +24,11 @@ public class SleepEffect extends MobEffect {
     public void applyEffectTick(LivingEntity living, int amplifier) {
         if (!(living instanceof Player player) || !player.getAbilities().invulnerable) {
             living.setDeltaMovement(new Vec3(living.getDeltaMovement().x, -0.08, -living.getDeltaMovement().z));
+        }
+        MobEffectInstance eff = living.getEffect(this);
+        if (eff.getDuration() > 200) {
+            living.removeEffect(this);
+            living.addEffect(new MobEffectInstance(this, 200, 0, true, false));
         }
     }
 

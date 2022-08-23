@@ -6,12 +6,14 @@ import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.DisableGoal;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
+import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
@@ -33,6 +35,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -47,6 +50,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -64,8 +68,8 @@ public class EntityCalls {
                 data.recalculateStats(serverPlayer, false);
                 if (!data.starting) {
                     data.starting = true;
-                    data.setMaxHealth(player, GeneralConfig.startingHealth);
-                    data.setHealth(player, data.getMaxHealth(player));
+                    data.setMaxHealth(player, GeneralConfig.startingHealth, true);
+                    player.setHealth(player.getMaxHealth());
                 }
                 if (GeneralConfig.recipeSystem > 1) {
                     if (!data.unlockedRecipes) {
@@ -198,24 +202,27 @@ public class EntityCalls {
                 return;
             }
             FoodProperties prop = DataPackHandler.getFoodStat(stack.getItem());
-            if (prop == null)
+            if (prop == null) {
+                if (entity instanceof ServerPlayer player && stack.isEdible()) {
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EATING, 0.1f));
+                }
                 return;
-            if (entity instanceof Player player) {
+            }
+            if (entity instanceof ServerPlayer player) {
                 player.getCooldowns().addCooldown(stack.getItem(), 3);
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                    boolean medicine = stack.getItem() instanceof ItemMedicine;
+                    if (data.foodBuffDuration() <= 0)
+                        data.getDailyUpdater().onFoodEaten(player);
                     data.applyFoodEffect(player, stack);
-                    int healthGain = medicine ? ((ItemMedicine) stack.getItem()).healthRegen(stack, prop) : prop.getHPGain();
-                    data.regenHealth(player, healthGain);
                     data.refreshRunePoints(player, prop.getRPRegen());
-                    int healthPercent = medicine ? ((ItemMedicine) stack.getItem()).healthRegenPercent(stack, prop) : prop.getHPGain();
-                    data.regenHealth(player, data.getMaxHealth(player) * healthPercent * 0.01F);
                     data.refreshRunePoints(player, (int) (data.getMaxRunePoints() * prop.getRpPercentRegen() * 0.01));
                 });
-            } else {
-                entity.heal(prop.getHPGain());
-                entity.heal(entity.getMaxHealth() * prop.getHpPercentGain() * 0.01F);
             }
+            boolean medicine = stack.getItem() instanceof ItemMedicine;
+            int healthGain = medicine ? ((ItemMedicine) stack.getItem()).healthRegen(stack, prop) : prop.getHPGain();
+            EntityUtils.foodHealing(entity, healthGain);
+            int healthPercent = medicine ? ((ItemMedicine) stack.getItem()).healthRegenPercent(stack, prop) : prop.getHpPercentGain();
+            EntityUtils.foodHealing(entity, entity.getMaxHealth() * healthPercent * 0.01F);
             if (prop.potionHeals() != null)
                 for (MobEffect s : prop.potionHeals()) {
                     entity.removeEffect(s);
@@ -238,9 +245,9 @@ public class EntityCalls {
     }
 
     public static void wakeUp(Player player) {
-        if (player instanceof ServerPlayer serverPlayer) {
+        if (GeneralConfig.modifyBed && player instanceof ServerPlayer serverPlayer) {
+            player.heal(player.getMaxHealth());
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
-                data.regenHealth(player, data.getMaxHealth(player));
                 data.refreshRunePoints(player, data.getMaxRunePoints());
                 LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SLEEPING, 1);
             });
@@ -256,15 +263,11 @@ public class EntityCalls {
 
     public static float damageCalculation(LivingEntity entity, DamageSource source, float dmg) {
         float damage = CombatUtils.reduceDamageFromStats(entity, source, dmg);
-        if (entity instanceof Player player) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                if (damage < 0)
-                    data.regenHealth((Player) entity, -damage);
-                else if (damage >= 1 && source != DamageSource.OUT_OF_WORLD)
-                    LevelCalc.levelSkill((ServerPlayer) entity, data, EnumSkills.DEFENCE, (float) (0.5 + Math.log(damage)));
-            });
-        } else if (damage < 0)
+        if (damage < 0)
             entity.heal(-damage);
+        else if (damage > 0 && source != DamageSource.OUT_OF_WORLD && entity instanceof Player player) {
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill((ServerPlayer) entity, data, EnumSkills.DEFENCE, Math.min(5, (float) (0.5 + Math.log(damage * 0.5)))));
+        }
         if (source instanceof CustomDamage)
             entity.invulnerableTime = ((CustomDamage) source).hurtProtection() + 10;
         return damage;
@@ -276,7 +279,7 @@ public class EntityCalls {
             float drainPercent = CombatUtils.getAttributeValue(attacker, ModAttributes.RFDRAIN.get(), entity) * 0.01f;
             if (drainPercent > 0f) {
                 if (attacker instanceof Player player)
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.regenHealth((Player) attacker, drainPercent * amount));
+                    player.heal(drainPercent * amount);
                 else
                     living.heal(drainPercent * amount);
             }
@@ -286,6 +289,22 @@ public class EntityCalls {
     public static void onSpawn(LivingEntity living) {
         if (living instanceof Mob mob) {
             mob.goalSelector.addGoal(-1, new DisableGoal(mob));
+        }
+    }
+
+    public static void onBlockBreak(ServerPlayer player, BlockState state, BlockPos pos) {
+        if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.MINING, state.getBlock() instanceof BlockMineral ? 10 : 1));
+        }
+        if (state.is(BlockTags.MINEABLE_WITH_AXE)) {
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOGGING, 1));
+        }
+        if (state.is(BlockTags.MINEABLE_WITH_HOE)) {
+            if (!(player.getMainHandItem().getItem() instanceof ItemToolSickle))
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 1));
+        }
+        if (state.getBlock() instanceof BushBlock) {
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 1));
         }
     }
 }

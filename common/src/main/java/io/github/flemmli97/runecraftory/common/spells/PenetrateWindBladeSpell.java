@@ -20,7 +20,7 @@ public class PenetrateWindBladeSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WIND, 1));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WIND, 1.5f));
     }
 
     @Override
@@ -46,6 +46,6 @@ public class PenetrateWindBladeSpell extends Spell {
 
     @Override
     public int rpCost() {
-        return 10;
+        return 30;
     }
 }

@@ -81,15 +81,15 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
 
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 0.3f));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 0.4f));
     }
 
     @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            LevelCalc.useRP(player, data, 7, true, false, true, 1, EnumSkills.FARMING);
-            LevelCalc.levelSkill(player, data, EnumSkills.FARMING, this.tier.getTierLevel() * 0.5f + 1);
-            LevelCalc.levelSkill(player, data, EnumSkills.WATER, this.tier.getTierLevel() * 0.4f + 0.5f);
+            LevelCalc.useRP(player, data, 7, true, false, true, 1, EnumSkills.FARMING, EnumSkills.WATER);
+            LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 4);
+            LevelCalc.levelSkill(player, data, EnumSkills.WATER, 0.6f);
         });
     }
 
@@ -191,11 +191,11 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
                         .filter(p -> this.moisten((ServerLevel) world, p, stack, entity))
                         .count();
                 if (entity instanceof ServerPlayer player)
-                    Platform.INSTANCE.getPlayerData(player)
-                            .ifPresent(data -> {
-                                LevelCalc.levelSkill(player, data, EnumSkills.FARMING, (this.tier.getTierLevel() * 0.5f + 1) * amount * 0.7f);
-                                LevelCalc.levelSkill(player, data, EnumSkills.WATER, (this.tier.getTierLevel() * 0.4f + 0.5f) * amount * 0.7f);
-                            });
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                        LevelCalc.useRP(player, data, this.tier.getTierLevel() * this.tier.getTierLevel() * 40, true, false, true, 1, EnumSkills.FARMING, EnumSkills.WATER);
+                        LevelCalc.levelSkill(player, data, EnumSkills.FARMING, range * 10);
+                        LevelCalc.levelSkill(player, data, EnumSkills.WATER, range * 0.8f);
+                    });
             }
         }
         super.releaseUsing(stack, world, entity, timeLeft);

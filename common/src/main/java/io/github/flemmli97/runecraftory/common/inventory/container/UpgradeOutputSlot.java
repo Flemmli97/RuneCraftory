@@ -1,11 +1,8 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
-import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -54,17 +51,17 @@ public class UpgradeOutputSlot extends Slot {
         this.checkTakeAchievements(stack);
         if (!(player instanceof ServerPlayer serverPlayer))
             return;
-        ItemStack ing1 = this.ingredientInv.getItem(6);
-        ItemStack ing2 = this.ingredientInv.getItem(7);
+        ItemStack toUpgrade = this.ingredientInv.getItem(6);
+        ItemStack material = this.ingredientInv.getItem(7);
         Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
             data.decreaseRunePoints(player, this.container.rpCost(), true);
             switch (this.container.craftingType()) {
-                case FORGE -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.FORGING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getItem(7).getItem()).map(ItemStat::getDiff).orElse(0) - data.getSkillLevel(EnumSkills.FORGING)[0]) * 0.3f);
-                case ARMOR -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.CRAFTING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getItem(7).getItem()).map(ItemStat::getDiff).orElse(0) - data.getSkillLevel(EnumSkills.CRAFTING)[0]) * 0.3f);
-                case CHEM -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.CHEMISTRY, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getItem(7).getItem()).map(ItemStat::getDiff).orElse(0) - data.getSkillLevel(EnumSkills.CHEMISTRY)[0]) * 0.3f);
-                case COOKING -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.COOKING, 1.5f + Math.min(0, DataPackHandler.getStats(this.ingredientInv.getItem(7).getItem()).map(ItemStat::getDiff).orElse(0) - data.getSkillLevel(EnumSkills.COOKING)[0]) * 0.3f);
+                case FORGE -> CraftingUtils.giveUpgradeXPTo(serverPlayer, data, EnumSkills.FORGING, toUpgrade, material);
+                case ARMOR -> CraftingUtils.giveUpgradeXPTo(serverPlayer, data, EnumSkills.CRAFTING, toUpgrade, material);
             }
         });
+        ItemStack ing1 = this.ingredientInv.getItem(6);
+        ItemStack ing2 = this.ingredientInv.getItem(7);
         if (!ing1.isEmpty()) {
             this.ingredientInv.removeItem(6, 1);
             ing1 = this.ingredientInv.getItem(6);

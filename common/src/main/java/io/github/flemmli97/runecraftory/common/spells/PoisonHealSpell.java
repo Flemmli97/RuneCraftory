@@ -48,6 +48,6 @@ public class PoisonHealSpell extends Spell {
 
     @Override
     public int rpCost() {
-        return 20;
+        return 30;
     }
 }

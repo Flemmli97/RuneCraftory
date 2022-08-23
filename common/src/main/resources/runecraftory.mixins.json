@@ -10,12 +10,14 @@
     "ConfiguredStructureMixin",
     "ContainerScreenAccessor",
     "CropBlockMixin",
-    "StructureTemplateMixin"
+    "StructureTemplateMixin",
+    "ItemStackMixin"
   ],
   "client": [
     "AtlasMixin",
     "MinecraftMixin",
     "MouseHandlerMixin",
+    "KeyboardHandlerMixin",
     "BiomeColorsMixin"
   ],
   "injectors": {

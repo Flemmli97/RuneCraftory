@@ -69,7 +69,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
         Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.LONGSWORD, 1));
+                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 1));
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.LONGSWORD)[0] >= 5).orElse(false)) {
+        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.LONGSWORD).getLevel() >= 5).orElse(false)) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
         }
@@ -134,8 +134,10 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
                 if (success) {
                     entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
                     if (entity instanceof ServerPlayer player) {
-                        this.onEntityHit(player, stack);
-                        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.useRP(player, data, 10, true, false, true, 1, EnumSkills.LONGSWORD));
+                        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                            LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 3);
+                            LevelCalc.useRP(player, data, 10, true, false, true, 1, EnumSkills.LONGSWORD);
+                        });
                     }
                 }
             }

@@ -1,0 +1,20 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [
+    {
+      "potion": "minecraft:speed",
+      "duration": 200,
+      "amplifier": 1
+    }
+  ],
+  "potionRemove": [],
+  "rpPercentIncrease": 5,
+  "duration": 4800,
+  "effects": {},
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 3,
+  "rpIncrease": 50,
+  "hpRegen": 80,
+  "rpRegen": 100,
+  "item": "runecraftory:hot_chocolate"
+}

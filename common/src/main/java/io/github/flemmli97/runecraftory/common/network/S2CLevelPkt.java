@@ -2,7 +2,8 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.common.attachment.PlayerData;
+import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -12,12 +13,14 @@ public class S2CLevelPkt implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_level");
 
-    private final int[] level;
+    private final LevelExpPair level;
     private int rp;
     private float rpMax, str, intel, vit;
 
-    private S2CLevelPkt(int[] level, int rp, float rpMax, float str, float intel, float vit) {
-        this.level = level;
+    private S2CLevelPkt(int level, float xp, int rp, float rpMax, float str, float intel, float vit) {
+        this.level = new LevelExpPair();
+        this.level.setLevel(level);
+        this.level.setXp(xp);
         this.rp = rp;
         this.rpMax = rpMax;
         this.str = str;
@@ -35,7 +38,7 @@ public class S2CLevelPkt implements Packet {
     }
 
     public static S2CLevelPkt read(FriendlyByteBuf buf) {
-        return new S2CLevelPkt(new int[]{buf.readInt(), buf.readInt()}, buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
+        return new S2CLevelPkt(buf.readInt(), buf.readFloat(), buf.readInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
     }
 
     public static void handle(S2CLevelPkt pkt) {
@@ -43,7 +46,7 @@ public class S2CLevelPkt implements Packet {
         if (player == null)
             return;
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            data.setPlayerLevel(player, pkt.level[0], pkt.level[1], false);
+            data.setPlayerLevel(player, pkt.level.getLevel(), pkt.level.getXp(), false);
             data.setRunePoints(player, pkt.rp);
             data.setMaxRunePoints(player, pkt.rpMax);
             data.setStr(player, pkt.str);
@@ -54,8 +57,8 @@ public class S2CLevelPkt implements Packet {
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.level[0]);
-        buf.writeInt(this.level[1]);
+        buf.writeInt(this.level.getLevel());
+        buf.writeFloat(this.level.getXp());
         buf.writeInt(this.rp);
         buf.writeFloat(this.rpMax);
         buf.writeFloat(this.str);

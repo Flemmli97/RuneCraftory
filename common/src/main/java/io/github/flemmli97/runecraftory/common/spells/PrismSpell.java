@@ -23,7 +23,7 @@ public class PrismSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LIGHT, 1));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LIGHT, 1.5f));
     }
 
     @Override
@@ -45,6 +45,6 @@ public class PrismSpell extends Spell {
 
     @Override
     public int rpCost() {
-        return 20;
+        return 30;
     }
 }

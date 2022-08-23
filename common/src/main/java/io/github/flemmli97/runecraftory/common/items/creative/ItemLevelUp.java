@@ -19,7 +19,7 @@ public class ItemLevelUp extends Item {
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         if (!world.isClientSide) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data ->
-                    data.addXp(player, LevelCalc.xpAmountForLevelUp(data.getPlayerLevel()[0]) - data.getPlayerLevel()[1]));
+                    data.addXp(player, LevelCalc.xpAmountForLevelUp(data.getPlayerLevel().getLevel()) - data.getPlayerLevel().getXp()));
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));
     }

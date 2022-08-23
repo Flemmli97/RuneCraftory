@@ -22,7 +22,7 @@ public class TripleWaterLaserSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 1));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 1.5f));
     }
 
     @Override
@@ -52,6 +52,6 @@ public class TripleWaterLaserSpell extends Spell {
 
     @Override
     public int rpCost() {
-        return 10;
+        return 40;
     }
 }

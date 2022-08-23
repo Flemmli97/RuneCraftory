@@ -42,10 +42,11 @@ public class BrokenMineralBlockEntity extends BlockEntity implements IDailyUpdat
         super.setLevel(level);
         if (this.level instanceof ServerLevel serverLevel) {
             WorldHandler.get(serverLevel.getServer()).addToTracker(this);
-            if (this.check && Math.abs(this.lastUpdateDay - WorldUtils.day(this.level)) > 0) {
+            int day = WorldUtils.day(this.level);
+            if (this.check && Math.abs(this.lastUpdateDay - day) > 0) {
                 this.level.getServer().tell(new TickTask(1, () -> this.update(serverLevel)));
             } else {
-                this.lastUpdateDay = WorldUtils.day(this.level);
+                this.lastUpdateDay = day;
                 this.check = false;
                 this.level.getServer().tell(new TickTask(1, this::setChanged));
             }

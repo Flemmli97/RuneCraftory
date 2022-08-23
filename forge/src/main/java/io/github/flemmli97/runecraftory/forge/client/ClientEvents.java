@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.forge.client;
 
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -38,10 +39,10 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void renderRunePoints(RenderGameOverlayEvent.PreLayer event) {
-        if (ClientConfig.renderOverlay) {
-            if (event.getOverlay() == ForgeIngameGui.PLAYER_HEALTH_ELEMENT || event.getOverlay() == ForgeIngameGui.FOOD_LEVEL_ELEMENT)
-                event.setCanceled(true);
-        }
+        if (ClientConfig.renderHealthRPBar == ClientConfig.HealthRPRenderType.BOTH && event.getOverlay() == ForgeIngameGui.PLAYER_HEALTH_ELEMENT)
+            event.setCanceled(true);
+        if (GeneralConfig.disableHunger && event.getOverlay() == ForgeIngameGui.FOOD_LEVEL_ELEMENT)
+            event.setCanceled(true);
     }
 
     @SubscribeEvent

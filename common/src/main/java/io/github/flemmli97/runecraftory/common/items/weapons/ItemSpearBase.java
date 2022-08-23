@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.common.attachment.PlayerData;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -67,7 +67,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
         Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.SPEAR, 1));
+                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 1));
     }
 
     @Override
@@ -109,7 +109,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
             return InteractionResultHolder.pass(itemstack);
         return Platform.INSTANCE.getPlayerData(player)
                 .map(data -> {
-                    if (hand == InteractionHand.MAIN_HAND && (data.getSkillLevel(EnumSkills.SPEAR)[0] >= 5 || player.isCreative())) {
+                    if (hand == InteractionHand.MAIN_HAND && (data.getSkillLevel(EnumSkills.SPEAR).getLevel() >= 5 || player.isCreative())) {
                         player.startUsingItem(hand);
                         return InteractionResultHolder.consume(itemstack);
                     }
@@ -132,9 +132,9 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
         if (entity instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 int time = this.getUseDuration(stack) - timeLeft;
-                if (data.canStartSpear()) {
+                if (data.getWeaponHandler().canStartSpear()) {
                     if (time >= this.getChargeTime(stack))
-                        data.startSpear();
+                        data.getWeaponHandler().startSpear();
                 } else if (time >= 1) {
                     this.useSpear(serverPlayer, data);
                 }
@@ -156,8 +156,8 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
         List<Entity> list = RayTraceUtils.getEntities(player, this.getRange(), 10);
         if (!list.isEmpty()) {
             LevelCalc.useRP(player, data, player.getRandom().nextInt(2) + 3, true, true, true, 1, EnumSkills.SPEAR);
-            data.onUseSpear();
-            LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 0.4f);
+            data.getWeaponHandler().onUseSpear();
+            LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 1);
             list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.3f, false, false, false));
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
         }

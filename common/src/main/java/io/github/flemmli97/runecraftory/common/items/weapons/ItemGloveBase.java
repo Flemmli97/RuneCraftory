@@ -58,7 +58,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
         Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.FIST, 1));
+                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FIST, 1));
     }
 
     @Override
@@ -99,7 +99,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
         if (level.isClientSide)
             return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
         boolean canCharge = hand == InteractionHand.MAIN_HAND && Platform.INSTANCE.getPlayerData(player)
-                .map(data -> (data.getSkillLevel(EnumSkills.FIST)[0] >= 5 || player.isCreative()) && data.canStartGlove()).orElse(false);
+                .map(data -> (data.getSkillLevel(EnumSkills.FIST).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canStartGlove()).orElse(false);
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -121,7 +121,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (entity instanceof ServerPlayer serverPlayer && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
             Platform.INSTANCE.getPlayerData(serverPlayer)
-                    .ifPresent(d -> d.startGlove(stack));
+                    .ifPresent(d -> d.getWeaponHandler().startGlove(stack));
         }
     }
 

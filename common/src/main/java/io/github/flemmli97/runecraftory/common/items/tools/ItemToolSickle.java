@@ -84,15 +84,15 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
 
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WIND, 0.3f));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WIND, 0.5f));
     }
 
     @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            LevelCalc.useRP(player, data, 2 + player.getRandom().nextInt(2), true, false, true, 1, EnumSkills.FARMING);
-            LevelCalc.levelSkill(player, data, EnumSkills.FARMING, this.tier.getTierLevel() * 0.5f + 1);
-            LevelCalc.levelSkill(player, data, EnumSkills.WIND, this.tier.getTierLevel() * 0.4f + 0.5f);
+            LevelCalc.useRP(player, data, 2 + player.getRandom().nextInt(2), true, false, true, 1, EnumSkills.FARMING, EnumSkills.WIND);
+            LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3);
+            LevelCalc.levelSkill(player, data, EnumSkills.WIND, 0.5f);
         });
     }
 
@@ -170,12 +170,12 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
                 int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
                         .filter(p -> this.sickleUse(serverLevel, p, stack, entity))
                         .count();
-                if (entity instanceof ServerPlayer player)
-                    Platform.INSTANCE.getPlayerData(player)
-                            .ifPresent(data -> {
-                                LevelCalc.levelSkill(player, data, EnumSkills.FARMING, (this.tier.getTierLevel() * 0.5f + 1) * amount * 0.7f);
-                                LevelCalc.levelSkill(player, data, EnumSkills.WIND, (this.tier.getTierLevel() * 0.4f + 0.5f) * amount * 0.7f);
-                            });
+                if (entity instanceof ServerPlayer player && amount > 0)
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                        LevelCalc.useRP(player, data, this.tier.getTierLevel() * this.tier.getTierLevel() * 20, true, false, true, 1, EnumSkills.FARMING, EnumSkills.WIND);
+                        LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3.5f);
+                        LevelCalc.levelSkill(player, data, EnumSkills.WIND, 0.8f);
+                    });
             }
         }
         super.releaseUsing(stack, level, entity, timeLeft);

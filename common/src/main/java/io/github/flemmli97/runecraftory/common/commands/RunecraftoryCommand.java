@@ -7,6 +7,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -27,7 +28,7 @@ public class RunecraftoryCommand {
         dispatcher.register(Commands.literal("runecraftory")
                 .then(Commands.literal("skill").requires(src -> src.hasPermission(2))
                         .then(Commands.argument("player", EntityArgument.players())
-                                .then(Commands.argument("skill", StringArgumentType.string()).suggests((context, builder) -> SharedSuggestionProvider.suggest(Stream.of(EnumSkills.values()).map(Object::toString), builder))
+                                .then(Commands.argument("skill", StringArgumentType.string()).suggests((context, builder) -> SharedSuggestionProvider.suggest(Stream.concat(Stream.of(EnumSkills.values()).map(Object::toString), Stream.of("ALL")), builder))
                                         .then(Commands.literal("add")
                                                 .then(Commands.literal("level").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addSkillLevel)))
                                                 .then(Commands.literal("xp").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addSkillXP))))
@@ -51,6 +52,19 @@ public class RunecraftoryCommand {
         int ret = 0;
         int amount = IntegerArgumentType.getInteger(ctx, "amount");
         String s = StringArgumentType.getString(ctx, "skill");
+        if (s.equals("ALL")) {
+            for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                    for (EnumSkills skill : EnumSkills.values()) {
+                        LevelExpPair skLvl = data.getSkillLevel(skill);
+                        data.setSkillLevel(skill, player, skLvl.getLevel() + amount, skLvl.getXp(), true);
+                    }
+                });
+                ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
+                ret++;
+            }
+            return ret;
+        }
         EnumSkills skill = EnumSkills.read(s);
         if (skill == null) {
             ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.no", s), false);
@@ -58,10 +72,10 @@ public class RunecraftoryCommand {
         }
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                int[] skLvl = data.getSkillLevel(skill);
-                data.setSkillLevel(skill, player, skLvl[0], skLvl[1], true);
+                LevelExpPair skLvl = data.getSkillLevel(skill);
+                data.setSkillLevel(skill, player, skLvl.getLevel() + amount, skLvl.getXp(), true);
             });
-            ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.lvl.add", skill, player.getName(), amount), false);
+            ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
             ret++;
         }
         return ret;
@@ -71,6 +85,17 @@ public class RunecraftoryCommand {
         int ret = 0;
         int amount = IntegerArgumentType.getInteger(ctx, "amount");
         String s = StringArgumentType.getString(ctx, "skill");
+        if (s.equals("ALL")) {
+            for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                    for (EnumSkills skill : EnumSkills.values())
+                        data.increaseSkill(skill, player, amount);
+                });
+                ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
+                ret++;
+            }
+            return ret;
+        }
         EnumSkills skill = EnumSkills.read(s);
         if (skill == null) {
             ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.no", s), false);
@@ -78,7 +103,7 @@ public class RunecraftoryCommand {
         }
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.increaseSkill(skill, player, amount));
-            ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.xp.add", skill, player.getName(), amount), false);
+            ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.xp.add", s, player.getName(), amount), false);
             ret++;
         }
         return ret;
@@ -88,6 +113,17 @@ public class RunecraftoryCommand {
         int ret = 0;
         int amount = IntegerArgumentType.getInteger(ctx, "amount");
         String s = StringArgumentType.getString(ctx, "skill");
+        if (s.equals("ALL")) {
+            for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                    for (EnumSkills skill : EnumSkills.values())
+                        data.setSkillLevel(skill, player, amount, 0, true);
+                });
+                ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
+                ret++;
+            }
+            return ret;
+        }
         EnumSkills skill = EnumSkills.read(s);
         if (skill == null) {
             ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.no", s), false);
@@ -127,7 +163,7 @@ public class RunecraftoryCommand {
         int ret = 0;
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                data.readFromNBT(data.resetNBT(), null);
+                data.resetAll(player);
                 Platform.INSTANCE.sendToClient(new S2CCapSync(data), player);
             });
             ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.reset.all", player.getName()), false);

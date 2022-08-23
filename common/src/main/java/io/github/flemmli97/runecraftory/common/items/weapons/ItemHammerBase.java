@@ -71,13 +71,11 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
         Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.HAMMERAXE, 1));
+                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 1));
     }
 
     @Override
     public void onBlockBreak(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(cap -> LevelCalc.levelSkill(player, cap, EnumSkills.MINING, 0.5f));
     }
 
     @Override
@@ -93,14 +91,6 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public boolean doSweepingAttack() {
         return false;
-    }
-
-    @Override
-    public boolean mineBlock(ItemStack stack, Level world, BlockState state, BlockPos pos, LivingEntity entityLiving) {
-        if (entityLiving instanceof ServerPlayer && this.getDestroySpeed(stack, state) == this.speed) {
-            this.onBlockBreak((ServerPlayer) entityLiving);
-        }
-        return super.mineBlock(stack, world, state, pos, entityLiving);
     }
 
     @Override
@@ -123,7 +113,7 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.HAMMERAXE)[0] >= 5).orElse(false)) {
+        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5).orElse(false)) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
         }
@@ -155,8 +145,10 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
                 if (success) {
                     entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
                     if (entity instanceof ServerPlayer player) {
-                        this.onEntityHit(player, stack);
-                        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.useRP(player, data, 10, true, false, true, 1, EnumSkills.HAMMERAXE));
+                        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                            LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 3);
+                            LevelCalc.useRP(player, data, 10, true, false, true, 1, EnumSkills.HAMMERAXE);
+                        });
                     }
                 }
             }

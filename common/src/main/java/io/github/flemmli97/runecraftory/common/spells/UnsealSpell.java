@@ -46,6 +46,6 @@ public class UnsealSpell extends Spell {
 
     @Override
     public int rpCost() {
-        return 30;
+        return 50;
     }
 }

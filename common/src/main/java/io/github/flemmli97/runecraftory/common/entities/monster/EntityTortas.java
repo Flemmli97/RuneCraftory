@@ -66,6 +66,8 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public void setDoJumping(boolean jump) {
+        if (this.isInWater())
+            super.setDoJumping(jump);
     }
 
     @Override
@@ -189,11 +191,6 @@ public class EntityTortas extends ChargingMonster {
     @Override
     public boolean canBreatheUnderwater() {
         return true;
-    }
-
-    @Override
-    public boolean rideableUnderWater() {
-        return false;
     }
 
     @Override
