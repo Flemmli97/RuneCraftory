@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.ai.LookAtAliveGo
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.RandomLookGoalAlive;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.RiderAttackTargetGoal;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.StayGoal;
+import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -421,7 +422,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         if (player instanceof ServerPlayer serverPlayer)
                             serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
                         float rightItemMultiplier = this.tamingMultiplier(stack);
+                        int count = stack.getCount();
                         this.applyFoodEffect(stack);
+                        if (count == stack.getCount() && !player.isCreative())
+                            stack.shrink(1);
                         this.tamingTick = 100;
                         float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier);
                         this.delayedTaming = () -> {
@@ -589,6 +593,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.level.isClientSide)
             return false;
         this.eat(this.level, stack);
+        if (stack.getItem() == ModItems.objectX.get())
+            ItemObjectX.applyEffect(this, stack);
         this.removeFoodEffect();
         FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
         if (food == null) {

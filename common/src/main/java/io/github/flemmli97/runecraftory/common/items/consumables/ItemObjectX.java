@@ -21,23 +21,27 @@ public class ItemObjectX extends Item {
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity livingEntity) {
         if (this.isEdible() && !livingEntity.level.isClientSide) {
-            ItemStack eat = livingEntity.eat(level, stack);
-            List<MobEffect> list = PlatformUtils.INSTANCE.effects().values()
-                    .stream().filter(effect -> effect.getCategory() == MobEffectCategory.HARMFUL).toList();
-            if (!list.isEmpty()) {
-                int r = livingEntity.getRandom().nextInt(5) + 1;
-                for (int i = 0; i < r; i++) {
-                    MobEffect effect = list.get(livingEntity.getRandom().nextInt(list.size()));
-                    int amp = livingEntity.getRandom().nextInt(2);
-                    MobEffectInstance inst = livingEntity.getEffect(effect);
-                    if (inst != null)
-                        amp += inst.getAmplifier();
-                    int duration = effect == ModEffects.sleep.get() ? 80 : 600;
-                    livingEntity.addEffect(new MobEffectInstance(effect, duration, amp));
-                }
-            }
-            return eat;
+            return applyEffect(livingEntity, stack);
         }
         return stack;
+    }
+
+    public static ItemStack applyEffect(LivingEntity livingEntity, ItemStack stack) {
+        ItemStack eat = livingEntity.eat(livingEntity.level, stack);
+        List<MobEffect> list = PlatformUtils.INSTANCE.effects().values()
+                .stream().filter(effect -> effect.getCategory() == MobEffectCategory.HARMFUL).toList();
+        if (!list.isEmpty()) {
+            int r = livingEntity.getRandom().nextInt(5) + 1;
+            for (int i = 0; i < r; i++) {
+                MobEffect effect = list.get(livingEntity.getRandom().nextInt(list.size()));
+                int amp = livingEntity.getRandom().nextInt(2);
+                MobEffectInstance inst = livingEntity.getEffect(effect);
+                if (inst != null)
+                    amp += inst.getAmplifier();
+                int duration = effect == ModEffects.sleep.get() ? 80 : 600;
+                livingEntity.addEffect(new MobEffectInstance(effect, duration, amp));
+            }
+        }
+        return eat;
     }
 }
