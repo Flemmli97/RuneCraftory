@@ -121,7 +121,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (this.getControllingPassenger() instanceof Player)
                 return false;
             if (this.isTamed())
-                return this.getOwnerUUID().equals(EntityUtils.tryGetOwner(e));
+                return !this.getOwnerUUID().equals(EntityUtils.tryGetOwner(e));
             return true;
         }
         return false;
@@ -140,11 +140,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 return true;
             Entity controller = this.getControllingPassenger();
             if (this.isTamed()) {
-                if (e == this.getTarget())
-                    return true;
                 UUID owner = EntityUtils.tryGetOwner(e);
                 if (owner != null && (!this.attackOtherTamedMobs() || owner.equals(this.getOwnerUUID())))
                     return false;
+                if (e == this.getTarget())
+                    return true;
                 if (controller instanceof Player)
                     return true;
                 return e instanceof Enemy || (e instanceof Mob && ((Mob) e).getTarget() == this);
@@ -971,6 +971,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.setYya(0);
         this.setZza(0);
         this.setXxa(0);
+        this.setTarget(null);
         super.addPassenger(passenger);
     }
 

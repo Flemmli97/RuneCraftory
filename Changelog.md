@@ -4,6 +4,8 @@ RuneCraftory 1.2.3
 - Mining minerals now cost rp
 - Add "Heal On Wake" config. Previously that logic was together with "Modify Bed"
 - Tools now shift the center of the action to the block the player is looking at instead of just using the players position
+- Fix non food item not getting used up during taming
+- Fix tamed monster sometimes going after other tamed monsters
 
 RuneCraftory 1.2.2
 ================
