@@ -36,6 +36,7 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.disableHunger = spec.disableHunger.get();
         GeneralConfig.modifyWeather = spec.modifyWeather.get();
         GeneralConfig.modifyBed = spec.modifyBed.get();
+        GeneralConfig.healOnWakeUp = spec.healOnWakeUp.get();
         GeneralConfig.disableFoodSystem = spec.disableFoodSystem.get();
         GeneralConfig.disableItemStatSystem = spec.disableItemStatSystem.get();
         GeneralConfig.disableCropSystem = spec.disableCropSystem.get();

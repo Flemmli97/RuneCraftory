@@ -155,7 +155,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     private void useSpear(ServerPlayer player, PlayerData data) {
         List<Entity> list = RayTraceUtils.getEntities(player, this.getRange(), 10);
         if (!list.isEmpty()) {
-            LevelCalc.useRP(player, data, player.getRandom().nextInt(2) + 3, true, true, true, 1, EnumSkills.SPEAR);
+            LevelCalc.useRP(player, data, player.getRandom().nextInt(2) + 2, true, false, true, EnumSkills.SPEAR);
             data.getWeaponHandler().onUseSpear();
             LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 1);
             list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.3f, false, false, false));

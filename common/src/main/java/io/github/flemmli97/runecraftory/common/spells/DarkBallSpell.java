@@ -37,7 +37,7 @@ public class DarkBallSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.DARK)).orElse(false);
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, false, true, EnumSkills.DARK)).orElse(false);
         if (rp) {
             EntityDarkBall ball = new EntityDarkBall(world, entity, this.type);
             ball.setDamageMultiplier(0.9f + level * 0.1f);

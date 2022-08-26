@@ -21,6 +21,7 @@ public class GeneralConfig {
     public static boolean disableHunger = false;
     public static boolean modifyWeather = false;
     public static boolean modifyBed = false;
+    public static boolean healOnWakeUp = false;
     public static boolean disableFoodSystem = false;
     public static boolean disableItemStatSystem = false;
     public static boolean disableCropSystem = true;
@@ -88,7 +89,7 @@ public class GeneralConfig {
         skillProps.put(EnumSkills.LOGGING, new SkillProperties(1, 0.7f, 0, 0.3f, 0, 2));
         skillProps.put(EnumSkills.MINING, new SkillProperties(1, 0.7f, 0.1f, 0.3f, 0, 1));
         skillProps.put(EnumSkills.FISHING, new SkillProperties(1, 0.5f, 0, 0, 0.5f, 25));
-        skillProps.put(EnumSkills.COOKING, new SkillProperties(0, 0.25f, 0, 0.1f, 0, 20));
+        skillProps.put(EnumSkills.COOKING, new SkillProperties(0, 0.25f, 0, 0.1f, 0, 10));
         skillProps.put(EnumSkills.FORGING, new SkillProperties(0, 0.25f, 0, 0.1f, 0, 20));
         skillProps.put(EnumSkills.CHEMISTRY, new SkillProperties(0, 0.25f, 0, 0.1f, 0, 20));
         skillProps.put(EnumSkills.CRAFTING, new SkillProperties(0, 0.25f, 0, 0, 0.1f, 20));

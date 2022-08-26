@@ -31,7 +31,7 @@ public class WaterLaserSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.WATER)).orElse(false);
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, false, true, EnumSkills.WATER)).orElse(false);
         if (rp) {
             EntityWaterLaser laser = new EntityWaterLaser(world, entity);
             laser.setMaxTicks(entity instanceof Player ? 44 : 15);

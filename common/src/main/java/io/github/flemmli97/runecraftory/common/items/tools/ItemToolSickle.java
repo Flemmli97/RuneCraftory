@@ -41,6 +41,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import java.util.Set;
 
@@ -90,7 +91,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
     @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            LevelCalc.useRP(player, data, 2 + player.getRandom().nextInt(2), true, false, true, 1, EnumSkills.FARMING, EnumSkills.WIND);
+            LevelCalc.useRP(player, data, 2, true, false, true, EnumSkills.FARMING, EnumSkills.WIND);
             LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3);
             LevelCalc.levelSkill(player, data, EnumSkills.WIND, 0.5f);
         });
@@ -154,25 +155,25 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
-        if (this.tier.getTierLevel() != 0 && level instanceof ServerLevel serverLevel) {
+        if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
             int range = Math.min(useTime, this.tier.getTierLevel());
-            BlockPos pos = entity.blockPosition();
+            BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
             if (range == 0) {
-                if (entity instanceof Player player) {
-                    BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
-                    if (result != null) {
-                        this.useOnBlock(new UseOnContext(player, entity.getUsedItemHand(), result));
-                        return;
-                    }
+                if (result != null) {
+                    this.useOnBlock(new UseOnContext(player, entity.getUsedItemHand(), result));
                 }
             } else {
-                int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
-                        .filter(p -> this.sickleUse(serverLevel, p, stack, entity))
+                BlockPos pos = entity.blockPosition();
+                if (result != null && result.getType() != HitResult.Type.MISS) {
+                    pos = result.getBlockPos();
+                }
+                int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, 0, -range), pos.offset(range, 0, range))
+                        .filter(p -> this.sickleUse(player.getLevel(), p.immutable(), stack, entity))
                         .count();
-                if (entity instanceof ServerPlayer player && amount > 0)
+                if (amount > 0)
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        LevelCalc.useRP(player, data, this.tier.getTierLevel() * this.tier.getTierLevel() * 20, true, false, true, 1, EnumSkills.FARMING, EnumSkills.WIND);
+                        LevelCalc.useRP(player, data, range * 13.5f, true, true, true, EnumSkills.FARMING);
                         LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3.5f);
                         LevelCalc.levelSkill(player, data, EnumSkills.WIND, 0.8f);
                     });

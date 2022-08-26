@@ -1,3 +1,10 @@
+RuneCraftory 1.2.3
+================
+- Readjusted and rewritten rp usages
+- Mining minerals now cost rp
+- Add "Heal On Wake" config. Previously that logic was together with "Modify Bed"
+- Tools now shift the center of the action to the block the player is looking at instead of just using the players position
+
 RuneCraftory 1.2.2
 ================
 - Make bronze mineral drop copper instead of bronze cause more logical and balanced  

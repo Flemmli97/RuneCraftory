@@ -31,7 +31,7 @@ public class PoisonHealSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.LOVE)).orElse(false);
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, EnumSkills.LOVE)).orElse(false);
         if (rp) {
             if (level >= 10) {
                 entity.removeEffect(ModEffects.seal.get());
@@ -48,6 +48,6 @@ public class PoisonHealSpell extends Spell {
 
     @Override
     public int rpCost() {
-        return 30;
+        return 15;
     }
 }

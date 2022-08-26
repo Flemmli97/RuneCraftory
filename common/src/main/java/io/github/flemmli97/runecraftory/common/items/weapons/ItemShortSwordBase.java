@@ -137,7 +137,7 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
                         this.onEntityHit(player, stack);
                         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                             LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 3);
-                            LevelCalc.useRP(player, data, 10, true, false, true, 1, EnumSkills.SHORTSWORD);
+                            LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.SHORTSWORD);
                         });
                     }
                 }

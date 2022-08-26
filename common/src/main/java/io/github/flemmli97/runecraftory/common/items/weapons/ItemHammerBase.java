@@ -147,7 +147,7 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
                     if (entity instanceof ServerPlayer player) {
                         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                             LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 3);
-                            LevelCalc.useRP(player, data, 10, true, false, true, 1, EnumSkills.HAMMERAXE);
+                            LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.HAMMERAXE);
                         });
                     }
                 }

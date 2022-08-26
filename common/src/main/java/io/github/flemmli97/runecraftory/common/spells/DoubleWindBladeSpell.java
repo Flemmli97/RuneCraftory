@@ -33,7 +33,7 @@ public class DoubleWindBladeSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, 1, EnumSkills.WIND)).orElse(false);
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, false, true, EnumSkills.WIND)).orElse(false);
         if (rp) {
             for (int i = 0; i < 2; i++) {
                 EntityWindBlade wind = new EntityWindBlade(world, entity);

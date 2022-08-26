@@ -32,7 +32,7 @@ public class HealT3Spell extends Spell {
     @Override
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data ->
-                LevelCalc.useRP(player, data, (int) (data.getMaxRunePoints() * 0.25), false, true, true, 1, EnumSkills.LOVE)).orElse(false);
+                LevelCalc.useRP(player, data, this.rpCost(), false, true, true, EnumSkills.LOVE)).orElse(false);
         if (rp) {
             float healAmount = CombatUtils.getAttributeValueRaw(entity, ModAttributes.RF_MAGIC.get()) * (3f + level * 0.3f);
             entity.heal(healAmount);
@@ -44,6 +44,6 @@ public class HealT3Spell extends Spell {
 
     @Override
     public int rpCost() {
-        return 0;
+        return 45;
     }
 }

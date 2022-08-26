@@ -137,7 +137,7 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
                     if (entity instanceof ServerPlayer player) {
                         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                             LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 3);
-                            LevelCalc.useRP(player, data, 10, true, false, true, 1, EnumSkills.DUAL);
+                            LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.DUAL);
                         });
                     }
                 }

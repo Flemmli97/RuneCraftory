@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.DisableGoal;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
+import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
@@ -22,6 +23,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -245,7 +247,7 @@ public class EntityCalls {
     }
 
     public static void wakeUp(Player player) {
-        if (GeneralConfig.modifyBed && player instanceof ServerPlayer serverPlayer) {
+        if (GeneralConfig.healOnWakeUp && player instanceof ServerPlayer serverPlayer) {
             player.heal(player.getMaxHealth());
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 data.refreshRunePoints(player, data.getMaxRunePoints());
@@ -293,7 +295,11 @@ public class EntityCalls {
     }
 
     public static void onBlockBreak(ServerPlayer player, BlockState state, BlockPos pos) {
-        if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
+        if (!player.hasCorrectToolForDrops(state))
+            return;
+        if (state.is(ModTags.hammerBreakable)) {
+            ItemToolHammer.onHammering(player, true);
+        } else if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.MINING, state.getBlock() instanceof BlockMineral ? 10 : 1));
         }
         if (state.is(BlockTags.MINEABLE_WITH_AXE)) {
@@ -304,7 +310,7 @@ public class EntityCalls {
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 1));
         }
         if (state.getBlock() instanceof BushBlock) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 1));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 0.5f));
         }
     }
 }

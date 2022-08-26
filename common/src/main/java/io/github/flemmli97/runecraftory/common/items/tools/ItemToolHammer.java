@@ -41,6 +41,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargeable {
 
@@ -87,10 +88,15 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
 
     @Override
     public void onBlockBreak(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            LevelCalc.useRP(player, data, 7, true, false, true, 1, EnumSkills.MINING);
-            LevelCalc.levelSkill(player, data, EnumSkills.MINING, 10);
-        });
+    }
+
+    public static void onHammering(ServerPlayer player, boolean level) {
+        if (getUseRPFlag(player.getMainHandItem()))
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                LevelCalc.useRP(player, data, 5, true, false, true, EnumSkills.MINING);
+                if (level)
+                    LevelCalc.levelSkill(player, data, EnumSkills.MINING, 10);
+            });
     }
 
     @Override
@@ -129,31 +135,51 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
+    public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity miningEntity) {
+        return super.mineBlock(stack, level, state, pos, miningEntity);
+    }
+
+    @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
-        if (this.tier.getTierLevel() != 0 && !world.isClientSide) {
+        if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
             int range = Math.min(useTime, this.tier.getTierLevel());
-            BlockPos pos = entity.blockPosition();
-            if (range == 0) {
-                if (entity instanceof Player player) {
-                    BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
-                    if (result != null) {
-                        this.useOnBlock(new UseOnContext(player, entity.getUsedItemHand(), result), false);
-                        return;
-                    }
+            if (range > 0) {
+                setDontUseRPFlagTemp(stack, true);
+                BlockPos pos = entity.blockPosition();
+                BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
+                if (result != null && result.getType() != HitResult.Type.MISS) {
+                    pos = result.getBlockPos();
                 }
-            } else {
                 int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
-                        .filter(p -> this.hammer((ServerLevel) world, p, stack, entity, true))
+                        .filter(p -> this.hammer((ServerLevel) world, p.immutable(), stack, entity, true) != HammerState.FAIL)
                         .count();
-                if (entity instanceof ServerPlayer player && amount > 0)
+                if (amount > 0)
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        LevelCalc.useRP(player, data, this.tier.getTierLevel() * this.tier.getTierLevel() * 30, true, false, true, 1, EnumSkills.MINING);
+                        LevelCalc.useRP(player, data, range * 17.75f, true, true, true, EnumSkills.MINING);
                         LevelCalc.levelSkill(player, data, EnumSkills.MINING, (range + 1) * 10);
                     });
+                setDontUseRPFlagTemp(stack, false);
             }
         }
         super.releaseUsing(stack, world, entity, timeLeft);
+    }
+
+    private static void setDontUseRPFlagTemp(ItemStack stack, boolean flag) {
+        if (flag) {
+            stack.getOrCreateTag().putBoolean("RFInUseFlag", true);
+        } else {
+            stack.getOrCreateTag().remove("RFInUseFlag");
+            if (stack.getTag().isEmpty())
+                stack.setTag(null);
+        }
+    }
+
+    private static boolean getUseRPFlag(ItemStack stack) {
+        if (stack.hasTag()) {
+            return !stack.getOrCreateTag().getBoolean("RFInUseFlag");
+        }
+        return true;
     }
 
     @Override
@@ -167,41 +193,49 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     }
 
     private InteractionResult useOnBlock(UseOnContext ctx, boolean canHammer) {
-        if (ctx.getLevel().isClientSide)
+        if (!(ctx.getPlayer() instanceof ServerPlayer player))
             return InteractionResult.PASS;
         ItemStack stack = ctx.getItemInHand();
-        if (this.hammer((ServerLevel) ctx.getLevel(), ctx.getClickedPos(), stack, ctx.getPlayer(), canHammer)) {
-            this.onBlockBreak((ServerPlayer) ctx.getPlayer());
+        HammerState state = this.hammer((ServerLevel) ctx.getLevel(), ctx.getClickedPos(), stack, ctx.getPlayer(), canHammer);
+        if (state != HammerState.FAIL) {
+            setDontUseRPFlagTemp(stack, false);
+            onHammering(player, state == HammerState.BREAK);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }
 
-    private boolean hammer(ServerLevel world, BlockPos pos, ItemStack stack, LivingEntity entity, boolean canHammer) {
+    private HammerState hammer(ServerLevel world, BlockPos pos, ItemStack stack, LivingEntity entity, boolean canHammer) {
         if (entity instanceof Player && !((Player) entity).mayUseItemAt(pos.relative(Direction.UP), Direction.UP, stack))
-            return false;
+            return HammerState.FAIL;
         BlockState state = world.getBlockState(pos);
         if (canHammer && state.is(ModTags.hammerBreakable)) {
             if (entity instanceof ServerPlayer serverPlayer) {
                 if (((ServerPlayer) entity).gameMode.destroyBlock(pos)) {
                     world.levelEvent(2001, pos, Block.getId(state));
                     serverPlayer.connection.send(new ClientboundBlockUpdatePacket(pos, world.getBlockState(pos)));
-                    return true;
+                    return HammerState.BREAK;
                 }
             } else {
-                return world.destroyBlock(pos, true, entity, 3);
+                return world.destroyBlock(pos, true, entity, 3) ? HammerState.BREAK : HammerState.FAIL;
             }
         } else if (state.is(ModTags.hammerFlattenable) && world.getBlockState(pos.above()).getMaterial() == Material.AIR) {
             if (world.setBlockAndUpdate(pos, Block.pushEntitiesUp(state, Blocks.DIRT.defaultBlockState(), world, pos))) {
                 world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.STONE_BREAK, SoundSource.BLOCKS, 1, 1);
-                return true;
+                return HammerState.FLATTEN;
             }
         }
-        return false;
+        return HammerState.FAIL;
     }
 
     @Override
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
         return ImmutableMultimap.of();
+    }
+
+    enum HammerState {
+        FAIL,
+        BREAK,
+        FLATTEN
     }
 }

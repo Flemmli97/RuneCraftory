@@ -39,6 +39,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Consumer;
@@ -89,7 +90,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            LevelCalc.useRP(player, data, 7, true, false, true, 1, EnumSkills.FARMING, EnumSkills.EARTH);
+            LevelCalc.useRP(player, data, 3, true, false, true, EnumSkills.FARMING, EnumSkills.EARTH);
             LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3);
             LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 0.6f);
         });
@@ -127,21 +128,23 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
         if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
             int range = Math.min(useTime, this.tier.getTierLevel());
-            BlockPos pos = entity.blockPosition();
+            BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
             if (range == 0) {
-                BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
                 if (result != null) {
                     this.useOnBlock(new UseOnContext(player, entity.getUsedItemHand(), result));
-                    return;
                 }
             } else {
+                BlockPos pos = entity.blockPosition().below();
+                if (result != null && result.getType() != HitResult.Type.MISS) {
+                    pos = result.getBlockPos();
+                }
                 Function<BlockPos, BlockHitResult> hit = bh -> new BlockHitResult(Vec3.atCenterOf(bh), Direction.UP, bh, false);
-                int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
-                        .filter(p -> this.hoeBlock(new UseOnContext(player, entity.getUsedItemHand(), hit.apply(p))))
+                int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, 0, -range), pos.offset(range, 0, range))
+                        .filter(p -> this.hoeBlock(new UseOnContext(player, entity.getUsedItemHand(), hit.apply(p.immutable()))))
                         .count();
                 if (amount > 0)
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        LevelCalc.useRP(player, data, this.tier.getTierLevel() * this.tier.getTierLevel() * 40, true, false, true, 1, EnumSkills.FARMING, EnumSkills.EARTH);
+                        LevelCalc.useRP(player, data, range * 18.75f, true, true, true, EnumSkills.FARMING);
                         LevelCalc.levelSkill(player, data, EnumSkills.FARMING, range * 15);
                         LevelCalc.levelSkill(player, data, EnumSkills.EARTH, range * 0.8f);
                     });

@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.EntityGetter;
 import net.minecraft.world.phys.Vec3;
@@ -181,26 +182,29 @@ public class LevelCalc {
         return level + Math.round((float) ((random.nextDouble() * 2 - 1) * Math.ceil(level * 0.1)));
     }
 
-    public static boolean useRP(Player player, PlayerData data, int amount, boolean hurt, boolean percentReduction, boolean mean, float modifier, EnumSkills... skills) {
+    public static boolean useRP(Player player, PlayerData data, float amount, boolean hurt, boolean percent, boolean mean, EnumSkills... skills) {
         int skillVal = 0;
-        if (mean) {
-            float l = skills.length;
-            int sLvl = 0;
-            for (EnumSkills skill : skills)
-                sLvl += data.getSkillLevel(skill).getLevel();
-            skillVal = (int) (sLvl / l);
-        } else {
-            for (EnumSkills skill : skills) {
-                int lvl = data.getSkillLevel(skill).getLevel();
-                if (lvl > skillVal)
-                    skillVal = lvl;
+        if (skills.length == 0)
+            skillVal = 1;
+        else if (skills.length == 1)
+            skillVal = data.getSkillLevel(skills[0]).getLevel();
+        else {
+            if (mean) {
+                float l = skills.length;
+                float sLvl = 0;
+                for (EnumSkills skill : skills)
+                    sLvl += data.getSkillLevel(skill).getLevel();
+                skillVal = (int) (sLvl / l);
+            } else {
+                for (EnumSkills skill : skills) {
+                    int lvl = data.getSkillLevel(skill).getLevel();
+                    if (lvl > skillVal)
+                        skillVal = lvl;
+                }
             }
         }
-        int val = amount;
-        if (percentReduction)
-            val *= 1 - Math.min(0.9, Math.log(skillVal) * 0.2);
-        else
-            val -= (int) (Math.log(skillVal) * modifier);
-        return data.decreaseRunePoints(player, Math.max(amount < 4 ? 1 : 3, val), hurt);
+        float val = amount * Math.max(1 - (skillVal - 1) * 0.0065f, 0.3f);
+        int usage = Mth.ceil(percent ? data.getMaxRunePoints() * val * 0.01 : val);
+        return data.decreaseRunePoints(player, usage, hurt);
     }
 }

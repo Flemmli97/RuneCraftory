@@ -34,7 +34,8 @@ public class BlockTagGen extends BlockTagsProvider {
                 .addTag(BlockTags.LEAVES)
                 .addTag(BlockTags.SAPLINGS)
                 .addTag(BlockTags.TALL_FLOWERS)
-                .add(Blocks.GRASS, Blocks.TALL_GRASS, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS)
+                .addTag(BlockTags.REPLACEABLE_PLANTS)
+                .add(Blocks.SEAGRASS, Blocks.TALL_SEAGRASS)
                 .add(Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM, Blocks.CRIMSON_FUNGUS, Blocks.WARPED_FUNGUS);
 
         this.tag(ModTags.hammerFlattenable)

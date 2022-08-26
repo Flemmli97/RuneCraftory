@@ -89,7 +89,7 @@ public class PlayerWeaponHandler {
         if (this.gloveTick % 4 == 0) {
             List<LivingEntity> list = player.level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(1.0));
             if (!list.isEmpty())
-                LevelCalc.useRP(player, data, 5, true, false, true, 1, EnumSkills.FIST);
+                LevelCalc.useRP(player, data, 5, true, false, true, EnumSkills.FIST);
             for (LivingEntity e : list) {
                 if (e != player) {
                     LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 2);

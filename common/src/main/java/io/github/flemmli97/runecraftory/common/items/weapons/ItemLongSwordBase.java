@@ -136,7 +136,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
                     if (entity instanceof ServerPlayer player) {
                         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                             LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 3);
-                            LevelCalc.useRP(player, data, 10, true, false, true, 1, EnumSkills.LONGSWORD);
+                            LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.LONGSWORD);
                         });
                     }
                 }
