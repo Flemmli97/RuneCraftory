@@ -750,7 +750,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         ++this.deathTime;
         if (this.deathTime == (this.maxDeathTime() - 5) && this.lastHurtByPlayer instanceof ServerPlayer) {
             Platform.INSTANCE.getPlayerData(this.lastHurtByPlayer).ifPresent(data -> {
-                LevelCalc.addXP((ServerPlayer) this.lastHurtByPlayer, data, LevelCalc.getMobXP(data, this));
+                LevelCalc.addXP((ServerPlayer) this.lastHurtByPlayer, data, this.baseXP(), this.level());
                 data.setMoney(this.lastHurtByPlayer, data.getMoney() + LevelCalc.getMoney(this.baseMoney(), this.level()));
             });
         }

@@ -334,7 +334,7 @@ public class GateEntity extends Mob implements IBaseMob {
     protected void tickDeath() {
         if (this.deathTime == 5 && this.lastHurtByPlayer instanceof ServerPlayer) {
             Platform.INSTANCE.getPlayerData(this.lastHurtByPlayer).ifPresent(data -> {
-                LevelCalc.addXP((ServerPlayer) this.lastHurtByPlayer, data, LevelCalc.gateXP(data, this));
+                LevelCalc.addXP((ServerPlayer) this.lastHurtByPlayer, data, MobConfig.gateXP, this.level());
                 data.setMoney(this.lastHurtByPlayer, data.getMoney() + LevelCalc.getMoney(this.baseMoney(), this.level()));
             });
         }

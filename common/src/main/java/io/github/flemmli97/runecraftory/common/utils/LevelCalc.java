@@ -5,8 +5,6 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -103,21 +101,18 @@ public class LevelCalc {
     }
 
     public static int getMoney(int base, int level) {
-        return (int) (base * Math.min(1, level * 0.5));
+        return (int) (base * Math.min(1, level * 0.1));
     }
 
-    public static int getMobXP(PlayerData data, BaseMonster monster) {
-        return (int) (Math.min(monster.level() / (float) data.getPlayerLevel().getLevel(), 1) * monster.baseXP());
-    }
-
-    public static int gateXP(PlayerData data, GateEntity gate) {
-        return (int) (Math.min(gate.level() / (float) data.getPlayerLevel().getLevel(), 1) * MobConfig.gateXP);
-    }
-
-    public static void addXP(ServerPlayer player, PlayerData data, int amount) {
+    public static void addXP(ServerPlayer player, PlayerData data, int base, int level) {
         if (GeneralConfig.xpMultiplier == 0)
             return;
-        data.addXp(player, amount * GeneralConfig.xpMultiplier);
+        if (data.getPlayerLevel().getLevel() <= level)
+            data.addXp(player, (base + base * (level - 1) * 0.5f) * GeneralConfig.xpMultiplier);
+        else {
+            int diff = data.getPlayerLevel().getLevel() - level * 2;
+            data.addXp(player, (base + base * Math.max(0, level - diff - 1) * 0.5f) * GeneralConfig.xpMultiplier);
+        }
     }
 
     public static int getBaseXP(EnumSkills skill) {
@@ -138,9 +133,9 @@ public class LevelCalc {
                 if (dist < 400)
                     yield MobConfig.baseGateLevel;
                 if (dist < 1000)
-                    yield randomizedLevel(level.random, MobConfig.baseGateLevel + (int) ((dist - 400) * 0.04));
+                    yield randomizedLevel(level.random, MobConfig.baseGateLevel + (int) ((dist - 400) * 0.03));
                 if (dist < 5000)
-                    yield randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (600 * 0.04 + (dist - 1000) * 0.05));
+                    yield randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (600 * 0.03 + (dist - 1000) * 0.05));
                 yield randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (4000 * 0.05 + (dist - 5000) * 0.07));
             }
             case PLAYERLEVELMAX -> {
