@@ -27,8 +27,11 @@ public class ModParticles {
     public static final RegistryEntrySupplier<ParticleType<ColoredParticleData4f>> circlingLight = PARTICLES.register("circling_light", () -> new ColoredParticle4fType(false));
     public static final RegistryEntrySupplier<ParticleType<ColoredParticleData4f>> vortex = PARTICLES.register("vortex", () -> new ColoredParticle4fType(false));
     public static final RegistryEntrySupplier<ParticleType<ColoredParticleData>> wind = registerColoredParticleType("wind", false);
+    public static final RegistryEntrySupplier<SimpleParticleType> lightning = PARTICLES.register("lightning", () -> Platform.INSTANCE.simple(false));
+
     public static final RegistryEntrySupplier<SimpleParticleType> sleep = PARTICLES.register("sleep", () -> Platform.INSTANCE.simple(false));
     public static final RegistryEntrySupplier<SimpleParticleType> poison = PARTICLES.register("poison", () -> Platform.INSTANCE.simple(false));
+    public static final RegistryEntrySupplier<SimpleParticleType> paralysis = PARTICLES.register("paralysis", () -> Platform.INSTANCE.simple(false));
 
     public static RegistryEntrySupplier<ParticleType<ColoredParticleData>> registerColoredParticleType(String name, boolean alwaysShow) {
         return PARTICLES.register(name, () -> new ColoredParticleType(alwaysShow));

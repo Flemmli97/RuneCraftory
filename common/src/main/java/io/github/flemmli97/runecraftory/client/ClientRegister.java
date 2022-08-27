@@ -36,6 +36,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelWisp;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWooly;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWoolyWool;
 import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
+import io.github.flemmli97.runecraftory.client.particles.LightningParticle;
 import io.github.flemmli97.runecraftory.client.particles.SinkingParticle;
 import io.github.flemmli97.runecraftory.client.particles.VortexParticle;
 import io.github.flemmli97.runecraftory.client.render.RenderGate;
@@ -309,6 +310,8 @@ public class ClientRegister {
         consumer.register(ModParticles.wind.get(), ColoredParticle.NoGravityParticleFactory::new);
         consumer.register(ModParticles.sleep.get(), HeartParticle.Provider::new);
         consumer.register(ModParticles.poison.get(), HeartParticle.Provider::new);
+        consumer.register(ModParticles.paralysis.get(), LightningParticle.Factory::new);
+        consumer.register(ModParticles.lightning.get(), LightningParticle.Factory::new);
     }
 
     public interface EntityRendererRegister {

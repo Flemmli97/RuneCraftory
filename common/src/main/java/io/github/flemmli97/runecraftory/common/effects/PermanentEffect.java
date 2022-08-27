@@ -35,8 +35,12 @@ public class PermanentEffect extends MobEffect implements ExtendedEffect {
 
     @Override
     public void applyEffectTick(LivingEntity living, int amplifier) {
-        living.removeEffect(this);
-        living.addEffect(new MobEffectInstance(this, 2 * this.tickDelay - 1, 0, false, false, false));
+        MobEffectInstance inst = living.getEffect(this);
+        if (!living.level.isClientSide) {
+            if (inst == null || inst.getDuration() - this.tickDelay <= 1) {
+                living.addEffect(new MobEffectInstance(this, 4 * this.tickDelay - 1, 0, false, false, false));
+            }
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.data.DataGenerator;
@@ -48,7 +49,14 @@ public class ParticleGen implements DataProvider {
                 new ResourceLocation("effect_2"), new ResourceLocation("effect_1"), new ResourceLocation("effect_0"));
         this.addTo(ModParticles.sleep.get());
         this.addTo(ModParticles.poison.get());
-
+        this.addTo(ModParticles.paralysis.get(), new ResourceLocation(RuneCraftory.MODID, "paralysis_0"),
+                new ResourceLocation(RuneCraftory.MODID, "paralysis_1"),
+                new ResourceLocation(RuneCraftory.MODID, "paralysis_2"),
+                new ResourceLocation(RuneCraftory.MODID, "paralysis_3"));
+        this.addTo(ModParticles.lightning.get(), new ResourceLocation(RuneCraftory.MODID, "lightning_0"),
+                new ResourceLocation(RuneCraftory.MODID, "lightning_1"),
+                new ResourceLocation(RuneCraftory.MODID, "lightning_2"),
+                new ResourceLocation(RuneCraftory.MODID, "lightning_3"));
     }
 
     @Override

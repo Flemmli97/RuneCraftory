@@ -98,7 +98,7 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
     protected boolean damageEntity(LivingEntity e) {
         if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(4).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
             e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 6, true, false));
-            e.addEffect(new MobEffectInstance(MobEffects.JUMP, 10, 128, true, false));
+            e.addEffect(new MobEffectInstance(MobEffects.JUMP, 10, 127, true, false));
             return true;
         }
         return false;

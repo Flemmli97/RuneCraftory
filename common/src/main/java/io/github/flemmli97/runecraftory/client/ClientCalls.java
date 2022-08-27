@@ -139,6 +139,12 @@ public class ClientCalls {
             if (mod == 3 && data.isPoisoned()) {
                 entity.level.addParticle(ModParticles.poison.get(), entity.getX(), entity.getY() + entity.getBbHeight() + 0.1, entity.getZ(), 0, 0, 0);
             }
+            if (data.isParalysed()) {
+                boolean bl2 = entity.isInvisible() ? entity.getRandom().nextInt(25) == 0 : entity.getRandom().nextInt(5) == 0;
+                if (bl2) {
+                    entity.level.addParticle(ModParticles.paralysis.get(), entity.getRandomX(0.5), entity.getRandomY(), entity.getRandomZ(0.5), 0.05, 0.05, 0.05);
+                }
+            }
         });
         if (entity instanceof LocalPlayer player && entity.getVehicle() instanceof BaseMonster && player.input.jumping)
             Platform.INSTANCE.sendToServer(new C2SRideJump());

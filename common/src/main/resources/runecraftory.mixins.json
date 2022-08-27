@@ -12,7 +12,8 @@
     "CropBlockMixin",
     "StructureTemplateMixin",
     "ItemStackMixin",
-    "PlayerMixin"
+    "PlayerMixin",
+    "LivingEntityMixin"
   ],
   "client": [
     "AtlasMixin",
