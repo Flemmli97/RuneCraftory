@@ -131,6 +131,8 @@ public class PlatformImpl implements Platform {
         FriendlyByteBuf buf = PacketByteBufs.create();
         message.write(buf);
         PlayerLookup.tracking(e).forEach(player -> ServerPlayNetworking.send(player, message.getID(), buf));
+        if (e instanceof ServerPlayer serverPlayer)
+            ServerPlayNetworking.send(serverPlayer, message.getID(), buf);
     }
 
     @Override
