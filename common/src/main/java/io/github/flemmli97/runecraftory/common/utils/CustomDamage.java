@@ -16,6 +16,7 @@ import javax.annotation.Nullable;
 public class CustomDamage extends EntityDamageSource {
 
     public static final DamageSource EXHAUST = Platform.INSTANCE.createDamageSource("rfExhaust", true, true);
+    public static final DamageSource POISON = Platform.INSTANCE.createDamageSource("poison", true, true);
 
     private EnumElement element;
     private KnockBackType knock;
