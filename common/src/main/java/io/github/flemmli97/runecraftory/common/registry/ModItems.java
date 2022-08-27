@@ -631,7 +631,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> furSmall = mat("fur_s", Texture.Y);
     public static final RegistryEntrySupplier<Item> furMedium = mat("fur_m", Texture.Y);
     public static final RegistryEntrySupplier<Item> furLarge = mat("fur_l", Texture.Y);
-    public static final RegistryEntrySupplier<Item> fur = mat("fur", Texture.N);
+    public static final RegistryEntrySupplier<Item> fur = mat("fur", Texture.Y);
     public static final RegistryEntrySupplier<Item> furball = mat("wooly_furball", Texture.N);
     public static final RegistryEntrySupplier<Item> downYellow = mat("yellow_down", Texture.Y);
     public static final RegistryEntrySupplier<Item> furQuality = mat("quality_puffy_fur", Texture.Y);
