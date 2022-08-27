@@ -11,14 +11,16 @@
     "ContainerScreenAccessor",
     "CropBlockMixin",
     "StructureTemplateMixin",
-    "ItemStackMixin"
+    "ItemStackMixin",
+    "PlayerMixin"
   ],
   "client": [
     "AtlasMixin",
     "MinecraftMixin",
     "MouseHandlerMixin",
     "KeyboardHandlerMixin",
-    "BiomeColorsMixin"
+    "BiomeColorsMixin",
+    "LivingEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

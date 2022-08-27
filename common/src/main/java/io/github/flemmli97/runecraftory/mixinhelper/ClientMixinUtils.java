@@ -1,9 +1,15 @@
 package io.github.flemmli97.runecraftory.mixinhelper;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.level.BlockAndTintGetter;
 
 import java.util.Map;
@@ -67,6 +73,16 @@ public class ClientMixinUtils {
                 Math.min(255, FastColor.ARGB32.red(packedColourOne) + FastColor.ARGB32.red(packedColorTwo)),
                 Math.min(255, FastColor.ARGB32.green(packedColourOne) + FastColor.ARGB32.green(packedColorTwo)),
                 Math.min(255, FastColor.ARGB32.blue(packedColourOne) + FastColor.ARGB32.blue(packedColorTwo)));
+    }
+
+    public static void translateSleepingEntity(LivingEntity entity, PoseStack poseStack, float partialTicks) {
+        if (Platform.INSTANCE.getEntityData(entity).map(EntityData::isSleeping).orElse(false)) {
+            float standOffset = entity.getEyeHeight(Pose.STANDING) - 0.1f;
+            float f = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
+            float xDir = -Mth.cos(-f * ((float) Math.PI / 180) - (float) Math.PI);
+            float zDir = -Mth.sin(-f * ((float) Math.PI / 180) - (float) Math.PI);
+            poseStack.translate(xDir * standOffset, 0.0, zDir * standOffset);
+        }
     }
 
     record SeasonedTint(int origin, EnumSeason season) {

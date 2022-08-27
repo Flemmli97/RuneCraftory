@@ -6,6 +6,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -41,6 +42,7 @@ public class SleepEffect extends MobEffect {
     public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
         entity.setSilent(false);
         sendSleepPacket(entity, false);
+        entity.setPose(Pose.STANDING);
         super.removeAttributeModifiers(entity, attributeMap, amplifier);
     }
 
@@ -48,6 +50,7 @@ public class SleepEffect extends MobEffect {
     public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
         entity.setSilent(true);
         sendSleepPacket(entity, true);
+        entity.setPose(Pose.SLEEPING);
         super.addAttributeModifiers(entity, attributeMap, amplifier);
     }
 }
