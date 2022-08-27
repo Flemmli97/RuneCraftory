@@ -6,6 +6,11 @@ RuneCraftory 1.2.3
 - Tools now shift the center of the action to the block the player is looking at instead of just using the players position
 - Fix non food item not getting used up during taming
 - Fix tamed monster sometimes going after other tamed monsters
+- Changed how the amount of xp per mob is calculated
+- Fabric: Fix some packets not properly send
+- Sleep effect now causes entities to lay down
+- Disable sprinting if paralysed
+- Added paralysis and lightning particles
 
 RuneCraftory 1.2.2
 ================
