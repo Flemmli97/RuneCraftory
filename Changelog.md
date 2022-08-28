@@ -17,6 +17,8 @@ RuneCraftory 1.2.3
 - Material show upgrade difficulty now
 - Fix when dying with shift mass crafting not taking account the death
 - Fix crafting tables not properly saving their inventory
+- Added stats to currently dropped items
+- Tweaked food stats
 
 RuneCraftory 1.2.2
 ================
