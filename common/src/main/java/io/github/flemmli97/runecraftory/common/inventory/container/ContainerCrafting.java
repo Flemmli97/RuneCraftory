@@ -143,7 +143,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
         if (this.canDecrease()) {
             this.tile.decreaseIndex();
         } else if (this.matchingRecipes != null) {
-            while (this.tile.craftingIndex() < this.matchingRecipes.size())
+            while (this.tile.craftingIndex() < this.matchingRecipes.size() - 1)
                 this.tile.increaseIndex();
         }
         this.updateCraftingSlot();
@@ -155,6 +155,8 @@ public class ContainerCrafting extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int slotID) {
+        if (!player.isAlive())
+            return ItemStack.EMPTY;
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(slotID);
         if (slot != null && slot.hasItem()) {

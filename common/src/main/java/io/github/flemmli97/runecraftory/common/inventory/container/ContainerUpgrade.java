@@ -83,6 +83,8 @@ public class ContainerUpgrade extends AbstractContainerMenu {
 
     @Override
     public ItemStack quickMoveStack(Player player, int slotID) {
+        if (!player.isAlive())
+            return ItemStack.EMPTY;
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(slotID);
         if (slot != null && slot.hasItem()) {
