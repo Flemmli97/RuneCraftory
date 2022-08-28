@@ -11,6 +11,11 @@ RuneCraftory 1.2.3
 - Sleep effect now causes entities to lay down
 - Disable sprinting if paralysed
 - Added paralysis and lightning particles
+- JEI: can browse recipes from inside crafting devices now
+- REI: Support for quick crafting (that + button thingy)
+- Now shows the crafting level of recipes in both JEI and REI
+- Material show upgrade difficulty now
+- Fix when dying with shift mass crafting not taking account the death
 
 RuneCraftory 1.2.2
 ================
