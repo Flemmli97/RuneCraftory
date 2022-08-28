@@ -20,8 +20,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.TieredItem;
 
 import java.util.Map;
 import java.util.Optional;
@@ -235,7 +233,7 @@ public class ItemNBT {
         if (stack.getItem() instanceof BlockItem)
             return false;
         EquipmentSlot slotType;
-        return stack.getItem() instanceof IItemUsable || stack.getItem() instanceof TieredItem || stack.getItem() instanceof SwordItem
+        return stack.getItem() instanceof IItemUsable
                 || ((slotType = Mob.getEquipmentSlotForItem(stack)) != null && slotType != EquipmentSlot.MAINHAND);
     }
 }

@@ -146,6 +146,8 @@ public class ItemStat {
         else
             price.append(" ").append(new TranslatableComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack))).append(" ");
         list.add(price.withStyle(ChatFormatting.YELLOW));
+        if (!ItemNBT.shouldHaveStats(stack))
+            list.add(new TranslatableComponent("tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
         if (showStat) {
             Map<Attribute, Double> stats = ItemNBT.statBonusRaw(stack);
             if (!stats.isEmpty()) {

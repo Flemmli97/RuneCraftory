@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.client.gui.widgets.PageButton;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
@@ -61,5 +62,17 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             }
             OverlayGui.drawStringCenter(stack, this.font, cost, this.leftPos + 123, this.topPos + 20, 0);
         }
+    }
+
+    public EnumCrafting type() {
+        return this.menu.craftingType();
+    }
+
+    public int getLeft() {
+        return this.leftPos;
+    }
+
+    public int getTop() {
+        return this.topPos;
     }
 }

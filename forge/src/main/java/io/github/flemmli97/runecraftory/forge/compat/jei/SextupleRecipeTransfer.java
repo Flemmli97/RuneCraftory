@@ -12,7 +12,7 @@ import java.util.List;
 
 @SuppressWarnings("removal")
 public record SextupleRecipeTransfer(
-        ResourceLocation category) implements IRecipeTransferInfo<ContainerCrafting, SextupleRecipe> {
+        RecipeType<SextupleRecipe> category) implements IRecipeTransferInfo<ContainerCrafting, SextupleRecipe> {
 
     @Override
     public Class<ContainerCrafting> getContainerClass() {
@@ -21,7 +21,7 @@ public record SextupleRecipeTransfer(
 
     @Override
     public RecipeType<SextupleRecipe> getRecipeType() {
-        return new RecipeType<>(this.category, SextupleRecipe.class);
+        return this.category;
     }
 
     @Override
@@ -52,6 +52,6 @@ public record SextupleRecipeTransfer(
 
     @Override
     public ResourceLocation getRecipeCategoryUid() {
-        return this.category;
+        return this.category.getUid();
     }
 }

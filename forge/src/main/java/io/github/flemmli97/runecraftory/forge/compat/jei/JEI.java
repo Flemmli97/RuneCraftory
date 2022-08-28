@@ -1,16 +1,16 @@
 package io.github.flemmli97.runecraftory.forge.compat.jei;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.crafting.ArmorRecipe;
-import io.github.flemmli97.runecraftory.common.crafting.ChemistryRecipe;
-import io.github.flemmli97.runecraftory.common.crafting.CookingRecipe;
-import io.github.flemmli97.runecraftory.common.crafting.ForgingRecipe;
+import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
-import io.github.flemmli97.runecraftory.forge.compat.jei.category.SextupleRecipeCategory;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.handlers.IGuiClickableArea;
+import mezz.jei.api.gui.handlers.IGuiContainerHandler;
+import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -21,7 +21,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 
-@SuppressWarnings("removal")
+import java.util.Collection;
+import java.util.List;
+
 @JeiPlugin
 public class JEI implements IModPlugin {
 
@@ -36,10 +38,10 @@ public class JEI implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), ForgingRecipe.class, SextupleRecipeCategory.FORGECATEGORY, ModItems.itemBlockForge.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), CookingRecipe.class, SextupleRecipeCategory.COOKINGCATEGORY, ModItems.itemBlockCooking.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), ArmorRecipe.class, SextupleRecipeCategory.ARMORCATEGORY, ModItems.itemBlockAccess.get()),
-                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), ChemistryRecipe.class, SextupleRecipeCategory.CHEMISTRYCATEGORY, ModItems.itemBlockChem.get())
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.FORGECATEGORY, ModItems.itemBlockForge.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.COOKINGCATEGORY, ModItems.itemBlockCooking.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.ARMORCATEGORY, ModItems.itemBlockAccess.get()),
+                new SextupleRecipeCategory<>(registration.getJeiHelpers().getGuiHelper(), SextupleRecipeCategory.CHEMISTRYCATEGORY, ModItems.itemBlockChem.get())
         );
     }
 
@@ -50,10 +52,10 @@ public class JEI implements IModPlugin {
         reg.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ModItems.NOTEX.stream()
                 .map(sup -> new ItemStack(sup.get())).toList());
         RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
-        reg.addRecipes(manager.getAllRecipesFor(ModCrafting.FORGE.get()), SextupleRecipeCategory.FORGECATEGORY);
-        reg.addRecipes(manager.getAllRecipesFor(ModCrafting.ARMOR.get()), SextupleRecipeCategory.ARMORCATEGORY);
-        reg.addRecipes(manager.getAllRecipesFor(ModCrafting.COOKING.get()), SextupleRecipeCategory.COOKINGCATEGORY);
-        reg.addRecipes(manager.getAllRecipesFor(ModCrafting.CHEMISTRY.get()), SextupleRecipeCategory.CHEMISTRYCATEGORY);
+        reg.addRecipes(SextupleRecipeCategory.FORGECATEGORY, manager.getAllRecipesFor(ModCrafting.FORGE.get()));
+        reg.addRecipes(SextupleRecipeCategory.ARMORCATEGORY, manager.getAllRecipesFor(ModCrafting.ARMOR.get()));
+        reg.addRecipes(SextupleRecipeCategory.COOKINGCATEGORY, manager.getAllRecipesFor(ModCrafting.COOKING.get()));
+        reg.addRecipes(SextupleRecipeCategory.CHEMISTRYCATEGORY, manager.getAllRecipesFor(ModCrafting.CHEMISTRY.get()));
     }
 
     @Override
@@ -70,5 +72,22 @@ public class JEI implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockAccess.get()), SextupleRecipeCategory.ARMORCATEGORY);
         registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockCooking.get()), SextupleRecipeCategory.COOKINGCATEGORY);
         registration.addRecipeCatalyst(new ItemStack(ModItems.itemBlockChem.get()), SextupleRecipeCategory.CHEMISTRYCATEGORY);
+    }
+
+    @Override
+    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
+        registration.addGuiContainerHandler(CraftingGui.class, new IGuiContainerHandler<>() {
+            @Override
+            public Collection<IGuiClickableArea> getGuiClickableAreas(CraftingGui gui, double mouseX, double mouseY) {
+                RecipeType<?> type = switch (gui.type()) {
+                    case FORGE -> SextupleRecipeCategory.FORGECATEGORY;
+                    case COOKING -> SextupleRecipeCategory.COOKINGCATEGORY;
+                    case ARMOR -> SextupleRecipeCategory.ARMORCATEGORY;
+                    case CHEM -> SextupleRecipeCategory.CHEMISTRYCATEGORY;
+                };
+                IGuiClickableArea clickableArea = IGuiClickableArea.createBasic(80, 30, 26, 26, type);
+                return List.of(clickableArea);
+            }
+        });
     }
 }

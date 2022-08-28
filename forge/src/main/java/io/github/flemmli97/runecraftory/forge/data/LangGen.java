@@ -239,6 +239,7 @@ public class LangGen implements DataProvider {
         this.add("tooltip.item.level", "Level: %s");
         this.add("tooltip.item.buy", "Buy: %s$");
         this.add("tooltip.item.sell", "Sell: %s$");
+        this.add("tooltip.item.difficulty", "Upgrade Difficulty: %s");
         this.add("tooltip.item.equipped", "When equipped");
         this.add("tooltip.item.upgrade", "Upgrade");
         this.add("tooltip.item.eaten", "When eaten");
@@ -297,11 +298,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.command.unlock.recipes", "Unlocked all crafting recipes for %s");
         this.add("runecraftory.command.reset.recipe", "Locked all crafting recipes for %s again");
 
-        this.add("runecraftory.jei.forge", "Forging");
-        this.add("runecraftory.jei.cooking", "Cooking");
-        this.add("runecraftory.jei.chemistry", "Pharmacy");
-        this.add("runecraftory.jei.armory", "Equipment");
-        this.add("runecraftory.jei.locked", "Unknown Recipe");
+        this.add("runecraftory.recipe_integration.locked", "Unknown Recipe");
+        this.add("runecraftory.recipe_integration.crafting_level", "Lvl: %s");
 
         this.add("runecraftory_book", "Runepedia");
         this.add("runecraftory.patchouli.subtitle", "");

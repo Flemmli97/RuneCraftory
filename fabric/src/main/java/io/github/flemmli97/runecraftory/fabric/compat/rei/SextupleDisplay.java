@@ -3,40 +3,49 @@ package io.github.flemmli97.runecraftory.fabric.compat.rei;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
-import me.shedaniel.rei.api.common.display.Display;
+import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import me.shedaniel.rei.api.common.util.EntryStacks;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 
-import java.util.ArrayList;
+import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
-public record SextupleDisplay(
-        SextupleRecipe recipe, EnumCrafting type) implements Display {
+public class SextupleDisplay extends BasicDisplay {
 
-    @Override
-    public List<EntryIngredient> getInputEntries() {
-        NonNullList<Ingredient> input = this.recipe.getIngredients();
-        List<EntryIngredient> inputs = new ArrayList<>();
-        for (Ingredient i : input)
-            inputs.add(EntryIngredients.ofIngredient(i));
-        return inputs;
+    private final EnumCrafting type;
+    private SextupleRecipe recipe;
+
+    public SextupleDisplay(SextupleRecipe recipe, EnumCrafting type) {
+        super(recipe.getIngredients().stream().map(EntryIngredients::ofIngredient).toList(), List.of(EntryIngredient.of(EntryStacks.of(recipe.getResultItem()))), Optional.of(recipe.getId()));
+        this.type = type;
+        this.recipe = recipe;
     }
 
-    @Override
-    public List<EntryIngredient> getOutputEntries() {
-        return List.of(EntryIngredient.of(EntryStacks.of(this.recipe.getResultItem())));
+    private SextupleDisplay(List<EntryIngredient> inputs, List<EntryIngredient> outputs, Optional<ResourceLocation> location, CompoundTag tag) {
+        super(inputs, outputs, location);
+        this.type = EnumCrafting.values()[tag.getInt("CraftingType")];
+    }
+
+    @Nullable
+    public SextupleRecipe recipe() {
+        return this.recipe;
     }
 
     @Override
     public CategoryIdentifier<?> getCategoryIdentifier() {
         return switch (this.type) {
-            case FORGE -> ReiPlugin.FORGING;
-            case ARMOR -> ReiPlugin.ARMOR;
-            case CHEM -> ReiPlugin.CHEM;
-            case COOKING -> ReiPlugin.COOKING;
+            case FORGE -> ReiClientPlugin.FORGING;
+            case ARMOR -> ReiClientPlugin.ARMOR;
+            case CHEM -> ReiClientPlugin.CHEM;
+            case COOKING -> ReiClientPlugin.COOKING;
         };
+    }
+
+    public static BasicDisplay.Serializer<SextupleDisplay> serializer() {
+        return BasicDisplay.Serializer.of(SextupleDisplay::new, ((display, tag) -> tag.putInt("CraftingType", display.type.ordinal())));
     }
 }
