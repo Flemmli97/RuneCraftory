@@ -1,0 +1,13 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 10.0,
+    "runecraftory:attribute.rf.magic_def": 5.0,
+    "runecraftory:attribute.rf.res_sleep": 5.0,
+    "runecraftory:attribute.rf.res_dizz": 25.0
+  },
+  "buyPrice": 3000,
+  "sellPrice": 500,
+  "upgradeDifficulty": 55,
+  "element": "NONE",
+  "item": "runecraftory:fur_l"
+}

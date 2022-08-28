@@ -1,0 +1,12 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 9.0,
+    "runecraftory:attribute.rf.magic_def": 9.0
+  },
+  "buyPrice": 3500,
+  "sellPrice": 110,
+  "upgradeDifficulty": 17,
+  "element": "NONE",
+  "tier1Spell": "runecraftory:vanilla_evoker_fang",
+  "item": "minecraft:totem_of_undying"
+}

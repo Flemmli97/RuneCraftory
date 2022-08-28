@@ -3,9 +3,9 @@
     "runecraftory:attribute.rf.defence": 4.0,
     "runecraftory:attribute.rf.magic_def": 2.0
   },
-  "buyPrice": 222,
+  "buyPrice": 3500,
   "sellPrice": 34,
   "upgradeDifficulty": 20,
   "element": "NONE",
-  "tag": "forge:ingots/gold"
+  "tag": "c:gold_ingots"
 }

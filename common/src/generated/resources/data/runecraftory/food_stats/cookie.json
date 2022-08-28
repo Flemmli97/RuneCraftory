@@ -9,6 +9,6 @@
   "rpRegenPercent": 0,
   "rpIncrease": 0,
   "hpRegen": 1,
-  "rpRegen": 7,
+  "rpRegen": 10,
   "item": "minecraft:cookie"
 }

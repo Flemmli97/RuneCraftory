@@ -15,6 +15,6 @@
   "rpRegenPercent": 1,
   "rpIncrease": 20,
   "hpRegen": 40,
-  "rpRegen": 70,
+  "rpRegen": 80,
   "item": "runecraftory:hot_milk"
 }

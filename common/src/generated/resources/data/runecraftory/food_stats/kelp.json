@@ -9,6 +9,6 @@
   "rpRegenPercent": 0,
   "rpIncrease": 0,
   "hpRegen": 1,
-  "rpRegen": 3,
+  "rpRegen": 5,
   "item": "minecraft:dried_kelp"
 }

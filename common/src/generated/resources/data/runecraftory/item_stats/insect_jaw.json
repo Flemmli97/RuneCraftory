@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "minecraft:generic.attack_damage": 2.0
+  },
+  "buyPrice": 100,
+  "sellPrice": 23,
+  "upgradeDifficulty": 14,
+  "element": "NONE",
+  "item": "runecraftory:insect_jaw"
+}

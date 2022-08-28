@@ -1,9 +1,9 @@
 {
   "itemStats": {
-    "minecraft:generic.attack_damage": 4.0
+    "minecraft:generic.attack_damage": 5.0
   },
-  "buyPrice": 25,
-  "sellPrice": 5,
+  "buyPrice": 950,
+  "sellPrice": 44,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "runecraftory:steel_edge"

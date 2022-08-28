@@ -3,8 +3,8 @@
     "minecraft:generic.attack_damage": 10.0,
     "runecraftory:attribute.rf.stun": 5.0
   },
-  "buyPrice": 25,
-  "sellPrice": 5,
+  "buyPrice": 245,
+  "sellPrice": 18,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "runecraftory:battle_hammer"

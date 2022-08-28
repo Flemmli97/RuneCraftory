@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_att": 4.0
+  },
+  "buyPrice": 200,
+  "sellPrice": 17,
+  "upgradeDifficulty": 17,
+  "element": "NONE",
+  "item": "minecraft:glowstone_dust"
+}

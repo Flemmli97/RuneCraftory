@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.drain": 3.0
+  },
+  "buyPrice": 2000,
+  "sellPrice": 150,
+  "upgradeDifficulty": 20,
+  "element": "LOVE",
+  "item": "runecraftory:love_crystal"
+}

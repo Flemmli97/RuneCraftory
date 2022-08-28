@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 2.0
+  },
+  "buyPrice": 0,
+  "sellPrice": 2,
+  "upgradeDifficulty": 1,
+  "element": "NONE",
+  "item": "runecraftory:scrap_plus"
+}

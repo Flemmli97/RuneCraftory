@@ -1,0 +1,12 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 2.0,
+    "runecraftory:attribute.rf.magic_def": 2.0,
+    "runecraftory:attribute.rf.res_seal": 25.0
+  },
+  "buyPrice": 70,
+  "sellPrice": 650,
+  "upgradeDifficulty": 21,
+  "element": "NONE",
+  "item": "runecraftory:ghost_hood"
+}

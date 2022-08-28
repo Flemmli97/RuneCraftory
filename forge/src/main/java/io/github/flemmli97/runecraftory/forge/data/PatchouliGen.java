@@ -37,6 +37,7 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .addEntry("entry.crafting", "runecraftory.patchouli.entry.crafting", ModBlocks.forge.get().getRegistryName().toString())
                 .setSortnum(0)
                 .addSimpleTextPage("runecraftory.patchouli.entry.crafting.1")
+                .addSimpleTextPage("runecraftory.patchouli.entry.crafting.2")
                 .addSpotlightPage(new ItemStack(ModBlocks.forge.get()))
                 .setText("runecraftory.patchouli.entry.crafting.forge")
                 .build()

@@ -2,8 +2,8 @@
   "itemStats": {
     "runecraftory:attribute.rf.defence": 2.0
   },
-  "buyPrice": 45,
-  "sellPrice": 3,
+  "buyPrice": 200,
+  "sellPrice": 14,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "minecraft:shield"

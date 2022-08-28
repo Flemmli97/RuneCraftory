@@ -2,8 +2,8 @@
   "itemStats": {
     "runecraftory:attribute.rf.defence": 2.0
   },
-  "buyPrice": 150,
-  "sellPrice": 21,
+  "buyPrice": 850,
+  "sellPrice": 38,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "runecraftory:bronze_bracelet"

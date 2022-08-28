@@ -312,6 +312,9 @@ public class LangGen implements DataProvider {
                 "Then using the correct crafting device you can make the desired item. " +
                 "Upon crafting an item the amount of rp shown will be used up. You can learn new recipes by eating recipe breads which (currently) " +
                 "can be obtain only via treasure chests");
+        this.add("runecraftory.patchouli.entry.crafting.2", "Weapon and tools can be upgraded in the forge and armor can be upgraded in the accessory table. " +
+                "Open the upgrade gui by shift right clicking on the crafting device. An item can be upgraded till it reaches level 10. Holding shift while hovering over an item will tell you " +
+                "what stat it gives. Using the same item multiple times causes a diminishing returns effect so try use different items");
         this.add("runecraftory.patchouli.entry.crafting.forge", "The forge is used to craft all weapons and tools");
         this.add("runecraftory.patchouli.entry.crafting.armor", "Use the accessory table to make various armor pieces");
         this.add("runecraftory.patchouli.entry.crafting.cooking", "The cooking table is as the name implies used to make all kinds of food");

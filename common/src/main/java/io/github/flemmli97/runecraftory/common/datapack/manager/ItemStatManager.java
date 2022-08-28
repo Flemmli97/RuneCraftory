@@ -63,10 +63,14 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
                 JsonObject obj = el.getAsJsonObject();
                 if (obj.has("tag")) {
                     TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation(obj.get("tag").getAsString()));
-                    tagBuilder.put(tag, GSON.fromJson(el, ItemStat.class));
+                    ItemStat stat = GSON.fromJson(el, ItemStat.class);
+                    stat.setID(fres);
+                    tagBuilder.put(tag, stat);
                 } else if (obj.has("item")) {
                     ResourceLocation res = new ResourceLocation(obj.get("item").getAsString());
-                    builder.put(res, GSON.fromJson(el, ItemStat.class));
+                    ItemStat stat = GSON.fromJson(el, ItemStat.class);
+                    stat.setID(fres);
+                    builder.put(res, stat);
                 }
             } catch (JsonSyntaxException ex) {
                 RuneCraftory.logger.error("Couldnt parse item stat json {}", fres);

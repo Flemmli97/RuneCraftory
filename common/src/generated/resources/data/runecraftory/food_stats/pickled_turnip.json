@@ -13,6 +13,6 @@
   "rpRegenPercent": 0,
   "rpIncrease": 0,
   "hpRegen": 150,
-  "rpRegen": 60,
+  "rpRegen": 90,
   "item": "runecraftory:pickled_turnip"
 }

@@ -1,0 +1,16 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 2.0,
+    "runecraftory:attribute.rf.res_paralysis": 5.0,
+    "runecraftory:attribute.rf.res_poison": 5.0,
+    "runecraftory:attribute.rf.res_seal": 5.0,
+    "runecraftory:attribute.rf.res_sleep": 5.0,
+    "runecraftory:attribute.rf.res_fatigue": 5.0,
+    "runecraftory:attribute.rf.res_cold": 5.0
+  },
+  "buyPrice": 550,
+  "sellPrice": 50,
+  "upgradeDifficulty": 22,
+  "element": "NONE",
+  "item": "runecraftory:broken_hilt"
+}

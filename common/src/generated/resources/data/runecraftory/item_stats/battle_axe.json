@@ -3,8 +3,8 @@
     "minecraft:generic.attack_damage": 7.0,
     "runecraftory:attribute.rf.crit": 5.0
   },
-  "buyPrice": 25,
-  "sellPrice": 5,
+  "buyPrice": 250,
+  "sellPrice": 19,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "runecraftory:battle_axe"

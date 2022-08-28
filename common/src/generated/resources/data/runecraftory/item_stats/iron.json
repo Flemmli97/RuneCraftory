@@ -2,9 +2,9 @@
   "itemStats": {
     "runecraftory:attribute.rf.defence": 1.0
   },
-  "buyPrice": 33,
-  "sellPrice": 1,
+  "buyPrice": 150,
+  "sellPrice": 2,
   "upgradeDifficulty": 5,
   "element": "NONE",
-  "tag": "forge:ingots/iron"
+  "tag": "c:iron_ingots"
 }

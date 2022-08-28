@@ -15,6 +15,6 @@
   "rpRegenPercent": 3,
   "rpIncrease": 50,
   "hpRegen": 80,
-  "rpRegen": 100,
+  "rpRegen": 200,
   "item": "runecraftory:hot_chocolate"
 }

@@ -22,6 +22,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import java.util.TreeMap;
 public class ItemStat {
 
     private static final Set<ResourceLocation> flatAttributes = Sets.newHashSet(
+            new ResourceLocation("generic.max_health"),
             LibAttributes.GENERIC_ATTACK_DAMAGE,
             LibAttributes.rf_defence,
             LibAttributes.rf_magic,
@@ -46,6 +48,8 @@ public class ItemStat {
     private Spell tier1Spell;
     private Spell tier2Spell;
     private Spell tier3Spell;
+
+    private transient ResourceLocation id;
 
     public static ItemStat fromPacket(FriendlyByteBuf buffer) {
         ItemStat stat = new ItemStat();
@@ -64,6 +68,11 @@ public class ItemStat {
         if (buffer.readBoolean())
             stat.tier3Spell = spellRegistry.getFromId(buffer.readResourceLocation());
         return stat;
+    }
+
+    public void setID(ResourceLocation id) {
+        if (this.id == null)
+            this.id = id;
     }
 
     public int getBuy() {
@@ -137,40 +146,51 @@ public class ItemStat {
         MutableComponent price = tag != null ? new TranslatableComponent("tooltip.item.level", tag.getInt(LibNBT.Level)) : null;
         if (ItemUtils.getBuyPrice(stack, this) > 0) {
             if (price == null)
-                price = new TranslatableComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack));
+                price = new TranslatableComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack, this));
             else
-                price.append(" ").append(new TranslatableComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack))).append(" ");
+                price.append(" ").append(new TranslatableComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack, this))).append(" ");
         }
-        if (price == null)
-            price = new TranslatableComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack));
-        else
-            price.append(" ").append(new TranslatableComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack))).append(" ");
-        list.add(price.withStyle(ChatFormatting.YELLOW));
-        if (!ItemNBT.shouldHaveStats(stack))
+        if (ItemUtils.getSellPrice(stack, this) > 0) {
+            if (price == null)
+                price = new TranslatableComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack, this));
+            else
+                price.append(" ").append(new TranslatableComponent("tooltip.item.sell", ItemUtils.getSellPrice(stack, this)));
+        }
+        if (price != null)
+            list.add(price.withStyle(ChatFormatting.YELLOW));
+        boolean shouldHaveStats = ItemNBT.shouldHaveStats(stack);
+        if (!shouldHaveStats && this.getDiff() > 0)
             list.add(new TranslatableComponent("tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
         if (showStat) {
             Map<Attribute, Double> stats = ItemNBT.statBonusRaw(stack);
             if (!stats.isEmpty()) {
-                String prefix = ItemNBT.shouldHaveStats(stack) ? "tooltip.item.equipped" : "tooltip.item.upgrade";
+                String prefix = shouldHaveStats ? "tooltip.item.equipped" : "tooltip.item.upgrade";
                 list.add(new TranslatableComponent(prefix).withStyle(ChatFormatting.GRAY));
             }
             for (Map.Entry<Attribute, Double> entry : stats.entrySet()) {
-                MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(entry.getKey(), entry.getValue().intValue())));
+                MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(entry.getKey(), entry.getValue())));
                 list.add(comp.withStyle(ChatFormatting.BLUE));
             }
         }
         return list;
     }
 
-    private String format(Attribute att, int n) {
+    private String format(Attribute att, double n) {
+        if (att == Attributes.MOVEMENT_SPEED) {
+            float f = ((int) (n * 100)) / 100f;
+            return (f >= 0 ? "+" + f : "" + f);
+        }
         boolean flat = flatAttributes.contains(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
-        int val = flat && n < 0 ? -n : n;
+        int val = (int) (flat && n < 0 ? -n : n);
         return (val >= 0 ? "+" + val : "" + val) + (flat ? "" : "%");
     }
 
     @Override
     public String toString() {
-        return "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, reg -> PlatformUtils.INSTANCE.attributes().getIDFrom(reg).toString(), Object::toString) + "]}";
+        String s = "[Buy:" + this.buyPrice + ";Sell:" + this.sellPrice + ";UpgradeDifficulty:" + this.upgradeDifficulty + ";DefaultElement:" + this.element + "];{stats:[" + MapUtils.toString(this.itemStats, reg -> PlatformUtils.INSTANCE.attributes().getIDFrom(reg).toString(), Object::toString) + "]}";
+        if (this.id != null)
+            s = this.id + ":" + s;
+        return s;
     }
 
     /**

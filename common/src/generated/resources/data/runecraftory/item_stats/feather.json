@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_att": 2.0
+  },
+  "buyPrice": 79,
+  "sellPrice": 7,
+  "upgradeDifficulty": 11,
+  "element": "NONE",
+  "item": "minecraft:feather"
+}

@@ -1,0 +1,12 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 1.0,
+    "runecraftory:attribute.rf.magic_def": 1.0,
+    "runecraftory:attribute.rf.res_dizz": 1.0
+  },
+  "buyPrice": 35,
+  "sellPrice": 7,
+  "upgradeDifficulty": 1,
+  "element": "NONE",
+  "item": "runecraftory:fur_s"
+}

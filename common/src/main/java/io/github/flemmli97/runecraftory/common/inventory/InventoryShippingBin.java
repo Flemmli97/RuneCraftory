@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.inventory;
 
+import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -17,7 +18,7 @@ public class InventoryShippingBin extends SaveItemContainer {
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        return DataPackHandler.getStats(stack.getItem()).isPresent();
+        return DataPackHandler.getStats(stack.getItem()).map(ItemStat::getSell).orElse(0) > 0;
     }
 
     public void shipItems(Player player) {
@@ -27,7 +28,10 @@ public class InventoryShippingBin extends SaveItemContainer {
                 ItemStack stack = this.getItem(i);
                 if (stack.isEmpty())
                     continue;
-                money += ItemUtils.getSellPrice(stack) * stack.getCount();
+                int basePrice = ItemUtils.getSellPrice(stack);
+                if (basePrice <= 0)
+                    continue;
+                money += basePrice * stack.getCount();
                 data.addShippingItem(player, stack);
                 this.setItem(i, ItemStack.EMPTY);
             }

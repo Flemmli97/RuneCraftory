@@ -1,0 +1,11 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 4.0,
+    "runecraftory:attribute.rf.magic_def": 8.0
+  },
+  "buyPrice": 25000,
+  "sellPrice": 2300,
+  "upgradeDifficulty": 24,
+  "element": "NONE",
+  "item": "runecraftory:crystal_skull"
+}

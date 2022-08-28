@@ -292,7 +292,7 @@ public class PlayerData {
     public void setSkillLevel(EnumSkills skill, Player player, int level, float xpAmount, boolean recalc) {
         this.skillMapN.get(skill).setLevel(Mth.clamp(level, 1, GeneralConfig.maxSkillLevel));
         this.skillMapN.get(skill).setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
-        if (!player.level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
                 this.recalculateStats(serverPlayer, true);
                 player.setHealth(player.getMaxHealth());
@@ -420,9 +420,28 @@ public class PlayerData {
                 }
             }
         }
-        if (!player.level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            this.setPlayerAttTo(serverPlayer, Attributes.MAX_HEALTH, this.equipmentBonus(Attributes.MAX_HEALTH));
+            this.setPlayerAttTo(serverPlayer, Attributes.MOVEMENT_SPEED, this.equipmentBonus(Attributes.MOVEMENT_SPEED));
             Platform.INSTANCE.sendToClient(new S2CEquipmentUpdate(slot), serverPlayer);
         }
+    }
+
+    private void setPlayerAttTo(ServerPlayer player, Attribute att, double val) {
+        AttributeInstance inst = player.getAttribute(att);
+        if (inst != null) {
+            inst.removeModifier(LibConstants.equipmentModifier);
+            inst.addTransientModifier(new AttributeModifier(LibConstants.equipmentModifier, "rf.equipment.mod", val, AttributeModifier.Operation.ADDITION));
+        }
+    }
+
+    private double equipmentBonus(Attribute att) {
+        return this.headBonus.getOrDefault(att, 0d) +
+                this.bodyBonus.getOrDefault(att, 0d) +
+                this.legsBonus.getOrDefault(att, 0d) +
+                this.feetBonus.getOrDefault(att, 0d) +
+                this.mainHandBonus.getOrDefault(att, 0d) +
+                this.offHandBonus.getOrDefault(att, 0d);
     }
 
     public double getAttributeValue(Player player, Attribute att) {
@@ -571,7 +590,7 @@ public class PlayerData {
         this.rpFoodBuff = 0;
         this.lastFood = null;
         this.setFoodHealthBonus(player, 0);
-        if (!player.level.isClientSide && player instanceof ServerPlayer serverPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.sendToClient(new S2CFoodPkt(null), serverPlayer);
         }
     }

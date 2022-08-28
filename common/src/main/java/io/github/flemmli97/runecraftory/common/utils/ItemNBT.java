@@ -87,6 +87,7 @@ public class ItemNBT {
                         map.put(att, tag.getDouble(attName));
                 }
             }
+            return map;
         }
         return DataPackHandler.getStats(stack.getItem()).map(ItemStat::itemStats).orElse(map);
     }
@@ -168,7 +169,7 @@ public class ItemNBT {
 
     public static void updateStatIncrease(Attribute attribute, double amount, CompoundTag tag) {
         String att = PlatformUtils.INSTANCE.attributes().getIDFrom(attribute).toString();
-        double oldValue = tag.getCompound(LibNBT.Stats).getInt(att);
+        double oldValue = tag.getCompound(LibNBT.Stats).getDouble(att);
         tag.getCompound(LibNBT.Stats).putDouble(att, oldValue + amount);
     }
 

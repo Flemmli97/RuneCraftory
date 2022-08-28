@@ -3,8 +3,8 @@
     "minecraft:generic.attack_damage": 15.0,
     "runecraftory:attribute.rf.magic_att": 3.0
   },
-  "buyPrice": 25,
-  "sellPrice": 5,
+  "buyPrice": 4500,
+  "sellPrice": 121,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "runecraftory:hoe_iron"

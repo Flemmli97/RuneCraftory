@@ -1,8 +1,11 @@
 {
-  "itemStats": {},
-  "buyPrice": 45,
-  "sellPrice": 2,
-  "upgradeDifficulty": 20,
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 4.0,
+    "runecraftory:attribute.rf.magic_def": 8.0
+  },
+  "buyPrice": 2500,
+  "sellPrice": 5,
+  "upgradeDifficulty": 24,
   "element": "NONE",
-  "tag": "forge:gems/emerald"
+  "tag": "c:emeralds"
 }

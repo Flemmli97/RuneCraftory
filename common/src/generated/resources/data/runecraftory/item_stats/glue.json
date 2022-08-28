@@ -1,0 +1,12 @@
+{
+  "itemStats": {
+    "minecraft:generic.attack_damage": 1.0,
+    "runecraftory:attribute.rf.defence": 1.0,
+    "runecraftory:attribute.rf.magic_def": 1.0
+  },
+  "buyPrice": 380,
+  "sellPrice": 41,
+  "upgradeDifficulty": 13,
+  "element": "NONE",
+  "item": "runecraftory:glue"
+}

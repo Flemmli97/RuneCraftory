@@ -79,6 +79,8 @@ public class ItemTagGen extends ItemTagsProvider {
         this.forgeAndCommonTag(ModTags.platinumF, ModTags.platinum, ModItems.platinum.get());
 
         this.forgeAndCommonTag(ModTags.amethystF, ModTags.amethyst, ModItems.amethyst.get());
+        this.tag(ModTags.amethyst)
+                .add(Items.AMETHYST_SHARD);
         this.forgeAndCommonTag(ModTags.aquamarineF, ModTags.aquamarine, ModItems.aquamarine.get());
         this.forgeAndCommonTag(ModTags.rubyF, ModTags.ruby, ModItems.ruby.get());
         this.forgeAndCommonTag(ModTags.sapphireF, ModTags.sapphire, ModItems.sapphire.get());

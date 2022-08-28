@@ -26,7 +26,7 @@
       "io.github.flemmli97.runecraftory.fabric.ModMenuIntegration"
     ],"rei_client": [
       "io.github.flemmli97.runecraftory.fabric.compat.rei.ReiClientPlugin"
-    ], "rei_server": [
+    ], "rei": [
       "io.github.flemmli97.runecraftory.fabric.compat.rei.ReiServerPlugin"
     ]
   },

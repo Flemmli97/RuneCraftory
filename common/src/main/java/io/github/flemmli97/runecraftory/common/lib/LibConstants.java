@@ -11,4 +11,5 @@ public class LibConstants {
     public static final UUID maxHealthItemIncrease = UUID.fromString("77866B02-9E93-40AE-83AC-EF017B78707D");
 
     public static final UUID foodMaxHealthModifier = UUID.fromString("21f083ec-4f13-4496-b95a-d997c2f5dbd1");
+    public static final UUID equipmentModifier = UUID.fromString("a9d52422-4347-4e2e-b773-23ebb2631e8f");
 }

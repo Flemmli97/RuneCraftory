@@ -13,7 +13,7 @@
   "hpRegenPercent": 0,
   "rpRegenPercent": 2,
   "rpIncrease": 0,
-  "hpRegen": 30,
-  "rpRegen": 15,
+  "hpRegen": 20,
+  "rpRegen": 35,
   "item": "runecraftory:baked_apple"
 }

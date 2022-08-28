@@ -2,9 +2,9 @@
   "itemStats": {
     "runecraftory:attribute.rf.defence": 70.0
   },
-  "buyPrice": 1000,
-  "sellPrice": 150,
-  "upgradeDifficulty": 10,
+  "buyPrice": 20000,
+  "sellPrice": 750,
+  "upgradeDifficulty": 65,
   "element": "NONE",
   "tag": "c:orichalcum"
 }

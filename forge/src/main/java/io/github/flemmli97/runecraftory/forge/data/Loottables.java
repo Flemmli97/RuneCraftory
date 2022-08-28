@@ -145,7 +145,8 @@ public class Loottables extends LootTableProvider {
             this.registerLootTable(ModEntities.ambrosia.get(), this.table(
                     new ItemLootData(ModItems.ambrosiasThorns.get(), 0.65f, 0.1f, 0.3f, 1)));
             this.registerLootTable(ModEntities.thunderbolt.get(), this.table(
-                    new ItemLootData(ModItems.lightningMane.get(), 0.65f, 0.1f, 0.3f, 1)));
+                    new ItemLootData(ModItems.lightningMane.get(), 0.65f, 0.1f, 0.3f, 1),
+                    new ItemLootData(ModItems.furQuality.get(), 0.5f, 0.05f, 1, 0)));
             this.registerLootTable(ModEntities.marionetta.get(), this.table(
                     new ItemLootData(ModItems.cursedDoll.get(), 0.65f, 0.1f, 0.3f, 1),
                     new ItemLootData(ModItems.puppetryStrings.get(), 0.2f, 0.1f, 0.3f, 1),

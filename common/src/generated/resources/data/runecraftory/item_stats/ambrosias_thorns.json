@@ -1,0 +1,12 @@
+{
+  "itemStats": {
+    "minecraft:generic.attack_damage": 7.0,
+    "runecraftory:attribute.rf.magic_att": 7.0,
+    "runecraftory:attribute.rf.sleep": 10.0
+  },
+  "buyPrice": 7500,
+  "sellPrice": 350,
+  "upgradeDifficulty": 21,
+  "element": "NONE",
+  "item": "runecraftory:ambrosias_thorns"
+}

@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_def": 2.0
+  },
+  "buyPrice": 100,
+  "sellPrice": 9,
+  "upgradeDifficulty": 19,
+  "element": "NONE",
+  "item": "minecraft:clay_ball"
+}

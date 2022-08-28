@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 1.0
+  },
+  "buyPrice": 75,
+  "sellPrice": 5,
+  "upgradeDifficulty": 6,
+  "element": "NONE",
+  "item": "minecraft:bone"
+}

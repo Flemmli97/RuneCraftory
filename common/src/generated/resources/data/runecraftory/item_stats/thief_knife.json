@@ -1,9 +1,9 @@
 {
   "itemStats": {
-    "minecraft:generic.attack_damage": 10.0
+    "minecraft:generic.attack_damage": 13.0
   },
-  "buyPrice": 25,
-  "sellPrice": 5,
+  "buyPrice": 7940,
+  "sellPrice": 384,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "runecraftory:thief_knife"

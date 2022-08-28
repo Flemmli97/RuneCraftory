@@ -2,8 +2,8 @@
   "itemStats": {
     "runecraftory:attribute.rf.defence": 4.0
   },
-  "buyPrice": 120,
-  "sellPrice": 18,
+  "buyPrice": 600,
+  "sellPrice": 23,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "runecraftory:small_shield"

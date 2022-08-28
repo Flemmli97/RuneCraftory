@@ -3,7 +3,8 @@
   "potionApply": [],
   "potionRemove": [
     "runecraftory:poison",
-    "minecraft:poison"
+    "minecraft:poison",
+    "minecraft:wither"
   ],
   "rpPercentIncrease": 0,
   "duration": 100,

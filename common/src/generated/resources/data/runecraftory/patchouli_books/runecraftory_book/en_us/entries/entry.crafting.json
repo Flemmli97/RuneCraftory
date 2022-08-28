@@ -8,6 +8,10 @@
       "text": "runecraftory.patchouli.entry.crafting.1"
     },
     {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.crafting.2"
+    },
+    {
       "type": "patchouli:spotlight",
       "item": "runecraftory:forge",
       "text": "runecraftory.patchouli.entry.crafting.forge"

@@ -1,0 +1,11 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 4.0,
+    "runecraftory:attribute.rf.magic_def": 8.0
+  },
+  "buyPrice": 3500,
+  "sellPrice": 23,
+  "upgradeDifficulty": 24,
+  "element": "NONE",
+  "tag": "c:aquamarines"
+}

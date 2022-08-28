@@ -1,10 +1,10 @@
 {
   "itemStats": {
-    "runecraftory:attribute.rf.magic_att": 21.0,
+    "runecraftory:attribute.rf.magic_att": 24.0,
     "runecraftory:attribute.rf.dizz": 15.0
   },
-  "buyPrice": 511,
-  "sellPrice": 237,
+  "buyPrice": 14110,
+  "sellPrice": 599,
   "upgradeDifficulty": 0,
   "element": "EARTH",
   "item": "runecraftory:staff"

@@ -2,8 +2,8 @@
   "itemStats": {
     "runecraftory:attribute.rf.defence": 1.5
   },
-  "buyPrice": 100,
-  "sellPrice": 13,
+  "buyPrice": 120,
+  "sellPrice": 21,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "runecraftory:cheap_bracelet"

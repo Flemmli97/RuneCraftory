@@ -19,6 +19,6 @@
   "rpRegenPercent": 0,
   "rpIncrease": 0,
   "hpRegen": 100,
-  "rpRegen": 30,
+  "rpRegen": 90,
   "item": "runecraftory:flan"
 }

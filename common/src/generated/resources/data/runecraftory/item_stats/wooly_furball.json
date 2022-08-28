@@ -1,0 +1,13 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 8.0,
+    "runecraftory:attribute.rf.magic_def": 4.0,
+    "runecraftory:attribute.rf.res_sleep": 3.0,
+    "runecraftory:attribute.rf.res_dizz": 10.0
+  },
+  "buyPrice": 900,
+  "sellPrice": 120,
+  "upgradeDifficulty": 38,
+  "element": "NONE",
+  "item": "runecraftory:wooly_furball"
+}

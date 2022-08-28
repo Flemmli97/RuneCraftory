@@ -1,0 +1,11 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_att": 3.0,
+    "runecraftory:attribute.rf.res_stun": 5.0
+  },
+  "buyPrice": 400,
+  "sellPrice": 28,
+  "upgradeDifficulty": 21,
+  "element": "NONE",
+  "item": "minecraft:ender_pearl"
+}

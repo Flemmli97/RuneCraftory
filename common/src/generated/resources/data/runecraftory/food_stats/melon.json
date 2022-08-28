@@ -9,6 +9,6 @@
   "rpRegenPercent": 0,
   "rpIncrease": 0,
   "hpRegen": 1,
-  "rpRegen": 1,
+  "rpRegen": 5,
   "item": "minecraft:melon_slice"
 }

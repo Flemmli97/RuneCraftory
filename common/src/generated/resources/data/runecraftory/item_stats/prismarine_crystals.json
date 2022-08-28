@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_att": 8.0
+  },
+  "buyPrice": 523,
+  "sellPrice": 46,
+  "upgradeDifficulty": 25,
+  "element": "NONE",
+  "item": "minecraft:prismarine_crystals"
+}

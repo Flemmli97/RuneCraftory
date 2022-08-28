@@ -3,8 +3,8 @@
     "runecraftory:attribute.rf.magic_att": 5.0,
     "runecraftory:attribute.rf.dizz": 15.0
   },
-  "buyPrice": 111,
-  "sellPrice": 50,
+  "buyPrice": 281,
+  "sellPrice": 32,
   "upgradeDifficulty": 0,
   "element": "FIRE",
   "tier1Spell": "runecraftory:fireball",

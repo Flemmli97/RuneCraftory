@@ -1,0 +1,11 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 9.0,
+    "runecraftory:attribute.rf.magic_att": 4.0
+  },
+  "buyPrice": 375,
+  "sellPrice": 31,
+  "upgradeDifficulty": 18,
+  "element": "NONE",
+  "item": "minecraft:slime_ball"
+}

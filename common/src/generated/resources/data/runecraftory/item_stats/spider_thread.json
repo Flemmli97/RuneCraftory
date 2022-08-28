@@ -1,0 +1,12 @@
+{
+  "itemStats": {
+    "minecraft:generic.attack_damage": 2.0,
+    "runecraftory:attribute.rf.magic_att": 2.0,
+    "runecraftory:attribute.rf.paralysis": 5.0
+  },
+  "buyPrice": 370,
+  "sellPrice": 28,
+  "upgradeDifficulty": 17,
+  "element": "NONE",
+  "item": "runecraftory:spider_thread"
+}

@@ -4,8 +4,8 @@
     "runecraftory:attribute.rf.magic_att": 15.0
   },
   "buyPrice": 5000,
-  "sellPrice": 150,
-  "upgradeDifficulty": 5,
+  "sellPrice": 170,
+  "upgradeDifficulty": 23,
   "element": "DARK",
   "tier1Spell": "runecraftory:vanilla_wither_skull",
   "item": "minecraft:wither_skeleton_skull"

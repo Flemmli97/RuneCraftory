@@ -11,6 +11,6 @@
   "rpRegenPercent": 0,
   "rpIncrease": 0,
   "hpRegen": 20,
-  "rpRegen": 30,
+  "rpRegen": 50,
   "item": "runecraftory:onigiri"
 }

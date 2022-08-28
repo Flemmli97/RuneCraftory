@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "minecraft:generic.attack_damage": 1.0
+  },
+  "buyPrice": 80,
+  "sellPrice": 10,
+  "upgradeDifficulty": 2,
+  "element": "NONE",
+  "item": "runecraftory:arrowhead"
+}

@@ -1,0 +1,12 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 5.0,
+    "runecraftory:attribute.rf.magic_def": 3.0,
+    "runecraftory:attribute.rf.crit": -3.0
+  },
+  "buyPrice": 160,
+  "sellPrice": 30,
+  "upgradeDifficulty": 16,
+  "element": "NONE",
+  "item": "runecraftory:turtle_shell"
+}

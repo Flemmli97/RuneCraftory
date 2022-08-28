@@ -1,10 +1,10 @@
 {
   "itemStats": {
-    "minecraft:generic.attack_damage": 14.0,
+    "minecraft:generic.attack_damage": 18.0,
     "runecraftory:attribute.rf.defence": 4.0
   },
-  "buyPrice": 108,
-  "sellPrice": 47,
+  "buyPrice": 7770,
+  "sellPrice": 333,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "runecraftory:needle_spear"

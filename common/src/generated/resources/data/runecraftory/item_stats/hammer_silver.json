@@ -4,8 +4,8 @@
     "runecraftory:attribute.rf.crit": -5.0,
     "runecraftory:attribute.rf.stun": 10.0
   },
-  "buyPrice": 25,
-  "sellPrice": 5,
+  "buyPrice": 25000,
+  "sellPrice": 300,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "runecraftory:hammer_silver"

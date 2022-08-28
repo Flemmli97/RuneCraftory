@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "minecraft:generic.max_health": 2.0
+  },
+  "buyPrice": 50,
+  "sellPrice": 4,
+  "upgradeDifficulty": 9,
+  "element": "NONE",
+  "item": "minecraft:rotten_flesh"
+}

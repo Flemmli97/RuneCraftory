@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_att": 12.0
+  },
+  "buyPrice": 500,
+  "sellPrice": 42,
+  "upgradeDifficulty": 26,
+  "element": "NONE",
+  "item": "minecraft:book"
+}

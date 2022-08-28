@@ -2,9 +2,9 @@
   "itemStats": {
     "runecraftory:attribute.rf.defence": 2.4
   },
-  "buyPrice": 25,
-  "sellPrice": 3,
-  "upgradeDifficulty": 10,
+  "buyPrice": 400,
+  "sellPrice": 14,
+  "upgradeDifficulty": 13,
   "element": "NONE",
   "tag": "c:bronze_ingots"
 }
