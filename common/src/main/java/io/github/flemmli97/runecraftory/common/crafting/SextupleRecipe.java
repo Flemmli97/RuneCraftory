@@ -44,7 +44,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
         if (unlocked) {
             StackedContents stackedContents = new StackedContents();
             int i = 0;
-            for (int j = 0; j < inv.getContainerSize(); ++j) {
+            for (int j = 0; j < 6; ++j) {
                 ItemStack itemStack = inv.getItem(j);
                 if (itemStack.isEmpty()) continue;
                 ++i;

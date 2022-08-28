@@ -27,7 +27,7 @@ public abstract class CraftingBlockEntity extends ContainerBlockEntity {
     public CraftingBlockEntity(BlockEntityType<?> blockEntityType, EnumCrafting type, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
         this.type = type;
-        this.inventory = new SaveItemContainer(this.type == EnumCrafting.COOKING || this.type == EnumCrafting.CHEM ? 6 : 8) {
+        this.inventory = new SaveItemContainer(this, this.type == EnumCrafting.COOKING || this.type == EnumCrafting.CHEM ? 6 : 8) {
             @Override
             public boolean canPlaceItem(int index, ItemStack stack) {
                 return CraftingBlockEntity.this.isItemValid(index, stack);

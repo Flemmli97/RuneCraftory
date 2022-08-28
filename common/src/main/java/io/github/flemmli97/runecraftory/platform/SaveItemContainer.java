@@ -8,13 +8,20 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class SaveItemContainer implements Container, StackedContentsCompatible {
 
     protected final NonNullList<ItemStack> stacks;
+    private final BlockEntity blockEntity;
 
     public SaveItemContainer(int size) {
+        this(null, size);
+    }
+
+    public SaveItemContainer(BlockEntity blockEntity, int size) {
         this.stacks = NonNullList.withSize(size, ItemStack.EMPTY);
+        this.blockEntity = blockEntity;
     }
 
     @Override
@@ -75,6 +82,8 @@ public class SaveItemContainer implements Container, StackedContentsCompatible {
 
     @Override
     public void setChanged() {
+        if (this.blockEntity != null && !this.blockEntity.isRemoved())
+            this.blockEntity.setChanged();
     }
 
     @Override

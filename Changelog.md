@@ -16,6 +16,7 @@ RuneCraftory 1.2.3
 - Now shows the crafting level of recipes in both JEI and REI
 - Material show upgrade difficulty now
 - Fix when dying with shift mass crafting not taking account the death
+- Fix crafting tables not properly saving their inventory
 
 RuneCraftory 1.2.2
 ================

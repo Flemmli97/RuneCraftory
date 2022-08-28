@@ -41,10 +41,12 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
         if (this.menu.rpCost() >= 0) {
             int rpMax = Platform.INSTANCE.getPlayerData(this.minecraft.player).map(PlayerData::getMaxRunePoints).orElse(0);
             MutableComponent cost = new TextComponent("" + this.menu.rpCost());
+            int yOffset = 0;
             if (rpMax < this.menu.rpCost()) {
                 cost = new TranslatableComponent("crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
+                yOffset = -25;
             }
-            OverlayGui.drawStringCenter(stack, this.font, cost, this.leftPos + 91, this.topPos + 42, 0);
+            OverlayGui.drawStringCenter(stack, this.font, cost, this.leftPos + 91, this.topPos + 42 + yOffset, 0);
         }
     }
 }
