@@ -158,7 +158,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
             LevelCalc.useRP(player, data, player.getRandom().nextInt(2) + 2, true, false, true, EnumSkills.SPEAR);
             data.getWeaponHandler().onUseSpear();
             LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 1);
-            list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.3f, false, false, false));
+            list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false, false));
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
         }
     }
