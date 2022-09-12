@@ -1,3 +1,10 @@
+RuneCraftory 1.2.4
+================
+- Increased some base xp values
+- Bosses dont despawn now
+- Spear charge dmg increased
+- Fix problem with ambrosias wave attack
+
 RuneCraftory 1.2.3
 ================
 - Readjusted and rewritten rp usages
