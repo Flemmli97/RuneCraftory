@@ -60,6 +60,11 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     }
 
     @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
     public void setOwner(Player player) {
         super.setOwner(player);
         if (player != null) {
