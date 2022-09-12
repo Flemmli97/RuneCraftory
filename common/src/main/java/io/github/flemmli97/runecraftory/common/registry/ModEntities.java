@@ -360,7 +360,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic_defence, 3).putLevelGains(LibAttributes.rf_magic_defence, 4.3)
                     .putAttributes(LibAttributes.rf_res_earth, 25)
                     .setTamingItem(new ItemTagWrapper(ModItems.toyherbGiant.getID().toString(), 1))
-                    .xp(21).money(50).tamingChance(0.008f).setRidable().setFlying().build());
+                    .xp(100).money(50).tamingChance(0.008f).setRidable().setFlying().build());
     public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> thunderbolt = regMonster(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), LibEntities.thunderbolt,
             0x212121, 0x2f1177,
             new EntityProperties.Builder()
@@ -371,7 +371,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic_defence, 2).putLevelGains(LibAttributes.rf_magic_defence, 4)
                     .putAttributes(LibAttributes.rf_res_wind, 25)
                     .setTamingItem(new ItemTagWrapper(ModItems.carrotGiant.getID().toString(), 1))
-                    .xp(25).money(75).tamingChance(0.008f).setRidable().build());
+                    .xp(125).money(75).tamingChance(0.008f).setRidable().build());
     public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> marionetta = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.5f).clientTrackingRange(8), LibEntities.marionetta,
             0xb86b13, 0xd8d7d7,
             new EntityProperties.Builder()
@@ -382,7 +382,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic_defence, 3.9).putLevelGains(LibAttributes.rf_magic_defence, 3.95)
                     .putAttributes(LibAttributes.rf_res_dark, 25)
                     .setTamingItem(new ItemTagWrapper(ModTags.marionettaTamer, 1))
-                    .xp(25).money(75).tamingChance(0.008f).setRidable().build());
+                    .xp(145).money(75).tamingChance(0.008f).setRidable().build());
 
     public static final RegistryEntrySupplier<EntityType<EntityTreasureChest>> treasureChest = treasureChest(EntityType.Builder.of(EntityTreasureChest::new, MobCategory.MISC).sized(1, 1).clientTrackingRange(4), LibEntities.treasureChest);
     public static final RegistryEntrySupplier<EntityType<EntityMobArrow>> arrow = reg(EntityType.Builder.<EntityMobArrow>of(EntityMobArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20), LibEntities.arrow);
