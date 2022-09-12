@@ -4,6 +4,7 @@ RuneCraftory 1.2.4
 - Bosses dont despawn now
 - Spear charge dmg increased
 - Fix problem with ambrosias wave attack
+- Add RP bars to crafting screens 
 
 RuneCraftory 1.2.3
 ================

@@ -38,8 +38,9 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
         //    texture = crafting;
         RenderSystem.setShaderTexture(0, texture);
         this.blit(stack, this.leftPos, this.topPos, 0, 0, 176, 166);
+        PlayerData data = Platform.INSTANCE.getPlayerData(this.minecraft.player).orElse(null);
         if (this.menu.rpCost() >= 0) {
-            int rpMax = Platform.INSTANCE.getPlayerData(this.minecraft.player).map(PlayerData::getMaxRunePoints).orElse(0);
+            int rpMax = data != null ? data.getMaxRunePoints() : 0;
             MutableComponent cost = new TextComponent("" + this.menu.rpCost());
             int yOffset = 0;
             if (rpMax < this.menu.rpCost()) {
@@ -48,5 +49,29 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
             }
             OverlayGui.drawStringCenter(stack, this.font, cost, this.leftPos + 91, this.topPos + 42 + yOffset, 0);
         }
+        if (data != null) {
+            stack.pushPose();
+            float scale = 0.8f;
+            int xPos = this.leftPos;
+            int yPos = this.topPos - 12;
+            stack.translate(xPos, yPos, 0);
+            stack.scale(scale, scale, scale);
+            RenderSystem.setShaderTexture(0, new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png"));
+            this.blit(stack, 0, 0, 131, 74, 96, 29);
+            int runePointsWidth = Math.min(75, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * 75.0f));
+            this.blit(stack, 18, 3, 18, 40, runePointsWidth, 9);
+            this.drawCenteredScaledString(stack, data.getRunePoints() + "/" + data.getMaxRunePoints(), 60, 5, 0.7f, 0xffffff);
+            stack.popPose();
+        }
+    }
+
+    private void drawCenteredScaledString(PoseStack stack, String string, float x, float y, float scale, int color) {
+        stack.pushPose();
+        stack.scale(scale, scale, scale);
+        float xCenter = x - this.minecraft.font.width(string) / 2;
+        int xScaled = (int) (xCenter / scale);
+        int yScaled = (int) (y / scale);
+        this.minecraft.font.draw(stack, string, xScaled, yScaled, color);
+        stack.popPose();
     }
 }

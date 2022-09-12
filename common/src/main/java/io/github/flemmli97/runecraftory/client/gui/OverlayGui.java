@@ -36,7 +36,7 @@ public class OverlayGui extends GuiComponent {
             PlayerData data = Platform.INSTANCE.getPlayerData(this.mc.player).orElse(null);
             int xPos = ClientConfig.healthBarWidgetX;
             int yPos = ClientConfig.healthBarWidgetY;
-            if (data != null && !this.mc.player.getAbilities().invulnerable) {
+            if (data != null && !this.mc.player.isCreative()) {
                 this.blit(stack, xPos, yPos, 0, 0, 96, 29);
                 int healthWidth = Math.min(75, (int) (this.mc.player.getHealth() / this.mc.player.getMaxHealth() * 75.0f));
                 int runePointsWidth = Math.min(75, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * 75.0f));
@@ -48,7 +48,7 @@ public class OverlayGui extends GuiComponent {
             PlayerData data = Platform.INSTANCE.getPlayerData(this.mc.player).orElse(null);
             int xPos = ClientConfig.healthBarWidgetX;
             int yPos = ClientConfig.healthBarWidgetY;
-            if (data != null && !this.mc.player.getAbilities().invulnerable) {
+            if (data != null && !this.mc.player.isCreative()) {
                 this.blit(stack, xPos, yPos, 131, 74, 96, 29);
                 int runePointsWidth = Math.min(75, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * 75.0f));
                 this.blit(stack, xPos + 18, yPos + 3, 18, 40, runePointsWidth, 9);
