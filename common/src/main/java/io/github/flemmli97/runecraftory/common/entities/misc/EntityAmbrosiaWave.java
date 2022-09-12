@@ -15,6 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -23,7 +24,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class EntityAmbrosiaWave extends EntityDamageCloud {
@@ -34,6 +37,7 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
     private Predicate<LivingEntity> pred = (e) -> !e.equals(this.getOwner());
     private static final List<Vector3f> circleParticleMotion = RayTraceUtils.rotatedVecs(new Vec3(0.25, 0, 0), new Vec3(0, 1, 0), -180, 175, 5);
     private float damageMultiplier = 0.3f;
+    private final Set<FrozenEntity> hitEntityPos = new HashSet<>();
 
     public EntityAmbrosiaWave(EntityType<? extends EntityAmbrosiaWave> type, Level level) {
         super(type, level);
@@ -85,8 +89,16 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
                     this.level.addParticle(new ColoredParticleData(ModParticles.staticLight.get(), 200 / 255F, 133 / 255F, 36 / 255F, 1, 0.4f), this.getX(), this.getY() + 0.2, this.getZ(), vec.x(), vec.y(), vec.z());
                 }
             }
-        } else if ((this.getOwner() != null && !this.getOwner().isAlive()))
-            this.remove(RemovalReason.KILLED);
+        } else {
+            if ((this.getOwner() != null && !this.getOwner().isAlive()))
+                this.remove(RemovalReason.KILLED);
+            this.hitEntityPos.forEach(frozenEntity -> {
+                if (frozenEntity.entity instanceof ServerPlayer player)
+                    player.moveTo(frozenEntity.pos.x(), frozenEntity.pos.y(), frozenEntity.pos.z());
+                else
+                    frozenEntity.entity.setPos(frozenEntity.pos.x(), frozenEntity.pos.y(), frozenEntity.pos.z());
+            });
+        }
     }
 
     @Override
@@ -98,7 +110,7 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
     protected boolean damageEntity(LivingEntity e) {
         if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(4).element(EnumElement.EARTH).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
             e.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 6, true, false));
-            e.addEffect(new MobEffectInstance(MobEffects.JUMP, 10, 127, true, false));
+            this.hitEntityPos.add(new FrozenEntity(e, e.position()));
             return true;
         }
         return false;
@@ -126,5 +138,18 @@ public class EntityAmbrosiaWave extends EntityDamageCloud {
         return owner;
     }
 
+    record FrozenEntity(LivingEntity entity, Vec3 pos) {
 
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof FrozenEntity frozenEntity)
+                return this.entity == frozenEntity.entity;
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return this.entity.getUUID().hashCode();
+        }
+    }
 }
