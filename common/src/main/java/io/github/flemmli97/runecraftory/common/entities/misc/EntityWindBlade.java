@@ -7,14 +7,22 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
+import io.github.flemmli97.tenshilib.platform.EventCalls;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.TheEndGatewayBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -27,7 +35,6 @@ public class EntityWindBlade extends EntityProjectile {
     private Entity target;
     private float damageMultiplier = 1;
     private boolean piercing = false;
-    private int collisionCooldown;
 
     public EntityWindBlade(EntityType<? extends EntityWindBlade> type, Level world) {
         super(type, world);
@@ -58,7 +65,7 @@ public class EntityWindBlade extends EntityProjectile {
 
     @Override
     public int livingTickMax() {
-        return this.isPiercing() ? 50 : 30;
+        return this.isPiercing() ? 150 : 30;
     }
 
     @Override
@@ -115,7 +122,7 @@ public class EntityWindBlade extends EntityProjectile {
     protected void onBlockHit(BlockHitResult blockRayTraceResult) {
         if (!this.isPiercing())
             this.remove(RemovalReason.KILLED);
-        else if (--this.collisionCooldown <= 0) {
+        else {
             Vec3 newMot;
             Vec3 mot = this.getDeltaMovement();
             switch (blockRayTraceResult.getDirection()) {
@@ -123,8 +130,31 @@ public class EntityWindBlade extends EntityProjectile {
                 case WEST, EAST -> newMot = new Vec3(-mot.x(), mot.y(), mot.z());
                 default -> newMot = new Vec3(mot.x(), mot.y(), -mot.z());
             }
+            if(!blockRayTraceResult.isInside())
+                this.setPos(blockRayTraceResult.getLocation());
             this.setDeltaMovement(newMot);
-            this.collisionCooldown = 2;
+            //If it hits a corner and its fast enough it can skip a correct bounce at that place. To fix we manually do a block collision check again
+            this.doBlockCollision();
+        }
+    }
+
+    private void doBlockCollision() {
+        Vec3 pos = this.position();
+        Vec3 to = pos.add(this.getDeltaMovement());
+        BlockHitResult raytraceresult = this.level.clip(new ClipContext(pos, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        if (raytraceresult.getType() == HitResult.Type.BLOCK) {
+            BlockPos blockpos = raytraceresult.getBlockPos();
+            BlockState blockstate = this.level.getBlockState(blockpos);
+            if (blockstate.is(Blocks.NETHER_PORTAL)) {
+                this.handleInsidePortal(blockpos);
+            } else if (blockstate.is(Blocks.END_GATEWAY)) {
+                BlockEntity tileentity = this.level.getBlockEntity(blockpos);
+                if (tileentity instanceof TheEndGatewayBlockEntity && TheEndGatewayBlockEntity.canEntityTeleport(this)) {
+                    TheEndGatewayBlockEntity.teleportEntity(this.level, blockpos, blockstate, this, (TheEndGatewayBlockEntity)tileentity);
+                }
+            } else if (!EventCalls.INSTANCE.projectileHitCall(this, raytraceresult)) {
+                this.onBlockHit(raytraceresult);
+            }
         }
     }
 
