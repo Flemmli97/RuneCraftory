@@ -41,8 +41,10 @@ public class BlockStatesGen extends BlockStateProvider {
             Block block = reg.get();
             this.getVariantBuilder(block).forAllStatesExcept(state -> {
                 int stage = state.getValue(BlockCrop.AGE);
-                String name = stage == 0 ? "runecraftory:flower_stage_0" : block.getRegistryName().toString() + "_" + stage;
-                ResourceLocation texture = stage == 0 ? this.blockTexture(RuneCraftory.MODID, "flower_stage_0")
+                boolean defaultFlowerState = stage == 0 && reg != ModBlocks.emeryFlower && reg != ModBlocks.ironleaf
+                        && reg != ModBlocks.noelGrass && reg != ModBlocks.lampGrass;
+                String name = defaultFlowerState ? "runecraftory:flower_stage_0" : block.getRegistryName().toString() + "_" + stage;
+                ResourceLocation texture = defaultFlowerState ? this.blockTexture(RuneCraftory.MODID, "flower_stage_0")
                         : stage == 3 ? this.itemCropTexture(block) : this.blockTexture(RuneCraftory.MODID, block.getRegistryName().getPath() + "_" + stage);
                 return ConfiguredModel.builder().modelFile(this.models().singleTexture(name, crossTinted, "cross", texture)).build();
             }, BlockCrop.WILTED);

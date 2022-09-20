@@ -40,6 +40,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.EntityTrackingEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -156,6 +157,10 @@ public class RuneCraftoryFabric implements ModInitializer {
                 return InteractionResult.FAIL;
             return InteractionResult.PASS;
         });
+        UseBlockCallback.EVENT.register(((player, world, hand, hitResult) -> {
+            EntityCalls.cropRightClickHarvest(player, world.getBlockState(hitResult.getBlockPos()), hitResult.getBlockPos());
+            return InteractionResult.PASS;
+        }));
 
         //WorldCalls
         ServerLifecycleEvents.SERVER_STARTED.register(GateSpawning::setupStructureSpawns);

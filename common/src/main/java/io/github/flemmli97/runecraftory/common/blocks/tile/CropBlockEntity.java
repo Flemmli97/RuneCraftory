@@ -40,6 +40,12 @@ public class CropBlockEntity extends BlockEntity {
         this.setChanged();
     }
 
+    public void onRegrowableHarvest(BlockCrop crop) {
+        float max = crop.properties().map(CropProperties::growth).orElse(0);
+        this.age = max * 0.5f;
+        this.updateState();
+    }
+
     public int level() {
         return (int) this.cropLvl;
     }
@@ -67,7 +73,7 @@ public class CropBlockEntity extends BlockEntity {
         this.age += speed * seasonModifier;
         if (block instanceof BlockCrop crop) {
             float max = crop.properties().map(CropProperties::growth).orElse(0);
-            this.age = Math.min(crop.properties().map(CropProperties::growth).orElse(0), this.age);
+            this.age = Math.min(max, this.age);
             int stateAge = (int) (this.age * 3 / max);
             state = state.setValue(BlockCrop.AGE, Mth.clamp(stateAge, 0, 3)).setValue(BlockCrop.WILTED, this.wilted);
             level.setBlock(pos, state, Block.UPDATE_ALL);
@@ -76,6 +82,8 @@ public class CropBlockEntity extends BlockEntity {
     }
 
     public void tryWitherCrop(Random rand) {
+        if (this.getBlockState().getBlock() instanceof BlockCrop crop && crop.isMaxAge(this.getBlockState(), this.level, this.getBlockPos()))
+            return;
         if (rand.nextFloat() < GeneralConfig.witherChance) {
             if (this.isWilted()) {
                 if (this.level != null)

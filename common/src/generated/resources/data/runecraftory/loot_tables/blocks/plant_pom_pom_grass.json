@@ -13,7 +13,7 @@
               "giant": false
             }
           ],
-          "name": "runecraftory:crop_pom-pom_grass"
+          "name": "runecraftory:crop_pom_pom_grass"
         },
         {
           "type": "minecraft:item",
@@ -23,7 +23,7 @@
               "giant": true
             }
           ],
-          "name": "runecraftory:crop_pom-pom_grass_giant"
+          "name": "runecraftory:crop_pom_pom_grass_giant"
         }
       ]
     }

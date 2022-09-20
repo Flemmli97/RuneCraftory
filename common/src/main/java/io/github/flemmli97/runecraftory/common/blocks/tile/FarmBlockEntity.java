@@ -23,7 +23,7 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
 
     private float growthMultiplier = 1;
     private boolean growGiant;
-    private int health = 255;
+    private int health = 32;
     private float farmLevel;
     private int lastUpdateDay;
     //Used for other crops not from this mod

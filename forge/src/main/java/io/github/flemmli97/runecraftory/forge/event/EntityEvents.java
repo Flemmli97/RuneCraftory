@@ -18,6 +18,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -120,5 +121,11 @@ public class EntityEvents {
     public void onSpawn(EntityJoinWorldEvent event) {
         if (event.getEntity() instanceof LivingEntity living)
             EntityCalls.onSpawn(living);
+    }
+
+    @SubscribeEvent
+    public void cropHarvest(PlayerInteractEvent.RightClickBlock event) {
+        if (event.getUseBlock() != Event.Result.DENY)
+            EntityCalls.cropRightClickHarvest(event.getPlayer(), event.getEntity().level.getBlockState(event.getHitVec().getBlockPos()), event.getHitVec().getBlockPos());
     }
 }

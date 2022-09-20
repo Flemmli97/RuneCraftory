@@ -1,13 +1,17 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
+import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.tile.CropBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.FarmBlockEntity;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -63,10 +67,11 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
             BlockEntity tile = level.getBlockEntity(pos);
             dropResources(state, level, pos, tile);
             if (tile instanceof CropBlockEntity && this.properties().map(CropProperties::regrowable).orElse(false)) {
-                ((CropBlockEntity) tile).resetAge();
-                level.setBlockAndUpdate(pos, state.setValue(AGE, 0));
+                ((CropBlockEntity) tile).onRegrowableHarvest(this);
             } else
                 level.removeBlock(pos, false);
+            if (player instanceof ServerPlayer serverPlayer)
+                Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.FARMING, 2f));
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
@@ -104,7 +109,8 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        return (level.getRawBrightness(pos, 0) >= 8 || level.canSeeSky(pos)) && super.canSurvive(state, level, pos);
+        BlockPos blockPos = pos.below();
+        return (level.getRawBrightness(pos, 0) >= 8 || level.canSeeSky(pos)) && this.mayPlaceOn(level.getBlockState(blockPos), level, blockPos);
     }
 
     private void modifyStack(ItemStack stack, CropBlockEntity tile) {

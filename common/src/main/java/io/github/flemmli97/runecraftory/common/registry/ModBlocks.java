@@ -135,7 +135,7 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> noelGrass = flower("noel_grass", () -> ModItems.noelGrass, () -> ModItems.noelGrassGiant, () -> ModItems.noelGrassSeeds);
     public static final RegistryEntrySupplier<Block> greenCrystal = flower("green_crystal", () -> ModItems.greenCrystal, () -> ModItems.greenCrystalGiant, () -> ModItems.greenCrystalSeeds);
     public static final RegistryEntrySupplier<Block> fireflower = flower("fireflower", () -> ModItems.fireflower, () -> ModItems.fireflowerGiant, () -> ModItems.fireflowerSeeds);
-    public static final RegistryEntrySupplier<Block> fourLeafClover = flower("4_leaf_clover", () -> ModItems.fourLeafClover, () -> ModItems.fourLeafCloverGiant, () -> ModItems.fourLeafCloverSeeds);
+    public static final RegistryEntrySupplier<Block> fourLeafClover = flower("four_leaf_clover", () -> ModItems.fourLeafClover, () -> ModItems.fourLeafCloverGiant, () -> ModItems.fourLeafCloverSeeds);
     public static final RegistryEntrySupplier<Block> ironleaf = flower("ironleaf", () -> ModItems.ironleaf, () -> ModItems.ironleafGiant, () -> ModItems.ironleafSeeds);
     public static final RegistryEntrySupplier<Block> emeryFlower = flower("emery_flower", () -> ModItems.emeryFlower, () -> ModItems.emeryFlowerGiant, () -> ModItems.emeryFlowerSeeds);
     public static final RegistryEntrySupplier<Block> blueCrystal = flower("blue_crystal", () -> ModItems.blueCrystal, () -> ModItems.blueCrystalGiant, () -> ModItems.blueCrystalSeeds);

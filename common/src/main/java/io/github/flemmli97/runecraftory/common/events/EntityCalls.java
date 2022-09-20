@@ -165,7 +165,7 @@ public class EntityCalls {
         }
     }
 
-    public static boolean cropRightClickHarvest(Player player, BlockState state, BlockPos pos) {
+    public static void cropRightClickHarvest(Player player, BlockState state, BlockPos pos) {
         if (!player.level.isClientSide && state.getBlock() instanceof CropBlock crop) {
             if (crop.isMaxAge(state)) {
                 CropProperties props = DataPackHandler.getCropStat(crop.getCloneItemStack(player.level, pos, state).getItem());
@@ -178,10 +178,10 @@ public class EntityCalls {
                     player.level.removeBlock(pos, false);
                 }
                 player.swing(InteractionHand.MAIN_HAND, true);
+                if (props != null && player instanceof ServerPlayer serverPlayer)
+                    Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.FARMING, 2f));
             }
-            return true;
         }
-        return false;
     }
 
     public static void updateLivingTick(Player player) {

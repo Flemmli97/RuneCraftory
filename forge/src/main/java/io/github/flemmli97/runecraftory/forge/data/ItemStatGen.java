@@ -480,7 +480,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.crystalElectro.get(), new ItemStat.MutableItemStat(0, 0, 0));
         this.addStat(ModItems.stickThick.get(), new ItemStat.MutableItemStat(1900, 200, 45)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 13));
-        this.addStat(ModItems.hornInsect.get(), new ItemStat.MutableItemStat(130 , 21, 8)
+        this.addStat(ModItems.hornInsect.get(), new ItemStat.MutableItemStat(130, 21, 8)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3));
         this.addStat(ModItems.hornRigid.get(), new ItemStat.MutableItemStat(0, 0, 0));
         this.addStat(ModItems.hornDevil.get(), new ItemStat.MutableItemStat(0, 0, 0));
@@ -502,7 +502,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 5)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 3)
                 .addAttribute(ModAttributes.RFCRIT.get(), -3));
-        this.addStat(ModItems.fishFossil.get(), new ItemStat.MutableItemStat(180 , 30, 19)
+        this.addStat(ModItems.fishFossil.get(), new ItemStat.MutableItemStat(180, 30, 19)
                 .addAttribute(ModAttributes.RF_MAGIC.get(), 5)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 1));
         this.addStat(ModItems.skull.get(), new ItemStat.MutableItemStat(100, 1000, 35)
@@ -528,7 +528,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
                 .addAttribute(ModAttributes.RF_MAGIC.get(), 2)
                 .addAttribute(ModAttributes.RFPARA.get(), 5));
-        this.addStat(ModItems.puppetryStrings.get(), new ItemStat.MutableItemStat(30000 , 1000, 37)
+        this.addStat(ModItems.puppetryStrings.get(), new ItemStat.MutableItemStat(30000, 1000, 37)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 6)
                 .addAttribute(ModAttributes.RF_MAGIC.get(), 9)
                 .addAttribute(ModAttributes.RFSEAL.get(), 15)
@@ -540,7 +540,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.tailChimera.get(), new ItemStat.MutableItemStat(0, 0, 0));
         this.addStat(ModItems.arrowHead.get(), new ItemStat.MutableItemStat(80, 10, 2)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1));
-        this.addStat(ModItems.bladeShard.get(), new ItemStat.MutableItemStat(139 , 25, 9)
+        this.addStat(ModItems.bladeShard.get(), new ItemStat.MutableItemStat(139, 25, 9)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3));
         this.addStat(ModItems.brokenHilt.get(), new ItemStat.MutableItemStat(550, 50, 22)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 2)
@@ -550,7 +550,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RFRESSLEEP.get(), 5)
                 .addAttribute(ModAttributes.RFRESFAT.get(), 5)
                 .addAttribute(ModAttributes.RFRESCOLD.get(), 5));
-        this.addStat(ModItems.brokenBox.get(), new ItemStat.MutableItemStat(1000 , 200, 48)
+        this.addStat(ModItems.brokenBox.get(), new ItemStat.MutableItemStat(1000, 200, 48)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.RFRESPOISON.get(), 10)
                 .addAttribute(ModAttributes.RFRESSEAL.get(), 10)
@@ -586,7 +586,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 1)
                 .addAttribute(ModAttributes.RFRESDIZ.get(), 3));
-        this.addStat(ModItems.furball.get(), new ItemStat.MutableItemStat(900 , 120, 38)
+        this.addStat(ModItems.furball.get(), new ItemStat.MutableItemStat(900, 120, 38)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 8)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.RFRESDIZ.get(), 10)
@@ -603,7 +603,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 13)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 7)
                 .addAttribute(ModAttributes.RFRESDIZ.get(), 13));
-            this.addStat(ModItems.lightningMane.get(), new ItemStat.MutableItemStat(13000, 600, 31)
+        this.addStat(ModItems.lightningMane.get(), new ItemStat.MutableItemStat(13000, 600, 31)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 8)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 6)
                 .addAttribute(ModAttributes.RFRESDIZ.get(), 17));
@@ -640,7 +640,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RFRESSEAL.get(), 25));
         this.addStat(ModItems.gloveGiant.get(), new ItemStat.MutableItemStat(0, 0, 0));
         this.addStat(ModItems.gloveBlueGiant.get(), new ItemStat.MutableItemStat(0, 0, 0));
-        this.addStat(ModItems.carapaceInsect.get(), new ItemStat.MutableItemStat(75 , 11, 8)
+        this.addStat(ModItems.carapaceInsect.get(), new ItemStat.MutableItemStat(75, 11, 8)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1)
                 .addAttribute(ModAttributes.RFRESPOISON.get(), 15));
         this.addStat(ModItems.carapacePretty.get(), new ItemStat.MutableItemStat(750, 85, 21)
