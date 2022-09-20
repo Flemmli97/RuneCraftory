@@ -100,6 +100,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private static final EntityDataAccessor<Integer> levelXP = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> moveFlags = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> behaviour = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> playDeathState = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
 
     private static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
     private static final UUID foodUUID = UUID.fromString("87A55C28-8C8C-4BFF-AF5F-9972A38CCD9D");
@@ -160,6 +161,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
         return false;
     };
+
+    private int playDeathTick;
+
     protected int tamingTick = -1;
     private int brushCount;
     private Runnable delayedTaming;
@@ -248,6 +252,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.entityData.define(levelXP, 0);
         this.entityData.define(moveFlags, (byte) 0);
         this.entityData.define(behaviour, (byte) 0);
+        this.entityData.define(playDeathState, false);
     }
 
     //=====Client
@@ -271,6 +276,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void tick() {
         this.getAnimationHandler().tick();
         super.tick();
+        if (this.playDeath()) {
+            this.playDeathTick = Math.min(15, ++this.playDeathTick);
+            if (!this.level.isClientSide && this.getHealth() > 0.02) {
+                this.entityData.set(playDeathState, false);
+            }
+        } else {
+            this.playDeathTick = Math.max(0, --this.playDeathTick);
+        }
         if (!this.level.isClientSide) {
             this.updater.tick();
             if (this.tamingTick > 0) {
@@ -308,6 +321,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         compound.putInt("FoodBuffTick", this.foodBuffTick);
         compound.put("FriendlyPoints", this.friendlyPoints.save());
         compound.put("DailyUpdater", this.updater.save());
+        compound.putBoolean("PlayDeath", this.entityData.get(playDeathState));
         //CompoundTag genes = new CompoundTag();
         //this.attributeRandomizer.forEach((att, val)->genes.putInt(att.getRegistryName().toString(), val));
         //compound.put("Genes", genes);
@@ -329,6 +343,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.foodBuffTick = compound.getInt("FoodBuffTick");
         this.friendlyPoints.read(compound.getCompound("FriendlyPoints"));
         this.updater.read(compound.getCompound("DailyUpdater"));
+        this.setPlayDeath(compound.getBoolean("PlayDeath"));
         //CompoundTag genes = compound.getCompound("Genes");
         //genes.keySet().forEach(key->this.attributeRandomizer.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(key)), genes.getInt(key)));
     }
@@ -398,19 +413,21 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         ItemStack stack = player.getItemInHand(hand);
         if (hand == InteractionHand.MAIN_HAND) {
             if (stack.isEmpty() && player.getUUID().equals(this.getOwnerUUID())) {
-                if (player.isShiftKeyDown()) {
-                    this.setBehaviour((byte) (this.behaviourState() + 1));
-                    if (player instanceof ServerPlayer serverPlayer)
-                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.5f, 0.4f));
-                    switch (this.behaviourState()) {
-                        case 0 -> player.sendMessage(new TranslatableComponent("monster.interact.move"), Util.NIL_UUID);
-                        case 1 -> player.sendMessage(new TranslatableComponent("monster.interact.follow"), Util.NIL_UUID);
-                        case 2 -> player.sendMessage(new TranslatableComponent("monster.interact.sit"), Util.NIL_UUID);
+                if (!this.playDeath()) {
+                    if (player.isShiftKeyDown()) {
+                        this.setBehaviour((byte) (this.behaviourState() + 1));
+                        if (player instanceof ServerPlayer serverPlayer)
+                            serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.5f, 0.4f));
+                        switch (this.behaviourState()) {
+                            case 0 -> player.sendMessage(new TranslatableComponent("monster.interact.move"), Util.NIL_UUID);
+                            case 1 -> player.sendMessage(new TranslatableComponent("monster.interact.follow"), Util.NIL_UUID);
+                            case 2 -> player.sendMessage(new TranslatableComponent("monster.interact.sit"), Util.NIL_UUID);
+                        }
+                        return InteractionResult.SUCCESS;
+                    } else if (this.ridable()) {
+                        player.startRiding(this);
+                        return InteractionResult.SUCCESS;
                     }
-                    return InteractionResult.SUCCESS;
-                } else if (this.ridable()) {
-                    player.startRiding(this);
-                    return InteractionResult.SUCCESS;
                 }
             }
         }
@@ -770,7 +787,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     protected void tickDeath() {
-        //if (!this.isTamed()) {
         if (this.deathTime == 0) {
             this.playDeathAnimation();
             this.getNavigation().stop();
@@ -792,7 +808,29 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
             }
         }
-        //}
+    }
+
+    public boolean playDeath() {
+        return this.entityData.get(playDeathState);
+    }
+
+    public void setPlayDeath(boolean flag) {
+        this.entityData.set(playDeathState, flag);
+        if (flag) {
+            this.getNavigation().stop();
+            this.setMoving(false);
+            this.setShiftKeyDown(false);
+            this.setSprinting(false);
+        }
+    }
+
+    public int getPlayDeathTick() {
+        return this.playDeathTick;
+    }
+
+    @Override
+    public boolean canBeSeenAsEnemy() {
+        return super.canBeSeenAsEnemy() && !this.playDeath();
     }
 
     @Override
@@ -801,7 +839,18 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 && !player.isShiftKeyDown()) {
             return false;
         }
+        if (this.playDeath())
+            return false;
         return (source.getEntity() == null || this.canAttackFrom(source.getEntity().blockPosition())) && super.hurt(source, amount);
+    }
+
+    @Override
+    protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
+        super.actuallyHurt(damageSrc, damageAmount);
+        if (this.isTamed() && this.getHealth() <= 0) {
+            this.setHealth(0.01f);
+            this.setPlayDeath(true);
+        }
     }
 
     @Override
@@ -821,7 +870,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.isVehicle();
+        return super.isImmobile() || this.isVehicle() || this.playDeath();
     }
 
     @Override
