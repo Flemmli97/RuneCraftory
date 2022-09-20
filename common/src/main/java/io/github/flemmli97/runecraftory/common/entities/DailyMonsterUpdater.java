@@ -11,6 +11,7 @@ public class DailyMonsterUpdater {
     private final BaseMonster monster;
 
     private int lastUpdateDay;
+    private int lastUpdateFood, lastUpdateBrush;
 
     public DailyMonsterUpdater(BaseMonster monster) {
         this.monster = monster;
@@ -24,7 +25,7 @@ public class DailyMonsterUpdater {
                 int i = -1;
                 ItemStack drop = ItemStack.EMPTY;
                 for (Map.Entry<ItemStack, Integer> e : this.monster.dailyDrops().entrySet()) {
-                    if (this.monster.getFriendlyPoints()[0] >= e.getValue() && i > e.getValue()) {
+                    if (this.monster.getFriendlyPoints().getLevel() >= e.getValue() && i > e.getValue()) {
                         drop = e.getKey();
                         i = e.getValue();
                     }
@@ -36,6 +37,22 @@ public class DailyMonsterUpdater {
 
     public void setLastUpdateDay(int lastUpdateDay) {
         this.lastUpdateDay = lastUpdateDay;
+    }
+
+    public void setLastUpdateFood(int lastUpdateFood) {
+        this.lastUpdateFood = lastUpdateFood;
+    }
+
+    public int getLastUpdateFood() {
+        return this.lastUpdateFood;
+    }
+
+    public void setLastUpdateBrush(int lastUpdateBrush) {
+        this.lastUpdateBrush = lastUpdateBrush;
+    }
+
+    public int getLastUpdateBrush() {
+        return this.lastUpdateBrush;
     }
 
     public CompoundTag save() {

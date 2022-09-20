@@ -103,9 +103,9 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> fishingRodSilver = fishingRod(EnumToolTier.SILVER);
     public static final RegistryEntrySupplier<Item> fishingRodGold = fishingRod(EnumToolTier.GOLD);
     public static final RegistryEntrySupplier<Item> fishingRodPlatinum = fishingRod(EnumToolTier.PLATINUM);
-    public static final RegistryEntrySupplier<Item> inspector = ITEMS.register("inspector", () -> new ItemPetInspector(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryEntrySupplier<Item> brush = ITEMS.register("brush", () -> new ItemBrush(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryEntrySupplier<Item> glass = ITEMS.register("magnifying_glass", () -> new ItemToolGlass(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> inspector = ITEMS.register("inspector", () -> new ItemPetInspector(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> brush = ITEMS.register("brush", () -> new ItemBrush(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> glass = ITEMS.register("magnifying_glass", () -> new ItemToolGlass(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
 
     public static final RegistryEntrySupplier<Item> leveliser = ITEMS.register("leveliser", () -> new ItemStatIncrease(ItemStatIncrease.Stat.LEVEL, new Item.Properties().tab(RFCreativeTabs.medicine)));
     public static final RegistryEntrySupplier<Item> heartDrink = ITEMS.register("heart_drink", () -> new ItemStatIncrease(ItemStatIncrease.Stat.HP, new Item.Properties().tab(RFCreativeTabs.medicine)));

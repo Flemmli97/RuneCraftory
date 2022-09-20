@@ -24,7 +24,7 @@ public class GeneralConfig {
     public static boolean healOnWakeUp = false;
     public static boolean disableFoodSystem = false;
     public static boolean disableItemStatSystem = false;
-    public static boolean disableCropSystem = true;
+    public static boolean disableCropSystem = false;
     public static float witherChance = 0.5f;
 
     public static boolean waila = true;

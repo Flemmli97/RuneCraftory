@@ -27,6 +27,8 @@ public class LevelCalc {
     private static long[] mediumSkillXP;
     private static long[] slowSkillXP;
 
+    private static long[] friendXPTotal;
+
     /**
      * Experimental calculations
      */
@@ -98,6 +100,29 @@ public class LevelCalc {
             prev = xps[l];
         }
         return xps;
+    }
+
+    public static int friendPointsForNext(int level) {
+        if (level <= 0)
+            return 1;
+        if (level >= 10)
+            return 0;
+        return (int) (totalFriendPointsForLevel(level + 1) - totalFriendPointsForLevel(level));
+    }
+
+    public static long totalFriendPointsForLevel(int level) {
+        if (level <= 0 || level >= 10)
+            return 0;
+        if (friendXPTotal == null) {
+            friendXPTotal = new long[10];
+            friendXPTotal[0] = 100;
+            long prev = friendXPTotal[0];
+            for (int l = 1; l < 10; l++) {
+                friendXPTotal[l] = prev + 20 + l * 15;
+                prev = friendXPTotal[l];
+            }
+        }
+        return friendXPTotal[level - 1];
     }
 
     public static int getMoney(int base, int level) {

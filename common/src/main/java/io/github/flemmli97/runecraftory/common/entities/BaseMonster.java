@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
@@ -160,12 +161,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return false;
     };
     protected int tamingTick = -1;
+    private int brushCount;
     private Runnable delayedTaming;
     protected int feedTimeOut;
     private boolean doJumping = false;
     private int foodBuffTick;
 
-    private int[] friendlyPoints = {0, 0};
+    private final LevelExpPair friendlyPoints = new LevelExpPair();
     private Map<ItemStack, Integer> dailyDrops;
 
     private final DailyMonsterUpdater updater = new DailyMonsterUpdater(this);
@@ -259,6 +261,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             for (int i = 0; i < 4; ++i) {
                 this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX() - this.getBbWidth() * 0.25 + this.random.nextFloat() * this.getBbWidth() * 0.25f, this.getY() + this.getBbHeight() + this.random.nextFloat() * 0.3, this.getZ() - this.getBbWidth() * 0.25 + this.random.nextFloat() * this.getBbWidth() * 0.25f, 0, 0, 0);
             }
+        } else if (id == 64) {
+            this.level.addParticle(ParticleTypes.NOTE, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
         }
         super.handleEntityEvent(id);
     }
@@ -302,7 +306,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.hasRestriction())
             compound.putIntArray("Home", new int[]{this.getRestrictCenter().getX(), this.getRestrictCenter().getY(), this.getRestrictCenter().getZ(), (int) this.getRestrictRadius()});
         compound.putInt("FoodBuffTick", this.foodBuffTick);
-        compound.putIntArray("FriendlyPoints", this.friendlyPoints);
+        compound.put("FriendlyPoints", this.friendlyPoints.save());
         compound.put("DailyUpdater", this.updater.save());
         //CompoundTag genes = new CompoundTag();
         //this.attributeRandomizer.forEach((att, val)->genes.putInt(att.getRegistryName().toString(), val));
@@ -323,9 +327,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
         this.dead = compound.getBoolean("Out");
         this.foodBuffTick = compound.getInt("FoodBuffTick");
-        this.friendlyPoints = compound.getIntArray("FriendlyPoints");
-        if (this.friendlyPoints.length != 2)
-            this.friendlyPoints = new int[]{0, 0};
+        this.friendlyPoints.read(compound.getCompound("FriendlyPoints"));
         this.updater.read(compound.getCompound("DailyUpdater"));
         //CompoundTag genes = compound.getCompound("Genes");
         //genes.keySet().forEach(key->this.attributeRandomizer.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(key)), genes.getInt(key)));
@@ -419,6 +421,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     return InteractionResult.CONSUME;
                 } else {
                     if (this.tamingTick == -1 && this.isAlive()) {
+                        if (stack.getItem() == ModItems.brush.get()) {
+                            if (player instanceof ServerPlayer serverPlayer)
+                                serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+                            this.brushCount++;
+                            if (this.brushCount > 10)
+                                this.brushCount = 10;
+                            this.tamingTick = 40;
+                            this.level.broadcastEntityEvent(this, (byte) 64);
+                            return InteractionResult.CONSUME;
+                        }
                         if (player instanceof ServerPlayer serverPlayer)
                             serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
                         float rightItemMultiplier = this.tamingMultiplier(stack);
@@ -427,7 +439,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         if (count == stack.getCount() && !player.isCreative())
                             stack.shrink(1);
                         this.tamingTick = 100;
-                        float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier);
+                        float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier) * (1 + this.brushCount * 0.05f);
                         this.delayedTaming = () -> {
                             if (chance == 0)
                                 this.level.broadcastEntityEvent(this, (byte) 34);
@@ -448,6 +460,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     return InteractionResult.CONSUME;
                 } else if (stack.getItem() == ModItems.inspector.get()) {
                     //open tamed gui
+                } else if (stack.getItem() == ModItems.brush.get()) {
+                    int day = WorldUtils.day(this.level);
+                    if (this.updater.getLastUpdateBrush() == day)
+                        return InteractionResult.PASS;
+                    if (player instanceof ServerPlayer serverPlayer)
+                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+                    this.updater.setLastUpdateBrush(day);
+                    this.increaseFriendPoints(15);
+                    this.level.broadcastEntityEvent(this, (byte) 64);
                 } else if (this.feedTimeOut <= 0 && this.applyFoodEffect(stack)) {
                     if (player instanceof ServerPlayer serverPlayer) {
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
@@ -456,11 +477,21 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     }
                     //this.feedTimeOut = 24000;
                     this.feedTimeOut = 20;
+                    int day = WorldUtils.day(this.level);
+                    if (this.updater.getLastUpdateFood() != day) {
+                        this.updater.setLastUpdateBrush(day);
+                        this.increaseFriendPoints(this.tamingItem().match(stack) ? 50 : 35);
+                    }
                     return InteractionResult.CONSUME;
                 }
             }
         }
         return InteractionResult.PASS;
+    }
+
+    public void increaseFriendPoints(int xp) {
+        this.friendlyPoints.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> {
+        });
     }
 
     @Override
@@ -680,10 +711,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void updateMoveAnimation() {
     }
 
-    /**
-     * @return int[] in form of {level, xp}
-     */
-    public int[] getFriendlyPoints() {
+    public LevelExpPair getFriendlyPoints() {
         return this.friendlyPoints;
     }
 
