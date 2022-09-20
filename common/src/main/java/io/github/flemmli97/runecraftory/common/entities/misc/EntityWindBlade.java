@@ -130,7 +130,7 @@ public class EntityWindBlade extends EntityProjectile {
                 case WEST, EAST -> newMot = new Vec3(-mot.x(), mot.y(), mot.z());
                 default -> newMot = new Vec3(mot.x(), mot.y(), -mot.z());
             }
-            if(!blockRayTraceResult.isInside())
+            if (!blockRayTraceResult.isInside())
                 this.setPos(blockRayTraceResult.getLocation());
             this.setDeltaMovement(newMot);
             //If it hits a corner and its fast enough it can skip a correct bounce at that place. To fix we manually do a block collision check again
@@ -150,7 +150,7 @@ public class EntityWindBlade extends EntityProjectile {
             } else if (blockstate.is(Blocks.END_GATEWAY)) {
                 BlockEntity tileentity = this.level.getBlockEntity(blockpos);
                 if (tileentity instanceof TheEndGatewayBlockEntity && TheEndGatewayBlockEntity.canEntityTeleport(this)) {
-                    TheEndGatewayBlockEntity.teleportEntity(this.level, blockpos, blockstate, this, (TheEndGatewayBlockEntity)tileentity);
+                    TheEndGatewayBlockEntity.teleportEntity(this.level, blockpos, blockstate, this, (TheEndGatewayBlockEntity) tileentity);
                 }
             } else if (!EventCalls.INSTANCE.projectileHitCall(this, raytraceresult)) {
                 this.onBlockHit(raytraceresult);

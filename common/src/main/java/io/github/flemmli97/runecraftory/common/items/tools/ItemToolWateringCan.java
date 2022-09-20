@@ -188,7 +188,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
                 if (result != null && result.getType() != HitResult.Type.MISS) {
                     pos = result.getBlockPos();
                 }
-                int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, 0, -range), pos.offset(range, 0, range))
+                int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
                         .filter(p -> this.moisten((ServerLevel) world, p.immutable(), stack, entity))
                         .count();
                 if (amount > 0)

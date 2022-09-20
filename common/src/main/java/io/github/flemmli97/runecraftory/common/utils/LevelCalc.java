@@ -129,7 +129,10 @@ public class LevelCalc {
         return switch (MobConfig.gateLevelType) {
             case CONSTANT -> MobConfig.baseGateLevel;
             case DISTANCESPAWN -> {
-                double dist = Math.sqrt(pos.distanceToSqr(Vec3.atCenterOf(level.getSharedSpawnPos())));
+                Vec3 spawn = Vec3.atCenterOf(level.getSharedSpawnPos());
+                double dX = spawn.x - pos.x;
+                double dZ = spawn.z - pos.z;
+                double dist = Math.sqrt(dX * dX + dZ * dZ);
                 if (dist < 400)
                     yield MobConfig.baseGateLevel;
                 if (dist < 1000)

@@ -144,10 +144,14 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
         if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
             int range = Math.min(useTime, this.tier.getTierLevel());
-            if (range > 0) {
+            BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
+            if (range == 0) {
+                if (result != null) {
+                    this.useOnBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result), false);
+                }
+            } else {
                 setDontUseRPFlagTemp(stack, true);
                 BlockPos pos = entity.blockPosition();
-                BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
                 if (result != null && result.getType() != HitResult.Type.MISS) {
                     pos = result.getBlockPos();
                 }
