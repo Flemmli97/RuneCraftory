@@ -67,4 +67,6 @@ public class LibEntities {
     public static final ResourceLocation darkBall = new ResourceLocation(RuneCraftory.MODID, "dark_ball");
     public static final ResourceLocation darkness = new ResourceLocation(RuneCraftory.MODID, "darkness");
 
+    public static final ResourceLocation fishingHook = new ResourceLocation(RuneCraftory.MODID, "fishing_hook");
+
 }

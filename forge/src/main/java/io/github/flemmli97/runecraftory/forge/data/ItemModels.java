@@ -75,7 +75,9 @@ public class ItemModels extends ItemModelProvider {
             else if (sup.get() instanceof ItemToolAxe)
                 this.singleTexture(sup.getID().getPath(), new ResourceLocation(RuneCraftory.MODID, "item/axe_tool"), "layer0", this.modLoc("item/" + sup.getID().getPath()));
             else if (sup.get() instanceof ItemToolFishingRod)
-                this.singleTexture(sup.getID().getPath(), new ResourceLocation(RuneCraftory.MODID, "item/fishing_rod"), "layer0", this.modLoc("item/" + sup.getID().getPath()));
+                this.singleTexture(sup.getID().getPath(), new ResourceLocation("item/handheld_rod"), "layer0", this.modLoc("item/" + sup.getID().getPath()))
+                        .override().predicate(this.modLoc("fishing"), 1)
+                        .model(this.singleTexture(sup.getID().getPath() + "_cast", new ResourceLocation("item/handheld_rod"), "layer0", this.modLoc("item/" + sup.getID().getPath() + "_cast")));
             else if (sup.get() instanceof ItemRecipeBread)
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", this.mcLoc("item/bread"));
             else if (sup.get() instanceof SpawnEgg)

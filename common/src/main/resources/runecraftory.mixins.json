@@ -13,7 +13,8 @@
     "StructureTemplateMixin",
     "ItemStackMixin",
     "PlayerMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "FishingRodHookTriggerMixin"
   ],
   "client": [
     "AtlasMixin",

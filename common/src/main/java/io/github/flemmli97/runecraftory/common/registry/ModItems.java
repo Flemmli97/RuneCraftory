@@ -1223,7 +1223,7 @@ public class ModItems {
     }
 
     public static RegistryEntrySupplier<Item> fishingRod(EnumToolTier tier) {
-        RegistryEntrySupplier<Item> sup = ITEMS.register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(tier, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
         return sup;
     }
 

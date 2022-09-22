@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.attachment;
 
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.entity.LivingEntity;
@@ -8,6 +9,8 @@ import net.minecraft.world.entity.LivingEntity;
 public class EntityData {
 
     private boolean sleeping, paralysis, cold, poison, invis, orthoView;
+
+    public EntityCustomFishingHook fishingHook;
 
     public void setSleeping(LivingEntity entity, boolean flag) {
         this.sleeping = flag;

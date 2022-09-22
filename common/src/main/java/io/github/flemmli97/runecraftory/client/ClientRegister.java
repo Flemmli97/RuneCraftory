@@ -50,6 +50,7 @@ import io.github.flemmli97.runecraftory.client.render.monster.RenderMarionetta;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderOrcArcher;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderThunderbolt;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
+import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingHookRenderer;
 import io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderCards;
@@ -73,6 +74,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStone;
 import io.github.flemmli97.runecraftory.common.inventory.container.ShippingContainer;
+import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -154,6 +156,8 @@ public class ClientRegister {
                 register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "held"), ItemModelProps.heldMainProp);
             else if (reg.get() instanceof ItemGloveBase)
                 register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "glove_held"), ItemModelProps.heldMainGlove);
+            else if (reg.get() instanceof ItemToolFishingRod)
+                register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "fishing"), ItemModelProps.fishingRods);
         });
     }
 
@@ -243,6 +247,8 @@ public class ClientRegister {
         consumer.register(ModEntities.lightBall.get(), EmptyRender::new);
         consumer.register(ModEntities.darkBall.get(), EmptyRender::new);
         consumer.register(ModEntities.darkness.get(), RenderDarkness::new);
+
+        consumer.register(ModEntities.fishingHook.get(), CustomFishingHookRenderer::new);
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T>> EntityRendererProvider<? super T> getMonsterRender(Function<ModelPart, M> model, ModelLayerLocation layerLocation, ResourceLocation texture, float shadow) {
