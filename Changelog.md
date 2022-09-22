@@ -1,3 +1,13 @@
+RuneCraftory 1.3.0
+================
+- Enabled crop features now by default cause textures are now (mostly) there
+- Brushing non tamed monster increase taming chance with 1.5x change at 10 brushes.
+  Brushing or feeding tamed monster increases friend points once per day
+- Add fishing mechanic
+- Fix penetrating wind blades bounce sometimes not correct
+- Ignore height for distance level calculation
+- Smooth out some animations
+
 RuneCraftory 1.2.4
 ================
 - Increased some base xp values

@@ -75,7 +75,6 @@ public class EntityCustomFishingHook extends EntityProjectile {
         super(ModEntities.fishingHook.get(), world, shooter);
         this.setPos(this.getX(), this.getY() + 0.1, this.getZ());
         this.shoot(shooter, Math.max(-90, shooter.getXRot() - 5), shooter.getYRot(), 0, 1.1f + Math.max(-0.3f, Mth.sin(-shooter.getXRot() * Mth.DEG_TO_RAD)), 0);
-        this.onUpdateOwner();
         this.lureSpeedBonus = speed;
         this.luck = luck;
         this.nibbleBonus = charge;
