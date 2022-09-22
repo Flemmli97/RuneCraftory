@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ItemStack.class)
-public class ItemStackMixin {
+public abstract class ItemStackMixin {
 
     @Inject(method = "mineBlock", at = @At("HEAD"))
     private void onBlockMine(Level level, BlockState state, BlockPos pos, Player player, CallbackInfo info) {

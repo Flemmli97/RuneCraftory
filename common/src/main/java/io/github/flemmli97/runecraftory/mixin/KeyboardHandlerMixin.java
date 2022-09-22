@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(KeyboardHandler.class)
-public class KeyboardHandlerMixin {
+public abstract class KeyboardHandlerMixin {
 
     @Inject(method = "keyPress", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/chat/NarratorChatListener;isActive()Z"), cancellable = true)
     private void keyDisable(long windowPointer, int key, int scanCode, int action, int modifiers, CallbackInfo info) {

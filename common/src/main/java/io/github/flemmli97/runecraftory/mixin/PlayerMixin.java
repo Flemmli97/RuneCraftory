@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Player.class)
-public class PlayerMixin {
+public abstract class PlayerMixin {
 
     @Inject(method = "updatePlayerPose", at = @At("HEAD"), cancellable = true)
     private void noPoseUpdate(CallbackInfo info) {
