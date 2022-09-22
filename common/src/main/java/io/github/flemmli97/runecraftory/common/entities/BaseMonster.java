@@ -176,6 +176,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     private final DailyMonsterUpdater updater = new DailyMonsterUpdater(this);
 
+    /**
+     * For movement animation interpolation
+     */
+    private int moveTick;
+    public static final int moveTickMax = 5;
+
     public BaseMonster(EntityType<? extends BaseMonster> type, Level world) {
         super(type, world);
         this.moveControl = new NewMoveController(this);
@@ -283,6 +289,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
         } else {
             this.playDeathTick = Math.max(0, --this.playDeathTick);
+        }
+        if (this.getMoveFlag() != 0) {
+            this.moveTick = Math.min(moveTickMax, ++this.moveTick);
+        } else {
+            this.moveTick = Math.max(0, --this.moveTick);
         }
         if (!this.level.isClientSide) {
             this.updater.tick();
@@ -734,8 +745,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     //=====Damage Logic
 
-    public boolean isMoving() {
-        return this.getMoveFlag() != 0;
+    public int moveTick() {
+        return this.moveTick;
+    }
+
+    public float interpolatedMoveTick() {
+        return this.moveTick / (float) moveTickMax;
     }
 
     public void setMoving(boolean flag) {

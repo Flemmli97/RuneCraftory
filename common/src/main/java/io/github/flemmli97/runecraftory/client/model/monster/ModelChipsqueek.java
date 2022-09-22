@@ -87,10 +87,10 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
         this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.5f;
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        if (entity.deathTime <= 0) {
+        if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
-            if (entity.isMoving())
-                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks);
+            if (entity.moveTick() > 0)
+                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick());
         }
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);

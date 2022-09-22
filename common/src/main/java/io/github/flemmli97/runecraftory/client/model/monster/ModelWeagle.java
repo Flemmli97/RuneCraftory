@@ -98,9 +98,9 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (anim == null) {
-            if (entity.deathTime <= 0) {
-                if (entity.isMoving()) {
-                    this.anim.doAnimation(this, "fly", entity.tickCount, partialTicks);
+            if (entity.deathTime <= 0 && !entity.playDeath()) {
+                if (entity.moveTick() > 0) {
+                    this.anim.doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick());
                 } else
                     this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
             }

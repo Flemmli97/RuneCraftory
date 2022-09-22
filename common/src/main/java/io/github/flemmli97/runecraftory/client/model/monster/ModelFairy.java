@@ -94,7 +94,7 @@ public class ModelFairy<T extends EntityFairy> extends EntityModel<T> implements
         this.model.getMainPart().xRot += 0.25;
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
-        if (entity.deathTime <= 0) {
+        if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
         }
         if (anim != null)
