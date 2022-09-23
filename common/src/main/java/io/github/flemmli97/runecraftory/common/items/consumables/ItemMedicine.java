@@ -22,7 +22,7 @@ public class ItemMedicine extends Item {
 
     @Override
     public int getUseDuration(ItemStack stack) {
-        return 3;
+        return 5;
     }
 
     public int healthRegen(ItemStack stack, FoodProperties prop) {

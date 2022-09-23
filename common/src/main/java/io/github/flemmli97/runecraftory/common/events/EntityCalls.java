@@ -211,7 +211,6 @@ public class EntityCalls {
                 return;
             }
             if (entity instanceof ServerPlayer player) {
-                player.getCooldowns().addCooldown(stack.getItem(), 3);
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                     if (data.foodBuffDuration() <= 0)
                         data.getDailyUpdater().onFoodEaten(player);

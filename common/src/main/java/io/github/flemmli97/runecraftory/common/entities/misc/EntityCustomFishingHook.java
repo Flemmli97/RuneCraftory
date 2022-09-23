@@ -166,12 +166,12 @@ public class EntityCustomFishingHook extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult entityHitResult) {
-        if(this.canAttack != null && !this.canAttack.get()) {
+        if (this.canAttack != null && !this.canAttack.get()) {
             this.discard();
             return false;
         }
         boolean att = CombatUtils.damage(this.getOwner(), entityHitResult.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(this.element).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE), null);
-        if(att && this.setOnCooldown != null) {
+        if (att && this.setOnCooldown != null) {
             this.setOnCooldown.run();
             this.setOnCooldown = null;
             this.canAttack = null;

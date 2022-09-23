@@ -137,8 +137,8 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
                 int luck = EnchantmentHelper.getFishingLuckBonus(itemStack);
                 hook = new EntityCustomFishingHook(level, entity, speed + this.tier.getTierLevel(), luck, charge);
                 hook.setElement(ItemNBT.getElement(itemStack));
-                if(entity instanceof Player player)
-                    hook.attackHandlingPlayer(()->player.getCooldowns().getCooldownPercent(itemStack.getItem(), 0.0f) <= 0, ()->player.getCooldowns().addCooldown(itemStack.getItem(), this.itemCoolDownTicks()));
+                if (entity instanceof Player player)
+                    hook.attackHandlingPlayer(() -> player.getCooldowns().getCooldownPercent(itemStack.getItem(), 0.0f) <= 0, () -> player.getCooldowns().addCooldown(itemStack.getItem(), this.itemCoolDownTicks()));
                 level.addFreshEntity(hook);
             }
             if (entity instanceof Player player)
