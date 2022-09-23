@@ -44,6 +44,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * The vanilla fishing hook has too much hardcoded stuff in it
@@ -64,6 +65,9 @@ public class EntityCustomFishingHook extends EntityProjectile {
     private final int nibbleBonus;
     private int difficultyBonus;
 
+    private Supplier<Boolean> canAttack;
+    private Runnable setOnCooldown;
+
     public EntityCustomFishingHook(EntityType<? extends EntityCustomFishingHook> entityType, Level level) {
         super(entityType, level);
         this.luck = 0;
@@ -82,6 +86,11 @@ public class EntityCustomFishingHook extends EntityProjectile {
 
     public void setElement(EnumElement element) {
         this.element = element;
+    }
+
+    public void attackHandlingPlayer(Supplier<Boolean> canAttack, Runnable runnable) {
+        this.canAttack = canAttack;
+        this.setOnCooldown = runnable;
     }
 
     @Override
@@ -157,7 +166,17 @@ public class EntityCustomFishingHook extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult entityHitResult) {
-        return CombatUtils.damage(this.getOwner(), entityHitResult.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(this.element).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE), null);
+        if(this.canAttack != null && !this.canAttack.get()) {
+            this.discard();
+            return false;
+        }
+        boolean att = CombatUtils.damage(this.getOwner(), entityHitResult.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(this.element).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE), null);
+        if(att && this.setOnCooldown != null) {
+            this.setOnCooldown.run();
+            this.setOnCooldown = null;
+            this.canAttack = null;
+        }
+        return att;
     }
 
     @Override
