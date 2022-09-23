@@ -4,6 +4,7 @@ RuneCraftory 1.3.0
 - Brushing non tamed monster increase taming chance with 1.5x change at 10 brushes.
   Brushing or feeding tamed monster increases friend points once per day
 - Add fishing mechanic
+- Teleport spell added. Teleports player to their spawn point if they arent in the same dimension or further than 10 blocks away else teleports to world spawn
 - Tamed monster now get knocked down instead of killed
 - Fix penetrating wind blades bounce sometimes not correct
 - Ignore height for distance level calculation

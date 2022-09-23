@@ -24,6 +24,7 @@ import io.github.flemmli97.runecraftory.common.spells.PrismSpell;
 import io.github.flemmli97.runecraftory.common.spells.RockSpearSpell;
 import io.github.flemmli97.runecraftory.common.spells.ShineSpell;
 import io.github.flemmli97.runecraftory.common.spells.SnowballSpell;
+import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.spells.TripleWaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.UnsealSpell;
 import io.github.flemmli97.runecraftory.common.spells.WaterLaserSpell;
@@ -75,6 +76,9 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> MEDIPOISON = SPELLS.register("medi_poison", PoisonHealSpell::new);
     public static final RegistryEntrySupplier<Spell> MEDIPARA = SPELLS.register("medi_paralysis", ParaHealSpell::new);
     public static final RegistryEntrySupplier<Spell> MEDISEAL = SPELLS.register("medi_seal", UnsealSpell::new);
+
+    public static final RegistryEntrySupplier<Spell> TELEPORT = SPELLS.register("teleport", TeleportSpell::new);
+
     public static final Supplier<SimpleRegistryWrapper<Spell>> SPELLREGISTRY = new LazyGetter<>(() -> PlatformUtils.INSTANCE.registry(SPELLREGISTRY_KEY));
 
 }

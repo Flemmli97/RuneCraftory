@@ -775,7 +775,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> bonusConcerto = spell(() -> ModSpells.EMPTY, "bonus_concerto");
     public static final RegistryEntrySupplier<Item> strikingMarch = spell(() -> ModSpells.EMPTY, "striking_march");
     public static final RegistryEntrySupplier<Item> ironWaltz = spell(() -> ModSpells.EMPTY, "iron_waltz");
-    public static final RegistryEntrySupplier<Item> teleport = spell(() -> ModSpells.EMPTY, "teleport");
+    public static final RegistryEntrySupplier<Item> teleport = spell(() -> ModSpells.TELEPORT, "teleport");
 
     public static final RegistryEntrySupplier<Item> rockfish = fish("rockfish", Texture.N);
     public static final RegistryEntrySupplier<Item> sandFlounder = fish("sand_flounder", Texture.N);
