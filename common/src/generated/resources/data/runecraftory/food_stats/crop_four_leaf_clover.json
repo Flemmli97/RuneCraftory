@@ -1,0 +1,20 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [
+    {
+      "potion": "minecraft:luck",
+      "duration": 600,
+      "amplifier": 0
+    }
+  ],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 600,
+  "effects": {},
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "hpRegen": 0,
+  "rpRegen": 25,
+  "item": "runecraftory:crop_four_leaf_clover"
+}

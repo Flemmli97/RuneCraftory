@@ -1,0 +1,14 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": 5,
+  "duration": 600,
+  "effects": {},
+  "hpRegenPercent": 5,
+  "rpRegenPercent": 0,
+  "rpIncrease": 30,
+  "hpRegen": 500,
+  "rpRegen": 0,
+  "item": "runecraftory:crop_golden_turnip_giant"
+}

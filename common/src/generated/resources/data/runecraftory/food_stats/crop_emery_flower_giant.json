@@ -1,0 +1,14 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 600,
+  "effects": {},
+  "hpRegenPercent": 15,
+  "rpRegenPercent": 10,
+  "rpIncrease": 0,
+  "hpRegen": 0,
+  "rpRegen": 0,
+  "item": "runecraftory:crop_emery_flower_giant"
+}

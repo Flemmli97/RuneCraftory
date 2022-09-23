@@ -123,5 +123,187 @@ public class FoodGen extends FoodProvider {
                 .addEffectPercentage(ModAttributes.RF_DEFENCE.get(), -25)
                 .addEffectPercentage(ModAttributes.RF_MAGIC.get(), -25)
                 .addEffectPercentage(ModAttributes.RF_MAGIC_DEFENCE.get(), -25));
+
+        this.addStat(ModItems.turnip.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(20, 0)
+                .setRPIncrease(5, 0));
+        this.addStat(ModItems.turnipGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(45, 0)
+                .setRPIncrease(15, 0));
+        this.addStat(ModItems.turnipPink.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(25, 0)
+                .setRPIncrease(5, 0));
+        this.addStat(ModItems.turnipPinkGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(90, 0)
+                .setRPIncrease(18, 0));
+        this.addStat(ModItems.cabbage.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(15, 0));
+        this.addStat(ModItems.cabbageGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(35, 0));
+        this.addStat(ModItems.pinkMelon.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(100, 0));
+        this.addStat(ModItems.pinkMelonGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(150, 0));
+        this.addStat(ModItems.pineapple.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(200, 0));
+        this.addStat(ModItems.pineappleGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(300, 0));
+        this.addStat(ModItems.strawberry.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(60, 0)
+                .setRPIncrease(3, 0));
+        this.addStat(ModItems.strawberryGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(110, 0)
+                .setRPIncrease(7, 0));
+        this.addStat(ModItems.goldenTurnip.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(300, 5)
+                .setRPIncrease(3, 3));
+        this.addStat(ModItems.goldenTurnipGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(500, 5)
+                .setRPIncrease(30, 5));
+        this.addStat(ModItems.goldenPotato.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(230, 5));
+        this.addStat(ModItems.goldenPotatoGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(400, 7));
+        this.addStat(ModItems.goldenPumpkin.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(200, 3));
+        this.addStat(ModItems.goldenPumpkinGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(300, 7));
+        this.addStat(ModItems.goldenCabbage.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(150, 5)
+                .setRPIncrease(5, 0));
+        this.addStat(ModItems.goldenCabbageGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(300, 5)
+                .setRPIncrease(40, 0));
+        this.addStat(ModItems.bokChoy.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(30, 0));
+        this.addStat(ModItems.bokChoyGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(60, 0));
+        this.addStat(ModItems.leek.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(20, 0));
+        this.addStat(ModItems.leekGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(80, 0));
+        this.addStat(ModItems.radish.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(25, 0));
+        this.addStat(ModItems.radishGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(50, 0));
+        this.addStat(ModItems.spinach.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(44, 0));
+        this.addStat(ModItems.spinachGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(90, 0));
+        this.addStat(ModItems.greenPepper.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(60, 0));
+        this.addStat(ModItems.greenPepperGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(100, 0));
+        this.addStat(ModItems.yam.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(33, 0));
+        this.addStat(ModItems.yamGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(70, 0));
+        this.addStat(ModItems.eggplant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(55, 0));
+        this.addStat(ModItems.eggplantGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(120, 0));
+        this.addStat(ModItems.tomato.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(80, 0));
+        this.addStat(ModItems.tomatoGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(160, 0));
+        this.addStat(ModItems.corn.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(45, 0));
+        this.addStat(ModItems.cornGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(110, 0));
+        this.addStat(ModItems.cucumber.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(70, 0));
+        this.addStat(ModItems.cucumberGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(140, 0));
+        this.addStat(ModItems.pumpkin.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(20, 0));
+        this.addStat(ModItems.pumpkinGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(75, 0));
+        this.addStat(ModItems.onion.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(35, 0));
+        this.addStat(ModItems.onionGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(60, 0));
+
+        this.addStat(ModItems.potatoGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(80, 0));
+        this.addStat(ModItems.carrotGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(80, 0));
+
+        this.addStat(ModItems.toyherb.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(15, 0));
+        this.addStat(ModItems.toyherbGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(60, 0));
+        this.addStat(ModItems.moondropFlower.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(18, 0));
+        this.addStat(ModItems.moondropFlowerGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(66, 0));
+        this.addStat(ModItems.pinkCat.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(20, 0));
+        this.addStat(ModItems.pinkCatGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(70, 0));
+        this.addStat(ModItems.charmBlue.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(25, 0));
+        this.addStat(ModItems.charmBlueGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(90, 0));
+        this.addStat(ModItems.lampGrass.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(33, 0));
+        this.addStat(ModItems.lampGrassGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(80, 0));
+        this.addStat(ModItems.cherryGrass.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(20, 0));
+        this.addStat(ModItems.cherryGrassGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(55, 0));
+        this.addStat(ModItems.pomPomGrass.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(15, 0)
+                .setRPRegen(10, 0));
+        this.addStat(ModItems.pomPomGrassGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(80, 0)
+                .setRPRegen(25, 0));
+        this.addStat(ModItems.autumnGrass.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(20, 0)
+                .setRPRegen(15, 0));
+        this.addStat(ModItems.autumnGrassGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(20, 0)
+                .setRPRegen(35, 0));
+        this.addStat(ModItems.noelGrass.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(80, 0));
+        this.addStat(ModItems.noelGrassGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(250, 0));
+        this.addStat(ModItems.fireflower.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(35, 0));
+        this.addStat(ModItems.fireflowerGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(85, 0));
+        this.addStat(ModItems.fourLeafClover.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(25, 0)
+                .addPotion(MobEffects.LUCK, 600, 0));
+        this.addStat(ModItems.fourLeafCloverGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(55, 0)
+                .addPotion(MobEffects.LUCK, 600, 1));
+        this.addStat(ModItems.ironleaf.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(-50, 0));
+        this.addStat(ModItems.ironleafGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(-100, 0));
+        this.addStat(ModItems.whiteCrystal.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(75, 0));
+        this.addStat(ModItems.whiteCrystalGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(150, 0));
+        this.addStat(ModItems.redCrystal.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(75, 0));
+        this.addStat(ModItems.redCrystalGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(150, 0));
+        this.addStat(ModItems.greenCrystal.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(75, 0));
+        this.addStat(ModItems.greenCrystalGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(150, 0));
+        this.addStat(ModItems.blueCrystal.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(75, 0));
+        this.addStat(ModItems.blueCrystalGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setRPRegen(150, 0));
+        this.addStat(ModItems.emeryFlower.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(0, 10)
+                .setRPRegen(0, 5));
+        this.addStat(ModItems.emeryFlowerGiant.get(), new FoodProperties.MutableFoodProps(600)
+                .setHPRegen(0, 15)
+                .setRPRegen(0, 10));
+
     }
 }

@@ -1,0 +1,14 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 600,
+  "effects": {},
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 0,
+  "rpIncrease": 5,
+  "hpRegen": 25,
+  "rpRegen": 0,
+  "item": "runecraftory:crop_turnip_pink"
+}

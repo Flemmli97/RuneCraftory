@@ -1,0 +1,14 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 600,
+  "effects": {},
+  "hpRegenPercent": 5,
+  "rpRegenPercent": 0,
+  "rpIncrease": 40,
+  "hpRegen": 300,
+  "rpRegen": 0,
+  "item": "runecraftory:crop_golden_cabbage_giant"
+}

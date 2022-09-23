@@ -1,0 +1,14 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 600,
+  "effects": {},
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "hpRegen": 80,
+  "rpRegen": 25,
+  "item": "runecraftory:crop_pom_pom_grass_giant"
+}

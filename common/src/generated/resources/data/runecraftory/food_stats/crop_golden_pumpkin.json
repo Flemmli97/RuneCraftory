@@ -1,0 +1,14 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": 0,
+  "duration": 600,
+  "effects": {},
+  "hpRegenPercent": 3,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "hpRegen": 200,
+  "rpRegen": 0,
+  "item": "runecraftory:crop_golden_pumpkin"
+}
