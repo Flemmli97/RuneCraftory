@@ -177,7 +177,7 @@ public class FoodProperties {
         if (this.getRpPercentRegen() != 0)
             hprp.append(" ").append(new TranslatableComponent("tooltip.food.rp.percent", this.format(this.getRpPercentRegen())));
         if (!hprp.getSiblings().isEmpty())
-            translationTexts.set(1, hprp);
+            translationTexts.set(1, hprp.withStyle(ChatFormatting.AQUA));
         return translationTexts;
     }
 
