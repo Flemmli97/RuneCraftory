@@ -31,6 +31,10 @@ public class EntityUtils {
         return entity.hasEffect(ModEffects.sleep.get());
     }
 
+    public static boolean sealed(LivingEntity entity) {
+        return entity.hasEffect(ModEffects.seal.get());
+    }
+
     public static void foodHealing(LivingEntity entity, float amount) {
         if (amount > 0)
             entity.heal(amount);

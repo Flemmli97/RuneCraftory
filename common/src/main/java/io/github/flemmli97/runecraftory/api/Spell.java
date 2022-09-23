@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.api;
 
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -20,6 +21,8 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     }
 
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack) {
+        if (EntityUtils.sealed(entity))
+            return false;
         return this.use(world, entity, stack, 1, 1, 1);
     }
 

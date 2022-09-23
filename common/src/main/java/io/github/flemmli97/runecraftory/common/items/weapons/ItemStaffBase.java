@@ -162,7 +162,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
         if (entity.level instanceof ServerLevel serverLevel) {
             if (!(entity instanceof Player player) || !player.getCooldowns().isOnCooldown(this)) {
-                ModSpells.STAFFCAST.get().use(serverLevel, entity, stack, 1, 1, 1);
+                ModSpells.STAFFCAST.get().use(serverLevel, entity, stack);
                 if (entity instanceof Player player) {
                     player.getCooldowns().addCooldown(stack.getItem(), this.itemCoolDownTicks());
                 }

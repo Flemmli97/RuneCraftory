@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpore;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.AnimatedMeleeGoal;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
@@ -63,6 +64,8 @@ public class EntityBigMuck extends BaseMonster {
                 this.attackPos = RayTraceUtils.rotatedVecs(look, new Vec3(0, 1, 0), -180, 135, 45);
             }
             if (anim.getTick() > anim.getAttackTime()) {
+                if (EntityUtils.sealed(this))
+                    return;
                 int i = (anim.getTick() - anim.getAttackTime()) / 3;
                 if (i < this.attackPos.size()) {
                     Vector3f vec = this.attackPos.get(i);

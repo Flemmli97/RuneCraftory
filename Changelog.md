@@ -8,6 +8,7 @@ RuneCraftory 1.3.0
 - Fix penetrating wind blades bounce sometimes not correct
 - Ignore height for distance level calculation
 - Smooth out some animations
+- Seal effect now implemented: Sealed entities cant use magic
 
 RuneCraftory 1.2.4
 ================

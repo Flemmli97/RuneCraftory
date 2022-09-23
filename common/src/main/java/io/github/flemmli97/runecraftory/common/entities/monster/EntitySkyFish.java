@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.ai.AnimatedRange
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.NearestTargetHorizontal;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.core.BlockPos;
@@ -103,6 +104,8 @@ public class EntitySkyFish extends BaseMonster {
             }
         } else if (anim.getID().equals(swipe.getID())) {
             if (anim.canAttack()) {
+                if (EntityUtils.sealed(this))
+                    return;
                 EntityWaterLaser laser = new EntityWaterLaser(this.level, this, -4).setMaxTicks(10);
                 Vec3 dir;
                 if (this.getTarget() != null) {

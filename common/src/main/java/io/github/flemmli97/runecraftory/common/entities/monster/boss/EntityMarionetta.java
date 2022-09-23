@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.ai.MarionettaAtt
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
@@ -196,7 +197,7 @@ public class EntityMarionetta extends BossMonster {
             }
             case "dark_beam" -> {
                 this.getNavigation().stop();
-                if (anim.canAttack())
+                if (anim.canAttack() && !EntityUtils.sealed(this))
                     this.darkBeam();
             }
             case "furniture" -> {

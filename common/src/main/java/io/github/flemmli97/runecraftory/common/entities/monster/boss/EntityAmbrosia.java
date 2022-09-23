@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollen;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.AmbrosiaAttackGoal;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
@@ -136,12 +137,12 @@ public class EntityAmbrosia extends BossMonster {
                 break;
             case "sleep":
                 this.getNavigation().stop();
-                if (anim.canAttack())
+                if (anim.canAttack() && !EntityUtils.sealed(this))
                     this.summonSleepBalls();
                 break;
             case "wave":
                 this.getNavigation().stop();
-                if (anim.canAttack())
+                if (anim.canAttack() && !EntityUtils.sealed(this))
                     this.summonWave(anim.getLength() - anim.getAttackTime());
                 break;
             case "pollen":
@@ -149,7 +150,7 @@ public class EntityAmbrosia extends BossMonster {
                 if (this.aiVarHelper == null)
                     return;
                 this.setDeltaMovement(new Vec3(this.aiVarHelper[0], 0, this.aiVarHelper[2]));
-                if (anim.canAttack()) {
+                if (anim.canAttack() && !EntityUtils.sealed(this)) {
                     this.getNavigation().stop();
                     EntityPollen pollen = new EntityPollen(this.level, this);
                     pollen.setPos(pollen.getX(), pollen.getY() + 0.5, pollen.getZ());

@@ -245,7 +245,7 @@ public class CombatUtils {
                     knockback *= 0.85f;
                 }
                 if (player.level instanceof ServerLevel serverLevel)
-                    ModSpells.STAFFCAST.get().use(serverLevel, player, stack, 1, 1, 1);
+                    ModSpells.STAFFCAST.get().use(serverLevel, player, stack);
                 CustomDamage source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(ignoreArmor ? CustomDamage.DamageType.IGNOREDEF : CustomDamage.DamageType.NORMAL).knock(CustomDamage.KnockBackType.VANILLA)
                         .knockAmount(knockback).hurtResistant(0).get();
                 if (damage(player, target, source, damagePhys, stack)) {

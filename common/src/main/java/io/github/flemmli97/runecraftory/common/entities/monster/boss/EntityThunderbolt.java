@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityThunderboltBe
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.ThunderboltAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -197,19 +198,19 @@ public class EntityThunderbolt extends BossMonster {
                 }
                 break;
             case "laser_x5":
-                if (anim.canAttack()) {
+                if (anim.canAttack() && !EntityUtils.sealed(this)) {
                     this.summonLaserx5();
                 }
                 break;
             case "laser_aoe":
-                if (anim.canAttack()) {
+                if (anim.canAttack() && !EntityUtils.sealed(this)) {
                     this.summonLaserAOE();
                 }
                 break;
             case "laser_kick":
             case "laser_kick_2":
             case "laser_kick_3":
-                if (anim.canAttack()) {
+                if (anim.canAttack() && !EntityUtils.sealed(this)) {
                     this.summonLaserBolt(target);
                 }
                 break;
