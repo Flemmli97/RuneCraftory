@@ -126,8 +126,8 @@ public class EntityMarionetta extends BossMonster {
     }
 
     @Override
-    protected void playDeathAnimation() {
-        this.getAnimationHandler().setAnimation(defeat);
+    public AnimatedAction getDeathAnimation() {
+        return defeat;
     }
 
     @Override

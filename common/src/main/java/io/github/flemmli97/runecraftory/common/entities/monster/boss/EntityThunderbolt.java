@@ -140,8 +140,8 @@ public class EntityThunderbolt extends BossMonster {
     }
 
     @Override
-    protected void playDeathAnimation() {
-        this.getAnimationHandler().setAnimation(defeat);
+    public AnimatedAction getDeathAnimation() {
+        return defeat;
     }
 
     @Override
@@ -265,7 +265,7 @@ public class EntityThunderbolt extends BossMonster {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrentAnim(defeat.getID()) && !this.feintedDeath) {
+        if (!this.level.isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrentAnim(defeat.getID()) && !this.feintedDeath && !this.isTamed()) {
             AnimatedAction anim = this.getAnimationHandler().getAnimation();
             if (anim.getTick() > anim.getLength()) {
                 this.feintedDeath = true;
@@ -276,7 +276,7 @@ public class EntityThunderbolt extends BossMonster {
             this.setXRot(0);
             this.setYRot(this.entityData.get(lockedYaw));
         }
-        if (this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID())) {
+        if (this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID()) && !this.isTamed()) {
             Vec3 delta = this.getDeltaMovement();
             this.setDeltaMovement(0, delta.y, 0);
             if (this.getAnimationHandler().getAnimation().checkID(defeat)) {

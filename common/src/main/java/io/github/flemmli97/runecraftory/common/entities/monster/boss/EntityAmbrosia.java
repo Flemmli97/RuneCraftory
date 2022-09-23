@@ -107,8 +107,8 @@ public class EntityAmbrosia extends BossMonster {
     }
 
     @Override
-    protected void playDeathAnimation() {
-        this.getAnimationHandler().setAnimation(defeat);
+    public AnimatedAction getDeathAnimation() {
+        return defeat;
     }
 
     @Override

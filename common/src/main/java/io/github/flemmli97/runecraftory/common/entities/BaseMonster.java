@@ -56,6 +56,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -79,6 +80,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -285,7 +287,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);
             if (!this.level.isClientSide && this.getHealth() > 0.02) {
-                this.entityData.set(playDeathState, false);
+                this.setPlayDeath(false);
             }
         } else {
             this.playDeathTick = Math.max(0, --this.playDeathTick);
@@ -833,9 +835,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.entityData.set(playDeathState, flag);
         if (flag) {
             this.getNavigation().stop();
+            this.playDeathAnimation();
             this.setMoving(false);
             this.setShiftKeyDown(false);
             this.setSprinting(false);
+        } else {
+            this.getAnimationHandler().setAnimation(null);
         }
     }
 
@@ -940,6 +945,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (this.isControlledByLocalInstance()) {
                 this.setSpeed((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED));
                 this.setMoving(forward != 0 || strafing != 0);
+                this.setSprinting(forward > 0);
                 forward *= this.ridingSpeedModifier();
                 strafing *= this.ridingSpeedModifier();
                 super.travel(new Vec3(strafing, vec.y, forward));
@@ -966,6 +972,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     protected void playDeathAnimation() {
+        if (this.getDeathAnimation() != null)
+            this.getAnimationHandler().setAnimation(this.getDeathAnimation());
+    }
+
+    public AnimatedAction getDeathAnimation() {
+        return null;
     }
 
     private boolean canAttackFrom(BlockPos pos) {
@@ -1052,6 +1064,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.level.broadcastEntityEvent(this, (byte) 10);
         this.updater.setLastUpdateDay(WorldUtils.day(this.level));
         this.setBehaviour(1);
+        this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
+                e -> e instanceof OwnableEntity ownable && this.getOwnerUUID().equals(ownable.getOwnerUUID())
+                        && e.getTarget() == this).forEach(e -> e.setTarget(null));
         if (owner instanceof ServerPlayer serverPlayer)
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.TAMING, 10));
     }
@@ -1124,6 +1139,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (this.isControlledByLocalInstance()) {
                 this.setSpeed((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED));
                 this.setMoving(forward != 0 || strafing != 0);
+                this.setSprinting(forward > 0);
                 vec = new Vec3(strafing, vec.y, forward);
             } else if (entitylivingbase instanceof Player) {
                 vec = Vec3.ZERO;
