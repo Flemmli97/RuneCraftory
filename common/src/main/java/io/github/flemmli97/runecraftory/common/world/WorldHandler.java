@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
+import io.github.flemmli97.runecraftory.common.network.S2CRuneyWeatherData;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -116,6 +117,7 @@ public class WorldHandler extends SavedData {
                 case CLEAR, RUNEY -> world.setWeatherParameters(24000, 0, false, false);
                 case STORM -> world.setWeatherParameters(0, 24000, true, true);
             }
+            Platform.INSTANCE.sendToAll(new S2CRuneyWeatherData(this.currentWeather() == EnumWeather.RUNEY), world.getServer());
             this.setDirty();
         }
     }

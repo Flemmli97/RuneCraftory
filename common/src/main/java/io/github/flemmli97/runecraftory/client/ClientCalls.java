@@ -19,6 +19,7 @@ import io.github.flemmli97.runecraftory.mixin.ContainerScreenAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.ParticleStatus;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
@@ -122,8 +123,6 @@ public class ClientCalls {
     }
 
     public static void worldRender(PoseStack stack) {
-        //if(WeatherData.get(Minecraft.getMinecraft().world).currentWeather()== EnumWeather.RUNEY)
-        //    this.renderRuneyWeather(Minecraft.getMinecraft(), event.getPartialTicks());
         if (GeneralConfig.debugAttack) {
             AttackAABBRender.INST.render(stack, Minecraft.getInstance().renderBuffers().crumblingBufferSource());
         }
@@ -148,8 +147,17 @@ public class ClientCalls {
         });
         if (entity instanceof LocalPlayer player && entity.getVehicle() instanceof BaseMonster && player.input.jumping)
             Platform.INSTANCE.sendToServer(new C2SRideJump());
-        if (entity == Minecraft.getInstance().player)
+        if (entity == Minecraft.getInstance().cameraEntity) {
             ShakeHandler.shakeTick--;
+            if (ClientHandlers.isRuneyWeather) {
+                int tries = Minecraft.getInstance().options.particles != ParticleStatus.ALL ? 1 : 2;
+                for (int i = 0; i < tries; i++)
+                    entity.level.addParticle(ModParticles.runey.get(),
+                            entity.getX() + (entity.getRandom().nextDouble() - 0.5) * 24,
+                            entity.getY() + (entity.getRandom().nextDouble() - 0.5) * 12,
+                            entity.getZ() + (entity.getRandom().nextDouble() - 0.5) * 24, 0, 0, 0);
+            }
+        }
     }
 
     public static boolean invis(LivingEntity entity) {
