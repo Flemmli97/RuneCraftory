@@ -3,8 +3,11 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
+import io.github.flemmli97.runecraftory.common.network.S2CRuneyWeatherData;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.MinecraftServer;
 
 public class CalendarImpl {
 
@@ -40,9 +43,10 @@ public class CalendarImpl {
         return this.nextWeather;
     }
 
-    public void setWeather(EnumWeather weather, EnumWeather nextWeather) {
+    public void setWeather(MinecraftServer server, EnumWeather weather, EnumWeather nextWeather) {
         this.currentWeather = weather;
         this.nextWeather = nextWeather;
+        Platform.INSTANCE.sendToAll(new S2CRuneyWeatherData(this.currentWeather == EnumWeather.RUNEY), server);
     }
 
     public void toPacket(FriendlyByteBuf buffer) {

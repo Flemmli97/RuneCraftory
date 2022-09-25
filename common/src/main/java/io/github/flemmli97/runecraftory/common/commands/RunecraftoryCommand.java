@@ -7,9 +7,11 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
+import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -40,6 +42,7 @@ public class RunecraftoryCommand {
                                 .then(Commands.literal("xp").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addLevelXP))))
                 )
                 .then(Commands.literal("unlockRecipes").requires(src -> src.hasPermission(2)).then(Commands.argument("player", EntityArgument.players()).executes(RunecraftoryCommand::unlockRecipes)))
+                .then(Commands.literal("weather").requires(src -> src.hasPermission(2)).then(Commands.argument("weather", StringArgumentType.string()).suggests((context, builder) -> SharedSuggestionProvider.suggest(Stream.of(EnumWeather.values()).map(Object::toString), builder)).executes(RunecraftoryCommand::setWeather)))
                 .then(Commands.literal("reset").requires(src -> src.hasPermission(2))
                         .then(Commands.argument("player", EntityArgument.players())
                                 .then(Commands.literal("all").executes(RunecraftoryCommand::resetAll))
@@ -195,5 +198,19 @@ public class RunecraftoryCommand {
             ret++;
         }
         return ret;
+    }
+
+    private static int setWeather(CommandContext<CommandSourceStack> ctx) {
+        EnumWeather weather;
+        String s = StringArgumentType.getString(ctx, "weather");
+        try {
+            weather = EnumWeather.valueOf(s);
+        } catch (IllegalArgumentException e) {
+            ctx.getSource().sendFailure(new TranslatableComponent("runecraftory.command.weather.no", s));
+            return 0;
+        }
+        WorldHandler.get(ctx.getSource().getServer()).updateWeatherTo(ctx.getSource().getLevel(), weather);
+        ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.set.weather", weather), false);
+        return 1;
     }
 }

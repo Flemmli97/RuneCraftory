@@ -14,6 +14,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -77,6 +79,26 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
 
     public void applySizeFertilizer(boolean growGiant) {
         this.growGiant = growGiant;
+        this.setChanged();
+    }
+
+    public void onStorming() {
+        this.health--;
+        if (this.health <= 0) {
+            BlockPos cropPos = this.getBlockPos().above();
+            BlockState cropState = this.level.getBlockState(cropPos);
+            boolean destroyChange = this.level.random.nextFloat() < 0.4f;
+            if (destroyChange) {
+                if (cropState.getBlock() instanceof CropBlock || cropState.getBlock() instanceof BlockCrop) {
+                    if (this.level.random.nextFloat() < 0.6f) {
+                        this.level.destroyBlock(this.getBlockPos(), true);
+                    } else
+                        this.level.setBlock(this.getBlockPos(), ModBlocks.witheredGrass.get().defaultBlockState(), Block.UPDATE_ALL);
+                } else {
+                    this.level.setBlock(this.getBlockPos(), Blocks.DIRT.defaultBlockState(), Block.UPDATE_ALL);
+                }
+            }
+        }
         this.setChanged();
     }
 

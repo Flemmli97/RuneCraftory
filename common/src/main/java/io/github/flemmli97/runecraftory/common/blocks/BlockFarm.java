@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.blocks;
 
+import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.blocks.tile.FarmBlockEntity;
+import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
@@ -25,6 +27,12 @@ public class BlockFarm extends FarmBlock implements EntityBlock, BonemealableBlo
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random rand) {
         if (level.isRainingAt(pos.above())) {
             level.setBlock(pos, state.setValue(FarmBlock.MOISTURE, 7), 2);
+        }
+        if (level.random.nextBoolean() && WorldHandler.get(level.getServer()).currentWeather() == EnumWeather.STORM) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof FarmBlockEntity farm) {
+                farm.onStorming();
+            }
         }
     }
 
