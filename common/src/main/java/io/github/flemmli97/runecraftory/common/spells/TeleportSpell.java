@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -10,10 +11,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Optional;
 
 public class TeleportSpell extends Spell {
 
@@ -34,9 +38,26 @@ public class TeleportSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        if (entity instanceof Mob mob && mob.hasRestriction()) {
-            Vec3 home = Vec3.atCenterOf(mob.getRestrictCenter());
-            if (mob.distanceToSqr(home) > 100) {
+        if (entity instanceof Mob mob && mob.level instanceof ServerLevel) {
+            if (mob.hasRestriction()) {
+                Vec3 home = Vec3.atCenterOf(mob.getRestrictCenter());
+                if (mob.distanceToSqr(home) > 100) {
+                    this.safeTeleportTo(mob, home.x(), home.y(), home.z());
+                    return true;
+                }
+            }
+            Optional<GlobalPos> mem;
+            if (mob.getBrain().hasMemoryValue(MemoryModuleType.HOME) && (mem = mob.getBrain().getMemory(MemoryModuleType.HOME)).isPresent()) {
+                Vec3 home = Vec3.atCenterOf(mem.get().pos());
+                ResourceKey<Level> levelKey = mem.get().dimension();
+                if (mob.level.dimension() != levelKey) {
+                    ServerLevel serverLevel = mob.getServer().getLevel(levelKey);
+                    if (serverLevel != null) {
+                        mob.changeDimension(serverLevel);
+                        this.safeTeleportTo(mob, home.x(), home.y(), home.z());
+                        return true;
+                    }
+                }
                 this.safeTeleportTo(mob, home.x(), home.y(), home.z());
                 return true;
             }
