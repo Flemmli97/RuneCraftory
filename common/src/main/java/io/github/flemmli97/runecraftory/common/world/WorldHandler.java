@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
-import io.github.flemmli97.runecraftory.common.network.S2CRuneyWeatherData;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -98,28 +97,30 @@ public class WorldHandler extends SavedData {
             this.updateTracker.forEach(update -> update.update(world));
         }
         if (canUpdateWeather(world, this.currentWeather())) {
-            EnumWeather current = this.nextWeather();
-            EnumWeather nextWeather;
-            float chance = world.random.nextFloat();
-            EnumSeason season = this.currentSeason();
-            float stormAdd = (season == EnumSeason.SUMMER || season == EnumSeason.WINTER) ? 0.1F : 0;
-            if (chance < 0.01F)
-                nextWeather = EnumWeather.RUNEY;
-            else if (chance < 0.05F + stormAdd)
-                nextWeather = EnumWeather.STORM;
-            else if (chance < 0.4F)
-                nextWeather = EnumWeather.RAIN;
-            else
-                nextWeather = EnumWeather.CLEAR;
-            this.calendar.setWeather(current, nextWeather);
-            switch (this.currentWeather()) {
-                case RAIN -> world.setWeatherParameters(0, 24000, true, false);
-                case CLEAR, RUNEY -> world.setWeatherParameters(24000, 0, false, false);
-                case STORM -> world.setWeatherParameters(0, 24000, true, true);
-            }
-            Platform.INSTANCE.sendToAll(new S2CRuneyWeatherData(this.currentWeather() == EnumWeather.RUNEY), world.getServer());
-            this.setDirty();
+            this.updateWeatherTo(world, this.nextWeather());
         }
+    }
+
+    public void updateWeatherTo(ServerLevel world, EnumWeather weather) {
+        EnumWeather nextWeather;
+        float chance = world.random.nextFloat();
+        EnumSeason season = this.currentSeason();
+        float stormAdd = (season == EnumSeason.SUMMER || season == EnumSeason.WINTER) ? 0.1F : 0;
+        if (chance < 0.01F)
+            nextWeather = EnumWeather.RUNEY;
+        else if (chance < 0.05F + stormAdd)
+            nextWeather = EnumWeather.STORM;
+        else if (chance < 0.4F)
+            nextWeather = EnumWeather.RAIN;
+        else
+            nextWeather = EnumWeather.CLEAR;
+        this.calendar.setWeather(world.getServer(), weather, nextWeather);
+        switch (this.currentWeather()) {
+            case RAIN -> world.setWeatherParameters(0, 24000, true, false);
+            case CLEAR, RUNEY -> world.setWeatherParameters(24000, 0, false, false);
+            case STORM -> world.setWeatherParameters(0, 24000, true, true);
+        }
+        this.setDirty();
     }
 
     public void addToTracker(IDailyUpdate update) {
