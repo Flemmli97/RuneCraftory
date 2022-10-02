@@ -277,7 +277,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 2.2)
                     .putAttributes(LibAttributes.rf_magic, 7.3).putLevelGains(LibAttributes.rf_magic, 3.5)
                     .putAttributes(LibAttributes.rf_magic_defence, 1).putLevelGains(LibAttributes.rf_magic_defence, 3.3)
-                    .xp(8).money(6).tamingChance(0.06f).build(),
+                    .xp(8).money(6).tamingChance(0.06f).setFlying().build(),
             new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, ModTags.IS_MAGICAL));
     public static final RegistryEntrySupplier<EntityType<EntityGhost>> ghost = regMonster(EntityType.Builder.of(EntityGhost::new, MobCategory.MONSTER).sized(0.8f, 2.1f).clientTrackingRange(8), LibEntities.ghost,
             0x4d3d35, 0x838383,
@@ -287,7 +287,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 3.1)
                     .putAttributes(LibAttributes.rf_magic, 5).putLevelGains(LibAttributes.rf_magic, 3.6)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 3.5)
-                    .xp(9).money(7).tamingChance(0.04f).build(),
+                    .xp(9).money(7).tamingChance(0.04f).setFlying().build(),
             new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(60, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
     public static final RegistryEntrySupplier<EntityType<EntitySpirit>> spirit = regMonster(EntityType.Builder.of(EntitySpirit::new, MobCategory.MONSTER).sized(0.5f, 0.5f).clientTrackingRange(8), LibEntities.spirit,
             0xfdfdfd, 0xc3f8f7,
@@ -297,7 +297,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 3.3)
                     .putAttributes(LibAttributes.rf_magic, 7.1).putLevelGains(LibAttributes.rf_magic, 3.4)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 3.7)
-                    .xp(10).money(5).tamingChance(0.02f).build(),
+                    .xp(10).money(5).tamingChance(0.02f).setFlying().build(),
             new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(50, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP, ModTags.IS_MAGICAL, ModTags.IS_END));
     public static final RegistryEntrySupplier<EntityType<EntityGhostRay>> ghostRay = regMonster(EntityType.Builder.of(EntityGhostRay::new, MobCategory.MONSTER).sized(1f, 3.2f).clientTrackingRange(8), LibEntities.ghostRay,
             0x552217, 0x905a5a,
@@ -307,7 +307,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 1.5).putLevelGains(LibAttributes.rf_defence, 3.8)
                     .putAttributes(LibAttributes.rf_magic, 8).putLevelGains(LibAttributes.rf_magic, 3.6)
                     .putAttributes(LibAttributes.rf_magic_defence, 1.5).putLevelGains(LibAttributes.rf_magic_defence, 3.9)
-                    .xp(15).money(10).tamingChance(0.04f).build(),
+                    .xp(15).money(10).tamingChance(0.04f).setFlying().build(),
             new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
     public static final RegistryEntrySupplier<EntityType<EntitySpider>> spider = regMonster(EntityType.Builder.of(EntitySpider::new, MobCategory.MONSTER).sized(0.9f, 0.7f).clientTrackingRange(8), LibEntities.spider,
             0x6f6751, 0x404148,
@@ -328,7 +328,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 3.2)
                     .putAttributes(LibAttributes.rf_magic, 3).putLevelGains(LibAttributes.rf_magic, 2.9)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 2.8)
-                    .xp(12).money(9).tamingChance(0.02f).build(),
+                    .xp(12).money(9).tamingChance(0.02f).setRidable().build(),
             new SpawnConfig.SpawnData.Builder(0).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_SWAMP, ModTags.IS_PEAK, ModTags.IS_SLOPE));
     public static final RegistryEntrySupplier<EntityType<EntityMimic>> monsterBox = regMonster(EntityType.Builder.of(EntityMimic::new, MobCategory.MONSTER).sized(1, 1).clientTrackingRange(8), LibEntities.monsterBox,
             0xac935e, 0x462f10,

@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.GhostAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.monster.ai.NearestTargetNoLoS;
+import io.github.flemmli97.runecraftory.common.entities.monster.ai.NoClipFlyMoveController;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
@@ -47,7 +47,7 @@ public class EntityGhost extends ChargingMonster {
         this.goalSelector.addGoal(2, this.attack);
         this.setNoGravity(true);
         this.noPhysics = true;
-        this.moveControl = new FlyingMoveControl(this, 20, true);
+        this.moveControl = new NoClipFlyMoveController(this);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class EntityGhost extends ChargingMonster {
     @Override
     protected void applyAttributes() {
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.55);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.17);
         this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
         super.applyAttributes();
     }
@@ -146,6 +146,17 @@ public class EntityGhost extends ChargingMonster {
             }
         } else
             super.handleAttack(anim);
+    }
+
+    @Override
+    public void travel(Vec3 vec) {
+        if (this.isEffectiveAi() && this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entity) {
+            this.noPhysics = entity.noPhysics;
+            this.handleNoGravTravel(vec);
+        } else {
+            this.noPhysics = true;
+            super.travel(vec);
+        }
     }
 
     private void teleportTowards(Entity entity) {
