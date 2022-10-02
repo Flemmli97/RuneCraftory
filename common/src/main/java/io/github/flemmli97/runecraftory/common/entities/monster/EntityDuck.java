@@ -18,7 +18,8 @@ public class EntityDuck extends ChargingMonster {
 
     private static final AnimatedAction melee = new AnimatedAction(15, 8, "slap");
     private static final AnimatedAction dive = new AnimatedAction(48, 22, "dive");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, dive};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, dive, interact};
     public ChargeAttackGoal<EntityDuck> attack = new ChargeAttackGoal<>(this);
     protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityDuck> animationHandler = new AnimationHandler<>(this, anims)
@@ -99,5 +100,10 @@ public class EntityDuck extends ChargingMonster {
             else
                 this.getAnimationHandler().setAnimation(melee);
         }
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

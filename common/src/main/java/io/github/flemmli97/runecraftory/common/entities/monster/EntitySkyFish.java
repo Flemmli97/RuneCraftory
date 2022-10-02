@@ -32,7 +32,8 @@ public class EntitySkyFish extends BaseMonster {
     public static final AnimatedAction slap = new AnimatedAction(11, 6, "slap");
     public static final AnimatedAction beam = new AnimatedAction(14, 7, "beam");
     public static final AnimatedAction swipe = new AnimatedAction(16, 4, "swipe");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{slap, beam, swipe};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(slap, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{slap, beam, swipe, interact};
     private final AnimationHandler<EntitySkyFish> animationHandler = new AnimationHandler<>(this, anims);
     public AnimatedRangedGoal<EntitySkyFish> rangedGoal = new AnimatedRangedGoal<>(this, 8, e -> true);
 
@@ -176,6 +177,11 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     public MobType getMobType() {
         return MobType.WATER;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 
     static class FlySwimMoveController extends SwimWalkMoveController {

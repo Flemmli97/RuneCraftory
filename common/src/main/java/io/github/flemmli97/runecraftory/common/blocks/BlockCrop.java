@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -41,6 +42,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlock {
@@ -64,17 +66,33 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (this.isMaxAge(state, level, pos)) {
-            BlockEntity tile = level.getBlockEntity(pos);
-            dropResources(state, level, pos, tile);
-            if (tile instanceof CropBlockEntity && this.properties().map(CropProperties::regrowable).orElse(false)) {
-                ((CropBlockEntity) tile).onRegrowableHarvest(this);
-            } else
-                level.removeBlock(pos, false);
+            this.harvestCrop(state, level, pos, player, player.getItemInHand(hand), null);
             if (player instanceof ServerPlayer serverPlayer)
                 Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.FARMING, 2f));
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
+    }
+
+    public void harvestCrop(BlockState state, Level level, BlockPos pos, Entity entity, ItemStack stack, Function<ItemStack, ItemStack> stackConsumer) {
+        BlockEntity tile = level.getBlockEntity(pos);
+        if (stackConsumer != null) {
+            if (level instanceof ServerLevel serverLevel) {
+                Block.getDrops(state, serverLevel, pos, tile, entity, stack)
+                        .forEach(s -> {
+                            ItemStack rest = stackConsumer.apply(s);
+                            if (!rest.isEmpty())
+                                Block.popResource(level, pos, rest);
+                        });
+                state.spawnAfterBreak(serverLevel, pos, ItemStack.EMPTY);
+            }
+        } else
+            dropResources(state, level, pos, tile, entity, stack);
+        level.levelEvent(2001, pos, Block.getId(state));
+        if (tile instanceof CropBlockEntity && this.properties().map(CropProperties::regrowable).orElse(false)) {
+            ((CropBlockEntity) tile).onRegrowableHarvest(this);
+        } else
+            level.removeBlock(pos, false);
     }
 
     @Override

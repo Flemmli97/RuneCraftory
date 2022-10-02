@@ -44,8 +44,9 @@ public class EntityMarionetta extends BossMonster {
     public static final AnimatedAction furniture = new AnimatedAction(24, 8, "furniture");
     public static final AnimatedAction defeat = new AnimatedAction(204, 150, "defeat", "defeat", 1, false);
     public static final AnimatedAction angry = new AnimatedAction(28, 0, "angry");
+    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
     private static final EntityDataAccessor<Boolean> CAUGHT = SynchedEntityData.defineId(EntityMarionetta.class, EntityDataSerializers.BOOLEAN);
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, spin, card_attack, chest_attack, chest_throw, stuffed_animals, dark_beam, furniture, defeat, angry};
+    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, spin, card_attack, chest_attack, chest_throw, stuffed_animals, dark_beam, furniture, defeat, angry, interact};
     public final MarionettaAttackGoal<EntityMarionetta> attack = new MarionettaAttackGoal<>(this);
     private final List<LivingEntity> caughtEntities = new ArrayList<>();
     private final AnimationHandler<EntityMarionetta> animationHandler = new AnimationHandler<>(this, anims)
@@ -92,10 +93,8 @@ public class EntityMarionetta extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(chest_throw.getID()))
+        if (anim.getID().equals(chest_throw.getID()) || anim.getID().equals(defeat.getID()) || anim.getID().equals(angry.getID()) || anim.getID().equals(interact.getID()))
             return false;
-        if (anim.getID().equals(defeat.getID()) || anim.getID().equals(angry.getID()))
-            return type == AnimationType.IDLE;
         if (type == AnimationType.GENERICATTACK)
             return this.isEnraged() || (!anim.getID().equals(dark_beam.getID()) && !anim.getID().equals(furniture.getID()));
         return false;
@@ -332,5 +331,8 @@ public class EntityMarionetta extends BossMonster {
         return this.getBbHeight() * 0.85D;
     }
 
-
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
+    }
 }

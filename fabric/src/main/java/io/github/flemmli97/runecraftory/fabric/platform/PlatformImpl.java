@@ -60,6 +60,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class PlatformImpl implements Platform {
@@ -215,6 +216,60 @@ public class PlatformImpl implements Platform {
                 stacks.forEach(ItemNBT::initNBT);
             }
         };
+    }
+
+    @Override
+    public boolean matchingInventory(BlockEntity blockEntity, Function<ItemStack, Boolean> func) {
+        if(blockEntity == null)
+            return false;
+        if (blockEntity instanceof Container container) {
+            for (int i = 0; i < container.getContainerSize(); i++)
+                if (func.apply(container.getItem(i)))
+                    return true;
+        }
+        return false;
+    }
+
+    @Override
+    public ItemStack findMatchingItem(BlockEntity blockEntity, Function<ItemStack, Boolean> func, int amount) {
+        if(blockEntity == null)
+            return ItemStack.EMPTY;
+        if (blockEntity instanceof Container container) {
+            for (int i = 0; i < container.getContainerSize(); i++)
+                if (func.apply(container.getItem(i)))
+                    return container.removeItem(i, amount);
+        }
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack insertInto(BlockEntity blockEntity, ItemStack stack) {
+        if(blockEntity == null || stack.isEmpty())
+            return ItemStack.EMPTY;
+        if (blockEntity instanceof Container container) {
+            for (int i = 0; i < container.getContainerSize(); ++i) {
+                if(stack.isEmpty())
+                    break;
+                if(!container.canPlaceItem(i, stack))
+                    continue;
+                ItemStack itemStack = container.getItem(i);
+                if (itemStack.isEmpty()) {
+                    container.setItem(i, stack);
+                    return ItemStack.EMPTY;
+                }
+                if (itemStack.is(stack.getItem())
+                        && itemStack.getDamageValue() == stack.getDamageValue()
+                        && itemStack.getCount() < stack.getMaxStackSize()
+                        && ItemStack.tagMatches(itemStack, stack)) {
+                    int size = Math.min(stack.getCount(), stack.getMaxStackSize() - itemStack.getCount());
+                    stack.shrink(size);
+                    itemStack.grow(size);
+                    if(stack.isEmpty())
+                        return ItemStack.EMPTY;
+                }
+            }
+        }
+        return stack;
     }
 
     @Override

@@ -32,7 +32,8 @@ public class EntityGhost extends ChargingMonster {
     public static final AnimatedAction charge = new AnimatedAction(24, 7, "charge");
     public static final AnimatedAction swing = new AnimatedAction(11, 6, "swing");
     public static final AnimatedAction vanish = new AnimatedAction(100, 50, "vanish");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{darkBall, charge, swing, vanish};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(swing, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{darkBall, charge, swing, vanish, interact};
     public final GhostAttackGoal<EntityGhost> attack = new GhostAttackGoal<>(this);
     private boolean vanishNext;
 
@@ -195,5 +196,10 @@ public class EntityGhost extends ChargingMonster {
     @Override
     public MobType getMobType() {
         return MobType.UNDEAD;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

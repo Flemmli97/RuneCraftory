@@ -48,12 +48,15 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.eventbus.api.Event;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.network.NetworkHooks;
 import org.apache.commons.lang3.function.TriFunction;
 
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class PlatformImpl implements Platform {
@@ -184,6 +187,42 @@ public class PlatformImpl implements Platform {
                 items.forEach(ItemNBT::initNBT);
             }
         };
+    }
+
+    @Override
+    public boolean matchingInventory(BlockEntity blockEntity, Function<ItemStack, Boolean> func) {
+        if(blockEntity == null)
+            return false;
+        if (blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent())
+            return blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(cap -> {
+                for (int i = 0; i < cap.getSlots(); i++)
+                    if (func.apply(cap.getStackInSlot(i)))
+                        return true;
+                return false;
+            }).orElse(false);
+        return false;
+    }
+
+    @Override
+    public ItemStack findMatchingItem(BlockEntity blockEntity, Function<ItemStack, Boolean> func, int amount) {
+        if(blockEntity == null)
+            return ItemStack.EMPTY;
+        return blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+                .map(cap -> {
+                    for (int i = 0; i < cap.getSlots(); i++)
+                        if (func.apply(cap.getStackInSlot(i))) {
+                            return cap.extractItem(i, amount, false);
+                        }
+                    return ItemStack.EMPTY;
+                }).orElse(ItemStack.EMPTY);
+    }
+
+    @Override
+    public ItemStack insertInto(BlockEntity blockEntity, ItemStack stack) {
+        if(blockEntity == null || stack.isEmpty())
+            return ItemStack.EMPTY;
+        return blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+                .map(cap -> ItemHandlerHelper.insertItem(cap, stack, false)).orElse(ItemStack.EMPTY);
     }
 
     @Override

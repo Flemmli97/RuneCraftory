@@ -28,8 +28,9 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
 
     public static final AnimatedAction light = new AnimatedAction(15, 6, "light");
     public static final AnimatedAction wind = new AnimatedAction(15, 10, "wind");
-    public static final AnimatedAction heal = new AnimatedAction(15, 6, "heal", "light");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{light, wind, heal};
+    public static final AnimatedAction heal = AnimatedAction.copyOf(light, "heal");
+    public static final AnimatedAction interact = AnimatedAction.copyOf(light, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{light, wind, heal, interact};
     public final AnimatedRangedGoal<EntityFairy> attack = new AnimatedRangedGoal<>(this, 8, e -> true);
     private final AnimationHandler<EntityFairy> animationHandler = new AnimationHandler<>(this, anims);
 
@@ -75,7 +76,7 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(light.getID()) || anim.getID().equals(wind.getID());
+            return anim.getID().equals(light.getID()) || anim.getID().equals(wind.getID()) || anim.getID().equals(heal.getID());
         return false;
     }
 
@@ -132,5 +133,10 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     @Override
     public Predicate<LivingEntity> healeableEntities() {
         return this.healingPredicate;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

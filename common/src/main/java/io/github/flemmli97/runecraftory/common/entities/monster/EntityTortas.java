@@ -23,7 +23,8 @@ public class EntityTortas extends ChargingMonster {
 
     public static final AnimatedAction bite = new AnimatedAction(11, 6, "bite");
     public static final AnimatedAction spin = new AnimatedAction(51, 0, "spin");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{bite, spin};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(bite, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{bite, spin, interact};
     //public static final AnimatedAction swim = new AnimatedAction(32, 6, "swim");
     //public static final AnimatedAction walk = new AnimatedAction(21, 5, "walk");
     public final ChargeAttackGoal<EntityTortas> ai = new ChargeAttackGoal<>(this);
@@ -196,5 +197,10 @@ public class EntityTortas extends ChargingMonster {
     @Override
     public MobType getMobType() {
         return MobType.WATER;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

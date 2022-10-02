@@ -31,7 +31,8 @@ public class EntityWeagle extends BaseMonster {
     public static final AnimatedAction gale = new AnimatedAction(19, 5, "gale");
     public static final AnimatedAction peck = new AnimatedAction(11, 4, "peck");
     public static final AnimatedAction swoop = new AnimatedAction(14, 4, "swoop");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{gale, swoop};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(peck, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{gale, peck, swoop, interact};
     public AnimatedRangedGoal<EntityWeagle> rangedGoal = new AnimatedRangedGoal<>(this, 8, e -> true);
     protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityWeagle> animationHandler = new AnimationHandler<>(this, anims)
@@ -165,5 +166,10 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     protected void playStepSound(BlockPos pos, BlockState blockIn) {
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

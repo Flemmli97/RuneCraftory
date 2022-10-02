@@ -15,7 +15,8 @@ import net.minecraft.world.level.Level;
 public class EntityCluckadoodle extends BaseMonster {
 
     public static final AnimatedAction melee = new AnimatedAction(16, 10, "attack");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, interact};
     public final AnimatedMeleeGoal<EntityCluckadoodle> attack = new AnimatedMeleeGoal<>(this);
     private final AnimationHandler<EntityCluckadoodle> animationHandler = new AnimationHandler<>(this, anims);
 
@@ -80,5 +81,10 @@ public class EntityCluckadoodle extends BaseMonster {
     @Override
     public AnimationHandler<EntityCluckadoodle> getAnimationHandler() {
         return this.animationHandler;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

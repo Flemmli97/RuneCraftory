@@ -20,7 +20,8 @@ public class EntityOrcArcher extends EntityOrc {
 
     private static final AnimatedAction melee = new AnimatedAction(19, 13, "kick");
     private static final AnimatedAction ranged = new AnimatedAction(20, 12, "bow");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, ranged};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, ranged, interact};
     private final AnimationHandler<EntityOrcArcher> animationHandler = new AnimationHandler<>(this, anims);
     public AnimatedRangedGoal<EntityOrc> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getMainHandItem().getItem() instanceof BowItem);
 
@@ -87,5 +88,10 @@ public class EntityOrcArcher extends EntityOrc {
         arrow.shootAtEntity(target, 1.3f, 14 - this.level.getDifficulty().getId() * 4, 0.2f);
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(arrow);
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

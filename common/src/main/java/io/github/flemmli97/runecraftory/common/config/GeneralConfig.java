@@ -19,7 +19,7 @@ public class GeneralConfig {
     public static float deathHPPercent = 1;
     public static float deathRPPercent = 1;
     public static boolean disableHunger = false;
-    public static boolean modifyWeather = false;
+    public static boolean modifyWeather = true;
     public static boolean modifyBed = false;
     public static boolean healOnWakeUp = false;
     public static boolean disableFoodSystem = false;

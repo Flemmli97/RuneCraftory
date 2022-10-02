@@ -22,9 +22,10 @@ import net.minecraft.world.phys.Vec3;
 public class EntityGoblinArcher extends EntityGoblin {
 
     private static final AnimatedAction bow = new AnimatedAction(15, 9, "bow");
-    private static final AnimatedAction triple = new AnimatedAction(15, 9, "triple", "bow");
+    private static final AnimatedAction triple = AnimatedAction.copyOf(bow, "triple");
     private static final AnimatedAction kick = new AnimatedAction(11, 7, "kick");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{bow, triple, kick};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(kick, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{bow, triple, kick, interact};
     private final AnimationHandler<EntityGoblinArcher> animationHandler = new AnimationHandler<>(this, anims);
     public AnimatedRangedGoal<EntityGoblin> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getMainHandItem().getItem() instanceof BowItem);
 
@@ -120,5 +121,10 @@ public class EntityGoblinArcher extends EntityGoblin {
         }
 
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

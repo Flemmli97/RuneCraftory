@@ -12,7 +12,8 @@ public class EntityOrc extends BaseMonster {
 
     private static final AnimatedAction melee1 = new AnimatedAction(22, 14, "attack_1");
     private static final AnimatedAction melee2 = new AnimatedAction(23, 13, "attack_2");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee1, melee2};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(melee1, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{melee1, melee2, interact};
     private final AnimationHandler<EntityOrc> animationHandler = new AnimationHandler<>(this, anims);
     public AnimatedMeleeGoal<EntityOrc> attack = new AnimatedMeleeGoal<>(this);
 
@@ -58,5 +59,10 @@ public class EntityOrc extends BaseMonster {
     @Override
     public double getPassengersRidingOffset() {
         return this.getBbHeight() * 0.85D;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

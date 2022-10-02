@@ -42,6 +42,7 @@ import org.apache.commons.lang3.function.TriFunction;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface Platform {
@@ -101,6 +102,12 @@ public interface Platform {
     Activity activity(String name);
 
     CreativeModeTab tab(String label, Supplier<ItemStack> icon);
+
+    boolean matchingInventory(BlockEntity blockEntity, Function<ItemStack, Boolean> func);
+
+    ItemStack findMatchingItem(BlockEntity blockEntity, Function<ItemStack, Boolean> func, int amount);
+
+    ItemStack insertInto(BlockEntity blockEntity, ItemStack stack);
 
     //Events
 

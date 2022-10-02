@@ -13,7 +13,8 @@ public class EntityBeetle extends ChargingMonster {
 
     public static final AnimatedAction chargeAttack = new AnimatedAction(30, 2, "ramm");
     public static final AnimatedAction melee = new AnimatedAction(15, 8, "attack");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, chargeAttack};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, chargeAttack, interact};
     public final ChargeAttackGoal<EntityBeetle> ai = new ChargeAttackGoal<>(this);
     private final AnimationHandler<EntityBeetle> animationHandler = new AnimationHandler<>(this, anims);
 
@@ -59,5 +60,10 @@ public class EntityBeetle extends ChargingMonster {
     @Override
     public MobType getMobType() {
         return MobType.ARTHROPOD;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

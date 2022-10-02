@@ -12,7 +12,8 @@ import net.minecraft.world.level.Level;
 public class EntityAnt extends BaseMonster {
 
     public static final AnimatedAction melee = new AnimatedAction(23, 12, "attack");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, interact};
     public final AnimatedMeleeGoal<EntityAnt> attack = new AnimatedMeleeGoal<>(this);
     private final AnimationHandler<EntityAnt> animationHandler = new AnimationHandler<>(this, anims);
 
@@ -50,5 +51,10 @@ public class EntityAnt extends BaseMonster {
     @Override
     public MobType getMobType() {
         return MobType.ARTHROPOD;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

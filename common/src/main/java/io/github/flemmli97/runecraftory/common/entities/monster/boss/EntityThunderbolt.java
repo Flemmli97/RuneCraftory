@@ -47,29 +47,32 @@ public class EntityThunderbolt extends BossMonster {
     private static final AnimatedAction stomp = new AnimatedAction(9, 6, "stomp");
     //Horn attack: throws player into air and then kicks him away
     private static final AnimatedAction horn_attack = new AnimatedAction(9, 5, "horn_attack");
-    private static final AnimatedAction back_kick_horn = new AnimatedAction(13, 7, "back_kick_horn", "back_kick");
+    private static final AnimatedAction back_kick_horn = AnimatedAction.copyOf(back_kick, "back_kick_horn");
 
     //Charges 2 times at the player. 2-3 when enraged
     private static final AnimatedAction charge = new AnimatedAction(31, 9, "charge");
-    private static final AnimatedAction charge_2 = new AnimatedAction(31, 9, "charge_2", "charge");
-    private static final AnimatedAction charge_3 = new AnimatedAction(31, 9, "charge_3", "charge");
+    private static final AnimatedAction charge_2 = AnimatedAction.copyOf(charge, "charge_2");
+    private static final AnimatedAction charge_3 = AnimatedAction.copyOf(charge, "charge_3");
 
     //Shoots lazers in all directions. only enraged
-    private static final AnimatedAction laser_aoe = new AnimatedAction(29, 25, "laser_aoe", "laser_x5");
+    private static final AnimatedAction laser_aoe = AnimatedAction.copyOf(laser_x5, "laser_aoe");
     //Kicks with backlegs causes wind lazerbeam in looking direction. only enraged
     private static final AnimatedAction laser_kick = new AnimatedAction(16, 6, "laser_kick");
-    private static final AnimatedAction laser_kick_2 = new AnimatedAction(16, 6, "laser_kick_2", "laser_kick");
+    private static final AnimatedAction laser_kick_2 = AnimatedAction.copyOf(laser_kick, "laser_kick_2");
 
     //Shoots 2 slight homing wind blades
     private static final AnimatedAction wind_blade = new AnimatedAction(15, 8, "wind_blade");
     //Used after feinting death
-    private static final AnimatedAction laser_kick_3 = new AnimatedAction(16, 6, "laser_kick_3", "laser_kick");
+    private static final AnimatedAction laser_kick_3 = AnimatedAction.copyOf(laser_kick, "laser_kick_3");
     public static final ImmutableList<String> nonChoosableAttacks = ImmutableList.of(charge_2.getID(), charge_3.getID(), laser_kick_2.getID(), laser_kick_3.getID(), back_kick_horn.getID());
     private static final AnimatedAction feint = new AnimatedAction(40, 2, "feint");
     private static final AnimatedAction defeat = new AnimatedAction(80, 60, "defeat", "defeat", 1, false);
     private static final AnimatedAction neigh = new AnimatedAction(24, 9, "neigh");
+
+    public static final AnimatedAction interact = AnimatedAction.copyOf(stomp, "interact");
+
     private static final AnimatedAction[] anims = new AnimatedAction[]{back_kick, laser_x5, stomp, horn_attack, back_kick_horn, charge, charge_2, charge_3,
-            laser_aoe, laser_kick, laser_kick_2, wind_blade, laser_kick_3, feint, defeat, neigh};
+            laser_aoe, laser_kick, laser_kick_2, wind_blade, laser_kick_3, feint, defeat, neigh, interact};
     private static final EntityDataAccessor<Float> lockedYaw = SynchedEntityData.defineId(EntityThunderbolt.class, EntityDataSerializers.FLOAT);
     public final ThunderboltAttackGoal<EntityThunderbolt> attack = new ThunderboltAttackGoal<>(this);
     private final AnimationHandler<EntityThunderbolt> animationHandler = new AnimationHandler<>(this, anims)
@@ -101,8 +104,8 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(neigh.getID()) || anim.getID().equals(feint.getID()) || anim.getID().equals(defeat.getID()))
-            return type == AnimationType.IDLE;
+        if (anim.getID().equals(feint.getID()) || anim.getID().equals(defeat.getID()) || anim.getID().equals(neigh.getID()) || anim.getID().equals(interact.getID()))
+            return false;
         if (type == AnimationType.GENERICATTACK)
             return this.isEnraged() ? !anim.getID().equals(laser_x5.getID()) : !anim.getID().equals(laser_aoe.getID()) && !anim.getID().equals(laser_kick.getID());
         return false;
@@ -463,5 +466,10 @@ public class EntityThunderbolt extends BossMonster {
 
     public void lockYaw(float yaw) {
         this.entityData.set(lockedYaw, yaw);
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

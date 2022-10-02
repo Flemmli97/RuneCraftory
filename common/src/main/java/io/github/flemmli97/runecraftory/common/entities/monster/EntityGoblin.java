@@ -24,7 +24,8 @@ public class EntityGoblin extends ChargingMonster {
     private static final AnimatedAction melee = new AnimatedAction(12, 7, "slash");
     private static final AnimatedAction leap = new AnimatedAction(19, 6, "leap");
     private static final AnimatedAction stone = new AnimatedAction(14, 9, "throw");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap, stone};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap, stone, interact};
     public ChargeAttackGoal<EntityGoblin> attack = new ChargeAttackGoal<>(this);
     protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityGoblin> animationHandler = new AnimationHandler<>(this, anims)
@@ -119,5 +120,10 @@ public class EntityGoblin extends ChargingMonster {
         stone.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
         this.playSound(SoundEvents.FISHING_BOBBER_THROW, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(stone);
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

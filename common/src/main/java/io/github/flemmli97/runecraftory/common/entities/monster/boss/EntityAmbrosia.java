@@ -39,12 +39,15 @@ public class EntityAmbrosia extends BossMonster {
     public static final AnimatedAction sleep = new AnimatedAction(15, 5, "sleep");
     //2 spinning changing direction between them. also scatters earth damage pollen while doing it
     public static final AnimatedAction pollen = new AnimatedAction(15, 5, "pollen");
-    public static final AnimatedAction pollen2 = new AnimatedAction(15, 5, "pollen_2", "pollen");
+    public static final AnimatedAction pollen2 = AnimatedAction.copyOf(pollen, "pollen_2");
 
     public static final AnimatedAction defeat = new AnimatedAction(204, 150, "defeat", "defeat", 1, false);
     public static final AnimatedAction angry = new AnimatedAction(48, 0, "angry");
+
+    public static final AnimatedAction interact = AnimatedAction.copyOf(kick_1, "interact");
+
     public static final ImmutableList<String> nonChoosableAttacks = ImmutableList.of(pollen2.getID(), kick_2.getID(), kick_3.getID());
-    private static final AnimatedAction[] anims = new AnimatedAction[]{kick_1, butterfly, wave, sleep, pollen, pollen2, kick_2, kick_3, defeat, angry};
+    private static final AnimatedAction[] anims = new AnimatedAction[]{kick_1, butterfly, wave, sleep, pollen, pollen2, kick_2, kick_3, defeat, angry, interact};
     private static final List<Vector3f> pollenBase = RayTraceUtils.rotatedVecs(new Vec3(1, 0, 0), new Vec3(0, 1, 0), -180, 135, 45);
     private static final List<Vector3f> pollenInd = RayTraceUtils.rotatedVecs(new Vec3(0.04, 0.07, 0), new Vec3(0, 1, 0), -180, 160, 20);
     public final AmbrosiaAttackGoal<EntityAmbrosia> attack = new AmbrosiaAttackGoal<>(this);
@@ -65,8 +68,8 @@ public class EntityAmbrosia extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(defeat.getID()) || anim.getID().equals(angry.getID()))
-            return type == AnimationType.IDLE;
+        if (anim.getID().equals(angry.getID()) || anim.getID().equals(defeat.getID()) || anim.getID().equals(interact.getID()))
+            return false;
         if (type == AnimationType.GENERICATTACK)
             return this.isEnraged() || !anim.getID().equals(pollen.getID());
         return false;
@@ -259,5 +262,10 @@ public class EntityAmbrosia extends BossMonster {
             case "pollen" -> pollen2;
             default -> null;
         };
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.blocks.BlockFarm;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -16,11 +17,9 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -239,10 +238,8 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
             ItemNBT.initNBT(stack);
         }
         int water = this.getWater(stack);
-        if ((creative || water > 0) && state.is(ModBlocks.farmland.get()) && state.getValue(FarmBlock.MOISTURE) == 0) {
-            world.sendParticles(ParticleTypes.FISHING, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 4, 0.0, 0.01, 0.0, 0.1D);
-            world.setBlock(pos, state.setValue(FarmBlock.MOISTURE, 7), 3);
-            world.playSound(null, pos, SoundEvents.BOAT_PADDLE_WATER, SoundSource.BLOCKS, 1.0f, 1.1f);
+        if ((creative || water > 0) && state.is(ModBlocks.farmland.get()) && state.getValue(FarmBlock.MOISTURE) != 7) {
+            BlockFarm.waterLand(world, pos, state);
             if (!creative) {
                 stack.getTag().putInt("Water", water - 1);
             }

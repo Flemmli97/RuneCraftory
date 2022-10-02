@@ -17,7 +17,8 @@ public class EntityPanther extends ChargingMonster {
 
     private static final AnimatedAction melee = new AnimatedAction(16, 9, "attack");
     private static final AnimatedAction leap = new AnimatedAction(23, 6, "leap");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap, interact};
     public ChargeAttackGoal<EntityPanther> attack = new ChargeAttackGoal<>(this);
     protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityPanther> animationHandler = new AnimationHandler<>(this, anims)
@@ -88,5 +89,10 @@ public class EntityPanther extends ChargingMonster {
             else
                 this.getAnimationHandler().setAnimation(melee);
         }
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

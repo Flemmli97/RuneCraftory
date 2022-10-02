@@ -34,7 +34,9 @@ public class EntityWooly extends ChargingMonster {
     public static final AnimatedAction slap = new AnimatedAction(16, 7, "slap");
     public static final AnimatedAction kick = new AnimatedAction(20, 3, "kick");
     public static final AnimatedAction headbutt = new AnimatedAction(16, 7, "headbutt");
-    public static final AnimatedAction[] anims = new AnimatedAction[]{slap, kick, headbutt};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(headbutt, "interact");
+
+    public static final AnimatedAction[] anims = new AnimatedAction[]{slap, kick, headbutt, interact};
     private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
     private final AnimationHandler<EntityWooly> animationHandler = new AnimationHandler<>(this, anims);
@@ -196,5 +198,10 @@ public class EntityWooly extends ChargingMonster {
                 itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().add((this.random.nextFloat() - this.random.nextFloat()) * 0.1F, this.random.nextFloat() * 0.05F, (this.random.nextFloat() - this.random.nextFloat()) * 0.1F));
             }
         }
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

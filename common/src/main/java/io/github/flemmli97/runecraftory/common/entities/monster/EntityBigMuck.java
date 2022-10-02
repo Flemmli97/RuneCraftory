@@ -19,7 +19,8 @@ public class EntityBigMuck extends BaseMonster {
 
     public static final AnimatedAction slapAttack = new AnimatedAction(24, 7, "slap");
     public static final AnimatedAction sporeAttack = new AnimatedAction(44, 18, "spore");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{slapAttack, sporeAttack};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(slapAttack, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{slapAttack, sporeAttack, interact};
     public final AnimatedMeleeGoal<EntityBigMuck> ai = new AnimatedMeleeGoal<>(this);
     private final AnimationHandler<EntityBigMuck> animationHandler = new AnimationHandler<>(this, anims);
 
@@ -86,5 +87,10 @@ public class EntityBigMuck extends BaseMonster {
             else
                 this.getAnimationHandler().setAnimation(slapAttack);
         }
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

@@ -17,7 +17,8 @@ public class EntitySpider extends BaseMonster {
 
     public static final AnimatedAction melee = new AnimatedAction(13, 9, "attack");
     public static final AnimatedAction webshot = new AnimatedAction(14, 6, "webshot");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, webshot};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, webshot, interact};
     private final AnimationHandler<EntitySpider> animationHandler = new AnimationHandler<>(this, anims);
     public AnimatedRangedGoal<EntitySpider> attack = new AnimatedRangedGoal<>(this, 7, (e) -> true);
 
@@ -91,5 +92,10 @@ public class EntitySpider extends BaseMonster {
     @Override
     public MobType getMobType() {
         return MobType.ARTHROPOD;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

@@ -17,7 +17,8 @@ public class EntityBuffamoo extends ChargingMonster {
 
     public static final AnimatedAction chargeAttack = new AnimatedAction(61, 16, "charge");
     public static final AnimatedAction stamp = new AnimatedAction(8, 4, "stamp");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{stamp, chargeAttack};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(stamp, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{stamp, chargeAttack, interact};
     public final ChargeAttackGoal<EntityBuffamoo> ai = new ChargeAttackGoal<>(this);
     private final AnimationHandler<EntityBuffamoo> animationHandler = new AnimationHandler<>(this, anims);
 
@@ -94,5 +95,10 @@ public class EntityBuffamoo extends ChargingMonster {
     @Override
     public float chargingLength() {
         return 9;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }

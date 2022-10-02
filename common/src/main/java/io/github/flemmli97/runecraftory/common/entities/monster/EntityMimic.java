@@ -32,7 +32,8 @@ public class EntityMimic extends ChargingMonster {
     private static final AnimatedAction melee = new AnimatedAction(12, 9, "attack");
     private static final AnimatedAction leap = new AnimatedAction(12, 3, "leap");
     private static final AnimatedAction close = new AnimatedAction(6, 6, "close");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap, close};
+    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
+    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap, close, interact};
     public ChargeAttackGoal<EntityMimic> attack = new ChargeAttackGoal<>(this);
     protected List<LivingEntity> hitEntity;
     private final AnimationHandler<EntityMimic> animationHandler = new AnimationHandler<>(this, anims)
@@ -189,6 +190,11 @@ public class EntityMimic extends ChargingMonster {
     @Override
     public boolean canBeCollidedWith() {
         return !this.isAwake();
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 
     protected static class JumpingMover extends MoveControl {
