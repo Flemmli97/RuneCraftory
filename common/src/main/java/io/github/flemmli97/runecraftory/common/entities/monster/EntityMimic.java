@@ -188,7 +188,7 @@ public class EntityMimic extends ChargingMonster {
 
     @Override
     public boolean canBeCollidedWith() {
-        return true;
+        return !this.isAwake();
     }
 
     protected static class JumpingMover extends MoveControl {
