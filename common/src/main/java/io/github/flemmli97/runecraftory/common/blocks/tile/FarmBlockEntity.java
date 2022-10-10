@@ -104,6 +104,8 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
 
     @Override
     public void update(ServerLevel level) {
+        this.lastUpdateDay = WorldUtils.day(level);
+        this.setChanged();
         boolean isWet = level.getBlockState(this.worldPosition).getValue(FarmBlock.MOISTURE) > 0;
         BlockPos cropPos = this.worldPosition.above();
         BlockState cropState = level.getBlockState(cropPos);
@@ -166,7 +168,6 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
                 this.growthMultiplier = Math.min(this.growthMultiplier + 0.2F, 1F);
             }
         }
-        this.setChanged();
     }
 
     @Override
