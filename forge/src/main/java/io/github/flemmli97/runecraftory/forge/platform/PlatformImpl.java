@@ -191,7 +191,7 @@ public class PlatformImpl implements Platform {
 
     @Override
     public boolean matchingInventory(BlockEntity blockEntity, Function<ItemStack, Boolean> func) {
-        if(blockEntity == null)
+        if (blockEntity == null)
             return false;
         if (blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent())
             return blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(cap -> {
@@ -205,7 +205,7 @@ public class PlatformImpl implements Platform {
 
     @Override
     public ItemStack findMatchingItem(BlockEntity blockEntity, Function<ItemStack, Boolean> func, int amount) {
-        if(blockEntity == null)
+        if (blockEntity == null)
             return ItemStack.EMPTY;
         return blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
                 .map(cap -> {
@@ -219,7 +219,7 @@ public class PlatformImpl implements Platform {
 
     @Override
     public ItemStack insertInto(BlockEntity blockEntity, ItemStack stack) {
-        if(blockEntity == null || stack.isEmpty())
+        if (blockEntity == null || stack.isEmpty())
             return ItemStack.EMPTY;
         return blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
                 .map(cap -> ItemHandlerHelper.insertItem(cap, stack, false)).orElse(ItemStack.EMPTY);

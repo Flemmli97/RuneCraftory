@@ -23,6 +23,8 @@ public class ModTags {
 
     //Items
 
+    public static final TagKey<Item> seeds = tagCommon("seeds");
+
     public static final TagKey<Item> wood_rod = tagCommon("wooden_rods");
     public static final TagKey<Item> slime = tagCommon("slime_balls");
 

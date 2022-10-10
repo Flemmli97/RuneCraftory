@@ -220,7 +220,7 @@ public class PlatformImpl implements Platform {
 
     @Override
     public boolean matchingInventory(BlockEntity blockEntity, Function<ItemStack, Boolean> func) {
-        if(blockEntity == null)
+        if (blockEntity == null)
             return false;
         if (blockEntity instanceof Container container) {
             for (int i = 0; i < container.getContainerSize(); i++)
@@ -232,7 +232,7 @@ public class PlatformImpl implements Platform {
 
     @Override
     public ItemStack findMatchingItem(BlockEntity blockEntity, Function<ItemStack, Boolean> func, int amount) {
-        if(blockEntity == null)
+        if (blockEntity == null)
             return ItemStack.EMPTY;
         if (blockEntity instanceof Container container) {
             for (int i = 0; i < container.getContainerSize(); i++)
@@ -244,13 +244,13 @@ public class PlatformImpl implements Platform {
 
     @Override
     public ItemStack insertInto(BlockEntity blockEntity, ItemStack stack) {
-        if(blockEntity == null || stack.isEmpty())
+        if (blockEntity == null || stack.isEmpty())
             return ItemStack.EMPTY;
         if (blockEntity instanceof Container container) {
             for (int i = 0; i < container.getContainerSize(); ++i) {
-                if(stack.isEmpty())
+                if (stack.isEmpty())
                     break;
-                if(!container.canPlaceItem(i, stack))
+                if (!container.canPlaceItem(i, stack))
                     continue;
                 ItemStack itemStack = container.getItem(i);
                 if (itemStack.isEmpty()) {
@@ -264,7 +264,7 @@ public class PlatformImpl implements Platform {
                     int size = Math.min(stack.getCount(), stack.getMaxStackSize() - itemStack.getCount());
                     stack.shrink(size);
                     itemStack.grow(size);
-                    if(stack.isEmpty())
+                    if (stack.isEmpty())
                         return ItemStack.EMPTY;
                 }
             }

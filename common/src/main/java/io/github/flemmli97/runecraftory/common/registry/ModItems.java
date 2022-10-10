@@ -66,8 +66,11 @@ import java.util.function.Supplier;
 public class ModItems {
 
     public static final PlatformRegistry<Item> ITEMS = PlatformUtils.INSTANCE.of(Registry.ITEM_REGISTRY, RuneCraftory.MODID);
+
+    //Those collections are for datagen
     public static final List<RegistryEntrySupplier<Item>> NOTEX = new ArrayList<>();
     public static final Map<TagKey<Item>, List<RegistryEntrySupplier<Item>>> TREASURE = new HashMap<>();
+    public static final List<RegistryEntrySupplier<Item>> SEEDS = new ArrayList<>();
 
     private static final FoodProperties lowFoodProp = new FoodProperties.Builder().nutrition(1).saturationMod(0.5f).alwaysEat().build();
     private static final FoodProperties foodProp = new FoodProperties.Builder().nutrition(2).saturationMod(0.5f).alwaysEat().build();
@@ -1487,7 +1490,9 @@ public class ModItems {
     }
 
     public static RegistryEntrySupplier<Item> seed(String name, Supplier<Supplier<Block>> block) {
-        return ITEMS.register("seed_" + name, () -> new ItemNameBlockItem(block.get().get(), new Item.Properties().tab(RFCreativeTabs.crops)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register("seed_" + name, () -> new ItemNameBlockItem(block.get().get(), new Item.Properties().tab(RFCreativeTabs.crops)));
+        SEEDS.add(sup);
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> crop(String name, boolean giant, Texture texture) {

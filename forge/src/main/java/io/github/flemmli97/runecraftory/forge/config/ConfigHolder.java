@@ -96,6 +96,7 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
 
     public static void loadMobs(MobConfigSpec spec) {
         MobConfig.disableNaturalSpawn = spec.disableNaturalSpawn.get();
+        MobConfig.farmRadius = spec.farmRadius.get();
         MobConfig.gateHealth = spec.gateHealth.get();
         MobConfig.gateDef = spec.gateDef.get();
         MobConfig.gateMDef = spec.gateMDef.get();
@@ -110,6 +111,9 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         MobConfig.maxNearby = spec.maxNearby.get();
         MobConfig.baseGateLevel = spec.baseGateLevel.get();
         MobConfig.gateLevelType = spec.gateLevelType.get();
+        MobConfig.treasureChance = spec.treasureChance.get().floatValue();
+        MobConfig.mimicChance = spec.mimicChance.get().floatValue();
+        MobConfig.mimicStrongChance = spec.mimicStrongChance.get().floatValue();
 
         for (Map.Entry<ResourceLocation, EntityPropertySpecs> e : spec.mobSpecs.entrySet()) {
             MobConfig.propertiesMap.put(e.getKey(), EntityPropertySpecs.ofSpec(e.getValue()));

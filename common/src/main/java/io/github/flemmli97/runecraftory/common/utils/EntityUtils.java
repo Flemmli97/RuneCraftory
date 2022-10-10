@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.utils;
 
 import com.google.common.collect.ImmutableList;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
@@ -72,9 +73,9 @@ public class EntityUtils {
     }
 
     public static EntityType<?> trySpawnTreasureChest(GateEntity spawner) {
-        if (spawner.getRandom().nextFloat() < 0.001) {
-            if (spawner.getRandom().nextFloat() < 0.4) {
-                if (spawner.getRandom().nextFloat() < 0.3)
+        if (spawner.getRandom().nextFloat() < MobConfig.treasureChance) {
+            if (spawner.getRandom().nextFloat() < MobConfig.mimicChance) {
+                if (spawner.getRandom().nextFloat() < MobConfig.mimicStrongChance)
                     return ModEntities.gobbleBox.get();
                 else
                     return ModEntities.monsterBox.get();
@@ -86,9 +87,9 @@ public class EntityUtils {
 
     private static final List<WeightedChestTier> CHEST_TIERS = ImmutableList.of(
             new WeightedChestTier(0, 150, 0.4f, 550),
-            new WeightedChestTier(0, 40, 0.3f, 200),
-            new WeightedChestTier(0, 1, 0.3f, 60),
-            new WeightedChestTier(0, 0, 0, 20) //0.05f
+            new WeightedChestTier(1, 40, 0.3f, 200),
+            new WeightedChestTier(2, 1, 0.3f, 60),
+            new WeightedChestTier(3, 0, 0, 20) //0.05f
     );
 
     public static void tieredTreasureChest(GateEntity spawner, EntityTreasureChest chest) {

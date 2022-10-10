@@ -19,6 +19,8 @@ public class MobConfigSpec {
             .create(FabricLoader.getInstance().getConfigDir().resolve(RuneCraftory.MODID).resolve("mobs.json"), 1, MobConfigSpec::new);
 
     public final CommentedJsonConfig.CommentedVal<Boolean> disableNaturalSpawn;
+    public final CommentedJsonConfig.IntVal farmRadius;
+
     public final CommentedJsonConfig.DoubleVal gateHealth;
     public final CommentedJsonConfig.DoubleVal gateDef;
     public final CommentedJsonConfig.DoubleVal gateMDef;
@@ -33,6 +35,9 @@ public class MobConfigSpec {
     public final CommentedJsonConfig.IntVal maxNearby;
     public final CommentedJsonConfig.IntVal baseGateLevel;
     public final CommentedJsonConfig.CommentedVal<MobConfig.GateLevelType> gateLevelType;
+    public final CommentedJsonConfig.DoubleVal treasureChance;
+    public final CommentedJsonConfig.DoubleVal mimicChance;
+    public final CommentedJsonConfig.DoubleVal mimicStrongChance;
 
     public final Map<ResourceLocation, EntityPropertySpecs> mobSpecs = new HashMap<>();
 
@@ -40,6 +45,7 @@ public class MobConfigSpec {
 
         builder.push("general");
         this.disableNaturalSpawn = builder.comment("Disable all spawning not from gates").define("Disable Spawn", MobConfig.disableNaturalSpawn);
+        this.farmRadius = builder.comment("Radius in blocks for mobs to tend crops in", "Chests for seeds and drops can be placed within radius + 2").defineInRange("Farm Radius", MobConfig.farmRadius, 0, Integer.MAX_VALUE);
         builder.pop();
 
         builder.comment("Gate Configs").push("gate");
@@ -62,6 +68,9 @@ public class MobConfigSpec {
                 "PLAYERLEVELMAX: The player in a 256 radius with the highest level defines how strong a gate is",
                 "PLAYERLEVELMEAN: Average player level in a 256 radius is considered",
                 "Except for CONSTANT all other types gets also a + <Gate Base Level> addition").define("Gate Level Calc", MobConfig.gateLevelType);
+        this.treasureChance = builder.comment("Chance for a gate to spawn a treasure chest upon first try").defineInRange("Treasure Chest Chance", MobConfig.treasureChance, 0, 1f);
+        this.mimicChance = builder.comment("Chance for a spawned treasure chest to be a monster box").defineInRange("Mimic Chance", MobConfig.mimicChance, 0, 1f);
+        this.mimicStrongChance = builder.comment("Chance for a monster box to be a gobble box").defineInRange("Strong Mimic Chance", MobConfig.mimicStrongChance, 0, 1f);
         builder.pop();
         for (Map.Entry<ResourceLocation, EntityProperties> e : MobConfig.propertiesMap.entrySet()) {
             builder.push(e.getKey().toString());

@@ -9,6 +9,7 @@ import java.util.Map;
 public class MobConfig {
 
     public static boolean disableNaturalSpawn = false;
+    public static int farmRadius = 3;
 
     public static double gateHealth = 100;
     public static double gateDef = 0;
@@ -24,6 +25,9 @@ public class MobConfig {
     public static int maxNearby = 4;
     public static int baseGateLevel = 1;
     public static GateLevelType gateLevelType = GateLevelType.CONSTANT;
+    public static float treasureChance = 0.001f;
+    public static float mimicChance = 0.4f;
+    public static float mimicStrongChance = 0.3f;
 
     public static Map<ResourceLocation, EntityProperties> propertiesMap = new HashMap<>();
 

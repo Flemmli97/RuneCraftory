@@ -236,8 +236,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.goalSelector.addGoal(6, this.wander);
     }
 
-    private void updateAI() {
-        if (this.isTamed()) {
+    private void updateAI(boolean forced) {
+        if (forced || this.isTamed()) {
             if (this.behaviourState() != Behaviour.FARM) {
                 this.seedInventory = null;
                 this.cropInventory = null;
@@ -266,7 +266,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     this.goalSelector.removeGoal(this.wander);
                 }
                 case FARM -> {
-                    this.restrictTo(this.blockPosition(), 11);
+                    this.restrictTo(this.blockPosition(), MobConfig.farmRadius + 3);
                     this.goalSelector.addGoal(3, this.farm);
 
                     this.targetSelector.removeGoal(this.targetPlayer);
@@ -275,8 +275,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
                     this.goalSelector.removeGoal(this.wander);
 
-                    this.seedInventory = this.nearestBlockEntityWithInv();
-                    this.cropInventory = this.nearestBlockEntityWithInv();
+                    BlockPos nearestInv = this.nearestBlockEntityWithInv();
+                    this.setSeedInventory(nearestInv);
+                    this.setCropInventory(nearestInv);
                 }
             }
         }
@@ -569,8 +570,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     if (player instanceof ServerPlayer serverPlayer)
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 1, 1));
                     if (this.playDeath())
-                        this.heal(5);
+                        this.heal(this.getMaxHealth());
                     this.setBehaviour(Behaviour.WANDER);
+                    this.updateAI(true);
                     return InteractionResult.CONSUME;
                 } else if (stack.getItem() == ModItems.inspector.get()) {
                     //open tamed gui
@@ -1193,7 +1195,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.entityData.set(behaviourData, behaviour.ordinal());
         this.behaviour = behaviour;
         if (!this.level.isClientSide)
-            this.updateAI();
+            this.updateAI(false);
     }
 
     /**
@@ -1224,10 +1226,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public BlockPos getSeedInventory() {
+        if (this.seedInventory != null && !this.isWithinRestriction(this.seedInventory)) {
+            return null;
+        }
         return this.seedInventory;
     }
 
     public BlockPos getCropInventory() {
+        if (this.cropInventory != null && !this.isWithinRestriction(this.cropInventory)) {
+            return null;
+        }
         return this.cropInventory;
     }
 

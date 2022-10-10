@@ -3,14 +3,16 @@ package io.github.flemmli97.runecraftory.common.entities.monster.ai;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockFarm;
+import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.utils.BlockPlaceCtxHelper;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
@@ -32,7 +34,7 @@ import java.util.function.Function;
 
 public class TendCropsGoal extends Goal {
 
-    private static final Function<ItemStack, Boolean> seedItem = s -> !s.isEmpty() && s.getItem() instanceof BlockItem blockItem && (blockItem.getBlock() instanceof CropBlock || blockItem.getBlock() instanceof BlockCrop);
+    private static final Function<ItemStack, Boolean> seedItem = s -> !s.isEmpty() && s.getItem() instanceof BlockItem && s.is(ModTags.seeds);
 
     private final List<BlockPos> toTend = new ArrayList<>();
     private BlockPos selected;
@@ -57,8 +59,9 @@ public class TendCropsGoal extends Goal {
                 this.entity.level.getBlockEntity(this.entity.getSeedInventory()), seedItem);
         BlockPos center = this.entity.getRestrictCenter().mutable();
         BlockPos.MutableBlockPos mutable = this.entity.getRestrictCenter().mutable();
-        for (int x = -3; x <= 3; ++x) {
-            for (int z = -3; z <= 3; ++z) {
+        int radius = MobConfig.farmRadius;
+        for (int x = -radius; x <= radius; ++x) {
+            for (int z = -radius; z <= radius; ++z) {
                 for (int y = -1; y <= 1; ++y) {
                     mutable.set(center.getX() + x, center.getY() + y, center.getZ() + z);
                     if (this.validPos(mutable, this.entity.level))
@@ -123,12 +126,11 @@ public class TendCropsGoal extends Goal {
                 return;
             }
         }
-        if (!this.selected.closerToCenterThan(this.entity.position(), 1.1)) {
+        if (!this.selected.closerToCenterThan(this.entity.position(), Math.max(1.1, this.entity.getBbWidth() * 1.9))) {
             Vec3 to = Vec3.atCenterOf(this.selected);
-            if (this.entity.getNavigation().isDone()) {
-                Path path = this.entity.getNavigation().createPath(to.x(), to.y(), to.z(), 0);
-                this.entity.getNavigation().moveTo(path, 1);
-            }
+            Path path = this.entity.getNavigation().createPath(to.x(), to.y(), to.z(), 0);
+            this.entity.getNavigation().moveTo(path, 1);
+            this.cooldown = this.entity.getRandom().nextInt(5) + 5;
         } else {
             BlockState state = this.entity.level.getBlockState(this.selected);
             Block block = state.getBlock();
@@ -157,9 +159,10 @@ public class TendCropsGoal extends Goal {
                         if (this.entity.getSeedInventory() != null) {
                             ItemStack stack = Platform.INSTANCE.findMatchingItem(this.entity.level.getBlockEntity(this.entity.getSeedInventory()), seedItem, 1);
                             if (!stack.isEmpty() && stack.getItem() instanceof BlockItem blockItem) {
-                                this.entity.level.setBlock(this.selected, blockItem.getBlock().defaultBlockState(), 3);
-                                this.entity.level.playSound(null, this.selected.getX(), this.selected.getY(), this.selected.getZ(), SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0f, 1.0f);
-                                stack.shrink(1);
+                                blockItem.place(BlockPlaceCtxHelper.entityPlaceAt(this.entity.level, stack, this.selected, Direction.UP));
+                                //this.entity.level.setBlock(this.selected, blockItem.getBlock().defaultBlockState(), 3);
+                                //this.entity.level.playSound(null, this.selected.getX(), this.selected.getY(), this.selected.getZ(), SoundEvents.CROP_PLANTED, SoundSource.BLOCKS, 1.0f, 1.0f);
+                                //stack.shrink(1);
                                 success = true;
                             }
                         }
