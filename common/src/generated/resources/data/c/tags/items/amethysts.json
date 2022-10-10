@@ -1,11 +1,7 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:amethyst",
-    {
-      "id": "#forge:gems/amethyst",
-      "required": false
-    },
+    "#forge:gems/amethyst",
     "minecraft:amethyst_shard"
   ]
 }

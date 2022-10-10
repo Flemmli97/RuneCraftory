@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.forge.data;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
@@ -68,12 +69,16 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(ModTags.wood_rod)
                 .add(Items.STICK)
                 .addOptional(Tags.Items.RODS_WOODEN.location());
-        this.tag(ModTags.slime)
-                .add(Items.SLIME_BALL)
-                .addOptional(Tags.Items.SLIMEBALLS.location());
+        this.tag(ModTags.seeds)
+                .add(Items.WHEAT_SEEDS)
+                .add(Items.BEETROOT_SEEDS)
+                .add(Items.MELON_SEEDS)
+                .add(Items.PUMPKIN_SEEDS)
+                .addTag(Tags.Items.SEEDS);
 
         this.forgeAndCommonTag(Tags.Items.SLIMEBALLS, ModTags.slime, ModItems.glue.get());
-
+        this.tag(ModTags.slime)
+                .add(Items.SLIME_BALL);
         this.forgeAndCommonTag(ModTags.bronzeF, ModTags.bronze, ModItems.bronze.get());
         this.forgeAndCommonTag(ModTags.silverF, ModTags.silver, ModItems.silver.get());
         this.forgeAndCommonTag(ModTags.platinumF, ModTags.platinum, ModItems.platinum.get());
@@ -278,6 +283,10 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.cheesecake.get())
                 .add(ModItems.chocolateCake.get())
                 .add(ModItems.applePie.get());
+
+        for (RegistryEntrySupplier<Item> sup : ModItems.SEEDS) {
+            this.tag(Tags.Items.SEEDS).add(sup.get());
+        }
     }
 
     protected void forgeAndCommonTag(TagKey<Item> forge, TagKey<Item> common, Item... items) {
@@ -285,8 +294,6 @@ public class ItemTagGen extends ItemTagsProvider {
         for (Item item : items)
             a.add(item);
         a = this.tag(common);
-        for (Item item : items)
-            a.add(item);
-        a.addOptionalTag(forge.location());
+        a.addTag(forge);
     }
 }

@@ -1,10 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:platinum",
-    {
-      "id": "#forge:ingots/platinum",
-      "required": false
-    }
+    "#forge:ingots/platinum"
   ]
 }

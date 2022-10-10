@@ -1,15 +1,7 @@
 {
   "replace": false,
   "values": [
-    "minecraft:slime_ball",
-    {
-      "id": "forge:slimeballs",
-      "required": false
-    },
-    "runecraftory:glue",
-    {
-      "id": "#forge:slimeballs",
-      "required": false
-    }
+    "#forge:slimeballs",
+    "minecraft:slime_ball"
   ]
 }

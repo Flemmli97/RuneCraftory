@@ -1,10 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:aquamarine",
-    {
-      "id": "#forge:gems/aquamarine",
-      "required": false
-    }
+    "#forge:gems/aquamarine"
   ]
 }

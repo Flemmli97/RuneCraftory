@@ -24,9 +24,6 @@ public class BlockTagGen extends BlockTagsProvider {
                 .add(Blocks.END_STONE)
                 .addOptional(Tags.Blocks.END_STONES.location());
 
-        this.tag(ModTags.farmlandTill)
-                .addTag(BlockTags.DIRT);
-
         this.tag(ModTags.sickleDestroyable)
                 .addTag(BlockTags.CORAL_PLANTS)
                 .addTag(BlockTags.CROPS)
