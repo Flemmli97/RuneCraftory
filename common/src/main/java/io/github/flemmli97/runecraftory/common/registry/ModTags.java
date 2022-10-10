@@ -80,11 +80,10 @@ public class ModTags {
 
     //Blocks
     public static final TagKey<Block> farmland = blockCommon("farmland");
-    public static final TagKey<Block> farmlandTill = blockCommon("farmland_tillable");
-    public static final TagKey<Block> sickleDestroyable = blockCommon("sickle_destroyable");
-    public static final TagKey<Block> hammerFlattenable = blockCommon("hammer_flattenable");
-    public static final TagKey<Block> hammerBreakable = blockCommon("hammer_breakable");
-    public static final TagKey<Block> herbs = blockCommon("herbs");
+    public static final TagKey<Block> sickleDestroyable = blockMod("sickle_destroyable");
+    public static final TagKey<Block> hammerFlattenable = blockMod("hammer_flattenable");
+    public static final TagKey<Block> hammerBreakable = blockMod("hammer_breakable");
+    public static final TagKey<Block> herbs = blockMod("herbs");
     public static final TagKey<Block> sickleEffective = blockCommon("mineable/sickle");
 
     public static final TagKey<Block> ENDSTONES = blockCommon("end_stones");
@@ -158,6 +157,10 @@ public class ModTags {
 
     private static TagKey<Block> blockCommon(String name) {
         return PlatformUtils.INSTANCE.blockTag(new ResourceLocation("c", name));
+    }
+
+    private static TagKey<Block> blockMod(String name) {
+        return PlatformUtils.INSTANCE.blockTag(new ResourceLocation(RuneCraftory.MODID, name));
     }
 
     private static TagKey<Biome> biomeMod(String name) {
