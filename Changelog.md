@@ -1,15 +1,22 @@
 RuneCraftory 1.3.0
 ================
 - Enabled crop features now by default cause textures are now (mostly) there
-- Brushing non tamed monster increase taming chance with 1.5x change at 10 brushes.
+- Brushing non tamed monster increase taming chance with 1.5x chance at 10 brushes.
   Brushing or feeding tamed monster increases friend points once per day
 - Add fishing mechanic
 - Teleport spell added. Teleports player to their spawn point if they arent in the same dimension or further than 10 blocks away else teleports to world spawn
 - Tamed monster now get knocked down instead of killed
+- Tamed monster can help with farming
 - Fix penetrating wind blades bounce sometimes not correct
 - Ignore height for distance level calculation
 - Smooth out some animations
 - Seal effect now implemented: Sealed entities cant use magic
+- Runey weather now display correctly
+- Added command to change weather (uses this mods weather system)
+- Added missing recipe for guide book
+- Storms now destroy crops
+- Make ghost type mobs not phase through walls when ridden else players can suffocate
+- Make mimics not solid anymore when they are not hidden
 
 RuneCraftory 1.2.4
 ================
