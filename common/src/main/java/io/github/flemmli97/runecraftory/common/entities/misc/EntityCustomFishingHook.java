@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.mixinhelper.ExtendedFishingRodHookTrigger;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
@@ -175,6 +176,11 @@ public class EntityCustomFishingHook extends EntityProjectile {
             this.setOnCooldown.run();
             this.setOnCooldown = null;
             this.canAttack = null;
+            if (this.getOwner() instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                    LevelCalc.levelSkill(player, data, EnumSkills.FISHING, 0.2f);
+                    LevelCalc.levelSkill(player, data, EnumSkills.WATER, 1);
+                });
         }
         return att;
     }
@@ -335,6 +341,11 @@ public class EntityCustomFishingHook extends EntityProjectile {
                 if (itemStack2.is(ItemTags.FISHES))
                     owner.awardStat(Stats.FISH_CAUGHT, 1);
             }
+            if (this.getOwner() instanceof ServerPlayer player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                    LevelCalc.levelSkill(player, data, EnumSkills.FISHING, 1);
+                    LevelCalc.levelSkill(player, data, EnumSkills.WATER, 1);
+                });
         }
 
         this.discard();

@@ -932,6 +932,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.setMoving(false);
             this.setShiftKeyDown(false);
             this.setSprinting(false);
+            this.unRide();
         } else {
             this.getAnimationHandler().setAnimation(null);
         }
