@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.sky_fish",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:sky_fish_spawn_egg",
   "pages": [
     {

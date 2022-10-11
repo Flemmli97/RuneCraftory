@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.thunderbolt",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:thunderbolt_spawn_egg",
   "pages": [
     {

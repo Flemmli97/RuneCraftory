@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.buffamoo",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:buffamoo_spawn_egg",
   "pages": [
     {

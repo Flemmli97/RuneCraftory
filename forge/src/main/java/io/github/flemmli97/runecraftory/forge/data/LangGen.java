@@ -30,7 +30,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.data.ExistingFileHelper;
 import org.apache.commons.lang3.text.translate.JavaUnicodeEscaper;
 
 import java.io.BufferedWriter;
@@ -47,7 +46,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Same as LanguageProvider but with a linked hashmap and reading from old lang file
+ * Same as LanguageProvider but with a linked hashmap
  */
 public class LangGen implements DataProvider {
 
@@ -58,7 +57,7 @@ public class LangGen implements DataProvider {
     private final String modid;
     private final String locale;
 
-    public LangGen(DataGenerator gen, ExistingFileHelper existing) {
+    public LangGen(DataGenerator gen) {
         this.gen = gen;
         this.modid = RuneCraftory.MODID;
         this.locale = "en_us";
@@ -264,6 +263,7 @@ public class LangGen implements DataProvider {
         this.add("monster.interact.sit", "Entity is now staying");
         this.add("monster.interact.move", "Entity is now moving freely in this area");
         this.add("monster.interact.follow", "Entity is now following you");
+        this.add("monster.interact.farm", "Entity is now tending the crops");
         this.add("tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
         this.add("tooltip.item.treasure_level", "Chest tier lvl: %s");
 
@@ -282,7 +282,6 @@ public class LangGen implements DataProvider {
         this.add("itemGroup.runecraftory.crops", "Farming");
         this.add("itemGroup.runecraftory.monsters", "Monsters");
 
-
         this.add("runecraftory.keycategory", "Runecraftory");
         this.add("runecraftory.key.spell_1", "Interaction Key 1");
         this.add("runecraftory.key.spell_2", "Interaction Key 2");
@@ -297,6 +296,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.command.reset.all", "Reset all player data for %s");
         this.add("runecraftory.command.unlock.recipes", "Unlocked all crafting recipes for %s");
         this.add("runecraftory.command.reset.recipe", "Locked all crafting recipes for %s again");
+        this.add("runecraftory.command.weather.no", "No such weather %s");
+        this.add("runecraftory.command.set.weather", "Set current weather to %s");
 
         this.add("runecraftory.recipe_integration.locked", "Unknown Recipe");
         this.add("runecraftory.recipe_integration.crafting_level", "Lvl: %s");
@@ -304,8 +305,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory_book", "Runepedia");
         this.add("runecraftory.patchouli.subtitle", "");
         this.add("runecraftory.patchouli.landing", "WIP Guidebook for the mod");
-        this.add("runecraftory.patchouli.main.start", "Introduction");
-        this.add("runecraftory.patchouli.main.start.desc", "");
+        this.add("runecraftory.patchouli.category.main", "Introduction");
+        this.add("runecraftory.patchouli.category.main.desc", "");
         this.add("runecraftory.patchouli.entry.crafting", "Crafting");
         this.add("runecraftory.patchouli.entry.crafting.1", "To use any of the crafting devices you need to (depending on the config) " +
                 "$(li)unlocked the recipe $(li)enough rp to craft it $(br) " +
@@ -331,23 +332,91 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.entities.1", "The mobs in this mod don't spawn by themself but through gates that appear through the world. $(br)" +
                 "The type of monster a gate spawns depends on the biome and a gate will continue to spawn monsters till it is destroyed. Gates can drop their corresponding crystals upon destruction. " +
                 "$(br)Bosses spawn in their structures only and can be fought once every day.");
-        this.add("runecraftory.patchouli.entry.entities.2", "Monsters are able to be tamed by simple holding any item and shift-right-click them. This will consume the item and after a while $(bold)heart$(reset) particles" +
-                " appear if the taming was successful and $(bold)smoke$() particles appear if otherwise. Monsters might have one or more favorite items that doubles " +
-                "the taming chance and bosses can $(#ff0000)only$() be tamed by giving them their favorite items.");
-        this.add("runecraftory.patchouli.entry.entities.3", "You can interact with a tamed monster using the following actions: $(li)S$(thing)hift-right-clicking with an empty hand$() to change the behavior to follow, wander or stay mode." +
+        this.add("runecraftory.patchouli.entry.entities.2", "Placing a $(thing)bell block$() (or other meeting POI type blocks) will prevent gates from spawning in a 48 block radius around it. " +
+                "$(br)$(br)Monsters are able to be tamed by simple holding any item and shift-right-click them. This will consume the item and after a while $(bold)heart$(reset) particles" +
+                " appear if the taming was successful and $(bold)smoke$() particles appear if otherwise. Monsters might have one or more favorite items that ");
+        this.add("runecraftory.patchouli.entry.entities.3", "doubles the taming chance and bosses can $(#ff0000)only$() be tamed by giving them their favorite items." +
+                "$(br)$(br)Tamed monster cannot die. Instead they will simply play death when reaching critical damage and healing them through any means will bring them back up. " +
+                "Giving tamed monster a vanilla stick will release them again.");
+        this.add("runecraftory.patchouli.entry.entities.4", "You can interact with a tamed monster using the following actions: $(li)S$(thing)hift-right-clicking with an empty hand$() to change the behavior to follow, wander or stay mode." +
                 "$(li)$(thing)Right-click with an empty$() hand to (if possible) ride it." +
                 "$(li)While ridden press any of the following keys $(thing)$(k:runecraftory.key.spell_1), $(k:runecraftory.key.spell_2), $(k:runecraftory.key.spell_3), $(k:runecraftory.key.spell_4)$() to perform an attack." +
                 "$(li)$(thing)Right-click$() while holding a food item to feed it. ");
-        this.add("runecraftory.patchouli.entry.entities.4", "Food without additional benefits simply heals it while the other apply their benefits like they would to a player." +
-                "$(br)$(br)Placing a $(thing)bell block$() (or other meeting POI type blocks) will prevent gates from spawning in a 48 block radius around it");
-        this.add("runecraftory.patchouli.entry.equipment", "Equipment");
-        this.add("runecraftory.patchouli.entry.equipment.1", "WIP");
-        this.add("runecraftory.patchouli.entry.spellskills", "Spells and Skills");
-        this.add("runecraftory.patchouli.entry.spellskills.1", "WIP");
-        this.add("runecraftory.patchouli.entry.farming", "Farming");
-        this.add("runecraftory.patchouli.entry.farming.1", "WIP");
+        this.add("runecraftory.patchouli.entry.entities.5", "Food without additional benefits simply heals it while the other apply their benefits like they would to a player." +
+                "$(br)$(br)Tamed monster can also help you with farming crops. Upon setting them into farming mode they will tend the crops in a certain radius around the initial position. " +
+                "The nearest inventory block will also be bound to their action and they will deposit harvested crops into that inventory and if seeds are in it they can also plant them.");
+        this.add("runecraftory.patchouli.entry.entities.6", "Using a command stick you can configure both the area and the inventory for the entity.");
 
-        this.add("runecraftory.patchouli.entry.entities.desc", "List of all monsters");
+        this.add("runecraftory.patchouli.category.farming", "Agriculture");
+        this.add("runecraftory.patchouli.category.farming.desc", "An overview and guide about the agricultural aspects");
+        this.add("runecraftory.patchouli.entry.farming", "Getting Started");
+        this.add("runecraftory.patchouli.entry.farming.1", "To get started with growing crops you first need a $(item)hoe$(), a $(item)watering can$() and of course $(item)crop seeds$() to plant. The hoe needs to be from this mod, others it will not work. " +
+                "Then simply till the land to turn it into farmland. The farmland will have some additional data compared to vanilla farmland that will influence the growth of crops. You can use a magnifying glass to inspect it.");
+        this.add("runecraftory.patchouli.entry.farming.2", "After that plant the crops on the farmland and water it with a watering can. Unlike vanilla farmland nearby water will not water it. " +
+                "The crops will grow every day and you will also need to keep watering them each day till they are fully grown. Crops can wilt if you forget to water them and by not watering wilted crops they will turn into withered grass so make sure to keep them hydrated. " +
+                "You can use items to increase the soil quality see $(l:entry.fertilizer#p1)here.");
+        this.add("runecraftory.patchouli.entry.farming.3", "Crops will get a growth bonus if they are planted in the correct season and if planted in the wrong season will grow slower. The cropsystem can affect crops not from this mod and if affected you will not be able to grow those the vanilla way. " +
+                "You can see if they are affected by simply look if they have additional info attached to them.");
+        this.add("runecraftory.patchouli.entry.fertilizer", "Fertilizer");
+        this.add("runecraftory.patchouli.entry.fertilizer.1", "There are various items to improve your farming experience. You can buy them at shops. Vanilla bonemeal will not work like normal and grow the crops, " +
+                "instead it will work as a very weak growth increaser for the soil");
+        this.add("runecraftory.patchouli.entry.fertilizer.2", "$(li)Formular a, b and c acts increase the growth rate of the soil with a being the weakest and c the strongest." +
+                "$(li)Wettable powder: Increases the soils health" +
+                "$(li)Giantizer/Minimizer are used to grow giant crops (Not implemented $(bold)ATM$())." +
+                "$(li)Greenifier: Increases soil level and as such also crop level (Not implemented $(bold)ATM$()).");
+        this.add("runecraftory.patchouli.entry.weather", "Weather");
+        this.add("runecraftory.patchouli.entry.weather.1", "There are 4 types of weather conditions in this mod that only changes during certain times of the day: " +
+                "$(li)$(6)Sunny$(): Normal sunny day without any special properties" +
+                "$(li)$(6)Rain$(): Farmland will automatically get watered ");
+        this.add("runecraftory.patchouli.entry.weather.2", "$(li)$(6)Stormy$(): Farmland will automatically get watered but also the health gets reduced over time. If health drops to 0 the crops can get destroyed so pay attention" +
+                "$(li)$(6)Runey$(): Like sunny days but crops get a boost in growth");
+
+        this.add("runecraftory.patchouli.category.equipment", "Equipments");
+        this.add("runecraftory.patchouli.category.equipment.desc", "");
+        this.add("runecraftory.patchouli.entry.weapon", "Weapons");
+        this.add("runecraftory.patchouli.entry.weapon.1", "The mod adds a plethora of weapons and you will find a short explanation of each weapon type here. By reaching at least level 5 for a weapon type you are able to " +
+                "use a charge attack. Simply hold right click and release after a while to use it. This will consume a bit of runepoints though. " +
+                "They also have unlike vanilla swords an aoe effect. See it as sweeping but all mobs take equal damage.");
+        this.add("runecraftory.patchouli.entry.weapon.2.title", "Short Swords");
+        this.add("runecraftory.patchouli.entry.weapon.2", "Weapons with a shorter reach and attack power but quite fast with a small aoe effect. The closest to vanilla swords.");
+        this.add("runecraftory.patchouli.entry.weapon.3.title", "Long Swords");
+        this.add("runecraftory.patchouli.entry.weapon.3", "Bigger reach and more attack power but kinda slow. Has a decent aoe.");
+        this.add("runecraftory.patchouli.entry.weapon.4.title", "Spears");
+        this.add("runecraftory.patchouli.entry.weapon.4", "Big reach and fairly quick. The charge attack is special: After charging and releasing repeatedly right click to keep attacking");
+        this.add("runecraftory.patchouli.entry.weapon.5.title", "Axe/Hammers");
+        this.add("runecraftory.patchouli.entry.weapon.5", "Slow but strong and with bigger reach. Not to be confused with the axe and hammer tools though. Axes usually have a high crit rate while hammers a high stun chance. $(bold)ATM$() stunning will do nothing though");
+        this.add("runecraftory.patchouli.entry.weapon.6.title", "Dual Blades");
+        this.add("runecraftory.patchouli.entry.weapon.6", "Dual weapons. Fast but weaker than other weapons with a shorter reach. You will also not be able to use offhand items.");
+        this.add("runecraftory.patchouli.entry.weapon.7.title", "Fists");
+        this.add("runecraftory.patchouli.entry.weapon.7", "Dual weapons. Fast but with shorter reach and small aoe. Charge attack will push you into the direction you are looking and during that hitting any mobs in your way");
+        this.add("runecraftory.patchouli.entry.weapon.8.title", "Staffs");
+        this.add("runecraftory.patchouli.entry.weapon.8", "Magic weapon. Each staff has a base spell used per weapon swing. Additionally upgrading a staff with items can give it spells too. To use them simply hold right click. " +
+                "A staff can have max 3 spells attached to it.");
+        this.add("runecraftory.patchouli.entry.tools", "Tools");
+        this.add("runecraftory.patchouli.entry.tools.1", "Here is an overview of the tools from this mod. You can use tools as weapons but they are noticeably weaker. The higher tier the tool is the more powerful the " +
+                "charge ability will be.");
+        this.add("runecraftory.patchouli.entry.tools.2.title", "Hoe");
+        this.add("runecraftory.patchouli.entry.tools.2", "Used to till the earth turning it into farmland to grow crops.");
+        this.add("runecraftory.patchouli.entry.tools.3.title", "Wateringcan");
+        this.add("runecraftory.patchouli.entry.tools.3", "You need a watering can to water farmland. Right click on water blocks to fill it up.");
+        this.add("runecraftory.patchouli.entry.tools.4.title", "Sickle");
+        this.add("runecraftory.patchouli.entry.tools.4", "Can be used to clear out grass more easily");
+        this.add("runecraftory.patchouli.entry.tools.5.title", "Hammer");
+        this.add("runecraftory.patchouli.entry.tools.5", "Acts like a pickaxe but you can also use it to flatten farmland turning it back into dirt. It also gets additional benefits when breaking minerals.");
+        this.add("runecraftory.patchouli.entry.tools.6.title", "Axe");
+        this.add("runecraftory.patchouli.entry.tools.6", "For now acts just like vanilla axes");
+        this.add("runecraftory.patchouli.entry.tools.7.title", "Fishing Rod");
+        this.add("runecraftory.patchouli.entry.tools.7", "Similiar to vanilla fishing rod. Throw it into a body of water to start fishing. The body of water needs to be at least $(1)2 blocks deep and 3x3 wide$(). Higher tier fishing rods increases the speed to catch" +
+                " a fish while the more charge it has the easier it is to catch a fish.");
+        this.add("runecraftory.patchouli.entry.tools.8", "Useful to inspect the quality of the soil.");
+        this.add("runecraftory.patchouli.entry.spellskills", "Spells and Skills");
+        this.add("runecraftory.patchouli.entry.spellskills.1", "There are several spells and skills that can be found all over the world. Every spell and skill will require runepoints to use them. " +
+                "You can put both spell and skill items in the spell slots (in your inventory) and then you are able to simply press the corresponding key to cast them. " +
+                "The only craftable spells are the following two:");
+        this.add("runecraftory.patchouli.entry.spellskills.3", "Skills require you to hold a weapon in your hand and will drop in efficiency if you hold the wrong weapon. ");
+
+        this.add("runecraftory.patchouli.category.entities", "Monsters");
+        this.add("runecraftory.patchouli.category.entities.desc", "List of all monsters");
         this.add(patchouliEntity(ModEntities.wooly.getID()), "Sheep like creature that is rather passive. Shearable.");
         this.add(patchouliEntity(ModEntities.orc.getID()), "");
         this.add(patchouliEntity(ModEntities.orcArcher.getID()), "An orc but with a bow");

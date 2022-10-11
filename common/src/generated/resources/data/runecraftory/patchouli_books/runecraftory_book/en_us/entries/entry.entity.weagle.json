@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.weagle",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:weagle_spawn_egg",
   "pages": [
     {

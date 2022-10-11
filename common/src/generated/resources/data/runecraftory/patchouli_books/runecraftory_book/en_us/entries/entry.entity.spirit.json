@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.spirit",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:spirit_spawn_egg",
   "pages": [
     {

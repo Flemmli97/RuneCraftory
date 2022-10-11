@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.big_muck",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:big_muck_spawn_egg",
   "pages": [
     {

@@ -18,6 +18,14 @@
     {
       "type": "patchouli:text",
       "text": "runecraftory.patchouli.entry.entities.4"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entities.5"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entities.6"
     }
   ],
   "sortnum": 3

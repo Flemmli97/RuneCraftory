@@ -566,13 +566,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 }
             } else {
                 if (stack.getItem() == Items.STICK) {
-                    this.setOwner(null);
                     if (player instanceof ServerPlayer serverPlayer)
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 1, 1));
-                    if (this.playDeath())
-                        this.heal(this.getMaxHealth());
-                    this.setBehaviour(Behaviour.WANDER);
-                    this.updateAI(true);
+                    this.untameEntity();
                     return InteractionResult.CONSUME;
                 } else if (stack.getItem() == ModItems.inspector.get()) {
                     //open tamed gui
@@ -1224,6 +1220,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         && e.getTarget() == this).forEach(e -> e.setTarget(null));
         if (owner instanceof ServerPlayer serverPlayer)
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.TAMING, 10));
+    }
+
+    protected void untameEntity() {
+        this.setOwner(null);
+        if (this.playDeath())
+            this.heal(this.getMaxHealth());
+        this.setBehaviour(Behaviour.WANDER);
+        this.updateAI(true);
+        this.setTarget(null);
+        this.getNavigation().stop();
     }
 
     public BlockPos getSeedInventory() {

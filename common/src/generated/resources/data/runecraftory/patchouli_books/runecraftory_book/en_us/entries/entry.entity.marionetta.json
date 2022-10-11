@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.marionetta",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:marionetta_spawn_egg",
   "pages": [
     {

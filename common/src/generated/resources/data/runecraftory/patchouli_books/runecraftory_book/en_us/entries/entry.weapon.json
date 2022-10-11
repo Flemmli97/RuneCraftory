@@ -1,0 +1,54 @@
+{
+  "name": "runecraftory.patchouli.entry.weapon",
+  "category": "runecraftory:category.equipment",
+  "icon": "runecraftory:short_dagger",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.weapon.1"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:broad_sword",
+      "title": "runecraftory.patchouli.entry.weapon.2.title",
+      "text": "runecraftory.patchouli.entry.weapon.2"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:claymore",
+      "title": "runecraftory.patchouli.entry.weapon.3.title",
+      "text": "runecraftory.patchouli.entry.weapon.3"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:spear",
+      "title": "runecraftory.patchouli.entry.weapon.4.title",
+      "text": "runecraftory.patchouli.entry.weapon.4"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:battle_axe",
+      "title": "runecraftory.patchouli.entry.weapon.5.title",
+      "text": "runecraftory.patchouli.entry.weapon.5"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:short_dagger",
+      "title": "runecraftory.patchouli.entry.weapon.6.title",
+      "text": "runecraftory.patchouli.entry.weapon.6"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:leather_glove",
+      "title": "runecraftory.patchouli.entry.weapon.7.title",
+      "text": "runecraftory.patchouli.entry.weapon.7"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:rod",
+      "title": "runecraftory.patchouli.entry.weapon.8.title",
+      "text": "runecraftory.patchouli.entry.weapon.8"
+    }
+  ],
+  "sortnum": 1
+}

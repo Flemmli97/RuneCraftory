@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.cluckadoodle",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:cluckadoodle_spawn_egg",
   "pages": [
     {

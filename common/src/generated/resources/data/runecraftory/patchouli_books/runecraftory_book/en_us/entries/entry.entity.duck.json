@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.duck",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:duck_spawn_egg",
   "pages": [
     {

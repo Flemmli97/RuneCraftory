@@ -1,0 +1,53 @@
+{
+  "name": "runecraftory.patchouli.entry.tools",
+  "category": "runecraftory:category.equipment",
+  "icon": "runecraftory:hoe_scrap",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.tools.1"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:hoe_scrap",
+      "title": "runecraftory.patchouli.entry.tools.2.title",
+      "text": "runecraftory.patchouli.entry.tools.2"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:watering_can_scrap",
+      "title": "runecraftory.patchouli.entry.tools.3.title",
+      "text": "runecraftory.patchouli.entry.tools.3"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:sickle_scrap",
+      "title": "runecraftory.patchouli.entry.tools.4.title",
+      "text": "runecraftory.patchouli.entry.tools.4"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:hammer_scrap",
+      "title": "runecraftory.patchouli.entry.tools.5.title",
+      "text": "runecraftory.patchouli.entry.tools.5"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:axe_scrap",
+      "title": "runecraftory.patchouli.entry.tools.6.title",
+      "text": "runecraftory.patchouli.entry.tools.6"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:fishing_rod_scrap",
+      "title": "runecraftory.patchouli.entry.tools.7.title",
+      "text": "runecraftory.patchouli.entry.tools.7"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "runecraftory:magnifying_glass",
+      "text": "runecraftory.patchouli.entry.tools.8"
+    }
+  ],
+  "sortnum": 2
+}

@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.gobble_box",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:gobble_box_spawn_egg",
   "pages": [
     {

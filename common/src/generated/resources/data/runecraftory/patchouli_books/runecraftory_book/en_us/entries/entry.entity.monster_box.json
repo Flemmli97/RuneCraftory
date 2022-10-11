@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.monster_box",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:monster_box_spawn_egg",
   "pages": [
     {

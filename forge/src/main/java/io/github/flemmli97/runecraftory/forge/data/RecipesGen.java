@@ -1,5 +1,7 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.crafting.RecipeBuilder;
@@ -10,8 +12,12 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -23,6 +29,9 @@ public class RecipesGen extends RecipeProvider {
 
     @Override
     public void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
+        consumer.accept(this.patchouliShapelessBook(new ResourceLocation(RuneCraftory.MODID, "book"), new ResourceLocation(RuneCraftory.MODID, "runecraftory_book"),
+                Ingredient.of(Items.BOOK), Ingredient.of(Items.GRASS), Ingredient.of(Items.STONE)));
+
         ShapelessRecipeBuilder.shapeless(Items.WHITE_WOOL)
                 .requires(ModItems.furSmall.get(), 4)
                 .unlockedBy("wool", has(ItemTags.WOOL))
@@ -121,6 +130,24 @@ public class RecipesGen extends RecipeProvider {
                 .define('s', Items.SMOKER)
                 .define('l', ItemTags.LOGS)
                 .unlockedBy("cooking_recipe", has(Items.SMOKER))
+                .save(consumer);
+
+        ShapedRecipeBuilder.shaped(ModItems.teleport.get())
+                .pattern(" e ")
+                .pattern("ebe")
+                .pattern(" e ")
+                .define('e', Items.ENDER_PEARL)
+                .define('b', ItemTags.BEDS)
+                .unlockedBy("teleport", has(ItemTags.BEDS))
+                .save(consumer);
+        ShapedRecipeBuilder.shaped(ModItems.fireBallSmall.get())
+                .pattern("bcb")
+                .pattern("clc")
+                .pattern("bcb")
+                .define('b', Items.BLAZE_POWDER)
+                .define('c', Items.FIRE_CHARGE)
+                .define('l', Items.LAVA_BUCKET)
+                .unlockedBy("fireball", has(Items.LAVA_BUCKET))
                 .save(consumer);
 
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.hoeScrap.get(), 1, 5, 20)
@@ -359,5 +386,49 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(ModItems.cabbage.get()).build(consumer);
         //RecipeBuilder.create(EnumCrafting.COOKING, ModItems.squidSashimi.get(), 1, 5, 15)
         //        .addIngredient(ModItems.squid.get()).build(consumer);
+    }
+
+    private FinishedRecipe patchouliShapelessBook(ResourceLocation id, ResourceLocation book, Ingredient... ingredients) {
+        return new FinishedRecipe() {
+
+            @Override
+            public JsonObject serializeRecipe() {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("type", "patchouli:shapeless_book_recipe");
+                this.serializeRecipeData(jsonObject);
+                return jsonObject;
+            }
+
+            @Override
+            public void serializeRecipeData(JsonObject json) {
+                JsonArray arr = new JsonArray();
+                for (Ingredient ing : ingredients)
+                    arr.add(ing.toJson());
+                json.add("ingredients", arr);
+                json.addProperty("book", book.toString());
+            }
+
+            @Override
+            public ResourceLocation getId() {
+                return id;
+            }
+
+            @Override
+            public RecipeSerializer<?> getType() {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public JsonObject serializeAdvancement() {
+                return null;
+            }
+
+            @Nullable
+            @Override
+            public ResourceLocation getAdvancementId() {
+                return null;
+            }
+        };
     }
 }

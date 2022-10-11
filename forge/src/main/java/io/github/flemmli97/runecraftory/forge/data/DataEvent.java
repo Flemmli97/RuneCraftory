@@ -24,7 +24,7 @@ public class DataEvent {
         if (event.includeClient()) {
             data.addProvider(new BlockStatesGen(data, ignore));
             data.addProvider(new ItemModels(data, ignore));
-            data.addProvider(new LangGen(data, event.getExistingFileHelper()));
+            data.addProvider(new LangGen(data));
             data.addProvider(new ParticleGen(data));
         }
         if (event.includeServer()) {

@@ -1,11 +1,20 @@
 {
   "name": "runecraftory.patchouli.entry.spellskills",
-  "category": "runecraftory:category.main",
+  "category": "runecraftory:category.equipment",
   "icon": "runecraftory:teleport",
   "pages": [
     {
       "type": "patchouli:text",
       "text": "runecraftory.patchouli.entry.spellskills.1"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "runecraftory:fireball",
+      "recipe2": "runecraftory:teleport"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.spellskills.3"
     }
   ],
   "sortnum": 5

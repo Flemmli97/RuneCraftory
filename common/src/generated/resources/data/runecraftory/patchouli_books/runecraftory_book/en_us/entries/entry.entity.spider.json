@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.spider",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:spider_spawn_egg",
   "pages": [
     {

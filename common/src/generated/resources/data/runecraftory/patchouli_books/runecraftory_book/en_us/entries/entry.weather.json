@@ -1,0 +1,16 @@
+{
+  "name": "runecraftory.patchouli.entry.weather",
+  "category": "runecraftory:category.farming",
+  "icon": "minecraft:sunflower",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.weather.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.weather.2"
+    }
+  ],
+  "sortnum": 3
+}

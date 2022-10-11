@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.pomme_pomme",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:pomme_pomme_spawn_egg",
   "pages": [
     {

@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.ghost",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:ghost_spawn_egg",
   "pages": [
     {

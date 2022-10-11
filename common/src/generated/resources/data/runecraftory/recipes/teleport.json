@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " e ",
+    "ebe",
+    " e "
+  ],
+  "key": {
+    "e": {
+      "item": "minecraft:ender_pearl"
+    },
+    "b": {
+      "tag": "minecraft:beds"
+    }
+  },
+  "result": {
+    "item": "runecraftory:teleport"
+  }
+}

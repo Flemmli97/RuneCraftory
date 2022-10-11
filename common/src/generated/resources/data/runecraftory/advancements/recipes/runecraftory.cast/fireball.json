@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "runecraftory:fireball"
+    ]
+  },
+  "criteria": {
+    "fireball": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:lava_bucket"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "runecraftory:fireball"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "fireball",
+      "has_the_recipe"
+    ]
+  ]
+}

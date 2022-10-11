@@ -1,0 +1,15 @@
+{
+  "type": "patchouli:shapeless_book_recipe",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "minecraft:grass"
+    },
+    {
+      "item": "minecraft:stone"
+    }
+  ],
+  "book": "runecraftory:runecraftory_book"
+}

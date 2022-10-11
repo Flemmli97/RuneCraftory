@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.chipsqueek",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:chipsqueek_spawn_egg",
   "pages": [
     {

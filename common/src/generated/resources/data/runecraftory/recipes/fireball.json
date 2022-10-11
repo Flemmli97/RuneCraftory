@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bcb",
+    "clc",
+    "bcb"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:blaze_powder"
+    },
+    "c": {
+      "item": "minecraft:fire_charge"
+    },
+    "l": {
+      "item": "minecraft:lava_bucket"
+    }
+  },
+  "result": {
+    "item": "runecraftory:fireball"
+  }
+}

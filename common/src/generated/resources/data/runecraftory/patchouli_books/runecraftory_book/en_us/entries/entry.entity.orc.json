@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.orc",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:orc_spawn_egg",
   "pages": [
     {

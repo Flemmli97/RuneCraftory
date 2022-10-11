@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.ant",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:ant_spawn_egg",
   "pages": [
     {

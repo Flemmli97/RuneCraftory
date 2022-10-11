@@ -1,6 +1,6 @@
 {
   "name": "entity.runecraftory.tortas",
-  "category": "runecraftory:entry.entities",
+  "category": "runecraftory:category.entities",
   "icon": "runecraftory:tortas_spawn_egg",
   "pages": [
     {

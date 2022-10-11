@@ -1,6 +1,6 @@
 {
-  "name": "runecraftory.patchouli.main.start",
-  "description": "runecraftory.patchouli.main.start.desc",
+  "name": "runecraftory.patchouli.category.main",
+  "description": "runecraftory.patchouli.category.main.desc",
   "icon": "runecraftory:icon_0",
-  "sortnum": 1
+  "sortnum": 0
 }

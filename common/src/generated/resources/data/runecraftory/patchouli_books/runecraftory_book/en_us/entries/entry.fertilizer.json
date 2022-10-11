@@ -1,0 +1,17 @@
+{
+  "name": "runecraftory.patchouli.entry.fertilizer",
+  "category": "runecraftory:category.farming",
+  "icon": "runecraftory:formular_a",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "p1",
+      "text": "runecraftory.patchouli.entry.fertilizer.1"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.fertilizer.2"
+    }
+  ],
+  "sortnum": 2
+}
