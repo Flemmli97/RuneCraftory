@@ -142,11 +142,11 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
 
                         int stage = Math.round(this.age * maxAge) / props.growth();
                         //Update the blockstate according to the growth age from this tile
-                        level.setBlock(cropPos, crop.getStateForAge(Math.min(stage, maxAge)), 3);
-                    } else {
-                        //if not increase block state age by one per day with reduced bonus from growth multiplier
-                        int age = cropState.getValue(CropBlock.AGE);
-                        level.setBlock(cropPos, crop.getStateForAge(Math.min((int) (age + Math.max(1, this.growthMultiplier / 2.4)), crop.getMaxAge())), 2);
+                        BlockState newState = crop.getStateForAge(Math.min(stage, maxAge));
+                        level.setBlock(cropPos, newState, 3);
+                        if (crop.isMaxAge(newState)) {
+                            this.age = 0;
+                        }
                     }
                     didCropGrow = true;
                     Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
@@ -158,7 +158,7 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
         }
 
         if (didCropGrow) {
-            if (level.random.nextInt(2) == 0) {
+            if (level.random.nextInt(3) == 0) {
                 this.growthMultiplier = Math.max(this.growthMultiplier - 0.1F, 0.1F);
             }
             this.health = Math.max(0, --this.health);

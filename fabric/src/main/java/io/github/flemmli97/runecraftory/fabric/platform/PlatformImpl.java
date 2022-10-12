@@ -245,7 +245,7 @@ public class PlatformImpl implements Platform {
     @Override
     public ItemStack insertInto(BlockEntity blockEntity, ItemStack stack) {
         if (blockEntity == null || stack.isEmpty())
-            return ItemStack.EMPTY;
+            return stack;
         if (blockEntity instanceof Container container) {
             for (int i = 0; i < container.getContainerSize(); ++i) {
                 if (stack.isEmpty())

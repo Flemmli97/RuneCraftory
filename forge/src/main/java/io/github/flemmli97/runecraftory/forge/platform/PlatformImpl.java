@@ -220,7 +220,7 @@ public class PlatformImpl implements Platform {
     @Override
     public ItemStack insertInto(BlockEntity blockEntity, ItemStack stack) {
         if (blockEntity == null || stack.isEmpty())
-            return ItemStack.EMPTY;
+            return stack;
         return blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
                 .map(cap -> ItemHandlerHelper.insertItem(cap, stack, false)).orElse(ItemStack.EMPTY);
     }
