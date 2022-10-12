@@ -69,7 +69,7 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
 
     public void applyBonemeal() {
         if (this.growthMultiplier < 2.45)
-            this.applyGrowthFertilizer(0.05f);
+            this.applyGrowthFertilizer(0.15f);
     }
 
     public void applyHealth(int amount) {

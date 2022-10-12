@@ -17,6 +17,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
@@ -127,5 +128,12 @@ public class EntityEvents {
     public void cropHarvest(PlayerInteractEvent.RightClickBlock event) {
         if (event.getUseBlock() != Event.Result.DENY)
             EntityCalls.cropRightClickHarvest(event.getPlayer(), event.getEntity().level.getBlockState(event.getHitVec().getBlockPos()), event.getHitVec().getBlockPos());
+    }
+
+    @SubscribeEvent
+    public void bonemeal(BonemealEvent event) {
+        if (EntityCalls.onTryBonemeal(event.getWorld(), event.getStack(), event.getBlock(), event.getPos())) {
+            event.setCanceled(true);
+        }
     }
 }
