@@ -85,10 +85,10 @@ public class TendCropsGoal extends Goal {
         if (block instanceof BlockCrop crop && crop.isMaxAge(state, level, pos))
             return true;
         BlockState state2 = level.getBlockState(pos.below());
+        if (state2.is(ModBlocks.farmland.get()) && state2.getValue(FarmBlock.MOISTURE) < 7)
+            return true;
         if (state2.getBlock() instanceof FarmBlock && this.canPlant)
             return state.isAir();
-        if (state2.is(ModBlocks.farmland.get()))
-            return state2.getValue(FarmBlock.MOISTURE) < 7;
         return false;
     }
 
