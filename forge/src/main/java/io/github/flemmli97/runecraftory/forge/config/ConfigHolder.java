@@ -81,12 +81,17 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
     public static void loadClient(ClientConfigSpec spec) {
         ClientConfig.healthBarWidgetX = spec.healthBarWidgetX.get();
         ClientConfig.healthBarWidgetY = spec.healthBarWidgetY.get();
+        ClientConfig.healthBarWidgetPosition = spec.healthBarWidgetPosition.get();
         ClientConfig.seasonDisplayX = spec.seasonDisplayX.get();
         ClientConfig.seasonDisplayY = spec.seasonDisplayY.get();
+        ClientConfig.seasonDisplayPosition = spec.seasonDisplayPosition.get();
         ClientConfig.inventoryOffsetX = spec.inventoryOffsetX.get();
         ClientConfig.inventoryOffsetY = spec.inventoryOffsetY.get();
         ClientConfig.creativeInventoryOffsetX = spec.creativeInventoryOffsetX.get();
         ClientConfig.creativeInventoryOffsetY = spec.creativeInventoryOffsetY.get();
+        ClientConfig.farmlandX = spec.farmlandX.get();
+        ClientConfig.farmlandY = spec.farmlandY.get();
+        ClientConfig.farmlandPosition = spec.farmlandPosition.get();
         ClientConfig.renderHealthRPBar = spec.renderHealthRPBar.get();
         ClientConfig.renderCalendar = spec.renderCalendar.get();
         ClientConfig.inventoryButton = spec.inventoryButton.get();

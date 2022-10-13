@@ -32,10 +32,12 @@ public class OverlayGui extends GuiComponent {
     public void renderBar(PoseStack stack) {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, texturepath);
+        int guiWidth = this.mc.getWindow().getGuiScaledWidth();
+        int guiHeight = this.mc.getWindow().getGuiScaledHeight();
         if (ClientConfig.renderHealthRPBar == ClientConfig.HealthRPRenderType.BOTH) {
             PlayerData data = Platform.INSTANCE.getPlayerData(this.mc.player).orElse(null);
-            int xPos = ClientConfig.healthBarWidgetX;
-            int yPos = ClientConfig.healthBarWidgetY;
+            int xPos = ClientConfig.healthBarWidgetPosition.positionX(guiWidth, 96, ClientConfig.healthBarWidgetX);
+            int yPos = ClientConfig.healthBarWidgetPosition.positionY(guiHeight, 29, ClientConfig.healthBarWidgetY);
             if (data != null && !this.mc.player.isCreative()) {
                 this.blit(stack, xPos, yPos, 0, 0, 96, 29);
                 int healthWidth = Math.min(75, (int) (this.mc.player.getHealth() / this.mc.player.getMaxHealth() * 75.0f));
@@ -58,9 +60,11 @@ public class OverlayGui extends GuiComponent {
             CalendarImpl calendar = ClientHandlers.clientCalendar;
             EnumSeason season = calendar.currentSeason();
 
-            this.blit(stack, ClientConfig.seasonDisplayX, ClientConfig.seasonDisplayY, 50, 176, 37, 36);
-            this.blit(stack, ClientConfig.seasonDisplayX + 3, ClientConfig.seasonDisplayY + 3, 0 + season.ordinal() * 32, 226, 32, 30);
-            this.blit(stack, ClientConfig.seasonDisplayX, ClientConfig.seasonDisplayY + 39, 0, 176, 48, 17);
+            int xPos = ClientConfig.seasonDisplayPosition.positionX(guiWidth, 37, ClientConfig.seasonDisplayX);
+            int yPos = ClientConfig.seasonDisplayPosition.positionY(guiHeight, 36, ClientConfig.seasonDisplayY);
+            this.blit(stack, xPos, yPos, 50, 176, 37, 36);
+            this.blit(stack, xPos + 3, yPos + 3, season.ordinal() * 32, 226, 32, 30);
+            this.blit(stack, xPos, yPos + 39, 0, 176, 48, 17);
 
             drawStringCenter(stack, this.mc.font, new TranslatableComponent(calendar.currentDay().translation()).append(new TranslatableComponent(" " + calendar.date())), ClientConfig.seasonDisplayX + 26, ClientConfig.seasonDisplayY + 39 + 5, 0xbd1600);
         }

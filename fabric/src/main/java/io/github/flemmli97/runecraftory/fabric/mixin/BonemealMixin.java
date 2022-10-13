@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class BonemealMixin {
 
     @Inject(method = "growCrop", at = @At(value = "HEAD"), cancellable = true)
-    private void bonemealCheck(ItemStack stack, Level level, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
+    private static void bonemealCheck(ItemStack stack, Level level, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
         if (EntityCalls.onTryBonemeal(level, stack, level.getBlockState(pos), pos))
             info.setReturnValue(false);
     }
