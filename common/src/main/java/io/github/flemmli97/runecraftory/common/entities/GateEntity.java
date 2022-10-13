@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
@@ -74,6 +75,7 @@ public class GateEntity extends Mob implements IBaseMob {
     private List<EntityType<?>> spawnList = new ArrayList<>();
     private EnumElement type = EnumElement.NONE;
     private boolean initialSpawn = true;
+    private final LevelExpPair expPair = new LevelExpPair();
 
     public GateEntity(EntityType<? extends GateEntity> type, Level level) {
         super(type, level);
@@ -102,8 +104,14 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    public int level() {
-        return this.entityData.get(mobLevel);
+    public LevelExpPair level() {
+        this.expPair.setLevel(this.entityData.get(mobLevel));
+        return this.expPair;
+    }
+
+    @Override
+    public int friendPoints() {
+        return 0;
     }
 
     @Override
@@ -334,8 +342,8 @@ public class GateEntity extends Mob implements IBaseMob {
     protected void tickDeath() {
         if (this.deathTime == 5 && this.lastHurtByPlayer instanceof ServerPlayer) {
             Platform.INSTANCE.getPlayerData(this.lastHurtByPlayer).ifPresent(data -> {
-                LevelCalc.addXP((ServerPlayer) this.lastHurtByPlayer, data, MobConfig.gateXP, this.level());
-                data.setMoney(this.lastHurtByPlayer, data.getMoney() + LevelCalc.getMoney(this.baseMoney(), this.level()));
+                LevelCalc.addXP((ServerPlayer) this.lastHurtByPlayer, data, MobConfig.gateXP, this.level().getLevel());
+                data.setMoney(this.lastHurtByPlayer, data.getMoney() + LevelCalc.getMoney(this.baseMoney(), this.level().getLevel()));
             });
         }
         super.tickDeath();
@@ -389,11 +397,11 @@ public class GateEntity extends Mob implements IBaseMob {
 
     private void updateStatsToLevel() {
         this.getAttribute(Attributes.MAX_HEALTH).removeModifier(attributeLevelMod);
-        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADDITION));
         this.getAttribute(ModAttributes.RF_DEFENCE.get()).removeModifier(attributeLevelMod);
-        this.getAttribute(ModAttributes.RF_DEFENCE.get()).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.RF_DEFENCE.get()).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADDITION));
         this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).removeModifier(attributeLevelMod);
-        this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
         this.setHealth(this.getMaxHealth());
     }
 

@@ -1,9 +1,11 @@
 package io.github.flemmli97.runecraftory.client;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -105,5 +107,14 @@ public class ClientHandlers {
             return Platform.INSTANCE.getEntityData(living).map(EntityData::isOrthoView).orElse(false);
         }
         return false;
+    }
+
+    public static void openCompanionGui(int id) {
+        Entity entity = Minecraft.getInstance().level.getEntity(id);
+        if (entity instanceof BaseMonster monster) {
+            if (!Minecraft.getInstance().player.getUUID().equals(monster.getOwnerUUID()))
+                return;
+            Minecraft.getInstance().setScreen(new MonsterCompanionGui(monster));
+        }
     }
 }

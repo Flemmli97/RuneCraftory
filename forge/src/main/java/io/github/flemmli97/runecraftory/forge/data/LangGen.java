@@ -302,6 +302,20 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.recipe_integration.locked", "Unknown Recipe");
         this.add("runecraftory.recipe_integration.crafting_level", "Lvl: %s");
 
+        this.add("gui.companion.behaviour.wander", "Wander");
+        this.add("gui.companion.behaviour.follow", "Follow");
+        this.add("gui.companion.behaviour.stay", "Stay");
+        this.add("gui.companion.behaviour.farm", "Tend the crops");
+        this.add("gui.companion.behaviour.home", "Home");
+        this.add("gui.companion.behaviour.inventory.harvest", "Crop Inventory");
+        this.add("gui.companion.behaviour.inventory.seed", "Seed Inventory");
+
+        this.add("behaviour.home.position", "Updated restriction center");
+        this.add("behaviour.inventory.harvest", "Updated crop inventory position");
+        this.add("behaviour.inventory.harvest.invalid", "Position is too far away");
+        this.add("behaviour.inventory.seed", "Updated seed inventory position");
+        this.add("behaviour.inventory.seed.invalid", "Position is too far away");
+
         this.add("runecraftory_book", "Runepedia");
         this.add("runecraftory.patchouli.subtitle", "");
         this.add("runecraftory.patchouli.landing", "WIP Guidebook for the mod");
@@ -345,7 +359,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.entities.5", "Food without additional benefits simply heals it while the other apply their benefits like they would to a player." +
                 "$(br)$(br)Tamed monster can also help you with farming crops. Upon setting them into farming mode they will tend the crops in a certain radius around the initial position. " +
                 "The nearest inventory block will also be bound to their action and they will deposit harvested crops into that inventory and if seeds are in it they can also plant them.");
-        this.add("runecraftory.patchouli.entry.entities.6", "Using a command stick you can configure both the area and the inventory for the entity.");
+        this.add("runecraftory.patchouli.entry.entities.6", "Using a pet inspector you can see the stats for your monster and configure additional things like area of actions and inventory for the entity. " +
+                "Right clicking a block while e.g. configuring the home position will set the home position to that place.");
 
         this.add("runecraftory.patchouli.category.farming", "Agriculture");
         this.add("runecraftory.patchouli.category.farming.desc", "An overview and guide about the agricultural aspects");

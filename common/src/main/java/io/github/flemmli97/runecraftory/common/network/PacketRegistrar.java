@@ -15,6 +15,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, C2SRideJump.ID, C2SRideJump.class, C2SRideJump::write, C2SRideJump::read, C2SRideJump::handle);
         register.registerMessage(id++, C2SSpellKey.ID, C2SSpellKey.class, C2SSpellKey::write, C2SSpellKey::read, C2SSpellKey::handle);
         register.registerMessage(id++, C2SUpdateCraftingScreen.ID, C2SUpdateCraftingScreen.class, C2SUpdateCraftingScreen::write, C2SUpdateCraftingScreen::read, C2SUpdateCraftingScreen::handle);
+        register.registerMessage(id++, C2SSetMonsterBehaviour.ID, C2SSetMonsterBehaviour.class, C2SSetMonsterBehaviour::write, C2SSetMonsterBehaviour::read, C2SSetMonsterBehaviour::handle);
         return id;
     }
 
@@ -36,6 +37,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CRunePoints.ID, S2CRunePoints.class, S2CRunePoints::write, S2CRunePoints::read, S2CRunePoints::handle);
         register.registerMessage(id++, S2CSkillLevelPkt.ID, S2CSkillLevelPkt.class, S2CSkillLevelPkt::write, S2CSkillLevelPkt::read, S2CSkillLevelPkt::handle);
         register.registerMessage(id++, S2CRuneyWeatherData.ID, S2CRuneyWeatherData.class, S2CRuneyWeatherData::write, S2CRuneyWeatherData::read, S2CRuneyWeatherData::handle);
+        register.registerMessage(id++, S2COpenCompanionGui.ID, S2COpenCompanionGui.class, S2COpenCompanionGui::write, S2COpenCompanionGui::read, S2COpenCompanionGui::handle);
         return id;
     }
 

@@ -20,6 +20,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CPlayerStats;
 import io.github.flemmli97.runecraftory.common.network.S2CRunePoints;
 import io.github.flemmli97.runecraftory.common.network.S2CSkillLevelPkt;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -28,6 +29,7 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -100,6 +102,8 @@ public class PlayerData {
     private final PlayerWeaponHandler weaponHandler = new PlayerWeaponHandler();
 
     private final WalkingTracker walkingTracker = new WalkingTracker();
+
+    public final EntitySelector entitySelector = new EntitySelector();
 
     public PlayerData() {
         for (EnumSkills skill : EnumSkills.values()) {
@@ -644,6 +648,19 @@ public class PlayerData {
             this.updater.tick(serverPlayer);
             if (serverPlayer.tickCount % 10 == 0)
                 this.walkingTracker.tickWalkingTracker(serverPlayer);
+            ItemStack main = player.getMainHandItem();
+            ItemStack off = player.getOffhandItem();
+            if (main.is(ModItems.inspector.get()) || off.is(ModItems.inspector.get())) {
+                if (this.entitySelector.poi != null) {
+                    serverPlayer.getLevel().sendParticles(serverPlayer, ParticleTypes.FLAME, true,
+                            this.entitySelector.poi.getX() + 0.5, this.entitySelector.poi.getY() + 1.5, this.entitySelector.poi.getZ() + 0.5,
+                            1, 0, 0, 0, 0);
+                    serverPlayer.getLevel().sendParticles(serverPlayer, ParticleTypes.FLAME, true,
+                            this.entitySelector.poi.getX() + 0.5, this.entitySelector.poi.getY() + 1.5, this.entitySelector.poi.getZ() + 0.5,
+                            3, 0, 0, 0, 0.01);
+                }
+            } else
+                this.entitySelector.reset();
         }
         this.getInv().update(player);
         this.foodDuration = Math.max(--this.foodDuration, -1);

@@ -1,10 +1,13 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
+import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import net.minecraft.world.item.ItemStack;
 
 public interface IBaseMob {
 
-    int level();
+    LevelExpPair level();
+
+    int friendPoints();
 
     void setLevel(int level);
 

@@ -5,6 +5,7 @@ import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -87,6 +88,11 @@ public class ModTags {
     public static final TagKey<Block> sickleEffective = blockCommon("mineable/sickle");
 
     public static final TagKey<Block> ENDSTONES = blockCommon("end_stones");
+
+    //Entities
+    public static final TagKey<EntityType<?>> monsters = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "monsters"));
+    public static final TagKey<EntityType<?>> bossMonsters = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "boss_monsters"));
+
 
     //BIOME Tags via forges BiomeDictionary
     public static final TagKey<Biome> IS_HOT = biomeCommon("is_hot");

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -24,12 +25,15 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
 
     @Override
     protected void addTags() {
-        var heldBuilder = this.tag(held);
-        var useBuilder = this.tag(use);
         for (RegistryEntrySupplier<EntityType<?>> type : ModEntities.getMonsters()) {
-            heldBuilder.add(type.get());
-            useBuilder.add(type.get());
+            this.tag(held).add(type.get());
+            this.tag(use).add(type.get());
+            this.tag(ModTags.monsters).add(type.get());
         }
+        this.tag(ModTags.bossMonsters)
+                .add(ModEntities.ambrosia.get())
+                .add(ModEntities.thunderbolt.get())
+                .add(ModEntities.marionetta.get());
     }
 
     @Override

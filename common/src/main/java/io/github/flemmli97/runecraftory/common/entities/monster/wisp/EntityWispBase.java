@@ -28,8 +28,9 @@ public abstract class EntityWispBase extends BaseMonster {
 
     public static final AnimatedAction attackFar = new AnimatedAction(15, 6, "attack");
     public static final AnimatedAction attackClose = new AnimatedAction(15, 10, "attack");
+    public static final AnimatedAction interact = AnimatedAction.copyOf(attackFar, "interact");
     public static final AnimatedAction vanish = new AnimatedAction(100, 50, "vanish");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{attackFar, attackClose, vanish};
+    private static final AnimatedAction[] anims = new AnimatedAction[]{attackFar, attackClose, interact, vanish};
     public final WispAttackGoal<EntityWispBase> attack = new WispAttackGoal<>(this, 36);
     private boolean vanishNext;
 
@@ -195,5 +196,10 @@ public abstract class EntityWispBase extends BaseMonster {
     @Override
     public MobType getMobType() {
         return MobType.UNDEAD;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(interact);
     }
 }
