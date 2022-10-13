@@ -39,6 +39,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
+import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -105,6 +106,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private static final EntityDataAccessor<Byte> moveFlags = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Integer> behaviourData = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> playDeathState = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> friendPointsSync = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
 
     private static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
     private static final UUID foodUUID = UUID.fromString("87A55C28-8C8C-4BFF-AF5F-9972A38CCD9D");
@@ -324,6 +326,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.entityData.define(moveFlags, (byte) 0);
         this.entityData.define(behaviourData, 0);
         this.entityData.define(playDeathState, false);
+        this.entityData.define(friendPointsSync, 1);
     }
 
     @Override
@@ -425,7 +428,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.entityData.set(mobLevel, compound.getInt("MobLevel"));
+        this.levelPair.read(compound.getCompound("MobLevel"));
+        this.entityData.set(mobLevel, this.levelPair.getLevel());
+        this.entityData.set(levelXP, this.levelPair.getXp());
         if (compound.contains("Owner"))
             this.entityData.set(owner, Optional.of(compound.getUUID("Owner")));
         try {
@@ -440,6 +445,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.dead = compound.getBoolean("Out");
         this.foodBuffTick = compound.getInt("FoodBuffTick");
         this.friendlyPoints.read(compound.getCompound("FriendlyPoints"));
+        this.entityData.set(friendPointsSync, this.friendlyPoints.getLevel());
         this.updater.read(compound.getCompound("DailyUpdater"));
         this.setPlayDeath(compound.getBoolean("PlayDeath"));
         if (compound.contains("SeedInventory")) {
@@ -514,85 +520,58 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (this.level.isClientSide)
             return InteractionResult.PASS;
-        if (this.isTamed() && !this.getOwnerUUID().equals(player.getUUID())) {
-            player.sendMessage(new TranslatableComponent("monster.interact.notowner"), Util.NIL_UUID);
-            return InteractionResult.CONSUME;
-        }
         ItemStack stack = player.getItemInHand(hand);
-        if (hand == InteractionHand.MAIN_HAND) {
-            if (stack.isEmpty() && player.getUUID().equals(this.getOwnerUUID())) {
-                if (!this.playDeath()) {
+        if (this.isTamed()) {
+            if (!player.getUUID().equals(this.getOwnerUUID())) {
+                player.sendMessage(new TranslatableComponent("monster.interact.notowner"), Util.NIL_UUID);
+                return InteractionResult.CONSUME;
+            }
+            if (stack.isEmpty()) {
+                if (hand == InteractionHand.MAIN_HAND && !this.playDeath()) {
                     if (player.isShiftKeyDown()) {
                         this.setBehaviour(this.behaviourState().next());
                         if (player instanceof ServerPlayer serverPlayer)
-                            serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.5f, 0.4f));
+                            serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.4f, 0.4f));
                         player.sendMessage(new TranslatableComponent(this.behaviourState().interactKey), Util.NIL_UUID);
-                        return InteractionResult.SUCCESS;
+                        return InteractionResult.CONSUME;
                     } else if (this.ridable() && this.behaviourState() != Behaviour.FARM) {
                         player.startRiding(this);
-                        return InteractionResult.SUCCESS;
-                    }
-                }
-            }
-        }
-        if (player.isShiftKeyDown() && !stack.isEmpty()) {
-            if (!this.isTamed()) {
-                if (stack.getItem() == ModItems.tame.get()) {
-                    this.tameEntity(player);
-                    return InteractionResult.CONSUME;
-                } else {
-                    if (this.tamingTick == -1 && this.isAlive()) {
-                        if (stack.getItem() == ModItems.brush.get()) {
-                            if (player instanceof ServerPlayer serverPlayer)
-                                serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                            this.brushCount++;
-                            if (this.brushCount > 10)
-                                this.brushCount = 10;
-                            this.tamingTick = 40;
-                            this.level.broadcastEntityEvent(this, (byte) 64);
-                            return InteractionResult.CONSUME;
-                        }
-                        if (player instanceof ServerPlayer serverPlayer)
-                            serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                        float rightItemMultiplier = this.tamingMultiplier(stack);
-                        int count = stack.getCount();
-                        this.applyFoodEffect(stack);
-                        if (count == stack.getCount() && !player.isCreative())
-                            stack.shrink(1);
-                        this.tamingTick = 100;
-                        float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier) * (1 + this.brushCount * 0.05f);
-                        this.delayedTaming = () -> {
-                            if (chance == 0)
-                                this.level.broadcastEntityEvent(this, (byte) 34);
-                            else if (this.random.nextFloat() < chance) {
-                                this.tameEntity(player);
-                            } else {
-                                this.level.broadcastEntityEvent(this, (byte) 11);
-                            }
-                        };
                         return InteractionResult.CONSUME;
                     }
                 }
-            } else {
+                return InteractionResult.PASS;
+            }
+            if (stack.getItem() == ModItems.inspector.get() && hand == InteractionHand.MAIN_HAND) {
+                if (player instanceof ServerPlayer serverPlayer) {
+                    Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this), serverPlayer);
+                    serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(this.getId(), ((AttributeMapAccessor) this.getAttributes())
+                            .getAttributes().values()));
+                }
+                return InteractionResult.CONSUME;
+            } else if (stack.getItem() == ModItems.brush.get()) {
+                int day = WorldUtils.day(this.level);
+                if (this.updater.getLastUpdateBrush() == day)
+                    return InteractionResult.PASS;
+                if (player instanceof ServerPlayer serverPlayer)
+                    serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+                this.updater.setLastUpdateBrush(day);
+                this.increaseFriendPoints(15);
+                this.level.broadcastEntityEvent(this, (byte) 64);
+                player.swing(hand);
+                return InteractionResult.CONSUME;
+            }
+            if (player.isShiftKeyDown()) {
                 if (stack.getItem() == Items.STICK) {
                     if (player instanceof ServerPlayer serverPlayer)
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 1, 1));
                     this.untameEntity();
                     return InteractionResult.CONSUME;
-                } else if (stack.getItem() == ModItems.inspector.get()) {
-                    if (player instanceof ServerPlayer serverPlayer)
-                        Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this), serverPlayer);
-                } else if (stack.getItem() == ModItems.brush.get()) {
-                    int day = WorldUtils.day(this.level);
-                    if (this.updater.getLastUpdateBrush() == day)
-                        return InteractionResult.PASS;
-                    if (player instanceof ServerPlayer serverPlayer)
-                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                    this.updater.setLastUpdateBrush(day);
-                    this.increaseFriendPoints(15);
-                    this.level.broadcastEntityEvent(this, (byte) 64);
                 } else if (this.feedTimeOut <= 0) {
                     boolean favorite = this.tamingItem().match(stack);
+                    ItemStack stack1 = null;
+                    //The item will get consumed even if player is in creative so we add it back
+                    if (player.isCreative())
+                        stack1 = stack.copy();
                     if (this.applyFoodEffect(stack)) {
                         if (player instanceof ServerPlayer serverPlayer) {
                             serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
@@ -607,11 +586,50 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         this.feedTimeOut = 20;
                         int day = WorldUtils.day(this.level);
                         if (this.updater.getLastUpdateFood() != day) {
-                            this.updater.setLastUpdateBrush(day);
+                            this.updater.setLastUpdateFood(day);
                             this.increaseFriendPoints(favorite ? 50 : 35);
                         }
+                        if (stack1 != null)
+                            player.setItemInHand(hand, stack1);
                         return InteractionResult.CONSUME;
                     }
+                }
+            }
+        } else if (player.isShiftKeyDown() && !stack.isEmpty()) {
+            if (stack.getItem() == ModItems.tame.get()) {
+                this.tameEntity(player);
+                return InteractionResult.CONSUME;
+            } else {
+                if (this.tamingTick == -1 && this.isAlive()) {
+                    if (stack.getItem() == ModItems.brush.get()) {
+                        if (player instanceof ServerPlayer serverPlayer)
+                            serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+                        this.brushCount++;
+                        if (this.brushCount > 10)
+                            this.brushCount = 10;
+                        this.tamingTick = 40;
+                        this.level.broadcastEntityEvent(this, (byte) 64);
+                        return InteractionResult.CONSUME;
+                    }
+                    if (player instanceof ServerPlayer serverPlayer)
+                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+                    float rightItemMultiplier = this.tamingMultiplier(stack);
+                    int count = stack.getCount();
+                    this.applyFoodEffect(stack);
+                    if (count == stack.getCount() && !player.isCreative())
+                        stack.shrink(1);
+                    this.tamingTick = 100;
+                    float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier) * (1 + this.brushCount * 0.05f);
+                    this.delayedTaming = () -> {
+                        if (chance == 0)
+                            this.level.broadcastEntityEvent(this, (byte) 34);
+                        else if (this.random.nextFloat() < chance) {
+                            this.tameEntity(player);
+                        } else {
+                            this.level.broadcastEntityEvent(this, (byte) 11);
+                        }
+                    };
+                    return InteractionResult.CONSUME;
                 }
             }
         }
@@ -619,8 +637,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void increaseFriendPoints(int xp) {
-        this.friendlyPoints.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> {
-        });
+        this.friendlyPoints.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> this.entityData.set(friendPointsSync, this.friendlyPoints.getLevel()));
     }
 
     @Override
@@ -754,19 +771,20 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public boolean applyFoodEffect(ItemStack stack) {
         if (this.level.isClientSide)
             return false;
-        this.eat(this.level, stack);
         if (stack.getItem() == ModItems.objectX.get())
             ItemObjectX.applyEffect(this, stack);
         this.removeFoodEffect();
         FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
         if (food == null) {
             net.minecraft.world.food.FoodProperties mcFood = stack.getItem().getFoodProperties();
+            this.eat(this.level, stack);
             if (mcFood != null) {
                 this.heal(mcFood.getNutrition() * 0.5f);
                 return true;
             }
             return false;
         }
+        this.eat(this.level, stack);
         for (Map.Entry<Attribute, Double> entry : food.effectsMultiplier().entrySet()) {
             AttributeInstance inst = this.getAttribute(entry.getKey());
             if (inst == null)
@@ -842,7 +860,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public int friendPoints() {
-        return this.friendlyPoints.getLevel();
+        return this.entityData.get(friendPointsSync);
     }
 
     //=====Damage Logic

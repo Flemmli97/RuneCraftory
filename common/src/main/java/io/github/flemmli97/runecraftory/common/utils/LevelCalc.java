@@ -46,7 +46,7 @@ public class LevelCalc {
         if (levelXPTotal == null || levelXPTotal.length < level) {
             int len = 100;
             if (levelXPTotal != null) {
-                len = levelXPTotal.length + 50;
+                len = level + 50;
             }
             levelXPTotal = new long[len];
             levelXPTotal[0] = 50;
@@ -72,25 +72,25 @@ public class LevelCalc {
             return 0;
         long[] xps = switch (skill.gainType) {
             case COMMON -> (commonSkillXP == null || commonSkillXP.length < level) ?
-                    commonSkillXP = calcSkillXPs(commonSkillXP, 30, (l, prev) -> (long) (prev + 100 + 9 * Math.pow(l, 2.555) - 12 * Math.pow(l, 2.249) + l * 21))
+                    commonSkillXP = calcSkillXPs(commonSkillXP, level, 30, (l, prev) -> (long) (prev + 100 + 9 * Math.pow(l, 2.555) - 12 * Math.pow(l, 2.249) + l * 21))
                     : commonSkillXP;
             case SLOW -> (slowSkillXP == null || slowSkillXP.length < level) ?
-                    slowSkillXP = calcSkillXPs(slowSkillXP, 10, (l, prev) -> prev + 50 + l * 35 + (int) (Math.pow(l, 2.35) * 0.1) * 10)
+                    slowSkillXP = calcSkillXPs(slowSkillXP, level, 10, (l, prev) -> prev + 50 + l * 35 + (int) (Math.pow(l, 2.35) * 0.1) * 10)
                     : slowSkillXP;
             case MEDIUM -> (mediumSkillXP == null || mediumSkillXP.length < level) ?
-                    mediumSkillXP = calcSkillXPs(mediumSkillXP, 50, (l, prev) -> prev + 40 + l * 15 + (int) (Math.pow(l, 2) * 0.1) * 10)
+                    mediumSkillXP = calcSkillXPs(mediumSkillXP, level, 50, (l, prev) -> prev + 40 + l * 15 + (int) (Math.pow(l, 2) * 0.1) * 10)
                     : mediumSkillXP;
             case FAST -> (fastSkillXP == null || fastSkillXP.length < level) ?
-                    fastSkillXP = calcSkillXPs(fastSkillXP, 60, (l, prev) -> prev + 40 + l * 20 + (int) (Math.pow(l, 1.85) * 0.1) * 10)
+                    fastSkillXP = calcSkillXPs(fastSkillXP, level, 60, (l, prev) -> prev + 40 + l * 20 + (int) (Math.pow(l, 1.85) * 0.1) * 10)
                     : fastSkillXP;
         };
         return xps[level - 1];
     }
 
-    private static long[] calcSkillXPs(long[] current, int base, BiFunction<Integer, Long, Long> levelXP) {
+    private static long[] calcSkillXPs(long[] current, int level, int base, BiFunction<Integer, Long, Long> levelXP) {
         int len = 100;
         if (current != null) {
-            len = current.length + 50;
+            len = level + 50;
         }
         long[] xps = new long[len];
         xps[0] = base;
@@ -107,7 +107,7 @@ public class LevelCalc {
             return 1;
         if (level >= 10)
             return 0;
-        return (int) (totalFriendPointsForLevel(level + 1) - totalFriendPointsForLevel(level));
+        return (int) (totalFriendPointsForLevel(level) - totalFriendPointsForLevel(level - 1));
     }
 
     public static long totalFriendPointsForLevel(int level) {
@@ -115,10 +115,10 @@ public class LevelCalc {
             return 0;
         if (friendXPTotal == null) {
             friendXPTotal = new long[10];
-            friendXPTotal[0] = 100;
+            friendXPTotal[0] = 30;
             long prev = friendXPTotal[0];
             for (int l = 1; l < 10; l++) {
-                friendXPTotal[l] = prev + 20 + l * 15;
+                friendXPTotal[l] = prev + 45 + l * 5 + l * l * 10;
                 prev = friendXPTotal[l];
             }
         }

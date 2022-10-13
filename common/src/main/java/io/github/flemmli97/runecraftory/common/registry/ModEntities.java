@@ -354,20 +354,20 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> ambrosia = regMonster(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), LibEntities.ambrosia,
             0x00ff00, 0xe600e6,
             new EntityProperties.Builder()
-                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 210).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 13)
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 210).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 18)
                     .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 10).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 4.1)
-                    .putAttributes(LibAttributes.rf_defence, 3).putLevelGains(LibAttributes.rf_defence, 4.2)
+                    .putAttributes(LibAttributes.rf_defence, 3).putLevelGains(LibAttributes.rf_defence, 4.1)
                     .putAttributes(LibAttributes.rf_magic, 14).putLevelGains(LibAttributes.rf_magic, 5.1)
-                    .putAttributes(LibAttributes.rf_magic_defence, 3).putLevelGains(LibAttributes.rf_magic_defence, 4.3)
+                    .putAttributes(LibAttributes.rf_magic_defence, 3).putLevelGains(LibAttributes.rf_magic_defence, 4.2)
                     .putAttributes(LibAttributes.rf_res_earth, 25)
                     .setTamingItem(new ItemTagWrapper(ModItems.toyherbGiant.getID().toString(), 1))
                     .xp(100).money(50).tamingChance(0.008f).setRidable().setFlying().build());
     public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> thunderbolt = regMonster(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), LibEntities.thunderbolt,
             0x212121, 0x2f1177,
             new EntityProperties.Builder()
-                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 250).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 14)
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 250).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 21)
                     .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 16).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 5.15)
-                    .putAttributes(LibAttributes.rf_defence, 4).putLevelGains(LibAttributes.rf_defence, 4.1)
+                    .putAttributes(LibAttributes.rf_defence, 4).putLevelGains(LibAttributes.rf_defence, 4)
                     .putAttributes(LibAttributes.rf_magic, 13).putLevelGains(LibAttributes.rf_magic, 4.7)
                     .putAttributes(LibAttributes.rf_magic_defence, 2).putLevelGains(LibAttributes.rf_magic_defence, 4)
                     .putAttributes(LibAttributes.rf_res_wind, 25)
@@ -376,11 +376,11 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> marionetta = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.5f).clientTrackingRange(8), LibEntities.marionetta,
             0xb86b13, 0xd8d7d7,
             new EntityProperties.Builder()
-                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 300).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 13.5)
+                    .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 300).putLevelGains(LibAttributes.GENERIC_MAX_HEALTH, 20.5)
                     .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 18).putLevelGains(LibAttributes.GENERIC_ATTACK_DAMAGE, 5.2)
-                    .putAttributes(LibAttributes.rf_defence, 5).putLevelGains(LibAttributes.rf_defence, 4.2)
+                    .putAttributes(LibAttributes.rf_defence, 5).putLevelGains(LibAttributes.rf_defence, 4.1)
                     .putAttributes(LibAttributes.rf_magic, 13.3).putLevelGains(LibAttributes.rf_magic, 4.5)
-                    .putAttributes(LibAttributes.rf_magic_defence, 3.9).putLevelGains(LibAttributes.rf_magic_defence, 3.95)
+                    .putAttributes(LibAttributes.rf_magic_defence, 3.9).putLevelGains(LibAttributes.rf_magic_defence, 3.85)
                     .putAttributes(LibAttributes.rf_res_dark, 25)
                     .setTamingItem(new ItemTagWrapper(ModTags.marionettaTamer, 1))
                     .xp(145).money(75).tamingChance(0.008f).setRidable().build());
