@@ -39,6 +39,8 @@ public class CraftingUtils {
         if (!GeneralConfig.useRP)
             return 0;
         return DataPackHandler.getStats(ingredient.getItem()).map(stat -> {
+            if (stat.getDiff() <= 0)
+                return -1;
             if (onlyIngredient || !stack.isEmpty()) {
                 int skillLevel = type == EnumCrafting.FORGE ? data.getSkillLevel(EnumSkills.FORGING).getLevel() : data.getSkillLevel(EnumSkills.CRAFTING).getLevel();
                 int result;

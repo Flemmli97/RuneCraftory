@@ -378,6 +378,10 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 89)
                 .addAttribute(ModAttributes.RF_MAGIC.get(), 98));
 
+        this.addStat(ModItems.inspector.get(), new ItemStat.MutableItemStat(1500, 300, 0));
+        this.addStat(ModItems.brush.get(), new ItemStat.MutableItemStat(1500, 300, 0));
+        this.addStat(ModItems.glass.get(), new ItemStat.MutableItemStat(2000, 400, 1));
+
         this.addStat(ModItems.cheapBracelet.get(), new ItemStat.MutableItemStat(120, 21, 0)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1.5));
         this.addStat(ModItems.bronzeBracelet.get(), new ItemStat.MutableItemStat(850, 38, 0)

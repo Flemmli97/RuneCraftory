@@ -20,11 +20,12 @@ import java.util.Random;
 
 public class CropBlockEntity extends BlockEntity {
 
-    private boolean isGiant = false;
+    private float giantProgress = 0;
     private float age;
-    private long lastGrowth = 0;
-    private float cropLvl;
+    private float cropLvl = 1;
     private boolean wilted;
+
+    private long lastGrowth = 0;
     private BlockPos[] nearbyGiant;
 
     public CropBlockEntity(BlockPos blockPos, BlockState blockState) {
@@ -33,6 +34,13 @@ public class CropBlockEntity extends BlockEntity {
 
     public int age() {
         return (int) this.age;
+    }
+
+    public int growthPercent() {
+        if (this.getBlockState().getBlock() instanceof BlockCrop crop) {
+            return crop.properties().map(p -> Math.min((int) (this.age / p.growth() * 100), 100)).orElse(0);
+        }
+        return 0;
     }
 
     public void resetAge() {
@@ -51,7 +59,11 @@ public class CropBlockEntity extends BlockEntity {
     }
 
     public boolean isGiant() {
-        return this.isGiant;
+        return this.giantProgress >= 1;
+    }
+
+    public int giantProgress() {
+        return Math.min((int) (this.giantProgress * 100), 100);
     }
 
     public void increaseLevel(float amount) {
@@ -122,7 +134,7 @@ public class CropBlockEntity extends BlockEntity {
     public void load(CompoundTag nbt) {
         super.load(nbt);
         this.age = nbt.getFloat("Age");
-        this.isGiant = nbt.getBoolean("Giant");
+        this.giantProgress = nbt.getFloat("Giant");
         this.cropLvl = nbt.getFloat("Level");
         this.wilted = nbt.getBoolean("Wilted");
         this.updateState();
@@ -132,7 +144,7 @@ public class CropBlockEntity extends BlockEntity {
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
         nbt.putFloat("Age", this.age);
-        nbt.putBoolean("Giant", this.isGiant);
+        nbt.putFloat("Giant", this.giantProgress);
         nbt.putFloat("Level", this.cropLvl);
         nbt.putBoolean("Wilted", this.wilted);
     }

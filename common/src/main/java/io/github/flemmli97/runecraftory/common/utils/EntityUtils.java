@@ -13,6 +13,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -34,6 +35,12 @@ public class EntityUtils {
 
     public static boolean sealed(LivingEntity entity) {
         return entity.hasEffect(ModEffects.seal.get());
+    }
+
+    public static boolean shouldShowFarmlandView(LivingEntity entity) {
+        ItemStack main = entity.getMainHandItem();
+        ItemStack off = entity.getOffhandItem();
+        return ItemNBT.canBeUsedAsMagnifyingGlass(main) || ItemNBT.canBeUsedAsMagnifyingGlass(off);
     }
 
     public static void foodHealing(LivingEntity entity, float amount) {
@@ -64,7 +71,7 @@ public class EntityUtils {
         if (multiplier == 0)
             return 0;
         int lvl = Platform.INSTANCE.getPlayerData(player).map(d -> d.getPlayerLevel().getLevel()).orElse(1) + 1;
-        float lvlPenalty = (float) Math.pow(0.89, Math.max(0, monster.level() - lvl));
+        float lvlPenalty = (float) Math.pow(0.89, Math.max(0, monster.level().getLevel() - lvl));
         return monster.tamingChance() * multiplier * GeneralConfig.tamingMultiplier * lvlPenalty;
     }
 
@@ -95,12 +102,12 @@ public class EntityUtils {
     public static void tieredTreasureChest(GateEntity spawner, EntityTreasureChest chest) {
         int max = 0;
         for (WeightedChestTier tier : CHEST_TIERS) {
-            max += tier.getModifiedWeight(spawner.level());
+            max += tier.getModifiedWeight(spawner.level().getLevel());
         }
 
         int rand = spawner.getRandom().nextInt(max);
         for (WeightedChestTier tier : CHEST_TIERS) {
-            if ((rand -= tier.getModifiedWeight(spawner.level())) >= 0) continue;
+            if ((rand -= tier.getModifiedWeight(spawner.level().getLevel())) >= 0) continue;
             chest.setTier(tier.tier);
         }
     }

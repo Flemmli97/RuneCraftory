@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.client;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
+import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.InfoScreen;
 import io.github.flemmli97.runecraftory.client.gui.InfoSubScreen;
 import io.github.flemmli97.runecraftory.client.gui.MaxChestScreen;
@@ -131,6 +132,7 @@ public class ClientRegister {
     public static void init() {
         ClientHandlers.overlay = new OverlayGui(Minecraft.getInstance());
         ClientHandlers.spellDisplay = new SpellInvOverlayGui(Minecraft.getInstance());
+        ClientHandlers.farmDisplay = new FarmlandInfo(Minecraft.getInstance());
     }
 
     public static void registerKeyBinding(Consumer<KeyMapping> consumer) {

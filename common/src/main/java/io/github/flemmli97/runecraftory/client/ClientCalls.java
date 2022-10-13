@@ -88,6 +88,8 @@ public class ClientCalls {
             ClientHandlers.overlay.renderBar(stack);
         if (ClientHandlers.spellDisplay != null && ClientConfig.inventoryButton)
             ClientHandlers.spellDisplay.render(stack, partialTicks);
+        if (ClientHandlers.farmDisplay != null)
+            ClientHandlers.farmDisplay.render(stack);
     }
 
     public static void tooltipEvent(ItemStack stack, List<Component> tooltip) {

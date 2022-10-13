@@ -59,7 +59,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
         if (this.menu.rpCost() >= 0) {
             int rpMax = data != null ? data.getMaxRunePoints() : 0;
             MutableComponent cost = new TextComponent("" + this.menu.rpCost());
-            if (rpMax < this.menu.rpCost()) {
+            if (rpMax < this.menu.rpCost() && !this.minecraft.player.isCreative()) {
                 cost = new TranslatableComponent("crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
             }
             OverlayGui.drawStringCenter(stack, this.font, cost, this.leftPos + 123, this.topPos + 20, 0);

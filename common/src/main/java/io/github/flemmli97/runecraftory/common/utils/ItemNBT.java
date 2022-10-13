@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -139,6 +140,8 @@ public class ItemNBT {
             upgradeItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
             upgrades.add(upgradeItem);
             tag.put(LibNBT.Upgrades, upgrades);
+            if (stackToAdd.getItem() == ModItems.glass.get() && stack.getItem() instanceof IItemUsable)
+                tag.putBoolean("MagnifyingGlass", true);
             if (!shouldHaveStats(stackToAdd)) {
                 float effRes = efficiency;
                 DataPackHandler.getStats(stackToAdd.getItem()).ifPresent(stat -> {
@@ -236,5 +239,15 @@ public class ItemNBT {
         EquipmentSlot slotType;
         return stack.getItem() instanceof IItemUsable
                 || ((slotType = Mob.getEquipmentSlotForItem(stack)) != null && slotType != EquipmentSlot.MAINHAND);
+    }
+
+    public static boolean canBeUsedAsMagnifyingGlass(ItemStack stack) {
+        if (stack.getItem() == ModItems.glass.get())
+            return true;
+        if (stack.hasTag()) {
+            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
+            return tag.getBoolean("MagnifyingGlass");
+        }
+        return false;
     }
 }

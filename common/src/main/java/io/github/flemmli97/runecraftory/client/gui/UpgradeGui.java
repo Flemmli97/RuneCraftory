@@ -43,7 +43,7 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
             int rpMax = data != null ? data.getMaxRunePoints() : 0;
             MutableComponent cost = new TextComponent("" + this.menu.rpCost());
             int yOffset = 0;
-            if (rpMax < this.menu.rpCost()) {
+            if (rpMax < this.menu.rpCost() && !this.minecraft.player.isCreative()) {
                 cost = new TranslatableComponent("crafting.rpMax.missing").withStyle(ChatFormatting.DARK_RED);
                 yOffset = -25;
             }

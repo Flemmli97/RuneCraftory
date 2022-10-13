@@ -11,8 +11,12 @@ import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -20,13 +24,16 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
 
+    //Stats
     private float growthMultiplier = 1;
-    private boolean growGiant;
+    private float giantBonus;
     private int health = 32;
     private float farmLevel;
+
     private int lastUpdateDay;
     //Used for other crops not from this mod
     private float age;
@@ -49,37 +56,65 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
         return this.growthMultiplier;
     }
 
-    public boolean growGiant() {
-        return this.growGiant;
+    public float giantBonus() {
+        return this.giantBonus;
     }
 
     public void applyGrowthFertilizer(float amount) {
-        this.growthMultiplier = Math.min(5, this.growthMultiplier + amount);
-        this.setChanged();
+        this.applyGrowthFertilizer(amount, true);
     }
 
-    public void applyLevelFertilizer(float amount) {
-        this.farmLevel = Math.min(2, (this.farmLevel + amount));
-        this.setChanged();
+    private void applyGrowthFertilizer(float amount, boolean blockUpdate) {
+        this.growthMultiplier = Mth.clamp(this.growthMultiplier + amount, 0.1f, 5);
+        if (blockUpdate) {
+            this.setChanged();
+            this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     public boolean canUseBonemeal() {
-        return this.growthMultiplier < 2.45;
+        return this.growthMultiplier < 2.35;
     }
 
     public void applyBonemeal() {
-        if (this.growthMultiplier < 2.45)
+        if (this.growthMultiplier < 2.35)
             this.applyGrowthFertilizer(0.15f);
     }
 
+    public void applyLevelFertilizer(float amount) {
+        this.applyLevelFertilizer(amount, true);
+    }
+
+    private void applyLevelFertilizer(float amount, boolean blockUpdate) {
+        this.farmLevel = Mth.clamp(this.farmLevel + amount, 0, 2);
+        if (blockUpdate) {
+            this.setChanged();
+            this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
+        }
+    }
+
     public void applyHealth(int amount) {
-        this.health = Math.min(255, this.health + amount);
-        this.setChanged();
+        this.applyHealth(amount, true);
+    }
+
+    private void applyHealth(int amount, boolean blockUpdate) {
+        this.health = Mth.clamp(this.health + amount, 0, 255);
+        if (blockUpdate) {
+            this.setChanged();
+            this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     public void applySizeFertilizer(boolean growGiant) {
-        this.growGiant = growGiant;
-        this.setChanged();
+        this.applySizeFertilizer((growGiant ? 1 : -1), true);
+    }
+
+    private void applySizeFertilizer(float giantMod, boolean blockUpdate) {
+        this.giantBonus = Mth.clamp(this.giantBonus + giantMod, -2, 2);
+        if (blockUpdate) {
+            this.setChanged();
+            this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
+        }
     }
 
     public void onStorming() {
@@ -110,6 +145,12 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
         BlockPos cropPos = this.worldPosition.above();
         BlockState cropState = level.getBlockState(cropPos);
         boolean vanilla = cropState.getBlock() instanceof CropBlock;
+        if (!vanilla && !(cropState.getBlock() instanceof BlockCrop)) {
+            if (isWet)
+                level.setBlockAndUpdate(this.worldPosition, this.getBlockState().setValue(FarmBlock.MOISTURE, 0));
+            this.regenFarmlandStats();
+            return;
+        }
         if (!vanilla || ((CropBlock) cropState.getBlock()).isMaxAge(cropState)) {
             this.age = 0;
             if (vanilla)
@@ -121,12 +162,13 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
             if (cropState.getBlock() instanceof BlockCrop crop) {
                 //Let the crop tile entity handle growth
                 CropBlockEntity tile = (CropBlockEntity) level.getBlockEntity(cropPos);
-                float season = crop.properties().map(p -> p.seasonMultiplier(WorldHandler.get(level.getServer()).currentSeason())).orElse(1f);
-                float runeyBonus = WorldHandler.get(level.getServer()).currentWeather() == EnumWeather.RUNEY ? 7 : 1;
-                if (!tile.isFullyGrown(crop))
+                if (!tile.isFullyGrown(crop)) {
+                    float season = crop.properties().map(p -> p.seasonMultiplier(WorldHandler.get(level.getServer()).currentSeason())).orElse(1f);
+                    float runeyBonus = WorldHandler.get(level.getServer()).currentWeather() == EnumWeather.RUNEY ? 5 : 1;
                     tile.growCrop(level, cropPos, cropState, this.growthMultiplier * runeyBonus, this.farmLevel, season);
-                didCropGrow = true;
-                Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
+                    didCropGrow = true;
+                    Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
+                }
             } else if (cropState.getBlock() instanceof CropBlock crop) {
                 if (crop.isMaxAge(cropState)) {
                     this.age = 0;
@@ -134,7 +176,7 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
                     CropProperties props = DataPackHandler.getCropStat(crop.asItem());
                     if (props != null) {
                         float season = props.seasonMultiplier(WorldHandler.get(level.getServer()).currentSeason());
-                        float runeyBonus = WorldHandler.get(level.getServer()).currentWeather() == EnumWeather.RUNEY ? 7 : 1;
+                        float runeyBonus = WorldHandler.get(level.getServer()).currentWeather() == EnumWeather.RUNEY ? 5 : 1;
                         float speed = this.growthMultiplier * season * runeyBonus;
                         this.age += Math.min(props.growth(), speed);
                         //The blockstates maxAge
@@ -159,15 +201,23 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
 
         if (didCropGrow) {
             if (level.random.nextInt(3) == 0) {
-                this.growthMultiplier = Math.max(this.growthMultiplier - 0.1F, 0.1F);
+                this.applyGrowthFertilizer(-0.1f, false);
             }
-            this.health = Math.max(0, --this.health);
-            this.farmLevel = Math.max(0, this.farmLevel - 0.01F);
+            if (level.random.nextInt(5) == 0)
+                this.applyHealth(-1, false);
+            this.applyLevelFertilizer(-0.05f, false);
         } else {
             if (level.random.nextInt(4) == 0) {
-                this.growthMultiplier = Math.min(this.growthMultiplier + 0.2F, 1F);
+                this.regenFarmlandStats();
             }
         }
+    }
+
+    private void regenFarmlandStats() {
+        this.growthMultiplier = Math.min(this.growthMultiplier + 0.1F, 1);
+        this.health = Math.min(32, ++this.health);
+        this.applyLevelFertilizer(-0.1f, false);
+        this.giantBonus = Mth.clamp(this.giantBonus - 0.05f, 0, 2);
     }
 
     @Override
@@ -198,7 +248,7 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
         this.growthMultiplier = nbt.getFloat("Growth");
         this.farmLevel = nbt.getFloat("Level");
         this.age = nbt.getFloat("Age");
-        this.growGiant = nbt.getBoolean("Giant");
+        this.giantBonus = nbt.getFloat("Giant");
         this.lastUpdateDay = nbt.getInt("LastUpdate");
         this.check = true;
     }
@@ -210,7 +260,7 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
         nbt.putFloat("Level", this.farmLevel);
         nbt.putFloat("Growth", this.growthMultiplier);
         nbt.putFloat("Age", this.age);
-        nbt.putBoolean("Giant", this.growGiant);
+        nbt.putFloat("Giant", this.giantBonus);
         nbt.putInt("LastUpdate", this.lastUpdateDay);
     }
 
@@ -220,5 +270,21 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
         if (this.level instanceof ServerLevel serverLevel) {
             WorldHandler.get(serverLevel.getServer()).removeFromTracker(this);
         }
+    }
+
+    @Nullable
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        CompoundTag nbt = new CompoundTag();
+        nbt.putInt("Health", this.health);
+        nbt.putFloat("Level", this.farmLevel);
+        nbt.putFloat("Growth", this.growthMultiplier);
+        nbt.putFloat("Giant", this.giantBonus);
+        return nbt;
     }
 }

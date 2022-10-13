@@ -91,13 +91,13 @@ public class WorldHandler extends SavedData {
     }
 
     public void update(ServerLevel world) {
+        if (canUpdateWeather(world, this.currentWeather())) {
+            this.updateWeatherTo(world, this.nextWeather());
+        }
         if (WorldUtils.canUpdateDaily(world)) {
             this.increaseDay(world);
             this.updateTracker.removeIf(IDailyUpdate::inValid);
             this.updateTracker.forEach(update -> update.update(world));
-        }
-        if (canUpdateWeather(world, this.currentWeather())) {
-            this.updateWeatherTo(world, this.nextWeather());
         }
     }
 

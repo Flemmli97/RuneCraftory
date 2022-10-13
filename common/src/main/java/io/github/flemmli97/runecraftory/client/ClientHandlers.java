@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.client;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
@@ -29,6 +30,8 @@ public class ClientHandlers {
 
     public static OverlayGui overlay;
     public static SpellInvOverlayGui spellDisplay;
+    public static FarmlandInfo farmDisplay;
+
     public static TriggerKeyBind spell1;
     public static TriggerKeyBind spell2;
     public static TriggerKeyBind spell3;

@@ -316,6 +316,14 @@ public class LangGen implements DataProvider {
         this.add("behaviour.inventory.seed", "Updated seed inventory position");
         this.add("behaviour.inventory.seed.invalid", "Position is too far away");
 
+        this.add("magnifying_glass.view.crop.growth", "Growth: %s");
+        this.add("magnifying_glass.view.crop.level", "Level: %s");
+        this.add("magnifying_glass.view.crop.giant", "Giant prog.: %s");
+        this.add("magnifying_glass.view.speed", "Speed: %s");
+        this.add("magnifying_glass.view.health", "Health: %s");
+        this.add("magnifying_glass.view.level", "Quality: %s");
+        this.add("magnifying_glass.view.giant", "Size: %s");
+
         this.add("runecraftory_book", "Runepedia");
         this.add("runecraftory.patchouli.subtitle", "");
         this.add("runecraftory.patchouli.landing", "WIP Guidebook for the mod");
@@ -423,7 +431,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.tools.7.title", "Fishing Rod");
         this.add("runecraftory.patchouli.entry.tools.7", "Similiar to vanilla fishing rod. Throw it into a body of water to start fishing. The body of water needs to be at least $(1)2 blocks deep and 3x3 wide$(). Higher tier fishing rods increases the speed to catch" +
                 " a fish while the more charge it has the easier it is to catch a fish.");
-        this.add("runecraftory.patchouli.entry.tools.8", "Useful to inspect the quality of the soil.");
+        this.add("runecraftory.patchouli.entry.tools.8", "Useful to inspect the quality of the soil. If used as upgrade material will pass on its function to the upgraded tool.");
         this.add("runecraftory.patchouli.entry.spellskills", "Spells and Skills");
         this.add("runecraftory.patchouli.entry.spellskills.1", "There are several spells and skills that can be found all over the world. Every spell and skill will require runepoints to use them. " +
                 "You can put both spell and skill items in the spell slots (in your inventory) and then you are able to simply press the corresponding key to cast them. " +

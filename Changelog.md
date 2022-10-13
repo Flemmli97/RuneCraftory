@@ -7,6 +7,7 @@ RuneCraftory 1.3.0
 - Teleport spell added. Teleports player to their spawn point if they arent in the same dimension or further than 10 blocks away else teleports to world spawn
 - Tamed monster now get knocked down instead of killed
 - Tamed monster can help with farming
+- Add functionality to magnifying glass and inspector
 - Fix penetrating wind blades bounce sometimes not correct
 - Ignore height for distance level calculation
 - Smooth out some animations
