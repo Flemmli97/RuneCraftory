@@ -21,8 +21,8 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
     protected static final ResourceLocation texturepath = new ResourceLocation(RuneCraftory.MODID, "textures/gui/companion_gui.png");
     protected static final ResourceLocation bars = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
 
-    private final int textureX = 189;
-    private final int textureY = 112 + 70;
+    private final int textureX = 190;
+    private final int textureY = 113 + 70;
     private final Component levelTxt = new TranslatableComponent("level");
     protected int leftPos;
     protected int topPos;

@@ -22,9 +22,9 @@ public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
         int xSize = 90;
         int y = 115;
         this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent("gui.companion.behaviour.wander"), b -> this.handlePress(C2SSetMonsterBehaviour.Type.WANDER)));
-        this.addRenderableWidget(new Button(this.leftPos + x + xSize + 5, this.topPos + y, xSize, 20, new TranslatableComponent("gui.companion.behaviour.follow"), b -> this.handlePress(C2SSetMonsterBehaviour.Type.FOLLOW)));
+        this.addRenderableWidget(new Button(this.leftPos + x + xSize + 6, this.topPos + y, xSize, 20, new TranslatableComponent("gui.companion.behaviour.follow"), b -> this.handlePress(C2SSetMonsterBehaviour.Type.FOLLOW)));
         this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y + 23, xSize, 20, new TranslatableComponent("gui.companion.behaviour.stay"), b -> this.handlePress(C2SSetMonsterBehaviour.Type.STAY)));
-        this.addRenderableWidget(new Button(this.leftPos + x + xSize + 5, this.topPos + y + 23, xSize, 20, new TranslatableComponent("gui.companion.behaviour.farm"), b -> this.handlePress(C2SSetMonsterBehaviour.Type.FARM)));
+        this.addRenderableWidget(new Button(this.leftPos + x + xSize + 6, this.topPos + y + 23, xSize, 20, new TranslatableComponent("gui.companion.behaviour.farm"), b -> this.handlePress(C2SSetMonsterBehaviour.Type.FARM)));
 
         if (this.updatedBehaviour == -1) {
             BaseMonster.Behaviour behaviour = this.entity.behaviourState();
@@ -37,7 +37,7 @@ public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
             this.addRenderableWidget(new Button(this.leftPos + x + (int) ((xSize + 5) * 0.5), this.topPos + y + 23 * 2, xSize, 20, new TranslatableComponent("gui.companion.behaviour.home"), b -> this.handlePress(C2SSetMonsterBehaviour.Type.HOME)));
         if (this.updatedBehaviour >= 2) {
             this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y + 23 * 3, xSize, 20, new TranslatableComponent("gui.companion.behaviour.inventory.harvest"), b -> this.handlePress(C2SSetMonsterBehaviour.Type.HARVESTINV)));
-            this.addRenderableWidget(new Button(this.leftPos + x + xSize + 5, this.topPos + y + 23 * 3, xSize, 20, new TranslatableComponent("gui.companion.behaviour.inventory.seed"), b -> this.handlePress(C2SSetMonsterBehaviour.Type.SEEDINV)));
+            this.addRenderableWidget(new Button(this.leftPos + x + xSize + 6, this.topPos + y + 23 * 3, xSize, 20, new TranslatableComponent("gui.companion.behaviour.inventory.seed"), b -> this.handlePress(C2SSetMonsterBehaviour.Type.SEEDINV)));
         }
     }
 
