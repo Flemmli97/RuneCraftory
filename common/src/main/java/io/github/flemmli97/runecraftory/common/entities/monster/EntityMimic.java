@@ -2,10 +2,10 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.ChargeAttackGoal;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.FollowOwnerGoalMonster;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.RiderAttackTargetGoal;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.StayGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.FollowOwnerGoalMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.RiderAttackTargetGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -63,7 +63,7 @@ public class EntityMimic extends ChargingMonster {
         this.targetSelector.addGoal(3, new RiderAttackTargetGoal(this, 15));
 
         this.goalSelector.addGoal(0, this.swimGoal);
-        this.goalSelector.addGoal(0, new StayGoal(this));
+        this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
         this.goalSelector.addGoal(3, new FollowOwnerGoalMonster(this, 1.1, 10, 3));
         this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0));
     }

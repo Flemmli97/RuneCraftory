@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.AnimatedMeleeGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedMeleeGoal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.sounds.SoundEvent;

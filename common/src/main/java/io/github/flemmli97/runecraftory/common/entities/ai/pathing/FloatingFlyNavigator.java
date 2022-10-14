@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities.monster.ai;
+package io.github.flemmli97.runecraftory.common.entities.ai.pathing;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Mob;

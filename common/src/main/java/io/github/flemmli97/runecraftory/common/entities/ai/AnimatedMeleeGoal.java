@@ -1,14 +1,16 @@
-package io.github.flemmli97.runecraftory.common.entities.monster.ai;
+package io.github.flemmli97.runecraftory.common.entities.ai;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.RandomAttackSelectorMob;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.common.entity.ai.AnimatedAttackGoal;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 
-public class AnimatedMeleeGoal<T extends BaseMonster> extends AnimatedAttackGoal<T> {
+public class AnimatedMeleeGoal<T extends PathfinderMob & IAnimated & RandomAttackSelectorMob> extends AnimatedAttackGoal<T> {
 
     protected int iddleMoveDelay, iddleMoveFlag, attackMoveDelay;
 

@@ -2,11 +2,11 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.AirWanderGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
+import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindGust;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.AirWanderGoal;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.AnimatedRangedGoal;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.FloatingFlyNavigator;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.NearestTargetHorizontal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.core.BlockPos;

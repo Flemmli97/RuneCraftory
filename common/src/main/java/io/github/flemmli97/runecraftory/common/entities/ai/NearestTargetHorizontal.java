@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities.monster.ai;
+package io.github.flemmli97.runecraftory.common.entities.ai;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -10,8 +10,8 @@ import java.util.function.Predicate;
 
 public class NearestTargetHorizontal<T extends LivingEntity> extends NearestAttackableTargetGoal<T> {
 
-    public NearestTargetHorizontal(Mob mob, Class<T> class_, int i, boolean mustSee, boolean mustReach, @Nullable Predicate<LivingEntity> predicate) {
-        super(mob, class_, i, mustSee, mustReach, predicate);
+    public NearestTargetHorizontal(Mob mob, Class<T> clss, int i, boolean mustSee, boolean mustReach, @Nullable Predicate<LivingEntity> predicate) {
+        super(mob, clss, i, mustSee, mustReach, predicate);
     }
 
     @Override

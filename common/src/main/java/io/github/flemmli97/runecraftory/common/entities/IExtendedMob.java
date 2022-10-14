@@ -22,6 +22,4 @@ public interface IExtendedMob extends IBaseMob, OwnableEntity {
     void setOwner(Player player);
 
     boolean isFlyingEntity();
-
-    float attackChance(AnimationType type);
 }

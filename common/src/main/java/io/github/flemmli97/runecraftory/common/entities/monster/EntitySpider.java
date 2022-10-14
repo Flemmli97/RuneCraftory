@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpiderWeb;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.AnimatedRangedGoal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.sounds.SoundEvents;

@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.world.damagesource.DamageSource;

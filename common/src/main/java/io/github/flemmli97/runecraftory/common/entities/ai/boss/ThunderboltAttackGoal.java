@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities.monster.ai;
+package io.github.flemmli97.runecraftory.common.entities.ai.boss;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;

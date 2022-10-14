@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities.monster.ai;
+package io.github.flemmli97.runecraftory.common.entities.ai;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;

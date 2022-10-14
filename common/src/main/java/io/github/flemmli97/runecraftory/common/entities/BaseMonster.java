@@ -8,13 +8,13 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.FollowOwnerGoalMonster;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.HurtByTargetPredicate;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.LookAtAliveGoal;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.RandomLookGoalAlive;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.RiderAttackTargetGoal;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.StayGoal;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.TendCropsGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.FollowOwnerGoalMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.HurtByTargetPredicate;
+import io.github.flemmli97.runecraftory.common.entities.ai.LookAtAliveGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.RandomLookGoalAlive;
+import io.github.flemmli97.runecraftory.common.entities.ai.RiderAttackTargetGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.TendCropsGoal;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
@@ -98,7 +98,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob {
+public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, RandomAttackSelectorMob {
 
     private static final EntityDataAccessor<Optional<UUID>> owner = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Integer> mobLevel = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
@@ -108,9 +108,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private static final EntityDataAccessor<Boolean> playDeathState = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> friendPointsSync = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
 
-    private static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
-    private static final UUID foodUUID = UUID.fromString("87A55C28-8C8C-4BFF-AF5F-9972A38CCD9D");
-    private static final UUID foodUUIDMulti = UUID.fromString("A05442AC-381B-49DF-B0FA-0136B454157B");
+    public static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
+    public static final UUID foodUUID = UUID.fromString("87A55C28-8C8C-4BFF-AF5F-9972A38CCD9D");
+    public static final UUID foodUUIDMulti = UUID.fromString("A05442AC-381B-49DF-B0FA-0136B454157B");
+
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
             if (this.getControllingPassenger() instanceof Player)
@@ -197,12 +198,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public static final int moveTickMax = 5;
 
-    public BaseMonster(EntityType<? extends BaseMonster> type, Level world) {
-        super(type, world);
+    public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
+        super(type, level);
         this.moveControl = new NewMoveController(this);
         this.prop = MobConfig.propertiesMap.getOrDefault(PlatformUtils.INSTANCE.entities().getIDFrom(type), EntityProperties.defaultProp);
         this.applyAttributes();
-        this.addGoal();
+        if (!level.isClientSide)
+            this.addGoal();
     }
 
     public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {
@@ -233,7 +235,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.targetSelector.addGoal(3, new RiderAttackTargetGoal(this, 15));
 
         this.goalSelector.addGoal(0, this.swimGoal);
-        this.goalSelector.addGoal(0, new StayGoal(this));
+        this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
         this.goalSelector.addGoal(1, new RandomLookGoalAlive(this));
         this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
         this.goalSelector.addGoal(3, new FollowOwnerGoalMonster(this, 1.05, 9, 3));
@@ -655,6 +657,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return SpawnEgg.fromType(this.getType()).map(ItemStack::new).orElse(ItemStack.EMPTY);
     }
 
+    @Override
     @Nullable
     public AnimatedAction getRandomAnimation(AnimationType type) {
         List<AnimatedAction> anims = new ArrayList<>();
@@ -666,8 +669,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return anims.get(this.getRandom().nextInt(anims.size()));
     }
 
+    @Override
     public abstract boolean isAnimOfType(AnimatedAction anim, AnimationType type);
 
+    @Override
     public int animationCooldown(@Nullable AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
@@ -859,8 +864,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     @Override
-    public int friendPoints() {
-        return this.entityData.get(friendPointsSync);
+    public int friendPoints(Player player) {
+        if (player.getUUID().equals(this.getOwnerUUID()))
+            return this.entityData.get(friendPointsSync);
+        return 0;
     }
 
     //=====Damage Logic
@@ -1164,6 +1171,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distSqr(pos) < (this.getRestrictRadius() * this.getRestrictRadius());
     }
 
+    @Override
     public double maxAttackRange(AnimatedAction anim) {
         return 1;
     }
@@ -1190,6 +1198,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return this.calculateAttackAABB(anim, target, 0.2);
     }
 
+    @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
         double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
         Vec3 dir;

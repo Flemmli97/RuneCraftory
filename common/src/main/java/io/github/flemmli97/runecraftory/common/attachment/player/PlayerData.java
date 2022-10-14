@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
-import io.github.flemmli97.runecraftory.api.enums.EnumShop;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.values.SkillProperties;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemStatIncrease;

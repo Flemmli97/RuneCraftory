@@ -2,10 +2,10 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.FloatingFlyNavigator;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.GhostAttackGoal;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.NearestTargetNoLoS;
-import io.github.flemmli97.runecraftory.common.entities.monster.ai.NoClipFlyMoveController;
+import io.github.flemmli97.runecraftory.common.entities.ai.GhostAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetNoLoS;
+import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
+import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyMoveController;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;

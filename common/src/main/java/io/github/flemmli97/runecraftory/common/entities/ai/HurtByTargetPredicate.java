@@ -1,7 +1,7 @@
-package io.github.flemmli97.runecraftory.common.entities.monster.ai;
+package io.github.flemmli97.runecraftory.common.entities.ai;
 
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 
@@ -11,7 +11,7 @@ public class HurtByTargetPredicate extends HurtByTargetGoal {
 
     private final Predicate<LivingEntity> pred;
 
-    public HurtByTargetPredicate(BaseMonster mob, Predicate<LivingEntity> pred) {
+    public HurtByTargetPredicate(PathfinderMob mob, Predicate<LivingEntity> pred) {
         super(mob);
         this.pred = pred;
     }

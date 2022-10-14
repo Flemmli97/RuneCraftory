@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities.monster.ai;
+package io.github.flemmli97.runecraftory.common.entities.ai;
 
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;

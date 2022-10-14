@@ -68,7 +68,7 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
         this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13, 1.0f, 0);
         this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_MAGIC.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
         this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_MAGIC_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 3, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + this.entity.friendPoints(), this.leftPos + statX, this.topPos + statY + 13 * 4, 1.0f, 0);
+        this.drawRightAlignedScaledString(stack, "" + this.entity.friendPoints(this.minecraft.player), this.leftPos + statX, this.topPos + statY + 13 * 4, 1.0f, 0);
 
         float scale = 1;
         if (this.entity.getBbWidth() > 1.2) {

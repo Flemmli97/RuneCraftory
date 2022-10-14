@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities.monster.ai;
+package io.github.flemmli97.runecraftory.common.entities.ai;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import net.minecraft.core.BlockPos;
@@ -13,6 +13,7 @@ import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import java.util.EnumSet;
 
 public class FollowOwnerGoalMonster extends Goal {
+
     private final BaseMonster monster;
     private final double speedModifier;
     private final float stopDistance;
