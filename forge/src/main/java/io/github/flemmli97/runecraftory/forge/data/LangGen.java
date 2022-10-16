@@ -508,6 +508,10 @@ public class LangGen implements DataProvider {
         this.add("npc.schedule.days.weekend.1", "%s");
         this.add("npc.schedule.days.weekend.2", "%1$s and %2$s");
 
+        this.add("npc.shop.inventory.full", "You don't have enough inventory space for it");
+        this.add("npc.shop.money.no", "You don't have enough money");
+        this.add("npc.shop.success", "Thank you for your purchase");
+
         this.add("npc.generic.greet", "Hello %s");
 
     }

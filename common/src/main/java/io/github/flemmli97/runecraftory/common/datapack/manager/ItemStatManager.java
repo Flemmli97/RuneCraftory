@@ -26,10 +26,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class ItemStatManager extends SimpleJsonResourceReloadListener {
 
@@ -62,14 +62,13 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
     }
 
     public Collection<Pair<ItemStack, ItemStat>> all() {
-        List<Pair<ItemStack, ItemStat>> list = this.itemstat.entrySet().stream().map(e -> {
-            Item item = PlatformUtils.INSTANCE.items().getFromId(e.getKey());
+        List<Pair<ItemStack, ItemStat>> list = new ArrayList<>();
+        this.itemstat.forEach((res, stat) -> {
+            Item item = PlatformUtils.INSTANCE.items().getFromId(res);
             if (item != null && item != Items.AIR)
-                return Pair.of(new ItemStack(item), e.getValue());
-            return null;
-        }).filter(Objects::isNull).toList();
-        this.itemstatTag.entrySet().stream()
-                .forEach(e -> Registry.ITEM.getTag(e.getKey()).ifPresent(n -> n.forEach(h -> list.add(Pair.of(new ItemStack(h.value()), e.getValue())))));
+                list.add(Pair.of(new ItemStack(item), stat));
+        });
+        this.itemstatTag.forEach((key, value) -> Registry.ITEM.getTag(key).ifPresent(n -> n.forEach(h -> list.add(Pair.of(new ItemStack(h.value()), value)))));
         return list;
     }
 

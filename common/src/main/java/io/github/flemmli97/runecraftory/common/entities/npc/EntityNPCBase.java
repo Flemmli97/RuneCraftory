@@ -33,8 +33,6 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
-import it.unimi.dsi.fastutil.ints.IntSet;
-import it.unimi.dsi.fastutil.ints.IntSets;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -87,7 +85,9 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -99,6 +99,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private static final EntityDataAccessor<Boolean> playDeathState = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> shopSync = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> personalitySync = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> male = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT);
 
@@ -155,7 +156,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private int sleepCooldown;
 
     private boolean isStaying;
-    private IntSet interactingPlayers = IntSets.emptySet();
+    private Set<Integer> interactingPlayers = new HashSet<>();
 
     private final NPCSchedule schedule;
 
@@ -215,6 +216,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.entityData.define(playDeathState, false);
         this.entityData.define(shopSync, (byte) 0);
         this.entityData.define(personalitySync, (byte) 0);
+        this.entityData.define(male, false);
     }
 
     @Override
@@ -527,6 +529,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         compound.put("Schedule", this.schedule.save());
 
         compound.putBoolean("Staying", this.isStaying);
+
+        compound.putBoolean("Male", this.isMale());
     }
 
     @Override
@@ -557,6 +561,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.entityToFollowUUID = compound.getUUID("EntityToFollow");
         this.schedule.load(compound.getCompound("Schedule"));
         this.stayHere(compound.getBoolean("Staying"));
+        this.setMale(compound.getBoolean("Male"));
     }
 
     public void handleAttack(AnimatedAction anim) {
@@ -770,6 +775,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.interactingPlayers.remove(player.getId());
     }
 
+    public boolean isMale() {
+        return this.entityData.get(male);
+    }
+
+    public void setMale(boolean flag) {
+        this.entityData.set(male, flag);
+    }
+
     public void openShopForPlayer(ServerPlayer player) {
         if (this.canTrade() == ShopState.OPEN) {
             Platform.INSTANCE.getPlayerData(player).map(d -> {
@@ -796,5 +809,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 });
             });
         }
+    }
+
+    public void randomizeData() {
+        this.setPersonality(EnumNPCPersonality.values()[this.random.nextInt(EnumNPCPersonality.values().length)]);
+        this.setShop(EnumShop.values()[this.random.nextInt(EnumShop.values().length)]);
+        this.schedule.load(new NPCSchedule(this, this.random).save());
+        this.setMale(this.random.nextBoolean());
     }
 }

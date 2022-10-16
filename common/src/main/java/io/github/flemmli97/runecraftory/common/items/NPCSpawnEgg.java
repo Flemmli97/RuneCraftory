@@ -35,6 +35,7 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof EntityNPCBase npc) {
+            npc.randomizeData();
             npc.setShop(EnumShop.values()[this.getTier(stack)]);
         }
         return super.onEntitySpawned(e, stack, player);

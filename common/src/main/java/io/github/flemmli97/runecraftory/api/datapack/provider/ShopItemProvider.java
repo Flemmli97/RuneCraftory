@@ -84,7 +84,7 @@ public abstract class ShopItemProvider implements DataProvider {
     }
 
     public void addItem(EnumShop shop, ItemLike item, boolean defaults) {
-        this.items.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toUpperCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
+        this.items.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toLowerCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
                         r -> new ArrayList<>())
                 .add(item);
     }
@@ -94,7 +94,7 @@ public abstract class ShopItemProvider implements DataProvider {
     }
 
     public void addItem(EnumShop shop, ItemStack item, boolean defaults) {
-        this.ingredients.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toUpperCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
+        this.ingredients.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toLowerCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
                         r -> new ArrayList<>())
                 .add(Ingredient.of(item));
     }
@@ -104,12 +104,12 @@ public abstract class ShopItemProvider implements DataProvider {
     }
 
     public void addItem(EnumShop shop, TagKey<Item> tag, boolean defaults) {
-        this.ingredients.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toUpperCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
+        this.ingredients.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toLowerCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
                         r -> new ArrayList<>())
                 .add(Ingredient.of(tag));
     }
 
     public void overwrite(EnumShop shop, boolean defaults) {
-        this.overwrite.put(new ResourceLocation(this.modid, shop.name().toUpperCase(Locale.ROOT) + (defaults ? "_defaults" : "")), true);
+        this.overwrite.put(new ResourceLocation(this.modid, shop.name().toLowerCase(Locale.ROOT) + (defaults ? "_defaults" : "")), true);
     }
 }

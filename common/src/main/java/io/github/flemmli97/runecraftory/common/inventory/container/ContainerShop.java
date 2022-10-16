@@ -1,12 +1,15 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.EnumShopResult;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.registry.ModContainer;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
+import net.minecraft.Util;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -102,12 +105,27 @@ public class ContainerShop extends AbstractContainerMenu {
 
     @Override
     public void clicked(int slot, int mouse, ClickType clickType, Player player) {
-        if (slot >= InventoryShop.shopSize || slot < 0) {
+        if (slot > InventoryShop.shopSize || slot < 0) {
             super.clicked(slot, mouse, clickType, player);
+            return;
+        }
+        if (slot == InventoryShop.shopSize) {
+            Slot shopOutput = this.getSlot(InventoryShop.shopSize);
+            if (shopOutput.hasItem()) {
+                EnumShopResult res = ItemUtils.buyItem(player, shopOutput.getItem().copy());
+                switch (res) {
+                    case NOMONEY -> player.sendMessage(new TranslatableComponent("npc.shop.money.no"), Util.NIL_UUID);
+                    case NOSPACE -> player.sendMessage(new TranslatableComponent("npc.shop.inventory.full"), Util.NIL_UUID);
+                    case SUCCESS -> player.sendMessage(new TranslatableComponent("npc.shop.success"), Util.NIL_UUID);
+                }
+                shopOutput.set(ItemStack.EMPTY);
+            }
             return;
         }
         if (clickType == ClickType.QUICK_MOVE || clickType == ClickType.PICKUP || clickType == ClickType.PICKUP_ALL) {
             ItemStack clickedStack = this.getSlot(slot).getItem();
+            if (clickedStack.isEmpty())
+                return;
             ItemNBT.getItemNBT(clickedStack);
             Slot shopOutput = this.getSlot(InventoryShop.shopSize);
             int count = clickType == ClickType.QUICK_MOVE ? 10 : 1;
