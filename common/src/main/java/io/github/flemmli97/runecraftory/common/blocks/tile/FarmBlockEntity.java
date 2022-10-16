@@ -126,9 +126,9 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
             if (destroyChange) {
                 if (cropState.getBlock() instanceof CropBlock || cropState.getBlock() instanceof BlockCrop) {
                     if (this.level.random.nextFloat() < 0.6f) {
-                        this.level.destroyBlock(this.getBlockPos(), true);
+                        this.level.destroyBlock(cropPos, true);
                     } else
-                        this.level.setBlock(this.getBlockPos(), ModBlocks.witheredGrass.get().defaultBlockState(), Block.UPDATE_ALL);
+                        this.level.setBlock(cropPos, ModBlocks.witheredGrass.get().defaultBlockState(), Block.UPDATE_ALL);
                 } else {
                     this.level.setBlock(this.getBlockPos(), Blocks.DIRT.defaultBlockState(), Block.UPDATE_ALL);
                 }
