@@ -101,16 +101,12 @@ import java.util.stream.Collectors;
 public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, RandomAttackSelectorMob {
 
     private static final EntityDataAccessor<Optional<UUID>> owner = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final EntityDataAccessor<Integer> mobLevel = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> entityLevel = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> levelXP = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Byte> moveFlags = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Integer> behaviourData = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> playDeathState = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> friendPointsSync = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
-
-    public static final UUID attributeLevelMod = UUID.fromString("EC84560E-5266-4DC3-A4E1-388b97DBC0CB");
-    public static final UUID foodUUID = UUID.fromString("87A55C28-8C8C-4BFF-AF5F-9972A38CCD9D");
-    public static final UUID foodUUIDMulti = UUID.fromString("A05442AC-381B-49DF-B0FA-0136B454157B");
 
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
@@ -119,7 +115,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (this.isTamed()) {
                 return e instanceof Enemy && EntityUtils.tryGetOwner(e) == null;
             }
-            if (e instanceof Mob && this == ((Mob) e).getTarget())
+            if (e instanceof Mob mob && this == mob.getTarget())
                 return true;
             return e instanceof Npc || EntityUtils.tryGetOwner(e) != null;
         }
@@ -323,7 +319,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(owner, Optional.empty());
-        this.entityData.define(mobLevel, LibConstants.baseLevel);
+        this.entityData.define(entityLevel, LibConstants.baseLevel);
         this.entityData.define(levelXP, 0f);
         this.entityData.define(moveFlags, (byte) 0);
         this.entityData.define(behaviourData, 0);
@@ -408,7 +404,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.isTamed())
             compound.putUUID("Owner", this.getOwnerUUID());
         compound.putInt("Behaviour", this.behaviourState().ordinal());
-        compound.putBoolean("Out", this.dead);
         compound.putInt("FeedTime", this.feedTimeOut);
         if (this.hasRestriction())
             compound.putIntArray("Home", new int[]{this.getRestrictCenter().getX(), this.getRestrictCenter().getY(), this.getRestrictCenter().getZ(), (int) this.getRestrictRadius()});
@@ -431,7 +426,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.levelPair.read(compound.getCompound("MobLevel"));
-        this.entityData.set(mobLevel, this.levelPair.getLevel());
+        this.entityData.set(entityLevel, this.levelPair.getLevel());
         this.entityData.set(levelXP, this.levelPair.getXp());
         if (compound.contains("Owner"))
             this.entityData.set(owner, Optional.of(compound.getUUID("Owner")));
@@ -444,7 +439,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             int[] home = compound.getIntArray("Home");
             this.restrictTo(new BlockPos(home[0], home[1], home[2]), home[3]);
         }
-        this.dead = compound.getBoolean("Out");
         this.foodBuffTick = compound.getInt("FoodBuffTick");
         this.friendlyPoints.read(compound.getCompound("FriendlyPoints"));
         this.entityData.set(friendPointsSync, this.friendlyPoints.getLevel());
@@ -751,14 +745,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public LevelExpPair level() {
-        this.levelPair.setLevel(this.entityData.get(mobLevel));
+        this.levelPair.setLevel(this.entityData.get(entityLevel));
         this.levelPair.setXp(this.entityData.get(levelXP));
         return this.levelPair;
     }
 
     @Override
     public void setLevel(int level) {
-        this.entityData.set(mobLevel, Mth.clamp(level, 1, LibConstants.maxMonsterLevel));
+        this.entityData.set(entityLevel, Mth.clamp(level, 1, LibConstants.maxMonsterLevel));
         this.updateStatsToLevel();
     }
 
@@ -794,15 +788,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             AttributeInstance inst = this.getAttribute(entry.getKey());
             if (inst == null)
                 continue;
-            inst.removeModifier(foodUUIDMulti);
-            inst.addPermanentModifier(new AttributeModifier(foodUUIDMulti, "foodBuffMulti_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
+            inst.removeModifier(LibConstants.foodUUIDMulti);
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.foodUUIDMulti, "foodBuffMulti_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
         }
         for (Map.Entry<Attribute, Double> entry : food.effects().entrySet()) {
             AttributeInstance inst = this.getAttribute(entry.getKey());
             if (inst == null)
                 continue;
-            inst.removeModifier(foodUUID);
-            inst.addPermanentModifier(new AttributeModifier(foodUUID, "foodBuff_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.ADDITION));
+            inst.removeModifier(LibConstants.foodUUID);
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.foodUUID, "foodBuff_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.ADDITION));
         }
         this.foodBuffTick = food.duration();
         EntityUtils.foodHealing(this, food.getHPGain());
@@ -822,8 +816,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void removeFoodEffect() {
         ((AttributeMapAccessor) this.getAttributes())
                 .getAttributes().values().forEach(inst -> {
-                    inst.removeModifier(foodUUID);
-                    inst.removeModifier(foodUUIDMulti);
+                    inst.removeModifier(LibConstants.foodUUID);
+                    inst.removeModifier(LibConstants.foodUUIDMulti);
                 });
     }
 
@@ -832,9 +826,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.prop.getAttributeGains().forEach((att, val) -> {
             AttributeInstance inst = this.getAttribute(att);
             if (inst != null) {
-                inst.removeModifier(attributeLevelMod);
+                inst.removeModifier(LibConstants.attributeLevelMod);
                 float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-                inst.addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
                 if (att == Attributes.MAX_HEALTH)
                     this.setHealth(this.getMaxHealth() - preHealthDiff);
             }
@@ -842,7 +836,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void increaseLevel() {
-        this.entityData.set(mobLevel, Math.min(GeneralConfig.maxLevel, this.level().getLevel() + 1));
+        this.entityData.set(entityLevel, Math.min(GeneralConfig.maxLevel, this.level().getLevel() + 1));
         this.updateStatsToLevel();
     }
 
@@ -850,7 +844,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         LevelExpPair pair = this.level();
         boolean res = pair.addXP(amount, LibConstants.maxMonsterLevel, LevelCalc::xpAmountForLevelUp, () -> {
         });
-        this.entityData.set(mobLevel, pair.getLevel());
+        this.entityData.set(entityLevel, pair.getLevel());
         this.entityData.set(levelXP, pair.getXp());
         if (res)
             this.updateStatsToLevel();
@@ -985,7 +979,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 && !player.isShiftKeyDown()) {
             return false;
         }
-        if (this.playDeath())
+        if (this.playDeath() && source != DamageSource.OUT_OF_WORLD)
             return false;
         return (source.getEntity() == null || this.canAttackFrom(source.getEntity().blockPosition())) && super.hurt(source, amount);
     }
@@ -993,7 +987,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
         super.actuallyHurt(damageSrc, damageAmount);
-        if (this.isTamed() && this.getHealth() <= 0) {
+        if (damageSrc != DamageSource.OUT_OF_WORLD && this.isTamed() && this.getHealth() <= 0) {
             this.setHealth(0.01f);
             this.setPlayDeath(true);
         }

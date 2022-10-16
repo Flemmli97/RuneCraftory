@@ -56,6 +56,7 @@ import org.apache.commons.lang3.function.TriFunction;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -86,6 +87,11 @@ public class PlatformImpl implements Platform {
     @Override
     public void openGuiMenu(ServerPlayer player, MenuProvider provider, BlockPos pos) {
         NetworkHooks.openGui(player, provider, pos);
+    }
+
+    @Override
+    public void openGuiMenu(ServerPlayer player, MenuProvider provider, Consumer<FriendlyByteBuf> writer) {
+        NetworkHooks.openGui(player, provider, writer);
     }
 
     @Override

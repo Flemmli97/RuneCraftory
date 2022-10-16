@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerInfoScreen;
+import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerUpgrade;
 import io.github.flemmli97.runecraftory.common.inventory.container.ShippingContainer;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -20,6 +21,6 @@ public class ModContainer {
     public static final RegistryEntrySupplier<MenuType<ContainerCrafting>> craftingContainer = CONTAINERS.register("crafting_container", () -> Platform.INSTANCE.menuType(ContainerCrafting::new));
     public static final RegistryEntrySupplier<MenuType<ShippingContainer>> shippingContainer = CONTAINERS.register("shipping_container", () -> Platform.INSTANCE.menuType((windowID, inv) -> new ShippingContainer(windowID, inv)));
     public static final RegistryEntrySupplier<MenuType<ContainerUpgrade>> upgradeContainer = CONTAINERS.register("upgrade_container", () -> Platform.INSTANCE.menuType(ContainerUpgrade::new));
-
+    public static final RegistryEntrySupplier<MenuType<ContainerShop>> shopContainer = CONTAINERS.register("shop_container", () -> Platform.INSTANCE.menuType(ContainerShop::new));
 
 }

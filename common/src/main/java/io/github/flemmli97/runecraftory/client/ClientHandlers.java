@@ -3,10 +3,14 @@ package io.github.flemmli97.runecraftory.client;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
+import io.github.flemmli97.runecraftory.client.gui.NPCCompanionGui;
+import io.github.flemmli97.runecraftory.client.gui.NPCGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.ShopState;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -118,6 +122,16 @@ public class ClientHandlers {
             if (!Minecraft.getInstance().player.getUUID().equals(monster.getOwnerUUID()))
                 return;
             Minecraft.getInstance().setScreen(new MonsterCompanionGui(monster));
+        }
+    }
+
+    public static void openNPCChat(int id, ShopState isShopOpen, int followState) {
+        Entity entity = Minecraft.getInstance().level.getEntity(id);
+        if (entity instanceof EntityNPCBase npc) {
+            if (followState == 1)
+                Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN));
+            else
+                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0));
         }
     }
 }

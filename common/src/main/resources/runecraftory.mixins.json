@@ -14,7 +14,8 @@
     "ItemStackMixin",
     "PlayerMixin",
     "LivingEntityMixin",
-    "FishingRodHookTriggerMixin"
+    "FishingRodHookTriggerMixin",
+    "PoiTypeAccessor"
   ],
   "client": [
     "AtlasMixin",

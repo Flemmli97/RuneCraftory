@@ -50,10 +50,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -505,48 +508,36 @@ public class PlayerData {
         return false;
     }
 
-
     public void refreshShop(Player player) {
         if (!player.level.isClientSide) {
-            /*Set<ExtendedItemStackWrapper> ignore = NPCShopItems.starterItems();
             for (EnumShop profession : EnumShop.values()) {
-                List<ItemStack> list = NPCShopItems.getShopList(profession);
-                list.removeIf((stack) ->
-                {
-                    ExtendedItemStackWrapper wr = new ExtendedItemStackWrapper(stack);
-                    return !this.shippedItems.keySet().contains(wr.getItem().getRegistryName().toString()) && !ignore.contains(wr);
+                Collection<ItemStack> datapack = DataPackHandler.get(profession);
+                List<ItemStack> shopItems = new ArrayList<>();
+                datapack.forEach(item -> {
+                    if (this.shippedItems.containsKey(PlatformUtils.INSTANCE.items().getIDFrom(item.getItem())))
+                        shopItems.add(item);
                 });
-                if (list.isEmpty())
+                if (shopItems.isEmpty())
                     continue;
                 NonNullList<ItemStack> shop = NonNullList.create();
-                Set<ExtendedItemStackWrapper> pre = new HashSet<>();
-                for (float chance = 2.0f + list.size() * 0.002f; player.level.random.nextFloat() < chance; chance -= 0.1f) {
-                    pre.add(new ExtendedItemStackWrapper(list.get(player.level.random.nextInt(list.size()))));
-                }
-                for (ExtendedItemStackWrapper wr : pre) {
-                    ItemStack stack = wr.getStack();
-                    shop.add(ItemNBT.getLeveledItem(stack, this.shippedItems.getOrDefault(stack.getItem().getRegistryName().toString(), 1)));
+                for (float chance = 2.0f + shopItems.size() * 0.002f; player.level.random.nextFloat() < chance; chance -= 0.1f) {
+                    ItemStack stack = shopItems.get(player.level.random.nextInt(shopItems.size()));
+                    shop.add(stack);
                 }
                 this.shopItems.put(profession, shop);
-                 Platform.INSTANCE.sendToClient(new PacketUpdateShopItems(profession, shop), (ServerPlayer) player);
-            }*/
+            }
         }
     }
 
-    public void setShop(Player player, EnumShop shop, NonNullList<ItemStack> items) {
-        if (player.level.isClientSide)
-            this.shopItems.put(shop, items);
-    }
-
     public NonNullList<ItemStack> getShop(EnumShop shop) {
-        return this.shopItems.getOrDefault(shop, NonNullList.withSize(0, ItemStack.EMPTY));
+        NonNullList<ItemStack> list = NonNullList.create();
+        list.addAll(this.shopItems.getOrDefault(shop, NonNullList.withSize(0, ItemStack.EMPTY)));
+        return list;
     }
 
     public void addShippingItem(Player player, ItemStack item) {
-        /*int level = player.world.isRemote || !NPCShopItems.leveledItems().contains(new ExtendedItemStackWrapper(item)) ? 1 : ItemNBT.itemLevel(item);
-        boolean changed = this.shippedItems.compute(item.getItem().getRegistryName().toString(), (k, v) -> v == null ? level : Math.max(v, level)) != level;
-        if (!player.world.isRemote && changed)
-             Platform.INSTANCE.sendToClient(new PacketUpdateShippingItem(item, level), (ServerPlayer) player);*/
+        int level = ItemNBT.itemLevel(item);
+        boolean changed = this.shippedItems.compute(PlatformUtils.INSTANCE.items().getIDFrom(item.getItem()), (k, v) -> v == null ? level : Math.max(v, level)) != level;
     }
 
     public RecipeKeeper getRecipeKeeper() {

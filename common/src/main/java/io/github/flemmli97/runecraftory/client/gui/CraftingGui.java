@@ -24,7 +24,6 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
     private static final ResourceLocation crafting = new ResourceLocation(RuneCraftory.MODID, "textures/gui/craftingc.png");
     private static final ResourceLocation chem = new ResourceLocation(RuneCraftory.MODID, "textures/gui/chemc.png");
     private static final ResourceLocation cooking = new ResourceLocation(RuneCraftory.MODID, "textures/gui/cookingc.png");
-    //private static final ResourceLocation bars = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
 
     public CraftingGui(ContainerCrafting container, Inventory inv, Component name) {
         super(container, inv, name);

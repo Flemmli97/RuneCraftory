@@ -60,6 +60,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -93,6 +94,27 @@ public class PlatformImpl implements Platform {
             @Override
             public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
                 buf.writeBlockPos(pos);
+            }
+
+            @Override
+            public Component getDisplayName() {
+                return provider.getDisplayName();
+            }
+
+            @Nullable
+            @Override
+            public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
+                return provider.createMenu(i, inventory, player);
+            }
+        });
+    }
+
+    @Override
+    public void openGuiMenu(ServerPlayer player, MenuProvider provider, Consumer<FriendlyByteBuf> writer) {
+        player.openMenu(new ExtendedScreenHandlerFactory() {
+            @Override
+            public void writeScreenOpeningData(ServerPlayer player, FriendlyByteBuf buf) {
+                writer.accept(buf);
             }
 
             @Override

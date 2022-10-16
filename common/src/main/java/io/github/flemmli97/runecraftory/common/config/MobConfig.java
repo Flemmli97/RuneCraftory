@@ -29,6 +29,17 @@ public class MobConfig {
     public static float mimicChance = 0.4f;
     public static float mimicStrongChance = 0.3f;
 
+    public static double npcHealth = 20;
+    public static double npcAttack = 1;
+    public static double npcDefence = 0;
+    public static double npcMagicAttack = 5;
+    public static double npcMagicDefence = 0;
+    public static double npcHealthGain = 5;
+    public static double npcAttackGain = 2;
+    public static double npcDefenceGain = 2;
+    public static double npcMagicAttackGain = 2;
+    public static double npcMagicDefenceGain = 2;
+
     public static Map<ResourceLocation, EntityProperties> propertiesMap = new HashMap<>();
 
     public enum GateLevelType {

@@ -8,6 +8,11 @@ RuneCraftory 1.3.0
 - Tamed monster now get knocked down instead of killed
 - Tamed monster can help with farming
 - Add functionality to magnifying glass and inspector
+- Added NPC which currently spawn in vanilla villages.
+  They can spawn with the possibility of having a shop.  
+  NPC need a bed and a workstation not too far away from each other for the 
+  player to buy stuff and the shops are only open during certain times of the day.
+  Currently no skins (aka they just have the default steve skin)
 - Fix penetrating wind blades bounce sometimes not correct
 - Ignore height for distance level calculation
 - Smooth out some animations

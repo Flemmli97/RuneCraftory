@@ -8,9 +8,9 @@ public interface IBaseMob {
 
     LevelExpPair level();
 
-    int friendPoints(Player player);
-
     void setLevel(int level);
+
+    int friendPoints(Player player);
 
     int baseXP();
 

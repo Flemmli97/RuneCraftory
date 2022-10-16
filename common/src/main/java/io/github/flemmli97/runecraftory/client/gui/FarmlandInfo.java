@@ -57,14 +57,11 @@ public class FarmlandInfo extends GuiComponent {
         RenderSystem.setShaderTexture(0, texturepath);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        int sX = 100;
         int sY = (cropBlock != null ? 40 : 0) + (farmBlock != null ? 50 : 0);
-        int xPos = ClientConfig.farmlandPosition.positionX(this.mc.getWindow().getGuiScaledWidth(), sX, ClientConfig.farmlandX);
+        int xPos = ClientConfig.farmlandPosition.positionX(this.mc.getWindow().getGuiScaledWidth(), 100, ClientConfig.farmlandX);
         int yPos = ClientConfig.farmlandPosition.positionY(this.mc.getWindow().getGuiScaledHeight(), sY, ClientConfig.farmlandY);
-        this.blit(stack, xPos, yPos, 0, 0, sX - 5, sY - 5);
-        this.blit(stack, xPos + sX - 5, yPos, 150 - 5, 0, 5, sY - 5);
-        this.blit(stack, xPos, yPos + sY - 5, 0, 150 - 5, sX - 5, 5);
-        this.blit(stack, xPos + sX - 5, yPos + sY - 5, 150 - 5, 150 - 5, 5, 5);
+        this.blit(stack, xPos, yPos, 0, 0, 100, sY - 5);
+        this.blit(stack, xPos, yPos + sY - 5, 0, 100 - 5, 100, 5);
         RenderSystem.defaultBlendFunc();
         yPos += 5;
         xPos += 5;

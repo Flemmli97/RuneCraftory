@@ -61,6 +61,8 @@ import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbro
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityMarionetta;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntitySpirit;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.items.NPCSpawnEgg;
 import io.github.flemmli97.runecraftory.common.items.RuneCraftoryEggItem;
 import io.github.flemmli97.runecraftory.common.items.TreasureChestSpawnegg;
 import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
@@ -385,6 +387,8 @@ public class ModEntities {
                     .setTamingItem(new ItemTagWrapper(ModTags.marionettaTamer, 1))
                     .xp(145).money(75).tamingChance(0.008f).setRidable().build());
 
+    public static final RegistryEntrySupplier<EntityType<EntityNPCBase>> npc = npc(EntityType.Builder.of(EntityNPCBase::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), LibEntities.npc);
+
     public static final RegistryEntrySupplier<EntityType<EntityTreasureChest>> treasureChest = treasureChest(EntityType.Builder.of(EntityTreasureChest::new, MobCategory.MISC).sized(1, 1).clientTrackingRange(4), LibEntities.treasureChest);
     public static final RegistryEntrySupplier<EntityType<EntityMobArrow>> arrow = reg(EntityType.Builder.<EntityMobArrow>of(EntityMobArrow::new, MobCategory.MISC).sized(0.5F, 0.5F).clientTrackingRange(4).updateInterval(20), LibEntities.arrow);
     public static final RegistryEntrySupplier<EntityType<EntitySpore>> spore = reg(EntityType.Builder.<EntitySpore>of(EntitySpore::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), LibEntities.spore);
@@ -448,6 +452,8 @@ public class ModEntities {
         cons.accept(ambrosia.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
         cons.accept(thunderbolt.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
         cons.accept(marionetta.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
+
+        cons.accept(npc.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
     }
 
     public static <V extends Entity> RegistryEntrySupplier<EntityType<V>> reg(EntityType.Builder<V> v, ResourceLocation name) {
@@ -463,6 +469,12 @@ public class ModEntities {
     public static <V extends Entity> RegistryEntrySupplier<EntityType<V>> treasureChest(EntityType.Builder<V> v, ResourceLocation name) {
         RegistryEntrySupplier<EntityType<V>> reg = reg(v, name);
         ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new TreasureChestSpawnegg(reg, new Item.Properties().tab(RFCreativeTabs.monsters)));
+        return reg;
+    }
+
+    public static <V extends Entity> RegistryEntrySupplier<EntityType<V>> npc(EntityType.Builder<V> v, ResourceLocation name) {
+        RegistryEntrySupplier<EntityType<V>> reg = reg(v, name);
+        ModItems.ITEMS.register(name.getPath() + "_spawn_egg", () -> new NPCSpawnEgg(reg, new Item.Properties().tab(RFCreativeTabs.monsters)));
         return reg;
     }
 

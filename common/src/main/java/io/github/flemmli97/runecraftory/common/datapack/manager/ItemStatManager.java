@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
@@ -13,6 +14,7 @@ import io.github.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -21,8 +23,13 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class ItemStatManager extends SimpleJsonResourceReloadListener {
 
@@ -52,6 +59,18 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
                     .orElse(null);
         }
         return null;
+    }
+
+    public Collection<Pair<ItemStack, ItemStat>> all() {
+        List<Pair<ItemStack, ItemStat>> list = this.itemstat.entrySet().stream().map(e -> {
+            Item item = PlatformUtils.INSTANCE.items().getFromId(e.getKey());
+            if (item != null && item != Items.AIR)
+                return Pair.of(new ItemStack(item), e.getValue());
+            return null;
+        }).filter(Objects::isNull).toList();
+        this.itemstatTag.entrySet().stream()
+                .forEach(e -> Registry.ITEM.getTag(e.getKey()).ifPresent(n -> n.forEach(h -> list.add(Pair.of(new ItemStack(h.value()), e.getValue())))));
+        return list;
     }
 
     @Override

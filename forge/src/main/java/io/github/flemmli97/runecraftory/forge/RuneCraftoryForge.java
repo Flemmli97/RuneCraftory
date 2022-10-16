@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.forge.client.ClientEvents;
@@ -97,6 +98,7 @@ public class RuneCraftoryForge {
         ModStructures.STRUCTURES.registerContent();
         ModParticles.PARTICLES.registerContent();
         ModActivities.ACTIVITIES.registerContent();
+        ModPoiTypes.POI.registerContent();
     }
 
     public void registry(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
@@ -130,6 +132,7 @@ public class RuneCraftoryForge {
         DataPackHandler.reloadItemStats(event::addListener);
         DataPackHandler.reloadCropManager(event::addListener);
         DataPackHandler.reloadFoodManager(event::addListener);
+        DataPackHandler.reloadShopItems(event::addListener);
     }
 
     private void tweakVanillaAttribute(Attribute attribute, double value) {

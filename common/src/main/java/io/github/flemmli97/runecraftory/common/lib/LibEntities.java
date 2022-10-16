@@ -37,6 +37,8 @@ public class LibEntities {
     public static final ResourceLocation thunderbolt = new ResourceLocation(RuneCraftory.MODID, "thunderbolt");
     public static final ResourceLocation marionetta = new ResourceLocation(RuneCraftory.MODID, "marionetta");
 
+    public static final ResourceLocation npc = new ResourceLocation(RuneCraftory.MODID, "npc");
+
     public static final ResourceLocation treasureChest = new ResourceLocation(RuneCraftory.MODID, "treasure_chest");
 
     public static final ResourceLocation arrow = new ResourceLocation(RuneCraftory.MODID, "arrow");

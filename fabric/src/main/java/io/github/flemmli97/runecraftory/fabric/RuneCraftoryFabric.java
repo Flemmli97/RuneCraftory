@@ -19,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.world.GateSpawning;
@@ -132,6 +133,19 @@ public class RuneCraftoryFabric implements ModInitializer {
                 return new ResourceLocation(RuneCraftory.MODID, "food_manager");
             }
         });
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
+            @Override
+            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
+                DataPackHandler.reloadShopItems(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
+                return ret.get();
+            }
+
+            @Override
+            public ResourceLocation getFabricId() {
+                return new ResourceLocation(RuneCraftory.MODID, "shop_items");
+            }
+        });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(CropLootModifiers.INSTANCE);
 
         ModEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
@@ -197,6 +211,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModStructures.STRUCTURES.registerContent();
         ModParticles.PARTICLES.registerContent();
         ModActivities.ACTIVITIES.registerContent();
+        ModPoiTypes.POI.registerContent();
 
         ModLootCondition.LOOTFUNCTION.registerContent();
         ModLootCondition.LOOTCONDITIONS.registerContent();

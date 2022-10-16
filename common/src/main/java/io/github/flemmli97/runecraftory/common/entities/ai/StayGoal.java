@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.ai;
 
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import net.minecraft.world.entity.LivingEntity;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 
@@ -20,11 +20,16 @@ public class StayGoal<T extends Mob> extends Goal {
         if (!monster.isOnGround() && !monster.isNoGravity()) {
             return false;
         }
-        LivingEntity livingEntity = monster.getOwner();
-        if (livingEntity == null) {
-            return true;
-        }
         return monster.isStaying();
+    };
+    public static Function<EntityNPCBase, Boolean> CANSTAYNPC = npc -> {
+        if (npc.isInWaterOrBubble()) {
+            return false;
+        }
+        if (!npc.isOnGround()) {
+            return false;
+        }
+        return npc.isStaying();
     };
 
     private final T mob;

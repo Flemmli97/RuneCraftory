@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.InfoScreen;
 import io.github.flemmli97.runecraftory.client.gui.InfoSubScreen;
 import io.github.flemmli97.runecraftory.client.gui.MaxChestScreen;
+import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.UpgradeGui;
@@ -43,6 +44,7 @@ import io.github.flemmli97.runecraftory.client.particles.SinkingParticle;
 import io.github.flemmli97.runecraftory.client.particles.VortexParticle;
 import io.github.flemmli97.runecraftory.client.render.RenderGate;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
+import io.github.flemmli97.runecraftory.client.render.RenderNPC;
 import io.github.flemmli97.runecraftory.client.render.RenderTreasureChest;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderAnt;
@@ -175,6 +177,7 @@ public class ClientRegister {
         factory.register(ModContainer.infoContainer.get(), InfoScreen::new);
         factory.register(ModContainer.infoSubContainer.get(), InfoSubScreen::new);
         factory.register(ModContainer.shippingContainer.get(), MaxChestScreen<ShippingContainer>::new);
+        factory.register(ModContainer.shopContainer.get(), NPCShopGui::new);
     }
 
     public static <T extends Entity> void registerRenderers(EntityRendererRegister consumer) {
@@ -209,6 +212,8 @@ public class ClientRegister {
         consumer.register(ModEntities.ambrosia.get(), RenderAmbrosia::new);
         consumer.register(ModEntities.thunderbolt.get(), RenderThunderbolt::new);
         consumer.register(ModEntities.marionetta.get(), RenderMarionetta::new);
+
+        consumer.register(ModEntities.npc.get(), RenderNPC::new);
 
         consumer.register(ModEntities.treasureChest.get(), RenderTreasureChest::new);
 

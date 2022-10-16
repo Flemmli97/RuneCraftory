@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.api.enums;
+package io.github.flemmli97.runecraftory.common.entities.npc;
 
 public enum EnumShopResult {
 

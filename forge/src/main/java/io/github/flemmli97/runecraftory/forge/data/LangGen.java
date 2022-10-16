@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
+import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
@@ -169,6 +170,8 @@ public class LangGen implements DataProvider {
         this.add(ModEntities.gobbleBox.get(), "Gobble Box");
         this.add(ModEntities.marionetta.get(), "Marionetta");
 
+        this.add(ModEntities.npc.get(), "NPC");
+
         this.add(ModEntities.treasureChest.get(), "Treasure Chest");
 
         this.add(ModAttributes.RF_DEFENCE.get().getDescriptionId(), "DEF");
@@ -266,6 +269,17 @@ public class LangGen implements DataProvider {
         this.add("monster.interact.farm", "Entity is now tending the crops");
         this.add("tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
         this.add("tooltip.item.treasure_level", "Chest tier lvl: %s");
+
+        this.add("tooltip.item.npc", "Shift-right-click to change profession");
+        this.add(EnumShop.NONE.translationKey, "None");
+        this.add(EnumShop.GENERAL.translationKey, "General Store");
+        this.add(EnumShop.FLOWER.translationKey, "Carnation");
+        this.add(EnumShop.WEAPON.translationKey, "Smith");
+        this.add(EnumShop.CLINIC.translationKey, "Doctor");
+        this.add(EnumShop.FOOD.translationKey, "Cook");
+        this.add(EnumShop.MAGIC.translationKey, "Magicskill merchant");
+        this.add(EnumShop.RUNESKILL.translationKey, "Runeskill merchant");
+        this.add(EnumShop.RANDOM.translationKey, "Misc");
 
         this.add("crafting.rpMax.missing", "Missing total rp");
 
@@ -473,6 +487,29 @@ public class LangGen implements DataProvider {
             this.add(s.getTranslation(),
                     this.capitalize(s.getTranslation().replace("skill.", "").replace("_", " "),
                             Lists.newArrayList("and")));
+
+        this.add("gui.npc.talk", "Talk");
+        this.add("gui.npc.follow", "Follow me");
+        this.add("gui.npc.distance", "Stay back a bit");
+        this.add("gui.npc.stay", "Stay here");
+        this.add("gui.npc.stopFollow", "Stop following");
+        this.add("gui.npc.shop", "I want to shop");
+        this.add("gui.npc.shop.owner", "Owner of %s");
+        this.add("gui.npc.bed.no", "I don't have a bed");
+        this.add("gui.npc.workplace.no", "I don't have a work place. Valid workplaces are [%s]");
+
+        this.add("npc.schedule.work", "Work: %s - %s");
+        this.add("npc.schedule.work.2", "And: %s - %s");
+        this.add("npc.schedule.days.header", "Open on:");
+        this.add("npc.schedule.days.all", "Everyday");
+        this.add("npc.schedule.days.0", "All weekdays");
+        this.add("npc.schedule.days.1", "All weekdays except %s");
+        this.add("npc.schedule.days.2", "All weekdays except %1$s and %2$s");
+        this.add("npc.schedule.days.weekend.1", "%s");
+        this.add("npc.schedule.days.weekend.2", "%1$s and %2$s");
+
+        this.add("npc.generic.greet", "Hello %s");
+
     }
 
     private String simpleTranslation(ResourceLocation res) {

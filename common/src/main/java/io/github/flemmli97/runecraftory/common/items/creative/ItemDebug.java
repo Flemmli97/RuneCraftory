@@ -1,11 +1,15 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
+import net.minecraft.Util;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
 public class ItemDebug extends Item {
@@ -36,5 +40,14 @@ public class ItemDebug extends Item {
             ItemUtils.spawnItemAtEntity(player, stack);*/
         }
         return super.use(level, player, handIn);
+    }
+
+    @Override
+    public InteractionResult useOn(UseOnContext context) {
+        if (context.getLevel() instanceof ServerLevel serverLevel) {
+            int f = serverLevel.getPoiManager().getFreeTickets(context.getClickedPos());
+            context.getPlayer().sendMessage(new TextComponent("Free " + f), Util.NIL_UUID);
+        }
+        return super.useOn(context);
     }
 }

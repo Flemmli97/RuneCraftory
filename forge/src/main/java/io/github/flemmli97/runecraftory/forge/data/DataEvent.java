@@ -41,6 +41,7 @@ public class DataEvent {
             data.addProvider(new MainWorldGenData(data));
             data.addProvider(new PatchouliGen(data));
             data.addProvider(new EntityTagGen(data, event.getExistingFileHelper()));
+            data.addProvider(new ShopItemGen(data));
         }
     }
 

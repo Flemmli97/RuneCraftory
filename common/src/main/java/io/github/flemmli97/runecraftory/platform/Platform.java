@@ -42,6 +42,7 @@ import org.apache.commons.lang3.function.TriFunction;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -60,6 +61,8 @@ public interface Platform {
     void openGuiMenu(ServerPlayer player, MenuProvider provider);
 
     void openGuiMenu(ServerPlayer player, MenuProvider provider, BlockPos pos);
+
+    void openGuiMenu(ServerPlayer player, MenuProvider provider, Consumer<FriendlyByteBuf> writer);
 
     //Network
 
