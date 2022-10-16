@@ -6,14 +6,23 @@ import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpiderWeb;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class EntitySpider extends BaseMonster {
+
+    private static final EntityDataAccessor<Boolean> climbingSync = SynchedEntityData.defineId(EntitySpider.class, EntityDataSerializers.BOOLEAN);
 
     public static final AnimatedAction melee = new AnimatedAction(13, 9, "attack");
     public static final AnimatedAction webshot = new AnimatedAction(14, 6, "webshot");
@@ -22,9 +31,55 @@ public class EntitySpider extends BaseMonster {
     private final AnimationHandler<EntitySpider> animationHandler = new AnimationHandler<>(this, anims);
     public AnimatedRangedGoal<EntitySpider> attack = new AnimatedRangedGoal<>(this, 7, (e) -> true);
 
+    public int climbingTicker = -1;
+    public static int climbMax = 6;
+
     public EntitySpider(EntityType<? extends EntitySpider> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        return new WallClimberNavigation(this, level);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(climbingSync, false);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (!this.level.isClientSide) {
+            this.setClimbing(this.horizontalCollision);
+        }
+        if (this.isClimbing() && this.isAlive() && !this.playDeath()) {
+            this.climbingTicker = Math.min(this.climbingTicker + 1, climbMax);
+        } else
+            this.climbingTicker = Math.max(this.climbingTicker - 1, -1);
+    }
+
+    @Override
+    public boolean onClimbable() {
+        return this.isClimbing();
+    }
+
+    @Override
+    public void makeStuckInBlock(BlockState state, Vec3 motionMultiplier) {
+        if (!state.is(Blocks.COBWEB)) {
+            super.makeStuckInBlock(state, motionMultiplier);
+        }
+    }
+
+    public boolean isClimbing() {
+        return this.entityData.get(climbingSync);
+    }
+
+    public void setClimbing(boolean climbing) {
+        this.entityData.set(climbingSync, climbing);
     }
 
     @Override

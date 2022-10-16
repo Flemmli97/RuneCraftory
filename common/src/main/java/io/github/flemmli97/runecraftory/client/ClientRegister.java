@@ -52,6 +52,7 @@ import io.github.flemmli97.runecraftory.client.render.monster.RenderGhostRay;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGoblin;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderMarionetta;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderOrcArcher;
+import io.github.flemmli97.runecraftory.client.render.monster.RenderSpider;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderThunderbolt;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
 import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingHookRenderer;
@@ -201,7 +202,7 @@ public class ClientRegister {
         register(consumer, ModEntities.ghost.get(), ModelGhost::new, ModelGhost.LAYER_LOCATION, 0);
         register(consumer, ModEntities.spirit.get(), ModelWisp::new, ModelWisp.LAYER_LOCATION, 0);
         consumer.register(ModEntities.ghostRay.get(), RenderGhostRay::new);
-        register(consumer, ModEntities.spider.get(), ModelSpider::new, ModelSpider.LAYER_LOCATION, 0);
+        consumer.register(ModEntities.spider.get(), RenderSpider::new);
         register(consumer, ModEntities.shadowPanther.get(), ModelPanther::new, ModelPanther.LAYER_LOCATION, 0);
         register(consumer, ModEntities.monsterBox.get(), ModelMimic::new, ModelMimic.LAYER_LOCATION, 0);
         register(consumer, ModEntities.gobbleBox.get(), ModelMimic::new, ModelMimic.LAYER_LOCATION, 0);

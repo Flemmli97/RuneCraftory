@@ -29,8 +29,7 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T>> exte
     protected void setupRotations(T entity, PoseStack stack, float ageInTicks, float rotationYaw, float partialTicks) {
         super.setupRotations(entity, stack, ageInTicks, rotationYaw, partialTicks);
         if (entity.getPlayDeathTick() > 0 && entity.getDeathAnimation() == null) {
-            float partial = partialTicks - 1;
-            float f = (entity.getPlayDeathTick() + (entity.playDeath() ? partial : -partial)) / 20.0f * 1.6f;
+            float f = (entity.getPlayDeathTick() + (entity.playDeath() ? partialTicks : -partialTicks)) / 20.0f * 1.6f;
             if ((f = Mth.sqrt(f)) > 1.0f) {
                 f = 1.0f;
             }
