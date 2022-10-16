@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
@@ -16,10 +17,12 @@ import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.toasts.RecipeToast;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -132,6 +135,62 @@ public class ClientHandlers {
                 Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN));
             else
                 Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0));
+        }
+    }
+
+    public static void drawCenteredScaledString(PoseStack stack, Font font, Component component, float x, float y, float scale, int color) {
+        if (scale != 1) {
+            stack.pushPose();
+            stack.translate(x, y, 0);
+            stack.scale(scale, scale, scale);
+            stack.translate(-font.width(component) * 0.5, 0, 0);
+            font.draw(stack, component, 0, 0, color);
+            stack.popPose();
+        } else {
+            x -= font.width(component) * 0.5;
+            font.draw(stack, component, x, y, color);
+        }
+    }
+
+    public static void drawCenteredScaledString(PoseStack stack, Font font, String string, float x, float y, float scale, int color) {
+        if (scale != 1) {
+            stack.pushPose();
+            stack.translate(x, y, 0);
+            stack.scale(scale, scale, scale);
+            stack.translate(-font.width(string) * 0.5, 0, 0);
+            font.draw(stack, string, 0, 0, color);
+            stack.popPose();
+        } else {
+            x -= font.width(string) * 0.5;
+            font.draw(stack, string, x, y, color);
+        }
+    }
+
+    public static void drawRightAlignedScaledString(PoseStack stack, Font font, Component string, float x, float y, float scale, int color) {
+        if (scale != 1) {
+            stack.pushPose();
+            stack.translate(x, y, 0);
+            stack.scale(scale, scale, scale);
+            stack.translate(-font.width(string), 0, 0);
+            font.draw(stack, string, 0, 0, color);
+            stack.popPose();
+        } else {
+            x -= font.width(string);
+            font.draw(stack, string, x, y, color);
+        }
+    }
+
+    public static void drawRightAlignedScaledString(PoseStack stack, Font font, String string, float x, float y, float scale, int color) {
+        if (scale != 1) {
+            stack.pushPose();
+            stack.translate(x, y, 0);
+            stack.scale(scale, scale, scale);
+            stack.translate(-font.width(string), 0, 0);
+            font.draw(stack, string, 0, 0, color);
+            stack.popPose();
+        } else {
+            x -= font.width(string);
+            font.draw(stack, string, x, y, color);
         }
     }
 }

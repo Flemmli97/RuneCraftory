@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.entities.npc.ShopState;
@@ -62,27 +63,40 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         RenderSystem.setShaderTexture(0, texturepath);
         int posX = 25;
         int posY = 25;
-        this.blit(stack, posX, posY, 0, 0, 150, 150);
-
+        int texY = 150;
+        if (this.entity.getShop() == EnumShop.NONE)
+            texY = 40;
+        if (this.entity.getShop() == EnumShop.RANDOM)
+            texY = 60;
+        this.blit(stack, posX, posY, 0, 0, 150, texY != 150 ? texY - 5 : texY);
+        if (texY != 150)
+            this.blit(stack, posX, posY + texY - 5, 0, 150 - 5, 150, 5);
         int txtOffX = posX + 5;
         int txtOffY = posY + 5;
 
-        this.blit(stack, txtOffX + 55, txtOffY + 13, 152, 2, 8, 8);
+        this.blit(stack, posX + 65, txtOffY + 13, 152, 2, 8, 8);
 
         int y = 0;
-        this.drawCenteredScaledString(stack, this.entity.getName(), txtOffX + 65, txtOffY, 0);
+        ClientHandlers.drawCenteredScaledString(stack, this.font, this.entity.getName(), posX + 75, txtOffY, 1, 0);
         y += 1;
-        this.font.draw(stack, "" + this.entity.friendPoints(this.minecraft.player), txtOffX + 55 + 10, txtOffY + 13 * y, 0);
+        this.font.draw(stack, "" + this.entity.friendPoints(this.minecraft.player), posX + 65 + 10, txtOffY + 13 * y, 0);
         y += 1;
-        MutableComponent shopComp = new TranslatableComponent("gui.npc.shop.owner", new TranslatableComponent(this.entity.getShop().translationKey));
-        if (this.isShopOpen == ShopState.NOBED || this.isShopOpen == ShopState.NOWORKPLACE)
-            shopComp.withStyle(ChatFormatting.DARK_RED);
+        MutableComponent shopComp = null;
+        if (this.entity.getShop() == EnumShop.GENERAL || this.entity.getShop() == EnumShop.FLOWER)
+            shopComp = new TranslatableComponent("gui.npc.shop.owner", new TranslatableComponent(this.entity.getShop().translationKey));
+        else if (this.entity.getShop() != EnumShop.NONE)
+            shopComp = new TranslatableComponent(this.entity.getShop().translationKey);
         int shopY = txtOffY + 13 * y;
         int shopSizeY = -5;
-        for (FormattedCharSequence comp : this.font.split(shopComp, 140)) {
-            this.font.draw(stack, comp, txtOffX, txtOffY + 13 * y, 0);
-            y++;
-            shopSizeY += 13;
+        if (shopComp != null) {
+            if (this.isShopOpen == ShopState.NOBED || this.isShopOpen == ShopState.NOWORKPLACE)
+                shopComp.withStyle(ChatFormatting.DARK_RED);
+            for (FormattedCharSequence comp : this.font.split(shopComp, 140)) {
+                float xCenter = posX + 75 - this.minecraft.font.width(comp) * 0.5f;
+                this.font.draw(stack, comp, xCenter, txtOffY + 13 * y, 0);
+                y++;
+                shopSizeY += 13;
+            }
         }
 
         if (this.entity.getShop() != EnumShop.RANDOM && this.entity.getShop() != EnumShop.NONE) {
@@ -98,11 +112,6 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
             this.renderTooltip(stack, this.components, mouseX, mouseY);
         }
         super.render(stack, mouseX, mouseY, partialTick);
-    }
-
-    protected void drawCenteredScaledString(PoseStack stack, Component string, float x, float y, int color) {
-        float xCenter = x - this.minecraft.font.width(string) * 0.5f;
-        this.minecraft.font.draw(stack, string, xCenter, y, color);
     }
 
     protected void buttons() {

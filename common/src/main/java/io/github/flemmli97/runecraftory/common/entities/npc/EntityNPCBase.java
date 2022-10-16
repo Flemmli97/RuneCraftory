@@ -268,7 +268,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             }
             this.getAnimationHandler().runIfNotNull(this::handleAttack);
             --this.sleepCooldown;
-            if (this.getSleepingPos().map(pos -> !pos.closerToCenterThan(this.position(), 1)).orElse(false))
+            if (this.getSleepingPos().map(pos -> !pos.closerToCenterThan(this.position(), 1) || this.getActivity() != Activity.REST).orElse(false))
                 this.stopSleeping();
         }
     }
@@ -785,6 +785,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void openShopForPlayer(ServerPlayer player) {
         if (this.canTrade() == ShopState.OPEN) {
+            this.interactingPlayers.add(player.getId());
             Platform.INSTANCE.getPlayerData(player).map(d -> {
                 if (EntityNPCBase.this.getShop() != EnumShop.NONE)
                     return d.getShop(EntityNPCBase.this.getShop());

@@ -27,6 +27,7 @@ public class C2SNPCInteraction implements Packet {
         if (sender != null) {
             Entity entity = sender.level.getEntity(pkt.id);
             if (entity instanceof EntityNPCBase npc) {
+                npc.decreaseInteractingPlayers(sender);
                 switch (pkt.type) {
                     case TALK -> npc.talkTo(sender);
                     case FOLLOW -> {
@@ -47,7 +48,6 @@ public class C2SNPCInteraction implements Packet {
                     }
                     case SHOP -> npc.openShopForPlayer(sender);
                 }
-                npc.decreaseInteractingPlayers(sender);
             }
         }
     }

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.gui.widgets.PageButton;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
@@ -74,19 +75,9 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             this.blit(stack, 0, 0, 131, 74, 96, 29);
             int runePointsWidth = Math.min(75, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * 75.0f));
             this.blit(stack, 18, 3, 18, 40, runePointsWidth, 9);
-            this.drawCenteredScaledString(stack, data.getRunePoints() + "/" + data.getMaxRunePoints(), 60, 5, 0.7f, 0xffffff);
+            ClientHandlers.drawCenteredScaledString(stack, this.font, data.getRunePoints() + "/" + data.getMaxRunePoints(), 18 + 75 * 0.5f, 5, 0.7f, 0xffffff);
             stack.popPose();
         }
-    }
-
-    private void drawCenteredScaledString(PoseStack stack, String string, float x, float y, float scale, int color) {
-        stack.pushPose();
-        stack.scale(scale, scale, scale);
-        float xCenter = x - this.minecraft.font.width(string) / 2;
-        int xScaled = (int) (xCenter / scale);
-        int yScaled = (int) (y / scale);
-        this.minecraft.font.draw(stack, string, xScaled, yScaled, color);
-        stack.popPose();
     }
 
     public EnumCrafting type() {

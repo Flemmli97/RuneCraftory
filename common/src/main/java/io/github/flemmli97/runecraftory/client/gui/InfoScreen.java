@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.gui.widgets.PageButton;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
@@ -69,17 +70,17 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         this.blit(stack, this.leftPos + barX, this.topPos + 20, 2, 51, healthWidth, 6);
         this.blit(stack, this.leftPos + barX, this.topPos + 30, 2, 58, runeWidth, 6);
         this.blit(stack, this.leftPos + barX, this.topPos + 41, 2, 66, exp, 9);
-        this.drawCenteredScaledString(stack, (int) this.minecraft.player.getHealth() + "/" + (int) this.minecraft.player.getMaxHealth(), this.leftPos + barX + 56, this.topPos + 21f, 0.7f, 0xffffff);
-        this.drawCenteredScaledString(stack, this.data.getRunePoints() + "/" + this.data.getMaxRunePoints(), this.leftPos + barX + 56, this.topPos + 31f, 0.7f, 0xffffff);
+        ClientHandlers.drawCenteredScaledString(stack, this.font, (int) this.minecraft.player.getHealth() + "/" + (int) this.minecraft.player.getMaxHealth(), this.leftPos + barX + 50, this.topPos + 21f, 0.6f, 0xffffff);
+        ClientHandlers.drawCenteredScaledString(stack, this.font, this.data.getRunePoints() + "/" + this.data.getMaxRunePoints(), this.leftPos + barX + 50, this.topPos + 31f, 0.6f, 0xffffff);
         this.minecraft.font.draw(stack, this.levelTxt, this.leftPos + 120, this.topPos + 42, 0);
-        this.drawRightAlignedScaledString(stack, "" + this.data.getPlayerLevel().getLevel(), this.leftPos + barX + 99, this.topPos + 42, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + this.data.getMoney(), this.leftPos + 195, this.topPos + 9.25f, 0.6f, 0);
-        int statX = 215;
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getPlayerLevel().getLevel(), this.leftPos + barX + 99, this.topPos + 42, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getMoney(), this.leftPos + 187, this.topPos + 9, 0.6f, 0);
+        int statX = 216;
         int statY = 59;
-        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE, null), this.leftPos + statX, this.topPos + statY, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_MAGIC.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_MAGIC_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 3, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE, null), this.leftPos + statX, this.topPos + statY, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_MAGIC.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_MAGIC_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 3, 1.0f, 0);
 
         InventoryScreen.renderEntityInInventory(this.leftPos + 57, this.topPos + 76, 29, this.leftPos + 58 - mouseX, this.topPos + 26 - mouseY, this.minecraft.player);
     }
@@ -98,26 +99,6 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
 
     protected ResourceLocation texture() {
         return texturepath;
-    }
-
-    protected void drawCenteredScaledString(PoseStack stack, String string, float x, float y, float scale, int color) {
-        stack.pushPose();
-        stack.scale(scale, scale, scale);
-        float xCenter = x - this.minecraft.font.width(string) * 0.5f * scale;
-        int xScaled = (int) (xCenter / scale);
-        int yScaled = (int) (y / scale);
-        this.minecraft.font.draw(stack, string, xScaled, yScaled, color);
-        stack.popPose();
-    }
-
-    public void drawRightAlignedScaledString(PoseStack stack, String string, float x, float y, float scale, int color) {
-        stack.pushPose();
-        stack.scale(scale, scale, scale);
-        float xCenter = x - this.minecraft.font.width(string) * scale;
-        int xScaled = (int) (xCenter / scale);
-        int yScaled = (int) (y / scale);
-        this.minecraft.font.draw(stack, string, xScaled, yScaled, color);
-        stack.popPose();
     }
 
     @Override

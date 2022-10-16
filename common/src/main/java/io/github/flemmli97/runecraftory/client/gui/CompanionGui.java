@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -59,16 +60,16 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
         int barX = 81;
         this.blit(stack, this.leftPos + barX, this.topPos + 14, 2, 51, healthWidth, 6);
         this.blit(stack, this.leftPos + barX, this.topPos + 25, 2, 66, exp, 9);
-        this.drawCenteredScaledString(stack, (int) this.entity.getHealth() + "/" + (int) this.entity.getMaxHealth(), this.leftPos + barX + 56, this.topPos + 15, 0.7f, 0xffffff);
+        ClientHandlers.drawCenteredScaledString(stack, this.font, (int) this.entity.getHealth() + "/" + (int) this.entity.getMaxHealth(), this.leftPos + barX + 50, this.topPos + 15, 0.7f, 0xffffff);
         this.font.draw(stack, this.levelTxt, this.leftPos + barX + 3, this.topPos + 26, 0);
-        this.drawRightAlignedScaledString(stack, "" + this.entity.level().getLevel(), this.leftPos + barX + 99, this.topPos + 26, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.entity.level().getLevel(), this.leftPos + barX + 99, this.topPos + 26, 1.0f, 0);
         int statX = 179;
         int statY = 43;
-        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.entity, Attributes.ATTACK_DAMAGE, null), this.leftPos + statX, this.topPos + statY, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_MAGIC.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_MAGIC_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 3, 1.0f, 0);
-        this.drawRightAlignedScaledString(stack, "" + this.entity.friendPoints(this.minecraft.player), this.leftPos + statX, this.topPos + statY + 13 * 4, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.entity, Attributes.ATTACK_DAMAGE, null), this.leftPos + statX, this.topPos + statY, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_MAGIC.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_MAGIC_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 3, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.entity.friendPoints(this.minecraft.player), this.leftPos + statX, this.topPos + statY + 13 * 4, 1.0f, 0);
 
         float scale = 1;
         if (this.entity.getBbWidth() > 1.2) {
@@ -86,37 +87,18 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
         return texturepath;
     }
 
-    protected void drawCenteredScaledString(PoseStack stack, String string, float x, float y, float scale, int color) {
-        stack.pushPose();
-        stack.scale(scale, scale, scale);
-        float xCenter = x - (this.font.width(string) * 0.5f * scale);
-        int xScaled = (int) (xCenter / scale);
-        int yScaled = (int) (y / scale);
-        this.font.draw(stack, string, xScaled, yScaled, color);
-        stack.popPose();
-    }
-
     protected void drawCenteredScaledString(PoseStack stack, Component txt, float x, float y, float scale, int color) {
         stack.pushPose();
+        stack.translate(x, y, 0);
         stack.scale(scale, scale, scale);
-        float xCenter = x - (this.font.width(txt) * 0.5f * scale);
-        int xScaled = (int) (xCenter / scale);
-        int yScaled = (int) (y / scale);
         int yOffset = 0;
         for (FormattedCharSequence sub : this.font.split(txt, 64)) {
-            this.font.draw(stack, sub, xScaled, yScaled + yOffset, color);
+            stack.pushPose();
+            stack.translate(-this.font.width(sub) * 0.5, 0, 0);
+            this.font.draw(stack, sub, 0, yOffset, color);
             yOffset += 9;
+            stack.popPose();
         }
-        stack.popPose();
-    }
-
-    protected void drawRightAlignedScaledString(PoseStack stack, String string, float x, float y, float scale, int color) {
-        stack.pushPose();
-        stack.scale(scale, scale, scale);
-        float xCenter = x - this.font.width(string) * scale;
-        int xScaled = (int) (xCenter / scale);
-        int yScaled = (int) (y / scale);
-        this.font.draw(stack, string, xScaled, yScaled, color);
         stack.popPose();
     }
 
@@ -125,7 +107,7 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
         this.renderBackground(stack);
         this.renderBg(stack, partialTicks, mouseX, mouseY);
         super.render(stack, mouseX, mouseY, partialTicks);
-        this.drawCenteredScaledString(stack, this.title, this.leftPos + 38, this.topPos + 88, 0.8f, 0x404040);
+        this.drawCenteredScaledString(stack, this.title, this.leftPos + 38, this.topPos + 88, 0.8f, 0);
     }
 
     @Override

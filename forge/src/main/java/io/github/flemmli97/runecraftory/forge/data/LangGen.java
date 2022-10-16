@@ -40,6 +40,7 @@ import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -215,8 +216,11 @@ public class LangGen implements DataProvider {
         this.add(ModEffects.seal.get(), "Sealed");
         this.add(ModEffects.fatigue.get(), "Fatigue");
 
-        for (EnumDay day : EnumDay.values())
+        for (EnumDay day : EnumDay.values()) {
             this.add(day.translation(), day.toString().substring(0, 3));
+            String d = day.toString().toLowerCase(Locale.ROOT);
+            this.add(day.translationFull(), d.substring(0, 1).toUpperCase(Locale.ROOT) + d.substring(1));
+        }
 
         this.add("recipe.eat.unlock", "Unlocked recipe for %s");
         this.add("recipe.eat.fail", "Didn't learn any recipe. Maybe your crafting level is too low");
@@ -279,7 +283,7 @@ public class LangGen implements DataProvider {
         this.add(EnumShop.FOOD.translationKey, "Cook");
         this.add(EnumShop.MAGIC.translationKey, "Magicskill merchant");
         this.add(EnumShop.RUNESKILL.translationKey, "Runeskill merchant");
-        this.add(EnumShop.RANDOM.translationKey, "Misc");
+        this.add(EnumShop.RANDOM.translationKey, "Travelling merchant");
 
         this.add("crafting.rpMax.missing", "Missing total rp");
 
@@ -498,7 +502,7 @@ public class LangGen implements DataProvider {
         this.add("gui.npc.bed.no", "I don't have a bed");
         this.add("gui.npc.workplace.no", "I don't have a work place. Valid workplaces are [%s]");
 
-        this.add("npc.schedule.work", "Work: %s - %s");
+        this.add("npc.schedule.work", "From: %s - %s");
         this.add("npc.schedule.work.2", "And: %s - %s");
         this.add("npc.schedule.days.header", "Open on:");
         this.add("npc.schedule.days.all", "Everyday");
@@ -507,6 +511,7 @@ public class LangGen implements DataProvider {
         this.add("npc.schedule.days.2", "All weekdays except %1$s and %2$s");
         this.add("npc.schedule.days.weekend.1", "%s");
         this.add("npc.schedule.days.weekend.2", "%1$s and %2$s");
+        this.add("npc.schedule.days.with", "%1$s");
 
         this.add("npc.shop.inventory.full", "You don't have enough inventory space for it");
         this.add("npc.shop.money.no", "You don't have enough money");

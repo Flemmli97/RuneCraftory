@@ -63,7 +63,7 @@ public class ItemUtils {
 
     public static EnumShopResult buyItem(Player player, ItemStack stack) {
         if (sizeInv(player.getInventory(), stack) < stack.getCount()) {
-            player.playSound(SoundEvents.VILLAGER_YES, 1.0f, 1.0f);
+            player.playSound(SoundEvents.VILLAGER_NO, 1.0f, 1.0f);
             return EnumShopResult.NOSPACE;
         }
         int price = getBuyPrice(stack) * stack.getCount();
@@ -78,7 +78,7 @@ public class ItemUtils {
             }
             return EnumShopResult.SUCCESS;
         }
-        player.playSound(SoundEvents.VILLAGER_YES, 1.0f, 1.0f);
+        player.playSound(SoundEvents.VILLAGER_NO, 1.0f, 1.0f);
         return EnumShopResult.NOMONEY;
     }
 

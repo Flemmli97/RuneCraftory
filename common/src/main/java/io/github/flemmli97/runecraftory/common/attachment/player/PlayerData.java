@@ -521,8 +521,10 @@ public class PlayerData {
                     continue;
                 NonNullList<ItemStack> shop = NonNullList.create();
                 for (float chance = 2.0f + shopItems.size() * 0.002f; player.level.random.nextFloat() < chance; chance -= 0.1f) {
-                    ItemStack stack = shopItems.get(player.level.random.nextInt(shopItems.size()));
+                    ItemStack stack = shopItems.remove(player.level.random.nextInt(shopItems.size()));
                     shop.add(stack);
+                    if (shopItems.isEmpty())
+                        break;
                 }
                 this.shopItems.put(profession, shop);
             }

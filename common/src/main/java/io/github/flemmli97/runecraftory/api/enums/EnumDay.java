@@ -11,9 +11,11 @@ public enum EnumDay {
     SUNDAY("day.sunday");
 
     private final String translation;
+    private final String translationFull;
 
     EnumDay(String id) {
         this.translation = id;
+        this.translationFull = id + ".full";
     }
 
     public static EnumDay nextDay(EnumDay day) {
@@ -30,6 +32,10 @@ public enum EnumDay {
 
     public String translation() {
         return this.translation;
+    }
+
+    public String translationFull() {
+        return this.translationFull;
     }
 
 }

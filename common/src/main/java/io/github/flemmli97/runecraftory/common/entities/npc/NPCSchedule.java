@@ -36,7 +36,7 @@ public class NPCSchedule {
     public NPCSchedule(EntityNPCBase npc, int wakeUpTime, int workTime, int breakTime, int workTimeAfter, int doneWorkTime, int sleepTime, int meetTimeOffday, int meetTimeAfterOffday, EnumSet<EnumDay> workDays) {
         this.npc = npc;
         this.wakeUpTime = wakeUpTime;
-        this.workTime = Math.max(this.wakeUpTime, workTime);
+        this.workTime = Math.max(this.wakeUpTime + 500, workTime);
         this.breakTime = Math.max(this.workTime, breakTime);
         this.workTimeAfter = Math.max(this.breakTime, workTimeAfter);
         this.doneWorkTime = Math.max(this.workTimeAfter, doneWorkTime);
@@ -47,14 +47,14 @@ public class NPCSchedule {
     }
 
     public NPCSchedule(EntityNPCBase npc, Random random) {
-        this(npc, randomizedTime(random, 6, 10),
+        this(npc, randomizedTime(random, 6, 9),
 
                 randomizedTime(random, 8, 10),
                 randomizedTime(random, 11, 13),
                 randomizedTime(random, 12, 15),
                 randomizedTime(random, 16, 18),
 
-                randomizedTime(random, 20, 23),
+                randomizedTime(random, 20, 22),
 
                 randomizedTime(random, 9, 12),
                 randomizedTime(random, 13, 15),
@@ -170,17 +170,17 @@ public class NPCSchedule {
             } else {
                 switch (weekDayCounts.size()) {
                     case 0 -> newList.add(new TranslatableComponent("npc.schedule.days.0"));
-                    case 1 -> newList.add(new TranslatableComponent("npc.schedule.days.1", weekDayCounts.get(0)));
-                    case 2 -> newList.add(new TranslatableComponent("npc.schedule.days.2", weekDayCounts.get(0), weekDayCounts.get(1)));
-                    default -> newList.add(new TranslatableComponent("npc.schedule.days.with", this.workDays.stream().filter(day -> day != EnumDay.SATURDAY && day != EnumDay.SUNDAY).map(EnumDay::translation).toArray()));
+                    case 1 -> newList.add(new TranslatableComponent("npc.schedule.days.1", new TranslatableComponent(weekDayCounts.get(0).translationFull())));
+                    case 2 -> newList.add(new TranslatableComponent("npc.schedule.days.2", new TranslatableComponent(weekDayCounts.get(0).translationFull(), weekDayCounts.get(1))));
+                    default -> newList.add(new TranslatableComponent("npc.schedule.days.with", this.workDays.stream().filter(day -> day != EnumDay.SATURDAY && day != EnumDay.SUNDAY).map(e -> new TranslatableComponent(e.translationFull())).toArray()));
                 }
                 if (this.workDays.contains(EnumDay.SATURDAY)) {
                     if (this.workDays.contains(EnumDay.SUNDAY))
-                        newList.add(new TranslatableComponent("npc.schedule.days.weekend.2", EnumDay.SATURDAY.translation(), EnumDay.SUNDAY.translation()));
+                        newList.add(new TranslatableComponent("npc.schedule.days.weekend.2", new TranslatableComponent(EnumDay.SATURDAY.translationFull()), new TranslatableComponent(EnumDay.SUNDAY.translationFull())));
                     else
-                        newList.add(new TranslatableComponent("npc.schedule.days.weekend.1", new TranslatableComponent(EnumDay.SATURDAY.translation())));
+                        newList.add(new TranslatableComponent("npc.schedule.days.weekend.1", new TranslatableComponent(EnumDay.SATURDAY.translationFull())));
                 } else if (this.workDays.contains(EnumDay.SUNDAY))
-                    newList.add(new TranslatableComponent("npc.schedule.days.weekend.1", new TranslatableComponent(EnumDay.SUNDAY.translation())));
+                    newList.add(new TranslatableComponent("npc.schedule.days.weekend.1", new TranslatableComponent(EnumDay.SUNDAY.translationFull())));
             }
             this.view = ImmutableList.copyOf(newList);
         }

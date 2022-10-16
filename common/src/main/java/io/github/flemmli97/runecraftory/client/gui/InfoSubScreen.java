@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.gui.widgets.PageButton;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -37,7 +38,7 @@ public class InfoSubScreen extends InfoScreen {
                 RenderSystem.setShaderTexture(0, bars);
                 this.blit(stack, this.leftPos + 9, this.topPos + 117 + 13 * i, 2, 80, skillXP, 9);
                 this.minecraft.font.draw(stack, new TranslatableComponent(skill.getTranslation()), this.leftPos + 11, this.topPos + 118 + 13 * i, 0xffffff);
-                this.drawRightAlignedScaledString(stack, "" + this.data.getSkillLevel(skill).getLevel(), this.leftPos + 104, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
+                ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getSkillLevel(skill).getLevel(), this.leftPos + 104, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
             }
             index = i + 6 + this.page * 12;
             if (index < EnumSkills.values().length) {
@@ -46,7 +47,7 @@ public class InfoSubScreen extends InfoScreen {
                 RenderSystem.setShaderTexture(0, bars);
                 this.blit(stack, this.leftPos + 119, this.topPos + 117 + 13 * i, 2, 80, skillXP2, 9);
                 this.minecraft.font.draw(stack, new TranslatableComponent(skill2.getTranslation()), this.leftPos + 121, this.topPos + 118 + 13 * i, 0xffffff);
-                this.drawRightAlignedScaledString(stack, "" + this.data.getSkillLevel(skill2).getLevel(), this.leftPos + 214, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
+                ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getSkillLevel(skill2).getLevel(), this.leftPos + 214, this.topPos + 118 + 13 * i, 1.0f, 0xffffff);
             }
         }
     }

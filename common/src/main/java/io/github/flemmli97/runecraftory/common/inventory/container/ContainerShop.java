@@ -111,14 +111,15 @@ public class ContainerShop extends AbstractContainerMenu {
         }
         if (slot == InventoryShop.shopSize) {
             Slot shopOutput = this.getSlot(InventoryShop.shopSize);
-            if (shopOutput.hasItem()) {
+            if (shopOutput.hasItem() && !player.level.isClientSide) {
                 EnumShopResult res = ItemUtils.buyItem(player, shopOutput.getItem().copy());
                 switch (res) {
                     case NOMONEY -> player.sendMessage(new TranslatableComponent("npc.shop.money.no"), Util.NIL_UUID);
                     case NOSPACE -> player.sendMessage(new TranslatableComponent("npc.shop.inventory.full"), Util.NIL_UUID);
                     case SUCCESS -> player.sendMessage(new TranslatableComponent("npc.shop.success"), Util.NIL_UUID);
                 }
-                shopOutput.set(ItemStack.EMPTY);
+                if (res == EnumShopResult.SUCCESS)
+                    shopOutput.set(ItemStack.EMPTY);
             }
             return;
         }
