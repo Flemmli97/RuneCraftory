@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class NPCFindPOI extends Goal {
 
     protected final EntityNPCBase npc;
-    private int cooldown;
+    private int cooldown = 2;
 
     public NPCFindPOI(EntityNPCBase npc) {
         this.npc = npc;
@@ -57,7 +57,7 @@ public class NPCFindPOI extends Goal {
         }
         this.poiCheck(this.npc.getWorkPlace(), this.npc.getShop().poiType.get(), serverLevel, this.npc::setWorkPlace);
         this.poiCheck(this.npc.getMeetingPos(), PoiType.MEETING, serverLevel, this.npc::setMeetingPos);
-        this.cooldown = 19;
+        this.cooldown = this.npc.getWorkPlace() != null && this.npc.getBedPos() != null ? 20 : 10;
     }
 
     private void poiCheck(GlobalPos pos, PoiType poiType, ServerLevel serverLevel, Consumer<GlobalPos> set) {

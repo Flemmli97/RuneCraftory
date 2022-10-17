@@ -71,7 +71,7 @@ public class SingleTimeSpawner extends BlockEntity {
     @Override
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
-        if(this.savedEntity != null)
+        if (this.savedEntity != null)
             nbt.putString("Entity", PlatformUtils.INSTANCE.entities().getIDFrom(this.savedEntity).toString());
         if (this.tag != null)
             nbt.put("EntityNBT", this.tag);

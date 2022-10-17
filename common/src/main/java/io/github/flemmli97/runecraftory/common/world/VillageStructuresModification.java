@@ -23,28 +23,28 @@ public class VillageStructuresModification {
     private static boolean init;
 
     public static void modifyVillagePools() {
-        if(init)
+        if (init)
             return;
         init = true;
         addNewHouses(BuiltinRegistries.TEMPLATE_POOL.get(new ResourceLocation("village/plains/houses")), List.of(
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.GENERAL)).apply(StructureTemplatePool.Projection.RIGID), 30),
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.FLOWER)).apply(StructureTemplatePool.Projection.RIGID), 30)
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.GENERAL)).apply(StructureTemplatePool.Projection.RIGID), 2),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.FLOWER)).apply(StructureTemplatePool.Projection.RIGID), 2)
         ));
         addNewHouses(BuiltinRegistries.TEMPLATE_POOL.get(new ResourceLocation("village/desert/houses")), List.of(
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.GENERAL)).apply(StructureTemplatePool.Projection.RIGID), 30),
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.FLOWER)).apply(StructureTemplatePool.Projection.RIGID), 30)
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.GENERAL)).apply(StructureTemplatePool.Projection.RIGID), 2),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.FLOWER)).apply(StructureTemplatePool.Projection.RIGID), 2)
         ));
         addNewHouses(BuiltinRegistries.TEMPLATE_POOL.get(new ResourceLocation("village/savanna/houses")), List.of(
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.GENERAL)).apply(StructureTemplatePool.Projection.RIGID), 30),
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.FLOWER)).apply(StructureTemplatePool.Projection.RIGID), 30)
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.GENERAL)).apply(StructureTemplatePool.Projection.RIGID), 2),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.FLOWER)).apply(StructureTemplatePool.Projection.RIGID), 2)
         ));
         addNewHouses(BuiltinRegistries.TEMPLATE_POOL.get(new ResourceLocation("village/snowy/houses")), List.of(
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.GENERAL)).apply(StructureTemplatePool.Projection.RIGID), 30),
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.FLOWER)).apply(StructureTemplatePool.Projection.RIGID), 30)
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.GENERAL)).apply(StructureTemplatePool.Projection.RIGID), 2),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.FLOWER)).apply(StructureTemplatePool.Projection.RIGID), 2)
         ));
         addNewHouses(BuiltinRegistries.TEMPLATE_POOL.get(new ResourceLocation("village/taiga/houses")), List.of(
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.GENERAL)).apply(StructureTemplatePool.Projection.RIGID), 30),
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.FLOWER)).apply(StructureTemplatePool.Projection.RIGID), 30)
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.GENERAL)).apply(StructureTemplatePool.Projection.RIGID), 2),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(EnumShop.FLOWER)).apply(StructureTemplatePool.Projection.RIGID), 2)
         ));
 
     }

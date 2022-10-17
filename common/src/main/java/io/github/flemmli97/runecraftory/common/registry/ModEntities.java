@@ -453,7 +453,7 @@ public class ModEntities {
         cons.accept(thunderbolt.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
         cons.accept(marionetta.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
 
-        cons.accept(npc.get(), BaseMonster.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
+        cons.accept(npc.get(), EntityNPCBase.createAttributes(ModAttributes.ATTRIBUTES.getEntries()));
     }
 
     public static <V extends Entity> RegistryEntrySupplier<EntityType<V>> reg(EntityType.Builder<V> v, ResourceLocation name) {

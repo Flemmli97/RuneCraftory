@@ -33,9 +33,12 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
+import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -47,6 +50,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -57,11 +61,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -73,6 +80,7 @@ import net.minecraft.world.entity.ai.navigation.GroundPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -80,10 +88,12 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -166,6 +176,15 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (!level.isClientSide)
             this.addGoal();
         this.schedule = new NPCSchedule(this, this.getRandom());
+    }
+
+    public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {
+        AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.24)
+                .add(Attributes.FOLLOW_RANGE, 32);
+        if (atts != null)
+            for (RegistryEntrySupplier<Attribute> att : atts)
+                map.add(att.get());
+        return map;
     }
 
     protected void applyAttributes() {
@@ -287,6 +306,23 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         Platform.INSTANCE.sendToClient(new S2COpenNPCGui(this, serverPlayer), serverPlayer);
         this.interactingPlayers.add(serverPlayer.getId());
         return InteractionResult.CONSUME;
+    }
+
+    @Override
+    public void handleEntityEvent(byte id) {
+        if (id == 14) {
+            this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+        } else
+            super.handleEntityEvent(id);
+    }
+
+    protected void addParticlesAroundSelf(ParticleOptions particleData) {
+        for (int i = 0; i < 5; ++i) {
+            double d = this.random.nextGaussian() * 0.02;
+            double e = this.random.nextGaussian() * 0.02;
+            double f = this.random.nextGaussian() * 0.02;
+            this.level.addParticle(particleData, this.getRandomX(1.0), this.getRandomY() + 1.0, this.getRandomZ(1.0), d, e, f);
+        }
     }
 
     public void giftItem(Player player, ItemStack stack) {
@@ -564,6 +600,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.setMale(compound.getBoolean("Male"));
     }
 
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
+        if (reason == MobSpawnType.COMMAND || reason == MobSpawnType.SPAWN_EGG || reason == MobSpawnType.SPAWNER || reason == MobSpawnType.DISPENSER || reason == MobSpawnType.NATURAL) {
+            this.randomizeData();
+        }
+        return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
+    }
+
     public void handleAttack(AnimatedAction anim) {
         this.getNavigation().stop();
         if (anim.getTick() == 1 && this.getTarget() != null)
@@ -688,6 +732,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void setBedPos(GlobalPos pos) {
+        if (pos != null)
+            this.level.broadcastEntityEvent(this, (byte) 14);
         this.getBrain().setMemory(MemoryModuleType.HOME, pos);
     }
 
