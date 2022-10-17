@@ -4,9 +4,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.client.gui.widgets.PageButton;
+import io.github.flemmli97.runecraftory.client.gui.widgets.SpeechBubble;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
+import io.github.flemmli97.runecraftory.common.network.C2SShopButton;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -27,6 +30,9 @@ public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
     private boolean isLeftClickDown, isRightClickDown;
     private int clickDelay, rightDelay = 50, leftDelay = 50;
 
+    private PageButton next, prev;
+    private SpeechBubble speech;
+
     public NPCShopGui(ContainerShop abstractContainerMenu, Inventory inventory, Component component) {
         super(abstractContainerMenu, inventory, component);
         this.inventory = inventory;
@@ -37,6 +43,11 @@ public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
         this.imageWidth = 245;
         this.imageHeight = 217;
         super.init();
+
+        this.addRenderableWidget(this.next = new PageButton(this.leftPos + 123, this.topPos + 8, new TextComponent(">"), b -> Platform.INSTANCE.sendToServer(new C2SShopButton(true))));
+        this.addRenderableWidget(this.prev = new PageButton(this.leftPos + 12, this.topPos + 8, new TextComponent("<"), b -> Platform.INSTANCE.sendToServer(new C2SShopButton(false))));
+        this.updateButtons();
+        this.addRenderableOnly(this.speech = new SpeechBubble(this.minecraft, this.leftPos + 148, this.topPos + 10, 98, 30));
     }
 
     @Override
@@ -112,5 +123,16 @@ public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
     public void onClose() {
         super.onClose();
         Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.menu.getShopOwner().getId(), C2SNPCInteraction.Type.CLOSE));
+    }
+
+    public void drawBubble(Component txt) {
+        this.speech.showBubble(txt, 200);
+    }
+
+    public void updateButtons() {
+        if (this.next != null)
+            this.next.visible = this.menu.hasNext();
+        if (this.prev != null)
+            this.prev.visible = this.menu.hasPrev();
     }
 }

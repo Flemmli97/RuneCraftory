@@ -17,6 +17,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, C2SUpdateCraftingScreen.ID, C2SUpdateCraftingScreen.class, C2SUpdateCraftingScreen::write, C2SUpdateCraftingScreen::read, C2SUpdateCraftingScreen::handle);
         register.registerMessage(id++, C2SSetMonsterBehaviour.ID, C2SSetMonsterBehaviour.class, C2SSetMonsterBehaviour::write, C2SSetMonsterBehaviour::read, C2SSetMonsterBehaviour::handle);
         register.registerMessage(id++, C2SNPCInteraction.ID, C2SNPCInteraction.class, C2SNPCInteraction::write, C2SNPCInteraction::read, C2SNPCInteraction::handle);
+        register.registerMessage(id++, C2SShopButton.ID, C2SShopButton.class, C2SShopButton::write, C2SShopButton::read, C2SShopButton::handle);
         return id;
     }
 
@@ -41,6 +42,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2COpenCompanionGui.ID, S2COpenCompanionGui.class, S2COpenCompanionGui::write, S2COpenCompanionGui::read, S2COpenCompanionGui::handle);
         register.registerMessage(id++, S2COpenNPCGui.ID, S2COpenNPCGui.class, S2COpenNPCGui::write, S2COpenNPCGui::read, S2COpenNPCGui::handle);
         register.registerMessage(id++, S2CUpdateNPCData.ID, S2CUpdateNPCData.class, S2CUpdateNPCData::write, S2CUpdateNPCData::read, S2CUpdateNPCData::handle);
+        register.registerMessage(id++, S2CShopResponses.ID, S2CShopResponses.class, S2CShopResponses::write, S2CShopResponses::read, S2CShopResponses::handle);
         return id;
     }
 

@@ -3,13 +3,16 @@ package io.github.flemmli97.runecraftory.common.inventory.container;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShopResult;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
+import io.github.flemmli97.runecraftory.common.network.S2CShopResponses;
 import io.github.flemmli97.runecraftory.common.registry.ModContainer;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
-import net.minecraft.Util;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -25,6 +28,8 @@ public class ContainerShop extends AbstractContainerMenu {
 
     private final InventoryShop invShop;
     private final DataSlot price;
+    private final DataSlot next;
+    private final DataSlot prev;
 
     public ContainerShop(int windowID, Inventory playerInv, FriendlyByteBuf buffer) {
         this(windowID, playerInv, read(playerInv.player.level, buffer));
@@ -70,6 +75,9 @@ public class ContainerShop extends AbstractContainerMenu {
             this.addSlot(new Slot(playerInv, k, 13 + k * 18, 193));
         }
         this.addDataSlot(this.price = DataSlot.standalone());
+        this.addDataSlot(this.next = DataSlot.standalone());
+        this.addDataSlot(this.prev = DataSlot.standalone());
+        this.next.set(this.invShop.hasNext() ? 1 : 0);
     }
 
     @Override
@@ -111,13 +119,14 @@ public class ContainerShop extends AbstractContainerMenu {
         }
         if (slot == InventoryShop.shopSize) {
             Slot shopOutput = this.getSlot(InventoryShop.shopSize);
-            if (shopOutput.hasItem() && !player.level.isClientSide) {
+            if (shopOutput.hasItem() && player instanceof ServerPlayer serverPlayer) {
                 EnumShopResult res = ItemUtils.buyItem(player, shopOutput.getItem().copy());
-                switch (res) {
-                    case NOMONEY -> player.sendMessage(new TranslatableComponent("npc.shop.money.no"), Util.NIL_UUID);
-                    case NOSPACE -> player.sendMessage(new TranslatableComponent("npc.shop.inventory.full"), Util.NIL_UUID);
-                    case SUCCESS -> player.sendMessage(new TranslatableComponent("npc.shop.success"), Util.NIL_UUID);
-                }
+                Component txt = switch (res) {
+                    case NOMONEY -> new TranslatableComponent("npc.shop.money.no");
+                    case NOSPACE -> new TranslatableComponent("npc.shop.inventory.full");
+                    case SUCCESS -> new TranslatableComponent("npc.shop.success");
+                };
+                Platform.INSTANCE.sendToClient(new S2CShopResponses(txt), serverPlayer);
                 if (res == EnumShopResult.SUCCESS)
                     shopOutput.set(ItemStack.EMPTY);
             }
@@ -172,5 +181,25 @@ public class ContainerShop extends AbstractContainerMenu {
             return new InventoryShop(npc, list);
         }
         return null;
+    }
+
+    public void prev() {
+        this.invShop.prev();
+        this.broadcastChanges();
+        this.next.set(this.invShop.hasPrev() ? 1 : 0);
+    }
+
+    public void next() {
+        this.invShop.next();
+        this.broadcastChanges();
+        this.next.set(this.invShop.hasNext() ? 1 : 0);
+    }
+
+    public boolean hasNext() {
+        return this.next.get() == 1;
+    }
+
+    public boolean hasPrev() {
+        return this.prev.get() == 1;
     }
 }

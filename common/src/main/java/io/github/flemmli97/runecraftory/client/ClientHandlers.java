@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCCompanionGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCGui;
+import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
@@ -191,6 +192,15 @@ public class ClientHandlers {
         } else {
             x -= font.width(string);
             font.draw(stack, string, x, y, color);
+        }
+    }
+
+    public static void handleShopRespone(Component txt) {
+        if (Minecraft.getInstance().screen instanceof NPCShopGui shop) {
+            if (txt != null)
+                shop.drawBubble(txt);
+            else
+                shop.updateButtons();
         }
     }
 }

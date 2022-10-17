@@ -112,6 +112,14 @@ public class InventoryShop implements Container {
         this.updateInv();
     }
 
+    public boolean hasNext() {
+        return this.index < this.shop.size() / shopSize;
+    }
+
+    public boolean hasPrev() {
+        return this.index > 0;
+    }
+
     private void updateInv() {
         List<ItemStack> list = this.shop;
         for (int i = 0; i < this.slots.size(); ++i) {
