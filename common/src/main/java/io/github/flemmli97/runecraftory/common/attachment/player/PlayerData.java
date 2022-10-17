@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.config.values.SkillProperties;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
+import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemStatIncrease;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
@@ -520,10 +521,10 @@ public class PlayerData {
                 if (shopItems.isEmpty())
                     continue;
                 NonNullList<ItemStack> shop = NonNullList.create();
-                for (float chance = 2.0f + shopItems.size() * 0.002f; player.level.random.nextFloat() < chance; chance -= 0.1f) {
+                for (float chance = 1.5f + shopItems.size() * 0.002f; player.level.random.nextFloat() < chance; chance -= 0.1f) {
                     ItemStack stack = shopItems.remove(player.level.random.nextInt(shopItems.size()));
                     shop.add(stack);
-                    if (shopItems.isEmpty())
+                    if (shopItems.isEmpty() || (profession == EnumShop.RANDOM && shop.size() >= InventoryShop.shopSize))
                         break;
                 }
                 this.shopItems.put(profession, shop);

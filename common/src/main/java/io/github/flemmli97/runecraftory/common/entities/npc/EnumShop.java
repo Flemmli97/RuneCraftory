@@ -10,7 +10,7 @@ public enum EnumShop {
     NONE(() -> null, "shop_none"),
     GENERAL(() -> PoiType.FARMER, "shop_general"),
     FLOWER(() -> PoiType.FARMER, "shop_flower"),
-    WEAPON(() -> PoiType.WEAPONSMITH, "shop_weapon"),
+    WEAPON(() -> PoiType.TOOLSMITH, "shop_weapon"),
     CLINIC(() -> PoiType.CLERIC, "shop_clinic"),
     FOOD(() -> PoiType.BUTCHER, "shop_food"),
     MAGIC(ModPoiTypes.skills, "shop_magic"),
