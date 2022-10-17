@@ -18,7 +18,7 @@ import java.util.function.Function;
 public class ThunderboltRuinsStructure extends StructureFeature<JigsawConfiguration> {
 
     public ThunderboltRuinsStructure(Codec<JigsawConfiguration> codec) {
-        super(codec, ctx -> AmbrosiaForestStructure.createPiecesGenerator(ctx, ThunderboltRuinsStructure::isFeatureChunk), PostPlacementProcessor.NONE);
+        super(codec, ctx -> createPiecesGenerator(ctx, ThunderboltRuinsStructure::isFeatureChunk), PostPlacementProcessor.NONE);
     }
 
     public static Optional<PieceGenerator<JigsawConfiguration>> createPiecesGenerator(PieceGeneratorSupplier.Context<JigsawConfiguration> context,

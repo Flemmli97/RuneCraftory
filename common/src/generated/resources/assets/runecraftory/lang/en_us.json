@@ -1487,7 +1487,7 @@
   "gui.npc.shop.owner": "Owner of %s",
   "gui.npc.bed.no": "I don't have a bed",
   "gui.npc.workplace.no": "I don't have a work place. Valid workplaces are [%s]",
-  "npc.schedule.work": "Work: %s - %s",
+  "npc.schedule.work": "From: %s - %s",
   "npc.schedule.work.2": "And: %s - %s",
   "npc.schedule.days.header": "Open on:",
   "npc.schedule.days.all": "Everyday",

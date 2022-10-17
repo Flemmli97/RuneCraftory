@@ -15,7 +15,10 @@
     "PlayerMixin",
     "LivingEntityMixin",
     "FishingRodHookTriggerMixin",
-    "PoiTypeAccessor"
+    "PoiTypeAccessor",
+    "SinglePoolElementMixin",
+    "StructureTemplatePoolMixin",
+    "PoolsMixin"
   ],
   "client": [
     "AtlasMixin",

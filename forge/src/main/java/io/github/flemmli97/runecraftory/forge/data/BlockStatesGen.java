@@ -94,6 +94,7 @@ public class BlockStatesGen extends BlockStateProvider {
         this.craftingModel(ModBlocks.chemistry.get());
         //this.simpleBlock(ModBlocks.board.get());
         this.simpleBlock(ModBlocks.bossSpawner.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPAWNER.getRegistryName().getPath())));
+        this.simpleBlock(ModBlocks.singleSpawnBlock.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPAWNER.getRegistryName().getPath())));
 
         this.getVariantBuilder(ModBlocks.farmland.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
                         this.models().getExistingFile(state.getValue(FarmBlock.MOISTURE) == 7 ? new ResourceLocation("block/farmland_moist") : new ResourceLocation("block/farmland")))
