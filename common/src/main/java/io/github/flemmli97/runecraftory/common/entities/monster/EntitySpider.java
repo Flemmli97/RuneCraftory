@@ -32,7 +32,7 @@ public class EntitySpider extends BaseMonster {
     public AnimatedRangedGoal<EntitySpider> attack = new AnimatedRangedGoal<>(this, 7, (e) -> true);
 
     public int climbingTicker = -1;
-    public static int climbMax = 6;
+    public static int climbMax = 9;
 
     public EntitySpider(EntityType<? extends EntitySpider> type, Level world) {
         super(type, world);
@@ -132,6 +132,11 @@ public class EntitySpider extends BaseMonster {
             else
                 this.getAnimationHandler().setAnimation(melee);
         }
+    }
+
+    @Override
+    protected int calculateFallDamage(float distance, float damageMultiplier) {
+        return (int) ((super.calculateFallDamage(distance, damageMultiplier) - 3) * 0.5);
     }
 
     private void shootWeb(LivingEntity target) {
