@@ -82,7 +82,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         this.font.draw(stack, "" + this.entity.friendPoints(this.minecraft.player), posX + 65 + 10, txtOffY + 13 * y, 0);
         y += 1;
         MutableComponent shopComp = null;
-        if (this.entity.getShop() == EnumShop.GENERAL || this.entity.getShop() == EnumShop.FLOWER)
+        if (this.entity.getShop() == EnumShop.GENERAL)
             shopComp = new TranslatableComponent("gui.npc.shop.owner", new TranslatableComponent(this.entity.getShop().translationKey));
         else if (this.entity.getShop() != EnumShop.NONE)
             shopComp = new TranslatableComponent(this.entity.getShop().translationKey);

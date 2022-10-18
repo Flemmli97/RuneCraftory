@@ -312,6 +312,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void handleEntityEvent(byte id) {
         if (id == 14) {
             this.addParticlesAroundSelf(ParticleTypes.HAPPY_VILLAGER);
+        } else if (id == 15) {
+            this.addParticlesAroundSelf(ParticleTypes.END_ROD);
         } else
             super.handleEntityEvent(id);
     }
@@ -724,6 +726,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void setWorkPlace(GlobalPos pos) {
+        if (pos != null)
+            this.level.broadcastEntityEvent(this, (byte) 15);
         this.getBrain().setMemory(MemoryModuleType.JOB_SITE, pos);
     }
 

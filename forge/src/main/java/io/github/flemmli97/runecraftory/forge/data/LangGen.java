@@ -277,7 +277,7 @@ public class LangGen implements DataProvider {
         this.add("tooltip.item.npc", "Shift-right-click to change profession");
         this.add(EnumShop.NONE.translationKey, "None");
         this.add(EnumShop.GENERAL.translationKey, "General Store");
-        this.add(EnumShop.FLOWER.translationKey, "Carnation");
+        this.add(EnumShop.FLOWER.translationKey, "Florist");
         this.add(EnumShop.WEAPON.translationKey, "Smith");
         this.add(EnumShop.CLINIC.translationKey, "Doctor");
         this.add(EnumShop.FOOD.translationKey, "Cook");
@@ -455,6 +455,14 @@ public class LangGen implements DataProvider {
                 "You can put both spell and skill items in the spell slots (in your inventory) and then you are able to simply press the corresponding key to cast them. " +
                 "The only craftable spells are the following two:");
         this.add("runecraftory.patchouli.entry.spellskills.3", "Skills require you to hold a weapon in your hand and will drop in efficiency if you hold the wrong weapon. ");
+
+        this.add("runecraftory.patchouli.category.npc", "Villagers");
+        this.add("runecraftory.patchouli.category.npc.desc", "");
+        this.add("runecraftory.patchouli.entry.npc", "Villagers");
+        this.add("runecraftory.patchouli.entry.npc.1", "You might come across some villagers that are different from vanilla villagers. Some can operate shops where you can buy stuff. " +
+                "For them to operate a shop they need a bed and workplace not too far away from eachother first. Right click allows you to interact with them and they will tell you if they are missing something.");
+        this.add("runecraftory.patchouli.entry.npc.2", "Hover over the red text (if existent) to see that. $(br)$(br)" +
+                "Villagers are still WIP. They dont have skins yet and are pretty much limited to their shops.");
 
         this.add("runecraftory.patchouli.category.entities", "Monsters");
         this.add("runecraftory.patchouli.category.entities.desc", "List of all monsters");

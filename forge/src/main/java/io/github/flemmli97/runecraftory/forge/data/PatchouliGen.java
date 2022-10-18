@@ -103,7 +103,7 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .build();
 
         book.addCategory("category.equipment", "runecraftory.patchouli.category.equipment", "runecraftory.patchouli.category.equipment.desc", new ItemStack(ModItems.shortDagger.get()))
-                .setSortnum(1)
+                .setSortnum(2)
 
                 .addEntry("entry.weapon", "runecraftory.patchouli.entry.weapon", new ItemStack(ModItems.shortDagger.get()))
                 .setSortnum(1)
@@ -177,6 +177,15 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .setRecipe2(new ResourceLocation(RuneCraftory.MODID, "teleport"))
                 .build()
                 .addSimpleTextPage("runecraftory.patchouli.entry.spellskills.3")
+                .build();
+
+        book.addCategory("category.npc", "runecraftory.patchouli.category.npc", "runecraftory.patchouli.category.npc.desc", new ItemStack(Items.PLAYER_HEAD))
+                .setSortnum(3)
+                .addEntry("entry.npc", "runecraftory.patchouli.entry.npc", new ItemStack(Items.PLAYER_HEAD))
+                .setSortnum(5)
+                .addSimpleTextPage("runecraftory.patchouli.entry.npc.1")
+                .addSimpleTextPage("runecraftory.patchouli.entry.npc.2")
+
                 .build();
 
         CategoryBuilder cat = book.addCategory("category.entities", "runecraftory.patchouli.category.entities", "runecraftory.patchouli.category.entities.desc", new ItemStack(ModItems.spawner.get()))
