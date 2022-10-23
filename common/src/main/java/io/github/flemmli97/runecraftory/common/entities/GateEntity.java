@@ -252,11 +252,12 @@ public class GateEntity extends Mob implements IBaseMob {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData spawnData, @Nullable CompoundTag dataTag) {
         Holder<Biome> biome = level.getBiome(this.blockPosition());
-        this.spawnList.addAll(GateSpawning.pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(4) + 2, this.blockPosition()));
         this.type = this.getType(level, biome);
-        this.entityData.set(mobLevel, LevelCalc.levelFromPos(level.getLevel(), this.position()));
+        int gateLevel = LevelCalc.levelFromPos(level.getLevel(), this.position());
+        this.entityData.set(mobLevel, gateLevel);
         this.entityData.set(elementType, this.type.getTranslation());
         this.entityData.set(element, this.type.ordinal());
+        this.spawnList.addAll(GateSpawning.pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(4) + 2, this.blockPosition(), gateLevel));
         this.setPos(this.getX(), this.getY() + 1, this.getZ());
         this.updateStatsToLevel();
         return spawnData;

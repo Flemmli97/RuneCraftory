@@ -42,7 +42,7 @@ public class GateSpawning {
     private static final Map<TagKey<Biome>, List<SpawnResource>> spawningMappingBiome = new HashMap<>();
     private static final Map<ConfiguredStructureFeature<?, ?>, List<SpawnResource>> spawningMappingStructure = new HashMap<>();
 
-    public static List<EntityType<?>> pickRandomMobs(ServerLevel world, Holder<Biome> biome, Random rand, int amount, BlockPos pos) {
+    public static List<EntityType<?>> pickRandomMobs(ServerLevel world, Holder<Biome> biome, Random rand, int amount, BlockPos pos, int gateLevel) {
         List<SpawnResource> list = spawningMappingStructure.entrySet().stream()
                 .filter(e -> world.structureFeatureManager().getStructureAt(pos, e.getKey()).isValid())
                 .map(Map.Entry::getValue).flatMap(List::stream).collect(Collectors.toList());
@@ -55,7 +55,7 @@ public class GateSpawning {
         }
         if (list.isEmpty())
             return new ArrayList<>();
-        list.removeIf(w -> w.distToSpawnSq >= pos.distSqr(world.getSharedSpawnPos()));
+        list.removeIf(w -> w.distToSpawnSq >= pos.distSqr(world.getSharedSpawnPos()) || w.minGateLevel > gateLevel);
         List<EntityType<?>> ret = new ArrayList<>();
         if (amount > list.size()) {
             list.forEach(w -> {
@@ -135,11 +135,13 @@ public class GateSpawning {
 
         private final ResourceLocation entity;
         private final int distToSpawnSq;
+        private final int minGateLevel;
 
-        public SpawnResource(ResourceLocation entity, int distToSpawn, int weight) {
+        public SpawnResource(ResourceLocation entity, int distToSpawn, int minGateLevel, int weight) {
             super(weight);
             this.entity = entity;
             this.distToSpawnSq = distToSpawn * distToSpawn;
+            this.minGateLevel = minGateLevel;
         }
 
         public boolean canSpawn(ServerLevel world, BlockPos pos) {

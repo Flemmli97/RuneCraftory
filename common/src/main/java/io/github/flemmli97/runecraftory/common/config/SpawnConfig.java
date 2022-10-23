@@ -65,13 +65,13 @@ public class SpawnConfig {
                             SpawnData data = SpawnData.CODEC.parse(JsonOps.INSTANCE, element)
                                     .getOrThrow(false, e -> RuneCraftory.logger.error("Failed reading spawn data for " + p.getFileName() + ": " + e));
                             data.biomes.forEach((biome, weight) ->
-                                    this.biomeTagEntitiesMap.merge(biome, Lists.newArrayList(new GateSpawning.SpawnResource(data.entity, data.minDistanceFromSpawn, weight)), (old, v) -> {
-                                        old.add(new GateSpawning.SpawnResource(data.entity, data.minDistanceFromSpawn, weight));
+                                    this.biomeTagEntitiesMap.merge(biome, Lists.newArrayList(new GateSpawning.SpawnResource(data.entity, data.minDistanceFromSpawn, data.minGateLevel, weight)), (old, v) -> {
+                                        old.add(new GateSpawning.SpawnResource(data.entity, data.minDistanceFromSpawn, data.minGateLevel, weight));
                                         return old;
                                     }));
                             data.structures.forEach((biome, weight) ->
-                                    this.rawStructureEntities.merge(biome, Lists.newArrayList(new GateSpawning.SpawnResource(data.entity, data.minDistanceFromSpawn, weight)), (old, v) -> {
-                                        old.add(new GateSpawning.SpawnResource(data.entity, data.minDistanceFromSpawn, weight));
+                                    this.rawStructureEntities.merge(biome, Lists.newArrayList(new GateSpawning.SpawnResource(data.entity, data.minDistanceFromSpawn, data.minGateLevel, weight)), (old, v) -> {
+                                        old.add(new GateSpawning.SpawnResource(data.entity, data.minDistanceFromSpawn, data.minGateLevel, weight));
                                         return old;
                                     }));
                         } catch (Exception e) {
@@ -94,12 +94,14 @@ public class SpawnConfig {
     }
 
     public record SpawnData(ResourceLocation entity, int minDistanceFromSpawn,
+                            int minGateLevel,
                             Map<TagKey<Biome>, Integer> biomes,
                             Map<String, Integer> structures) {
 
         public static final Codec<SpawnData> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
                         ResourceLocation.CODEC.fieldOf("entity").forGetter(SpawnData::entity),
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("min_distance_from_spawn").forGetter(SpawnData::minDistanceFromSpawn),
+                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("min_gate_level").forGetter(SpawnData::minGateLevel),
                         Codec.unboundedMap(TagKey.codec(Registry.BIOME_REGISTRY), ExtraCodecs.POSITIVE_INT).fieldOf("biomes").forGetter(SpawnData::biomes),
                         Codec.unboundedMap(Codec.STRING, ExtraCodecs.POSITIVE_INT).fieldOf("structures").forGetter(SpawnData::structures))
                 .apply(instance, SpawnData::new));
@@ -108,10 +110,11 @@ public class SpawnConfig {
 
             private final Map<TagKey<Biome>, Integer> biomes = new HashMap<>();
             private final Map<String, Integer> structures = new HashMap<>();
-            private final int minDistanceFromSpawn;
+            private final int minDistanceFromSpawn, minGateLevel;
 
-            public Builder(int minDistanceFromSpawn) {
+            public Builder(int minDistanceFromSpawn, int minGateLevel) {
                 this.minDistanceFromSpawn = minDistanceFromSpawn;
+                this.minGateLevel = minGateLevel;
             }
 
             @SafeVarargs
@@ -128,7 +131,7 @@ public class SpawnConfig {
             }
 
             public SpawnData build(ResourceLocation name) {
-                return new SpawnData(name, this.minDistanceFromSpawn, this.biomes, this.structures);
+                return new SpawnData(name, this.minDistanceFromSpawn, this.minGateLevel, this.biomes, this.structures);
             }
         }
     }
