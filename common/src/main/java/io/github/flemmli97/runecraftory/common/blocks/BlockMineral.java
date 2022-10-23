@@ -234,9 +234,9 @@ public class BlockMineral extends Block implements SimpleWaterloggedBlock, Exten
             return level.setBlock(pos, fluid.createLegacyBlock(), Block.UPDATE_ALL);
         } else if (player.hasCorrectToolForDrops(state)) {
             pos = pos.immutable();
-            float breakChance = 0.4F;
+            float breakChance = 0.7F;
             if (player.getMainHandItem().getItem() instanceof ItemToolHammer hammer) {
-                breakChance -= hammer.tier.getTierLevel() * 0.05F;
+                breakChance -= (hammer.tier.getTierLevel() + 1) * 0.05F;
             }
             this.playerWillDestroy(level, pos, state, player);
             if (level.random.nextFloat() < breakChance) {
