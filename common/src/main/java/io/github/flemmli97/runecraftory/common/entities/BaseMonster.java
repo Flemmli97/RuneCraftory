@@ -929,11 +929,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.getNavigation().stop();
         }
         ++this.deathTime;
-        if (this.deathTime == (this.maxDeathTime() - 5) && this.lastHurtByPlayer instanceof ServerPlayer) {
-            Platform.INSTANCE.getPlayerData(this.lastHurtByPlayer).ifPresent(data -> {
-                LevelCalc.addXP((ServerPlayer) this.lastHurtByPlayer, data, this.baseXP(), this.level().getLevel());
-                data.setMoney(this.lastHurtByPlayer, data.getMoney() + LevelCalc.getMoney(this.baseMoney(), this.level().getLevel()));
-            });
+        if (this.deathTime == (this.maxDeathTime() - 5)) {
+            if (!this.level.isClientSide && this.getLastHurtByMob() != null)
+                LevelCalc.addXP(this.getLastHurtByMob(), this.baseXP(), this.baseMoney(), this.level().getLevel());
         }
         if (this.deathTime >= this.maxDeathTime()) {
             if (!this.level.isClientSide)
@@ -945,6 +943,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.level.addParticle(ParticleTypes.POOF, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), d0, d1, d2);
             }
         }
+    }
+
+    @Override
+    public void setLastHurtByMob(@Nullable LivingEntity livingBase) {
+        if (this.isDeadOrDying() && this.deathTime > 0)
+            return;
+        super.setLastHurtByMob(livingBase);
     }
 
     public boolean playDeath() {

@@ -15,6 +15,7 @@ RuneCraftory 1.3.1
 - Item-, food- and cropstats now show their id with advanced tooltip
 - Fix crash on fabric
 - Recipes are now sorted according to crafting level on REI and JEI
+- Mobs and NPC that follow you now get xp when defeating monsters
 
 RuneCraftory 1.3.0
 ================

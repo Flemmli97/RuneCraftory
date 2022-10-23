@@ -5,18 +5,26 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.EntityGetter;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public class LevelCalc {
 
@@ -129,15 +137,52 @@ public class LevelCalc {
         return (int) (base * Math.min(1, level * 0.1));
     }
 
-    public static void addXP(ServerPlayer player, PlayerData data, int base, int level) {
+    public static void addXP(LivingEntity attacker, int base, int money, int level) {
         if (GeneralConfig.xpMultiplier == 0)
             return;
-        if (data.getPlayerLevel().getLevel() <= level)
-            data.addXp(player, (base + base * (level - 1) * 0.5f) * GeneralConfig.xpMultiplier);
+        ServerPlayer player = null;
+        if (attacker instanceof ServerPlayer sP)
+            player = sP;
         else {
-            int diff = data.getPlayerLevel().getLevel() - level * 2;
-            data.addXp(player, (base + base * Math.max(0, level - diff - 1) * 0.5f) * GeneralConfig.xpMultiplier);
+            if (attacker instanceof OwnableEntity ownable && ownable.getOwner() instanceof ServerPlayer sP)
+                player = sP;
+            else if (attacker instanceof EntityNPCBase npc && npc.followEntity() instanceof ServerPlayer sP)
+                player = sP;
         }
+        if (player != null) {
+            ServerPlayer finalPlayer = player;
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                data.addXp(finalPlayer, levelXpWith(base, data.getPlayerLevel().getLevel(), level));
+                data.setMoney(finalPlayer, data.getMoney() + LevelCalc.getMoney(money, level));
+            });
+            if (!(attacker instanceof Player))
+                tryAddXPTo(attacker, player, base, level);
+            for (Mob e : player.level.getEntities(EntityTypeTest.forClass(Mob.class), player.getBoundingBox().inflate(32, 32, 32), e -> true)) {
+                if (e == attacker)
+                    continue;
+                tryAddXPTo(e, player, base, level);
+            }
+        }
+    }
+
+    private static void tryAddXPTo(LivingEntity entity, ServerPlayer player, int base, int level) {
+        if (entity instanceof IBaseMob mob) {
+            Consumer<Float> cons = null;
+            if (entity instanceof BaseMonster monster && player.getUUID().equals(monster.getOwnerUUID()) && monster.behaviourState() == BaseMonster.Behaviour.FOLLOW)
+                cons = monster::addXp;
+            if (entity instanceof EntityNPCBase npc && player.getUUID().equals(npc.getEntityToFollowUUID()))
+                cons = npc::addXp;
+            if (cons == null)
+                return;
+            cons.accept(levelXpWith(base, mob.level().getLevel(), level));
+        }
+    }
+
+    private static float levelXpWith(int base, int level, int targetLevel) {
+        if (level <= targetLevel)
+            return (base + base * (level - 1) * 0.5f) * GeneralConfig.xpMultiplier;
+        int diff = level - targetLevel * 2;
+        return (base + base * Math.max(0, level - diff - 1) * 0.5f) * GeneralConfig.xpMultiplier;
     }
 
     public static int getBaseXP(EnumSkills skill) {

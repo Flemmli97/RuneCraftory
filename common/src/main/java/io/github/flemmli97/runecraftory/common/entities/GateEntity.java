@@ -27,7 +27,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
@@ -342,11 +341,9 @@ public class GateEntity extends Mob implements IBaseMob {
 
     @Override
     protected void tickDeath() {
-        if (this.deathTime == 5 && this.lastHurtByPlayer instanceof ServerPlayer) {
-            Platform.INSTANCE.getPlayerData(this.lastHurtByPlayer).ifPresent(data -> {
-                LevelCalc.addXP((ServerPlayer) this.lastHurtByPlayer, data, MobConfig.gateXP, this.level().getLevel());
-                data.setMoney(this.lastHurtByPlayer, data.getMoney() + LevelCalc.getMoney(this.baseMoney(), this.level().getLevel()));
-            });
+        if (this.deathTime == 5) {
+            if (!this.level.isClientSide && this.getLastHurtByMob() != null)
+                LevelCalc.addXP(this.getLastHurtByMob(), this.baseXP(), this.baseMoney(), this.level().getLevel());
         }
         super.tickDeath();
     }
