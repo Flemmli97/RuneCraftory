@@ -1,6 +1,18 @@
 RuneCraftory 1.3.1
 ================
 - Smoother movement animation
+- Add search skill. Leveled by opening loot chests and treasure chests
+- Decreased spawnrate of thunderbolt ruins
+- Increased chance of minerals breaking
+- Decreased rain chance.  
+  Also detects if incorrect vanilla weather is running and fixes it
+- Updating some default config values
+- Fix arms not swinging for mob interaction
+- Bells blocking gates radius now configurable
+- Add minimum gate level check for spawn config
+- Fix knocked out flying mobs staying in midair
+- Flying mobs a bit faster when ridden
+- Item-, food- and cropstats now show their id with advanced tooltip
 
 RuneCraftory 1.3.0
 ================
