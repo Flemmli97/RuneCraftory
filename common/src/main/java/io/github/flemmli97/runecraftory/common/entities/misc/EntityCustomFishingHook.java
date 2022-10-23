@@ -300,8 +300,9 @@ public class EntityCustomFishingHook extends EntityProjectile {
                 serverLevel.sendParticles(ParticleTypes.FISHING, this.getX(), m, this.getZ(), (int) (1.0f + this.getBbWidth() * 20.0f), this.getBbWidth(), 0.0, this.getBbWidth(), 0.2f);
                 serverLevel.sendParticles(ParticleTypes.NOTE, this.getX(), m, this.getZ(), 0, 0, 0, 0, 0);
                 this.difficultyBonus = Mth.nextInt(this.random, 0, 3);
-                this.nibble = Mth.nextInt(this.random, 20, 30) - this.difficultyBonus * 5;
+                this.nibble = Mth.nextInt(this.random, 12, 30 - this.difficultyBonus * 3) - this.difficultyBonus * 5;
                 this.nibble += this.nibbleBonus * 3;
+                this.nibble = Math.max(1, this.nibble);
                 this.getEntityData().set(DATA_BITING, true);
             }
         } else {
