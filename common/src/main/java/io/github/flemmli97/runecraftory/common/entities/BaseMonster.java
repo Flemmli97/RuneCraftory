@@ -241,6 +241,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     private void updateAI(boolean forced) {
         if (forced || this.isTamed()) {
+            this.getNavigation().stop();
             if (this.behaviourState() != Behaviour.FARM) {
                 this.seedInventory = null;
                 this.cropInventory = null;
@@ -529,21 +530,21 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         if (player instanceof ServerPlayer serverPlayer)
                             serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.4f, 0.4f));
                         player.sendMessage(new TranslatableComponent(this.behaviourState().interactKey), Util.NIL_UUID);
-                        return InteractionResult.CONSUME;
+                        return InteractionResult.SUCCESS;
                     } else if (this.ridable() && this.behaviourState() != Behaviour.FARM) {
                         player.startRiding(this);
-                        return InteractionResult.CONSUME;
+                        return InteractionResult.SUCCESS;
                     }
                 }
                 return InteractionResult.PASS;
             }
             if (stack.getItem() == ModItems.inspector.get() && hand == InteractionHand.MAIN_HAND) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                    Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this), serverPlayer);
                     serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(this.getId(), ((AttributeMapAccessor) this.getAttributes())
                             .getAttributes().values()));
+                    Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this), serverPlayer);
                 }
-                return InteractionResult.CONSUME;
+                return InteractionResult.SUCCESS;
             } else if (stack.getItem() == ModItems.brush.get()) {
                 int day = WorldUtils.day(this.level);
                 if (this.updater.getLastUpdateBrush() == day)
@@ -554,14 +555,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.increaseFriendPoints(15);
                 this.level.broadcastEntityEvent(this, (byte) 64);
                 player.swing(hand);
-                return InteractionResult.CONSUME;
+                return InteractionResult.SUCCESS;
             }
             if (player.isShiftKeyDown()) {
                 if (stack.getItem() == Items.STICK) {
                     if (player instanceof ServerPlayer serverPlayer)
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 1, 1));
                     this.untameEntity();
-                    return InteractionResult.CONSUME;
+                    return InteractionResult.SUCCESS;
                 } else if (this.feedTimeOut <= 0) {
                     boolean favorite = this.tamingItem().match(stack);
                     ItemStack stack1 = null;
@@ -587,14 +588,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         }
                         if (stack1 != null)
                             player.setItemInHand(hand, stack1);
-                        return InteractionResult.CONSUME;
+                        return InteractionResult.SUCCESS;
                     }
                 }
             }
         } else if (player.isShiftKeyDown() && !stack.isEmpty()) {
             if (stack.getItem() == ModItems.tame.get()) {
                 this.tameEntity(player);
-                return InteractionResult.CONSUME;
+                return InteractionResult.SUCCESS;
             } else {
                 if (this.tamingTick == -1 && this.isAlive()) {
                     if (stack.getItem() == ModItems.brush.get()) {
@@ -605,7 +606,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                             this.brushCount = 10;
                         this.tamingTick = 40;
                         this.level.broadcastEntityEvent(this, (byte) 64);
-                        return InteractionResult.CONSUME;
+                        return InteractionResult.SUCCESS;
                     }
                     if (player instanceof ServerPlayer serverPlayer)
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
@@ -625,7 +626,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                             this.level.broadcastEntityEvent(this, (byte) 11);
                         }
                     };
-                    return InteractionResult.CONSUME;
+                    return InteractionResult.SUCCESS;
                 }
             }
         }
