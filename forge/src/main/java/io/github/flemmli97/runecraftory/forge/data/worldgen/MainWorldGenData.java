@@ -46,7 +46,7 @@ public class MainWorldGenData implements DataProvider {
                 ModStructures.AMBROSIA_FOREST.get(), BiomeTags.IS_FOREST, true,
                 this.simple(ModEntities.ambrosia.getID()));
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "thunderbolt_ruins"),
-                new RandomSpreadStructurePlacement(16, 8, RandomSpreadType.LINEAR, 1224567480),
+                new RandomSpreadStructurePlacement(32, 16, RandomSpreadType.LINEAR, 1224567480),
                 ModStructures.THUNDERBOLT_RUINS.get(), BiomeTags.IS_OCEAN, true,
                 this.simple(ModEntities.thunderbolt.getID()));
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "theater_ruins"),
