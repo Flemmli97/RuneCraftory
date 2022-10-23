@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.forge.compat.jei;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
+import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import mezz.jei.api.IModPlugin;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 
 @JeiPlugin
@@ -52,10 +54,16 @@ public class JEI implements IModPlugin {
         reg.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ModItems.NOTEX.stream()
                 .map(sup -> new ItemStack(sup.get())).toList());
         RecipeManager manager = Minecraft.getInstance().level.getRecipeManager();
-        reg.addRecipes(SextupleRecipeCategory.FORGECATEGORY, manager.getAllRecipesFor(ModCrafting.FORGE.get()));
-        reg.addRecipes(SextupleRecipeCategory.ARMORCATEGORY, manager.getAllRecipesFor(ModCrafting.ARMOR.get()));
-        reg.addRecipes(SextupleRecipeCategory.COOKINGCATEGORY, manager.getAllRecipesFor(ModCrafting.COOKING.get()));
-        reg.addRecipes(SextupleRecipeCategory.CHEMISTRYCATEGORY, manager.getAllRecipesFor(ModCrafting.CHEMISTRY.get()));
+        reg.addRecipes(SextupleRecipeCategory.FORGECATEGORY, sorted(manager, ModCrafting.FORGE.get()));
+        reg.addRecipes(SextupleRecipeCategory.ARMORCATEGORY, sorted(manager, ModCrafting.ARMOR.get()));
+        reg.addRecipes(SextupleRecipeCategory.COOKINGCATEGORY, sorted(manager, ModCrafting.COOKING.get()));
+        reg.addRecipes(SextupleRecipeCategory.CHEMISTRYCATEGORY, sorted(manager, ModCrafting.CHEMISTRY.get()));
+    }
+
+    private static <T extends SextupleRecipe> List<T> sorted(RecipeManager manager, net.minecraft.world.item.crafting.RecipeType<T> type) {
+        List<T> l = manager.getAllRecipesFor(type);
+        l.sort(Comparator.comparingInt(SextupleRecipe::getCraftingLevel));
+        return l;
     }
 
     @Override

@@ -15,12 +15,16 @@ import me.shedaniel.rei.api.client.registry.screen.ClickArea;
 import me.shedaniel.rei.api.client.registry.screen.ScreenRegistry;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.entry.type.VanillaEntryTypes;
+import me.shedaniel.rei.api.common.registry.RecipeManagerContext;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -45,10 +49,20 @@ public class ReiClientPlugin implements REIClientPlugin {
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
-        registry.registerFiller(SextupleRecipe.class, recipe -> recipe.getType() == ModCrafting.FORGE.get(), r -> new SextupleDisplay(r, EnumCrafting.FORGE));
-        registry.registerFiller(SextupleRecipe.class, recipe -> recipe.getType() == ModCrafting.CHEMISTRY.get(), r -> new SextupleDisplay(r, EnumCrafting.CHEM));
-        registry.registerFiller(SextupleRecipe.class, recipe -> recipe.getType() == ModCrafting.COOKING.get(), r -> new SextupleDisplay(r, EnumCrafting.COOKING));
-        registry.registerFiller(SextupleRecipe.class, recipe -> recipe.getType() == ModCrafting.ARMOR.get(), r -> new SextupleDisplay(r, EnumCrafting.ARMOR));
+        for (SextupleRecipe r : sorted(RecipeManagerContext.getInstance().getRecipeManager(), ModCrafting.FORGE.get()))
+            registry.add(new SextupleDisplay(r, EnumCrafting.FORGE), r);
+        for (SextupleRecipe r : sorted(RecipeManagerContext.getInstance().getRecipeManager(), ModCrafting.ARMOR.get()))
+            registry.add(new SextupleDisplay(r, EnumCrafting.ARMOR), r);
+        for (SextupleRecipe r : sorted(RecipeManagerContext.getInstance().getRecipeManager(), ModCrafting.COOKING.get()))
+            registry.add(new SextupleDisplay(r, EnumCrafting.COOKING), r);
+        for (SextupleRecipe r : sorted(RecipeManagerContext.getInstance().getRecipeManager(), ModCrafting.CHEMISTRY.get()))
+            registry.add(new SextupleDisplay(r, EnumCrafting.CHEM), r);
+    }
+
+    private static <T extends SextupleRecipe> List<T> sorted(RecipeManager manager, RecipeType<T> type) {
+        List<T> l = manager.getAllRecipesFor(type);
+        l.sort(Comparator.comparingInt(SextupleRecipe::getCraftingLevel));
+        return l;
     }
 
     @Override

@@ -13,6 +13,8 @@ RuneCraftory 1.3.1
 - Fix knocked out flying mobs staying in midair
 - Flying mobs a bit faster when ridden
 - Item-, food- and cropstats now show their id with advanced tooltip
+- Fix crash on fabric
+- Recipes are now sorted according to crafting level on REI and JEI
 
 RuneCraftory 1.3.0
 ================
