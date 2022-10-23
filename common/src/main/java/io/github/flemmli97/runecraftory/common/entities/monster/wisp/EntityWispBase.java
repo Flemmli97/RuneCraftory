@@ -151,7 +151,7 @@ public abstract class EntityWispBase extends BaseMonster {
             this.noPhysics = entity.noPhysics;
             this.handleNoGravTravel(vec);
         } else {
-            this.noPhysics = true;
+            this.noPhysics = !this.playDeath();
             super.travel(vec);
         }
     }

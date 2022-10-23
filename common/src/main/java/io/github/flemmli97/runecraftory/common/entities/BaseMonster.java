@@ -975,6 +975,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     @Override
+    public boolean isNoGravity() {
+        return super.isNoGravity() && !this.playDeath();
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.getEntity() instanceof Player player && player.getUUID().equals(this.getOwnerUUID())
                 && !player.isShiftKeyDown()) {
@@ -1115,9 +1120,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             this.flyingSpeed = this.getSpeed() * 0.1f;
             if (this.isControlledByLocalInstance()) {
-                this.setSpeed((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                float attVal = (float) (this.getAttribute(Attributes.FLYING_SPEED) != null ? this.getAttribute(Attributes.FLYING_SPEED).getValue() : this.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                this.setSpeed(attVal * 1.15f);
                 this.setMoving(forward != 0 || strafing != 0);
                 this.setSprinting(forward > 0);
+                forward *= this.ridingSpeedModifier();
+                strafing *= this.ridingSpeedModifier();
                 vec = new Vec3(strafing, vec.y, forward * this.getSpeed());
             } else if (entitylivingbase instanceof Player) {
                 vec = Vec3.ZERO;
