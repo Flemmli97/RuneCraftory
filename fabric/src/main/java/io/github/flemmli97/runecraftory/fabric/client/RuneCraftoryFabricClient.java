@@ -64,7 +64,7 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
         HudRenderCallback.EVENT.register(ClientCalls::renderRunePoints);
         ClientTickEvents.END_CLIENT_TICK.register(client -> ClientCalls.keyEvent());
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> ClientCalls.initSkillTab(screen, Screens.getButtons(screen)::add));
-        ItemTooltipCallback.EVENT.register((stack, context, lines) -> ClientCalls.tooltipEvent(stack, lines));
+        ItemTooltipCallback.EVENT.register((stack, context, lines) -> ClientCalls.tooltipEvent(stack, lines, context));
         WorldRenderEvents.END.register(ctx -> ClientCalls.worldRender(ctx.matrixStack()));
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
@@ -32,9 +33,11 @@ public class FoodProperties {
     private MobEffect[] potionRemove = new MobEffect[0];
 
     private transient List<Component> translationTexts;
+    private transient ResourceLocation id;
 
     public static FoodProperties fromPacket(FriendlyByteBuf buffer) {
         FoodProperties prop = new FoodProperties();
+        prop.id = buffer.readResourceLocation();
         prop.hpRegen = buffer.readInt();
         prop.rpRegen = buffer.readInt();
         prop.hpRegenPercent = buffer.readInt();
@@ -55,6 +58,15 @@ public class FoodProperties {
         for (int i = 0; i < size; i++)
             prop.potionApply[i] = new SimpleEffect(PlatformUtils.INSTANCE.effects().getFromId(buffer.readResourceLocation()), buffer.readInt(), buffer.readInt());
         return prop;
+    }
+
+    public void setID(ResourceLocation id) {
+        if (this.id == null)
+            this.id = id;
+    }
+
+    public ResourceLocation getId() {
+        return this.id;
     }
 
     public int getHPGain() {
@@ -102,6 +114,7 @@ public class FoodProperties {
     }
 
     public void toPacket(FriendlyByteBuf buffer) {
+        buffer.writeResourceLocation(this.id);
         buffer.writeInt(this.hpRegen);
         buffer.writeInt(this.rpRegen);
         buffer.writeInt(this.hpRegenPercent);
@@ -187,7 +200,10 @@ public class FoodProperties {
 
     @Override
     public String toString() {
-        return "[HP:" + this.hpRegen + ",RP:" + this.rpRegen + ",HP%:" + this.hpRegenPercent + ",RP%:" + this.rpRegenPercent + ",Duration:" + this.duration + "]" + "{effects:[" + this.effects + "], potions:[" + ArrayUtils.arrayToString(this.potionRemove, null) + "]";
+        String s = "[HP:" + this.hpRegen + ",RP:" + this.rpRegen + ",HP%:" + this.hpRegenPercent + ",RP%:" + this.rpRegenPercent + ",Duration:" + this.duration + "]" + "{effects:[" + this.effects + "], potions:[" + ArrayUtils.arrayToString(this.potionRemove, null) + "]";
+        if (this.id != null)
+            s = this.id + ":" + s;
+        return s;
     }
 
     /**

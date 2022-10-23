@@ -57,10 +57,14 @@ public class CropManager extends SimpleJsonResourceReloadListener {
                 JsonObject obj = el.getAsJsonObject();
                 if (obj.has("tag")) {
                     TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation(obj.get("tag").getAsString()));
-                    tagBuilder.put(tag, GSON.fromJson(el, CropProperties.class));
+                    CropProperties props = GSON.fromJson(el, CropProperties.class);
+                    props.setID(fres);
+                    tagBuilder.put(tag, props);
                 } else if (obj.has("item")) {
                     ResourceLocation res = new ResourceLocation(obj.get("item").getAsString());
-                    builder.put(res, GSON.fromJson(el, CropProperties.class));
+                    CropProperties props = GSON.fromJson(el, CropProperties.class);
+                    props.setID(fres);
+                    builder.put(res, props);
                 }
             } catch (JsonSyntaxException | IllegalStateException ex) {
                 RuneCraftory.logger.error("Couldnt parse crop properties json {}", fres);

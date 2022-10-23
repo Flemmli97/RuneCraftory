@@ -53,6 +53,7 @@ public class ItemStat {
 
     public static ItemStat fromPacket(FriendlyByteBuf buffer) {
         ItemStat stat = new ItemStat();
+        stat.id = buffer.readResourceLocation();
         stat.buyPrice = buffer.readInt();
         stat.sellPrice = buffer.readInt();
         stat.upgradeDifficulty = buffer.readInt();
@@ -73,6 +74,10 @@ public class ItemStat {
     public void setID(ResourceLocation id) {
         if (this.id == null)
             this.id = id;
+    }
+
+    public ResourceLocation getId() {
+        return this.id;
     }
 
     public int getBuy() {
@@ -111,6 +116,7 @@ public class ItemStat {
      * Writes this ItemStat to a buffer for synchronization. Spell upgrades are not synched
      */
     public void toPacket(FriendlyByteBuf buffer) {
+        buffer.writeResourceLocation(this.id);
         buffer.writeInt(this.buyPrice);
         buffer.writeInt(this.sellPrice);
         buffer.writeInt(this.upgradeDifficulty);

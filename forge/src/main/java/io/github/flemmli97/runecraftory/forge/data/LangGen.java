@@ -273,6 +273,9 @@ public class LangGen implements DataProvider {
         this.add("monster.interact.farm", "Entity is now tending the crops");
         this.add("tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
         this.add("tooltip.item.treasure_level", "Chest tier lvl: %s");
+        this.add("tooltip.debug.stat", "Itemstat-ID: %s");
+        this.add("tooltip.debug.crop", "Cropdata-ID: %s");
+        this.add("tooltip.debug.food", "Fooddata-ID: %s");
 
         this.add("tooltip.item.npc", "Shift-right-click to change profession");
         this.add(EnumShop.NONE.translationKey, "None");

@@ -52,7 +52,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void tooltipEvent(ItemTooltipEvent event) {
-        ClientCalls.tooltipEvent(event.getItemStack(), event.getToolTip());
+        ClientCalls.tooltipEvent(event.getItemStack(), event.getToolTip(), event.getFlags());
     }
 
     @SubscribeEvent

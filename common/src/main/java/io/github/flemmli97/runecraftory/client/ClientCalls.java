@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SkillButton;
@@ -17,6 +18,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.mixin.ContainerScreenAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.ParticleStatus;
@@ -27,10 +29,12 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,25 +96,34 @@ public class ClientCalls {
             ClientHandlers.farmDisplay.render(stack);
     }
 
-    public static void tooltipEvent(ItemStack stack, List<Component> tooltip) {
+    public static void tooltipEvent(ItemStack stack, List<Component> tooltip, TooltipFlag flag) {
         if (!stack.isEmpty()) {
             boolean showTooltip = true;
             if (stack.hasTag() && stack.getTag().contains("HideFlags", 99)) {
                 showTooltip = (stack.getTag().getInt("HideFlags") & 0x20) == 0x0;
             }
             if (showTooltip) {
-                tooltip.addAll(1, injectAdditionalTooltip(stack));
+                Pair<List<Component>, List<Component>> p = injectAdditionalTooltip(stack, flag);
+                tooltip.addAll(1, p.getFirst());
+                tooltip.addAll(p.getSecond());
             }
         }
     }
 
-    private static List<Component> injectAdditionalTooltip(ItemStack stack) {
+    private static Pair<List<Component>, List<Component>> injectAdditionalTooltip(ItemStack stack, TooltipFlag flag) {
         List<Component> tooltip = new ArrayList<>();
         boolean shift = Screen.hasShiftDown();
-        DataPackHandler.getStats(stack.getItem()).ifPresent(stat -> tooltip.addAll(stat.texts(stack, shift)));
+        List<Component> debug = new ArrayList<>();
+        DataPackHandler.getStats(stack.getItem()).ifPresent(stat -> {
+            tooltip.addAll(stat.texts(stack, shift));
+            if (flag.isAdvanced())
+                debug.add(new TranslatableComponent("tooltip.debug.stat", stat.getId().toString()).withStyle(ChatFormatting.GRAY));
+        });
         CropProperties props = DataPackHandler.getCropStat(stack.getItem());
         if (props != null) {
             tooltip.addAll(props.texts());
+            if (flag.isAdvanced())
+                debug.add(new TranslatableComponent("tooltip.debug.crop", props.getId().toString()).withStyle(ChatFormatting.GRAY));
         }
         if (shift) {
             FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
@@ -119,9 +132,11 @@ public class ClientCalls {
                     tooltip.addAll(food.medicineText((ItemMedicine) stack.getItem(), stack));
                 else
                     tooltip.addAll(food.texts());
+                if (flag.isAdvanced())
+                    debug.add(new TranslatableComponent("tooltip.debug.food", food.getId().toString()).withStyle(ChatFormatting.GRAY));
             }
         }
-        return tooltip;
+        return Pair.of(tooltip, debug);
     }
 
     public static void worldRender(PoseStack stack) {

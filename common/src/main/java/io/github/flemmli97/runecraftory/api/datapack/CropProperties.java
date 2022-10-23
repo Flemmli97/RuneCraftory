@@ -6,6 +6,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -23,9 +24,11 @@ public class CropProperties {
     private boolean regrowable;
 
     private transient List<Component> translationTexts;
+    private transient ResourceLocation id;
 
     public static CropProperties fromPacket(FriendlyByteBuf buffer) {
         CropProperties prop = new CropProperties();
+        prop.id = buffer.readResourceLocation();
         prop.growth = buffer.readInt();
         prop.maxDrops = buffer.readInt();
         prop.regrowable = buffer.readBoolean();
@@ -36,6 +39,15 @@ public class CropProperties {
         for (int i = 0; i < size; i++)
             prop.badSeason.add(buffer.readEnum(EnumSeason.class));
         return prop;
+    }
+
+    public void setID(ResourceLocation id) {
+        if (this.id == null)
+            this.id = id;
+    }
+
+    public ResourceLocation getId() {
+        return this.id;
     }
 
     public Set<EnumSeason> bestSeasons() {
@@ -67,6 +79,7 @@ public class CropProperties {
     }
 
     public void toPacket(FriendlyByteBuf buffer) {
+        buffer.writeResourceLocation(this.id);
         buffer.writeInt(this.growth);
         buffer.writeInt(this.maxDrops);
         buffer.writeBoolean(this.regrowable);
@@ -110,7 +123,10 @@ public class CropProperties {
 
     @Override
     public String toString() {
-        return "[BestSeasons:" + this.bestSeason + ";BadSeasons:" + this.badSeason + ";Growth:" + this.growth + ";Drops:" + this.maxDrops + ";Regrowable:" + this.regrowable + "]";
+        String s = "[BestSeasons:" + this.bestSeason + ";BadSeasons:" + this.badSeason + ";Growth:" + this.growth + ";Drops:" + this.maxDrops + ";Regrowable:" + this.regrowable + "]";
+        if (this.id != null)
+            s = this.id + ":" + s;
+        return s;
     }
 
     /**

@@ -62,10 +62,14 @@ public class FoodManager extends SimpleJsonResourceReloadListener {
                 JsonObject obj = el.getAsJsonObject();
                 if (obj.has("tag")) {
                     TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation(obj.get("tag").getAsString()));
-                    tagBuilder.put(tag, GSON.fromJson(el, FoodProperties.class));
+                    FoodProperties props = GSON.fromJson(el, FoodProperties.class);
+                    props.setID(fres);
+                    tagBuilder.put(tag, props);
                 } else if (obj.has("item")) {
                     ResourceLocation res = new ResourceLocation(obj.get("item").getAsString());
-                    builder.put(res, GSON.fromJson(el, FoodProperties.class));
+                    FoodProperties props = GSON.fromJson(el, FoodProperties.class);
+                    props.setID(fres);
+                    builder.put(res, props);
                 }
             } catch (JsonSyntaxException ex) {
                 RuneCraftory.logger.error("Couldnt parse food stat json {}", fres);
