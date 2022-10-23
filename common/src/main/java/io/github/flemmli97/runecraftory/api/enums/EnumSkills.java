@@ -24,6 +24,7 @@ public enum EnumSkills {
     CHEMISTRY("skill.chemistry", GainType.FAST),
     CRAFTING("skill.crafting", GainType.FAST),
     SLEEPING("skill.sleeping", GainType.FAST),
+    SEARCHING("skill.searching", GainType.MEDIUM),
     WALKING("skill.walking", GainType.COMMON),
     EATING("skill.eating", GainType.MEDIUM),
     DEFENCE("skill.defence", GainType.COMMON),

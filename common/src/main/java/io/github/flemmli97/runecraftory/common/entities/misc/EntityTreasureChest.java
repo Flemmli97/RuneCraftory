@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ItemCraftingLevelManager;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -160,6 +161,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
                 this.getAnimationHandler().setAnimation(open);
                 this.playSound(SoundEvents.CHEST_OPEN, 0.7f, 1);
                 this.openChest = () -> dropRandomItems(serverPlayer, this.random, this.tier(), this::spawnAtLocation);
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 1));
             }
         }
         return InteractionResult.CONSUME;

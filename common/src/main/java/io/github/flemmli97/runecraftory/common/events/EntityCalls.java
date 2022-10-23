@@ -59,6 +59,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
@@ -335,6 +336,12 @@ public class EntityCalls {
         }
         if (state.getBlock() instanceof BushBlock) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 0.5f));
+        }
+    }
+
+    public static void onLootTableBlockGen(Player player, BlockEntity blockEntity) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 1.3f));
         }
     }
 }
