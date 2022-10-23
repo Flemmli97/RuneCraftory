@@ -24,6 +24,7 @@ public class ModPoiTypes {
     private static PoiType createPoiType(String string, Set<BlockState> set, int i, int j) {
         try {
             Constructor<PoiType> cons = PoiType.class.getDeclaredConstructor(String.class, Set.class, int.class, int.class);
+            cons.setAccessible(true);
             return cons.newInstance(string, set, i, i);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
