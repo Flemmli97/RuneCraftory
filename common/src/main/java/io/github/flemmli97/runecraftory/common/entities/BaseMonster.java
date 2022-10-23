@@ -234,7 +234,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
         this.goalSelector.addGoal(1, new RandomLookGoalAlive(this));
         this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
-        this.goalSelector.addGoal(3, new FollowOwnerGoalMonster(this, 1.05, 9, 3));
+        this.goalSelector.addGoal(3, new FollowOwnerGoalMonster(this, 1.05, 9, 2));
         this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0));
         this.goalSelector.addGoal(6, this.wander);
     }
