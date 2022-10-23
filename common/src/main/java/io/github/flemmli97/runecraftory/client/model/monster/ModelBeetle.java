@@ -156,7 +156,7 @@ public class ModelBeetle<T extends EntityBeetle> extends EntityModel<T> implemen
             if (!entity.isOnGround())
                 this.anim.doAnimation(this, "fly", entity.tickCount, partialTicks);
             else if (entity.moveTick() > 0)
-                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick());
+                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);

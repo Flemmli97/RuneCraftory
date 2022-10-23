@@ -124,9 +124,9 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
         if (anim == null) {
             if (entity.deathTime <= 0 && !entity.playDeath()) {
                 if (entity.isSprinting())
-                    this.anim.doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTick());
+                    this.anim.doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
                 else if (entity.moveTick() > 0)
-                    this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick());
+                    this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
             }
         } else
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);

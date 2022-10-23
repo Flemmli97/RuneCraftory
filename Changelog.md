@@ -1,3 +1,7 @@
+RuneCraftory 1.3.1
+================
+- Smoother movement animation
+
 RuneCraftory 1.3.0
 ================
 - Enabled crop features now by default cause textures are now (mostly) there

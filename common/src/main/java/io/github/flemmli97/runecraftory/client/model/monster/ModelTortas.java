@@ -106,9 +106,9 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
             this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0) {
                 if (entity.isSwimming())
-                    this.anim.doAnimation(this, "swim", entity.tickCount, partialTicks, entity.interpolatedMoveTick());
+                    this.anim.doAnimation(this, "swim", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
                 else
-                    this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick());
+                    this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
             }
         }
         if (anim != null)

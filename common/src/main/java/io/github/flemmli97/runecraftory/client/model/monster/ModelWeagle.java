@@ -100,7 +100,7 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
         if (anim == null) {
             if (entity.deathTime <= 0 && !entity.playDeath()) {
                 if (entity.moveTick() > 0) {
-                    this.anim.doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick());
+                    this.anim.doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
                 } else
                     this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
             }

@@ -90,7 +90,7 @@ public class ModelChipsqueek<T extends EntityChipsqueek> extends EntityModel<T> 
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0)
-                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick());
+                this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);

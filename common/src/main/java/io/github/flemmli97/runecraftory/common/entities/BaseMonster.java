@@ -870,8 +870,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return this.moveTick;
     }
 
-    public float interpolatedMoveTick() {
-        return this.moveTick / (float) moveTickMax;
+    public float interpolatedMoveTick(float partialTicks) {
+        return Mth.clamp((this.moveTick + (this.getMoveFlag() != 0 ? partialTicks : -partialTicks)) / (float) moveTickMax, 0, 1);
     }
 
     public void setMoving(boolean flag) {
