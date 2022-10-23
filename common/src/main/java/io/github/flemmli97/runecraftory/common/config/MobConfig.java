@@ -11,6 +11,7 @@ public class MobConfig {
     public static boolean disableNaturalSpawn = false;
     public static int farmRadius = 3;
 
+    public static int bellRadius = 48;
     public static double gateHealth = 100;
     public static double gateDef = 0;
     public static double gateMDef = 0;

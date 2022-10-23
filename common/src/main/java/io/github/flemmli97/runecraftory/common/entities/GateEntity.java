@@ -93,7 +93,7 @@ public class GateEntity extends Mob implements IBaseMob {
 
     public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
         return level.getDifficulty() != Difficulty.PEACEFUL && GateSpawning.hasSpawns(level, pos)
-                && level.getLevel().getPoiManager().find(PoiType.MEETING.getPredicate(), p -> true, pos, 48, PoiManager.Occupancy.ANY).isEmpty()
+                && level.getLevel().getPoiManager().find(PoiType.MEETING.getPredicate(), p -> true, pos, MobConfig.bellRadius, PoiManager.Occupancy.ANY).isEmpty()
                 && checkMobSpawnRules(type, level, reason, pos, random)
                 && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
     }

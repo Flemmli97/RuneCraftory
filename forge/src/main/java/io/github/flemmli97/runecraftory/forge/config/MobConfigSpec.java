@@ -17,6 +17,7 @@ public class MobConfigSpec {
     public final ForgeConfigSpec.BooleanValue disableNaturalSpawn;
     public final ForgeConfigSpec.IntValue farmRadius;
 
+    public final ForgeConfigSpec.IntValue bellRadius;
     public final ForgeConfigSpec.DoubleValue gateHealth;
     public final ForgeConfigSpec.DoubleValue gateDef;
     public final ForgeConfigSpec.DoubleValue gateMDef;
@@ -44,6 +45,7 @@ public class MobConfigSpec {
         builder.pop();
 
         builder.comment("Gate Configs").push("gate");
+        this.bellRadius = builder.comment("Radius in blocks for bells to prevent gate spawning").defineInRange("Bell Radius", MobConfig.bellRadius, 0, Integer.MAX_VALUE);
         this.gateHealth = builder.comment("Base health of gates").defineInRange("Health", MobConfig.gateHealth, 0, Double.MAX_VALUE);
         this.gateDef = builder.comment("Base defence of gates").defineInRange("Defence", MobConfig.gateDef, 0, Double.MAX_VALUE);
         this.gateMDef = builder.comment("Base magic defence of gates").defineInRange("Magic Defence", MobConfig.gateMDef, 0, Double.MAX_VALUE);

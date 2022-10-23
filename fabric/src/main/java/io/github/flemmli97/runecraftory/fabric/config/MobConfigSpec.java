@@ -21,6 +21,7 @@ public class MobConfigSpec {
     public final CommentedJsonConfig.CommentedVal<Boolean> disableNaturalSpawn;
     public final CommentedJsonConfig.IntVal farmRadius;
 
+    public final CommentedJsonConfig.IntVal bellRadius;
     public final CommentedJsonConfig.DoubleVal gateHealth;
     public final CommentedJsonConfig.DoubleVal gateDef;
     public final CommentedJsonConfig.DoubleVal gateMDef;
@@ -49,6 +50,7 @@ public class MobConfigSpec {
         builder.pop();
 
         builder.comment("Gate Configs").push("gate");
+        this.bellRadius = builder.comment("Radius in blocks for bells to prevent gate spawning").defineInRange("Bell Radius", MobConfig.bellRadius, 0, Integer.MAX_VALUE);
         this.gateHealth = builder.comment("Base health of gates").defineInRange("Health", MobConfig.gateHealth, 0, Double.MAX_VALUE);
         this.gateDef = builder.comment("Base defence of gates").defineInRange("Defence", MobConfig.gateDef, 0, Double.MAX_VALUE);
         this.gateMDef = builder.comment("Base magic defence of gates").defineInRange("Magic Defence", MobConfig.gateMDef, 0, Double.MAX_VALUE);
