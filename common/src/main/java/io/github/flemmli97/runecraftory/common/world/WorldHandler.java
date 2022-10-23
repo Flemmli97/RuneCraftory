@@ -30,6 +30,8 @@ public class WorldHandler extends SavedData {
      */
     private final Set<IDailyUpdate> updateTracker = Sets.newConcurrentHashSet();
 
+    private int updateDelay;
+
     public WorldHandler() {
     }
 
@@ -41,14 +43,19 @@ public class WorldHandler extends SavedData {
         return server.overworld().getDataStorage().computeIfAbsent(WorldHandler::new, WorldHandler::new, id);
     }
 
-    public static boolean canUpdateWeather(Level world, EnumWeather currentWeather) {
-        if (GeneralConfig.modifyWeather && world.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)) {
-            if (currentWeather == EnumWeather.RUNEY || currentWeather == EnumWeather.STORM)
-                return WorldUtils.dayTime(world) == 1;
-            long time = WorldUtils.dayTime(world);
-            return time == 1 || time == 6001 || time == 12001 || time == 18001;
-        }
-        return false;
+    public static boolean canUpdateWeather(Level level) {
+        return GeneralConfig.modifyWeather && level.getGameRules().getBoolean(GameRules.RULE_DAYLIGHT);
+    }
+
+    public static boolean shouldUpdateWeather(Level level, EnumWeather currentWeather) {
+        if (currentWeather == EnumWeather.RUNEY || currentWeather == EnumWeather.STORM)
+            return WorldUtils.dayTime(level) == 1;
+        long time = WorldUtils.dayTime(level);
+        return time == 1 || time == 6001 || time == 12001 || time == 18001;
+    }
+
+    public static boolean canChangeToRuneyOrStormyWeather(Level level) {
+        return WorldUtils.dayTime(level) == 1;
     }
 
     public CalendarImpl getCalendar() {
@@ -61,12 +68,12 @@ public class WorldHandler extends SavedData {
         this.setDirty();
     }
 
-    public void increaseDay(ServerLevel world) {
-        int date = WorldUtils.day(world);
+    public void increaseDay(ServerLevel level) {
+        int date = WorldUtils.day(level);
         EnumDay day = EnumDay.values()[Math.floorMod(date, EnumDay.values().length)];
         EnumSeason season = EnumSeason.values()[Math.floorMod(date / 30, EnumSeason.values().length)];
         this.calendar.setDateDayAndSeason(date % 30 + 1, day, season);
-        Platform.INSTANCE.sendToAll(new S2CCalendar(this.calendar), world.getServer());
+        Platform.INSTANCE.sendToAll(new S2CCalendar(this.calendar), level.getServer());
         this.setDirty();
     }
 
@@ -90,37 +97,60 @@ public class WorldHandler extends SavedData {
         return this.calendar.nextWeather();
     }
 
-    public void update(ServerLevel world) {
-        if (canUpdateWeather(world, this.currentWeather())) {
-            this.updateWeatherTo(world, this.nextWeather());
+    public void update(ServerLevel level) {
+        boolean doWeather = canUpdateWeather(level);
+        if (doWeather && shouldUpdateWeather(level, this.currentWeather())) {
+            this.updateWeatherTo(level, this.nextWeather());
         }
-        if (WorldUtils.canUpdateDaily(world)) {
-            this.increaseDay(world);
+        if (--this.updateDelay <= 0) {
+            if (doWeather && !this.isCorrectWeather(level))
+                this.setMCWeather(level);
+            this.updateDelay = 40;
+        }
+        if (WorldUtils.canUpdateDaily(level)) {
+            this.increaseDay(level);
             this.updateTracker.removeIf(IDailyUpdate::inValid);
-            this.updateTracker.forEach(update -> update.update(world));
+            this.updateTracker.forEach(update -> update.update(level));
         }
     }
 
-    public void updateWeatherTo(ServerLevel world, EnumWeather weather) {
-        EnumWeather nextWeather;
-        float chance = world.random.nextFloat();
+    public void updateWeatherTo(ServerLevel level, EnumWeather weather) {
+        EnumWeather nextWeather = null;
+        float chance = level.random.nextFloat();
         EnumSeason season = this.currentSeason();
-        float stormAdd = (season == EnumSeason.SUMMER || season == EnumSeason.WINTER) ? 0.1F : 0;
-        if (chance < 0.01F)
-            nextWeather = EnumWeather.RUNEY;
-        else if (chance < 0.05F + stormAdd)
-            nextWeather = EnumWeather.STORM;
-        else if (chance < 0.4F)
-            nextWeather = EnumWeather.RAIN;
-        else
-            nextWeather = EnumWeather.CLEAR;
-        this.calendar.setWeather(world.getServer(), weather, nextWeather);
-        switch (this.currentWeather()) {
-            case RAIN -> world.setWeatherParameters(0, 24000, true, false);
-            case CLEAR, RUNEY -> world.setWeatherParameters(24000, 0, false, false);
-            case STORM -> world.setWeatherParameters(0, 24000, true, true);
+        if (canChangeToRuneyOrStormyWeather(level)) {
+            float stormAdd = (season == EnumSeason.SUMMER || season == EnumSeason.WINTER) ? 0.1F : 0;
+            if (chance < 0.01F)
+                nextWeather = EnumWeather.RUNEY;
+            else if (chance < 0.05F + stormAdd)
+                nextWeather = EnumWeather.STORM;
         }
+        if (nextWeather == null) {
+            if (chance < 0.3F)
+                nextWeather = EnumWeather.RAIN;
+            else
+                nextWeather = EnumWeather.CLEAR;
+        }
+        this.calendar.setWeather(level.getServer(), weather, nextWeather);
+        this.setMCWeather(level);
+        this.updateDelay = 100;
         this.setDirty();
+    }
+
+    private void setMCWeather(ServerLevel level) {
+        switch (this.currentWeather()) {
+            case RAIN -> level.setWeatherParameters(0, 24000, true, false);
+            case CLEAR, RUNEY -> level.setWeatherParameters(24000, 0, false, false);
+            case STORM -> level.setWeatherParameters(0, 24000, true, true);
+        }
+    }
+
+    private boolean isCorrectWeather(ServerLevel level) {
+        return switch (this.currentWeather()) {
+            case RAIN -> level.isRaining();
+            case CLEAR, RUNEY -> !level.isRaining() && !level.isThundering();
+            case STORM -> level.isRaining() && level.isThundering();
+        };
     }
 
     public void addToTracker(IDailyUpdate update) {

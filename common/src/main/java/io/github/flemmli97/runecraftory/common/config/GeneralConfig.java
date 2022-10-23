@@ -21,7 +21,7 @@ public class GeneralConfig {
     public static boolean disableHunger = false;
     public static boolean modifyWeather = true;
     public static boolean modifyBed = false;
-    public static boolean healOnWakeUp = false;
+    public static boolean healOnWakeUp = true;
     public static boolean disableFoodSystem = false;
     public static boolean disableItemStatSystem = false;
     public static boolean disableCropSystem = false;
@@ -56,8 +56,8 @@ public class GeneralConfig {
     public static int platinumWateringCanWater = 250;
     public static EnumMap<EnumWeaponType, WeaponTypeProperties> weaponProps = new EnumMap<>(EnumWeaponType.class);
 
-    public static float xpMultiplier = 0;
-    public static float skillXpMultiplier = 0;
+    public static float xpMultiplier = 1;
+    public static float skillXpMultiplier = 1;
     public static float tamingMultiplier = 1;
 
     public static boolean debugAttack = false;
