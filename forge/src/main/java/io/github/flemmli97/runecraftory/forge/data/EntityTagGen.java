@@ -15,8 +15,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class EntityTagGen extends TagsProvider<EntityType<?>> {
 
-    public static final TagKey<EntityType<?>> held = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_helditems"));
-    public static final TagKey<EntityType<?>> use = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_useitem"));
+    public static final TagKey<EntityType<?>> IMHeld = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_helditems"));
+    public static final TagKey<EntityType<?>> IMUse = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_useitem"));
+    public static final TagKey<EntityType<?>> IMVillagers = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_villager"));
+
+    public static final TagKey<EntityType<?>> minecolonies = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("minecolonies", "mob_attack_blacklist"));
 
     @SuppressWarnings("deprecation")
     public EntityTagGen(DataGenerator arg, @Nullable ExistingFileHelper existingFileHelper) {
@@ -26,8 +29,10 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
     @Override
     protected void addTags() {
         for (RegistryEntrySupplier<EntityType<?>> type : ModEntities.getMonsters()) {
-            this.tag(held).add(type.get());
-            this.tag(use).add(type.get());
+            this.tag(IMHeld).add(type.get());
+            this.tag(IMUse).add(type.get());
+            this.tag(IMVillagers).add(type.get());
+            this.tag(minecolonies).add(type.get());
             this.tag(ModTags.monsters).add(type.get());
         }
         this.tag(ModTags.bossMonsters)
