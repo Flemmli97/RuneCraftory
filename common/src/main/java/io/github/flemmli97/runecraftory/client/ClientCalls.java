@@ -198,7 +198,7 @@ public class ClientCalls {
         if (t <= 0)
             return;
         float pT = t * 2 - partialTicks;
-        setPitch.accept(pitch + Mth.sin(pT * pT) * 2);
-        setRoll.accept(roll + Mth.sin(pT * 2) * 2);
+        setPitch.accept(pitch + Mth.sin(pT * pT) * ShakeHandler.shakeStrength);
+        setRoll.accept(roll + Mth.sin(pT * 2) * ShakeHandler.shakeStrength);
     }
 }

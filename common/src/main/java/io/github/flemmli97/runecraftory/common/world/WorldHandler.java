@@ -120,13 +120,13 @@ public class WorldHandler extends SavedData {
         EnumSeason season = this.currentSeason();
         if (canChangeToRuneyOrStormyWeather(level)) {
             float stormAdd = (season == EnumSeason.SUMMER || season == EnumSeason.WINTER) ? 0.1F : 0;
-            if (chance < 0.01F)
+            if (chance < 0.035F)
                 nextWeather = EnumWeather.RUNEY;
-            else if (chance < 0.05F + stormAdd)
+            else if (chance < 0.04F + stormAdd)
                 nextWeather = EnumWeather.STORM;
         }
         if (nextWeather == null) {
-            if (chance < 0.3F)
+            if (chance < 0.2F)
                 nextWeather = EnumWeather.RAIN;
             else
                 nextWeather = EnumWeather.CLEAR;

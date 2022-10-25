@@ -2,16 +2,19 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -70,20 +73,32 @@ public class EntityExplosionSpell extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        this.doExplosion(result.getEntity());
-        this.level.playSound(null, result.getEntity().blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0f, 1.0f);
-        this.remove(RemovalReason.KILLED);
+        this.doExplosion(result.getEntity().getX(), result.getEntity().getY(), result.getEntity().getZ(), result.getEntity());
         return true;
     }
 
     @Override
     protected void onBlockHit(BlockHitResult result) {
-        this.doExplosion(null);
-        this.level.playSound(null, result.getLocation().x, result.getLocation().y, result.getLocation().z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0f, 1.0f);
+        this.doExplosion(result.getLocation().x, result.getLocation().y, result.getLocation().z, null);
+    }
+
+    private void doExplosion(double x, double y, double z, Entity hit) {
+        this.doExplosion(hit);
+        this.level.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0f, 1.0f);
         this.remove(RemovalReason.KILLED);
+        if (this.level instanceof ServerLevel serverLevel) {
+            AABB area = new AABB(x - 0.5, y - 0.5, z + 0.5, x + 0.5, y + 0.5, z + 0.5).inflate(7);
+            for (ServerPlayer player : serverLevel.players()) {
+                if (!area.contains(player.getX(), player.getY(), player.getZ()))
+                    continue;
+                Platform.INSTANCE.sendToClient(new S2CScreenShake(8, 1), player);
+            }
+        }
     }
 
     protected void doExplosion(Entity hit) {
+        if (hit != null)
+            CombatUtils.damage(this.getOwner(), hit, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.FIRE).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
         List<Entity> list = this.level.getEntities(this, new AABB(-5, -5, -5, 5, 5, 5).move(this.position()));
         for (Entity e : list) {
             double dist;

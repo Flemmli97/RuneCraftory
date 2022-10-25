@@ -1,6 +1,8 @@
 RuneCraftory 1.3.2
 ================
 - Add "vanilla ignore defence" config
+- Make explosion spell hit shake screen
+- Tweaked weather chances
 
 RuneCraftory 1.3.1
 ================

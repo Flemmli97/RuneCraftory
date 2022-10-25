@@ -43,6 +43,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2COpenNPCGui.ID, S2COpenNPCGui.class, S2COpenNPCGui::write, S2COpenNPCGui::read, S2COpenNPCGui::handle);
         register.registerMessage(id++, S2CUpdateNPCData.ID, S2CUpdateNPCData.class, S2CUpdateNPCData::write, S2CUpdateNPCData::read, S2CUpdateNPCData::handle);
         register.registerMessage(id++, S2CShopResponses.ID, S2CShopResponses.class, S2CShopResponses::write, S2CShopResponses::read, S2CShopResponses::handle);
+        register.registerMessage(id++, S2CScreenShake.ID, S2CScreenShake.class, S2CScreenShake::write, S2CScreenShake::read, S2CScreenShake::handle);
         return id;
     }
 
