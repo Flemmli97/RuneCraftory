@@ -16,6 +16,7 @@ public class GeneralConfigSpec {
     public static final Pair<GeneralConfigSpec, ForgeConfigSpec> spec = new ForgeConfigSpec.Builder().configure(GeneralConfigSpec::new);
 
     public final ForgeConfigSpec.BooleanValue disableDefence;
+    public final ForgeConfigSpec.BooleanValue vanillaIgnoreDefence;
     public final ForgeConfigSpec.BooleanValue gateSpawning;
     public final ForgeConfigSpec.BooleanValue disableVanillaSpawning;
     public final ForgeConfigSpec.BooleanValue randomDamage;
@@ -72,6 +73,9 @@ public class GeneralConfigSpec {
         builder.comment("The current default values reflect a near vanilla experience since quite a few things are not done yet to my satisfaction.",
                 "You can freely change the things here and they will work but you might also consider tweaking things for balancing").push("Modules");
         this.disableDefence = builder.comment("If disabled attacks will ignore defence of mobs. Should be near vanilla then except effects like poison attacks etc.").define("Ignore Defence", GeneralConfig.disableDefence);
+        this.vanillaIgnoreDefence = builder.comment("If damage sources not from this mod should simply ignore defence.",
+                "Since vanilla dmg doesnt scale much after gaining some defence you are pretty much immune to it.",
+                "Turn it off if you have some mods that do damage scaling. Or want to just feel op.").define("Vanilla Ignore Defence", GeneralConfig.vanillaIgnoreDefence);
         this.gateSpawning = builder.comment("Should gates spawn? If disabled will also disable all mobs from this mod to spawn. Needs server restart").define("Gate Spawning", GeneralConfig.gateSpawning);
         this.disableVanillaSpawning = builder.comment("If enabled mobs can only spawn through gates.").define("Disable vanilla spawn", GeneralConfig.disableVanillaSpawning);
         this.randomDamage = builder.comment("If enabled damage gets a +-10% randomness.").define("Random Damage", GeneralConfig.randomDamage);

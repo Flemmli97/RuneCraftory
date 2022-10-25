@@ -104,11 +104,13 @@ public class CombatUtils {
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {
         int reduce = 0;
         if (!GeneralConfig.disableDefence && !source.isBypassMagic()) {
-            if (!source.isBypassArmor()) {
-                if (source.isMagic())
-                    reduce = getAttributeValue(entity, ModAttributes.RF_MAGIC_DEFENCE.get(), null);
-                else
-                    reduce = getAttributeValue(entity, ModAttributes.RF_DEFENCE.get(), null);
+            if (!GeneralConfig.vanillaIgnoreDefence || source instanceof CustomDamage) {
+                if (!source.isBypassArmor()) {
+                    if (source.isMagic())
+                        reduce = getAttributeValue(entity, ModAttributes.RF_MAGIC_DEFENCE.get(), null);
+                    else
+                        reduce = getAttributeValue(entity, ModAttributes.RF_DEFENCE.get(), null);
+                }
             }
         }
         float dmg = Math.max(0.02f * amount, amount - reduce);

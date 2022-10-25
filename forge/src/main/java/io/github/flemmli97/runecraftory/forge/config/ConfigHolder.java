@@ -32,6 +32,7 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
 
     public static void loadGeneral(GeneralConfigSpec spec) {
         GeneralConfig.disableDefence = spec.disableDefence.get();
+        GeneralConfig.vanillaIgnoreDefence = spec.vanillaIgnoreDefence.get();
         GeneralConfig.gateSpawning = spec.gateSpawning.get();
         GeneralConfig.disableVanillaSpawning = spec.disableVanillaSpawning.get();
         GeneralConfig.randomDamage = spec.randomDamage.get();

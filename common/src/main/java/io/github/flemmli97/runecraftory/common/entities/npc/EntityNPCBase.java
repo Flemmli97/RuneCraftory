@@ -241,16 +241,18 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (key == shopSync) {
-            try {
-                this.shop = EnumShop.values()[this.entityData.get(shopSync)];
-            } catch (ArrayIndexOutOfBoundsException ignored) {
+        if (this.level.isClientSide) {
+            if (key == shopSync) {
+                try {
+                    this.shop = EnumShop.values()[this.entityData.get(shopSync)];
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                }
             }
-        }
-        if (key == personalitySync) {
-            try {
-                this.personality = EnumNPCPersonality.values()[this.entityData.get(personalitySync)];
-            } catch (ArrayIndexOutOfBoundsException ignored) {
+            if (key == personalitySync) {
+                try {
+                    this.personality = EnumNPCPersonality.values()[this.entityData.get(personalitySync)];
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                }
             }
         }
     }

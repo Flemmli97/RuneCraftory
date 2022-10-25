@@ -375,13 +375,15 @@ public class GateEntity extends Mob implements IBaseMob {
 
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
-        if (key.equals(mobLevel)) {
-            this.updateStatsToLevel();
-        }
-        if (key.equals(element)) {
-            this.type = EnumElement.values()[this.entityData.get(element)];
-        }
         super.onSyncedDataUpdated(key);
+        if (this.level.isClientSide) {
+            if (key.equals(mobLevel)) {
+                this.updateStatsToLevel();
+            }
+            if (key.equals(element)) {
+                this.type = EnumElement.values()[this.entityData.get(element)];
+            }
+        }
     }
 
     @Override

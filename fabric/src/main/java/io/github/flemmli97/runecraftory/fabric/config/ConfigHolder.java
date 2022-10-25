@@ -26,6 +26,7 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
 
     public static void loadGeneral(GeneralConfigSpec spec) {
         GeneralConfig.disableDefence = spec.disableDefence.get();
+        GeneralConfig.vanillaIgnoreDefence = spec.vanillaIgnoreDefence.get();
         GeneralConfig.gateSpawning = spec.gateSpawning.get();
         GeneralConfig.disableVanillaSpawning = spec.disableVanillaSpawning.get();
         GeneralConfig.randomDamage = spec.randomDamage.get();

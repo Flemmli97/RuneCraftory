@@ -331,10 +331,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (key == behaviourData) {
-            try {
-                this.behaviour = Behaviour.values()[this.entityData.get(behaviourData)];
-            } catch (ArrayIndexOutOfBoundsException ignored) {
+        if (this.level.isClientSide) {
+            if (key == behaviourData) {
+                try {
+                    this.behaviour = Behaviour.values()[this.entityData.get(behaviourData)];
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                }
+            }
+            //This case only happens during load. At that point we want to skip right to the end of the animation
+            if (key == playDeathState) {
+                if (this.entityData.get(playDeathState) && !this.getAnimationHandler().hasAnimation())
+                    this.playDeathAnimation(true);
             }
         }
     }
@@ -925,7 +932,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     protected void tickDeath() {
         if (this.deathTime == 0) {
-            this.playDeathAnimation();
+            this.playDeathAnimation(false);
             this.getNavigation().stop();
         }
         ++this.deathTime;
@@ -960,7 +967,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.entityData.set(playDeathState, flag);
         if (flag) {
             this.getNavigation().stop();
-            this.playDeathAnimation();
+            this.playDeathAnimation(false);
             this.setMoving(false);
             this.setShiftKeyDown(false);
             this.setSprinting(false);
@@ -1166,9 +1173,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return 20;
     }
 
-    protected void playDeathAnimation() {
-        if (this.getDeathAnimation() != null)
+    protected void playDeathAnimation(boolean load) {
+        if (this.getDeathAnimation() != null) {
             this.getAnimationHandler().setAnimation(this.getDeathAnimation());
+            if (load && this.level.isClientSide) {
+                AnimatedAction anim = this.getAnimationHandler().getAnimation();
+                while (anim.getTick() < anim.getLength())
+                    anim.tick();
+            }
+        }
     }
 
     public AnimatedAction getDeathAnimation() {

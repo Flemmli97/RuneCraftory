@@ -1,3 +1,7 @@
+RuneCraftory 1.3.2
+================
+- Add "vanilla ignore defence" config
+
 RuneCraftory 1.3.1
 ================
 - Smoother movement animation

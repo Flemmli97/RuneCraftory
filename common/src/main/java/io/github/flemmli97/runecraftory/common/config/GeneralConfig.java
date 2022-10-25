@@ -10,6 +10,7 @@ import java.util.EnumMap;
 public class GeneralConfig {
 
     public static boolean disableDefence = false;
+    public static boolean vanillaIgnoreDefence = true;
     public static boolean gateSpawning = true;
     public static boolean disableVanillaSpawning = false;
     public static boolean randomDamage = true;
