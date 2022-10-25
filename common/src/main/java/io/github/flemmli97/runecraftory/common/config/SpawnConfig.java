@@ -100,8 +100,8 @@ public class SpawnConfig {
 
         public static final Codec<SpawnData> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
                         ResourceLocation.CODEC.fieldOf("entity").forGetter(SpawnData::entity),
-                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("min_distance_from_spawn").forGetter(SpawnData::minDistanceFromSpawn),
-                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("min_gate_level").forGetter(SpawnData::minGateLevel),
+                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("min_distance_from_spawn").orElse(0).forGetter(SpawnData::minDistanceFromSpawn),
+                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("min_gate_level").orElse(0).forGetter(SpawnData::minGateLevel),
                         Codec.unboundedMap(TagKey.codec(Registry.BIOME_REGISTRY), ExtraCodecs.POSITIVE_INT).fieldOf("biomes").forGetter(SpawnData::biomes),
                         Codec.unboundedMap(Codec.STRING, ExtraCodecs.POSITIVE_INT).fieldOf("structures").forGetter(SpawnData::structures))
                 .apply(instance, SpawnData::new));
