@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -57,16 +57,18 @@ public class CropManager extends SimpleJsonResourceReloadListener {
                 JsonObject obj = el.getAsJsonObject();
                 if (obj.has("tag")) {
                     TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation(obj.get("tag").getAsString()));
-                    CropProperties props = GSON.fromJson(el, CropProperties.class);
+                    CropProperties props = CropProperties.CODEC.parse(JsonOps.INSTANCE, el)
+                            .getOrThrow(false, RuneCraftory.logger::error);
                     props.setID(fres);
                     tagBuilder.put(tag, props);
                 } else if (obj.has("item")) {
                     ResourceLocation res = new ResourceLocation(obj.get("item").getAsString());
-                    CropProperties props = GSON.fromJson(el, CropProperties.class);
+                    CropProperties props = CropProperties.CODEC.parse(JsonOps.INSTANCE, el)
+                            .getOrThrow(false, RuneCraftory.logger::error);
                     props.setID(fres);
                     builder.put(res, props);
                 }
-            } catch (JsonSyntaxException | IllegalStateException ex) {
+            } catch (Exception ex) {
                 RuneCraftory.logger.error("Couldnt parse crop properties json {}", fres);
                 ex.fillInStackTrace();
             }

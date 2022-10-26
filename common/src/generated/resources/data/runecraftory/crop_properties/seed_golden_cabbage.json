@@ -1,4 +1,5 @@
 {
+  "regrowable": false,
   "bestSeason": [
     "WINTER"
   ],
@@ -7,6 +8,5 @@
   ],
   "growth": 75,
   "maxDrops": 3,
-  "regrowable": false,
   "item": "runecraftory:seed_golden_cabbage"
 }

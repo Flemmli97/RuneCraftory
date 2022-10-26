@@ -1,4 +1,5 @@
 {
+  "regrowable": false,
   "bestSeason": [
     "FALL"
   ],
@@ -7,6 +8,5 @@
   ],
   "growth": 29,
   "maxDrops": 3,
-  "regrowable": false,
   "item": "runecraftory:seed_autumn_grass"
 }

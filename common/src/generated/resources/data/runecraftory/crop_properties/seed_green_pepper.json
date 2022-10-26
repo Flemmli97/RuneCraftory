@@ -1,4 +1,5 @@
 {
+  "regrowable": true,
   "bestSeason": [
     "SUMMER"
   ],
@@ -7,6 +8,5 @@
   ],
   "growth": 8,
   "maxDrops": 5,
-  "regrowable": true,
   "item": "runecraftory:seed_green_pepper"
 }

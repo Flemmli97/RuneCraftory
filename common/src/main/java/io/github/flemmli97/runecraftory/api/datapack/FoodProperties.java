@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.api.datapack;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
@@ -19,12 +20,28 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class FoodProperties {
+
+    public static final Codec<FoodProperties> CODEC = RecordCodecBuilder.create((instance) ->
+            instance.group(Codec.INT.fieldOf("hpRegen").forGetter(d -> d.hpRegen),
+                    Codec.INT.fieldOf("rpRegen").forGetter(d -> d.rpRegen),
+                    Codec.INT.fieldOf("hpRegenPercent").forGetter(d -> d.hpRegenPercent),
+                    Codec.INT.fieldOf("rpRegenPercent").forGetter(d -> d.rpRegenPercent),
+                    Codec.INT.fieldOf("rpIncrease").forGetter(d -> d.rpIncrease),
+                    Codec.INT.fieldOf("rpPercentIncrease").forGetter(d -> d.rpPercentIncrease),
+                    Codec.INT.fieldOf("duration").forGetter(d -> d.duration),
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effects").forGetter(d -> d.effects),
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effectsPercentage").forGetter(d -> d.effectsPercentage),
+                    SimpleEffect.CODEC.listOf().fieldOf("potionApply").forGetter(d -> Arrays.asList(d.potionApply)),
+                    Registry.MOB_EFFECT.byNameCodec().listOf().fieldOf("potionRemove").forGetter(d -> Arrays.asList(d.potionRemove))
+            ).apply(instance, FoodProperties::new));
 
     private final Map<Attribute, Double> effects = new TreeMap<>(ModAttributes.sorted);
     private final Map<Attribute, Double> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
@@ -34,6 +51,24 @@ public class FoodProperties {
 
     private transient List<Component> translationTexts;
     private transient ResourceLocation id;
+
+    private FoodProperties() {
+    }
+
+    public FoodProperties(int hpRegen, int rpRegen, int hpRegenPercent, int rpRegenPercent, int rpIncrease, int rpPercentIncrease, int duration,
+                          Map<Attribute, Double> effects, Map<Attribute, Double> effectsPercentage, List<SimpleEffect> potionApply, List<MobEffect> potionRemove) {
+        this.hpRegen = hpRegen;
+        this.rpRegen = rpRegen;
+        this.hpRegenPercent = hpRegenPercent;
+        this.rpRegenPercent = rpRegenPercent;
+        this.rpIncrease = rpIncrease;
+        this.rpPercentIncrease = rpPercentIncrease;
+        this.duration = duration;
+        this.effects.putAll(effects);
+        this.effectsPercentage.putAll(effectsPercentage);
+        this.potionApply = potionApply.toArray(new SimpleEffect[0]);
+        this.potionRemove = potionRemove.toArray(new MobEffect[0]);
+    }
 
     public static FoodProperties fromPacket(FriendlyByteBuf buffer) {
         FoodProperties prop = new FoodProperties();
@@ -105,12 +140,12 @@ public class FoodProperties {
         return new LinkedHashMap<>(this.effectsPercentage);
     }
 
-    public MobEffect[] potionHeals() {
-        return this.potionRemove;
+    public List<MobEffect> potionHeals() {
+        return ImmutableList.copyOf(this.potionRemove);
     }
 
-    public SimpleEffect[] potionApply() {
-        return this.potionApply;
+    public List<SimpleEffect> potionApply() {
+        return ImmutableList.copyOf(this.potionApply);
     }
 
     public void toPacket(FriendlyByteBuf buffer) {
@@ -209,76 +244,59 @@ public class FoodProperties {
     /**
      * Used in serialization
      */
-    public static class MutableFoodProps {
+    public static class Builder {
 
-        public static final Codec<MutableFoodProps> CODEC = RecordCodecBuilder.create((instance) ->
-                instance.group(Codec.INT.fieldOf("hpRegen").forGetter(d -> d.hpRegen),
-                        Codec.INT.fieldOf("rpRegen").forGetter(d -> d.rpRegen),
-                        Codec.INT.fieldOf("hpRegenPercent").forGetter(d -> d.hpRegenPercent),
-                        Codec.INT.fieldOf("rpRegenPercent").forGetter(d -> d.rpRegenPercent),
-                        Codec.INT.fieldOf("rpIncrease").forGetter(d -> d.rpIncrease),
-                        Codec.INT.fieldOf("rpPercentIncrease").forGetter(d -> d.rpPercentIncrease),
-                        Codec.INT.fieldOf("duration").forGetter(d -> d.duration),
-                        Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effects").forGetter(d -> d.effects),
-                        Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effectsPercentage").forGetter(d -> d.effectsPercentage),
-                        SimpleEffect.CODEC.listOf().fieldOf("potionApply").forGetter(d -> d.potionApply),
-                        Registry.MOB_EFFECT.byNameCodec().listOf().fieldOf("potionRemove").forGetter(d -> d.potionRemove)
-                ).apply(instance, (hpRegen, rpRegen, hpRegenPerc, rpRegenPerc, rpInc, rpIncPerc, duration, effects, effectsPerc, potion, potionRem) -> {
-                    MutableFoodProps prop = new MutableFoodProps(duration).setHPRegen(hpRegen, hpRegenPerc)
-                            .setRPRegen(rpRegen, rpRegenPerc)
-                            .setRPIncrease(rpInc, rpIncPerc);
-                    prop.effects.putAll(effects);
-                    prop.effectsPercentage.putAll(effectsPerc);
-                    prop.potionApply.addAll(potion);
-                    prop.potionRemove.addAll(potionRem);
-                    return prop;
-                }));
-        private final TreeMap<Attribute, Double> effects = new TreeMap<>(ModAttributes.sorted);
-        private final TreeMap<Attribute, Double> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
+        private final Map<Attribute, Double> effects = new HashMap<>();
+        private final Map<Attribute, Double> effectsPercentage = new HashMap<>();
         private final List<SimpleEffect> potionApply = new ArrayList<>();
         private final List<MobEffect> potionRemove = new ArrayList<>();
-        private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
+        private final int duration;
+        private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease;
 
-        public MutableFoodProps(int duration) {
+        public Builder(int duration) {
             this.duration = duration;
         }
 
-        public MutableFoodProps setHPRegen(int hpRegen, int hpRegenPercent) {
+        public Builder setHPRegen(int hpRegen, int hpRegenPercent) {
             this.hpRegen = hpRegen;
             this.hpRegenPercent = hpRegenPercent;
             return this;
         }
 
-        public MutableFoodProps setRPRegen(int rpRegen, int rpRegenPercent) {
+        public Builder setRPRegen(int rpRegen, int rpRegenPercent) {
             this.rpRegen = rpRegen;
             this.rpRegenPercent = rpRegenPercent;
             return this;
         }
 
-        public MutableFoodProps setRPIncrease(int increase, int percentIncrease) {
+        public Builder setRPIncrease(int increase, int percentIncrease) {
             this.rpIncrease = increase;
             this.rpPercentIncrease = percentIncrease;
             return this;
         }
 
-        public MutableFoodProps addEffect(Attribute att, double value) {
+        public Builder addEffect(Attribute att, double value) {
             this.effects.put(att, value);
             return this;
         }
 
-        public MutableFoodProps addEffectPercentage(Attribute att, double value) {
+        public Builder addEffectPercentage(Attribute att, double value) {
             this.effectsPercentage.put(att, value);
             return this;
         }
 
-        public MutableFoodProps addPotion(MobEffect effect, int duration, int amplifier) {
+        public Builder addPotion(MobEffect effect, int duration, int amplifier) {
             this.potionApply.add(new SimpleEffect(effect, duration, amplifier));
             return this;
         }
 
-        public MutableFoodProps curePotion(MobEffect effect) {
+        public Builder curePotion(MobEffect effect) {
             this.potionRemove.add(effect);
             return this;
+        }
+
+        public FoodProperties build() {
+            return new FoodProperties(this.hpRegen, this.rpRegen, this.hpRegenPercent, this.rpRegenPercent, this.rpIncrease, this.rpPercentIncrease, this.duration, this.effects, this.effectsPercentage, this.potionApply, this.potionRemove);
         }
     }
 }

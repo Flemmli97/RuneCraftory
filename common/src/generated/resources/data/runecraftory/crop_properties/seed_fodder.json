@@ -1,8 +1,8 @@
 {
+  "regrowable": true,
   "bestSeason": [],
   "badSeason": [],
   "growth": 5,
   "maxDrops": 1,
-  "regrowable": true,
   "item": "runecraftory:seed_fodder"
 }

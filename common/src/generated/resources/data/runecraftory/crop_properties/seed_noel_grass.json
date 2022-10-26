@@ -1,4 +1,5 @@
 {
+  "regrowable": false,
   "bestSeason": [
     "WINTER"
   ],
@@ -7,6 +8,5 @@
   ],
   "growth": 33,
   "maxDrops": 4,
-  "regrowable": false,
   "item": "runecraftory:seed_noel_grass"
 }

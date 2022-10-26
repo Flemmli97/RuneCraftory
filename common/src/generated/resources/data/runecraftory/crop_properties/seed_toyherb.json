@@ -1,4 +1,5 @@
 {
+  "regrowable": false,
   "bestSeason": [
     "SPRING"
   ],
@@ -7,6 +8,5 @@
   ],
   "growth": 4,
   "maxDrops": 2,
-  "regrowable": false,
   "item": "runecraftory:seed_toyherb"
 }

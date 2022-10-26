@@ -1,4 +1,5 @@
 {
+  "regrowable": true,
   "bestSeason": [
     "SPRING",
     "SUMMER"
@@ -8,6 +9,5 @@
   ],
   "growth": 7,
   "maxDrops": 2,
-  "regrowable": true,
   "item": "runecraftory:seed_pink_melon"
 }

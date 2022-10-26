@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.JsonOps;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
@@ -34,7 +36,7 @@ public abstract class ItemStatProvider implements DataProvider {
             .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.attributes()))
             .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.registry(ModSpells.SPELLREGISTRY_KEY))).create();
 
-    private final Map<ResourceLocation, ItemStat.MutableItemStat> data = new HashMap<>();
+    private final Map<ResourceLocation, ItemStat.Builder> data = new HashMap<>();
     private final Map<ResourceLocation, Consumer<JsonObject>> item = new HashMap<>();
 
     private final DataGenerator gen;
@@ -53,7 +55,8 @@ public abstract class ItemStatProvider implements DataProvider {
         this.data.forEach((res, builder) -> {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/item_stats/" + res.getPath() + ".json");
             try {
-                JsonElement obj = GSON.toJsonTree(builder);
+                JsonElement obj = ItemStat.CODEC.encodeStart(JsonOps.INSTANCE, builder.build())
+                        .getOrThrow(false, RuneCraftory.logger::error);
                 if (obj.isJsonObject())
                     this.item.get(res).accept(obj.getAsJsonObject());
                 DataProvider.save(GSON, cache, obj, path);
@@ -69,28 +72,28 @@ public abstract class ItemStatProvider implements DataProvider {
     }
 
     public void addStat(ItemLike item, int buy, int sell, int upgrade) {
-        this.addStat(item, new ItemStat.MutableItemStat(buy, sell, upgrade));
+        this.addStat(item, new ItemStat.Builder(buy, sell, upgrade));
     }
 
     public void addStat(String id, ItemLike item, int buy, int sell, int upgrade) {
-        this.addStat(id, item, new ItemStat.MutableItemStat(buy, sell, upgrade));
+        this.addStat(id, item, new ItemStat.Builder(buy, sell, upgrade));
     }
 
-    public void addStat(ItemLike item, ItemStat.MutableItemStat builder) {
+    public void addStat(ItemLike item, ItemStat.Builder builder) {
         this.addStat(PlatformUtils.INSTANCE.items().getIDFrom(item.asItem()).getPath(), item, builder);
     }
 
-    public void addStat(String id, ItemLike item, ItemStat.MutableItemStat builder) {
+    public void addStat(String id, ItemLike item, ItemStat.Builder builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
         this.item.put(res, obj -> obj.addProperty("item", (PlatformUtils.INSTANCE.items().getIDFrom(item.asItem()).toString())));
     }
 
     public void addStat(String id, TagKey<Item> tag, int buy, int sell, int upgrade) {
-        this.addStat(id, tag, new ItemStat.MutableItemStat(buy, sell, upgrade));
+        this.addStat(id, tag, new ItemStat.Builder(buy, sell, upgrade));
     }
 
-    public void addStat(String id, TagKey<Item> tag, ItemStat.MutableItemStat builder) {
+    public void addStat(String id, TagKey<Item> tag, ItemStat.Builder builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
         this.item.put(res, obj -> obj.addProperty("tag", tag.location().toString()));

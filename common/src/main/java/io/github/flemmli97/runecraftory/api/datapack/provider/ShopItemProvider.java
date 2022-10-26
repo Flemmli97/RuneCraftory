@@ -4,17 +4,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -34,9 +30,7 @@ public abstract class ShopItemProvider implements DataProvider {
 
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping()
-            .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.attributes()))
-            .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.registry(ModSpells.SPELLREGISTRY_KEY))).create();
+    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping().create();
 
     private final Map<ResourceLocation, Collection<ItemLike>> items = new HashMap<>();
     private final Map<ResourceLocation, Collection<Ingredient>> ingredients = new HashMap<>();

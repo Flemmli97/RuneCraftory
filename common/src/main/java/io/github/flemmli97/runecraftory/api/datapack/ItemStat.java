@@ -1,35 +1,57 @@
 package io.github.flemmli97.runecraftory.api.datapack;
 
 import com.google.common.collect.Sets;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.tenshilib.common.utils.MapUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.SimpleRegistryWrapper;
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 
 public class ItemStat {
+
+    public static final Codec<ItemStat> CODEC = RecordCodecBuilder.create((instance) ->
+            instance.group(
+                    CodecHelper.enumCodec(EnumElement.class, EnumElement.NONE).orElse(EnumElement.NONE).fieldOf("element").forGetter(ItemStat::element),
+                    CodecHelper.ofCustomRegistry(ModSpells.SPELLREGISTRY, ModSpells.SPELLREGISTRY_KEY).optionalFieldOf("tier1Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
+                    CodecHelper.ofCustomRegistry(ModSpells.SPELLREGISTRY, ModSpells.SPELLREGISTRY_KEY).optionalFieldOf("tier2Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
+                    CodecHelper.ofCustomRegistry(ModSpells.SPELLREGISTRY, ModSpells.SPELLREGISTRY_KEY).optionalFieldOf("tier3Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
+
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("itemStats").forGetter(ItemStat::itemStats),
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("buyPrice").forGetter(ItemStat::getBuy),
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("sellPrice").forGetter(ItemStat::getSell),
+                    ExtraCodecs.NON_NEGATIVE_INT.fieldOf("upgradeDifficulty").forGetter(ItemStat::getDiff)
+            ).apply(instance, ((element, spell, spell2, spell3, atts, buy, sell, upgrade) ->
+                    new ItemStat(buy, sell, upgrade, element, spell.orElse(null), spell2.orElse(null), spell3.orElse(null), atts))));
 
     private static final Set<ResourceLocation> flatAttributes = Sets.newHashSet(
             new ResourceLocation("generic.max_health"),
@@ -38,8 +60,7 @@ public class ItemStat {
             LibAttributes.rf_magic,
             LibAttributes.rf_magic_defence);
 
-    private final Map<Attribute, Double> itemStats = new TreeMap<>(ModAttributes.sorted);
-    private transient Map<Attribute, Double> itemStatCopy;
+    private final Map<Attribute, Double> itemStats;
     private int buyPrice;
     private int sellPrice;
     private int upgradeDifficulty;
@@ -48,7 +69,23 @@ public class ItemStat {
     private Spell tier2Spell;
     private Spell tier3Spell;
 
+    private transient Map<Attribute, Double> itemStatView;
     private transient ResourceLocation id;
+
+    private ItemStat() {
+        this.itemStats = new HashMap<>();
+    }
+
+    private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, EnumElement element, Spell tier1Spell, Spell tier2Spell, Spell tier3Spell, Map<Attribute, Double> itemStats) {
+        this.itemStats = itemStats;
+        this.buyPrice = buyPrice;
+        this.sellPrice = sellPrice;
+        this.upgradeDifficulty = upgradeDifficulty;
+        this.element = element;
+        this.tier1Spell = tier1Spell;
+        this.tier2Spell = tier2Spell;
+        this.tier3Spell = tier3Spell;
+    }
 
     public static ItemStat fromPacket(FriendlyByteBuf buffer) {
         ItemStat stat = new ItemStat();
@@ -96,21 +133,24 @@ public class ItemStat {
     }
 
     public Map<Attribute, Double> itemStats() {
-        if (this.itemStatCopy == null) {
-            this.itemStatCopy = new TreeMap<>(ModAttributes.sorted);
-            this.itemStatCopy.putAll(this.itemStats);
+        if (this.itemStatView == null) {
+            this.itemStatView = new TreeMap<>(ModAttributes.sorted);
+            this.itemStatView.putAll(this.itemStats);
         }
-        return this.itemStatCopy;
+        return this.itemStatView;
     }
 
+    @Nullable
     public Spell getTier1Spell() {
         return this.tier1Spell;
     }
 
+    @Nullable
     public Spell getTier2Spell() {
         return this.tier2Spell;
     }
 
+    @Nullable
     public Spell getTier3Spell() {
         return this.tier3Spell;
     }
@@ -198,41 +238,42 @@ public class ItemStat {
         return s;
     }
 
-    /**
-     * Used in serialization
-     */
-    public static class MutableItemStat {
+    public static class Builder {
 
-        private final Map<Attribute, Double> itemStats = new TreeMap<>(ModAttributes.sorted);
-        private int buyPrice;
-        private int sellPrice;
-        private int upgradeDifficulty;
+        private final Map<Attribute, Double> itemStats = new HashMap<>();
+        private final int buyPrice;
+        private final int sellPrice;
+        private final int upgradeDifficulty;
         private EnumElement element = EnumElement.NONE;
         private Spell tier1Spell;
         private Spell tier2Spell;
         private Spell tier3Spell;
 
-        public MutableItemStat(int buy, int sell, int upgrade) {
+        public Builder(int buy, int sell, int upgrade) {
             this.buyPrice = buy;
             this.sellPrice = sell;
             this.upgradeDifficulty = upgrade;
         }
 
-        public MutableItemStat setElement(EnumElement element) {
+        public Builder setElement(EnumElement element) {
             this.element = element;
             return this;
         }
 
-        public MutableItemStat addAttribute(Attribute att, double value) {
+        public Builder addAttribute(Attribute att, double value) {
             this.itemStats.put(att, value);
             return this;
         }
 
-        public MutableItemStat setSpell(Spell tier1, Spell tier2, Spell tier3) {
+        public Builder setSpell(Spell tier1, Spell tier2, Spell tier3) {
             this.tier1Spell = tier1;
             this.tier2Spell = tier2;
             this.tier3Spell = tier3;
             return this;
+        }
+
+        public ItemStat build() {
+            return new ItemStat(this.buyPrice, this.sellPrice, this.upgradeDifficulty, this.element, this.tier1Spell, this.tier2Spell, this.tier3Spell, this.itemStats);
         }
     }
 }

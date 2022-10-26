@@ -34,7 +34,7 @@ public abstract class FoodProvider implements DataProvider {
             .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.attributes()))
             .registerTypeAdapter(MobEffect.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.effects())).create();
 
-    private final Map<ResourceLocation, FoodProperties.MutableFoodProps> data = new HashMap<>();
+    private final Map<ResourceLocation, FoodProperties.Builder> data = new HashMap<>();
     private final Map<ResourceLocation, Consumer<JsonObject>> item = new HashMap<>();
 
     private final DataGenerator gen;
@@ -53,7 +53,7 @@ public abstract class FoodProvider implements DataProvider {
         this.data.forEach((res, builder) -> {
             Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/food_stats/" + res.getPath() + ".json");
             try {
-                JsonElement obj = FoodProperties.MutableFoodProps.CODEC.encode(builder, JsonOps.INSTANCE, new JsonObject())
+                JsonElement obj = FoodProperties.CODEC.encodeStart(JsonOps.INSTANCE, builder.build())
                         .getOrThrow(false, LOGGER::error);
                 if (obj.isJsonObject())
                     this.item.get(res).accept(obj.getAsJsonObject());
@@ -70,28 +70,28 @@ public abstract class FoodProvider implements DataProvider {
     }
 
     public void addStat(ItemLike item, int duration) {
-        this.addStat(item, new FoodProperties.MutableFoodProps(duration));
+        this.addStat(item, new FoodProperties.Builder(duration));
     }
 
     public void addStat(String id, ItemLike item, int duration) {
-        this.addStat(id, item, new FoodProperties.MutableFoodProps(duration));
+        this.addStat(id, item, new FoodProperties.Builder(duration));
     }
 
-    public void addStat(ItemLike item, FoodProperties.MutableFoodProps builder) {
+    public void addStat(ItemLike item, FoodProperties.Builder builder) {
         this.addStat(PlatformUtils.INSTANCE.items().getIDFrom(item.asItem()).getPath(), item, builder);
     }
 
-    public void addStat(String id, ItemLike item, FoodProperties.MutableFoodProps builder) {
+    public void addStat(String id, ItemLike item, FoodProperties.Builder builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
         this.item.put(res, obj -> obj.addProperty("item", (PlatformUtils.INSTANCE.items().getIDFrom(item.asItem()).toString())));
     }
 
     public void addStat(String id, TagKey<Item> tag, int duration) {
-        this.addStat(id, tag, new FoodProperties.MutableFoodProps(duration));
+        this.addStat(id, tag, new FoodProperties.Builder(duration));
     }
 
-    public void addStat(String id, TagKey<Item> tag, FoodProperties.MutableFoodProps builder) {
+    public void addStat(String id, TagKey<Item> tag, FoodProperties.Builder builder) {
         ResourceLocation res = new ResourceLocation(this.modid, id);
         this.data.put(res, builder);
         this.item.put(res, obj -> obj.addProperty("tag", tag.location().toString()));

@@ -1,4 +1,5 @@
 {
+  "regrowable": false,
   "bestSeason": [
     "FALL"
   ],
@@ -9,6 +10,5 @@
   ],
   "growth": 80,
   "maxDrops": 3,
-  "regrowable": false,
   "item": "runecraftory:seed_red_crystal"
 }

@@ -1,4 +1,5 @@
 {
+  "regrowable": false,
   "bestSeason": [
     "SPRING"
   ],
@@ -9,6 +10,5 @@
   ],
   "growth": 55,
   "maxDrops": 3,
-  "regrowable": false,
   "item": "runecraftory:seed_blue_crystal"
 }

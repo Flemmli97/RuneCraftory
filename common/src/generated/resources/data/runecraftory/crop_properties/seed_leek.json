@@ -1,4 +1,5 @@
 {
+  "regrowable": false,
   "bestSeason": [
     "SPRING",
     "FALL"
@@ -8,6 +9,5 @@
   ],
   "growth": 10,
   "maxDrops": 2,
-  "regrowable": false,
   "item": "runecraftory:seed_leek"
 }

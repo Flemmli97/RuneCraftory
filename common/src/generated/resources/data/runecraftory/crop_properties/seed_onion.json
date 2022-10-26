@@ -1,4 +1,5 @@
 {
+  "regrowable": false,
   "bestSeason": [
     "FALL"
   ],
@@ -7,6 +8,5 @@
   ],
   "growth": 20,
   "maxDrops": 6,
-  "regrowable": false,
   "item": "runecraftory:seed_onion"
 }
