@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 public class NPCSpawnEgg extends RuneCraftoryEggItem {
 
     public NPCSpawnEgg(Supplier<? extends EntityType<?>> type, Properties props) {
-        super(type, 0xb86b13, 0xd8d7d7, props);
+        super(type, 0x452808, 0x7d4c15, props);
     }
 
     @Override
