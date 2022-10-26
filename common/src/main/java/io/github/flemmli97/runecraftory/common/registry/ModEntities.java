@@ -105,7 +105,7 @@ public class ModEntities {
                     .addDaily(new SimpleItemStackWrapper(ModItems.furSmall.getID().toString()), 0)
                     .addDaily(new SimpleItemStackWrapper(ModItems.furMedium.getID().toString()), 5)
                     .addDaily(new SimpleItemStackWrapper(ModItems.furLarge.getID().toString()), 8)
-                    .xp(1).money(3).tamingChance(0.25f).setRidable().build(),
+                    .xp(30).money(3).tamingChance(0.25f).setRidable().build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(60, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     ModTags.IS_MAGICAL).addToBiomeTag(44, ModTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN));
     public static final RegistryEntrySupplier<EntityType<EntityOrc>> orc = regMonster(EntityType.Builder.of(EntityOrc::new, MobCategory.MONSTER).sized(0.73f, 2.4f).clientTrackingRange(8), LibEntities.orc,
@@ -116,7 +116,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 1.45)
                     .putAttributes(LibAttributes.rf_magic, 3).putLevelGains(LibAttributes.rf_magic, 0.5)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 0.8)
-                    .xp(2).money(4).tamingChance(0.15f).setRidable().build(),
+                    .xp(50).money(4).tamingChance(0.15f).setRidable().build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     ModTags.IS_MAGICAL).addToBiomeTag(44, ModTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN));
     public static final RegistryEntrySupplier<EntityType<EntityOrcArcher>> orcArcher = regMonster(EntityType.Builder.of(EntityOrcArcher::new, MobCategory.MONSTER).sized(0.73f, 2.4f).clientTrackingRange(8), LibEntities.orcArcher,
@@ -127,7 +127,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 0.7)
                     .putAttributes(LibAttributes.rf_magic, 3).putLevelGains(LibAttributes.rf_magic, 0.4)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 0.9)
-                    .xp(2).money(4).tamingChance(0.15f).setRidable().build(),
+                    .xp(50).money(4).tamingChance(0.15f).setRidable().build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     ModTags.IS_MAGICAL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA));
     public static final RegistryEntrySupplier<EntityType<EntityAnt>> ant = regMonster(EntityType.Builder.of(EntityAnt::new, MobCategory.MONSTER).sized(1.1f, 0.44f).clientTrackingRange(8), LibEntities.ant,
@@ -139,7 +139,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic, 4).putLevelGains(LibAttributes.rf_defence, 0.5)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_defence, 1.1)
                     .addDaily(new SimpleItemStackWrapper(ModItems.jawInsect.getID().toString()), 0)
-                    .xp(2).money(5).tamingChance(0.1f).build(),
+                    .xp(45).money(5).tamingChance(0.1f).build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, ModTags.IS_LUSH, ModTags.IS_SAVANNA));
     public static final RegistryEntrySupplier<EntityType<EntityBeetle>> beetle = regMonster(EntityType.Builder.of(EntityBeetle::new, MobCategory.MONSTER).clientTrackingRange(8), LibEntities.beetle,
             0x000000, 0x800000,
@@ -150,7 +150,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic, 4).putLevelGains(LibAttributes.rf_magic, 1)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 0.75)
                     .addDaily(new SimpleItemStackWrapper(ModItems.hornInsect.getID().toString()), 0)
-                    .xp(2).money(3).tamingChance(0.08f).setRidable().setFlying().build(),
+                    .xp(60).money(3).tamingChance(0.08f).setRidable().setFlying().build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, ModTags.IS_LUSH));
     public static final RegistryEntrySupplier<EntityType<EntityBigMuck>> big_muck = regMonster(EntityType.Builder.of(EntityBigMuck::new, MobCategory.MONSTER).sized(0.9f, 1.6f).clientTrackingRange(8), LibEntities.big_muck,
             0xd7ce4a, 0xad5c25,
@@ -161,7 +161,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic, 7).putLevelGains(LibAttributes.rf_magic, 2.6)
                     .putAttributes(LibAttributes.rf_magic_defence, 1).putLevelGains(LibAttributes.rf_magic_defence, 1)
                     .addDaily(new SimpleItemStackWrapper(ModItems.spore.getID().toString()), 0)
-                    .xp(2).money(3).tamingChance(0.06f).setRidable().build(),
+                    .xp(65).money(3).tamingChance(0.06f).setRidable().build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(40, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, ModTags.IS_LUSH, ModTags.IS_MAGICAL, ModTags.IS_MUSHROOM));
     public static final RegistryEntrySupplier<EntityType<EntityBuffamoo>> buffamoo = regMonster(EntityType.Builder.of(EntityBuffamoo::new, MobCategory.MONSTER).sized(1.1f, 1.45f).clientTrackingRange(8), LibEntities.buffamoo,
             0xd8d8d0, 0x4e4e4c,
@@ -174,7 +174,7 @@ public class ModEntities {
                     .addDaily(new SimpleItemStackWrapper(ModItems.milkS.getID().toString()), 0)
                     .addDaily(new SimpleItemStackWrapper(ModItems.milkM.getID().toString()), 5)
                     .addDaily(new SimpleItemStackWrapper(ModItems.milkL.getID().toString()), 8)
-                    .xp(1).money(6).tamingChance(0.15f).setRidable().build(),
+                    .xp(55).money(6).tamingChance(0.15f).setRidable().build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_LUSH));
     public static final RegistryEntrySupplier<EntityType<EntityChipsqueek>> chipsqueek = regMonster(EntityType.Builder.of(EntityChipsqueek::new, MobCategory.MONSTER).sized(0.65f, 1.05f).clientTrackingRange(8), LibEntities.chipsqueek,
             0xff3b5b, 0xf9ffbb,
@@ -184,7 +184,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 0.95)
                     .putAttributes(LibAttributes.rf_magic, 5).putLevelGains(LibAttributes.rf_magic, 1.2)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 0.93)
-                    .xp(3).money(1).tamingChance(0.12f).build(),
+                    .xp(45).money(1).tamingChance(0.12f).build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(40, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_LUSH, ModTags.IS_SAVANNA));
     public static final RegistryEntrySupplier<EntityType<EntityCluckadoodle>> cluckadoodle = regMonster(EntityType.Builder.of(EntityCluckadoodle::new, MobCategory.MONSTER).sized(0.6f, 1.1f).clientTrackingRange(8), LibEntities.cluckadoodle,
             0xc2c2c2, 0xdc2121,
@@ -197,7 +197,7 @@ public class ModEntities {
                     .addDaily(new SimpleItemStackWrapper(ModItems.eggS.getID().toString()), 0)
                     .addDaily(new SimpleItemStackWrapper(ModItems.eggM.getID().toString()), 5)
                     .addDaily(new SimpleItemStackWrapper(ModItems.eggL.getID().toString()), 8)
-                    .xp(3).money(2).tamingChance(0.15f).build(),
+                    .xp(35).money(2).tamingChance(0.15f).build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN));
     public static final RegistryEntrySupplier<EntityType<EntityPommePomme>> pomme_pomme = regMonster(EntityType.Builder.of(EntityPommePomme::new, MobCategory.MONSTER).sized(1.0f, 1.6f).clientTrackingRange(8), LibEntities.pomme_pomme,
             0xff1c2b, 0xf7b4b8,
@@ -208,7 +208,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic, 2).putLevelGains(LibAttributes.rf_magic, 1)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 0.8)
                     .addDaily(new SimpleItemStackWrapper("minecraft:apple"), 0)
-                    .xp(2).money(4).tamingChance(0.09f).setRidable().build(),
+                    .xp(40).money(4).tamingChance(0.09f).setRidable().build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, ModTags.IS_MAGICAL));
     public static final RegistryEntrySupplier<EntityType<EntityTortas>> tortas = regMonster(EntityType.Builder.of(EntityTortas::new, MobCategory.MONSTER).sized(1.4f, 0.70f).clientTrackingRange(8), LibEntities.tortas,
             0x5c6682, 0xa5848c,
@@ -218,7 +218,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 1.5).putLevelGains(LibAttributes.rf_defence, 3.1)
                     .putAttributes(LibAttributes.rf_magic, 2).putLevelGains(LibAttributes.rf_magic, 0.6)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 2)
-                    .xp(6).money(10).tamingChance(0.03f).setRidable().build(),
+                    .xp(75).money(10).tamingChance(0.03f).setRidable().build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_BEACH, ModTags.IS_WATER));
     public static final RegistryEntrySupplier<EntityType<EntitySkyFish>> sky_fish = regMonster(EntityType.Builder.of(EntitySkyFish::new, MobCategory.MONSTER).sized(1.2f, 0.7f).clientTrackingRange(8), LibEntities.sky_fish,
             0x8fa4c5, 0x5a3536,
@@ -228,7 +228,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 1.3)
                     .putAttributes(LibAttributes.rf_magic, 6).putLevelGains(LibAttributes.rf_magic, 2.65)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 2.1)
-                    .xp(2).money(6).tamingChance(0.02f).setRidable().setFlying().build(),
+                    .xp(90).money(6).tamingChance(0.02f).setRidable().setFlying().build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(40, ModTags.IS_BEACH, ModTags.IS_WATER));
     public static final RegistryEntrySupplier<EntityType<EntityWeagle>> weagle = regMonster(EntityType.Builder.of(EntityWeagle::new, MobCategory.MONSTER).sized(0.8f, 1.1f).clientTrackingRange(8), LibEntities.weagle,
             0x8e127b, 0xdb9dd2,
@@ -239,8 +239,8 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic, 5).putLevelGains(LibAttributes.rf_magic, 1.5)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 1)
                     .addDaily(new SimpleItemStackWrapper("minecraft:feather"), 0)
-                    .xp(5).money(4).tamingChance(0.03f).setRidable().setFlying().build(),
-            new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_HILL));
+                    .xp(70).money(4).tamingChance(0.03f).setRidable().setFlying().build(),
+            new SpawnConfig.SpawnData.Builder(500, 0).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_HILL));
     public static final RegistryEntrySupplier<EntityType<EntityGoblin>> goblin = regMonster(EntityType.Builder.of(EntityGoblin::new, MobCategory.MONSTER).sized(0.6f, 1.5f).clientTrackingRange(8), LibEntities.goblin,
             0x21b322, 0x462f2a,
             new EntityProperties.Builder()
@@ -249,8 +249,8 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0.5).putLevelGains(LibAttributes.rf_defence, 3)
                     .putAttributes(LibAttributes.rf_magic, 4).putLevelGains(LibAttributes.rf_magic, 3)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 2.5)
-                    .xp(7).money(8).tamingChance(0.08f).setRidable().build(),
-            new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA, ModTags.IS_SANDY));
+                    .xp(60).money(8).tamingChance(0.08f).setRidable().build(),
+            new SpawnConfig.SpawnData.Builder(500, 0).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA, ModTags.IS_SANDY));
     public static final RegistryEntrySupplier<EntityType<EntityGoblinArcher>> goblinArcher = regMonster(EntityType.Builder.of(EntityGoblinArcher::new, MobCategory.MONSTER).sized(0.6f, 1.5f).clientTrackingRange(8), LibEntities.goblinArcher,
             0x21b322, 0x462f2a,
             new EntityProperties.Builder()
@@ -259,8 +259,8 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0.5).putLevelGains(LibAttributes.rf_defence, 2.7)
                     .putAttributes(LibAttributes.rf_magic, 4).putLevelGains(LibAttributes.rf_magic, 2)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 3.4)
-                    .xp(7).money(8).tamingChance(0.08f).setRidable().build(),
-            new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA, ModTags.IS_SANDY));
+                    .xp(60).money(8).tamingChance(0.08f).setRidable().build(),
+            new SpawnConfig.SpawnData.Builder(500, 0).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA, ModTags.IS_SANDY));
     public static final RegistryEntrySupplier<EntityType<EntityDuck>> duck = regMonster(EntityType.Builder.of(EntityDuck::new, MobCategory.MONSTER).sized(0.65f, 1.45f).clientTrackingRange(8), LibEntities.duck,
             0xdabf33, 0x845242,
             new EntityProperties.Builder()
@@ -279,8 +279,8 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 2.2)
                     .putAttributes(LibAttributes.rf_magic, 7.3).putLevelGains(LibAttributes.rf_magic, 3.5)
                     .putAttributes(LibAttributes.rf_magic_defence, 1).putLevelGains(LibAttributes.rf_magic_defence, 3.3)
-                    .xp(8).money(6).tamingChance(0.06f).setFlying().build(),
-            new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, ModTags.IS_MAGICAL));
+                    .xp(66).money(6).tamingChance(0.06f).setFlying().build(),
+            new SpawnConfig.SpawnData.Builder(0, 3).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, ModTags.IS_MAGICAL));
     public static final RegistryEntrySupplier<EntityType<EntityGhost>> ghost = regMonster(EntityType.Builder.of(EntityGhost::new, MobCategory.MONSTER).sized(0.8f, 2.1f).clientTrackingRange(8), LibEntities.ghost,
             0x4d3d35, 0x838383,
             new EntityProperties.Builder()
@@ -289,7 +289,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 3.1)
                     .putAttributes(LibAttributes.rf_magic, 5).putLevelGains(LibAttributes.rf_magic, 3.6)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 3.5)
-                    .xp(9).money(7).tamingChance(0.04f).setFlying().build(),
+                    .xp(70).money(7).tamingChance(0.04f).setFlying().build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(60, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
     public static final RegistryEntrySupplier<EntityType<EntitySpirit>> spirit = regMonster(EntityType.Builder.of(EntitySpirit::new, MobCategory.MONSTER).sized(0.5f, 0.5f).clientTrackingRange(8), LibEntities.spirit,
             0xfdfdfd, 0xc3f8f7,
@@ -299,8 +299,8 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 3.3)
                     .putAttributes(LibAttributes.rf_magic, 7.1).putLevelGains(LibAttributes.rf_magic, 3.4)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 3.7)
-                    .xp(10).money(5).tamingChance(0.02f).setFlying().build(),
-            new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP, ModTags.IS_MAGICAL, ModTags.IS_END));
+                    .xp(80).money(5).tamingChance(0.02f).setFlying().build(),
+            new SpawnConfig.SpawnData.Builder(500, 3).addToBiomeTag(50, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP, ModTags.IS_MAGICAL, ModTags.IS_END));
     public static final RegistryEntrySupplier<EntityType<EntityGhostRay>> ghostRay = regMonster(EntityType.Builder.of(EntityGhostRay::new, MobCategory.MONSTER).sized(1f, 3.2f).clientTrackingRange(8), LibEntities.ghostRay,
             0x552217, 0x905a5a,
             new EntityProperties.Builder()
@@ -309,8 +309,8 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 1.5).putLevelGains(LibAttributes.rf_defence, 3.8)
                     .putAttributes(LibAttributes.rf_magic, 8).putLevelGains(LibAttributes.rf_magic, 3.6)
                     .putAttributes(LibAttributes.rf_magic_defence, 1.5).putLevelGains(LibAttributes.rf_magic_defence, 3.9)
-                    .xp(15).money(10).tamingChance(0.04f).setFlying().build(),
-            new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
+                    .xp(130).money(10).tamingChance(0.04f).setFlying().build(),
+            new SpawnConfig.SpawnData.Builder(500, 5).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
     public static final RegistryEntrySupplier<EntityType<EntitySpider>> spider = regMonster(EntityType.Builder.of(EntitySpider::new, MobCategory.MONSTER).sized(0.9f, 0.7f).clientTrackingRange(8), LibEntities.spider,
             0x6f6751, 0x404148,
             new EntityProperties.Builder()
@@ -320,7 +320,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic, 4).putLevelGains(LibAttributes.rf_magic, 2.4)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 3.8)
                     .addDaily(new SimpleItemStackWrapper(ModItems.threadSpider.getID().toString()), 0)
-                    .xp(11).money(8).tamingChance(0.07f).build(),
+                    .xp(70).money(8).tamingChance(0.07f).build(),
             new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(60, ModTags.IS_SPOOKY, BiomeTags.IS_FOREST, BiomeTags.IS_JUNGLE, ModTags.IS_LUSH));
     public static final RegistryEntrySupplier<EntityType<EntityPanther>> shadowPanther = regMonster(EntityType.Builder.of(EntityPanther::new, MobCategory.MONSTER).sized(1.3f, 2.2f).clientTrackingRange(8), LibEntities.shadowPanther,
             0x27375b, 0x733838,
@@ -330,8 +330,8 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 0).putLevelGains(LibAttributes.rf_defence, 3.2)
                     .putAttributes(LibAttributes.rf_magic, 3).putLevelGains(LibAttributes.rf_magic, 2.9)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 2.8)
-                    .xp(12).money(9).tamingChance(0.02f).setRidable().build(),
-            new SpawnConfig.SpawnData.Builder(0, 0).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_SWAMP, ModTags.IS_PEAK, ModTags.IS_SLOPE));
+                    .xp(100).money(9).tamingChance(0.02f).setRidable().build(),
+            new SpawnConfig.SpawnData.Builder(500, 3).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_SWAMP, ModTags.IS_PEAK, ModTags.IS_SLOPE));
     public static final RegistryEntrySupplier<EntityType<EntityMimic>> monsterBox = regMonster(EntityType.Builder.of(EntityMimic::new, MobCategory.MONSTER).sized(1, 1).clientTrackingRange(8), LibEntities.monsterBox,
             0xac935e, 0x462f10,
             new EntityProperties.Builder()
@@ -340,7 +340,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 1).putLevelGains(LibAttributes.rf_defence, 3.8)
                     .putAttributes(LibAttributes.rf_magic, 3).putLevelGains(LibAttributes.rf_magic, 3)
                     .putAttributes(LibAttributes.rf_magic_defence, 0).putLevelGains(LibAttributes.rf_magic_defence, 2.9)
-                    .xp(13).money(9).tamingChance(0.02f).build(),
+                    .xp(300).money(9).tamingChance(0.02f).build(),
             new SpawnConfig.SpawnData.Builder(0, 0));
     public static final RegistryEntrySupplier<EntityType<EntityMimic>> gobbleBox = regMonster(EntityType.Builder.of(EntityMimic::new, MobCategory.MONSTER).sized(1, 1).clientTrackingRange(8), LibEntities.gobbleBox,
             0x8f9cc4, 0x343843,
@@ -350,7 +350,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 1.5).putLevelGains(LibAttributes.rf_defence, 4)
                     .putAttributes(LibAttributes.rf_magic, 4).putLevelGains(LibAttributes.rf_magic, 3.5)
                     .putAttributes(LibAttributes.rf_magic_defence, 0.5).putLevelGains(LibAttributes.rf_magic_defence, 3.1)
-                    .xp(13).money(9).tamingChance(0.015f).build(),
+                    .xp(500).money(9).tamingChance(0.015f).build(),
             new SpawnConfig.SpawnData.Builder(0, 10));
 
     public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> ambrosia = regMonster(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), LibEntities.ambrosia,
@@ -363,7 +363,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic_defence, 3).putLevelGains(LibAttributes.rf_magic_defence, 4.2)
                     .putAttributes(LibAttributes.rf_res_earth, 25)
                     .setTamingItem(new ItemTagWrapper(ModItems.toyherbGiant.getID().toString(), 1))
-                    .xp(100).money(50).tamingChance(0.008f).setRidable().setFlying().build());
+                    .xp(500).money(50).tamingChance(0.008f).setRidable().setFlying().build());
     public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> thunderbolt = regMonster(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), LibEntities.thunderbolt,
             0x212121, 0x2f1177,
             new EntityProperties.Builder()
@@ -374,7 +374,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic_defence, 2).putLevelGains(LibAttributes.rf_magic_defence, 4)
                     .putAttributes(LibAttributes.rf_res_wind, 25)
                     .setTamingItem(new ItemTagWrapper(ModItems.carrotGiant.getID().toString(), 1))
-                    .xp(125).money(75).tamingChance(0.008f).setRidable().build());
+                    .xp(750).money(75).tamingChance(0.008f).setRidable().build());
     public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> marionetta = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.5f).clientTrackingRange(8), LibEntities.marionetta,
             0xb86b13, 0xd8d7d7,
             new EntityProperties.Builder()
@@ -385,7 +385,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic_defence, 3.9).putLevelGains(LibAttributes.rf_magic_defence, 3.85)
                     .putAttributes(LibAttributes.rf_res_dark, 25)
                     .setTamingItem(new ItemTagWrapper(ModTags.marionettaTamer, 1))
-                    .xp(145).money(75).tamingChance(0.008f).setRidable().build());
+                    .xp(1000).money(75).tamingChance(0.008f).setRidable().build());
 
     public static final RegistryEntrySupplier<EntityType<EntityNPCBase>> npc = npc(EntityType.Builder.of(EntityNPCBase::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), LibEntities.npc);
 
