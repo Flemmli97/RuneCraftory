@@ -18,6 +18,7 @@ import io.github.flemmli97.runecraftory.common.items.creative.ItemSkillUp;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemAccessoireBase;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemSeedShield;
+import io.github.flemmli97.runecraftory.common.items.equipment.ItemStatShield;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemBrush;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemFertilizer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemPetInspector;
@@ -45,7 +46,6 @@ import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -1386,19 +1386,11 @@ public class ModItems {
 
     public static RegistryEntrySupplier<Item> shield(String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ShieldItem(new Item.Properties().stacksTo(1)) {
-                public boolean isShield(ItemStack stack, LivingEntity entity) {
-                    return true;
-                }
-            });
+            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemStatShield(new Item.Properties().stacksTo(1)));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ShieldItem(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.equipment)) {
-            public boolean isShield(ItemStack stack, LivingEntity entity) {
-                return true;
-            }
-        });
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ShieldItem(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.equipment)));
         TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
             lo.add(sup);
             return lo;

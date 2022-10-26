@@ -32,7 +32,6 @@ public class ItemUtils {
 
     public static void spawnItemAt(Level level, BlockPos pos, ItemStack stack, @Nullable LivingEntity entity) {
         if (!level.isClientSide) {
-            ItemNBT.initNBT(stack);
             ItemEntity item = new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), stack);
             item.setPickUpDelay(0);
             if (entity != null)

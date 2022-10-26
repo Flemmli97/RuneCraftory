@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
 import net.minecraft.core.NonNullList;
@@ -57,9 +57,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
 
     @Override
     public ItemStack assemble(PlayerContainerInv inv) {
-        ItemStack stack = this.recipeOutput.copy();
-        ItemNBT.initNBT(stack);
-        return stack;
+        return CraftingUtils.getCraftingOutput(this.recipeOutput.copy(), inv);
     }
 
     @Override
@@ -69,9 +67,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
 
     @Override
     public ItemStack getResultItem() {
-        ItemStack stack = this.recipeOutput.copy();
-        ItemNBT.initNBT(stack);
-        return stack;
+        return this.recipeOutput.copy();
     }
 
     @Override

@@ -7,13 +7,11 @@ import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.network.Packet;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.forge.capability.CapabilityInsts;
 import io.github.flemmli97.runecraftory.forge.item.StaffItem;
 import io.github.flemmli97.runecraftory.forge.network.PacketHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -120,11 +118,6 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public EquipmentSlot slotType(ItemStack stack) {
-        return stack.getEquipmentSlot();
-    }
-
-    @Override
     public boolean canEquip(ItemStack stack, EquipmentSlot slot, LivingEntity entity) {
         return stack.canEquip(slot, entity);
     }
@@ -185,12 +178,6 @@ public class PlatformImpl implements Platform {
             @Override
             public ItemStack makeIcon() {
                 return icon.get();
-            }
-
-            @Override
-            public void fillItemList(NonNullList<ItemStack> items) {
-                super.fillItemList(items);
-                items.forEach(ItemNBT::initNBT);
             }
         };
     }

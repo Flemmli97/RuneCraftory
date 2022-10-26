@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
-import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -14,7 +13,6 @@ import io.github.flemmli97.tenshilib.common.utils.MapUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.SimpleRegistryWrapper;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -26,7 +24,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,11 +37,13 @@ public class ItemStat {
             LibAttributes.rf_defence,
             LibAttributes.rf_magic,
             LibAttributes.rf_magic_defence);
+
     private final Map<Attribute, Double> itemStats = new TreeMap<>(ModAttributes.sorted);
+    private transient Map<Attribute, Double> itemStatCopy;
     private int buyPrice;
     private int sellPrice;
     private int upgradeDifficulty;
-    private EnumElement element;
+    private EnumElement element = EnumElement.NONE;
     private Spell tier1Spell;
     private Spell tier2Spell;
     private Spell tier3Spell;
@@ -97,7 +96,11 @@ public class ItemStat {
     }
 
     public Map<Attribute, Double> itemStats() {
-        return new LinkedHashMap<>(this.itemStats);
+        if (this.itemStatCopy == null) {
+            this.itemStatCopy = new TreeMap<>(ModAttributes.sorted);
+            this.itemStatCopy.putAll(this.itemStats);
+        }
+        return this.itemStatCopy;
     }
 
     public Spell getTier1Spell() {
@@ -139,17 +142,13 @@ public class ItemStat {
 
     public List<Component> texts(ItemStack stack, boolean showStat) {
         List<Component> list = new ArrayList<>();
-        CompoundTag tag = ItemNBT.getItemNBT(stack);
-        if (stack.getItem() instanceof IItemUsable && tag != null) {
-            try {
-                EnumElement element = EnumElement.valueOf(tag.getString(LibNBT.Element));
-                if (element != EnumElement.NONE) {
-                    list.add(new TranslatableComponent(element.getTranslation()).withStyle(element.getColor()));
-                }
-            } catch (IllegalArgumentException ignored) {
+        if (stack.getItem() instanceof IItemUsable) {
+            EnumElement element = ItemNBT.getElement(stack);
+            if (element != EnumElement.NONE) {
+                list.add(new TranslatableComponent(element.getTranslation()).withStyle(element.getColor()));
             }
         }
-        MutableComponent price = tag != null ? new TranslatableComponent("tooltip.item.level", tag.getInt(LibNBT.Level)) : null;
+        MutableComponent price = ItemNBT.shouldHaveLevel(stack) ? new TranslatableComponent("tooltip.item.level", ItemNBT.itemLevel(stack)) : null;
         if (ItemUtils.getBuyPrice(stack, this) > 0) {
             if (price == null)
                 price = new TranslatableComponent("tooltip.item.buy", ItemUtils.getBuyPrice(stack, this));
@@ -168,7 +167,7 @@ public class ItemStat {
         if (!shouldHaveStats && this.getDiff() > 0)
             list.add(new TranslatableComponent("tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
         if (showStat) {
-            Map<Attribute, Double> stats = ItemNBT.statBonusRaw(stack);
+            Map<Attribute, Double> stats = ItemNBT.statIncrease(stack);
             if (!stats.isEmpty()) {
                 String prefix = shouldHaveStats ? "tooltip.item.equipped" : "tooltip.item.upgrade";
                 list.add(new TranslatableComponent(prefix).withStyle(ChatFormatting.GRAY));

@@ -78,8 +78,6 @@ public interface Platform {
 
     boolean isShield(ItemStack stack, Player player);
 
-    EquipmentSlot slotType(ItemStack stack);
-
     boolean canEquip(ItemStack stack, EquipmentSlot slot, LivingEntity entity);
 
     ItemStaffBase staff(EnumElement starterElement, int amount, Item.Properties properties);

@@ -11,8 +11,8 @@ import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.blocks.BlockFarm;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
+import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
@@ -104,10 +104,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
     }
 
     public int getWater(ItemStack stack) {
-        if (!stack.hasTag()) {
-            ItemNBT.initNBT(stack, true);
-        }
-        return stack.getTag().getInt("Water");
+        return stack.getOrCreateTag().getInt(LibNBT.WateringCanWater);
     }
 
     @Override
@@ -131,10 +128,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
         ItemStack itemstack = player.getItemInHand(hand);
         BlockState state = world.getBlockState(ray.getBlockPos());
         if (state.getFluidState().getType() == Fluids.WATER) {
-            if (!itemstack.hasTag()) {
-                ItemNBT.initNBT(itemstack);
-            }
-            itemstack.getOrCreateTag().putInt("Water", this.maxWater());
+            itemstack.getOrCreateTag().putInt(LibNBT.WateringCanWater, this.maxWater());
             world.setBlock(ray.getBlockPos(), state.getFluidState().createLegacyBlock(), 3);
             player.playSound(SoundEvents.BUCKET_FILL, 1.0f, 1.0f);
             return InteractionResultHolder.success(itemstack);
@@ -234,14 +228,11 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
             return false;
         boolean creative = !(entity instanceof Player) || ((Player) entity).isCreative();
         BlockState state = world.getBlockState(pos);
-        if (!stack.hasTag()) {
-            ItemNBT.initNBT(stack);
-        }
         int water = this.getWater(stack);
         if ((creative || water > 0) && state.is(ModBlocks.farmland.get()) && state.getValue(FarmBlock.MOISTURE) != 7) {
             BlockFarm.waterLand(world, pos, state);
             if (!creative) {
-                stack.getTag().putInt("Water", water - 1);
+                stack.getTag().putInt(LibNBT.WateringCanWater, water - 1);
             }
             return true;
         }

@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerPlayer;
@@ -81,11 +82,7 @@ public class CraftingUtils {
     }
 
     public static ItemStack getUpgradedStack(ItemStack stack, ItemStack ing) {
-        if (ing.isEmpty() || !ItemNBT.shouldHaveStats(stack) || ItemNBT.itemLevel(stack) >= 10)
-            return ItemStack.EMPTY;
-        ItemStack output = stack.copy();
-        ItemNBT.addUpgradeItem(output, ing);
-        return output;
+        return ItemNBT.addUpgradeItem(stack.copy(), ing);
     }
 
     private static int xpForCrafting(EnumSkills skill, SextupleRecipe recipe, int skillLevel) {
@@ -119,5 +116,9 @@ public class CraftingUtils {
         if (GeneralConfig.skillXpMultiplier == 0)
             return;
         data.increaseSkill(skill, serverPlayer, (int) (xpForUpgrade(skill, equip, upgrade, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier));
+    }
+
+    public static ItemStack getCraftingOutput(ItemStack stack, PlayerContainerInv inv) {
+        return stack;
     }
 }

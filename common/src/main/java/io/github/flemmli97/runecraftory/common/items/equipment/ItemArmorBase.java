@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.items.equipment;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import io.github.flemmli97.runecraftory.api.items.StatItem;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.platform.ExtendedItem;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
@@ -15,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 
-public class ItemArmorBase extends ArmorItem implements ExtendedItem {
+public class ItemArmorBase extends ArmorItem implements ExtendedItem, StatItem {
 
     private static final String armorModelPath = "runecraftory:textures/models/armor/";
 

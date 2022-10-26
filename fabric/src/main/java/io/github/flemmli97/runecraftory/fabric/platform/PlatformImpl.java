@@ -7,25 +7,24 @@ import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.network.Packet;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.fabric.mixin.DamageSourceAccessor;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.EntityDataGetter;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.PlayerDataGetter;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.StaffDataGetter;
 import io.github.flemmli97.runecraftory.fabric.network.ClientPacketHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
-import net.fabricmc.fabric.impl.item.group.ItemGroupExtensions;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -164,11 +163,6 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public EquipmentSlot slotType(ItemStack stack) {
-        return Mob.getEquipmentSlotForItem(stack);
-    }
-
-    @Override
     public boolean canEquip(ItemStack stack, EquipmentSlot slot, LivingEntity entity) {
         return Mob.getEquipmentSlotForItem(stack) == slot;
     }
@@ -225,19 +219,7 @@ public class PlatformImpl implements Platform {
 
     @Override
     public CreativeModeTab tab(String label, Supplier<ItemStack> icon) {
-        ((ItemGroupExtensions) CreativeModeTab.TAB_BUILDING_BLOCKS).fabric_expandArray();
-        return new CreativeModeTab(CreativeModeTab.TABS.length - 1, String.format("%s.%s", RuneCraftory.MODID, label)) {
-            @Override
-            public ItemStack makeIcon() {
-                return icon.get();
-            }
-
-            @Override
-            public void fillItemList(NonNullList<ItemStack> stacks) {
-                super.fillItemList(stacks);
-                stacks.forEach(ItemNBT::initNBT);
-            }
-        };
+        return FabricItemGroupBuilder.build(new ResourceLocation(RuneCraftory.MODID, label), icon);
     }
 
     @Override

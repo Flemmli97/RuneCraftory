@@ -1,32 +1,35 @@
 package io.github.flemmli97.runecraftory.common.attachment;
 
 import io.github.flemmli97.runecraftory.api.Spell;
+import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public class StaffData {
 
     private Spell tier1, tier2, tier3;
 
-    public Spell getTier1Spell() {
-        return this.tier1;
+    public Spell getTier1Spell(ItemStack stack) {
+        return this.tier1 != null ? this.tier1 : DataPackHandler.getStats(stack.getItem()).map(ItemStat::getTier1Spell).orElse(null);
     }
 
     public void setTier1Spell(Spell spell) {
         this.tier1 = spell;
     }
 
-    public Spell getTier2Spell() {
-        return this.tier2;
+    public Spell getTier2Spell(ItemStack stack) {
+        return this.tier2 != null ? this.tier2 : DataPackHandler.getStats(stack.getItem()).map(ItemStat::getTier2Spell).orElse(null);
     }
 
     public void setTier2Spell(Spell spell) {
         this.tier2 = spell;
     }
 
-    public Spell getTier3Spell() {
-        return this.tier3;
+    public Spell getTier3Spell(ItemStack stack) {
+        return this.tier3 != null ? this.tier3 : DataPackHandler.getStats(stack.getItem()).map(ItemStat::getTier3Spell).orElse(null);
     }
 
     public void setTier3Spell(Spell spell) {

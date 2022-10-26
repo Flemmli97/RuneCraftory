@@ -45,13 +45,13 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     @Override
     public int getChargeTime(ItemStack stack) {
         return Platform.INSTANCE.getStaffData(stack).map(cap ->
-                cap.getTier1Spell() != null ? cap.getTier1Spell().coolDown() : cap.getTier2Spell() != null ? cap.getTier1Spell().coolDown() : cap.getTier3Spell() != null ? cap.getTier3Spell().coolDown() : 0).orElse(GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime());
+                cap.getTier1Spell(stack) != null ? cap.getTier1Spell(stack).coolDown() : cap.getTier2Spell(stack) != null ? cap.getTier1Spell(stack).coolDown() : cap.getTier3Spell(stack) != null ? cap.getTier3Spell(stack).coolDown() : 0).orElse(GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime());
     }
 
     @Override
     public int chargeAmount(ItemStack stack) {
         return Platform.INSTANCE.getStaffData(stack).map(cap ->
-                cap.getTier3Spell() != null ? 3 : cap.getTier2Spell() != null ? 2 : cap.getTier1Spell() != null ? 1 : 0).orElse(0);
+                cap.getTier3Spell(stack) != null ? 3 : cap.getTier2Spell(stack) != null ? 2 : cap.getTier1Spell(stack) != null ? 1 : 0).orElse(0);
     }
 
     @Override
@@ -146,9 +146,9 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     public Spell getSpell(ItemStack stack, int level) {
         StaffData cap = Platform.INSTANCE.getStaffData(stack).orElseThrow(() -> new NullPointerException("Error getting capability for staff item"));
         return switch (level) {
-            case 3 -> cap.getTier3Spell();
-            case 2 -> cap.getTier2Spell();
-            case 1 -> cap.getTier1Spell();
+            case 3 -> cap.getTier3Spell(stack);
+            case 2 -> cap.getTier2Spell(stack);
+            case 1 -> cap.getTier1Spell(stack);
             default -> null;
         };
     }

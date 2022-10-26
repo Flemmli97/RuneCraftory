@@ -12,7 +12,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -134,7 +134,7 @@ public class ContainerInfoScreen extends AbstractContainerMenu {
             if (slot != null && slot.hasItem()) {
                 ItemStack itemstack1 = slot.getItem();
                 itemstack = itemstack1.copy();
-                EquipmentSlot slotType = Mob.getEquipmentSlotForItem(itemstack);
+                EquipmentSlot slotType = LivingEntity.getEquipmentSlotForItem(itemstack);
                 if (slotType.getType() == EquipmentSlot.Type.ARMOR && !this.slots.get(39 - slotType.getIndex()).hasItem()) {
                     int i = 39 - slotType.getIndex();
                     if (!this.moveItemStackTo(itemstack1, i, i + 1, false)) {

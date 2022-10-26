@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.entities.npc.EnumShopResult;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.network.S2CShopResponses;
 import io.github.flemmli97.runecraftory.common.registry.ModContainer;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.NonNullList;
@@ -136,7 +135,6 @@ public class ContainerShop extends AbstractContainerMenu {
             ItemStack clickedStack = this.getSlot(slot).getItem();
             if (clickedStack.isEmpty())
                 return;
-            ItemNBT.getItemNBT(clickedStack);
             Slot shopOutput = this.getSlot(InventoryShop.shopSize);
             int count = clickType == ClickType.QUICK_MOVE ? 10 : 1;
             if (mouse == 1)
