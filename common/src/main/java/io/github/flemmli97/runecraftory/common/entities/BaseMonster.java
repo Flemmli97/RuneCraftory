@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities;
 
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
+import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -21,6 +22,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
@@ -174,7 +176,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private final LevelExpPair levelPair = new LevelExpPair();
 
     protected int tamingTick = -1;
-    private int brushCount;
+    //These 2 values are not getting saved intentionally to prevent stuff like player dying or running away
+    private int brushCount, loveAttCount;
     private Runnable delayedTaming;
     protected int feedTimeOut;
     private boolean doJumping = false;
@@ -608,9 +611,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     if (stack.getItem() == ModItems.brush.get()) {
                         if (player instanceof ServerPlayer serverPlayer)
                             serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                        this.brushCount++;
-                        if (this.brushCount > 10)
-                            this.brushCount = 10;
+                        this.brushCount = Math.min(10, this.brushCount + 1);
                         this.tamingTick = 40;
                         this.level.broadcastEntityEvent(this, (byte) 64);
                         return InteractionResult.SUCCESS;
@@ -623,7 +624,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     if (count == stack.getCount() && !player.isCreative())
                         stack.shrink(1);
                     this.tamingTick = 100;
-                    float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier) * (1 + this.brushCount * 0.05f);
+                    float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier, this.brushCount, this.loveAttCount);
                     this.delayedTaming = () -> {
                         if (chance == 0)
                             this.level.broadcastEntityEvent(this, (byte) 34);
@@ -1005,6 +1006,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
         super.actuallyHurt(damageSrc, damageAmount);
+        if (!this.isTamed() && damageSrc instanceof CustomDamage dmg && dmg.getEntity() instanceof Player && dmg.getElement() == EnumElement.LOVE)
+            this.loveAttCount = Math.min(100, this.loveAttCount + 1);
         if (damageSrc != DamageSource.OUT_OF_WORLD && this.isTamed() && this.getHealth() <= 0) {
             this.setHealth(0.01f);
             this.setPlayDeath(true);
@@ -1138,7 +1141,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.setSprinting(forward > 0);
                 forward *= this.ridingSpeedModifier();
                 strafing *= this.ridingSpeedModifier();
-                vec = new Vec3(strafing, vec.y, forward * this.getSpeed());
+                vec = new Vec3(strafing * this.getSpeed(), vec.y, forward * this.getSpeed());
             } else if (entitylivingbase instanceof Player) {
                 vec = Vec3.ZERO;
             }

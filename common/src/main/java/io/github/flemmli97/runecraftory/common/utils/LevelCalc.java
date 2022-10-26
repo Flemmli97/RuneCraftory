@@ -134,7 +134,7 @@ public class LevelCalc {
     }
 
     public static int getMoney(int base, int level) {
-        return (int) (base * Math.min(1, level * 0.1));
+        return (int) (base * Math.min(1, 1 + level * 0.1));
     }
 
     public static void addXP(LivingEntity attacker, int base, int money, int level) {

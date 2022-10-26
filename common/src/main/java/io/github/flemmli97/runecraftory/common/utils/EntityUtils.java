@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import com.google.common.collect.ImmutableList;
+import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
@@ -67,12 +68,16 @@ public class EntityUtils {
         return null;
     }
 
-    public static float tamingChance(BaseMonster monster, Player player, float multiplier) {
-        if (multiplier == 0)
+    public static float tamingChance(BaseMonster monster, Player player, float itemMultiplier, int brushCount, int loveAttackCount) {
+        if (itemMultiplier == 0 || GeneralConfig.tamingMultiplier == 0)
             return 0;
         int lvl = Platform.INSTANCE.getPlayerData(player).map(d -> d.getPlayerLevel().getLevel()).orElse(1) + 1;
-        float lvlPenalty = (float) Math.pow(0.89, Math.max(0, monster.level().getLevel() - lvl));
-        return monster.tamingChance() * multiplier * GeneralConfig.tamingMultiplier * lvlPenalty;
+        float lvlPenalty = Math.max(0, (monster.level().getLevel() - lvl) * 0.02f);
+        float brushBonus = brushCount * 0.05f;
+        float loveAttackBonus = loveAttackCount * 0.002f;
+        float tamingLvlBonus = (Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(EnumSkills.TAMING).getLevel()).orElse(1) - 1) * 0.005f;
+        float tamingBonus = 1 + brushBonus + loveAttackBonus + tamingLvlBonus;
+        return monster.tamingChance() * GeneralConfig.tamingMultiplier * tamingBonus - lvlPenalty;
     }
 
     public static NullPointerException playerDataException() {

@@ -378,7 +378,8 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.entities.2", "Placing a $(thing)bell block$() (or other meeting POI type blocks) will prevent gates from spawning in a 48 block radius around it. " +
                 "$(br)$(br)Monsters are able to be tamed by simple holding any item and shift-right-click them. This will consume the item and after a while $(bold)heart$(reset) particles" +
                 " appear if the taming was successful and $(bold)smoke$() particles appear if otherwise. Monsters might have one or more favorite items that ");
-        this.add("runecraftory.patchouli.entry.entities.3", "doubles the taming chance and bosses can $(#ff0000)only$() be tamed by giving them their favorite items." +
+        this.add("runecraftory.patchouli.entry.entities.3", "doubles the taming chance and bosses can $(#ff0000)only$() be tamed by giving them their favorite items. " +
+                "Other ways to increase taming chance include: Brushing, leveling the taming skill and hitting it with a love attribute weapon." +
                 "$(br)$(br)Tamed monster cannot die. Instead they will simply play death when reaching critical damage and healing them through any means will bring them back up. " +
                 "Giving tamed monster a vanilla stick will release them again.");
         this.add("runecraftory.patchouli.entry.entities.4", "You can interact with a tamed monster using the following actions: $(li)S$(thing)hift-right-clicking with an empty hand$() to change the behavior to follow, wander or stay mode." +

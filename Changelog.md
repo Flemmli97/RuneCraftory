@@ -3,6 +3,9 @@ RuneCraftory 1.3.2
 - Add "vanilla ignore defence" config
 - Make explosion spell hit shake screen
 - Tweaked weather chances
+- Internal: NBT stuff rewritten. Datapack stuff uses Codecs
+- Make goblin and orcs not drop their weapons on death
+- Taming chance now considers taming skill too. Also add option to increase it further with love weapons
 
 RuneCraftory 1.3.1
 ================
