@@ -42,6 +42,7 @@ public class EntityGoblin extends ChargingMonster {
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.steelSword.get()));
+        this.setDropChance(EquipmentSlot.MAINHAND, 0);
     }
 
     @Override

@@ -38,6 +38,7 @@ public class EntityGoblinArcher extends EntityGoblin {
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
         this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
+        this.setDropChance(EquipmentSlot.MAINHAND, 0);
     }
 
     @Override
