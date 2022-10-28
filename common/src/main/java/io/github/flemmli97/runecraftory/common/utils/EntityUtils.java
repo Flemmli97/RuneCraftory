@@ -7,12 +7,15 @@ import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -36,6 +39,12 @@ public class EntityUtils {
 
     public static boolean sealed(LivingEntity entity) {
         return entity.hasEffect(ModEffects.seal.get());
+    }
+
+    public static boolean canMonsterTargetNPC(Entity e) {
+        if (e instanceof EntityNPCBase npc && npc.getEntityToFollowUUID() != null)
+            return true;
+        return MobConfig.mobAttackNPC && e instanceof Npc;
     }
 
     public static boolean shouldShowFarmlandView(LivingEntity entity) {

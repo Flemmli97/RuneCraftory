@@ -10,6 +10,7 @@ public class MobConfig {
 
     public static boolean disableNaturalSpawn = false;
     public static int farmRadius = 3;
+    public static boolean mobAttackNPC;
 
     public static int bellRadius = 48;
     public static double gateHealth = 100;

@@ -78,7 +78,6 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -119,7 +118,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             if (e instanceof Mob mob && this == mob.getTarget())
                 return true;
-            return e instanceof Npc || EntityUtils.tryGetOwner(e) != null;
+            return EntityUtils.canMonsterTargetNPC(e) || EntityUtils.tryGetOwner(e) != null;
         }
         return false;
     };
@@ -166,7 +165,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     return baseMonster.hitPred.test(e);
                 riderTarget = controller instanceof Mob mob && e == mob.getTarget();
             }
-            return riderTarget || e == this.getTarget() || e instanceof Npc || EntityUtils.tryGetOwner(e) != null || e instanceof Player;
+            return riderTarget || e == this.getTarget() || EntityUtils.canMonsterTargetNPC(e) || EntityUtils.tryGetOwner(e) != null || e instanceof Player;
         }
         return false;
     };

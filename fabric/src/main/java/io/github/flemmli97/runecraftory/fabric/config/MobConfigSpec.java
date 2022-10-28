@@ -20,6 +20,7 @@ public class MobConfigSpec {
 
     public final CommentedJsonConfig.CommentedVal<Boolean> disableNaturalSpawn;
     public final CommentedJsonConfig.IntVal farmRadius;
+    public final CommentedJsonConfig.CommentedVal<Boolean> mobAttackNPC;
 
     public final CommentedJsonConfig.IntVal bellRadius;
     public final CommentedJsonConfig.DoubleVal gateHealth;
@@ -47,6 +48,7 @@ public class MobConfigSpec {
         builder.push("general");
         this.disableNaturalSpawn = builder.comment("Disable all spawning not from gates").define("Disable Spawn", MobConfig.disableNaturalSpawn);
         this.farmRadius = builder.comment("Radius in blocks for mobs to tend crops in", "Chests for seeds and drops can be placed within radius + 2").defineInRange("Farm Radius", MobConfig.farmRadius, 0, Integer.MAX_VALUE);
+        this.mobAttackNPC = builder.comment("If monsters should attack npcs/villagers. Note if an npc follows you they will always attack").define("Attack NPC", MobConfig.mobAttackNPC);
         builder.pop();
 
         builder.comment("Gate Configs").push("gate");
