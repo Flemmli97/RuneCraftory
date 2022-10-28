@@ -4,6 +4,8 @@ RuneCraftory 1.3.3
 - Walking xp reduced
 - Textures and models
 - Make golems not attack tamed monster
+- Improved tamed monster and npc following you
+- Improved tamed monster interaction
 
 RuneCraftory 1.3.2
 ================

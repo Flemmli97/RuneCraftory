@@ -235,11 +235,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
         this.goalSelector.addGoal(0, this.swimGoal);
         this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
-        this.goalSelector.addGoal(1, new RandomLookGoalAlive(this));
+        this.goalSelector.addGoal(1, new FollowOwnerGoalMonster(this, 1.05, 9, 2, 20));
         this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
-        this.goalSelector.addGoal(3, new FollowOwnerGoalMonster(this, 1.05, 9, 2));
         this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0));
         this.goalSelector.addGoal(6, this.wander);
+        this.goalSelector.addGoal(7, new RandomLookGoalAlive(this));
     }
 
     private void updateAI(boolean forced) {
@@ -533,21 +533,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 player.sendMessage(new TranslatableComponent("monster.interact.notowner"), Util.NIL_UUID);
                 return InteractionResult.CONSUME;
             }
-            if (stack.isEmpty()) {
-                if (hand == InteractionHand.MAIN_HAND && !this.playDeath()) {
-                    if (player.isShiftKeyDown()) {
-                        this.setBehaviour(this.behaviourState().next());
-                        if (player instanceof ServerPlayer serverPlayer)
-                            serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.4f, 0.4f));
-                        player.sendMessage(new TranslatableComponent(this.behaviourState().interactKey), Util.NIL_UUID);
-                        return InteractionResult.SUCCESS;
-                    } else if (this.ridable() && this.behaviourState() != Behaviour.FARM) {
-                        player.startRiding(this);
-                        return InteractionResult.SUCCESS;
-                    }
-                }
-                return InteractionResult.PASS;
-            }
             if (stack.getItem() == ModItems.inspector.get() && hand == InteractionHand.MAIN_HAND) {
                 if (player instanceof ServerPlayer serverPlayer) {
                     serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(this.getId(), ((AttributeMapAccessor) this.getAttributes())
@@ -602,6 +587,19 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     }
                 }
             }
+            if (hand == InteractionHand.MAIN_HAND && !this.playDeath()) {
+                if (player.isShiftKeyDown()) {
+                    this.setBehaviour(this.behaviourState().next());
+                    if (player instanceof ServerPlayer serverPlayer)
+                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.4f, 0.4f));
+                    player.sendMessage(new TranslatableComponent(this.behaviourState().interactKey), Util.NIL_UUID);
+                    return InteractionResult.SUCCESS;
+                } else if (this.ridable() && this.behaviourState() != Behaviour.FARM) {
+                    player.startRiding(this);
+                    return InteractionResult.SUCCESS;
+                }
+            }
+            return InteractionResult.PASS;
         } else if (player.isShiftKeyDown() && !stack.isEmpty()) {
             if (stack.getItem() == ModItems.tame.get()) {
                 this.tameEntity(player);

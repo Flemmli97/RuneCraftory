@@ -64,7 +64,7 @@ public class EntityMimic extends ChargingMonster {
 
         this.goalSelector.addGoal(0, this.swimGoal);
         this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
-        this.goalSelector.addGoal(3, new FollowOwnerGoalMonster(this, 1.1, 9, 2));
+        this.goalSelector.addGoal(3, new FollowOwnerGoalMonster(this, 1.1, 9, 2, 20));
         this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0));
     }
 

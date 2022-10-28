@@ -224,7 +224,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.goalSelector.addGoal(1, new AvoidWhenNotFollowing(this, LivingEntity.class, 8, 1.3, 1.2));
         this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, true));
-        this.goalSelector.addGoal(3, new NPCFollowGoal(this, 1.05, 9, 3));
+        this.goalSelector.addGoal(3, new NPCFollowGoal(this, 1.05, 9, 3, 20));
         this.goalSelector.addGoal(4, this.wander);
     }
 
