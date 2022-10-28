@@ -18,7 +18,8 @@
     "PoiTypeAccessor",
     "SinglePoolElementMixin",
     "StructureTemplatePoolMixin",
-    "PoolsMixin"
+    "PoolsMixin",
+    "TargetingConditionsMixin"
   ],
   "client": [
     "AtlasMixin",

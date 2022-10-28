@@ -76,6 +76,7 @@ import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -99,7 +100,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, RandomAttackSelectorMob {
+public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, RandomAttackSelectorMob, ExtendedEntity {
 
     private static final EntityDataAccessor<Optional<UUID>> owner = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Integer> entityLevel = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
@@ -1349,6 +1350,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public abstract void playInteractionAnimation();
+
+    @Override
+    public boolean canBeAttackedBy(LivingEntity entity) {
+        if (entity instanceof AbstractGolem g && this.getTarget() != g && g.getLastHurtByMob() != this)
+            return !this.isTamed();
+        return true;
+    }
 
     public enum Behaviour {
 
