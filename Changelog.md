@@ -1,3 +1,10 @@
+RuneCraftory 1.3.3
+================
+- Add config if monster should attack npc
+- Walking xp reduced
+- Textures and models
+- Make golems not attack tamed monster
+
 RuneCraftory 1.3.2
 ================
 - Add "vanilla ignore defence" config
