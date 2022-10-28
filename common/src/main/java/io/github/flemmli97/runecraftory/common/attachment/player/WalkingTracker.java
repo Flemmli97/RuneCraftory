@@ -20,14 +20,14 @@ public class WalkingTracker {
 
     private static Map<ResourceLocation, Float> relevantStatMap() {
         Map<ResourceLocation, Float> map = new HashMap<>();
-        map.put(Stats.WALK_ONE_CM, 1f);
-        map.put(Stats.CROUCH_ONE_CM, 1.5f);
-        map.put(Stats.SPRINT_ONE_CM, 0.5f);
-        map.put(Stats.WALK_ON_WATER_ONE_CM, 1f);
-        map.put(Stats.WALK_UNDER_WATER_ONE_CM, 1.2f);
-        map.put(Stats.SWIM_ONE_CM, 0.75f);
-        map.put(Stats.FLY_ONE_CM, 0.2f);
-        map.put(Stats.AVIATE_ONE_CM, 0.1f);
+        map.put(Stats.WALK_ONE_CM, 0.8f);
+        map.put(Stats.CROUCH_ONE_CM, 1.25f);
+        map.put(Stats.SPRINT_ONE_CM, 0.3f);
+        map.put(Stats.WALK_ON_WATER_ONE_CM, 0.9f);
+        map.put(Stats.WALK_UNDER_WATER_ONE_CM, 1.0f);
+        map.put(Stats.SWIM_ONE_CM, 0.65f);
+        map.put(Stats.FLY_ONE_CM, 0.15f);
+        map.put(Stats.AVIATE_ONE_CM, 0.07f);
         return map;
     }
 
