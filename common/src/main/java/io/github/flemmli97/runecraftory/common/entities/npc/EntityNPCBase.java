@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
 import com.google.common.collect.ImmutableList;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
@@ -490,6 +491,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public void die(DamageSource cause) {
+        RuneCraftory.logger.info("NPC {} died, message: '{}'", this, cause.getLocalizedDeathMessage(this).getString());
         if (!this.level.isClientSide) {
             this.getAnimationHandler().setAnimation(null);
         }

@@ -6,6 +6,9 @@ import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -34,6 +37,9 @@ public class NPCDataProcessor extends DataStructureBlockProcessor {
     protected StructureTemplate.StructureBlockInfo handleDataMarker(String data, StructureTemplate.StructureBlockInfo origin, LevelReader level, StructurePlaceSettings settings) {
         CompoundTag entityTag = new CompoundTag();
         entityTag.putInt("Shop", this.shopType.ordinal());
+        ListTag listTag = new ListTag();
+        listTag.add(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 5, true, false).save(new CompoundTag()));
+        entityTag.put("ActiveEffects", listTag);
         BlockState state = ModBlocks.singleSpawnBlock.get().defaultBlockState();
         CompoundTag tag = new CompoundTag();
         tag.putString("Entity", ModEntities.npc.getID().toString());
