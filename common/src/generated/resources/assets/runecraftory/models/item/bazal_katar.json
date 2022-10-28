@@ -6,7 +6,19 @@
   "overrides": [
     {
       "predicate": {
-        "runecraftory:glove_held": 2.0
+        "runecraftory:glove_held": 0.25
+      },
+      "model": "runecraftory:item/bazal_katar_held"
+    },
+    {
+      "predicate": {
+        "runecraftory:glove_held": 0.5
+      },
+      "model": "runecraftory:item/bazal_katar_held_left"
+    },
+    {
+      "predicate": {
+        "runecraftory:glove_held": 0.75
       },
       "model": "runecraftory:item/bazal_katar_held_s"
     },
@@ -14,7 +26,7 @@
       "predicate": {
         "runecraftory:glove_held": 1.0
       },
-      "model": "runecraftory:item/bazal_katar_held"
+      "model": "runecraftory:item/bazal_katar_held_s_left"
     }
   ]
 }

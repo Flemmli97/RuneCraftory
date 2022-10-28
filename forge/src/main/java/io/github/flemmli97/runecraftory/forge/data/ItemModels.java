@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemRecipeBread;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
@@ -23,15 +24,19 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.TieredItem;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class ItemModels extends ItemModelProvider {
 
     private final Map<RegistryEntrySupplier<Item>, ResourceLocation> dualItemMapping = this.getDualItemMapping();
     private final Map<RegistryEntrySupplier<Item>, Supplier<ItemModelBuilder>> dualItemGenMapping = this.generateDualItemMapping();
+    private final Set<RegistryEntrySupplier<Item>> existingSameGloveItems = this.generateSameGloveItemMapping();
+
 
     public ItemModels(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator, RuneCraftory.MODID, existingFileHelper);
@@ -39,6 +44,13 @@ public class ItemModels extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+        this.withExistingParent("fist_s", this.modLoc("fist")).transforms()
+                .transform(ModelBuilder.Perspective.THIRDPERSON_LEFT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
+                .transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
+        this.withExistingParent("fist_s_left", this.modLoc("fist_left")).transforms()
+                .transform(ModelBuilder.Perspective.THIRDPERSON_LEFT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
+                .transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
+
         for (RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
             if (sup == ModItems.medicinalHerb || sup == ModItems.itemBlockForge || sup == ModItems.itemBlockAccess
                     || sup == ModItems.itemBlockChem || sup == ModItems.itemBlockCooking)
@@ -59,11 +71,7 @@ public class ItemModels extends ItemModelProvider {
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
                         .override().predicate(this.modLoc("held"), 1).model(this.getExistingFile(this.dualItemMapping.get(sup)));
             else if (sup.get() instanceof ItemGloveBase)
-                this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
-                        .override().predicate(this.modLoc("glove_held"), 2)
-                        .model(this.singleTexture(sup.getID().getPath() + "_held_s", this.modLoc("item/fist_s"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_held"))).end()
-                        .override().predicate(this.modLoc("glove_held"), 1)
-                        .model(this.singleTexture(sup.getID().getPath() + "_held", this.modLoc("item/fist"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_held")));
+                this.createGloveModels(sup);
             else if (sup.get() instanceof ItemToolHammer)
                 this.singleTexture(sup.getID().getPath(), new ResourceLocation(RuneCraftory.MODID, "item/hammer_tool"), "layer0", this.modLoc("item/" + sup.getID().getPath()));
             else if (sup.get() instanceof ItemToolSickle)
@@ -107,5 +115,40 @@ public class ItemModels extends ItemModelProvider {
         map.put(ModItems.windEdge, () -> this.singleTexture(ModItems.windEdge.getID().getPath() + "_single", new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"),
                 "layer0", this.modLoc("item/" + ModItems.windEdge.getID().getPath() + "_single")));
         return map.build();
+    }
+
+    private Set<RegistryEntrySupplier<Item>> generateSameGloveItemMapping() {
+        ImmutableSet.Builder<RegistryEntrySupplier<Item>> builder = new ImmutableSet.Builder<>();
+        builder.add(ModItems.brassKnuckles);
+        builder.add(ModItems.bearClaws);
+        return builder.build();
+    }
+
+    private void createGloveModels(RegistryEntrySupplier<Item> sup) {
+        if (this.existingSameGloveItems.contains(sup)) {
+            ResourceLocation modelFile = this.modLoc("item/" + sup.getID().getPath() + "_held");
+            this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
+                    .override().predicate(this.modLoc("glove_held"), 0.25f)
+                    .model(this.getExistingFile(modelFile)).end()
+                    .override().predicate(this.modLoc("glove_held"), 0.5f)
+                    .model(this.withExistingParent(sup.getID().getPath() + "_held_left", modelFile)).end()
+                    .override().predicate(this.modLoc("glove_held"), 0.75f)
+                    .model(this.withExistingParent(sup.getID().getPath() + "_held_s", modelFile).transforms()
+                            .transform(ModelBuilder.Perspective.THIRDPERSON_LEFT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
+                            .transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end().end()).end()
+                    .override().predicate(this.modLoc("glove_held"), 1)
+                    .model(this.withExistingParent(sup.getID().getPath() + "_held_s_left", modelFile).transforms()
+                            .transform(ModelBuilder.Perspective.THIRDPERSON_LEFT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
+                            .transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end().end()).end();
+        } else
+            this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
+                    .override().predicate(this.modLoc("glove_held"), 0.25f)
+                    .model(this.singleTexture(sup.getID().getPath() + "_held", this.modLoc("item/fist"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_held"))).end()
+                    .override().predicate(this.modLoc("glove_held"), 0.5f)
+                    .model(this.singleTexture(sup.getID().getPath() + "_held_left", this.modLoc("item/fist_left"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_held"))).end()
+                    .override().predicate(this.modLoc("glove_held"), 0.75f)
+                    .model(this.singleTexture(sup.getID().getPath() + "_held_s", this.modLoc("item/fist_s"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_held"))).end()
+                    .override().predicate(this.modLoc("glove_held"), 1)
+                    .model(this.singleTexture(sup.getID().getPath() + "_held_s_left", this.modLoc("item/fist_s_left"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_held"))).end();
     }
 }

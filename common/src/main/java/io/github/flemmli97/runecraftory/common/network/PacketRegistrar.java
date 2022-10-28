@@ -44,6 +44,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CUpdateNPCData.ID, S2CUpdateNPCData.class, S2CUpdateNPCData::write, S2CUpdateNPCData::read, S2CUpdateNPCData::handle);
         register.registerMessage(id++, S2CShopResponses.ID, S2CShopResponses.class, S2CShopResponses::write, S2CShopResponses::read, S2CShopResponses::handle);
         register.registerMessage(id++, S2CScreenShake.ID, S2CScreenShake.class, S2CScreenShake::write, S2CScreenShake::read, S2CScreenShake::handle);
+        register.registerMessage(id++, S2CWeaponUse.ID, S2CWeaponUse.class, S2CWeaponUse::write, S2CWeaponUse::read, S2CWeaponUse::handle);
         return id;
     }
 

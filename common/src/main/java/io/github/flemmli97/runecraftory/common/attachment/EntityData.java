@@ -5,12 +5,15 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishing
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 
 public class EntityData {
 
     private boolean sleeping, paralysis, cold, poison, invis, orthoView;
 
     public EntityCustomFishingHook fishingHook;
+
+    private ItemStack main, off;
 
     public void setSleeping(LivingEntity entity, boolean flag) {
         this.sleeping = flag;
@@ -79,5 +82,13 @@ public class EntityData {
 
     public boolean isOrthoView() {
         return this.orthoView;
+    }
+
+    public ItemStack getGloveOffHand(ItemStack stack) {
+        if (stack != null && this.main != stack) {
+            this.main = stack;
+            this.off = this.main.copy();
+        }
+        return this.off;
     }
 }

@@ -1,38 +1,38 @@
 {
   "parent": "runecraftory:item/fist",
   "display": {
-    "thirdperson_righthand": {
-      "scale": [
-        0.25,
-        0.3,
-        0.3
+    "thirdperson_lefthand": {
+      "rotation": [
+        -2.5,
+        0,
+        0
       ],
       "translation": [
         0,
         -1.86,
         1.6
       ],
-      "rotation": [
-        -2.5,
-        0,
-        0
+      "scale": [
+        0.25,
+        0.3,
+        0.3
       ]
     },
-    "thirdperson_lefthand": {
-      "scale": [
-        0.25,
-        0.3,
-        0.3
+    "thirdperson_righthand": {
+      "rotation": [
+        -2.5,
+        0,
+        0
       ],
       "translation": [
         0,
         -1.86,
         1.6
       ],
-      "rotation": [
-        -2.5,
-        0,
-        0
+      "scale": [
+        0.25,
+        0.3,
+        0.3
       ]
     }
   }

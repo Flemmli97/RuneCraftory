@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/fist_left",
+  "textures": {
+    "layer0": "runecraftory:item/fist_of_water_held"
+  }
+}

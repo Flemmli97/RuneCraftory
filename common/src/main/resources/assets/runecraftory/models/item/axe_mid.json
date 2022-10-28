@@ -2,14 +2,26 @@
   "parent": "item/generated",
   "display": {
     "thirdperson_righthand": {
-      "rotation": [ -5, 90, 0 ],
-      "translation": [ 0, 3.25, 1.75 ],
-      "scale": [ 1, 1, 1 ]
+      "rotation": [
+        -5, 90, 0
+      ],
+      "translation": [
+        0, 3.25, 1.75
+      ],
+      "scale": [
+        1, 1, 1
+      ]
     },
     "thirdperson_lefthand": {
-      "rotation": [ -5, 90, 0 ],
-      "translation": [ 0, 3.25, 1.75 ],
-      "scale": [ 1, 1, 1 ]
+      "rotation": [
+        -5, 90, 0
+      ],
+      "translation": [
+        0, 3.25, 1.75
+      ],
+      "scale": [
+        1, 1, 1
+      ]
     }
   }
 }

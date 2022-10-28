@@ -121,12 +121,17 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (entity instanceof ServerPlayer serverPlayer && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
             Platform.INSTANCE.getPlayerData(serverPlayer)
-                    .ifPresent(d -> d.getWeaponHandler().startGlove(stack));
+                    .ifPresent(d -> d.getWeaponHandler().startGlove(serverPlayer, stack));
         }
     }
 
     @Override
     public boolean isEnchantable(ItemStack stack) {
         return false;
+    }
+
+    @Override
+    public ItemStack offHandStack(LivingEntity entity) {
+        return Platform.INSTANCE.getEntityData(entity).map(d -> d.getGloveOffHand(entity.getMainHandItem())).orElse(entity.getMainHandItem());
     }
 }

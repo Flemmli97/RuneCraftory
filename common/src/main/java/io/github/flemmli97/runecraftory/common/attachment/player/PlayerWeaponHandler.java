@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,13 +22,16 @@ public class PlayerWeaponHandler {
     private PlayerData.WeaponSwing weapon;
     private int swings, timeSinceLastSwing;
     //Gloves charge
-    private int gloveTick;
+    private int gloveTick = -1;
     private ItemStack glove = ItemStack.EMPTY;
     //Spear charge
     private int spearUseCounter = 0;
     private int spearTicker = 0;
 
     public void tick(PlayerData data, Player player) {
+        --this.gloveTick;
+        if (this.gloveTick == 0)
+            player.maxUpStep -= 0.5;
         if (player instanceof ServerPlayer serverPlayer) {
             if (--this.spellTicker == 0) {
                 this.fireballSpellFlag = 0;
@@ -73,17 +78,25 @@ public class PlayerWeaponHandler {
         return this.gloveTick <= 0;
     }
 
-    public void startGlove(ItemStack stack) {
-        this.gloveTick = 35;
+    public void startGlove(Player player, ItemStack stack) {
+        this.gloveTick = 50;
         this.glove = stack;
+        player.maxUpStep += 0.5;
+        if (player instanceof ServerPlayer serverPlayer) {
+            Platform.INSTANCE.sendToClient(new S2CWeaponUse(S2CWeaponUse.Type.GLOVERIGHTCLICK), serverPlayer);
+        }
+    }
+
+    public int getGloveTick() {
+        return this.gloveTick;
     }
 
     private void updateGlove(PlayerData data, ServerPlayer player) {
-        if (this.gloveTick <= 0)
+        if (this.gloveTick <= 0) {
             return;
-        --this.gloveTick;
+        }
         Vec3 look = player.getLookAngle();
-        Vec3 move = new Vec3(look.x, 0.0, look.z).normalize().scale(0.8).add(0, player.getDeltaMovement().y, 0);
+        Vec3 move = new Vec3(look.x, 0.0, look.z).normalize().scale(player.isOnGround() ? 0.6 : 0.3).add(0, player.getDeltaMovement().y, 0);
         player.setDeltaMovement(move);
         player.hurtMarked = true;
         if (this.gloveTick % 4 == 0) {
