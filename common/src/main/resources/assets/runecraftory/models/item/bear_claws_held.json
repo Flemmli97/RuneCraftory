@@ -93,12 +93,12 @@
 		},
 		"firstperson_righthand": {
 			"rotation": [45, 0, 0],
-			"translation": [0.5, 3, 3],
+			"translation": [0, 1.5, 3],
 			"scale": [0.3, 0.3, 0.3]
 		},
 		"firstperson_lefthand": {
 			"rotation": [45, 0, 0],
-			"translation": [0.5, 3, 3],
+			"translation": [0, 1.5, 3],
 			"scale": [0.3, 0.3, 0.3]
 		},
 		"gui": {

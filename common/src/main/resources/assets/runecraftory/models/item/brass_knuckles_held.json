@@ -1,0 +1,106 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "runecraftory:item/brass_knuckles_held"
+	},
+	"elements": [
+		{
+			"name": "front",
+			"from": [0, 0, 0],
+			"to": [16, 16, 14],
+			"faces": {
+				"north": {"uv": [0, 0, 4, 4], "texture": "#1"},
+				"east": {"uv": [4.25, 0, 7.75, 4], "texture": "#1"},
+				"south": {"uv": [0, 4.25, 4, 8.25], "texture": "#1"},
+				"west": {"uv": [4.25, 4.25, 7.75, 8.25], "texture": "#1"},
+				"up": {"uv": [12, 3.5, 8, 0], "texture": "#1"},
+				"down": {"uv": [12, 3.75, 8, 7.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "back",
+			"from": [1, 1, 14],
+			"to": [15, 15, 15],
+			"faces": {
+				"north": {"uv": [8, 7.5, 11.5, 11], "texture": "#1"},
+				"east": {"uv": [13.5, 10, 13.75, 13.5], "texture": "#1"},
+				"south": {"uv": [0, 8.5, 3.5, 12], "texture": "#1"},
+				"west": {"uv": [13.75, 0, 14, 3.5], "texture": "#1"},
+				"up": {"uv": [15.75, 6.25, 12.25, 6], "texture": "#1"},
+				"down": {"uv": [15.75, 6.5, 12.25, 6.75], "texture": "#1"}
+			}
+		},
+		{
+			"from": [2, 8, -10],
+			"to": [4, 17, 1],
+			"faces": {
+				"north": {"uv": [6.75, 8.5, 7.25, 10.75], "texture": "#1"},
+				"east": {"uv": [3.75, 8.5, 6.5, 10.75], "texture": "#1"},
+				"south": {"uv": [12.75, 13, 13.25, 15.25], "texture": "#1"},
+				"west": {"uv": [3.75, 11, 6.5, 13.25], "texture": "#1"},
+				"up": {"uv": [12.75, 2.75, 12.25, 0], "texture": "#1"},
+				"down": {"uv": [3.5, 12.25, 3, 15], "texture": "#1"}
+			}
+		},
+		{
+			"from": [7, 8, -10],
+			"to": [9, 17, 1],
+			"faces": {
+				"north": {"uv": [3.75, 13.5, 4.25, 15.75], "texture": "#1"},
+				"east": {"uv": [6.75, 11.25, 9.5, 13.5], "texture": "#1"},
+				"south": {"uv": [4.5, 13.5, 5, 15.75], "texture": "#1"},
+				"west": {"uv": [9.75, 11.25, 12.5, 13.5], "texture": "#1"},
+				"up": {"uv": [12.75, 5.75, 12.25, 3], "texture": "#1"},
+				"down": {"uv": [13.25, 10, 12.75, 12.75], "texture": "#1"}
+			}
+		},
+		{
+			"from": [12, 8, -10],
+			"to": [14, 17, 1],
+			"faces": {
+				"north": {"uv": [5.25, 13.5, 5.75, 15.75], "texture": "#1"},
+				"east": {"uv": [11.75, 7.5, 14.5, 9.75], "texture": "#1"},
+				"south": {"uv": [6, 13.5, 6.5, 15.75], "texture": "#1"},
+				"west": {"uv": [0, 12.25, 2.75, 14.5], "texture": "#1"},
+				"up": {"uv": [13.5, 2.75, 13, 0], "texture": "#1"},
+				"down": {"uv": [13.5, 3, 13, 5.75], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [-2.5, 0, 0],
+			"translation": [0, -1.86, 1.6],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [-2.5, 0, 0],
+			"translation": [0, -1.86, 1.6],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"firstperson_righthand": {
+			"rotation": [45, 0, 0],
+			"translation": [0, 1.5, 3],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"firstperson_lefthand": {
+			"rotation": [45, 0, 0],
+			"translation": [0, 1.5, 3],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"gui": {
+			"rotation": [117, -45, 1],
+			"translation": [-0.5, -0.5, 0],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "right",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4]
+		}
+	]
+}
