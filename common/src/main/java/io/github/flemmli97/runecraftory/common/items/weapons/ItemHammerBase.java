@@ -133,6 +133,10 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
+            if (entity instanceof ServerPlayer player) {
+                ItemAxeBase.performRightClickActionPlayer(stack, player, this.getRange());
+                return;
+            }
             List<Entity> list = RayTraceUtils.getEntitiesIgnorePitch(entity, this.getRange(), 360, null);
             if (!list.isEmpty()) {
                 CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
@@ -144,12 +148,6 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
                 }
                 if (success) {
                     entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
-                    if (entity instanceof ServerPlayer player) {
-                        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                            LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 3);
-                            LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.HAMMERAXE);
-                        });
-                    }
                 }
             }
         }

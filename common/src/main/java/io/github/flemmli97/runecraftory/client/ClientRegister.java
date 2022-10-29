@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.UpgradeGui;
+import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.client.model.ModelButterfly;
 import io.github.flemmli97.runecraftory.client.model.ModelChest;
 import io.github.flemmli97.runecraftory.client.model.ModelGate;
@@ -310,6 +311,8 @@ public class ClientRegister {
         consumer.accept(RenderFurnitures.LOC_CHAIR, RenderFurnitures::chairLayer);
         consumer.accept(RenderFurnitures.LOC_CHIPSQUEEK_PLUSH, RenderFurnitures::chipSqueekPlushLayer);
         consumer.accept(RenderFurnitures.LOC_WOOLY_PLUSH, RenderFurnitures::woolyPlushLayer);
+
+        consumer.accept(AnimatedPlayerModel.LAYER_LOCATION, AnimatedPlayerModel::createBodyLayer);
     }
 
     public static <T extends ParticleOptions> void registerParticles(PartileRegister consumer) {

@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.client.gui.NPCGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
+import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -46,6 +47,8 @@ public class ClientHandlers {
     public static TriggerKeyBind spell4;
 
     public static boolean isRuneyWeather;
+
+    public static AnimatedPlayerModel animatedPlayerModel;
 
     private static CameraType pastType = CameraType.FIRST_PERSON;
 

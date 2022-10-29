@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -122,6 +123,31 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
+            if (entity instanceof ServerPlayer player) {
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                    Runnable run = () -> {
+                        List<Entity> list = RayTraceUtils.getEntities(entity, this.getRange() + 2, this.getFOV() + 10);
+                        if (!list.isEmpty()) {
+                            CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
+                            boolean success = false;
+                            for (Entity e : list) {
+                                float damagePhys = CombatUtils.getAttributeValueRaw(entity, Attributes.ATTACK_DAMAGE);
+                                if (CombatUtils.damage(entity, e, src, damagePhys, stack))
+                                    success = true;
+                            }
+                            if (success) {
+                                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
+                                this.onEntityHit(player, stack);
+                                LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 3);
+                                LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.SHORTSWORD);
+                            }
+                        }
+
+                    };
+                    data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.SHORTSWORDRIGHTCLICK, stack, run);
+                });
+                return;
+            }
             List<Entity> list = RayTraceUtils.getEntities(entity, this.getRange() + 2, this.getFOV() + 10);
             if (!list.isEmpty()) {
                 CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
@@ -133,13 +159,6 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
                 }
                 if (success) {
                     entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
-                    if (entity instanceof ServerPlayer player) {
-                        this.onEntityHit(player, stack);
-                        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                            LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 3);
-                            LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.SHORTSWORD);
-                        });
-                    }
                 }
             }
         }

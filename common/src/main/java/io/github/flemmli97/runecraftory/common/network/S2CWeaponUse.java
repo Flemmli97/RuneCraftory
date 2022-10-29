@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -11,14 +12,14 @@ public class S2CWeaponUse implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_weapon_use");
 
-    private final Type type;
+    private final PlayerWeaponHandler.WeaponUseState type;
 
-    public S2CWeaponUse(Type type) {
+    public S2CWeaponUse(PlayerWeaponHandler.WeaponUseState type) {
         this.type = type;
     }
 
     public static S2CWeaponUse read(FriendlyByteBuf buf) {
-        return new S2CWeaponUse(buf.readEnum(Type.class));
+        return new S2CWeaponUse(buf.readEnum(PlayerWeaponHandler.WeaponUseState.class));
     }
 
     public static void handle(S2CWeaponUse pkt) {
@@ -26,8 +27,10 @@ public class S2CWeaponUse implements Packet {
         if (player == null)
             return;
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            if (pkt.type == Type.GLOVERIGHTCLICK)
+            if (pkt.type == PlayerWeaponHandler.WeaponUseState.GLOVERIGHTCLICK)
                 data.getWeaponHandler().startGlove(player, null);
+            else
+                data.getWeaponHandler().setAnimationBasedOnState(player, pkt.type);
         });
     }
 
@@ -39,9 +42,5 @@ public class S2CWeaponUse implements Packet {
     @Override
     public ResourceLocation getID() {
         return ID;
-    }
-
-    public enum Type {
-        GLOVERIGHTCLICK
     }
 }

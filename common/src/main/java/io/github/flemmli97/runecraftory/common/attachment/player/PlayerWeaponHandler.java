@@ -1,10 +1,12 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
 import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -12,8 +14,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class PlayerWeaponHandler {
+
+    public static final AnimatedAction shortSwordUse = new AnimatedAction(16, 6, "short_sword");
+    public static final AnimatedAction hammerAxeUse = new AnimatedAction(20, 12, "hammer_axe");
 
     //Weapon and ticker
     private int fireballSpellFlag, bigFireballSpellFlag;
@@ -27,6 +33,12 @@ public class PlayerWeaponHandler {
     //Spear charge
     private int spearUseCounter = 0;
     private int spearTicker = 0;
+
+    private WeaponUseState weaponUseState;
+    private AnimatedAction currentAnim;
+    private ItemStack usedWeapon;
+    private Runnable weaponRunnable;
+    private Consumer<AnimatedAction> weaponConsumer;
 
     public void tick(PlayerData data, Player player) {
         --this.gloveTick;
@@ -44,6 +56,22 @@ public class PlayerWeaponHandler {
         this.timeSinceLastSwing = Math.max(--this.timeSinceLastSwing, 0);
         if (this.timeSinceLastSwing == 0) {
             this.swings = 0;
+        }
+        if (this.currentAnim != null) {
+            boolean tick = this.currentAnim.tick();
+            if (!player.level.isClientSide) {
+                if (player.getMainHandItem() != this.usedWeapon) {
+                    this.setAnimationBasedOnState(player, WeaponUseState.NONE);
+                } else {
+                    if (this.weaponRunnable != null && this.currentAnim.canAttack()) {
+                        this.weaponRunnable.run();
+                    }
+                }
+            }
+            if (this.currentAnim != null && this.weaponConsumer != null)
+                this.weaponConsumer.accept(this.currentAnim);
+            if (tick)
+                this.setAnimationTo(null);
         }
     }
 
@@ -83,7 +111,7 @@ public class PlayerWeaponHandler {
         this.glove = stack;
         player.maxUpStep += 0.5;
         if (player instanceof ServerPlayer serverPlayer) {
-            Platform.INSTANCE.sendToClient(new S2CWeaponUse(S2CWeaponUse.Type.GLOVERIGHTCLICK), serverPlayer);
+            Platform.INSTANCE.sendToClient(new S2CWeaponUse(PlayerWeaponHandler.WeaponUseState.GLOVERIGHTCLICK), serverPlayer);
         }
     }
 
@@ -136,5 +164,65 @@ public class PlayerWeaponHandler {
 
     public boolean isAtUltimate() {
         return this.weapon.getMaxSwing() == this.swings;
+    }
+
+    public void doWeaponAttack(Player player, WeaponUseState state, ItemStack stack, Runnable attack) {
+        this.setAnimationBasedOnState(player, state);
+        this.usedWeapon = stack;
+        this.weaponRunnable = attack;
+    }
+
+    private void setAnimationTo(AnimatedAction anim) {
+        if (anim == null) {
+            this.weaponRunnable = null;
+            this.weaponConsumer = null;
+            this.currentAnim = null;
+        } else {
+            this.currentAnim = anim.create();
+        }
+    }
+
+    public void setAnimationBasedOnState(Player player, WeaponUseState state) {
+        this.weaponUseState = state;
+        switch (this.weaponUseState) {
+            case NONE -> this.currentAnim = null;
+            case SHORTSWORDRIGHTCLICK -> {
+                this.setAnimationTo(shortSwordUse);
+            }
+            case LONGSWORDRIGHTCLICK -> {
+            }
+            case SPEARRIGHTCLICK -> {
+            }
+            case HAMMERAXERIGHTCLICK -> {
+                this.setAnimationTo(hammerAxeUse);
+                this.weaponConsumer = ItemAxeBase.movePlayer(player);
+            }
+            case DUALRIGHTCLICK -> {
+            }
+            case STAFFRIGHTCLICK -> {
+            }
+            default -> {
+            }
+        }
+        if (player instanceof ServerPlayer serverPlayer) {
+            Platform.INSTANCE.sendToClient(new S2CWeaponUse(this.weaponUseState), serverPlayer);
+        }
+        player.yBodyRot = player.yHeadRot;
+    }
+
+    public AnimatedAction getCurrentAnim() {
+        return this.currentAnim;
+    }
+
+    public enum WeaponUseState {
+
+        NONE,
+        SHORTSWORDRIGHTCLICK,
+        LONGSWORDRIGHTCLICK,
+        SPEARRIGHTCLICK,
+        HAMMERAXERIGHTCLICK,
+        DUALRIGHTCLICK,
+        GLOVERIGHTCLICK,
+        STAFFRIGHTCLICK
     }
 }

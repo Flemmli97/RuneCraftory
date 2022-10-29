@@ -6,10 +6,14 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockAndTintGetter;
 
 import java.util.Map;
@@ -82,6 +86,16 @@ public class ClientMixinUtils {
             float xDir = -Mth.cos(-f * ((float) Math.PI / 180) - (float) Math.PI);
             float zDir = -Mth.sin(-f * ((float) Math.PI / 180) - (float) Math.PI);
             poseStack.translate(xDir * standOffset, 0.0, zDir * standOffset);
+        }
+    }
+
+    public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model) {
+        if (entity instanceof Player player && ClientHandlers.animatedPlayerModel != null) {
+            AnimatedAction anim = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAnim()).orElse(null);
+            if (anim != null) {
+                ClientHandlers.animatedPlayerModel.setUpModel(anim, Minecraft.getInstance().getFrameTime());
+                ClientHandlers.animatedPlayerModel.copyTo(model);
+            }
         }
     }
 
