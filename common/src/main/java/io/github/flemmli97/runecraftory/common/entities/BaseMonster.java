@@ -998,7 +998,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
         if (this.playDeath() && source != DamageSource.OUT_OF_WORLD)
             return false;
-        return (source.getEntity() == null || this.canAttackFrom(source.getEntity().blockPosition())) && super.hurt(source, amount);
+        return (source.getEntity() == null || this.canAttackFrom(source.getEntity().position())) && super.hurt(source, amount);
     }
 
     @Override
@@ -1189,8 +1189,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return null;
     }
 
-    private boolean canAttackFrom(BlockPos pos) {
-        return this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distSqr(pos) < (this.getRestrictRadius() * this.getRestrictRadius());
+    private boolean canAttackFrom(Vec3 pos) {
+        return this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distToCenterSqr(pos.x(), pos.y(), pos.z()) < (this.getRestrictRadius() * this.getRestrictRadius());
     }
 
     @Override
