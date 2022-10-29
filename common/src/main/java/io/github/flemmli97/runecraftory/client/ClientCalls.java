@@ -75,7 +75,8 @@ public class ClientCalls {
     }
 
     public static void handleInputUpdate(Player player, Input input) {
-        if (EntityUtils.isDisabled(player) || Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getGloveTick() > 0).orElse(false)) {
+        if (EntityUtils.isDisabled(player) || Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getGloveTick() > 0).orElse(false)
+                || Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAnim()).orElse(null) != null) {
             input.leftImpulse = 0;
             input.forwardImpulse = 0;
             input.up = false;
