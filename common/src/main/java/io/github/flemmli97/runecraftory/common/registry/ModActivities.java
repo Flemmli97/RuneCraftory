@@ -13,4 +13,6 @@ public class ModActivities {
     public static PlatformRegistry<Activity> ACTIVITIES = PlatformUtils.INSTANCE.of(Registry.ACTIVITY_REGISTRY, RuneCraftory.MODID);
 
     public static RegistryEntrySupplier<Activity> DISABLED = ACTIVITIES.register("disabled", () -> Platform.INSTANCE.activity("disabled"));
+    public static RegistryEntrySupplier<Activity> EARLYIDLE = ACTIVITIES.register("early_idle", () -> Platform.INSTANCE.activity("early_idle"));
+
 }

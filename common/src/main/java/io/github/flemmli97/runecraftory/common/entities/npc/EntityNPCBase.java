@@ -23,6 +23,7 @@ import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateNPCData;
+import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -170,6 +171,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private Set<Integer> interactingPlayers = new HashSet<>();
 
     private final NPCSchedule schedule;
+
+    private BlockPos prevRestriction = BlockPos.ZERO;
+    private int prevRestrictionRadius = -1;
 
     public EntityNPCBase(EntityType<? extends EntityNPCBase> type, Level level) {
         super(type, level);
@@ -679,6 +683,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return this.animationHandler;
     }
 
+    @Override
+    public boolean hasRestriction() {
+        return super.hasRestriction() && this.getEntityToFollowUUID() == null;
+    }
+
     public EnumShop getShop() {
         return this.shop;
     }
@@ -703,6 +712,17 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.tickCount % 20 == 0 && this.level instanceof ServerLevel serverLevel) {
             Activity prev = this.activity;
             this.activity = this.getActivityForTime(serverLevel);
+            if (this.activity == ModActivities.EARLYIDLE.get() && this.getBedPos() != null && this.getBedPos().dimension() == this.level.dimension()) {
+                if (!this.getRestrictCenter().equals(this.getBedPos().pos())) {
+                    this.prevRestriction = this.getRestrictCenter();
+                    this.prevRestrictionRadius = (int) this.getRestrictRadius();
+                    this.restrictTo(this.getBedPos().pos(), 10);
+                }
+            } else if (this.prevRestrictionRadius >= 0) {
+                this.restrictTo(this.prevRestriction, this.prevRestrictionRadius);
+                this.prevRestriction = BlockPos.ZERO;
+                this.prevRestrictionRadius = -1;
+            }
             return prev != this.activity;
         }
         return false;

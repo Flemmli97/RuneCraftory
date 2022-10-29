@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.npc;
 
 import com.google.common.collect.ImmutableList;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
+import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import net.minecraft.nbt.CompoundTag;
@@ -91,7 +92,7 @@ public class NPCSchedule {
             return Activity.REST;
         if (this.workDays.contains(day) && this.npc.getShop() != EnumShop.NONE) {
             if (dayTime < this.workTime)
-                return Activity.IDLE;
+                return ModActivities.EARLYIDLE.get();
             if (dayTime < this.breakTime)
                 return Activity.WORK;
             if (dayTime < this.workTimeAfter)
