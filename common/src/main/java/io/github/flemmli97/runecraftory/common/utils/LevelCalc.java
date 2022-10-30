@@ -138,6 +138,10 @@ public class LevelCalc {
     }
 
     public static void addXP(LivingEntity attacker, int base, int money, int level) {
+        addXP(attacker, base, money, level, true);
+    }
+
+    public static void addXP(LivingEntity attacker, int base, int money, int level, boolean adjustOnLevel) {
         if (GeneralConfig.xpMultiplier == 0)
             return;
         ServerPlayer player = null;
@@ -152,20 +156,20 @@ public class LevelCalc {
         if (player != null) {
             ServerPlayer finalPlayer = player;
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                data.addXp(finalPlayer, levelXpWith(base, data.getPlayerLevel().getLevel(), level));
+                data.addXp(finalPlayer, adjustOnLevel ? levelXpWith(base, data.getPlayerLevel().getLevel(), level) : base);
                 data.setMoney(finalPlayer, data.getMoney() + LevelCalc.getMoney(money, level));
             });
             if (!(attacker instanceof Player))
-                tryAddXPTo(attacker, player, base, level);
+                tryAddXPTo(attacker, player, base, level, adjustOnLevel);
             for (Mob e : player.level.getEntities(EntityTypeTest.forClass(Mob.class), player.getBoundingBox().inflate(32, 32, 32), e -> true)) {
                 if (e == attacker)
                     continue;
-                tryAddXPTo(e, player, base, level);
+                tryAddXPTo(e, player, base, level, adjustOnLevel);
             }
         }
     }
 
-    private static void tryAddXPTo(LivingEntity entity, ServerPlayer player, int base, int level) {
+    private static void tryAddXPTo(LivingEntity entity, ServerPlayer player, int base, int level, boolean adjustOnLevel) {
         if (entity instanceof IBaseMob mob) {
             Consumer<Float> cons = null;
             if (entity instanceof BaseMonster monster && player.getUUID().equals(monster.getOwnerUUID()) && monster.behaviourState() == BaseMonster.Behaviour.FOLLOW)
@@ -174,7 +178,7 @@ public class LevelCalc {
                 cons = npc::addXp;
             if (cons == null)
                 return;
-            cons.accept(levelXpWith(base, mob.level().getLevel(), level));
+            cons.accept(adjustOnLevel ? levelXpWith(base, mob.level().getLevel(), level) : base);
         }
     }
 

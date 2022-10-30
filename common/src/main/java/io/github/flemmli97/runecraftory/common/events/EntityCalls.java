@@ -158,6 +158,9 @@ public class EntityCalls {
             if (entity instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getInv().dropItemsAt(entity));
             }
+            if (MobConfig.vanillaGiveXp && entity instanceof Mob m && !(entity instanceof IBaseMob) && source.getEntity() instanceof LivingEntity attacker) {
+                LevelCalc.addXP(attacker, (int) m.getMaxHealth(), 0, 0, false);
+            }
         }
         return false;
     }

@@ -104,6 +104,7 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         MobConfig.disableNaturalSpawn = spec.disableNaturalSpawn.get();
         MobConfig.farmRadius = spec.farmRadius.get();
         MobConfig.mobAttackNPC = spec.mobAttackNPC.get();
+        MobConfig.vanillaGiveXp = spec.vanillaGiveXp.get();
         MobConfig.bellRadius = spec.bellRadius.get();
         MobConfig.gateHealth = spec.gateHealth.get();
         MobConfig.gateDef = spec.gateDef.get();
