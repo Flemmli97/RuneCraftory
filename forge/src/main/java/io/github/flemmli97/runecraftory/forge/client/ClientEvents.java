@@ -62,8 +62,10 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void render(RenderLivingEvent.Pre<?, ?> event) {
-        if (ClientCalls.invis(event.getEntity()))
+        if (ClientCalls.invis(event.getEntity())) {
             event.setCanceled(true);
+            MinecraftForge.EVENT_BUS.post(new RenderLivingEvent.Post<>(event.getEntity(), event.getRenderer(), event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource(), event.getPackedLight()));
+        }
     }
 
     @SubscribeEvent

@@ -4,12 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
-import org.jetbrains.annotations.Nullable;
 
 public class RenderMonster<T extends BaseMonster, M extends EntityModel<T>> extends MobRenderer<T, M> {
 
@@ -38,17 +37,16 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T>> exte
         }
     }
 
-    @Nullable
     @Override
-    protected RenderType getRenderType(T entity, boolean invis, boolean translucent, boolean glowing) {
+    public boolean shouldRender(T entity, Frustum camera, double camX, double camY, double camZ) {
         if (entity.getPlayDeathTick() > 0 && !entity.playDeath()) {
             if (entity.getPlayDeathTick() > 8) {
                 if (entity.getPlayDeathTick() % 2 == 0)
-                    return null;
+                    return false;
             }
             if (entity.getPlayDeathTick() % 3 == 0)
-                return null;
+                return false;
         }
-        return super.getRenderType(entity, invis, translucent, glowing);
+        return super.shouldRender(entity, camera, camX, camY, camZ);
     }
 }
