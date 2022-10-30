@@ -184,17 +184,6 @@ public class ClientCalls {
 
     public static void renderShaking(Camera camera, float yaw, float pitch, float roll, float partialTicks,
                                      Consumer<Float> setYaw, Consumer<Float> setPitch, Consumer<Float> setRoll) {
-        /*if(ClientHandlers.orthorgraphicCam()) {
-            Entity entity = Minecraft.getInstance().getCameraEntity();
-            if(entity != null) {
-                camera.setRotation(entity.getViewYRot(partialTicks), entity.getViewXRot(partialTicks));
-                camera.setPosition(Mth.lerp(partialTicks, entity.xo, entity.getX()),
-                        Mth.lerp(partialTicks, entity.yo, entity.getY()) + Mth.lerp(partialTicks, camera.eyeHeightOld, camera.eyeHeight),
-                        Mth.lerp(partialTicks, entity.zo, entity.getZ()));
-                camera.move(-camera.getMaxZoom(4.0), 3.0, 0.0);
-                camera.setRotation(camera.getYRot(), camera.getXRot());
-            }
-        }*/
         int t = ShakeHandler.shakeTick;
         if (t <= 0)
             return;

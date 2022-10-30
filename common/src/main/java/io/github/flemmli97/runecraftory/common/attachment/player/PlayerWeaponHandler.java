@@ -18,8 +18,9 @@ import java.util.function.Consumer;
 
 public class PlayerWeaponHandler {
 
-    public static final AnimatedAction shortSwordUse = new AnimatedAction(16, 6, "short_sword");
-    public static final AnimatedAction hammerAxeUse = new AnimatedAction(20, 12, "hammer_axe");
+    //We need +1 for the length cause vanilla models dont reset all their values everytime
+    public static final AnimatedAction shortSwordUse = new AnimatedAction(16 + 1, 6, "short_sword");
+    public static final AnimatedAction hammerAxeUse = new AnimatedAction(20 + 1, 12, "hammer_axe");
 
     //Weapon and ticker
     private int fireballSpellFlag, bigFireballSpellFlag;
@@ -58,20 +59,21 @@ public class PlayerWeaponHandler {
             this.swings = 0;
         }
         if (this.currentAnim != null) {
-            boolean tick = this.currentAnim.tick();
-            if (!player.level.isClientSide) {
-                if (player.getMainHandItem() != this.usedWeapon) {
-                    this.setAnimationBasedOnState(player, WeaponUseState.NONE);
-                } else {
-                    if (this.weaponRunnable != null && this.currentAnim.canAttack()) {
-                        this.weaponRunnable.run();
+            if (this.currentAnim.tick())
+                this.setAnimationTo(null);
+            else {
+                if (!player.level.isClientSide) {
+                    if (player.getMainHandItem() != this.usedWeapon) {
+                        this.setAnimationBasedOnState(player, WeaponUseState.NONE);
+                    } else {
+                        if (this.weaponRunnable != null && this.currentAnim.canAttack()) {
+                            this.weaponRunnable.run();
+                        }
                     }
                 }
+                if (this.currentAnim != null && this.weaponConsumer != null)
+                    this.weaponConsumer.accept(this.currentAnim);
             }
-            if (this.currentAnim != null && this.weaponConsumer != null)
-                this.weaponConsumer.accept(this.currentAnim);
-            if (tick)
-                this.setAnimationTo(null);
         }
     }
 

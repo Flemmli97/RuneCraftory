@@ -21,6 +21,8 @@ import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.tenshilib.common.utils.CircleSector;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -37,6 +39,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -174,6 +177,21 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
             Runnable run = () -> {
                 List<Entity> list = getEntitiesIn(player, range, 360, null);
                 Platform.INSTANCE.sendToClient(new S2CScreenShake(4, 1), player);
+                player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.DRAGON_FIREBALL_EXPLODE, player.getSoundSource(), 1.0f, 0.4f);
+                BlockPos pos = player.blockPosition().below();
+                BlockPos.MutableBlockPos mut = pos.mutable();
+                for (int x = -2; x < 3; x++)
+                    for (int z = -2; z < 3; z++) {
+                        if (x == 0 && z == 0)
+                            continue;
+                        mut.set(pos.getX() + x, pos.getY(), pos.getZ() + z);
+                        BlockState state = player.level.getBlockState(mut);
+                        Vec3 dir = Vec3.atLowerCornerOf(pos.subtract(mut)).normalize().scale(1.2);
+                        Vec3 scaled = dir.scale(0.5);
+                        if (state.getRenderShape() != RenderShape.INVISIBLE)
+                            player.getLevel().sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), player.getX() + dir.x(), player.getY() + 0.1, player.getZ() + dir.z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
+                    }
+
                 if (!list.isEmpty()) {
                     CustomDamage src = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
                     boolean success = false;
@@ -196,7 +214,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     public static List<Entity> getEntitiesIn(LivingEntity entity, float reach, float aoe, Predicate<Entity> pred) {
         CircleSector circ = new CircleSector(entity.position().add(0.0D, 0.1D, 0.0D), Vec3.directionFromRotation(0.0F, entity.getViewYRot(1.0F)), reach, aoe, entity);
         return entity.level.getEntities(entity, entity.getBoundingBox().inflate(reach + 1.0F), (t) -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable() &&
-                circ.intersects(t.level, t.getBoundingBox().inflate(0.15D, t.getY() - entity.getY() >= 0.9 ? 1.15 : (t.getBbHeight() <= 0.3D ? t.getBbHeight() : 0.15D), 0.15D)));
+                circ.intersects(t.level, t.getBoundingBox().inflate(0.15D, t.getY() - entity.getY() >= 0.9 ? 1.15 : (t.getBbHeight() <= 0.3D ? t.getBbHeight() + 0.2 : 0.2D), 0.15D)));
     }
 
     public static Consumer<AnimatedAction> movePlayer(Player player) {

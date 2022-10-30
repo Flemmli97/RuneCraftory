@@ -37,7 +37,7 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
 
     public AnimatedPlayerModel(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "Body");
+        this.model = new ModelPartHandler(root.getChild("Body"), "Body");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "player"));
         this.head = this.model.getPart("Head");
         this.rightArm = this.model.getPart("RightArm");
@@ -80,12 +80,16 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
 
     public void copyTo(HumanoidModel<?> model) {
         PartPose main = this.model.getMainPart().storePose();
+        PartPose head = model.head.storePose();
         model.head.loadPose(this.withParent(main, this.head.storePose()));
         model.body.loadPose(main);
         model.leftArm.loadPose(this.withParent(main, this.leftArm.storePose()));
         model.rightArm.loadPose(this.withParent(main, this.rightArm.storePose()));
         model.leftLeg.loadPose(this.withParent(main, this.leftLeg.storePose()));
         model.rightLeg.loadPose(this.withParent(main, this.rightLeg.storePose()));
+        model.head.xRot += head.xRot;
+        model.head.yRot += head.yRot;
+        model.head.zRot += head.zRot;
         model.hat.copyFrom(model.head);
     }
 
