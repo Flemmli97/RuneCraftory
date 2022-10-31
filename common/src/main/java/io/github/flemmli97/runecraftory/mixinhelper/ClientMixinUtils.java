@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.BlockAndTintGetter;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 public class ClientMixinUtils {
 
@@ -89,13 +91,19 @@ public class ClientMixinUtils {
         }
     }
 
-    public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model) {
+    public static void transFormPre(LivingEntity entity, HumanoidModel<?> model, Consumer<AnimatedAction> cons) {
         if (entity instanceof Player player && ClientHandlers.getAnimatedPlayerModel() != null) {
             AnimatedAction anim = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAnim()).orElse(null);
-            if (anim != null) {
-                ClientHandlers.getAnimatedPlayerModel().setUpModel(anim, Minecraft.getInstance().getFrameTime());
-                ClientHandlers.getAnimatedPlayerModel().copyTo(model);
-            }
+            cons.accept(anim);
+            ClientHandlers.getAnimatedPlayerModel().setUpModel(anim, Minecraft.getInstance().getFrameTime());
+            if (anim == null)
+                ClientHandlers.getAnimatedPlayerModel().copyTo(entity, model, true, false);
+        }
+    }
+
+    public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model, AnimatedAction anim) {
+        if (entity instanceof Player && ClientHandlers.getAnimatedPlayerModel() != null && anim != null) {
+            ClientHandlers.getAnimatedPlayerModel().copyTo(entity, model, false, anim.getID().equals(PlayerWeaponHandler.dualBladeUse.getID()));
         }
     }
 

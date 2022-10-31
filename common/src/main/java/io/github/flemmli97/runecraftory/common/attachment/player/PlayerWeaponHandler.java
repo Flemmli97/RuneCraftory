@@ -21,6 +21,9 @@ public class PlayerWeaponHandler {
     //We need +1 for the length cause vanilla models dont reset all their values everytime
     public static final AnimatedAction shortSwordUse = new AnimatedAction(16 + 1, 6, "short_sword");
     public static final AnimatedAction hammerAxeUse = new AnimatedAction(20 + 1, 12, "hammer_axe");
+    public static final AnimatedAction longSwordUse = new AnimatedAction(16 + 1, 5, "long_sword");
+    public static final AnimatedAction dualBladeUse = new AnimatedAction(19 + 1, 7, "dual_blades");
+    public static final AnimatedAction staffUse = new AnimatedAction(16 + 1, 8, "staff");
 
     //Weapon and ticker
     private int fireballSpellFlag, bigFireballSpellFlag;
@@ -188,21 +191,16 @@ public class PlayerWeaponHandler {
         this.weaponUseState = state;
         switch (this.weaponUseState) {
             case NONE -> this.currentAnim = null;
-            case SHORTSWORDRIGHTCLICK -> {
-                this.setAnimationTo(shortSwordUse);
-            }
-            case LONGSWORDRIGHTCLICK -> {
-            }
+            case SHORTSWORDRIGHTCLICK -> this.setAnimationTo(shortSwordUse);
+            case LONGSWORDRIGHTCLICK -> this.setAnimationTo(longSwordUse);
             case SPEARRIGHTCLICK -> {
             }
             case HAMMERAXERIGHTCLICK -> {
                 this.setAnimationTo(hammerAxeUse);
                 this.weaponConsumer = ItemAxeBase.movePlayer(player);
             }
-            case DUALRIGHTCLICK -> {
-            }
-            case STAFFRIGHTCLICK -> {
-            }
+            case DUALRIGHTCLICK -> this.setAnimationTo(dualBladeUse);
+            case STAFFRIGHTCLICK -> this.setAnimationTo(staffUse);
             default -> {
             }
         }

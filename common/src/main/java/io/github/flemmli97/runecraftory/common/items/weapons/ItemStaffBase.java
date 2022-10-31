@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -132,8 +133,17 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
             int level = Math.min(useTime, this.chargeAmount(stack));
             Spell spell = this.getSpell(stack, level);
             if (spell != null) {
-                if (spell.use((ServerLevel) world, entity, stack) && entity instanceof Player)
-                    spell.levelSkill((ServerPlayer) entity);
+                if (entity instanceof ServerPlayer player) {
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                        Runnable run = () -> {
+                            if (spell.use(player.getLevel(), entity, stack))
+                                spell.levelSkill(player);
+                        };
+                        data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.STAFFRIGHTCLICK, stack, run);
+                    });
+                    return;
+                }
+                spell.use((ServerLevel) world, entity, stack);
             }
         }
     }
