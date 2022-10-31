@@ -15,7 +15,7 @@ import net.minecraft.world.level.Level;
 
 public class EntityBuffamoo extends ChargingMonster {
 
-    public static final AnimatedAction chargeAttack = new AnimatedAction(61, 16, "charge");
+    public static final AnimatedAction chargeAttack = new AnimatedAction(44, 16, "charge");
     public static final AnimatedAction stamp = new AnimatedAction(8, 4, "stamp");
     public static final AnimatedAction interact = AnimatedAction.copyOf(stamp, "interact");
     private static final AnimatedAction[] anims = new AnimatedAction[]{stamp, chargeAttack, interact};
@@ -94,7 +94,7 @@ public class EntityBuffamoo extends ChargingMonster {
 
     @Override
     public float chargingLength() {
-        return 9;
+        return 11;
     }
 
     @Override

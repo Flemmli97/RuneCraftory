@@ -64,7 +64,7 @@ public abstract class FollowEntityGoal<T extends Mob> extends Goal {
         if (this.mob.getNavigation().isDone()) {
             return false;
         }
-        if (this.canFollow()) {
+        if (!this.canFollow()) {
             return false;
         }
         return !(this.mob.distanceToSqr(this.owner) <= (double) (this.stopDistance * this.stopDistance));

@@ -90,11 +90,11 @@ public class ClientMixinUtils {
     }
 
     public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model) {
-        if (entity instanceof Player player && ClientHandlers.animatedPlayerModel != null) {
+        if (entity instanceof Player player && ClientHandlers.getAnimatedPlayerModel() != null) {
             AnimatedAction anim = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAnim()).orElse(null);
             if (anim != null) {
-                ClientHandlers.animatedPlayerModel.setUpModel(anim, Minecraft.getInstance().getFrameTime());
-                ClientHandlers.animatedPlayerModel.copyTo(model);
+                ClientHandlers.getAnimatedPlayerModel().setUpModel(anim, Minecraft.getInstance().getFrameTime());
+                ClientHandlers.getAnimatedPlayerModel().copyTo(model);
             }
         }
     }

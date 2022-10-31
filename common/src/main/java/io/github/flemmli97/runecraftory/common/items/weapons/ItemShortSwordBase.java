@@ -126,6 +126,7 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
             if (entity instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                     Runnable run = () -> {
+                        entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
                         List<Entity> list = RayTraceUtils.getEntities(entity, this.getRange() + 2, this.getFOV() + 10);
                         if (!list.isEmpty()) {
                             CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
@@ -136,7 +137,6 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
                                     success = true;
                             }
                             if (success) {
-                                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
                                 this.onEntityHit(player, stack);
                                 LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 3);
                                 LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.SHORTSWORD);

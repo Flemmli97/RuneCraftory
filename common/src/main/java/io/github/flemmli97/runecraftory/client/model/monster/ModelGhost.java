@@ -95,18 +95,7 @@ public class ModelGhost<T extends EntityGhost> extends EntityModel<T> implements
             this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
         }
         if (anim != null) {
-            if (anim.getID().equals(EntityGhost.vanish.getID())) {
-                int tick = anim.getTick();
-                if (tick < 10 || tick > 90)
-                    this.model.getMainPart().visible = tick % 8 == 0;
-                else if (tick < 20 || tick > 80)
-                    this.model.getMainPart().visible = tick % 5 == 0;
-                else if (tick < 40 || tick > 60)
-                    this.model.getMainPart().visible = tick % 2 == 0;
-                else
-                    this.model.getMainPart().visible = false;
-            } else
-                this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
         }
     }
 

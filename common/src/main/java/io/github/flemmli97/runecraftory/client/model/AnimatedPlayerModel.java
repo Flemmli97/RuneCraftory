@@ -9,10 +9,10 @@ import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -35,9 +35,9 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
 
     protected final BlockBenchAnimations anim;
 
-    public AnimatedPlayerModel(ModelPart root) {
+    public AnimatedPlayerModel() {
         super();
-        this.model = new ModelPartHandler(root.getChild("Body"), "Body");
+        this.model = new ModelPartHandler(Minecraft.getInstance().getEntityModels().bakeLayer(LAYER_LOCATION).getChild("Body"), "Body");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "player"));
         this.head = this.model.getPart("Head");
         this.rightArm = this.model.getPart("RightArm");
@@ -85,8 +85,10 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
         model.body.loadPose(main);
         model.leftArm.loadPose(this.withParent(main, this.leftArm.storePose()));
         model.rightArm.loadPose(this.withParent(main, this.rightArm.storePose()));
-        model.leftLeg.loadPose(this.withParent(main, this.leftLeg.storePose()));
-        model.rightLeg.loadPose(this.withParent(main, this.rightLeg.storePose()));
+        if (!model.riding) {
+            model.leftLeg.loadPose(this.withParent(main, this.leftLeg.storePose()));
+            model.rightLeg.loadPose(this.withParent(main, this.rightLeg.storePose()));
+        }
         model.head.xRot += head.xRot;
         model.head.yRot += head.yRot;
         model.head.zRot += head.zRot;

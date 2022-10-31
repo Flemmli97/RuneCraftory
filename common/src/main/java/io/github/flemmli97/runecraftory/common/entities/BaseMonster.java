@@ -370,16 +370,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public void tick() {
-        this.getAnimationHandler().tick();
         super.tick();
-        if (this.playDeath()) {
-            this.playDeathTick = Math.min(15, ++this.playDeathTick);
-            if (!this.level.isClientSide && this.getHealth() > 0.02) {
-                this.setPlayDeath(false);
-            }
-        } else {
-            this.playDeathTick = Math.max(0, --this.playDeathTick);
-        }
         if (this.getMoveFlag() != 0) {
             this.moveTick = Math.min(moveTickMax, ++this.moveTick);
         } else {
@@ -405,6 +396,20 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.removeFoodEffect();
             }
             this.getAnimationHandler().runIfNotNull(this::handleAttack);
+        }
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        this.getAnimationHandler().tick();
+        if (this.playDeath()) {
+            this.playDeathTick = Math.min(15, ++this.playDeathTick);
+            if (!this.level.isClientSide && this.getHealth() > 0.02) {
+                this.setPlayDeath(false);
+            }
+        } else {
+            this.playDeathTick = Math.max(0, --this.playDeathTick);
         }
     }
 
@@ -1042,14 +1047,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.shouldFreezeTravel())
             return;
         if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entitylivingbase) {
-            if (this.adjustRotFromRider(entitylivingbase)) {
-                this.setYRot(entitylivingbase.getYRot());
-                this.setXRot(entitylivingbase.getXRot() * 0.5f);
+            if (!this.level.isClientSide) {
+                if (this.adjustRotFromRider(entitylivingbase)) {
+                    this.setYRot(this.rotateClamped(this.getYRot(), entitylivingbase.getYRot(), this.getHeadRotSpeed()));
+                    this.setXRot(entitylivingbase.getXRot() * 0.5f);
+                }
+                this.yBodyRot = this.getYRot();
+                this.yHeadRot = this.yBodyRot;
             }
-            this.yRotO = this.getYRot();
-            this.setRot(this.getYRot(), this.getXRot());
-            this.yBodyRot = this.getYRot();
-            this.yHeadRot = this.yBodyRot;
             float strafing = entitylivingbase.xxa * 0.5f;
             float forward = entitylivingbase.zza;
             if (forward <= 0.0f) {
@@ -1108,14 +1113,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void handleNoGravTravel(Vec3 vec) {
         if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entitylivingbase
                 && !this.getAnimationHandler().hasAnimation()) {
-            if (this.adjustRotFromRider(entitylivingbase)) {
-                this.setYRot(entitylivingbase.getYRot());
-                this.setXRot(entitylivingbase.getXRot() * 0.5f);
+            if (!this.level.isClientSide) {
+                if (this.adjustRotFromRider(entitylivingbase)) {
+                    this.setYRot(this.rotateClamped(this.getYRot(), entitylivingbase.getYRot(), this.getHeadRotSpeed()));
+                    this.setXRot(entitylivingbase.getXRot() * 0.5f);
+                }
+                this.yBodyRot = this.getYRot();
+                this.yHeadRot = this.yBodyRot;
             }
-            this.yRotO = this.getYRot();
-            this.setRot(this.getYRot(), this.getXRot());
-            this.yBodyRot = this.getYRot();
-            this.yHeadRot = this.yBodyRot;
             float strafing = entitylivingbase.xxa * 0.5f;
             float forward = entitylivingbase.zza;
             double vert = 0;
@@ -1151,6 +1156,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.moveRelative(0.1F, vec);
         this.move(MoverType.SELF, this.getDeltaMovement());
         this.setDeltaMovement(this.getDeltaMovement().scale(0.9D));
+    }
+
+    private float rotateClamped(float current, float target, float maxChange) {
+        float f = Mth.degreesDifference(current, target);
+        float g = Mth.clamp(f, -maxChange, maxChange);
+        return current + g;
     }
 
     public double ridingSpeedModifier() {

@@ -15,7 +15,7 @@ public class GhostAttackGoal<T extends EntityGhost> extends AnimatedMeleeGoal<T>
     public AnimatedAction randomAttack() {
         if (this.attacker.shouldVanishNext(this.prevAnim) || this.distanceToTargetSq > 100)
             return EntityGhost.vanish;
-        if (this.distanceToTargetSq >= 25)
+        if (this.attacker.getRandom().nextFloat() < 0.5)
             return EntityGhost.darkBall;
         if (this.attacker.getRandom().nextFloat() < 0.7f && this.distanceToTargetSq <= (this.attacker.chargingLength() * this.attacker.chargingLength() + 1) && this.attacker.getY() >= this.target.getY())
             return this.attacker.getRandomAnimation(AnimationType.CHARGE);
@@ -31,8 +31,14 @@ public class GhostAttackGoal<T extends EntityGhost> extends AnimatedMeleeGoal<T>
         if (this.attacker.isAnimOfType(this.next, AnimationType.MELEE))
             super.handlePreAttack();
         else if (this.attacker.isAnimOfType(this.next, AnimationType.RANGED)) {
+            if (this.distanceToTargetSq >= 64)
+                this.moveToEntityNearer(this.target, 1);
+
             this.attacker.getLookControl().setLookAt(this.target, 360, 90);
-            this.movementDone = true;
+            if (this.distanceToTargetSq <= 25) {
+                this.attacker.getNavigation().stop();
+                this.movementDone = true;
+            }
         } else {
             this.attacker.setChargeMotion(this.attacker.getChargeTo(this.next, this.target.position()));
             this.attacker.lookAt(this.target, 360, 10);

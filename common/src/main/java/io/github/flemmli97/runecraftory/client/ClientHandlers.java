@@ -48,7 +48,7 @@ public class ClientHandlers {
 
     public static boolean isRuneyWeather;
 
-    public static AnimatedPlayerModel animatedPlayerModel;
+    private static AnimatedPlayerModel animatedPlayerModel;
 
     private static CameraType pastType = CameraType.FIRST_PERSON;
 
@@ -205,5 +205,15 @@ public class ClientHandlers {
             else
                 shop.updateButtons();
         }
+    }
+
+    public static AnimatedPlayerModel getAnimatedPlayerModel() {
+        if (animatedPlayerModel == null) {
+            try {
+                animatedPlayerModel = new AnimatedPlayerModel();
+            } catch (IllegalArgumentException ignored) {
+            }
+        }
+        return animatedPlayerModel;
     }
 }

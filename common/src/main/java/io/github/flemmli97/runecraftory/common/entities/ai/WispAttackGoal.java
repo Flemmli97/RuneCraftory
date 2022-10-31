@@ -25,8 +25,13 @@ public class WispAttackGoal<T extends EntityWispBase> extends AnimatedMeleeGoal<
 
     @Override
     public void handlePreAttack() {
-        this.movementDone = true;
+        if (this.distanceToTargetSq >= 64)
+            this.moveToEntityNearer(this.target, 1);
         this.attacker.getLookControl().setLookAt(this.target, 360, 90);
+        if (this.distanceToTargetSq <= 25) {
+            this.attacker.getNavigation().stop();
+            this.movementDone = true;
+        }
     }
 
     @Override

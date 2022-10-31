@@ -157,7 +157,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
-            int range = Math.min(useTime, this.tier.getTierLevel());
+            int range = Math.min(useTime, this.tier.getTierLevel()) + 2;
             BlockHitResult result = getPlayerPOVHitResult(level, player, ClipContext.Fluid.NONE);
             if (range == 0) {
                 if (result != null) {
