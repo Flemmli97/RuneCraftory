@@ -8,6 +8,7 @@ RuneCraftory 1.3.3
 - Improved tamed monster interaction
 - Add right click animation system. Gloves and spears missing atm
 - Make ghost and spirit attack better
+- Fix NPC despawning
 
 RuneCraftory 1.3.2
 ================

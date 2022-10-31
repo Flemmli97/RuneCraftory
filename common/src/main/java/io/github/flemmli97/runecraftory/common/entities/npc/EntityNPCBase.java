@@ -494,6 +494,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
     public void die(DamageSource cause) {
         RuneCraftory.logger.info("NPC {} died, message: '{}'", this, cause.getLocalizedDeathMessage(this).getString());
         if (!this.level.isClientSide) {
