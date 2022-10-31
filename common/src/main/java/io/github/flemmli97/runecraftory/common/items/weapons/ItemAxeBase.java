@@ -25,6 +25,7 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -48,6 +49,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IAOEWeapon {
+
+    private static final Vec3[] particleDirection = generateParticleDir(2);
 
     public ItemAxeBase(Item.Properties props) {
         super(ItemTiers.tier, 0, 0, props);
@@ -178,20 +181,15 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
                 List<Entity> list = getEntitiesIn(player, range, 360, null);
                 Platform.INSTANCE.sendToClient(new S2CScreenShake(4, 1), player);
                 player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.DRAGON_FIREBALL_EXPLODE, player.getSoundSource(), 1.0f, 0.4f);
-                BlockPos pos = player.blockPosition().below();
-                BlockPos.MutableBlockPos mut = pos.mutable();
-                for (int x = -2; x < 3; x++)
-                    for (int z = -2; z < 3; z++) {
-                        if (x == 0 && z == 0)
-                            continue;
-                        mut.set(pos.getX() + x, pos.getY(), pos.getZ() + z);
-                        BlockState state = player.level.getBlockState(mut);
-                        Vec3 dir = Vec3.atLowerCornerOf(pos.subtract(mut)).normalize().scale(1.2);
-                        Vec3 scaled = dir.scale(0.5);
-                        if (state.getRenderShape() != RenderShape.INVISIBLE)
-                            player.getLevel().sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), player.getX() + dir.x(), player.getY() + 0.1, player.getZ() + dir.z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
-                    }
-
+                Vec3 pos = player.position().add(0, -1, 0);
+                BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
+                for (Vec3 dir : particleDirection) {
+                    Vec3 scaled = dir.scale(0.5);
+                    mut.set(Mth.floor(pos.x() + dir.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + dir.z()));
+                    BlockState state = player.level.getBlockState(mut);
+                    if (state.getRenderShape() != RenderShape.INVISIBLE)
+                        player.getLevel().sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), player.getX() + dir.x(), player.getY() + 0.1, player.getZ() + dir.z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
+                }
                 if (!list.isEmpty()) {
                     CustomDamage src = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
                     boolean success = false;
@@ -224,5 +222,18 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
                 player.hasImpulse = true;
             }
         };
+    }
+
+    private static Vec3[] generateParticleDir(int range) {
+        Vec3[] arr = new Vec3[(2 * range + 1) * (2 * range + 1) - 1];
+        int i = 0;
+        for (int x = -range; x <= range; x++)
+            for (int z = -range; z <= range; z++) {
+                if (x == 0 && z == 0)
+                    continue;
+                arr[i] = new Vec3(x, 0, z).normalize().scale(1.2);
+                i++;
+            }
+        return arr;
     }
 }
