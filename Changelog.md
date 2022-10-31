@@ -6,7 +6,8 @@ RuneCraftory 1.3.3
 - Make golems not attack tamed monster
 - Improved tamed monster and npc following you
 - Improved tamed monster interaction
-- Add right click animation system. Shortsword, hammers and axes use it rn
+- Add right click animation system. Gloves and spears missing atm
+- Make ghost and spirit attack better
 
 RuneCraftory 1.3.2
 ================
