@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.client;
 
-import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
@@ -100,7 +99,6 @@ import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
@@ -116,8 +114,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
@@ -127,7 +123,6 @@ import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.block.Block;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -173,7 +168,7 @@ public class ClientRegister {
                 register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "glove_held"), ItemModelProps.heldMainGlove);
             else if (reg.get() instanceof ItemToolFishingRod)
                 register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "fishing"), ItemModelProps.fishingRods);
-            else if(reg.get() instanceof ShieldItem)
+            else if (reg.get() instanceof ShieldItem)
                 register.register(reg.get(), new ResourceLocation("blocking"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
         });
     }
@@ -344,17 +339,6 @@ public class ClientRegister {
         consumer.register(ModParticles.runey.get(), RuneyParticle.Provider::new);
     }
 
-    public static Map<ResourceLocation, ArmorRenderer> getArmorRenderer() {
-        ImmutableMap.Builder<ResourceLocation, ArmorRenderer> builder = ImmutableMap.builder();
-        builder.put(ModItems.magicEarrings.getID(), ((entityLiving, itemStack, slot, origin) -> {
-            origin.setAllVisible(false);
-            origin.head.visible = true;
-            origin.hat.visible = true;
-            return false;
-        }));
-        return builder.build();
-    }
-
     public interface EntityRendererRegister {
         <T extends Entity> void register(EntityType<? extends T> type, EntityRendererProvider<T> provider);
     }
@@ -373,9 +357,5 @@ public class ClientRegister {
 
     public interface ScreenConstructor<T extends AbstractContainerMenu, U extends Screen & MenuAccess<T>> {
         U create(T var1, Inventory var2, Component var3);
-    }
-
-    public interface ArmorRenderer {
-        boolean render(LivingEntity entityLiving, ItemStack itemStack, EquipmentSlot slot, HumanoidModel<?> origin);
     }
 }

@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.model.ModelGate;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.tenshilib.client.render.RenderUtils;
@@ -28,6 +29,7 @@ public class RenderGate extends LivingEntityRenderer<GateEntity, ModelGate> {
 
     public RenderGate(EntityRendererProvider.Context ctx) {
         super(ctx, new ModelGate(ctx.bakeLayer(ModelGate.LAYER_LOCATION)), 0);
+        ClientHandlers.initNonRendererModels(ctx);
     }
 
     @Override

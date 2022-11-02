@@ -56,8 +56,8 @@ public class ItemModels extends ItemModelProvider {
             if (sup == ModItems.medicinalHerb || sup == ModItems.itemBlockForge || sup == ModItems.itemBlockAccess
                     || sup == ModItems.itemBlockChem || sup == ModItems.itemBlockCooking)
                 continue;
-            if(sup.get() instanceof ShieldItem) {
-                if(sup == ModItems.umbrella)
+            if (sup.get() instanceof ShieldItem) {
+                if (sup == ModItems.umbrella)
                     continue;
                 this.withExistingParent(sup.getID().getPath() + "_blocking", this.modLoc(sup.getID().getPath())).transforms()
                         .transform(ModelBuilder.Perspective.FIRSTPERSON_RIGHT).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()

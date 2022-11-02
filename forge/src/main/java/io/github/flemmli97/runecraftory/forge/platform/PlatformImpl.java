@@ -5,15 +5,18 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.network.Packet;
 import io.github.flemmli97.runecraftory.forge.capability.CapabilityInsts;
+import io.github.flemmli97.runecraftory.forge.item.ForgeArmorBase;
 import io.github.flemmli97.runecraftory.forge.item.StaffItem;
 import io.github.flemmli97.runecraftory.forge.network.PacketHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -125,6 +128,11 @@ public class PlatformImpl implements Platform {
     @Override
     public ItemStaffBase staff(EnumElement starterElement, int amount, Item.Properties properties) {
         return new StaffItem(starterElement, amount, properties);
+    }
+
+    @Override
+    public ItemArmorBase armor(EquipmentSlot slot, Item.Properties properties, ResourceLocation id) {
+        return new ForgeArmorBase(slot, properties, id);
     }
 
     @Override

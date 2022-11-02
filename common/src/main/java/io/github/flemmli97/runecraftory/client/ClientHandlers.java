@@ -23,6 +23,7 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.toasts.RecipeToast;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -32,6 +33,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 public class ClientHandlers {
 
@@ -49,6 +51,7 @@ public class ClientHandlers {
     public static boolean isRuneyWeather;
 
     private static AnimatedPlayerModel animatedPlayerModel;
+    public static Consumer<EntityRendererProvider.Context> initModelConsumer;
 
     private static CameraType pastType = CameraType.FIRST_PERSON;
 
@@ -208,12 +211,12 @@ public class ClientHandlers {
     }
 
     public static AnimatedPlayerModel getAnimatedPlayerModel() {
-        if (animatedPlayerModel == null) {
-            try {
-                animatedPlayerModel = new AnimatedPlayerModel();
-            } catch (IllegalArgumentException ignored) {
-            }
-        }
         return animatedPlayerModel;
+    }
+
+    public static void initNonRendererModels(EntityRendererProvider.Context ctx) {
+        animatedPlayerModel = new AnimatedPlayerModel(ctx.bakeLayer(AnimatedPlayerModel.LAYER_LOCATION));
+        if (initModelConsumer != null)
+            initModelConsumer.accept(ctx);
     }
 }

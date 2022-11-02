@@ -15,8 +15,6 @@ import io.github.flemmli97.runecraftory.common.items.consumables.ItemRecipeBread
 import io.github.flemmli97.runecraftory.common.items.creative.ItemDebug;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemLevelUp;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemSkillUp;
-import io.github.flemmli97.runecraftory.common.items.equipment.ItemAccessoireBase;
-import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemSeedShield;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemStatShield;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemBrush;
@@ -44,6 +42,7 @@ import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.food.FoodProperties;
@@ -363,74 +362,74 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> elvishHarp = staff("elvish_harp", EnumElement.LOVE, 3, Texture.N);
     public static final RegistryEntrySupplier<Item> syringe = staff("syringe", EnumElement.WATER, 2, Texture.N);
 
-    public static final RegistryEntrySupplier<Item> engagementRing = accessoire("engagement_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> cheapBracelet = accessoire("cheap_bracelet", Texture.Y);
-    public static final RegistryEntrySupplier<Item> bronzeBracelet = accessoire("bronze_bracelet", Texture.Y);
-    public static final RegistryEntrySupplier<Item> silverBracelet = accessoire("silver_bracelet", Texture.Y);
-    public static final RegistryEntrySupplier<Item> goldBracelet = accessoire("gold_bracelet", Texture.Y);
-    public static final RegistryEntrySupplier<Item> platinumBracelet = accessoire("platinum_bracelet", Texture.Y);
-    public static final RegistryEntrySupplier<Item> silverRing = accessoire("silver_ring", Texture.Y);
-    //public static final RegistryEntrySupplier<Item> goldRing = accessoire("gold_ring", Texture.Y);
-    //public static final RegistryEntrySupplier<Item> platinumRing = accessoire("platinum_ring", Texture.Y);
-    public static final RegistryEntrySupplier<Item> shieldRing = accessoire("shield_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> criticalRing = accessoire("critical_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> silentRing = accessoire("silent_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> paralysisRing = accessoire("paralysis_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> poisonRing = accessoire("poison_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> magicRing = accessoire("magic_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> throwingRing = accessoire("throwing_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> stayUpRing = accessoire("stay_up_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> aquamarineRing = accessoire("aquamarine_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> amethystRing = accessoire("amethyst_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> emeraldRing = accessoire("emerald_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> sapphireRing = accessoire("sapphire_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> rubyRing = accessoire("ruby_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> cursedRing = accessoire("cursed_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> diamondRing = accessoire("diamond_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> aquamarineBrooch = accessoire("aquamarine_brooch", Texture.N);
-    public static final RegistryEntrySupplier<Item> amethystBrooch = accessoire("amethyst_brooch", Texture.N);
-    public static final RegistryEntrySupplier<Item> emeraldBrooch = accessoire("emerald_brooch", Texture.N);
-    public static final RegistryEntrySupplier<Item> sapphireBrooch = accessoire("sapphire_brooch", Texture.N);
-    public static final RegistryEntrySupplier<Item> rubyBrooch = accessoire("ruby_brooch", Texture.N);
-    public static final RegistryEntrySupplier<Item> diamondBrooch = accessoire("diamond_brooch", Texture.N);
-    public static final RegistryEntrySupplier<Item> dolphinBrooch = accessoire("dolphin_brooch", Texture.N);
-    public static final RegistryEntrySupplier<Item> fireRing = accessoire("fire_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> windRing = accessoire("wind_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> waterRing = accessoire("water_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> earthRing = accessoire("earth_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> happyRing = accessoire("happy_ring", Texture.N);
-    public static final RegistryEntrySupplier<Item> silverPendant = accessoire("silver_pendant", Texture.N);
-    public static final RegistryEntrySupplier<Item> starPendant = accessoire("star_pendant", Texture.N);
-    public static final RegistryEntrySupplier<Item> sunPendant = accessoire("sun_pendant", Texture.N);
-    public static final RegistryEntrySupplier<Item> fieldPendant = accessoire("field_pendant", Texture.N);
-    public static final RegistryEntrySupplier<Item> dewPendant = accessoire("dew_pendant", Texture.N);
-    public static final RegistryEntrySupplier<Item> earthPendant = accessoire("earth_pendant", Texture.N);
-    public static final RegistryEntrySupplier<Item> heartPendant = accessoire("heart_pendant", Texture.N);
-    public static final RegistryEntrySupplier<Item> strangePendant = accessoire("strange_pendant", Texture.N);
-    public static final RegistryEntrySupplier<Item> anettesNecklace = accessoire("anettes_necklace", Texture.N);
-    public static final RegistryEntrySupplier<Item> workGloves = accessoire("work_gloves", Texture.N);
-    public static final RegistryEntrySupplier<Item> glovesAccess = accessoire("gloves_accessory", Texture.N);
-    public static final RegistryEntrySupplier<Item> powerGloves = accessoire("power_gloves", Texture.N);
-    public static final RegistryEntrySupplier<Item> earrings = accessoire("earrings", Texture.N);
-    public static final RegistryEntrySupplier<Item> witchEarrings = accessoire("witch_earrings", Texture.N);
-    public static final RegistryEntrySupplier<Item> magicEarrings = accessoire("magic_earrings", EquipmentSlot.HEAD, Texture.Y);
-    public static final RegistryEntrySupplier<Item> charm = accessoire("charm", Texture.N);
-    public static final RegistryEntrySupplier<Item> holyAmulet = accessoire("holy_amulet", Texture.N);
-    public static final RegistryEntrySupplier<Item> rosary = accessoire("rosary", Texture.N);
-    public static final RegistryEntrySupplier<Item> talisman = accessoire("talisman", Texture.N);
-    public static final RegistryEntrySupplier<Item> magicCharm = accessoire("magic_charm", Texture.N);
-    public static final RegistryEntrySupplier<Item> leatherBelt = accessoire("leather_belt", Texture.N);
-    public static final RegistryEntrySupplier<Item> luckyStrike = accessoire("lucky_strike", Texture.N);
-    public static final RegistryEntrySupplier<Item> champBelt = accessoire("champ_belt", Texture.N);
-    public static final RegistryEntrySupplier<Item> handKnitScarf = accessoire("hand_knit_scarf", Texture.N);
-    public static final RegistryEntrySupplier<Item> fluffyScarf = accessoire("fluffy_scarf", Texture.N);
-    public static final RegistryEntrySupplier<Item> herosProof = accessoire("heros_proof", Texture.N);
-    public static final RegistryEntrySupplier<Item> proofOfWisdom = accessoire("proof_of_wisdom", Texture.N);
-    public static final RegistryEntrySupplier<Item> artOfAttack = accessoire("art_of_attack", Texture.N);
-    public static final RegistryEntrySupplier<Item> artOfDefense = accessoire("art_of_defense", Texture.N);
-    public static final RegistryEntrySupplier<Item> artOfMagic = accessoire("art_of_magic", Texture.N);
-    public static final RegistryEntrySupplier<Item> badge = accessoire("badge", Texture.N);
-    public static final RegistryEntrySupplier<Item> courageBadge = accessoire("courage_badge", Texture.N);
+    public static final RegistryEntrySupplier<Item> engagementRing = equipment(EquipmentSlot.LEGS, "engagement_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> cheapBracelet = equipment(EquipmentSlot.LEGS, "cheap_bracelet", Texture.Y);
+    public static final RegistryEntrySupplier<Item> bronzeBracelet = equipment(EquipmentSlot.LEGS, "bronze_bracelet", Texture.Y);
+    public static final RegistryEntrySupplier<Item> silverBracelet = equipment(EquipmentSlot.LEGS, "silver_bracelet", Texture.Y);
+    public static final RegistryEntrySupplier<Item> goldBracelet = equipment(EquipmentSlot.LEGS, "gold_bracelet", Texture.Y);
+    public static final RegistryEntrySupplier<Item> platinumBracelet = equipment(EquipmentSlot.LEGS, "platinum_bracelet", Texture.Y);
+    public static final RegistryEntrySupplier<Item> silverRing = equipment(EquipmentSlot.LEGS, "silver_ring", Texture.Y);
+    //public static final RegistryEntrySupplier<Item> goldRing = equipment(EquipmentSlot.LEGS, "gold_ring", Texture.Y);
+    //public static final RegistryEntrySupplier<Item> platinumRing = equipment(EquipmentSlot.LEGS, "platinum_ring", Texture.Y);
+    public static final RegistryEntrySupplier<Item> shieldRing = equipment(EquipmentSlot.LEGS, "shield_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> criticalRing = equipment(EquipmentSlot.LEGS, "critical_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> silentRing = equipment(EquipmentSlot.LEGS, "silent_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> paralysisRing = equipment(EquipmentSlot.LEGS, "paralysis_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> poisonRing = equipment(EquipmentSlot.LEGS, "poison_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> magicRing = equipment(EquipmentSlot.LEGS, "magic_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> throwingRing = equipment(EquipmentSlot.LEGS, "throwing_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> stayUpRing = equipment(EquipmentSlot.LEGS, "stay_up_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> aquamarineRing = equipment(EquipmentSlot.LEGS, "aquamarine_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> amethystRing = equipment(EquipmentSlot.LEGS, "amethyst_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> emeraldRing = equipment(EquipmentSlot.LEGS, "emerald_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> sapphireRing = equipment(EquipmentSlot.LEGS, "sapphire_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> rubyRing = equipment(EquipmentSlot.LEGS, "ruby_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> cursedRing = equipment(EquipmentSlot.LEGS, "cursed_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> diamondRing = equipment(EquipmentSlot.LEGS, "diamond_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> aquamarineBrooch = equipment(EquipmentSlot.LEGS, "aquamarine_brooch", Texture.N);
+    public static final RegistryEntrySupplier<Item> amethystBrooch = equipment(EquipmentSlot.LEGS, "amethyst_brooch", Texture.N);
+    public static final RegistryEntrySupplier<Item> emeraldBrooch = equipment(EquipmentSlot.LEGS, "emerald_brooch", Texture.N);
+    public static final RegistryEntrySupplier<Item> sapphireBrooch = equipment(EquipmentSlot.LEGS, "sapphire_brooch", Texture.N);
+    public static final RegistryEntrySupplier<Item> rubyBrooch = equipment(EquipmentSlot.LEGS, "ruby_brooch", Texture.N);
+    public static final RegistryEntrySupplier<Item> diamondBrooch = equipment(EquipmentSlot.LEGS, "diamond_brooch", Texture.N);
+    public static final RegistryEntrySupplier<Item> dolphinBrooch = equipment(EquipmentSlot.LEGS, "dolphin_brooch", Texture.N);
+    public static final RegistryEntrySupplier<Item> fireRing = equipment(EquipmentSlot.LEGS, "fire_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> windRing = equipment(EquipmentSlot.LEGS, "wind_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> waterRing = equipment(EquipmentSlot.LEGS, "water_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> earthRing = equipment(EquipmentSlot.LEGS, "earth_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> happyRing = equipment(EquipmentSlot.LEGS, "happy_ring", Texture.N);
+    public static final RegistryEntrySupplier<Item> silverPendant = equipment(EquipmentSlot.LEGS, "silver_pendant", Texture.N);
+    public static final RegistryEntrySupplier<Item> starPendant = equipment(EquipmentSlot.LEGS, "star_pendant", Texture.N);
+    public static final RegistryEntrySupplier<Item> sunPendant = equipment(EquipmentSlot.LEGS, "sun_pendant", Texture.N);
+    public static final RegistryEntrySupplier<Item> fieldPendant = equipment(EquipmentSlot.LEGS, "field_pendant", Texture.N);
+    public static final RegistryEntrySupplier<Item> dewPendant = equipment(EquipmentSlot.LEGS, "dew_pendant", Texture.N);
+    public static final RegistryEntrySupplier<Item> earthPendant = equipment(EquipmentSlot.LEGS, "earth_pendant", Texture.N);
+    public static final RegistryEntrySupplier<Item> heartPendant = equipment(EquipmentSlot.LEGS, "heart_pendant", Texture.N);
+    public static final RegistryEntrySupplier<Item> strangePendant = equipment(EquipmentSlot.LEGS, "strange_pendant", Texture.N);
+    public static final RegistryEntrySupplier<Item> anettesNecklace = equipment(EquipmentSlot.LEGS, "anettes_necklace", Texture.N);
+    public static final RegistryEntrySupplier<Item> workGloves = equipment(EquipmentSlot.LEGS, "work_gloves", Texture.N);
+    public static final RegistryEntrySupplier<Item> glovesAccess = equipment(EquipmentSlot.LEGS, "gloves_accessory", Texture.N);
+    public static final RegistryEntrySupplier<Item> powerGloves = equipment(EquipmentSlot.LEGS, "power_gloves", Texture.N);
+    public static final RegistryEntrySupplier<Item> earrings = equipment(EquipmentSlot.LEGS, "earrings", Texture.N);
+    public static final RegistryEntrySupplier<Item> witchEarrings = equipment(EquipmentSlot.LEGS, "witch_earrings", Texture.N);
+    public static final RegistryEntrySupplier<Item> magicEarrings = equipment(EquipmentSlot.LEGS, "magic_earrings", Texture.Y);
+    public static final RegistryEntrySupplier<Item> charm = equipment(EquipmentSlot.LEGS, "charm", Texture.N);
+    public static final RegistryEntrySupplier<Item> holyAmulet = equipment(EquipmentSlot.LEGS, "holy_amulet", Texture.N);
+    public static final RegistryEntrySupplier<Item> rosary = equipment(EquipmentSlot.LEGS, "rosary", Texture.N);
+    public static final RegistryEntrySupplier<Item> talisman = equipment(EquipmentSlot.LEGS, "talisman", Texture.N);
+    public static final RegistryEntrySupplier<Item> magicCharm = equipment(EquipmentSlot.LEGS, "magic_charm", Texture.N);
+    public static final RegistryEntrySupplier<Item> leatherBelt = equipment(EquipmentSlot.LEGS, "leather_belt", Texture.N);
+    public static final RegistryEntrySupplier<Item> luckyStrike = equipment(EquipmentSlot.LEGS, "lucky_strike", Texture.N);
+    public static final RegistryEntrySupplier<Item> champBelt = equipment(EquipmentSlot.LEGS, "champ_belt", Texture.N);
+    public static final RegistryEntrySupplier<Item> handKnitScarf = equipment(EquipmentSlot.LEGS, "hand_knit_scarf", Texture.N);
+    public static final RegistryEntrySupplier<Item> fluffyScarf = equipment(EquipmentSlot.LEGS, "fluffy_scarf", Texture.N);
+    public static final RegistryEntrySupplier<Item> herosProof = equipment(EquipmentSlot.LEGS, "heros_proof", Texture.N);
+    public static final RegistryEntrySupplier<Item> proofOfWisdom = equipment(EquipmentSlot.LEGS, "proof_of_wisdom", Texture.N);
+    public static final RegistryEntrySupplier<Item> artOfAttack = equipment(EquipmentSlot.LEGS, "art_of_attack", Texture.N);
+    public static final RegistryEntrySupplier<Item> artOfDefense = equipment(EquipmentSlot.LEGS, "art_of_defense", Texture.N);
+    public static final RegistryEntrySupplier<Item> artOfMagic = equipment(EquipmentSlot.LEGS, "art_of_magic", Texture.N);
+    public static final RegistryEntrySupplier<Item> badge = equipment(EquipmentSlot.LEGS, "badge", Texture.N);
+    public static final RegistryEntrySupplier<Item> courageBadge = equipment(EquipmentSlot.LEGS, "courage_badge", Texture.N);
 
     public static final RegistryEntrySupplier<Item> shirt = equipment(EquipmentSlot.CHEST, "shirt", Texture.Y);
     public static final RegistryEntrySupplier<Item> vest = equipment(EquipmentSlot.CHEST, "vest", Texture.Y);
@@ -1199,7 +1198,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> cookingBread = ITEMS.register("cooking_bread", () -> new ItemRecipeBread(EnumCrafting.COOKING, new Item.Properties().tab(RFCreativeTabs.food).stacksTo(16)));
 
     public static final RegistryEntrySupplier<Item> shippingBin = blockItem("shipping_bin", () -> ModBlocks.shipping);
-    public static final RegistryEntrySupplier<Item> requestBoard = blockItem("quest_box", () -> ModBlocks.board);
+    public static final RegistryEntrySupplier<Item> requestBoard = noTexblockItem("quest_box", () -> ModBlocks.board);
     public static final RegistryEntrySupplier<Item> spawner = blockItem("boss_spawner", () -> ModBlocks.bossSpawner, RFCreativeTabs.monsters);
     public static final RegistryEntrySupplier<Item> farmland = blockItem("farmland", () -> ModBlocks.farmland, null);
 
@@ -1345,41 +1344,13 @@ public class ModItems {
         return sup;
     }
 
-    public static RegistryEntrySupplier<Item> accessoire(String name, Texture texture) {
-        if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAccessoireBase(new Item.Properties()));
-            NOTEX.add(sup);
-            return sup;
-        }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAccessoireBase(new Item.Properties().tab(RFCreativeTabs.equipment)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
-        return sup;
-    }
-
-    public static RegistryEntrySupplier<Item> accessoire(String name, EquipmentSlot renderSlot, Texture texture) {
-        if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAccessoireBase(renderSlot, new Item.Properties()));
-            NOTEX.add(sup);
-            return sup;
-        }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAccessoireBase(renderSlot, new Item.Properties().tab(RFCreativeTabs.equipment)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
-        return sup;
-    }
-
     public static RegistryEntrySupplier<Item> equipment(EquipmentSlot slot, String name, Texture texture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemArmorBase(slot, new Item.Properties()));
+            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties(), new ResourceLocation(RuneCraftory.MODID, name)));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemArmorBase(slot, new Item.Properties().tab(RFCreativeTabs.equipment)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties().tab(RFCreativeTabs.equipment), new ResourceLocation(RuneCraftory.MODID, name)));
         TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
             lo.add(sup);
             return lo;
@@ -1403,6 +1374,12 @@ public class ModItems {
 
     public static RegistryEntrySupplier<Item> blockItem(String name, Supplier<Supplier<Block>> block) {
         return ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().tab(RFCreativeTabs.blocks)));
+    }
+
+    public static RegistryEntrySupplier<Item> noTexblockItem(String name, Supplier<Supplier<Block>> block) {
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties()));
+        NOTEX.add(sup);
+        return sup;
     }
 
     public static RegistryEntrySupplier<Item> blockItem(String name, Supplier<Supplier<Block>> block, CreativeModeTab group) {

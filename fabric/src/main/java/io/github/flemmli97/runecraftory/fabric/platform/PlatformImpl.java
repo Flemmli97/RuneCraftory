@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.network.Packet;
 import io.github.flemmli97.runecraftory.fabric.mixin.DamageSourceAccessor;
@@ -170,6 +171,11 @@ public class PlatformImpl implements Platform {
     @Override
     public ItemStaffBase staff(EnumElement starterElement, int amount, Item.Properties properties) {
         return new ItemStaffBase(starterElement, amount, properties);
+    }
+
+    @Override
+    public ItemArmorBase armor(EquipmentSlot slot, Item.Properties properties, ResourceLocation id) {
+        return new ItemArmorBase(slot, properties, id);
     }
 
     @Override

@@ -9,7 +9,6 @@ import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -38,9 +37,9 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
 
     protected final BlockBenchAnimations anim;
 
-    public AnimatedPlayerModel() {
+    public AnimatedPlayerModel(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(Minecraft.getInstance().getEntityModels().bakeLayer(LAYER_LOCATION).getChild("Body"), "Body");
+        this.model = new ModelPartHandler(root.getChild("Body"), "Body");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "player"));
         this.head = this.model.getPart("Head");
         this.rightArm = this.model.getPart("RightArm");

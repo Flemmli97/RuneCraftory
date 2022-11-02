@@ -4,12 +4,14 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.items.equipment.ItemArmorBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.network.Packet;
 import io.github.flemmli97.tenshilib.platform.InitUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
@@ -81,6 +83,8 @@ public interface Platform {
     boolean canEquip(ItemStack stack, EquipmentSlot slot, LivingEntity entity);
 
     ItemStaffBase staff(EnumElement starterElement, int amount, Item.Properties properties);
+
+    ItemArmorBase armor(EquipmentSlot slot, Item.Properties properties, ResourceLocation id);
 
     //Block Stuff
 
