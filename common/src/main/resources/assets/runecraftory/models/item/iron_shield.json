@@ -1,0 +1,110 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "runecraftory:item/iron_shield"
+	},
+	"elements": [
+		{
+			"name": "handle",
+			"from": [7, 8, 9],
+			"to": [9, 14, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 12]},
+			"faces": {
+				"north": {"uv": [1.5, 5.25, 2, 6.75], "texture": "#0"},
+				"east": {"uv": [0, 5.25, 1.5, 6.75], "texture": "#0"},
+				"south": {"uv": [3.5, 5.25, 4, 6.75], "texture": "#0"},
+				"west": {"uv": [2, 5.25, 3.5, 6.75], "texture": "#0"},
+				"up": {"uv": [2, 5.25, 1.5, 3.75], "texture": "#0"},
+				"down": {"uv": [2.5, 3.75, 2, 5.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "shield",
+			"from": [2, 6, 8],
+			"to": [14, 20, 9],
+			"faces": {
+				"north": {"uv": [0.25, 0.25, 3.25, 3.75], "texture": "#0"},
+				"east": {"uv": [0, 0.25, 0.25, 3.75], "texture": "#0"},
+				"south": {"uv": [3.5, 0.25, 6.5, 3.75], "texture": "#0"},
+				"west": {"uv": [3.25, 0.25, 3.5, 3.75], "texture": "#0"},
+				"up": {"uv": [3.25, 0.25, 0.25, 0], "texture": "#0"},
+				"down": {"uv": [6.25, 0, 3.25, 0.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "shield",
+			"from": [3, 3, 8],
+			"to": [13, 6, 9],
+			"faces": {
+				"north": {"uv": [4.25, 4, 6.75, 4.75], "texture": "#0"},
+				"east": {"uv": [4, 4, 4.25, 4.75], "texture": "#0"},
+				"south": {"uv": [7, 4, 9.5, 4.75], "texture": "#0"},
+				"west": {"uv": [6.75, 4, 7, 4.75], "texture": "#0"},
+				"up": {"uv": [6.75, 4, 4.25, 3.75], "texture": "#0"},
+				"down": {"uv": [9.25, 3.75, 6.75, 4], "texture": "#0"}
+			}
+		},
+		{
+			"name": "shield",
+			"from": [5, 2, 8],
+			"to": [11, 3, 9],
+			"faces": {
+				"north": {"uv": [0.25, 7, 1.75, 7.25], "texture": "#0"},
+				"east": {"uv": [0, 7, 0.25, 7.25], "texture": "#0"},
+				"south": {"uv": [2, 7, 3.5, 7.25], "texture": "#0"},
+				"west": {"uv": [1.75, 7, 2, 7.25], "texture": "#0"},
+				"up": {"uv": [1.75, 7, 0.25, 6.75], "texture": "#0"},
+				"down": {"uv": [3.25, 6.75, 1.75, 7], "texture": "#0"}
+			}
+		}
+	],
+	"gui_light": "front",
+	"overrides": [
+		{
+			"predicate": {
+				"blocking": 1
+			},
+			"model": "runecraftory:item/iron_shield_blocking"
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, -90, 0],
+			"translation": [4, -5, 4]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, -90, 0],
+			"translation": [4, -5, 4]
+		},
+		"firstperson_righthand": {
+			"translation": [3, -5.5, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [3, -5.5, 0]
+		},
+		"ground": {
+			"translation": [0, 2, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [179.67, 35.79, -171.16],
+			"translation": [-1.25, -2.75, 0],
+			"scale": [0.75, 0.75, 0.75]
+		},
+		"head": {
+			"translation": [0, 13, -7]
+		},
+		"fixed": {
+			"translation": [0, -3, -1.25]
+		}
+	},
+	"groups": [
+		{
+			"name": "shield",
+			"origin": [-1, 15.5, 3],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
+}

@@ -1,0 +1,53 @@
+{
+  "parent": "runecraftory:item/bone_shield",
+  "display": {
+    "firstperson_righthand": {
+      "rotation": [
+        9.25,
+        0.37,
+        8
+      ],
+      "translation": [
+        -0.5,
+        -4.25,
+        0
+      ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [
+        9.25,
+        0.37,
+        8
+      ],
+      "translation": [
+        -0.5,
+        -4.25,
+        0
+      ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [
+        55,
+        -47.5,
+        0
+      ],
+      "translation": [
+        6,
+        -1.25,
+        -4
+      ]
+    },
+    "thirdperson_righthand": {
+      "rotation": [
+        55,
+        -47.5,
+        0
+      ],
+      "translation": [
+        6,
+        -1.25,
+        -4
+      ]
+    }
+  }
+}

@@ -210,9 +210,9 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     }
 
     public static List<Entity> getEntitiesIn(LivingEntity entity, float reach, float aoe, Predicate<Entity> pred) {
-        CircleSector circ = new CircleSector(entity.position().add(0.0D, 0.1D, 0.0D), Vec3.directionFromRotation(0.0F, entity.getViewYRot(1.0F)), reach, aoe, entity);
+        CircleSector circ = new CircleSector(entity.position().add(0.0, 0.1, 0.0), Vec3.directionFromRotation(0.0F, entity.getViewYRot(1.0F)), reach, aoe, entity);
         return entity.level.getEntities(entity, entity.getBoundingBox().inflate(reach + 1.0F), (t) -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable() &&
-                circ.intersects(t.level, t.getBoundingBox().inflate(0.15D, t.getY() - entity.getY() >= 0.9 ? 1.15 : (t.getBbHeight() <= 0.3D ? t.getBbHeight() + 0.2 : 0.2D), 0.15D)));
+                circ.intersects(t.level, t.getBoundingBox().inflate(0.15, t.getBbHeight() <= 0.3 ? t.getBbHeight() + 0.15 : 0.15, 0.15D).expandTowards(0, -1.5, 0)));
     }
 
     public static Consumer<AnimatedAction> movePlayer(Player player) {

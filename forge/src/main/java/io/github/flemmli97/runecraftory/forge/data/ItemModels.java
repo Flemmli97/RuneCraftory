@@ -21,6 +21,7 @@ import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TieredItem;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -55,7 +56,15 @@ public class ItemModels extends ItemModelProvider {
             if (sup == ModItems.medicinalHerb || sup == ModItems.itemBlockForge || sup == ModItems.itemBlockAccess
                     || sup == ModItems.itemBlockChem || sup == ModItems.itemBlockCooking)
                 continue;
-            if (sup == ModItems.farmland)
+            if(sup.get() instanceof ShieldItem) {
+                if(sup == ModItems.umbrella)
+                    continue;
+                this.withExistingParent(sup.getID().getPath() + "_blocking", this.modLoc(sup.getID().getPath())).transforms()
+                        .transform(ModelBuilder.Perspective.FIRSTPERSON_RIGHT).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()
+                        .transform(ModelBuilder.Perspective.FIRSTPERSON_LEFT).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()
+                        .transform(ModelBuilder.Perspective.THIRDPERSON_LEFT).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end()
+                        .transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end();
+            } else if (sup == ModItems.farmland)
                 this.withExistingParent(sup.getID().getPath(), "block/farmland");
             else if (sup == ModItems.spawner)
                 this.withExistingParent(sup.getID().getPath(), "block/spawner");
