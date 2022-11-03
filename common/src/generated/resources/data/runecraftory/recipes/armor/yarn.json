@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:armor",
+  "level": 5,
+  "cost": 15,
+  "ingredients": [
+    {
+      "tag": "runecraftory:furs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:yarn"
+  }
+}

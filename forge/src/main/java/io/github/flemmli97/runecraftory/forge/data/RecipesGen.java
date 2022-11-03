@@ -80,6 +80,16 @@ public class RecipesGen extends RecipeProvider {
                 .requires(ModItems.milkL.get())
                 .unlockedBy("wool", has(ItemTags.WOOL))
                 .save(consumer, RuneCraftory.MODID + ":large_milk_conversion");
+        ShapelessRecipeBuilder.shapeless(Items.MUSHROOM_STEW)
+                .requires(ModItems.mushroom.get(), 2)
+                .requires(Items.BOWL)
+                .unlockedBy("mushroom_stew", has(ModItems.mushroom.get()))
+                .save(consumer, RuneCraftory.MODID + ":mushroom_stew");
+        ShapelessRecipeBuilder.shapeless(Items.MUSHROOM_STEW, 2)
+                .requires(ModItems.monarchMushroom.get(), 2)
+                .requires(Items.BOWL)
+                .unlockedBy("mushroom_stew", has(ModItems.monarchMushroom.get()))
+                .save(consumer, RuneCraftory.MODID + ":mushroom_stew_monarch");
 
         ShapedRecipeBuilder.shaped(ModItems.shippingBin.get())
                 .pattern("ses")
@@ -361,6 +371,8 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.staff.get(), 1, 22, 40)
                 .addIngredient(ModItems.crystalMagic.get()).addIngredient(ModTags.sticks).build(consumer);
 
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.yarn.get(), 1, 5, 15)
+                .addIngredient(ModTags.furs).build(consumer);
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.cheapBracelet.get(), 1, 3, 15)
                 .addIngredient(ModTags.minerals).build(consumer);
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.bronzeBracelet.get(), 1, 15, 15)

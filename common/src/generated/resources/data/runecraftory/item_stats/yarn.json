@@ -1,7 +1,10 @@
 {
-  "itemStats": {},
-  "buyPrice": 0,
-  "sellPrice": 0,
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 3.0,
+    "runecraftory:attribute.rf.magic_def": 1.0
+  },
+  "buyPrice": 400,
+  "sellPrice": 75,
   "upgradeDifficulty": 0,
   "element": "NONE",
   "item": "runecraftory:yarn"

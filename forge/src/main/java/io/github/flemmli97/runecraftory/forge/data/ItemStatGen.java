@@ -567,7 +567,9 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.tabletGolem.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.stoneSpirit.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.tabletTruth.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.yarn.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.yarn.get(), new ItemStat.Builder(400, 75, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 3)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 1));
         this.addStat(ModItems.oldBandage.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.ambrosiasThorns.get(), new ItemStat.Builder(7500, 350, 21)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 7)
