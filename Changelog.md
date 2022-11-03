@@ -9,6 +9,7 @@ RuneCraftory 1.3.3
 - Add right click animation system. Gloves and spears missing atm
 - Make ghost and spirit attack better
 - Fix NPC despawning
+- Empty farmland can grow herbs
 
 RuneCraftory 1.3.2
 ================

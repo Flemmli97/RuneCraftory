@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.utils.GrassRegrowUtil;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -149,6 +150,9 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
             if (isWet)
                 level.setBlockAndUpdate(this.worldPosition, this.getBlockState().setValue(FarmBlock.MOISTURE, 0));
             this.regenFarmlandStats();
+            if (cropState.isAir() && level.random.nextFloat() < 0.02) {
+                GrassRegrowUtil.tryGrowHerb(level, cropPos);
+            }
             return;
         }
         if (!vanilla || ((CropBlock) cropState.getBlock()).isMaxAge(cropState)) {
