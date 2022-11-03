@@ -69,7 +69,6 @@ public class ItemStat {
     private Spell tier2Spell;
     private Spell tier3Spell;
 
-    private transient Map<Attribute, Double> itemStatView;
     private transient ResourceLocation id;
 
     private ItemStat() {
@@ -133,11 +132,9 @@ public class ItemStat {
     }
 
     public Map<Attribute, Double> itemStats() {
-        if (this.itemStatView == null) {
-            this.itemStatView = new TreeMap<>(ModAttributes.sorted);
-            this.itemStatView.putAll(this.itemStats);
-        }
-        return this.itemStatView;
+        TreeMap<Attribute, Double> map = new TreeMap<>(ModAttributes.sorted);
+        map.putAll(this.itemStats);
+        return map;
     }
 
     @Nullable

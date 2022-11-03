@@ -18,7 +18,6 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
-import io.github.flemmli97.tenshilib.common.utils.CircleSector;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -178,7 +177,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     public static void performRightClickActionPlayer(ItemStack stack, ServerPlayer player, float range) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             Runnable run = () -> {
-                List<Entity> list = getEntitiesIn(player, range, 360, null);
+                List<Entity> list = getEntitiesIn(player, range, null);
                 Platform.INSTANCE.sendToClient(new S2CScreenShake(4, 1), player);
                 player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.DRAGON_FIREBALL_EXPLODE, player.getSoundSource(), 1.0f, 0.4f);
                 Vec3 pos = player.position().add(0, -1, 0);
@@ -209,10 +208,20 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
         });
     }
 
-    public static List<Entity> getEntitiesIn(LivingEntity entity, float reach, float aoe, Predicate<Entity> pred) {
-        CircleSector circ = new CircleSector(entity.position().add(0.0, 0.1, 0.0), Vec3.directionFromRotation(0.0F, entity.getViewYRot(1.0F)), reach, aoe, entity);
-        return entity.level.getEntities(entity, entity.getBoundingBox().inflate(reach + 1.0F), (t) -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable() &&
-                circ.intersects(t.level, t.getBoundingBox().inflate(0.15, t.getBbHeight() <= 0.3 ? t.getBbHeight() + 0.15 : 0.15, 0.15D).expandTowards(0, -1.5, 0)));
+    public static List<Entity> getEntitiesIn(LivingEntity entity, float reach, Predicate<Entity> pred) {
+        return entity.level.getEntities(entity, entity.getBoundingBox().inflate(reach, 1, reach), (t) -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable() &&
+                inReach(entity.position(), t, reach - 0.5f));
+    }
+
+    private static boolean inReach(Vec3 origin, Entity entity, float reach) {
+        double dX = entity.getX() - origin.x;
+        double dY = entity.getY() - origin.y();
+        if (dY < -0.15 || dY > 1.15)
+            return false;
+        dY = Math.abs(dY) + 0.75;
+        double dZ = entity.getZ() - origin.z;
+        reach += entity.getBbWidth() * 0.5;
+        return dX * dX + dY * dY + dZ * dZ <= reach * reach;
     }
 
     public static Consumer<AnimatedAction> movePlayer(Player player) {
