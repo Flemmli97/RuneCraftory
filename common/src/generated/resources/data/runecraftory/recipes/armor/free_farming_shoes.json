@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:armor",
+  "level": 9,
+  "cost": 10,
+  "ingredients": [
+    {
+      "tag": "runecraftory:furs"
+    },
+    {
+      "tag": "c:string"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:free_farming_shoes"
+  }
+}

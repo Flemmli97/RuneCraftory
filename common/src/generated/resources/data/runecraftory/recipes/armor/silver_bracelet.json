@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:armor",
+  "level": 25,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "c:silver_ingots"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:silver_bracelet"
+  }
+}

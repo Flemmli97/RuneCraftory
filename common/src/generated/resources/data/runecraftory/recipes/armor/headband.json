@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:armor",
+  "level": 1,
+  "cost": 10,
+  "ingredients": [
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:headband"
+  }
+}

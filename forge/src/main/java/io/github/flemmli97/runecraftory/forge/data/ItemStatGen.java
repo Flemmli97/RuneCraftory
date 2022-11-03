@@ -383,14 +383,59 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.glass.get(), new ItemStat.Builder(2000, 400, 1));
 
         this.addStat(ModItems.cheapBracelet.get(), new ItemStat.Builder(120, 21, 0)
-                .addAttribute(ModAttributes.RF_DEFENCE.get(), 1.5));
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 1.5));
         this.addStat(ModItems.bronzeBracelet.get(), new ItemStat.Builder(850, 38, 0)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 4));
+        this.addStat(ModItems.silverBracelet.get(), new ItemStat.Builder(3000, 300, 0)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 10));
+        this.addStat(ModItems.goldBracelet.get(), new ItemStat.Builder(15000, 750, 0)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 25));
+        this.addStat(ModItems.platinumBracelet.get(), new ItemStat.Builder(50000, 1000, 0)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 50));
+        this.addStat(ModItems.silverRing.get(), new ItemStat.Builder(20000, 600, 0)
+                .addAttribute(ModAttributes.RFRESLIGHT.get(), 50)
+                .addAttribute(ModAttributes.RFRESDARK.get(), 50));
+
+        this.addStat(ModItems.shirt.get(), new ItemStat.Builder(120, 13, 0)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 2));
+        this.addStat(ModItems.vest.get(), new ItemStat.Builder(1000, 30, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 7)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 2));
+        this.addStat(ModItems.cottonCloth.get(), new ItemStat.Builder(4000, 90, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 12)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 4));
+
+        this.addStat(ModItems.headband.get(), new ItemStat.Builder(50, 5, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));
+        this.addStat(ModItems.blueRibbon.get(), new ItemStat.Builder(500, 35, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 3)
+                .addAttribute(ModAttributes.RFRESSEAL.get(), 5));
+        this.addStat(ModItems.greenRibbon.get(), new ItemStat.Builder(500, 35, 0)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 3)
+                .addAttribute(ModAttributes.RFRESSEAL.get(), 5));
+        this.addStat(ModItems.purpleRibbon.get(), new ItemStat.Builder(500, 35, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 2)
+                .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 1)
+                .addAttribute(ModAttributes.RFRESSEAL.get(), 5));
+
+        this.addStat(ModItems.leatherBoots.get(), new ItemStat.Builder(75, 10, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 2));
+        this.addStat(ModItems.freeFarmingShoes.get(), new ItemStat.Builder(450, 40, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 3)
+                .addAttribute(ModAttributes.RFRESFAT.get(), 3)
+                .addAttribute(ModAttributes.RFRESCOLD.get(), 3));
+        this.addStat(ModItems.piyoSandals.get(), new ItemStat.Builder(400, 35, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 5)
+                .addAttribute(ModAttributes.RFRESLOVE.get(), 1)
+                .addAttribute(ModAttributes.RFRESDIZ.get(), 50)
+                .addAttribute(ModAttributes.RFDIZ.get(), 20));
 
         this.addStat(Items.SHIELD, new ItemStat.Builder(200, 14, 0)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 2));
         this.addStat(ModItems.smallShield.get(), new ItemStat.Builder(600, 23, 0)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 4));
+        this.addStat(ModItems.ironShield.get(), new ItemStat.Builder(1000, 50, 0)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), 7));
 
         this.addStat(ModItems.scrap.get(), new ItemStat.Builder(13, 1, 1));
         this.addStat(ModItems.scrapPlus.get(), new ItemStat.Builder(0, 2, 1)

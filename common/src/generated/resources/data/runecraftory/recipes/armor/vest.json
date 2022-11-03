@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:armor",
+  "level": 10,
+  "cost": 25,
+  "ingredients": [
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "tag": "runecraftory:furs"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:vest"
+  }
+}

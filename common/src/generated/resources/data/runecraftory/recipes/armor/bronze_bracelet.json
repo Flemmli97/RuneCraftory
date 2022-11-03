@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:armor",
+  "level": 15,
+  "cost": 15,
+  "ingredients": [
+    {
+      "tag": "c:copper_blocks"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:bronze_bracelet"
+  }
+}

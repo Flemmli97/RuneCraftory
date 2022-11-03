@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:armor",
+  "level": 7,
+  "cost": 15,
+  "ingredients": [
+    {
+      "item": "runecraftory:green_grass"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "tag": "c:string"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:green_ribbon"
+  }
+}

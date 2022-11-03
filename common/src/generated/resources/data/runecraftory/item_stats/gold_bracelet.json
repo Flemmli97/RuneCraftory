@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_def": 25.0
+  },
+  "buyPrice": 15000,
+  "sellPrice": 750,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "item": "runecraftory:gold_bracelet"
+}

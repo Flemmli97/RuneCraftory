@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 7.0
+  },
+  "buyPrice": 1000,
+  "sellPrice": 50,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "item": "runecraftory:iron_shield"
+}

@@ -1,0 +1,12 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 3.0,
+    "runecraftory:attribute.rf.res_fatigue": 3.0,
+    "runecraftory:attribute.rf.res_cold": 3.0
+  },
+  "buyPrice": 450,
+  "sellPrice": 40,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "item": "runecraftory:free_farming_shoes"
+}

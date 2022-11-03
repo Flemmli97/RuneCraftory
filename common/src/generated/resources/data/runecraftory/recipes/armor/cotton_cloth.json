@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:armor",
+  "level": 15,
+  "cost": 25,
+  "ingredients": [
+    {
+      "item": "runecraftory:old_bandage"
+    },
+    {
+      "item": "runecraftory:old_bandage"
+    },
+    {
+      "tag": "c:string"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:cotton_cloth"
+  }
+}

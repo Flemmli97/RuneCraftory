@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 16,
+  "cost": 45,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "tag": "c:gold_ingots"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:bear_claws"
+  }
+}

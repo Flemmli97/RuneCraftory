@@ -1,0 +1,11 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.res_dark": 50.0,
+    "runecraftory:attribute.rf.res_light": 50.0
+  },
+  "buyPrice": 20000,
+  "sellPrice": 600,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "item": "runecraftory:silver_ring"
+}

@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:forge",
+  "level": 12,
+  "cost": 30,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "tag": "c:iron_ingots"
+    },
+    {
+      "item": "runecraftory:palm_claw"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:kote"
+  }
+}

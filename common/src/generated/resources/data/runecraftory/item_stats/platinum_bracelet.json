@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_def": 50.0
+  },
+  "buyPrice": 50000,
+  "sellPrice": 1000,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "item": "runecraftory:platinum_bracelet"
+}

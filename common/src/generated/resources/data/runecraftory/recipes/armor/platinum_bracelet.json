@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:armor",
+  "level": 50,
+  "cost": 40,
+  "ingredients": [
+    {
+      "tag": "c:platinum_ingots"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:platinum_bracelet"
+  }
+}

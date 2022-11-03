@@ -1,0 +1,25 @@
+{
+  "type": "runecraftory:forge",
+  "level": 22,
+  "cost": 45,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "tag": "c:gold_ingots"
+    },
+    {
+      "item": "runecraftory:rigid_horn"
+    },
+    {
+      "item": "runecraftory:earth_crystal"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:fist_of_earth"
+  }
+}

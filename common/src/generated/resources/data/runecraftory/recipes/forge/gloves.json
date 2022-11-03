@@ -1,0 +1,22 @@
+{
+  "type": "runecraftory:forge",
+  "level": 14,
+  "cost": 35,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "item": "runecraftory:fur_m"
+    },
+    {
+      "item": "runecraftory:quality_cloth"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:gloves"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:armor",
+  "level": 10,
+  "cost": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:shield"
+    },
+    {
+      "tag": "c:iron_ingots"
+    },
+    {
+      "tag": "c:iron_ingots"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:iron_shield"
+  }
+}

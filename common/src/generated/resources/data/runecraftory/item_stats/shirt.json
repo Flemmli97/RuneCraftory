@@ -1,0 +1,10 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 2.0
+  },
+  "buyPrice": 120,
+  "sellPrice": 13,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "item": "runecraftory:shirt"
+}

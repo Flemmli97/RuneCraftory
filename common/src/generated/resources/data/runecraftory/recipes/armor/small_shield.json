@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:armor",
+  "level": 2,
+  "cost": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:shield"
+    },
+    {
+      "tag": "runecraftory:mineral"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:small_shield"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:armor",
+  "level": 20,
+  "cost": 30,
+  "ingredients": [
+    {
+      "tag": "forge:ingots/silver"
+    },
+    {
+      "tag": "runecraftory:crystals"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:silver_ring"
+  }
+}

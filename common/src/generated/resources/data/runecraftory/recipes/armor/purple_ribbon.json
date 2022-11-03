@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:armor",
+  "level": 7,
+  "cost": 15,
+  "ingredients": [
+    {
+      "item": "runecraftory:purple_grass"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "tag": "c:string"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:purple_ribbon"
+  }
+}

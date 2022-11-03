@@ -1,0 +1,12 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 2.0,
+    "runecraftory:attribute.rf.magic_def": 1.0,
+    "runecraftory:attribute.rf.res_seal": 5.0
+  },
+  "buyPrice": 500,
+  "sellPrice": 35,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "item": "runecraftory:purple_ribbon"
+}

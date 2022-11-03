@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:forge",
+  "level": 8,
+  "cost": 25,
+  "ingredients": [
+    {
+      "tag": "runecraftory:mineral"
+    },
+    {
+      "tag": "runecraftory:cloths"
+    },
+    {
+      "tag": "c:copper_blocks"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:brass_knuckles"
+  }
+}
