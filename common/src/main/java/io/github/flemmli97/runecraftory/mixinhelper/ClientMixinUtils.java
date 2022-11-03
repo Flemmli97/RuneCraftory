@@ -112,7 +112,7 @@ public class ClientMixinUtils {
         }
     }
 
-    public static void onRenderHand(PoseStack poseStack, Player player, boolean rightArm, PlayerModel<AbstractClientPlayer> arm, MultiBufferSource buffer, int combinedLight) {
+    public static void onRenderHand(PoseStack poseStack, AbstractClientPlayer player, boolean rightArm, PlayerModel<AbstractClientPlayer> arm, MultiBufferSource buffer, int combinedLight) {
         for (ItemStack stack : player.getArmorSlots()) {
             if (!stack.isEmpty()) {
                 ArmorModels.FirstPersonArmorRenderer r = ArmorModels.getFirstPersonRenderer(stack);

@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.fabric.client;
 
 import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.fabric.config.ClientConfigSpec;
@@ -71,7 +70,6 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
         ScreenEvents.AFTER_INIT.register((client, screen, scaledWidth, scaledHeight) -> ClientCalls.initSkillTab(screen, Screens.getButtons(screen)::add));
         ItemTooltipCallback.EVENT.register((stack, context, lines) -> ClientCalls.tooltipEvent(stack, lines, context));
         WorldRenderEvents.END.register(ctx -> ClientCalls.worldRender(ctx.matrixStack()));
-        ClientHandlers.initModelConsumer = VanillaArmorModels::init;
         ModItems.ITEMS.getEntries().forEach(e -> {
             ArmorModels.ArmorModelGetter r = ArmorModels.armorGetter.get(e.getID());
             if (r != null)

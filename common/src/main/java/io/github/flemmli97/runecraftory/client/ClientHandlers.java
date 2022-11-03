@@ -33,7 +33,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import java.util.Collection;
-import java.util.function.Consumer;
 
 public class ClientHandlers {
 
@@ -51,7 +50,6 @@ public class ClientHandlers {
     public static boolean isRuneyWeather;
 
     private static AnimatedPlayerModel animatedPlayerModel;
-    public static Consumer<EntityRendererProvider.Context> initModelConsumer;
 
     private static CameraType pastType = CameraType.FIRST_PERSON;
 
@@ -216,8 +214,6 @@ public class ClientHandlers {
 
     public static void initNonRendererModels(EntityRendererProvider.Context ctx) {
         animatedPlayerModel = new AnimatedPlayerModel(ctx.bakeLayer(AnimatedPlayerModel.LAYER_LOCATION));
-        if (initModelConsumer != null)
-            initModelConsumer.accept(ctx);
         ArmorModels.initArmorModels(ctx);
     }
 }
