@@ -28,6 +28,7 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -51,12 +52,22 @@ public class ItemModels extends ItemModelProvider {
         this.withExistingParent("fist_s_left", this.modLoc("fist_left")).transforms()
                 .transform(ModelBuilder.Perspective.THIRDPERSON_LEFT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
                 .transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
+        List<RegistryEntrySupplier<Item>> ribbons = ModItems.ribbons();
 
         for (RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
             if (sup == ModItems.medicinalHerb || sup == ModItems.itemBlockForge || sup == ModItems.itemBlockAccess
                     || sup == ModItems.itemBlockChem || sup == ModItems.itemBlockCooking)
                 continue;
-            if (sup.get() instanceof ShieldItem) {
+            if (ribbons.contains(sup)) {
+                this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
+                        .transforms().transform(ModelBuilder.Perspective.HEAD).rotation(0, 180, 0).translation(0, 5, -6.75f).scale(0.35f);
+                //Left sided:
+                //this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
+                //        .transforms().transform(ModelBuilder.Perspective.HEAD).rotation(0, 180, -35).translation(-4.5f, 5, -6.75f).scale(0.35f);
+                //Right Sided:
+                //this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
+                //        .transforms().transform(ModelBuilder.Perspective.HEAD).rotation(0, 180, 35).translation(4.5f, 5, -6.75f).scale(0.35f);*/
+            } else if (sup.get() instanceof ShieldItem) {
                 if (sup == ModItems.umbrella)
                     continue;
                 this.withExistingParent(sup.getID().getPath() + "_blocking", this.modLoc(sup.getID().getPath())).transforms()

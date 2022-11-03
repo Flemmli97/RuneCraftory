@@ -1,5 +1,24 @@
 {
   "parent": "minecraft:item/generated",
+  "display": {
+    "head": {
+      "rotation": [
+        0,
+        180,
+        0
+      ],
+      "translation": [
+        0,
+        5,
+        -6.75
+      ],
+      "scale": [
+        0.35,
+        0.35,
+        0.35
+      ]
+    }
+  },
   "textures": {
     "layer0": "runecraftory:item/indigo_ribbon"
   }

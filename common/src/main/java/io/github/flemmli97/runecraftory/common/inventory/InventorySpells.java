@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.platform.SaveItemContainer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -34,9 +33,9 @@ public class InventorySpells extends SaveItemContainer {
     public void dropItemsAt(LivingEntity entity) {
         if (!entity.level.isClientSide) {
             for (ItemStack stack : this.stacks) {
-                ItemEntity item = new ItemEntity(entity.level, entity.getX(), entity.getY(), entity.getZ(), stack);
-                item.setPickUpDelay(0);
-                entity.level.addFreshEntity(item);
+                if (stack.isEmpty())
+                    continue;
+                entity.spawnAtLocation(stack);
             }
         }
         this.stacks.clear();

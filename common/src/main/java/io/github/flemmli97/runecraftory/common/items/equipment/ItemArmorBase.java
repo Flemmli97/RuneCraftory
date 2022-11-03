@@ -15,8 +15,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
-
 public class ItemArmorBase extends ArmorItem implements ExtendedItem, StatItem {
 
     private static final String armorModelPath = "runecraftory:textures/models/armor/";
@@ -33,7 +31,6 @@ public class ItemArmorBase extends ArmorItem implements ExtendedItem, StatItem {
     }
 
     @Override
-    @Nullable
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
         return armorModelPath + PlatformUtils.INSTANCE.items().getIDFrom(stack.getItem()).getPath() + ".png";
     }

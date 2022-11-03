@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.mixinhelper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
@@ -10,11 +11,15 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 
 import java.util.Map;
@@ -104,6 +109,17 @@ public class ClientMixinUtils {
     public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model, AnimatedAction anim) {
         if (entity instanceof Player && ClientHandlers.getAnimatedPlayerModel() != null && anim != null) {
             ClientHandlers.getAnimatedPlayerModel().copyTo(entity, model, false, anim.getID().equals(PlayerWeaponHandler.dualBladeUse.getID()));
+        }
+    }
+
+    public static void onRenderHand(PoseStack poseStack, Player player, boolean rightArm, PlayerModel<AbstractClientPlayer> arm, MultiBufferSource buffer, int combinedLight) {
+        for (ItemStack stack : player.getArmorSlots()) {
+            if (!stack.isEmpty()) {
+                ArmorModels.FirstPersonArmorRenderer r = ArmorModels.getFirstPersonRenderer(stack);
+                if (r != null) {
+                    r.render(player, stack, rightArm, arm, poseStack, buffer, combinedLight);
+                }
+            }
         }
     }
 

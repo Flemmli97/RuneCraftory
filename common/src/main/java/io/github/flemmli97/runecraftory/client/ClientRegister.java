@@ -14,6 +14,8 @@ import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.client.model.ModelButterfly;
 import io.github.flemmli97.runecraftory.client.model.ModelChest;
 import io.github.flemmli97.runecraftory.client.model.ModelGate;
+import io.github.flemmli97.runecraftory.client.model.armor.PiyoSandals;
+import io.github.flemmli97.runecraftory.client.model.armor.RingsArmorModel;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelAmbrosia;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelAnt;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelBeetle;
@@ -318,6 +320,8 @@ public class ClientRegister {
         consumer.accept(RenderFurnitures.LOC_WOOLY_PLUSH, RenderFurnitures::woolyPlushLayer);
 
         consumer.accept(AnimatedPlayerModel.LAYER_LOCATION, AnimatedPlayerModel::createBodyLayer);
+        consumer.accept(PiyoSandals.LAYER_LOCATION, PiyoSandals::createBodyLayer);
+        consumer.accept(RingsArmorModel.LAYER_LOCATION, RingsArmorModel::createBodyLayer);
     }
 
     public static <T extends ParticleOptions> void registerParticles(PartileRegister consumer) {

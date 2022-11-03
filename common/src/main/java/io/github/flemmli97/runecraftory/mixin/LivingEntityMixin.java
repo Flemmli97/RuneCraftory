@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.mixin;
 
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
+import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,5 +18,10 @@ public abstract class LivingEntityMixin {
         if (sprinting && Platform.INSTANCE.getEntityData((LivingEntity) (Object) this).map(EntityData::isParalysed).orElse(false)) {
             info.cancel();
         }
+    }
+
+    @Inject(method = "dropAllDeathLoot", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;dropEquipment()V", shift = At.Shift.AFTER))
+    private void doDeathLootDrop(DamageSource source, CallbackInfo info) {
+        EntityCalls.dropInventoryDeath((LivingEntity) (Object) this);
     }
 }

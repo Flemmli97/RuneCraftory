@@ -1540,6 +1540,12 @@ public class ModItems {
         return sup;
     }
 
+    public static List<RegistryEntrySupplier<Item>> ribbons() {
+        return List.of(ModItems.blueRibbon, ModItems.greenRibbon, ModItems.purpleRibbon, ModItems.blackRibbon,
+                ModItems.yellowRibbon, ModItems.redRibbon, ModItems.orangeRibbon, ModItems.whiteRibbon,
+                ModItems.indigoRibbon);
+    }
+
     //Here till all items have a texture
     enum Texture {
         Y,

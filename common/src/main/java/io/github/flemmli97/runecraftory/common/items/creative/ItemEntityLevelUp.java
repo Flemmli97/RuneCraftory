@@ -20,9 +20,9 @@ public class ItemEntityLevelUp extends Item {
         if (entity.level.isClientSide) {
             return InteractionResult.SUCCESS;
         }
-        if (entity instanceof BaseMonster) {
-            //((BaseMonster)entity)();
-            player.playSound(SoundEvents.PLAYER_LEVELUP, 1, 1);
+        if (entity instanceof BaseMonster monster) {
+            monster.increaseLevel();
+            player.playSound(SoundEvents.PLAYER_LEVELUP, 1, 0.5f);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;

@@ -258,7 +258,7 @@ public class PlayerData {
             return;
         boolean levelUp = this.levelN.addXP(amount, GeneralConfig.maxLevel, LevelCalc::xpAmountForLevelUp, () -> this.onLevelUp(player));
         if (levelUp) {
-            player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.7f, 1.0f);
+            player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
         if (player instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.sendToClient(new S2CLevelPkt(this), serverPlayer);
@@ -314,7 +314,7 @@ public class PlayerData {
             return;
         boolean levelUp = this.skillMapN.get(skill).addXP(amount, GeneralConfig.maxSkillLevel, lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, player));
         if (levelUp) {
-            player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.7f, 1.0f);
+            player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
         if (player instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.sendToClient(new S2CSkillLevelPkt(this, skill), serverPlayer);

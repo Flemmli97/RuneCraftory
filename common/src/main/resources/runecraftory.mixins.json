@@ -28,7 +28,8 @@
     "KeyboardHandlerMixin",
     "BiomeColorsMixin",
     "LivingEntityRendererMixin",
-    "HumanoidModelMixin"
+    "HumanoidModelMixin",
+    "PlayerRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

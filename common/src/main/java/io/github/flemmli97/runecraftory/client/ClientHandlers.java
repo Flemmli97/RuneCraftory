@@ -218,5 +218,6 @@ public class ClientHandlers {
         animatedPlayerModel = new AnimatedPlayerModel(ctx.bakeLayer(AnimatedPlayerModel.LAYER_LOCATION));
         if (initModelConsumer != null)
             initModelConsumer.accept(ctx);
+        ArmorModels.initArmorModels(ctx);
     }
 }
