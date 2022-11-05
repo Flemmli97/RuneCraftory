@@ -1,3 +1,11 @@
+RuneCraftory 1.3.4
+================
+- Fix a crash using cross dimension teleport sometimes
+- Also made teleport spell teleport nearby monster/npc that currently follow you
+- Fix nether herbs generating too far from restriction
+- Monster loose hp when during farming chores. They will stop doing chores if hp drops below 10%.  
+  They also gain a tiny bit of xp when farming.
+
 RuneCraftory 1.3.3
 ================
 - Add config if monster should attack npc

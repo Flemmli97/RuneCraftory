@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
@@ -52,7 +53,7 @@ public class TendCropsGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (!this.entity.hasRestriction() || --this.checkCooldown > 0)
+        if (cantTendToCropsAnymore(this.entity) || !this.entity.hasRestriction() || --this.checkCooldown > 0)
             return false;
         this.toTend.clear();
         this.canPlant = this.entity.getSeedInventory() != null && Platform.INSTANCE.matchingInventory(
@@ -111,6 +112,10 @@ public class TendCropsGoal extends Goal {
 
     @Override
     public void tick() {
+        if (cantTendToCropsAnymore(this.entity)) {
+            this.toTend.clear();
+            return;
+        }
         if (--this.cooldown > 0) {
             return;
         }
@@ -170,6 +175,8 @@ public class TendCropsGoal extends Goal {
                 }
             }
             if (success) {
+                this.entity.setHealth(this.entity.getHealth() - 1);
+                this.entity.addXp(5 + this.entity.getRandom().nextInt(5));
                 this.entity.playInteractionAnimation();
             }
             this.selected = null;
@@ -192,5 +199,9 @@ public class TendCropsGoal extends Goal {
         } else
             Block.dropResources(state, level, pos, blockEntity, this.entity, ItemStack.EMPTY);
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+    }
+
+    public static boolean cantTendToCropsAnymore(BaseMonster monster) {
+        return Mth.floor(monster.getHealth()) <= Math.max(1, monster.getMaxHealth() * 0.05);
     }
 }

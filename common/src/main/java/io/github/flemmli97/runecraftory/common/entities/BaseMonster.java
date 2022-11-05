@@ -396,6 +396,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.removeFoodEffect();
             }
             this.getAnimationHandler().runIfNotNull(this::handleAttack);
+        } else {
+            if (!this.playDeath() && TendCropsGoal.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
+                this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
         }
     }
 
@@ -580,7 +583,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         else
                             this.level.broadcastEntityEvent(this, (byte) 64);
                         //this.feedTimeOut = 24000;
-                        this.feedTimeOut = 20;
+                        this.feedTimeOut = 10;
                         int day = WorldUtils.day(this.level);
                         if (this.updater.getLastUpdateFood() != day) {
                             this.updater.setLastUpdateFood(day);
@@ -590,7 +593,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                             player.setItemInHand(hand, stack1);
                         return InteractionResult.SUCCESS;
                     }
-                }
+                } else
+                    return InteractionResult.FAIL;
             }
             if (hand == InteractionHand.MAIN_HAND && !this.playDeath()) {
                 if (player.isShiftKeyDown()) {
