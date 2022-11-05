@@ -51,8 +51,7 @@ public class ModFeatures {
         )));
         PLACEDNETHERHERBFEATURE = BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, "placed_nether_herb_feature", new PlacedFeature(CONFIGUREDHERBFEATURE, List.of(
                 CountOnEveryLayerPlacement.of(6),
-                RarityFilter.onAverageOnceEvery(8),
-                InSquarePlacement.spread()
+                RarityFilter.onAverageOnceEvery(8)
         )));
         PLACEDENDHERBFEATURE = BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, "placed_end_herb_feature", new PlacedFeature(CONFIGUREDHERBFEATURE, List.of(
                 RarityFilter.onAverageOnceEvery(3),
