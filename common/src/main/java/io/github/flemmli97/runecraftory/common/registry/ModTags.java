@@ -89,6 +89,8 @@ public class ModTags {
 
     public static final TagKey<Block> ENDSTONES = blockCommon("end_stones");
 
+    public static final TagKey<Block> SNOWLAYER = blockCommon("snow_layer");
+
     //Entities
     public static final TagKey<EntityType<?>> monsters = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "monsters"));
     public static final TagKey<EntityType<?>> bossMonsters = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "boss_monsters"));

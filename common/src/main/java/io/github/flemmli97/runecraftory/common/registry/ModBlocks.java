@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockFarm;
 import io.github.flemmli97.runecraftory.common.blocks.BlockForge;
 import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
+import io.github.flemmli97.runecraftory.common.blocks.BlockMeltableSnow;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.blocks.BlockShippingBin;
 import io.github.flemmli97.runecraftory.common.blocks.BlockSingleTimeSpawner;
@@ -32,6 +33,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -166,6 +168,8 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> antidoteGrass = herb("antidote_grass");
     public static final RegistryEntrySupplier<Block> medicinalHerb = herb("medicinal_herb");
     public static final RegistryEntrySupplier<Block> bambooSprout = herb("bamboo_sprout");
+
+    public static final RegistryEntrySupplier<Block> snow = BLOCKS.register("snow", () -> new BlockMeltableSnow(BlockBehaviour.Properties.of(Material.TOP_SNOW).randomTicks().strength(0.1f).requiresCorrectToolForDrops().sound(SoundType.SNOW).isViewBlocking((blockState, blockGetter, blockPos) -> blockState.getValue(SnowLayerBlock.LAYERS) >= 8)));
 
     //Trees
     /*public static final RegistryEntrySupplier<Block> appleTree = new BlockTreeBase("apple_tree_base");

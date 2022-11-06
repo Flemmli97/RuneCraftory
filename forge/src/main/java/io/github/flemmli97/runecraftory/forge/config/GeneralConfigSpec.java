@@ -32,6 +32,7 @@ public class GeneralConfigSpec {
     public final ForgeConfigSpec.BooleanValue disableItemStatSystem;
     public final ForgeConfigSpec.BooleanValue disableCropSystem;
     public final ForgeConfigSpec.DoubleValue witherChance;
+    public final ForgeConfigSpec.BooleanValue seasonedSnow;
 
     public final boolean waila = true;
     public final boolean jei = true;
@@ -92,6 +93,7 @@ public class GeneralConfigSpec {
         this.disableItemStatSystem = builder.comment("If true item get no stats assigned as defined per datapack. ", "Note: Weapons will then do no damage").define("Disable Item Stat System", GeneralConfig.disableItemStatSystem);
         this.disableCropSystem = builder.comment("If true crop data will be disabled.", "Note: Crops from this mod will not function anymore").define("Disable Crop System", GeneralConfig.disableCropSystem);
         this.witherChance = builder.comment("Change for a crop to wither if its not been watered", "If crop is already withered it and it doesnt get watered it will turn into withered grass").defineInRange("Wither Chance", GeneralConfig.witherChance, 0, 1);
+        this.seasonedSnow = builder.comment("If biome temperature should be adjusted based on current season. Can cause snowfall during winter").define("Seasoned Biome Temp", GeneralConfig.seasonedSnow);
         builder.pop();
 
         builder.push("Multipliers");

@@ -24,6 +24,13 @@ public class BlockTagGen extends BlockTagsProvider {
                 .add(Blocks.END_STONE)
                 .addOptional(Tags.Blocks.END_STONES.location());
 
+        this.tag(BlockTags.SNOW).add(ModBlocks.snow.get());
+        this.tag(BlockTags.INSIDE_STEP_SOUND_BLOCKS).add(ModBlocks.snow.get());
+        this.tag(BlockTags.GOATS_SPAWNABLE_ON).add(ModBlocks.snow.get());
+        this.tag(BlockTags.RABBITS_SPAWNABLE_ON).add(ModBlocks.snow.get());
+        this.tag(BlockTags.FOXES_SPAWNABLE_ON).add(ModBlocks.snow.get());
+        this.tag(BlockTags.WOLVES_SPAWNABLE_ON).add(ModBlocks.snow.get());
+
         this.tag(ModTags.sickleDestroyable)
                 .addTag(BlockTags.CORAL_PLANTS)
                 .addTag(BlockTags.CROPS)

@@ -1,3 +1,7 @@
+RuneCraftory 1.4.0
+================
+- Add seasonal snow
+
 RuneCraftory 1.3.4
 ================
 - Fix a crash using cross dimension teleport sometimes

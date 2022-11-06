@@ -19,7 +19,10 @@
     "SinglePoolElementMixin",
     "StructureTemplatePoolMixin",
     "PoolsMixin",
-    "TargetingConditionsMixin"
+    "TargetingConditionsMixin",
+    "BiomeAccessor",
+    "ServerLevelMixin",
+    "SpreadingSnowyDirtBlockMixin"
   ],
   "client": [
     "AtlasMixin",
@@ -29,7 +32,8 @@
     "BiomeColorsMixin",
     "LivingEntityRendererMixin",
     "HumanoidModelMixin",
-    "PlayerRendererMixin"
+    "PlayerRendererMixin",
+    "LevelRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

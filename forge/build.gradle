@@ -19,6 +19,11 @@ loom {
                 arg "--existing", file("src/main/resources").absolutePath
             }
         }
+        runs {
+            client {
+                vmArgs "-Dmixin.debug.export=true"
+            }
+        }
     }
 }
 

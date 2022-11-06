@@ -141,6 +141,7 @@ public class LangGen implements DataProvider {
         }
         this.add(ModBlocks.mushroom.get(), "Mushroom");
         this.add(ModBlocks.monarchMushroom.get(), "Monach Mushroom");
+        this.add(ModBlocks.snow.get(), "Snow");
 
         this.add(ModEntities.wooly.get(), "Wooly");
         this.add(ModEntities.gate.get(), "Gate");

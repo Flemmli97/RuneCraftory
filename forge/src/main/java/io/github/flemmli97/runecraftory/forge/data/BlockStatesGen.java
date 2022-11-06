@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -98,6 +99,10 @@ public class BlockStatesGen extends BlockStateProvider {
 
         this.getVariantBuilder(ModBlocks.farmland.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
                         this.models().getExistingFile(state.getValue(FarmBlock.MOISTURE) == 7 ? new ResourceLocation("block/farmland_moist") : new ResourceLocation("block/farmland")))
+                .build());
+
+        this.getVariantBuilder(ModBlocks.snow.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
+                        this.models().getExistingFile(state.getValue(SnowLayerBlock.LAYERS) == 8 ? new ResourceLocation("block/snow_block") : new ResourceLocation("block/snow_height" + state.getValue(SnowLayerBlock.LAYERS) * 2)))
                 .build());
 
         this.getVariantBuilder(ModBlocks.shipping.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(

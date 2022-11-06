@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Pools.class)
-public class PoolsMixin {
+public abstract class PoolsMixin {
 
     @Inject(method = "bootstrap", at = @At("RETURN"))
     private static void modify(CallbackInfoReturnable<Holder<StructureTemplatePool>> info) {

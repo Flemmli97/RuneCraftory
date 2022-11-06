@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.util.List;
 
 @Mixin(StructureTemplatePool.class)
-public class StructureTemplatePoolMixin implements StructureTemplateModifier {
+public abstract class StructureTemplatePoolMixin implements StructureTemplateModifier {
 
     @Shadow
     private List<Pair<StructurePoolElement, Integer>> rawTemplates;

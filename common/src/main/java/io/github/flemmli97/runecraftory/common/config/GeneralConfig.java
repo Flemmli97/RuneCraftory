@@ -27,6 +27,7 @@ public class GeneralConfig {
     public static boolean disableItemStatSystem = false;
     public static boolean disableCropSystem = false;
     public static float witherChance = 0.5f;
+    public static boolean seasonedSnow = true;
 
     public static boolean waila = true;
     public static boolean jei = true;

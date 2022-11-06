@@ -42,6 +42,7 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.disableItemStatSystem = spec.disableItemStatSystem.get();
         GeneralConfig.disableCropSystem = spec.disableCropSystem.get();
         GeneralConfig.witherChance = spec.witherChance.get().floatValue();
+        GeneralConfig.seasonedSnow = spec.seasonedSnow.get();
 
         GeneralConfig.maxLevel = spec.maxLevel.get();
         GeneralConfig.maxSkillLevel = spec.maxSkillLevel.get();

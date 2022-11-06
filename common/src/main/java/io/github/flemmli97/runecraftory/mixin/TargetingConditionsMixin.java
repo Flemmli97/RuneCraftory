@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(TargetingConditions.class)
-public class TargetingConditionsMixin {
+public abstract class TargetingConditionsMixin {
 
     @Inject(method = "test", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;canAttack(Lnet/minecraft/world/entity/LivingEntity;)Z"), cancellable = true)
     private void testAdditional(LivingEntity attacker, LivingEntity target, CallbackInfoReturnable<Boolean> info) {

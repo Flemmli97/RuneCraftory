@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
@@ -108,7 +109,12 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
     @Override
     public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity entityLiving) {
         if (entityLiving instanceof ServerPlayer serverPlayer && this.getDestroySpeed(stack, state) == this.speed) {
-            this.onBlockBreak(serverPlayer);
+            Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
+                if (state.getBlock() instanceof BlockCrop)
+                    LevelCalc.useRP(serverPlayer, data, 2, true, false, true, EnumSkills.FARMING, EnumSkills.WIND);
+                LevelCalc.levelSkill(serverPlayer, data, EnumSkills.FARMING, 3);
+                LevelCalc.levelSkill(serverPlayer, data, EnumSkills.WIND, 0.5f);
+            });
         }
         return super.mineBlock(stack, level, state, pos, entityLiving);
     }
