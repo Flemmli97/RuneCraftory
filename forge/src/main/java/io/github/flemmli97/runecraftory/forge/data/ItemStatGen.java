@@ -586,7 +586,8 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.ambrosiasThorns.get(), new ItemStat.Builder(7500, 350, 21)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 7)
                 .addAttribute(ModAttributes.RF_MAGIC.get(), 7)
-                .addAttribute(ModAttributes.RFSLEEP.get(), 10));
+                .addAttribute(ModAttributes.RFSLEEP.get(), 10)
+                .setSpell(null, ModSpells.WAVE.get(), ModSpells.BUTTERFLY.get()));
         this.addStat(ModItems.threadSpider.get(), new ItemStat.Builder(370, 28, 17)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
                 .addAttribute(ModAttributes.RF_MAGIC.get(), 2)
@@ -669,7 +670,8 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.lightningMane.get(), new ItemStat.Builder(13000, 600, 31)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 8)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 6)
-                .addAttribute(ModAttributes.RFRESDIZ.get(), 17));
+                .addAttribute(ModAttributes.RFRESDIZ.get(), 17)
+                .setSpell(ModSpells.LASER3.get(), ModSpells.LASER5.get(), ModSpells.BIGLIGHTNING.get()));
         this.addStat(ModItems.furRedLion.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.furBlueLion.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.chestHair.get(), new ItemStat.Builder(0, 0, 0));
@@ -759,7 +761,8 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 7)
                 .addAttribute(ModAttributes.RFRESSEAL.get(), 10)
                 .addAttribute(ModAttributes.RFRESPARA.get(), 10)
-                .addAttribute(ModAttributes.RFRESDRAIN.get(), 15));
+                .addAttribute(ModAttributes.RFRESDRAIN.get(), 15)
+                .setSpell(ModSpells.CARDTHROW.get(), ModSpells.PLUSHTHROW.get(), ModSpells.FURNITURE.get()));
         this.addStat(ModItems.warriorsProof.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.proofOfRank.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.throneOfEmpire.get(), new ItemStat.Builder(0, 0, 0));

@@ -27,7 +27,7 @@ public class BigLightningBoltSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 55;
+        return 30;
     }
 
     @Override

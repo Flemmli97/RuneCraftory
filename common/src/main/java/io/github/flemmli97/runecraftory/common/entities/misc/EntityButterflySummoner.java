@@ -45,8 +45,8 @@ public class EntityButterflySummoner extends Entity implements OwnableEntity {
             if (this.getOwner() != null && this.getOwner().isAlive()) {
                 EntityButterfly fly = new EntityButterfly(this.level, this.getOwner());
                 fly.setDamageMultiplier(this.damageMultiplier);
-                fly.setPos(fly.getX() + this.random.nextFloat() * 2 - 1, fly.getY() + this.random.nextFloat() * 0.35 - 0.2, fly.getZ() + this.random.nextFloat() * 2 - 1);
-                fly.shootAtPosition(this.targetX, this.targetY, this.targetZ, 0.3f, 5.0f);
+                fly.setPos(fly.getX() + this.random.nextFloat() * 2 - 1, fly.getY() + this.random.nextFloat() * 0.05 - 0.1, fly.getZ() + this.random.nextFloat() * 2 - 1);
+                fly.shootAtPosition(this.targetX, this.targetY, this.targetZ, 0.3f, 10);
                 this.level.addFreshEntity(fly);
             }
             if (this.ticksExisted >= 40) {

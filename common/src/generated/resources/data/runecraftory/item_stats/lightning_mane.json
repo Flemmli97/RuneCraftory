@@ -8,5 +8,8 @@
   "sellPrice": 600,
   "upgradeDifficulty": 31,
   "element": "NONE",
+  "tier1Spell": "runecraftory:laser_3",
+  "tier2Spell": "runecraftory:laser_5",
+  "tier3Spell": "runecraftory:big_lightning",
   "item": "runecraftory:lightning_mane"
 }

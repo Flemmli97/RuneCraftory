@@ -28,7 +28,7 @@ public class FurnitureThrowSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 40;
+        return 30;
     }
 
     @Override

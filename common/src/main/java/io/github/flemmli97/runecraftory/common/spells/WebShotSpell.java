@@ -26,7 +26,7 @@ public class WebShotSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 25;
+        return 15;
     }
 
     @Override

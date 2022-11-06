@@ -27,7 +27,7 @@ public class DarkBeamSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 60;
+        return 40;
     }
 
     @Override

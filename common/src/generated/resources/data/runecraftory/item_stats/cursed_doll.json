@@ -10,5 +10,8 @@
   "sellPrice": 27000,
   "upgradeDifficulty": 39,
   "element": "NONE",
+  "tier1Spell": "runecraftory:card_attack",
+  "tier2Spell": "runecraftory:throw_plush",
+  "tier3Spell": "runecraftory:furniture_summon",
   "item": "runecraftory:cursed_doll"
 }

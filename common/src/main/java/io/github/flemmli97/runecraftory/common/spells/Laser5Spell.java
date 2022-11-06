@@ -29,7 +29,7 @@ public class Laser5Spell extends Spell {
 
     @Override
     public int coolDown() {
-        return 40;
+        return 25;
     }
 
     @Override

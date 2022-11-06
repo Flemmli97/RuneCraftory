@@ -30,7 +30,7 @@ public class ButterflySpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 80;
+        return 40;
     }
 
     @Override
@@ -45,8 +45,8 @@ public class ButterflySpell extends Spell {
         } else if (entity instanceof Mob mob && mob.getTarget() != null) {
             summoner.setTarget(mob.getTarget().getX(), mob.getTarget().getY(), mob.getTarget().getZ());
         } else {
-            Vec3 look = Vec3.directionFromRotation(Mth.clamp(entity.getXRot(), -10, 10), entity.getYRot()).scale(7);
-            summoner.setTarget(look.x(), look.y(), look.z());
+            Vec3 look = Vec3.directionFromRotation(Mth.clamp(entity.getXRot(), -10, 10), entity.getYRot()).scale(5);
+            summoner.setTarget(entity.getX() + look.x(), entity.getEyeY() + look.y(), entity.getZ() + look.z());
         }
         level.addFreshEntity(summoner);
         return true;
