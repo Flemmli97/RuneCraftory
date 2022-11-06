@@ -1,0 +1,19 @@
+{
+  "type": "runecraftory:armor",
+  "level": 20,
+  "cost": 30,
+  "ingredients": [
+    {
+      "tag": "c:gold_ingots"
+    },
+    {
+      "item": "runecraftory:orichalcum"
+    },
+    {
+      "item": "runecraftory:turnips_miracle"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:gold_ring"
+  }
+}

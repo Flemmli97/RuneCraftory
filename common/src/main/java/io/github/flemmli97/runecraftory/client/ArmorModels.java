@@ -165,7 +165,7 @@ public class ArmorModels {
     }
 
     private static List<RegistryEntrySupplier<Item>> rings() {
-        return List.of(ModItems.silverRing);
+        return List.of(ModItems.silverRing, ModItems.goldRing, ModItems.platinumRing);
     }
 
     public interface ArmorModelGetter {

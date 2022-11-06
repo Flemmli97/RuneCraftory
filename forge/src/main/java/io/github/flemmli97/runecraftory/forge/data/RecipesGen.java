@@ -384,7 +384,11 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.platinumBracelet.get(), 1, 50, 40)
                 .addIngredient(ModTags.platinum).addIngredient(ModTags.cloths).build(consumer);
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.silverRing.get(), 1, 20, 30)
-                .addIngredient(ModTags.silverF).addIngredient(ModTags.crystals).build(consumer);
+                .addIngredient(ModTags.silver).addIngredient(ModTags.crystals).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.goldRing.get(), 1, 20, 30)
+                .addIngredient(ModTags.gold).addIngredient(ModItems.orichalcum.get()).addIngredient(ModItems.turnipsMiracle.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.platinumRing.get(), 1, 70, 50)
+                .addIngredient(ModTags.platinum).addIngredient(ModItems.dragonic.get()).build(consumer);
 
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.shirt.get(), 1, 2, 10)
                 .addIngredient(ModTags.cloths).build(consumer);

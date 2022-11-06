@@ -1,0 +1,16 @@
+{
+  "type": "runecraftory:armor",
+  "level": 70,
+  "cost": 50,
+  "ingredients": [
+    {
+      "tag": "c:platinum_ingots"
+    },
+    {
+      "item": "runecraftory:dragonic_stone"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:platinum_ring"
+  }
+}

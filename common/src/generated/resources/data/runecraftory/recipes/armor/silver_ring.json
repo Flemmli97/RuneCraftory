@@ -4,7 +4,7 @@
   "cost": 30,
   "ingredients": [
     {
-      "tag": "forge:ingots/silver"
+      "tag": "c:silver_ingots"
     },
     {
       "tag": "runecraftory:crystals"

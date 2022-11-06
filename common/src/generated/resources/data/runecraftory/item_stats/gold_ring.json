@@ -1,0 +1,13 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.res_water": 15.0,
+    "runecraftory:attribute.rf.res_earth": 15.0,
+    "runecraftory:attribute.rf.res_wind": 15.0,
+    "runecraftory:attribute.rf.res_fire": 15.0
+  },
+  "buyPrice": 0,
+  "sellPrice": 5000,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "item": "runecraftory:gold_ring"
+}

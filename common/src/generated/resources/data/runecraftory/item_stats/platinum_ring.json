@@ -1,0 +1,15 @@
+{
+  "itemStats": {
+    "runecraftory:attribute.rf.res_water": 10.0,
+    "runecraftory:attribute.rf.res_earth": 10.0,
+    "runecraftory:attribute.rf.res_wind": 10.0,
+    "runecraftory:attribute.rf.res_fire": 10.0,
+    "runecraftory:attribute.rf.res_dark": 25.0,
+    "runecraftory:attribute.rf.res_light": 25.0
+  },
+  "buyPrice": 0,
+  "sellPrice": 7500,
+  "upgradeDifficulty": 0,
+  "element": "NONE",
+  "item": "runecraftory:platinum_ring"
+}

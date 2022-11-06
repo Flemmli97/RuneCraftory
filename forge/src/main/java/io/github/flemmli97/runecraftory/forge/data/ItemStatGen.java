@@ -395,6 +395,18 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.silverRing.get(), new ItemStat.Builder(20000, 600, 0)
                 .addAttribute(ModAttributes.RFRESLIGHT.get(), 50)
                 .addAttribute(ModAttributes.RFRESDARK.get(), 50));
+        this.addStat(ModItems.goldRing.get(), new ItemStat.Builder(0, 5000, 0)
+                .addAttribute(ModAttributes.RFRESWIND.get(), 15)
+                .addAttribute(ModAttributes.RFRESWATER.get(), 15)
+                .addAttribute(ModAttributes.RFRESEARTH.get(), 15)
+                .addAttribute(ModAttributes.RFRESFIRE.get(), 15));
+        this.addStat(ModItems.platinumRing.get(), new ItemStat.Builder(0, 7500, 0)
+                .addAttribute(ModAttributes.RFRESWIND.get(), 10)
+                .addAttribute(ModAttributes.RFRESWATER.get(), 10)
+                .addAttribute(ModAttributes.RFRESEARTH.get(), 10)
+                .addAttribute(ModAttributes.RFRESFIRE.get(), 10)
+                .addAttribute(ModAttributes.RFRESLIGHT.get(), 25)
+                .addAttribute(ModAttributes.RFRESDARK.get(), 25));
 
         this.addStat(ModItems.shirt.get(), new ItemStat.Builder(120, 13, 0)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 2));

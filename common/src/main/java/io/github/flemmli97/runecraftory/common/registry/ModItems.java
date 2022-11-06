@@ -369,8 +369,8 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> goldBracelet = equipment(EquipmentSlot.LEGS, "gold_bracelet", Texture.Y);
     public static final RegistryEntrySupplier<Item> platinumBracelet = equipment(EquipmentSlot.LEGS, "platinum_bracelet", Texture.Y);
     public static final RegistryEntrySupplier<Item> silverRing = equipment(EquipmentSlot.LEGS, "silver_ring", Texture.Y);
-    //public static final RegistryEntrySupplier<Item> goldRing = equipment(EquipmentSlot.LEGS, "gold_ring", Texture.Y);
-    //public static final RegistryEntrySupplier<Item> platinumRing = equipment(EquipmentSlot.LEGS, "platinum_ring", Texture.Y);
+    public static final RegistryEntrySupplier<Item> goldRing = equipment(EquipmentSlot.LEGS, "gold_ring", Texture.Y);
+    public static final RegistryEntrySupplier<Item> platinumRing = equipment(EquipmentSlot.LEGS, "platinum_ring", Texture.Y);
     public static final RegistryEntrySupplier<Item> shieldRing = equipment(EquipmentSlot.LEGS, "shield_ring", Texture.N);
     public static final RegistryEntrySupplier<Item> criticalRing = equipment(EquipmentSlot.LEGS, "critical_ring", Texture.N);
     public static final RegistryEntrySupplier<Item> silentRing = equipment(EquipmentSlot.LEGS, "silent_ring", Texture.N);
