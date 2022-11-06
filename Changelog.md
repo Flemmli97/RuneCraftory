@@ -1,6 +1,6 @@
 RuneCraftory 1.4.0
 ================
-- Add seasonal snow
+- Add seasonal snow. If it gets cold enough it will snow in biomes where it will normally not.
 - Various mob attack rewritten to use spell system. So they can be used with staff upgrades
 - Fix default element not saved when upgrading item
 
