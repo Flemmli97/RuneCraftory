@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
@@ -32,24 +33,23 @@ public class WindBladeSpell extends Spell {
     }
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, false, true, EnumSkills.WIND)).orElse(false);
-        if (rp) {
-            EntityWindBlade wind = new EntityWindBlade(world, entity);
-            wind.setDamageMultiplier(0.95f + level * 0.05f);
-            wind.shoot(entity, 0, entity.getYRot(), 0, 0.45f, 0);
-            if (entity instanceof Mob mob && mob.getTarget() != null) {
-                wind.setTarget(mob.getTarget());
-            } else if (entity instanceof Player) {
-                EntityHitResult res = RayTraceUtils.calculateEntityFromLook(entity, 9);
-                if (res != null) {
-                    wind.setTarget(res.getEntity());
-                }
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.WIND)).orElse(false);
+        if (!rp)
+            return false;
+        EntityWindBlade wind = new EntityWindBlade(level, entity);
+        wind.setDamageMultiplier(0.95f + lvl * 0.05f);
+        wind.shoot(entity, 0, entity.getYRot(), 0, 0.45f, 0);
+        if (entity instanceof Mob mob && mob.getTarget() != null) {
+            wind.setTarget(mob.getTarget());
+        } else if (entity instanceof Player) {
+            EntityHitResult res = RayTraceUtils.calculateEntityFromLook(entity, 9);
+            if (res != null) {
+                wind.setTarget(res.getEntity());
             }
-            world.addFreshEntity(wind);
-            return true;
         }
-        return false;
+        level.addFreshEntity(wind);
+        return true;
     }
 
     @Override

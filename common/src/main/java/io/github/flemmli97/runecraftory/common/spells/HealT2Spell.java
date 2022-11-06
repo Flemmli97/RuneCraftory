@@ -36,32 +36,31 @@ public class HealT2Spell extends Spell {
     }
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data ->
                 LevelCalc.useRP(player, data, (int) (data.getMaxRunePoints() * 0.15), false, true, true, EnumSkills.LOVE)).orElse(false);
-        if (rp) {
-            List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(8), e -> {
-                if (e == entity)
-                    return true;
-                if (entity instanceof Player player) {
-                    return e instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())
-                            || e instanceof AbstractVillager || e instanceof Animal;
-                } else {
-                    if (entity instanceof HealingPredicateEntity healer)
-                        return healer.healeableEntities().test(e);
-                    return false;
-                }
-            });
-            float healAmount = CombatUtils.getAttributeValueRaw(entity, ModAttributes.RF_MAGIC.get()) * (1.5f + level * 0.1f);
-            entity.heal(healAmount);
-            HealT1Spell.spawnHealParticles(entity);
-            entities.forEach(e -> {
-                e.heal(healAmount);
-                HealT1Spell.spawnHealParticles(e);
-            });
-            return true;
-        }
-        return false;
+        if (!rp)
+            return false;
+        List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(8), e -> {
+            if (e == entity)
+                return true;
+            if (entity instanceof Player player) {
+                return e instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())
+                        || e instanceof AbstractVillager || e instanceof Animal;
+            } else {
+                if (entity instanceof HealingPredicateEntity healer)
+                    return healer.healeableEntities().test(e);
+                return false;
+            }
+        });
+        float healAmount = CombatUtils.getAttributeValueRaw(entity, ModAttributes.RF_MAGIC.get()) * (1.5f + lvl * 0.1f);
+        entity.heal(healAmount);
+        HealT1Spell.spawnHealParticles(entity);
+        entities.forEach(e -> {
+            e.heal(healAmount);
+            HealT1Spell.spawnHealParticles(e);
+        });
+        return true;
     }
 
     @Override

@@ -33,13 +33,13 @@ public class BaseStaffSpell extends Spell {
     }
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (stack.getItem() instanceof ItemStaffBase staff) {
             EnumElement element = ItemNBT.getElement(stack);
             if (element == EnumElement.NONE)
                 return false;
             if (staff.amount == 1) {
-                EntityBaseSpellBall ball = new EntityBaseSpellBall(world, entity, element);
+                EntityBaseSpellBall ball = new EntityBaseSpellBall(level, entity, element);
                 Vec3 look = entity.getLookAngle();
                 ball.shoot(look.x, look.y, look.z, 1, 0);
                 entity.level.addFreshEntity(ball);
@@ -47,7 +47,7 @@ public class BaseStaffSpell extends Spell {
                 for (float offset : offsetTwo) {
                     Vec3 side = MathUtils.rotate(MathUtils.normalY, MathUtils.normalX, -entity.getYRot() * Mth.DEG_TO_RAD);
                     Vec3 newPos = entity.position().add(side.scale(offset)).add(0, entity.getEyeHeight() - 0.1, 0);
-                    EntityBaseSpellBall ball = new EntityBaseSpellBall(world, entity, element);
+                    EntityBaseSpellBall ball = new EntityBaseSpellBall(level, entity, element);
                     Vec3 look = entity.getLookAngle();
                     ball.shoot(look.x, look.y, look.z, 1, 0);
                     ball.setPos(newPos.x, newPos.y, newPos.z);
@@ -57,7 +57,7 @@ public class BaseStaffSpell extends Spell {
                 for (float offset : offsetThree) {
                     Vec3 side = MathUtils.rotate(MathUtils.normalY, MathUtils.normalX, -entity.getYRot() * Mth.DEG_TO_RAD);
                     Vec3 newPos = entity.position().add(side.scale(offset)).add(0, entity.getEyeHeight() - 0.1, 0);
-                    EntityBaseSpellBall ball = new EntityBaseSpellBall(world, entity, element);
+                    EntityBaseSpellBall ball = new EntityBaseSpellBall(level, entity, element);
                     Vec3 look = entity.getLookAngle();
                     ball.shoot(look.x, look.y, look.z, 1, 0);
                     ball.setPos(newPos.x, newPos.y, newPos.z);

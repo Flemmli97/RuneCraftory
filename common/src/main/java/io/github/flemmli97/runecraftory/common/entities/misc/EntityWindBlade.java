@@ -92,7 +92,7 @@ public class EntityWindBlade extends EntityProjectile {
                     this.target = res;
             }
             if (this.target != null) {
-                Vec3 dir = this.target.getEyePosition().subtract(this.position()).normalize().scale(0.08);
+                Vec3 dir = this.target.getEyePosition().subtract(this.position()).normalize().scale(0.1);
                 this.setDeltaMovement(this.getDeltaMovement().scale(0.95).add(dir));
             }
         }

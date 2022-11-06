@@ -1,12 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.ThunderboltAttackGoal;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityThiccLightningBolt;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityThunderboltBeam;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -14,7 +11,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -22,7 +18,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -196,25 +191,25 @@ public class EntityThunderbolt extends BossMonster {
                 }
                 break;
             case "wind_blade":
-                if (anim.canAttack()) {
-                    this.summonWind(target);
+                if (anim.canAttack() && !EntityUtils.sealed(this)) {
+                    ModSpells.DOUBLESONIC.get().use((ServerLevel) this.level, this);
                 }
                 break;
             case "laser_x5":
                 if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    this.summonLaserx5();
+                    ModSpells.LASER5.get().use((ServerLevel) this.level, this);
                 }
                 break;
             case "laser_aoe":
                 if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    this.summonLaserAOE();
+                    ModSpells.LASERAOE.get().use((ServerLevel) this.level, this);
                 }
                 break;
             case "laser_kick":
             case "laser_kick_2":
             case "laser_kick_3":
                 if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    this.summonLaserBolt(target);
+                    ModSpells.BIGLIGHTNING.get().use((ServerLevel) this.level, this);
                 }
                 break;
             case "charge":
@@ -384,41 +379,6 @@ public class EntityThunderbolt extends BossMonster {
     public double getPassengersRidingOffset() {
 
         return this.getBbHeight() * 0.825D;
-    }
-
-    private void summonLaserx5() {
-        for (Vector3f vec : RayTraceUtils.rotatedVecs(this.getLookAngle(), new Vec3(0, 1, 0), -50, 50, 25)) {
-            EntityThunderboltBeam beam = new EntityThunderboltBeam(this.level, this);
-            beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);
-            this.level.addFreshEntity(beam);
-        }
-    }
-
-    private void summonLaserAOE() {
-        for (Vector3f vec : RayTraceUtils.rotatedVecs(this.getLookAngle(), new Vec3(0, 1, 0), -180, 150, 30)) {
-            EntityThunderboltBeam beam = new EntityThunderboltBeam(this.level, this);
-            beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);
-            this.level.addFreshEntity(beam);
-        }
-    }
-
-    private void summonLaserBolt(LivingEntity target) {
-        if (!this.level.isClientSide) {
-            EntityThiccLightningBolt bolt = new EntityThiccLightningBolt(this.level, this);
-            if (target != null) {
-                double y = -Mth.sin(17 * 0.017453292F);
-                Vec3 dir = target.position().subtract(this.position()).normalize();
-                bolt.shoot(dir.x(), y, dir.z(), 0.15f, 0);
-            } else
-                bolt.shoot(this, 17, this.getYRot(), 0, 0.15f, 0);
-            this.level.addFreshEntity(bolt);
-        }
-    }
-
-    private void summonWind(LivingEntity target) {
-        if (!this.level.isClientSide) {
-            ModSpells.DOUBLESONIC.get().use((ServerLevel) this.level, this);
-        }
     }
 
     public void setChargeMotion(double[] charge) {

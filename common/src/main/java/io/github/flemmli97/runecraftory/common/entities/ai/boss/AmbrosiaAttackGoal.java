@@ -55,7 +55,7 @@ public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttack
                     this.moveDelay = 44 + this.attacker.getRandom().nextInt(10);
                     this.moveFlag = true;
                 } else if (this.moveDelay-- <= 0 || this.attacker.getNavigation().isDone()) {
-                    this.attacker.setAiVarHelper(new double[]{this.target.getX(), this.target.getEyeY() - this.target.getBbHeight() * 0.5, this.target.getZ()});
+                    this.attacker.setAiVarHelper(new Vec3(this.target.getX(), this.target.getEyeY() - this.target.getBbHeight() * 0.5, this.target.getZ()));
                     this.movementDone = true;
                     this.moveFlag = false;
                 }
@@ -81,7 +81,7 @@ public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttack
                 } else if (this.moveDelay-- <= 0 || this.distanceToTargetSq < 4) {
                     Vec3 vec = this.target.position().subtract(this.attacker.position()).normalize().scale(5);
                     int length = this.next.getLength();
-                    this.attacker.setAiVarHelper(new double[]{vec.x / length, 0, vec.z / length});
+                    this.attacker.setAiVarHelper(new Vec3(vec.x / length, 0, vec.z / length));
                     this.movementDone = true;
                     this.moveFlag = false;
                 }
@@ -90,7 +90,7 @@ public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttack
                 this.movementDone = true;
                 Vec3 vec = this.target.position().subtract(this.attacker.position()).normalize().scale(5);
                 int length = this.next.getLength();
-                this.attacker.setAiVarHelper(new double[]{vec.x / length, 0, vec.z / length});
+                this.attacker.setAiVarHelper(new Vec3(vec.x / length, 0, vec.z / length));
                 break;
             case "wave":
                 if (!this.moveFlag) {

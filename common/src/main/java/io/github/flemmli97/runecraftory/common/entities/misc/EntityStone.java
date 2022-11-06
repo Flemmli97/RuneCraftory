@@ -31,6 +31,10 @@ public class EntityStone extends EntityProjectile {
             this.pred = ((BaseMonster) shooter).hitPred;
     }
 
+    public void setDamageMultiplier(float damageMultiplier) {
+        this.damageMultiplier = damageMultiplier;
+    }
+
     @Override
     public int livingTickMax() {
         return 8;

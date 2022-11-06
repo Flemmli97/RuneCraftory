@@ -24,7 +24,7 @@ public class EmptySpell extends Spell {
     }
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         return true;
     }
 

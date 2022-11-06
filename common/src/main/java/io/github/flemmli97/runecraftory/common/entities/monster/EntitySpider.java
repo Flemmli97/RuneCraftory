@@ -3,15 +3,14 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpiderWeb;
+import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
@@ -117,7 +116,7 @@ public class EntitySpider extends BaseMonster {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget())) {
-                    this.shootWeb(this.getTarget());
+                    ModSpells.WEBSHOTSPELL.get().use((ServerLevel) this.level, this);
                 }
             }
         } else
@@ -137,16 +136,6 @@ public class EntitySpider extends BaseMonster {
     @Override
     protected int calculateFallDamage(float distance, float damageMultiplier) {
         return (int) ((super.calculateFallDamage(distance, damageMultiplier) - 3) * 0.5);
-    }
-
-    private void shootWeb(LivingEntity target) {
-        EntitySpiderWeb web = new EntitySpiderWeb(this.level, this);
-        Vec3 dir = new Vec3(target.getX() - web.getX(), target.getY(0.33) - web.getY(), target.getZ() - web.getZ());
-        double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
-        dir = dir.add(0, l * 0.2, 0);
-        web.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
-        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(web);
     }
 
     @Override

@@ -6,10 +6,11 @@ import io.github.flemmli97.runecraftory.common.entities.ai.AirWanderGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindGust;
+import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -89,18 +90,7 @@ public class EntityWeagle extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.getID().equals(gale.getID())) {
             if (anim.canAttack()) {
-                EntityWindGust gust = new EntityWindGust(this.level, this);
-                gust.setPos(gust.getX(), gust.getY() + 1.5, gust.getZ());
-                if (this.getTarget() != null) {
-                    LivingEntity target = this.getTarget();
-                    Vec3 dir = target.position().subtract(this.position());
-                    double len = dir.length();
-                    if (len > 6)
-                        len = 1;
-                    dir = new Vec3(dir.x(), 0, dir.z()).normalize().scale(len);
-                    gust.setRotationTo(target.getX() + dir.x(), target.getY() + target.getBbHeight() * 0.3, target.getZ() + dir.z(), 0);
-                }
-                this.level.addFreshEntity(gust);
+                ModSpells.GUSTSPELL.get().use((ServerLevel) this.level, this);
             }
         } else if (anim.getID().equals(swoop.getID())) {
             if (this.hitEntity == null)

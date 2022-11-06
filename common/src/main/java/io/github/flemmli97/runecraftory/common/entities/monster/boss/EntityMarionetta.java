@@ -1,23 +1,20 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.MarionettaAttackGoal;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityCards;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBeam;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityFurniture;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMarionettaTrap;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
+import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -160,7 +157,7 @@ public class EntityMarionetta extends BossMonster {
             case "card_attack" -> {
                 this.getNavigation().stop();
                 if (anim.canAttack())
-                    this.cardAttack();
+                    ModSpells.CARDTHROW.get().use((ServerLevel) this.level, this);
             }
             case "chest_attack" -> {
                 if (this.aiVarHelper == null)
@@ -192,17 +189,17 @@ public class EntityMarionetta extends BossMonster {
             case "stuffed_animals" -> {
                 this.getNavigation().stop();
                 if (anim.canAttack())
-                    this.throwPlushies();
+                    ModSpells.PLUSHTHROW.get().use((ServerLevel) this.level, this);
             }
             case "dark_beam" -> {
                 this.getNavigation().stop();
                 if (anim.canAttack() && !EntityUtils.sealed(this))
-                    this.darkBeam();
+                    ModSpells.DARKBEAM.get().use((ServerLevel) this.level, this);
             }
             case "furniture" -> {
                 this.getNavigation().stop();
-                if (anim.canAttack())
-                    this.summonFurnitures();
+                if (anim.canAttack() && !EntityUtils.sealed(this))
+                    ModSpells.FURNITURE.get().use((ServerLevel) this.level, this);
             }
         }
     }
@@ -237,63 +234,6 @@ public class EntityMarionetta extends BossMonster {
 
     public void setAiVarHelper(double[] aiVarHelper) {
         this.aiVarHelper = aiVarHelper;
-    }
-
-    public void cardAttack() {
-        if (!this.level.isClientSide) {
-            for (Vector3f vec : RayTraceUtils.rotatedVecs(this.getLookAngle(), new Vec3(0, 1, 0), -80, 80, 10)) {
-                EntityCards cards = new EntityCards(this.level, this, this.random.nextInt(8));
-                cards.shoot(vec.x(), vec.y(), vec.z(), 1.5f, 0);
-                this.level.addFreshEntity(cards);
-            }
-        }
-    }
-
-    public void throwPlushies() {
-        if (!this.level.isClientSide) {
-            int amount = this.random.nextInt(8) + 12;
-            for (int i = 0; i < amount; ++i) {
-                EntityFurniture furniture = new EntityFurniture(this.level, this, this.random.nextBoolean() ? EntityFurniture.Type.WOOLYPLUSH : EntityFurniture.Type.CHIPSQUEEKPLUSH);
-                LivingEntity target = this.getTarget();
-                if (target != null) {
-                    Vec3 dir = target.position().subtract(this.position()).scale(0.45 + this.random.nextDouble() * 0.2);
-                    furniture.shootAtPosition(this.getX() + dir.x(), target.getY() + 12, this.getZ() + dir.z(), 0.95f + this.random.nextFloat() * 0.2f, 9);
-                } else
-                    furniture.shoot(this, this.yHeadRot, this.getXRot(), -55, 0.95f + this.random.nextFloat() * 0.2f, 9);
-                this.level.addFreshEntity(furniture);
-            }
-        }
-    }
-
-    public void darkBeam() {
-        if (!this.level.isClientSide) {
-            EntityDarkBeam beam = new EntityDarkBeam(this.level, this);
-            LivingEntity target = this.getTarget();
-            if (target != null)
-                beam.setRotationTo(target.getX(), target.getY() + target.getBbHeight() * 0.5, target.getZ(), 0);
-            this.level.addFreshEntity(beam);
-        }
-    }
-
-    public void summonFurnitures() {
-        if (!this.level.isClientSide) {
-            int amount = this.random.nextInt(7) + 4;
-            for (int i = 0; i < amount; ++i) {
-                EntityFurniture.Type randType = EntityFurniture.Type.values()[this.random.nextInt(EntityFurniture.Type.values().length)];
-                EntityFurniture furniture = new EntityFurniture(this.level, this, randType);
-                furniture.setNoGravity(true);
-                double xRand = this.getX() + (this.random.nextDouble() - 0.5) * 13;
-                double yRand = this.getY() + (this.random.nextDouble()) * 2;
-                double zRand = this.getZ() + (this.random.nextDouble() - 0.5) * 13;
-                furniture.setPos(xRand, yRand, zRand);
-                LivingEntity target = this.getTarget();
-                if (target != null)
-                    furniture.shootAtPosition(target.getX(), target.getY() + target.getBbHeight() * 0.5, target.getZ(), 0.1f, 1.2f);
-                else
-                    furniture.shoot(this, this.yHeadRot, this.getXRot(), 0, 0.09f, 1.2f);
-                this.level.addFreshEntity(furniture);
-            }
-        }
     }
 
     @Override

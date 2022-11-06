@@ -8,7 +8,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.TicketType;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -25,8 +24,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Optional;
 
 public class TeleportSpell extends Spell {
-
-    public static final TicketType<Integer> LINGERING_TELEPORT_CHUNK = TicketType.create("lingering_teleport_chunk", Integer::compareTo, 5);
 
     @Override
     public void update(Player player, ItemStack stack) {

@@ -3,11 +3,11 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityStone;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -89,7 +89,7 @@ public class EntityGoblin extends ChargingMonster {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 if (this.getTarget() != null) {
-                    this.shootStone(this.getTarget());
+                    ModSpells.STONETHROW.get().use((ServerLevel) this.level, this);
                 }
             }
         } else if (anim.getID().equals(leap.getID())) {
@@ -111,16 +111,6 @@ public class EntityGoblin extends ChargingMonster {
             }
         } else
             super.handleAttack(anim);
-    }
-
-    private void shootStone(LivingEntity target) {
-        EntityStone stone = new EntityStone(this.level, this);
-        Vec3 dir = new Vec3(target.getX() - stone.getX(), target.getY(0.33) - stone.getY(), target.getZ() - stone.getZ());
-        double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
-        dir = dir.add(0, l * 0.2, 0);
-        stone.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
-        this.playSound(SoundEvents.FISHING_BOBBER_THROW, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
-        this.level.addFreshEntity(stone);
     }
 
     @Override

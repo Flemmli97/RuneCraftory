@@ -25,7 +25,6 @@ public class EntityButterfly extends EntityProjectile {
     private double length;
     private boolean turn;
     private Predicate<LivingEntity> pred;
-    private int upDelay = 30;
     private float damageMultiplier = 0.15f;
 
     public EntityButterfly(EntityType<? extends EntityButterfly> type, Level level) {
@@ -46,10 +45,6 @@ public class EntityButterfly extends EntityProjectile {
         this.damageMultiplier = damageMultiplier;
     }
 
-    public void setUpDelay(int delay) {
-        this.upDelay = delay;
-    }
-
     @Override
     public boolean isPiercing() {
         return true;
@@ -58,17 +53,6 @@ public class EntityButterfly extends EntityProjectile {
     @Override
     public int livingTickMax() {
         return 50;
-    }
-
-    @Override
-    public void tick() {
-        if (this.upDelay-- < 0) {
-            double motionY = this.getDeltaMovement().y;
-            if (motionY < -0.7)
-                motionY += 0.25;
-            this.setDeltaMovement(new Vec3(this.getDeltaMovement().x, motionY + 0.02, this.getDeltaMovement().z));
-        }
-        super.tick();
     }
 
     @Override
@@ -100,7 +84,6 @@ public class EntityButterfly extends EntityProjectile {
 
     @Override
     protected void onBlockHit(BlockHitResult blockRayTraceResult) {
-        this.upDelay = 0;
     }
 
     @Override

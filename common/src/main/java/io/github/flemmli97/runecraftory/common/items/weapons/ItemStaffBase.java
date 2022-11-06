@@ -50,7 +50,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     @Override
     public int chargeAmount(ItemStack stack) {
         return Platform.INSTANCE.getStaffData(stack).map(cap ->
-                cap.getTier3Spell(stack) != null ? 3 : cap.getTier2Spell(stack) != null ? 2 : cap.getTier1Spell(stack) != null ? 1 : 0).orElse(0);
+                cap.getTier3Spell(stack) != null && ItemNBT.itemLevel(stack) >= 3 ? 3 : cap.getTier2Spell(stack) != null ? 2 : cap.getTier1Spell(stack) != null ? 1 : 0).orElse(0);
     }
 
     @Override

@@ -2,18 +2,17 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaSleep;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public class UnsealSpell extends Spell {
+public class SleepBallSpell extends Spell {
 
     @Override
     public void update(Player player, ItemStack stack) {
@@ -22,32 +21,33 @@ public class UnsealSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOVE, 1));
+
     }
 
     @Override
     public int coolDown() {
-        return 20;
+        return 80;
     }
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, true, true, EnumSkills.LOVE)).orElse(false);
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.EARTH)).orElse(false);
         if (!rp)
             return false;
-        if (lvl >= 10) {
-            entity.removeEffect(ModEffects.poison.get());
+        for (int i = 0; i < 4; ++i) {
+            double angle = i / 4.0 * Math.PI * 2.0 + Math.toRadians(entity.getYRot());
+            double x = Math.cos(angle) * 1.3;
+            double z = Math.sin(angle) * 1.3;
+            EntityAmbrosiaSleep pollen = new EntityAmbrosiaSleep(level, entity);
+            pollen.setDamageMultiplier(0.55f + lvl * 0.05f);
+            pollen.setPos(entity.getX() + x, entity.getY() + 0.4, entity.getZ() + z);
+            level.addFreshEntity(pollen);
         }
-        if (lvl >= 5) {
-            entity.removeEffect(ModEffects.paralysis.get());
-        }
-        entity.removeEffect(MobEffects.DIG_SLOWDOWN);
-        entity.removeEffect(ModEffects.seal.get());
         return true;
     }
 
     @Override
     public int rpCost() {
-        return 30;
+        return 50;
     }
 }

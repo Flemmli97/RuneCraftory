@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkness;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
@@ -29,15 +30,14 @@ public class DarknessSpell extends Spell {
     }
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, false, true, EnumSkills.DARK)).orElse(false);
-        if (rp) {
-            EntityDarkness darkness = new EntityDarkness(world, entity);
-            darkness.setDamageMultiplier(1 + level * 0.1f);
-            world.addFreshEntity(darkness);
-            return true;
-        }
-        return false;
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.DARK)).orElse(false);
+        if (!rp)
+            return false;
+        EntityDarkness darkness = new EntityDarkness(level, entity);
+        darkness.setDamageMultiplier(1 + lvl * 0.1f);
+        level.addFreshEntity(darkness);
+        return true;
     }
 
     @Override

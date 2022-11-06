@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityLightBall;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
@@ -32,15 +33,14 @@ public class ShineSpell extends Spell {
     }
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, false, true, EnumSkills.LIGHT)).orElse(false);
-        if (rp) {
-            List<Entity> lights = world.getEntities(entity, entity.getBoundingBox().inflate(4), e -> e instanceof EntityLightBall light && light.getOwner() == entity);
-            lights.forEach(e -> e.remove(Entity.RemovalReason.KILLED));
-            EntityLightBall.createQuadLights(world, entity, false, 0.9f + level * 0.1f);
-            return true;
-        }
-        return false;
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.LIGHT)).orElse(false);
+        if (!rp)
+            return false;
+        List<Entity> lights = level.getEntities(entity, entity.getBoundingBox().inflate(4), e -> e instanceof EntityLightBall light && light.getOwner() == entity);
+        lights.forEach(e -> e.remove(Entity.RemovalReason.KILLED));
+        EntityLightBall.createQuadLights(level, entity, false, 0.9f + lvl * 0.1f);
+        return true;
     }
 
     @Override

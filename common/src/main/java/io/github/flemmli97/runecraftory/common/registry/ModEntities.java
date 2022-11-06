@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaSleep
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBaseSpellBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterflySummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCards;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
@@ -415,6 +416,8 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityLightBall>> lightBall = reg(EntityType.Builder.<EntityLightBall>of(EntityLightBall::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.lightBall);
     public static final RegistryEntrySupplier<EntityType<EntityDarkBall>> darkBall = reg(EntityType.Builder.<EntityDarkBall>of(EntityDarkBall::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.darkBall);
     public static final RegistryEntrySupplier<EntityType<EntityDarkness>> darkness = reg(EntityType.Builder.<EntityDarkness>of(EntityDarkness::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.darkness);
+
+    public static final RegistryEntrySupplier<EntityType<EntityButterflySummoner>> butterflySummoner = reg(EntityType.Builder.<EntityButterflySummoner>of(EntityButterflySummoner::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.butterflySummoner);
 
     public static final RegistryEntrySupplier<EntityType<EntityCustomFishingHook>> fishingHook = reg(EntityType.Builder.<EntityCustomFishingHook>of(EntityCustomFishingHook::new, MobCategory.MISC).noSave().noSummon().sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(5), LibEntities.fishingHook);
 

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -31,19 +32,19 @@ public class PoisonHealSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, true, true, EnumSkills.LOVE)).orElse(false);
-        if (rp) {
-            if (level >= 10) {
-                entity.removeEffect(ModEffects.seal.get());
-            }
-            if (level >= 5) {
-                entity.removeEffect(ModEffects.paralysis.get());
-            }
-            entity.removeEffect(MobEffects.POISON);
-            entity.removeEffect(ModEffects.poison.get());
-            return true;
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, true, true, EnumSkills.LOVE)).orElse(false);
+        if (!rp)
+            return false;
+        if (level >= 10) {
+            entity.removeEffect(ModEffects.seal.get());
         }
-        return false;
+        if (level >= 5) {
+            entity.removeEffect(ModEffects.paralysis.get());
+        }
+        entity.removeEffect(MobEffects.POISON);
+        entity.removeEffect(MobEffects.WITHER);
+        entity.removeEffect(ModEffects.poison.get());
+        return true;
     }
 
     @Override

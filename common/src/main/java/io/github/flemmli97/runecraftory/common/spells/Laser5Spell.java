@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
+import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityThunderboltBeam;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -10,12 +11,11 @@ import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 
-public class DoubleWindBladeSpell extends Spell {
+public class Laser5Spell extends Spell {
 
     @Override
     public void update(Player player, ItemStack stack) {
@@ -24,12 +24,12 @@ public class DoubleWindBladeSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WIND, 1.2f));
+
     }
 
     @Override
     public int coolDown() {
-        return 20;
+        return 40;
     }
 
     @Override
@@ -37,25 +37,17 @@ public class DoubleWindBladeSpell extends Spell {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.WIND)).orElse(false);
         if (!rp)
             return false;
-        for (int i = 0; i < 2; i++) {
-            EntityWindBlade wind = new EntityWindBlade(level, entity);
-            wind.setDamageMultiplier(0.95f + lvl * 0.05f);
-            wind.shoot(entity, 0, entity.getYRot() - (i == 0 ? 1 : -1) * 40, 0, 0.45f, 0);
-            if (entity instanceof Mob mob && mob.getTarget() != null) {
-                wind.setTarget(mob.getTarget());
-            } else if (entity instanceof Player) {
-                EntityHitResult res = RayTraceUtils.calculateEntityFromLook(entity, 9);
-                if (res != null) {
-                    wind.setTarget(res.getEntity());
-                }
-            }
-            level.addFreshEntity(wind);
+        for (Vector3f vec : RayTraceUtils.rotatedVecs(entity.getLookAngle(), new Vec3(0, 1, 0), -50, 50, 25)) {
+            EntityThunderboltBeam beam = new EntityThunderboltBeam(level, entity);
+            beam.setDamageMultiplier(0.65f + lvl * 0.05f);
+            beam.setRotationToDir(vec.x(), vec.y(), vec.z(), 0);
+            level.addFreshEntity(beam);
         }
         return true;
     }
 
     @Override
     public int rpCost() {
-        return 20;
+        return 70;
     }
 }

@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
+import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -69,7 +70,7 @@ public class EntityCards extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(1).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
+        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(1).element(EnumElement.LIGHT).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
         this.remove(RemovalReason.KILLED);
         return att;
     }

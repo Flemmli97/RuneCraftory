@@ -3,11 +3,13 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityExplosionSpell;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -29,16 +31,19 @@ public class ExplosionSpell extends Spell {
     }
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, false, true, EnumSkills.FIRE)).orElse(false);
-        if (rp) {
-            EntityExplosionSpell spell = new EntityExplosionSpell(world, entity);
-            spell.setDamageMultiplier(1.1f + (level - 1) * 0.05f);
-            spell.shoot(entity, entity.getXRot(), entity.getYRot(), 0, 1, 0);
-            world.addFreshEntity(spell);
-            return true;
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.FIRE)).orElse(false);
+        if (!rp)
+            return false;
+        EntityExplosionSpell spell = new EntityExplosionSpell(level, entity);
+        spell.setDamageMultiplier(1.1f + (lvl - 1) * 0.05f);
+        if (entity instanceof Mob mob && mob.getTarget() != null) {
+            spell.shootAtEntity(mob.getTarget(), 1.3f, 0, 0);
+        } else {
+            spell.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 1.5F, 1.0F);
         }
-        return false;
+        level.addFreshEntity(spell);
+        return true;
     }
 
     @Override

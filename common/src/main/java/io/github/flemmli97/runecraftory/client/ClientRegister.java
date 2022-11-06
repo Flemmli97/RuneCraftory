@@ -265,6 +265,8 @@ public class ClientRegister {
         consumer.register(ModEntities.darkBall.get(), EmptyRender::new);
         consumer.register(ModEntities.darkness.get(), RenderDarkness::new);
 
+        consumer.register(ModEntities.butterflySummoner.get(), EmptyRender::new);
+
         consumer.register(ModEntities.fishingHook.get(), CustomFishingHookRenderer::new);
     }
 

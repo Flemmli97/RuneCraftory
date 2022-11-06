@@ -1,19 +1,21 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
+import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityCards;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
-import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
-public class UnsealSpell extends Spell {
+public class CardThrowSpell extends Spell {
 
     @Override
     public void update(Player player, ItemStack stack) {
@@ -22,32 +24,29 @@ public class UnsealSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOVE, 1));
+
     }
 
     @Override
     public int coolDown() {
-        return 20;
+        return 50;
     }
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, true, true, EnumSkills.LOVE)).orElse(false);
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.LIGHT)).orElse(false);
         if (!rp)
             return false;
-        if (lvl >= 10) {
-            entity.removeEffect(ModEffects.poison.get());
+        for (Vector3f vec : RayTraceUtils.rotatedVecs(entity.getLookAngle(), new Vec3(0, 1, 0), -80, 80, 10)) {
+            EntityCards cards = new EntityCards(level, entity, entity.getRandom().nextInt(8));
+            cards.shoot(vec.x(), vec.y(), vec.z(), 1.5f, 0);
+            level.addFreshEntity(cards);
         }
-        if (lvl >= 5) {
-            entity.removeEffect(ModEffects.paralysis.get());
-        }
-        entity.removeEffect(MobEffects.DIG_SLOWDOWN);
-        entity.removeEffect(ModEffects.seal.get());
         return true;
     }
 
     @Override
     public int rpCost() {
-        return 30;
+        return 50;
     }
 }

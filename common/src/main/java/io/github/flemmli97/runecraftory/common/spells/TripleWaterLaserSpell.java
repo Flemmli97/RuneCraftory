@@ -4,6 +4,7 @@ import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
@@ -31,23 +32,22 @@ public class TripleWaterLaserSpell extends Spell {
     }
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), false, false, true, EnumSkills.WATER)).orElse(false);
-        if (rp) {
-            for (int i = -1; i < 2; i++) {
-                float posYawOff = i * 130;
-                Vector3f vec = RayTraceUtils.rotatedAround(entity.getLookAngle(), Vector3f.YP, posYawOff);
-                EntityWaterLaser laser = new EntityWaterLaser(world, entity);
-                laser.setPos(laser.getX() + vec.x(), laser.getY() + vec.y(), laser.getZ() + vec.z());
-                laser.setMaxTicks(entity instanceof Player ? 44 : 15);
-                laser.setDamageMultiplier(0.95f + level * 0.05f);
-                laser.setYawOffset(-i * 130);
-                laser.setPositionYawOffset(posYawOff);
-                world.addFreshEntity(laser);
-            }
-            return true;
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.WATER)).orElse(false);
+        if (!rp)
+            return false;
+        for (int i = -1; i < 2; i++) {
+            float posYawOff = i * 130;
+            Vector3f vec = RayTraceUtils.rotatedAround(entity.getLookAngle(), Vector3f.YP, posYawOff);
+            EntityWaterLaser laser = new EntityWaterLaser(level, entity);
+            laser.setPos(laser.getX() + vec.x(), laser.getY() + vec.y(), laser.getZ() + vec.z());
+            laser.setMaxTicks(entity instanceof Player ? 44 : 15);
+            laser.setDamageMultiplier(0.95f + lvl * 0.05f);
+            laser.setYawOffset(-i * 130);
+            laser.setPositionYawOffset(posYawOff);
+            level.addFreshEntity(laser);
         }
-        return false;
+        return true;
     }
 
     @Override

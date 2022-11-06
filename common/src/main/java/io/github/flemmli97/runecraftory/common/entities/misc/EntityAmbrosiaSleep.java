@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
@@ -35,12 +34,13 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
         super(type, world);
     }
 
-    public EntityAmbrosiaSleep(Level world, EntityAmbrosia caster) {
+    public EntityAmbrosiaSleep(Level world, LivingEntity caster) {
         this(ModEntities.sleepBall.get(), world);
         this.owner = caster;
         this.ownerUUID = caster.getUUID();
         this.setPos(caster.getX(), caster.getY(), caster.getZ());
-        this.pred = caster.hitPred;
+        if (caster instanceof BaseMonster monster)
+            this.pred = monster.hitPred;
     }
 
     public void setDamageMultiplier(float damageMultiplier) {

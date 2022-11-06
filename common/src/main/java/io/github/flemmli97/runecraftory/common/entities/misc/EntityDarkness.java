@@ -22,6 +22,7 @@ public class EntityDarkness extends EntityDamageCloud {
 
     public EntityDarkness(Level world, LivingEntity shooter) {
         super(ModEntities.darkness.get(), world, shooter);
+        this.setPos(this.getX(), this.getY() + 0.1, this.getZ());
     }
 
     public void setDamageMultiplier(float damageMultiplier) {

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -30,16 +31,15 @@ public class HealT3Spell extends Spell {
     }
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data ->
-                LevelCalc.useRP(player, data, this.rpCost(), false, true, true, EnumSkills.LOVE)).orElse(false);
-        if (rp) {
-            float healAmount = CombatUtils.getAttributeValueRaw(entity, ModAttributes.RF_MAGIC.get()) * (3f + level * 0.3f);
-            entity.heal(healAmount);
-            HealT1Spell.spawnHealParticles(entity);
-            return true;
-        }
-        return false;
+                LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, true, true, EnumSkills.LOVE)).orElse(false);
+        if (!rp)
+            return false;
+        float healAmount = CombatUtils.getAttributeValueRaw(entity, ModAttributes.RF_MAGIC.get()) * (3f + lvl * 0.3f);
+        entity.heal(healAmount);
+        HealT1Spell.spawnHealParticles(entity);
+        return true;
     }
 
     @Override

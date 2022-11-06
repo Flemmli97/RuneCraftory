@@ -26,10 +26,10 @@ public class SnowballSpell extends Spell {
     }
 
     @Override
-    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
-        Snowball snowball = new Snowball(world, entity);
+    public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
+        Snowball snowball = new Snowball(level, entity);
         snowball.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0.0F, 2.0F, 1.0F);
-        world.addFreshEntity(snowball);
+        level.addFreshEntity(snowball);
         return true;
     }
 

@@ -1,5 +1,7 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
+import com.mojang.math.Quaternion;
+import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
@@ -17,8 +19,9 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
-public class ArrowSpell extends Spell {
+public class TripleArrowSpell extends Spell {
 
     @Override
     public void update(Player player, ItemStack stack) {
@@ -47,12 +50,24 @@ public class ArrowSpell extends Spell {
         arrowentity.setSecondsOnFire(ItemNBT.getElement(stack) == EnumElement.FIRE ? 200 : 0);
         arrowentity.pickup = AbstractArrow.Pickup.DISALLOWED;
         level.addFreshEntity(arrowentity);
+
+        Vec3 dir = entity.getLookAngle();
+        Vec3 up = entity.getUpVector(1);
+        for (float y = -15; y <= 15; y += 30) {
+            Quaternion quaternion = new Quaternion(new Vector3f(up), y, true);
+            Vector3f newDir = new Vector3f(dir);
+            newDir.transform(quaternion);
+            Arrow arrowO = new Arrow(level, entity);
+            arrowO.setBaseDamage(1.7 + CombatUtils.getAttributeValueRaw(entity, Attributes.ATTACK_DAMAGE) * 0.05 * lvl);
+            arrowO.shoot(newDir.x(), newDir.y(), newDir.z(), f * 1.5F, 1.0F);
+            level.addFreshEntity(arrowO);
+        }
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARROW_SHOOT, entity.getSoundSource(), 1.0f, 1.0f / (level.getRandom().nextFloat() * 0.4f + 1.2f) + f * 0.5f);
         return true;
     }
 
     @Override
     public int rpCost() {
-        return 5;
+        return 10;
     }
 }
