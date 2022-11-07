@@ -5,6 +5,7 @@ RuneCraftory 1.4.0
 - Fix default element not saved when upgrading item
 - Player get a notification when their tamed monster gets knocked out
 - Lots of damaging stuff that didnt apply several status effects now do it properly
+- Made bosses resistant against a lot of status effects
 
 RuneCraftory 1.3.4
 ================
