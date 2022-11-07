@@ -28,7 +28,7 @@ public abstract class PlayerMixin implements PlayerDataGetter {
 
     @Inject(method = "addAdditionalSaveData", at = @At("RETURN"))
     private void saveData(CompoundTag compound, CallbackInfo info) {
-        compound.put(RuneCraftory.MODID + ":data", this.runecraftoryPlayerData.writeToNBT(new CompoundTag(), (Player) (Object) this));
+        compound.put(RuneCraftory.MODID + ":data", this.runecraftoryPlayerData.writeToNBTPlain(new CompoundTag()));
     }
 
     @ModifyVariable(method = "actuallyHurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getDamageAfterArmorAbsorb(Lnet/minecraft/world/damagesource/DamageSource;F)F"), argsOnly = true)

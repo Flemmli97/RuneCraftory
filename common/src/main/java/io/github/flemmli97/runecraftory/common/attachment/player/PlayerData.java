@@ -35,6 +35,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -672,16 +673,6 @@ public class PlayerData {
         this.unlockedRecipes = nbt.getBoolean("UnlockedRecipes");
         this.runePointsMax = nbt.getFloat("MaxRunePoints");
         this.runePoints = nbt.getInt("RunePoints");
-        if (nbt.contains("DeathHP") && player != null) {
-            float f = nbt.getFloat("DeathHP");
-            if (f > 0)
-                player.setHealth(f);
-        }
-        if (nbt.contains("MaxHP") && player != null) {
-            AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
-            health.removeModifier(LibConstants.maxHealthModifier);
-            health.addPermanentModifier(new AttributeModifier(LibConstants.maxHealthModifier, "rf.hpModifier", nbt.getDouble("MaxHP"), AttributeModifier.Operation.ADDITION));
-        }
         this.money = nbt.getInt("Money");
         this.str = nbt.getFloat("Strength");
         this.vit = nbt.getFloat("Vitality");
@@ -716,21 +707,32 @@ public class PlayerData {
         if (player instanceof ServerPlayer serverPlayer && serverPlayer.connection != null) {
             this.recalculateStats(serverPlayer, false);
         }
+        if (nbt.contains("RestoreHP") && player instanceof ServerPlayer serverPlayer) {
+            float f = nbt.getFloat("RestoreHP");
+            //Sheduling the health update in case other mods modify max health
+            serverPlayer.getServer().tell(new TickTask(1, () -> player.setHealth(f)));
+        }
         this.walkingTracker.read(nbt.getCompound("WalkingTracker"));
     }
 
-    public CompoundTag writeToNBT(CompoundTag nbt, Player player) {
+    public CompoundTag writeToNBTPlain(CompoundTag nbt) {
+        return this.writeToNBT(nbt, null, false);
+    }
+
+    public CompoundTag writeToNBT(CompoundTag nbt, Player player, boolean wasDead) {
         nbt.putBoolean("Starting", this.starting);
         nbt.putBoolean("UnlockedRecipes", this.unlockedRecipes);
         nbt.putFloat("MaxRunePoints", this.runePointsMax);
         if (player == null) {
             nbt.putInt("RunePoints", this.runePoints);
-        } else if (!player.isAlive()) {
-            AttributeModifier modifier = player.getAttribute(Attributes.MAX_HEALTH).getModifier(LibConstants.maxHealthModifier);
-            if (modifier != null)
-                nbt.putDouble("MaxHP", modifier.getAmount());
-            nbt.putFloat("DeathHP", player.getMaxHealth() * GeneralConfig.deathHPPercent);
-            nbt.putInt("RunePoints", (int) (this.runePointsMax * GeneralConfig.deathRPPercent));
+        } else {
+            if (wasDead) {
+                nbt.putFloat("RestoreHP", player.getMaxHealth() * GeneralConfig.deathHPPercent);
+                nbt.putInt("RunePoints", (int) (this.runePointsMax * GeneralConfig.deathRPPercent));
+            } else {
+                nbt.putFloat("RestoreHP", player.getHealth());
+                nbt.putInt("RunePoints", this.runePoints);
+            }
         }
         nbt.putInt("Money", this.money);
         nbt.putFloat("Strength", this.str);
@@ -772,7 +774,7 @@ public class PlayerData {
         PlayerData newData = new PlayerData();
         newData.spells.load(this.spells.save());
         newData.shipping.load(this.shipping.save());
-        this.readFromNBT(newData.writeToNBT(new CompoundTag(), null), null);
+        this.readFromNBT(newData.writeToNBTPlain(new CompoundTag()), null);
         this.recalculateStats(player, false);
         this.starting = false;
     }

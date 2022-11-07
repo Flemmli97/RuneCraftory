@@ -164,7 +164,7 @@ public class RuneCraftoryFabric implements ModInitializer {
             if (entity instanceof Player player)
                 EntityCalls.wakeUp(player);
         });
-        ServerPlayerEvents.COPY_FROM.register(EntityCalls::clone);
+        ServerPlayerEvents.COPY_FROM.register((old, newPlayer, keepEverything) -> EntityCalls.clone(old, newPlayer, !keepEverything));
         ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> EntityCalls.joinPlayer(handler.getPlayer())));
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             if (EntityCalls.playerAttack(player, entity))
