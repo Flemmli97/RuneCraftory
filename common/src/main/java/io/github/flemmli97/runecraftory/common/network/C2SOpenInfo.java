@@ -21,8 +21,13 @@ public record C2SOpenInfo(C2SOpenInfo.Type type) implements Packet {
         if (sender != null) {
             switch (pkt.type) {
                 case MAIN -> {
+                    ItemStack stack = sender.containerMenu.getCarried();
+                    sender.containerMenu.setCarried(ItemStack.EMPTY);
                     Platform.INSTANCE.sendToClient(new S2CCapSync(Platform.INSTANCE.getPlayerData(sender).orElseThrow(EntityUtils::playerDataException)), sender);
                     Platform.INSTANCE.openGuiMenu(sender, ContainerInfoScreen.create());
+                    if (!stack.isEmpty()) {
+                        sender.containerMenu.setCarried(stack);
+                    }
                 }
                 case SUB -> {
                     Platform.INSTANCE.sendToClient(new S2CCapSync(Platform.INSTANCE.getPlayerData(sender).orElseThrow(EntityUtils::playerDataException)), sender);

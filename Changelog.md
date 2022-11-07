@@ -3,6 +3,7 @@ RuneCraftory 1.3.5
 - Fix player data not saved when travelling from the end
 - Also fix data not syncing to client when changing dimensions
 - Fix default element not saved when upgrading item
+- Make carried item not reset when opening the extended inventory menu
 
 RuneCraftory 1.3.4
 ================
