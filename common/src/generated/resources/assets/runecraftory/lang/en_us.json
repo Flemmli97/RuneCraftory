@@ -1377,6 +1377,8 @@
   "behaviour.inventory.harvest.invalid": "Position is too far away",
   "behaviour.inventory.seed": "Updated seed inventory position",
   "behaviour.inventory.seed.invalid": "Position is too far away",
+  "tamed.monster.knockout.by": "%1$s got knocked out by %5$s at [%2$s,%3$s,%4$s]",
+  "tamed.monster.knockout": "%1$s got knocked out at [%2$s,%3$s,%4$s]",
   "magnifying_glass.view.crop.growth": "Growth: %s",
   "magnifying_glass.view.crop.level": "Level: %s",
   "magnifying_glass.view.crop.giant": "Giant prog.: %s",

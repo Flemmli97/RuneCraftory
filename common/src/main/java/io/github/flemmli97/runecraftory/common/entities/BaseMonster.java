@@ -39,6 +39,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
@@ -54,6 +55,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -974,6 +976,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void setPlayDeath(boolean flag) {
         this.entityData.set(playDeathState, flag);
         if (flag) {
+            if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
+                this.getOwner().sendMessage(this.getKnockoutMessage(), Util.NIL_UUID);
             this.getNavigation().stop();
             this.playDeathAnimation(false);
             this.setMoving(false);
@@ -983,6 +987,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         } else {
             this.getAnimationHandler().setAnimation(null);
         }
+    }
+
+    private Component getKnockoutMessage() {
+        DamageSource source = this.getLastDamageSource();
+        if (source instanceof EntityDamageSource && source.getEntity() != null)
+            return new TranslatableComponent("tamed.monster.knockout.by", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ(), source.getEntity().getDisplayName());
+        return new TranslatableComponent("tamed.monster.knockout", this.getDisplayName(), this.blockPosition().getX(), this.blockPosition().getY(), this.blockPosition().getZ());
     }
 
     public int getPlayDeathTick() {

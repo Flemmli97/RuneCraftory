@@ -338,6 +338,9 @@ public class LangGen implements DataProvider {
         this.add("behaviour.inventory.seed", "Updated seed inventory position");
         this.add("behaviour.inventory.seed.invalid", "Position is too far away");
 
+        this.add("tamed.monster.knockout.by", "%1$s got knocked out by %5$s at [%2$s,%3$s,%4$s]");
+        this.add("tamed.monster.knockout", "%1$s got knocked out at [%2$s,%3$s,%4$s]");
+
         this.add("magnifying_glass.view.crop.growth", "Growth: %s");
         this.add("magnifying_glass.view.crop.level", "Level: %s");
         this.add("magnifying_glass.view.crop.giant", "Giant prog.: %s");

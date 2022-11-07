@@ -3,6 +3,7 @@ RuneCraftory 1.4.0
 - Add seasonal snow. If it gets cold enough it will snow in biomes where it will normally not.
 - Various mob attack rewritten to use spell system. So they can be used with staff upgrades
 - Fix default element not saved when upgrading item
+- Player get a notification when their tamed monster gets knocked out
 
 RuneCraftory 1.3.4
 ================
