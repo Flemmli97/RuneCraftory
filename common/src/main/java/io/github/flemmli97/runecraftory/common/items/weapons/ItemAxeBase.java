@@ -18,10 +18,10 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -46,6 +46,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IAOEWeapon {
 
@@ -153,18 +154,8 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
                 performRightClickActionPlayer(stack, player, this.getRange());
                 return;
             }
-            List<Entity> list = RayTraceUtils.getEntitiesIgnorePitch(entity, this.getRange(), 360, null);
-            if (!list.isEmpty()) {
-                CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
-                boolean success = false;
-                for (Entity e : list) {
-                    float damagePhys = CombatUtils.getAttributeValueRaw(entity, Attributes.ATTACK_DAMAGE);
-                    if (CombatUtils.damage(entity, e, src, damagePhys, stack))
-                        success = true;
-                }
-                if (success) {
-                    entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
-                }
+            if (performRightClickAction(stack, entity, this.getRange())) {
+                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }
     }
@@ -177,35 +168,41 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     public static void performRightClickActionPlayer(ItemStack stack, ServerPlayer player, float range) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             Runnable run = () -> {
-                List<Entity> list = getEntitiesIn(player, range, null);
+                boolean success = performRightClickAction(stack, player, range);
                 Platform.INSTANCE.sendToClient(new S2CScreenShake(4, 1), player);
-                player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.DRAGON_FIREBALL_EXPLODE, player.getSoundSource(), 1.0f, 0.4f);
-                Vec3 pos = player.position().add(0, -1, 0);
-                BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
-                for (Vec3 dir : particleDirection) {
-                    Vec3 scaled = dir.scale(0.5);
-                    mut.set(Mth.floor(pos.x() + dir.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + dir.z()));
-                    BlockState state = player.level.getBlockState(mut);
-                    if (state.getRenderShape() != RenderShape.INVISIBLE)
-                        player.getLevel().sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), player.getX() + dir.x(), player.getY() + 0.1, player.getZ() + dir.z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
-                }
-                if (!list.isEmpty()) {
-                    CustomDamage src = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
-                    boolean success = false;
-                    for (Entity e : list) {
-                        float damagePhys = CombatUtils.getAttributeValueRaw(player, Attributes.ATTACK_DAMAGE);
-                        if (CombatUtils.damage(player, e, src, damagePhys, stack))
-                            success = true;
-                    }
-                    if (success) {
-                        player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
-                        LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 3);
-                        LevelCalc.useRP(player, data, 10, true, false, true, EnumSkills.HAMMERAXE);
-                    }
+                if (success) {
+                    player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
+                    LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 3);
+                    LevelCalc.useRP(player, data, 10, true, false, true, EnumSkills.HAMMERAXE);
                 }
             };
             data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.HAMMERAXERIGHTCLICK, stack, run);
         });
+    }
+
+    public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, float range) {
+        List<Entity> list = getEntitiesIn(entity, range, null);
+        entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.DRAGON_FIREBALL_EXPLODE, entity.getSoundSource(), 1.0f, 0.4f);
+        Vec3 pos = entity.position().add(0, -1, 0);
+        BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
+        for (Vec3 dir : particleDirection) {
+            Vec3 scaled = dir.scale(0.5);
+            mut.set(Mth.floor(pos.x() + dir.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + dir.z()));
+            BlockState state = entity.level.getBlockState(mut);
+            if (state.getRenderShape() != RenderShape.INVISIBLE)
+                ((ServerLevel) entity.getLevel()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), entity.getX() + dir.x(), entity.getY() + 0.1, entity.getZ() + dir.z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
+        }
+        if (!list.isEmpty()) {
+            Supplier<CustomDamage.Builder> base = () -> new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10);
+            boolean success = false;
+            double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.1;
+            for (Entity e : list) {
+                if (CombatUtils.damage(entity, e, base.get(), false, false, damagePhys, stack))
+                    success = true;
+            }
+            return success;
+        }
+        return false;
     }
 
     public static List<Entity> getEntitiesIn(LivingEntity entity, float reach, Predicate<Entity> pred) {

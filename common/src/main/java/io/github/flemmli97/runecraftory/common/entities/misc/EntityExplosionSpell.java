@@ -98,7 +98,7 @@ public class EntityExplosionSpell extends EntityProjectile {
 
     protected void doExplosion(Entity hit) {
         if (hit != null)
-            CombatUtils.damage(this.getOwner(), hit, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.FIRE).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
+            CombatUtils.damage(this.getOwner(), hit, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.FIRE).hurtResistant(5).knock(CustomDamage.KnockBackType.BACK).knockAmount(1), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
         List<Entity> list = this.level.getEntities(this, new AABB(-5, -5, -5, 5, 5, 5).move(this.position()));
         for (Entity e : list) {
             double dist;
@@ -111,7 +111,7 @@ public class EntityExplosionSpell extends EntityProjectile {
                 dmgPerc = 0.8f;
             else
                 dmgPerc = 1;
-            CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.FIRE).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier * dmgPerc, null);
+            CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.FIRE).hurtResistant(5), true, true, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier * dmgPerc, null);
         }
         if (this.level instanceof ServerLevel serverLevel)
             serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 2, 1.0, 0.0, 0.0, 1);

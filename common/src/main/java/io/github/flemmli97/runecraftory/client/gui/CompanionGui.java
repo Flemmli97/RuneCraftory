@@ -65,10 +65,10 @@ public abstract class CompanionGui<T extends LivingEntity & IBaseMob> extends Sc
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.entity.level().getLevel(), this.leftPos + barX + 99, this.topPos + 26, 1.0f, 0);
         int statX = 179;
         int statY = 43;
-        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.entity, Attributes.ATTACK_DAMAGE, null), this.leftPos + statX, this.topPos + statY, 1.0f, 0);
-        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13, 1.0f, 0);
-        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_MAGIC.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
-        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_MAGIC_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 3, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.entity, Attributes.ATTACK_DAMAGE), this.leftPos + statX, this.topPos + statY, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_DEFENCE.get()), this.leftPos + statX, this.topPos + statY + 13, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_MAGIC.get()), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.entity, ModAttributes.RF_MAGIC_DEFENCE.get()), this.leftPos + statX, this.topPos + statY + 13 * 3, 1.0f, 0);
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.entity.friendPoints(this.minecraft.player), this.leftPos + statX, this.topPos + statY + 13 * 4, 1.0f, 0);
 
         float scale = 1;

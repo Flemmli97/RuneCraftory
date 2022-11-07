@@ -44,33 +44,14 @@ public class CombatUtils {
     /**
      * For damage calculation target should be null. The damage reduction gets done at the target.
      */
-    public static int getAttributeValueRaw(Entity attacker, Attribute att) {
-        return getAttributeValue(attacker, att, null);
-    }
-
-    /**
-     * For damage calculation target should be null. The damage reduction gets done at the target.
-     */
-    public static int getAttributeValue(Entity entity, Attribute att, Entity target) {
+    public static double getAttributeValue(Entity entity, Attribute att) {
         if (!(entity instanceof LivingEntity attacker))
-            return 1;
-        float increase = 0;
+            return 0;
+        double increase = 0;
         if (attacker instanceof Player player) {
             increase += Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getAttributeValue((Player) attacker, att)).orElse(0d);
         } else if (attacker.getAttribute(att) != null) {
             increase += attacker.getAttributeValue(att);
-        }
-        if (!(target instanceof LivingEntity))
-            return (int) increase;
-        Attribute opp = opposing(att);
-        if (opp == null)
-            return (int) increase;
-        if (target instanceof Player player) {
-            increase -= Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getAttributeValue((Player) target, opp)).orElse(0d);
-        } else {
-            LivingEntity living = (LivingEntity) target;
-            if (living.getAttribute(opp) != null)
-                increase -= living.getAttributeValue(opp);
         }
         return (int) increase;
     }
@@ -101,15 +82,43 @@ public class CombatUtils {
         return null;
     }
 
+    public static EnumSkills matchingSkill(Attribute att) {
+        if (att == ModAttributes.RFPARA.get())
+            return EnumSkills.RESPARA;
+        if (att == ModAttributes.RFPOISON.get())
+            return EnumSkills.RESPOISON;
+        if (att == ModAttributes.RFSEAL.get())
+            return EnumSkills.RESSEAL;
+        if (att == ModAttributes.RFSLEEP.get())
+            return EnumSkills.RESSLEEP;
+        if (att == ModAttributes.RFFAT.get())
+            return EnumSkills.RESFAT;
+        if (att == ModAttributes.RFCOLD.get())
+            return EnumSkills.RESCOLD;
+        return null;
+    }
+
+    public static double statusEffectChance(LivingEntity entity, Attribute att, Entity target) {
+        double chance = getAttributeValue(entity, att);
+        Attribute opposing = opposing(att);
+        double res = target instanceof LivingEntity livingTarget && opposing != null ? getAttributeValue(livingTarget, opposing) : 0;
+        if (target instanceof Player player) {
+            EnumSkills matchingSkill = matchingSkill(att);
+            if (matchingSkill != null)
+                res += Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(matchingSkill).getLevel() * 0.005).orElse(0d);
+        }
+        return chance * (100 - res) * 0.01;
+    }
+
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {
-        int reduce = 0;
-        if (!GeneralConfig.disableDefence && !source.isBypassMagic()) {
+        float reduce = 0;
+        if (!GeneralConfig.disableDefence) {
             if (!GeneralConfig.vanillaIgnoreDefence || source instanceof CustomDamage) {
-                if (!source.isBypassArmor()) {
-                    if (source.isMagic())
-                        reduce = getAttributeValue(entity, ModAttributes.RF_MAGIC_DEFENCE.get(), null);
-                    else
-                        reduce = getAttributeValue(entity, ModAttributes.RF_DEFENCE.get(), null);
+                if (source.isMagic()) {
+                    if (!source.isBypassMagic())
+                        reduce = (float) getAttributeValue(entity, ModAttributes.RF_MAGIC_DEFENCE.get());
+                } else if (!source.isBypassArmor()) {
+                    reduce = (float) getAttributeValue(entity, ModAttributes.RF_DEFENCE.get());
                 }
             }
         }
@@ -123,28 +132,28 @@ public class CombatUtils {
     public static float elementalReduction(LivingEntity entity, DamageSource source, float amount) {
         if (source instanceof CustomDamage && ((CustomDamage) source).getElement() != EnumElement.NONE) {
             EnumElement element = ((CustomDamage) source).getElement();
-            float percent = 0;
+            double percent = 0;
             switch (element) {
                 case DARK:
-                    percent = getAttributeValue(entity, ModAttributes.RFRESDARK.get(), null);
+                    percent = getAttributeValue(entity, ModAttributes.RFRESDARK.get());
                     break;
                 case EARTH:
-                    percent = getAttributeValue(entity, ModAttributes.RFRESEARTH.get(), null);
+                    percent = getAttributeValue(entity, ModAttributes.RFRESEARTH.get());
                     break;
                 case FIRE:
-                    percent = getAttributeValue(entity, ModAttributes.RFRESFIRE.get(), null);
+                    percent = getAttributeValue(entity, ModAttributes.RFRESFIRE.get());
                     break;
                 case LIGHT:
-                    percent = getAttributeValue(entity, ModAttributes.RFRESLIGHT.get(), null);
+                    percent = getAttributeValue(entity, ModAttributes.RFRESLIGHT.get());
                     break;
                 case LOVE:
-                    percent = getAttributeValue(entity, ModAttributes.RFRESLOVE.get(), null);
+                    percent = getAttributeValue(entity, ModAttributes.RFRESLOVE.get());
                     break;
                 case WATER:
-                    percent = getAttributeValue(entity, ModAttributes.RFRESWATER.get(), null);
+                    percent = getAttributeValue(entity, ModAttributes.RFRESWATER.get());
                     break;
                 case WIND:
-                    percent = getAttributeValue(entity, ModAttributes.RFRESWIND.get(), null);
+                    percent = getAttributeValue(entity, ModAttributes.RFRESWIND.get());
                     break;
                 case NONE:
                     break;
@@ -226,30 +235,33 @@ public class CombatUtils {
         if (!(stack.getItem() instanceof IItemUsable item))
             return false;
         if (target.isAttackable() && !target.skipAttackInteraction(player) && player.getCooldowns().getCooldownPercent(stack.getItem(), 0.0f) <= 0) {
-            float damagePhys = getAttributeValueRaw(player, Attributes.ATTACK_DAMAGE) * damageModifier;
+            double damagePhys = getAttributeValue(player, Attributes.ATTACK_DAMAGE) * damageModifier;
             if (damagePhys > 0) {
                 if (resetCooldown) {
                     player.getCooldowns().addCooldown(stack.getItem(), item.itemCoolDownTicks());
                 }
-                boolean faintChance = player.level.random.nextInt(100) < getAttributeValue(player, ModAttributes.RFFAINT.get(), target);
-                boolean critChance = player.level.random.nextInt(100) < getAttributeValue(player, ModAttributes.RFCRIT.get(), target);
-                boolean knockBackChance = player.level.random.nextInt(100) < getAttributeValue(player, ModAttributes.RFKNOCK.get(), target);
+                boolean faintChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.RFFAINT.get(), target);
+                boolean critChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.RFCRIT.get(), target);
+                CustomDamage.DamageType damageType = CustomDamage.DamageType.NORMAL;
+                if (faintChance)
+                    damageType = CustomDamage.DamageType.FAINT;
+                else if (critChance)
+                    damageType = CustomDamage.DamageType.IGNOREDEF;
+                boolean knockBackChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.RFKNOCK.get(), target);
                 int i = knockBackChance ? 1 : 0;
                 if (player.isSprinting()) {
                     player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, player.getSoundSource(), 1.0f, 1.0f);
                     ++i;
                 }
-                Vec3 targetMot = target.getDeltaMovement();
-                damagePhys = faintChance ? Float.MAX_VALUE : damagePhys;
-                boolean ignoreArmor = critChance || faintChance;
                 float knockback = i * 0.5f + 0.1f;
                 if (target instanceof BaseMonster) {
                     knockback *= 0.85f;
                 }
                 if (player.level instanceof ServerLevel serverLevel)
                     ModSpells.STAFFCAST.get().use(serverLevel, player, stack);
-                CustomDamage source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(ignoreArmor ? CustomDamage.DamageType.IGNOREDEF : CustomDamage.DamageType.NORMAL).knock(CustomDamage.KnockBackType.VANILLA)
+                CustomDamage source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(damageType).knock(CustomDamage.KnockBackType.VANILLA)
                         .knockAmount(knockback).hurtResistant(0).get();
+                Vec3 targetMot = target.getDeltaMovement();
                 if (damage(player, target, source, damagePhys, stack)) {
                     //Level skill on successful attack
                     if (levelSkill && player instanceof ServerPlayer)
@@ -284,39 +296,54 @@ public class CombatUtils {
     }
 
     public static boolean mobAttack(LivingEntity attacker, Entity target) {
-        CustomDamage source = build(attacker, target, new CustomDamage.Builder(attacker)).hurtResistant(5).get();
-        return mobAttack(attacker, target, source, CombatUtils.getAttributeValue(attacker, Attributes.ATTACK_DAMAGE, target));
+        CustomDamage source = build(attacker, target, new CustomDamage.Builder(attacker).hurtResistant(5), false, true);
+        return mobAttack(attacker, target, source, CombatUtils.getAttributeValue(attacker, Attributes.ATTACK_DAMAGE));
     }
 
-    public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage source, float dmg) {
+    public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage source, double dmg) {
         if (target.level.getDifficulty() == Difficulty.PEACEFUL && target instanceof Player)
             return false;
         if (dmg > 0) {
-            boolean faintChance = attacker.level.random.nextInt(100) < getAttributeValue(attacker, ModAttributes.RFFAINT.get(), target);
-            dmg = faintChance ? Float.MAX_VALUE : dmg;
             return damage(attacker, target, source, dmg, null);
         }
         return false;
     }
 
-    public static CustomDamage.Builder build(LivingEntity attacker, Entity target, CustomDamage.Builder builder) {
-        boolean faintChance = attacker.level.random.nextInt(100) < getAttributeValue(attacker, ModAttributes.RFFAINT.get(), target);
-        boolean critChance = attacker.level.random.nextInt(100) < getAttributeValue(attacker, ModAttributes.RFCRIT.get(), target);
-        boolean knockBackChance = attacker.level.random.nextInt(100) < getAttributeValue(attacker, ModAttributes.RFKNOCK.get(), target);
-        int i = knockBackChance ? 2 : 1;
-        if (attacker.isSprinting()) {
-            ++i;
+    public static CustomDamage build(Entity entity, Entity target, CustomDamage.Builder builder, boolean magic, boolean withDefaultKnockback) {
+        if (!(entity instanceof LivingEntity attacker)) {
+            return builder.damageType(magic ? CustomDamage.DamageType.MAGIC : CustomDamage.DamageType.NORMAL).get();
         }
-        boolean ignoreArmor = critChance || faintChance;
-        float knockback = i * 0.5f - 0.1f;
-        if (target instanceof BaseMonster) {
-            knockback *= 0.85f;
+        boolean faintChance = attacker.level.random.nextDouble() < statusEffectChance(attacker, ModAttributes.RFFAINT.get(), target);
+        boolean critChance = attacker.level.random.nextDouble() < statusEffectChance(attacker, ModAttributes.RFCRIT.get(), target);
+        CustomDamage.DamageType damageType = magic ? CustomDamage.DamageType.MAGIC : CustomDamage.DamageType.NORMAL;
+        if (faintChance)
+            damageType = CustomDamage.DamageType.FAINT;
+        else if (critChance)
+            damageType = magic ? CustomDamage.DamageType.IGNOREMAGICDEF : CustomDamage.DamageType.IGNOREDEF;
+        if (withDefaultKnockback) {
+            boolean knockBackChance = attacker.level.random.nextDouble() < statusEffectChance(attacker, ModAttributes.RFKNOCK.get(), target);
+            int i = knockBackChance ? 2 : 1;
+            if (attacker.isSprinting()) {
+                ++i;
+            }
+            float knockback = i * 0.5f - 0.1f;
+            if (target instanceof BaseMonster) {
+                knockback *= 0.85f;
+            }
+            builder.knockAmount(knockback);
         }
-        return builder.damageType(ignoreArmor ? CustomDamage.DamageType.IGNOREDEF : CustomDamage.DamageType.NORMAL).knock(CustomDamage.KnockBackType.VANILLA).knockAmount(knockback);
+        return builder.damageType(damageType).get();
     }
 
-    public static boolean damage(@Nullable Entity attacker, Entity target, CustomDamage source, float damage, @Nullable ItemStack stack) {
-        boolean success = target.hurt(source, damage);
+    public static boolean damage(@Nullable Entity attacker, Entity target, CustomDamage.Builder source, boolean magic, boolean withDefaultKnockback, double damage, @Nullable ItemStack stack) {
+        return damage(attacker, target, build(attacker, target, source, magic, withDefaultKnockback), damage, stack);
+    }
+
+    public static boolean damage(@Nullable Entity attacker, Entity target, CustomDamage source, double damage, @Nullable ItemStack stack) {
+        float dmg = (float) damage;
+        if (source.criticalDamage())
+            dmg = Float.MAX_VALUE;
+        boolean success = target.hurt(source, dmg);
         if (success) {
             spawnElementalParticle(target, source.getElement());
             if (attacker instanceof LivingEntity livingAttacker) {
@@ -353,14 +380,14 @@ public class CombatUtils {
 
     //TODO: Need to look more into stun and dizzy
     public static void applyStatusEffects(LivingEntity attackingEntity, LivingEntity target) {
-        boolean poisonChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFPOISON.get(), target);
-        boolean sleepChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFSLEEP.get(), target);
-        boolean fatigueChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFFAT.get(), target);
-        boolean coldChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFCOLD.get(), target);
-        boolean paraChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFPARA.get(), target);
-        boolean sealChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFSEAL.get(), target);
-        boolean dizzyChance = attackingEntity.level.random.nextInt(1000) < getAttributeValue(attackingEntity, ModAttributes.RFDIZ.get(), target);
-        boolean stunChance = attackingEntity.level.random.nextInt(100) < getAttributeValue(attackingEntity, ModAttributes.RFSTUN.get(), target);
+        boolean poisonChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RFPOISON.get(), target);
+        boolean sleepChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RFSLEEP.get(), target);
+        boolean fatigueChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RFFAT.get(), target);
+        boolean coldChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RFCOLD.get(), target);
+        boolean paraChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RFPARA.get(), target);
+        boolean sealChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RFSEAL.get(), target);
+        boolean dizzyChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RFDIZ.get(), target);
+        boolean stunChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RFSTUN.get(), target);
         if (poisonChance) {
             target.addEffect(new MobEffectInstance(ModEffects.poison.get()));
             if (attackingEntity instanceof ServerPlayer player)

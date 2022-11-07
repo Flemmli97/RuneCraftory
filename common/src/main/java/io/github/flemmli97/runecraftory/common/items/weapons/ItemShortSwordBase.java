@@ -35,6 +35,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ItemShortSwordBase extends SwordItem implements IItemUsable, IChargeable, IAOEWeapon {
 
@@ -127,41 +128,35 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                     Runnable run = () -> {
                         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
-                        List<Entity> list = RayTraceUtils.getEntities(entity, this.getRange() + 2, this.getFOV() + 10);
-                        if (!list.isEmpty()) {
-                            CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
-                            boolean success = false;
-                            for (Entity e : list) {
-                                float damagePhys = CombatUtils.getAttributeValueRaw(entity, Attributes.ATTACK_DAMAGE);
-                                if (CombatUtils.damage(entity, e, src, damagePhys, stack))
-                                    success = true;
-                            }
-                            if (success) {
-                                this.onEntityHit(player, stack);
-                                LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 3);
-                                LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.SHORTSWORD);
-                            }
+                        if (performRightClickAction(stack, entity, this.getRange(), this.getFOV())) {
+                            this.onEntityHit(player, stack);
+                            LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 3);
+                            LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.SHORTSWORD);
                         }
-
                     };
                     data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.SHORTSWORDRIGHTCLICK, stack, run);
                 });
                 return;
             }
-            List<Entity> list = RayTraceUtils.getEntities(entity, this.getRange() + 2, this.getFOV() + 10);
-            if (!list.isEmpty()) {
-                CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
-                boolean success = false;
-                for (Entity e : list) {
-                    float damagePhys = CombatUtils.getAttributeValueRaw(entity, Attributes.ATTACK_DAMAGE);
-                    if (CombatUtils.damage(entity, e, src, damagePhys, stack))
-                        success = true;
-                }
-                if (success) {
-                    entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
-                }
+            if (performRightClickAction(stack, entity, this.getRange(), this.getFOV())) {
+                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }
+    }
+
+    public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, float range, float fov) {
+        List<Entity> list = RayTraceUtils.getEntities(entity, range + 2, fov + 10);
+        if (!list.isEmpty()) {
+            Supplier<CustomDamage.Builder> base = () -> new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(20);
+            boolean success = false;
+            double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.4;
+            for (Entity e : list) {
+                if (CombatUtils.damage(entity, e, base.get(), false, false, damagePhys, stack))
+                    success = true;
+            }
+            return success;
+        }
+        return false;
     }
 
     @Override

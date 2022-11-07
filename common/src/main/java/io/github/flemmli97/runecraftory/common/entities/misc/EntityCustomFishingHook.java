@@ -171,7 +171,7 @@ public class EntityCustomFishingHook extends EntityProjectile {
             this.discard();
             return false;
         }
-        boolean att = CombatUtils.damage(this.getOwner(), entityHitResult.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(this.element).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), Attributes.ATTACK_DAMAGE), null);
+        boolean att = CombatUtils.damage(this.getOwner(), entityHitResult.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(this.element).hurtResistant(5), false, false, CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE), null);
         if (att && this.setOnCooldown != null) {
             this.setOnCooldown.run();
             this.setOnCooldown = null;

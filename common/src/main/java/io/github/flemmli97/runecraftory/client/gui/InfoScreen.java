@@ -77,10 +77,10 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getMoney(), this.leftPos + 187, this.topPos + 9, 0.6f, 0);
         int statX = 216;
         int statY = 59;
-        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE, null), this.leftPos + statX, this.topPos + statY, 1.0f, 0);
-        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13, 1.0f, 0);
-        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_MAGIC.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
-        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_MAGIC_DEFENCE.get(), null), this.leftPos + statX, this.topPos + statY + 13 * 3, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE), this.leftPos + statX, this.topPos + statY, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_DEFENCE.get()), this.leftPos + statX, this.topPos + statY + 13, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_MAGIC.get()), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_MAGIC_DEFENCE.get()), this.leftPos + statX, this.topPos + statY + 13 * 3, 1.0f, 0);
 
         InventoryScreen.renderEntityInInventory(this.leftPos + 57, this.topPos + 76, 29, this.leftPos + 58 - mouseX, this.topPos + 26 - mouseY, this.minecraft.player);
     }

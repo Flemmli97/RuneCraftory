@@ -20,26 +20,23 @@ public class CustomDamage extends EntityDamageSource {
 
     private EnumElement element;
     private KnockBackType knock;
-    private boolean ignoreMagic;
     private Entity trueSourceEntity;
     private float knockAmount;
     private int protection;
+    private boolean faintEntity;
 
-    public CustomDamage(Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock, float knockBackAmount, int hurtTimeProtection) {
+    public CustomDamage(Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock, float knockBackAmount, int hurtTimeProtection, boolean faintEntity) {
         super("rfAttack", attacker);
         this.element = element;
         this.knock = knock;
         this.trueSourceEntity = cause;
         this.knockAmount = knockBackAmount;
         this.protection = hurtTimeProtection;
+        this.faintEntity = faintEntity;
     }
 
     public EnumElement getElement() {
         return this.element;
-    }
-
-    public boolean ignoreMagicDef() {
-        return this.ignoreMagic;
     }
 
     public KnockBackType getKnockBackType() {
@@ -52,6 +49,10 @@ public class CustomDamage extends EntityDamageSource {
 
     public int hurtProtection() {
         return this.protection;
+    }
+
+    public boolean criticalDamage() {
+        return this.faintEntity;
     }
 
     @Override
@@ -79,7 +80,7 @@ public class CustomDamage extends EntityDamageSource {
         MAGIC,
         IGNOREDEF,
         IGNOREMAGICDEF,
-        IGNOREALL
+        FAINT
     }
 
     public enum KnockBackType {
@@ -93,7 +94,6 @@ public class CustomDamage extends EntityDamageSource {
 
         private EnumElement element = EnumElement.NONE;
         private KnockBackType knock = KnockBackType.VANILLA;
-        private boolean ignoreMagic;
         private Entity trueSource;
         private Entity cause;
         private float knockAmount;
@@ -105,7 +105,7 @@ public class CustomDamage extends EntityDamageSource {
         }
 
         public Builder(Entity attacker, Entity source) {
-            this(attacker);
+            this.cause = attacker;
             this.trueSource = source;
         }
 
@@ -130,29 +130,26 @@ public class CustomDamage extends EntityDamageSource {
         }
 
         public Builder damageType(DamageType type) {
-            this.dmg = type;
+            if (this.dmg != DamageType.FAINT)
+                this.dmg = type;
             return this;
         }
 
         public CustomDamage get() {
-            CustomDamage source = new CustomDamage(this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection);
+            CustomDamage source = new CustomDamage(this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection, this.dmg == DamageType.FAINT);
             switch (this.dmg) {
                 case NORMAL:
                     break;
                 case MAGIC:
                     source.setMagic();
                     break;
+                case FAINT:
                 case IGNOREDEF:
                     source.bypassArmor();
                     break;
                 case IGNOREMAGICDEF:
                     source.setMagic();
-                    source.ignoreMagic = true;
-                    break;
-                case IGNOREALL:
-                    source.bypassArmor();
-                    source.setMagic();
-                    source.ignoreMagic = true;
+                    source.bypassMagic();
                     break;
             }
             return source;

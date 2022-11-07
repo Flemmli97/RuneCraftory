@@ -4,6 +4,7 @@ RuneCraftory 1.4.0
 - Various mob attack rewritten to use spell system. So they can be used with staff upgrades
 - Fix default element not saved when upgrading item
 - Player get a notification when their tamed monster gets knocked out
+- Lots of damaging stuff that didnt apply several status effects now do it properly
 
 RuneCraftory 1.3.4
 ================

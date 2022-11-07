@@ -46,7 +46,7 @@ public class TripleArrowSpell extends Spell {
         if (stack.getItem() instanceof ItemStaffBase)
             f = BowItem.getPowerForTime(72000 - entity.getUseItemRemainingTicks());
         arrowentity.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0.0F, f * 1.5F, 1.0F);
-        arrowentity.setBaseDamage(1.7 + CombatUtils.getAttributeValueRaw(entity, Attributes.ATTACK_DAMAGE) * 0.05 * lvl);
+        arrowentity.setBaseDamage(1.7 + CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 0.05 * lvl);
         arrowentity.setSecondsOnFire(ItemNBT.getElement(stack) == EnumElement.FIRE ? 200 : 0);
         arrowentity.pickup = AbstractArrow.Pickup.DISALLOWED;
         level.addFreshEntity(arrowentity);
@@ -58,7 +58,7 @@ public class TripleArrowSpell extends Spell {
             Vector3f newDir = new Vector3f(dir);
             newDir.transform(quaternion);
             Arrow arrowO = new Arrow(level, entity);
-            arrowO.setBaseDamage(1.7 + CombatUtils.getAttributeValueRaw(entity, Attributes.ATTACK_DAMAGE) * 0.05 * lvl);
+            arrowO.setBaseDamage(1.7 + CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 0.05 * lvl);
             arrowO.shoot(newDir.x(), newDir.y(), newDir.z(), f * 1.5F, 1.0F);
             level.addFreshEntity(arrowO);
         }

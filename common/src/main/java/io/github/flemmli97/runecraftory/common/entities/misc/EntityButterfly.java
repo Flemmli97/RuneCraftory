@@ -70,7 +70,7 @@ public class EntityButterfly extends EntityProjectile {
         LivingEntity owner = this.getOwner() instanceof LivingEntity living ? living : null;
         if (owner != null)
             CombatUtils.applyTempAttribute(owner, ModAttributes.RFDRAIN.get(), 100);
-        if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(3).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(3), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null)) {
             if (owner != null)
                 CombatUtils.removeAttribute(owner, ModAttributes.RFDRAIN.get());
             if (result.getEntity() instanceof LivingEntity)

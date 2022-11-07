@@ -35,6 +35,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ItemLongSwordBase extends SwordItem implements IItemUsable, IChargeable, IAOEWeapon {
 
@@ -128,39 +129,34 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
                     Runnable run = () -> {
                         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
                         player.sweepAttack();
-                        List<Entity> list = RayTraceUtils.getEntitiesIgnorePitch(entity, this.getRange(), 200, null);
-                        if (!list.isEmpty()) {
-                            CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
-                            boolean success = false;
-                            for (Entity e : list) {
-                                float damagePhys = CombatUtils.getAttributeValueRaw(entity, Attributes.ATTACK_DAMAGE);
-                                if (CombatUtils.damage(entity, e, src, damagePhys, stack))
-                                    success = true;
-                            }
-                            if (success) {
-                                LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 3);
-                                LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.LONGSWORD);
-                            }
+                        if (performRightClickAction(stack, entity, this.getRange())) {
+                            LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 3);
+                            LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.LONGSWORD);
                         }
                     };
                     data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.LONGSWORDRIGHTCLICK, stack, run);
                 });
                 return;
             }
-            List<Entity> list = RayTraceUtils.getEntitiesIgnorePitch(entity, this.getRange(), 200, null);
-            if (!list.isEmpty()) {
-                CustomDamage src = new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(0.7f).hurtResistant(10).get();
-                boolean success = false;
-                for (Entity e : list) {
-                    float damagePhys = CombatUtils.getAttributeValueRaw(entity, Attributes.ATTACK_DAMAGE);
-                    if (CombatUtils.damage(entity, e, src, damagePhys, stack))
-                        success = true;
-                }
-                if (success) {
-                    entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
-                }
+            if (performRightClickAction(stack, entity, this.getRange())) {
+                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }
+    }
+
+    public static boolean performRightClickAction(ItemStack stack, LivingEntity entity, float range) {
+        List<Entity> list = RayTraceUtils.getEntities(entity, range, 200);
+        if (!list.isEmpty()) {
+            Supplier<CustomDamage.Builder> base = () -> new CustomDamage.Builder(entity).element(ItemNBT.getElement(stack)).knock(CustomDamage.KnockBackType.UP).knockAmount(1f).hurtResistant(10);
+            boolean success = false;
+            double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.2;
+            for (Entity e : list) {
+                if (CombatUtils.damage(entity, e, base.get(), false, false, damagePhys, stack))
+                    success = true;
+            }
+            return success;
+        }
+        return false;
     }
 
     @Override

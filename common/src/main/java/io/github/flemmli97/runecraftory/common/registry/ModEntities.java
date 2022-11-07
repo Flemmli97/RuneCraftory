@@ -363,6 +363,15 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic, 14).putLevelGains(LibAttributes.rf_magic, 5.1)
                     .putAttributes(LibAttributes.rf_magic_defence, 3).putLevelGains(LibAttributes.rf_magic_defence, 4.2)
                     .putAttributes(LibAttributes.rf_res_earth, 25)
+                    .putAttributes(LibAttributes.rf_res_para, 80)
+                    .putAttributes(LibAttributes.rf_res_poison, 90)
+                    .putAttributes(LibAttributes.rf_res_seal, 90)
+                    .putAttributes(LibAttributes.rf_res_sleep, 100)
+                    .putAttributes(LibAttributes.rf_res_diz, 70)
+                    .putAttributes(LibAttributes.rf_res_crit, 40)
+                    .putAttributes(LibAttributes.rf_res_stun, 60)
+                    .putAttributes(LibAttributes.rf_res_faint, 95)
+                    .putAttributes(LibAttributes.rf_res_drain, 30)
                     .setTamingItem(new ItemTagWrapper(ModItems.toyherbGiant.getID().toString(), 1))
                     .xp(500).money(50).tamingChance(0.008f).setRidable().setFlying().build());
     public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> thunderbolt = regMonster(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), LibEntities.thunderbolt,
@@ -374,6 +383,15 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic, 13).putLevelGains(LibAttributes.rf_magic, 4.7)
                     .putAttributes(LibAttributes.rf_magic_defence, 2).putLevelGains(LibAttributes.rf_magic_defence, 4)
                     .putAttributes(LibAttributes.rf_res_wind, 25)
+                    .putAttributes(LibAttributes.rf_res_para, 85)
+                    .putAttributes(LibAttributes.rf_res_poison, 90)
+                    .putAttributes(LibAttributes.rf_res_seal, 90)
+                    .putAttributes(LibAttributes.rf_res_sleep, 100)
+                    .putAttributes(LibAttributes.rf_res_diz, 60)
+                    .putAttributes(LibAttributes.rf_res_crit, 40)
+                    .putAttributes(LibAttributes.rf_res_stun, 50)
+                    .putAttributes(LibAttributes.rf_res_faint, 95)
+                    .putAttributes(LibAttributes.rf_res_drain, 25)
                     .setTamingItem(new ItemTagWrapper(ModItems.carrotGiant.getID().toString(), 1))
                     .xp(750).money(75).tamingChance(0.008f).setRidable().build());
     public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> marionetta = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.5f).clientTrackingRange(8), LibEntities.marionetta,
@@ -385,6 +403,15 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_magic, 13.3).putLevelGains(LibAttributes.rf_magic, 4.5)
                     .putAttributes(LibAttributes.rf_magic_defence, 3.9).putLevelGains(LibAttributes.rf_magic_defence, 3.85)
                     .putAttributes(LibAttributes.rf_res_dark, 25)
+                    .putAttributes(LibAttributes.rf_res_para, 75)
+                    .putAttributes(LibAttributes.rf_res_poison, 95)
+                    .putAttributes(LibAttributes.rf_res_seal, 90)
+                    .putAttributes(LibAttributes.rf_res_sleep, 100)
+                    .putAttributes(LibAttributes.rf_res_diz, 65)
+                    .putAttributes(LibAttributes.rf_res_crit, 35)
+                    .putAttributes(LibAttributes.rf_res_stun, 60)
+                    .putAttributes(LibAttributes.rf_res_faint, 95)
+                    .putAttributes(LibAttributes.rf_res_drain, 20)
                     .setTamingItem(new ItemTagWrapper(ModTags.marionettaTamer, 1))
                     .xp(1000).money(75).tamingChance(0.008f).setRidable().build());
 

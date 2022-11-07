@@ -68,7 +68,7 @@ public class EntityRockSpear extends EntityBeam {
 
     @Override
     public void onImpact(EntityHitResult entityHitResult) {
-        CombatUtils.damage(this.getOwner(), entityHitResult.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).hurtResistant(5).get(), CombatUtils.getAttributeValueRaw(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
+        CombatUtils.damage(this.getOwner(), entityHitResult.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).hurtResistant(5), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
     }
 
     @Override
