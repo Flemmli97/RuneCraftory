@@ -131,13 +131,14 @@ public class ItemNBT {
             for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {
                 updateStatIncrease(entry.getKey(), entry.getValue() * efficiency, tag.getCompound(LibNBT.Stats));
             }
-            if (shouldHaveElement(stack) && stat.element() != EnumElement.NONE) {
+            if (!tag.contains(LibNBT.Element))
+                tag.putString(LibNBT.Element, getElement(stack).toString());
+            if (shouldHaveElement(stack)) {
                 EnumElement current = getElement(stack);
-                if (current == EnumElement.NONE) {
+                if (stat.element() != EnumElement.NONE && current == EnumElement.NONE) {
                     tag.putString(LibNBT.Element, stat.element().toString());
-                } else {
-                    tag.putString(LibNBT.Element, EnumElement.NONE.toString());
-                }
+                } else
+                    tag.putString(LibNBT.Element, current.toString());
             }
             if (stack.getItem() instanceof ItemStaffBase) {
                 Platform.INSTANCE.getStaffData(stack).ifPresent(data -> {
