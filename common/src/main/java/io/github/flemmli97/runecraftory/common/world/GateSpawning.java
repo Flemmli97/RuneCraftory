@@ -66,7 +66,6 @@ public class GateSpawning {
         } else {
             int i = amount;
             int totalWeight = WeightedRandom.getTotalWeight(list);
-            Optional<SpawnResource> el;
             Function<Optional<SpawnResource>, EntityType<?>> fromData = o -> o.map(d -> PlatformUtils.INSTANCE.entities().getFromId(d.entity)).orElse(null);
             EntityType<?> type;
             while (i > 0 && !ret.contains(type = fromData.apply(WeightedRandom.getRandomItem(rand, list, totalWeight)))) {
@@ -91,13 +90,10 @@ public class GateSpawning {
     public static boolean hasSpawns(ServerLevelAccessor level, BlockPos pos) {
         if (level.getBiome(pos).tags().anyMatch(t -> {
             List<SpawnResource> l = spawningMappingBiome.get(t);
-            return l != null && !l.isEmpty();
+            return l != null && l.stream().anyMatch(r -> r.canSpawn(level.getLevel(), pos));
         }))
             return true;
-        if (level instanceof ServerLevel) {
-            return hasStructureSpawns((ServerLevel) level, pos);
-        }
-        return false;
+        return hasStructureSpawns(level.getLevel(), pos);
     }
 
     public static boolean hasStructureSpawns(ServerLevel world, BlockPos pos) {
@@ -145,12 +141,12 @@ public class GateSpawning {
         }
 
         public boolean canSpawn(ServerLevel world, BlockPos pos) {
-            return pos.distSqr(world.getSharedSpawnPos()) < this.distToSpawnSq;
+            return pos.distSqr(world.getSharedSpawnPos()) >= this.distToSpawnSq;
         }
 
         @Override
         public String toString() {
-            return String.format("Entity: %s, MinSpawnSq: %d, Weight: %s", this.entity, this.distToSpawnSq, this.getWeight());
+            return String.format("Entity: %s, MinSpawnSq: %d, Weight: %s, MinGateLevel: %s", this.entity, this.distToSpawnSq, this.getWeight(), this.minGateLevel);
         }
     }
 }

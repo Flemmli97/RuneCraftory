@@ -27,6 +27,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
@@ -76,6 +77,7 @@ public class GateEntity extends Mob implements IBaseMob {
     private EnumElement type = EnumElement.NONE;
     private boolean initialSpawn = true;
     private final LevelExpPair expPair = new LevelExpPair();
+    private boolean removeCauseEmptyList;
 
     public GateEntity(EntityType<? extends GateEntity> type, Level level) {
         super(type, level);
@@ -165,7 +167,12 @@ public class GateEntity extends Mob implements IBaseMob {
     public void tick() {
         if (Platform.INSTANCE.onLivingUpdate(this)) return;
         if (!this.level.isClientSide) {
+            if (this.removeCauseEmptyList) {
+                this.discard();
+                return;
+            }
             this.setSharedFlag(6, this.isCurrentlyGlowing());
+
         } else {
             this.clientParticles += 10;
             this.clientParticleFlag = true;
@@ -259,6 +266,9 @@ public class GateEntity extends Mob implements IBaseMob {
         this.spawnList.addAll(GateSpawning.pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(4) + 2, this.blockPosition(), gateLevel));
         this.setPos(this.getX(), this.getY() + 1, this.getZ());
         this.updateStatsToLevel();
+        //Cant check during spawn conditions since gate level isnt set there yet
+        if (this.spawnList.isEmpty() && reason != MobSpawnType.SPAWN_EGG && reason != MobSpawnType.COMMAND)
+            this.removeCauseEmptyList = true;
         return spawnData;
     }
 
@@ -437,5 +447,10 @@ public class GateEntity extends Mob implements IBaseMob {
             }
         }
         return element;
+    }
+
+    @Override
+    public boolean broadcastToPlayer(ServerPlayer player) {
+        return !this.removeCauseEmptyList;
     }
 }
