@@ -90,7 +90,7 @@ public class ItemNBT {
         return shouldHaveElement(stack) ? DataPackHandler.getStats(stack.getItem()).map(ItemStat::element).orElse(EnumElement.NONE) : EnumElement.NONE;
     }
 
-    public static ItemStack addUpgradeItem(ItemStack stack, ItemStack stackToAdd) {
+    public static ItemStack addUpgradeItem(ItemStack stack, ItemStack stackToAdd, boolean crafting) {
         int level = itemLevel(stack);
         if (stackToAdd.isEmpty() || !ItemNBT.shouldHaveStats(stack) || level >= 10)
             return ItemStack.EMPTY;
@@ -99,21 +99,31 @@ public class ItemNBT {
             tag = new CompoundTag();
         tag.putInt(LibNBT.Level, level + 1);
 
-        int similar = 0;
-        ListTag upgrades = tag.getList(LibNBT.Upgrades, Tag.TAG_COMPOUND);
-        //Searches for items, which are already applied to the itemstack. Reduces the efficiency for each identical item found.
-        for (Tag item : upgrades) {
-            CompoundTag nbt = (CompoundTag) item;
-            if (PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString().equals(nbt.getString("Id"))) {
-                ++similar;
+        float efficiency = 1;
+        if (!crafting) {
+            int similar = 0;
+            ListTag upgrades = tag.getList(LibNBT.Upgrades, Tag.TAG_COMPOUND);
+            //Searches for items, which are already applied to the itemstack. Reduces the efficiency for each identical item found.
+            for (Tag item : upgrades) {
+                CompoundTag nbt = (CompoundTag) item;
+                if (PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString().equals(nbt.getString("Id"))) {
+                    ++similar;
+                }
             }
+            efficiency = (float) Math.max(0.0, 1 - 0.3 * similar);
+            CompoundTag upgradeItem = new CompoundTag();
+            upgradeItem.putString("Id", PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString());
+            upgradeItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
+            upgrades.add(upgradeItem);
+            tag.put(LibNBT.Upgrades, upgrades);
+        } else {
+            ListTag bonus = tag.getList(LibNBT.Upgrades, Tag.TAG_COMPOUND);
+            CompoundTag bonusItem = new CompoundTag();
+            bonusItem.putString("Id", PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString());
+            bonusItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
+            bonus.add(bonusItem);
+            tag.put(LibNBT.CraftingBonus, bonus);
         }
-        float efficiency = (float) Math.max(0.0, 1 - 0.3 * similar);
-        CompoundTag upgradeItem = new CompoundTag();
-        upgradeItem.putString("Id", PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString());
-        upgradeItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
-        upgrades.add(upgradeItem);
-        tag.put(LibNBT.Upgrades, upgrades);
         if (stackToAdd.getItem() == ModItems.glass.get() && stack.getItem() instanceof IItemUsable)
             tag.putBoolean(LibNBT.MagnifyingGlass, true);
         ItemStat stat = DataPackHandler.getStats(stackToAdd.getItem()).orElse(null);

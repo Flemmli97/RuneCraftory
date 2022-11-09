@@ -15,13 +15,18 @@ import net.minecraft.world.item.ItemStack;
 public class CraftingOutputSlot extends Slot {
 
     private final PlayerContainerInv ingredientInv;
-    private final ContainerCrafting container;
-    private int amountCrafted;
+    private final ContainerCrafting craftingContainer;
+    private int amountCrafted, id;
 
     public CraftingOutputSlot(Container output, ContainerCrafting container, PlayerContainerInv ingredientInv, int id, int x, int y) {
         super(output, id, x, y);
         this.ingredientInv = ingredientInv;
-        this.container = container;
+        this.craftingContainer = container;
+        this.id = id;
+    }
+
+    public ItemStack getStackToSync() {
+        return this.container.getItem(this.id + 1);
     }
 
     @Override
@@ -51,17 +56,21 @@ public class CraftingOutputSlot extends Slot {
         this.checkTakeAchievements(stack);
         if (!(player instanceof ServerPlayer serverPlayer))
             return;
-        NonNullList<ItemStack> remaining = this.container.getCurrentRecipe() != null ? this.container.getCurrentRecipe().getRemainingItems(this.ingredientInv) : NonNullList.withSize(0, ItemStack.EMPTY);
-        if (this.container.rpCost() >= 0)
+        NonNullList<ItemStack> remaining = this.craftingContainer.getCurrentRecipe() != null ? this.craftingContainer.getCurrentRecipe().getRemainingItems(this.ingredientInv) : NonNullList.withSize(0, ItemStack.EMPTY);
+        if (this.craftingContainer.rpCost() >= 0)
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                data.decreaseRunePoints(player, this.container.rpCost(), true);
-                if (this.container.getCurrentRecipe() != null)
-                    switch (this.container.craftingType()) {
-                        case FORGE -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.FORGING, this.container.getCurrentRecipe());
-                        case ARMOR -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CRAFTING, this.container.getCurrentRecipe());
-                        case CHEM -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CHEMISTRY, this.container.getCurrentRecipe());
-                        case COOKING -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.COOKING, this.container.getCurrentRecipe());
+                data.decreaseRunePoints(player, this.craftingContainer.rpCost(), true);
+                if (this.craftingContainer.getCurrentRecipe() != null)
+                    if (!data.getRecipeKeeper().isUnlocked(this.craftingContainer.getCurrentRecipe())) {
+                        data.getRecipeKeeper().unlockRecipe(player, this.craftingContainer.getCurrentRecipe());
+                        this.craftingContainer.sendCraftingRecipesToClient(serverPlayer, data);
                     }
+                switch (this.craftingContainer.craftingType()) {
+                    case FORGE -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.FORGING, this.craftingContainer.getCurrentRecipe());
+                    case ARMOR -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CRAFTING, this.craftingContainer.getCurrentRecipe());
+                    case CHEM -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CHEMISTRY, this.craftingContainer.getCurrentRecipe());
+                    case COOKING -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.COOKING, this.craftingContainer.getCurrentRecipe());
+                }
             });
 
         boolean refreshRecipe = false;
@@ -87,7 +96,7 @@ public class CraftingOutputSlot extends Slot {
             }
         }
         if (refreshRecipe)
-            this.container.slotsChanged(this.ingredientInv);
+            this.craftingContainer.slotsChanged(this.ingredientInv);
         super.onTake(player, stack);
     }
 
@@ -108,6 +117,6 @@ public class CraftingOutputSlot extends Slot {
     public boolean mayPickup(Player player) {
         if (!GeneralConfig.useRP)
             return true;
-        return (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(data -> data.getMaxRunePoints() >= this.container.rpCost()).orElse(false));
+        return (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(data -> data.getMaxRunePoints() >= this.craftingContainer.rpCost()).orElse(false));
     }
 }

@@ -14,10 +14,10 @@ public class PacketRegistrar {
         register.registerMessage(id++, C2SOpenInfo.ID, C2SOpenInfo.class, C2SOpenInfo::write, C2SOpenInfo::read, C2SOpenInfo::handle);
         register.registerMessage(id++, C2SRideJump.ID, C2SRideJump.class, C2SRideJump::write, C2SRideJump::read, C2SRideJump::handle);
         register.registerMessage(id++, C2SSpellKey.ID, C2SSpellKey.class, C2SSpellKey::write, C2SSpellKey::read, C2SSpellKey::handle);
-        register.registerMessage(id++, C2SUpdateCraftingScreen.ID, C2SUpdateCraftingScreen.class, C2SUpdateCraftingScreen::write, C2SUpdateCraftingScreen::read, C2SUpdateCraftingScreen::handle);
         register.registerMessage(id++, C2SSetMonsterBehaviour.ID, C2SSetMonsterBehaviour.class, C2SSetMonsterBehaviour::write, C2SSetMonsterBehaviour::read, C2SSetMonsterBehaviour::handle);
         register.registerMessage(id++, C2SNPCInteraction.ID, C2SNPCInteraction.class, C2SNPCInteraction::write, C2SNPCInteraction::read, C2SNPCInteraction::handle);
         register.registerMessage(id++, C2SShopButton.ID, C2SShopButton.class, C2SShopButton::write, C2SShopButton::read, C2SShopButton::handle);
+        register.registerMessage(id++, C2SSelectRecipeCrafting.ID, C2SSelectRecipeCrafting.class, C2SSelectRecipeCrafting::write, C2SSelectRecipeCrafting::read, C2SSelectRecipeCrafting::handle);
         return id;
     }
 
@@ -45,6 +45,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CShopResponses.ID, S2CShopResponses.class, S2CShopResponses::write, S2CShopResponses::read, S2CShopResponses::handle);
         register.registerMessage(id++, S2CScreenShake.ID, S2CScreenShake.class, S2CScreenShake::write, S2CScreenShake::read, S2CScreenShake::handle);
         register.registerMessage(id++, S2CWeaponUse.ID, S2CWeaponUse.class, S2CWeaponUse::write, S2CWeaponUse::read, S2CWeaponUse::handle);
+        register.registerMessage(id++, S2CCraftingRecipes.ID, S2CCraftingRecipes.class, S2CCraftingRecipes::write, S2CCraftingRecipes::read, S2CCraftingRecipes::handle);
         return id;
     }
 

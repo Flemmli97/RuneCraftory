@@ -80,28 +80,28 @@ public class LevelCalc {
             return 0;
         long[] xps = switch (skill.gainType) {
             case COMMON -> (commonSkillXP == null || commonSkillXP.length < level) ?
-                    commonSkillXP = calcSkillXPs(commonSkillXP, level, 30, (l, prev) -> (long) (prev + 100 + 9 * Math.pow(l, 2.555) - 12 * Math.pow(l, 2.249) + l * 21))
+                    commonSkillXP = calcSkillXPs(commonSkillXP, level, (l, prev) -> (long) (prev + 35 + 9 * Math.pow(l, 2.555) - 12 * Math.pow(l, 2.249) + l * 21))
                     : commonSkillXP;
             case SLOW -> (slowSkillXP == null || slowSkillXP.length < level) ?
-                    slowSkillXP = calcSkillXPs(slowSkillXP, level, 10, (l, prev) -> prev + 50 + l * 35 + (int) (Math.pow(l, 2.35) * 0.1) * 10)
+                    slowSkillXP = calcSkillXPs(slowSkillXP, level, (l, prev) -> prev + 25 + (l - 1L) * 35 + (int) (Math.pow(l, 2.3) * 0.1) * 10)
                     : slowSkillXP;
-            case MEDIUM -> (mediumSkillXP == null || mediumSkillXP.length < level) ?
-                    mediumSkillXP = calcSkillXPs(mediumSkillXP, level, 50, (l, prev) -> prev + 40 + l * 15 + (int) (Math.pow(l, 2) * 0.1) * 10)
+            case VERYFAST -> (mediumSkillXP == null || mediumSkillXP.length < level) ?
+                    mediumSkillXP = calcSkillXPs(mediumSkillXP, level, (l, prev) -> prev + 50 + (l - 1L) * 30)
                     : mediumSkillXP;
             case FAST -> (fastSkillXP == null || fastSkillXP.length < level) ?
-                    fastSkillXP = calcSkillXPs(fastSkillXP, level, 60, (l, prev) -> prev + 40 + l * 20 + (int) (Math.pow(l, 1.85) * 0.1) * 10)
+                    fastSkillXP = calcSkillXPs(fastSkillXP, level, (l, prev) -> prev + 40 + l * 30 + (int) (Math.pow(l, 1.75) * 0.125) * 10)
                     : fastSkillXP;
         };
         return xps[level - 1];
     }
 
-    private static long[] calcSkillXPs(long[] current, int level, int base, BiFunction<Integer, Long, Long> levelXP) {
+    private static long[] calcSkillXPs(long[] current, int level, BiFunction<Integer, Long, Long> levelXP) {
         int len = 100;
         if (current != null) {
             len = level + 50;
         }
         long[] xps = new long[len];
-        xps[0] = base;
+        xps[0] = 0;
         long prev = xps[0];
         for (int l = 1; l < len; l++) {
             xps[l] = levelXP.apply(l, prev);

@@ -3,7 +3,9 @@ package io.github.flemmli97.runecraftory.common.crafting;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
@@ -11,7 +13,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -40,24 +41,52 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
 
     @Override
     public boolean matches(PlayerContainerInv inv, Level world) {
-        boolean unlocked = Platform.INSTANCE.getPlayerData(inv.getPlayer()).map(cap -> cap.getRecipeKeeper().isUnlocked(this)).orElse(false);
-        if (unlocked) {
-            StackedContents stackedContents = new StackedContents();
-            int i = 0;
-            for (int j = 0; j < 6; ++j) {
-                ItemStack itemStack = inv.getItem(j);
-                if (itemStack.isEmpty()) continue;
-                ++i;
-                stackedContents.accountStack(itemStack, 1);
-            }
-            return i == this.recipeItems.size() && stackedContents.canCraft(this, null);
+        NonNullList<ItemStack> stacks = NonNullList.create();
+        for (int j = 0; j < 6; ++j) {
+            ItemStack itemStack = inv.getItem(j);
+            if (!itemStack.isEmpty())
+                stacks.add(itemStack);
         }
-        return false;
+        int matches = matchingStacks(this, stacks).getFirst().size();
+        return matches >= this.getIngredients().size();
     }
 
     @Override
     public ItemStack assemble(PlayerContainerInv inv) {
-        return CraftingUtils.getCraftingOutput(this.recipeOutput.copy(), inv);
+        return this.getCraftingOutput(inv).serverResult();
+    }
+
+    public RecipeOutput getCraftingOutput(PlayerContainerInv inv) {
+        boolean unlocked = Platform.INSTANCE.getPlayerData(inv.getPlayer()).map(cap -> cap.getRecipeKeeper().isUnlocked(this)).orElse(false);
+        NonNullList<ItemStack> stacks = NonNullList.create();
+        for (int j = 0; j < 6; ++j) {
+            ItemStack itemStack = inv.getItem(j);
+            if (!itemStack.isEmpty())
+                stacks.add(itemStack);
+        }
+        Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> ing = matchingStacks(this, stacks);
+        ItemStack trueOutput = CraftingUtils.getCraftingOutput(this.recipeOutput.copy(), inv, ing);
+        return new RecipeOutput(trueOutput, unlocked ? trueOutput : new ItemStack(ModItems.unknown.get()), ing.getSecond());
+    }
+
+    public static Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> matchingStacks(SextupleRecipe recipe, NonNullList<ItemStack> inv) {
+        if (inv.size() > 6)
+            return Pair.of(NonNullList.create(), NonNullList.create());
+        NonNullList<ItemStack> list = NonNullList.create();
+        NonNullList<ItemStack> bonus = NonNullList.create();
+        for (Ingredient ing : recipe.getIngredients()) {
+            for (ItemStack stack : inv) {
+                if (ing.test(stack) && !list.contains(stack)) {
+                    list.add(stack);
+                    break;
+                }
+            }
+        }
+        for (ItemStack stack : inv) {
+            if (!list.contains(stack))
+                bonus.add(stack);
+        }
+        return Pair.of(list, bonus);
     }
 
     @Override
@@ -105,6 +134,9 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
     @Override
     public String toString() {
         return String.format("Result: %s; Required Level: %d; ID: %s", this.recipeOutput, this.craftingLevel, this.id);
+    }
+
+    public record RecipeOutput(ItemStack serverResult, ItemStack clientResult, NonNullList<ItemStack> bonusItems) {
     }
 
     public static abstract class Serializer<T extends SextupleRecipe> extends CustomRegistryEntry<Serializer<T>> implements RecipeSerializer<T> {

@@ -2,46 +2,59 @@ package io.github.flemmli97.runecraftory.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.client.gui.widgets.PageButton;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
-import io.github.flemmli97.runecraftory.common.network.C2SUpdateCraftingScreen;
+import io.github.flemmli97.runecraftory.common.network.C2SSelectRecipeCrafting;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
 
 public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
 
+    private static final ResourceLocation bars = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
     private static final ResourceLocation forging = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forgec.png");
     private static final ResourceLocation crafting = new ResourceLocation(RuneCraftory.MODID, "textures/gui/craftingc.png");
     private static final ResourceLocation chem = new ResourceLocation(RuneCraftory.MODID, "textures/gui/chemc.png");
     private static final ResourceLocation cooking = new ResourceLocation(RuneCraftory.MODID, "textures/gui/cookingc.png");
 
+    private Rect scrollBar = new Rect(195, 12, 8, 142);
+    private Rect scrollArea = new Rect(172, 12, 31, 142);
+    private final CraftingGui.RecipeSelectButton[] selectButtons = new CraftingGui.RecipeSelectButton[7];
+    private int scrollValue;
+    private boolean isDragging;
+
     public CraftingGui(ContainerCrafting container, Inventory inv, Component name) {
         super(container, inv, name);
+        this.imageWidth = 209;
+        this.imageHeight = 166;
     }
 
     @Override
     protected void init() {
         super.init();
-        this.addRenderableWidget(new PageButton(this.leftPos + 108, this.topPos + 60, new TextComponent("<"), b -> Platform.INSTANCE.sendToServer(new C2SUpdateCraftingScreen(false))));
-        this.addRenderableWidget(new PageButton(this.leftPos + 128, this.topPos + 60, new TextComponent(">"), b -> Platform.INSTANCE.sendToServer(new C2SUpdateCraftingScreen(true))));
-    }
-
-    @Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(stack);
-        super.render(stack, mouseX, mouseY, partialTicks);
-        this.renderTooltip(stack, mouseX, mouseY);
+        for (int i = 0; i < 7; i++) {
+            this.addRenderableWidget(this.selectButtons[i] = new RecipeSelectButton(this.leftPos + 173, this.topPos + 13 + i * 20, i, b -> {
+                if (b instanceof RecipeSelectButton but)
+                    Platform.INSTANCE.sendToServer(new C2SSelectRecipeCrafting(but.getActualIndex()));
+            }));
+        }
+        this.scrollBar = new Rect(this.leftPos + 195, this.topPos + 12, 8, 142);
+        this.scrollArea = new Rect(this.leftPos + 172, this.topPos + 12, 31, 142);
     }
 
     @Override
@@ -54,7 +67,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             case CHEM -> chem;
         };*/
         RenderSystem.setShaderTexture(0, texture);
-        this.blit(stack, this.leftPos, this.topPos, 0, 0, 176, 166);
+        this.blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         PlayerData data = Platform.INSTANCE.getPlayerData(this.minecraft.player).orElse(null);
         if (this.menu.rpCost() >= 0) {
             int rpMax = data != null ? data.getMaxRunePoints() : 0;
@@ -71,13 +84,77 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             int yPos = this.topPos - 12;
             stack.translate(xPos, yPos, 0);
             stack.scale(scale, scale, scale);
-            RenderSystem.setShaderTexture(0, new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png"));
+            RenderSystem.setShaderTexture(0, bars);
             this.blit(stack, 0, 0, 131, 74, 96, 29);
             int runePointsWidth = Math.min(75, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * 75.0f));
             this.blit(stack, 18, 3, 18, 40, runePointsWidth, 9);
             ClientHandlers.drawCenteredScaledString(stack, this.font, data.getRunePoints() + "/" + data.getMaxRunePoints(), 18 + 75 * 0.5f, 5, 0.7f, 0xffffff);
             stack.popPose();
         }
+    }
+
+    @Override
+    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(stack);
+        super.render(stack, mouseX, mouseY, partialTicks);
+        this.renderTooltip(stack, mouseX, mouseY);
+        List<Pair<Integer, ItemStack>> recipes = this.menu.getMatchingRecipesClient();
+        for (int i = this.scrollValue; i < this.scrollValue + 7; i++) {
+            if (i < recipes.size()) {
+                this.itemRenderer.blitOffset = 100.0f;
+                this.itemRenderer.renderAndDecorateFakeItem(recipes.get(i).getSecond(), this.leftPos + 176, this.topPos + 15 + 20 * (i - this.scrollValue));
+            }
+        }
+        for (CraftingGui.RecipeSelectButton button : this.selectButtons) {
+            button.visible = button.index < this.menu.getMatchingRecipesClient().size();
+        }
+        RenderSystem.setShaderTexture(0, bars);
+        this.renderScroller(stack, this.scrollBar.x + 1, this.scrollBar.y + 1);
+    }
+
+    private void renderScroller(PoseStack poseStack, int posX, int posY) {
+        int steps = this.menu.getMatchingRecipesClient().size() - 7;
+        int widgetHeight = 27;
+        if (steps > 0) {
+            int barHeight = this.scrollBar.height - 2;
+            int moveableHeight = barHeight - widgetHeight;
+            int k = moveableHeight / steps;
+            int yOffset = Mth.clamp(this.scrollValue * k, 0, moveableHeight);
+            this.blit(poseStack, posX, posY + yOffset, 185, 0, 6, widgetHeight);
+        } else {
+            this.blit(poseStack, posX, posY, 191, 0, 6, widgetHeight);
+        }
+    }
+
+    private boolean canScroll() {
+        return this.menu.getMatchingRecipesClient().size() > 7;
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        if (this.canScroll() && this.scrollArea.isMouseOver(mouseX, mouseY)) {
+            this.setScrollValue((int) (this.scrollValue - delta));
+        }
+        return true;
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+        if (this.isDragging) {
+            int maxY = this.scrollBar.y + this.scrollBar.height - 3;
+            int max = this.menu.getMatchingRecipesClient().size() - 7;
+            float amount = ((float) mouseY - (float) this.scrollBar.y - 13.5f) / ((float) (maxY - this.scrollBar.y) - 27.0f);
+            amount = amount * (float) max + 0.5f;
+            this.scrollValue = Mth.clamp((int) amount, 0, max);
+            return true;
+        }
+        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        this.isDragging = this.canScroll() && this.scrollBar.isMouseOver(mouseX, mouseY);
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     public EnumCrafting type() {
@@ -90,5 +167,38 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
 
     public int getTop() {
         return this.topPos;
+    }
+
+    public void setScrollValue(int val) {
+        this.scrollValue = Mth.clamp(val, 0, Math.max(0, this.menu.getMatchingRecipesClient().size() - 7));
+    }
+
+    record Rect(int x, int y, int width, int height) {
+        public boolean isMouseOver(double mouseX, double mouseY) {
+            return mouseX >= this.x && mouseY >= this.y && mouseX < (this.x + this.width) && mouseY < (this.y + this.height);
+        }
+    }
+
+    private class RecipeSelectButton extends Button {
+
+        private final int index;
+
+        public RecipeSelectButton(int i, int j, int k, OnPress onPress) {
+            super(i, j, 22, 20, TextComponent.EMPTY, onPress);
+            this.index = k;
+            this.visible = true;
+        }
+
+        public int getActualIndex() {
+            return this.index + CraftingGui.this.scrollValue;
+        }
+
+        @Override
+        public void renderToolTip(PoseStack poseStack, int relativeMouseX, int relativeMouseY) {
+            if (this.isHovered && this.getActualIndex() < CraftingGui.this.menu.getMatchingRecipesClient().size()) {
+                ItemStack itemStack = CraftingGui.this.menu.getMatchingRecipesClient().get(this.getActualIndex()).getSecond();
+                CraftingGui.this.renderTooltip(poseStack, itemStack, relativeMouseX, relativeMouseY);
+            }
+        }
     }
 }

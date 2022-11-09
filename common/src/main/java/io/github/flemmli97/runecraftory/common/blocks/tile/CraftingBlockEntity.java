@@ -70,12 +70,8 @@ public abstract class CraftingBlockEntity extends ContainerBlockEntity {
         return this.craftingIndex;
     }
 
-    public void increaseIndex() {
-        this.craftingIndex++;
-    }
-
-    public void decreaseIndex() {
-        this.craftingIndex--;
+    public void setIndex(int craftingIndex) {
+        this.craftingIndex = craftingIndex;
     }
 
     public void resetIndex() {

@@ -22,7 +22,8 @@
     "TargetingConditionsMixin",
     "BiomeAccessor",
     "ServerLevelMixin",
-    "SpreadingSnowyDirtBlockMixin"
+    "SpreadingSnowyDirtBlockMixin",
+    "AbstractContainerMenuAccessor"
   ],
   "client": [
     "AtlasMixin",

@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
@@ -10,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -34,8 +36,6 @@ public class CraftingUtils {
         return upgradeCost(type, data, stack, ingredient, false);
     }
 
-    //1300 with lvl 100 and all skill lvl 50
-
     public static int upgradeCost(EnumCrafting type, PlayerData data, ItemStack stack, ItemStack ingredient, boolean onlyIngredient) {
         if (!GeneralConfig.useRP)
             return 0;
@@ -59,7 +59,7 @@ public class CraftingUtils {
         }).orElse(-1);
     }
 
-    public static int craftingCost(EnumCrafting type, PlayerData data, SextupleRecipe recipe) {
+    public static int craftingCost(EnumCrafting type, PlayerData data, SextupleRecipe recipe, NonNullList<ItemStack> bonusItems, boolean unlocked) {
         if (!GeneralConfig.useRP)
             return 0;
         if (GeneralConfig.recipeSystem == 1 || GeneralConfig.recipeSystem == 3)
@@ -73,21 +73,33 @@ public class CraftingUtils {
         int lvlDifference = recipe.getCraftingLevel() - skillLevel;
         int cost;
         if (lvlDifference <= 0) {
-            cost = Math.max(3 * recipe.getCraftingLevel() + lvlDifference, 10);
+            cost = Math.max(2 * recipe.getCraftingLevel() + lvlDifference, 10);
         } else {
             cost = Math.max(2 * recipe.getCraftingLevel(), 10) * (int) ((1 + lvlDifference) * 1.5);
         }
         int additionalMaterial = 0;
-        return cost + additionalMaterial;
+        for (ItemStack items : bonusItems) {
+            additionalMaterial += DataPackHandler.getStats(items.getItem()).map(s -> {
+                if (skillLevel >= s.getDiff()) {
+                    return s.getDiff();
+                } else {
+                    return (int) ((s.getDiff() - skillLevel) * 1.5) * (s.getDiff() - 5);
+                }
+            }).orElse(10);
+        }
+        cost = cost + additionalMaterial;
+        if (!unlocked)
+            cost *= 3;
+        return cost;
     }
 
     public static ItemStack getUpgradedStack(ItemStack stack, ItemStack ing) {
-        return ItemNBT.addUpgradeItem(stack.copy(), ing);
+        return ItemNBT.addUpgradeItem(stack.copy(), ing, false);
     }
 
     private static int xpForCrafting(EnumSkills skill, SextupleRecipe recipe, int skillLevel) {
         int base = LevelCalc.getBaseXP(skill);
-        int xp = (int) (recipe.getCraftingLevel() * 0.5 + base);
+        int xp = recipe.getCraftingLevel() * 2 + base;
         if (skillLevel > recipe.getCraftingLevel())
             xp -= 2 * skillLevel - recipe.getCraftingLevel();
         else
@@ -118,7 +130,23 @@ public class CraftingUtils {
         data.increaseSkill(skill, serverPlayer, (int) (xpForUpgrade(skill, equip, upgrade, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier));
     }
 
-    public static ItemStack getCraftingOutput(ItemStack stack, PlayerContainerInv inv) {
+    public static ItemStack getCraftingOutput(ItemStack stack, PlayerContainerInv inv, Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> materials) {
+        int i = 0;
+        for (ItemStack bonus : materials.getSecond()) {
+            i++;
+            ItemNBT.addUpgradeItem(stack, bonus, true);
+            if (i == 3)
+                break;
+        }
+        NonNullList<ItemStack> recipeStacks = materials.getFirst();
+        if (recipeStacks.size() > 3) {
+            while (i < 3) {
+                ItemStack rand = recipeStacks.get(inv.getPlayer().getRandom().nextInt(recipeStacks.size()));
+                if (!rand.isEmpty())
+                    recipeStacks.remove(rand);
+                i++;
+            }
+        }
         return stack;
     }
 }

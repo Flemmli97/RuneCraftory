@@ -1,17 +1,25 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
+import com.google.common.base.Suppliers;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.blocks.tile.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.inventory.DummyInventory;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
+import io.github.flemmli97.runecraftory.common.network.S2CCraftingRecipes;
 import io.github.flemmli97.runecraftory.common.registry.ModContainer;
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.runecraftory.mixin.AbstractContainerMenuAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,7 +32,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
 /**
  * Needs multiplayer testing
@@ -37,6 +48,10 @@ public class ContainerCrafting extends AbstractContainerMenu {
     private final CraftingBlockEntity tile;
     private final DataSlot rpCost;
     private List<SextupleRecipe> matchingRecipes;
+
+    private List<Pair<Integer, ItemStack>> matchingRecipesClient = new ArrayList<>();
+    private boolean updatedRecipes;
+    private boolean init = true;
     private SextupleRecipe currentRecipe;
 
     public ContainerCrafting(int windowId, Inventory inv, FriendlyByteBuf data) {
@@ -45,7 +60,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
 
     public ContainerCrafting(int windowID, Inventory playerInv, CraftingBlockEntity tile) {
         super(ModContainer.craftingContainer.get(), windowID);
-        this.outPutInv = new DummyInventory(new SimpleContainer(1));
+        this.outPutInv = new DummyInventory(new SimpleContainer(2));
         this.craftingInv = PlayerContainerInv.create(this, tile.getInventory(), playerInv.player);
         this.tile = tile;
         this.type = tile.craftingType();
@@ -64,11 +79,15 @@ public class ContainerCrafting extends AbstractContainerMenu {
         }
         this.addDataSlot(this.rpCost = DataSlot.standalone());
         this.initCraftingMatrix(this.craftingInv);
+        this.init = false;
     }
 
     public static List<SextupleRecipe> getRecipes(PlayerContainerInv inv, EnumCrafting type) {
-        if (inv.getPlayer() instanceof ServerPlayer serverPlayer)
-            return inv.getPlayer().getServer().getRecipeManager().getRecipesFor(CraftingUtils.getType(type), inv, serverPlayer.getLevel());
+        if (inv.getPlayer() instanceof ServerPlayer serverPlayer) {
+            List<SextupleRecipe> recipes = serverPlayer.getServer().getRecipeManager().getRecipesFor(CraftingUtils.getType(type), inv, serverPlayer.getLevel());
+            recipes.sort(Comparator.comparingInt(SextupleRecipe::getCraftingLevel));
+            return recipes;
+        }
         return new ArrayList<>();
     }
 
@@ -94,6 +113,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
             return;
         if (this.craftingInv.refreshAndSet()) {
             this.matchingRecipes = getRecipes(this.craftingInv, this.type);
+            this.updatedRecipes = true;
             if (!init)
                 this.tile.resetIndex();
         }
@@ -101,56 +121,106 @@ public class ContainerCrafting extends AbstractContainerMenu {
     }
 
     private void updateCraftingSlot() {
-        ItemStack stack;
+        ItemStack trueOutput;
+        ItemStack clientOutput;
         if (this.matchingRecipes != null && this.matchingRecipes.size() > 0) {
-            if (this.tile.craftingIndex() >= this.matchingRecipes.size())
-                this.tile.resetIndex();
+            if (this.updatedRecipes) {
+                if (this.currentRecipe != null) {
+                    int i;
+                    for (i = this.matchingRecipes.size() - 1; i > 0; i--) {
+                        if (this.currentRecipe.equals(this.matchingRecipes.get(i)))
+                            break;
+                    }
+                    this.tile.setIndex(i);
+                } else if (!this.init || (this.tile.craftingIndex() >= this.matchingRecipes.size()))
+                    this.tile.resetIndex();
+            }
             this.currentRecipe = this.matchingRecipes.get(this.tile.craftingIndex());
-            this.rpCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()).orElseThrow(EntityUtils::playerDataException), this.currentRecipe));
-            stack = this.currentRecipe.assemble(this.craftingInv);
+            SextupleRecipe.RecipeOutput output = this.currentRecipe.getCraftingOutput(this.craftingInv);
+            this.rpCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()).orElseThrow(EntityUtils::playerDataException), this.currentRecipe, output.bonusItems(), output.clientResult().getItem() == ModItems.unknown.get()));
+            trueOutput = output.serverResult();
+            clientOutput = output.clientResult();
         } else {
-            stack = ItemStack.EMPTY;
+            trueOutput = ItemStack.EMPTY;
+            clientOutput = ItemStack.EMPTY;
             this.rpCost.set(-1);
             this.currentRecipe = null;
         }
-        this.outPutInv.setItem(0, stack);
-        if (this.craftingInv.getPlayer() instanceof ServerPlayer)
-            ((ServerPlayer) this.craftingInv.getPlayer()).connection.send(new ClientboundContainerSetSlotPacket(this.containerId, this.incrementStateId(), 0, stack));
+        this.outPutInv.setItem(0, trueOutput);
+        this.outPutInv.setItem(1, clientOutput);
+        if (this.craftingInv.getPlayer() instanceof ServerPlayer player) {
+            if (this.updatedRecipes) {
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> this.sendCraftingRecipesToClient(player, data));
+            }
+            player.connection.send(new ClientboundContainerSetSlotPacket(this.containerId, this.incrementStateId(), 0, clientOutput));
+        }
+        this.updatedRecipes = false;
+    }
+
+    public void sendCraftingRecipesToClient(ServerPlayer player, PlayerData data) {
+        List<Pair<Integer, ItemStack>> clientData = IntStream.range(0, this.matchingRecipes.size())
+                .mapToObj(i -> {
+                    SextupleRecipe recipe = this.matchingRecipes.get(i);
+                    return Pair.of(i, data.getRecipeKeeper().isUnlocked(recipe) ? this.matchingRecipes.get(i).getResultItem() : new ItemStack(ModItems.unknown.get()));
+                }).toList();
+        if (!this.init)
+            Platform.INSTANCE.sendToClient(new S2CCraftingRecipes(clientData, 0), player);
+        else //The client wont have the gui open if it just got opened server side
+            player.getServer().tell(new TickTask(1, () -> Platform.INSTANCE.sendToClient(new S2CCraftingRecipes(clientData, this.currentRecipe == null ? 0 : this.matchingRecipes.indexOf(this.currentRecipe)), player)));
     }
 
     public SextupleRecipe getCurrentRecipe() {
         return this.currentRecipe;
     }
 
-    public boolean canIncrease() {
-        return this.matchingRecipes != null && this.tile.craftingIndex() < this.matchingRecipes.size() - 1;
-    }
-
-    public boolean canDecrease() {
-        return this.tile.craftingIndex() > 0;
-    }
-
-    public void increase() {
-        if (this.canIncrease()) {
-            this.tile.increaseIndex();
-        } else {
-            this.tile.resetIndex();
-        }
+    public void updateCurrentRecipeIndex(int id) {
+        id = Mth.clamp(id, 0, this.matchingRecipes != null ? this.matchingRecipes.size() - 1 : 0);
+        this.tile.setIndex(id);
         this.updateCraftingSlot();
-    }
 
-    public void decrease() {
-        if (this.canDecrease()) {
-            this.tile.decreaseIndex();
-        } else if (this.matchingRecipes != null) {
-            while (this.tile.craftingIndex() < this.matchingRecipes.size() - 1)
-                this.tile.increaseIndex();
-        }
-        this.updateCraftingSlot();
     }
 
     public int rpCost() {
         return this.rpCost.get();
+    }
+
+    @Override
+    public void broadcastChanges() {
+        int i;
+        AbstractContainerMenuAccessor acc = (AbstractContainerMenuAccessor) this;
+        for (i = 0; i < this.slots.size(); ++i) {
+            Slot slot = this.slots.get(i);
+            ItemStack itemStack = slot instanceof CraftingOutputSlot outputSlot ? outputSlot.getStackToSync() : this.slots.get(i).getItem();
+            Supplier<ItemStack> supplier = Suppliers.memoize(itemStack::copy);
+            acc.doTriggerSlotListeners(i, itemStack, supplier);
+            acc.doSynchronizeSlotToRemote(i, itemStack, supplier);
+        }
+        acc.doSynchronizeCarriedToRemote();
+        for (i = 0; i < acc.getDataSlots().size(); ++i) {
+            DataSlot dataSlot = acc.getDataSlots().get(i);
+            int j = dataSlot.get();
+            if (dataSlot.checkAndClearUpdateFlag()) {
+                acc.doUpdateDataSlotListeners(i, j);
+            }
+            acc.doSynchronizeDataSlotToRemote(i, j);
+        }
+    }
+
+    @Override
+    public void sendAllDataToRemote() {
+        AbstractContainerMenuAccessor acc = (AbstractContainerMenuAccessor) this;
+        for (int i = 0; i < this.slots.size(); ++i) {
+            Slot slot = this.slots.get(i);
+            ItemStack itemStack = slot instanceof CraftingOutputSlot outputSlot ? outputSlot.getStackToSync() : this.slots.get(i).getItem();
+            this.setRemoteSlot(i, itemStack.copy());
+        }
+        this.setRemoteCarried(this.getCarried());
+        for (int i = 0; i < acc.getDataSlots().size(); ++i) {
+            acc.getRemoteDataSlots().set(i, acc.getDataSlots().get(i).get());
+        }
+        if (acc.getSynchronizer() != null) {
+            acc.getSynchronizer().sendInitialData(this, acc.getRemoteSlots(), acc.getRemoteCarried(), acc.getRemoteDataSlots().toIntArray());
+        }
     }
 
     @Override
@@ -209,5 +279,13 @@ public class ContainerCrafting extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player player) {
         return true;
+    }
+
+    public List<Pair<Integer, ItemStack>> getMatchingRecipesClient() {
+        return this.matchingRecipesClient;
+    }
+
+    public void setMatchingRecipesClient(List<Pair<Integer, ItemStack>> matchingRecipesClient) {
+        this.matchingRecipesClient = matchingRecipesClient;
     }
 }

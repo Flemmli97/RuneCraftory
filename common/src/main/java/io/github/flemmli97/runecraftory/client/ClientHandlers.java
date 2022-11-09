@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCCompanionGui;
@@ -215,5 +216,10 @@ public class ClientHandlers {
     public static void initNonRendererModels(EntityRendererProvider.Context ctx) {
         animatedPlayerModel = new AnimatedPlayerModel(ctx.bakeLayer(AnimatedPlayerModel.LAYER_LOCATION));
         ArmorModels.initArmorModels(ctx);
+    }
+
+    public static void updateCurrentRecipeIndex(int index) {
+        if (Minecraft.getInstance().screen instanceof CraftingGui gui)
+            gui.setScrollValue(index);
     }
 }
