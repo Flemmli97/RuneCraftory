@@ -81,7 +81,8 @@ public class EntityCalls {
                     data.setMaxHealth(player, GeneralConfig.startingHealth, true);
                     player.setHealth(player.getMaxHealth());
                 }
-                if (GeneralConfig.recipeSystem > 1) {
+                if (GeneralConfig.recipeSystem == GeneralConfig.RecipeSystem.SKILLNOLOCK ||
+                        GeneralConfig.recipeSystem == GeneralConfig.RecipeSystem.BASENOLOCK) {
                     if (!data.unlockedRecipes) {
                         data.unlockedRecipes = true;
                         Set<ResourceLocation> allRecipes = Sets.newHashSet();

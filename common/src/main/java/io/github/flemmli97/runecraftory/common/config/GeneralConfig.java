@@ -15,7 +15,7 @@ public class GeneralConfig {
     public static boolean disableVanillaSpawning = false;
     public static boolean randomDamage = true;
     public static boolean dropVanillaLoot = true;
-    public static int recipeSystem = 3;
+    public static RecipeSystem recipeSystem = RecipeSystem.SKILL;
     public static boolean useRP = true;
     public static float deathHPPercent = 1;
     public static float deathRPPercent = 1;
@@ -29,10 +29,8 @@ public class GeneralConfig {
     public static float witherChance = 0.5f;
     public static float runeyChance = 0.05f;
     public static boolean seasonedSnow = true;
-    public static boolean allowLockedCrafting = true;
 
     public static boolean waila = true;
-    public static boolean jei = true;
     public static boolean harvestCraft = true;
     public static boolean seasons = true;
     public static boolean dynamicTrees = true;
@@ -111,5 +109,23 @@ public class GeneralConfig {
         skillProps.put(EnumSkills.BATH, new SkillProperties(2, 1, 0, 0.1f, 0, 5));
         skillProps.put(EnumSkills.TAMING, new SkillProperties(0, 0.5f, 0, 0.25f, 0.5f, 1));
         skillProps.put(EnumSkills.LEADER, new SkillProperties(1, 0, 0.25f, 0, 0.1f, 1));
+    }
+
+    public enum RecipeSystem {
+
+        SKILL(false, true, true),
+        SKILLIGNORELOCK(false, true, false),
+        SKILLNOLOCK(false, false, false),
+        BASE(true, true, true),
+        BASEIGNORELOCK(true, true, false),
+        BASENOLOCK(true, false, false);
+
+        public final boolean baseCost, allowLocked, lockedCostMore;
+
+        RecipeSystem(boolean baseCost, boolean allowLocked, boolean lockedCostMore) {
+            this.baseCost = baseCost;
+            this.allowLocked = allowLocked;
+            this.lockedCostMore = lockedCostMore;
+        }
     }
 }

@@ -62,8 +62,12 @@ public class CraftingUtils {
     public static int craftingCost(EnumCrafting type, PlayerData data, SextupleRecipe recipe, NonNullList<ItemStack> bonusItems, boolean unlocked) {
         if (!GeneralConfig.useRP)
             return 0;
-        if (GeneralConfig.recipeSystem == 1 || GeneralConfig.recipeSystem == 3)
-            return recipe.getBaseCost();
+        if (GeneralConfig.recipeSystem.baseCost) {
+            int cost = recipe.getBaseCost();
+            if (!unlocked && GeneralConfig.recipeSystem.lockedCostMore)
+                cost *= 3;
+            return cost;
+        }
         int skillLevel = switch (type) {
             case FORGE -> data.getSkillLevel(EnumSkills.FORGING).getLevel();
             case ARMOR -> data.getSkillLevel(EnumSkills.CRAFTING).getLevel();
@@ -88,7 +92,7 @@ public class CraftingUtils {
             }).orElse(10);
         }
         cost = cost + additionalMaterial;
-        if (!unlocked)
+        if (!unlocked && GeneralConfig.recipeSystem.lockedCostMore)
             cost *= 3;
         return cost;
     }

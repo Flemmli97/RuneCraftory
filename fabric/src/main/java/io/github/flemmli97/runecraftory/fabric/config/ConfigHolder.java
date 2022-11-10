@@ -44,7 +44,6 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.witherChance = spec.witherChance.get().floatValue();
         GeneralConfig.runeyChance = spec.runeyChance.get().floatValue();
         GeneralConfig.seasonedSnow = spec.seasonedSnow.get();
-        GeneralConfig.allowLockedCrafting = spec.allowLockedCrafting.get();
 
         GeneralConfig.maxLevel = spec.maxLevel.get();
         GeneralConfig.maxSkillLevel = spec.maxSkillLevel.get();

@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.network.S2CRecipe;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.nbt.CompoundTag;
@@ -60,6 +61,13 @@ public class RecipeKeeper {
 
     public boolean isUnlocked(Recipe<?> recipe) {
         return this.unlockedRecipes.contains(recipe.getId());
+    }
+
+    public boolean isUnlockedForCrafting(Recipe<?> recipe) {
+        if (GeneralConfig.recipeSystem == GeneralConfig.RecipeSystem.SKILLNOLOCK ||
+                GeneralConfig.recipeSystem == GeneralConfig.RecipeSystem.BASENOLOCK)
+            return true;
+        return this.isUnlocked(recipe);
     }
 
     public Collection<ResourceLocation> unlockedRecipes() {

@@ -24,7 +24,7 @@ public class GeneralConfigSpec {
     public final CommentedJsonConfig.CommentedVal<Boolean> gateSpawning;
     public final CommentedJsonConfig.CommentedVal<Boolean> disableVanillaSpawning;
     public final CommentedJsonConfig.CommentedVal<Boolean> randomDamage;
-    public final CommentedJsonConfig.IntVal recipeSystem;
+    public final CommentedJsonConfig.CommentedVal<GeneralConfig.RecipeSystem> recipeSystem;
     public final CommentedJsonConfig.CommentedVal<Boolean> useRP;
     public final CommentedJsonConfig.DoubleVal deathHPPercent;
     public final CommentedJsonConfig.DoubleVal deathRPPercent;
@@ -38,7 +38,6 @@ public class GeneralConfigSpec {
     public final CommentedJsonConfig.DoubleVal witherChance;
     public final CommentedJsonConfig.DoubleVal runeyChance;
     public final CommentedJsonConfig.CommentedVal<Boolean> seasonedSnow;
-    public final CommentedJsonConfig.CommentedVal<Boolean> allowLockedCrafting;
 
     public final boolean waila = true;
     public final boolean jei = true;
@@ -86,8 +85,14 @@ public class GeneralConfigSpec {
         this.gateSpawning = builder.comment("Should gates spawn? If disabled will also disable all mobs from this mod to spawn. Needs server restart").define("Gate Spawning", GeneralConfig.gateSpawning);
         this.disableVanillaSpawning = builder.comment("If enabled mobs can only spawn through gates.").define("Disable vanilla spawn", GeneralConfig.disableVanillaSpawning);
         this.randomDamage = builder.comment("If enabled damage gets a +-10% randomness.").define("Random Damage", GeneralConfig.randomDamage);
-        this.recipeSystem = builder.comment("The recipe system to use.", "0 = Only unlocked recipes are craftable and crafting skill influence the rp cost", "1 = Unlocked recipes are craftable and rp cost are the base cost.",
-                "2 = All recipes are craftable without unlocking but crafting skill influence the cost.", "3 = All craftable and only base cost taken into consideration.").defineInRange("Recipe System", GeneralConfig.recipeSystem, 0, 3);
+        this.recipeSystem = builder.comment("The recipe system to use.",
+                        "SKILL = Crafting skill influence the rp cost. Not unlocked recipes will cost more",
+                        "SKILLIGNORELOCK = Crafting skill influence the rp cost and locked recipes cost the same",
+                        "SKILLNOLOCK = Crafting skill influence the rp cost and locked recipes are not craftable at all",
+                        "BASE = Rp cost is a fixed base cost but locked recipes cost more",
+                        "BASEIGNORELOCK = Rp cost is a fixed base cost and locked recipes cost the same",
+                        "BASENOLOCK = Base cost and locked recipes are uncraftable")
+                .define("Recipe System", GeneralConfig.recipeSystem);
         this.useRP = builder.comment("If actions consume rune points").define("Use RunePoints", GeneralConfig.useRP);
         this.deathHPPercent = builder.comment("Percent of HP that will be regenerated on death").defineInRange("Death HP Percent", GeneralConfig.deathHPPercent, 0, 1);
         this.deathRPPercent = builder.comment("Percent of RP that will be regenerated on death").defineInRange("Death RP Percent", GeneralConfig.deathRPPercent, 0, 1);
@@ -101,7 +106,6 @@ public class GeneralConfigSpec {
         this.witherChance = builder.comment("Change for a crop to wither if its not been watered", "If crop is already withered it and it doesnt get watered it will turn into withered grass").defineInRange("Wither Chance", GeneralConfig.witherChance, 0, 1);
         this.runeyChance = builder.comment("Chance for a runey to spawn when harvesting fully grown crops").defineInRange("Runey Chance", GeneralConfig.runeyChance, 0, 1);
         this.seasonedSnow = builder.comment("If biome temperature should be adjusted based on current season. Can cause snowfall during winter").define("Seasoned Biome Temp", GeneralConfig.seasonedSnow);
-        this.allowLockedCrafting = builder.comment("If true allows crafting of not unlocked recipes. They will cost more rp to craft").define("Allow Locked Crafting", GeneralConfig.allowLockedCrafting);
         builder.pop();
 
         builder.push("Multipliers");

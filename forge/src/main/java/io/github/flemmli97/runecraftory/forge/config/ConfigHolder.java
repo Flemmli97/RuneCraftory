@@ -50,7 +50,6 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         GeneralConfig.witherChance = spec.witherChance.get().floatValue();
         GeneralConfig.runeyChance = spec.runeyChance.get().floatValue();
         GeneralConfig.seasonedSnow = spec.seasonedSnow.get();
-        GeneralConfig.allowLockedCrafting = spec.allowLockedCrafting.get();
 
         GeneralConfig.maxLevel = spec.maxLevel.get();
         GeneralConfig.maxSkillLevel = spec.maxSkillLevel.get();
