@@ -47,7 +47,7 @@ import java.util.function.Consumer;
 public class ClientCalls {
 
     public static void keyEvent() {
-        if(Minecraft.getInstance().screen != null)
+        if (Minecraft.getInstance().screen != null)
             return;
         if (ClientHandlers.spell1.onPress()) {
             Platform.INSTANCE.sendToServer(new C2SSpellKey(0));

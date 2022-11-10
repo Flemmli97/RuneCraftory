@@ -26,6 +26,8 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityMarionettaTra
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollen;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityRockSpear;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityRuneOrb;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityRuney;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpiderWeb;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpore;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStone;
@@ -443,6 +445,9 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityLightBall>> lightBall = reg(EntityType.Builder.<EntityLightBall>of(EntityLightBall::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.lightBall);
     public static final RegistryEntrySupplier<EntityType<EntityDarkBall>> darkBall = reg(EntityType.Builder.<EntityDarkBall>of(EntityDarkBall::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.darkBall);
     public static final RegistryEntrySupplier<EntityType<EntityDarkness>> darkness = reg(EntityType.Builder.<EntityDarkness>of(EntityDarkness::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.darkness);
+
+    public static final RegistryEntrySupplier<EntityType<EntityRuney>> runey = reg(EntityType.Builder.of(EntityRuney::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), LibEntities.runey);
+    public static final RegistryEntrySupplier<EntityType<EntityRuneOrb>> statBonus = reg(EntityType.Builder.of(EntityRuneOrb::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), LibEntities.runeOrb);
 
     public static final RegistryEntrySupplier<EntityType<EntityButterflySummoner>> butterflySummoner = reg(EntityType.Builder.<EntityButterflySummoner>of(EntityButterflySummoner::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.butterflySummoner);
 

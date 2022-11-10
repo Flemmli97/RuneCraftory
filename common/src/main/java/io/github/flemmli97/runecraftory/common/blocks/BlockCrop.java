@@ -4,7 +4,9 @@ import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.tile.CropBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.FarmBlockEntity;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -93,6 +95,8 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
             ((CropBlockEntity) tile).onRegrowableHarvest(this);
         } else
             level.removeBlock(pos, false);
+        if (this.isMaxAge(state, level, pos) && entity instanceof ServerPlayer player)
+            spawnRuney(player, pos);
     }
 
     @Override
@@ -173,5 +177,13 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new CropBlockEntity(pos, state);
+    }
+
+    public static void spawnRuney(ServerPlayer player, BlockPos pos) {
+        if (player.getRandom().nextFloat() < GeneralConfig.runeyChance) {
+            Entity entity = player.getRandom().nextFloat() < 0.4 ? ModEntities.runey.get().create(player.getLevel()) : ModEntities.statBonus.get().create(player.getLevel());
+            entity.setPos(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+            player.level.addFreshEntity(entity);
+        }
     }
 }

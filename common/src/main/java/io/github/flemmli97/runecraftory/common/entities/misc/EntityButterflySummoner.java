@@ -65,7 +65,6 @@ public class EntityButterflySummoner extends Entity implements OwnableEntity {
         this.targetY = compound.getDouble("TargetY");
         this.targetZ = compound.getDouble("TargetZ");
         this.damageMultiplier = compound.getFloat("DamageMultiplier");
-        ;
         this.ticksExisted = compound.getInt("TicksExisted");
     }
 

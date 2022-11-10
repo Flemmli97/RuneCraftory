@@ -48,6 +48,7 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         GeneralConfig.disableItemStatSystem = spec.disableItemStatSystem.get();
         GeneralConfig.disableCropSystem = spec.disableCropSystem.get();
         GeneralConfig.witherChance = spec.witherChance.get().floatValue();
+        GeneralConfig.runeyChance = spec.runeyChance.get().floatValue();
         GeneralConfig.seasonedSnow = spec.seasonedSnow.get();
         GeneralConfig.allowLockedCrafting = spec.allowLockedCrafting.get();
 

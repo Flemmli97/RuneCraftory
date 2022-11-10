@@ -48,6 +48,7 @@ import io.github.flemmli97.runecraftory.client.particles.VortexParticle;
 import io.github.flemmli97.runecraftory.client.render.RenderGate;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
 import io.github.flemmli97.runecraftory.client.render.RenderNPC;
+import io.github.flemmli97.runecraftory.client.render.RenderRuney;
 import io.github.flemmli97.runecraftory.client.render.RenderTreasureChest;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderAnt;
@@ -264,6 +265,9 @@ public class ClientRegister {
         consumer.register(ModEntities.lightBall.get(), EmptyRender::new);
         consumer.register(ModEntities.darkBall.get(), EmptyRender::new);
         consumer.register(ModEntities.darkness.get(), RenderDarkness::new);
+
+        consumer.register(ModEntities.runey.get(), RenderRuney::new);
+        consumer.register(ModEntities.statBonus.get(), EmptyRender::new);
 
         consumer.register(ModEntities.butterflySummoner.get(), EmptyRender::new);
 

@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockFarm;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -190,8 +191,10 @@ public class EntityCalls {
                     player.level.removeBlock(pos, false);
                 }
                 player.swing(InteractionHand.MAIN_HAND, true);
-                if (props != null && player instanceof ServerPlayer serverPlayer)
+                if (props != null && player instanceof ServerPlayer serverPlayer) {
+                    BlockCrop.spawnRuney(serverPlayer, pos);
                     Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.FARMING, 2f));
+                }
             }
         }
     }
