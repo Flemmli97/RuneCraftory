@@ -16,6 +16,7 @@ RuneCraftory 1.4.0
 - Disable spell keys when gui is open
 - Runeys and rune orbs can now spawn when harvesting fully grown crops. They will refresh your runepoints and level a random skill
   or a random stat
+- Config value for "Recipe System" overwritten. 
 
 RuneCraftory 1.3.4
 ================
