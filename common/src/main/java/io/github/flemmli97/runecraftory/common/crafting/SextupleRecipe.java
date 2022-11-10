@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
@@ -45,6 +46,9 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
     }
 
     public boolean checkMatch(PlayerContainerInv inv, Level world, boolean exact) {
+        boolean unlocked = GeneralConfig.allowLockedCrafting || Platform.INSTANCE.getPlayerData(inv.getPlayer()).map(cap -> cap.getRecipeKeeper().isUnlocked(this)).orElse(false);
+        if (!unlocked)
+            return false;
         NonNullList<ItemStack> stacks = NonNullList.create();
         for (int j = 0; j < 6; ++j) {
             ItemStack itemStack = inv.getItem(j);
