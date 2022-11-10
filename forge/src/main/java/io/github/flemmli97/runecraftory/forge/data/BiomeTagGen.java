@@ -98,8 +98,8 @@ public class BiomeTagGen extends TagsProvider<Biome> {
         this.tag(ModTags.general_herb).addOptionalTag(ModTags.IS_MAGICAL.location()).addTag(ModTags.IS_LUSH).addTag(ModTags.IS_DENSE_OVERWORLD).addTag(ModTags.IS_PLAINS)
                 .addTag(BiomeTags.IS_FOREST).addTag(BiomeTags.IS_HILL);
 
-        this.addedTags.forEach(tag -> this.tag(tag).addOptional(new ResourceLocation("byg", tag.location().getPath())));
-        this.addedTags.forEach(tag -> this.tag(tag).addOptional(new ResourceLocation("forge", tag.location().getPath())));
+        this.addedTags.forEach(tag -> this.tag(tag).addOptionalTag(new ResourceLocation("byg", tag.location().getPath())));
+        this.addedTags.forEach(tag -> this.tag(tag).addOptionalTag(new ResourceLocation("forge", tag.location().getPath())));
     }
 
     @SafeVarargs

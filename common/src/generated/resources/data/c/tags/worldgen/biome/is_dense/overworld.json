@@ -5,11 +5,11 @@
     "minecraft:old_growth_birch_forest",
     "minecraft:old_growth_spruce_taiga",
     {
-      "id": "byg:is_dense/overworld",
+      "id": "#byg:is_dense/overworld",
       "required": false
     },
     {
-      "id": "forge:is_dense/overworld",
+      "id": "#forge:is_dense/overworld",
       "required": false
     }
   ]

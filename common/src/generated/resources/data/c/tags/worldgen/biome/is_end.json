@@ -7,11 +7,11 @@
     "minecraft:end_highlands",
     "minecraft:end_barrens",
     {
-      "id": "byg:is_end",
+      "id": "#byg:is_end",
       "required": false
     },
     {
-      "id": "forge:is_end",
+      "id": "#forge:is_end",
       "required": false
     }
   ]

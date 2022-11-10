@@ -17,11 +17,11 @@
     "minecraft:warped_forest",
     "minecraft:basalt_deltas",
     {
-      "id": "byg:is_hot",
+      "id": "#byg:is_hot",
       "required": false
     },
     {
-      "id": "forge:is_hot",
+      "id": "#forge:is_hot",
       "required": false
     }
   ]

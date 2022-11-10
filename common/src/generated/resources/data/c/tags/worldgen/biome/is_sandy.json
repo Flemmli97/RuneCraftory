@@ -5,11 +5,11 @@
     "minecraft:badlands",
     "minecraft:wooded_badlands",
     {
-      "id": "byg:is_sandy",
+      "id": "#byg:is_sandy",
       "required": false
     },
     {
-      "id": "forge:is_sandy",
+      "id": "#forge:is_sandy",
       "required": false
     }
   ]

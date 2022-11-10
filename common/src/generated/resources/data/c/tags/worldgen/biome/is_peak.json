@@ -5,11 +5,11 @@
     "minecraft:frozen_peaks",
     "minecraft:stony_peaks",
     {
-      "id": "byg:is_peak",
+      "id": "#byg:is_peak",
       "required": false
     },
     {
-      "id": "forge:is_peak",
+      "id": "#forge:is_peak",
       "required": false
     }
   ]

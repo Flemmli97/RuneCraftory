@@ -7,11 +7,11 @@
     "minecraft:windswept_savanna",
     "minecraft:eroded_badlands",
     {
-      "id": "byg:is_dry/overworld",
+      "id": "#byg:is_dry/overworld",
       "required": false
     },
     {
-      "id": "forge:is_dry/overworld",
+      "id": "#forge:is_dry/overworld",
       "required": false
     }
   ]

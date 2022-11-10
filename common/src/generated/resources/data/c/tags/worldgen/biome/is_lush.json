@@ -3,11 +3,11 @@
   "values": [
     "minecraft:lush_caves",
     {
-      "id": "byg:is_lush",
+      "id": "#byg:is_lush",
       "required": false
     },
     {
-      "id": "forge:is_lush",
+      "id": "#forge:is_lush",
       "required": false
     }
   ]

@@ -3,11 +3,11 @@
   "values": [
     "minecraft:dark_forest",
     {
-      "id": "byg:is_spooky",
+      "id": "#byg:is_spooky",
       "required": false
     },
     {
-      "id": "forge:is_spooky",
+      "id": "#forge:is_spooky",
       "required": false
     }
   ]

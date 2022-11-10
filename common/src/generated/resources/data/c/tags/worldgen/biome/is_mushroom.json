@@ -3,11 +3,11 @@
   "values": [
     "minecraft:mushroom_fields",
     {
-      "id": "byg:is_mushroom",
+      "id": "#byg:is_mushroom",
       "required": false
     },
     {
-      "id": "forge:is_mushroom",
+      "id": "#forge:is_mushroom",
       "required": false
     }
   ]

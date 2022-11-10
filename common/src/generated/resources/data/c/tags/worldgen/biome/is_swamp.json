@@ -3,11 +3,11 @@
   "values": [
     "minecraft:swamp",
     {
-      "id": "byg:is_swamp",
+      "id": "#byg:is_swamp",
       "required": false
     },
     {
-      "id": "forge:is_swamp",
+      "id": "#forge:is_swamp",
       "required": false
     }
   ]

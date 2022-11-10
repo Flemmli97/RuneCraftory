@@ -12,11 +12,11 @@
     "minecraft:frozen_peaks",
     "minecraft:ice_spikes",
     {
-      "id": "byg:is_snowy",
+      "id": "#byg:is_snowy",
       "required": false
     },
     {
-      "id": "forge:is_snowy",
+      "id": "#forge:is_snowy",
       "required": false
     }
   ]

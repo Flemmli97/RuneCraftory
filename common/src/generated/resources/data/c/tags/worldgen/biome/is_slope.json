@@ -7,11 +7,11 @@
     "minecraft:grove",
     "minecraft:snowy_slopes",
     {
-      "id": "byg:is_slope",
+      "id": "#byg:is_slope",
       "required": false
     },
     {
-      "id": "forge:is_slope",
+      "id": "#forge:is_slope",
       "required": false
     }
   ]

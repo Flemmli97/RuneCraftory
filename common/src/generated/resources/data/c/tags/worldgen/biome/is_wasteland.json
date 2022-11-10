@@ -3,11 +3,11 @@
   "values": [
     "minecraft:snowy_plains",
     {
-      "id": "byg:is_wasteland",
+      "id": "#byg:is_wasteland",
       "required": false
     },
     {
-      "id": "forge:is_wasteland",
+      "id": "#forge:is_wasteland",
       "required": false
     }
   ]

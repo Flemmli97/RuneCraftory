@@ -8,11 +8,11 @@
     "minecraft:bamboo_jungle",
     "minecraft:lush_caves",
     {
-      "id": "byg:is_wet",
+      "id": "#byg:is_wet",
       "required": false
     },
     {
-      "id": "forge:is_wet",
+      "id": "#forge:is_wet",
       "required": false
     }
   ]

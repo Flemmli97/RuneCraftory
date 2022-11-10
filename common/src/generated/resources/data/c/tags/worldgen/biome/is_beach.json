@@ -5,11 +5,11 @@
     "minecraft:stony_shore",
     "minecraft:snowy_beach",
     {
-      "id": "byg:is_beach",
+      "id": "#byg:is_beach",
       "required": false
     },
     {
-      "id": "forge:is_beach",
+      "id": "#forge:is_beach",
       "required": false
     }
   ]
