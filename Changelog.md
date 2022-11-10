@@ -6,6 +6,12 @@ RuneCraftory 1.4.0
 - Player get a notification when their tamed monster gets knocked out
 - Lots of damaging stuff that didnt apply several status effects now do it properly
 - Made bosses resistant against a lot of status effects
+- Crafting system got rewritten:  
+  You can now craft items you havent unlocked at a higher rp cost (You can disable it in the config if you want).  
+  During crafting you can add up to 3 additional items. These items are applied the same as if you upgrade
+  the item directly but without an duplicate item penalty.  
+  Gui for crafting got redesigned to make choosing recipes easier.  
+  Crafting an item without a valid recipe now yields something different
 
 RuneCraftory 1.3.4
 ================

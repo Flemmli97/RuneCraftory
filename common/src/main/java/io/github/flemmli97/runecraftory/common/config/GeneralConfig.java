@@ -92,9 +92,9 @@ public class GeneralConfig {
         skillProps.put(EnumSkills.MINING, new SkillProperties(1, 0.7f, 0.1f, 0.3f, 0, 1));
         skillProps.put(EnumSkills.FISHING, new SkillProperties(1, 0.5f, 0, 0, 0.5f, 25));
         skillProps.put(EnumSkills.COOKING, new SkillProperties(0, 0.25f, 0, 0.1f, 0, 10));
-        skillProps.put(EnumSkills.FORGING, new SkillProperties(0, 0.25f, 0, 0.1f, 0, 20));
-        skillProps.put(EnumSkills.CHEMISTRY, new SkillProperties(0, 0.25f, 0, 0.1f, 0, 20));
-        skillProps.put(EnumSkills.CRAFTING, new SkillProperties(0, 0.25f, 0, 0, 0.1f, 20));
+        skillProps.put(EnumSkills.FORGING, new SkillProperties(0, 0.25f, 0, 0.1f, 0, 10));
+        skillProps.put(EnumSkills.CHEMISTRY, new SkillProperties(0, 0.25f, 0, 0.1f, 0, 10));
+        skillProps.put(EnumSkills.CRAFTING, new SkillProperties(0, 0.25f, 0, 0, 0.1f, 10));
         skillProps.put(EnumSkills.SEARCHING, new SkillProperties(0, 0.5f, 0, 0, 0.3f, 15));
         skillProps.put(EnumSkills.WALKING, new SkillProperties(0.3f, 0.125f, 0, 0.1f, 0, 1));
         skillProps.put(EnumSkills.SLEEPING, new SkillProperties(3, 2, 0.5f, 1, 0.5f, 75));

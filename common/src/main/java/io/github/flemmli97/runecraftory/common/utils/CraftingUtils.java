@@ -142,8 +142,10 @@ public class CraftingUtils {
         if (recipeStacks.size() > 3) {
             while (i < 3) {
                 ItemStack rand = recipeStacks.get(inv.getPlayer().getRandom().nextInt(recipeStacks.size()));
-                if (!rand.isEmpty())
+                if (!rand.isEmpty()) {
                     recipeStacks.remove(rand);
+                    ItemNBT.addUpgradeItem(stack, rand, true);
+                }
                 i++;
             }
         }

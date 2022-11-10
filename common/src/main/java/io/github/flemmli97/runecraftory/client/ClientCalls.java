@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SkillButton;
@@ -11,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
+import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.network.C2SRideJump;
 import io.github.flemmli97.runecraftory.common.network.C2SSpellKey;
@@ -28,7 +30,9 @@ import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -100,8 +104,12 @@ public class ClientCalls {
     public static void tooltipEvent(ItemStack stack, List<Component> tooltip, TooltipFlag flag) {
         if (!stack.isEmpty()) {
             boolean showTooltip = true;
-            if (stack.hasTag() && stack.getTag().contains("HideFlags", 99)) {
-                showTooltip = (stack.getTag().getInt("HideFlags") & 0x20) == 0x0;
+            if (stack.hasTag()) {
+                CompoundTag tag = stack.getTag();
+                if (tag.contains("HideFlags", 99))
+                    showTooltip = (stack.getTag().getInt("HideFlags") & 0x20) == 0x0;
+                if (tag.getCompound(RuneCraftory.MODID).contains(LibNBT.CraftingBonus) && tooltip.get(0) instanceof MutableComponent mut)
+                    mut.withStyle(ChatFormatting.AQUA);
             }
             if (showTooltip) {
                 Pair<List<Component>, List<Component>> p = injectAdditionalTooltip(stack, flag);

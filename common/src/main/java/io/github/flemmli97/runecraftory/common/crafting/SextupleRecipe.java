@@ -41,6 +41,10 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
 
     @Override
     public boolean matches(PlayerContainerInv inv, Level world) {
+        return this.checkMatch(inv, world, false);
+    }
+
+    public boolean checkMatch(PlayerContainerInv inv, Level world, boolean exact) {
         NonNullList<ItemStack> stacks = NonNullList.create();
         for (int j = 0; j < 6; ++j) {
             ItemStack itemStack = inv.getItem(j);
@@ -48,7 +52,9 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
                 stacks.add(itemStack);
         }
         int matches = matchingStacks(this, stacks).getFirst().size();
-        return matches >= this.getIngredients().size();
+        if (!exact)
+            return matches >= this.getIngredients().size();
+        return matches == this.getIngredients().size();
     }
 
     @Override

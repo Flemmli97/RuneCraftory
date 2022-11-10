@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.blocks.tile.CraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
+import io.github.flemmli97.runecraftory.common.crafting.SpecialSextupleRecipe;
 import io.github.flemmli97.runecraftory.common.inventory.DummyInventory;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.network.S2CCraftingRecipes;
@@ -113,6 +114,15 @@ public class ContainerCrafting extends AbstractContainerMenu {
             return;
         if (this.craftingInv.refreshAndSet()) {
             this.matchingRecipes = getRecipes(this.craftingInv, this.type);
+            if (this.matchingRecipes.isEmpty()) {
+                this.matchingRecipes = new ArrayList<>();
+                SpecialSextupleRecipe recipe = switch (this.type) {
+                    case ARMOR, FORGE -> SpecialSextupleRecipe.scrap.get();
+                    case COOKING, CHEM -> SpecialSextupleRecipe.objectX.get();
+                };
+                if (recipe.matches(this.craftingInv, this.craftingInv.getPlayer().level))
+                    this.matchingRecipes.add(recipe);
+            }
             this.updatedRecipes = true;
             if (!init)
                 this.tile.resetIndex();

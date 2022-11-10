@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.crafting.SextupleRecipe;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -16,7 +17,8 @@ public class CraftingOutputSlot extends Slot {
 
     private final PlayerContainerInv ingredientInv;
     private final ContainerCrafting craftingContainer;
-    private int amountCrafted, id;
+    private int amountCrafted;
+    private final int id;
 
     public CraftingOutputSlot(Container output, ContainerCrafting container, PlayerContainerInv ingredientInv, int id, int x, int y) {
         super(output, id, x, y);
@@ -60,11 +62,11 @@ public class CraftingOutputSlot extends Slot {
         if (this.craftingContainer.rpCost() >= 0)
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                 data.decreaseRunePoints(player, this.craftingContainer.rpCost(), true);
-                if (this.craftingContainer.getCurrentRecipe() != null)
-                    if (!data.getRecipeKeeper().isUnlocked(this.craftingContainer.getCurrentRecipe())) {
-                        data.getRecipeKeeper().unlockRecipe(player, this.craftingContainer.getCurrentRecipe());
-                        this.craftingContainer.sendCraftingRecipesToClient(serverPlayer, data);
-                    }
+                SextupleRecipe recipe = this.craftingContainer.getCurrentRecipe();
+                if (recipe != null && !recipe.isSpecial() && !data.getRecipeKeeper().isUnlocked(recipe)) {
+                    data.getRecipeKeeper().unlockRecipe(player, recipe);
+                    this.craftingContainer.sendCraftingRecipesToClient(serverPlayer, data);
+                }
                 switch (this.craftingContainer.craftingType()) {
                     case FORGE -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.FORGING, this.craftingContainer.getCurrentRecipe());
                     case ARMOR -> CraftingUtils.giveCraftingXPTo(serverPlayer, data, EnumSkills.CRAFTING, this.craftingContainer.getCurrentRecipe());
