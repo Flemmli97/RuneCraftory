@@ -60,7 +60,7 @@ public class LevelCalc {
             levelXPTotal[0] = 50;
             long prev = levelXPTotal[0];
             for (int l = 1; l < len; l++) {
-                levelXPTotal[l] = (long) (prev + 150 + 9 * Math.pow(l, 2.655) - 12 * Math.pow(l, 1.549) + (l - 1) * 125L);
+                levelXPTotal[l] = (long) (prev + 170 + 9 * Math.pow(l, 2.455) - 12 * Math.pow(l, 1.549) + (l - 1) * 125L);
                 prev = levelXPTotal[l];
             }
         }
