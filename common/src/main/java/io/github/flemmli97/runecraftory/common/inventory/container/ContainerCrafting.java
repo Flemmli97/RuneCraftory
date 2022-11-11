@@ -118,7 +118,8 @@ public class ContainerCrafting extends AbstractContainerMenu {
                 this.matchingRecipes = new ArrayList<>();
                 SpecialSextupleRecipe recipe = switch (this.type) {
                     case ARMOR, FORGE -> SpecialSextupleRecipe.scrap.get();
-                    case COOKING, CHEM -> SpecialSextupleRecipe.objectX.get();
+                    case CHEM -> SpecialSextupleRecipe.objectX.get();
+                    case COOKING -> SpecialSextupleRecipe.failedDish.get();
                 };
                 if (recipe.matches(this.craftingInv, this.craftingInv.getPlayer().level))
                     this.matchingRecipes.add(recipe);
