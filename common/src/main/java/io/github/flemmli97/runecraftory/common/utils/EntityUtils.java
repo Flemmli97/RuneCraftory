@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -56,7 +57,7 @@ public class EntityUtils {
     public static void foodHealing(LivingEntity entity, float amount) {
         if (amount > 0)
             entity.heal(amount);
-        else
+        else if (!entity.getType().is(ModTags.bossMonsters))
             entity.setHealth(entity.getHealth() + amount);
     }
 
