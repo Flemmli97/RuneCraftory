@@ -18,6 +18,7 @@ RuneCraftory 1.4.0
   or a random stat
 - Config value for "Recipe System" overwritten. 
 - NPC now seek shelter when its raining
+- Add some advancements
 
 RuneCraftory 1.3.4
 ================
