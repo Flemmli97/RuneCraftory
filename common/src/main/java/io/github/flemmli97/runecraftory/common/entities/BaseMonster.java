@@ -20,6 +20,7 @@ import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
+import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -1304,8 +1305,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
                 e -> e instanceof OwnableEntity ownable && this.getOwnerUUID().equals(ownable.getOwnerUUID())
                         && e.getTarget() == this).forEach(e -> e.setTarget(null));
-        if (owner instanceof ServerPlayer serverPlayer)
-            Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.TAMING, 10));
+        if (owner instanceof ServerPlayer serverPlayer) {
+            Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
+                data.tamedEntity.tameEntity(this);
+                ModCriteria.TAME_MONSTER_TRIGGER.trigger(serverPlayer, this, data.tamedEntity);
+                LevelCalc.levelSkill(serverPlayer, data, EnumSkills.TAMING, 10);
+            });
+        }
     }
 
     protected void untameEntity() {

@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
-import io.github.flemmli97.runecraftory.mixinhelper.ClientMixinUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
@@ -42,6 +41,8 @@ public abstract class LevelRendererMixin {
 
     @ModifyVariable(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;getY()I", ordinal = 0, shift = At.Shift.BEFORE), ordinal = 2)
     private BlockPos rainTickCheck(BlockPos pos) {
-        return ClientMixinUtils.p(this.minecraft.level, pos, this.rf4CacheBiome);
+        if (WorldUtils.coldEnoughForSnow(this.minecraft.level, pos, this.rf4CacheBiome))
+            return new BlockPos(pos.getX(), this.minecraft.level.getMinBuildHeight() - 1, pos.getZ());
+        return pos;
     }
 }

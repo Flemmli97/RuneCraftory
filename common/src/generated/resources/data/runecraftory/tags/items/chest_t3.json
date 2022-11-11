@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "runecraftory:broad_sword",
     "runecraftory:steel_sword",
     "runecraftory:steel_sword_plus",
     "runecraftory:cutlass",

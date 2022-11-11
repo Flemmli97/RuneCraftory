@@ -1,0 +1,32 @@
+{
+  "parent": "runecraftory:main/skill/skill_10",
+  "display": {
+    "icon": {
+      "item": "minecraft:experience_bottle"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.skill.25.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.skill.25.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "skill": {
+      "trigger": "runecraftory:skill_level_trigger",
+      "conditions": {
+        "level": 25,
+        "skill": "*"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "skill"
+    ]
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "parent": "runecraftory:main/shop",
+  "display": {
+    "icon": {
+      "item": "runecraftory:crop_emery_flower"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.million.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.million.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "have_money": {
+      "trigger": "runecraftory:money",
+      "conditions": {
+        "amount": 1000000
+      }
+    }
+  },
+  "requirements": [
+    [
+      "have_money"
+    ]
+  ]
+}

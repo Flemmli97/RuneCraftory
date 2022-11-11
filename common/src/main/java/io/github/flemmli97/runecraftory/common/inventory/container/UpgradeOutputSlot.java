@@ -1,8 +1,12 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
+import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -54,6 +58,13 @@ public class UpgradeOutputSlot extends Slot {
         ItemStack toUpgrade = this.ingredientInv.getItem(6);
         ItemStack material = this.ingredientInv.getItem(7);
         Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
+            ModCriteria.UPGRADE_ITEM.trigger(serverPlayer);
+            if (ItemNBT.getElement(toUpgrade) != ItemNBT.getElement(stack))
+                ModCriteria.CHANGE_ELEMENT.trigger(serverPlayer);
+            if (stack.getItem() instanceof ItemStaffBase) {
+                if (DataPackHandler.getStats(material.getItem()).map(s -> s.getTier1Spell() != null || s.getTier2Spell() != null || s.getTier3Spell() != null).orElse(false))
+                    ModCriteria.CHANGE_SPELL.trigger(serverPlayer);
+            }
             data.decreaseRunePoints(player, this.container.rpCost(), true);
             switch (this.container.craftingType()) {
                 case FORGE -> CraftingUtils.giveUpgradeXPTo(serverPlayer, data, EnumSkills.FORGING, toUpgrade, material);

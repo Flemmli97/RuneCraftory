@@ -3,10 +3,13 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShopResult;
+import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -60,13 +63,15 @@ public class ItemUtils {
         return DataPackHandler.getStats(stack.getItem()).map(stat -> getBuyPrice(stack, stat)).orElse(0);
     }
 
-    public static EnumShopResult buyItem(Player player, ItemStack stack) {
+    public static EnumShopResult buyItem(Player player, EntityNPCBase npc, ItemStack stack) {
         if (sizeInv(player.getInventory(), stack) < stack.getCount()) {
             player.playSound(SoundEvents.VILLAGER_NO, 1.0f, 1.0f);
             return EnumShopResult.NOSPACE;
         }
         int price = getBuyPrice(stack) * stack.getCount();
         if (Platform.INSTANCE.getPlayerData(player).map(d -> d.useMoney(player, price)).orElse(false)) {
+            if (player instanceof ServerPlayer serverPlayer)
+                ModCriteria.SHOP_TRIGGER.trigger(serverPlayer, npc, stack);
             player.playSound(SoundEvents.VILLAGER_YES, 1.0f, 1.0f);
             while (stack.getCount() > 0) {
                 ItemStack copy = stack.copy();

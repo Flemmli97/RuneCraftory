@@ -122,7 +122,7 @@ public class RunecraftoryCommand {
                     for (EnumSkills skill : EnumSkills.values())
                         data.setSkillLevel(skill, player, amount, 0, true);
                 });
-                ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.lvl.add", s, player.getName(), amount), false);
+                ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.skill.lvl.set", s, player.getName(), amount), false);
                 ret++;
             }
             return ret;

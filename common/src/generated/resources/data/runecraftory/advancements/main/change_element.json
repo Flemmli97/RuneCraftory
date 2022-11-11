@@ -1,0 +1,29 @@
+{
+  "parent": "runecraftory:main/upgrade",
+  "display": {
+    "icon": {
+      "item": "runecraftory:love_crystal"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.change.element.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.change.element.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "element": {
+      "trigger": "runecraftory:change_element",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "element"
+    ]
+  ]
+}

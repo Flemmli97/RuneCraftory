@@ -7,3 +7,5 @@ accessible field net/minecraft/world/entity/Mob targetSelector Lnet/minecraft/wo
 
 accessible class net/minecraft/world/inventory/MenuType$MenuSupplier
 accessible method net/minecraft/world/inventory/MenuType <init> (Lnet/minecraft/world/inventory/MenuType$MenuSupplier;)V
+
+accessible method net/minecraft/advancements/CriteriaTriggers register (Lnet/minecraft/advancements/CriterionTrigger;)Lnet/minecraft/advancements/CriterionTrigger;

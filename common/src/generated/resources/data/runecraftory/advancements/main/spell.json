@@ -1,0 +1,35 @@
+{
+  "parent": "runecraftory:main/upgrade",
+  "display": {
+    "icon": {
+      "item": "runecraftory:fireball"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.spell.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.spell.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "spell": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "runecraftory:spells"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "spell"
+    ]
+  ]
+}

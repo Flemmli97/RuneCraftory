@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 
 public class DailyPlayerUpdater {
 
@@ -19,7 +18,7 @@ public class DailyPlayerUpdater {
         this.data = data;
     }
 
-    public void tick(Player player) {
+    public void tick(ServerPlayer player) {
         int day = WorldUtils.day(player.level);
         if (Math.abs(this.lastUpdateDay - day) >= 1) {
             this.lastUpdateDay = day;

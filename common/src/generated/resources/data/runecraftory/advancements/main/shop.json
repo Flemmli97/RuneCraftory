@@ -1,0 +1,29 @@
+{
+  "parent": "runecraftory:main/shipping",
+  "display": {
+    "icon": {
+      "item": "minecraft:gold_ingot"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.shop.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.shop.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "buy_item": {
+      "trigger": "runecraftory:shop_buy",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "buy_item"
+    ]
+  ]
+}

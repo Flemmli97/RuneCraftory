@@ -119,7 +119,7 @@ public class ContainerShop extends AbstractContainerMenu {
         if (slot == InventoryShop.shopSize) {
             Slot shopOutput = this.getSlot(InventoryShop.shopSize);
             if (shopOutput.hasItem() && player instanceof ServerPlayer serverPlayer) {
-                EnumShopResult res = ItemUtils.buyItem(player, shopOutput.getItem().copy());
+                EnumShopResult res = ItemUtils.buyItem(player, this.invShop.npc, shopOutput.getItem().copy());
                 Component txt = switch (res) {
                     case NOMONEY -> new TranslatableComponent("npc.shop.money.no");
                     case NOSPACE -> new TranslatableComponent("npc.shop.inventory.full");

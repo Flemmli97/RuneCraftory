@@ -1,0 +1,31 @@
+{
+  "parent": "runecraftory:main/root",
+  "display": {
+    "icon": {
+      "item": "runecraftory:leveliser"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.level.10.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.level.10.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "level": {
+      "trigger": "runecraftory:level_trigger",
+      "conditions": {
+        "level": 10
+      }
+    }
+  },
+  "requirements": [
+    [
+      "level"
+    ]
+  ]
+}

@@ -67,7 +67,7 @@ public class ModItems {
 
     //Those collections are for datagen
     public static final List<RegistryEntrySupplier<Item>> NOTEX = new ArrayList<>();
-    public static final Map<TagKey<Item>, List<RegistryEntrySupplier<Item>>> TREASURE = new HashMap<>();
+    public static final Map<TagKey<Item>, List<RegistryEntrySupplier<Item>>> DATAGENTAGS = new HashMap<>();
     public static final List<RegistryEntrySupplier<Item>> SEEDS = new ArrayList<>();
 
     private static final FoodProperties lowFoodProp = new FoodProperties.Builder().nutrition(1).saturationMod(0.5f).alwaysEat().build();
@@ -1239,10 +1239,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1253,10 +1250,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1267,10 +1261,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1281,10 +1272,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1295,10 +1283,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1309,10 +1294,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1323,10 +1305,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1337,10 +1316,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.staff(starterElement, amount, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1351,10 +1327,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties().tab(RFCreativeTabs.equipment), new ResourceLocation(RuneCraftory.MODID, name)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1365,10 +1338,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemStatShield(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.equipment)));
-        TREASURE.merge(ModTags.chest_t3, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1408,19 +1378,13 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().rarity(rarity).tab(RFCreativeTabs.upgradeItems)));
         if (rarity == Rarity.COMMON)
-            TREASURE.merge(ModTags.chest_t1, new ArrayList<>(), (lo, l) -> {
-                lo.add(sup);
-                return lo;
-            });
+            DATAGENTAGS.computeIfAbsent(ModTags.chest_t1, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> medicine(String name, boolean affectStats) {
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemMedicine(affectStats, new Item.Properties().food(foodProp).stacksTo(16).tab(RFCreativeTabs.medicine)));
-        TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t2, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1431,19 +1395,14 @@ public class ModItems {
                 return UseAnim.DRINK;
             }
         });
-        TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t2, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> spell(Supplier<Supplier<Spell>> sup, String name) {
         RegistryEntrySupplier<Item> ret = ITEMS.register(name, () -> new ItemSpell(sup.get(), new Item.Properties().stacksTo(1).tab(RFCreativeTabs.cast)));
-        TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
-            lo.add(ret);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t2, t -> new ArrayList<>()).add(ret);
+        DATAGENTAGS.computeIfAbsent(ModTags.spells, t -> new ArrayList<>()).add(ret);
         return ret;
     }
 
@@ -1454,10 +1413,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().tab(RFCreativeTabs.food)));
-        TREASURE.merge(ModTags.chest_t1, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t1, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1482,19 +1438,13 @@ public class ModItems {
             sup = ITEMS.register("crop_" + name + "_giant", () -> new ItemGiantCrops(new Item.Properties().food(foodProp).tab(RFCreativeTabs.crops)));
         else
             sup = ITEMS.register("crop_" + name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.crops)));
-        TREASURE.merge(ModTags.chest_t1, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t1, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> herb(String name, Supplier<Supplier<Block>> block) {
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(lowFoodProp).tab(RFCreativeTabs.medicine)));
-        TREASURE.merge(ModTags.chest_t1, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t1, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1509,10 +1459,7 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.food)));
-        TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t2, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1533,10 +1480,7 @@ public class ModItems {
                 return UseAnim.DRINK;
             }
         });
-        TREASURE.merge(ModTags.chest_t2, new ArrayList<>(), (lo, l) -> {
-            lo.add(sup);
-            return lo;
-        });
+        DATAGENTAGS.computeIfAbsent(ModTags.chest_t2, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 

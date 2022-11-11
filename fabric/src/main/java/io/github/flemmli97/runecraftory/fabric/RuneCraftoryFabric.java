@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModContainer;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
+import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
@@ -221,6 +222,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         this.tweakVanillaAttribute(Attributes.MAX_HEALTH, Double.MAX_VALUE);
         this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE, Double.MAX_VALUE);
         ModFeatures.registerConfiguredMineralFeatures();
+        ModCriteria.init();
     }
 
     private void tweakVanillaAttribute(Attribute attribute, double value) {

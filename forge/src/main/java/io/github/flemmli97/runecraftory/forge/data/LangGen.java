@@ -535,6 +535,57 @@ public class LangGen implements DataProvider {
 
         this.add("npc.generic.greet", "Hello %s");
 
+        this.add("runecraftory.advancements.root.title", "Runecraftory");
+        this.add("runecraftory.advancements.root.description", "A minecrafty harvest moon");
+        this.add("runecraftory.advancements.tame.first.title", "First buddy");
+        this.add("runecraftory.advancements.tame.first.description", "Tame your first monster");
+        this.add("runecraftory.advancements.tame.ten.title", "Monster tamer");
+        this.add("runecraftory.advancements.tame.ten.description", "Tame 10 monster");
+        this.add("runecraftory.advancements.tame.boss.title", "Strong buddy");
+        this.add("runecraftory.advancements.tame.boss.description", "Tame a boss monster");
+
+        this.add("runecraftory.advancements.shipping.title", "Money");
+        this.add("runecraftory.advancements.shipping.description", "Ship your first item");
+        this.add("runecraftory.advancements.shop.title", "Time for shopping");
+        this.add("runecraftory.advancements.shop.description", "Buy your first item");
+        this.add("runecraftory.advancements.million.title", "One Million!");
+        this.add("runecraftory.advancements.million.description", "Have one million gold");
+
+        this.add("runecraftory.advancements.skill.weapon.5.title", "Gotta start somewhere");
+        this.add("runecraftory.advancements.skill.weapon.5.description", "Get to level 5 in any weapon skill");
+        this.add("runecraftory.advancements.skill.10.title", "Skill Level 10");
+        this.add("runecraftory.advancements.skill.10.description", "Get to level 10 in any skill");
+        this.add("runecraftory.advancements.skill.25.title", "Skill Level 25");
+        this.add("runecraftory.advancements.skill.25.description", "Get to level 25 in any skill");
+        this.add("runecraftory.advancements.skill.50.title", "Skill Level 50");
+        this.add("runecraftory.advancements.skill.50.description", "Get to level 50 in any skill");
+        this.add("runecraftory.advancements.skill.100.title", "Skill Level 100");
+        this.add("runecraftory.advancements.skill.100.description", "Get to level 100 in any skill");
+
+        this.add("runecraftory.advancements.level.10.title", "Level 10");
+        this.add("runecraftory.advancements.level.10.description", "Get to level 10");
+        this.add("runecraftory.advancements.level.25.title", "Level 25");
+        this.add("runecraftory.advancements.level.25.description", "Get to level 25");
+        this.add("runecraftory.advancements.level.50.title", "Level 50");
+        this.add("runecraftory.advancements.level.50.description", "Get to level 50");
+        this.add("runecraftory.advancements.level.100.title", "Level 100");
+        this.add("runecraftory.advancements.level.100.description", "Get to level 100");
+
+        this.add("runecraftory.advancements.upgrade.title", "Better equipment");
+        this.add("runecraftory.advancements.upgrade.description", "Upgrade any equipment");
+        this.add("runecraftory.advancements.change.element.title", "Its super effective");
+        this.add("runecraftory.advancements.change.element.description", "Change an element of a weapon");
+        this.add("runecraftory.advancements.spell.title", "Magick");
+        this.add("runecraftory.advancements.spell.description", "Find or craft a spell");
+        this.add("runecraftory.advancements.change.spell.title", "Staff power");
+        this.add("runecraftory.advancements.change.spell.description", "Change or add a spell to a staff");
+
+        this.add("runecraftory.advancements.fertilizer.title", "Increased production");
+        this.add("runecraftory.advancements.fertilizer.description", "Use a fertilizer to improve your farmland");
+        this.add("runecraftory.advancements.monster.help.title", "Useful helper");
+        this.add("runecraftory.advancements.monster.help.description", "Command a monster to help you out with farming");
+        this.add("runecraftory.advancements.final.tool.title", "The best");
+        this.add("runecraftory.advancements.final.tool.description", "Obtain a final tier tool");
     }
 
     private String simpleTranslation(ResourceLocation res) {
@@ -674,6 +725,7 @@ public class LangGen implements DataProvider {
         CONTAINER,
         ELEMENT,
         ATTRIBUTE,
+        ADVANCEMENT,
         SKILL,
         TOOLTIP,
         DAY,
@@ -695,6 +747,8 @@ public class LangGen implements DataProvider {
                 return ELEMENT;
             if (s.startsWith("attribute.rf."))
                 return ATTRIBUTE;
+            if (s.startsWith("runecraftory.advancements"))
+                return ADVANCEMENT;
             if (s.startsWith("skill."))
                 return SKILL;
             if (s.startsWith("tooltip."))

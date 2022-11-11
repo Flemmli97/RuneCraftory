@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "runecraftory:bronze",
     "runecraftory:silver",
     "runecraftory:platinum",
     "runecraftory:scrap",

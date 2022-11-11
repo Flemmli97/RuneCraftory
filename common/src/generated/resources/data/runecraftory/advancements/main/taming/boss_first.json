@@ -1,0 +1,32 @@
+{
+  "parent": "runecraftory:main/taming/first",
+  "display": {
+    "icon": {
+      "item": "runecraftory:ambrosia_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.tame.boss.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.tame.boss.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "tame_boss_monster": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": true
+      }
+    }
+  },
+  "requirements": [
+    [
+      "tame_boss_monster"
+    ]
+  ]
+}

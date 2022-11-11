@@ -21,6 +21,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CPlayerStats;
 import io.github.flemmli97.runecraftory.common.network.S2CRunePoints;
 import io.github.flemmli97.runecraftory.common.network.S2CSkillLevelPkt;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -108,6 +109,8 @@ public class PlayerData {
     private final WalkingTracker walkingTracker = new WalkingTracker();
 
     public final EntitySelector entitySelector = new EntitySelector();
+
+    public final TamedEntityTracker tamedEntity = new TamedEntityTracker();
 
     public PlayerData() {
         for (EnumSkills skill : EnumSkills.values()) {
@@ -204,6 +207,7 @@ public class PlayerData {
     public void setMoney(Player player, int amount) {
         this.money = amount;
         if (player instanceof ServerPlayer serverPlayer) {
+            ModCriteria.MONEY_TRIGGER.trigger(serverPlayer);
             Platform.INSTANCE.sendToClient(new S2CMoney(this), serverPlayer);
         }
     }
@@ -261,6 +265,8 @@ public class PlayerData {
             player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
         if (player instanceof ServerPlayer serverPlayer) {
+            if (levelUp)
+                ModCriteria.LEVEL_TRIGGER.trigger(serverPlayer);
             Platform.INSTANCE.sendToClient(new S2CLevelPkt(this), serverPlayer);
         }
     }
@@ -317,6 +323,8 @@ public class PlayerData {
             player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
         if (player instanceof ServerPlayer serverPlayer) {
+            if (levelUp)
+                ModCriteria.SKILL_LEVEL_TRIGGER.trigger(serverPlayer, skill);
             Platform.INSTANCE.sendToClient(new S2CSkillLevelPkt(this, skill), serverPlayer);
         }
     }
@@ -765,6 +773,7 @@ public class PlayerData {
         }*/
         nbt.put("FoodData", this.foodBuffNBT());
         nbt.put("WalkingTracker", this.walkingTracker.save());
+        nbt.put("TamedEntityTracker", this.tamedEntity.save());
         return nbt;
     }
 
@@ -775,6 +784,7 @@ public class PlayerData {
         this.readFromNBT(newData.writeToNBT(new CompoundTag(), null), null);
         this.recalculateStats(player, false);
         this.starting = false;
+        this.tamedEntity.reset();
     }
 
     public enum WeaponSwing {

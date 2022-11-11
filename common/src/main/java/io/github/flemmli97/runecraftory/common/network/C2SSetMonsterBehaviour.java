@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.Util;
 import net.minecraft.network.FriendlyByteBuf;
@@ -46,6 +47,7 @@ public class C2SSetMonsterBehaviour implements Packet {
                     case FARM -> {
                         monster.setBehaviour(BaseMonster.Behaviour.FARM);
                         sender.sendMessage(new TranslatableComponent(monster.behaviourState().interactKey), Util.NIL_UUID);
+                        ModCriteria.COMMAND_FARMING.trigger(sender);
                     }
                     case HOME -> Platform.INSTANCE.getPlayerData(sender)
                             .ifPresent(data -> {

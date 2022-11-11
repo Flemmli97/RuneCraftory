@@ -71,6 +71,9 @@ public class ModTags {
     public static final TagKey<Item> clawFangs = tag("claws_fangs");
     public static final TagKey<Item> scales = tag("scales");
 
+    public static final TagKey<Item> spells = tag("spells");
+    public static final TagKey<Item> high_tier_tools = tag("high_tier_tools");
+
     public static final TagKey<Item> woolyTamer = tag("wooly_tame");
     public static final TagKey<Item> marionettaTamer = tag("marionetta_tame");
 

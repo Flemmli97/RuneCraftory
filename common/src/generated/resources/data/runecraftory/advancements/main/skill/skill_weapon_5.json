@@ -1,0 +1,64 @@
+{
+  "parent": "runecraftory:main/root",
+  "display": {
+    "icon": {
+      "item": "runecraftory:short_dagger"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.skill.weapon.5.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.skill.weapon.5.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "short_sword": {
+      "trigger": "runecraftory:skill_level_trigger",
+      "conditions": {
+        "level": 5,
+        "skill": "SHORTSWORD"
+      }
+    },
+    "long_sword": {
+      "trigger": "runecraftory:skill_level_trigger",
+      "conditions": {
+        "level": 5,
+        "skill": "LONGSWORD"
+      }
+    },
+    "spear": {
+      "trigger": "runecraftory:skill_level_trigger",
+      "conditions": {
+        "level": 5,
+        "skill": "SPEAR"
+      }
+    },
+    "axes_hammer": {
+      "trigger": "runecraftory:skill_level_trigger",
+      "conditions": {
+        "level": 5,
+        "skill": "HAMMERAXE"
+      }
+    },
+    "fist": {
+      "trigger": "runecraftory:skill_level_trigger",
+      "conditions": {
+        "level": 5,
+        "skill": "FIST"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "short_sword",
+      "long_sword",
+      "spear",
+      "axes_hammer",
+      "fist"
+    ]
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "parent": "runecraftory:main/root",
+  "display": {
+    "icon": {
+      "item": "runecraftory:cheap_bracelet"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.upgrade.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.upgrade.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "upgrade": {
+      "trigger": "runecraftory:upgrade_item",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "upgrade"
+    ]
+  ]
+}

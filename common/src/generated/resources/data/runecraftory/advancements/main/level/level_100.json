@@ -1,0 +1,32 @@
+{
+  "parent": "runecraftory:main/level/level_50",
+  "display": {
+    "icon": {
+      "item": "runecraftory:leveliser",
+      "nbt": "{Enchantments:[{id:\"minecraft:unbreaking\",lvl:1s}]}"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.level.100.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.level.100.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "level": {
+      "trigger": "runecraftory:level_trigger",
+      "conditions": {
+        "level": 100
+      }
+    }
+  },
+  "requirements": [
+    [
+      "level"
+    ]
+  ]
+}

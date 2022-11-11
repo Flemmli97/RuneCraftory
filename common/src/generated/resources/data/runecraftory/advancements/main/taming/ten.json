@@ -1,0 +1,122 @@
+{
+  "parent": "runecraftory:main/taming/first",
+  "display": {
+    "icon": {
+      "item": "runecraftory:wooly_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.tame.ten.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.tame.ten.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "tame_monster_0": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false
+      }
+    },
+    "tame_monster_1": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 2,
+        "bosses": false
+      }
+    },
+    "tame_monster_2": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 3,
+        "bosses": false
+      }
+    },
+    "tame_monster_3": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 4,
+        "bosses": false
+      }
+    },
+    "tame_monster_4": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 5,
+        "bosses": false
+      }
+    },
+    "tame_monster_5": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 6,
+        "bosses": false
+      }
+    },
+    "tame_monster_6": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 7,
+        "bosses": false
+      }
+    },
+    "tame_monster_7": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 8,
+        "bosses": false
+      }
+    },
+    "tame_monster_8": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 9,
+        "bosses": false
+      }
+    },
+    "tame_monster_9": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 10,
+        "bosses": false
+      }
+    }
+  },
+  "requirements": [
+    [
+      "tame_monster_0"
+    ],
+    [
+      "tame_monster_1"
+    ],
+    [
+      "tame_monster_2"
+    ],
+    [
+      "tame_monster_3"
+    ],
+    [
+      "tame_monster_4"
+    ],
+    [
+      "tame_monster_5"
+    ],
+    [
+      "tame_monster_6"
+    ],
+    [
+      "tame_monster_7"
+    ],
+    [
+      "tame_monster_8"
+    ],
+    [
+      "tame_monster_9"
+    ]
+  ]
+}

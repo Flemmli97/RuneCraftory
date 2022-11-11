@@ -1,0 +1,29 @@
+{
+  "parent": "runecraftory:main/fertilizer",
+  "display": {
+    "icon": {
+      "item": "runecraftory:inspector"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.monster.help.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.monster.help.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "farming": {
+      "trigger": "runecraftory:monster_farming",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "farming"
+    ]
+  ]
+}

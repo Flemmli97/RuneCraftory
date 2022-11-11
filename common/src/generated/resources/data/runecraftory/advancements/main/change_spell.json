@@ -1,0 +1,29 @@
+{
+  "parent": "runecraftory:main/spell",
+  "display": {
+    "icon": {
+      "item": "runecraftory:rod"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.change.spell.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.change.spell.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "spell": {
+      "trigger": "runecraftory:change_spell",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "spell"
+    ]
+  ]
+}

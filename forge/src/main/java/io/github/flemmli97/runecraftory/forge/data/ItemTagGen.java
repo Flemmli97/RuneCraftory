@@ -22,7 +22,7 @@ public class ItemTagGen extends ItemTagsProvider {
 
     @Override
     protected void addTags() {
-        ModItems.TREASURE.forEach((key, supList) -> supList.forEach(sup -> this.tag(key).add(sup.get())));
+        ModItems.DATAGENTAGS.forEach((key, supList) -> supList.forEach(sup -> this.tag(key).add(sup.get())));
         this.tag(ModTags.chest_t1)
                 .add(ModItems.forgingBread.get())
                 .add(ModItems.armorBread.get())
@@ -266,6 +266,14 @@ public class ItemTagGen extends ItemTagsProvider {
                         ModItems.scaleFire.get(),
                         ModItems.scaleEarth.get(),
                         ModItems.scaleLegend.get());
+
+        this.tag(ModTags.high_tier_tools)
+                .add(ModItems.hoePlatinum.get())
+                .add(ModItems.wateringCanPlatinum.get())
+                .add(ModItems.sicklePlatinum.get())
+                .add(ModItems.hammerPlatinum.get())
+                .add(ModItems.axePlatinum.get())
+                .add(ModItems.fishingRodPlatinum.get());
 
         this.forgeAndCommonTag(Tags.Items.EGGS, ModTags.eggs, ModItems.eggS.get(),
                 ModItems.eggM.get(), ModItems.eggL.get(), Items.EGG);

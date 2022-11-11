@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:hoe_platinum",
+    "runecraftory:watering_can_platinum",
+    "runecraftory:sickle_platinum",
+    "runecraftory:hammer_platinum",
+    "runecraftory:axe_platinum",
+    "runecraftory:fishing_rod_platinum"
+  ]
+}

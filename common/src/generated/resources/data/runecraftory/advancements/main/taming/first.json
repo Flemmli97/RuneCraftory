@@ -1,0 +1,32 @@
+{
+  "parent": "runecraftory:main/root",
+  "display": {
+    "icon": {
+      "item": "runecraftory:wooly_spawn_egg"
+    },
+    "title": {
+      "translate": "runecraftory.advancements.tame.first.title"
+    },
+    "description": {
+      "translate": "runecraftory.advancements.tame.first.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "tame_monster": {
+      "trigger": "runecraftory:tame_monster",
+      "conditions": {
+        "amount": 1,
+        "bosses": false
+      }
+    }
+  },
+  "requirements": [
+    [
+      "tame_monster"
+    ]
+  ]
+}

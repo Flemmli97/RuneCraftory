@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
 import io.github.flemmli97.runecraftory.common.blocks.tile.FarmBlockEntity;
+import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -63,6 +65,7 @@ public class ItemFertilizer extends Item {
             world.levelEvent(2005, blockpos, 0);
             if (ctx.getPlayer() != null && ctx.getPlayer().isCreative())
                 ctx.getItemInHand().shrink(1);
+            ModCriteria.FERTILIZE_FARM.trigger((ServerPlayer) ctx.getPlayer());
             return InteractionResult.SUCCESS;
         } else if (world.getBlockState(blockpos).getBlock() instanceof BushBlock) {
             blockpos = blockpos.below();
@@ -71,6 +74,7 @@ public class ItemFertilizer extends Item {
                 world.levelEvent(2005, blockpos, 0);
                 if (ctx.getPlayer() != null && ctx.getPlayer().isCreative())
                     ctx.getItemInHand().shrink(1);
+                ModCriteria.FERTILIZE_FARM.trigger((ServerPlayer) ctx.getPlayer());
                 return InteractionResult.SUCCESS;
             }
         }
