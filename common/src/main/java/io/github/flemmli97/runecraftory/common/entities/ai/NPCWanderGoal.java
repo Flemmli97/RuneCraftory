@@ -20,6 +20,7 @@ import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -246,8 +247,8 @@ public class NPCWanderGoal extends Goal {
     }
 
     private boolean isUnderRoof(BlockPos pos) {
-        return BlockPos.betweenClosedStream(pos.offset(-2, 0, -2), pos.offset(2, 0, 2))
-                .noneMatch(p -> this.npc.level.canSeeSky(p));
+        return BlockPos.betweenClosedStream(pos.offset(-2, 1, -2), pos.offset(2, 1, 2))
+                .noneMatch(p -> this.npc.level.canSeeSky(p) && this.npc.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, p).getY() <= p.getY());
     }
 
     @Nullable
