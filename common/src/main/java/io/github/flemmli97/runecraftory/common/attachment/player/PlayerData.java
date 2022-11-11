@@ -159,7 +159,7 @@ public class PlayerData {
                 int diff = amount - this.runePoints;
                 this.runePoints = 0;
                 if (!player.level.isClientSide) {
-                    player.hurt(CustomDamage.EXHAUST, (float) (diff * 2));
+                    player.hurt(CustomDamage.EXHAUST, Math.min(player.getMaxHealth() * 0.25f, (float) (diff * 2)));
                     player.invulnerableTime = 10;
                 }
             } else

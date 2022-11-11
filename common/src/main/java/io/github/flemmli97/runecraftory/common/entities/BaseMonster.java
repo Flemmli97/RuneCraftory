@@ -1090,13 +1090,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         this.setDeltaMovement(this.getDeltaMovement().add(-0.4f * f, 0, 0.4f * f2));
                     }
                 } else if (this.isFlyingEntity()) {
-                    float speed = this.getSpeed();
+                    float speed = this.getSpeed() * 0.5f;
                     double motionY = Math.min(this.getDeltaMovement().y + speed, this.maxAscensionSpeed());
                     this.setDeltaMovement(new Vec3(this.getDeltaMovement().x, motionY, this.getDeltaMovement().z));
                     if (forward > 0.0f) {
                         float f = Mth.sin(this.getYRot() * 0.017453292f);
                         float f2 = Mth.cos(this.getYRot() * 0.017453292f);
-                        speed *= 0.5;
+                        speed *= 0.1;
                         this.setDeltaMovement(this.getDeltaMovement().add(-speed * f, 0, speed * f2));
                     }
                 }
