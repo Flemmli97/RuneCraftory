@@ -19,6 +19,8 @@ RuneCraftory 1.4.0
 - Config value for "Recipe System" overwritten. 
 - NPC now seek shelter when its raining
 - Add some advancements
+- Decreased xp for level up
+- Made bosses immune against heal reduction from food
 
 RuneCraftory 1.3.4
 ================
