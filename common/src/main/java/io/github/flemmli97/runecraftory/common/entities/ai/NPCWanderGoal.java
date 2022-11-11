@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.ai;
 
+import com.google.common.base.Suppliers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.SectionPos;
@@ -8,22 +10,36 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.WalkTarget;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.entity.ai.util.LandRandomPos;
+import net.minecraft.world.entity.ai.village.poi.PoiManager;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class NPCWanderGoal extends Goal {
 
+    private static final Supplier<Set<PoiType>> shelterPOIS = Suppliers.memoize(() -> Arrays.stream(EnumShop.values()).map(s -> s.poiType.get()).filter(Objects::nonNull).collect(Collectors.toSet()));
+
     protected final EntityNPCBase npc;
 
-    private int walkCooldown;
+    private int walkCooldown, shelterPOISearchCooldown, pathFindCooldown;
     private Activity prevActivity;
 
     public NPCWanderGoal(EntityNPCBase npc) {
@@ -33,12 +49,12 @@ public class NPCWanderGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        return true;
+        return this.npc.getEntityToFollowUUID() == null;
     }
 
     @Override
     public boolean canContinueToUse() {
-        return true;
+        return this.canUse();
     }
 
     @Override
@@ -51,77 +67,187 @@ public class NPCWanderGoal extends Goal {
         Activity activity = this.npc.getActivity();
         boolean changed = this.prevActivity != activity;
         this.prevActivity = activity;
+        --this.shelterPOISearchCooldown;
+        --this.walkCooldown;
+        --this.pathFindCooldown;
+        if (changed)
+            this.npc.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+        this.moveToTarget();
         if (activity == Activity.REST) {
-            GlobalPos pos = this.npc.getBedPos();
-            if (pos != null && this.npc.level.dimension() == pos.dimension()) {
-                if (changed || (this.npc.getNavigation().isDone() && !this.npc.isSleeping())) {
-                    Path path = this.npc.getNavigation().createPath(pos.pos(), 0);
-                    this.npc.getNavigation().moveTo(path, 1);
-                }
-                BlockState blockState;
-                if (pos.pos().closerToCenterThan(this.npc.position(), 2.0) && (blockState = this.npc.level.getBlockState(pos.pos())).is(BlockTags.BEDS) && !blockState.getValue(BedBlock.OCCUPIED)) {
-                    this.npc.startSleeping(pos.pos());
-                }
+            if (this.rest())
                 return;
-            }
         } else if (activity == Activity.WORK) {
-            GlobalPos pos = this.npc.getWorkPlace();
-            if (pos != null && this.npc.level.dimension() == pos.dimension()) {
-                if (pos.pos().closerToCenterThan(this.npc.position(), 2.0)) {
-                    this.npc.getNavigation().stop();
-                    return;
-                }
-                if (changed || this.npc.getNavigation().isDone()) {
-                    Path path = this.npc.getNavigation().createPath(pos.pos(), 0);
-                    this.npc.getNavigation().moveTo(path, 1);
-                }
+            if (this.work())
                 return;
-            }
         } else if (activity == Activity.MEET) {
-            GlobalPos pos = this.npc.getMeetingPos();
-            if (pos != null && this.npc.level.dimension() == pos.dimension()) {
-                --this.walkCooldown;
-                if (pos.pos().closerToCenterThan(this.npc.position(), 6.0) && this.walkCooldown <= 0) {
-                    Vec3 to = this.getRandomPosition(5);
-                    if (to != null) {
-                        Path path = this.npc.getNavigation().createPath(to.x(), to.y(), to.z(), 0);
-                        this.npc.getNavigation().moveTo(path, 1);
-                        this.walkCooldown = this.npc.getRandom().nextInt(40) + 90;
-                    } else
-                        this.walkCooldown = this.npc.getRandom().nextInt(20) + 30;
-                    return;
-                }
-                if (changed || this.npc.getNavigation().isDone()) {
-                    Path path = this.npc.getNavigation().createPath(pos.pos(), 0);
-                    this.npc.getNavigation().moveTo(path, 1);
-                }
+            if (this.goMeet())
                 return;
-            }
         }
-        if (this.npc.getNavigation().isDone()) {
-            if (--this.walkCooldown <= 0) {
-                Vec3 pos;
-                BlockPos blockPos = this.npc.blockPosition();
-                ServerLevel serverLevel = (ServerLevel) this.npc.level;
-                if (serverLevel.isVillage(blockPos)) {
-                    pos = this.getRandomPosition(10);
-                } else {
-                    SectionPos sectionPos = SectionPos.of(blockPos);
-                    SectionPos sectionPos2 = BehaviorUtils.findSectionClosestToVillage(serverLevel, sectionPos, 2);
-                    if (sectionPos2 != sectionPos) {
-                        pos = this.setTargetedPosTowards(sectionPos2);
-                    } else {
-                        pos = this.getRandomPosition(10);
-                    }
-                }
-                if (pos != null) {
-                    Path path = this.npc.getNavigation().createPath(pos.x(), pos.y(), pos.z(), 0);
-                    this.npc.getNavigation().moveTo(path, 1);
+        this.wanderAround();
+    }
+
+    public boolean rest() {
+        GlobalPos pos = this.npc.getBedPos();
+        if (pos != null && this.npc.level.dimension() == pos.dimension()) {
+            if (this.npc.getBrain().getMemory(MemoryModuleType.WALK_TARGET).isEmpty() && !this.npc.isSleeping()) {
+                float spd = this.npc.isInWaterOrRain() && this.npc.distanceToSqr(pos.pos().getX() + 0.5, pos.pos().getY(), pos.pos().getZ() + 0.5) > 25 ? 1.3f : 1;
+                this.setWalkTarget(pos.pos(), spd, 0);
+            }
+            BlockState blockState;
+            if (pos.pos().closerToCenterThan(this.npc.position(), 2.0) && (blockState = this.npc.level.getBlockState(pos.pos())).is(BlockTags.BEDS) && !blockState.getValue(BedBlock.OCCUPIED)) {
+                this.npc.startSleeping(pos.pos());
+                this.npc.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean work() {
+        GlobalPos pos = this.npc.getWorkPlace();
+        if (pos != null && this.npc.level.dimension() == pos.dimension()) {
+            if (pos.pos().closerToCenterThan(this.npc.position(), 2.0)) {
+                return true;
+            }
+            if (this.npc.getBrain().getMemory(MemoryModuleType.WALK_TARGET).isEmpty()) {
+                this.setWalkTarget(pos.pos(), 1, 1);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean goMeet() {
+        if (this.seekShelter())
+            return true;
+        GlobalPos pos = this.npc.getMeetingPos();
+        if (pos != null && this.npc.level.dimension() == pos.dimension()) {
+            if (pos.pos().closerToCenterThan(this.npc.position(), 6.0) && this.walkCooldown <= 0) {
+                Vec3 to = this.getRandomPosition(5);
+                if (to != null) {
+                    this.setWalkTarget(new BlockPos(to), 1, 0);
                     this.walkCooldown = this.npc.getRandom().nextInt(40) + 90;
                 } else
                     this.walkCooldown = this.npc.getRandom().nextInt(20) + 30;
+                return true;
             }
+            if (this.npc.getBrain().getMemory(MemoryModuleType.WALK_TARGET).isEmpty()) {
+                this.setWalkTarget(pos.pos(), 1, 1);
+            }
+            return true;
         }
+        return false;
+    }
+
+    public boolean seekShelter() {
+        if (this.npc.level.isRaining()) {
+            if (--this.shelterPOISearchCooldown < 0) {
+                Optional<GlobalPos> hide = this.npc.getBrain().getMemory(MemoryModuleType.HIDING_PLACE);
+                if (hide.isEmpty()) {
+                    PoiManager poiManager = ((ServerLevel) this.npc.level).getPoiManager();
+                    Set<BlockPos> set = poiManager.findAllClosestFirst(p -> shelterPOIS.get().contains(p), p -> {
+                        if (this.npc.getBedPos() != null)
+                            return this.npc.blockPosition().distSqr(this.npc.getBedPos().pos()) > p.distSqr(this.npc.blockPosition());
+                        return true;
+                    }, this.npc.blockPosition(), 48, PoiManager.Occupancy.ANY).limit(5L).collect(Collectors.toSet());
+                    boolean found = false;
+                    for (BlockPos pos : set) {
+                        AABB atPos = new AABB(pos).inflate(10);
+                        if (this.npc.level.getEntities(EntityTypeTest.forClass(EntityNPCBase.class), atPos, e -> true).size() < 5 && this.isUnderRoof(pos)) {
+                            this.npc.getBrain().setMemory(MemoryModuleType.HIDING_PLACE, GlobalPos.of(this.npc.level.dimension(), pos));
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        if (this.npc.getBedPos() != null && this.npc.getBedPos().dimension() == this.npc.level.dimension() && this.isUnderRoof(this.npc.getBedPos().pos()))
+                            this.npc.getBrain().setMemory(MemoryModuleType.HIDING_PLACE, this.npc.getBedPos());
+                        else if (this.npc.getWorkPlace() != null && this.npc.getWorkPlace().dimension() == this.npc.level.dimension() && this.isUnderRoof(this.npc.getWorkPlace().pos()))
+                            this.npc.getBrain().setMemory(MemoryModuleType.HIDING_PLACE, this.npc.getWorkPlace());
+                    }
+                } else {
+                    if (!this.isUnderRoof(hide.get().pos()))
+                        this.npc.getBrain().eraseMemory(MemoryModuleType.HIDING_PLACE);
+                }
+                this.shelterPOISearchCooldown = 60 + this.npc.getRandom().nextInt(40);
+            }
+            if (--this.walkCooldown <= 0 && this.npc.getNavigation().isDone()) {
+                this.npc.getBrain().getMemory(MemoryModuleType.HIDING_PLACE).ifPresent(p -> {
+                    Vec3 target;
+                    float spd = 1;
+                    int acc = 0;
+                    if (this.npc.distanceToSqr(p.pos().getX() + 0.5, p.pos().getY(), p.pos().getZ() + 0.5) < 49) {
+                        target = this.getRandomPosition(5);
+                        if (target != null && this.npc.level.canSeeSky(new BlockPos(target)))
+                            target = null;
+                    } else {
+                        target = Vec3.atCenterOf(p.pos());
+                        spd = 1.3f;
+                        acc = 1;
+                    }
+                    if (target != null) {
+                        this.setWalkTarget(new BlockPos(target), spd, acc);
+                        this.walkCooldown = this.npc.getRandom().nextInt(40) + 90;
+                    } else
+                        this.walkCooldown = this.npc.getRandom().nextInt(20) + 30;
+                });
+            }
+            return true;
+        }
+        if (this.npc.getBrain().getMemory(MemoryModuleType.HIDING_PLACE).isPresent())
+            this.npc.getBrain().eraseMemory(MemoryModuleType.HIDING_PLACE);
+        return false;
+    }
+
+    public void wanderAround() {
+        if (this.seekShelter())
+            return;
+        if (this.walkCooldown <= 0 && this.npc.getNavigation().isDone()) {
+            Vec3 pos;
+            BlockPos blockPos = this.npc.blockPosition();
+            ServerLevel serverLevel = (ServerLevel) this.npc.level;
+            if (serverLevel.isVillage(blockPos)) {
+                pos = this.getRandomPosition(10);
+            } else {
+                SectionPos sectionPos = SectionPos.of(blockPos);
+                SectionPos sectionPos2 = BehaviorUtils.findSectionClosestToVillage(serverLevel, sectionPos, 2);
+                if (sectionPos2 != sectionPos) {
+                    pos = this.setTargetedPosTowards(sectionPos2);
+                } else {
+                    pos = this.getRandomPosition(10);
+                }
+            }
+            if (pos != null) {
+                this.setWalkTarget(new BlockPos(pos), 1, 0);
+                this.walkCooldown = this.npc.getRandom().nextInt(40) + 90;
+            } else
+                this.walkCooldown = this.npc.getRandom().nextInt(20) + 30;
+        }
+    }
+
+    private void setWalkTarget(BlockPos pos, float speed, int accuracy) {
+        this.npc.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(pos, speed, accuracy));
+    }
+
+    private void moveToTarget() {
+        if (this.pathFindCooldown <= 0) {
+            this.npc.getBrain().getMemory(MemoryModuleType.WALK_TARGET).ifPresent(target -> {
+                Path path = this.npc.getNavigation().createPath(target.getTarget().currentBlockPosition(), target.getCloseEnoughDist());
+                this.npc.getNavigation().moveTo(path, target.getSpeedModifier());
+                this.pathFindCooldown = this.npc.getRandom().nextInt(10) + 15;
+            });
+        }
+        this.npc.getBrain().getMemory(MemoryModuleType.WALK_TARGET).ifPresent(target -> {
+            if (this.npc.blockPosition().distManhattan(target.getTarget().currentBlockPosition()) <= target.getCloseEnoughDist()) {
+                this.npc.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+                this.npc.getNavigation().stop();
+            }
+        });
+    }
+
+    private boolean isUnderRoof(BlockPos pos) {
+        return BlockPos.betweenClosedStream(pos.offset(-2, 0, -2), pos.offset(2, 0, 2))
+                .noneMatch(p -> this.npc.level.canSeeSky(p));
     }
 
     @Nullable

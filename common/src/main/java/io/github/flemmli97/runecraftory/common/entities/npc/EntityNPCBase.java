@@ -113,7 +113,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private static final EntityDataAccessor<Byte> personalitySync = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> male = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
 
-    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT);
+    private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT,
+            MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.WALK_TARGET);
 
     private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, AnimatedAction.vanillaAttackOnly);
 
@@ -312,6 +313,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         Platform.INSTANCE.sendToClient(new S2CUpdateNPCData(this, this.getFriendPointData(serverPlayer).save()), serverPlayer);
         Platform.INSTANCE.sendToClient(new S2COpenNPCGui(this, serverPlayer), serverPlayer);
         this.interactingPlayers.add(serverPlayer.getId());
+        this.lookAt(serverPlayer, 30, 30);
         return InteractionResult.CONSUME;
     }
 
