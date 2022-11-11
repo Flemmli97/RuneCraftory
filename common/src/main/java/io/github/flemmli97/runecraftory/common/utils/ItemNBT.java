@@ -145,10 +145,12 @@ public class ItemNBT {
                 tag.putString(LibNBT.Element, getElement(stack).toString());
             if (shouldHaveElement(stack)) {
                 EnumElement current = getElement(stack);
-                if (stat.element() != EnumElement.NONE && current == EnumElement.NONE) {
-                    tag.putString(LibNBT.Element, stat.element().toString());
-                } else
-                    tag.putString(LibNBT.Element, current.toString());
+                if (stat.element() != EnumElement.NONE) {
+                    if (current == EnumElement.NONE) {
+                        tag.putString(LibNBT.Element, stat.element().toString());
+                    } else
+                        tag.putString(LibNBT.Element, EnumElement.NONE.toString());
+                }
             }
             if (stack.getItem() instanceof ItemStaffBase) {
                 Platform.INSTANCE.getStaffData(stack).ifPresent(data -> {
