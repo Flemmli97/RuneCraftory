@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class AccessoryBlockEntity extends CraftingBlockEntity {
+public class AccessoryBlockEntity extends UpgradingCraftingBlockEntity {
 
     public AccessoryBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.accessoryTile.get(), EnumCrafting.ARMOR, blockPos, blockState);
@@ -17,7 +17,7 @@ public class AccessoryBlockEntity extends CraftingBlockEntity {
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        if (slot == 6) {
+        if (slot == 0) {
             EquipmentSlot slotType = LivingEntity.getEquipmentSlotForItem(stack);
             return slotType != null && slotType != EquipmentSlot.MAINHAND && ItemNBT.shouldHaveStats(stack);
         }

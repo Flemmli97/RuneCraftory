@@ -9,7 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ForgingBlockEntity extends CraftingBlockEntity {
+public class ForgingBlockEntity extends UpgradingCraftingBlockEntity {
 
     public ForgingBlockEntity(BlockPos blockPos, BlockState blockState) {
         super(ModBlocks.forgingTile.get(), EnumCrafting.FORGE, blockPos, blockState);
@@ -17,7 +17,7 @@ public class ForgingBlockEntity extends CraftingBlockEntity {
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        if (slot == 6) {
+        if (slot == 0) {
             EquipmentSlot slotType = LivingEntity.getEquipmentSlotForItem(stack);
             return (slotType == null || slotType == EquipmentSlot.MAINHAND) && ItemNBT.shouldHaveStats(stack);
         }

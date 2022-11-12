@@ -55,8 +55,8 @@ public class UpgradeOutputSlot extends Slot {
         this.checkTakeAchievements(stack);
         if (!(player instanceof ServerPlayer serverPlayer))
             return;
-        ItemStack toUpgrade = this.ingredientInv.getItem(6);
-        ItemStack material = this.ingredientInv.getItem(7);
+        ItemStack toUpgrade = this.ingredientInv.getItem(0);
+        ItemStack material = this.ingredientInv.getItem(1);
         Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
             ModCriteria.UPGRADE_ITEM.trigger(serverPlayer);
             if (ItemNBT.getElement(toUpgrade) != ItemNBT.getElement(stack))
@@ -71,15 +71,15 @@ public class UpgradeOutputSlot extends Slot {
                 case ARMOR -> CraftingUtils.giveUpgradeXPTo(serverPlayer, data, EnumSkills.CRAFTING, toUpgrade, material);
             }
         });
-        ItemStack ing1 = this.ingredientInv.getItem(6);
-        ItemStack ing2 = this.ingredientInv.getItem(7);
+        ItemStack ing1 = this.ingredientInv.getItem(0);
+        ItemStack ing2 = this.ingredientInv.getItem(1);
         if (!ing1.isEmpty()) {
-            this.ingredientInv.removeItem(6, 1);
-            ing1 = this.ingredientInv.getItem(6);
+            this.ingredientInv.removeItem(0, 1);
+            ing1 = this.ingredientInv.getItem(0);
         }
         if (!ing2.isEmpty()) {
-            this.ingredientInv.removeItem(7, 1);
-            ing2 = this.ingredientInv.getItem(7);
+            this.ingredientInv.removeItem(1, 1);
+            ing2 = this.ingredientInv.getItem(1);
         }
         player.level.playSound(null, player.blockPosition(), SoundEvents.ANVIL_USE, SoundSource.BLOCKS, 1, 1);
         if (ing1.isEmpty() || ing2.isEmpty())
@@ -101,7 +101,7 @@ public class UpgradeOutputSlot extends Slot {
 
     @Override
     public boolean mayPickup(Player player) {
-        return CraftingUtils.canUpgrade(player, this.container.craftingType(), this.ingredientInv.getItem(6), this.ingredientInv.getItem(7))
+        return CraftingUtils.canUpgrade(player, this.container.craftingType(), this.ingredientInv.getItem(0), this.ingredientInv.getItem(1))
                 && (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(data -> data.getMaxRunePoints() >= this.container.rpCost()).orElse(false));
     }
 }

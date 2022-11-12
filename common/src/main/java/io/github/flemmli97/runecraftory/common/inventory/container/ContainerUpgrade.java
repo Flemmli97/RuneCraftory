@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
-import io.github.flemmli97.runecraftory.common.blocks.tile.CraftingBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.tile.UpgradingCraftingBlockEntity;
 import io.github.flemmli97.runecraftory.common.inventory.DummyInventory;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.registry.ModContainer;
@@ -17,6 +17,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ContainerUpgrade extends AbstractContainerMenu {
 
@@ -26,15 +28,13 @@ public class ContainerUpgrade extends AbstractContainerMenu {
     private final DataSlot rpCost;
 
     public ContainerUpgrade(int windowId, Inventory inv, FriendlyByteBuf data) {
-        this(windowId, inv, ContainerCrafting.getTile(inv.player.level, data));
+        this(windowId, inv, getTile(inv.player.level, data));
     }
 
-    public ContainerUpgrade(int windowId, Inventory playerInv, CraftingBlockEntity tile) {
+    public ContainerUpgrade(int windowId, Inventory playerInv, UpgradingCraftingBlockEntity tile) {
         super(ModContainer.upgradeContainer.get(), windowId);
-        if (tile.getInventory().getContainerSize() <= 6)
-            throw new IllegalStateException("Tried creating a container for " + tile + " but its not made for upgrading items");
         this.outPutInv = new DummyInventory(new SimpleContainer(1));
-        this.craftingInv = PlayerContainerInv.create(this, tile.getInventory(), playerInv.player);
+        this.craftingInv = PlayerContainerInv.create(this, tile.getUpgradeInventory(), playerInv.player);
         this.type = tile.craftingType();
         this.addSlot(new UpgradeOutputSlot(this.outPutInv, this, this.craftingInv, 0, 116, 35));
         for (int i = 0; i < 3; ++i) {
@@ -45,10 +45,10 @@ public class ContainerUpgrade extends AbstractContainerMenu {
         for (int k = 0; k < 9; ++k) {
             this.addSlot(new Slot(playerInv, k, 8 + k * 18, 142));
         }
-        this.addSlot(new Slot(this.craftingInv, 6, 20, 35) {
+        this.addSlot(new Slot(this.craftingInv, 0, 20, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return this.container.canPlaceItem(6, stack);
+                return this.container.canPlaceItem(0, stack);
             }
 
             @Override
@@ -56,22 +56,30 @@ public class ContainerUpgrade extends AbstractContainerMenu {
                 return 1;
             }
         });
-        this.addSlot(new Slot(this.craftingInv, 7, 56, 35) {
+        this.addSlot(new Slot(this.craftingInv, 1, 56, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return this.container.canPlaceItem(7, stack);
+                return this.container.canPlaceItem(1, stack);
             }
         });
         this.addDataSlot(this.rpCost = DataSlot.standalone());
         this.updateOutput();
     }
 
+    public static UpgradingCraftingBlockEntity getTile(Level world, FriendlyByteBuf buffer) {
+        BlockEntity blockEntity = world.getBlockEntity(buffer.readBlockPos());
+        if (blockEntity instanceof UpgradingCraftingBlockEntity) {
+            return (UpgradingCraftingBlockEntity) blockEntity;
+        }
+        throw new IllegalStateException("Expected tile entity of type TileCrafting but got " + blockEntity);
+    }
+
     private void updateOutput() {
         if (this.craftingInv.getPlayer().level.isClientSide)
             return;
-        int cost = CraftingUtils.upgradeCost(this.craftingType(), Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()).orElseThrow(EntityUtils::playerDataException), this.craftingInv.getItem(6), this.craftingInv.getItem(7));
+        int cost = CraftingUtils.upgradeCost(this.craftingType(), Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()).orElseThrow(EntityUtils::playerDataException), this.craftingInv.getItem(0), this.craftingInv.getItem(1));
         if (cost >= 0) {
-            this.outPutInv.setItem(0, CraftingUtils.getUpgradedStack(this.craftingInv.getItem(6), this.craftingInv.getItem(7)));
+            this.outPutInv.setItem(0, CraftingUtils.getUpgradedStack(this.craftingInv.getItem(0), this.craftingInv.getItem(1)));
         } else {
             this.outPutInv.setItem(0, ItemStack.EMPTY);
         }

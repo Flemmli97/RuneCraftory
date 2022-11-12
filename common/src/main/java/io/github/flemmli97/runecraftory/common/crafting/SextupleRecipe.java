@@ -46,6 +46,8 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
     }
 
     public boolean checkMatch(PlayerContainerInv inv, Level world, boolean exact) {
+        if (inv.getContainerSize() < 6)
+            return false;
         boolean unlocked = GeneralConfig.recipeSystem.allowLocked || Platform.INSTANCE.getPlayerData(inv.getPlayer()).map(cap -> cap.getRecipeKeeper().isUnlocked(this)).orElse(false);
         if (!unlocked)
             return false;
@@ -67,6 +69,8 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
     }
 
     public RecipeOutput getCraftingOutput(PlayerContainerInv inv) {
+        if (inv.getContainerSize() < 6)
+            return new RecipeOutput(ItemStack.EMPTY, ItemStack.EMPTY, NonNullList.create());
         boolean unlocked = Platform.INSTANCE.getPlayerData(inv.getPlayer()).map(cap -> cap.getRecipeKeeper().isUnlockedForCrafting(this)).orElse(false);
         NonNullList<ItemStack> stacks = NonNullList.create();
         for (int j = 0; j < 6; ++j) {

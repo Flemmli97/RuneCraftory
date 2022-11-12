@@ -99,7 +99,7 @@ public class CombatUtils {
     }
 
     public static double statusEffectChance(LivingEntity entity, Attribute att, Entity target) {
-        double chance = getAttributeValue(entity, att);
+        double chance = getAttributeValue(entity, att) * 0.01;
         Attribute opposing = opposing(att);
         double res = target instanceof LivingEntity livingTarget && opposing != null ? getAttributeValue(livingTarget, opposing) : 0;
         if (target instanceof Player player) {
@@ -107,7 +107,8 @@ public class CombatUtils {
             if (matchingSkill != null)
                 res += Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(matchingSkill).getLevel() * 0.005).orElse(0d);
         }
-        return chance * (100 - res) * 0.01;
+        res *= 0.01;
+        return chance * (1 - res);
     }
 
     public static float reduceDamageFromStats(LivingEntity entity, DamageSource source, float amount) {

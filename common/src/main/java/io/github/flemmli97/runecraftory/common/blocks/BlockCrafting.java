@@ -2,12 +2,12 @@ package io.github.flemmli97.runecraftory.common.blocks;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.tile.CraftingBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.tile.UpgradingCraftingBlockEntity;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -89,10 +89,9 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
         if (!state.is(orig.getBlock())) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof CraftingBlockEntity craftingBlock) {
-                Containers.dropContents(level, pos, craftingBlock.getInventory());
+                craftingBlock.dropContents(level, pos);
                 level.updateNeighbourForOutputSignal(pos, this);
             }
-
             super.onRemove(state, level, pos, orig, moving);
         }
     }
@@ -107,11 +106,11 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
                 pos = this.getOtherPos(pos, state);
                 tile = level.getBlockEntity(pos);
             }
-            if (tile instanceof CraftingBlockEntity) {
-                if (player.isShiftKeyDown() && this.hasUpgradeScreen())
-                    Platform.INSTANCE.openGuiMenu((ServerPlayer) player, ((CraftingBlockEntity) tile).upgradeMenu(), pos);
+            if (tile instanceof CraftingBlockEntity craftingBlock) {
+                if (player.isShiftKeyDown() && craftingBlock instanceof UpgradingCraftingBlockEntity upgrading)
+                    Platform.INSTANCE.openGuiMenu((ServerPlayer) player, upgrading.upgradeMenu(), pos);
                 else
-                    Platform.INSTANCE.openGuiMenu((ServerPlayer) player, (CraftingBlockEntity) tile, pos);
+                    Platform.INSTANCE.openGuiMenu((ServerPlayer) player, craftingBlock, pos);
                 return InteractionResult.SUCCESS;
             }
             return InteractionResult.PASS;

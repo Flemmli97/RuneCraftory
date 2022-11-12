@@ -220,11 +220,11 @@ public class ItemStat {
     private String format(Attribute att, double n) {
         if (att == Attributes.MOVEMENT_SPEED) {
             float f = ((int) (n * 100)) / 100f;
-            return (f >= 0 ? "+" + f : "" + f);
+            return (f > 0 ? "+" + f : "" + f);
         }
         boolean flat = flatAttributes.contains(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
-        int val = (int) (flat && n < 0 ? -n : n);
-        return (val >= 0 ? "+" + val : "" + val) + (flat ? "" : "%");
+        int val = (int) n;
+        return (val > 0 ? "+" + val : "" + val) + (flat ? "" : "%");
     }
 
     @Override
