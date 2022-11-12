@@ -16,11 +16,11 @@ import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.tenshilib.common.utils.JsonUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
@@ -114,23 +114,25 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
                     return;
                 }
                 JsonObject obj = el.getAsJsonObject();
-                boolean replace = JsonUtils.get(obj, "replace", false);
-                JsonArray array = obj.getAsJsonArray("values");
+                boolean replace = GsonHelper.getAsBoolean(obj, "replace", false);
+                JsonArray array = GsonHelper.getAsJsonArray(obj, "values");
                 Collection<ShopItemProperties> items = new ArrayList<>();
                 array.forEach(val -> {
-                    JsonObject valObj = val.getAsJsonObject();
-                    JsonElement itemVal = valObj.get("item");
-                    List<ItemStack> itemList = new ArrayList<>();
-                    boolean special = valObj.get("needs_unlock").getAsBoolean();
-                    if (itemVal.isJsonPrimitive()) {
-                        Item item = PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(val.getAsString()));
-                        if (item != Items.AIR) {
-                            itemList.add(new ItemStack(item));
+                    if (val.isJsonObject()) {
+                        JsonObject valObj = val.getAsJsonObject();
+                        JsonElement itemVal = valObj.get("item");
+                        List<ItemStack> itemList = new ArrayList<>();
+                        boolean special = valObj.get("needs_unlock").getAsBoolean();
+                        if (itemVal.isJsonPrimitive()) {
+                            Item item = PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(itemVal.getAsString()));
+                            if (item != Items.AIR) {
+                                itemList.add(new ItemStack(item));
+                            }
+                        } else {
+                            itemList.addAll(Arrays.asList(Ingredient.fromJson(val).getItems()));
                         }
-                    } else {
-                        itemList.addAll(Arrays.asList(Ingredient.fromJson(val).getItems()));
+                        itemList.forEach(s -> items.add(new ShopItemProperties(s, special)));
                     }
-                    itemList.forEach(s -> items.add(new ShopItemProperties(s, special)));
                 });
                 if (addToDefault) {
                     if (replace)
