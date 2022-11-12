@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.tenshilib.api.config.ItemTagWrapper;
 import io.github.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -30,20 +29,18 @@ public class EntityProperties {
     private final int xp;
     private final int money;
     private final float taming;
-    private final ItemTagWrapper tamingItem;
     private final Map<SimpleItemStackWrapper, Integer> daily;
     private final boolean ridable;
     private final boolean flying;
     private Map<Attribute, Double> baseValues;
     private Map<Attribute, Double> levelGains;
 
-    private EntityProperties(List<String> baseValues, List<String> gains, int xp, int money, float tamingChance, ItemTagWrapper tamingItem, Map<SimpleItemStackWrapper, Integer> dailyDrops, boolean ridable, boolean flying) {
+    private EntityProperties(List<String> baseValues, List<String> gains, int xp, int money, float tamingChance, Map<SimpleItemStackWrapper, Integer> dailyDrops, boolean ridable, boolean flying) {
         this.confAttributes = baseValues;
         this.confGains = gains;
         this.xp = xp;
         this.money = money;
         this.taming = tamingChance;
-        this.tamingItem = tamingItem;
         this.daily = dailyDrops;
         this.ridable = ridable;
         this.flying = flying;
@@ -114,10 +111,6 @@ public class EntityProperties {
         return this.taming;
     }
 
-    public ItemTagWrapper getTamingItem() {
-        return this.tamingItem;
-    }
-
     public static class Builder {
 
         private final Set<String> baseValues = new LinkedHashSet<>();
@@ -126,7 +119,6 @@ public class EntityProperties {
         private int xp;
         private int money;
         private float taming;
-        private ItemTagWrapper tamingItem = new ItemTagWrapper("", 1);
         private boolean ridable;
         private boolean flying;
 
@@ -163,11 +155,6 @@ public class EntityProperties {
             return this;
         }
 
-        public Builder setTamingItem(ItemTagWrapper itemstack) {
-            this.tamingItem = itemstack;
-            return this;
-        }
-
         public Builder addDaily(SimpleItemStackWrapper itemstack, int requiredHearts) {
             this.daily.put(itemstack, requiredHearts);
             return this;
@@ -184,7 +171,7 @@ public class EntityProperties {
         }
 
         public EntityProperties build() {
-            return new EntityProperties(Lists.newArrayList(this.baseValues), Lists.newArrayList(this.gains), this.xp, this.money, this.taming, this.tamingItem, this.daily, this.ridable, this.flying);
+            return new EntityProperties(Lists.newArrayList(this.baseValues), Lists.newArrayList(this.gains), this.xp, this.money, this.taming, this.daily, this.ridable, this.flying);
         }
     }
 }

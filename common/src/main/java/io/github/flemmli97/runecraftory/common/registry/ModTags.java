@@ -10,6 +10,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ModTags {
 
     //Forge Tags
@@ -81,6 +84,8 @@ public class ModTags {
     public static final TagKey<Item> chest_t2 = tag("chest_t2");
     public static final TagKey<Item> chest_t3 = tag("chest_t3");
     public static final TagKey<Item> chest_t4 = tag("chest_t4");
+
+    private static final Map<EntityType<?>, TagKey<Item>> entityTamingTags = new HashMap<>();
 
     //Blocks
     public static final TagKey<Block> farmland = blockCommon("farmland");
@@ -180,5 +185,9 @@ public class ModTags {
 
     private static TagKey<Biome> biomeCommon(String name) {
         return PlatformUtils.INSTANCE.tag(Registry.BIOME_REGISTRY, new ResourceLocation("c", name));
+    }
+
+    public static TagKey<Item> tamingTag(EntityType<?> type) {
+        return entityTamingTags.computeIfAbsent(type, r -> tag("taming/" + PlatformUtils.INSTANCE.entities().getIDFrom(type).getPath()));
     }
 }

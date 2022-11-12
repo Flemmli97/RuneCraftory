@@ -35,7 +35,7 @@ public class GeneralConfig {
     public static boolean seasons = true;
     public static boolean dynamicTrees = true;
 
-    public static int maxLevel = 250;
+    public static int maxLevel = 999;
     public static int maxSkillLevel = 100;
     public static int startingHealth = 20;
     public static int startingRP = 100;
@@ -43,11 +43,11 @@ public class GeneralConfig {
     public static int startingStr = 0;
     public static int startingVit = 0;
     public static int startingIntel = 1;
-    public static float hpPerLevel = 7;
-    public static float rpPerLevel = 3;
-    public static float strPerLevel = 0.8f;
-    public static float vitPerLevel = 1;
-    public static float intPerLevel = 0.6f;
+    public static float hpPerLevel = 13;
+    public static float rpPerLevel = 2;
+    public static float strPerLevel = 2f;
+    public static float vitPerLevel = 2.5f;
+    public static float intPerLevel = 2f;
     public static EnumMap<EnumSkills, SkillProperties> skillProps = new EnumMap<>(EnumSkills.class);
 
     public static float platinumChargeTime = 0.5f;
@@ -66,12 +66,12 @@ public class GeneralConfig {
 
     static {
         weaponProps.put(EnumWeaponType.FARM, new WeaponTypeProperties(3.0f, 0, 20, 20));
-        weaponProps.put(EnumWeaponType.SHORTSWORD, new WeaponTypeProperties(2.5f, 7, 20, 11));
+        weaponProps.put(EnumWeaponType.SHORTSWORD, new WeaponTypeProperties(2.5f, 7, 17, 11));
         weaponProps.put(EnumWeaponType.LONGSWORD, new WeaponTypeProperties(4.0f, 40, 20, 30));
         weaponProps.put(EnumWeaponType.SPEAR, new WeaponTypeProperties(5.0f, 3, 20, 15));
         weaponProps.put(EnumWeaponType.HAXE, new WeaponTypeProperties(4.0f, 23, 20, 20));
-        weaponProps.put(EnumWeaponType.DUAL, new WeaponTypeProperties(2.5f, 10, 20, 7));
-        weaponProps.put(EnumWeaponType.GLOVE, new WeaponTypeProperties(2.5f, 3, 20, 9));
+        weaponProps.put(EnumWeaponType.DUAL, new WeaponTypeProperties(2.5f, 10, 16, 7));
+        weaponProps.put(EnumWeaponType.GLOVE, new WeaponTypeProperties(2.5f, 3, 16, 9));
         weaponProps.put(EnumWeaponType.STAFF, new WeaponTypeProperties(3.0f, 0, 20, 20));
 
         skillProps.put(EnumSkills.SHORTSWORD, new SkillProperties(0, 0.5f, 0.25f, 0, 0, 2));

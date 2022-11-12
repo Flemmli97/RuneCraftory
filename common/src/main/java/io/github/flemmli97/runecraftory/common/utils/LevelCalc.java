@@ -210,10 +210,10 @@ public class LevelCalc {
                 if (dist < 400)
                     yield MobConfig.baseGateLevel;
                 if (dist < 1000)
-                    yield randomizedLevel(level.random, MobConfig.baseGateLevel + (int) ((dist - 400) * 0.03));
+                    yield randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(0, 20, 1000 - 400, dist));
                 if (dist < 5000)
-                    yield randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (600 * 0.03 + (dist - 1000) * 0.05));
-                yield randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (4000 * 0.05 + (dist - 5000) * 0.07));
+                    yield randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(20, 80, 5000 - 1000, dist));
+                yield randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (100 + (dist - 5000) * 0.07));
             }
             case PLAYERLEVELMAX -> {
                 int diff = MobConfig.baseGateLevel;
@@ -239,6 +239,10 @@ public class LevelCalc {
                 yield randomizedLevel(level.random, MobConfig.baseGateLevel + diff);
             }
         };
+    }
+
+    private static int uniformInterpolation(int start, int increase, int len, double x) {
+        return (int) (start + increase / (float) len * x);
     }
 
     private static List<Player> playersIn(EntityGetter getter, Vec3 pos, double radius) {

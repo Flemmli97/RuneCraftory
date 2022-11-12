@@ -1,15 +1,16 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
-import io.github.flemmli97.tenshilib.api.config.ItemTagWrapper;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
 
 public interface IExtendedMob extends IBaseMob, OwnableEntity {
 
-    ItemTagWrapper tamingItem();
+    TagKey<Item> tamingItem();
 
     Map<ItemStack, Integer> dailyDrops();
 

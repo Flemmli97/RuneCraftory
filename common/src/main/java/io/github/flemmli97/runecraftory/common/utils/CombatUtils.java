@@ -259,7 +259,7 @@ public class CombatUtils {
                 }
                 if (player.level instanceof ServerLevel serverLevel)
                     ModSpells.STAFFCAST.get().use(serverLevel, player, stack);
-                if(ItemNBT.doesFixedOneDamage(stack)) {
+                if (ItemNBT.doesFixedOneDamage(stack)) {
                     damageType = CustomDamage.DamageType.FIXED;
                     damagePhys = 1;
                 }

@@ -90,6 +90,14 @@ public class RecipesGen extends RecipeProvider {
                 .requires(Items.BOWL)
                 .unlockedBy("mushroom_stew", has(ModItems.monarchMushroom.get()))
                 .save(consumer, RuneCraftory.MODID + ":mushroom_stew_monarch");
+        ShapelessRecipeBuilder.shapeless(Items.BONE_MEAL, 2)
+                .requires(ModItems.fishFossil.get(), 1)
+                .unlockedBy("fish_fossil", has(ModItems.fishFossil.get()))
+                .save(consumer, RuneCraftory.MODID + ":fish_fossil_bone_meal");
+        ShapelessRecipeBuilder.shapeless(Items.BONE_MEAL, 3)
+                .requires(ModItems.skull.get(), 1)
+                .unlockedBy("skull", has(ModItems.skull.get()))
+                .save(consumer, RuneCraftory.MODID + ":skull_bone_meal");
 
         ShapedRecipeBuilder.shaped(ModItems.shippingBin.get())
                 .pattern("ses")

@@ -120,7 +120,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     @Override
     protected float tamingMultiplier(ItemStack stack) {
-        boolean flag = this.tamingItem().match(stack);
+        boolean flag = stack.is(this.tamingItem());
         return flag ? 1 : 0;
     }
 
