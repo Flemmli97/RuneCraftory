@@ -23,6 +23,8 @@ RuneCraftory 1.4.0
 - Made bosses immune against heal reduction from food
 - Fix taming/untaming monster not resetting target properly and attacking things they shouldn't
 - Scrap metal + upgrade now does fixed 1 damage
+- Tweaked monster stats
+- Taming item not config but tag based now. The tag its checking is "runecraftory:taming/entity_id"
 
 RuneCraftory 1.3.4
 ================
