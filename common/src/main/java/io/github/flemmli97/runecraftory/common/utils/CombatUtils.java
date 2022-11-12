@@ -347,6 +347,8 @@ public class CombatUtils {
         float dmg = (float) damage;
         if (source.criticalDamage())
             dmg = Float.MAX_VALUE;
+        else if (!source.fixedDamage())
+            dmg = modifyDmgElement(source.getElement(), target, dmg);
         boolean success = target.hurt(source, dmg);
         if (success) {
             spawnElementalParticle(target, source.getElement());
@@ -368,17 +370,36 @@ public class CombatUtils {
                     }
                 }
             }
-            elementalEffects(source.getElement(), target);
+            elementalEffects(attacker, source.getElement(), target);
         }
         return success;
     }
 
-    public static void elementalEffects(EnumElement element, Entity target) {
-        if (!(target instanceof IBaseMob)) {
-            if (element == EnumElement.FIRE)
-                target.setSecondsOnFire(3);
-            if (element == EnumElement.DARK && target instanceof LivingEntity)
-                ((LivingEntity) target).addEffect(new MobEffectInstance(MobEffects.WITHER, 200));
+    public static float modifyDmgElement(EnumElement element, Entity target, float dmg) {
+        if (!(target instanceof IBaseMob) && !(target instanceof Player)) {
+            if (element == EnumElement.WATER && target instanceof LivingEntity living && (living.fireImmune() || living.isSensitiveToWater()))
+                dmg *= 1.1;
+        }
+        return dmg;
+    }
+
+    public static void elementalEffects(Entity attacker, EnumElement element, Entity target) {
+        if (!(target instanceof IBaseMob) && !(target instanceof Player)) {
+            switch (element) {
+                case FIRE -> target.setSecondsOnFire(3);
+                case DARK -> {
+                    if (target instanceof LivingEntity living)
+                        living.addEffect(new MobEffectInstance(MobEffects.WITHER, 200));
+                }
+                case WIND -> {
+                    if (target instanceof LivingEntity living && attacker != null)
+                        living.knockback(1.5, Mth.sin(attacker.getYRot() * ((float) Math.PI / 180)), -Mth.cos(attacker.getYRot() * ((float) Math.PI / 180)));
+                }
+                case WATER -> {
+                    if (target instanceof LivingEntity living)
+                        living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200));
+                }
+            }
         }
     }
 
