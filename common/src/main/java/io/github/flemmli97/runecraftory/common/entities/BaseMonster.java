@@ -22,6 +22,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -29,7 +30,6 @@ import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.api.config.ItemTagWrapper;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
@@ -50,6 +50,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -83,6 +84,7 @@ import net.minecraft.world.entity.animal.AbstractGolem;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
@@ -570,7 +572,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     this.untameEntity();
                     return InteractionResult.SUCCESS;
                 } else if (this.feedTimeOut <= 0) {
-                    boolean favorite = this.tamingItem().match(stack);
+                    boolean favorite = stack.is(this.tamingItem());
                     ItemStack stack1 = null;
                     //The item will get consumed even if player is in creative so we add it back
                     if (player.isCreative())
@@ -704,8 +706,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     @Override
-    public ItemTagWrapper tamingItem() {
-        return this.prop.getTamingItem();
+    public TagKey<Item> tamingItem() {
+        return ModTags.tamingTag(this.getType());
     }
 
     @Override
@@ -713,7 +715,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.dailyDrops == null)
             this.dailyDrops = this.prop.dailyDrops().entrySet().stream()
                     .collect(Collectors.toMap(e -> e.getKey().getStack(), Map.Entry::getValue));
-        ;
         return this.dailyDrops;
     }
 
@@ -881,6 +882,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (player.getUUID().equals(this.getOwnerUUID()))
             return this.entityData.get(friendPointsSync);
         return 0;
+    }
+
+    public void onDailyUpdate() {
     }
 
     //=====Damage Logic
@@ -1290,7 +1294,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     protected float tamingMultiplier(ItemStack stack) {
-        boolean flag = this.tamingItem().match(stack);
+        boolean flag = stack.is(this.tamingItem());
         return flag ? 2 : 1;
     }
 

@@ -3,6 +3,8 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.nbt.CompoundTag;
@@ -19,15 +21,14 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.gameevent.GameEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class EntityWooly extends ChargingMonster {
 
@@ -41,7 +42,6 @@ public class EntityWooly extends ChargingMonster {
     private static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
     private final AnimationHandler<EntityWooly> animationHandler = new AnimationHandler<>(this, anims);
     public ChargeAttackGoal<EntityWooly> attack = new ChargeAttackGoal<>(this);
-    private int shearTick;
 
     public EntityWooly(EntityType<? extends EntityWooly> type, Level level) {
         super(type, level);
@@ -53,17 +53,6 @@ public class EntityWooly extends ChargingMonster {
         super.defineSynchedData();
         this.entityData.define(SPAWNSHEARED, this.getRandom().nextFloat() < 0.1);
         this.entityData.define(SHEARED, this.entityData.get(SPAWNSHEARED));
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        if (!this.entityData.get(SPAWNSHEARED)) {
-            this.shearTick = Math.max(--this.shearTick, 0);
-            if (this.shearTick == 1) {
-                this.setSheared(false);
-            }
-        }
     }
 
     @Override
@@ -94,8 +83,8 @@ public class EntityWooly extends ChargingMonster {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        if (itemStack.is(Items.SHEARS)) {
-            if (!this.level.isClientSide && !this.isSheared()) {
+        if (itemStack.is(ModTags.shears)) {
+            if (!this.level.isClientSide && !this.isSheared() && (!this.isTamed() || player.getUUID().equals(this.getOwnerUUID()))) {
                 this.shear(player, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
                 itemStack.hurtAndBreak(1, player, (playerx) -> playerx.broadcastBreakEvent(hand));
                 return InteractionResult.SUCCESS;
@@ -169,26 +158,38 @@ public class EntityWooly extends ChargingMonster {
         return this.animationHandler;
     }
 
+    @Override
+    public void onDailyUpdate() {
+        if (!this.entityData.get(SPAWNSHEARED) || this.isTamed())
+            this.setSheared(false);
+    }
+
     public boolean isSheared() {
         return this.entityData.get(SHEARED);
     }
 
     public void setSheared(boolean flag) {
-        this.shearTick = 24000;
         this.entityData.set(SHEARED, flag);
     }
 
     public void shear(Player player, int fortune) {
         this.setSheared(true);
         List<ItemStack> ret = new ArrayList<>();
-        //if(!this.isTamed()){
-        //    ret.add((new ItemStack(ModItems.furSmall)));
-        //}else {
-        int i = 1 + this.random.nextInt(3);
-        for (int j = 0; j < i; ++j) {
-            ret.add(new ItemStack(Blocks.WHITE_WOOL, 1));
+
+        int heart = -1;
+        ItemStack drop = new ItemStack(ModItems.furSmall.get());
+        for (Map.Entry<ItemStack, Integer> e : this.dailyDrops().entrySet()) {
+            if (e.getKey().getItem() != ModItems.furMedium.get() || e.getKey().getItem() != ModItems.furSmall.get())
+                continue;
+            if (this.getFriendlyPoints().getLevel() >= e.getValue() && heart < e.getValue()) {
+                drop = e.getKey();
+                heart = e.getValue();
+            }
         }
-        //}
+        int i = 1 + this.random.nextInt(1 + fortune);
+        for (int j = 0; j < i; ++j) {
+            ret.add(drop.copy());
+        }
         this.playSound(SoundEvents.SHEEP_SHEAR, 1.0f, 1.0f);
         this.gameEvent(GameEvent.SHEAR, player);
 

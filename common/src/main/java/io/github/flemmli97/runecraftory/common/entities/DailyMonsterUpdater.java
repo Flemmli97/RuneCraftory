@@ -25,13 +25,14 @@ public class DailyMonsterUpdater {
                 int i = -1;
                 ItemStack drop = ItemStack.EMPTY;
                 for (Map.Entry<ItemStack, Integer> e : this.monster.dailyDrops().entrySet()) {
-                    if (this.monster.getFriendlyPoints().getLevel() >= e.getValue() && i > e.getValue()) {
+                    if (this.monster.getFriendlyPoints().getLevel() >= e.getValue() && i < e.getValue()) {
                         drop = e.getKey();
                         i = e.getValue();
                     }
                 }
                 this.monster.spawnAtLocation(drop.copy());
             }
+            this.monster.onDailyUpdate();
         }
     }
 
