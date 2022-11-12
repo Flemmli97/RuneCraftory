@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
-import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -11,9 +10,6 @@ import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -64,15 +60,8 @@ public class ItemStatIncrease extends Item {
     private void increaseStat(ItemStack stack, Level level, Player player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             switch (this.stat) {
-                case HP -> {
-                    AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
-                    AttributeModifier modifier = health.getModifier(LibConstants.maxHealthItemIncrease);
-                    double val = modifier == null ? 0 : modifier.getAmount();
-                    health.removeModifier(LibConstants.maxHealthItemIncrease);
-                    health.addPermanentModifier(new AttributeModifier(LibConstants.maxHealthModifier, "rf.item.hpModifier", val + 10, AttributeModifier.Operation.ADDITION));
-                }
                 case LEVEL -> data.addXp(player, LevelCalc.xpAmountForLevelUp(data.getPlayerLevel().getLevel()) - data.getPlayerLevel().getXp());
-                case STR, INT, VIT -> data.consumeStatBoostItem(player, this.stat);
+                case STR, INT, VIT, HP -> data.increaseStatBonus(player, this.stat);
             }
         });
     }

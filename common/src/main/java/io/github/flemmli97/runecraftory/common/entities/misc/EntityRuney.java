@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.items.tools.ItemStatIncrease;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -9,6 +8,8 @@ import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -42,11 +43,17 @@ public class EntityRuney extends Entity {
             return;
         }
         this.discard();
-        EnumSkills randomSkill = EnumSkills.values()[player.getRandom().nextInt(EnumSkills.values().length)];
+        ItemStatIncrease.Stat stat = switch (this.getEntityData().get(TYPE)) {
+            case 0 -> ItemStatIncrease.Stat.STR;
+            case 2 -> ItemStatIncrease.Stat.INT;
+            case 3 -> ItemStatIncrease.Stat.VIT;
+            default -> ItemStatIncrease.Stat.HP;
+        };
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            data.increaseSkill(randomSkill, player, LevelCalc.xpAmountForSkillLevelUp(randomSkill, data.getSkillLevel(randomSkill).getLevel()) - data.getSkillLevel(randomSkill).getXp());
+            data.increaseStatBonus(player, stat);
             data.refreshRunePoints(player, 150);
         });
+        player.level.playSound(null, player.blockPosition(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1, 0.5f);
     }
 
     @Override

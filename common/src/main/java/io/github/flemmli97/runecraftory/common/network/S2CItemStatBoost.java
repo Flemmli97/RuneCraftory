@@ -9,24 +9,30 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
 public record S2CItemStatBoost(
-        ItemStatIncrease.Stat stat) implements Packet {
+        ItemStatIncrease.Stat stat, boolean reset) implements Packet {
 
     public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "s2c_item_stat_boost");
 
     public static S2CItemStatBoost read(FriendlyByteBuf buf) {
-        return new S2CItemStatBoost(buf.readEnum(ItemStatIncrease.Stat.class));
+        return new S2CItemStatBoost(buf.readEnum(ItemStatIncrease.Stat.class), buf.readBoolean());
     }
 
     public static void handle(S2CItemStatBoost pkt) {
         Player player = ClientHandlers.getPlayer();
         if (player == null)
             return;
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.consumeStatBoostItem(player, pkt.stat));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+            if (pkt.reset)
+                data.resetAllStatBoost(player, pkt.stat);
+            else
+                data.increaseStatBonus(player, pkt.stat);
+        });
     }
 
     @Override
     public void write(FriendlyByteBuf buf) {
         buf.writeEnum(this.stat);
+        buf.writeBoolean(this.reset);
     }
 
     @Override

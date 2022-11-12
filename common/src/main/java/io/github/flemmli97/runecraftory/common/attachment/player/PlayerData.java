@@ -340,22 +340,29 @@ public class PlayerData {
         this.intel += prop.intelIncrease();
     }
 
-    public void consumeStatBoostItem(Player player, ItemStatIncrease.Stat type) {
+    public void increaseStatBonus(Player player, ItemStatIncrease.Stat type) {
         switch (type) {
             case STR -> {
                 this.strAdd += 1;
                 if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type), serverPlayer);
+                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, false), serverPlayer);
             }
             case INT -> {
                 this.intAdd += 1;
                 if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type), serverPlayer);
+                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, false), serverPlayer);
             }
             case VIT -> {
                 this.vitAdd += 1;
                 if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type), serverPlayer);
+                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, false), serverPlayer);
+            }
+            case HP -> {
+                AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
+                AttributeModifier modifier = health.getModifier(LibConstants.maxHealthItemIncrease);
+                double val = modifier == null ? 0 : modifier.getAmount();
+                health.removeModifier(LibConstants.maxHealthItemIncrease);
+                health.addPermanentModifier(new AttributeModifier(LibConstants.maxHealthModifier, "rf.item.hpModifier", val + 10, AttributeModifier.Operation.ADDITION));
             }
         }
     }
@@ -363,22 +370,24 @@ public class PlayerData {
     public void resetAllStatBoost(Player player, ItemStatIncrease.Stat type) {
         switch (type) {
             case STR -> {
-                this.strAdd = -10;
+                this.strAdd = 0;
                 if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type), serverPlayer);
+                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, true), serverPlayer);
                 this.strAdd = 0;
             }
             case INT -> {
-                this.intAdd = -10;
-                if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type), serverPlayer);
                 this.intAdd = 0;
+                if (player instanceof ServerPlayer serverPlayer)
+                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, true), serverPlayer);
             }
             case VIT -> {
-                this.vitAdd = -10;
-                if (player instanceof ServerPlayer serverPlayer)
-                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type), serverPlayer);
                 this.vitAdd = 0;
+                if (player instanceof ServerPlayer serverPlayer)
+                    Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, true), serverPlayer);
+            }
+            case HP -> {
+                AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
+                health.removeModifier(LibConstants.maxHealthItemIncrease);
             }
         }
     }
