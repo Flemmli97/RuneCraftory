@@ -123,8 +123,8 @@ public class CombatUtils {
             }
         }
         float dmg = Math.max(0.02f * amount, amount - reduce);
-        if (source instanceof CustomDamage && GeneralConfig.randomDamage) {
-            dmg = (float) Math.floor(dmg + (entity.level.random.nextGaussian() * dmg / 10.0));
+        if (source instanceof CustomDamage custom && GeneralConfig.randomDamage && !custom.fixedDamage()) {
+            dmg += entity.level.random.nextGaussian() * dmg / 10.0;
         }
         return elementalReduction(entity, source, dmg);
     }
@@ -259,6 +259,10 @@ public class CombatUtils {
                 }
                 if (player.level instanceof ServerLevel serverLevel)
                     ModSpells.STAFFCAST.get().use(serverLevel, player, stack);
+                if(ItemNBT.doesFixedOneDamage(stack)) {
+                    damageType = CustomDamage.DamageType.FIXED;
+                    damagePhys = 1;
+                }
                 CustomDamage source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(damageType).knock(CustomDamage.KnockBackType.VANILLA)
                         .knockAmount(knockback).hurtResistant(0).get();
                 Vec3 targetMot = target.getDeltaMovement();

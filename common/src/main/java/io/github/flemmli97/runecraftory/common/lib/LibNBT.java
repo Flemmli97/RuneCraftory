@@ -8,6 +8,7 @@ public class LibNBT {
     public static final String CraftingBonus = "CraftingBonus";
     public static final String Level = "ItemLevel";
     public static final String MagnifyingGlass = "MagnifyingGlass";
+    public static final String ScrapMetalPlus = "ScrapMetalPlus";
 
     public static final String WateringCanWater = "Water";
 

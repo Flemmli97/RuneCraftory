@@ -22,6 +22,7 @@ RuneCraftory 1.4.0
 - Decreased xp for level up
 - Made bosses immune against heal reduction from food
 - Fix taming/untaming monster not resetting target properly and attacking things they shouldn't
+- Scrap metal + upgrade now does fixed 1 damage
 
 RuneCraftory 1.3.4
 ================

@@ -23,9 +23,10 @@ public class CustomDamage extends EntityDamageSource {
     private Entity trueSourceEntity;
     private float knockAmount;
     private int protection;
-    private boolean faintEntity;
+    private final boolean faintEntity;
+    private final boolean fixedDamage;
 
-    public CustomDamage(Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock, float knockBackAmount, int hurtTimeProtection, boolean faintEntity) {
+    public CustomDamage(Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock, float knockBackAmount, int hurtTimeProtection, boolean faintEntity, boolean fixedDamage) {
         super("rfAttack", attacker);
         this.element = element;
         this.knock = knock;
@@ -33,6 +34,7 @@ public class CustomDamage extends EntityDamageSource {
         this.knockAmount = knockBackAmount;
         this.protection = hurtTimeProtection;
         this.faintEntity = faintEntity;
+        this.fixedDamage = fixedDamage;
     }
 
     public EnumElement getElement() {
@@ -53,6 +55,10 @@ public class CustomDamage extends EntityDamageSource {
 
     public boolean criticalDamage() {
         return this.faintEntity;
+    }
+
+    public boolean fixedDamage() {
+        return this.fixedDamage;
     }
 
     @Override
@@ -80,7 +86,8 @@ public class CustomDamage extends EntityDamageSource {
         MAGIC,
         IGNOREDEF,
         IGNOREMAGICDEF,
-        FAINT
+        FAINT,
+        FIXED
     }
 
     public enum KnockBackType {
@@ -136,7 +143,7 @@ public class CustomDamage extends EntityDamageSource {
         }
 
         public CustomDamage get() {
-            CustomDamage source = new CustomDamage(this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection, this.dmg == DamageType.FAINT);
+            CustomDamage source = new CustomDamage(this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection, this.dmg == DamageType.FAINT, this.dmg == DamageType.FIXED);
             switch (this.dmg) {
                 case NORMAL:
                     break;
@@ -144,6 +151,7 @@ public class CustomDamage extends EntityDamageSource {
                     source.setMagic();
                     break;
                 case FAINT:
+                case FIXED:
                 case IGNOREDEF:
                     source.bypassArmor();
                     break;

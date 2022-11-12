@@ -126,6 +126,8 @@ public class ItemNBT {
         }
         if (stackToAdd.getItem() == ModItems.glass.get() && stack.getItem() instanceof IItemUsable)
             tag.putBoolean(LibNBT.MagnifyingGlass, true);
+        if (stackToAdd.getItem() == ModItems.scrapPlus.get() && stack.getItem() instanceof IItemUsable)
+            tag.putBoolean(LibNBT.ScrapMetalPlus, true);
         ItemStat stat = DataPackHandler.getStats(stackToAdd.getItem()).orElse(null);
         if (stat != null) {
             if (!tag.contains(LibNBT.Stats) && !stat.itemStats().isEmpty()) {
@@ -199,6 +201,14 @@ public class ItemNBT {
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
             return tag.getBoolean(LibNBT.MagnifyingGlass);
+        }
+        return false;
+    }
+
+    public static boolean doesFixedOneDamage(ItemStack stack) {
+        if (stack.hasTag()) {
+            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
+            return tag.getBoolean(LibNBT.ScrapMetalPlus);
         }
         return false;
     }
