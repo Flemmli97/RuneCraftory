@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
+import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.common.datapack.manager.CropManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.FoodManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ItemStatManager;
@@ -59,11 +60,11 @@ public class DataPackHandler {
         return foods.get(item);
     }
 
-    public static Collection<ItemStack> get(EnumShop shop) {
+    public static Collection<ShopItemProperties> get(EnumShop shop) {
         return shopItems.get(shop);
     }
 
-    public static Collection<ItemStack> getDefaultItems(EnumShop shop) {
+    public static Collection<ShopItemProperties> getDefaultItems(EnumShop shop) {
         return shopItems.getDefaultItems(shop);
     }
 

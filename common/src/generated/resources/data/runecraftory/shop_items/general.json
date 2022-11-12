@@ -1,0 +1,96 @@
+{
+  "values": [
+    {
+      "item": "runecraftory:crop_turnip",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_turnip_pink",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_cabbage",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_pink_melon",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_pineapple",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_strawberry",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_golden_turnip",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_golden_potato",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_golden_pumpkin",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_golden_cabbage",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_hot_hot_fruit",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_bok_choy",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_leek",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_radish",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_spinach",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_green_pepper",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_yam",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_eggplant",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_tomato",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_corn",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_cucumber",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_pumpkin",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:crop_onion",
+      "needs_unlock": false
+    }
+  ]
+}

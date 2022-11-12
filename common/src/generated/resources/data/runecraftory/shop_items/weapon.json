@@ -1,24 +1,84 @@
 {
   "values": [
-    "runecraftory:hoe_iron",
-    "runecraftory:hoe_silver",
-    "runecraftory:watering_can_iron",
-    "runecraftory:watering_can_silver",
-    "runecraftory:sickle_iron",
-    "runecraftory:sickle_silver",
-    "runecraftory:hammer_iron",
-    "runecraftory:hammer_silver",
-    "runecraftory:axe_iron",
-    "runecraftory:axe_silver",
-    "runecraftory:fishing_rod_iron",
-    "runecraftory:fishing_rod_silver",
-    "runecraftory:cutlass",
-    "runecraftory:great_sword",
-    "runecraftory:needle_spear",
-    "runecraftory:pole_axe",
-    "runecraftory:war_hammer",
-    "runecraftory:iron_edge",
-    "runecraftory:gloves",
-    "runecraftory:aquamarine_rod"
+    {
+      "item": "runecraftory:hoe_iron",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:hoe_silver",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:watering_can_iron",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:watering_can_silver",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:sickle_iron",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:sickle_silver",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:hammer_iron",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:hammer_silver",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:axe_iron",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:axe_silver",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:fishing_rod_iron",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:fishing_rod_silver",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:cutlass",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:great_sword",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:needle_spear",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:pole_axe",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:war_hammer",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:iron_edge",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:gloves",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:aquamarine_rod",
+      "needs_unlock": false
+    }
   ]
 }

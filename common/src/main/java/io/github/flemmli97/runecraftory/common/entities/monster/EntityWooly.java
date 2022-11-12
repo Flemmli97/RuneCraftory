@@ -179,14 +179,14 @@ public class EntityWooly extends ChargingMonster {
         int heart = -1;
         ItemStack drop = new ItemStack(ModItems.furSmall.get());
         for (Map.Entry<ItemStack, Integer> e : this.dailyDrops().entrySet()) {
-            if (e.getKey().getItem() != ModItems.furMedium.get() || e.getKey().getItem() != ModItems.furSmall.get())
+            if (e.getKey().getItem() != ModItems.furMedium.get() && e.getKey().getItem() != ModItems.furLarge.get())
                 continue;
             if (this.getFriendlyPoints().getLevel() >= e.getValue() && heart < e.getValue()) {
                 drop = e.getKey();
                 heart = e.getValue();
             }
         }
-        int i = 1 + this.random.nextInt(1 + fortune);
+        int i = 1 + this.random.nextInt(2 + fortune);
         for (int j = 0; j < i; ++j) {
             ret.add(drop.copy());
         }

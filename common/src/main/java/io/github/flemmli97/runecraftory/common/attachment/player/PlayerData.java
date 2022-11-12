@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
+import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.values.SkillProperties;
@@ -529,11 +530,11 @@ public class PlayerData {
     public void refreshShop(Player player) {
         if (!player.level.isClientSide) {
             for (EnumShop profession : EnumShop.values()) {
-                Collection<ItemStack> datapack = DataPackHandler.get(profession);
+                Collection<ShopItemProperties> datapack = DataPackHandler.get(profession);
                 List<ItemStack> shopItems = new ArrayList<>();
                 datapack.forEach(item -> {
-                    if (this.shippedItems.containsKey(PlatformUtils.INSTANCE.items().getIDFrom(item.getItem())))
-                        shopItems.add(item);
+                    if (!item.needsSpecialUnlocking() && this.shippedItems.containsKey(PlatformUtils.INSTANCE.items().getIDFrom(item.stack().getItem())))
+                        shopItems.add(item.stack().copy());
                 });
                 if (shopItems.isEmpty())
                     continue;
@@ -544,6 +545,7 @@ public class PlayerData {
                     if (shopItems.isEmpty() || (profession == EnumShop.RANDOM && shop.size() >= InventoryShop.shopSize))
                         break;
                 }
+                DataPackHandler.getDefaultItems(profession).forEach(item -> shopItems.add(item.stack().copy()));
                 this.shopItems.put(profession, shop);
             }
         }

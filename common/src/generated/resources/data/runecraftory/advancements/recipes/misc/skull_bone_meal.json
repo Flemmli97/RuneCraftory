@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "runecraftory:skull_bone_meal"
+    ]
+  },
+  "criteria": {
+    "skull": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "runecraftory:skull"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "runecraftory:skull_bone_meal"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "skull",
+      "has_the_recipe"
+    ]
+  ]
+}

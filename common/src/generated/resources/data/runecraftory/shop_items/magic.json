@@ -1,0 +1,96 @@
+{
+  "values": [
+    {
+      "item": "runecraftory:fireball_big",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:explosion",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:water_laser",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:parallel_laser",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:delta_laser",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:screw_rock",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:earth_spike",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:avenger_rock",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:sonic_wind",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:double_sonic",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:penetrate_sonic",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:light_barrier",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:shine",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:prism",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:dark_snake",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:dark_ball",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:darkness",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:cure",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:cure_all",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:cure_master",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:medi_poison",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:medi_paralysis",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:medi_seal",
+      "needs_unlock": false
+    }
+  ]
+}

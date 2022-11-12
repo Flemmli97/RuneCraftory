@@ -868,28 +868,26 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.canTrade() == ShopState.OPEN) {
             this.interactingPlayers.add(player.getId());
             Platform.INSTANCE.getPlayerData(player).map(d -> {
-                if (EntityNPCBase.this.getShop() != EnumShop.NONE)
-                    return d.getShop(EntityNPCBase.this.getShop());
+                if (EntityNPCBase.this.getShop() != EnumShop.NONE) {
+                    return d.getShop(this.getShop());
+                }
                 return null;
-            }).ifPresent(shopList -> {
-                shopList.addAll(DataPackHandler.getDefaultItems(EntityNPCBase.this.getShop()));
-                Platform.INSTANCE.openGuiMenu(player, new MenuProvider() {
-                    @Override
-                    public Component getDisplayName() {
-                        return new TranslatableComponent(EntityNPCBase.this.getShop().translationKey);
-                    }
+            }).ifPresent(shopList -> Platform.INSTANCE.openGuiMenu(player, new MenuProvider() {
+                @Override
+                public Component getDisplayName() {
+                    return new TranslatableComponent(EntityNPCBase.this.getShop().translationKey);
+                }
 
-                    @Nullable
-                    @Override
-                    public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
-                        return new ContainerShop(i, inventory, new InventoryShop(EntityNPCBase.this, shopList));
-                    }
-                }, buf -> {
-                    buf.writeInt(EntityNPCBase.this.getId());
-                    buf.writeInt(shopList.size());
-                    shopList.forEach(s -> buf.writeWithCodec(ItemStack.CODEC, s));
-                });
-            });
+                @Nullable
+                @Override
+                public AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
+                    return new ContainerShop(i, inventory, new InventoryShop(EntityNPCBase.this, shopList));
+                }
+            }, buf -> {
+                buf.writeInt(EntityNPCBase.this.getId());
+                buf.writeInt(shopList.size());
+                shopList.forEach(s -> buf.writeWithCodec(ItemStack.CODEC, s));
+            }));
         }
     }
 

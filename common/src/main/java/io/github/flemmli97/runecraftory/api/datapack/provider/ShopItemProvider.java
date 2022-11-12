@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.data.DataGenerator;
@@ -32,8 +33,8 @@ public abstract class ShopItemProvider implements DataProvider {
 
     private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping().create();
 
-    private final Map<ResourceLocation, Collection<ItemLike>> items = new HashMap<>();
-    private final Map<ResourceLocation, Collection<Ingredient>> ingredients = new HashMap<>();
+    private final Map<ResourceLocation, Collection<Pair<ItemLike, Boolean>>> items = new HashMap<>();
+    private final Map<ResourceLocation, Collection<Pair<Ingredient, Boolean>>> ingredients = new HashMap<>();
 
     private final Map<ResourceLocation, Boolean> overwrite = new HashMap<>();
 
@@ -57,9 +58,19 @@ public abstract class ShopItemProvider implements DataProvider {
                 if (this.overwrite.getOrDefault(res, false))
                     obj.addProperty("replace", true);
                 JsonArray arr = new JsonArray();
-                builder.forEach(itemLike -> arr.add(PlatformUtils.INSTANCE.items().getIDFrom(itemLike.asItem()).toString()));
+                builder.forEach(pair -> {
+                    JsonObject o = new JsonObject();
+                    o.addProperty("item", PlatformUtils.INSTANCE.items().getIDFrom(pair.getFirst().asItem()).toString());
+                    o.addProperty("needs_unlock", pair.getSecond());
+                    arr.add(o);
+                });
                 this.ingredients.getOrDefault(res, new ArrayList<>())
-                        .forEach(ing -> arr.add(ing.toJson()));
+                        .forEach(pair -> {
+                            JsonObject o = new JsonObject();
+                            o.add("item", pair.getFirst().toJson());
+                            o.addProperty("needs_unlock", pair.getSecond());
+                            arr.add(o);
+                        });
                 obj.add("values", arr);
                 DataProvider.save(GSON, cache, obj, path);
             } catch (IOException e) {
@@ -74,23 +85,31 @@ public abstract class ShopItemProvider implements DataProvider {
     }
 
     public void addItem(EnumShop shop, ItemLike item) {
-        this.addItem(shop, item, false);
+        this.addItem(shop, item, false, false);
     }
 
     public void addItem(EnumShop shop, ItemLike item, boolean defaults) {
+        this.addItem(shop, item, defaults, false);
+    }
+
+    public void addItem(EnumShop shop, ItemLike item, boolean defaults, boolean needsUnlock) {
         this.items.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toLowerCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
                         r -> new ArrayList<>())
-                .add(item);
+                .add(Pair.of(item, needsUnlock));
     }
 
     public void addItem(EnumShop shop, ItemStack item) {
-        this.addItem(shop, item, false);
+        this.addItem(shop, item, false, false);
     }
 
     public void addItem(EnumShop shop, ItemStack item, boolean defaults) {
+        this.addItem(shop, item, defaults, false);
+    }
+
+    public void addItem(EnumShop shop, ItemStack item, boolean defaults, boolean needsUnlock) {
         this.ingredients.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toLowerCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
                         r -> new ArrayList<>())
-                .add(Ingredient.of(item));
+                .add(Pair.of(Ingredient.of(item), needsUnlock));
     }
 
     public void addItem(EnumShop shop, TagKey<Item> tag) {
@@ -98,9 +117,13 @@ public abstract class ShopItemProvider implements DataProvider {
     }
 
     public void addItem(EnumShop shop, TagKey<Item> tag, boolean defaults) {
+        this.addItem(shop, tag, defaults, false);
+    }
+
+    public void addItem(EnumShop shop, TagKey<Item> tag, boolean defaults, boolean needsUnlock) {
         this.ingredients.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toLowerCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
                         r -> new ArrayList<>())
-                .add(Ingredient.of(tag));
+                .add(Pair.of(Ingredient.of(tag), needsUnlock));
     }
 
     public void overwrite(EnumShop shop, boolean defaults) {

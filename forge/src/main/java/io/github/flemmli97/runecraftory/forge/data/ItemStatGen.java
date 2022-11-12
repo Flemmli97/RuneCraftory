@@ -119,6 +119,10 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.healingPotion.get(), new ItemStat.Builder(500, 35, 0));
         this.addStat(ModItems.mysteryPotion.get(), new ItemStat.Builder(3000, 250, 0));
         this.addStat(ModItems.magicalPotion.get(), new ItemStat.Builder(6000, 500, 0));
+        this.addStat(ModItems.invinciroid.get(), new ItemStat.Builder(25000, 1500, 0));
+        this.addStat(ModItems.lovePotion.get(), new ItemStat.Builder(50000, 2000, 0));
+        this.addStat(ModItems.formuade.get(), new ItemStat.Builder(20000, 700, 0));
+        this.addStat(ModItems.objectX.get(), new ItemStat.Builder(6000, 500, 15));
 
         this.addStat(ModItems.broadSword.get(), new ItemStat.Builder(100, 16, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 4));
@@ -382,6 +386,20 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.brush.get(), new ItemStat.Builder(1500, 300, 0));
         this.addStat(ModItems.glass.get(), new ItemStat.Builder(2000, 400, 1));
 
+        this.addStat(ModItems.leveliser.get(), new ItemStat.Builder(2000000, 3000, 0));
+        this.addStat(ModItems.heartDrink.get(), new ItemStat.Builder(1500000, 1500, 0));
+        this.addStat(ModItems.vitalGummi.get(), new ItemStat.Builder(1500000, 1500, 0));
+        this.addStat(ModItems.intelligencer.get(), new ItemStat.Builder(1500000, 1500, 0));
+        this.addStat(ModItems.protein.get(), new ItemStat.Builder(1500000, 1500, 0));
+        this.addStat(ModItems.formularA.get(), new ItemStat.Builder(1000, 150, 0));
+        this.addStat(ModItems.formularB.get(), new ItemStat.Builder(2500, 250, 0));
+        this.addStat(ModItems.formularC.get(), new ItemStat.Builder(5000, 400, 0));
+        this.addStat(ModItems.minimizer.get(), new ItemStat.Builder(10000, 300, 0));
+        this.addStat(ModItems.giantizer.get(), new ItemStat.Builder(10000, 300, 0));
+        this.addStat(ModItems.greenifier.get(), new ItemStat.Builder(2000, 200, 0));
+        this.addStat(ModItems.greenifierPlus.get(), new ItemStat.Builder(10000, 500, 0));
+        this.addStat(ModItems.wettablePowder.get(), new ItemStat.Builder(1500, 150, 0));
+
         this.addStat(ModItems.cheapBracelet.get(), new ItemStat.Builder(120, 21, 0)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 1.5));
         this.addStat(ModItems.bronzeBracelet.get(), new ItemStat.Builder(850, 38, 0)
@@ -449,7 +467,8 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.ironShield.get(), new ItemStat.Builder(1000, 50, 0)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 7));
 
-        this.addStat(ModItems.scrap.get(), new ItemStat.Builder(13, 1, 1));
+        this.addStat(ModItems.scrap.get(), new ItemStat.Builder(13, 1, 1)
+                .addAttribute(ModAttributes.RF_DEFENCE.get(), -2));
         this.addStat(ModItems.scrapPlus.get(), new ItemStat.Builder(0, 2, 1)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 2));
         this.addStat("iron", ModTags.iron, new ItemStat.Builder(150, 2, 5)
@@ -771,6 +790,31 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.can.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.boots.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.lawn.get(), new ItemStat.Builder(0, 0, 0));
+
+        this.addStat(ModItems.fireBallSmall.get(), new ItemStat.Builder(2400, 120, 0));
+        this.addStat(ModItems.fireBallBig.get(), new ItemStat.Builder(4800, 240, 0));
+        this.addStat(ModItems.explosion.get(), new ItemStat.Builder(9600, 480, 0));
+        this.addStat(ModItems.waterLaser.get(), new ItemStat.Builder(2400, 120, 0));
+        this.addStat(ModItems.parallelLaser.get(), new ItemStat.Builder(4800, 240, 0));
+        this.addStat(ModItems.deltaLaser.get(), new ItemStat.Builder(9600, 480, 0));
+        this.addStat(ModItems.screwRock.get(), new ItemStat.Builder(2400, 120, 0));
+        this.addStat(ModItems.earthSpike.get(), new ItemStat.Builder(0, 240, 0));
+        this.addStat(ModItems.avengerRock.get(), new ItemStat.Builder(9600, 480, 0));
+        this.addStat(ModItems.sonicWind.get(), new ItemStat.Builder(2400, 120, 0));
+        this.addStat(ModItems.doubleSonic.get(), new ItemStat.Builder(4800, 240, 0));
+        this.addStat(ModItems.penetrateSonic.get(), new ItemStat.Builder(9600, 480, 0));
+        this.addStat(ModItems.lightBarrier.get(), new ItemStat.Builder(2700, 135, 0));
+        this.addStat(ModItems.shine.get(), new ItemStat.Builder(5400, 270, 0));
+        this.addStat(ModItems.prism.get(), new ItemStat.Builder(10800, 540, 0));
+        this.addStat(ModItems.darkSnake.get(), new ItemStat.Builder(2700, 135, 0));
+        this.addStat(ModItems.darkBall.get(), new ItemStat.Builder(5400, 270, 0));
+        this.addStat(ModItems.darkness.get(), new ItemStat.Builder(10800, 540, 0));
+        this.addStat(ModItems.cure.get(), new ItemStat.Builder(1500, 75, 0));
+        this.addStat(ModItems.cureAll.get(), new ItemStat.Builder(4500, 225, 0));
+        this.addStat(ModItems.cureMaster.get(), new ItemStat.Builder(12000, 600, 0));
+        this.addStat(ModItems.mediPoison.get(), new ItemStat.Builder(1500, 75, 0));
+        this.addStat(ModItems.mediPara.get(), new ItemStat.Builder(3000, 150, 0));
+        this.addStat(ModItems.mediSeal.get(), new ItemStat.Builder(5000, 250, 0));
 
         this.addStat(ModItems.witheredGrass.get(), 100, 1, 1);
         this.addStat(ModItems.weeds.get(), 30, 1, 1);

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:insect_carapace",
+    "runecraftory:pretty_carapace",
+    "runecraftory:insect_horn",
+    "runecraftory:rigid_horn"
+  ]
+}

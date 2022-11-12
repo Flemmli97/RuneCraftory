@@ -1,8 +1,20 @@
 {
   "values": [
-    "runecraftory:healing_potion",
-    "runecraftory:mystery_potion",
-    "runecraftory:magical_potion",
-    "runecraftory:elli_leaves"
+    {
+      "item": "runecraftory:healing_potion",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:mystery_potion",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:magical_potion",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:elli_leaves",
+      "needs_unlock": false
+    }
   ]
 }

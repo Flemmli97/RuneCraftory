@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:brown_mushroom",
+    "minecraft:red_mushroom",
+    "runecraftory:mushroom",
+    "runecraftory:monarch_mushroom",
+    "runecraftory:spore"
+  ]
+}

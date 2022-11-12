@@ -1,5 +1,7 @@
 {
-  "itemStats": {},
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": -2.0
+  },
   "buyPrice": 13,
   "sellPrice": 1,
   "upgradeDifficulty": 1,

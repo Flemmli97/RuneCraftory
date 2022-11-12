@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "runecraftory:fish_fossil"
+    }
+  ],
+  "result": {
+    "item": "minecraft:bone_meal",
+    "count": 2
+  }
+}

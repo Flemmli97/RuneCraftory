@@ -1,21 +1,72 @@
 {
   "values": [
-    "runecraftory:hoe_scrap",
-    "runecraftory:watering_can_scrap",
-    "runecraftory:sickle_scrap",
-    "runecraftory:hammer_scrap",
-    "runecraftory:axe_scrap",
-    "runecraftory:fishing_rod_scrap",
-    "runecraftory:inspector",
-    "runecraftory:brush",
-    "runecraftory:magnifying_glass",
-    "runecraftory:broad_sword",
-    "runecraftory:claymore",
-    "runecraftory:spear",
-    "runecraftory:battle_axe",
-    "runecraftory:battle_hammer",
-    "runecraftory:short_dagger",
-    "runecraftory:leather_glove",
-    "runecraftory:rod"
+    {
+      "item": "runecraftory:hoe_scrap",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:watering_can_scrap",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:sickle_scrap",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:hammer_scrap",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:axe_scrap",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:fishing_rod_scrap",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:inspector",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:brush",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:magnifying_glass",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:broad_sword",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:claymore",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:spear",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:battle_axe",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:battle_hammer",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:short_dagger",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:leather_glove",
+      "needs_unlock": false
+    },
+    {
+      "item": "runecraftory:rod",
+      "needs_unlock": false
+    }
   ]
 }

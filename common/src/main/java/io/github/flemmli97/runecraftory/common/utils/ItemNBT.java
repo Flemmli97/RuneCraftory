@@ -128,6 +128,9 @@ public class ItemNBT {
             tag.putBoolean(LibNBT.MagnifyingGlass, true);
         if (stackToAdd.getItem() == ModItems.scrapPlus.get() && stack.getItem() instanceof IItemUsable)
             tag.putBoolean(LibNBT.ScrapMetalPlus, true);
+        boolean hasObjectX = tag.getBoolean(LibNBT.ObjectX);
+        if (stackToAdd.getItem() == ModItems.objectX.get())
+            tag.putBoolean(LibNBT.ObjectX, !hasObjectX);
         ItemStat stat = DataPackHandler.getStats(stackToAdd.getItem()).orElse(null);
         if (stat != null) {
             if (!tag.contains(LibNBT.Stats) && !stat.itemStats().isEmpty()) {
@@ -141,7 +144,10 @@ public class ItemNBT {
                 }
             }
             for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {
-                updateStatIncrease(entry.getKey(), entry.getValue() * efficiency, tag.getCompound(LibNBT.Stats));
+                double amount = entry.getValue() * efficiency;
+                if (hasObjectX)
+                    amount *= -1;
+                updateStatIncrease(entry.getKey(), amount, tag.getCompound(LibNBT.Stats));
             }
             if (!tag.contains(LibNBT.Element))
                 tag.putString(LibNBT.Element, getElement(stack).toString());
@@ -206,6 +212,14 @@ public class ItemNBT {
     }
 
     public static boolean doesFixedOneDamage(ItemStack stack) {
+        if (stack.hasTag()) {
+            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
+            return tag.getBoolean(LibNBT.ScrapMetalPlus);
+        }
+        return false;
+    }
+
+    public static boolean reverseStats(ItemStack stack) {
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
             return tag.getBoolean(LibNBT.ScrapMetalPlus);

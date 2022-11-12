@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "#c:shears",
-    "#minecraft:wool"
+    "#c:milks",
+    "minecraft:wheat"
   ]
 }

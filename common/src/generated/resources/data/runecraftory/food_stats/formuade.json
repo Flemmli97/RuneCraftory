@@ -1,0 +1,28 @@
+{
+  "effectsPercentage": {
+    "minecraft:generic.max_health": -50.0
+  },
+  "potionApply": [],
+  "potionRemove": [],
+  "rpPercentIncrease": 75,
+  "duration": 100,
+  "effects": {
+    "minecraft:generic.attack_damage": 70.0,
+    "runecraftory:attribute.rf.defence": 35.0,
+    "runecraftory:attribute.rf.magic_att": 70.0,
+    "runecraftory:attribute.rf.magic_def": 35.0,
+    "runecraftory:attribute.rf.res_paralysis": 25.0,
+    "runecraftory:attribute.rf.res_poison": 25.0,
+    "runecraftory:attribute.rf.res_seal": 25.0,
+    "runecraftory:attribute.rf.res_sleep": 25.0,
+    "runecraftory:attribute.rf.res_fatigue": 25.0,
+    "runecraftory:attribute.rf.res_cold": 25.0,
+    "runecraftory:attribute.rf.res_faint": 25.0
+  },
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "hpRegen": 0,
+  "rpRegen": 0,
+  "item": "runecraftory:formuade"
+}

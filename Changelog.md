@@ -25,6 +25,7 @@ RuneCraftory 1.4.0
 - Scrap metal + upgrade now does fixed 1 damage
 - Tweaked monster stats
 - Taming item not config but tag based now. The tag its checking is "runecraftory:taming/entity_id"
+- Add more stats and shop items
 
 RuneCraftory 1.3.4
 ================

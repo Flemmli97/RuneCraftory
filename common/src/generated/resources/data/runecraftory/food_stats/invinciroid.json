@@ -1,0 +1,28 @@
+{
+  "effectsPercentage": {},
+  "potionApply": [],
+  "potionRemove": [
+    "minecraft:poison",
+    "minecraft:wither",
+    "minecraft:slowness",
+    "minecraft:bad_omen",
+    "minecraft:blindness",
+    "minecraft:levitation",
+    "minecraft:nausea",
+    "runecraftory:sleep",
+    "runecraftory:poison",
+    "runecraftory:paralysis",
+    "runecraftory:seal",
+    "runecraftory:fatigue",
+    "runecraftory:cold"
+  ],
+  "rpPercentIncrease": 0,
+  "duration": 100,
+  "effects": {},
+  "hpRegenPercent": 0,
+  "rpRegenPercent": 0,
+  "rpIncrease": 0,
+  "hpRegen": 0,
+  "rpRegen": 0,
+  "item": "runecraftory:invinciroid"
+}

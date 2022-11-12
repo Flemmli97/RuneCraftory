@@ -57,6 +57,34 @@ public class FoodGen extends FoodProvider {
         this.addStat(ModItems.healingPotion.get(), new FoodProperties.Builder(100).setHPRegen(500, 0));
         this.addStat(ModItems.mysteryPotion.get(), new FoodProperties.Builder(100).setHPRegen(2000, 0));
         this.addStat(ModItems.magicalPotion.get(), new FoodProperties.Builder(100).setHPRegen(0, 50));
+        this.addStat(ModItems.invinciroid.get(), new FoodProperties.Builder(100)
+                .curePotion(MobEffects.POISON)
+                .curePotion(MobEffects.WITHER)
+                .curePotion(MobEffects.MOVEMENT_SLOWDOWN)
+                .curePotion(MobEffects.BAD_OMEN)
+                .curePotion(MobEffects.BLINDNESS)
+                .curePotion(MobEffects.LEVITATION)
+                .curePotion(MobEffects.CONFUSION)
+                .curePotion(ModEffects.sleep.get())
+                .curePotion(ModEffects.poison.get())
+                .curePotion(ModEffects.paralysis.get())
+                .curePotion(ModEffects.seal.get())
+                .curePotion(ModEffects.fatigue.get())
+                .curePotion(ModEffects.cold.get()));
+        this.addStat(ModItems.formuade.get(), new FoodProperties.Builder(100).setRPIncrease(0, 75)
+                .addEffectPercentage(Attributes.MAX_HEALTH, -50)
+                .addEffect(Attributes.ATTACK_DAMAGE, 70)
+                .addEffect(ModAttributes.RF_MAGIC.get(), 70)
+                .addEffect(ModAttributes.RF_DEFENCE.get(), 35)
+                .addEffect(ModAttributes.RF_MAGIC_DEFENCE.get(), 35)
+                .addEffect(ModAttributes.RFRESPOISON.get(), 25)
+                .addEffect(ModAttributes.RFRESPARA.get(), 25)
+                .addEffect(ModAttributes.RFRESSEAL.get(), 25)
+                .addEffect(ModAttributes.RFRESSLEEP.get(), 25)
+                .addEffect(ModAttributes.RFRESFAT.get(), 25)
+                .addEffect(ModAttributes.RFRESCOLD.get(), 25)
+                .addEffect(ModAttributes.RFRESFAINT.get(), 25));
+        this.addStat(ModItems.objectX.get(), new FoodProperties.Builder(100).setRPIncrease(0, -50));
 
         this.addStat(ModItems.mushroom.get(), new FoodProperties.Builder(100).setHPRegen(5, 1).setRPRegen(10, 0));
         this.addStat(ModItems.monarchMushroom.get(), new FoodProperties.Builder(100).setHPRegen(5, 2).setRPRegen(15, 0));

@@ -39,6 +39,30 @@ public class ShopItemGen extends ShopItemProvider {
         this.addItem(EnumShop.GENERAL, ModItems.cucumberSeeds.get(), true);
         //this.addItem(EnumShop.GENERAL, ModItems.fodderSeeds.get(), true);
 
+        this.addItem(EnumShop.GENERAL, ModItems.turnip.get());
+        this.addItem(EnumShop.GENERAL, ModItems.turnipPink.get());
+        this.addItem(EnumShop.GENERAL, ModItems.cabbage.get());
+        this.addItem(EnumShop.GENERAL, ModItems.pinkMelon.get());
+        this.addItem(EnumShop.GENERAL, ModItems.pineapple.get());
+        this.addItem(EnumShop.GENERAL, ModItems.strawberry.get());
+        this.addItem(EnumShop.GENERAL, ModItems.goldenTurnip.get());
+        this.addItem(EnumShop.GENERAL, ModItems.goldenPotato.get());
+        this.addItem(EnumShop.GENERAL, ModItems.goldenPumpkin.get());
+        this.addItem(EnumShop.GENERAL, ModItems.goldenCabbage.get());
+        this.addItem(EnumShop.GENERAL, ModItems.hotHotFruit.get());
+        this.addItem(EnumShop.GENERAL, ModItems.bokChoy.get());
+        this.addItem(EnumShop.GENERAL, ModItems.leek.get());
+        this.addItem(EnumShop.GENERAL, ModItems.radish.get());
+        this.addItem(EnumShop.GENERAL, ModItems.spinach.get());
+        this.addItem(EnumShop.GENERAL, ModItems.greenPepper.get());
+        this.addItem(EnumShop.GENERAL, ModItems.yam.get());
+        this.addItem(EnumShop.GENERAL, ModItems.eggplant.get());
+        this.addItem(EnumShop.GENERAL, ModItems.tomato.get());
+        this.addItem(EnumShop.GENERAL, ModItems.corn.get());
+        this.addItem(EnumShop.GENERAL, ModItems.cucumber.get());
+        this.addItem(EnumShop.GENERAL, ModItems.pumpkin.get());
+        this.addItem(EnumShop.GENERAL, ModItems.onion.get());
+
         this.addItem(EnumShop.FLOWER, ModItems.toyherbSeeds.get(), true);
         this.addItem(EnumShop.FLOWER, ModItems.moondropSeeds.get(), true);
         this.addItem(EnumShop.FLOWER, ModItems.pinkCatSeeds.get(), true);
@@ -56,6 +80,33 @@ public class ShopItemGen extends ShopItemProvider {
         this.addItem(EnumShop.FLOWER, ModItems.greenCrystalSeeds.get(), true);
         this.addItem(EnumShop.FLOWER, ModItems.blueCrystalSeeds.get(), true);
         this.addItem(EnumShop.FLOWER, ModItems.emeryFlowerSeeds.get(), true);
+
+        this.addItem(EnumShop.FLOWER, ModItems.toyherb.get());
+        this.addItem(EnumShop.FLOWER, ModItems.moondropFlower.get());
+        this.addItem(EnumShop.FLOWER, ModItems.pinkCat.get());
+        this.addItem(EnumShop.FLOWER, ModItems.charmBlue.get());
+        this.addItem(EnumShop.FLOWER, ModItems.lampGrass.get());
+        this.addItem(EnumShop.FLOWER, ModItems.cherryGrass.get());
+        this.addItem(EnumShop.FLOWER, ModItems.pomPomGrass.get());
+        this.addItem(EnumShop.FLOWER, ModItems.autumnGrass.get());
+        this.addItem(EnumShop.FLOWER, ModItems.noelGrass.get());
+        this.addItem(EnumShop.FLOWER, ModItems.fireflower.get());
+        this.addItem(EnumShop.FLOWER, ModItems.fourLeafClover.get());
+        this.addItem(EnumShop.FLOWER, ModItems.ironleaf.get());
+        this.addItem(EnumShop.FLOWER, ModItems.whiteCrystal.get());
+        this.addItem(EnumShop.FLOWER, ModItems.redCrystal.get());
+        this.addItem(EnumShop.FLOWER, ModItems.greenCrystal.get());
+        this.addItem(EnumShop.FLOWER, ModItems.blueCrystal.get());
+        this.addItem(EnumShop.FLOWER, ModItems.emeryFlower.get());
+
+        this.addItem(EnumShop.FLOWER, ModItems.formularA.get(), true);
+        this.addItem(EnumShop.FLOWER, ModItems.formularB.get(), true);
+        this.addItem(EnumShop.FLOWER, ModItems.formularC.get(), true);
+        this.addItem(EnumShop.FLOWER, ModItems.minimizer.get(), true);
+        this.addItem(EnumShop.FLOWER, ModItems.giantizer.get(), true);
+        this.addItem(EnumShop.FLOWER, ModItems.greenifier.get(), true);
+        this.addItem(EnumShop.FLOWER, ModItems.greenifierPlus.get(), true);
+        this.addItem(EnumShop.FLOWER, ModItems.wettablePowder.get(), true);
 
         this.addItem(EnumShop.WEAPON, ModItems.hoeScrap.get(), true);
         this.addItem(EnumShop.WEAPON, ModItems.hoeIron.get());
@@ -130,5 +181,30 @@ public class ShopItemGen extends ShopItemProvider {
         this.addItem(EnumShop.CLINIC, ModItems.blackGrass.get(), true);
         this.addItem(EnumShop.CLINIC, ModItems.antidoteGrass.get(), true);
         this.addItem(EnumShop.CLINIC, ModItems.medicinalHerb.get(), true);
+
+        this.addItem(EnumShop.MAGIC, ModItems.fireBallSmall.get(), true);
+        this.addItem(EnumShop.MAGIC, ModItems.fireBallBig.get());
+        this.addItem(EnumShop.MAGIC, ModItems.explosion.get());
+        this.addItem(EnumShop.MAGIC, ModItems.waterLaser.get());
+        this.addItem(EnumShop.MAGIC, ModItems.parallelLaser.get());
+        this.addItem(EnumShop.MAGIC, ModItems.deltaLaser.get());
+        this.addItem(EnumShop.MAGIC, ModItems.screwRock.get());
+        this.addItem(EnumShop.MAGIC, ModItems.earthSpike.get());
+        this.addItem(EnumShop.MAGIC, ModItems.avengerRock.get());
+        this.addItem(EnumShop.MAGIC, ModItems.sonicWind.get());
+        this.addItem(EnumShop.MAGIC, ModItems.doubleSonic.get());
+        this.addItem(EnumShop.MAGIC, ModItems.penetrateSonic.get());
+        this.addItem(EnumShop.MAGIC, ModItems.lightBarrier.get());
+        this.addItem(EnumShop.MAGIC, ModItems.shine.get());
+        this.addItem(EnumShop.MAGIC, ModItems.prism.get());
+        this.addItem(EnumShop.MAGIC, ModItems.darkSnake.get());
+        this.addItem(EnumShop.MAGIC, ModItems.darkBall.get());
+        this.addItem(EnumShop.MAGIC, ModItems.darkness.get());
+        this.addItem(EnumShop.MAGIC, ModItems.cure.get());
+        this.addItem(EnumShop.MAGIC, ModItems.cureAll.get());
+        this.addItem(EnumShop.MAGIC, ModItems.cureMaster.get());
+        this.addItem(EnumShop.MAGIC, ModItems.mediPoison.get());
+        this.addItem(EnumShop.MAGIC, ModItems.mediPara.get());
+        this.addItem(EnumShop.MAGIC, ModItems.mediSeal.get());
     }
 }
