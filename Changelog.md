@@ -21,6 +21,7 @@ RuneCraftory 1.4.0
 - Add some advancements
 - Decreased xp for level up
 - Made bosses immune against heal reduction from food
+- Fix taming/untaming monster not resetting target properly and attacking things they shouldn't
 
 RuneCraftory 1.3.4
 ================

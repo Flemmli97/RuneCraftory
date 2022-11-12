@@ -1303,8 +1303,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.updater.setLastUpdateDay(WorldUtils.day(this.level));
         this.setBehaviour(Behaviour.FOLLOW);
         this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
-                e -> e instanceof OwnableEntity ownable && this.getOwnerUUID().equals(ownable.getOwnerUUID())
-                        && e.getTarget() == this).forEach(e -> e.setTarget(null));
+                e -> e != this && e instanceof OwnableEntity ownable && this.getOwnerUUID().equals(ownable.getOwnerUUID())
+                        && e.getTarget() == this).forEach(e -> {
+            e.setTarget(null);
+            if (e.getLastHurtByMob() == this)
+                e.setLastHurtByMob(null);
+        });
+        this.setLastHurtByMob(null);
         if (owner instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 data.tamedEntity.tameEntity(this);
@@ -1315,7 +1320,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     protected void untameEntity() {
+        this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
+                e -> e != this && e.getTarget() == this).forEach(e -> {
+            e.setTarget(null);
+            if (e.getLastHurtByMob() == this)
+                e.setLastHurtByMob(null);
+        });
         this.setOwner(null);
+        this.setLastHurtByMob(null);
         if (this.playDeath())
             this.heal(this.getMaxHealth());
         this.setBehaviour(Behaviour.WANDER);
