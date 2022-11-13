@@ -272,15 +272,15 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(ModTags.strings)
                 .addIngredient(ModTags.sticks).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.broadSword.get(), 1, 1, 20)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.broadSword.get(), 1, 3, 20)
                 .addIngredient(ModTags.minerals).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.steelSword.get(), 1, 3, 30)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.steelSword.get(), 1, 5, 30)
                 .addIngredient(ModTags.minerals).addIngredient(ModTags.clawFangs).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.steelSwordPlus.get(), 1, 6, 30)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.steelSwordPlus.get(), 1, 7, 30)
                 .addIngredient(ModItems.steelSword.get()).addIngredient(ModTags.minerals).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.cutlass.get(), 1, 8, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.cutlass.get(), 1, 10, 40)
                 .addIngredient(ModTags.copperBlock).addIngredient(ModTags.clawFangs).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.aquaSword.get(), 1, 12, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.aquaSword.get(), 1, 13, 40)
                 .addIngredient(ModTags.silver).addIngredient(ModItems.aquamarine.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.invisiBlade.get(), 1, 16, 40)
                 .addIngredient(ModItems.invisStone.get()).addIngredient(ModTags.clawFangs).addIngredient(ModTags.crystals).build(consumer);

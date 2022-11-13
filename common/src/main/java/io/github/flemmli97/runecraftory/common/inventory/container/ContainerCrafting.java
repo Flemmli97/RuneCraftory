@@ -148,7 +148,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
             }
             this.currentRecipe = this.matchingRecipes.get(this.tile.craftingIndex());
             SextupleRecipe.RecipeOutput output = this.currentRecipe.getCraftingOutput(this.craftingInv);
-            this.rpCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()).orElseThrow(EntityUtils::playerDataException), this.currentRecipe, output.bonusItems(), output.clientResult().getItem() == ModItems.unknown.get()));
+            this.rpCost.set(CraftingUtils.craftingCost(this.type, Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()).orElseThrow(EntityUtils::playerDataException), this.currentRecipe, output.bonusItems(), output.clientResult().getItem() != ModItems.unknown.get()));
             trueOutput = output.serverResult();
             clientOutput = output.clientResult();
         } else {

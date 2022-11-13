@@ -64,6 +64,11 @@ public class CraftingUtils {
             return 0;
         if (GeneralConfig.recipeSystem.baseCost) {
             int cost = recipe.getBaseCost();
+            int additionalMaterial = 0;
+            for (ItemStack items : bonusItems) {
+                additionalMaterial += DataPackHandler.getStats(items.getItem()).map(ItemStat::getDiff).orElse(10);
+            }
+            cost += additionalMaterial;
             if (!unlocked && GeneralConfig.recipeSystem.lockedCostMore)
                 cost *= 3;
             return cost;
@@ -91,7 +96,7 @@ public class CraftingUtils {
                 }
             }).orElse(10);
         }
-        cost = cost + additionalMaterial;
+        cost += additionalMaterial;
         if (!unlocked && GeneralConfig.recipeSystem.lockedCostMore)
             cost *= 3;
         return cost;
