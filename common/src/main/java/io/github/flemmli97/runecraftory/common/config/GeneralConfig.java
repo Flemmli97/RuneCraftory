@@ -65,14 +65,14 @@ public class GeneralConfig {
     public static boolean debugAttack = false;
 
     static {
-        weaponProps.put(EnumWeaponType.FARM, new WeaponTypeProperties(3.0f, 0, 20, 20));
-        weaponProps.put(EnumWeaponType.SHORTSWORD, new WeaponTypeProperties(2.5f, 7, 17, 11));
-        weaponProps.put(EnumWeaponType.LONGSWORD, new WeaponTypeProperties(4.0f, 40, 20, 30));
-        weaponProps.put(EnumWeaponType.SPEAR, new WeaponTypeProperties(5.0f, 3, 20, 15));
-        weaponProps.put(EnumWeaponType.HAXE, new WeaponTypeProperties(4.0f, 23, 20, 20));
-        weaponProps.put(EnumWeaponType.DUAL, new WeaponTypeProperties(2.5f, 10, 16, 7));
-        weaponProps.put(EnumWeaponType.GLOVE, new WeaponTypeProperties(2.5f, 3, 16, 9));
-        weaponProps.put(EnumWeaponType.STAFF, new WeaponTypeProperties(3.0f, 0, 20, 20));
+        weaponProps.put(EnumWeaponType.FARM, new WeaponTypeProperties(3.0f, 0, 10, 20));
+        weaponProps.put(EnumWeaponType.SHORTSWORD, new WeaponTypeProperties(2.5f, 7, 13, 11));
+        weaponProps.put(EnumWeaponType.LONGSWORD, new WeaponTypeProperties(4.0f, 40, 17, 17));
+        weaponProps.put(EnumWeaponType.SPEAR, new WeaponTypeProperties(5.0f, 3, 13, 13));
+        weaponProps.put(EnumWeaponType.HAXE, new WeaponTypeProperties(4.0f, 23, 16, 15));
+        weaponProps.put(EnumWeaponType.DUAL, new WeaponTypeProperties(2.5f, 10, 10, 7));
+        weaponProps.put(EnumWeaponType.GLOVE, new WeaponTypeProperties(2.5f, 3, 10, 7));
+        weaponProps.put(EnumWeaponType.STAFF, new WeaponTypeProperties(3.0f, 0, 20, 15));
 
         skillProps.put(EnumSkills.SHORTSWORD, new SkillProperties(0, 0.5f, 0.25f, 0, 0, 2));
         skillProps.put(EnumSkills.LONGSWORD, new SkillProperties(0, 0.5f, 0.25f, 0, 0, 3));

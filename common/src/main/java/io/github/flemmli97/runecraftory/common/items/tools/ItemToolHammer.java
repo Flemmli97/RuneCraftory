@@ -142,29 +142,31 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
-            int useTime = (this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack);
-            int range = Math.min(useTime, this.tier.getTierLevel());
-            BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
-            if (range == 0) {
-                if (result != null) {
-                    this.useOnBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result), false);
-                }
-            } else {
-                setDontUseRPFlagTemp(stack, true);
-                BlockPos pos = entity.blockPosition();
-                if (result != null && result.getType() != HitResult.Type.MISS) {
-                    pos = result.getBlockPos();
-                }
-                int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
-                        .filter(p -> this.hammer((ServerLevel) world, p.immutable(), stack, entity, true) != HammerState.FAIL)
-                        .count();
-                if (amount > 0)
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        LevelCalc.useRP(player, data, range * 17.75f, true, true, true, EnumSkills.MINING);
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                int useTime = data.getWeaponHandler().getCurrentToolCharge() > 0 ? data.getWeaponHandler().getCurrentToolCharge() : ((this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack));
+                int range = Math.min(useTime, this.tier.getTierLevel());
+                BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
+                if (range == 0) {
+                    if (result != null) {
+                        this.useOnBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result), false);
+                    }
+                } else {
+                    setDontUseRPFlagTemp(stack, true);
+                    BlockPos pos = entity.blockPosition();
+                    if (result != null && result.getType() != HitResult.Type.MISS) {
+                        pos = result.getBlockPos();
+                    }
+                    data.getWeaponHandler().useAxeOrHammer(stack, range);
+                    int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
+                            .filter(p -> this.hammer((ServerLevel) world, p.immutable(), stack, entity, true) != HammerState.FAIL)
+                            .count();
+                    if (amount > 0) {
+                        LevelCalc.useRP(player, data, range * 15, true, false, true, EnumSkills.MINING);
                         LevelCalc.levelSkill(player, data, EnumSkills.MINING, (range + 1) * 10);
-                    });
-                setDontUseRPFlagTemp(stack, false);
-            }
+                    }
+                    setDontUseRPFlagTemp(stack, false);
+                }
+            });
         }
         super.releaseUsing(stack, world, entity, timeLeft);
     }

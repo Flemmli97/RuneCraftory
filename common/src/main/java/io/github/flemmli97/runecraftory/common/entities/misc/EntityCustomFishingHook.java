@@ -344,6 +344,7 @@ public class EntityCustomFishingHook extends EntityProjectile {
             }
             if (this.getOwner() instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                    LevelCalc.useRP(player, data, 10 * (this.nibbleBonus + 1), true, false, true, EnumSkills.FISHING);
                     LevelCalc.levelSkill(player, data, EnumSkills.FISHING, 1);
                     LevelCalc.levelSkill(player, data, EnumSkills.WATER, 1);
                 });

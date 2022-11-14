@@ -38,6 +38,9 @@ public class PlayerWeaponHandler {
     private int spearUseCounter = 0;
     private int spearTicker = 0;
 
+    private int toolAxeHammerCounter, toolAxeHammerTicker, toolAxeHammerCharge;
+    private ItemStack axeHammerTool;
+
     private WeaponUseState weaponUseState;
     private AnimatedAction currentAnim;
     private ItemStack usedWeapon;
@@ -55,6 +58,10 @@ public class PlayerWeaponHandler {
             }
             this.updateGlove(data, serverPlayer);
             --this.spearTicker;
+            --this.toolAxeHammerTicker;
+            if (this.toolAxeHammerTicker == 0 || (this.axeHammerTool != null && player.getMainHandItem() != this.axeHammerTool)) {
+                this.resetAxeHammerUse();
+            }
         }
         this.ticker = Math.max(--this.ticker, 0);
         this.timeSinceLastSwing = Math.max(--this.timeSinceLastSwing, 0);
@@ -79,7 +86,6 @@ public class PlayerWeaponHandler {
             }
         }
     }
-
 
     public int fireballSpellFlag() {
         return this.fireballSpellFlag;
@@ -212,6 +218,27 @@ public class PlayerWeaponHandler {
 
     public AnimatedAction getCurrentAnim() {
         return this.currentAnim;
+    }
+
+    public int getCurrentToolCharge() {
+        return this.toolAxeHammerCharge;
+    }
+
+    public void useAxeOrHammer(ItemStack stack, int charge) {
+        this.axeHammerTool = stack;
+        this.toolAxeHammerCounter++;
+        this.toolAxeHammerCharge = charge;
+        this.toolAxeHammerTicker = 15;
+        if (this.toolAxeHammerCounter >= 3) {
+            this.resetAxeHammerUse();
+        }
+    }
+
+    private void resetAxeHammerUse() {
+        this.toolAxeHammerCounter = 0;
+        this.toolAxeHammerCharge = 0;
+        this.toolAxeHammerTicker = -1;
+        this.axeHammerTool = null;
     }
 
     public enum WeaponUseState {
