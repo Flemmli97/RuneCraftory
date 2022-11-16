@@ -26,7 +26,8 @@ RuneCraftory 1.4.0
 - Tweaked monster stats
 - Taming item not config but tag based now. The tag its checking is "runecraftory:taming/entity_id"
 - Add more stats and shop items
-
+- Add datapack based NPC interaction. Can define dialogues, gifts, looks etc.
+  
 RuneCraftory 1.3.4
 ================
 - Fix a crash using cross dimension teleport sometimes

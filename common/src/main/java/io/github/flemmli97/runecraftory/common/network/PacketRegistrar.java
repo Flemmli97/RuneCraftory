@@ -46,6 +46,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CScreenShake.ID, S2CScreenShake.class, S2CScreenShake::write, S2CScreenShake::read, S2CScreenShake::handle);
         register.registerMessage(id++, S2CWeaponUse.ID, S2CWeaponUse.class, S2CWeaponUse::write, S2CWeaponUse::read, S2CWeaponUse::handle);
         register.registerMessage(id++, S2CCraftingRecipes.ID, S2CCraftingRecipes.class, S2CCraftingRecipes::write, S2CCraftingRecipes::read, S2CCraftingRecipes::handle);
+        register.registerMessage(id++, S2CNPCLook.ID, S2CNPCLook.class, S2CNPCLook::write, S2CNPCLook::read, S2CNPCLook::handle);
         return id;
     }
 

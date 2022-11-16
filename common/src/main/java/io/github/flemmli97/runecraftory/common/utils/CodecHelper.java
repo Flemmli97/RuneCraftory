@@ -17,7 +17,6 @@ public class CodecHelper {
             try {
                 return Enum.valueOf(clss, s);
             } catch (IllegalArgumentException e) {
-
                 return fallback;
             }
         }, Enum::name);

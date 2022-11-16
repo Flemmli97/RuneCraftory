@@ -143,7 +143,7 @@ public class TendCropsGoal extends Goal {
             if (block instanceof CropBlock crop && crop.isMaxAge(state)) {
                 this.breakBlock((ServerLevel) this.entity.level, this.selected, this.entity.getCropInventory() != null ?
                         s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
-                CropProperties props = DataPackHandler.getCropStat(crop.getCloneItemStack(this.entity.level, this.selected, state).getItem());
+                CropProperties props = DataPackHandler.cropManager().get(crop.getCloneItemStack(this.entity.level, this.selected, state).getItem());
                 if (props != null && props.regrowable()) {
                     this.entity.level.setBlock(this.selected, crop.getStateForAge(0), Block.UPDATE_ALL);
                 }

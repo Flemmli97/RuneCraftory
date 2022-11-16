@@ -793,7 +793,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (stack.getItem() == ModItems.objectX.get())
             ItemObjectX.applyEffect(this, stack);
         this.removeFoodEffect();
-        FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
+        FoodProperties food = DataPackHandler.foodManager().get(stack.getItem());
         if (food == null) {
             net.minecraft.world.food.FoodProperties mcFood = stack.getItem().getFoodProperties();
             this.eat(this.level, stack);

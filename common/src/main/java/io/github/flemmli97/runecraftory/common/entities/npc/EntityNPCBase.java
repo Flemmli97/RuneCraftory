@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.npc;
 import com.google.common.collect.ImmutableList;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
+import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -11,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.ai.AvoidWhenNotFollowing;
 import io.github.flemmli97.runecraftory.common.entities.ai.LookAtAliveGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.LookAtInteractingPlayerGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NPCFindPOI;
 import io.github.flemmli97.runecraftory.common.entities.ai.NPCFollowGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NPCWanderGoal;
@@ -21,6 +23,7 @@ import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
+import io.github.flemmli97.runecraftory.common.network.S2CNPCLook;
 import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateNPCData;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
@@ -43,14 +46,17 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -88,6 +94,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -95,23 +102,22 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimated {
 
-    private static final EntityDataAccessor<Integer> entityLevel = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Float> levelXP = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Boolean> playDeathState = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Byte> shopSync = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Byte> personalitySync = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Boolean> male = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> ENTITY_LEVEL = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> LEVEL_XP = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> SHOP_SYNC = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> MALE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT,
             MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.WALK_TARGET);
@@ -151,7 +157,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private final LevelExpPair levelPair = new LevelExpPair();
 
     private EnumShop shop = EnumShop.NONE;
-    private EnumNPCPersonality personality = EnumNPCPersonality.ALL;
+    private NPCData data = NPCData.DEFAULT_DATA;
+    //Will be used if data returns null for these values
+    private NPCData.NPCLook look;
+    private Map<String, TagKey<Item>> gift = new HashMap<>();
+    //shop, gender
 
     private Activity activity = Activity.IDLE;
 
@@ -169,7 +179,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private int sleepCooldown;
 
     private boolean isStaying;
-    private Set<Integer> interactingPlayers = new HashSet<>();
+    private final List<ServerPlayer> interactingPlayers = new ArrayList<>();
 
     private final NPCSchedule schedule;
 
@@ -223,11 +233,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
         this.goalSelector.addGoal(0, new NPCFindPOI(this));
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYNPC));
         this.goalSelector.addGoal(0, new OpenDoorGoal(this, true));
-        this.goalSelector.addGoal(1, new RandomLookGoalAlive(this));
+        this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYNPC));
         this.goalSelector.addGoal(1, new AvoidWhenNotFollowing(this, LivingEntity.class, 8, 1.3, 1.2));
+        this.goalSelector.addGoal(1, new LookAtInteractingPlayerGoal(this));
         this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
+        this.goalSelector.addGoal(3, new RandomLookGoalAlive(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, true));
         this.goalSelector.addGoal(3, new NPCFollowGoal(this, 1.05, 9, 3, 20));
         this.goalSelector.addGoal(4, this.wander);
@@ -236,27 +247,20 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(entityLevel, LibConstants.baseLevel);
-        this.entityData.define(levelXP, 0f);
-        this.entityData.define(playDeathState, false);
-        this.entityData.define(shopSync, (byte) 0);
-        this.entityData.define(personalitySync, (byte) 0);
-        this.entityData.define(male, false);
+        this.entityData.define(ENTITY_LEVEL, LibConstants.baseLevel);
+        this.entityData.define(LEVEL_XP, 0f);
+        this.entityData.define(PLAY_DEATH_STATE, false);
+        this.entityData.define(SHOP_SYNC, (byte) 0);
+        this.entityData.define(MALE, false);
     }
 
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         if (this.level.isClientSide) {
-            if (key == shopSync) {
+            if (key == SHOP_SYNC) {
                 try {
-                    this.shop = EnumShop.values()[this.entityData.get(shopSync)];
-                } catch (ArrayIndexOutOfBoundsException ignored) {
-                }
-            }
-            if (key == personalitySync) {
-                try {
-                    this.personality = EnumNPCPersonality.values()[this.entityData.get(personalitySync)];
+                    this.shop = EnumShop.values()[this.entityData.get(SHOP_SYNC)];
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
             }
@@ -312,7 +316,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         Platform.INSTANCE.sendToClient(new S2CUpdateNPCData(this, this.getFriendPointData(serverPlayer).save()), serverPlayer);
         Platform.INSTANCE.sendToClient(new S2COpenNPCGui(this, serverPlayer), serverPlayer);
-        this.interactingPlayers.add(serverPlayer.getId());
+        this.interactingPlayers.add(serverPlayer);
         this.lookAt(serverPlayer, 30, 30);
         return InteractionResult.CONSUME;
     }
@@ -337,8 +341,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void giftItem(Player player, ItemStack stack) {
-        boolean react = this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
-                .talkTo(this.level, 15);
+        NPCData.Gift gift = this.giftOf(stack);
+        if (gift != null) {
+            this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
+                    .giftXP(this.level, gift.xp());
+            player.sendMessage(new TranslatableComponent(gift.responseKey(), player.getName()), Util.NIL_UUID);
+        } else {
+            this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
+                    .giftXP(this.level, 15);
+            player.sendMessage(new TranslatableComponent(this.data.neutralGiftResponse(), player.getName()), Util.NIL_UUID);
+        }
         if (!player.isCreative())
             stack.shrink(1);
     }
@@ -346,7 +358,21 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void talkTo(Player player) {
         boolean doGreet = this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
                 .talkTo(this.level, 15);
-        player.sendMessage(new TranslatableComponent("npc.generic.greet", player.getName()), Util.NIL_UUID);
+        int heart = this.playerHearts.get(player.getUUID()).points.getLevel();
+        List<NPCData.Conversation> conversations;
+        if (doGreet) {
+            conversations = this.data.greetings();
+        } else
+            conversations = this.data.conversations();
+        List<NPCData.Conversation> filtered = conversations.stream().filter(c -> c.minHearts() <= heart && c.maxHearts() >= heart).toList();
+        if (!filtered.isEmpty()) {
+            NPCData.Conversation randomLine = filtered.get(this.random.nextInt(filtered.size()));
+            player.sendMessage(new TranslatableComponent(randomLine.translationKey(), player.getName()), Util.NIL_UUID);
+        } else if (!conversations.isEmpty()) {
+            //No matching message so we just send the first one available
+            NPCData.Conversation randomLine = conversations.get(0);
+            player.sendMessage(new TranslatableComponent(randomLine.translationKey(), player.getName()), Util.NIL_UUID);
+        }
     }
 
     @Override
@@ -356,19 +382,19 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public LevelExpPair level() {
-        this.levelPair.setLevel(this.entityData.get(entityLevel));
-        this.levelPair.setXp(this.entityData.get(levelXP));
+        this.levelPair.setLevel(this.entityData.get(ENTITY_LEVEL));
+        this.levelPair.setXp(this.entityData.get(LEVEL_XP));
         return this.levelPair;
     }
 
     @Override
     public void setLevel(int level) {
-        this.entityData.set(entityLevel, Mth.clamp(level, 1, LibConstants.maxMonsterLevel));
+        this.entityData.set(ENTITY_LEVEL, Mth.clamp(level, 1, LibConstants.maxMonsterLevel));
         this.updateStatsToLevel();
     }
 
     public void increaseLevel() {
-        this.entityData.set(entityLevel, Math.min(GeneralConfig.maxLevel, this.level().getLevel() + 1));
+        this.entityData.set(ENTITY_LEVEL, Math.min(GeneralConfig.maxLevel, this.level().getLevel() + 1));
         this.updateStatsToLevel();
     }
 
@@ -376,8 +402,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         LevelExpPair pair = this.level();
         boolean res = pair.addXP(amount, LibConstants.maxMonsterLevel, LevelCalc::xpAmountForLevelUp, () -> {
         });
-        this.entityData.set(entityLevel, pair.getLevel());
-        this.entityData.set(levelXP, pair.getXp());
+        this.entityData.set(ENTITY_LEVEL, pair.getLevel());
+        this.entityData.set(LEVEL_XP, pair.getXp());
         if (res)
             this.updateStatsToLevel();
     }
@@ -447,7 +473,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (stack.getItem() == ModItems.objectX.get())
             ItemObjectX.applyEffect(this, stack);
         this.removeFoodEffect();
-        FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
+        FoodProperties food = DataPackHandler.foodManager().get(stack.getItem());
         if (food == null) {
             net.minecraft.world.food.FoodProperties mcFood = stack.getItem().getFoodProperties();
             this.eat(this.level, stack);
@@ -523,11 +549,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public boolean playDeath() {
-        return this.entityData.get(playDeathState);
+        return this.entityData.get(PLAY_DEATH_STATE);
     }
 
     public void setPlayDeath(boolean flag) {
-        this.entityData.set(playDeathState, flag);
+        this.entityData.set(PLAY_DEATH_STATE, flag);
         if (flag) {
             this.getNavigation().stop();
             this.setShiftKeyDown(false);
@@ -568,9 +594,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         super.addAdditionalSaveData(compound);
         compound.put("MobLevel", this.level().save());
         compound.putInt("Shop", this.getShop().ordinal());
-        compound.putInt("Personality", this.getPersonality().ordinal());
         compound.putInt("FoodBuffTick", this.foodBuffTick);
-        compound.putBoolean("PlayDeath", this.entityData.get(playDeathState));
+        compound.putBoolean("PlayDeath", this.entityData.get(PLAY_DEATH_STATE));
 
         CompoundTag heartsTag = new CompoundTag();
         this.playerHearts.forEach((uuid, hearts) -> heartsTag.put(uuid.toString(), hearts.save()));
@@ -584,22 +609,17 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         compound.putBoolean("Staying", this.isStaying);
 
         compound.putBoolean("Male", this.isMale());
+
+        if (this.data != NPCData.DEFAULT_DATA)
+            compound.putString("NPCData", DataPackHandler.npcDataManager().get(this.data).toString());
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.levelPair.read(compound.getCompound("MobLevel"));
-        this.entityData.set(entityLevel, this.levelPair.getLevel());
-        this.entityData.set(levelXP, this.levelPair.getXp());
-        try {
-            this.setShop(EnumShop.values()[compound.getInt("Shop")]);
-        } catch (ArrayIndexOutOfBoundsException ignored) {
-        }
-        try {
-            this.setPersonality(EnumNPCPersonality.values()[compound.getInt("Personality")]);
-        } catch (ArrayIndexOutOfBoundsException ignored) {
-        }
+        this.entityData.set(ENTITY_LEVEL, this.levelPair.getLevel());
+        this.entityData.set(LEVEL_XP, this.levelPair.getXp());
         this.foodBuffTick = compound.getInt("FoodBuffTick");
         this.setPlayDeath(compound.getBoolean("PlayDeath"));
 
@@ -614,7 +634,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.entityToFollowUUID = compound.getUUID("EntityToFollow");
         this.schedule.load(compound.getCompound("Schedule"));
         this.stayHere(compound.getBoolean("Staying"));
-        this.setMale(compound.getBoolean("Male"));
+        if (compound.contains("NPCData"))
+            this.setNPCData(DataPackHandler.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))));
+        if (this.data.gender() == NPCData.Gender.UNDEFINED)
+            this.setMale(compound.getBoolean("Male"));
+        if (this.data.profession() == null) {
+            try {
+                this.setShop(EnumShop.values()[compound.getInt("Shop")]);
+            } catch (ArrayIndexOutOfBoundsException ignored) {
+            }
+        }
     }
 
     @Override
@@ -702,17 +731,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void setShop(EnumShop shop) {
         this.shop = shop;
         if (!this.level.isClientSide)
-            this.entityData.set(shopSync, (byte) shop.ordinal());
+            this.entityData.set(SHOP_SYNC, (byte) shop.ordinal());
     }
 
-    public EnumNPCPersonality getPersonality() {
-        return this.personality;
-    }
-
-    public void setPersonality(EnumNPCPersonality personality) {
-        this.personality = personality;
-        if (!this.level.isClientSide)
-            this.entityData.set(personalitySync, (byte) personality.ordinal());
+    public boolean isShopDefined() {
+        return this.data.profession() != null;
     }
 
     public boolean updateActivity() {
@@ -852,21 +875,53 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.isStaying = flag;
     }
 
-    public void decreaseInteractingPlayers(Player player) {
-        this.interactingPlayers.remove(player.getId());
+    public void decreaseInteractingPlayers(ServerPlayer player) {
+        this.interactingPlayers.remove(player);
+    }
+
+    public ServerPlayer getLastInteractedPlayer() {
+        if (this.interactingPlayers.isEmpty())
+            return null;
+        return this.interactingPlayers.get(this.interactingPlayers.size() - 1);
     }
 
     public boolean isMale() {
-        return this.entityData.get(male);
+        return this.entityData.get(MALE);
     }
 
     public void setMale(boolean flag) {
-        this.entityData.set(male, flag);
+        this.entityData.set(MALE, flag);
+    }
+
+    public NPCData.NPCLook getLook() {
+        if (this.look == null) {
+            if (this.data == NPCData.DEFAULT_DATA)
+                this.look = NPCData.NPCLook.DEFAULT_LOOK;
+            else if (this.data.look() != null)
+                this.look = DataPackHandler.npcLookManager().get(this.data.look());
+            else
+                this.look = DataPackHandler.npcLookManager().getRandom(this.random, this.isMale());
+        }
+        return this.look;
+    }
+
+    public void setClientLook(NPCData.NPCLook look) {
+        if (this.level.isClientSide)
+            this.look = look;
+    }
+
+    public NPCData.Gift giftOf(ItemStack stack) {
+        for (Map.Entry<String, NPCData.Gift> e : this.data.giftItems().entrySet()) {
+            TagKey<Item> tag = e.getValue().item() == null ? this.gift.computeIfAbsent(e.getKey(), s -> DataPackHandler.nameAndGiftManager().getRandomGift(NPCData.GiftType.ofXP(e.getValue().xp()), this.random)) : e.getValue().item();
+            if (tag == null || stack.is(tag))
+                return e.getValue();
+        }
+        return null;
     }
 
     public void openShopForPlayer(ServerPlayer player) {
         if (this.canTrade() == ShopState.OPEN) {
-            this.interactingPlayers.add(player.getId());
+            this.interactingPlayers.add(player);
             Platform.INSTANCE.getPlayerData(player).map(d -> {
                 if (EntityNPCBase.this.getShop() != EnumShop.NONE) {
                     return d.getShop(this.getShop());
@@ -892,9 +947,38 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void randomizeData() {
-        this.setPersonality(EnumNPCPersonality.values()[this.random.nextInt(EnumNPCPersonality.values().length)]);
-        this.setShop(EnumShop.values()[this.random.nextInt(EnumShop.values().length)]);
+        this.setNPCData(DataPackHandler.npcDataManager().getRandom(this.random));
         this.schedule.load(new NPCSchedule(this, this.random).save());
-        this.setMale(this.random.nextBoolean());
+    }
+
+    public void setNPCData(NPCData data) {
+        this.data = data;
+        this.setShop(this.data.profession() != null ? this.data.profession() : EnumShop.values()[this.random.nextInt(EnumShop.values().length)]);
+        this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
+        String name;
+        if (this.data.name() != null) {
+            name = this.data.name();
+            if (this.data.surname() != null)
+                name += " " + this.data.surname();
+            this.setCustomName(new TextComponent(name));
+        } else {
+            name = DataPackHandler.nameAndGiftManager().getRandomName(this.random, this.isMale());
+            if (name != null) {
+                String surname = DataPackHandler.nameAndGiftManager().getRandomSurname(this.random);
+                if (surname != null)
+                    name = name + " " + surname;
+                this.setCustomName(new TextComponent(name));
+            }
+        }
+        if (this.data == NPCData.DEFAULT_DATA)
+            this.look = NPCData.NPCLook.DEFAULT_LOOK;
+        else
+            this.look = this.data.look() != null ? DataPackHandler.npcLookManager().get(this.data.look()) : DataPackHandler.npcLookManager().getRandom(this.random, this.isMale());
+        Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look), this);
+    }
+
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        Platform.INSTANCE.sendToClient(new S2CNPCLook(this.getId(), this.look), player);
     }
 }

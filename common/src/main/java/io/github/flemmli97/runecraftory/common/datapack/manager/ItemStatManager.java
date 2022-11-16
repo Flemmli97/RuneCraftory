@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class ItemStatManager extends SimpleJsonResourceReloadListener {
 
@@ -44,21 +45,20 @@ public class ItemStatManager extends SimpleJsonResourceReloadListener {
         super(GSON, "item_stats");
     }
 
-    public ItemStat get(Item item) {
+    public Optional<ItemStat> get(Item item) {
         if (GeneralConfig.disableItemStatSystem)
-            return null;
+            return Optional.empty();
         ResourceLocation res = PlatformUtils.INSTANCE.items().getIDFrom(item);
         ItemStat stat = this.itemstat.get(res);
         if (stat != null) {
-            return stat;
+            return Optional.of(stat);
         }
         if (!this.itemstatTag.isEmpty()) {
             return item.builtInRegistryHolder().tags()
                     .filter(this.itemstatTag::containsKey)
-                    .findFirst().map(this.itemstatTag::get)
-                    .orElse(null);
+                    .findFirst().map(t -> this.itemstatTag.get(t));
         }
-        return null;
+        return Optional.empty();
     }
 
     public Collection<Pair<ItemStack, ItemStat>> all() {

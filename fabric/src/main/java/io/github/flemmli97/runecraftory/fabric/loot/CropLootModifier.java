@@ -58,7 +58,7 @@ public class CropLootModifier {
     private boolean insertMerge(List<ItemStack> list, ItemStack stack) {
         if (this.remove == null || this.remove == Items.AIR)
             return false;
-        CropProperties prop = DataPackHandler.getCropStat(this.remove);
+        CropProperties prop = DataPackHandler.cropManager().get(this.remove);
         if (prop != null) {
             for (ItemStack s : list) {
                 if (ItemStack.isSameItemSameTags(s, stack)) {

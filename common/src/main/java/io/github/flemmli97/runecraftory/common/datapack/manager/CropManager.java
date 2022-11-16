@@ -18,6 +18,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class CropManager extends SimpleJsonResourceReloadListener {
@@ -31,6 +32,7 @@ public class CropManager extends SimpleJsonResourceReloadListener {
         super(GSON, "crop_properties");
     }
 
+    @Nullable
     public CropProperties get(Item item) {
         if (GeneralConfig.disableCropSystem)
             return null;

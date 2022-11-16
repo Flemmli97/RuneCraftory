@@ -182,7 +182,7 @@ public class EntityCalls {
     public static void cropRightClickHarvest(Player player, BlockState state, BlockPos pos) {
         if (!player.level.isClientSide && state.getBlock() instanceof CropBlock crop) {
             if (crop.isMaxAge(state)) {
-                CropProperties props = DataPackHandler.getCropStat(crop.getCloneItemStack(player.level, pos, state).getItem());
+                CropProperties props = DataPackHandler.cropManager().get(crop.getCloneItemStack(player.level, pos, state).getItem());
                 if (!player.level.isClientSide) {
                     crop.playerDestroy(player.level, player, pos, state, null, ItemStack.EMPTY);
                 }
@@ -202,7 +202,7 @@ public class EntityCalls {
 
     public static boolean onTryBonemeal(Level level, ItemStack stack, BlockState state, BlockPos pos) {
         if (!level.isClientSide && state.getBlock() instanceof CropBlock crop) {
-            CropProperties props = DataPackHandler.getCropStat(crop.getCloneItemStack(level, pos, state).getItem());
+            CropProperties props = DataPackHandler.cropManager().get(crop.getCloneItemStack(level, pos, state).getItem());
             if (props != null) {
                 BlockPos below = pos.below();
                 BlockState belowState = level.getBlockState(below);
@@ -238,7 +238,7 @@ public class EntityCalls {
                 ((IBaseMob) entity).applyFoodEffect(stack);
                 return;
             }
-            FoodProperties prop = DataPackHandler.getFoodStat(stack.getItem());
+            FoodProperties prop = DataPackHandler.foodManager().get(stack.getItem());
             if (prop == null) {
                 if (entity instanceof ServerPlayer player && stack.isEdible()) {
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EATING, 0.1f));

@@ -73,7 +73,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
     private void removeNoneBuyable() {
         ImmutableMap.Builder<EnumShop, Collection<ShopItemProperties>> b = ImmutableMap.builder();
         ImmutableMap.Builder<EnumShop, Collection<ShopItemProperties>> bD = ImmutableMap.builder();
-        b.put(EnumShop.RANDOM, DataPackHandler.getAll()
+        b.put(EnumShop.RANDOM, DataPackHandler.itemStatManager().all()
                 .stream().filter(p -> p.getSecond().getBuy() > 0)
                 .map(p -> new ShopItemProperties(p.getFirst(), false))
                 .toList());
@@ -81,7 +81,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
             if (s != EnumShop.RANDOM) {
                 Collection<ShopItemProperties> newCollection = new ArrayList<>();
                 c.forEach(stack -> {
-                    if (DataPackHandler.getStats(stack.stack().getItem()).map(ItemStat::getBuy).orElse(0) > 0)
+                    if (DataPackHandler.itemStatManager().get(stack.stack().getItem()).map(ItemStat::getBuy).orElse(0) > 0)
                         newCollection.add(stack);
                 });
                 b.put(s, ImmutableList.copyOf(newCollection));
@@ -90,7 +90,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
         this.shopItemsDefaults.forEach((s, c) -> {
             Collection<ShopItemProperties> newCollection = new ArrayList<>();
             c.forEach(stack -> {
-                if (DataPackHandler.getStats(stack.stack().getItem()).map(ItemStat::getBuy).orElse(0) > 0)
+                if (DataPackHandler.itemStatManager().get(stack.stack().getItem()).map(ItemStat::getBuy).orElse(0) > 0)
                     newCollection.add(stack);
             });
             bD.put(s, ImmutableList.copyOf(newCollection));

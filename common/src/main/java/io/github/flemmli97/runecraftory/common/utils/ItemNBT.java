@@ -55,7 +55,7 @@ public class ItemNBT {
     public static Map<Attribute, Double> statIncrease(ItemStack stack) {
         CompoundTag compound = getItemNBT(stack);
         if (compound == null || !compound.contains(LibNBT.Stats)) {
-            return DataPackHandler.getStats(stack.getItem()).map(ItemStat::itemStats).orElse(new TreeMap<>(ModAttributes.sorted));
+            return DataPackHandler.itemStatManager().get(stack.getItem()).map(ItemStat::itemStats).orElse(new TreeMap<>(ModAttributes.sorted));
         }
         CompoundTag tag = compound.getCompound(LibNBT.Stats);
         Map<Attribute, Double> map = new TreeMap<>(ModAttributes.sorted);
@@ -87,7 +87,7 @@ public class ItemNBT {
                 return EnumElement.NONE;
             }
         }
-        return shouldHaveElement(stack) ? DataPackHandler.getStats(stack.getItem()).map(ItemStat::element).orElse(EnumElement.NONE) : EnumElement.NONE;
+        return shouldHaveElement(stack) ? DataPackHandler.itemStatManager().get(stack.getItem()).map(ItemStat::element).orElse(EnumElement.NONE) : EnumElement.NONE;
     }
 
     public static ItemStack addUpgradeItem(ItemStack stack, ItemStack stackToAdd, boolean crafting) {
@@ -131,10 +131,10 @@ public class ItemNBT {
         boolean hasObjectX = tag.getBoolean(LibNBT.ObjectX);
         if (stackToAdd.getItem() == ModItems.objectX.get())
             tag.putBoolean(LibNBT.ObjectX, !hasObjectX);
-        ItemStat stat = DataPackHandler.getStats(stackToAdd.getItem()).orElse(null);
+        ItemStat stat = DataPackHandler.itemStatManager().get(stackToAdd.getItem()).orElse(null);
         if (stat != null) {
             if (!tag.contains(LibNBT.Stats) && !stat.itemStats().isEmpty()) {
-                ItemStat base = DataPackHandler.getStats(stack.getItem()).orElse(null);
+                ItemStat base = DataPackHandler.itemStatManager().get(stack.getItem()).orElse(null);
                 if (base != null) {
                     CompoundTag statsTag = new CompoundTag();
                     for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {

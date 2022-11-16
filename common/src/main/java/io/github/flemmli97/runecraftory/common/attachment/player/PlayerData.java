@@ -530,7 +530,7 @@ public class PlayerData {
     public void refreshShop(Player player) {
         if (!player.level.isClientSide) {
             for (EnumShop profession : EnumShop.values()) {
-                Collection<ShopItemProperties> datapack = DataPackHandler.get(profession);
+                Collection<ShopItemProperties> datapack = DataPackHandler.shopItemsManager().get(profession);
                 List<ItemStack> shopItems = new ArrayList<>();
                 datapack.forEach(item -> {
                     if (!item.needsSpecialUnlocking() && this.shippedItems.containsKey(PlatformUtils.INSTANCE.items().getIDFrom(item.stack().getItem())))
@@ -545,7 +545,7 @@ public class PlayerData {
                     if (shopItems.isEmpty() || (profession == EnumShop.RANDOM && shop.size() >= InventoryShop.shopSize))
                         break;
                 }
-                DataPackHandler.getDefaultItems(profession).forEach(item -> shopItems.add(item.stack().copy()));
+                DataPackHandler.shopItemsManager().getDefaultItems(profession).forEach(item -> shopItems.add(item.stack().copy()));
                 this.shopItems.put(profession, shop);
             }
         }
@@ -572,7 +572,7 @@ public class PlayerData {
 
     public void applyFoodEffect(Player player, ItemStack stack) {
         this.removeFoodEffect(player);
-        FoodProperties prop = DataPackHandler.getFoodStat(stack.getItem());
+        FoodProperties prop = DataPackHandler.foodManager().get(stack.getItem());
         Map<Attribute, Double> gain = prop.effects();
         prop.effectsMultiplier().forEach((att, d) -> {
             float percent = (float) (d * 0.01f);

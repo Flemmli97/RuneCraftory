@@ -1,88 +1,86 @@
 package io.github.flemmli97.runecraftory.common.datapack;
 
-import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
-import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
-import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
-import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.common.datapack.manager.CropManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.FoodManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ItemStatManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameAndGiftManager;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 
-import javax.annotation.Nullable;
-import java.util.Collection;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class DataPackHandler {
 
-    private static ItemStatManager itemStats = new ItemStatManager();
-    private static CropManager crops = new CropManager();
-    private static FoodManager foods = new FoodManager();
-    private static ShopItemsManager shopItems = new ShopItemsManager();
+    private static final ItemStatManager ITEM_STATS = new ItemStatManager();
+    private static final CropManager CROPS = new CropManager();
+    private static final FoodManager FOODS = new FoodManager();
+    private static final ShopItemsManager SHOP_ITEMS = new ShopItemsManager();
+    private static final NameAndGiftManager NAME_AND_GIFTS = new NameAndGiftManager();
+    private static final NPCDataManager NPC_DATA = new NPCDataManager();
+    private static final NPCLookManager NPC_LOOKS = new NPCLookManager();
 
     public static void reloadItemStats(Consumer<PreparableReloadListener> cons) {
-        cons.accept(itemStats);
+        cons.accept(ITEM_STATS);
     }
 
     public static void reloadCropManager(Consumer<PreparableReloadListener> cons) {
-        cons.accept(crops);
+        cons.accept(CROPS);
     }
 
     public static void reloadFoodManager(Consumer<PreparableReloadListener> cons) {
-        cons.accept(foods);
+        cons.accept(FOODS);
     }
 
     public static void reloadShopItems(Consumer<PreparableReloadListener> cons) {
-        cons.accept(shopItems);
+        cons.accept(SHOP_ITEMS);
     }
 
-    public static Optional<ItemStat> getStats(Item item) {
-        return Optional.ofNullable(itemStats.get(item));
+    public static void reloadNPCData(Consumer<PreparableReloadListener> cons) {
+        cons.accept(NAME_AND_GIFTS);
+        cons.accept(NPC_DATA);
+        cons.accept(NPC_LOOKS);
     }
 
-    public static Collection<Pair<ItemStack, ItemStat>> getAll() {
-        return itemStats.all();
+    public static ItemStatManager itemStatManager() {
+        return ITEM_STATS;
     }
 
-    public static CropProperties getCropStat(Item item) {
-        return crops.get(item);
+    public static CropManager cropManager() {
+        return CROPS;
     }
 
-    @Nullable
-    public static FoodProperties getFoodStat(Item item) {
-        return foods.get(item);
+    public static FoodManager foodManager() {
+        return FOODS;
     }
 
-    public static Collection<ShopItemProperties> get(EnumShop shop) {
-        return shopItems.get(shop);
+    public static ShopItemsManager shopItemsManager() {
+        return SHOP_ITEMS;
     }
 
-    public static Collection<ShopItemProperties> getDefaultItems(EnumShop shop) {
-        return shopItems.getDefaultItems(shop);
+    public static NameAndGiftManager nameAndGiftManager() {
+        return NAME_AND_GIFTS;
+    }
+
+    public static NPCDataManager npcDataManager() {
+        return NPC_DATA;
+    }
+
+    public static NPCLookManager npcLookManager() {
+        return NPC_LOOKS;
     }
 
     public static void toPacket(FriendlyByteBuf buffer) {
-        itemStats.toPacket(buffer);
-        crops.toPacket(buffer);
-        foods.toPacket(buffer);
+        ITEM_STATS.toPacket(buffer);
+        CROPS.toPacket(buffer);
+        FOODS.toPacket(buffer);
     }
 
     public static void fromPacket(FriendlyByteBuf buffer) {
-        if (itemStats == null)
-            itemStats = new ItemStatManager();
-        if (crops == null)
-            crops = new CropManager();
-        if (foods == null)
-            foods = new FoodManager();
-        itemStats.fromPacket(buffer);
-        crops.fromPacket(buffer);
-        foods.fromPacket(buffer);
+        ITEM_STATS.fromPacket(buffer);
+        CROPS.fromPacket(buffer);
+        FOODS.fromPacket(buffer);
     }
 }

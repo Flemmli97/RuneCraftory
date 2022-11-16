@@ -332,7 +332,7 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(ModTags.tamingTag(ModEntities.goblin.get()))
                 .add(ModItems.oldBandage.get());
         this.tag(ModTags.tamingTag(ModEntities.goblinArcher.get()))
-                .addTag(ModTags.tamingTag(ModEntities.goblinArcher.get()));
+                .addTag(ModTags.tamingTag(ModEntities.goblin.get()));
         this.tag(ModTags.tamingTag(ModEntities.duck.get()))
                 .add(ModItems.fur.get())
                 .add(Items.FEATHER);

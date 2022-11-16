@@ -125,19 +125,19 @@ public class ClientCalls {
         List<Component> tooltip = new ArrayList<>();
         boolean shift = Screen.hasShiftDown();
         List<Component> debug = new ArrayList<>();
-        DataPackHandler.getStats(stack.getItem()).ifPresent(stat -> {
+        DataPackHandler.itemStatManager().get(stack.getItem()).ifPresent(stat -> {
             tooltip.addAll(stat.texts(stack, shift));
             if (flag.isAdvanced())
                 debug.add(new TranslatableComponent("tooltip.debug.stat", stat.getId().toString()).withStyle(ChatFormatting.GRAY));
         });
-        CropProperties props = DataPackHandler.getCropStat(stack.getItem());
+        CropProperties props = DataPackHandler.cropManager().get(stack.getItem());
         if (props != null) {
             tooltip.addAll(props.texts());
             if (flag.isAdvanced())
                 debug.add(new TranslatableComponent("tooltip.debug.crop", props.getId().toString()).withStyle(ChatFormatting.GRAY));
         }
         if (shift) {
-            FoodProperties food = DataPackHandler.getFoodStat(stack.getItem());
+            FoodProperties food = DataPackHandler.foodManager().get(stack.getItem());
             if (food != null) {
                 if (stack.getItem() instanceof ItemMedicine)
                     tooltip.addAll(food.medicineText((ItemMedicine) stack.getItem(), stack));

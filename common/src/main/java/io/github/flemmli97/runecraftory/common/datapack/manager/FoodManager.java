@@ -21,6 +21,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 
 public class FoodManager extends SimpleJsonResourceReloadListener {
@@ -36,6 +37,7 @@ public class FoodManager extends SimpleJsonResourceReloadListener {
         super(GSON, "food_stats");
     }
 
+    @Nullable
     public FoodProperties get(Item item) {
         if (GeneralConfig.disableFoodSystem)
             return null;

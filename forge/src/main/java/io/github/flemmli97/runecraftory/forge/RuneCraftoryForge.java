@@ -135,6 +135,7 @@ public class RuneCraftoryForge {
         DataPackHandler.reloadCropManager(event::addListener);
         DataPackHandler.reloadFoodManager(event::addListener);
         DataPackHandler.reloadShopItems(event::addListener);
+        DataPackHandler.reloadNPCData(event::addListener);
     }
 
     private void tweakVanillaAttribute(Attribute attribute, double value) {

@@ -39,7 +39,7 @@ public class CraftingUtils {
     public static int upgradeCost(EnumCrafting type, PlayerData data, ItemStack stack, ItemStack ingredient, boolean onlyIngredient) {
         if (!GeneralConfig.useRP)
             return 0;
-        return DataPackHandler.getStats(ingredient.getItem()).map(stat -> {
+        return DataPackHandler.itemStatManager().get(ingredient.getItem()).map(stat -> {
             if (stat.getDiff() <= 0)
                 return -1;
             if (onlyIngredient || !stack.isEmpty()) {
@@ -66,7 +66,7 @@ public class CraftingUtils {
             int cost = recipe.getBaseCost();
             int additionalMaterial = 0;
             for (ItemStack items : bonusItems) {
-                additionalMaterial += DataPackHandler.getStats(items.getItem()).map(ItemStat::getDiff).orElse(10);
+                additionalMaterial += DataPackHandler.itemStatManager().get(items.getItem()).map(ItemStat::getDiff).orElse(10);
             }
             cost += additionalMaterial;
             if (!unlocked && GeneralConfig.recipeSystem.lockedCostMore)
@@ -88,7 +88,7 @@ public class CraftingUtils {
         }
         int additionalMaterial = 0;
         for (ItemStack items : bonusItems) {
-            additionalMaterial += DataPackHandler.getStats(items.getItem()).map(s -> {
+            additionalMaterial += DataPackHandler.itemStatManager().get(items.getItem()).map(s -> {
                 if (skillLevel >= s.getDiff()) {
                     return s.getDiff();
                 } else {
@@ -126,7 +126,7 @@ public class CraftingUtils {
 
     private static int xpForUpgrade(EnumSkills skill, ItemStack equip, ItemStack upgrade, int skillLevel) {
         int base = (int) (LevelCalc.getBaseXP(skill) * 1.5);
-        int difficulty = DataPackHandler.getStats(upgrade.getItem()).map(ItemStat::getDiff).orElse(0);
+        int difficulty = DataPackHandler.itemStatManager().get(upgrade.getItem()).map(ItemStat::getDiff).orElse(0);
         int xp = base + ItemNBT.itemLevel(equip);
         if (skillLevel < difficulty)
             xp += 2 * difficulty - skillLevel;

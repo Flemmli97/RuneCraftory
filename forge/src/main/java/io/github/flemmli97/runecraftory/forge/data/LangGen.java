@@ -533,7 +533,22 @@ public class LangGen implements DataProvider {
         this.add("npc.shop.money.no", "You don't have enough money");
         this.add("npc.shop.success", "Thank you for your purchase");
 
-        this.add("npc.generic.greet", "Hello %s");
+        this.add("npc.default.greeting", "Hello %s");
+        this.add("npc.default.talk", "Hi %s");
+        this.add("npc.default.gift.neutral", "Thank you for your gift");
+
+        this.add("npc.generic.greeting.1", "Hello %s");
+        this.add("npc.generic.greeting.2", "Hi. How are you %s?");
+        this.add("npc.generic.talk.1", "This is random line 1");
+        this.add("npc.generic.talk.2", "This is random line 2");
+        this.add("npc.generic.dislike", "Eh... thanks i guess?");
+        this.add("npc.generic.like", "Thanks %s for the gift. I really like this.");
+
+        this.add("npc.generic.2.greeting.1", "Hello %s");
+        this.add("npc.generic.2.greeting.2", "Hi. How are you %s?");
+        this.add("npc.generic.2.talk.1", "This is random line 1");
+        this.add("npc.generic.2.talk.2", "This is random line 2");
+        this.add("npc.generic.2.default.gift", "Thank you for your gift");
 
         this.add("runecraftory.advancements.root.title", "Runecraftory");
         this.add("runecraftory.advancements.root.description", "A minecrafty harvest moon");
@@ -732,6 +747,7 @@ public class LangGen implements DataProvider {
         SEASON,
         DEATH,
         ITEMGROUP,
+        NPC,
         OTHER;
 
         public static LangType get(String s) {
@@ -761,6 +777,8 @@ public class LangGen implements DataProvider {
                 return DEATH;
             if (s.startsWith("itemGroup."))
                 return ITEMGROUP;
+            if (s.startsWith("npc."))
+                return NPC;
             return OTHER;
         }
     }

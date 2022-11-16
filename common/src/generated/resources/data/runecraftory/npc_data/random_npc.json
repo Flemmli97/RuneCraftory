@@ -1,0 +1,39 @@
+{
+  "gender": "UNDEFINED",
+  "weight": 50,
+  "conversations": [
+    {
+      "translationKey": "npc.generic.talk.1",
+      "minHearts": 0,
+      "maxHearts": 10
+    },
+    {
+      "translationKey": "npc.generic.talk.2",
+      "minHearts": 0,
+      "maxHearts": 10
+    }
+  ],
+  "greetings": [
+    {
+      "translationKey": "npc.generic.greeting.1",
+      "minHearts": 0,
+      "maxHearts": 10
+    },
+    {
+      "translationKey": "npc.generic.greeting.2",
+      "minHearts": 0,
+      "maxHearts": 10
+    }
+  ],
+  "neutralGiftResponse": "npc.generic.default.gift",
+  "giftItems": {
+    "dislike": {
+      "responseKey": "npc.generic.dislike",
+      "xp": -10
+    },
+    "like": {
+      "responseKey": "npc.generic.like",
+      "xp": 25
+    }
+  }
+}
