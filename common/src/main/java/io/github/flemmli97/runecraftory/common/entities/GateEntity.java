@@ -118,7 +118,7 @@ public class GateEntity extends Mob implements IBaseMob {
 
     @Override
     public void setLevel(int lvl) {
-        this.entityData.set(mobLevel, Mth.clamp(lvl, 1, LibConstants.maxMonsterLevel));
+        this.entityData.set(mobLevel, Mth.clamp(lvl, 1, LibConstants.MAX_MONSTER_LEVEL));
     }
 
     @Override
@@ -159,7 +159,7 @@ public class GateEntity extends Mob implements IBaseMob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(elementType, "none");
-        this.entityData.define(mobLevel, LibConstants.baseLevel);
+        this.entityData.define(mobLevel, LibConstants.BASE_LEVEL);
         this.entityData.define(element, 0);
     }
 

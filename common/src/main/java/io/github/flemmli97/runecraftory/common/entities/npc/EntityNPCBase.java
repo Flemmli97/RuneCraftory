@@ -247,7 +247,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ENTITY_LEVEL, LibConstants.baseLevel);
+        this.entityData.define(ENTITY_LEVEL, LibConstants.BASE_LEVEL);
         this.entityData.define(LEVEL_XP, 0f);
         this.entityData.define(PLAY_DEATH_STATE, false);
         this.entityData.define(SHOP_SYNC, (byte) 0);
@@ -387,7 +387,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public void setLevel(int level) {
-        this.entityData.set(ENTITY_LEVEL, Mth.clamp(level, 1, LibConstants.maxMonsterLevel));
+        this.entityData.set(ENTITY_LEVEL, Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL));
         this.updateStatsToLevel();
     }
 
@@ -398,7 +398,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void addXp(float amount) {
         LevelExpPair pair = this.level();
-        boolean res = pair.addXP(amount, LibConstants.maxMonsterLevel, LevelCalc::xpAmountForLevelUp, () -> {
+        boolean res = pair.addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
         });
         this.entityData.set(ENTITY_LEVEL, pair.getLevel());
         this.entityData.set(LEVEL_XP, pair.getXp());
@@ -410,34 +410,34 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
-            inst.removeModifier(LibConstants.attributeLevelMod);
+            inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcHealthGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcHealthGain * multiplier, AttributeModifier.Operation.ADDITION));
             this.setHealth(this.getMaxHealth() - preHealthDiff);
         }
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
-            inst.removeModifier(LibConstants.attributeLevelMod);
+            inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.RF_DEFENCE.get());
         if (inst != null) {
-            inst.removeModifier(LibConstants.attributeLevelMod);
+            inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.RF_MAGIC.get());
         if (inst != null) {
-            inst.removeModifier(LibConstants.attributeLevelMod);
+            inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcMagicAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcMagicAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get());
         if (inst != null) {
-            inst.removeModifier(LibConstants.attributeLevelMod);
+            inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcMagicDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcMagicDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
         }
     }
 
@@ -486,15 +486,15 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             AttributeInstance inst = this.getAttribute(entry.getKey());
             if (inst == null)
                 continue;
-            inst.removeModifier(LibConstants.foodUUIDMulti);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.foodUUIDMulti, "foodBuffMulti_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
+            inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID_MULTI, "foodBuffMulti_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
         }
         for (Map.Entry<Attribute, Double> entry : food.effects().entrySet()) {
             AttributeInstance inst = this.getAttribute(entry.getKey());
             if (inst == null)
                 continue;
-            inst.removeModifier(LibConstants.foodUUID);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.foodUUID, "foodBuff_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.ADDITION));
+            inst.removeModifier(LibConstants.FOOD_UUID);
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID, "foodBuff_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.ADDITION));
         }
         this.foodBuffTick = food.duration();
         EntityUtils.foodHealing(this, food.getHPGain());
@@ -514,8 +514,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void removeFoodEffect() {
         ((AttributeMapAccessor) this.getAttributes())
                 .getAttributes().values().forEach(inst -> {
-                    inst.removeModifier(LibConstants.foodUUID);
-                    inst.removeModifier(LibConstants.foodUUIDMulti);
+                    inst.removeModifier(LibConstants.FOOD_UUID);
+                    inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
                 });
     }
 

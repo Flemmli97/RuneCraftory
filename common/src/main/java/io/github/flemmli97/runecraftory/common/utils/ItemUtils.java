@@ -101,9 +101,9 @@ public class ItemUtils {
         return stat.getBuy();
     }
 
-    public static float getShieldEfficiency(Player player) {
-        if (player.getMainHandItem().getItem() instanceof IItemUsable)
-            return ((IItemUsable) player.getMainHandItem().getItem()).getWeaponType().getShieldEfficiency();
+    public static float getShieldEfficiency(LivingEntity entity) {
+        if (entity.getMainHandItem().getItem() instanceof IItemUsable)
+            return ((IItemUsable) entity.getMainHandItem().getItem()).getWeaponType().getShieldEfficiency();
         return 1;
     }
 }

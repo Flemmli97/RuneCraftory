@@ -32,7 +32,7 @@ public class RuneCraftoryEggItem extends SpawnEgg {
     @Override
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof IBaseMob && stack.hasCustomHoverName()) {
-            int level = LibConstants.baseLevel;
+            int level = LibConstants.BASE_LEVEL;
             try {
                 level = Integer.parseInt(stack.getHoverName().getContents());
             } catch (NumberFormatException ignored) {

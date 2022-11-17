@@ -121,18 +121,18 @@ public class PlayerData {
 
     public void setMaxHealth(Player player, float amount, boolean asBaseHealth) {
         AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
-        AttributeModifier modifier = health.getModifier(LibConstants.maxHealthModifier);
+        AttributeModifier modifier = health.getModifier(LibConstants.MAX_HEALTH_MODIFIER);
         double val = amount - (asBaseHealth ? health.getBaseValue() : health.getValue());
         if (modifier != null && !asBaseHealth)
             val += modifier.getAmount();
-        health.removeModifier(LibConstants.maxHealthModifier);
-        health.addPermanentModifier(new AttributeModifier(LibConstants.maxHealthModifier, "rf.hpModifier", val, AttributeModifier.Operation.ADDITION));
+        health.removeModifier(LibConstants.MAX_HEALTH_MODIFIER);
+        health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_MODIFIER, "rf.hpModifier", val, AttributeModifier.Operation.ADDITION));
     }
 
     private void setFoodHealthBonus(Player player, double amount) {
         AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
-        health.removeModifier(LibConstants.foodMaxHealthModifier);
-        health.addPermanentModifier(new AttributeModifier(LibConstants.foodMaxHealthModifier, "rf.food.hpModifier", amount, AttributeModifier.Operation.ADDITION));
+        health.removeModifier(LibConstants.FOOD_MAX_HEALTH_MODIFIER);
+        health.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MAX_HEALTH_MODIFIER, "rf.food.hpModifier", amount, AttributeModifier.Operation.ADDITION));
     }
 
     public int getRunePoints() {
@@ -360,10 +360,10 @@ public class PlayerData {
             }
             case HP -> {
                 AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
-                AttributeModifier modifier = health.getModifier(LibConstants.maxHealthItemIncrease);
+                AttributeModifier modifier = health.getModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
                 double val = modifier == null ? 0 : modifier.getAmount();
-                health.removeModifier(LibConstants.maxHealthItemIncrease);
-                health.addPermanentModifier(new AttributeModifier(LibConstants.maxHealthModifier, "rf.item.hpModifier", val + 10, AttributeModifier.Operation.ADDITION));
+                health.removeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
+                health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_MODIFIER, "rf.item.hpModifier", val + 10, AttributeModifier.Operation.ADDITION));
             }
         }
     }
@@ -388,7 +388,7 @@ public class PlayerData {
             }
             case HP -> {
                 AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
-                health.removeModifier(LibConstants.maxHealthItemIncrease);
+                health.removeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
             }
         }
     }
@@ -456,8 +456,8 @@ public class PlayerData {
     private void setPlayerAttTo(ServerPlayer player, Attribute att, double val) {
         AttributeInstance inst = player.getAttribute(att);
         if (inst != null) {
-            inst.removeModifier(LibConstants.equipmentModifier);
-            inst.addTransientModifier(new AttributeModifier(LibConstants.equipmentModifier, "rf.equipment.mod", val, AttributeModifier.Operation.ADDITION));
+            inst.removeModifier(LibConstants.EQUIPMENT_MODIFIER);
+            inst.addTransientModifier(new AttributeModifier(LibConstants.EQUIPMENT_MODIFIER, "rf.equipment.mod", val, AttributeModifier.Operation.ADDITION));
         }
     }
 
@@ -698,8 +698,8 @@ public class PlayerData {
         }
         if (nbt.contains("MaxHP") && player != null) {
             AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
-            health.removeModifier(LibConstants.maxHealthModifier);
-            health.addPermanentModifier(new AttributeModifier(LibConstants.maxHealthModifier, "rf.hpModifier", nbt.getDouble("MaxHP"), AttributeModifier.Operation.ADDITION));
+            health.removeModifier(LibConstants.MAX_HEALTH_MODIFIER);
+            health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_MODIFIER, "rf.hpModifier", nbt.getDouble("MaxHP"), AttributeModifier.Operation.ADDITION));
         }
         this.money = nbt.getInt("Money");
         this.str = nbt.getFloat("Strength");
@@ -745,7 +745,7 @@ public class PlayerData {
         if (player == null) {
             nbt.putInt("RunePoints", this.runePoints);
         } else if (!player.isAlive()) {
-            AttributeModifier modifier = player.getAttribute(Attributes.MAX_HEALTH).getModifier(LibConstants.maxHealthModifier);
+            AttributeModifier modifier = player.getAttribute(Attributes.MAX_HEALTH).getModifier(LibConstants.MAX_HEALTH_MODIFIER);
             if (modifier != null)
                 nbt.putDouble("MaxHP", modifier.getAmount());
             nbt.putFloat("DeathHP", player.getMaxHealth() * GeneralConfig.deathHPPercent);

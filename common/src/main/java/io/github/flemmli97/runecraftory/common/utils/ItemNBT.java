@@ -87,7 +87,7 @@ public class ItemNBT {
                 return EnumElement.NONE;
             }
         }
-        return shouldHaveElement(stack) ? DataPackHandler.itemStatManager().get(stack.getItem()).map(ItemStat::element).orElse(EnumElement.NONE) : EnumElement.NONE;
+        return isWeapon(stack) ? DataPackHandler.itemStatManager().get(stack.getItem()).map(ItemStat::element).orElse(EnumElement.NONE) : EnumElement.NONE;
     }
 
     public static ItemStack addUpgradeItem(ItemStack stack, ItemStack stackToAdd, boolean crafting) {
@@ -151,7 +151,7 @@ public class ItemNBT {
             }
             if (!tag.contains(LibNBT.Element))
                 tag.putString(LibNBT.Element, getElement(stack).toString());
-            if (shouldHaveElement(stack)) {
+            if (isWeapon(stack)) {
                 EnumElement current = getElement(stack);
                 if (stat.element() != EnumElement.NONE) {
                     if (current == EnumElement.NONE) {
@@ -197,7 +197,7 @@ public class ItemNBT {
         return shouldHaveStats(stack);
     }
 
-    public static boolean shouldHaveElement(ItemStack stack) {
+    public static boolean isWeapon(ItemStack stack) {
         return stack.getItem() instanceof IItemUsable;
     }
 

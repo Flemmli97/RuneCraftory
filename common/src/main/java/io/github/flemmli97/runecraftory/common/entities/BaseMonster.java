@@ -328,7 +328,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(owner, Optional.empty());
-        this.entityData.define(entityLevel, LibConstants.baseLevel);
+        this.entityData.define(entityLevel, LibConstants.BASE_LEVEL);
         this.entityData.define(levelXP, 0f);
         this.entityData.define(moveFlags, (byte) 0);
         this.entityData.define(behaviourData, 0);
@@ -772,7 +772,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public void setLevel(int level) {
-        this.entityData.set(entityLevel, Mth.clamp(level, 1, LibConstants.maxMonsterLevel));
+        this.entityData.set(entityLevel, Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL));
         this.updateStatsToLevel();
     }
 
@@ -808,15 +808,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             AttributeInstance inst = this.getAttribute(entry.getKey());
             if (inst == null)
                 continue;
-            inst.removeModifier(LibConstants.foodUUIDMulti);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.foodUUIDMulti, "foodBuffMulti_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
+            inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID_MULTI, "foodBuffMulti_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
         }
         for (Map.Entry<Attribute, Double> entry : food.effects().entrySet()) {
             AttributeInstance inst = this.getAttribute(entry.getKey());
             if (inst == null)
                 continue;
-            inst.removeModifier(LibConstants.foodUUID);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.foodUUID, "foodBuff_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.ADDITION));
+            inst.removeModifier(LibConstants.FOOD_UUID);
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID, "foodBuff_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.ADDITION));
         }
         this.foodBuffTick = food.duration();
         EntityUtils.foodHealing(this, food.getHPGain());
@@ -836,8 +836,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void removeFoodEffect() {
         ((AttributeMapAccessor) this.getAttributes())
                 .getAttributes().values().forEach(inst -> {
-                    inst.removeModifier(LibConstants.foodUUID);
-                    inst.removeModifier(LibConstants.foodUUIDMulti);
+                    inst.removeModifier(LibConstants.FOOD_UUID);
+                    inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
                 });
     }
 
@@ -846,9 +846,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.prop.getAttributeGains().forEach((att, val) -> {
             AttributeInstance inst = this.getAttribute(att);
             if (inst != null) {
-                inst.removeModifier(LibConstants.attributeLevelMod);
+                inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
                 float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-                inst.addPermanentModifier(new AttributeModifier(LibConstants.attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * val * multiplier, AttributeModifier.Operation.ADDITION));
                 if (att == Attributes.MAX_HEALTH)
                     this.setHealth(this.getMaxHealth() - preHealthDiff);
             }
@@ -862,7 +862,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public void addXp(float amount) {
         LevelExpPair pair = this.level();
-        boolean res = pair.addXP(amount, LibConstants.maxMonsterLevel, LevelCalc::xpAmountForLevelUp, () -> {
+        boolean res = pair.addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
         });
         this.entityData.set(entityLevel, pair.getLevel());
         this.entityData.set(levelXP, pair.getXp());
