@@ -85,8 +85,9 @@ public abstract class NPCDataProvider implements DataProvider {
     }
 
     public void addNPCData(String id, NPCData data) {
-        if (data.look() == null)
-            this.data.put(new ResourceLocation(this.modid, id), data);
+        if (data.look() != null && !this.looks.containsKey(data.look()))
+            throw new IllegalStateException("NPC has look defined but there is no such look registered");
+        this.data.put(new ResourceLocation(this.modid, id), data);
     }
 
     public void addNPCDataWithLook(String id, NPCData data, NPCData.NPCLook look) {

@@ -359,19 +359,17 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         boolean doGreet = this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
                 .talkTo(this.level, 15);
         int heart = this.playerHearts.get(player.getUUID()).points.getLevel();
-        List<NPCData.Conversation> conversations;
+        NPCData.ConversationSet conversations;
         if (doGreet) {
-            conversations = this.data.greetings();
+            conversations = this.data.interactions().get(NPCData.ConversationType.GREETING);
         } else
-            conversations = this.data.conversations();
-        List<NPCData.Conversation> filtered = conversations.stream().filter(c -> c.minHearts() <= heart && c.maxHearts() >= heart).toList();
+            conversations = this.data.interactions().get(NPCData.ConversationType.TALK);
+        List<NPCData.Conversation> filtered = conversations.conversations().stream().filter(c -> c.minHearts() <= heart && c.maxHearts() >= heart).toList();
         if (!filtered.isEmpty()) {
             NPCData.Conversation randomLine = filtered.get(this.random.nextInt(filtered.size()));
             player.sendMessage(new TranslatableComponent(randomLine.translationKey(), player.getName()), Util.NIL_UUID);
-        } else if (!conversations.isEmpty()) {
-            //No matching message so we just send the first one available
-            NPCData.Conversation randomLine = conversations.get(0);
-            player.sendMessage(new TranslatableComponent(randomLine.translationKey(), player.getName()), Util.NIL_UUID);
+        } else {
+            player.sendMessage(new TranslatableComponent(conversations.fallbackKey(), player.getName()), Util.NIL_UUID);
         }
     }
 

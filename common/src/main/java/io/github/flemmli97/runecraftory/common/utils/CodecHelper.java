@@ -13,13 +13,15 @@ import java.util.function.Supplier;
 public class CodecHelper {
 
     public static <T extends Enum<T>> Codec<T> enumCodec(Class<T> clss, T fallback) {
-        return Codec.STRING.xmap(s -> {
+        return Codec.STRING.flatXmap(s -> {
             try {
-                return Enum.valueOf(clss, s);
+                return DataResult.success(Enum.valueOf(clss, s));
             } catch (IllegalArgumentException e) {
-                return fallback;
+                if (fallback != null)
+                    return DataResult.success(fallback);
+                return DataResult.error("No such enum constant " + s + " for class " + clss);
             }
-        }, Enum::name);
+        }, e -> DataResult.success(e.name()));
     }
 
     public static <T> Codec<T> ofCustomRegistry(Supplier<SimpleRegistryWrapper<T>> registry, ResourceKey<? extends Registry<T>> key) {

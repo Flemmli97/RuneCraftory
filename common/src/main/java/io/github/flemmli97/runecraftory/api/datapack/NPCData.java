@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.api.datapack;
 
+import com.google.common.collect.ImmutableMap;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
@@ -16,28 +18,50 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
+import java.util.function.Function;
 
 public record NPCData(@Nullable String name, @Nullable String surname,
                       Gender gender, EnumShop profession, @Nullable ResourceLocation look,
                       int weight, String neutralGiftResponse,
-                      List<Conversation> greetings,
-                      List<Conversation> conversations,
+                      Map<ConversationType, ConversationSet> interactions,
                       Map<String, Gift> giftItems) {
 
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, null, null, 1, "npc.default.gift.neutral",
-            List.of(new Conversation("npc.default.greeting", 0, 10)),
-            List.of(new Conversation("npc.default.talk", 0, 10)), Map.of());
+            buildDefaultInteractionMap(), Map.of());
+
+    private static Map<ConversationType, ConversationSet> buildDefaultInteractionMap() {
+        ImmutableMap.Builder<ConversationType, ConversationSet> builder = new ImmutableMap.Builder<>();
+        for (ConversationType type : ConversationType.values())
+            builder.put(type, new ConversationSet("npc.default" + type.key + ".default", List.of()));
+        return builder.build();
+    }
+
+    public static <E extends Enum<?>, T> Codec<Map<E, T>> filledMap(Class<E> enumClss, Codec<Map<E, T>> codec) {
+        return codec.flatXmap(filledMapCheck(enumClss), filledMapCheck(enumClss));
+    }
+
+    public static <E extends Enum<?>, T> Function<Map<E, T>, DataResult<Map<E, T>>> filledMapCheck(Class<E> enumClss) {
+        return map -> {
+            E[] enums = enumClss.getEnumConstants();
+            for (E e : enums)
+                if (!map.containsKey(e)) {
+                    return DataResult.error("Map is missing value for " + e);
+                }
+            return DataResult.success(map);
+        };
+    }
 
     public static final Codec<NPCData> CODEC = RecordCodecBuilder.create(inst ->
             inst.group(
+                    ResourceLocation.CODEC.optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look)),
                     Codec.STRING.fieldOf("neutralGiftResponse").forGetter(d -> d.neutralGiftResponse),
                     Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("giftItems").forGetter(d -> d.giftItems),
-
-                    ResourceLocation.CODEC.optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look)),
-                    ExtraCodecs.nonEmptyList(Conversation.CODEC.listOf()).fieldOf("conversations").forGetter(d -> d.conversations),
-                    ExtraCodecs.nonEmptyList(Conversation.CODEC.listOf()).fieldOf("greetings").forGetter(d -> d.greetings),
+                    filledMap(ConversationType.class, Codec.unboundedMap(CodecHelper.enumCodec(ConversationType.class, null), ConversationSet.CODEC))
+                            .fieldOf("interactions").forGetter(d -> d.interactions),
 
                     CodecHelper.enumCodec(EnumShop.class, null).optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession)),
                     ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
@@ -45,13 +69,27 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
                     CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender)
-            ).apply(inst, ((neutralGift, giftItems, look, conversations, greetings, profession, weight, name, surname, gender) -> new NPCData(name.orElse(null), surname.orElse(null),
-                    gender, profession.orElse(null), look.orElse(null), weight, neutralGift, greetings, conversations, giftItems))));
+            ).apply(inst, ((look, neutralGift, giftItems, interactions, profession, weight, name, surname, gender) -> new NPCData(name.orElse(null), surname.orElse(null),
+                    gender, profession.orElse(null), look.orElse(null), weight, neutralGift, interactions, giftItems))));
 
     public enum Gender {
         UNDEFINED,
         MALE,
-        FEMALE;
+        FEMALE
+    }
+
+    public enum ConversationType {
+
+        GREETING("greeting"),
+        TALK("talk"),
+        FOLLOWYES("follow.yes"),
+        FOLLOWNO("follow.no");
+
+        public final String key;
+
+        ConversationType(String key) {
+            this.key = key;
+        }
     }
 
     public static class Builder {
@@ -62,8 +100,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final int weight;
         private String neutralGiftResponse;
         private EnumShop profession;
-        private final List<Conversation> greetings = new ArrayList<>();
-        private final List<Conversation> conversations = new ArrayList<>();
+        private final Map<ConversationType, ConversationSet> interactions = new TreeMap<>();
         private final Map<String, Gift> giftItems = new LinkedHashMap<>();
         private ResourceLocation look;
 
@@ -81,13 +118,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             this.surname = surname;
             this.gender = gender;
             if (this.name != null) {
-                this.neutralGiftResponse = "npc." + name + ".default.gift";
+                this.neutralGiftResponse = "npc." + name.toLowerCase(Locale.ROOT) + ".default.gift";
             }
-        }
-
-        public Builder withDefaultConvosOfName(String name) {
-            this.neutralGiftResponse = "npc." + name + ".default.gift";
-            return this;
         }
 
         public Builder setNeutralGiftResponse(String neutralGiftResponse) {
@@ -105,13 +137,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder addGreeting(Conversation greeting) {
-            this.greetings.add(greeting);
-            return this;
-        }
-
-        public Builder addConversation(Conversation conversation) {
-            this.conversations.add(conversation);
+        public Builder addInteraction(ConversationType type, ConversationSet.Builder set) {
+            this.interactions.put(type, set.build());
             return this;
         }
 
@@ -121,9 +148,42 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
 
         public NPCData build() {
-            if (this.greetings.isEmpty() || this.conversations.isEmpty() || this.neutralGiftResponse == null)
-                throw new IllegalStateException("Not all required fields are filled.");
-            return new NPCData(this.name, this.surname, this.gender, this.profession, this.look, this.weight, this.neutralGiftResponse, this.greetings, this.conversations, this.giftItems);
+            if (this.neutralGiftResponse == null)
+                throw new IllegalStateException("Neutral gift response not set.");
+            for (ConversationType type : ConversationType.values()) {
+                if (!this.interactions.containsKey(type))
+                    throw new IllegalStateException("Missing interactions for " + type);
+            }
+            return new NPCData(this.name, this.surname, this.gender, this.profession, this.look, this.weight, this.neutralGiftResponse, this.interactions, this.giftItems);
+        }
+    }
+
+    public record ConversationSet(String fallbackKey, List<Conversation> conversations) {
+
+        public static final Codec<ConversationSet> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        Codec.STRING.fieldOf("fallbackKey").forGetter(d -> d.fallbackKey),
+                        Conversation.CODEC.listOf().fieldOf("conversations").forGetter(d -> d.conversations)
+                ).apply(inst, ConversationSet::new));
+
+
+        public static class Builder {
+
+            private final String fallback;
+            private final List<Conversation> greetings = new ArrayList<>();
+
+            public Builder(String fallback) {
+                this.fallback = fallback;
+            }
+
+            public Builder addConversation(Conversation conversation) {
+                this.greetings.add(conversation);
+                return this;
+            }
+
+            public ConversationSet build() {
+                return new ConversationSet(this.fallback, this.greetings);
+            }
         }
     }
 

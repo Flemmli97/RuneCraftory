@@ -533,22 +533,33 @@ public class LangGen implements DataProvider {
         this.add("npc.shop.money.no", "You don't have enough money");
         this.add("npc.shop.success", "Thank you for your purchase");
 
-        this.add("npc.default.greeting", "Hello %s");
-        this.add("npc.default.talk", "Hi %s");
-        this.add("npc.default.gift.neutral", "Thank you for your gift");
+        this.add("npc.default.greeting.default", "Hello %s.");
+        this.add("npc.default.talk.default", "Hi %s.");
+        this.add("npc.default.follow.yes.default", "Sure %s. Where are we going?");
+        this.add("npc.default.follow.no.default", "Sorry but im busy right now.");
+        this.add("npc.default.gift.neutral", "Thank you for your gift.");
 
+        this.add("npc.generic.greeting.default", "Hello %s");
         this.add("npc.generic.greeting.1", "Hello %s");
         this.add("npc.generic.greeting.2", "Hi. How are you %s?");
+        this.add("npc.generic.talk.default", "This is the default line");
         this.add("npc.generic.talk.1", "This is random line 1");
         this.add("npc.generic.talk.2", "This is random line 2");
+        this.add("npc.generic.follow.yes", "Ok");
+        this.add("npc.generic.follow.no", "Sorry but i decline.");
         this.add("npc.generic.dislike", "Eh... thanks i guess?");
         this.add("npc.generic.like", "Thanks %s for the gift. I really like this.");
+        this.add("npc.generic.gift.default", "Thank you for your gift");
 
-        this.add("npc.generic.2.greeting.1", "Hello %s");
-        this.add("npc.generic.2.greeting.2", "Hi. How are you %s?");
+        this.add("npc.generic.2.greeting.default", "Hello %s");
+        this.add("npc.generic.2.greeting.1", "Howdy %s");
+        this.add("npc.generic.2.greeting.2", "Hi. Whats up %s?");
+        this.add("npc.generic.2.talk.default", "This is random line 1");
         this.add("npc.generic.2.talk.1", "This is random line 1");
         this.add("npc.generic.2.talk.2", "This is random line 2");
-        this.add("npc.generic.2.default.gift", "Thank you for your gift");
+        this.add("npc.generic.2.follow.yes", "Ok");
+        this.add("npc.generic.2.follow.no", "Sorry but i decline.");
+        this.add("npc.generic.2.gift.default", "Thank you for your gift");
 
         this.add("runecraftory.advancements.root.title", "Runecraftory");
         this.add("runecraftory.advancements.root.description", "A minecrafty harvest moon");

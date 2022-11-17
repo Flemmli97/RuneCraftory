@@ -1,31 +1,7 @@
 {
   "gender": "UNDEFINED",
   "weight": 50,
-  "conversations": [
-    {
-      "translationKey": "npc.generic.talk.1",
-      "minHearts": 0,
-      "maxHearts": 10
-    },
-    {
-      "translationKey": "npc.generic.talk.2",
-      "minHearts": 0,
-      "maxHearts": 10
-    }
-  ],
-  "greetings": [
-    {
-      "translationKey": "npc.generic.greeting.1",
-      "minHearts": 0,
-      "maxHearts": 10
-    },
-    {
-      "translationKey": "npc.generic.greeting.2",
-      "minHearts": 0,
-      "maxHearts": 10
-    }
-  ],
-  "neutralGiftResponse": "npc.generic.default.gift",
+  "neutralGiftResponse": "npc.generic.gift.default",
   "giftItems": {
     "dislike": {
       "responseKey": "npc.generic.dislike",
@@ -34,6 +10,46 @@
     "like": {
       "responseKey": "npc.generic.like",
       "xp": 25
+    }
+  },
+  "interactions": {
+    "GREETING": {
+      "fallbackKey": "npc.generic.greeting.default",
+      "conversations": [
+        {
+          "translationKey": "npc.generic.greeting.1",
+          "minHearts": 0,
+          "maxHearts": 10
+        },
+        {
+          "translationKey": "npc.generic.greeting.2",
+          "minHearts": 0,
+          "maxHearts": 10
+        }
+      ]
+    },
+    "TALK": {
+      "fallbackKey": "npc.generic.talk.default",
+      "conversations": [
+        {
+          "translationKey": "npc.generic.talk.1",
+          "minHearts": 0,
+          "maxHearts": 10
+        },
+        {
+          "translationKey": "npc.generic.talk.2",
+          "minHearts": 0,
+          "maxHearts": 10
+        }
+      ]
+    },
+    "FOLLOWYES": {
+      "fallbackKey": "npc.generic.follow.yes",
+      "conversations": []
+    },
+    "FOLLOWNO": {
+      "fallbackKey": "npc.generic.follow.no",
+      "conversations": []
     }
   }
 }

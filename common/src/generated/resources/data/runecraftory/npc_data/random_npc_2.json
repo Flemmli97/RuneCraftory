@@ -1,30 +1,46 @@
 {
   "gender": "UNDEFINED",
   "weight": 50,
-  "conversations": [
-    {
-      "translationKey": "npc.generic.2.talk.1",
-      "minHearts": 0,
-      "maxHearts": 10
+  "neutralGiftResponse": "npc.generic.2.gift.default",
+  "giftItems": {},
+  "interactions": {
+    "GREETING": {
+      "fallbackKey": "npc.generic.2.talk.default",
+      "conversations": [
+        {
+          "translationKey": "npc.generic.2.greeting.1",
+          "minHearts": 0,
+          "maxHearts": 10
+        },
+        {
+          "translationKey": "npc.generic.2.greeting.2",
+          "minHearts": 0,
+          "maxHearts": 10
+        }
+      ]
     },
-    {
-      "translationKey": "npc.generic.2.talk.2",
-      "minHearts": 0,
-      "maxHearts": 10
-    }
-  ],
-  "greetings": [
-    {
-      "translationKey": "npc.generic.2.greeting.1",
-      "minHearts": 0,
-      "maxHearts": 10
+    "TALK": {
+      "fallbackKey": "npc.generic.2.talk.default",
+      "conversations": [
+        {
+          "translationKey": "npc.generic.2.talk.1",
+          "minHearts": 0,
+          "maxHearts": 10
+        },
+        {
+          "translationKey": "npc.generic.2.talk.2",
+          "minHearts": 0,
+          "maxHearts": 10
+        }
+      ]
     },
-    {
-      "translationKey": "npc.generic.2.greeting.2",
-      "minHearts": 0,
-      "maxHearts": 10
+    "FOLLOWYES": {
+      "fallbackKey": "npc.generic.2.follow.yes",
+      "conversations": []
+    },
+    "FOLLOWNO": {
+      "fallbackKey": "npc.generic.2.follow.no",
+      "conversations": []
     }
-  ],
-  "neutralGiftResponse": "npc.generic.2.default.gift",
-  "giftItems": {}
+  }
 }
