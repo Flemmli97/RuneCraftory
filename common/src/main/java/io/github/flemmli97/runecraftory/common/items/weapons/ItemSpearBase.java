@@ -105,16 +105,11 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if (!(player instanceof ServerPlayer))
-            return InteractionResultHolder.pass(itemstack);
-        return Platform.INSTANCE.getPlayerData(player)
-                .map(data -> {
-                    if (hand == InteractionHand.MAIN_HAND && (data.getSkillLevel(EnumSkills.SPEAR).getLevel() >= 5 || player.isCreative())) {
-                        player.startUsingItem(hand);
-                        return InteractionResultHolder.consume(itemstack);
-                    }
-                    return InteractionResultHolder.pass(itemstack);
-                }).orElse(InteractionResultHolder.pass(itemstack));
+        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.SPEAR).getLevel() >= 5).orElse(false)) {
+            player.startUsingItem(hand);
+            return InteractionResultHolder.consume(itemstack);
+        }
+        return InteractionResultHolder.pass(itemstack);
     }
 
     @Override

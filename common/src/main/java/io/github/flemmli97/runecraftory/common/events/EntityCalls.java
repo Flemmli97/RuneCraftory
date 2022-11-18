@@ -70,8 +70,6 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -127,17 +125,11 @@ public class EntityCalls {
         }
         boolean hasWeapon = ItemNBT.isWeapon(entity.getMainHandItem());
         float shieldEfficiency = ItemUtils.getShieldEfficiency(entity);
-        Collection<EquipmentSlot> toRemove = null;
         if (changed.containsKey(EquipmentSlot.MAINHAND)) {
-            boolean hadWeapon = ItemNBT.isWeapon(lastMainhandItem);
             float lastShieldEfficiency = ItemUtils.getShieldEfficiency(lastMainhandItem);
             //Recalc offhand stats if mainhand changed but offhand did not
             if (!changed.containsKey(EquipmentSlot.OFFHAND) && shieldEfficiency != lastShieldEfficiency) {
                 recalcOffhandBonus(entity, entity.getOffhandItem(), shieldEfficiency);
-            }
-            //If player doesnt have a weapon now we remove all attack damage modifiers
-            if (hadWeapon && !hasWeapon) {
-                toRemove = Arrays.stream(EquipmentSlot.values()).toList();
             }
         }
         ItemStack off = changed.get(EquipmentSlot.OFFHAND);
@@ -147,11 +139,13 @@ public class EntityCalls {
         if (entity instanceof ServerPlayer serverPlayer)
             serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(entity.getId(), ((AttributeMapAccessor) entity.getAttributes())
                     .getAttributes().values()));
-        if (toRemove == null && !hasWeapon)
-            toRemove = changed.keySet();
-        AttributeInstance instance = entity.getAttribute(Attributes.ATTACK_DAMAGE);
-        if (toRemove != null && instance != null)
-            toRemove.forEach(slot -> instance.removeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()]));
+        //If player doesnt have a weapon now we remove all attack damage modifiers
+        if (!hasWeapon) {
+            AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);
+            if (inst != null)
+                for (EquipmentSlot slot : EquipmentSlot.values())
+                    inst.removeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()]);
+        }
     }
 
     private static void reAddAttackDamage(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
