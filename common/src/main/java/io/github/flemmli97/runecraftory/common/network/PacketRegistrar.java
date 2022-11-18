@@ -28,7 +28,6 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CDataPackSync.ID, S2CDataPackSync.class, S2CDataPackSync::write, S2CDataPackSync::read, S2CDataPackSync::handle);
         register.registerMessage(id++, S2CEntityDataSync.ID, S2CEntityDataSync.class, S2CEntityDataSync::write, S2CEntityDataSync::read, S2CEntityDataSync::handle);
         register.registerMessage(id++, S2CEntityDataSyncAll.ID, S2CEntityDataSyncAll.class, S2CEntityDataSyncAll::write, S2CEntityDataSyncAll::read, S2CEntityDataSyncAll::handle);
-        register.registerMessage(id++, S2CEquipmentUpdate.ID, S2CEquipmentUpdate.class, S2CEquipmentUpdate::write, S2CEquipmentUpdate::read, S2CEquipmentUpdate::handle);
         register.registerMessage(id++, S2CFoodPkt.ID, S2CFoodPkt.class, S2CFoodPkt::write, S2CFoodPkt::read, S2CFoodPkt::handle);
         register.registerMessage(id++, S2CItemStatBoost.ID, S2CItemStatBoost.class, S2CItemStatBoost::write, S2CItemStatBoost::read, S2CItemStatBoost::handle);
         register.registerMessage(id++, S2CLevelPkt.ID, S2CLevelPkt.class, S2CLevelPkt::write, S2CLevelPkt::read, S2CLevelPkt::handle);

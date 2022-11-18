@@ -165,7 +165,7 @@ public class PlatformImpl implements Platform {
 
     @Override
     public boolean canEquip(ItemStack stack, EquipmentSlot slot, LivingEntity entity) {
-        return Mob.getEquipmentSlotForItem(stack) == slot;
+        return LivingEntity.getEquipmentSlotForItem(stack) == slot;
     }
 
     @Override

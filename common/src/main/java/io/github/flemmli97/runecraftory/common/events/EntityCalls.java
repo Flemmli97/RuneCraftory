@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.events;
 
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
@@ -34,6 +33,7 @@ import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
@@ -59,7 +59,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -122,34 +121,31 @@ public class EntityCalls {
      * the main hand.
      */
     public static void updateEquipmentNew(LivingEntity entity, Map<EquipmentSlot, ItemStack> changed, ItemStack lastMainhandItem) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            //Readd attack damage to unchanged slots. This is to make sure the client gets send the correct data
+            if (!changed.containsKey(slot)) {
+                reAddAttackDamage(entity, entity.getItemBySlot(slot), slot);
+            }
+        }
         boolean hasWeapon = ItemNBT.isWeapon(entity.getMainHandItem());
+        float shieldEfficiency = ItemUtils.getShieldEfficiency(entity);
         Collection<EquipmentSlot> toRemove = null;
         if (changed.containsKey(EquipmentSlot.MAINHAND)) {
             boolean hadWeapon = ItemNBT.isWeapon(lastMainhandItem);
-            if (!hadWeapon && hasWeapon) {
-                for (EquipmentSlot slot : EquipmentSlot.values()) {
-                    if (slot == EquipmentSlot.MAINHAND || changed.containsKey(slot))
-                        continue;
-                    ItemStack stackInSlot = entity.getItemBySlot(slot);
-                    Multimap<Attribute, AttributeModifier> mod = stackInSlot.getAttributeModifiers(slot);
-                    mod.get(Attributes.ATTACK_DAMAGE).stream().filter(m -> m.getId().equals(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()])).findAny()
-                            .ifPresent(m -> {
-                                AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);
-                                if (inst != null)
-                                    inst.addTransientModifier(m);
-                            });
-                }
-                //We tell the client here after all bonuses were readded
-                if (entity instanceof ServerPlayer serverPlayer)
-                    serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(entity.getId(), ((AttributeMapAccessor) entity.getAttributes())
-                            .getAttributes().values()));
-                return;
+            float lastShieldEfficiency = ItemUtils.getShieldEfficiency(lastMainhandItem);
+            //Recalc offhand stats if mainhand changed but offhand did not
+            if (!changed.containsKey(EquipmentSlot.OFFHAND) && shieldEfficiency != lastShieldEfficiency) {
+                recalcOffhandBonus(entity, entity.getOffhandItem(), shieldEfficiency);
             }
+            //If player doesnt have a weapon now we remove all attack damage modifiers
             if (hadWeapon && !hasWeapon) {
                 toRemove = Arrays.stream(EquipmentSlot.values()).toList();
             }
         }
-        //Telling the client the attribute values before damage is removed so players now the potential damage
+        ItemStack off = changed.get(EquipmentSlot.OFFHAND);
+        if (off != null)
+            recalcOffhandBonus(entity, off, shieldEfficiency);
+        //Telling the client the attribute values before damage is removed so players know the potential damage
         if (entity instanceof ServerPlayer serverPlayer)
             serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(entity.getId(), ((AttributeMapAccessor) entity.getAttributes())
                     .getAttributes().values()));
@@ -158,6 +154,26 @@ public class EntityCalls {
         AttributeInstance instance = entity.getAttribute(Attributes.ATTACK_DAMAGE);
         if (toRemove != null && instance != null)
             toRemove.forEach(slot -> instance.removeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()]));
+    }
+
+    private static void reAddAttackDamage(LivingEntity entity, ItemStack stack, EquipmentSlot slot) {
+        stack.getAttributeModifiers(slot).get(Attributes.ATTACK_DAMAGE).forEach(mod -> {
+            AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);
+            if (inst != null) {
+                inst.removeModifier(mod);
+                inst.addTransientModifier(mod);
+            }
+        });
+    }
+
+    private static void recalcOffhandBonus(LivingEntity entity, ItemStack stack, float efficiency) {
+        stack.getAttributeModifiers(EquipmentSlot.OFFHAND).forEach((att, mod) -> {
+            AttributeInstance inst = entity.getAttribute(att);
+            if (inst != null) {
+                inst.removeModifier(mod);
+                inst.addTransientModifier(new AttributeModifier(mod.getId(), mod.getName(), mod.getAmount() * efficiency, mod.getOperation()));
+            }
+        });
     }
 
     public static boolean playerAttack(Player player, Entity target) {

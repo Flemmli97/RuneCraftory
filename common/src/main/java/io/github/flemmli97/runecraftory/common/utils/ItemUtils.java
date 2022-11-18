@@ -102,8 +102,12 @@ public class ItemUtils {
     }
 
     public static float getShieldEfficiency(LivingEntity entity) {
-        if (entity.getMainHandItem().getItem() instanceof IItemUsable)
-            return ((IItemUsable) entity.getMainHandItem().getItem()).getWeaponType().getShieldEfficiency();
+        return getShieldEfficiency(entity.getMainHandItem());
+    }
+
+    public static float getShieldEfficiency(ItemStack stack) {
+        if (stack.getItem() instanceof IItemUsable usable)
+            return usable.getWeaponType().getShieldEfficiency();
         return 1;
     }
 }

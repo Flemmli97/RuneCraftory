@@ -12,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemStatIncrease;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
-import io.github.flemmli97.runecraftory.common.network.S2CEquipmentUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2CFoodPkt;
 import io.github.flemmli97.runecraftory.common.network.S2CItemStatBoost;
 import io.github.flemmli97.runecraftory.common.network.S2CLevelPkt;
@@ -27,7 +26,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
@@ -41,8 +39,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
@@ -51,7 +47,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +56,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.function.Function;
 
 public class PlayerData {
@@ -75,18 +69,10 @@ public class PlayerData {
     private float vit = GeneralConfig.startingVit;
     private float intel = GeneralConfig.startingIntel;
     private float strAdd, vitAdd, intAdd;
-    private Map<Attribute, Double> headBonus = new HashMap<>();
-    private Map<Attribute, Double> bodyBonus = new HashMap<>();
-    private Map<Attribute, Double> legsBonus = new HashMap<>();
-    private Map<Attribute, Double> feetBonus = new HashMap<>();
-    private Map<Attribute, Double> mainHandBonus = new HashMap<>();
-    private Map<Attribute, Double> offHandBonus = new HashMap<>();
-    private float shieldEfficiency = -1;
     /**
      * first number is level, second is the xp a.k.a. percent to next level
      */
-    private LevelExpPair levelN = new LevelExpPair();
-    //private final Map<EnumSkills, int[]> skillMap = new HashMap<>();
+    private final LevelExpPair level = new LevelExpPair();
     private final EnumMap<EnumSkills, LevelExpPair> skillMapN = new EnumMap<>(EnumSkills.class);
 
     private final InventorySpells spells = new InventorySpells();
@@ -244,12 +230,12 @@ public class PlayerData {
     }
 
     public LevelExpPair getPlayerLevel() {
-        return this.levelN;
+        return this.level;
     }
 
     public void setPlayerLevel(Player player, int level, float xpAmount, boolean recalc) {
-        this.levelN.setLevel(Mth.clamp(level, 1, GeneralConfig.maxLevel));
-        this.levelN.setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForLevelUp(level)));
+        this.level.setLevel(Mth.clamp(level, 1, GeneralConfig.maxLevel));
+        this.level.setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForLevelUp(level)));
         if (player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
                 this.recalculateStats(serverPlayer, true);
@@ -259,9 +245,9 @@ public class PlayerData {
     }
 
     public void addXp(Player player, float amount) {
-        if (this.levelN.getLevel() >= GeneralConfig.maxLevel)
+        if (this.level.getLevel() >= GeneralConfig.maxLevel)
             return;
-        boolean levelUp = this.levelN.addXP(amount, GeneralConfig.maxLevel, LevelCalc::xpAmountForLevelUp, () -> this.onLevelUp(player));
+        boolean levelUp = this.level.addXP(amount, GeneralConfig.maxLevel, LevelCalc::xpAmountForLevelUp, () -> this.onLevelUp(player));
         if (levelUp) {
             player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
@@ -283,7 +269,7 @@ public class PlayerData {
     }
 
     public void recalculateStats(ServerPlayer player, boolean regen) {
-        int lvl = this.levelN.getLevel() - 1;
+        int lvl = this.level.getLevel() - 1;
         this.setMaxHealth(player, GeneralConfig.hpPerLevel * lvl + GeneralConfig.startingHealth + this.skillVal(SkillProperties::healthIncrease).intValue(), true);
         this.runePointsMax = GeneralConfig.rpPerLevel * lvl + GeneralConfig.startingRP + this.skillVal(SkillProperties::rpIncrease).intValue();
         if (regen) {
@@ -393,90 +379,8 @@ public class PlayerData {
         }
     }
 
-    public void updateEquipmentStats(Player player, EquipmentSlot slot) {
-        ItemStack stack = player.getItemBySlot(slot);
-        switch (slot) {
-            case CHEST -> {
-                this.bodyBonus = ItemNBT.statIncrease(stack);
-                if (player.level.isClientSide) {
-                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
-                            this.bodyBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
-                }
-            }
-            case FEET -> {
-                this.feetBonus = ItemNBT.statIncrease(stack);
-                if (player.level.isClientSide) {
-                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
-                            this.feetBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
-                }
-            }
-            case HEAD -> {
-                this.headBonus = ItemNBT.statIncrease(stack);
-                if (player.level.isClientSide) {
-                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
-                            this.headBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
-                }
-            }
-            case LEGS -> {
-                this.legsBonus = ItemNBT.statIncrease(stack);
-                if (player.level.isClientSide) {
-                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
-                            this.legsBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
-                }
-            }
-            case MAINHAND -> {
-                this.mainHandBonus = ItemNBT.statIncrease(stack);
-                float eff = this.shieldEfficiency;
-                this.shieldEfficiency = ItemUtils.getShieldEfficiency(player);
-                if (eff != this.shieldEfficiency && !this.offHandBonus.isEmpty())
-                    this.updateEquipmentStats(player, EquipmentSlot.OFFHAND);
-                if (player.level.isClientSide) {
-                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
-                            this.mainHandBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
-                    this.mainHandBonus.merge(Attributes.ATTACK_DAMAGE, (double) EnchantmentHelper.getDamageBonus(stack, MobType.UNDEFINED), (prev, v) -> prev += v);
-                }
-            }
-            case OFFHAND -> {
-                Map<Attribute, Double> inc = Platform.INSTANCE.isShield(stack, player) ? ItemNBT.statIncrease(stack) : new TreeMap<>(ModAttributes.sorted);
-                inc.replaceAll((att, val) -> this.shieldEfficiency * val);
-                this.offHandBonus = inc;
-                if (player.level.isClientSide) {
-                    stack.getAttributeModifiers(slot).forEach((att, mod) ->
-                            this.offHandBonus.merge(att, mod.getAmount(), (prev, v) -> prev += v));
-                }
-            }
-        }
-        if (player instanceof ServerPlayer serverPlayer) {
-            this.setPlayerAttTo(serverPlayer, Attributes.MAX_HEALTH, this.equipmentBonus(Attributes.MAX_HEALTH));
-            this.setPlayerAttTo(serverPlayer, Attributes.MOVEMENT_SPEED, this.equipmentBonus(Attributes.MOVEMENT_SPEED));
-            Platform.INSTANCE.sendToClient(new S2CEquipmentUpdate(slot), serverPlayer);
-        }
-    }
-
-    private void setPlayerAttTo(ServerPlayer player, Attribute att, double val) {
-        AttributeInstance inst = player.getAttribute(att);
-        if (inst != null) {
-            inst.removeModifier(LibConstants.EQUIPMENT_MODIFIER);
-            inst.addTransientModifier(new AttributeModifier(LibConstants.EQUIPMENT_MODIFIER, "rf.equipment.mod", val, AttributeModifier.Operation.ADDITION));
-        }
-    }
-
-    private double equipmentBonus(Attribute att) {
-        return this.headBonus.getOrDefault(att, 0d) +
-                this.bodyBonus.getOrDefault(att, 0d) +
-                this.legsBonus.getOrDefault(att, 0d) +
-                this.feetBonus.getOrDefault(att, 0d) +
-                this.mainHandBonus.getOrDefault(att, 0d) +
-                this.offHandBonus.getOrDefault(att, 0d);
-    }
-
     public double getAttributeValue(Player player, Attribute att) {
-        double val = Math.floor(this.headBonus.getOrDefault(att, 0d) +
-                this.bodyBonus.getOrDefault(att, 0d) +
-                this.legsBonus.getOrDefault(att, 0d) +
-                this.feetBonus.getOrDefault(att, 0d) +
-                this.mainHandBonus.getOrDefault(att, 0d) +
-                this.offHandBonus.getOrDefault(att, 0d));
+        double val = 0;
         float vit = this.getVit() + this.vitAdd;
         if (att == Attributes.ATTACK_DAMAGE)
             val += this.getStr() + this.strAdd;
@@ -705,7 +609,7 @@ public class PlayerData {
         this.str = nbt.getFloat("Strength");
         this.vit = nbt.getFloat("Vitality");
         this.intel = nbt.getFloat("Intelligence");
-        this.levelN.read(nbt.get("Level"));
+        this.level.read(nbt.get("Level"));
         this.strAdd = nbt.getFloat("StrengthBonus");
         this.vitAdd = nbt.getFloat("VitalityBonus");
         this.intAdd = nbt.getFloat("IntelligenceBonus");
@@ -755,7 +659,7 @@ public class PlayerData {
         nbt.putFloat("Strength", this.str);
         nbt.putFloat("Vitality", this.vit);
         nbt.putFloat("Intelligence", this.intel);
-        nbt.put("Level", this.levelN.save());
+        nbt.put("Level", this.level.save());
         nbt.putFloat("StrengthBonus", this.strAdd);
         nbt.putFloat("VitalityBonus", this.vitAdd);
         nbt.putFloat("IntelligenceBonus", this.intAdd);
