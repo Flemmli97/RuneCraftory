@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
-import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.values.SkillProperties;
@@ -12,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemStatIncrease;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
+import io.github.flemmli97.runecraftory.common.network.S2CEquipmentUpdate;
 import io.github.flemmli97.runecraftory.common.network.S2CFoodPkt;
 import io.github.flemmli97.runecraftory.common.network.S2CItemStatBoost;
 import io.github.flemmli97.runecraftory.common.network.S2CLevelPkt;
@@ -21,11 +21,11 @@ import io.github.flemmli97.runecraftory.common.network.S2CPlayerStats;
 import io.github.flemmli97.runecraftory.common.network.S2CRunePoints;
 import io.github.flemmli97.runecraftory.common.network.S2CSkillLevelPkt;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
@@ -39,6 +39,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
@@ -47,6 +49,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +59,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 
 public class PlayerData {
@@ -360,7 +364,6 @@ public class PlayerData {
                 this.strAdd = 0;
                 if (player instanceof ServerPlayer serverPlayer)
                     Platform.INSTANCE.sendToClient(new S2CItemStatBoost(type, true), serverPlayer);
-                this.strAdd = 0;
             }
             case INT -> {
                 this.intAdd = 0;
@@ -595,16 +598,6 @@ public class PlayerData {
         this.unlockedRecipes = nbt.getBoolean("UnlockedRecipes");
         this.runePointsMax = nbt.getFloat("MaxRunePoints");
         this.runePoints = nbt.getInt("RunePoints");
-        if (nbt.contains("DeathHP") && player != null) {
-            float f = nbt.getFloat("DeathHP");
-            if (f > 0)
-                player.setHealth(f);
-        }
-        if (nbt.contains("MaxHP") && player != null) {
-            AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
-            health.removeModifier(LibConstants.MAX_HEALTH_MODIFIER);
-            health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_MODIFIER, "rf.hpModifier", nbt.getDouble("MaxHP"), AttributeModifier.Operation.ADDITION));
-        }
         this.money = nbt.getInt("Money");
         this.str = nbt.getFloat("Strength");
         this.vit = nbt.getFloat("Vitality");
@@ -639,21 +632,32 @@ public class PlayerData {
         if (player instanceof ServerPlayer serverPlayer && serverPlayer.connection != null) {
             this.recalculateStats(serverPlayer, false);
         }
+        if (nbt.contains("RestoreHP") && player instanceof ServerPlayer serverPlayer) {
+            float f = nbt.getFloat("RestoreHP");
+            //Sheduling the health update in case other mods modify max health
+            serverPlayer.getServer().tell(new TickTask(1, () -> player.setHealth(f)));
+        }
         this.walkingTracker.read(nbt.getCompound("WalkingTracker"));
     }
 
-    public CompoundTag writeToNBT(CompoundTag nbt, Player player) {
+    public CompoundTag writeToNBTPlain(CompoundTag nbt) {
+        return this.writeToNBT(nbt, null, false);
+    }
+
+    public CompoundTag writeToNBT(CompoundTag nbt, Player player, boolean wasDead) {
         nbt.putBoolean("Starting", this.starting);
         nbt.putBoolean("UnlockedRecipes", this.unlockedRecipes);
         nbt.putFloat("MaxRunePoints", this.runePointsMax);
         if (player == null) {
             nbt.putInt("RunePoints", this.runePoints);
-        } else if (!player.isAlive()) {
-            AttributeModifier modifier = player.getAttribute(Attributes.MAX_HEALTH).getModifier(LibConstants.MAX_HEALTH_MODIFIER);
-            if (modifier != null)
-                nbt.putDouble("MaxHP", modifier.getAmount());
-            nbt.putFloat("DeathHP", player.getMaxHealth() * GeneralConfig.deathHPPercent);
-            nbt.putInt("RunePoints", (int) (this.runePointsMax * GeneralConfig.deathRPPercent));
+        } else {
+            if (wasDead) {
+                nbt.putFloat("RestoreHP", player.getMaxHealth() * GeneralConfig.deathHPPercent);
+                nbt.putInt("RunePoints", (int) (this.runePointsMax * GeneralConfig.deathRPPercent));
+            } else {
+                nbt.putFloat("RestoreHP", player.getHealth());
+                nbt.putInt("RunePoints", this.runePoints);
+            }
         }
         nbt.putInt("Money", this.money);
         nbt.putFloat("Strength", this.str);
@@ -696,7 +700,7 @@ public class PlayerData {
         PlayerData newData = new PlayerData();
         newData.spells.load(this.spells.save());
         newData.shipping.load(this.shipping.save());
-        this.readFromNBT(newData.writeToNBT(new CompoundTag(), null), null);
+        this.readFromNBT(newData.writeToNBTPlain(new CompoundTag()), null);
         this.recalculateStats(player, false);
         this.starting = false;
         this.tamedEntity.reset();

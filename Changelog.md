@@ -30,6 +30,13 @@ RuneCraftory 1.4.0
 - Stat system now use vanilla attribute system instead of a separate one.  
   Makes it so stats are now applied to mobs too instead of only the player
 
+RuneCraftory 1.3.5
+================
+- Fix player data not saved when travelling from the end
+- Also fix data not syncing to client when changing dimensions
+- Fix default element not saved when upgrading item
+- Make carried item not reset when opening the extended inventory menu
+
 RuneCraftory 1.3.4
 ================
 - Fix a crash using cross dimension teleport sometimes

@@ -15,7 +15,7 @@ public class PlayerCap extends PlayerData implements ICapabilitySerializable<Com
 
     @Override
     public CompoundTag serializeNBT() {
-        return this.writeToNBT(new CompoundTag(), null);
+        return this.writeToNBTPlain(new CompoundTag());
     }
 
     @Override

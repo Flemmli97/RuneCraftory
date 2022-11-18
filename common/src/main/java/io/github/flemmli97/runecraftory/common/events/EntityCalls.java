@@ -43,7 +43,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
@@ -106,7 +105,6 @@ public class EntityCalls {
                 } else if (data.unlockedRecipes)
                     data.unlockedRecipes = false;
             });
-            Platform.INSTANCE.sendToClient(new S2CCapSync(Platform.INSTANCE.getPlayerData(player).orElseThrow(EntityUtils::playerDataException)), serverPlayer);
         }
     }
 
@@ -236,12 +234,12 @@ public class EntityCalls {
     }
 
     public static void clone(Player origin, Player player, boolean death) {
-        if (death && player instanceof ServerPlayer serverPlayer) {
+        if (player instanceof ServerPlayer) {
             Platform.INSTANCE.getPlayerData(origin).ifPresent(data -> {
-                data.useMoney(origin, (int) (data.getMoney() * 0.2));
-                Platform.INSTANCE.getPlayerData(player).ifPresent(newData -> newData.readFromNBT(data.writeToNBT(new CompoundTag(), origin), player));
+                if (death)
+                    data.useMoney(origin, (int) (data.getMoney() * 0.2));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(newData -> newData.readFromNBT(data.writeToNBT(new CompoundTag(), origin, death), player));
             });
-            serverPlayer.getServer().tell(new TickTask(1, () -> Platform.INSTANCE.sendToClient(new S2CCapSync(Platform.INSTANCE.getPlayerData(player).orElseThrow(EntityUtils::playerDataException)), serverPlayer)));
         }
     }
 
@@ -392,6 +390,8 @@ public class EntityCalls {
         if (living instanceof Mob mob) {
             mob.goalSelector.addGoal(-1, new DisableGoal(mob));
         }
+        if (living instanceof ServerPlayer player)
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> Platform.INSTANCE.sendToClient(new S2CCapSync(data), player));
     }
 
     public static void onBlockBreak(ServerPlayer player, BlockState state, BlockPos pos) {
