@@ -32,6 +32,7 @@ import io.github.flemmli97.runecraftory.fabric.loot.CropLootModifiers;
 import io.github.flemmli97.runecraftory.fabric.network.ServerPacketHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.fabric.events.AOEAttackEvent;
+import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
@@ -74,6 +75,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class RuneCraftoryFabric implements ModInitializer {
 
     public static final Path confDir = FabricLoader.getInstance().getConfigDir().resolve(RuneCraftory.MODID);
+
+    private static boolean initAttributes;
 
     public static void entityTick(LivingEntity entity) {
         if (entity instanceof Player player) {
@@ -217,7 +220,7 @@ public class RuneCraftoryFabric implements ModInitializer {
 
         ModBlocks.TILES.registerContent();
         ModContainer.CONTAINERS.registerContent();
-        ModAttributes.ATTRIBUTES.registerContent();
+        //ModAttributes.ATTRIBUTES.registerContent();
         ModEffects.EFFECTS.registerContent();
         ModCrafting.RECIPESERIALIZER.registerContent();
         ModFeatures.FEATURES.registerContent();
@@ -236,6 +239,14 @@ public class RuneCraftoryFabric implements ModInitializer {
         this.tweakVanillaAttribute(Attributes.ATTACK_DAMAGE, Double.MAX_VALUE);
         ModFeatures.registerConfiguredMineralFeatures();
         ModCriteria.init();
+    }
+
+    public static PlatformRegistry<Attribute> attributes() {
+        if (!initAttributes) {
+            ModAttributes.ATTRIBUTES.registerContent();
+            initAttributes = true;
+        }
+        return ModAttributes.ATTRIBUTES;
     }
 
     private void tweakVanillaAttribute(Attribute attribute, double value) {

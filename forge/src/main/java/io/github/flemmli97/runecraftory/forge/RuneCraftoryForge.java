@@ -25,6 +25,9 @@ import io.github.flemmli97.runecraftory.forge.event.WorldEvents;
 import io.github.flemmli97.runecraftory.forge.network.PacketHandler;
 import io.github.flemmli97.runecraftory.forge.registry.ModLootModifier;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
+import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -37,6 +40,7 @@ import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -65,6 +69,7 @@ public class RuneCraftoryForge {
         modBus.addListener(this::common);
         modBus.addListener(this::conf);
         modBus.addListener(this::attributes);
+        modBus.addListener(this::attributesAdd);
         modBus.addGenericListener(GlobalLootModifierSerializer.class, this::registry);
         if (FMLEnvironment.dist == Dist.CLIENT)
             ClientEvents.register();
@@ -122,6 +127,15 @@ public class RuneCraftoryForge {
 
     public void attributes(EntityAttributeCreationEvent event) {
         ModEntities.registerAttributes((type, builder) -> event.put(type, builder.build()));
+    }
+
+    public void attributesAdd(EntityAttributeModificationEvent event) {
+        for (EntityType<? extends LivingEntity> t : event.getTypes()) {
+            for (RegistryEntrySupplier<Attribute> s : ModAttributes.ATTRIBUTES.getEntries()) {
+                if (!event.has(t, s.get()))
+                    event.add(t, s.get());
+            }
+        }
     }
 
     public void conf(ModConfigEvent event) {
