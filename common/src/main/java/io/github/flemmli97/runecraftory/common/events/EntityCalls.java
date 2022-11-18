@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.events;
 
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
@@ -18,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.DisableGoal;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
+import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
@@ -31,12 +33,15 @@ import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
@@ -54,6 +59,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -63,7 +72,10 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -104,10 +116,48 @@ public class EntityCalls {
             Platform.INSTANCE.sendToClient(new S2CEntityDataSyncAll(living), serverPlayer);
     }
 
-    public static void updateEquipment(LivingEntity entity, EquipmentSlot slot) {
-        if (entity instanceof Player player) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.updateEquipmentStats(player, slot));
+    /**
+     * Using vanilla attribute system instead of saving it custom on the player. Also now makes it possible to affect generic entities.
+     * We are doing this roundabout way cause the attack damage bonus of equipment should only come into play when the player has a fitting weapon in
+     * the main hand.
+     */
+    public static void updateEquipmentNew(LivingEntity entity, Map<EquipmentSlot, ItemStack> changed, ItemStack lastMainhandItem) {
+        boolean hasWeapon = ItemNBT.isWeapon(entity.getMainHandItem());
+        Collection<EquipmentSlot> toRemove = null;
+        if (changed.containsKey(EquipmentSlot.MAINHAND)) {
+            boolean hadWeapon = ItemNBT.isWeapon(lastMainhandItem);
+            if (!hadWeapon && hasWeapon) {
+                for (EquipmentSlot slot : EquipmentSlot.values()) {
+                    if (slot == EquipmentSlot.MAINHAND || changed.containsKey(slot))
+                        continue;
+                    ItemStack stackInSlot = entity.getItemBySlot(slot);
+                    Multimap<Attribute, AttributeModifier> mod = stackInSlot.getAttributeModifiers(slot);
+                    mod.get(Attributes.ATTACK_DAMAGE).stream().filter(m -> m.getId().equals(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()])).findAny()
+                            .ifPresent(m -> {
+                                AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);
+                                if (inst != null)
+                                    inst.addTransientModifier(m);
+                            });
+                }
+                //We tell the client here after all bonuses were readded
+                if (entity instanceof ServerPlayer serverPlayer)
+                    serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(entity.getId(), ((AttributeMapAccessor) entity.getAttributes())
+                            .getAttributes().values()));
+                return;
+            }
+            if (hadWeapon && !hasWeapon) {
+                toRemove = Arrays.stream(EquipmentSlot.values()).toList();
+            }
         }
+        //Telling the client the attribute values before damage is removed so players now the potential damage
+        if (entity instanceof ServerPlayer serverPlayer)
+            serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(entity.getId(), ((AttributeMapAccessor) entity.getAttributes())
+                    .getAttributes().values()));
+        if (toRemove == null && !hasWeapon)
+            toRemove = changed.keySet();
+        AttributeInstance instance = entity.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (toRemove != null && instance != null)
+            toRemove.forEach(slot -> instance.removeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()]));
     }
 
     public static boolean playerAttack(Player player, Entity target) {

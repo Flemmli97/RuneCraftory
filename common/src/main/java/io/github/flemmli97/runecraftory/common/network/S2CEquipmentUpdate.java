@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -20,7 +19,7 @@ public record S2CEquipmentUpdate(EquipmentSlot slot) implements Packet {
         Player player = ClientHandlers.getPlayer();
         if (player == null)
             return;
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.updateEquipmentStats(player, pkt.slot));
+        //Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.updateEquipmentStats(player, pkt.slot));
     }
 
     @Override

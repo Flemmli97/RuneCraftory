@@ -12,7 +12,6 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -36,11 +35,6 @@ public class EntityEvents {
     @SubscribeEvent
     public void trackEntity(PlayerEvent.StartTracking event) {
         EntityCalls.trackEntity(event.getPlayer(), event.getTarget());
-    }
-
-    @SubscribeEvent
-    public void updateEquipment(LivingEquipmentChangeEvent event) {
-        EntityCalls.updateEquipment(event.getEntityLiving(), event.getSlot());
     }
 
     @SubscribeEvent
