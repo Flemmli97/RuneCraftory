@@ -20,6 +20,7 @@ import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
@@ -561,6 +562,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 if (player instanceof ServerPlayer serverPlayer)
                     serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
                 this.updater.setLastUpdateBrush(day);
+                this.onBrushing();
                 this.increaseFriendPoints(15);
                 this.level.broadcastEntityEvent(this, (byte) 64);
                 player.swing(hand);
@@ -606,7 +608,37 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void increaseFriendPoints(int xp) {
-        this.friendlyPoints.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> this.entityData.set(friendPointsSync, this.friendlyPoints.getLevel()));
+        boolean leveledUp = this.friendlyPoints.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> this.entityData.set(friendPointsSync, this.friendlyPoints.getLevel()));
+        if (leveledUp) {
+            List<Attribute> increasable = List.of(Attributes.MAX_HEALTH, Attributes.ATTACK_DAMAGE,
+                    ModAttributes.RF_DEFENCE.get(), ModAttributes.RF_MAGIC.get(), ModAttributes.RF_MAGIC_DEFENCE.get());
+            for (Attribute att : increasable) {
+                AttributeInstance inst = this.getAttribute(att);
+                if (inst != null) {
+                    double inc = 1 + (this.friendlyPoints.getLevel() - 1) * 0.03;
+                    inst.removeModifier(LibConstants.ATTRIBUTE_FRIEND_MOD);
+                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_FRIEND_MOD, "rf.friend.mod", inc, AttributeModifier.Operation.MULTIPLY_BASE));
+                }
+            }
+        }
+    }
+
+    public void onBrushing() {
+        Attribute toIncrease = switch (this.random.nextInt(4)) {
+            case 1 -> ModAttributes.RF_DEFENCE.get();
+            case 2 -> ModAttributes.RF_MAGIC.get();
+            case 3 -> ModAttributes.RF_MAGIC_DEFENCE.get();
+            default -> Attributes.ATTACK_DAMAGE;
+        };
+        AttributeInstance inst = this.getAttribute(toIncrease);
+        if (inst != null) {
+            AttributeModifier mod = inst.getModifier(LibConstants.ATTRIBUTE_BRUSH_MOD);
+            double inc = 1;
+            if (mod != null)
+                inc += mod.getAmount();
+            inst.removeModifier(LibConstants.ATTRIBUTE_BRUSH_MOD);
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_BRUSH_MOD, "rf.brush.mod", inc, AttributeModifier.Operation.ADDITION));
+        }
     }
 
     @Override
