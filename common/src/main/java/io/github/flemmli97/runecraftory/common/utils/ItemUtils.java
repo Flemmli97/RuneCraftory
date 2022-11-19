@@ -11,11 +11,13 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
@@ -109,5 +111,11 @@ public class ItemUtils {
         if (stack.getItem() instanceof IItemUsable usable)
             return usable.getWeaponType().getShieldEfficiency();
         return 1;
+    }
+
+    public static EquipmentSlot slotOf(ItemStack stack) {
+        if (stack.getItem() instanceof ShieldItem)
+            return EquipmentSlot.OFFHAND;
+        return LivingEntity.getEquipmentSlotForItem(stack);
     }
 }

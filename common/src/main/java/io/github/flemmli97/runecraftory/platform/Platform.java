@@ -84,7 +84,7 @@ public interface Platform {
 
     ItemStaffBase staff(EnumElement starterElement, int amount, Item.Properties properties);
 
-    ItemArmorBase armor(EquipmentSlot slot, Item.Properties properties, ResourceLocation id);
+    ItemArmorBase armor(EquipmentSlot slot, Item.Properties properties, ResourceLocation id, boolean useItemTexture);
 
     //Block Stuff
 

@@ -19,4 +19,8 @@ public interface IBaseMob {
     boolean applyFoodEffect(ItemStack stack);
 
     void removeFoodEffect();
+
+    default boolean onGivingItem(Player player, ItemStack stack) {
+        return false;
+    }
 }

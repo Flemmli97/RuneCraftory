@@ -29,6 +29,8 @@ RuneCraftory 1.4.0
 - Add datapack based NPC interaction. Can define dialogues, gifts, looks etc.
 - Stat system now use vanilla attribute system instead of a separate one.  
   Makes it so stats are now applied to mobs too instead of only the player
+- Changed the process of giving items to mobs. You now need to throw the item at them.  
+  Also if you are walking or moving faster and drop an item that item will get launched a bit further than normal
 
 RuneCraftory 1.3.5
 ================

@@ -452,9 +452,9 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> fourDragonsVest = equipment(EquipmentSlot.CHEST, "four_dragons_vest", Texture.N);
 
     public static final RegistryEntrySupplier<Item> headband = equipment(EquipmentSlot.HEAD, "headband", Texture.Y);
-    public static final RegistryEntrySupplier<Item> blueRibbon = equipment(EquipmentSlot.HEAD, "blue_ribbon", Texture.Y);
-    public static final RegistryEntrySupplier<Item> greenRibbon = equipment(EquipmentSlot.HEAD, "green_ribbon", Texture.Y);
-    public static final RegistryEntrySupplier<Item> purpleRibbon = equipment(EquipmentSlot.HEAD, "purple_ribbon", Texture.Y);
+    public static final RegistryEntrySupplier<Item> blueRibbon = equipment(EquipmentSlot.HEAD, "blue_ribbon", Texture.Y, true);
+    public static final RegistryEntrySupplier<Item> greenRibbon = equipment(EquipmentSlot.HEAD, "green_ribbon", Texture.Y, true);
+    public static final RegistryEntrySupplier<Item> purpleRibbon = equipment(EquipmentSlot.HEAD, "purple_ribbon", Texture.Y, true);
     public static final RegistryEntrySupplier<Item> spectacles = equipment(EquipmentSlot.HEAD, "spectacles", Texture.N);
     public static final RegistryEntrySupplier<Item> strawHat = equipment(EquipmentSlot.HEAD, "straw_hat", Texture.N);
     public static final RegistryEntrySupplier<Item> fancyHat = equipment(EquipmentSlot.HEAD, "fancy_hat", Texture.N);
@@ -463,19 +463,19 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> intelligentGlasses = equipment(EquipmentSlot.HEAD, "intelligent_glasses", Texture.N);
     public static final RegistryEntrySupplier<Item> fireproofHood = equipment(EquipmentSlot.HEAD, "fireproof_hood", Texture.N);
     public static final RegistryEntrySupplier<Item> silkHat = equipment(EquipmentSlot.HEAD, "silk_hat", Texture.N);
-    public static final RegistryEntrySupplier<Item> blackRibbon = equipment(EquipmentSlot.HEAD, "black_ribbon", Texture.Y);
+    public static final RegistryEntrySupplier<Item> blackRibbon = equipment(EquipmentSlot.HEAD, "black_ribbon", Texture.Y, true);
     public static final RegistryEntrySupplier<Item> lolitaHeaddress = equipment(EquipmentSlot.HEAD, "lolita_headdress", Texture.N);
     public static final RegistryEntrySupplier<Item> headdress = equipment(EquipmentSlot.HEAD, "headdress", Texture.N);
-    public static final RegistryEntrySupplier<Item> yellowRibbon = equipment(EquipmentSlot.HEAD, "yellow_ribbon", Texture.Y);
+    public static final RegistryEntrySupplier<Item> yellowRibbon = equipment(EquipmentSlot.HEAD, "yellow_ribbon", Texture.Y, true);
     public static final RegistryEntrySupplier<Item> catEars = equipment(EquipmentSlot.HEAD, "cat_ears", Texture.N);
-    public static final RegistryEntrySupplier<Item> silverHairpin = equipment(EquipmentSlot.HEAD, "silver_hairpin", Texture.N);
+    public static final RegistryEntrySupplier<Item> silverHairpin = equipment(EquipmentSlot.HEAD, "silver_hairpin", Texture.N, true);
     public static final RegistryEntrySupplier<Item> redRibbon = equipment(EquipmentSlot.HEAD, "red_ribbon", Texture.Y);
-    public static final RegistryEntrySupplier<Item> orangeRibbon = equipment(EquipmentSlot.HEAD, "orange_ribbon", Texture.Y);
-    public static final RegistryEntrySupplier<Item> whiteRibbon = equipment(EquipmentSlot.HEAD, "white_ribbon", Texture.Y);
+    public static final RegistryEntrySupplier<Item> orangeRibbon = equipment(EquipmentSlot.HEAD, "orange_ribbon", Texture.Y, true);
+    public static final RegistryEntrySupplier<Item> whiteRibbon = equipment(EquipmentSlot.HEAD, "white_ribbon", Texture.Y, true);
     public static final RegistryEntrySupplier<Item> fourSeasons = equipment(EquipmentSlot.HEAD, "four_seasons", Texture.N);
     public static final RegistryEntrySupplier<Item> feathersHat = equipment(EquipmentSlot.HEAD, "feathers_hat", Texture.N);
     public static final RegistryEntrySupplier<Item> goldHairpin = equipment(EquipmentSlot.HEAD, "gold_hairpin", Texture.N);
-    public static final RegistryEntrySupplier<Item> indigoRibbon = equipment(EquipmentSlot.HEAD, "indigo_ribbon", Texture.Y);
+    public static final RegistryEntrySupplier<Item> indigoRibbon = equipment(EquipmentSlot.HEAD, "indigo_ribbon", Texture.Y, true);
     public static final RegistryEntrySupplier<Item> crown = equipment(EquipmentSlot.HEAD, "crown", Texture.N);
     public static final RegistryEntrySupplier<Item> turnipHeadgear = equipment(EquipmentSlot.HEAD, "turnip_headgear", Texture.N);
     public static final RegistryEntrySupplier<Item> pumpkinHeadgear = equipment(EquipmentSlot.HEAD, "pumpkin_headgear", Texture.N);
@@ -973,12 +973,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> invinciroid = drinkable("invinciroid");
     public static final RegistryEntrySupplier<Item> lovePotion = drinkable("love_potion");
     public static final RegistryEntrySupplier<Item> formuade = drinkable("formuade");
-    public static final RegistryEntrySupplier<Item> objectX = ITEMS.register("object_x", () -> new ItemObjectX(new Item.Properties().food(foodProp).tab(RFCreativeTabs.medicine)) {
-        @Override
-        public UseAnim getUseAnimation(ItemStack stack) {
-            return UseAnim.DRINK;
-        }
-    });
+    public static final RegistryEntrySupplier<Item> objectX = ITEMS.register("object_x", () -> new ItemObjectX(new Item.Properties().food(foodProp).tab(RFCreativeTabs.medicine)));
 
     //Herbs
     public static final RegistryEntrySupplier<Item> elliLeaves = herb("elli_leaves", () -> ModBlocks.elliLeaves);
@@ -1321,12 +1316,16 @@ public class ModItems {
     }
 
     public static RegistryEntrySupplier<Item> equipment(EquipmentSlot slot, String name, Texture texture) {
+        return equipment(slot, name, texture, false);
+    }
+
+    public static RegistryEntrySupplier<Item> equipment(EquipmentSlot slot, String name, Texture texture, boolean useItemTexture) {
         if (texture == Texture.N) {
-            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties(), new ResourceLocation(RuneCraftory.MODID, name)));
+            RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties(), new ResourceLocation(RuneCraftory.MODID, name), useItemTexture));
             NOTEX.add(sup);
             return sup;
         }
-        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties().tab(RFCreativeTabs.equipment), new ResourceLocation(RuneCraftory.MODID, name)));
+        RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties().tab(RFCreativeTabs.equipment), new ResourceLocation(RuneCraftory.MODID, name), useItemTexture));
         DATAGENTAGS.computeIfAbsent(ModTags.chest_t3, t -> new ArrayList<>()).add(sup);
         return sup;
     }

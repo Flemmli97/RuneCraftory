@@ -1,14 +1,9 @@
 package io.github.flemmli97.runecraftory.mixin;
 
-import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
-import io.github.flemmli97.runecraftory.mixinhelper.MixinUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -27,11 +22,6 @@ public abstract class ItemStackMixin {
     private void onBlockMine(Level level, BlockState state, BlockPos pos, Player player, CallbackInfo info) {
         if (player instanceof ServerPlayer serverPlayer)
             EntityCalls.onBlockBreak(serverPlayer, state, pos);
-    }
-
-    @ModifyVariable(method = "getAttributeModifiers", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/item/Item;getDefaultAttributeModifiers(Lnet/minecraft/world/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;"))
-    private Multimap<Attribute, AttributeModifier> getStats(Multimap<Attribute, AttributeModifier> old, EquipmentSlot slot) {
-        return MixinUtils.getStats((ItemStack) (Object) this, old, slot);
     }
 
     @ModifyVariable(method = "getTooltipLines", at = @At(value = "FIELD", args = "Lnet/minecraft/world/item/ItemStack$TooltipPart;MODIFIERS:Lnet/minecraft/world/item/ItemStack$TooltipPart;", opcode = Opcodes.GETSTATIC, shift = At.Shift.BEFORE), ordinal = 0)

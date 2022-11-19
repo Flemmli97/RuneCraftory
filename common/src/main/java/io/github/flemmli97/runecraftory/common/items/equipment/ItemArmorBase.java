@@ -18,12 +18,15 @@ import net.minecraft.world.item.ItemStack;
 
 public class ItemArmorBase extends ArmorItem implements ExtendedItem, DynamicArmorTextureItem, StatItem {
 
-    private static final String armorModelPath = "runecraftory:textures/models/armor/";
+    private static final String ARMOR_MODEL_PATH = "runecraftory:textures/models/armor/";
+    private static final String ITEM_PATH = "runecraftory:textures/models/armor/empty.png";
     public final ResourceLocation registryID;
+    private final boolean useItemTexture;
 
-    public ItemArmorBase(EquipmentSlot slot, Properties properties, ResourceLocation registryID) {
+    public ItemArmorBase(EquipmentSlot slot, Properties properties, ResourceLocation registryID, boolean useItemTexture) {
         super(ItemTiers.armor, slot, properties);
         this.registryID = registryID;
+        this.useItemTexture = useItemTexture;
     }
 
     @Override
@@ -33,7 +36,7 @@ public class ItemArmorBase extends ArmorItem implements ExtendedItem, DynamicArm
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        return armorModelPath + PlatformUtils.INSTANCE.items().getIDFrom(this).getPath() + ".png";
+        return this.useItemTexture ? ITEM_PATH : (ARMOR_MODEL_PATH + PlatformUtils.INSTANCE.items().getIDFrom(this).getPath() + ".png");
     }
 
     @Override

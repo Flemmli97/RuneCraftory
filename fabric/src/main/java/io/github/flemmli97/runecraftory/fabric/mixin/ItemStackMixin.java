@@ -1,10 +1,15 @@
 package io.github.flemmli97.runecraftory.fabric.mixin;
 
+import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.StaffDataGetter;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -13,6 +18,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
@@ -57,5 +63,10 @@ public abstract class ItemStackMixin implements StaffDataGetter {
     @Override
     public StaffData getStaffData() {
         return this.runecraftoryPlayerData;
+    }
+
+    @ModifyVariable(method = "getAttributeModifiers", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/world/item/Item;getDefaultAttributeModifiers(Lnet/minecraft/world/entity/EquipmentSlot;)Lcom/google/common/collect/Multimap;"))
+    private Multimap<Attribute, AttributeModifier> getStats(Multimap<Attribute, AttributeModifier> old, EquipmentSlot slot) {
+        return ItemNBT.getStatsAttributeMap((ItemStack) (Object) this, old, slot);
     }
 }

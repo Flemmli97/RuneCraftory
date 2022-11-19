@@ -1,5 +1,7 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
@@ -7,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.api.items.StatItem;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
+import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -17,7 +20,9 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
@@ -63,6 +68,15 @@ public class ItemNBT {
             Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
             if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(attName))
                 map.put(att, tag.getDouble(attName));
+        }
+        return map;
+    }
+
+    public static Multimap<Attribute, AttributeModifier> getStatsAttributeMap(ItemStack stack, Multimap<Attribute, AttributeModifier> map, EquipmentSlot slot) {
+        if (ItemNBT.shouldHaveStats(stack) && ItemUtils.slotOf(stack) == slot) {
+            Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create();
+            ItemNBT.statIncrease(stack).forEach((att, d) -> multimap.put(att, new AttributeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()], "rf.stat_increase", d, AttributeModifier.Operation.ADDITION)));
+            return multimap;
         }
         return map;
     }

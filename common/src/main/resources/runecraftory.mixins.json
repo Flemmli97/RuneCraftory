@@ -23,7 +23,8 @@
     "BiomeAccessor",
     "ServerLevelMixin",
     "SpreadingSnowyDirtBlockMixin",
-    "AbstractContainerMenuAccessor"
+    "AbstractContainerMenuAccessor",
+    "ItemEntityMixin"
   ],
   "client": [
     "AtlasMixin",

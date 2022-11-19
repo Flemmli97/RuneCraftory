@@ -48,6 +48,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -571,35 +572,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 1, 1));
                     this.untameEntity();
                     return InteractionResult.SUCCESS;
-                } else if (this.feedTimeOut <= 0) {
-                    boolean favorite = stack.is(this.tamingItem());
-                    ItemStack stack1 = null;
-                    //The item will get consumed even if player is in creative so we add it back
-                    if (player.isCreative())
-                        stack1 = stack.copy();
-                    if (this.applyFoodEffect(stack)) {
-                        if (player instanceof ServerPlayer serverPlayer) {
-                            serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                            Platform.INSTANCE.getPlayerData(serverPlayer)
-                                    .ifPresent(data -> data.getDailyUpdater().onGiveMonsterItem(serverPlayer));
-                        }
-                        if (favorite)
-                            this.level.broadcastEntityEvent(this, (byte) 65);
-                        else
-                            this.level.broadcastEntityEvent(this, (byte) 64);
-                        //this.feedTimeOut = 24000;
-                        this.feedTimeOut = 10;
-                        int day = WorldUtils.day(this.level);
-                        if (this.updater.getLastUpdateFood() != day) {
-                            this.updater.setLastUpdateFood(day);
-                            this.increaseFriendPoints(favorite ? 50 : 35);
-                        }
-                        if (stack1 != null)
-                            player.setItemInHand(hand, stack1);
-                        return InteractionResult.SUCCESS;
-                    }
-                } else
-                    return InteractionResult.FAIL;
+                }
             }
             if (hand == InteractionHand.MAIN_HAND && !this.playDeath()) {
                 if (player.isShiftKeyDown()) {
@@ -619,33 +592,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.tameEntity(player);
                 return InteractionResult.SUCCESS;
             } else {
-                if (this.tamingTick == -1 && this.isAlive()) {
-                    if (stack.getItem() == ModItems.brush.get()) {
-                        if (player instanceof ServerPlayer serverPlayer)
-                            serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                        this.brushCount = Math.min(10, this.brushCount + 1);
-                        this.tamingTick = 40;
-                        this.level.broadcastEntityEvent(this, (byte) 64);
-                        return InteractionResult.SUCCESS;
-                    }
+                if (this.tamingTick == -1 && this.isAlive() && stack.getItem() == ModItems.brush.get()) {
                     if (player instanceof ServerPlayer serverPlayer)
-                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.GENERIC_EAT, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                    float rightItemMultiplier = this.tamingMultiplier(stack);
-                    int count = stack.getCount();
-                    this.applyFoodEffect(stack);
-                    if (count == stack.getCount() && !player.isCreative())
-                        stack.shrink(1);
-                    this.tamingTick = 100;
-                    float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier, this.brushCount, this.loveAttCount);
-                    this.delayedTaming = () -> {
-                        if (chance == 0)
-                            this.level.broadcastEntityEvent(this, (byte) 34);
-                        else if (this.random.nextFloat() < chance) {
-                            this.tameEntity(player);
-                        } else {
-                            this.level.broadcastEntityEvent(this, (byte) 11);
-                        }
-                    };
+                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+                    this.brushCount = Math.min(10, this.brushCount + 1);
+                    this.tamingTick = 40;
+                    this.level.broadcastEntityEvent(this, (byte) 64);
                     return InteractionResult.SUCCESS;
                 }
             }
@@ -839,6 +791,69 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     inst.removeModifier(LibConstants.FOOD_UUID);
                     inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
                 });
+    }
+
+    @Override
+    public boolean onGivingItem(Player player, ItemStack stack) {
+        if (this.isTamed()) {
+            if (!player.getUUID().equals(this.getOwnerUUID()))
+                return false;
+            if (this.feedTimeOut <= 0) {
+                boolean favorite = stack.is(this.tamingItem());
+                int count = stack.getCount();
+                SoundEvent sound = switch (stack.getUseAnimation()) {
+                    case DRINK -> stack.getDrinkingSound();
+                    case EAT -> stack.getEatingSound();
+                    default -> SoundEvents.NOTE_BLOCK_PLING;
+                };
+                if (player instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.connection.send(new ClientboundSoundPacket(sound, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+                    Platform.INSTANCE.getPlayerData(serverPlayer)
+                            .ifPresent(data -> data.getDailyUpdater().onGiveMonsterItem(serverPlayer));
+                }
+                boolean food = this.applyFoodEffect(stack);
+                stack.setCount(count);
+                this.feedTimeOut = 7;
+                int day = WorldUtils.day(this.level);
+                if (this.updater.getLastUpdateFood() != day) {
+                    this.updater.setLastUpdateFood(day);
+                    this.increaseFriendPoints(favorite ? 50 : 35);
+                    if (favorite)
+                        this.level.broadcastEntityEvent(this, (byte) 65);
+                    else
+                        this.level.broadcastEntityEvent(this, (byte) 64);
+                }
+                if (!player.isCreative())
+                    stack.shrink(1);
+                return true;
+            }
+        } else if (this.tamingTick == -1 && this.isAlive()) {
+            SoundEvent sound = switch (stack.getUseAnimation()) {
+                case DRINK -> stack.getDrinkingSound();
+                case EAT -> stack.getEatingSound();
+                default -> SoundEvents.NOTE_BLOCK_PLING;
+            };
+            if (player instanceof ServerPlayer serverPlayer)
+                serverPlayer.connection.send(new ClientboundSoundPacket(sound, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+            float rightItemMultiplier = this.tamingMultiplier(stack);
+            int count = stack.getCount();
+            this.applyFoodEffect(stack);
+            if (count == stack.getCount() && !player.isCreative())
+                stack.shrink(1);
+            this.tamingTick = 100;
+            float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier, this.brushCount, this.loveAttCount);
+            this.delayedTaming = () -> {
+                if (chance == 0)
+                    this.level.broadcastEntityEvent(this, (byte) 34);
+                else if (this.random.nextFloat() < chance) {
+                    this.tameEntity(player);
+                } else {
+                    this.level.broadcastEntityEvent(this, (byte) 11);
+                }
+            };
+            return true;
+        }
+        return false;
     }
 
     public void updateStatsToLevel() {

@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(SpreadingSnowyDirtBlock.class)
-public class SpreadingSnowyDirtBlockMixin {
+public abstract class SpreadingSnowyDirtBlockMixin {
 
     @Inject(method = "canBeGrass", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
     private static void grassCheck(BlockState state, LevelReader levelReader, BlockPos pos, CallbackInfoReturnable<Boolean> info, BlockPos above, BlockState aboveState) {

@@ -1,13 +1,18 @@
 package io.github.flemmli97.runecraftory.forge.event;
 
+import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.forge.events.AOEAttackEvent;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ToolActions;
+import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -128,6 +133,15 @@ public class EntityEvents {
     public void bonemeal(BonemealEvent event) {
         if (EntityCalls.onTryBonemeal(event.getWorld(), event.getStack(), event.getBlock(), event.getPos())) {
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public void itemStackAttributes(ItemAttributeModifierEvent event) {
+        Multimap<Attribute, AttributeModifier> map = ItemNBT.getStatsAttributeMap(event.getItemStack(), event.getModifiers(), event.getSlotType());
+        if (map != event.getOriginalModifiers()) {
+            event.clearModifiers();
+            map.forEach(event::addModifier);
         }
     }
 }

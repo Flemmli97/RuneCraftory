@@ -131,8 +131,8 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public ItemArmorBase armor(EquipmentSlot slot, Item.Properties properties, ResourceLocation id) {
-        return new ForgeArmorBase(slot, properties, id);
+    public ItemArmorBase armor(EquipmentSlot slot, Item.Properties properties, ResourceLocation id, boolean useItemTexture) {
+        return new ForgeArmorBase(slot, properties, id, useItemTexture);
     }
 
     @Override

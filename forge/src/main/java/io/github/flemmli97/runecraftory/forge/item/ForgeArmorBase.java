@@ -10,8 +10,8 @@ import java.util.function.Consumer;
 
 public class ForgeArmorBase extends ItemArmorBase {
 
-    public ForgeArmorBase(EquipmentSlot slot, Properties properties, ResourceLocation registryID) {
-        super(slot, properties, registryID);
+    public ForgeArmorBase(EquipmentSlot slot, Properties properties, ResourceLocation registryID, boolean useItemTexture) {
+        super(slot, properties, registryID, useItemTexture);
     }
 
     @Override

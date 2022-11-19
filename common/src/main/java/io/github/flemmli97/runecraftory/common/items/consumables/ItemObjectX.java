@@ -8,6 +8,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
@@ -24,6 +25,11 @@ public class ItemObjectX extends Item {
             return applyEffect(livingEntity, stack);
         }
         return stack;
+    }
+
+    @Override
+    public UseAnim getUseAnimation(ItemStack stack) {
+        return UseAnim.DRINK;
     }
 
     public static ItemStack applyEffect(LivingEntity livingEntity, ItemStack stack) {

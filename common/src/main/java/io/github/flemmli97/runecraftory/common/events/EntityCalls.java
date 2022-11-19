@@ -292,8 +292,8 @@ public class EntityCalls {
 
     public static void foodHandling(LivingEntity entity, ItemStack stack) {
         if (!entity.level.isClientSide) {
-            if (entity instanceof IBaseMob) {
-                ((IBaseMob) entity).applyFoodEffect(stack);
+            if (entity instanceof IBaseMob mob) {
+                mob.applyFoodEffect(stack);
                 return;
             }
             FoodProperties prop = DataPackHandler.foodManager().get(stack.getItem());

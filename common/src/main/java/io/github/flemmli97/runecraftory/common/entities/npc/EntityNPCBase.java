@@ -31,6 +31,8 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -48,6 +50,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -56,6 +59,9 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
@@ -67,6 +73,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
@@ -341,6 +348,24 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void giftItem(Player player, ItemStack stack) {
+        this.lookAt(player, 30, 30);
+        int count = stack.getCount();
+        SoundEvent sound = switch (stack.getUseAnimation()) {
+            case DRINK -> stack.getDrinkingSound();
+            case EAT -> stack.getEatingSound();
+            default -> SoundEvents.NOTE_BLOCK_PLING;
+        };
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.connection.send(new ClientboundSoundPacket(sound, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+        }
+        EquipmentSlot slot = ItemUtils.slotOf(stack);
+        if (slot != EquipmentSlot.MAINHAND || ItemNBT.isWeapon(stack)) {
+            ItemStack copy = stack.copy();
+            copy.setCount(1);
+            this.setItemSlot(slot, copy);
+        }
+        boolean food = this.applyFoodEffect(stack);
+        stack.setCount(count);
         NPCData.Gift gift = this.giftOf(stack);
         if (gift != null) {
             this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
@@ -517,6 +542,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                     inst.removeModifier(LibConstants.FOOD_UUID);
                     inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
                 });
+    }
+
+    @Override
+    public boolean onGivingItem(Player player, ItemStack stack) {
+        this.giftItem(player, stack);
+        return true;
     }
 
     @Override

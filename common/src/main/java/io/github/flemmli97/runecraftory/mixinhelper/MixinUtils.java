@@ -1,21 +1,18 @@
 package io.github.flemmli97.runecraftory.mixinhelper;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
-import io.github.flemmli97.runecraftory.common.lib.LibConstants;
-import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
+import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public class MixinUtils {
@@ -34,18 +31,48 @@ public class MixinUtils {
         return false;
     }
 
-    public static Multimap<Attribute, AttributeModifier> getStats(ItemStack stack, Multimap<Attribute, AttributeModifier> map, EquipmentSlot slot) {
-        if (ItemNBT.shouldHaveStats(stack) && of(stack) == slot) {
-            Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create();
-            ItemNBT.statIncrease(stack).forEach((att, d) -> multimap.put(att, new AttributeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()], "rf.stat_increase", d, AttributeModifier.Operation.ADDITION)));
-            return multimap;
+    public static void onPlayerThrowItem(Player player, ItemEntity entity) {
+        if (!player.isDeadOrDying()) {
+            entity.setThrower(player.getUUID());
+            PrevEntityPosition pos = (PrevEntityPosition) player;
+            double dX = player.getX() - pos.getOldPlayerX();
+            double dZ = player.getZ() - pos.getOldPlayerZ();
+            double spd = dX * dX + dZ * dZ;
+            if (spd > 0.01) {
+                entity.setDeltaMovement(entity.getDeltaMovement().scale(2));
+            }
         }
-        return map;
     }
 
-    private static EquipmentSlot of(ItemStack stack) {
-        if (stack.getItem() instanceof ShieldItem)
-            return EquipmentSlot.OFFHAND;
-        return LivingEntity.getEquipmentSlotForItem(stack);
+    public static boolean handleEntityCollision(ItemEntity entity) {
+        if (entity.isInWater() || entity.isInLava() || entity.getThrower() == null)
+            return true;
+        HitResult hitResult = ProjectileUtil.getHitResult(entity, t -> canHitEntity(entity, t));
+        if (hitResult.getType() == HitResult.Type.BLOCK) {
+            return true;
+        }
+        if (hitResult.getType() == HitResult.Type.ENTITY) {
+            EntityHitResult result = (EntityHitResult) hitResult;
+            if (result.getEntity() instanceof IBaseMob mob) {
+                ItemStack stack = entity.getItem();
+                Entity e = ((ServerLevel) entity.level).getEntity(entity.getThrower());
+                if (e instanceof Player thrower) {
+                    if (mob.onGivingItem(thrower, stack)) {
+                        if (stack.isEmpty())
+                            entity.discard();
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+    protected static boolean canHitEntity(ItemEntity entity, Entity target) {
+        if (target.isSpectator() || !target.isAlive() || !target.isPickable()) {
+            return false;
+        }
+        return !target.getUUID().equals(entity.getThrower());
     }
 }
