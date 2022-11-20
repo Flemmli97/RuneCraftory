@@ -365,7 +365,7 @@ public class LangGen implements DataProvider {
                 "what stat it gives. Using the same item multiple times causes a diminishing returns effect so try use different items");
         this.add("runecraftory.patchouli.entry.crafting.forge", "The forge is used to craft all weapons and tools. During crafting you can add up to 3 bonus items that will " +
                 "act the same as if you upgraded the weapon/tool with it.");
-        this.add("runecraftory.patchouli.entry.crafting.armor", "Use the accessory table to make various armor pieces. Same as the forge you can use up to 3 additional items here" +
+        this.add("runecraftory.patchouli.entry.crafting.armor", "Use the accessory table to make various armor pieces. Same as the forge you can use up to 3 additional items here " +
                 "to increase the stats.");
         this.add("runecraftory.patchouli.entry.crafting.cooking", "The cooking table is as the name implies used to make all kinds of food.");
         this.add("runecraftory.patchouli.entry.crafting.chemistry", "A chemistry set allows you to create potions and other pharmacy items.");

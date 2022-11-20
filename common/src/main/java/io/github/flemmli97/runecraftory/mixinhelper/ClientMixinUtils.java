@@ -29,42 +29,42 @@ import java.util.function.Consumer;
 public class ClientMixinUtils {
 
     //Add
-    public static int leaveSpring = 0x093700;
+    public static int LEAVE_SPRING = 0x0d4a01;
     //Mult
-    public static int leaveFall = 0xff4646;
+    public static int LEAVE_FALL = 0xff4646;
 
-    private static Map<SeasonedTint, Integer> map = new ConcurrentHashMap<>();
-    private static Map<SeasonedTint, Integer> grassMap = new ConcurrentHashMap<>();
+    private static final Map<SeasonedTint, Integer> LEAVE_TINTS = new ConcurrentHashMap<>();
+    private static final Map<SeasonedTint, Integer> GRASS_TINTS = new ConcurrentHashMap<>();
 
     public static int modifyColoredTint(BlockAndTintGetter getter, int old) {
         CalendarImpl calendar = ClientHandlers.clientCalendar;
         if (calendar.currentSeason() == EnumSeason.SUMMER)
             return old;
-        return map.computeIfAbsent(new SeasonedTint(old, calendar.currentSeason()), ClientMixinUtils::getLeaveTint);
+        return LEAVE_TINTS.computeIfAbsent(new SeasonedTint(old, calendar.currentSeason()), ClientMixinUtils::getLeaveTint);
     }
 
     public static int modifyColoredTintGrass(BlockAndTintGetter getter, int old) {
         CalendarImpl calendar = ClientHandlers.clientCalendar;
         if (calendar.currentSeason() == EnumSeason.SUMMER)
             return old;
-        return grassMap.computeIfAbsent(new SeasonedTint(old, calendar.currentSeason()), ClientMixinUtils::getGrassTint);
+        return GRASS_TINTS.computeIfAbsent(new SeasonedTint(old, calendar.currentSeason()), ClientMixinUtils::getGrassTint);
     }
 
     private static int getLeaveTint(SeasonedTint tint) {
         return switch (tint.season) {
-            case SPRING -> add(tint.origin, leaveSpring);
+            case SPRING -> desaturate(add(tint.origin, LEAVE_SPRING), 0.1f);
             case SUMMER -> tint.origin;
-            case FALL -> add(FastColor.ARGB32.multiply(tint.origin, leaveFall), 0x3c1e00);
-            case WINTER -> desaturate(tint.origin, 0.55f);
+            case FALL -> desaturate(add(FastColor.ARGB32.multiply(tint.origin, LEAVE_FALL), 0x3c1e00), 0.2f);
+            case WINTER -> desaturate(add(FastColor.ARGB32.multiply(tint.origin, LEAVE_FALL), 0x3c1e00), 0.6f);
         };
     }
 
     private static int getGrassTint(SeasonedTint tint) {
         return switch (tint.season) {
-            case SPRING -> add(tint.origin, leaveSpring);
+            case SPRING -> desaturate(add(tint.origin, LEAVE_SPRING), 0.1f);
             case SUMMER -> tint.origin;
-            case FALL -> desaturate(tint.origin, 0.2f);
-            case WINTER -> desaturate(tint.origin, 0.45f);
+            case FALL -> desaturate(tint.origin, 0.25f);
+            case WINTER -> desaturate(tint.origin, 0.7f);
         };
     }
 
