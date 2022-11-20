@@ -31,6 +31,8 @@ RuneCraftory 1.4.0
   Makes it so stats are now applied to mobs too instead of only the player
 - Changed the process of giving items to mobs. You now need to throw the item at them.  
   Also if you are walking or moving faster and drop an item that item will get launched a bit further than normal
+- Brushing tamed monster increases a random stat by 1 once a day
+- Monster with higher friend points gain a stat boost
 
 RuneCraftory 1.3.5
 ================
