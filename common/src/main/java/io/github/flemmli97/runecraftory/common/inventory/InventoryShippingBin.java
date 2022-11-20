@@ -38,7 +38,7 @@ public class InventoryShippingBin extends SaveItemContainer {
                 this.setItem(i, ItemStack.EMPTY);
             }
             data.setMoney(player, data.getMoney() + money);
-            if(money != 0)
+            if (money != 0)
                 player.displayClientMessage(new TranslatableComponent("shipping.money").append("" + money).withStyle(ChatFormatting.GOLD), true);
         });
     }

@@ -87,8 +87,8 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
     public static Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> matchingStacks(SextupleRecipe recipe, NonNullList<ItemStack> inv) {
         if (inv.size() > 6)
             return Pair.of(NonNullList.create(), NonNullList.create());
-        for(ItemStack s : inv)
-            if(!recipe.areItemsFitting(s))
+        for (ItemStack s : inv)
+            if (!recipe.areItemsFitting(s))
                 return Pair.of(NonNullList.create(), NonNullList.create());
         NonNullList<ItemStack> list = NonNullList.create();
         NonNullList<ItemStack> bonus = NonNullList.create();
