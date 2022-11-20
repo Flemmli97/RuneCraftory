@@ -355,37 +355,38 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.category.main", "Introduction");
         this.add("runecraftory.patchouli.category.main.desc", "");
         this.add("runecraftory.patchouli.entry.crafting", "Crafting");
-        this.add("runecraftory.patchouli.entry.crafting.1", "To use any of the crafting devices you need to (depending on the config) " +
-                "$(li)unlocked the recipe $(li)enough rp to craft it $(br) " +
-                "Then using the correct crafting device you can make the desired item. " +
-                "Upon crafting an item the amount of rp shown will be used up. You can learn new recipes by eating recipe breads which (currently) " +
+        this.add("runecraftory.patchouli.entry.crafting.1", "This mod adds 4 additional blocks that are used to craft various items. " +
+                "Every crafting process requires a certain amount of rp. Recipes that you haven't unlocked yet will require more rp than those you have." +
+                "You will not be able to craft an item if the required rp is higher than your total rp. " +
+                "Crafting a locked recipe will unlock it. You can also learn new recipes by eating recipe breads which (currently) " +
                 "can be obtain only via treasure chests");
-        this.add("runecraftory.patchouli.entry.crafting.2", "Weapon and tools can be upgraded in the forge and armor can be upgraded in the accessory table. " +
+        this.add("runecraftory.patchouli.entry.crafting.2", "Weapon and tools can be upgraded in the forge while armor can be upgraded in the accessory table. " +
                 "Open the upgrade gui by shift right clicking on the crafting device. An item can be upgraded till it reaches level 10. Holding shift while hovering over an item will tell you " +
                 "what stat it gives. Using the same item multiple times causes a diminishing returns effect so try use different items");
-        this.add("runecraftory.patchouli.entry.crafting.forge", "The forge is used to craft all weapons and tools");
-        this.add("runecraftory.patchouli.entry.crafting.armor", "Use the accessory table to make various armor pieces");
-        this.add("runecraftory.patchouli.entry.crafting.cooking", "The cooking table is as the name implies used to make all kinds of food");
-        this.add("runecraftory.patchouli.entry.crafting.chemistry", "A chemistry set allows you to create potions and other pharmacy items");
+        this.add("runecraftory.patchouli.entry.crafting.forge", "The forge is used to craft all weapons and tools. During crafting you can add up to 3 bonus items that will " +
+                "act the same as if you upgraded the weapon/tool with it.");
+        this.add("runecraftory.patchouli.entry.crafting.armor", "Use the accessory table to make various armor pieces. Same as the forge you can use up to 3 additional items here" +
+                "to increase the stats.");
+        this.add("runecraftory.patchouli.entry.crafting.cooking", "The cooking table is as the name implies used to make all kinds of food.");
+        this.add("runecraftory.patchouli.entry.crafting.chemistry", "A chemistry set allows you to create potions and other pharmacy items.");
         this.add("runecraftory.patchouli.entry.minerals", "Minerals");
         this.add("runecraftory.patchouli.entry.minerals.1", "Cluster of minerals spawn all over the world. These mineral clusters can be mined with an iron pickaxe or above but its best mined with " +
                 "the $(item)mining hammers$() from this mod. Better hammers and mining skill decrease the chance of the mineral breaking and increase the chance to get rarer materials from it.");
         this.add("runecraftory.patchouli.entry.minerals.2", "Some materials even are impossible to get unless you have a high enough mining skill. " +
                 "$(br)Minerals regenerate after a day. $(br)If you want to completly get rid of a mineral mine a broken one while shifting.");
         this.add("runecraftory.patchouli.entry.shipping", "Shipping Items");
-        this.add("runecraftory.patchouli.entry.shipping.1", "You can craft a shipping bin to sell items. Every morning all sellable items in the shipping bin will be sold. The shipping bin inventory is global for each player." +
-                "$(br)Note: ATM money is useless");
+        this.add("runecraftory.patchouli.entry.shipping.1", "You can craft a shipping bin to sell items. Every morning all sellable items in the shipping bin will be sold. The shipping bin inventory is global for each player.");
         this.add("runecraftory.patchouli.entry.entities", "Monsters");
         this.add("runecraftory.patchouli.entry.entities.1", "The mobs in this mod don't spawn by themself but through gates that appear through the world. $(br)" +
                 "The type of monster a gate spawns depends on the biome and a gate will continue to spawn monsters till it is destroyed. Gates can drop their corresponding crystals upon destruction. " +
                 "$(br)Bosses spawn in their structures only and can be fought once every day.");
         this.add("runecraftory.patchouli.entry.entities.2", "Placing a $(thing)bell block$() (or other meeting POI type blocks) will prevent gates from spawning in a 48 block radius around it. " +
-                "$(br)$(br)Monsters are able to be tamed by simple holding any item and shift-right-click them. This will consume the item and after a while $(bold)heart$(reset) particles" +
+                "$(br)$(br)Monsters are able to be tamed by throwing an item at them. This will consume the item and after a while $(bold)heart$(reset) particles" +
                 " appear if the taming was successful and $(bold)smoke$() particles appear if otherwise. Monsters might have one or more favorite items that ");
         this.add("runecraftory.patchouli.entry.entities.3", "doubles the taming chance and bosses can $(#ff0000)only$() be tamed by giving them their favorite items. " +
                 "Other ways to increase taming chance include: Brushing, leveling the taming skill and hitting it with a love attribute weapon." +
                 "$(br)$(br)Tamed monster cannot die. Instead they will simply play death when reaching critical damage and healing them through any means will bring them back up. " +
-                "Giving tamed monster a vanilla stick will release them again.");
+                "Shift right click a tamed monster with a vanilla stick will release them again.");
         this.add("runecraftory.patchouli.entry.entities.4", "You can interact with a tamed monster using the following actions: $(li)S$(thing)hift-right-clicking with an empty hand$() to change the behavior to follow, wander or stay mode." +
                 "$(li)$(thing)Right-click with an empty$() hand to (if possible) ride it." +
                 "$(li)While ridden press any of the following keys $(thing)$(k:runecraftory.key.spell_1), $(k:runecraftory.key.spell_2), $(k:runecraftory.key.spell_3), $(k:runecraftory.key.spell_4)$() to perform an attack." +
@@ -394,7 +395,8 @@ public class LangGen implements DataProvider {
                 "$(br)$(br)Tamed monster can also help you with farming crops. Upon setting them into farming mode they will tend the crops in a certain radius around the initial position. " +
                 "The nearest inventory block will also be bound to their action and they will deposit harvested crops into that inventory and if seeds are in it they can also plant them.");
         this.add("runecraftory.patchouli.entry.entities.6", "Using a pet inspector you can see the stats for your monster and configure additional things like area of actions and inventory for the entity. " +
-                "Right clicking a block while e.g. configuring the home position will set the home position to that place.");
+                "Right clicking a block while e.g. configuring the home position will set the home position to that place." +
+                "$(br)Brushing and giving tamed monster items once a day increases your friendship with them.");
 
         this.add("runecraftory.patchouli.category.farming", "Agriculture");
         this.add("runecraftory.patchouli.category.farming.desc", "An overview and guide about the agricultural aspects");
@@ -415,10 +417,11 @@ public class LangGen implements DataProvider {
                 "$(li)Greenifier: Increases soil level and as such also crop level (Not implemented $(bold)ATM$()).");
         this.add("runecraftory.patchouli.entry.weather", "Weather");
         this.add("runecraftory.patchouli.entry.weather.1", "There are 4 types of weather conditions in this mod that only changes during certain times of the day: " +
-                "$(li)$(6)Sunny$(): Normal sunny day without any special properties" +
-                "$(li)$(6)Rain$(): Farmland will automatically get watered ");
-        this.add("runecraftory.patchouli.entry.weather.2", "$(li)$(6)Stormy$(): Farmland will automatically get watered but also the health gets reduced over time. If health drops to 0 the crops can get destroyed so pay attention" +
-                "$(li)$(6)Runey$(): Like sunny days but crops get a boost in growth");
+                "$(li)$(a)Sunny$(): Normal sunny day without any special properties" +
+                "$(li)$(9)Rain$(): Farmland will automatically get watered ");
+        this.add("runecraftory.patchouli.entry.weather.2", "$(li)$(3)Stormy$(): Farmland will automatically get watered but also the health gets reduced over time. If health drops to 0 the crops can get destroyed so pay attention" +
+                "$(li)$(6)Runey$(): Like sunny days but crops get a boost in growth" +
+                "$(br)$(br)If it gets cold enough it might also snow in places where it normally wouldn't.");
 
         this.add("runecraftory.patchouli.category.equipment", "Equipments");
         this.add("runecraftory.patchouli.category.equipment.desc", "");
@@ -469,8 +472,9 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.npc", "Villagers");
         this.add("runecraftory.patchouli.entry.npc.1", "You might come across some villagers that are different from vanilla villagers. Some can operate shops where you can buy stuff. " +
                 "For them to operate a shop they need a bed and workplace not too far away from eachother first. Right click allows you to interact with them and they will tell you if they are missing something.");
-        this.add("runecraftory.patchouli.entry.npc.2", "Hover over the red text (if existent) to see that. $(br)$(br)" +
-                "Villagers are still WIP. They dont have skins yet and are pretty much limited to their shops.");
+        this.add("runecraftory.patchouli.entry.npc.2", "Hover over the red text (if existent) to see that. Talking daily with a villager increases your friendship. You can also gift them item" +
+                "by throwing it at them. If you give them equipment they will equip it too." +
+                "$(br)$(br)Note: Villagers don't have skins yet.");
 
         this.add("runecraftory.patchouli.category.entities", "Monsters");
         this.add("runecraftory.patchouli.category.entities.desc", "List of all monsters");
@@ -541,25 +545,25 @@ public class LangGen implements DataProvider {
 
         this.add("npc.generic.greeting.default", "Hello %s");
         this.add("npc.generic.greeting.1", "Hello %s");
-        this.add("npc.generic.greeting.2", "Hi. How are you %s?");
-        this.add("npc.generic.talk.default", "This is the default line");
-        this.add("npc.generic.talk.1", "This is random line 1");
-        this.add("npc.generic.talk.2", "This is random line 2");
+        this.add("npc.generic.greeting.2", "Hi. How are you today %s?");
+        this.add("npc.generic.talk.default", "...");
+        this.add("npc.generic.talk.1", "On sunny days I like to go out and walk a lot.");
+        this.add("npc.generic.talk.2", "I don't like working.");
         this.add("npc.generic.follow.yes", "Ok");
-        this.add("npc.generic.follow.no", "Sorry but i decline.");
-        this.add("npc.generic.dislike", "Eh... thanks i guess?");
+        this.add("npc.generic.follow.no", "Sorry but I decline.");
+        this.add("npc.generic.dislike", "Eh... thanks I guess?");
         this.add("npc.generic.like", "Thanks %s for the gift. I really like this.");
         this.add("npc.generic.gift.default", "Thank you for your gift");
 
         this.add("npc.generic.2.greeting.default", "Hello %s");
         this.add("npc.generic.2.greeting.1", "Howdy %s");
         this.add("npc.generic.2.greeting.2", "Hi. Whats up %s?");
-        this.add("npc.generic.2.talk.default", "This is random line 1");
-        this.add("npc.generic.2.talk.1", "This is random line 1");
-        this.add("npc.generic.2.talk.2", "This is random line 2");
-        this.add("npc.generic.2.follow.yes", "Ok");
-        this.add("npc.generic.2.follow.no", "Sorry but i decline.");
-        this.add("npc.generic.2.gift.default", "Thank you for your gift");
+        this.add("npc.generic.2.talk.default", "...");
+        this.add("npc.generic.2.talk.1", "Did you know that upgrading a weapon with scrap metal + makes it do 1 damage?");
+        this.add("npc.generic.2.talk.2", "Those villagers seem strange. Why do they have no hands?");
+        this.add("npc.generic.2.follow.yes", "Where are we going?");
+        this.add("npc.generic.2.follow.no", "Sorry but I'm busy.");
+        this.add("npc.generic.2.gift.default", "Thanks. I appreciate it");
 
         this.add("runecraftory.advancements.root.title", "Runecraftory");
         this.add("runecraftory.advancements.root.description", "A minecrafty harvest moon");

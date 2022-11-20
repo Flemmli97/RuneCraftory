@@ -10,14 +10,11 @@
       "item": "runecraftory:medicinal_herb"
     },
     {
-      "item": "runecraftory:medicinal_herb"
-    },
-    {
       "item": "runecraftory:white_grass"
     }
   ],
   "result": {
     "item": "runecraftory:mystery_potion",
-    "count": 3
+    "count": 2
   }
 }

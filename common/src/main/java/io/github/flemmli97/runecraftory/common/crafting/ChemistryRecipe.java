@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.crafting;
 
+import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import net.minecraft.core.NonNullList;
@@ -8,11 +9,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 
 public class ChemistryRecipe extends SextupleRecipe {
 
     public ChemistryRecipe(ResourceLocation id, String group, int level, int cost, ItemStack result, NonNullList<Ingredient> ingredients) {
         super(id, group, level, cost, result, ingredients);
+    }
+
+    @Override
+    public boolean matches(PlayerContainerInv inv, Level world) {
+        return this.checkMatch(inv, world, true);
     }
 
     @Override

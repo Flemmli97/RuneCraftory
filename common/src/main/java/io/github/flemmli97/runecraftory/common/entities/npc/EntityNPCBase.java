@@ -101,8 +101,10 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -359,7 +361,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             serverPlayer.connection.send(new ClientboundSoundPacket(sound, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
         }
         EquipmentSlot slot = ItemUtils.slotOf(stack);
-        if (slot != EquipmentSlot.MAINHAND || ItemNBT.isWeapon(stack)) {
+        if (slot != EquipmentSlot.MAINHAND || ItemNBT.isWeapon(stack) || stack.getItem() instanceof SwordItem || stack.getItem() instanceof AxeItem) {
             ItemStack copy = stack.copy();
             copy.setCount(1);
             this.setItemSlot(slot, copy);

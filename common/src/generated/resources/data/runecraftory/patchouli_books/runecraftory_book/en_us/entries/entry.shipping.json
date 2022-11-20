@@ -6,6 +6,10 @@
     {
       "type": "patchouli:text",
       "text": "runecraftory.patchouli.entry.shipping.1"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "runecraftory:shipping_bin"
     }
   ],
   "sortnum": 2

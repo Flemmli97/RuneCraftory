@@ -57,10 +57,11 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
             if (!itemStack.isEmpty())
                 stacks.add(itemStack);
         }
-        int matches = matchingStacks(this, stacks).getFirst().size();
-        if (!exact)
-            return matches >= this.getIngredients().size();
-        return matches == this.getIngredients().size();
+        Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> result = matchingStacks(this, stacks);
+        int matches = result.getFirst().size();
+        if (matches != this.getIngredients().size())
+            return false;
+        return !exact || result.getSecond().isEmpty();
     }
 
     @Override
@@ -86,6 +87,9 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
     public static Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> matchingStacks(SextupleRecipe recipe, NonNullList<ItemStack> inv) {
         if (inv.size() > 6)
             return Pair.of(NonNullList.create(), NonNullList.create());
+        for(ItemStack s : inv)
+            if(!recipe.areItemsFitting(s))
+                return Pair.of(NonNullList.create(), NonNullList.create());
         NonNullList<ItemStack> list = NonNullList.create();
         NonNullList<ItemStack> bonus = NonNullList.create();
         for (Ingredient ing : recipe.getIngredients()) {
@@ -101,6 +105,10 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
                 bonus.add(stack);
         }
         return Pair.of(list, bonus);
+    }
+
+    public boolean areItemsFitting(ItemStack stack) {
+        return true;
     }
 
     @Override

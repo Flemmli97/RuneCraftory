@@ -426,20 +426,19 @@ public class RecipesGen extends RecipeProvider {
         RecipeBuilder.create(EnumCrafting.ARMOR, ModItems.ironShield.get(), 1, 10, 10)
                 .addIngredient(Items.SHIELD).addIngredient(ModTags.iron).addIngredient(ModTags.iron).build(consumer);
 
-        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.recoveryPotion.get(), 3, 1, 30)
-                .addIngredient(ModItems.medicinalHerb.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.healingPotion.get(), 3, 20, 30)
+        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.recoveryPotion.get(), 2, 3, 30)
+                .addIngredient(ModItems.medicinalHerb.get())
+                .addIngredient(ModItems.medicinalHerb.get())
+                .addIngredient(ModItems.greenGrass.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.healingPotion.get(), 2, 20, 30)
                 .addIngredient(ModItems.medicinalHerb.get())
                 .addIngredient(ModItems.medicinalHerb.get())
                 .addIngredient(ModItems.redGrass.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.mysteryPotion.get(), 3, 45, 30)
-                .addIngredient(ModItems.medicinalHerb.get())
+        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.mysteryPotion.get(), 2, 45, 30)
                 .addIngredient(ModItems.medicinalHerb.get())
                 .addIngredient(ModItems.medicinalHerb.get())
                 .addIngredient(ModItems.whiteGrass.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.magicalPotion.get(), 3, 45, 30)
-                .addIngredient(ModItems.medicinalHerb.get())
-                .addIngredient(ModItems.medicinalHerb.get())
+        RecipeBuilder.create(EnumCrafting.CHEM, ModItems.magicalPotion.get(), 2, 70, 30)
                 .addIngredient(ModItems.medicinalHerb.get())
                 .addIngredient(ModItems.medicinalHerb.get())
                 .addIngredient(ModItems.elliLeaves.get()).build(consumer);
