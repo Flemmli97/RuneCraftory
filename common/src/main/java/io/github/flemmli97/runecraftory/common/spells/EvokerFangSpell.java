@@ -24,7 +24,7 @@ public class EvokerFangSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 20;
+        return 10;
     }
 
     @Override

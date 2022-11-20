@@ -25,7 +25,7 @@ public class WaveSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 40;
+        return 35;
     }
 
     @Override

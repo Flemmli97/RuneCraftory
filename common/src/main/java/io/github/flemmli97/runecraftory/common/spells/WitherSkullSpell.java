@@ -24,7 +24,7 @@ public class WitherSkullSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 15;
+        return 10;
     }
 
     @Override

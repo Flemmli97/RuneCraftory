@@ -11,12 +11,15 @@ import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaSleep;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBaseSpellBall;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigPlate;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterflySummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCards;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBeam;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBullet;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBulletSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkness;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityExplosionSpell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
@@ -25,6 +28,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityLightBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMarionettaTrap;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollen;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityPollenPuff;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityRockSpear;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityRuneOrb;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityRuney;
@@ -428,6 +432,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityAmbrosiaSleep>> sleepBall = reg(EntityType.Builder.<EntityAmbrosiaSleep>of(EntityAmbrosiaSleep::new, MobCategory.MISC).sized(0.4f, 0.6f).clientTrackingRange(4), LibEntities.ambrosia_sleep);
     public static final RegistryEntrySupplier<EntityType<EntityAmbrosiaWave>> ambrosiaWave = reg(EntityType.Builder.<EntityAmbrosiaWave>of(EntityAmbrosiaWave::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.ambrosia_wave);
     public static final RegistryEntrySupplier<EntityType<EntityButterfly>> butterfly = reg(EntityType.Builder.<EntityButterfly>of(EntityButterfly::new, MobCategory.MISC).sized(0.2f, 0.2f).clientTrackingRange(4), LibEntities.butterfly);
+    public static final RegistryEntrySupplier<EntityType<EntityPollenPuff>> pollenPuff = reg(EntityType.Builder.<EntityPollenPuff>of(EntityPollenPuff::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), LibEntities.pollenPuff);
     public static final RegistryEntrySupplier<EntityType<EntityPollen>> pollen = reg(EntityType.Builder.<EntityPollen>of(EntityPollen::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.pollen);
     public static final RegistryEntrySupplier<EntityType<EntityThiccLightningBolt>> lightningOrbBolt = reg(EntityType.Builder.<EntityThiccLightningBolt>of(EntityThiccLightningBolt::new, MobCategory.MISC).sized(0.8f, 0.8f).clientTrackingRange(4), LibEntities.lightningOrbBolt);
     public static final RegistryEntrySupplier<EntityType<EntityThunderboltBeam>> lightningBeam = reg(EntityType.Builder.<EntityThunderboltBeam>of(EntityThunderboltBeam::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), LibEntities.lightningBeam);
@@ -446,11 +451,14 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityLightBall>> lightBall = reg(EntityType.Builder.<EntityLightBall>of(EntityLightBall::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.lightBall);
     public static final RegistryEntrySupplier<EntityType<EntityDarkBall>> darkBall = reg(EntityType.Builder.<EntityDarkBall>of(EntityDarkBall::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.darkBall);
     public static final RegistryEntrySupplier<EntityType<EntityDarkness>> darkness = reg(EntityType.Builder.<EntityDarkness>of(EntityDarkness::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.darkness);
+    public static final RegistryEntrySupplier<EntityType<EntityBigPlate>> plate = reg(EntityType.Builder.<EntityBigPlate>of(EntityBigPlate::new, MobCategory.MISC).sized(1.5f, 0.3f).clientTrackingRange(4), LibEntities.plate);
+    public static final RegistryEntrySupplier<EntityType<EntityDarkBullet>> darkBullet = reg(EntityType.Builder.<EntityDarkBullet>of(EntityDarkBullet::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), LibEntities.darkBullet);
 
     public static final RegistryEntrySupplier<EntityType<EntityRuney>> runey = reg(EntityType.Builder.of(EntityRuney::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), LibEntities.runey);
     public static final RegistryEntrySupplier<EntityType<EntityRuneOrb>> statBonus = reg(EntityType.Builder.of(EntityRuneOrb::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), LibEntities.runeOrb);
 
-    public static final RegistryEntrySupplier<EntityType<EntityButterflySummoner>> butterflySummoner = reg(EntityType.Builder.<EntityButterflySummoner>of(EntityButterflySummoner::new, MobCategory.MISC).sized(0.05f, 0.05f).clientTrackingRange(4), LibEntities.butterflySummoner);
+    public static final RegistryEntrySupplier<EntityType<EntityButterflySummoner>> butterflySummoner = reg(EntityType.Builder.<EntityButterflySummoner>of(EntityButterflySummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).clientTrackingRange(4), LibEntities.butterflySummoner);
+    public static final RegistryEntrySupplier<EntityType<EntityDarkBulletSummoner>> darkBulletSummoner = reg(EntityType.Builder.<EntityDarkBulletSummoner>of(EntityDarkBulletSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).clientTrackingRange(4), LibEntities.darkBulletSummoner);
 
     public static final RegistryEntrySupplier<EntityType<EntityCustomFishingHook>> fishingHook = reg(EntityType.Builder.<EntityCustomFishingHook>of(EntityCustomFishingHook::new, MobCategory.MISC).noSave().noSummon().sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(5), LibEntities.fishingHook);
 

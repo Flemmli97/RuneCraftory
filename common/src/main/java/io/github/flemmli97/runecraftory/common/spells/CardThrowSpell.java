@@ -29,7 +29,7 @@ public class CardThrowSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 30;
+        return 20;
     }
 
     @Override

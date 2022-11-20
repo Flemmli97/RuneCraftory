@@ -9,7 +9,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -53,7 +52,7 @@ public class EntityRuney extends Entity {
             data.increaseStatBonus(player, stat);
             data.refreshRunePoints(player, 150);
         });
-        player.level.playSound(null, player.blockPosition(), SoundEvents.GLASS_BREAK, SoundSource.PLAYERS, 1, 0.5f);
+        player.level.playSound(null, player.blockPosition(), SoundEvents.GLASS_BREAK, this.getSoundSource(), 1, 0.5f);
     }
 
     @Override

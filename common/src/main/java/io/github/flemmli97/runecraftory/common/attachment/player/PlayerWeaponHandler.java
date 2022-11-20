@@ -177,6 +177,12 @@ public class PlayerWeaponHandler {
         return this.weapon.getMaxSwing() == this.swings;
     }
 
+    public void doWeaponAttack(Player player, WeaponUseState state, ItemStack stack, Runnable attack, boolean checkCurrentAnimation) {
+        if (checkCurrentAnimation && this.currentAnim != null)
+            return;
+        this.doWeaponAttack(player, state, stack, attack);
+    }
+
     public void doWeaponAttack(Player player, WeaponUseState state, ItemStack stack, Runnable attack) {
         this.setAnimationBasedOnState(player, state);
         this.usedWeapon = stack;

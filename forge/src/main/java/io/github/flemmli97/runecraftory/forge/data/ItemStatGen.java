@@ -606,7 +606,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 7)
                 .addAttribute(ModAttributes.RF_MAGIC.get(), 7)
                 .addAttribute(ModAttributes.RFSLEEP.get(), 10)
-                .setSpell(null, ModSpells.WAVE.get(), ModSpells.BUTTERFLY.get()));
+                .setSpell(ModSpells.POLLENPUFF.get(), ModSpells.WAVE.get(), ModSpells.BUTTERFLY.get()));
         this.addStat(ModItems.threadSpider.get(), new ItemStat.Builder(370, 28, 17)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
                 .addAttribute(ModAttributes.RF_MAGIC.get(), 2)
@@ -615,7 +615,8 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 6)
                 .addAttribute(ModAttributes.RF_MAGIC.get(), 9)
                 .addAttribute(ModAttributes.RFSEAL.get(), 15)
-                .addAttribute(ModAttributes.RFPARA.get(), 5));
+                .addAttribute(ModAttributes.RFPARA.get(), 5)
+                .setSpell(ModSpells.DARKBEAM.get(), ModSpells.PLATE.get(), ModSpells.DARKBULLETS.get()));
         this.addStat(ModItems.vine.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.tailScorpion.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.strongVine.get(), new ItemStat.Builder(0, 0, 0));

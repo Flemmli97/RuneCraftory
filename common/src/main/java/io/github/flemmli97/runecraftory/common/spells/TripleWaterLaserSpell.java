@@ -28,7 +28,7 @@ public class TripleWaterLaserSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 50;
+        return 40;
     }
 
     @Override

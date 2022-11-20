@@ -6,10 +6,12 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
 import io.github.flemmli97.runecraftory.common.spells.ArrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.BaseStaffSpell;
 import io.github.flemmli97.runecraftory.common.spells.BigLightningBoltSpell;
+import io.github.flemmli97.runecraftory.common.spells.BigPlateSpell;
 import io.github.flemmli97.runecraftory.common.spells.ButterflySpell;
 import io.github.flemmli97.runecraftory.common.spells.CardThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.DarkBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.DarkBeamSpell;
+import io.github.flemmli97.runecraftory.common.spells.DarkBulletsSpell;
 import io.github.flemmli97.runecraftory.common.spells.DarknessSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWindBladeSpell;
@@ -30,6 +32,7 @@ import io.github.flemmli97.runecraftory.common.spells.ParaHealSpell;
 import io.github.flemmli97.runecraftory.common.spells.PenetrateWindBladeSpell;
 import io.github.flemmli97.runecraftory.common.spells.PlushThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.PoisonHealSpell;
+import io.github.flemmli97.runecraftory.common.spells.PollenPuffSpell;
 import io.github.flemmli97.runecraftory.common.spells.PrismSpell;
 import io.github.flemmli97.runecraftory.common.spells.RockSpearSpell;
 import io.github.flemmli97.runecraftory.common.spells.ShineSpell;
@@ -104,6 +107,7 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> WEBSHOTSPELL = SPELLS.register("web_shot", WebShotSpell::new);
     public static final RegistryEntrySupplier<Spell> SPIRITFLAME = SPELLS.register("spirit_flame", SpiritFlameSpell::new);
 
+    public static final RegistryEntrySupplier<Spell> POLLENPUFF = SPELLS.register("pollen_puff", PollenPuffSpell::new);
     public static final RegistryEntrySupplier<Spell> SLEEPBALLS = SPELLS.register("sleep_balls", SleepBallSpell::new);
     public static final RegistryEntrySupplier<Spell> WAVE = SPELLS.register("wave", WaveSpell::new);
     public static final RegistryEntrySupplier<Spell> BUTTERFLY = SPELLS.register("butterfly", ButterflySpell::new);
@@ -117,6 +121,8 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> PLUSHTHROW = SPELLS.register("throw_plush", PlushThrowSpell::new);
     public static final RegistryEntrySupplier<Spell> FURNITURE = SPELLS.register("furniture_summon", FurnitureThrowSpell::new);
     public static final RegistryEntrySupplier<Spell> DARKBEAM = SPELLS.register("dark_beam", DarkBeamSpell::new);
+    public static final RegistryEntrySupplier<Spell> PLATE = SPELLS.register("big_plate", BigPlateSpell::new);
+    public static final RegistryEntrySupplier<Spell> DARKBULLETS = SPELLS.register("dark_bullets", DarkBulletsSpell::new);
 
     public static final Supplier<SimpleRegistryWrapper<Spell>> SPELLREGISTRY = new LazyGetter<>(() -> PlatformUtils.INSTANCE.registry(SPELLREGISTRY_KEY));
 

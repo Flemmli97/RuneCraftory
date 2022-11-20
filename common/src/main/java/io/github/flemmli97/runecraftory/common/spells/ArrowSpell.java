@@ -30,7 +30,7 @@ public class ArrowSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ArrowSpell extends Spell {
         if (stack.getItem() instanceof ItemStaffBase)
             f = BowItem.getPowerForTime(72000 - entity.getUseItemRemainingTicks());
         arrowentity.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0.0F, f * 1.5F, 1.0F);
-        arrowentity.setBaseDamage(1.7 + CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 0.05 * lvl);
+        arrowentity.setBaseDamage(1.7 + CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 0.7 * lvl);
         arrowentity.setSecondsOnFire(ItemNBT.getElement(stack) == EnumElement.FIRE ? 200 : 0);
         arrowentity.pickup = AbstractArrow.Pickup.DISALLOWED;
         level.addFreshEntity(arrowentity);

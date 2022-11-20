@@ -49,6 +49,7 @@ public class LibEntities {
     public static final ResourceLocation ambrosia_sleep = new ResourceLocation(RuneCraftory.MODID, "sleep_ball");
     public static final ResourceLocation ambrosia_wave = new ResourceLocation(RuneCraftory.MODID, "ambrosia_wave");
     public static final ResourceLocation butterfly = new ResourceLocation(RuneCraftory.MODID, "butterfly");
+    public static final ResourceLocation pollenPuff = new ResourceLocation(RuneCraftory.MODID, "pollen_puff");
     public static final ResourceLocation pollen = new ResourceLocation(RuneCraftory.MODID, "pollen");
     public static final ResourceLocation lightningOrbBolt = new ResourceLocation(RuneCraftory.MODID, "lightning_orb_bolt");
     public static final ResourceLocation lightningBeam = new ResourceLocation(RuneCraftory.MODID, "lightning_beam");
@@ -68,11 +69,14 @@ public class LibEntities {
     public static final ResourceLocation lightBall = new ResourceLocation(RuneCraftory.MODID, "light_ball");
     public static final ResourceLocation darkBall = new ResourceLocation(RuneCraftory.MODID, "dark_ball");
     public static final ResourceLocation darkness = new ResourceLocation(RuneCraftory.MODID, "darkness");
+    public static final ResourceLocation plate = new ResourceLocation(RuneCraftory.MODID, "big_plate");
+    public static final ResourceLocation darkBullet = new ResourceLocation(RuneCraftory.MODID, "dark_bullet");
 
     public static final ResourceLocation runey = new ResourceLocation(RuneCraftory.MODID, "runey");
     public static final ResourceLocation runeOrb = new ResourceLocation(RuneCraftory.MODID, "rune_orb");
 
     public static final ResourceLocation butterflySummoner = new ResourceLocation(RuneCraftory.MODID, "butterfly_summoner");
+    public static final ResourceLocation darkBulletSummoner = new ResourceLocation(RuneCraftory.MODID, "dark_bullet_summoner");
 
     public static final ResourceLocation fishingHook = new ResourceLocation(RuneCraftory.MODID, "fishing_hook");
 

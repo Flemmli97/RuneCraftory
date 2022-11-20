@@ -33,7 +33,7 @@ public class TripleArrowSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 1;
+        return 10;
     }
 
     @Override

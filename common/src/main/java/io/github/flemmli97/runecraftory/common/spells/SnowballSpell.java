@@ -22,7 +22,7 @@ public class SnowballSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 5;
+        return 1;
     }
 
     @Override

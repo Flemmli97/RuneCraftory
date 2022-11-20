@@ -37,7 +37,7 @@ public class TeleportSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 20;
+        return 30;
     }
 
     @Override

@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.client.model.ModelButterfly;
 import io.github.flemmli97.runecraftory.client.model.ModelChest;
 import io.github.flemmli97.runecraftory.client.model.ModelGate;
+import io.github.flemmli97.runecraftory.client.model.ModelPlate;
 import io.github.flemmli97.runecraftory.client.model.armor.PiyoSandals;
 import io.github.flemmli97.runecraftory.client.model.armor.RingsArmorModel;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelAmbrosia;
@@ -66,11 +67,13 @@ import io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderCards;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkBeam;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkBullet;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkness;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFireball;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFurnitures;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMarionettaTrap;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderPlate;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderRockSpear;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSpiderWeb;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderStaffBall;
@@ -244,6 +247,7 @@ public class ClientRegister {
             }
         });
         consumer.register(ModEntities.sleepBall.get(), EmptyRender::new);
+        consumer.register(ModEntities.pollenPuff.get(), EmptyRender::new);
         consumer.register(ModEntities.pollen.get(), EmptyRender::new);
         consumer.register(ModEntities.ambrosiaWave.get(), EmptyRender::new);
         consumer.register(ModEntities.butterfly.get(), RenderButterfly::new);
@@ -265,13 +269,17 @@ public class ClientRegister {
         consumer.register(ModEntities.lightBall.get(), EmptyRender::new);
         consumer.register(ModEntities.darkBall.get(), EmptyRender::new);
         consumer.register(ModEntities.darkness.get(), RenderDarkness::new);
+        consumer.register(ModEntities.plate.get(), RenderPlate::new);
+        consumer.register(ModEntities.darkBullet.get(), RenderDarkBullet::new);
 
         consumer.register(ModEntities.runey.get(), RenderRuney::new);
         consumer.register(ModEntities.statBonus.get(), EmptyRender::new);
 
         consumer.register(ModEntities.butterflySummoner.get(), EmptyRender::new);
+        consumer.register(ModEntities.darkBulletSummoner.get(), EmptyRender::new);
 
         consumer.register(ModEntities.fishingHook.get(), CustomFishingHookRenderer::new);
+
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T>> EntityRendererProvider<? super T> getMonsterRender(Function<ModelPart, M> model, ModelLayerLocation layerLocation, ResourceLocation texture, float shadow) {
@@ -328,6 +336,8 @@ public class ClientRegister {
         consumer.accept(AnimatedPlayerModel.LAYER_LOCATION, AnimatedPlayerModel::createBodyLayer);
         consumer.accept(PiyoSandals.LAYER_LOCATION, PiyoSandals::createBodyLayer);
         consumer.accept(RingsArmorModel.LAYER_LOCATION, RingsArmorModel::createBodyLayer);
+
+        consumer.accept(ModelPlate.LAYER_LOCATION, ModelPlate::createBodyLayer);
     }
 
     public static <T extends ParticleOptions> void registerParticles(PartileRegister consumer) {

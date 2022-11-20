@@ -18,6 +18,7 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -35,7 +36,8 @@ import java.util.function.Function;
 
 public class TendCropsGoal extends Goal {
 
-    private static final Function<ItemStack, Boolean> seedItem = s -> !s.isEmpty() && s.getItem() instanceof BlockItem && s.is(ModTags.seeds);
+    private static final Function<ItemStack, Boolean> seedItem = s -> !s.isEmpty() && s.getItem() instanceof BlockItem
+            && (s.is(ModTags.seeds) || s.getItem() == Items.POTATO || s.getItem() == Items.CARROT);
 
     private final List<BlockPos> toTend = new ArrayList<>();
     private BlockPos selected;

@@ -9,5 +9,8 @@
   "sellPrice": 1000,
   "upgradeDifficulty": 37,
   "element": "NONE",
+  "tier1Spell": "runecraftory:dark_beam",
+  "tier2Spell": "runecraftory:big_plate",
+  "tier3Spell": "runecraftory:dark_bullets",
   "item": "runecraftory:puppetry_strings"
 }

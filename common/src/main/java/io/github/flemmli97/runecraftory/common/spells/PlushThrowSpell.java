@@ -27,7 +27,7 @@ public class PlushThrowSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 30;
+        return 25;
     }
 
     @Override

@@ -28,7 +28,7 @@ public class SpiritFlameSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 5;
+        return 10;
     }
 
     @Override

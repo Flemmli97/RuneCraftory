@@ -8,6 +8,7 @@
   "sellPrice": 350,
   "upgradeDifficulty": 21,
   "element": "NONE",
+  "tier1Spell": "runecraftory:pollen_puff",
   "tier2Spell": "runecraftory:wave",
   "tier3Spell": "runecraftory:butterfly",
   "item": "runecraftory:ambrosias_thorns"

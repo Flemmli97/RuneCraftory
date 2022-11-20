@@ -96,7 +96,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int remainingUseDuration) {
         int duration = stack.getUseDuration() - remainingUseDuration;
-        if (duration != 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
+        if (duration > 0 && duration / this.getChargeTime(stack) <= this.chargeAmount(stack) && duration % this.getChargeTime(stack) == 0)
             livingEntity.playSound(SoundEvents.NOTE_BLOCK_XYLOPHONE, 1, 1);
     }
 
@@ -137,7 +137,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
                             if (spell.use(player.getLevel(), entity, stack))
                                 spell.levelSkill(player);
                         };
-                        data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.STAFFRIGHTCLICK, stack, run);
+                        data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.STAFFRIGHTCLICK, stack, run, true);
                     });
                     return;
                 }

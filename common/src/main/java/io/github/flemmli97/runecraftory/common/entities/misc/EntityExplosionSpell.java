@@ -16,7 +16,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -84,7 +83,7 @@ public class EntityExplosionSpell extends EntityProjectile {
 
     private void doExplosion(double x, double y, double z, Entity hit) {
         this.doExplosion(hit);
-        this.level.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0f, 1.0f);
+        this.level.playSound(null, x, y, z, SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
         this.remove(RemovalReason.KILLED);
         if (this.level instanceof ServerLevel serverLevel) {
             AABB area = new AABB(x - 0.5, y - 0.5, z + 0.5, x + 0.5, y + 0.5, z + 0.5).inflate(7);

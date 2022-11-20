@@ -89,7 +89,12 @@ public class EntityBuffamoo extends ChargingMonster {
     @Override
     public void doWhileCharge() {
         if (this.tickCount % 3 == 0)
-            this.level.playSound(null, this.blockPosition(), SoundEvents.COW_STEP, SoundSource.HOSTILE, 1, this.getRandom().nextFloat() * 0.2F);
+            this.level.playSound(null, this.blockPosition(), SoundEvents.COW_STEP, this.getSoundSource(), 1, this.getRandom().nextFloat() * 0.2F);
+    }
+
+    @Override
+    public SoundSource getSoundSource() {
+        return SoundSource.HOSTILE;
     }
 
     @Override

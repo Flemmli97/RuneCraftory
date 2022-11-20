@@ -31,7 +31,7 @@ public class EntityDarkness extends EntityDamageCloud {
 
     @Override
     public int livingTickMax() {
-        return 46;
+        return 20;
     }
 
     @Override

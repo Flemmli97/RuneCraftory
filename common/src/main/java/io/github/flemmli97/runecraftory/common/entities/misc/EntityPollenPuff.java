@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
+import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -7,40 +8,33 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
-public class EntityFireball extends EntityProjectile {
+public class EntityPollenPuff extends EntityProjectile {
 
-    private static final EntityDataAccessor<Boolean> BIG = SynchedEntityData.defineId(EntityFireball.class, EntityDataSerializers.BOOLEAN);
+    public static final DustParticleOptions PARTICLE = new DustParticleOptions(new Vector3f(Vec3.fromRGB24(0xd4fcd7)), 1.0f);
 
-    private Predicate<LivingEntity> pred;
     private float damageMultiplier = 1;
+    private Predicate<LivingEntity> pred;
 
-    public EntityFireball(EntityType<? extends EntityFireball> type, Level level) {
-        super(type, level);
+    public EntityPollenPuff(EntityType<? extends EntityPollenPuff> type, Level world) {
+        super(type, world);
     }
 
-    public EntityFireball(Level level, LivingEntity shooter, boolean big) {
-        super(ModEntities.fireBall.get(), level, shooter);
+    public EntityPollenPuff(Level world, LivingEntity shooter) {
+        super(ModEntities.pollenPuff.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
-        this.entityData.set(BIG, big);
-    }
-
-    public boolean big() {
-        return this.entityData.get(BIG);
     }
 
     public void setDamageMultiplier(float damageMultiplier) {
@@ -48,14 +42,17 @@ public class EntityFireball extends EntityProjectile {
     }
 
     @Override
-    public int livingTickMax() {
-        return 200;
+    public void tick() {
+        super.tick();
+        if (this.level.isClientSide) {
+            for (int i = 0; i < 3; i++)
+                this.level.addParticle(PARTICLE, this.getRandomX(0.5), this.getY() + this.getBbHeight() * 0.5, this.getRandomZ(0.5), 0, 0, 0);
+        }
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(BIG, false);
+    public int livingTickMax() {
+        return 60;
     }
 
     @Override
@@ -64,36 +61,32 @@ public class EntityFireball extends EntityProjectile {
     }
 
     @Override
-    protected float getGravityVelocity() {
-        return 0.0025f;
-    }
-
-    @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.FIRE).hurtResistant(5), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
-        this.level.playSound(null, result.getEntity().blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
-        this.remove(RemovalReason.KILLED);
+        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(0).element(EnumElement.EARTH).hurtResistant(5), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.RF_MAGIC.get()) * this.damageMultiplier, null);
+        this.kill();
         return att;
     }
 
     @Override
-    protected void onBlockHit(BlockHitResult result) {
-        this.level.playSound(null, result.getLocation().x, result.getLocation().y, result.getLocation().z, SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
-        this.remove(RemovalReason.KILLED);
+    protected void onBlockHit(BlockHitResult blockHitResult) {
+        this.kill();
+    }
+
+    @Override
+    protected float getGravityVelocity() {
+        return 0.02f;
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.damageMultiplier = compound.getFloat("DamageMultiplier");
-        this.entityData.set(BIG, compound.getBoolean("Big"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putFloat("DamageMultiplier", this.damageMultiplier);
-        compound.putBoolean("Big", this.big());
     }
 
     @Override

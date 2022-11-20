@@ -29,7 +29,7 @@ public class DoubleWaterLaserSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 50;
+        return 40;
     }
 
     @Override

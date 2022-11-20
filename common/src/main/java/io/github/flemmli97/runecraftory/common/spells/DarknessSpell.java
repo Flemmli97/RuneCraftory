@@ -26,7 +26,7 @@ public class DarknessSpell extends Spell {
 
     @Override
     public int coolDown() {
-        return 50;
+        return 30;
     }
 
     @Override
