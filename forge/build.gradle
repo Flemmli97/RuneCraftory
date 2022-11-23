@@ -9,7 +9,7 @@ architectury {
 
 loom {
     forge {
-        mixinConfigs = ["runecraftory.mixins.json"]
+        mixinConfigs = ["runecraftory.mixins.json", "runecraftory.forge.mixins.json"]
         dataGen {
             mod "runecraftory"
         }
@@ -70,7 +70,7 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
-    modImplementation "${tenshilib_dep}:forge"
+    modImplementation "${tenshilib_dep}-forge"
     modImplementation patchouli
     modImplementation patchouli_datagen
     modCompileOnly "${jei_dep}:api"
@@ -98,7 +98,6 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier "forge"
 }
 
 jar {
@@ -109,7 +108,7 @@ sourcesJar {
     def commonSources = project(":common").sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
-    classifier "forge-sources"
+    classifier "sources"
 }
 
 components.java {
@@ -129,7 +128,7 @@ publishing {
                 builtBy remapSourcesJar
             }
             artifactId project.archives_base_name
-            version project.version
+            version project.version + "-forge"
         }
     }
 

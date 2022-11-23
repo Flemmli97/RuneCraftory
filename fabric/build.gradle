@@ -35,7 +35,7 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
 
-    modImplementation "${tenshilib_dep}:fabric"
+    modImplementation "${tenshilib_dep}-fabric"
 
     modApi("${cloth_config}") {
         exclude(group: "net.fabricmc.fabric-api")
@@ -63,7 +63,6 @@ shadowJar {
 remapJar {
     input.set shadowJar.archiveFile
     dependsOn shadowJar
-    classifier "fabric"
 }
 
 jar {
@@ -74,7 +73,7 @@ sourcesJar {
     def commonSources = project(":common").sourcesJar
     dependsOn commonSources
     from commonSources.archiveFile.map { zipTree(it) }
-    classifier "fabric-sources"
+    classifier "sources"
 }
 
 components.java {
@@ -94,7 +93,7 @@ publishing {
                 builtBy remapSourcesJar
             }
             artifactId project.archives_base_name
-            version project.version
+            version project.version + "-fabric"
         }
     }
 
