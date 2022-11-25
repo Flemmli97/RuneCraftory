@@ -168,7 +168,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private EnumShop shop = EnumShop.NONE;
     private NPCData data = NPCData.DEFAULT_DATA;
     //Will be used if data returns null for these values
-    private NPCData.NPCLook look;
+    private NPCData.NPCLook look = NPCData.NPCLook.DEFAULT_LOOK;
     private Map<String, TagKey<Item>> gift = new HashMap<>();
     //shop, gender
 
