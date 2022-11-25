@@ -45,7 +45,7 @@ public class MixinUtils {
     }
 
     public static boolean handleEntityCollision(ItemEntity entity) {
-        if (entity.isInWater() || entity.isInLava() || entity.getThrower() == null)
+        if (entity.isInWater() || entity.isInLava() || entity.getThrower() == null || entity.level.isClientSide)
             return true;
         HitResult hitResult = ProjectileUtil.getHitResult(entity, t -> canHitEntity(entity, t));
         if (hitResult.getType() == HitResult.Type.BLOCK) {

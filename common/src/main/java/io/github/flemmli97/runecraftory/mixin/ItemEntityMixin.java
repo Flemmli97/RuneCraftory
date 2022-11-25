@@ -15,7 +15,7 @@ public abstract class ItemEntityMixin {
     @Unique
     private boolean hitSomething;
 
-    @Inject(method = "tick", at = @At("RETURN"))
+    @Inject(method = "tick", at = @At("TAIL"))
     private void checkEntityCollision(CallbackInfo info) {
         if (!this.hitSomething && !((ItemEntity) (Object) this).isOnGround())
             this.hitSomething = MixinUtils.handleEntityCollision(((ItemEntity) (Object) this));
