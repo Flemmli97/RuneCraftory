@@ -350,7 +350,7 @@ public class PlayerData {
                 AttributeModifier modifier = health.getModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
                 double val = modifier == null ? 0 : modifier.getAmount();
                 health.removeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE);
-                health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_MODIFIER, "rf.item.hpModifier", val + 10, AttributeModifier.Operation.ADDITION));
+                health.addPermanentModifier(new AttributeModifier(LibConstants.MAX_HEALTH_ITEM_INCREASE, "rf.item.hpModifier", val + 10, AttributeModifier.Operation.ADDITION));
             }
         }
     }
