@@ -1,3 +1,10 @@
+RuneCraftory 1.4.1
+================
+- Fix crash with thrown item
+- Fix crash with picking up hp runeys
+- Fix meltable snow not having correct tags
+- Hide the tooltip from apotheosis and quark for weapons/armor from this mod
+
 RuneCraftory 1.4.0
 ================
 - Add seasonal snow. If it gets cold enough it will snow in biomes where it will normally not.
