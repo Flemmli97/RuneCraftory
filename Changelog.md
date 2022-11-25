@@ -4,6 +4,7 @@ RuneCraftory 1.4.1
 - Fix crash with picking up hp runeys
 - Fix meltable snow not having correct tags
 - Hide the tooltip from apotheosis and quark for weapons/armor from this mod
+- Fix a nullpointer with loading old npcs
 
 RuneCraftory 1.4.0
 ================
