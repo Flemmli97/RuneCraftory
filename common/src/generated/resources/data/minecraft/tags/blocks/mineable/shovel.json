@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "runecraftory:snow",
     "runecraftory:farmland"
   ]
 }

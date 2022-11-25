@@ -30,6 +30,7 @@ public class BlockTagGen extends BlockTagsProvider {
         this.tag(BlockTags.RABBITS_SPAWNABLE_ON).add(ModBlocks.snow.get());
         this.tag(BlockTags.FOXES_SPAWNABLE_ON).add(ModBlocks.snow.get());
         this.tag(BlockTags.WOLVES_SPAWNABLE_ON).add(ModBlocks.snow.get());
+        this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.snow.get());
 
         this.tag(ModTags.sickleDestroyable)
                 .addTag(BlockTags.CORAL_PLANTS)

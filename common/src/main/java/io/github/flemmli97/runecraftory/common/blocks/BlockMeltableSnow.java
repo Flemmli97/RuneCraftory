@@ -2,9 +2,11 @@ package io.github.flemmli97.runecraftory.common.blocks;
 
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,6 +26,18 @@ public class BlockMeltableSnow extends SnowLayerBlock {
             SnowLayerBlock.dropResources(state, level, pos);
             level.removeBlock(pos, false);
         }
+    }
+
+    @Override
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
+        int i = state.getValue(LAYERS);
+        if (useContext.getItemInHand().is(Items.SNOW) && i < 8) {
+            if (useContext.replacingClickedOnBlock()) {
+                return useContext.getClickedFace() == Direction.UP;
+            }
+            return true;
+        }
+        return i == 1;
     }
 
     @Override
