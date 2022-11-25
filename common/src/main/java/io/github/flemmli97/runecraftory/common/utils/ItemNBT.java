@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.MultimapBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
@@ -74,7 +74,7 @@ public class ItemNBT {
 
     public static Multimap<Attribute, AttributeModifier> getStatsAttributeMap(ItemStack stack, Multimap<Attribute, AttributeModifier> map, EquipmentSlot slot) {
         if (ItemNBT.shouldHaveStats(stack) && ItemUtils.slotOf(stack) == slot) {
-            Multimap<Attribute, AttributeModifier> multimap = HashMultimap.create();
+            Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.treeKeys(ModAttributes.sorted).hashSetValues().build();
             ItemNBT.statIncrease(stack).forEach((att, d) -> multimap.put(att, new AttributeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()], "rf.stat_increase", d, AttributeModifier.Operation.ADDITION)));
             return multimap;
         }
