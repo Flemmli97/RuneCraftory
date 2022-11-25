@@ -5,6 +5,8 @@ RuneCraftory 1.4.1
 - Fix meltable snow not having correct tags
 - Hide the tooltip from apotheosis and quark for weapons/armor from this mod
 - Fix a nullpointer with loading old npcs
+- Fix wrong default npc lang key 
+- Fix default items not added to shop
 
 RuneCraftory 1.4.0
 ================
