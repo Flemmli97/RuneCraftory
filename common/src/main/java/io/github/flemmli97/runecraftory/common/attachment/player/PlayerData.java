@@ -440,16 +440,16 @@ public class PlayerData {
                     if (!item.needsSpecialUnlocking() && this.shippedItems.containsKey(PlatformUtils.INSTANCE.items().getIDFrom(item.stack().getItem())))
                         shopItems.add(item.stack().copy());
                 });
-                if (shopItems.isEmpty())
-                    continue;
                 NonNullList<ItemStack> shop = NonNullList.create();
-                for (float chance = 1.5f + shopItems.size() * 0.002f; player.level.random.nextFloat() < chance; chance -= 0.1f) {
-                    ItemStack stack = shopItems.remove(player.level.random.nextInt(shopItems.size()));
-                    shop.add(stack);
-                    if (shopItems.isEmpty() || (profession == EnumShop.RANDOM && shop.size() >= InventoryShop.shopSize))
-                        break;
+                if (!shopItems.isEmpty()) {
+                    for (float chance = 1.5f + shopItems.size() * 0.002f; player.level.random.nextFloat() < chance; chance -= 0.1f) {
+                        ItemStack stack = shopItems.remove(player.level.random.nextInt(shopItems.size()));
+                        shop.add(stack);
+                        if (shopItems.isEmpty() || (profession == EnumShop.RANDOM && shop.size() >= InventoryShop.shopSize))
+                            break;
+                    }
                 }
-                DataPackHandler.shopItemsManager().getDefaultItems(profession).forEach(item -> shopItems.add(item.stack().copy()));
+                DataPackHandler.shopItemsManager().getDefaultItems(profession).forEach(item -> shop.add(item.stack().copy()));
                 this.shopItems.put(profession, shop);
             }
         }

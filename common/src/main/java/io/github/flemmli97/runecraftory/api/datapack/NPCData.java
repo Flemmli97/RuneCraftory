@@ -36,7 +36,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
     private static Map<ConversationType, ConversationSet> buildDefaultInteractionMap() {
         ImmutableMap.Builder<ConversationType, ConversationSet> builder = new ImmutableMap.Builder<>();
         for (ConversationType type : ConversationType.values())
-            builder.put(type, new ConversationSet("npc.default" + type.key + ".default", List.of()));
+            builder.put(type, new ConversationSet("npc.default." + type.key + ".default", List.of()));
         return builder.build();
     }
 
