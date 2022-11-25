@@ -59,10 +59,14 @@ public class DailyMonsterUpdater {
     public CompoundTag save() {
         CompoundTag compound = new CompoundTag();
         compound.putInt("LastUpdateDay", this.lastUpdateDay);
+        compound.putInt("LastUpdateFood", this.lastUpdateFood);
+        compound.putInt("LastUpdateBrush", this.lastUpdateBrush);
         return compound;
     }
 
     public void read(CompoundTag compound) {
         this.lastUpdateDay = compound.getInt("LastUpdateDay");
+        this.lastUpdateFood = compound.getInt("LastUpdateFood");
+        this.lastUpdateBrush = compound.getInt("LastUpdateBrush");
     }
 }
