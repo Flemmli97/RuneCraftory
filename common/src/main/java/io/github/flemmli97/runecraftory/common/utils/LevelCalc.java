@@ -183,10 +183,11 @@ public class LevelCalc {
     }
 
     private static float levelXpWith(int base, int level, int targetLevel) {
+        float xp = (base + base * (level - 1) * 0.5f) * GeneralConfig.xpMultiplier;
         if (level <= targetLevel)
-            return (base + base * (level - 1) * 0.5f) * GeneralConfig.xpMultiplier;
-        int diff = level - targetLevel * 2;
-        return (base + base * Math.max(0, level - diff - 1) * 0.5f) * GeneralConfig.xpMultiplier;
+            return xp;
+        int diff = level - targetLevel;
+        return xp * Math.max(0.01f, 1 - diff * 0.075f) * GeneralConfig.xpMultiplier;
     }
 
     public static int getBaseXP(EnumSkills skill) {
