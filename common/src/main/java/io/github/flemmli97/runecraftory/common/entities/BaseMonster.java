@@ -855,8 +855,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     else
                         this.level.broadcastEntityEvent(this, (byte) 64);
                 }
-                if (!player.isCreative())
-                    stack.shrink(1);
+                stack.shrink(1);
                 return true;
             }
         } else if (this.tamingTick == -1 && this.isAlive()) {

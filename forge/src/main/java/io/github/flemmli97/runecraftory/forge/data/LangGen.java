@@ -541,6 +541,7 @@ public class LangGen implements DataProvider {
         this.add("npc.default.talk.default", "Hi %s.");
         this.add("npc.default.follow.yes.default", "Sure %s. Where are we going?");
         this.add("npc.default.follow.no.default", "Sorry but im busy right now.");
+        this.add("npc.default.follow.stop.default", "Ok.");
         this.add("npc.default.gift.neutral", "Thank you for your gift.");
 
         this.add("npc.generic.greeting.default", "Hello %s");
@@ -551,6 +552,7 @@ public class LangGen implements DataProvider {
         this.add("npc.generic.talk.2", "I don't like working.");
         this.add("npc.generic.follow.yes", "Ok");
         this.add("npc.generic.follow.no", "Sorry but I decline.");
+        this.add("npc.generic.follow.stop", "Ok. See you again.");
         this.add("npc.generic.dislike", "Eh... thanks I guess?");
         this.add("npc.generic.like", "Thanks %s for the gift. I really like this.");
         this.add("npc.generic.gift.default", "Thank you for your gift");
@@ -563,6 +565,7 @@ public class LangGen implements DataProvider {
         this.add("npc.generic.2.talk.2", "Those villagers seem strange. Why do they have no hands?");
         this.add("npc.generic.2.follow.yes", "Where are we going?");
         this.add("npc.generic.2.follow.no", "Sorry but I'm busy.");
+        this.add("npc.generic.2.follow.stop", "Ok. Bye.");
         this.add("npc.generic.2.gift.default", "Thanks. I appreciate it");
 
         this.add("runecraftory.advancements.root.title", "Runecraftory");

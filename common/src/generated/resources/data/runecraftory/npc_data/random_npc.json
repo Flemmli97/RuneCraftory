@@ -19,12 +19,14 @@
         {
           "translationKey": "npc.generic.greeting.1",
           "minHearts": 0,
-          "maxHearts": 10
+          "maxHearts": 10,
+          "conditions": []
         },
         {
           "translationKey": "npc.generic.greeting.2",
           "minHearts": 0,
-          "maxHearts": 10
+          "maxHearts": 10,
+          "conditions": []
         }
       ]
     },
@@ -34,12 +36,14 @@
         {
           "translationKey": "npc.generic.talk.1",
           "minHearts": 0,
-          "maxHearts": 10
+          "maxHearts": 10,
+          "conditions": []
         },
         {
           "translationKey": "npc.generic.talk.2",
           "minHearts": 0,
-          "maxHearts": 10
+          "maxHearts": 10,
+          "conditions": []
         }
       ]
     },
@@ -49,6 +53,10 @@
     },
     "FOLLOWNO": {
       "fallbackKey": "npc.generic.follow.no",
+      "conversations": []
+    },
+    "FOLLOWSTOP": {
+      "fallbackKey": "npc.generic.follow.stop",
       "conversations": []
     }
   }

@@ -1,21 +1,38 @@
 package io.github.flemmli97.runecraftory.api.datapack;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSyntaxException;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.storage.loot.Deserializers;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.Serializer;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -83,7 +100,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         GREETING("greeting"),
         TALK("talk"),
         FOLLOWYES("follow.yes"),
-        FOLLOWNO("follow.no");
+        FOLLOWNO("follow.no"),
+        FOLLOWSTOP("follow.stop");
 
         public final String key;
 
@@ -187,15 +205,60 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
-    public record Conversation(String translationKey, int minHearts, int maxHearts) {
+    public record Conversation(String translationKey, int minHearts, int maxHearts, LootItemCondition... conditions) {
+
+        private static final Gson GSON = Deserializers.createConditionSerializer().create();
+        private static final JsonDeserializationContext CTX_DESERIALIZER = GSON::fromJson;
+        private static final JsonSerializationContext CTX_SERIALIZER = new JsonSerializationContext() {
+            @Override
+            public JsonElement serialize(Object src) {
+                return GSON.toJsonTree(src);
+            }
+
+            @Override
+            public JsonElement serialize(Object src, Type typeOfSrc) {
+                return GSON.toJsonTree(src, typeOfSrc);
+            }
+        };
+
+        @SuppressWarnings("unchecked")
+        public static final Codec<LootItemCondition> LOOT_ITEM_CONDITION_CODEC = Codec.PASSTHROUGH.comapFlatMap(dynamic -> {
+            JsonElement json = dynamic.convert(JsonOps.INSTANCE).getValue();
+            if (json instanceof JsonObject obj) {
+                String type = GsonHelper.getAsString(obj, "type", "");
+                if (type.isEmpty()) {
+                    throw new JsonSyntaxException("Missing LootConditionType");
+                }
+                LootItemConditionType conditionType = Registry.LOOT_CONDITION_TYPE.get(new ResourceLocation(type));
+                if (conditionType == null) {
+                    throw new JsonSyntaxException("Unknown type '" + type + "'");
+                }
+                return DataResult.success(conditionType.getSerializer().deserialize(obj, CTX_DESERIALIZER));
+            }
+            return DataResult.error("Not a json object: " + json);
+        }, conditon -> {
+            JsonObject obj = new JsonObject();
+            obj.addProperty("type", Registry.LOOT_CONDITION_TYPE.getKey(conditon.getType()).toString());
+            ((Serializer<LootItemCondition>) conditon.getType().getSerializer()).serialize(obj, conditon, CTX_SERIALIZER);
+            return new Dynamic<>(JsonOps.INSTANCE, obj);
+        });
 
         public static final Codec<Conversation> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         Codec.STRING.fieldOf("translationKey").forGetter(d -> d.translationKey),
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("minHearts").forGetter(d -> d.minHearts),
-                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("maxHearts").forGetter(d -> d.maxHearts)
-                ).apply(inst, Conversation::new));
+                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("maxHearts").forGetter(d -> d.maxHearts),
+                        LOOT_ITEM_CONDITION_CODEC.listOf().fieldOf("conditions").forGetter(d -> Arrays.stream(d.conditions).toList())
+                ).apply(inst, (key, min, max, cond) -> new Conversation(key, min, max, cond.toArray(new LootItemCondition[0]))));
 
+        public boolean test(int hearts, LootContext ctx) {
+            if (this.minHearts > hearts || this.maxHearts < hearts)
+                return false;
+            for (LootItemCondition condition : this.conditions)
+                if (!condition.test(ctx))
+                    return false;
+            return true;
+        }
     }
 
     public record Gift(TagKey<Item> item, String responseKey, int xp) {
@@ -222,7 +285,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 return DISLIKE;
             if (xp < 20)
                 return NEUTRAL;
-            if (xp < 50)
+            if (xp < 40)
                 return LIKE;
             return LOVE;
         }

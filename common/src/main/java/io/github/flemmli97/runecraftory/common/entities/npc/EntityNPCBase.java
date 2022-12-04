@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.npc;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
@@ -22,6 +23,7 @@ import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
+import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CNPCLook;
 import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
@@ -107,6 +109,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -178,6 +183,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private int playDeathTick;
 
     private final Map<UUID, NPCFriendPoints> playerHearts = new HashMap<>();
+    private Pair<UUID, NPCRelation> relation;
     private UUIDNameMapper fatherUUID;
     private UUIDNameMapper motherUUID;
     private UUIDNameMapper[] childUUIDs;
@@ -378,26 +384,36 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                     .giftXP(this.level, 15);
             player.sendMessage(new TranslatableComponent(this.data.neutralGiftResponse(), player.getName()), Util.NIL_UUID);
         }
-        if (!player.isCreative())
-            stack.shrink(1);
+        stack.shrink(1);
     }
 
     public void talkTo(Player player) {
         boolean doGreet = this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
                 .talkTo(this.level, 15);
-        int heart = this.playerHearts.get(player.getUUID()).points.getLevel();
-        NPCData.ConversationSet conversations;
-        if (doGreet) {
-            conversations = this.data.interactions().get(NPCData.ConversationType.GREETING);
-        } else
-            conversations = this.data.interactions().get(NPCData.ConversationType.TALK);
-        List<NPCData.Conversation> filtered = conversations.conversations().stream().filter(c -> c.minHearts() <= heart && c.maxHearts() >= heart).toList();
+        this.speak(player, doGreet ? NPCData.ConversationType.GREETING : NPCData.ConversationType.TALK);
+    }
+
+    public void speak(Player player, NPCData.ConversationType type) {
+        int heart = this.getFriendPointData(player).points.getLevel();
+        NPCData.ConversationSet conversations = this.data.interactions().get(type);
+        LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
+                .withParameter(LootContextParams.THIS_ENTITY, this)
+                .withParameter(LootContextParams.ORIGIN, this.position())
+                .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
+                .withLuck(player.getLuck()).create(LootContextParamSets.GIFT);
+        List<NPCData.Conversation> filtered = conversations.conversations().stream().filter(c -> c.test(heart, ctx)).toList();
         if (!filtered.isEmpty()) {
             NPCData.Conversation randomLine = filtered.get(this.random.nextInt(filtered.size()));
             player.sendMessage(new TranslatableComponent(randomLine.translationKey(), player.getName()), Util.NIL_UUID);
         } else {
             player.sendMessage(new TranslatableComponent(conversations.fallbackKey(), player.getName()), Util.NIL_UUID);
         }
+    }
+
+    public NPCRelation relationFor(Player player) {
+        if (this.relation != null && this.relation.getFirst().equals(player.getUUID()))
+            return this.relation.getSecond();
+        return NPCRelation.NORMAL;
     }
 
     @Override
@@ -888,10 +904,15 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void followEntity(LivingEntity entity) {
         this.stayHere(false);
         this.entityToFollow = entity;
-        if (entity != null)
+        if (entity != null) {
             this.entityToFollowUUID = entity.getUUID();
-        else
+            if (entity instanceof Player player)
+                this.speak(player, NPCData.ConversationType.FOLLOWYES);
+        } else {
+            if (this.followEntity() instanceof Player player)
+                this.speak(player, NPCData.ConversationType.FOLLOWSTOP);
             this.entityToFollowUUID = null;
+        }
     }
 
     public void followAtDistance(LivingEntity entity) {

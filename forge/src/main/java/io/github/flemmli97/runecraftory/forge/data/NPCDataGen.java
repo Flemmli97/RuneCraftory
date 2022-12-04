@@ -26,6 +26,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .addConversation(new NPCData.Conversation("npc.generic.talk.2", 0, 10)))
                 .addInteraction(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.follow.yes"))
                 .addInteraction(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.follow.no"))
+                .addInteraction(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.follow.stop"))
                 .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.dislike", -10))
                 .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.like", 25))
                 .setNeutralGiftResponse("npc.generic.gift.default").build());
@@ -39,6 +40,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .addConversation(new NPCData.Conversation("npc.generic.2.talk.2", 0, 10)))
                 .addInteraction(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.2.follow.yes"))
                 .addInteraction(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.2.follow.no"))
+                .addInteraction(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.2.follow.stop"))
                 .setNeutralGiftResponse("npc.generic.2.gift.default").build());
     }
 
