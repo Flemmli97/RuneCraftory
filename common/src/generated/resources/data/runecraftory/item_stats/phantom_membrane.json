@@ -1,10 +1,11 @@
 {
-  "itemStats": {
-    "minecraft:generic.movement_speed": 0.03
-  },
   "buyPrice": 600,
   "sellPrice": 55,
   "upgradeDifficulty": 19,
+  "itemStats": {
+    "minecraft:generic.movement_speed": 0.03
+  },
+  "monsterBonus": {},
   "element": "NONE",
   "item": "minecraft:phantom_membrane"
 }

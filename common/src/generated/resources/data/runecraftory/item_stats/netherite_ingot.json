@@ -1,11 +1,12 @@
 {
+  "buyPrice": 0,
+  "sellPrice": 200,
+  "upgradeDifficulty": 40,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 20.0,
     "runecraftory:attribute.rf.magic_def": 20.0
   },
-  "buyPrice": 0,
-  "sellPrice": 200,
-  "upgradeDifficulty": 40,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "minecraft:netherite_ingot"
 }

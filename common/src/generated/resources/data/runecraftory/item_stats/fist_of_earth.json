@@ -1,11 +1,12 @@
 {
+  "buyPrice": 12640,
+  "sellPrice": 587,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 17.0,
     "runecraftory:attribute.rf.defence": 11.0
   },
-  "buyPrice": 12640,
-  "sellPrice": 587,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "EARTH",
   "item": "runecraftory:fist_of_earth"
 }

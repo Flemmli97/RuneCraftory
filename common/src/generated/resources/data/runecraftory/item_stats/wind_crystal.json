@@ -1,10 +1,11 @@
 {
-  "itemStats": {
-    "runecraftory:attribute.rf.magic_def": 5.0
-  },
   "buyPrice": 2000,
   "sellPrice": 150,
   "upgradeDifficulty": 20,
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_def": 5.0
+  },
+  "monsterBonus": {},
   "element": "WIND",
   "item": "runecraftory:wind_crystal"
 }

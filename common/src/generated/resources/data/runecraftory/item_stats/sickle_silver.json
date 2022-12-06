@@ -1,10 +1,11 @@
 {
-  "itemStats": {
-    "minecraft:generic.attack_damage": 36.0
-  },
   "buyPrice": 25000,
   "sellPrice": 300,
   "upgradeDifficulty": 0,
+  "itemStats": {
+    "minecraft:generic.attack_damage": 36.0
+  },
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:sickle_silver"
 }

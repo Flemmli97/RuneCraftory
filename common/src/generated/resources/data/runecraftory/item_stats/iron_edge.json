@@ -1,10 +1,11 @@
 {
-  "itemStats": {
-    "minecraft:generic.attack_damage": 11.0
-  },
   "buyPrice": 4910,
   "sellPrice": 230,
   "upgradeDifficulty": 0,
+  "itemStats": {
+    "minecraft:generic.attack_damage": 11.0
+  },
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:iron_edge"
 }

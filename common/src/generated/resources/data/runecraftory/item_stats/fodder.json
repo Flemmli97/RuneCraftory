@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 250,
   "sellPrice": 35,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:fodder"
 }

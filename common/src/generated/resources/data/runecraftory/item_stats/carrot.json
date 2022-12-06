@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 130,
   "sellPrice": 100,
   "upgradeDifficulty": 3,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "minecraft:carrot"
 }

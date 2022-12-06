@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 120,
   "sellPrice": 5,
   "upgradeDifficulty": 1,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:green_grass"
 }

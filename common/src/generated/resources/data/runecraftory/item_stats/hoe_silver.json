@@ -1,11 +1,12 @@
 {
+  "buyPrice": 25000,
+  "sellPrice": 300,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 34.0,
     "runecraftory:attribute.rf.magic_att": 5.0
   },
-  "buyPrice": 25000,
-  "sellPrice": 300,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "EARTH",
   "item": "runecraftory:hoe_silver"
 }

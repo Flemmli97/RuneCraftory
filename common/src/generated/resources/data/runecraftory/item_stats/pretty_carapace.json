@@ -1,12 +1,13 @@
 {
+  "buyPrice": 750,
+  "sellPrice": 85,
+  "upgradeDifficulty": 21,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 4.0,
     "runecraftory:attribute.rf.res_paralysis": 20.0,
     "runecraftory:attribute.rf.res_seal": 5.0
   },
-  "buyPrice": 750,
-  "sellPrice": 85,
-  "upgradeDifficulty": 21,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:pretty_carapace"
 }

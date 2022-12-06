@@ -1,10 +1,11 @@
 {
-  "itemStats": {
-    "minecraft:generic.attack_damage": 3.0
-  },
   "buyPrice": 103,
   "sellPrice": 9,
   "upgradeDifficulty": 8,
+  "itemStats": {
+    "minecraft:generic.attack_damage": 3.0
+  },
+  "monsterBonus": {},
   "element": "NONE",
   "item": "minecraft:flint"
 }

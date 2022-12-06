@@ -22,6 +22,7 @@ public class CropProperties {
     public static final Codec<CropProperties> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(Codec.INT.fieldOf("growth").forGetter(d -> d.growth),
                     Codec.INT.fieldOf("maxDrops").forGetter(d -> d.maxDrops),
+
                     Codec.BOOL.fieldOf("regrowable").forGetter(d -> d.regrowable),
                     Codec.list(CodecHelper.enumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("bestSeason").forGetter(d -> List.copyOf(d.bestSeason)),
                     Codec.list(CodecHelper.enumCodec(EnumSeason.class, EnumSeason.SPRING)).fieldOf("badSeason").forGetter(d -> List.copyOf(d.badSeason))

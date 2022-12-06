@@ -1,12 +1,13 @@
 {
+  "buyPrice": 300,
+  "sellPrice": 33,
+  "upgradeDifficulty": 21,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 3.0,
     "runecraftory:attribute.rf.magic_def": 2.0,
     "runecraftory:attribute.rf.res_dizz": 5.0
   },
-  "buyPrice": 300,
-  "sellPrice": 33,
-  "upgradeDifficulty": 21,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:yellow_down"
 }

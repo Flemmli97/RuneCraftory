@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 10800,
   "sellPrice": 540,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:prism"
 }

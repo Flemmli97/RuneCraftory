@@ -1,12 +1,13 @@
 {
+  "buyPrice": 2170,
+  "sellPrice": 104,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 11.0,
     "runecraftory:attribute.rf.dizz": 5.0,
     "runecraftory:attribute.rf.stun": 15.0
   },
-  "buyPrice": 2170,
-  "sellPrice": 104,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:zweihaender_plus"
 }

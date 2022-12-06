@@ -1,12 +1,13 @@
 {
+  "buyPrice": 7500,
+  "sellPrice": 350,
+  "upgradeDifficulty": 21,
   "itemStats": {
     "minecraft:generic.attack_damage": 7.0,
     "runecraftory:attribute.rf.magic_att": 7.0,
     "runecraftory:attribute.rf.sleep": 10.0
   },
-  "buyPrice": 7500,
-  "sellPrice": 350,
-  "upgradeDifficulty": 21,
+  "monsterBonus": {},
   "element": "NONE",
   "tier1Spell": "runecraftory:pollen_puff",
   "tier2Spell": "runecraftory:wave",

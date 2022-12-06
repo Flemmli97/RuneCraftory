@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 65000,
   "sellPrice": 20000,
   "upgradeDifficulty": 69,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:crop_red_crystal"
 }

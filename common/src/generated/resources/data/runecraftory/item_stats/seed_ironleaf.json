@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 660,
   "sellPrice": 66,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:seed_ironleaf"
 }

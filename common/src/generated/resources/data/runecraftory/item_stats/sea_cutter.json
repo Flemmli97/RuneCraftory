@@ -1,11 +1,12 @@
 {
+  "buyPrice": 9170,
+  "sellPrice": 404,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 19.0,
     "runecraftory:attribute.rf.dizz": 11.0
   },
-  "buyPrice": 9170,
-  "sellPrice": 404,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:sea_cutter"
 }

@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 5000,
   "sellPrice": 250,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:medi_seal"
 }

@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 900,
   "sellPrice": 90,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:seed_onion"
 }

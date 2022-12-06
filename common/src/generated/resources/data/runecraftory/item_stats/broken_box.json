@@ -1,4 +1,7 @@
 {
+  "buyPrice": 1000,
+  "sellPrice": 200,
+  "upgradeDifficulty": 48,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 4.0,
     "runecraftory:attribute.rf.res_paralysis": 10.0,
@@ -8,9 +11,7 @@
     "runecraftory:attribute.rf.res_fatigue": 10.0,
     "runecraftory:attribute.rf.res_cold": 10.0
   },
-  "buyPrice": 1000,
-  "sellPrice": 200,
-  "upgradeDifficulty": 48,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:broken_box"
 }

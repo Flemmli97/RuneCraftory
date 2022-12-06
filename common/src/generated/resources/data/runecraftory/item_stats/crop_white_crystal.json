@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 70000,
   "sellPrice": 23000,
   "upgradeDifficulty": 77,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:crop_white_crystal"
 }

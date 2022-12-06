@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 830,
   "sellPrice": 83,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:seed_corn"
 }

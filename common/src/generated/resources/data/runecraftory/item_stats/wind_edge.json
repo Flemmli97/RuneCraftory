@@ -1,11 +1,12 @@
 {
+  "buyPrice": 11600,
+  "sellPrice": 568,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 15.0,
     "runecraftory:attribute.rf.magic_att": 5.0
   },
-  "buyPrice": 11600,
-  "sellPrice": 568,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "WIND",
   "item": "runecraftory:wind_edge"
 }

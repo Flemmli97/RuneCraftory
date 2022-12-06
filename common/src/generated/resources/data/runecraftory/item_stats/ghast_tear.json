@@ -1,12 +1,13 @@
 {
+  "buyPrice": 750,
+  "sellPrice": 49,
+  "upgradeDifficulty": 22,
   "itemStats": {
     "minecraft:generic.max_health": 7.0,
     "runecraftory:attribute.rf.defence": 3.0,
     "runecraftory:attribute.rf.magic_att": 2.0
   },
-  "buyPrice": 750,
-  "sellPrice": 49,
-  "upgradeDifficulty": 22,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "minecraft:ghast_tear"
 }

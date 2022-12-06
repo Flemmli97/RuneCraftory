@@ -1,11 +1,12 @@
 {
+  "buyPrice": 6340,
+  "sellPrice": 265,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 15.0,
     "runecraftory:attribute.rf.stun": 7.0
   },
-  "buyPrice": 6340,
-  "sellPrice": 265,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:war_hammer_plus"
 }

@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 600,
   "sellPrice": 100,
   "upgradeDifficulty": 1,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:chemistry_bread"
 }

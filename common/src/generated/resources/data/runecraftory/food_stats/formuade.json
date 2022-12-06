@@ -1,10 +1,7 @@
 {
-  "effectsPercentage": {
-    "minecraft:generic.max_health": -50.0
-  },
+  "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "rpPercentIncrease": 75,
   "duration": 100,
   "effects": {
     "minecraft:generic.attack_damage": 70.0,
@@ -19,10 +16,14 @@
     "runecraftory:attribute.rf.res_cold": 25.0,
     "runecraftory:attribute.rf.res_faint": 25.0
   },
-  "hpRegenPercent": 0,
+  "effectsPercentage": {
+    "minecraft:generic.max_health": -50.0
+  },
   "rpRegenPercent": 0,
   "rpIncrease": 0,
+  "rpPercentIncrease": 75,
   "hpRegen": 0,
   "rpRegen": 0,
+  "hpRegenPercent": 0,
   "item": "runecraftory:formuade"
 }

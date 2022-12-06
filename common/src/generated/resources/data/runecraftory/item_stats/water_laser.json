@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 2400,
   "sellPrice": 120,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:water_laser"
 }

@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 2000000,
   "sellPrice": 3000,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:leveliser"
 }

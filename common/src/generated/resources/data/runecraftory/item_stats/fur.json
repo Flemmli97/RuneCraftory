@@ -1,12 +1,13 @@
 {
+  "buyPrice": 130,
+  "sellPrice": 23,
+  "upgradeDifficulty": 7,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 2.0,
     "runecraftory:attribute.rf.magic_def": 1.0,
     "runecraftory:attribute.rf.res_dizz": 3.0
   },
-  "buyPrice": 130,
-  "sellPrice": 23,
-  "upgradeDifficulty": 7,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:fur"
 }

@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 0,
   "sellPrice": 0,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:magic_powder"
 }

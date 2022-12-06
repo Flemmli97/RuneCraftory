@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 100,
   "sellPrice": 10,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:seed_turnip"
 }

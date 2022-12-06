@@ -1,14 +1,15 @@
 {
-  "effectsPercentage": {},
+  "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "rpPercentIncrease": 0,
   "duration": 100,
   "effects": {},
-  "hpRegenPercent": 0,
+  "effectsPercentage": {},
   "rpRegenPercent": 0,
   "rpIncrease": 0,
+  "rpPercentIncrease": 0,
   "hpRegen": 0,
   "rpRegen": 5,
+  "hpRegenPercent": 0,
   "item": "runecraftory:milk_s"
 }

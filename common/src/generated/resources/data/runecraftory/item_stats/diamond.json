@@ -1,11 +1,12 @@
 {
+  "buyPrice": 5000,
+  "sellPrice": 21,
+  "upgradeDifficulty": 29,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 12.0,
     "runecraftory:attribute.rf.magic_def": 12.0
   },
-  "buyPrice": 5000,
-  "sellPrice": 21,
-  "upgradeDifficulty": 29,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "minecraft:diamond"
 }

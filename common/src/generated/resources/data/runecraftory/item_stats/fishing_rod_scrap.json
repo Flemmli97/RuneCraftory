@@ -1,11 +1,12 @@
 {
+  "buyPrice": 150,
+  "sellPrice": 35,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 1.0,
     "runecraftory:attribute.rf.magic_att": 5.0
   },
-  "buyPrice": 150,
-  "sellPrice": 35,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:fishing_rod_scrap"
 }

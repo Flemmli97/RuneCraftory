@@ -1,14 +1,15 @@
 {
-  "effectsPercentage": {},
+  "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "rpPercentIncrease": 0,
   "duration": 100,
   "effects": {},
-  "hpRegenPercent": 2,
+  "effectsPercentage": {},
   "rpRegenPercent": 0,
   "rpIncrease": 0,
+  "rpPercentIncrease": 0,
   "hpRegen": 5,
   "rpRegen": 15,
+  "hpRegenPercent": 2,
   "item": "runecraftory:monarch_mushroom"
 }

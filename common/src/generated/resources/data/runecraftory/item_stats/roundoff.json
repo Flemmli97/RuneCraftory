@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 750,
   "sellPrice": 50,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:roundoff"
 }

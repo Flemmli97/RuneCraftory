@@ -1,10 +1,11 @@
 {
-  "itemStats": {
-    "runecraftory:attribute.rf.magic_att": 2.0
-  },
   "buyPrice": 167,
   "sellPrice": 13,
   "upgradeDifficulty": 4,
+  "itemStats": {
+    "runecraftory:attribute.rf.magic_att": 2.0
+  },
+  "monsterBonus": {},
   "element": "NONE",
   "item": "minecraft:paper"
 }

@@ -1,11 +1,12 @@
 {
+  "buyPrice": 150,
+  "sellPrice": 37,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 3.0,
     "runecraftory:attribute.rf.crit": 5.0
   },
-  "buyPrice": 150,
-  "sellPrice": 37,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:axe_scrap"
 }

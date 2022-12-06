@@ -118,8 +118,8 @@ public class PlayerData {
 
     private void setFoodHealthBonus(Player player, double amount) {
         AttributeInstance health = player.getAttribute(Attributes.MAX_HEALTH);
-        health.removeModifier(LibConstants.FOOD_MAX_HEALTH_MODIFIER);
-        health.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MAX_HEALTH_MODIFIER, "rf.food.hpModifier", amount, AttributeModifier.Operation.ADDITION));
+        health.removeModifier(LibConstants.FOOD_MODIFIER);
+        health.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_MODIFIER, "rf.food.hpModifier", amount, AttributeModifier.Operation.ADDITION));
     }
 
     public int getRunePoints() {

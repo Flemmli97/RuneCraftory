@@ -1,11 +1,12 @@
 {
+  "buyPrice": 14360,
+  "sellPrice": 683,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 27.0,
     "runecraftory:attribute.rf.crit": 15.0
   },
-  "buyPrice": 14360,
-  "sellPrice": 683,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:tomohawk"
 }

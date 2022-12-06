@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 2000,
   "sellPrice": 400,
   "upgradeDifficulty": 1,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:magnifying_glass"
 }

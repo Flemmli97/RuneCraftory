@@ -1,11 +1,12 @@
 {
+  "buyPrice": 4500,
+  "sellPrice": 121,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 15.0,
     "runecraftory:attribute.rf.magic_att": 3.0
   },
-  "buyPrice": 4500,
-  "sellPrice": 121,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:hoe_iron"
 }

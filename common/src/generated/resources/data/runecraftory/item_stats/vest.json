@@ -1,11 +1,12 @@
 {
+  "buyPrice": 1000,
+  "sellPrice": 30,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 7.0,
     "runecraftory:attribute.rf.magic_def": 2.0
   },
-  "buyPrice": 1000,
-  "sellPrice": 30,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:vest"
 }

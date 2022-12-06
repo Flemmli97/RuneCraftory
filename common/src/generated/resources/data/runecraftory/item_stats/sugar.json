@@ -1,10 +1,11 @@
 {
-  "itemStats": {
-    "minecraft:generic.movement_speed": 0.01
-  },
   "buyPrice": 25,
   "sellPrice": 13,
   "upgradeDifficulty": 18,
+  "itemStats": {
+    "minecraft:generic.movement_speed": 0.01
+  },
+  "monsterBonus": {},
   "element": "NONE",
   "item": "minecraft:sugar"
 }

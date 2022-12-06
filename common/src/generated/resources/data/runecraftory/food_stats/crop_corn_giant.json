@@ -1,14 +1,15 @@
 {
-  "effectsPercentage": {},
+  "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "rpPercentIncrease": 0,
   "duration": 600,
   "effects": {},
-  "hpRegenPercent": 0,
+  "effectsPercentage": {},
   "rpRegenPercent": 0,
   "rpIncrease": 0,
+  "rpPercentIncrease": 0,
   "hpRegen": 110,
   "rpRegen": 0,
+  "hpRegenPercent": 0,
   "item": "runecraftory:crop_corn_giant"
 }

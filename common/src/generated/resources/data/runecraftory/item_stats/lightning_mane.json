@@ -1,12 +1,13 @@
 {
+  "buyPrice": 13000,
+  "sellPrice": 600,
+  "upgradeDifficulty": 31,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 8.0,
     "runecraftory:attribute.rf.magic_def": 6.0,
     "runecraftory:attribute.rf.res_dizz": 17.0
   },
-  "buyPrice": 13000,
-  "sellPrice": 600,
-  "upgradeDifficulty": 31,
+  "monsterBonus": {},
   "element": "NONE",
   "tier1Spell": "runecraftory:laser_3",
   "tier2Spell": "runecraftory:laser_5",

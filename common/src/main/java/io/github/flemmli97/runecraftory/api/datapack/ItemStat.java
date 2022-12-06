@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.api.datapack;
 
+import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -47,13 +48,15 @@ public class ItemStat {
                     CodecHelper.ofCustomRegistry(ModSpells.SPELLREGISTRY, ModSpells.SPELLREGISTRY_KEY).optionalFieldOf("tier3Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
 
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("itemStats").forGetter(ItemStat::itemStats),
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("monsterBonus").forGetter(ItemStat::getMonsterGiftIncrease),
+
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("buyPrice").forGetter(ItemStat::getBuy),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("sellPrice").forGetter(ItemStat::getSell),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("upgradeDifficulty").forGetter(ItemStat::getDiff)
-            ).apply(instance, ((element, spell, spell2, spell3, atts, buy, sell, upgrade) ->
-                    new ItemStat(buy, sell, upgrade, element, spell.orElse(null), spell2.orElse(null), spell3.orElse(null), atts))));
+            ).apply(instance, ((element, spell, spell2, spell3, atts, monster, buy, sell, upgrade) ->
+                    new ItemStat(buy, sell, upgrade, element, spell.orElse(null), spell2.orElse(null), spell3.orElse(null), atts, monster))));
 
-    private static final Set<ResourceLocation> flatAttributes = Sets.newHashSet(
+    private static final Set<ResourceLocation> FLAT_ATTRIBUTES = Sets.newHashSet(
             new ResourceLocation("generic.max_health"),
             LibAttributes.GENERIC_ATTACK_DAMAGE,
             LibAttributes.rf_defence,
@@ -61,6 +64,8 @@ public class ItemStat {
             LibAttributes.rf_magic_defence);
 
     private final Map<Attribute, Double> itemStats;
+    private Map<Attribute, Double> monsterGiftIncrease = Map.of();
+
     private int buyPrice;
     private int sellPrice;
     private int upgradeDifficulty;
@@ -75,7 +80,7 @@ public class ItemStat {
         this.itemStats = new HashMap<>();
     }
 
-    private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, EnumElement element, Spell tier1Spell, Spell tier2Spell, Spell tier3Spell, Map<Attribute, Double> itemStats) {
+    private ItemStat(int buyPrice, int sellPrice, int upgradeDifficulty, EnumElement element, Spell tier1Spell, Spell tier2Spell, Spell tier3Spell, Map<Attribute, Double> itemStats, Map<Attribute, Double> monsterGiftIncrease) {
         this.itemStats = itemStats;
         this.buyPrice = buyPrice;
         this.sellPrice = sellPrice;
@@ -84,6 +89,7 @@ public class ItemStat {
         this.tier1Spell = tier1Spell;
         this.tier2Spell = tier2Spell;
         this.tier3Spell = tier3Spell;
+        this.monsterGiftIncrease = ImmutableSortedMap.copyOf(monsterGiftIncrease, ModAttributes.sorted);
     }
 
     public static ItemStat fromPacket(FriendlyByteBuf buffer) {
@@ -96,6 +102,11 @@ public class ItemStat {
         int size = buffer.readInt();
         for (int i = 0; i < size; i++)
             stat.itemStats.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
+        size = buffer.readInt();
+        ImmutableSortedMap.Builder<Attribute, Double> builder = new ImmutableSortedMap.Builder<>(ModAttributes.sorted);
+        for (int i = 0; i < size; i++)
+            builder.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
+        stat.monsterGiftIncrease = builder.build();
         SimpleRegistryWrapper<Spell> spellRegistry = PlatformUtils.INSTANCE.registry(ModSpells.SPELLREGISTRY_KEY);
         if (buffer.readBoolean())
             stat.tier1Spell = spellRegistry.getFromId(buffer.readResourceLocation());
@@ -137,6 +148,10 @@ public class ItemStat {
         return map;
     }
 
+    public Map<Attribute, Double> getMonsterGiftIncrease() {
+        return this.monsterGiftIncrease;
+    }
+
     @Nullable
     public Spell getTier1Spell() {
         return this.tier1Spell;
@@ -163,6 +178,11 @@ public class ItemStat {
         buffer.writeEnum(this.element);
         buffer.writeInt(this.itemStats.size());
         this.itemStats.forEach((att, val) -> {
+            buffer.writeResourceLocation(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
+            buffer.writeDouble(val);
+        });
+        buffer.writeInt(this.monsterGiftIncrease.size());
+        this.monsterGiftIncrease.forEach((att, val) -> {
             buffer.writeResourceLocation(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
             buffer.writeDouble(val);
         });
@@ -222,7 +242,7 @@ public class ItemStat {
             float f = ((int) (n * 100)) / 100f;
             return (f > 0 ? "+" + f : "" + f);
         }
-        boolean flat = flatAttributes.contains(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
+        boolean flat = FLAT_ATTRIBUTES.contains(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
         int val = (int) n;
         return (val > 0 ? "+" + val : "" + val) + (flat ? "" : "%");
     }
@@ -238,6 +258,7 @@ public class ItemStat {
     public static class Builder {
 
         private final Map<Attribute, Double> itemStats = new HashMap<>();
+        private final Map<Attribute, Double> monsterGiftIncrease = new HashMap<>();
         private final int buyPrice;
         private final int sellPrice;
         private final int upgradeDifficulty;
@@ -262,6 +283,11 @@ public class ItemStat {
             return this;
         }
 
+        public Builder addMonsterStat(Attribute att, double value) {
+            this.monsterGiftIncrease.put(att, value);
+            return this;
+        }
+
         public Builder setSpell(Spell tier1, Spell tier2, Spell tier3) {
             this.tier1Spell = tier1;
             this.tier2Spell = tier2;
@@ -270,7 +296,7 @@ public class ItemStat {
         }
 
         public ItemStat build() {
-            return new ItemStat(this.buyPrice, this.sellPrice, this.upgradeDifficulty, this.element, this.tier1Spell, this.tier2Spell, this.tier3Spell, this.itemStats);
+            return new ItemStat(this.buyPrice, this.sellPrice, this.upgradeDifficulty, this.element, this.tier1Spell, this.tier2Spell, this.tier3Spell, this.itemStats, this.monsterGiftIncrease);
         }
     }
 }

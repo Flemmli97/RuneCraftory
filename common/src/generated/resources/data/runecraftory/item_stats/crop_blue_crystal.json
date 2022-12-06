@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 40000,
   "sellPrice": 15000,
   "upgradeDifficulty": 74,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:crop_blue_crystal"
 }

@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 300,
   "sellPrice": 25,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:recovery_potion"
 }

@@ -1,11 +1,12 @@
 {
+  "buyPrice": 3500,
+  "sellPrice": 34,
+  "upgradeDifficulty": 20,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 4.0,
     "runecraftory:attribute.rf.magic_def": 2.0
   },
-  "buyPrice": 3500,
-  "sellPrice": 34,
-  "upgradeDifficulty": 20,
+  "monsterBonus": {},
   "element": "NONE",
   "tag": "c:gold_ingots"
 }

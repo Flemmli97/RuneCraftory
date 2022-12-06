@@ -1,12 +1,13 @@
 {
+  "buyPrice": 2000,
+  "sellPrice": 150,
+  "upgradeDifficulty": 20,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 1.5,
     "runecraftory:attribute.rf.magic_att": 3.0,
     "runecraftory:attribute.rf.magic_def": 1.5
   },
-  "buyPrice": 2000,
-  "sellPrice": 150,
-  "upgradeDifficulty": 20,
+  "monsterBonus": {},
   "element": "LIGHT",
   "item": "runecraftory:light_crystal"
 }

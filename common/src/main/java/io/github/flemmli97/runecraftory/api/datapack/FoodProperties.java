@@ -33,18 +33,23 @@ public class FoodProperties {
             instance.group(Codec.INT.fieldOf("hpRegen").forGetter(d -> d.hpRegen),
                     Codec.INT.fieldOf("rpRegen").forGetter(d -> d.rpRegen),
                     Codec.INT.fieldOf("hpRegenPercent").forGetter(d -> d.hpRegenPercent),
+
                     Codec.INT.fieldOf("rpRegenPercent").forGetter(d -> d.rpRegenPercent),
                     Codec.INT.fieldOf("rpIncrease").forGetter(d -> d.rpIncrease),
                     Codec.INT.fieldOf("rpPercentIncrease").forGetter(d -> d.rpPercentIncrease),
+
                     Codec.INT.fieldOf("duration").forGetter(d -> d.duration),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effects").forGetter(d -> d.effects),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("effectsPercentage").forGetter(d -> d.effectsPercentage),
+
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("cookingBonus").forGetter(d -> d.cookingBonus),
                     SimpleEffect.CODEC.listOf().fieldOf("potionApply").forGetter(d -> Arrays.asList(d.potionApply)),
                     Registry.MOB_EFFECT.byNameCodec().listOf().fieldOf("potionRemove").forGetter(d -> Arrays.asList(d.potionRemove))
             ).apply(instance, FoodProperties::new));
 
     private final Map<Attribute, Double> effects = new TreeMap<>(ModAttributes.sorted);
     private final Map<Attribute, Double> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
+    private final Map<Attribute, Double> cookingBonus = new TreeMap<>(ModAttributes.sorted);
     private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
     private SimpleEffect[] potionApply = new SimpleEffect[0];
     private MobEffect[] potionRemove = new MobEffect[0];
@@ -56,7 +61,7 @@ public class FoodProperties {
     }
 
     public FoodProperties(int hpRegen, int rpRegen, int hpRegenPercent, int rpRegenPercent, int rpIncrease, int rpPercentIncrease, int duration,
-                          Map<Attribute, Double> effects, Map<Attribute, Double> effectsPercentage, List<SimpleEffect> potionApply, List<MobEffect> potionRemove) {
+                          Map<Attribute, Double> effects, Map<Attribute, Double> effectsPercentage, Map<Attribute, Double> cookingBonus, List<SimpleEffect> potionApply, List<MobEffect> potionRemove) {
         this.hpRegen = hpRegen;
         this.rpRegen = rpRegen;
         this.hpRegenPercent = hpRegenPercent;
@@ -66,6 +71,7 @@ public class FoodProperties {
         this.duration = duration;
         this.effects.putAll(effects);
         this.effectsPercentage.putAll(effectsPercentage);
+        this.cookingBonus.putAll(cookingBonus);
         this.potionApply = potionApply.toArray(new SimpleEffect[0]);
         this.potionRemove = potionRemove.toArray(new MobEffect[0]);
     }
@@ -84,6 +90,9 @@ public class FoodProperties {
         size = buffer.readInt();
         for (int i = 0; i < size; i++)
             prop.effectsPercentage.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
+        size = buffer.readInt();
+        for (int i = 0; i < size; i++)
+            prop.cookingBonus.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
         size = buffer.readInt();
         prop.potionRemove = new MobEffect[size];
         for (int i = 0; i < size; i++)
@@ -140,6 +149,10 @@ public class FoodProperties {
         return new LinkedHashMap<>(this.effectsPercentage);
     }
 
+    public Map<Attribute, Double> cookingBonus() {
+        return new LinkedHashMap<>(this.cookingBonus);
+    }
+
     public List<MobEffect> potionHeals() {
         return ImmutableList.copyOf(this.potionRemove);
     }
@@ -162,6 +175,11 @@ public class FoodProperties {
         });
         buffer.writeInt(this.effectsPercentage.size());
         this.effectsPercentage.forEach((att, val) -> {
+            buffer.writeResourceLocation(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
+            buffer.writeDouble(val);
+        });
+        buffer.writeInt(this.cookingBonus.size());
+        this.cookingBonus.forEach((att, val) -> {
             buffer.writeResourceLocation(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
             buffer.writeDouble(val);
         });
@@ -248,6 +266,7 @@ public class FoodProperties {
 
         private final Map<Attribute, Double> effects = new HashMap<>();
         private final Map<Attribute, Double> effectsPercentage = new HashMap<>();
+        private final Map<Attribute, Double> cookingBonus = new HashMap<>();
         private final List<SimpleEffect> potionApply = new ArrayList<>();
         private final List<MobEffect> potionRemove = new ArrayList<>();
         private final int duration;
@@ -285,6 +304,11 @@ public class FoodProperties {
             return this;
         }
 
+        public Builder addCookingBonus(Attribute att, double value) {
+            this.cookingBonus.put(att, value);
+            return this;
+        }
+
         public Builder addPotion(MobEffect effect, int duration, int amplifier) {
             this.potionApply.add(new SimpleEffect(effect, duration, amplifier));
             return this;
@@ -296,7 +320,7 @@ public class FoodProperties {
         }
 
         public FoodProperties build() {
-            return new FoodProperties(this.hpRegen, this.rpRegen, this.hpRegenPercent, this.rpRegenPercent, this.rpIncrease, this.rpPercentIncrease, this.duration, this.effects, this.effectsPercentage, this.potionApply, this.potionRemove);
+            return new FoodProperties(this.hpRegen, this.rpRegen, this.hpRegenPercent, this.rpRegenPercent, this.rpIncrease, this.rpPercentIncrease, this.duration, this.effects, this.effectsPercentage, this.cookingBonus, this.potionApply, this.potionRemove);
         }
     }
 }

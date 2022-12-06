@@ -1,11 +1,12 @@
 {
+  "buyPrice": 4500,
+  "sellPrice": 135,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 9.0,
     "runecraftory:attribute.rf.magic_att": 14.0
   },
-  "buyPrice": 4500,
-  "sellPrice": 135,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:fishing_rod_iron"
 }

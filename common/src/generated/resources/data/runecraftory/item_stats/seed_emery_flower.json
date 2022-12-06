@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 50000,
   "sellPrice": 2000,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:seed_emery_flower"
 }

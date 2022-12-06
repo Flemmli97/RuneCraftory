@@ -1,11 +1,12 @@
 {
+  "buyPrice": 800,
+  "sellPrice": 100,
+  "upgradeDifficulty": 18,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 5.0,
     "runecraftory:attribute.rf.res_crit": 5.0
   },
-  "buyPrice": 800,
-  "sellPrice": 100,
-  "upgradeDifficulty": 18,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:quality_cloth"
 }

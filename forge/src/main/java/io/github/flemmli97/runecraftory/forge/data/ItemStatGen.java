@@ -23,7 +23,8 @@ public class ItemStatGen extends ItemStatProvider {
     protected void add() {
         //Vanilla stuff
         this.addStat(Items.STICK, new ItemStat.Builder(15, 1, 2)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 1));
+                .addAttribute(Attributes.ATTACK_DAMAGE, 1)
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat("arrows", ItemTags.ARROWS, new ItemStat.Builder(45, 3, 2)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
                 .setSpell(ModSpells.ARROW.get(), null, null));

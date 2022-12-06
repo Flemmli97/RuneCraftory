@@ -1,10 +1,11 @@
 {
-  "itemStats": {
-    "runecraftory:attribute.rf.defence": 5.0
-  },
   "buyPrice": 2000,
   "sellPrice": 150,
   "upgradeDifficulty": 20,
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 5.0
+  },
+  "monsterBonus": {},
   "element": "EARTH",
   "item": "runecraftory:earth_crystal"
 }

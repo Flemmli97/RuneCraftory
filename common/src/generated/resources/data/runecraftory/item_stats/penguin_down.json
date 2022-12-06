@@ -1,12 +1,13 @@
 {
+  "buyPrice": 1250,
+  "sellPrice": 129,
+  "upgradeDifficulty": 59,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 13.0,
     "runecraftory:attribute.rf.magic_def": 7.0,
     "runecraftory:attribute.rf.res_dizz": 13.0
   },
-  "buyPrice": 1250,
-  "sellPrice": 129,
-  "upgradeDifficulty": 59,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:penguin_down"
 }

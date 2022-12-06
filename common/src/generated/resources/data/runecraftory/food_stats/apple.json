@@ -1,14 +1,17 @@
 {
-  "effectsPercentage": {},
+  "cookingBonus": {
+    "minecraft:generic.max_health": 30.0
+  },
   "potionApply": [],
   "potionRemove": [],
-  "rpPercentIncrease": 0,
   "duration": 600,
   "effects": {},
-  "hpRegenPercent": 0,
+  "effectsPercentage": {},
   "rpRegenPercent": 0,
   "rpIncrease": 0,
+  "rpPercentIncrease": 0,
   "hpRegen": 1,
   "rpRegen": 7,
+  "hpRegenPercent": 0,
   "item": "minecraft:apple"
 }

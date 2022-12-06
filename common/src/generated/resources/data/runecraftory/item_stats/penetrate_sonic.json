@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 9600,
   "sellPrice": 480,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:penetrate_sonic"
 }

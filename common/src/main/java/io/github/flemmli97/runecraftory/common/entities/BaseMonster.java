@@ -838,24 +838,39 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     case EAT -> stack.getEatingSound();
                     default -> SoundEvents.NOTE_BLOCK_PLING;
                 };
-                if (player instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.connection.send(new ClientboundSoundPacket(sound, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                    Platform.INSTANCE.getPlayerData(serverPlayer)
-                            .ifPresent(data -> data.getDailyUpdater().onGiveMonsterItem(serverPlayer));
-                }
                 boolean food = this.applyFoodEffect(stack);
-                stack.setCount(count);
-                this.feedTimeOut = 7;
-                int day = WorldUtils.day(this.level);
-                if (this.updater.getLastUpdateFood() != day) {
-                    this.updater.setLastUpdateFood(day);
-                    this.increaseFriendPoints(favorite ? 50 : 35);
-                    if (favorite)
-                        this.level.broadcastEntityEvent(this, (byte) 65);
-                    else
-                        this.level.broadcastEntityEvent(this, (byte) 64);
+                if (food || !this.playDeath()) {
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        serverPlayer.connection.send(new ClientboundSoundPacket(sound, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
+                        Platform.INSTANCE.getPlayerData(serverPlayer)
+                                .ifPresent(data -> data.getDailyUpdater().onGiveMonsterItem(serverPlayer));
+                    }
+                    stack.setCount(count);
+                    this.feedTimeOut = 7;
+                    int day = WorldUtils.day(this.level);
+                    if (this.updater.getLastUpdateFood() != day) {
+                        this.updater.setLastUpdateFood(day);
+                        this.increaseFriendPoints(favorite ? 50 : 35);
+                        if (favorite)
+                            this.level.broadcastEntityEvent(this, (byte) 65);
+                        else
+                            this.level.broadcastEntityEvent(this, (byte) 64);
+                        DataPackHandler.itemStatManager().get(stack.getItem()).ifPresent(s -> s.getMonsterGiftIncrease().forEach((att, d) -> {
+                            AttributeInstance inst = this.getAttribute(att);
+                            if (inst != null) {
+                                AttributeModifier mod = inst.getModifier(LibConstants.MONSTER_ITEM_BONUS);
+                                double val = d;
+                                if (mod != null) {
+                                    val += mod.getAmount();
+                                    inst.removeModifier(mod);
+                                }
+                                inst.addPermanentModifier(new AttributeModifier(LibConstants.MONSTER_ITEM_BONUS, "item_bonus_" + att.getDescriptionId(), val, AttributeModifier.Operation.ADDITION));
+                            }
+                        }));
+                    }
+
+                    stack.shrink(1);
                 }
-                stack.shrink(1);
                 return true;
             }
         } else if (this.tamingTick == -1 && this.isAlive()) {

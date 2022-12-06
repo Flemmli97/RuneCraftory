@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 300,
   "sellPrice": 45,
   "upgradeDifficulty": 1,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:pickled_turnip"
 }

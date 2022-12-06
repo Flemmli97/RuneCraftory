@@ -1,5 +1,5 @@
 {
-  "effectsPercentage": {},
+  "cookingBonus": {},
   "potionApply": [
     {
       "potion": "minecraft:speed",
@@ -8,13 +8,14 @@
     }
   ],
   "potionRemove": [],
-  "rpPercentIncrease": 0,
   "duration": 4800,
   "effects": {},
-  "hpRegenPercent": 0,
+  "effectsPercentage": {},
   "rpRegenPercent": 1,
   "rpIncrease": 20,
+  "rpPercentIncrease": 0,
   "hpRegen": 40,
   "rpRegen": 80,
+  "hpRegenPercent": 0,
   "item": "runecraftory:hot_milk"
 }

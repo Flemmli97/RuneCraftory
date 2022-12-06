@@ -1,5 +1,5 @@
 {
-  "effectsPercentage": {},
+  "cookingBonus": {},
   "potionApply": [
     {
       "potion": "minecraft:speed",
@@ -8,13 +8,14 @@
     }
   ],
   "potionRemove": [],
-  "rpPercentIncrease": 5,
   "duration": 4800,
   "effects": {},
-  "hpRegenPercent": 0,
+  "effectsPercentage": {},
   "rpRegenPercent": 3,
   "rpIncrease": 50,
+  "rpPercentIncrease": 5,
   "hpRegen": 80,
   "rpRegen": 200,
+  "hpRegenPercent": 0,
   "item": "runecraftory:hot_chocolate"
 }

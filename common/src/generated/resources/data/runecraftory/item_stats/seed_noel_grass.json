@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 1700,
   "sellPrice": 170,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:seed_noel_grass"
 }

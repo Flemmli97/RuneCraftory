@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 1250,
   "sellPrice": 250,
   "upgradeDifficulty": 1,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:egg_s"
 }

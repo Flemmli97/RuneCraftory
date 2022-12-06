@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 3330,
   "sellPrice": 1000,
   "upgradeDifficulty": 15,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:crop_four_leaf_clover"
 }

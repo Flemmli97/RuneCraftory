@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 0,
   "sellPrice": 750,
   "upgradeDifficulty": 24,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:invisible_stone"
 }

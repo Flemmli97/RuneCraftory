@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 800,
   "sellPrice": 350,
   "upgradeDifficulty": 25,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:crop_tomato"
 }

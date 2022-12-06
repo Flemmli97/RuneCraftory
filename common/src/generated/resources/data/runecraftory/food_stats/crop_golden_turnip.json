@@ -1,14 +1,15 @@
 {
-  "effectsPercentage": {},
+  "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "rpPercentIncrease": 3,
   "duration": 600,
   "effects": {},
-  "hpRegenPercent": 5,
+  "effectsPercentage": {},
   "rpRegenPercent": 0,
   "rpIncrease": 3,
+  "rpPercentIncrease": 3,
   "hpRegen": 300,
   "rpRegen": 0,
+  "hpRegenPercent": 5,
   "item": "runecraftory:crop_golden_turnip"
 }

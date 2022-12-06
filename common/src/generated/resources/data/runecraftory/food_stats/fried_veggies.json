@@ -1,19 +1,20 @@
 {
-  "effectsPercentage": {
-    "minecraft:generic.max_health": 300.0
-  },
+  "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "rpPercentIncrease": 20,
   "duration": 4800,
   "effects": {
     "runecraftory:attribute.rf.defence": 1.0,
     "runecraftory:attribute.rf.magic_att": 1.0
   },
-  "hpRegenPercent": 30,
+  "effectsPercentage": {
+    "minecraft:generic.max_health": 300.0
+  },
   "rpRegenPercent": 25,
   "rpIncrease": 0,
+  "rpPercentIncrease": 20,
   "hpRegen": 300,
   "rpRegen": 250,
+  "hpRegenPercent": 30,
   "item": "runecraftory:fried_veggies"
 }

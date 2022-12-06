@@ -1,14 +1,15 @@
 {
-  "effectsPercentage": {},
+  "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "rpPercentIncrease": 0,
   "duration": 600,
   "effects": {},
-  "hpRegenPercent": 10,
+  "effectsPercentage": {},
   "rpRegenPercent": 5,
   "rpIncrease": 0,
+  "rpPercentIncrease": 0,
   "hpRegen": 0,
   "rpRegen": 0,
+  "hpRegenPercent": 10,
   "item": "runecraftory:crop_emery_flower"
 }

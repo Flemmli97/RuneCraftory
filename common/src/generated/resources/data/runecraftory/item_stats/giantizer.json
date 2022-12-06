@@ -1,8 +1,9 @@
 {
-  "itemStats": {},
   "buyPrice": 10000,
   "sellPrice": 300,
   "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:giantizer"
 }

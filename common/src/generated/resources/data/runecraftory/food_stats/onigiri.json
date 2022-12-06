@@ -1,16 +1,17 @@
 {
-  "effectsPercentage": {},
+  "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "rpPercentIncrease": 0,
   "duration": 4800,
   "effects": {
     "minecraft:generic.attack_damage": 1.0
   },
-  "hpRegenPercent": 0,
+  "effectsPercentage": {},
   "rpRegenPercent": 0,
   "rpIncrease": 0,
+  "rpPercentIncrease": 0,
   "hpRegen": 20,
   "rpRegen": 50,
+  "hpRegenPercent": 0,
   "item": "runecraftory:onigiri"
 }

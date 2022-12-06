@@ -1,5 +1,5 @@
 {
-  "effectsPercentage": {},
+  "cookingBonus": {},
   "potionApply": [
     {
       "potion": "minecraft:luck",
@@ -8,13 +8,14 @@
     }
   ],
   "potionRemove": [],
-  "rpPercentIncrease": 0,
   "duration": 600,
   "effects": {},
-  "hpRegenPercent": 0,
+  "effectsPercentage": {},
   "rpRegenPercent": 0,
   "rpIncrease": 0,
+  "rpPercentIncrease": 0,
   "hpRegen": 0,
   "rpRegen": 55,
+  "hpRegenPercent": 0,
   "item": "runecraftory:crop_four_leaf_clover_giant"
 }

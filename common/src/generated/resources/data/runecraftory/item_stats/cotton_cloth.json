@@ -1,11 +1,12 @@
 {
+  "buyPrice": 4000,
+  "sellPrice": 90,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "runecraftory:attribute.rf.defence": 12.0,
     "runecraftory:attribute.rf.magic_def": 4.0
   },
-  "buyPrice": 4000,
-  "sellPrice": 90,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:cotton_cloth"
 }

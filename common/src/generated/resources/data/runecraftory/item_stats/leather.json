@@ -1,10 +1,11 @@
 {
-  "itemStats": {
-    "runecraftory:attribute.rf.defence": 7.0
-  },
   "buyPrice": 170,
   "sellPrice": 14,
   "upgradeDifficulty": 23,
+  "itemStats": {
+    "runecraftory:attribute.rf.defence": 7.0
+  },
+  "monsterBonus": {},
   "element": "NONE",
   "item": "minecraft:leather"
 }

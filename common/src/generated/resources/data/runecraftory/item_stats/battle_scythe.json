@@ -1,11 +1,12 @@
 {
+  "buyPrice": 1430,
+  "sellPrice": 60,
+  "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 11.0,
     "runecraftory:attribute.rf.crit": 15.0
   },
-  "buyPrice": 1430,
-  "sellPrice": 60,
-  "upgradeDifficulty": 0,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:battle_scythe"
 }

@@ -24,7 +24,8 @@ public class FoodGen extends FoodProvider {
         this.addStat("sweet_berry", Items.SWEET_BERRIES, new FoodProperties.Builder(600).setHPRegen(1, 0).setRPRegen(5, 0));
         this.addStat("cookie", Items.COOKIE, new FoodProperties.Builder(600).setHPRegen(1, 0).setRPRegen(10, 0));
         this.addStat("honey_bottle", Items.HONEY_BOTTLE, new FoodProperties.Builder(600).setHPRegen(1, 0).setRPRegen(13, 1));
-        this.addStat("apple", Items.APPLE, new FoodProperties.Builder(600).setHPRegen(1, 0).setRPRegen(7, 0));
+        this.addStat("apple", Items.APPLE, new FoodProperties.Builder(600).setHPRegen(1, 0).setRPRegen(7, 0)
+                .addCookingBonus(Attributes.MAX_HEALTH, 30));
 
         this.addStat("chorus_fruit", Items.CHORUS_FRUIT, new FoodProperties.Builder(600).setHPRegen(1, 0).setRPRegen(5, 0));
         this.addStat("kelp", Items.DRIED_KELP, new FoodProperties.Builder(600).setHPRegen(1, 0).setRPRegen(5, 0));

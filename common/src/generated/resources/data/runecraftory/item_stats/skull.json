@@ -1,12 +1,13 @@
 {
+  "buyPrice": 100,
+  "sellPrice": 1000,
+  "upgradeDifficulty": 35,
   "itemStats": {
     "runecraftory:attribute.rf.magic_att": 9.0,
     "runecraftory:attribute.rf.magic_def": 4.0,
     "runecraftory:attribute.rf.cold": 5.0
   },
-  "buyPrice": 100,
-  "sellPrice": 1000,
-  "upgradeDifficulty": 35,
+  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:skull"
 }
