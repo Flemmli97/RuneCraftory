@@ -7,6 +7,9 @@ RuneCraftory 1.4.1
 - Fix a nullpointer with loading old npcs
 - Fix wrong default npc lang key 
 - Fix default items not added to shop
+- Add condition to npc conversations
+- Fix snow in biomes with no downfall
+- Add npc birthday
 
 RuneCraftory 1.4.0
 ================

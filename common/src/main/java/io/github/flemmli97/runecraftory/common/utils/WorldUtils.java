@@ -1,5 +1,9 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -13,7 +17,25 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.function.Function;
+
 public class WorldUtils {
+
+    public static final Codec<Pair<EnumSeason, Integer>> DATE = RecordCodecBuilder.create(inst ->
+            inst.group(
+                    CodecHelper.enumCodec(EnumSeason.class, null).fieldOf("season").forGetter(Pair::getFirst),
+                    dayRange().fieldOf("day").forGetter(Pair::getSecond)
+            ).apply(inst, Pair::of));
+
+    private static Codec<Integer> dayRange() {
+        Function<Integer, DataResult<Integer>> function = i -> {
+            if (i >= 1 && i <= 30) {
+                return DataResult.success(i);
+            }
+            return DataResult.error("Date must be between 1 - 30 but is " + i);
+        };
+        return Codec.INT.flatXmap(function, function);
+    }
 
     public static boolean canUpdateDaily(Level level) {
         return level.getGameRules().getRule(GameRules.RULE_DAYLIGHT).get() && dayTime(level) == 1;

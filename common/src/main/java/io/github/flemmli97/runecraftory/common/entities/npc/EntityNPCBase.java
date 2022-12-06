@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
+import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
@@ -36,6 +37,7 @@ import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -172,10 +174,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     private EnumShop shop = EnumShop.NONE;
     private NPCData data = NPCData.DEFAULT_DATA;
-    //Will be used if data returns null for these values
     private NPCData.NPCLook look = NPCData.NPCLook.DEFAULT_LOOK;
+    private Pair<EnumSeason, Integer> birthday = Pair.of(EnumSeason.SPRING, 1);
+    //Will be used if data returns null for these values
     private Map<String, TagKey<Item>> gift = new HashMap<>();
-    //shop, gender
 
     private Activity activity = Activity.IDLE;
 
@@ -363,7 +365,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             case EAT -> stack.getEatingSound();
             default -> SoundEvents.NOTE_BLOCK_PLING;
         };
+        float mult = 1;
         if (player instanceof ServerPlayer serverPlayer) {
+            WorldHandler handler = WorldHandler.get(serverPlayer.getServer());
+            if (handler.currentSeason() == this.birthday.getFirst() && handler.date() == this.birthday.getSecond())
+                mult = 3;
             serverPlayer.connection.send(new ClientboundSoundPacket(sound, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
         }
         EquipmentSlot slot = ItemUtils.slotOf(stack);
@@ -377,11 +383,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         NPCData.Gift gift = this.giftOf(stack);
         if (gift != null) {
             this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
-                    .giftXP(this.level, gift.xp());
+                    .giftXP(this.level, (int) (gift.xp() * mult));
             player.sendMessage(new TranslatableComponent(gift.responseKey(), player.getName()), Util.NIL_UUID);
         } else {
             this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
-                    .giftXP(this.level, 15);
+                    .giftXP(this.level, (int) (15 * mult));
             player.sendMessage(new TranslatableComponent(this.data.neutralGiftResponse(), player.getName()), Util.NIL_UUID);
         }
         stack.shrink(1);
@@ -957,6 +963,21 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return this.look;
     }
 
+    public Pair<EnumSeason, Integer> getBirthday() {
+        if (this.birthday == null) {
+            if (this.data == NPCData.DEFAULT_DATA)
+                this.birthday = Pair.of(EnumSeason.SPRING, 1);
+            else if (this.data.birthday() != null)
+                this.birthday = this.data.birthday();
+            else {
+                EnumSeason randSeason = EnumSeason.values()[this.random.nextInt(EnumSeason.values().length)];
+                int day = this.random.nextInt(30) + 1;
+                this.birthday = Pair.of(randSeason, day);
+            }
+        }
+        return this.birthday;
+    }
+
     public void setClientLook(NPCData.NPCLook look) {
         if (this.level.isClientSide)
             this.look = look;
@@ -1022,10 +1043,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 this.setCustomName(new TextComponent(name));
             }
         }
-        if (this.data == NPCData.DEFAULT_DATA)
-            this.look = NPCData.NPCLook.DEFAULT_LOOK;
-        else
-            this.look = this.data.look() != null ? DataPackHandler.npcLookManager().get(this.data.look()) : DataPackHandler.npcLookManager().getRandom(this.random, this.isMale());
+        this.look = null;
+        this.getLook();
+        this.birthday = null;
+        this.getBirthday();
         Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look), this);
     }
 

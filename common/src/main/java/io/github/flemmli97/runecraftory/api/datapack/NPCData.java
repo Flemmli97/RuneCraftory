@@ -13,8 +13,10 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -43,11 +45,12 @@ import java.util.function.Function;
 
 public record NPCData(@Nullable String name, @Nullable String surname,
                       Gender gender, EnumShop profession, @Nullable ResourceLocation look,
+                      @Nullable Pair<EnumSeason, Integer> birthday,
                       int weight, String neutralGiftResponse,
                       Map<ConversationType, ConversationSet> interactions,
                       Map<String, Gift> giftItems) {
 
-    public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, null, null, 1, "npc.default.gift.neutral",
+    public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, null, null, null, 1, "npc.default.gift.neutral",
             buildDefaultInteractionMap(), Map.of());
 
     private static Map<ConversationType, ConversationSet> buildDefaultInteractionMap() {
@@ -74,20 +77,23 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
     public static final Codec<NPCData> CODEC = RecordCodecBuilder.create(inst ->
             inst.group(
-                    ResourceLocation.CODEC.optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look)),
-                    Codec.STRING.fieldOf("neutralGiftResponse").forGetter(d -> d.neutralGiftResponse),
                     Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("giftItems").forGetter(d -> d.giftItems),
                     filledMap(ConversationType.class, Codec.unboundedMap(CodecHelper.enumCodec(ConversationType.class, null), ConversationSet.CODEC))
                             .fieldOf("interactions").forGetter(d -> d.interactions),
 
-                    CodecHelper.enumCodec(EnumShop.class, null).optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession)),
+                    WorldUtils.DATE.optionalFieldOf("birthday").forGetter(d -> Optional.ofNullable(d.birthday)),
                     ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
+                    Codec.STRING.fieldOf("neutralGiftResponse").forGetter(d -> d.neutralGiftResponse),
+
+                    CodecHelper.enumCodec(EnumShop.class, null).optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession)),
+                    ResourceLocation.CODEC.optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look)),
 
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
                     CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender)
-            ).apply(inst, ((look, neutralGift, giftItems, interactions, profession, weight, name, surname, gender) -> new NPCData(name.orElse(null), surname.orElse(null),
-                    gender, profession.orElse(null), look.orElse(null), weight, neutralGift, interactions, giftItems))));
+            ).apply(inst, ((giftItems, interactions, birthday, weight, neutralGift, profession, look, name, surname, gender) -> new NPCData(name.orElse(null), surname.orElse(null),
+                    gender, profession.orElse(null), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, giftItems))));
+
 
     public enum Gender {
         UNDEFINED,
@@ -120,6 +126,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private EnumShop profession;
         private final Map<ConversationType, ConversationSet> interactions = new TreeMap<>();
         private final Map<String, Gift> giftItems = new LinkedHashMap<>();
+        private Pair<EnumSeason, Integer> birthday;
         private ResourceLocation look;
 
         public Builder(int weight) {
@@ -150,6 +157,11 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
+        public Builder withBirthday(Pair<EnumSeason, Integer> birthday) {
+            this.birthday = birthday;
+            return this;
+        }
+
         public Builder withProfession(EnumShop profession) {
             this.profession = profession;
             return this;
@@ -172,7 +184,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 if (!this.interactions.containsKey(type))
                     throw new IllegalStateException("Missing interactions for " + type);
             }
-            return new NPCData(this.name, this.surname, this.gender, this.profession, this.look, this.weight, this.neutralGiftResponse, this.interactions, this.giftItems);
+            return new NPCData(this.name, this.surname, this.gender, this.profession, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions, this.giftItems);
         }
     }
 
