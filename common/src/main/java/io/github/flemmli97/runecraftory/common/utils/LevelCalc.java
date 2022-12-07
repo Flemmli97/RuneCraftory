@@ -190,14 +190,14 @@ public class LevelCalc {
         return xp * Math.max(0.01f, 1 - diff * 0.075f) * GeneralConfig.xpMultiplier;
     }
 
-    public static int getBaseXP(EnumSkills skill) {
-        return GeneralConfig.skillProps.get(skill).baseXP();
+    public static float getSkillXpMultiplier(EnumSkills skill) {
+        return GeneralConfig.skillProps.get(skill).xpMultiplier();
     }
 
-    public static void levelSkill(ServerPlayer player, PlayerData data, EnumSkills skill, float multiplier) {
+    public static void levelSkill(ServerPlayer player, PlayerData data, EnumSkills skill, float amount) {
         if (GeneralConfig.skillXpMultiplier == 0)
             return;
-        data.increaseSkill(skill, player, getBaseXP(skill) * multiplier * GeneralConfig.skillXpMultiplier);
+        data.increaseSkill(skill, player, getSkillXpMultiplier(skill) * amount * GeneralConfig.skillXpMultiplier);
     }
 
     public static int levelFromPos(ServerLevel level, Vec3 pos) {

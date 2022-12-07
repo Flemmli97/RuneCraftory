@@ -43,7 +43,7 @@ public class DailyPlayerUpdater {
     public void onFoodEaten(ServerPlayer player) {
         if (!this.ateFood) {
             this.ateFood = true;
-            LevelCalc.levelSkill(player, this.data, EnumSkills.EATING, 1);
+            LevelCalc.levelSkill(player, this.data, EnumSkills.EATING, 50);
         }
     }
 

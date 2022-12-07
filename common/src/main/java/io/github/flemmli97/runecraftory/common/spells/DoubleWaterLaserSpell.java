@@ -24,7 +24,7 @@ public class DoubleWaterLaserSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 1.2f));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 8));
     }
 
     @Override

@@ -84,7 +84,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
         Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 1));
+                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5));
     }
 
     @Override
@@ -172,7 +172,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
                 Platform.INSTANCE.sendToClient(new S2CScreenShake(4, 1), player);
                 if (success) {
                     player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
-                    LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 3);
+                    LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5);
                     LevelCalc.useRP(player, data, 10, true, false, true, EnumSkills.HAMMERAXE);
                 }
             };

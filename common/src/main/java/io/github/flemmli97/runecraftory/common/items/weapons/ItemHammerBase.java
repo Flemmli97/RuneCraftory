@@ -63,7 +63,7 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
         Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 1));
+                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5));
     }
 
     @Override

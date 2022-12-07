@@ -27,7 +27,7 @@ public class RockSpearSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EARTH, this.big ? 1.5f : 1));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EARTH, this.big ? 10 : 6));
     }
 
     @Override

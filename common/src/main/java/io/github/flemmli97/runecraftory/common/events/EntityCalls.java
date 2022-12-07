@@ -299,7 +299,7 @@ public class EntityCalls {
             FoodProperties prop = DataPackHandler.foodManager().get(stack.getItem());
             if (prop == null) {
                 if (entity instanceof ServerPlayer player && stack.isEdible()) {
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EATING, 0.1f));
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EATING, 5));
                 }
                 return;
             }
@@ -343,7 +343,7 @@ public class EntityCalls {
             player.heal(player.getMaxHealth());
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 data.refreshRunePoints(player, data.getMaxRunePoints());
-                LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SLEEPING, 1);
+                LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SLEEPING, 75);
             });
         }
     }
@@ -359,8 +359,8 @@ public class EntityCalls {
         float damage = CombatUtils.reduceDamageFromStats(entity, source, dmg);
         if (damage < 0)
             entity.heal(-damage);
-        else if (damage > 0 && source != DamageSource.OUT_OF_WORLD && entity instanceof Player player) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill((ServerPlayer) entity, data, EnumSkills.DEFENCE, Math.min(5, (float) (0.5 + Math.log(damage * 0.5)))));
+        else if (damage > 0 && source != DamageSource.OUT_OF_WORLD && entity instanceof ServerPlayer player) {
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DEFENCE, Math.min(5, (float) (0.5 + Math.log(damage * 0.5))) * 2));
         }
         if (source instanceof CustomDamage)
             entity.invulnerableTime = ((CustomDamage) source).hurtProtection() + 10;
@@ -410,7 +410,7 @@ public class EntityCalls {
 
     public static void onLootTableBlockGen(Player player, BlockEntity blockEntity) {
         if (player instanceof ServerPlayer serverPlayer) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 1.3f));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 20));
         }
     }
 }

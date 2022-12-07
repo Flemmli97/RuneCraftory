@@ -84,7 +84,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
 
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 0.6f));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 1.5f));
     }
 
     @Override
@@ -92,7 +92,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             LevelCalc.useRP(player, data, 3, true, false, true, EnumSkills.FARMING, EnumSkills.EARTH);
             LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3);
-            LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 0.6f);
+            LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 1.5f);
         });
     }
 
@@ -146,7 +146,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                         LevelCalc.useRP(player, data, range * 18.75f, true, true, true, EnumSkills.FARMING);
                         LevelCalc.levelSkill(player, data, EnumSkills.FARMING, range * 15);
-                        LevelCalc.levelSkill(player, data, EnumSkills.EARTH, range * 0.8f);
+                        LevelCalc.levelSkill(player, data, EnumSkills.EARTH, range * 2);
                     });
             }
         }

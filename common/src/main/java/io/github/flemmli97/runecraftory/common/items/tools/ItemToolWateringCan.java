@@ -81,7 +81,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
 
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 0.4f));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 1));
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             LevelCalc.useRP(player, data, 2, true, false, true, EnumSkills.FARMING, EnumSkills.WATER);
             LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 4);
-            LevelCalc.levelSkill(player, data, EnumSkills.WATER, 0.6f);
+            LevelCalc.levelSkill(player, data, EnumSkills.WATER, 1);
         });
     }
 
@@ -188,7 +188,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                         LevelCalc.useRP(player, data, range * 18.5f, true, true, true, EnumSkills.FARMING);
                         LevelCalc.levelSkill(player, data, EnumSkills.FARMING, range * 10);
-                        LevelCalc.levelSkill(player, data, EnumSkills.WATER, range * 0.8f);
+                        LevelCalc.levelSkill(player, data, EnumSkills.WATER, range * 3);
                     });
             }
         }

@@ -10,7 +10,7 @@ public class SkillPropertySpecs {
     public final ForgeConfigSpec.DoubleValue str;
     public final ForgeConfigSpec.DoubleValue vit;
     public final ForgeConfigSpec.DoubleValue intel;
-    public final ForgeConfigSpec.IntValue baseXP;
+    public final ForgeConfigSpec.DoubleValue xpMultiplier;
 
     public SkillPropertySpecs(ForgeConfigSpec.Builder builder, SkillProperties def) {
         this.hp = builder.comment("HP gain per level").defineInRange("HP", def.healthIncrease(), 0, Double.MAX_VALUE);
@@ -18,11 +18,11 @@ public class SkillPropertySpecs {
         this.str = builder.comment("Strength gain per level").defineInRange("Str", def.strIncrease(), 0, Double.MAX_VALUE);
         this.vit = builder.comment("Vitality gain per level").defineInRange("Vit", def.vitIncrease(), 0, Double.MAX_VALUE);
         this.intel = builder.comment("Intelligence gain per level").defineInRange("Intel", def.intelIncrease(), 0, Double.MAX_VALUE);
-        this.baseXP = builder.comment("Base xp gained per action").defineInRange("BaseXP", def.baseXP(), 0, Integer.MAX_VALUE);
+        this.xpMultiplier = builder.comment("XP multiplier for this action").defineInRange("XP Multiplier", def.xpMultiplier(), 0, Double.MAX_VALUE);
     }
 
     public static SkillProperties ofSpec(SkillPropertySpecs specs) {
         return new SkillProperties(specs.hp.get().floatValue(), specs.rp.get().floatValue(), specs.str.get().floatValue(),
-                specs.vit.get().floatValue(), specs.intel.get().floatValue(), specs.baseXP.get());
+                specs.vit.get().floatValue(), specs.intel.get().floatValue(), specs.xpMultiplier.get().floatValue());
     }
 }

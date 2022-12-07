@@ -28,7 +28,7 @@ public class DarkBallSpell extends Spell {
 
     @Override
     public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DARK, this.type == EntityDarkBall.Type.SNAKE ? 1.2f : 1));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DARK, this.type == EntityDarkBall.Type.SNAKE ? 8 : 6));
     }
 
     @Override

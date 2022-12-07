@@ -417,37 +417,37 @@ public class CombatUtils {
         if (poisonChance) {
             target.addEffect(new MobEffectInstance(ModEffects.poison.get()));
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPOISON, 1));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPOISON, 5));
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPOISON, 2));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPOISON, 15));
         }
         if (fatigueChance) {
             target.addEffect(new MobEffectInstance(ModEffects.fatigue.get()));
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESFAT, 1));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESFAT, 5));
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESFAT, 2));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESFAT, 15));
         }
         if (coldChance) {
             target.addEffect(new MobEffectInstance(ModEffects.cold.get()));
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESCOLD, 1));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESCOLD, 5));
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESCOLD, 2));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESCOLD, 15));
         }
         if (paraChance) {
             target.addEffect(new MobEffectInstance(ModEffects.paralysis.get()));
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPARA, 1));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPARA, 5));
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPARA, 2));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESPARA, 15));
         }
         if (sealChance) {
             target.addEffect(new MobEffectInstance(ModEffects.seal.get()));
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSEAL, 1));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSEAL, 5));
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSEAL, 2));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSEAL, 15));
         }
         if (dizzyChance) {
             target.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 1, true, false));
@@ -459,9 +459,9 @@ public class CombatUtils {
         if (sleepChance) {
             target.addEffect(new MobEffectInstance(ModEffects.sleep.get(), 80, 0, true, false));
             if (attackingEntity instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSLEEP, 1));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSLEEP, 5));
             if (target instanceof ServerPlayer player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSLEEP, 2));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RESSLEEP, 15));
         }
     }
 

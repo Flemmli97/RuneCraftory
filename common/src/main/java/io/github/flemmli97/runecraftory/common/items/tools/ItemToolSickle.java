@@ -85,7 +85,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
 
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WIND, 0.5f));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WIND, 2));
     }
 
     @Override
@@ -93,7 +93,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             LevelCalc.useRP(player, data, 2, true, false, true, EnumSkills.FARMING, EnumSkills.WIND);
             LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3);
-            LevelCalc.levelSkill(player, data, EnumSkills.WIND, 0.5f);
+            LevelCalc.levelSkill(player, data, EnumSkills.WIND, 2);
         });
     }
 
@@ -110,7 +110,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
         if (entityLiving instanceof ServerPlayer serverPlayer && this.getDestroySpeed(stack, state) == this.speed) {
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 LevelCalc.levelSkill(serverPlayer, data, EnumSkills.FARMING, 3);
-                LevelCalc.levelSkill(serverPlayer, data, EnumSkills.WIND, 0.5f);
+                LevelCalc.levelSkill(serverPlayer, data, EnumSkills.WIND, 2);
             });
         }
         return super.mineBlock(stack, level, state, pos, entityLiving);
@@ -178,7 +178,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
                     Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                         LevelCalc.useRP(player, data, range * 10, true, false, true, EnumSkills.FARMING);
                         LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 3.5f);
-                        LevelCalc.levelSkill(player, data, EnumSkills.WIND, 0.8f);
+                        LevelCalc.levelSkill(player, data, EnumSkills.WIND, 2.5f);
                     });
             }
         }

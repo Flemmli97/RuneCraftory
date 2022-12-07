@@ -71,7 +71,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
         Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 1));
+                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 4));
     }
 
     @Override
@@ -130,7 +130,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
                         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
                         player.sweepAttack();
                         if (performRightClickAction(stack, entity, this.getRange())) {
-                            LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 3);
+                            LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 7);
                             LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.LONGSWORD);
                         }
                     };

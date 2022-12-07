@@ -67,7 +67,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     @Override
     public void onEntityHit(ServerPlayer player, ItemStack stack) {
         Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 1));
+                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 3));
     }
 
     @Override
@@ -152,7 +152,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
         if (!list.isEmpty()) {
             LevelCalc.useRP(player, data, player.getRandom().nextInt(2) + 2, true, false, true, EnumSkills.SPEAR);
             data.getWeaponHandler().onUseSpear();
-            LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 1);
+            LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 2);
             list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false, false));
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
         }
