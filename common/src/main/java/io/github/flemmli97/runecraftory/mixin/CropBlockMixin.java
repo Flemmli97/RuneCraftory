@@ -15,7 +15,7 @@ public abstract class CropBlockMixin {
 
     @Inject(method = "mayPlaceOn", at = @At("HEAD"), cancellable = true)
     private void checkPlace(BlockState state, BlockGetter level, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
-        if (state.is(ModTags.farmland)) {
+        if (state.is(ModTags.FARMLAND)) {
             info.setReturnValue(true);
             info.cancel();
         }

@@ -32,7 +32,7 @@ public class BlockTagGen extends BlockTagsProvider {
         this.tag(BlockTags.WOLVES_SPAWNABLE_ON).add(ModBlocks.snow.get());
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.snow.get());
 
-        this.tag(ModTags.sickleDestroyable)
+        this.tag(ModTags.SICKLE_DESTROYABLE)
                 .addTag(BlockTags.CORAL_PLANTS)
                 .addTag(BlockTags.CROPS)
                 .addTag(BlockTags.FLOWERS)
@@ -43,10 +43,10 @@ public class BlockTagGen extends BlockTagsProvider {
                 .add(Blocks.SEAGRASS, Blocks.TALL_SEAGRASS)
                 .add(Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM, Blocks.CRIMSON_FUNGUS, Blocks.WARPED_FUNGUS);
 
-        this.tag(ModTags.hammerFlattenable)
+        this.tag(ModTags.HAMMER_FLATTENABLE)
                 .add(Blocks.FARMLAND, ModBlocks.farmland.get(), Blocks.DIRT_PATH);
 
-        this.tag(ModTags.hammerBreakable)
+        this.tag(ModTags.HAMMER_BREAKABLE)
                 .add(ModBlocks.mineralMap.values().stream().map(RegistryEntrySupplier::get).toArray(Block[]::new));
 
         for (RegistryEntrySupplier<Block> sup : ModBlocks.mineralMap.values()) {
@@ -54,13 +54,14 @@ public class BlockTagGen extends BlockTagsProvider {
             this.tag(BlockTags.NEEDS_IRON_TOOL).add(sup.get());
         }
         for (RegistryEntrySupplier<Block> sup : ModBlocks.herbs) {
-            this.tag(ModTags.sickleDestroyable).add(sup.get());
+            this.tag(ModTags.SICKLE_DESTROYABLE).add(sup.get());
+            this.tag(ModTags.HERBS).add(sup.get());
         }
         for (RegistryEntrySupplier<Block> sup : ModBlocks.crops) {
-            this.tag(ModTags.sickleDestroyable).add(sup.get());
+            this.tag(ModTags.SICKLE_DESTROYABLE).add(sup.get());
         }
         for (RegistryEntrySupplier<Block> sup : ModBlocks.flowers) {
-            this.tag(ModTags.sickleDestroyable).add(sup.get());
+            this.tag(ModTags.SICKLE_DESTROYABLE).add(sup.get());
         }
 
         for (RegistryEntrySupplier<Block> sup : ModBlocks.brokenMineralMap.values()) {
@@ -73,6 +74,6 @@ public class BlockTagGen extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.farmland.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.board.get(), ModBlocks.shipping.get());
 
-        this.tag(ModTags.farmland).add(Blocks.FARMLAND, ModBlocks.farmland.get());
+        this.tag(ModTags.FARMLAND).add(Blocks.FARMLAND, ModBlocks.farmland.get());
     }
 }

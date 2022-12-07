@@ -126,7 +126,7 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-        return state.is(ModTags.farmland);
+        return state.is(ModTags.FARMLAND);
     }
 
     @Override

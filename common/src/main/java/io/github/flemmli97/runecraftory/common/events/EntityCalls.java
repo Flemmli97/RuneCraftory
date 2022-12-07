@@ -391,7 +391,7 @@ public class EntityCalls {
     public static void onBlockBreak(ServerPlayer player, BlockState state, BlockPos pos) {
         if (!player.hasCorrectToolForDrops(state))
             return;
-        if (state.is(ModTags.hammerBreakable)) {
+        if (state.is(ModTags.HAMMER_BREAKABLE)) {
             ItemToolHammer.onHammering(player, true);
         } else if (state.is(BlockTags.MINEABLE_WITH_PICKAXE)) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.MINING, state.getBlock() instanceof BlockMineral ? 10 : 1));

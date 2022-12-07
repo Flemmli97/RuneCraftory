@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "#c:vegetables/turnip",
+    "#c:vegetables/turnip_pink",
+    "#c:vegetables/cabbage",
+    "#c:vegetables/golden_turnip",
+    "#c:vegetables/golden_cabbage",
+    "#c:vegetables/radish",
+    "#c:vegetables/yam",
+    "#c:vegetables/tomato",
+    "#c:vegetables/cucumber"
+  ]
+}

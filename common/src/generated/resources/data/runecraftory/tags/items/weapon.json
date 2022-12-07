@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "#runecraftory:weapon/short_swords",
+    "#runecraftory:weapon/long_swords",
+    "#runecraftory:weapon/spears",
+    "#runecraftory:weapon/axes",
+    "#runecraftory:weapon/hammers",
+    "#runecraftory:weapon/dual_blades",
+    "#runecraftory:weapon/fists",
+    "#runecraftory:weapon/staffs"
+  ]
+}

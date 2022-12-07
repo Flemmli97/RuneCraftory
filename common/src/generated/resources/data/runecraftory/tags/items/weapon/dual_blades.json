@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:short_dagger",
+    "runecraftory:steel_edge",
+    "runecraftory:frost_edge",
+    "runecraftory:iron_edge",
+    "runecraftory:thief_knife",
+    "runecraftory:wind_edge"
+  ]
+}

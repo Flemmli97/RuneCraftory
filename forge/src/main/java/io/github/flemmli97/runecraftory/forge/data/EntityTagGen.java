@@ -33,9 +33,13 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
             this.tag(IMUse).add(type.get());
             this.tag(IMVillagers).add(type.get());
             this.tag(minecolonies).add(type.get());
-            this.tag(ModTags.monsters).add(type.get());
+            this.tag(ModTags.MONSTERS).add(type.get());
         }
-        this.tag(ModTags.bossMonsters)
+        this.tag(ModTags.BOSS_MONSTERS)
+                .add(ModEntities.ambrosia.get())
+                .add(ModEntities.thunderbolt.get())
+                .add(ModEntities.marionetta.get());
+        this.tag(ModTags.BOSSES)
                 .add(ModEntities.ambrosia.get())
                 .add(ModEntities.thunderbolt.get())
                 .add(ModEntities.marionetta.get());

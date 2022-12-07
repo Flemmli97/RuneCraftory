@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:claymore",
+    "runecraftory:zweihaender",
+    "runecraftory:zweihaender_plus",
+    "runecraftory:great_sword",
+    "runecraftory:sea_cutter",
+    "runecraftory:cyclone_blade"
+  ]
+}

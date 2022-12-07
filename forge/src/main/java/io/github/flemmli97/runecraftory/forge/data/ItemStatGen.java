@@ -472,44 +472,44 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), -2));
         this.addStat(ModItems.scrapPlus.get(), new ItemStat.Builder(0, 2, 1)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 2));
-        this.addStat("iron", ModTags.iron, new ItemStat.Builder(150, 2, 5)
+        this.addStat("iron", ModTags.IRON, new ItemStat.Builder(150, 2, 5)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1));
-        this.addStat("bronze", ModTags.bronze, new ItemStat.Builder(400, 14, 13)
+        this.addStat("bronze", ModTags.BRONZE, new ItemStat.Builder(400, 14, 13)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 2.4));
-        this.addStat("copper", ModTags.copper, new ItemStat.Builder(200, 9, 10)
+        this.addStat("copper", ModTags.COPPER, new ItemStat.Builder(200, 9, 10)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 1.6));
-        this.addStat("silver", ModTags.silver, new ItemStat.Builder(1500, 27, 15)
+        this.addStat("silver", ModTags.SILVER, new ItemStat.Builder(1500, 27, 15)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 5));
-        this.addStat("gold", ModTags.gold, new ItemStat.Builder(3500, 34, 20)
+        this.addStat("gold", ModTags.GOLD, new ItemStat.Builder(3500, 34, 20)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 2));
-        this.addStat("platinum", ModTags.platinum, new ItemStat.Builder(5000, 111, 34)
+        this.addStat("platinum", ModTags.PLATINUM, new ItemStat.Builder(5000, 111, 34)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 25));
-        this.addStat("orichalcum", ModTags.orichalcum, new ItemStat.Builder(20000, 750, 65)
+        this.addStat("orichalcum", ModTags.ORICHALCUM, new ItemStat.Builder(20000, 750, 65)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 70));
-        this.addStat("dragonic", ModTags.dragonic, new ItemStat.Builder(0, 1000, 70)
+        this.addStat("dragonic", ModTags.DRAGONIC, new ItemStat.Builder(0, 1000, 70)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 130)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 90));
         this.addStat(Items.NETHERITE_INGOT, new ItemStat.Builder(0, 200, 40)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 20)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 20));
 
-        this.addStat("emerald", ModTags.emerald, new ItemStat.Builder(2500, 5, 24)
+        this.addStat("emerald", ModTags.EMERALDS, new ItemStat.Builder(2500, 5, 24)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 8));
         this.addStat(Items.DIAMOND, new ItemStat.Builder(5000, 21, 29)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 12)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 12));
-        this.addStat("amethyst", ModTags.amethyst, new ItemStat.Builder(3500, 18, 24)
+        this.addStat("amethyst", ModTags.AMETHYSTS, new ItemStat.Builder(3500, 18, 24)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 1));
-        this.addStat("aquamarine", ModTags.aquamarine, new ItemStat.Builder(3500, 23, 24)
+        this.addStat("aquamarine", ModTags.AQUAMARINES, new ItemStat.Builder(3500, 23, 24)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 8));
-        this.addStat("ruby", ModTags.ruby, new ItemStat.Builder(4000, 37, 24)
+        this.addStat("ruby", ModTags.RUBIES, new ItemStat.Builder(4000, 37, 24)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 8));
-        this.addStat("sapphier", ModTags.sapphire, new ItemStat.Builder(3500, 24, 24)
+        this.addStat("sapphier", ModTags.SAPPHIRES, new ItemStat.Builder(3500, 24, 24)
                 .addAttribute(ModAttributes.RF_DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.RF_MAGIC_DEFENCE.get(), 8));
         this.addStat(ModItems.coreGreen.get(), new ItemStat.Builder(15000, 1050, 24)

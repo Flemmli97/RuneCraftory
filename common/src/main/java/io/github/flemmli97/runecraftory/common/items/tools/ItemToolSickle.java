@@ -52,7 +52,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
     public final EnumToolTier tier;
 
     public ItemToolSickle(EnumToolTier tier, Item.Properties props) {
-        super(0, 0, ItemTiers.tier, ModTags.sickleEffective, props);
+        super(0, 0, ItemTiers.tier, ModTags.SICKLE_EFFECTIVE, props);
         this.tier = tier;
     }
 
@@ -210,7 +210,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
         if (entity instanceof Player player && !player.mayUseItemAt(pos.relative(Direction.UP), Direction.UP, stack))
             return false;
         BlockState state = level.getBlockState(pos);
-        if (state.is(ModTags.sickleDestroyable)) {
+        if (state.is(ModTags.SICKLE_DESTROYABLE)) {
             if (entity instanceof ServerPlayer serverPlayer) {
                 if (serverPlayer.gameMode.destroyBlock(pos)) {
                     level.levelEvent(2001, pos, Block.getId(state));

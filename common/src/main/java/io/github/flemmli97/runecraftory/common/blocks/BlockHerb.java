@@ -55,7 +55,7 @@ public class BlockHerb extends BushBlock implements IBlockModifyLevel {
         if (this.types.contains(GroundTypes.SANDY))
             if (state.is(BlockTags.SAND))
                 return true;
-        return state.is(BlockTags.DIRT) || state.is(ModTags.farmland) || super.mayPlaceOn(state, level, pos);
+        return state.is(BlockTags.DIRT) || state.is(ModTags.FARMLAND) || super.mayPlaceOn(state, level, pos);
     }
 
     @Override

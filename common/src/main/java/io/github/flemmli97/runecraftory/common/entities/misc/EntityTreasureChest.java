@@ -89,10 +89,10 @@ public class EntityTreasureChest extends Entity implements IAnimated {
 
     public static TagKey<Item> lootTagFromTier(int tier) {
         return switch (tier) {
-            case 1 -> ModTags.chest_t2;
-            case 2 -> ModTags.chest_t3;
-            case 3 -> ModTags.chest_t4;
-            default -> ModTags.chest_t1;
+            case 1 -> ModTags.CHEST_T2;
+            case 2 -> ModTags.CHEST_T3;
+            case 3 -> ModTags.CHEST_T4;
+            default -> ModTags.CHEST_T1;
         };
     }
 

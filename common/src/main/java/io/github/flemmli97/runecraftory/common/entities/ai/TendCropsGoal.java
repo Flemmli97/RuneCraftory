@@ -37,7 +37,7 @@ import java.util.function.Function;
 public class TendCropsGoal extends Goal {
 
     private static final Function<ItemStack, Boolean> seedItem = s -> !s.isEmpty() && s.getItem() instanceof BlockItem
-            && (s.is(ModTags.seeds) || s.getItem() == Items.POTATO || s.getItem() == Items.CARROT);
+            && (s.is(ModTags.SEEDS) || s.getItem() == Items.POTATO || s.getItem() == Items.CARROT);
 
     private final List<BlockPos> toTend = new ArrayList<>();
     private BlockPos selected;

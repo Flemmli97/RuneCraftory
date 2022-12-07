@@ -57,7 +57,7 @@ public class EntityUtils {
     public static void foodHealing(LivingEntity entity, float amount) {
         if (amount > 0)
             entity.heal(amount);
-        else if (!entity.getType().is(ModTags.bossMonsters))
+        else if (!entity.getType().is(ModTags.BOSS_MONSTERS))
             entity.setHealth(entity.getHealth() + amount);
     }
 

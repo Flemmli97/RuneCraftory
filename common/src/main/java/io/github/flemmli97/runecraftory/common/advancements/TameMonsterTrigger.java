@@ -61,7 +61,7 @@ public class TameMonsterTrigger extends SimpleCriterionTrigger<TameMonsterTrigge
 
         public boolean matches(BaseMonster monster, TamedEntityTracker tracker) {
             if (this.bossOnly) {
-                if (!monster.getType().is(ModTags.bossMonsters))
+                if (!monster.getType().is(ModTags.BOSS_MONSTERS))
                     return false;
                 return tracker.getTameCount(true) >= this.amount;
             }

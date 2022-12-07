@@ -83,7 +83,7 @@ public class EntityWooly extends ChargingMonster {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        if (itemStack.is(ModTags.shears)) {
+        if (itemStack.is(ModTags.SHEARS)) {
             if (!this.level.isClientSide && !this.isSheared() && (!this.isTamed() || player.getUUID().equals(this.getOwnerUUID()))) {
                 this.shear(player, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
                 itemStack.hurtAndBreak(1, player, (playerx) -> playerx.broadcastBreakEvent(hand));

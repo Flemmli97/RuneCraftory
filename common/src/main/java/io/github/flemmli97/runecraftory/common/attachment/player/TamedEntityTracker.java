@@ -11,7 +11,7 @@ public class TamedEntityTracker {
 
     public void tameEntity(BaseMonster monster) {
         this.tamedMonster++;
-        if (monster.getType().is(ModTags.bossMonsters))
+        if (monster.getType().is(ModTags.BOSS_MONSTERS))
             this.tamedBossMonster++;
     }
 

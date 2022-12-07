@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:battle_hammer",
+    "runecraftory:bat",
+    "runecraftory:war_hammer",
+    "runecraftory:war_hammer_plus",
+    "runecraftory:iron_bat",
+    "runecraftory:great_hammer"
+  ]
+}

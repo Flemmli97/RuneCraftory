@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:leather_glove",
+    "runecraftory:brass_knuckles",
+    "runecraftory:kote",
+    "runecraftory:gloves",
+    "runecraftory:bear_claws",
+    "runecraftory:fist_of_earth"
+  ]
+}

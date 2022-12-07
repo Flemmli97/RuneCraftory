@@ -10,6 +10,8 @@ RuneCraftory 1.4.1
 - Add condition to npc conversations
 - Fix snow in biomes with no downfall
 - Add npc birthday
+- Base xp config for skill removed. Instead replaced with skill xp multiplier
+- Added more tags
 
 RuneCraftory 1.4.0
 ================

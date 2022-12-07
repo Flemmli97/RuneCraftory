@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:rod",
+    "runecraftory:amethyst_rod",
+    "runecraftory:aquamarine_rod",
+    "runecraftory:friendly_rod",
+    "runecraftory:love_love_rod",
+    "runecraftory:staff"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:battle_axe",
+    "runecraftory:battle_scythe",
+    "runecraftory:pole_axe",
+    "runecraftory:pole_axe_plus",
+    "runecraftory:great_axe",
+    "runecraftory:tomohawk"
+  ]
+}
