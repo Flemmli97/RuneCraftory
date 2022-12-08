@@ -1280,8 +1280,8 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
         DATAGENTAGS.computeIfAbsent(ModTags.AXES, t -> new ArrayList<>()).add(sup);
+        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 

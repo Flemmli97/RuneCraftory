@@ -430,7 +430,7 @@ public class ItemTagGen extends ItemTagsProvider {
         }
 
         forgeParentTag = tempKeyForge("fruits");
-        this.tag(ModTags.FRUITS).addTag(forgeCropParentTag);
+        this.tag(ModTags.FRUITS).addTag(forgeParentTag);
         for (RegistryEntrySupplier<Item> sup : ModItems.FRUITS) {
             String name = sup.getID().getPath().replace("crop_", "");
             TagKey<Item> forgeTag = tempKeyForge("fruits/" + name);
@@ -450,7 +450,7 @@ public class ItemTagGen extends ItemTagsProvider {
         }
 
         forgeParentTag = tempKeyForge("flowers");
-        this.tag(ModTags.FLOWERS).addTag(forgeCropParentTag);
+        this.tag(ModTags.FLOWERS).addTag(forgeParentTag);
         for (RegistryEntrySupplier<Item> sup : ModItems.FLOWERS) {
             this.tag(forgeParentTag).add(sup.get());
         }
