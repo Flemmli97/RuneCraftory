@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:vegetables/turnip",
+    "#forge:vegetables/turnip_pink",
+    "#forge:vegetables/cabbage",
+    "#forge:vegetables/golden_turnip",
+    "#forge:vegetables/golden_cabbage",
+    "#forge:vegetables/radish",
+    "#forge:vegetables/yam",
+    "#forge:vegetables/tomato",
+    "#forge:vegetables/cucumber"
+  ]
+}

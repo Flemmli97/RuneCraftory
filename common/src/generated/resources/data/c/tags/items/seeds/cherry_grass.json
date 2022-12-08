@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_cherry_grass"
+    "#forge:seeds/cherry_grass"
   ]
 }

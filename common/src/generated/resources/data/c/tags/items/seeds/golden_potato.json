@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_golden_potato"
+    "#forge:seeds/golden_potato"
   ]
 }

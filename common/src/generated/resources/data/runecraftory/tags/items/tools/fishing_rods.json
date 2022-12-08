@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:fishing_rod_scrap",
+    "runecraftory:fishing_rod_iron",
+    "runecraftory:fishing_rod_silver",
+    "runecraftory:fishing_rod_gold",
+    "runecraftory:fishing_rod_platinum"
+  ]
+}

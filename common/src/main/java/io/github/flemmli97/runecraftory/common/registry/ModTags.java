@@ -41,7 +41,7 @@ public class ModTags {
     public static final TagKey<Item> SHEARS = tagCommon("shears");
 
     public static final TagKey<Item> COBBLESTONE = tagCommon("cobblestone");
-    public static final TagKey<Item> CHEST = tagCommon("chest");
+    public static final TagKey<Item> CHEST = tagCommon("chests");
 
     public static final TagKey<Item> BRONZE = tagCommon("bronze_ingots");
     public static final TagKey<Item> SILVER = tagCommon("silver_ingots");
@@ -78,6 +78,16 @@ public class ModTags {
     public static final TagKey<Item> SPELLS = tag("spells");
     public static final TagKey<Item> HIGH_TIER_TOOLS = tag("high_tier_tools");
 
+    public static final TagKey<Item> UPGRADABLE_HELD = tag("upgradable_held");
+
+    public static final TagKey<Item> TOOLS = tag("tools");
+    public static final TagKey<Item> HOES = tag("tools/hoes");
+    public static final TagKey<Item> WATERINGCANS = tag("tools/wateringcans");
+    public static final TagKey<Item> SICKLES = tag("tools/sickles");
+    public static final TagKey<Item> HAMMER_TOOLS = tag("tools/hammers");
+    public static final TagKey<Item> AXE_TOOLS = tag("tools/axes");
+    public static final TagKey<Item> FISHING_RODS = tag("tools/fishing_rods");
+
     public static final TagKey<Item> WEAPONS = tag("weapon");
     public static final TagKey<Item> SHORTSWORDS = tag("weapon/short_swords");
     public static final TagKey<Item> LONGSWORDS = tag("weapon/long_swords");
@@ -88,10 +98,19 @@ public class ModTags {
     public static final TagKey<Item> FISTS = tag("weapon/fists");
     public static final TagKey<Item> STAFFS = tag("weapon/staffs");
 
+    public static final TagKey<Item> EQUIPMENT = tag("equipment");
+    public static final TagKey<Item> HELMET = tag("equipment/helmet");
+    public static final TagKey<Item> CHESTPLATE = tag("equipment/chestplate");
+    public static final TagKey<Item> ACCESSORIES = tag("equipment/accessories");
+    public static final TagKey<Item> BOOTS = tag("equipment/boots");
+    public static final TagKey<Item> SHIELDS = tag("equipment/shields");
+
     public static final TagKey<Item> VEGGIES = tagCommon("vegetables");
     public static final TagKey<Item> FRUITS = tagCommon("fruits");
     public static final TagKey<Item> FLOWERS = tagCommon("flowers");
     public static final TagKey<Item> CROPS = tagCommon("crops");
+
+    public static final TagKey<Item> FOODS = tagCommon("foods");
 
     //Loot
     public static final TagKey<Item> CHEST_T1 = tag("chest_t1");

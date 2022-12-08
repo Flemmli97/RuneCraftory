@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:crop_pink_melon"
+    "#forge:crops/pink_melon"
   ]
 }

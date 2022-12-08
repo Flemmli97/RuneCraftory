@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_lamp_grass"
+    "#forge:seeds/lamp_grass"
   ]
 }

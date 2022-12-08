@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_autumn_grass"
+    "#forge:seeds/autumn_grass"
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:cheap_bracelet",
+    "runecraftory:bronze_bracelet",
+    "runecraftory:silver_bracelet",
+    "runecraftory:gold_bracelet",
+    "runecraftory:platinum_bracelet",
+    "runecraftory:silver_ring",
+    "runecraftory:gold_ring",
+    "runecraftory:platinum_ring",
+    "runecraftory:magic_earrings"
+  ]
+}

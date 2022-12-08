@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_shield"
+    "#forge:seeds/shield"
   ]
 }

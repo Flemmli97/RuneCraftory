@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_moondrop_flower"
+    "#forge:seeds/moondrop_flower"
   ]
 }

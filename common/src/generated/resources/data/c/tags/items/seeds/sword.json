@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_sword"
+    "#forge:seeds/sword"
   ]
 }

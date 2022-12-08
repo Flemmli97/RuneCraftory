@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:crop_turnip"
+    "#forge:vegetables/turnip"
   ]
 }

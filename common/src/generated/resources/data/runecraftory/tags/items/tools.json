@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#runecraftory:tools/hoes",
+    "#runecraftory:tools/wateringcans",
+    "#runecraftory:tools/sickles",
+    "#runecraftory:tools/hammers",
+    "#runecraftory:tools/axes",
+    "#runecraftory:tools/fishing_rods"
+  ]
+}

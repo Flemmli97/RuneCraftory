@@ -278,15 +278,37 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.axePlatinum.get())
                 .add(ModItems.fishingRodPlatinum.get());
 
-        this.tag(ModTags.WEAPONS)
-                .addTag(ModTags.SHORTSWORDS)
-                .addTag(ModTags.LONGSWORDS)
-                .addTag(ModTags.SPEARS)
-                .addTag(ModTags.AXES)
-                .addTag(ModTags.HAMMERS)
-                .addTag(ModTags.DUALBLADES)
-                .addTag(ModTags.FISTS)
-                .addTag(ModTags.STAFFS);
+        this.tag(ModTags.UPGRADABLE_HELD).addTag(ModTags.TOOLS).addTag(ModTags.WEAPONS);
+        this.tag(ModTags.TOOLS).addTag(ModTags.HOES).addTag(ModTags.WATERINGCANS)
+                .addTag(ModTags.SICKLES).addTag(ModTags.HAMMER_TOOLS)
+                .addTag(ModTags.AXE_TOOLS).addTag(ModTags.FISHING_RODS);
+
+        this.tag(tempKeyFabric("hoes")).addTag(tempKeyForge("tools/hoes"));
+        this.tag(tempKeyForge("tools/hoes")).addTag(ModTags.HOES);
+        this.tag(tempKeyFabric("fishing_rods")).addTag(tempKeyForge("tools/fishing_rods"));
+        this.tag(tempKeyForge("tools/fishing_rods")).addTag(ModTags.FISHING_RODS);
+
+        this.tag(ModTags.WEAPONS).addTag(ModTags.SHORTSWORDS).addTag(ModTags.LONGSWORDS)
+                .addTag(ModTags.SPEARS).addTag(ModTags.AXES)
+                .addTag(ModTags.HAMMERS).addTag(ModTags.DUALBLADES)
+                .addTag(ModTags.FISTS).addTag(ModTags.STAFFS);
+
+        this.tag(tempKeyFabric("swords")).addTag(tempKeyForge("tools/swords"));
+        this.tag(tempKeyForge("tools/swords"))
+                .addTag(ModTags.SHORTSWORDS).addTag(ModTags.LONGSWORDS).addTag(ModTags.DUALBLADES);
+
+        this.tag(ModTags.EQUIPMENT).addTag(ModTags.HELMET).addTag(ModTags.CHESTPLATE)
+                .addTag(ModTags.ACCESSORIES).addTag(ModTags.BOOTS)
+                .addTag(ModTags.SHIELDS);
+
+        this.tag(tempKeyFabric("helmets")).addTag(tempKeyForge("armors/helmets"));
+        this.tag(tempKeyForge("armors/helmets")).addTag(ModTags.HELMET);
+        this.tag(tempKeyFabric("chestplates")).addTag(tempKeyForge("armors/chestplates"));
+        this.tag(tempKeyForge("armors/chestplates")).addTag(ModTags.CHESTPLATE);
+        this.tag(tempKeyFabric("boots")).addTag(tempKeyForge("armors/boots"));
+        this.tag(tempKeyForge("armors/boots")).addTag(ModTags.BOOTS);
+        this.tag(tempKeyFabric("shields")).addTag(tempKeyForge("tools/shields"));
+        this.tag(tempKeyForge("tools/shields")).addTag(ModTags.SHIELDS);
 
         this.forgeAndCommonTag(Tags.Items.EGGS, ModTags.EGGS, ModItems.eggS.get(),
                 ModItems.eggM.get(), ModItems.eggL.get(), Items.EGG);
@@ -373,34 +395,64 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.chocolateCake.get())
                 .add(ModItems.applePie.get());
 
-        //Maybe find better way for fabric forge tags
+        //Note: Add items to the matching forge tags and make fabric common tag include the corresponding forge tag
+        TagKey<Item> forgeParentTag = tempKeyForge("seeds");
+        //this.tag(Tags.Items.SEEDS).addTag(forgeParentTag); Already done above. Just here in case of confusion
         for (RegistryEntrySupplier<Item> sup : ModItems.SEEDS) {
-            TagKey<Item> seedTag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation("c", "seeds/" + sup.getID().getPath().replace("seed_", "")));
-            this.tag(seedTag).add(sup.get());
-            this.tag(Tags.Items.SEEDS).addTag(seedTag);
+            TagKey<Item> forgeTag = tempKeyForge("seeds/" + sup.getID().getPath().replace("seed_", ""));
+            this.tag(forgeTag).add(sup.get());
+            this.tag(forgeParentTag).addTag(forgeTag);
+
+            TagKey<Item> commonTag = tempKeyFabric("seeds/" + sup.getID().getPath().replace("seed_", ""));
+            this.tag(commonTag).addTag(forgeTag);
         }
+
+        forgeParentTag = tempKeyForge("vegetables");
+        TagKey<Item> forgeCropParentTag = tempKeyForge("crops");
+        this.tag(ModTags.VEGGIES).addTag(forgeParentTag);
+        this.tag(ModTags.CROPS).addTag(forgeCropParentTag);
         for (RegistryEntrySupplier<Item> sup : ModItems.VEGGIES) {
             String name = sup.getID().getPath().replace("crop_", "");
-            TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation("c", "vegetables/" + name));
-            this.tag(tag).add(sup.get());
-            this.tag(ModTags.VEGGIES).addTag(tag);
+            TagKey<Item> forgeTag = tempKeyForge("vegetables/" + name);
+            this.tag(forgeTag).add(sup.get());
+            this.tag(forgeParentTag).addTag(forgeTag);
 
-            tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation("c", "crops/" + name));
-            this.tag(tag).add(sup.get());
-            this.tag(ModTags.CROPS).addTag(tag);
+            TagKey<Item> commonTag = tempKeyFabric("vegetables/" + name);
+            this.tag(commonTag).addTag(forgeTag);
+
+            //Also add to crops tag
+            forgeTag = tempKeyForge("crops/" + name);
+            this.tag(forgeTag).add(sup.get());
+            this.tag(forgeCropParentTag).addTag(forgeTag);
+
+            commonTag = tempKeyFabric("crops/" + name);
+            this.tag(commonTag).addTag(forgeTag);
         }
+
+        forgeParentTag = tempKeyForge("fruits");
+        this.tag(ModTags.FRUITS).addTag(forgeCropParentTag);
         for (RegistryEntrySupplier<Item> sup : ModItems.FRUITS) {
             String name = sup.getID().getPath().replace("crop_", "");
-            TagKey<Item> tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation("c", "fruits/" + name));
-            this.tag(tag).add(sup.get());
-            this.tag(ModTags.FRUITS).addTag(tag);
+            TagKey<Item> forgeTag = tempKeyForge("fruits/" + name);
+            this.tag(forgeTag).add(sup.get());
+            this.tag(forgeParentTag).addTag(forgeTag);
 
-            tag = PlatformUtils.INSTANCE.itemTag(new ResourceLocation("c", "crops/" + name));
-            this.tag(tag).add(sup.get());
-            this.tag(ModTags.CROPS).addTag(tag);
+            TagKey<Item> commonTag = tempKeyFabric("fruits/" + name);
+            this.tag(commonTag).addTag(forgeTag);
+
+            //Also add to crops tag
+            forgeTag = tempKeyForge("crops/" + name);
+            this.tag(forgeTag).add(sup.get());
+            this.tag(forgeCropParentTag).addTag(forgeTag);
+
+            commonTag = tempKeyFabric("crops/" + name);
+            this.tag(commonTag).addTag(forgeTag);
         }
+
+        forgeParentTag = tempKeyForge("flowers");
+        this.tag(ModTags.FLOWERS).addTag(forgeCropParentTag);
         for (RegistryEntrySupplier<Item> sup : ModItems.FLOWERS) {
-            this.tag(ModTags.FLOWERS).add(sup.get());
+            this.tag(forgeParentTag).add(sup.get());
         }
     }
 
@@ -410,5 +462,13 @@ public class ItemTagGen extends ItemTagsProvider {
             a.add(item);
         a = this.tag(common);
         a.addTag(forge);
+    }
+
+    protected static TagKey<Item> tempKeyForge(String path) {
+        return PlatformUtils.INSTANCE.itemTag(new ResourceLocation("forge", path));
+    }
+
+    protected static TagKey<Item> tempKeyFabric(String path) {
+        return PlatformUtils.INSTANCE.itemTag(new ResourceLocation("c", path));
     }
 }

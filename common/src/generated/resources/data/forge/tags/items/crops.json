@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:crops/turnip",
+    "#forge:crops/turnip_pink",
+    "#forge:crops/cabbage",
+    "#forge:crops/golden_turnip",
+    "#forge:crops/golden_cabbage",
+    "#forge:crops/radish",
+    "#forge:crops/yam",
+    "#forge:crops/tomato",
+    "#forge:crops/cucumber",
+    "#forge:crops/pink_melon"
+  ]
+}

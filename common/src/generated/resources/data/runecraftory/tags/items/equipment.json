@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#runecraftory:equipment/helmet",
+    "#runecraftory:equipment/chestplate",
+    "#runecraftory:equipment/accessories",
+    "#runecraftory:equipment/boots",
+    "#runecraftory:equipment/shields"
+  ]
+}

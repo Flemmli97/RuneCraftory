@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockFarm;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
@@ -169,7 +168,7 @@ public class EntityCalls {
     }
 
     public static boolean playerAttack(Player player, Entity target) {
-        if (!player.level.isClientSide && player.getMainHandItem().getItem() instanceof IItemUsable) {
+        if (!player.level.isClientSide && ItemNBT.isWeapon(player.getMainHandItem())) {
             CombatUtils.playerAttackWithItem(player, target, true, true, true);
             return true;
         }
@@ -177,7 +176,7 @@ public class EntityCalls {
     }
 
     public static boolean playerAoeAttack(Player player, ItemStack stack, List<Entity> list) {
-        if (stack.getItem() instanceof IItemUsable) {
+        if (ItemNBT.isWeapon(stack)) {
             for (int i = 0; i < list.size(); ++i) {
                 CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
             }

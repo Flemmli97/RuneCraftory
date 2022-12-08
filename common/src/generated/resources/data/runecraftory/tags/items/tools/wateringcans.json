@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:watering_can_scrap",
+    "runecraftory:watering_can_iron",
+    "runecraftory:watering_can_silver",
+    "runecraftory:watering_can_gold",
+    "runecraftory:watering_can_platinum"
+  ]
+}

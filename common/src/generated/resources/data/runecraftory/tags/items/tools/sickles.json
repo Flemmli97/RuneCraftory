@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:sickle_scrap",
+    "runecraftory:sickle_iron",
+    "runecraftory:sickle_silver",
+    "runecraftory:sickle_gold",
+    "runecraftory:sickle_platinum"
+  ]
+}

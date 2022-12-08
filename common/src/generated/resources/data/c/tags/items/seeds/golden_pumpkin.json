@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_golden_pumpkin"
+    "#forge:seeds/golden_pumpkin"
   ]
 }

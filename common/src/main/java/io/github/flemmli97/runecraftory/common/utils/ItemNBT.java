@@ -6,13 +6,13 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.api.items.StatItem;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -204,7 +204,7 @@ public class ItemNBT {
     }
 
     public static boolean shouldHaveStats(ItemStack stack) {
-        return stack.getItem() instanceof StatItem;
+        return stack.is(ModTags.UPGRADABLE_HELD) || stack.is(ModTags.EQUIPMENT);
     }
 
     public static boolean shouldHaveLevel(ItemStack stack) {
@@ -236,7 +236,7 @@ public class ItemNBT {
     public static boolean reverseStats(ItemStack stack) {
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
-            return tag.getBoolean(LibNBT.ScrapMetalPlus);
+            return tag.getBoolean(LibNBT.ObjectX);
         }
         return false;
     }

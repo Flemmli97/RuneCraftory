@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_corn"
+    "#forge:seeds/corn"
   ]
 }

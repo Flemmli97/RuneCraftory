@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:hoe_scrap",
+    "runecraftory:hoe_iron",
+    "runecraftory:hoe_silver",
+    "runecraftory:hoe_gold",
+    "runecraftory:hoe_platinum"
+  ]
+}

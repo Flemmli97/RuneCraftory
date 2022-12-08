@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#runecraftory:weapon/short_swords",
+    "#runecraftory:weapon/long_swords",
+    "#runecraftory:weapon/dual_blades"
+  ]
+}

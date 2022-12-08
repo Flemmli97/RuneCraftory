@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
-public interface IItemUsable extends StatItem {
+public interface IItemUsable {
 
     EnumWeaponType getWeaponType();
 

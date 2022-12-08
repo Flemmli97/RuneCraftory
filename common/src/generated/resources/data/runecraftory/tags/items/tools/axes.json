@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:axe_scrap",
+    "runecraftory:axe_iron",
+    "runecraftory:axe_silver",
+    "runecraftory:axe_gold",
+    "runecraftory:axe_platinum"
+  ]
+}

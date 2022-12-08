@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_hot_hot_fruit"
+    "#forge:seeds/hot_hot_fruit"
   ]
 }

@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_dungeon"
+    "#forge:seeds/dungeon"
   ]
 }

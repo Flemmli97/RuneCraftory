@@ -1,8 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:ambrosia",
-    "runecraftory:thunderbolt",
-    "runecraftory:marionetta"
+    "#forge:bosses"
   ]
 }

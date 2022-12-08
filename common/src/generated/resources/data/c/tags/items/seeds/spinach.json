@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_spinach"
+    "#forge:seeds/spinach"
   ]
 }

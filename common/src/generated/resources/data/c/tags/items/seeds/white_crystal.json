@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:seed_white_crystal"
+    "#forge:seeds/white_crystal"
   ]
 }

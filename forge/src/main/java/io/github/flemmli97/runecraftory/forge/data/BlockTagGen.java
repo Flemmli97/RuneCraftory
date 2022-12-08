@@ -20,10 +20,12 @@ public class BlockTagGen extends BlockTagsProvider {
 
     @Override
     public void addTags() {
+        //Forge tag clone
         this.tag(ModTags.ENDSTONES)
                 .add(Blocks.END_STONE)
                 .addOptional(Tags.Blocks.END_STONES.location());
 
+        //Snow
         this.tag(BlockTags.SNOW).add(ModBlocks.snow.get());
         this.tag(BlockTags.INSIDE_STEP_SOUND_BLOCKS).add(ModBlocks.snow.get());
         this.tag(BlockTags.GOATS_SPAWNABLE_ON).add(ModBlocks.snow.get());

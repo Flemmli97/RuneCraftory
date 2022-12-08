@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.items.equipment;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import io.github.flemmli97.runecraftory.api.items.StatItem;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.platform.ExtendedItem;
 import io.github.flemmli97.tenshilib.api.item.DynamicArmorTextureItem;
@@ -16,7 +15,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 
-public class ItemArmorBase extends ArmorItem implements ExtendedItem, DynamicArmorTextureItem, StatItem {
+public class ItemArmorBase extends ArmorItem implements ExtendedItem, DynamicArmorTextureItem {
 
     private static final String ARMOR_MODEL_PATH = "runecraftory:textures/models/armor/";
     private static final String ITEM_PATH = "runecraftory:textures/models/armor/empty.png";

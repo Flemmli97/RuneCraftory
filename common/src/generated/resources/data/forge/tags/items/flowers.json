@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "runecraftory:crop_toyherb",
+    "runecraftory:crop_moondrop_flower",
+    "runecraftory:crop_pink_cat",
+    "runecraftory:crop_charm_blue",
+    "runecraftory:crop_lamp_grass",
+    "runecraftory:crop_cherry_grass",
+    "runecraftory:crop_pom_pom_grass",
+    "runecraftory:crop_autumn_grass",
+    "runecraftory:crop_noel_grass",
+    "runecraftory:crop_fireflower",
+    "runecraftory:crop_four_leaf_clover",
+    "runecraftory:crop_ironleaf",
+    "runecraftory:crop_white_crystal",
+    "runecraftory:crop_red_crystal",
+    "runecraftory:crop_green_crystal",
+    "runecraftory:crop_blue_crystal",
+    "runecraftory:crop_emery_flower"
+  ]
+}

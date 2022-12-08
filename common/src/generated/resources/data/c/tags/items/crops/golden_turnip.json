@@ -1,6 +1,6 @@
 {
   "replace": false,
   "values": [
-    "runecraftory:crop_golden_turnip"
+    "#forge:crops/golden_turnip"
   ]
 }
