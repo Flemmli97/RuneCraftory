@@ -52,6 +52,7 @@ import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -188,13 +189,13 @@ public class Loottables extends LootTableProvider {
                     new TamedItemLootData(ModItems.furMedium.get(), 1, 5),
                     new TamedItemLootData(ModItems.furLarge.get(), 1, 8));
             LootPoolEntryContainer.Builder<?> b = AlternativesEntry.alternatives();
-            b.otherwise(LootItem.lootTableItem(ModItems.furSmall.get()).when(FriendPointCondition.of(0))
+            b.otherwise(LootItem.lootTableItem(ModItems.furLarge.get()).when(FriendPointCondition.of(8))
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                     .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
             b.otherwise(LootItem.lootTableItem(ModItems.furMedium.get()).when(FriendPointCondition.of(5))
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                     .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
-            b.otherwise(LootItem.lootTableItem(ModItems.furLarge.get()).when(FriendPointCondition.of(8))
+            b.otherwise(LootItem.lootTableItem(ModItems.furSmall.get()).when(FriendPointCondition.of(0))
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                     .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
             this.lootTables.put(EntityWooly.shearedLootTable(ModEntities.wooly.get().getDefaultLootTable()), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
@@ -278,11 +279,18 @@ public class Loottables extends LootTableProvider {
         }
 
         private void tamedDropTable(ResourceLocation res, TamedItemLootData... datas) {
-            LootPoolEntryContainer.Builder<?> b = AlternativesEntry.alternatives();
-            for (TamedItemLootData data : datas) {
-                b.otherwise(LootItem.lootTableItem(data.item()).when(FriendPointCondition.of(data.friendPoints())).when(LootItemRandomChanceCondition.randomChance(data.chance())));
+            if(datas.length > 1) {
+                LootPoolEntryContainer.Builder<?> builder = AlternativesEntry.alternatives();
+                List<TamedItemLootData> sorted = Arrays.stream(datas).sorted((f, s) -> Integer.compare(s.friendPoints, f.friendPoints)).toList();
+                for (TamedItemLootData data : sorted) {
+                    builder.otherwise(LootItem.lootTableItem(data.item()).when(FriendPointCondition.of(data.friendPoints())).when(LootItemRandomChanceCondition.randomChance(data.chance())));
+                }
+                this.lootTables.put(res, LootTable.lootTable().withPool(LootPool.lootPool().add(builder)));
+            } else if(datas.length == 1) {
+                TamedItemLootData data = datas[0];
+                LootPoolEntryContainer.Builder<?> builder = LootItem.lootTableItem(data.item()).when(FriendPointCondition.of(data.friendPoints())).when(LootItemRandomChanceCondition.randomChance(data.chance()));
+                this.lootTables.put(res, LootTable.lootTable().withPool(LootPool.lootPool().add(builder)));
             }
-            this.lootTables.put(res, LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
         }
 
         @Override
