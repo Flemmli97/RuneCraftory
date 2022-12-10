@@ -1,3 +1,9 @@
+RuneCraftory 1.4.2
+================
+- Tags
+- Fix mixin crash on fabric
+- Monster daily drops changed to loot tables
+
 RuneCraftory 1.4.1
 ================
 - Fix crash with thrown item
@@ -12,7 +18,6 @@ RuneCraftory 1.4.1
 - Add npc birthday
 - Base xp config for skill removed. Instead replaced with skill xp multiplier
 - Added more tags
-- Monster daily drops changed to loot tables
 
 RuneCraftory 1.4.0
 ================
