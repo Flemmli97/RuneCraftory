@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
-import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -11,6 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -18,17 +18,13 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public class EntityWooly extends ChargingMonster {
 
@@ -85,7 +81,7 @@ public class EntityWooly extends ChargingMonster {
         ItemStack itemStack = player.getItemInHand(hand);
         if (itemStack.is(ModTags.SHEARS)) {
             if (!this.level.isClientSide && !this.isSheared() && (!this.isTamed() || player.getUUID().equals(this.getOwnerUUID()))) {
-                this.shear(player, EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, itemStack));
+                this.shear(player, itemStack);
                 itemStack.hurtAndBreak(1, player, (playerx) -> playerx.broadcastBreakEvent(hand));
                 return InteractionResult.SUCCESS;
             } else {
@@ -160,6 +156,7 @@ public class EntityWooly extends ChargingMonster {
 
     @Override
     public void onDailyUpdate() {
+        super.onDailyUpdate();
         if (!this.entityData.get(SPAWNSHEARED) || this.isTamed())
             this.setSheared(false);
     }
@@ -172,37 +169,21 @@ public class EntityWooly extends ChargingMonster {
         this.entityData.set(SHEARED, flag);
     }
 
-    public void shear(Player player, int fortune) {
+    public void shear(Player player, ItemStack used) {
         this.setSheared(true);
-        List<ItemStack> ret = new ArrayList<>();
-
-        int heart = -1;
-        ItemStack drop = new ItemStack(ModItems.furSmall.get());
-        for (Map.Entry<ItemStack, Integer> e : this.dailyDrops().entrySet()) {
-            if (e.getKey().getItem() != ModItems.furMedium.get() && e.getKey().getItem() != ModItems.furLarge.get())
-                continue;
-            if (this.getFriendlyPoints().getLevel() >= e.getValue() && heart < e.getValue()) {
-                drop = e.getKey();
-                heart = e.getValue();
-            }
-        }
-        int i = 1 + this.random.nextInt(2 + fortune);
-        for (int j = 0; j < i; ++j) {
-            ret.add(drop.copy());
-        }
         this.playSound(SoundEvents.SHEEP_SHEAR, 1.0f, 1.0f);
         this.gameEvent(GameEvent.SHEAR, player);
-
-        for (ItemStack stack : ret) {
-            ItemEntity itemEntity = this.spawnAtLocation(stack, 1);
-            if (itemEntity != null) {
-                itemEntity.setDeltaMovement(itemEntity.getDeltaMovement().add((this.random.nextFloat() - this.random.nextFloat()) * 0.1F, this.random.nextFloat() * 0.05F, (this.random.nextFloat() - this.random.nextFloat()) * 0.1F));
-            }
-        }
+        LootTable lootTable = this.level.getServer().getLootTables().get(shearedLootTable(this.getDefaultLootTable()));
+        lootTable.getRandomItems(this.dailyDropContext()
+                .withParameter(LootContextParams.TOOL, used).create(LootContextParamSets.GIFT), this::spawnAtLocation);
     }
 
     @Override
     public void playInteractionAnimation() {
         this.getAnimationHandler().setAnimation(interact);
+    }
+
+    public static ResourceLocation shearedLootTable(ResourceLocation def) {
+        return new ResourceLocation(def.getNamespace(), def.getPath() + "_sheared_drops");
     }
 }

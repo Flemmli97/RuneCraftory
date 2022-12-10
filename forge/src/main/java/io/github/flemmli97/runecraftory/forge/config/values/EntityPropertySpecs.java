@@ -14,7 +14,6 @@ public class EntityPropertySpecs {
     public final ForgeConfigSpec.IntValue xp;
     public final ForgeConfigSpec.IntValue money;
     public final ForgeConfigSpec.DoubleValue taming;
-    public final ForgeConfigSpec.ConfigValue<List<String>> daily;
     public final ForgeConfigSpec.BooleanValue ridable;
     public final ForgeConfigSpec.BooleanValue flying;
 
@@ -24,7 +23,6 @@ public class EntityPropertySpecs {
         this.xp = builder.comment("Xp this mob gives").defineInRange("XP", def.getXp(), 0, Integer.MAX_VALUE);
         this.money = builder.comment("Money this mob drops").defineInRange("Money", def.getMoney(), 0, Integer.MAX_VALUE);
         this.taming = builder.comment("Base chance to tame this mob").defineInRange("Taming Chance", def.tamingChance(), 0, 1);
-        this.daily = builder.comment("Daily Products this mob gives").define("Daily", EntityProperties.dailyToString(def.dailyDrops()));
         this.ridable = builder.define("Ridable", def.ridable());
         this.flying = builder.define("Can Fly", def.flying());
     }
@@ -48,12 +46,6 @@ public class EntityPropertySpecs {
         builder.tamingChance(spec.taming.get().floatValue());
         builder.money(spec.money.get());
         builder.money(spec.money.get());
-        for (String s : spec.daily.get()) {
-            String[] sp = s.split("-");
-            if (sp.length != 2)
-                continue;
-            builder.addDaily(new SimpleItemStackWrapper("", 0).readFromString(sp[0]), Integer.parseInt(sp[1]));
-        }
         if (spec.ridable.get())
             builder.setRidable();
         if (spec.flying.get())

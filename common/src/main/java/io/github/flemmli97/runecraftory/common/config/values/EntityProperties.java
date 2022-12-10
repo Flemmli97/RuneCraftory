@@ -10,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -29,19 +28,17 @@ public class EntityProperties {
     private final int xp;
     private final int money;
     private final float taming;
-    private final Map<SimpleItemStackWrapper, Integer> daily;
     private final boolean ridable;
     private final boolean flying;
     private Map<Attribute, Double> baseValues;
     private Map<Attribute, Double> levelGains;
 
-    private EntityProperties(List<String> baseValues, List<String> gains, int xp, int money, float tamingChance, Map<SimpleItemStackWrapper, Integer> dailyDrops, boolean ridable, boolean flying) {
+    private EntityProperties(List<String> baseValues, List<String> gains, int xp, int money, float tamingChance, boolean ridable, boolean flying) {
         this.confAttributes = baseValues;
         this.confGains = gains;
         this.xp = xp;
         this.money = money;
         this.taming = tamingChance;
-        this.daily = dailyDrops;
         this.ridable = ridable;
         this.flying = flying;
     }
@@ -87,10 +84,6 @@ public class EntityProperties {
         return ImmutableMap.copyOf(this.levelGains);
     }
 
-    public Map<SimpleItemStackWrapper, Integer> dailyDrops() {
-        return this.daily;
-    }
-
     public boolean ridable() {
         return this.ridable;
     }
@@ -115,7 +108,6 @@ public class EntityProperties {
 
         private final Set<String> baseValues = new LinkedHashSet<>();
         private final Set<String> gains = new LinkedHashSet<>();
-        private final Map<SimpleItemStackWrapper, Integer> daily = new LinkedHashMap<>();
         private int xp;
         private int money;
         private float taming;
@@ -155,11 +147,6 @@ public class EntityProperties {
             return this;
         }
 
-        public Builder addDaily(SimpleItemStackWrapper itemstack, int requiredHearts) {
-            this.daily.put(itemstack, requiredHearts);
-            return this;
-        }
-
         public Builder setRidable() {
             this.ridable = true;
             return this;
@@ -171,7 +158,7 @@ public class EntityProperties {
         }
 
         public EntityProperties build() {
-            return new EntityProperties(Lists.newArrayList(this.baseValues), Lists.newArrayList(this.gains), this.xp, this.money, this.taming, this.daily, this.ridable, this.flying);
+            return new EntityProperties(Lists.newArrayList(this.baseValues), Lists.newArrayList(this.gains), this.xp, this.money, this.taming, this.ridable, this.flying);
         }
     }
 }

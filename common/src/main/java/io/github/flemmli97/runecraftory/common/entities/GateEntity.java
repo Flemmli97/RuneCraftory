@@ -46,7 +46,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -116,8 +115,8 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     @Override
-    public int friendPoints(Player player) {
-        return 0;
+    public int friendPoints(UUID uuid) {
+        return -1;
     }
 
     @Override

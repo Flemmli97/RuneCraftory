@@ -12,6 +12,7 @@ RuneCraftory 1.4.1
 - Add npc birthday
 - Base xp config for skill removed. Instead replaced with skill xp multiplier
 - Added more tags
+- Monster daily drops changed to loot tables
 
 RuneCraftory 1.4.0
 ================

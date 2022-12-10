@@ -10,11 +10,28 @@
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.2,
+              "looting_multiplier": 0.03
+            }
+          ],
+          "name": "runecraftory:recovery_potion"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_looting",
               "chance": 0.4,
               "looting_multiplier": 0.05
             }
           ],
-          "name": "runecraftory:blade_shard"
+          "name": "runecraftory:glue"
         }
       ]
     },
@@ -39,7 +56,7 @@
               }
             }
           ],
-          "name": "runecraftory:blade_shard"
+          "name": "runecraftory:glue"
         }
       ]
     },

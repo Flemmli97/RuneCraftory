@@ -495,8 +495,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     @Override
-    public int friendPoints(Player player) {
-        return this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints()).points.getLevel();
+    public int friendPoints(UUID uuid) {
+        return this.playerHearts.computeIfAbsent(uuid, u -> new NPCFriendPoints()).points.getLevel();
     }
 
     public void updateFriendPointsFrom(Player player, CompoundTag tag) {

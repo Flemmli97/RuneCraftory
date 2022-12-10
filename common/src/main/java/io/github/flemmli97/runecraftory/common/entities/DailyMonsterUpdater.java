@@ -2,9 +2,6 @@ package io.github.flemmli97.runecraftory.common.entities;
 
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.ItemStack;
-
-import java.util.Map;
 
 public class DailyMonsterUpdater {
 
@@ -21,17 +18,6 @@ public class DailyMonsterUpdater {
         int day = WorldUtils.day(this.monster.level);
         if (Math.abs(this.lastUpdateDay - day) >= 1) {
             this.lastUpdateDay = day;
-            if (this.monster.isTamed()) {
-                int i = -1;
-                ItemStack drop = ItemStack.EMPTY;
-                for (Map.Entry<ItemStack, Integer> e : this.monster.dailyDrops().entrySet()) {
-                    if (this.monster.getFriendlyPoints().getLevel() >= e.getValue() && i < e.getValue()) {
-                        drop = e.getKey();
-                        i = e.getValue();
-                    }
-                }
-                this.monster.spawnAtLocation(drop.copy());
-            }
             this.monster.onDailyUpdate();
         }
     }
