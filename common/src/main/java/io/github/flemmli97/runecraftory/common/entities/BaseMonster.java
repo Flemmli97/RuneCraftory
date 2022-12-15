@@ -948,7 +948,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void onDailyUpdate() {
-        if (this.level instanceof ServerLevel && this.isTamed()) {
+        if (this.level instanceof ServerLevel && this.isTamed() && !this.playDeath()) {
             ResourceLocation resourceLocation = this.dailyDropTable();
             this.dropAsDailyDrop(resourceLocation);
         }
