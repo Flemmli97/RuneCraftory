@@ -1,3 +1,13 @@
+RuneCraftory 1.4.3
+================
+- Fix bonus item increasing the item level
+- Money from defeating monsters now not scaled on level anymore
+- Fix attribute tooltip
+- Some attributes will not get used when upgrading items:  
+  Weapon/Tools: Will not get resistance (e.g. sleep resistance) increased  
+  Armor: Will not get status effect (e.g. sleep effect chance) chance increased
+- Reduced storm chances in summer/winter
+
 RuneCraftory 1.4.2
 ================
 - Tags
