@@ -111,7 +111,7 @@ public class ItemNBT {
         CompoundTag tag = getItemNBT(stack);
         if (tag == null)
             tag = new CompoundTag();
-        tag.putInt(LibNBT.Level, level + 1);
+        tag.putInt(LibNBT.Level, !crafting ? level + 1 : level);
 
         float efficiency = 1;
         if (!crafting) {
