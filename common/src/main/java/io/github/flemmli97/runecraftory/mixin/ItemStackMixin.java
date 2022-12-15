@@ -23,7 +23,7 @@ public abstract class ItemStackMixin {
             EntityCalls.onBlockBreak(serverPlayer, state, pos);
     }
 
-    @ModifyVariable(method = "getTooltipLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 3, shift = At.Shift.BEFORE), ordinal = 0)
+    @ModifyVariable(method = "getTooltipLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 3, shift = At.Shift.BY, by = -2), ordinal = 0)
     private int hideTooltip(int old) {
         return ItemNBT.shouldHaveStats((ItemStack) (Object) this) ? old | ItemStack.TooltipPart.MODIFIERS.getMask() : old;
     }
