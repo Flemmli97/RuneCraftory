@@ -4,8 +4,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
+import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -80,7 +82,14 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
                 stacks.add(itemStack);
         }
         Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> ing = matchingStacks(this, stacks);
-        ItemStack trueOutput = CraftingUtils.getCraftingOutput(this.recipeOutput.copy(), inv, ing);
+        EnumCrafting type = EnumCrafting.FORGE;
+        if (this.getType() == ModCrafting.ARMOR.get())
+            type = EnumCrafting.ARMOR;
+        if (this.getType() == ModCrafting.CHEMISTRY.get())
+            type = EnumCrafting.CHEM;
+        if (this.getType() == ModCrafting.COOKING.get())
+            type = EnumCrafting.COOKING;
+        ItemStack trueOutput = CraftingUtils.getCraftingOutput(this.recipeOutput.copy(), inv, ing, type);
         return new RecipeOutput(trueOutput, unlocked ? trueOutput : new ItemStack(ModItems.unknown.get()), ing.getSecond());
     }
 

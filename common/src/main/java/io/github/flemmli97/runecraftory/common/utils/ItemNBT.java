@@ -4,6 +4,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
+import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
@@ -25,10 +26,42 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class ItemNBT {
+
+    private static final List<ResourceLocation> WEAPON_ONLY = List.of(
+            ModAttributes.RFPARA.getID(),
+            ModAttributes.RFPOISON.getID(),
+            ModAttributes.RFSEAL.getID(),
+            ModAttributes.RFSLEEP.getID(),
+            ModAttributes.RFFAT.getID(),
+            ModAttributes.RFCOLD.getID(),
+            ModAttributes.RFFAINT.getID(),
+            ModAttributes.RFDRAIN.getID()
+    );
+    private static final List<ResourceLocation> ARMOR_ONLY = List.of(
+            ModAttributes.RFRESWATER.getID(),
+            ModAttributes.RFRESEARTH.getID(),
+            ModAttributes.RFRESWIND.getID(),
+            ModAttributes.RFRESFIRE.getID(),
+            ModAttributes.RFRESDARK.getID(),
+            ModAttributes.RFRESLIGHT.getID(),
+            ModAttributes.RFRESLOVE.getID(),
+            ModAttributes.RFRESPARA.getID(),
+            ModAttributes.RFRESPOISON.getID(),
+            ModAttributes.RFRESSEAL.getID(),
+            ModAttributes.RFRESSLEEP.getID(),
+            ModAttributes.RFRESFAT.getID(),
+            ModAttributes.RFRESCOLD.getID(),
+            ModAttributes.RFRESDIZ.getID(),
+            ModAttributes.RFRESCRIT.getID(),
+            ModAttributes.RFRESSTUN.getID(),
+            ModAttributes.RFRESFAINT.getID(),
+            ModAttributes.RFRESDRAIN.getID()
+    );
 
     public static int itemLevel(ItemStack stack) {
         CompoundTag tag = getItemNBT(stack);
@@ -104,7 +137,7 @@ public class ItemNBT {
         return isWeapon(stack) ? DataPackHandler.itemStatManager().get(stack.getItem()).map(ItemStat::element).orElse(EnumElement.NONE) : EnumElement.NONE;
     }
 
-    public static ItemStack addUpgradeItem(ItemStack stack, ItemStack stackToAdd, boolean crafting) {
+    public static ItemStack addUpgradeItem(ItemStack stack, ItemStack stackToAdd, boolean crafting, EnumCrafting type) {
         int level = itemLevel(stack);
         if (stackToAdd.isEmpty() || !ItemNBT.shouldHaveStats(stack) || level >= 10)
             return ItemStack.EMPTY;
@@ -157,7 +190,14 @@ public class ItemNBT {
                     tag.put(LibNBT.Stats, statsTag);
                 }
             }
+            List<ResourceLocation> blacklist = List.of();
+            if (type == EnumCrafting.FORGE)
+                blacklist = ARMOR_ONLY;
+            if (type == EnumCrafting.ARMOR)
+                blacklist = WEAPON_ONLY;
             for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {
+                if (blacklist.contains(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey())))
+                    continue;
                 double amount = entry.getValue() * efficiency;
                 if (hasObjectX)
                     amount *= -1;

@@ -79,7 +79,7 @@ public class ContainerUpgrade extends AbstractContainerMenu {
             return;
         int cost = CraftingUtils.upgradeCost(this.craftingType(), Platform.INSTANCE.getPlayerData(this.craftingInv.getPlayer()).orElseThrow(EntityUtils::playerDataException), this.craftingInv.getItem(0), this.craftingInv.getItem(1));
         if (cost >= 0) {
-            this.outPutInv.setItem(0, CraftingUtils.getUpgradedStack(this.craftingInv.getItem(0), this.craftingInv.getItem(1)));
+            this.outPutInv.setItem(0, CraftingUtils.getUpgradedStack(this.craftingInv.getItem(0), this.craftingInv.getItem(1), this.craftingType()));
         } else {
             this.outPutInv.setItem(0, ItemStack.EMPTY);
         }

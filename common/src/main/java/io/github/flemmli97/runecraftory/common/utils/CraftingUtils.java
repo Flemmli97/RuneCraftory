@@ -102,8 +102,8 @@ public class CraftingUtils {
         return cost;
     }
 
-    public static ItemStack getUpgradedStack(ItemStack stack, ItemStack ing) {
-        return ItemNBT.addUpgradeItem(stack.copy(), ing, false);
+    public static ItemStack getUpgradedStack(ItemStack stack, ItemStack ing, EnumCrafting type) {
+        return ItemNBT.addUpgradeItem(stack.copy(), ing, false, type);
     }
 
     private static float xpForCrafting(EnumSkills skill, SextupleRecipe recipe, int skillLevel) {
@@ -139,11 +139,11 @@ public class CraftingUtils {
         data.increaseSkill(skill, serverPlayer, xpForUpgrade(skill, equip, upgrade, data.getSkillLevel(skill).getLevel()) * GeneralConfig.skillXpMultiplier);
     }
 
-    public static ItemStack getCraftingOutput(ItemStack stack, PlayerContainerInv inv, Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> materials) {
+    public static ItemStack getCraftingOutput(ItemStack stack, PlayerContainerInv inv, Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> materials, EnumCrafting type) {
         int i = 0;
         for (ItemStack bonus : materials.getSecond()) {
             i++;
-            ItemNBT.addUpgradeItem(stack, bonus, true);
+            ItemNBT.addUpgradeItem(stack, bonus, true, type);
             if (i == 3)
                 break;
         }
@@ -153,7 +153,7 @@ public class CraftingUtils {
                 ItemStack rand = recipeStacks.get(inv.getPlayer().getRandom().nextInt(recipeStacks.size()));
                 if (!rand.isEmpty()) {
                     recipeStacks.remove(rand);
-                    ItemNBT.addUpgradeItem(stack, rand, true);
+                    ItemNBT.addUpgradeItem(stack, rand, true, type);
                 }
                 i++;
             }
