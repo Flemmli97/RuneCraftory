@@ -62,6 +62,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
@@ -222,7 +223,7 @@ public class EntityCalls {
     }
 
     public static void dropInventoryDeath(LivingEntity entity) {
-        if (entity instanceof ServerPlayer player)
+        if (entity instanceof ServerPlayer player && !player.level.getGameRules().getBoolean(GameRules.RULE_KEEPINVENTORY))
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.getInv().dropItemsAt(player));
     }
 
