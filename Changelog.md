@@ -7,6 +7,8 @@ RuneCraftory 1.4.3
   Weapon/Tools: Will not get resistance (e.g. sleep resistance) increased  
   Armor: Will not get status effect (e.g. sleep effect chance) chance increased
 - Reduced storm chances in summer/winter
+- Fix spell inventory dropping things if keepInventory is true
+- Make the attack in the stats screen red if the player doesn't have a weapon equipped
 
 RuneCraftory 1.4.2
 ================
