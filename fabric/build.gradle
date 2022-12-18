@@ -9,6 +9,11 @@ architectury {
 
 loom {
     accessWidenerPath.set file("src/main/resources/runecraftory.accesswidener")
+    runs {
+        client {
+            vmArgs "-Dmixin.debug.export=true"
+        }
+    }
 }
 
 configurations {
