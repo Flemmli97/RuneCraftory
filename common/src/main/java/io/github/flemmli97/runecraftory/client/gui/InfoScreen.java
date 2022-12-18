@@ -10,11 +10,14 @@ import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -32,6 +35,9 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
     private final int textureX = 223;
     private final int textureY = 198;
     private final Component levelTxt = new TranslatableComponent("level");
+
+    // Cause if we just simply check to apply the color it can go out of sync for a few render ticks since item is set first before attribute update packet arrives
+    private int canUseAttack = -1;
 
     public InfoScreen(AbstractContainerMenu container, Inventory inv, Component name) {
         super(container, inv, name);
@@ -77,7 +83,14 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + this.data.getMoney(), this.leftPos + 187, this.topPos + 9, 0.6f, 0);
         int statX = 216;
         int statY = 59;
-        ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE), this.leftPos + statX, this.topPos + statY, 1.0f, 0);
+        double att = CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE);
+        MutableComponent mut = new TextComponent("" + (int) CombatUtils.getAttributeValue(this.minecraft.player, Attributes.ATTACK_DAMAGE));
+        if (this.canUseAttack == -1) {
+            this.canUseAttack = ItemNBT.isWeapon(this.minecraft.player.getMainHandItem()) ? 1 : 0;
+        }
+        if (this.canUseAttack == 0)
+            mut.withStyle(ChatFormatting.DARK_RED);
+        ClientHandlers.drawRightAlignedScaledString(stack, this.font, mut, this.leftPos + statX, this.topPos + statY, 1.0f, 0);
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_DEFENCE.get()), this.leftPos + statX, this.topPos + statY + 13, 1.0f, 0);
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_MAGIC.get()), this.leftPos + statX, this.topPos + statY + 13 * 2, 1.0f, 0);
         ClientHandlers.drawRightAlignedScaledString(stack, this.font, "" + (int) CombatUtils.getAttributeValue(this.minecraft.player, ModAttributes.RF_MAGIC_DEFENCE.get()), this.leftPos + statX, this.topPos + statY + 13 * 3, 1.0f, 0);
@@ -106,5 +119,9 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
         this.renderBackground(stack);
         super.render(stack, mouseX, mouseY, partialTicks);
         this.renderTooltip(stack, mouseX, mouseY);
+    }
+
+    public void onAttributePkt() {
+        this.canUseAttack = -1;
     }
 }

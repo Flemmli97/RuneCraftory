@@ -35,12 +35,10 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
-import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -136,9 +134,9 @@ public class EntityCalls {
         if (off != null)
             recalcOffhandBonus(entity, off, shieldEfficiency);
         //Telling the client the attribute values before damage is removed so players know the potential damage
-        if (entity instanceof ServerPlayer serverPlayer)
-            serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(entity.getId(), ((AttributeMapAccessor) entity.getAttributes())
-                    .getAttributes().values()));
+        if (entity instanceof ServerPlayer serverPlayer) {
+            EntityUtils.sendAttributesTo(serverPlayer, serverPlayer);
+        }
         //If player doesnt have a weapon now we remove all attack damage modifiers
         if (!hasWeapon) {
             AttributeInstance inst = entity.getAttribute(Attributes.ATTACK_DAMAGE);

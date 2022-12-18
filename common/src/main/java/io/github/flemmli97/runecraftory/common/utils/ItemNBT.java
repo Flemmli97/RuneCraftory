@@ -93,10 +93,10 @@ public class ItemNBT {
     public static Map<Attribute, Double> statIncrease(ItemStack stack) {
         CompoundTag compound = getItemNBT(stack);
         if (compound == null || !compound.contains(LibNBT.Stats)) {
-            return DataPackHandler.itemStatManager().get(stack.getItem()).map(ItemStat::itemStats).orElse(new TreeMap<>(ModAttributes.sorted));
+            return DataPackHandler.itemStatManager().get(stack.getItem()).map(ItemStat::itemStats).orElse(new TreeMap<>(ModAttributes.SORTED));
         }
         CompoundTag tag = compound.getCompound(LibNBT.Stats);
-        Map<Attribute, Double> map = new TreeMap<>(ModAttributes.sorted);
+        Map<Attribute, Double> map = new TreeMap<>(ModAttributes.SORTED);
         for (String attName : tag.getAllKeys()) {
             Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
             if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(attName))
@@ -107,7 +107,7 @@ public class ItemNBT {
 
     public static Multimap<Attribute, AttributeModifier> getStatsAttributeMap(ItemStack stack, Multimap<Attribute, AttributeModifier> map, EquipmentSlot slot) {
         if (ItemNBT.shouldHaveStats(stack) && ItemUtils.slotOf(stack) == slot) {
-            Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.treeKeys(ModAttributes.sorted).hashSetValues().build();
+            Multimap<Attribute, AttributeModifier> multimap = MultimapBuilder.treeKeys(ModAttributes.SORTED).hashSetValues().build();
             ItemNBT.statIncrease(stack).forEach((att, d) -> multimap.put(att, new AttributeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()], "rf.stat_increase", d, AttributeModifier.Operation.ADDITION)));
             return multimap;
         }

@@ -45,7 +45,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
-import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -555,8 +554,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             if (stack.getItem() == ModItems.inspector.get() && hand == InteractionHand.MAIN_HAND) {
                 if (player instanceof ServerPlayer serverPlayer) {
-                    serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(this.getId(), ((AttributeMapAccessor) this.getAttributes())
-                            .getAttributes().values()));
+                    EntityUtils.sendAttributesTo(this, serverPlayer);
                     Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this), serverPlayer);
                 }
                 return InteractionResult.SUCCESS;

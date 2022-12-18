@@ -16,7 +16,7 @@ import java.util.Comparator;
 public class ModAttributes {
 
     public static final PlatformRegistry<Attribute> ATTRIBUTES = PlatformUtils.INSTANCE.of(Registry.ATTRIBUTE_REGISTRY, RuneCraftory.MODID);
-    public static final Comparator<Attribute> sorted = (o1, o2) -> {
+    public static final Comparator<Attribute> SORTED = (o1, o2) -> {
         if (o1 == Attributes.MAX_HEALTH && o2 != Attributes.MAX_HEALTH)
             return -1;
         if (o1 != Attributes.MAX_HEALTH && o2 == Attributes.MAX_HEALTH)
@@ -32,9 +32,9 @@ public class ModAttributes {
     };
     //public static final RegistryEntrySupplier<Attribute RP_MAX;
     private static int id = 0;
-    public static final RegistryEntrySupplier<Attribute> RF_DEFENCE = register(LibAttributes.rf_defence, id++, 0, -9999, 9999);
-    public static final RegistryEntrySupplier<Attribute> RF_MAGIC = register(LibAttributes.rf_magic, id++, 0, -9999, 9999);
-    public static final RegistryEntrySupplier<Attribute> RF_MAGIC_DEFENCE = register(LibAttributes.rf_magic_defence, id++, 0, -9999, 9999);
+    public static final RegistryEntrySupplier<Attribute> RF_DEFENCE = registerSyncable(LibAttributes.rf_defence, id++, 0, -9999, 9999);
+    public static final RegistryEntrySupplier<Attribute> RF_MAGIC = registerSyncable(LibAttributes.rf_magic, id++, 0, -9999, 9999);
+    public static final RegistryEntrySupplier<Attribute> RF_MAGIC_DEFENCE = registerSyncable(LibAttributes.rf_magic_defence, id++, 0, -9999, 9999);
     public static final RegistryEntrySupplier<Attribute> RFPARA = register(LibAttributes.rf_para, id++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> RFPOISON = register(LibAttributes.rf_poison, id++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> RFSEAL = register(LibAttributes.rf_seal, id++, 0, -100, 100);
@@ -69,6 +69,10 @@ public class ModAttributes {
 
     private static RegistryEntrySupplier<Attribute> register(ResourceLocation reg, int id, double base, double min, double max) {
         return ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute(reg.getPath(), id, base, min, max));
+    }
+
+    private static RegistryEntrySupplier<Attribute> registerSyncable(ResourceLocation reg, int id, double base, double min, double max) {
+        return ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute(reg.getPath(), id, base, min, max).setSyncable(true));
     }
 
     public static class OrderedAttribute extends RangedAttribute {

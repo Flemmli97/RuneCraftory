@@ -47,9 +47,9 @@ public class FoodProperties {
                     Registry.MOB_EFFECT.byNameCodec().listOf().fieldOf("potionRemove").forGetter(d -> Arrays.asList(d.potionRemove))
             ).apply(instance, FoodProperties::new));
 
-    private final Map<Attribute, Double> effects = new TreeMap<>(ModAttributes.sorted);
-    private final Map<Attribute, Double> effectsPercentage = new TreeMap<>(ModAttributes.sorted);
-    private final Map<Attribute, Double> cookingBonus = new TreeMap<>(ModAttributes.sorted);
+    private final Map<Attribute, Double> effects = new TreeMap<>(ModAttributes.SORTED);
+    private final Map<Attribute, Double> effectsPercentage = new TreeMap<>(ModAttributes.SORTED);
+    private final Map<Attribute, Double> cookingBonus = new TreeMap<>(ModAttributes.SORTED);
     private int hpRegen, rpRegen, hpRegenPercent, rpRegenPercent, rpIncrease, rpPercentIncrease, duration;
     private SimpleEffect[] potionApply = new SimpleEffect[0];
     private MobEffect[] potionRemove = new MobEffect[0];

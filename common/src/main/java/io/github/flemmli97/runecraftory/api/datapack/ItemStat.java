@@ -89,7 +89,7 @@ public class ItemStat {
         this.tier1Spell = tier1Spell;
         this.tier2Spell = tier2Spell;
         this.tier3Spell = tier3Spell;
-        this.monsterGiftIncrease = ImmutableSortedMap.copyOf(monsterGiftIncrease, ModAttributes.sorted);
+        this.monsterGiftIncrease = ImmutableSortedMap.copyOf(monsterGiftIncrease, ModAttributes.SORTED);
     }
 
     public static ItemStat fromPacket(FriendlyByteBuf buffer) {
@@ -103,7 +103,7 @@ public class ItemStat {
         for (int i = 0; i < size; i++)
             stat.itemStats.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
         size = buffer.readInt();
-        ImmutableSortedMap.Builder<Attribute, Double> builder = new ImmutableSortedMap.Builder<>(ModAttributes.sorted);
+        ImmutableSortedMap.Builder<Attribute, Double> builder = new ImmutableSortedMap.Builder<>(ModAttributes.SORTED);
         for (int i = 0; i < size; i++)
             builder.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
         stat.monsterGiftIncrease = builder.build();
@@ -143,7 +143,7 @@ public class ItemStat {
     }
 
     public Map<Attribute, Double> itemStats() {
-        TreeMap<Attribute, Double> map = new TreeMap<>(ModAttributes.sorted);
+        TreeMap<Attribute, Double> map = new TreeMap<>(ModAttributes.SORTED);
         map.putAll(this.itemStats);
         return map;
     }

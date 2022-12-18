@@ -8,14 +8,19 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.network.S2CUpdateAttributesWithAdditional;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -46,6 +51,19 @@ public class EntityUtils {
         if (e instanceof EntityNPCBase npc && npc.getEntityToFollowUUID() != null)
             return true;
         return MobConfig.mobAttackNPC && e instanceof Npc;
+    }
+
+    public static void sendAttributesTo(LivingEntity entity, ServerPlayer player) {
+        AttributeInstance att = entity.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (att != null)
+            entity.getAttributes().getDirtyAttributes().add(att);
+        if (entity == player) {
+            Platform.INSTANCE.sendToClient(new S2CUpdateAttributesWithAdditional(entity.getAttributes().getDirtyAttributes()), player);
+            entity.getAttributes().getDirtyAttributes().clear();
+        } else {
+            player.connection.send(new ClientboundUpdateAttributesPacket(entity.getId(), entity.getAttributes().getDirtyAttributes()));
+            entity.getAttributes().getDirtyAttributes().clear();
+        }
     }
 
     public static boolean shouldShowFarmlandView(LivingEntity entity) {

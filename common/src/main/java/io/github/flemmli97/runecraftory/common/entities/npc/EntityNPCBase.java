@@ -55,7 +55,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
-import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.network.protocol.game.DebugPackets;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -328,8 +327,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.isSleeping())
             return InteractionResult.CONSUME;
         if (this.getEntityToFollowUUID() != null && this.getEntityToFollowUUID().equals(serverPlayer.getUUID())) {
-            serverPlayer.connection.send(new ClientboundUpdateAttributesPacket(this.getId(), ((AttributeMapAccessor) this.getAttributes())
-                    .getAttributes().values()));
+            EntityUtils.sendAttributesTo(this, serverPlayer);
         }
         Platform.INSTANCE.sendToClient(new S2CUpdateNPCData(this, this.getFriendPointData(serverPlayer).save()), serverPlayer);
         Platform.INSTANCE.sendToClient(new S2COpenNPCGui(this, serverPlayer), serverPlayer);

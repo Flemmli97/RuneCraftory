@@ -56,7 +56,7 @@ public class EntityProperties {
 
     public Map<Attribute, Double> getBaseValues() {
         if (this.baseValues == null) {
-            this.baseValues = new TreeMap<>(ModAttributes.sorted);
+            this.baseValues = new TreeMap<>(ModAttributes.SORTED);
             for (String s : this.confAttributes) {
                 String[] sub = s.replace(" ", "").split("-");
                 Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(sub[0]));
@@ -73,7 +73,7 @@ public class EntityProperties {
 
     public Map<Attribute, Double> getAttributeGains() {
         if (this.levelGains == null) {
-            this.levelGains = new TreeMap<>(ModAttributes.sorted);
+            this.levelGains = new TreeMap<>(ModAttributes.SORTED);
             for (String s : this.confGains) {
                 String[] sub = s.replace(" ", "").split("-");
                 Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(sub[0]));
