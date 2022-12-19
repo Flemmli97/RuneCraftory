@@ -3,15 +3,26 @@
   "pools": [
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.6,
+              "chance": 0.2,
               "looting_multiplier": 0.05
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "runecraftory:chanced_looting_number",
+                "max": 0.0,
+                "chance": 0.4
+              },
+              "add": true
             }
           ],
           "name": "runecraftory:arrowhead"
@@ -20,40 +31,26 @@
     },
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
-            {
-              "function": "minecraft:looting_enchant",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.55
-              }
-            }
-          ],
-          "name": "runecraftory:arrowhead"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.5,
+              "chance": 0.4,
               "looting_multiplier": 0.05
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "runecraftory:chanced_looting_number",
+                "max": 0.0,
+                "chance": 0.5
+              },
+              "add": true
             }
           ],
           "name": "runecraftory:old_bandage"
@@ -62,64 +59,24 @@
     },
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
-            {
-              "function": "minecraft:looting_enchant",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.55
-              }
-            }
-          ],
-          "name": "runecraftory:old_bandage"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.3,
+              "chance": 0.7,
               "looting_multiplier": 0.05
             }
           ],
-          "name": "minecraft:gunpowder"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
           "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
             {
               "function": "minecraft:looting_enchant",
               "count": {
                 "type": "minecraft:uniform",
                 "min": 0.0,
-                "max": 0.35
+                "max": 0.7
               }
             }
           ],
@@ -129,15 +86,15 @@
     },
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.1,
-              "looting_multiplier": 0.03
+              "chance": 0.15,
+              "looting_multiplier": 0.05
             }
           ],
           "name": "runecraftory:recovery_potion"

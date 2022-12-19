@@ -39,6 +39,7 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
 import org.apache.commons.lang3.function.TriFunction;
 
 import java.util.Optional;
@@ -127,4 +128,6 @@ public interface Platform {
     boolean canEntitySpawnSpawner(Mob entity, LevelAccessor level, double x, double y, double z, BaseSpawner spawner, MobSpawnType spawnReason);
 
     float onLivingHurt(LivingEntity entity, DamageSource damageSrc, float damageAmount);
+
+    int getLootingFromCtx(LootContext ctx);
 }

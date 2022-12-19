@@ -3,14 +3,14 @@
   "pools": [
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.1,
+              "chance": 0.05,
               "looting_multiplier": 0.03
             }
           ],
@@ -20,7 +20,7 @@
     },
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
@@ -31,29 +31,15 @@
               "looting_multiplier": 0.05
             }
           ],
-          "name": "runecraftory:cheap_cloth"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
           "functions": [
             {
               "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
-            {
-              "function": "minecraft:looting_enchant",
               "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.25
-              }
+                "type": "runecraftory:chanced_looting_number",
+                "max": 0.0,
+                "chance": 0.4
+              },
+              "add": true
             }
           ],
           "name": "runecraftory:cheap_cloth"
@@ -62,40 +48,26 @@
     },
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.5,
+              "chance": 0.3,
               "looting_multiplier": 0.05
             }
           ],
-          "name": "runecraftory:glue"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
           "functions": [
             {
               "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
-            {
-              "function": "minecraft:looting_enchant",
               "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.55
-              }
+                "type": "runecraftory:chanced_looting_number",
+                "max": 0.0,
+                "chance": 0.4
+              },
+              "add": true
             }
           ],
           "name": "runecraftory:glue"

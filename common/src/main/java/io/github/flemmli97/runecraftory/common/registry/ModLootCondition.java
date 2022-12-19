@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.loot.BiomeLootCondition;
+import io.github.flemmli97.runecraftory.common.loot.ChancedLootingGenerator;
 import io.github.flemmli97.runecraftory.common.loot.FriendPointCondition;
 import io.github.flemmli97.runecraftory.common.loot.GiantLootCondition;
 import io.github.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
@@ -15,11 +16,13 @@ import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 
 public class ModLootCondition {
 
     public static final PlatformRegistry<LootItemConditionType> LOOTCONDITIONS = PlatformUtils.INSTANCE.of(Registry.LOOT_ITEM_REGISTRY, RuneCraftory.MODID);
     public static final PlatformRegistry<LootItemFunctionType> LOOTFUNCTION = PlatformUtils.INSTANCE.of(Registry.LOOT_FUNCTION_REGISTRY, RuneCraftory.MODID);
+    public static final PlatformRegistry<LootNumberProviderType> LOOTNUMBERS = PlatformUtils.INSTANCE.of(Registry.LOOT_NUMBER_PROVIDER_REGISTRY, RuneCraftory.MODID);
 
     public static final RegistryEntrySupplier<LootItemConditionType> INT_CHECK = LOOTCONDITIONS.register("mining_check", () -> new LootItemConditionType(new MiningLootCondition.Serializer()));
     public static final RegistryEntrySupplier<LootItemConditionType> GIANTCROP = LOOTCONDITIONS.register("crop_giant", () -> new LootItemConditionType(new GiantLootCondition.Serializer()));
@@ -30,5 +33,7 @@ public class ModLootCondition {
     public static final RegistryEntrySupplier<LootItemConditionType> FRIENDPOINTS = LOOTCONDITIONS.register("friend_points", () -> new LootItemConditionType(new FriendPointCondition.Serializer()));
 
     public static final RegistryEntrySupplier<LootItemFunctionType> ITEM_LEVEL = LOOTFUNCTION.register("item_level", () -> new LootItemFunctionType(new ItemLevelLootFunction.Serializer()));
+
+    public static final RegistryEntrySupplier<LootNumberProviderType> BINOMIAL_LOOTING = LOOTNUMBERS.register("chanced_looting_number", () -> new LootNumberProviderType(new ChancedLootingGenerator.Serializer()));
 
 }

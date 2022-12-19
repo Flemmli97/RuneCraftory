@@ -3,15 +3,26 @@
   "pools": [
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.5,
+              "chance": 0.4,
               "looting_multiplier": 0.05
+            }
+          ],
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "runecraftory:chanced_looting_number",
+                "max": 0.0,
+                "chance": 0.4
+              },
+              "add": true
             }
           ],
           "name": "runecraftory:fish_fossil"
@@ -20,26 +31,35 @@
     },
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
+          "conditions": [
             {
-              "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
-            {
-              "function": "minecraft:looting_enchant",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.55
-              }
+              "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.05,
+              "looting_multiplier": 0.03
             }
           ],
-          "name": "runecraftory:fish_fossil"
+          "name": "runecraftory:can"
+        }
+      ]
+    },
+    {
+      "rolls": 1.0,
+      "bonus_rolls": 0.7,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.01,
+              "looting_multiplier": 0.005
+            }
+          ],
+          "name": "runecraftory:rare_can"
         }
       ]
     }

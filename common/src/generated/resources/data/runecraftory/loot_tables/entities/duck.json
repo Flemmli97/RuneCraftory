@@ -3,7 +3,7 @@
   "pools": [
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
@@ -14,29 +14,15 @@
               "looting_multiplier": 0.05
             }
           ],
-          "name": "runecraftory:yellow_down"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
           "functions": [
             {
               "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
-            {
-              "function": "minecraft:looting_enchant",
               "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.55
-              }
+                "type": "runecraftory:chanced_looting_number",
+                "max": 0.0,
+                "chance": 0.4
+              },
+              "add": true
             }
           ],
           "name": "runecraftory:yellow_down"
@@ -45,7 +31,7 @@
     },
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
@@ -56,32 +42,46 @@
               "looting_multiplier": 0.05
             }
           ],
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "runecraftory:chanced_looting_number",
+                "max": 0.0,
+                "chance": 0.6
+              },
+              "add": true
+            }
+          ],
           "name": "minecraft:feather"
         }
       ]
     },
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:random_chance_with_looting",
+              "chance": 0.03,
+              "looting_multiplier": 0.025
+            }
+          ],
           "functions": [
             {
               "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
-            {
-              "function": "minecraft:looting_enchant",
               "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.55
-              }
+                "type": "runecraftory:chanced_looting_number",
+                "max": 0.0,
+                "chance": 0.2
+              },
+              "add": true
             }
           ],
-          "name": "minecraft:feather"
+          "name": "runecraftory:yellow_feather"
         }
       ]
     }

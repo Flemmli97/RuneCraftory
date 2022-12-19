@@ -46,6 +46,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -54,6 +55,8 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
 
@@ -307,6 +310,14 @@ public class PlatformImpl implements Platform {
     @Override
     public float onLivingHurt(LivingEntity entity, DamageSource damageSrc, float damageAmount) {
         return damageAmount;
+    }
+
+    @Override
+    public int getLootingFromCtx(LootContext ctx) {
+        Entity entity = ctx.getParamOrNull(LootContextParams.KILLER_ENTITY);
+        if (entity instanceof LivingEntity living)
+            return EnchantmentHelper.getMobLooting(living);
+        return 0;
     }
 
     public static class CustomDamageSource extends DamageSource {

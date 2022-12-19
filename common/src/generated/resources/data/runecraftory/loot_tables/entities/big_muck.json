@@ -3,7 +3,7 @@
   "pools": [
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
@@ -14,29 +14,15 @@
               "looting_multiplier": 0.05
             }
           ],
-          "name": "runecraftory:spore"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
           "functions": [
             {
               "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
-            {
-              "function": "minecraft:looting_enchant",
               "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.55
-              }
+                "type": "runecraftory:chanced_looting_number",
+                "max": 0.0,
+                "chance": 0.4
+              },
+              "add": true
             }
           ],
           "name": "runecraftory:spore"
@@ -45,40 +31,26 @@
     },
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.05,
-              "looting_multiplier": 0.03
+              "chance": 0.03,
+              "looting_multiplier": 0.01
             }
           ],
-          "name": "runecraftory:poison_powder"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
           "functions": [
             {
               "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
-            {
-              "function": "minecraft:looting_enchant",
               "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.1
-              }
+                "type": "runecraftory:chanced_looting_number",
+                "max": 0.0,
+                "chance": 0.2
+              },
+              "add": true
             }
           ],
           "name": "runecraftory:poison_powder"
@@ -87,7 +59,7 @@
     },
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
@@ -98,29 +70,15 @@
               "looting_multiplier": 0.05
             }
           ],
-          "name": "runecraftory:mushroom"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
           "functions": [
             {
               "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
-            {
-              "function": "minecraft:looting_enchant",
               "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.5
-              }
+                "type": "runecraftory:chanced_looting_number",
+                "max": 0.0,
+                "chance": 0.5
+              },
+              "add": true
             }
           ],
           "name": "runecraftory:mushroom"

@@ -3,33 +3,18 @@
   "pools": [
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.5,
+              "chance": 0.7,
               "looting_multiplier": 0.05
             }
           ],
-          "name": "minecraft:apple"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
           "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": 0.0,
-              "add": false
-            },
             {
               "function": "minecraft:looting_enchant",
               "count": {
@@ -37,7 +22,7 @@
                 "min": 0.0,
                 "max": 0.7
               },
-              "limit": 3
+              "limit": 2
             }
           ],
           "name": "minecraft:apple"
@@ -46,15 +31,15 @@
     },
     {
       "rolls": 1.0,
-      "bonus_rolls": 0.0,
+      "bonus_rolls": 0.7,
       "entries": [
         {
           "type": "minecraft:item",
           "conditions": [
             {
               "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.05,
-              "looting_multiplier": 0.03
+              "chance": 0.03,
+              "looting_multiplier": 0.01
             }
           ],
           "name": "runecraftory:baked_apple"

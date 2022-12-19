@@ -9,6 +9,8 @@ RuneCraftory 1.4.3
 - Reduced storm chances in summer/winter
 - Fix spell inventory dropping things if keepInventory is true
 - Make the attack in the stats screen red if the player doesn't have a weapon equipped
+- Tweaked mob loot tables
+- Sheared woolys dont drop wool
 
 RuneCraftory 1.4.2
 ================

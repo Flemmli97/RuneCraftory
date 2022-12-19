@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
@@ -27,6 +28,8 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public class EntityWooly extends ChargingMonster {
+
+    public static final ResourceLocation WOOLED_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/wooly/white");
 
     public static final AnimatedAction slap = new AnimatedAction(16, 7, "slap");
     public static final AnimatedAction kick = new AnimatedAction(20, 3, "kick");
@@ -159,6 +162,14 @@ public class EntityWooly extends ChargingMonster {
         super.onDailyUpdate();
         if (!this.entityData.get(SPAWNSHEARED) || this.isTamed())
             this.setSheared(false);
+    }
+
+    @Override
+    protected ResourceLocation getDefaultLootTable() {
+        if (this.isSheared())
+            return super.getDefaultLootTable();
+        else
+            return WOOLED_LOOT;
     }
 
     public boolean isSheared() {
