@@ -1,3 +1,9 @@
+RuneCraftory 1.4.4
+================
+- Changed how some stuff is updated. (e.g. Weather)
+- Removed bonus rolls (aka luck attribute bonuses) from loot tables
+- Make milk conversion recipe require bucket
+
 RuneCraftory 1.4.3
 ================
 - Fix bonus item increasing the item level
