@@ -285,7 +285,6 @@ public class Loottables extends LootTableProvider {
                         b.apply(SetItemCountFunction.setCount(ChancedLootingGenerator.chance(data.lootingCountMax, data.lootingCountBonus), true));
                 }
                 builder.withPool(this.create()
-                        .setBonusRolls(ConstantValue.exactly(0.7f))
                         .add(b));
             }
             return builder;
@@ -306,12 +305,17 @@ public class Loottables extends LootTableProvider {
                 LootPoolEntryContainer.Builder<?> builder = AlternativesEntry.alternatives();
                 List<TamedItemLootData> sorted = Arrays.stream(datas).sorted((f, s) -> Integer.compare(s.friendPoints, f.friendPoints)).toList();
                 for (TamedItemLootData data : sorted) {
-                    builder.otherwise(LootItem.lootTableItem(data.item()).when(FriendPointCondition.of(data.friendPoints())).when(LootItemRandomChanceCondition.randomChance(data.chance())));
+                    LootPoolSingletonContainer.Builder<?> b = LootItem.lootTableItem(data.item()).when(FriendPointCondition.of(data.friendPoints()));
+                    if(data.chance != 1)
+                        b.when(LootItemRandomChanceCondition.randomChance(data.chance()));
+                    builder.otherwise(b);
                 }
                 this.lootTables.put(res, LootTable.lootTable().withPool(LootPool.lootPool().add(builder)));
             } else if (datas.length == 1) {
                 TamedItemLootData data = datas[0];
-                LootPoolEntryContainer.Builder<?> builder = LootItem.lootTableItem(data.item()).when(FriendPointCondition.of(data.friendPoints())).when(LootItemRandomChanceCondition.randomChance(data.chance()));
+                LootPoolEntryContainer.Builder<?> builder = LootItem.lootTableItem(data.item()).when(FriendPointCondition.of(data.friendPoints()));
+                if(data.chance != 1)
+                    builder.when(LootItemRandomChanceCondition.randomChance(data.chance()));
                 this.lootTables.put(res, LootTable.lootTable().withPool(LootPool.lootPool().add(builder)));
             }
         }

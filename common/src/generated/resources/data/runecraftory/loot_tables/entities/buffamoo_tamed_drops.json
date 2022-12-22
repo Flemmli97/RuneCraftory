@@ -14,10 +14,6 @@
                 {
                   "condition": "runecraftory:friend_points",
                   "points": 8
-                },
-                {
-                  "condition": "minecraft:random_chance",
-                  "chance": 1.0
                 }
               ],
               "name": "runecraftory:milk_l"
@@ -28,10 +24,6 @@
                 {
                   "condition": "runecraftory:friend_points",
                   "points": 5
-                },
-                {
-                  "condition": "minecraft:random_chance",
-                  "chance": 1.0
                 }
               ],
               "name": "runecraftory:milk_m"
@@ -42,10 +34,6 @@
                 {
                   "condition": "runecraftory:friend_points",
                   "points": 0
-                },
-                {
-                  "condition": "minecraft:random_chance",
-                  "chance": 1.0
                 }
               ],
               "name": "runecraftory:milk_s"
