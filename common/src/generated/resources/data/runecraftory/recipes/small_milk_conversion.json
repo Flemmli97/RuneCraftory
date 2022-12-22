@@ -9,6 +9,9 @@
     },
     {
       "item": "runecraftory:milk_s"
+    },
+    {
+      "item": "minecraft:bucket"
     }
   ],
   "result": {

@@ -3,6 +3,9 @@
   "ingredients": [
     {
       "item": "runecraftory:milk_l"
+    },
+    {
+      "item": "minecraft:bucket"
     }
   ],
   "result": {

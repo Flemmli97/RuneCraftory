@@ -6,6 +6,9 @@
     },
     {
       "item": "runecraftory:milk_m"
+    },
+    {
+      "item": "minecraft:bucket"
     }
   ],
   "result": {
