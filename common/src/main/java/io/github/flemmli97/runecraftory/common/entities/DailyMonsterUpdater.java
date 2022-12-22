@@ -16,7 +16,7 @@ public class DailyMonsterUpdater {
 
     public void tick() {
         int day = WorldUtils.day(this.monster.level);
-        if (Math.abs(this.lastUpdateDay - day) >= 1) {
+        if (this.lastUpdateDay != day) {
             this.lastUpdateDay = day;
             this.monster.onDailyUpdate();
         }

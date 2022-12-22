@@ -37,8 +37,8 @@ public class WorldUtils {
         return Codec.INT.flatXmap(function, function);
     }
 
-    public static boolean canUpdateDaily(Level level) {
-        return level.getGameRules().getRule(GameRules.RULE_DAYLIGHT).get() && dayTime(level) == 1;
+    public static boolean canUpdateDaily(Level level, int lastUpdate) {
+        return level.getGameRules().getRule(GameRules.RULE_DAYLIGHT).get() && day(level) != lastUpdate;
     }
 
     public static int dayTime(Level level) {

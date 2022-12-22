@@ -36,7 +36,7 @@ public class BossSpawnerBlockEntity extends BlockEntity {
 
     public static void tick(Level level, BlockPos blockPos, BlockState blockState, BossSpawnerBlockEntity blockEntity) {
         if (level.hasNearbyAlivePlayer(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5, 16)) {
-            boolean flag = blockEntity.lastUpdateDay == -1 || Math.abs(blockEntity.lastUpdateDay - WorldUtils.day(level)) >= 1;
+            boolean flag = blockEntity.lastUpdateDay != WorldUtils.day(level);
             /*if(this.structure!=null)
                 for(EntityPlayer player : this.world.playerEntities)
                     if(this.base.isInside(player.getPosition()))
@@ -82,13 +82,15 @@ public class BossSpawnerBlockEntity extends BlockEntity {
     public void load(CompoundTag nbt) {
         super.load(nbt);
         this.lastUpdateDay = nbt.getInt("LastUpdate");
-        this.savedEntity = PlatformUtils.INSTANCE.entities().getFromId(new ResourceLocation(nbt.getString("Entity")));
+        if (nbt.contains("Entity"))
+            this.savedEntity = PlatformUtils.INSTANCE.entities().getFromId(new ResourceLocation(nbt.getString("Entity")));
     }
 
     @Override
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
         nbt.putInt("LastUpdate", this.lastUpdateDay);
-        nbt.putString("Entity", PlatformUtils.INSTANCE.entities().getIDFrom(this.savedEntity).toString());
+        if (this.savedEntity != null)
+            nbt.putString("Entity", PlatformUtils.INSTANCE.entities().getIDFrom(this.savedEntity).toString());
     }
 }

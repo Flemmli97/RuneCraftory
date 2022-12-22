@@ -20,7 +20,7 @@ public class DailyPlayerUpdater {
 
     public void tick(ServerPlayer player) {
         int day = WorldUtils.day(player.level);
-        if (Math.abs(this.lastUpdateDay - day) >= 1) {
+        if (this.lastUpdateDay != day) {
             this.lastUpdateDay = day;
             this.data.getShippingInv().shipItems(player);
             this.data.refreshShop(player);
