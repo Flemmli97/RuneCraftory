@@ -140,7 +140,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (this.getControllingPassenger() instanceof Player)
                 return false;
             if (this.isTamed())
-                return !this.getOwnerUUID().equals(EntityUtils.tryGetOwner(e));
+                return !e.getUUID().equals(this.getOwnerUUID()) && !this.getOwnerUUID().equals(EntityUtils.tryGetOwner(e));
             return true;
         }
         return false;
