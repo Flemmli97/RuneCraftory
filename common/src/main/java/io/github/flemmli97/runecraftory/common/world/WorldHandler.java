@@ -105,16 +105,16 @@ public class WorldHandler extends SavedData {
             this.lastUpdateDay = WorldUtils.day(level);
             return;
         }
-        // Checks if current weather is correct and if not corrects it
-        /*
         if (doWeather && shouldUpdateWeather(level, this.currentWeather())) {
             this.updateWeatherTo(level, this.calendar.getCurrentWeatherFor(level));
-        }*/
+        }
+        // Checks if current weather is correct and if not corrects it
+        /*
         if (--this.updateDelay <= 0) {
             if (doWeather && !this.isCorrectWeather(level))
                 this.setMCWeather(level);
             this.updateDelay = 40;
-        }
+        }*/
     }
 
     public void updateWeatherTo(ServerLevel level, EnumWeather weather) {
