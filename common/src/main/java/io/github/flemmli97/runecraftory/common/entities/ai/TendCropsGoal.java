@@ -90,8 +90,12 @@ public class TendCropsGoal extends Goal {
         BlockState state2 = level.getBlockState(pos.below());
         if (state2.is(ModBlocks.farmland.get()) && state2.getValue(FarmBlock.MOISTURE) < 7)
             return true;
-        if (state2.getBlock() instanceof FarmBlock && this.canPlant)
-            return state.isAir();
+        if (state2.getBlock() instanceof FarmBlock) {
+            if (state.is(ModTags.MONSTER_CLEARABLE))
+                return true;
+            if (this.canPlant)
+                return state.isAir();
+        }
         return false;
     }
 
@@ -142,7 +146,10 @@ public class TendCropsGoal extends Goal {
             BlockState state = this.entity.level.getBlockState(this.selected);
             Block block = state.getBlock();
             boolean success = false;
-            if (block instanceof CropBlock crop && crop.isMaxAge(state)) {
+            if (state.is(ModTags.MONSTER_CLEARABLE)) {
+                this.breakBlock((ServerLevel) this.entity.level, this.selected, this.entity.getCropInventory() != null ?
+                        s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
+            } else if (block instanceof CropBlock crop && crop.isMaxAge(state)) {
                 this.breakBlock((ServerLevel) this.entity.level, this.selected, this.entity.getCropInventory() != null ?
                         s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
                 CropProperties props = DataPackHandler.cropManager().get(crop.getCloneItemStack(this.entity.level, this.selected, state).getItem());

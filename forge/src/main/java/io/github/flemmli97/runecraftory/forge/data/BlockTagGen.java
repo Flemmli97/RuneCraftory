@@ -66,6 +66,8 @@ public class BlockTagGen extends BlockTagsProvider {
             this.tag(ModTags.SICKLE_DESTROYABLE).add(sup.get());
         }
 
+        this.tag(ModTags.MONSTER_CLEARABLE).addTag(ModTags.HERBS);
+
         for (RegistryEntrySupplier<Block> sup : ModBlocks.brokenMineralMap.values()) {
             this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(sup.get());
             this.tag(BlockTags.NEEDS_IRON_TOOL).add(sup.get());
