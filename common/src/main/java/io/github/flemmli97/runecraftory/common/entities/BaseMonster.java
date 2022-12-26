@@ -368,13 +368,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         } else if (id == 11) {
             this.playTameEffect(false);
         } else if (id == 34) {
-            for (int i = 0; i < 4; ++i) {
+            for (int i = 0; i < 5; ++i) {
                 this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX() - this.getBbWidth() * 0.25 + this.random.nextFloat() * this.getBbWidth() * 0.25f, this.getY() + this.getBbHeight() + this.random.nextFloat() * 0.3, this.getZ() - this.getBbWidth() * 0.25 + this.random.nextFloat() * this.getBbWidth() * 0.25f, 0, 0, 0);
             }
         } else if (id == 64) {
-            this.level.addParticle(ParticleTypes.NOTE, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
+            this.level.addParticle(ParticleTypes.NOTE, true, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
         } else if (id == 65) {
-            this.level.addParticle(ParticleTypes.HEART, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
+            this.level.addParticle(ParticleTypes.HEART, true, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
         }
         super.handleEntityEvent(id);
     }
