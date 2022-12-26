@@ -105,9 +105,11 @@ public class WorldHandler extends SavedData {
             this.lastUpdateDay = WorldUtils.day(level);
             return;
         }
+        // Checks if current weather is correct and if not corrects it
+        /*
         if (doWeather && shouldUpdateWeather(level, this.currentWeather())) {
             this.updateWeatherTo(level, this.calendar.getCurrentWeatherFor(level));
-        }
+        }*/
         if (--this.updateDelay <= 0) {
             if (doWeather && !this.isCorrectWeather(level))
                 this.setMCWeather(level);
