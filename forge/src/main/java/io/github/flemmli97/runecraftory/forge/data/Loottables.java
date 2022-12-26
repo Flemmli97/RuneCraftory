@@ -216,7 +216,8 @@ public class Loottables extends LootTableProvider {
             b.otherwise(LootItem.lootTableItem(ModItems.furSmall.get()).when(FriendPointCondition.of(0))
                     .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
                     .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
-            this.lootTables.put(EntityWooly.shearedLootTable(ModEntities.wooly.get().getDefaultLootTable()), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
+
+            this.lootTables.put(EntityWooly.shearedLootTable(EntityWooly.WOOLED_LOOT), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
 
             this.tamedDropTable(ModEntities.ant.get(),
                     new TamedItemLootData(ModItems.carapaceInsect.get(), 1, 0));
@@ -306,7 +307,7 @@ public class Loottables extends LootTableProvider {
                 List<TamedItemLootData> sorted = Arrays.stream(datas).sorted((f, s) -> Integer.compare(s.friendPoints, f.friendPoints)).toList();
                 for (TamedItemLootData data : sorted) {
                     LootPoolSingletonContainer.Builder<?> b = LootItem.lootTableItem(data.item()).when(FriendPointCondition.of(data.friendPoints()));
-                    if(data.chance != 1)
+                    if (data.chance != 1)
                         b.when(LootItemRandomChanceCondition.randomChance(data.chance()));
                     builder.otherwise(b);
                 }
@@ -314,7 +315,7 @@ public class Loottables extends LootTableProvider {
             } else if (datas.length == 1) {
                 TamedItemLootData data = datas[0];
                 LootPoolEntryContainer.Builder<?> builder = LootItem.lootTableItem(data.item()).when(FriendPointCondition.of(data.friendPoints()));
-                if(data.chance != 1)
+                if (data.chance != 1)
                     builder.when(LootItemRandomChanceCondition.randomChance(data.chance()));
                 this.lootTables.put(res, LootTable.lootTable().withPool(LootPool.lootPool().add(builder)));
             }
