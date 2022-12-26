@@ -138,6 +138,11 @@ public class ModTags {
 
     public static final TagKey<EntityType<?>> BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("c", "bosses"));
 
+    /**
+     * Tag for entities that normally target hostile mobs but shouldn't target monster if they are tamed
+     * E.g. iron golems and snow golems
+     */
+    public static final TagKey<EntityType<?>> TAMED_MONSTER_IGNORE = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "ignore_tamed_monsters"));
 
     //BIOME Tags via forges BiomeDictionary
     public static final TagKey<Biome> IS_HOT = biomeCommon("is_hot");

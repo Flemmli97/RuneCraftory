@@ -44,6 +44,12 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
                 .addTag(ModTags.BOSS_MONSTERS);
         this.tag(ModTags.BOSSES)
                 .addTag(forgeBosses);
+
+        this.tag(ModTags.TAMED_MONSTER_IGNORE)
+                .add(EntityType.SNOW_GOLEM)
+                .add(EntityType.IRON_GOLEM)
+                .addOptional(new ResourceLocation("advancedgolems", "golem"))
+                .addOptional(new ResourceLocation("minecolonies", "citizen"));
     }
 
     @Override
