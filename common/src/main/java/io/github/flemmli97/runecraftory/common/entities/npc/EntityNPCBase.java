@@ -907,16 +907,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void followEntity(LivingEntity entity) {
         this.stayHere(false);
-        this.entityToFollow = entity;
         if (entity != null) {
-            this.entityToFollowUUID = entity.getUUID();
             if (entity instanceof Player player)
                 this.speak(player, NPCData.ConversationType.FOLLOWYES);
+            this.entityToFollowUUID = entity.getUUID();
         } else {
             if (this.followEntity() instanceof Player player)
                 this.speak(player, NPCData.ConversationType.FOLLOWSTOP);
             this.entityToFollowUUID = null;
         }
+        this.entityToFollow = entity;
     }
 
     public void followAtDistance(LivingEntity entity) {
