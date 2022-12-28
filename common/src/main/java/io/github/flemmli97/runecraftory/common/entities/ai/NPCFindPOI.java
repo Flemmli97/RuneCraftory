@@ -84,6 +84,8 @@ public class NPCFindPOI extends Goal {
     private GlobalPos findAndTakePOI(ServerLevel serverLevel, PoiType poiType, Predicate<BlockPos> pred) {
         PoiManager poiManager = serverLevel.getPoiManager();
         Set<BlockPos> set = poiManager.findAllClosestFirst(poiType.getPredicate(), pred, this.npc.blockPosition(), 48, PoiManager.Occupancy.HAS_SPACE).limit(5L).collect(Collectors.toSet());
+        if (set.isEmpty())
+            return null;
         Path path = this.npc.getNavigation().createPath(set, poiType.getValidRange());
         if (path != null && path.canReach()) {
             BlockPos blockPos2 = path.getTarget();

@@ -17,6 +17,7 @@ import net.minecraft.world.entity.ai.util.LandRandomPos;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.schedule.Activity;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
@@ -71,8 +72,10 @@ public class NPCWanderGoal extends Goal {
         --this.shelterPOISearchCooldown;
         --this.walkCooldown;
         --this.pathFindCooldown;
-        if (changed)
+        if (changed) {
             this.npc.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
+            this.npc.getBrain().eraseMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+        }
         this.moveToTarget();
         if (activity == Activity.REST) {
             if (this.rest())
@@ -92,7 +95,7 @@ public class NPCWanderGoal extends Goal {
         if (pos != null && this.npc.level.dimension() == pos.dimension()) {
             if (this.npc.getBrain().getMemory(MemoryModuleType.WALK_TARGET).isEmpty() && !this.npc.isSleeping()) {
                 float spd = this.npc.isInWaterOrRain() && this.npc.distanceToSqr(pos.pos().getX() + 0.5, pos.pos().getY(), pos.pos().getZ() + 0.5) > 25 ? 1.3f : 1;
-                this.setWalkTarget(pos.pos(), spd, 0);
+                this.setWalkTargetTo(pos.pos(), spd, 0, () -> this.npc.setBedPos(null));
             }
             BlockState blockState;
             if (pos.pos().closerToCenterThan(this.npc.position(), 2.0) && (blockState = this.npc.level.getBlockState(pos.pos())).is(BlockTags.BEDS) && !blockState.getValue(BedBlock.OCCUPIED)) {
@@ -111,7 +114,7 @@ public class NPCWanderGoal extends Goal {
                 return true;
             }
             if (this.npc.getBrain().getMemory(MemoryModuleType.WALK_TARGET).isEmpty()) {
-                this.setWalkTarget(pos.pos(), 1, 1);
+                this.setWalkTargetTo(pos.pos(), 1, 1, () -> this.npc.setWorkPlace(null));
             }
             return true;
         }
@@ -133,7 +136,7 @@ public class NPCWanderGoal extends Goal {
                 return true;
             }
             if (this.npc.getBrain().getMemory(MemoryModuleType.WALK_TARGET).isEmpty()) {
-                this.setWalkTarget(pos.pos(), 1, 1);
+                this.setWalkTargetTo(pos.pos(), 1, 1, () -> this.npc.setMeetingPos(null));
             }
             return true;
         }
@@ -178,16 +181,16 @@ public class NPCWanderGoal extends Goal {
                     float spd = 1;
                     int acc = 0;
                     if (this.npc.distanceToSqr(p.pos().getX() + 0.5, p.pos().getY(), p.pos().getZ() + 0.5) < 49) {
-                        target = this.getRandomPosition(5);
+                        target = this.getRandomPosition(6);
                         if (target != null && this.npc.level.canSeeSky(new BlockPos(target)))
                             target = null;
                     } else {
                         target = Vec3.atCenterOf(p.pos());
                         spd = 1.3f;
-                        acc = 1;
+                        acc = 4;
                     }
                     if (target != null) {
-                        this.setWalkTarget(new BlockPos(target), spd, acc);
+                        this.setWalkTargetTo(new BlockPos(target), spd, acc, () -> this.npc.getBrain().eraseMemory(MemoryModuleType.HIDING_PLACE));
                         this.walkCooldown = this.npc.getRandom().nextInt(40) + 90;
                     } else
                         this.walkCooldown = this.npc.getRandom().nextInt(20) + 30;
@@ -226,16 +229,56 @@ public class NPCWanderGoal extends Goal {
         }
     }
 
+    private void setWalkTargetTo(BlockPos pos, float speed, int accuracy, Runnable onFail) {
+        if (this.tiredOfTryingToFindTarget(this.npc.level, this.npc)) {
+            onFail.run();
+        } else if (pos.distManhattan(this.npc.blockPosition()) > 100) {
+            int i;
+            Vec3 vec3 = null;
+            int attempts = 300;
+            for (i = 0; i < attempts && (vec3 == null || this.distManhattan(this.npc.position(), vec3) > 100); ++i) {
+                vec3 = DefaultRandomPos.getPosTowards(this.npc, 15, 7, Vec3.atCenterOf(pos), 1.5707963705062866);
+            }
+            if (i == attempts || vec3 == null) {
+                onFail.run();
+                return;
+            }
+            this.setWalkTarget(new BlockPos(vec3), speed, accuracy);
+        } else
+            this.setWalkTarget(pos, speed, accuracy);
+    }
+
+    private boolean tiredOfTryingToFindTarget(Level level, EntityNPCBase npc) {
+        return npc.getBrain().getMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE)
+                .map(l -> level.getGameTime() - l > 1000).orElse(false);
+    }
+
+    private double distManhattan(Vec3 vec3, Vec3 other) {
+        double f = Math.abs(vec3.x() - other.x());
+        double g = Math.abs(vec3.y() - other.y());
+        double h = Math.abs(vec3.z() - other.z());
+        return f + g + h;
+    }
+
     private void setWalkTarget(BlockPos pos, float speed, int accuracy) {
         this.npc.getBrain().setMemory(MemoryModuleType.WALK_TARGET, new WalkTarget(pos, speed, accuracy));
     }
 
     private void moveToTarget() {
-        if (this.pathFindCooldown <= 0) {
+        if (this.pathFindCooldown <= 0 && this.npc.getNavigation().isDone()) {
             this.npc.getBrain().getMemory(MemoryModuleType.WALK_TARGET).ifPresent(target -> {
                 Path path = this.npc.getNavigation().createPath(target.getTarget().currentBlockPosition(), target.getCloseEnoughDist());
+                if (path == null || !path.canReach()) {
+                    if (!this.npc.getBrain().hasMemoryValue(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE))
+                        this.npc.getBrain().setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, this.npc.level.getGameTime());
+                    if (path == null) {
+                        this.pathFindCooldown = this.npc.getRandom().nextInt(30) + 15;
+                        return;
+                    }
+                }
+                this.npc.getBrain().eraseMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
                 this.npc.getNavigation().moveTo(path, target.getSpeedModifier());
-                this.pathFindCooldown = this.npc.getRandom().nextInt(10) + 15;
+                this.pathFindCooldown = this.npc.getRandom().nextInt(15) + 15;
             });
         }
         this.npc.getBrain().getMemory(MemoryModuleType.WALK_TARGET).ifPresent(target -> {

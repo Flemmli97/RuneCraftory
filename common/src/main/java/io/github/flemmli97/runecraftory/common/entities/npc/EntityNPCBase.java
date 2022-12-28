@@ -20,6 +20,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.NPCFollowGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NPCWanderGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.RandomLookGoalAlive;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
+import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
@@ -110,6 +111,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -122,6 +125,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -135,7 +139,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private static final EntityDataAccessor<Boolean> MALE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT,
-            MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.WALK_TARGET);
+            MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
 
     private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, AnimatedAction.vanillaAttackOnly);
 
@@ -256,7 +260,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
         this.goalSelector.addGoal(3, new RandomLookGoalAlive(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, true));
-        this.goalSelector.addGoal(3, new NPCFollowGoal(this, 1.05, 9, 3, 20));
+        this.goalSelector.addGoal(3, new NPCFollowGoal(this, 1.15, 9, 3, 20));
         this.goalSelector.addGoal(4, this.wander);
     }
 
@@ -290,7 +294,21 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     protected PathNavigation createNavigation(Level level) {
-        GroundPathNavigation nav = new GroundPathNavigation(this, level);
+        GroundPathNavigation nav = new GroundPathNavigation(this, level) {
+
+            @Override
+            @Nullable
+            protected Path createPath(Set<BlockPos> targets, int regionOffset, boolean offsetUpward, int accuracy) {
+                return this.createPath(targets, regionOffset, offsetUpward, accuracy, 100); //Increased pathfinding range
+            }
+
+            @Override
+            protected PathFinder createPathFinder(int i) {
+                this.nodeEvaluator = new NPCWalkNodeEvaluator();
+                this.nodeEvaluator.setCanPassDoors(true);
+                return new PathFinder(this.nodeEvaluator, i);
+            }
+        };
         nav.setCanOpenDoors(true);
         return nav;
     }
