@@ -1298,6 +1298,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     private boolean canAttackFrom(Vec3 pos) {
+        if (this.isTamed())
+            return true;
         return this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distToCenterSqr(pos.x(), pos.y(), pos.z()) < (this.getRestrictRadius() * this.getRestrictRadius());
     }
 
