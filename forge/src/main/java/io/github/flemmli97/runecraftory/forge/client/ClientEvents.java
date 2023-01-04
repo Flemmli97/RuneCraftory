@@ -14,6 +14,7 @@ import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
@@ -83,8 +84,9 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void worldRender(RenderLevelLastEvent event) {
-        ClientCalls.worldRender(event.getPoseStack());
+    public static void worldRender(RenderLevelStageEvent event) {
+        if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES)
+            ClientCalls.worldRender(event.getPoseStack());
     }
 
     @SubscribeEvent

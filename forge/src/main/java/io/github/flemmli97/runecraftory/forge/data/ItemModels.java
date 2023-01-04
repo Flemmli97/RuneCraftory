@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.forge.item.StaffItem;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.models.model.ModelLocationUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -47,11 +48,11 @@ public class ItemModels extends ItemModelProvider {
     @Override
     protected void registerModels() {
         this.withExistingParent("fist_s", this.modLoc("fist")).transforms()
-                .transform(ModelBuilder.Perspective.THIRDPERSON_LEFT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
-                .transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
+                .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
+                .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
         this.withExistingParent("fist_s_left", this.modLoc("fist_left")).transforms()
-                .transform(ModelBuilder.Perspective.THIRDPERSON_LEFT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
-                .transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
+                .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
+                .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end();
         List<RegistryEntrySupplier<Item>> ribbons = ModItems.ribbons();
 
         for (RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
@@ -60,21 +61,21 @@ public class ItemModels extends ItemModelProvider {
                 continue;
             if (ribbons.contains(sup)) {
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
-                        .transforms().transform(ModelBuilder.Perspective.HEAD).rotation(0, 180, 0).translation(0, 5, -6.75f).scale(0.35f);
+                        .transforms().transform(ItemTransforms.TransformType.HEAD).rotation(0, 180, 0).translation(0, 5, -6.75f).scale(0.35f);
                 //Left sided:
                 //this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
-                //        .transforms().transform(ModelBuilder.Perspective.HEAD).rotation(0, 180, -35).translation(-4.5f, 5, -6.75f).scale(0.35f);
+                //        .transforms().transform(ItemTransforms.TransformType.HEAD).rotation(0, 180, -35).translation(-4.5f, 5, -6.75f).scale(0.35f);
                 //Right Sided:
                 //this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
-                //        .transforms().transform(ModelBuilder.Perspective.HEAD).rotation(0, 180, 35).translation(4.5f, 5, -6.75f).scale(0.35f);*/
+                //        .transforms().transform(ItemTransforms.TransformType.HEAD).rotation(0, 180, 35).translation(4.5f, 5, -6.75f).scale(0.35f);*/
             } else if (sup.get() instanceof ShieldItem) {
                 if (sup == ModItems.umbrella)
                     continue;
                 this.withExistingParent(sup.getID().getPath() + "_blocking", this.modLoc(sup.getID().getPath())).transforms()
-                        .transform(ModelBuilder.Perspective.FIRSTPERSON_RIGHT).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()
-                        .transform(ModelBuilder.Perspective.FIRSTPERSON_LEFT).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()
-                        .transform(ModelBuilder.Perspective.THIRDPERSON_LEFT).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end()
-                        .transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end();
+                        .transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()
+                        .transform(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()
+                        .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end()
+                        .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end();
             } else if (sup == ModItems.farmland)
                 this.withExistingParent(sup.getID().getPath(), "block/farmland");
             else if (sup == ModItems.spawner)
@@ -154,12 +155,12 @@ public class ItemModels extends ItemModelProvider {
                     .model(this.withExistingParent(sup.getID().getPath() + "_held_left", modelFile)).end()
                     .override().predicate(this.modLoc("glove_held"), 0.75f)
                     .model(this.withExistingParent(sup.getID().getPath() + "_held_s", modelFile).transforms()
-                            .transform(ModelBuilder.Perspective.THIRDPERSON_LEFT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
-                            .transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end().end()).end()
+                            .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
+                            .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end().end()).end()
                     .override().predicate(this.modLoc("glove_held"), 1)
                     .model(this.withExistingParent(sup.getID().getPath() + "_held_s_left", modelFile).transforms()
-                            .transform(ModelBuilder.Perspective.THIRDPERSON_LEFT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
-                            .transform(ModelBuilder.Perspective.THIRDPERSON_RIGHT).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end().end()).end();
+                            .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
+                            .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end().end()).end();
         } else
             this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
                     .override().predicate(this.modLoc("glove_held"), 0.25f)
