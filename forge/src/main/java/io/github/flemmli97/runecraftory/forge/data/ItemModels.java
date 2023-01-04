@@ -26,7 +26,6 @@ import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.TieredItem;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.List;

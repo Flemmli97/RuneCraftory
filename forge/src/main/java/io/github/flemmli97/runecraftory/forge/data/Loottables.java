@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
+import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
@@ -12,7 +13,7 @@ import io.github.flemmli97.runecraftory.common.loot.ChancedLootingGenerator;
 import io.github.flemmli97.runecraftory.common.loot.FriendPointCondition;
 import io.github.flemmli97.runecraftory.common.loot.GiantLootCondition;
 import io.github.flemmli97.runecraftory.common.loot.ItemLevelLootFunction;
-import io.github.flemmli97.runecraftory.common.loot.MiningLootCondition;
+import io.github.flemmli97.runecraftory.common.loot.SkillLevelCondition;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -443,7 +444,7 @@ public class Loottables extends LootTableProvider {
         }
 
         private static LootPoolSingletonContainer.Builder<?> ore(int weight, int quality, ItemLike item, int minMiningLevel) {
-            return ore(weight, quality, item).when(MiningLootCondition.get(minMiningLevel));
+            return ore(weight, quality, item).when(SkillLevelCondition.get(EnumSkills.MINING, minMiningLevel));
         }
 
         @Override

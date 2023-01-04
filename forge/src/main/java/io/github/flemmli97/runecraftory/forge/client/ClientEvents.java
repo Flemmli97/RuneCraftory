@@ -13,7 +13,6 @@ import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.ScreenEvent;
@@ -85,7 +84,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void worldRender(RenderLevelStageEvent event) {
-        if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES)
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES)
             ClientCalls.worldRender(event.getPoseStack());
     }
 
