@@ -9,7 +9,7 @@ RuneCraftory 1.4.4
 - Fix npc follow issue
 - Make npc reset POI when too far away or can't reach
 - Make mobs that hold weapons able to use them
-- Make skill leveling when hitting entities tag based item based
+- Make skill leveling when hitting entities tag based instead of item based
 
 RuneCraftory 1.4.3
 ================
