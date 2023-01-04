@@ -83,11 +83,6 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     }
 
     @Override
-    public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 1.5f));
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             LevelCalc.useRP(player, data, 3, true, false, true, EnumSkills.FARMING, EnumSkills.EARTH);

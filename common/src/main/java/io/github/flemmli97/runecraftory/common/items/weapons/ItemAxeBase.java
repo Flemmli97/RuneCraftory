@@ -82,12 +82,6 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     }
 
     @Override
-    public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5));
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player)
                 .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOGGING, 1));

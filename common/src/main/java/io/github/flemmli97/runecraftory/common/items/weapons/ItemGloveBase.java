@@ -56,12 +56,6 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     }
 
     @Override
-    public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FIST, 2));
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
 
     }

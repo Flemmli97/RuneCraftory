@@ -69,22 +69,6 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     }
 
     @Override
-    public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> {
-                    switch (ItemNBT.getElement(stack)) {
-                        case WATER -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 3);
-                        case EARTH -> LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 3);
-                        case WIND -> LevelCalc.levelSkill(player, data, EnumSkills.WIND, 3);
-                        case FIRE -> LevelCalc.levelSkill(player, data, EnumSkills.FIRE, 3);
-                        case LIGHT -> LevelCalc.levelSkill(player, data, EnumSkills.LIGHT, 3);
-                        case DARK -> LevelCalc.levelSkill(player, data, EnumSkills.DARK, 3);
-                        case LOVE -> LevelCalc.levelSkill(player, data, EnumSkills.LOVE, 3);
-                    }
-                });
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
     }
 

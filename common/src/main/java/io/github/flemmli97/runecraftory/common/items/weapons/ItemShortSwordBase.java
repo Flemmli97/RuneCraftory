@@ -69,12 +69,6 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
     }
 
     @Override
-    public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 2));
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
 
     }
@@ -129,7 +123,7 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
                     Runnable run = () -> {
                         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
                         if (performRightClickAction(stack, entity, this.getRange(), this.getFOV())) {
-                            this.onEntityHit(player, stack);
+                            CombatUtils.hitEntityWithItemPlayer(player, stack);
                             LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 6);
                             LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.SHORTSWORD);
                         }

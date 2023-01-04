@@ -84,11 +84,6 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
     }
 
     @Override
-    public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WIND, 2));
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             LevelCalc.useRP(player, data, 2, true, false, true, EnumSkills.FARMING, EnumSkills.WIND);

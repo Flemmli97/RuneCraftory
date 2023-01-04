@@ -70,12 +70,6 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
     }
 
     @Override
-    public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 2));
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
 
     }

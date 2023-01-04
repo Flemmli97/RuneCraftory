@@ -82,11 +82,6 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
-    public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 1));
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
     }
 

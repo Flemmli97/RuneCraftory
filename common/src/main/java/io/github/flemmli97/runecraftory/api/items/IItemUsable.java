@@ -10,7 +10,5 @@ public interface IItemUsable {
 
     int itemCoolDownTicks();
 
-    void onEntityHit(ServerPlayer player, ItemStack stack);
-
     void onBlockBreak(ServerPlayer player);
 }

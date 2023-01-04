@@ -69,12 +69,6 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     }
 
     @Override
-    public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 4));
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
 
     }

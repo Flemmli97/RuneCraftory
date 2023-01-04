@@ -3,12 +3,15 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import net.minecraft.core.particles.ParticleTypes;
@@ -16,6 +19,7 @@ import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
@@ -29,6 +33,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
@@ -271,8 +276,8 @@ public class CombatUtils {
                 Vec3 targetMot = target.getDeltaMovement();
                 if (damage(player, target, source, damagePhys, stack)) {
                     //Level skill on successful attack
-                    if (levelSkill && player instanceof ServerPlayer && item != null)
-                        item.onEntityHit((ServerPlayer) player, stack);
+                    if (levelSkill && player instanceof ServerPlayer serverPlayer)
+                        hitEntityWithItemPlayer(serverPlayer, stack);
                     if (i > 0) {
                         player.setDeltaMovement(player.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
                         player.setSprinting(false);
@@ -510,5 +515,49 @@ public class CombatUtils {
         AttributeInstance inst = entity.getAttribute(att);
         if (inst != null)
             inst.removeModifier(attributeMod);
+    }
+
+    public static void hitEntityWithItemPlayer(ServerPlayer player, ItemStack stack) {
+        PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
+        if(data == null)
+            return;
+        //Weapons
+        if(stack.getItem() instanceof ItemStaffBase) {
+            switch (ItemNBT.getElement(stack)) {
+                case WATER -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 3);
+                case EARTH -> LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 3);
+                case WIND -> LevelCalc.levelSkill(player, data, EnumSkills.WIND, 3);
+                case FIRE -> LevelCalc.levelSkill(player, data, EnumSkills.FIRE, 3);
+                case LIGHT -> LevelCalc.levelSkill(player, data, EnumSkills.LIGHT, 3);
+                case DARK -> LevelCalc.levelSkill(player, data, EnumSkills.DARK, 3);
+                case LOVE -> LevelCalc.levelSkill(player, data, EnumSkills.LOVE, 3);
+            }
+            return;
+        }
+        if(stack.is(ModTags.SHORTSWORDS)) {
+            LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 2);
+        }
+        if(stack.is(ModTags.LONGSWORDS)) {
+            LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 4);
+        }
+        if(stack.is(ModTags.SPEARS)) {
+            LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 3);
+        }
+        if(stack.is(ModTags.AXES) || stack.is(ModTags.HAMMERS)) {
+            LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5);
+        }
+        if(stack.is(ModTags.DUALBLADES)) {
+            LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 2);
+        }
+        if(stack.is(ModTags.FISTS)) {
+            LevelCalc.levelSkill(player, data, EnumSkills.FIST, 2);
+        }
+        //Tools
+        if(stack.is(ModTags.AXE_TOOLS) || stack.is(ModTags.HAMMER_TOOLS)) {
+            LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 1);
+        }
+        if(stack.is(ModTags.HOES) || stack.is(ModTags.WATERINGCANS) || stack.is(ModTags.SICKLES)) {
+            LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 1);
+        }
     }
 }

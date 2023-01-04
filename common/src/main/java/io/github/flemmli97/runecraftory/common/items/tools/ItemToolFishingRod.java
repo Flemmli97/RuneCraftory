@@ -64,11 +64,6 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
     }
 
     @Override
-    public void onEntityHit(ServerPlayer player, ItemStack stack) {
-
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
 
     }

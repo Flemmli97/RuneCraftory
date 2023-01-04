@@ -65,12 +65,6 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     @Override
-    public void onEntityHit(ServerPlayer player, ItemStack stack) {
-        Platform.INSTANCE.getPlayerData(player)
-                .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 3));
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
 
     }
