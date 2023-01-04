@@ -3,6 +3,13 @@ RuneCraftory 1.4.4
 - Changed how some stuff is updated. (e.g. Weather)
 - Removed bonus rolls (aka luck attribute bonuses) from loot tables
 - Make milk conversion recipe require bucket
+- Fix monster interaction particles not always shown
+- Monsters can now clear farmland of herbs growing on them
+- Fix monster retaliating when attacked by owner on accident
+- Fix npc follow issue
+- Make npc reset POI when too far away or can't reach
+- Make mobs that hold weapons able to use them
+- Make skill leveling when hitting entities tag based item based
 
 RuneCraftory 1.4.3
 ================
