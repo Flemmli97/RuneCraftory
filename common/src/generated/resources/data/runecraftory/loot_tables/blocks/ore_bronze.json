@@ -27,7 +27,8 @@
           "type": "minecraft:item",
           "conditions": [
             {
-              "condition": "runecraftory:mining_check",
+              "condition": "runecraftory:skill_check",
+              "skill": "MINING",
               "min_required_level": 40
             }
           ],
