@@ -24,6 +24,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -252,7 +254,7 @@ public class ItemNBT {
     }
 
     public static boolean isWeapon(ItemStack stack) {
-        return stack.getItem() instanceof IItemUsable;
+        return stack.is(ModTags.UPGRADABLE_HELD);
     }
 
     public static boolean canBeUsedAsMagnifyingGlass(ItemStack stack) {
@@ -279,5 +281,9 @@ public class ItemNBT {
             return tag.getBoolean(LibNBT.ObjectX);
         }
         return false;
+    }
+
+    public static int cooldown(Player player, ItemStack stack) {
+        return stack.getItem() instanceof IItemUsable usable ? usable.itemCoolDownTicks() : (int) (1 / (player.getAttributeValue(Attributes.ATTACK_SPEED) * 20));
     }
 }

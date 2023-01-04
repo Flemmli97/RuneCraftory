@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
@@ -19,7 +18,6 @@ import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
@@ -33,7 +31,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
@@ -239,14 +236,10 @@ public class CombatUtils {
 
     public static boolean playerAttackWithItem(Player player, Entity target, ItemStack stack, float damageModifier, boolean resetCooldown, boolean playSound, boolean levelSkill) {
         if (target.isAttackable() && !target.skipAttackInteraction(player) && player.getCooldowns().getCooldownPercent(stack.getItem(), 0.0f) <= 0) {
-            IItemUsable item = null;
-            if (stack.getItem() instanceof IItemUsable)
-                item = (IItemUsable) stack.getItem();
             double damagePhys = getAttributeValue(player, Attributes.ATTACK_DAMAGE) * damageModifier;
             if (damagePhys > 0) {
                 if (resetCooldown) {
-                    int cooldown = item != null ? item.itemCoolDownTicks() : (int) (1 / (player.getAttributeValue(Attributes.ATTACK_SPEED) * 20));
-                    player.getCooldowns().addCooldown(stack.getItem(), cooldown);
+                    player.getCooldowns().addCooldown(stack.getItem(), ItemNBT.cooldown(player, stack));
                 }
                 boolean faintChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.RFFAINT.get(), target);
                 boolean critChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.RFCRIT.get(), target);
@@ -519,10 +512,10 @@ public class CombatUtils {
 
     public static void hitEntityWithItemPlayer(ServerPlayer player, ItemStack stack) {
         PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
-        if(data == null)
+        if (data == null)
             return;
         //Weapons
-        if(stack.getItem() instanceof ItemStaffBase) {
+        if (stack.getItem() instanceof ItemStaffBase) {
             switch (ItemNBT.getElement(stack)) {
                 case WATER -> LevelCalc.levelSkill(player, data, EnumSkills.WATER, 3);
                 case EARTH -> LevelCalc.levelSkill(player, data, EnumSkills.EARTH, 3);
@@ -534,29 +527,29 @@ public class CombatUtils {
             }
             return;
         }
-        if(stack.is(ModTags.SHORTSWORDS)) {
+        if (stack.is(ModTags.SHORTSWORDS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 2);
         }
-        if(stack.is(ModTags.LONGSWORDS)) {
+        if (stack.is(ModTags.LONGSWORDS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 4);
         }
-        if(stack.is(ModTags.SPEARS)) {
+        if (stack.is(ModTags.SPEARS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 3);
         }
-        if(stack.is(ModTags.AXES) || stack.is(ModTags.HAMMERS)) {
+        if (stack.is(ModTags.AXES) || stack.is(ModTags.HAMMERS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5);
         }
-        if(stack.is(ModTags.DUALBLADES)) {
+        if (stack.is(ModTags.DUALBLADES)) {
             LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 2);
         }
-        if(stack.is(ModTags.FISTS)) {
+        if (stack.is(ModTags.FISTS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.FIST, 2);
         }
         //Tools
-        if(stack.is(ModTags.AXE_TOOLS) || stack.is(ModTags.HAMMER_TOOLS)) {
+        if (stack.is(ModTags.AXE_TOOLS) || stack.is(ModTags.HAMMER_TOOLS)) {
             LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 1);
         }
-        if(stack.is(ModTags.HOES) || stack.is(ModTags.WATERINGCANS) || stack.is(ModTags.SICKLES)) {
+        if (stack.is(ModTags.HOES) || stack.is(ModTags.WATERINGCANS) || stack.is(ModTags.SICKLES)) {
             LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 1);
         }
     }
