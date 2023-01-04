@@ -76,8 +76,11 @@ dependencies {
     modCompileOnly "${jei_dep}:api"
     modRuntimeOnly jei_dep
 
+    //Mods useful for testing things
     modRuntimeOnly "curse.maven:mobbattle-268746:3952783"
     modRuntimeOnly "curse.maven:dummy-225738:3820503"
+
+    modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.0-forge"
 }
 
 processResources {

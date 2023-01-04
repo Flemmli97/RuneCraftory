@@ -138,6 +138,8 @@ public class ModTags {
 
     public static final TagKey<EntityType<?>> BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("c", "bosses"));
 
+    public static final TagKey<EntityType<?>> HELD_WEAPON_EXEMPT = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "held_weapon_exempt"));
+
     /**
      * Tag for entities that normally target hostile mobs but shouldn't target monster if they are tamed
      * E.g. iron golems and snow golems

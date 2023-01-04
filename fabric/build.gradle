@@ -50,6 +50,8 @@ dependencies {
     modRuntimeOnly("me.shedaniel:RoughlyEnoughItems-fabric:${rei_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
+
+    modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.0-fabric"
 }
 
 processResources {

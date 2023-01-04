@@ -166,6 +166,18 @@ public class EntityCalls {
         });
     }
 
+    public static boolean cancelLivingAttack(DamageSource source, Entity target) {
+        Entity attacker = source.getEntity();
+        if (attacker instanceof Player || source instanceof CustomDamage) {
+            return false;
+        }
+        if (attacker instanceof LivingEntity living && living.getMainHandItem().is(ModTags.UPGRADABLE_HELD) && !living.getType().is(ModTags.HELD_WEAPON_EXEMPT)) {
+            CombatUtils.mobAttack(living, target);
+            return true;
+        }
+        return false;
+    }
+
     public static boolean playerAttack(Player player, Entity target) {
         if (!player.level.isClientSide && ItemNBT.isWeapon(player.getMainHandItem())) {
             CombatUtils.playerAttackWithItem(player, target, true, true, true);

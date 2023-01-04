@@ -96,7 +96,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
             if (this.tickLeft <= 21 && this.tickLeft >= 9) {
                 if (this.getOwner() != null && this.tickLeft % 3 == 0)
                     this.caughtEntities.forEach(e -> {
-                        CustomDamage source = CombatUtils.build(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(this.tickLeft == 7 ? 10 : 0), false, false);
+                        CustomDamage source = CombatUtils.build(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(this.tickLeft == 7 ? 10 : 0), false, false).get();
                         CombatUtils.mobAttack(this.getOwner(), e, source, CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier);
                     });
             }

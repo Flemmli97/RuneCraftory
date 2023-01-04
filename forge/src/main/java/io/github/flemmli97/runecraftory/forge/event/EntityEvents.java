@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -105,6 +106,11 @@ public class EntityEvents {
     public void disableNatural(LivingSpawnEvent.CheckSpawn event) {
         if (EntityCalls.disableNatural(event.getSpawnReason(), event.getEntity().getType()))
             event.setResult(Event.Result.DENY);
+    }
+
+    @SubscribeEvent
+    public void livingAttack(LivingAttackEvent event) {
+        event.setCanceled(EntityCalls.cancelLivingAttack(event.getSource(), event.getEntity()));
     }
 
     @SubscribeEvent

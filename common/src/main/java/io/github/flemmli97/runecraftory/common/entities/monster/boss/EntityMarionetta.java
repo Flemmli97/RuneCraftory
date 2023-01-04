@@ -149,7 +149,7 @@ public class EntityMarionetta extends BossMonster {
                 this.setDeltaMovement(new Vec3(this.aiVarHelper[0], 0, this.aiVarHelper[2]));
                 if (anim.getTick() >= anim.getAttackTime()) {
                     this.mobAttack(anim, null, e -> {
-                        CustomDamage source = CombatUtils.build(this, e, new CustomDamage.Builder(this).hurtResistant(8), false, true);
+                        CustomDamage source = CombatUtils.build(this, e, new CustomDamage.Builder(this).hurtResistant(8), false, true).get();
                         CombatUtils.mobAttack(this, e, source, CombatUtils.getAttributeValue(this, Attributes.ATTACK_DAMAGE));
                     });
                 }

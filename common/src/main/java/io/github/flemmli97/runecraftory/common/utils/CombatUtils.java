@@ -233,13 +233,15 @@ public class CombatUtils {
     }
 
     public static boolean playerAttackWithItem(Player player, Entity target, ItemStack stack, float damageModifier, boolean resetCooldown, boolean playSound, boolean levelSkill) {
-        if (!(stack.getItem() instanceof IItemUsable item))
-            return false;
         if (target.isAttackable() && !target.skipAttackInteraction(player) && player.getCooldowns().getCooldownPercent(stack.getItem(), 0.0f) <= 0) {
+            IItemUsable item = null;
+            if (stack.getItem() instanceof IItemUsable)
+                item = (IItemUsable) stack.getItem();
             double damagePhys = getAttributeValue(player, Attributes.ATTACK_DAMAGE) * damageModifier;
             if (damagePhys > 0) {
                 if (resetCooldown) {
-                    player.getCooldowns().addCooldown(stack.getItem(), item.itemCoolDownTicks());
+                    int cooldown = item != null ? item.itemCoolDownTicks() : (int) (1 / (player.getAttributeValue(Attributes.ATTACK_SPEED) * 20));
+                    player.getCooldowns().addCooldown(stack.getItem(), cooldown);
                 }
                 boolean faintChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.RFFAINT.get(), target);
                 boolean critChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.RFCRIT.get(), target);
@@ -269,7 +271,7 @@ public class CombatUtils {
                 Vec3 targetMot = target.getDeltaMovement();
                 if (damage(player, target, source, damagePhys, stack)) {
                     //Level skill on successful attack
-                    if (levelSkill && player instanceof ServerPlayer)
+                    if (levelSkill && player instanceof ServerPlayer && item != null)
                         item.onEntityHit((ServerPlayer) player, stack);
                     if (i > 0) {
                         player.setDeltaMovement(player.getDeltaMovement().multiply(0.6D, 1.0D, 0.6D));
@@ -301,8 +303,17 @@ public class CombatUtils {
     }
 
     public static boolean mobAttack(LivingEntity attacker, Entity target) {
-        CustomDamage source = build(attacker, target, new CustomDamage.Builder(attacker).hurtResistant(5), false, true);
-        return mobAttack(attacker, target, source, CombatUtils.getAttributeValue(attacker, Attributes.ATTACK_DAMAGE));
+        ItemStack stack = attacker.getMainHandItem();
+        CustomDamage.Builder source = build(attacker, target, new CustomDamage.Builder(attacker).hurtResistant(5), false, true)
+                .element(ItemNBT.getElement(stack));
+        double damagePhys = getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
+        if (attacker.level instanceof ServerLevel serverLevel)
+            ModSpells.STAFFCAST.get().use(serverLevel, attacker, stack);
+        if (ItemNBT.doesFixedOneDamage(stack)) {
+            source.damageType(CustomDamage.DamageType.FIXED);
+            damagePhys = 1;
+        }
+        return mobAttack(attacker, target, source.get(), damagePhys);
     }
 
     public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage source, double dmg) {
@@ -314,9 +325,9 @@ public class CombatUtils {
         return false;
     }
 
-    public static CustomDamage build(Entity entity, Entity target, CustomDamage.Builder builder, boolean magic, boolean withDefaultKnockback) {
+    public static CustomDamage.Builder build(Entity entity, Entity target, CustomDamage.Builder builder, boolean magic, boolean withDefaultKnockback) {
         if (!(entity instanceof LivingEntity attacker)) {
-            return builder.damageType(magic ? CustomDamage.DamageType.MAGIC : CustomDamage.DamageType.NORMAL).get();
+            return builder.damageType(magic ? CustomDamage.DamageType.MAGIC : CustomDamage.DamageType.NORMAL);
         }
         boolean faintChance = attacker.level.random.nextDouble() < statusEffectChance(attacker, ModAttributes.RFFAINT.get(), target);
         boolean critChance = attacker.level.random.nextDouble() < statusEffectChance(attacker, ModAttributes.RFCRIT.get(), target);
@@ -337,11 +348,11 @@ public class CombatUtils {
             }
             builder.knockAmount(knockback);
         }
-        return builder.damageType(damageType).get();
+        return builder.damageType(damageType);
     }
 
     public static boolean damage(@Nullable Entity attacker, Entity target, CustomDamage.Builder source, boolean magic, boolean withDefaultKnockback, double damage, @Nullable ItemStack stack) {
-        return damage(attacker, target, build(attacker, target, source, magic, withDefaultKnockback), damage, stack);
+        return damage(attacker, target, build(attacker, target, source, magic, withDefaultKnockback).get(), damage, stack);
     }
 
     public static boolean damage(@Nullable Entity attacker, Entity target, CustomDamage source, double damage, @Nullable ItemStack stack) {

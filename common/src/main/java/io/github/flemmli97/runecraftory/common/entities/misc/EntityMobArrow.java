@@ -47,7 +47,7 @@ public class EntityMobArrow extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult res) {
-        if (CombatUtils.damage(this.getOwner(), res.getEntity(), (CustomDamage) CombatUtils.build(this.getOwner(), res.getEntity(), new CustomDamage.Builder(this, this.getOwner()), false, true).setProjectile(), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
+        if (CombatUtils.damage(this.getOwner(), res.getEntity(), (CustomDamage) CombatUtils.build(this.getOwner(), res.getEntity(), new CustomDamage.Builder(this, this.getOwner()), false, true).get().setProjectile(), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
             if (res.getEntity() instanceof LivingEntity livingentity) {
                 livingentity.setArrowCount(livingentity.getArrowCount() + 1);
                 EnchantmentHelper.doPostHurtEffects(livingentity, this.getOwner());
