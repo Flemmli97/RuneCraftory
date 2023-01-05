@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.ShopState;
+import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -26,6 +27,8 @@ import net.minecraft.client.gui.components.toasts.RecipeToast;
 import net.minecraft.client.gui.screens.ChatScreen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -35,6 +38,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import java.util.Collection;
+import java.util.Random;
 
 public class ClientHandlers {
 
@@ -227,6 +231,28 @@ public class ClientHandlers {
     public static void onAttributePkt() {
         if (Minecraft.getInstance().screen instanceof InfoScreen screen) {
             screen.onAttributePkt();
+        }
+    }
+
+    public static void handleTriggers(S2CTriggers.Type type, BlockPos pos) {
+        switch (type) {
+            case FERTILIZER -> { //Makes the particles more visible. The one called at BoneMealItem checks for air blocks
+                Level level = Minecraft.getInstance().level;
+                double x = pos.getX() + 0.5D;
+                double y = pos.getY() + 1.25D;
+                double z = pos.getZ() + 0.5D;
+                level.addParticle(ParticleTypes.HAPPY_VILLAGER, x, y, z, 0.0D, 0.0D, 0.0D);
+                Random random = level.getRandom();
+                for (int i = 0; i < 15; ++i) {
+                    double nX = x - 0.5 + random.nextDouble();
+                    double nY = y - 0.35 + random.nextDouble() * 0.5;
+                    double nZ = z - 0.5 + random.nextDouble();
+                    if (!level.getBlockState((new BlockPos(nX, nY, nZ)).below()).isAir()) {
+                        level.addParticle(ParticleTypes.HAPPY_VILLAGER, nX, nY, nZ,
+                                random.nextGaussian() * 0.02D, random.nextGaussian() * 0.02D, random.nextGaussian() * 0.02D);
+                    }
+                }
+            }
         }
     }
 }

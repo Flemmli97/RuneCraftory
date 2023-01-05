@@ -47,6 +47,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CCraftingRecipes.ID, S2CCraftingRecipes.class, S2CCraftingRecipes::write, S2CCraftingRecipes::read, S2CCraftingRecipes::handle);
         register.registerMessage(id++, S2CNPCLook.ID, S2CNPCLook.class, S2CNPCLook::write, S2CNPCLook::read, S2CNPCLook::handle);
         register.registerMessage(id++, S2CUpdateAttributesWithAdditional.ID, S2CUpdateAttributesWithAdditional.class, S2CUpdateAttributesWithAdditional::write, S2CUpdateAttributesWithAdditional::read, S2CUpdateAttributesWithAdditional::handle);
+        register.registerMessage(id++, S2CTriggers.ID, S2CTriggers.class, S2CTriggers::write, S2CTriggers::read, S2CTriggers::handle);
         return id;
     }
 

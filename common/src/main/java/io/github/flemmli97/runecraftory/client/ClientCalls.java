@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
@@ -12,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
+import io.github.flemmli97.runecraftory.common.items.tools.ItemFertilizer;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.network.C2SRideJump;
@@ -30,15 +32,22 @@ import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -200,5 +209,35 @@ public class ClientCalls {
         float pT = t * 2 - partialTicks;
         setPitch.accept(pitch + Mth.sin(pT * pT) * ShakeHandler.shakeStrength);
         setRoll.accept(roll + Mth.sin(pT * 2) * ShakeHandler.shakeStrength);
+    }
+
+    public static boolean onBlockHighlightRender(Level level, PoseStack poseStack, VertexConsumer consumer, Entity entity, double camX, double camY, double camZ, BlockPos pos, BlockState state) {
+        if (entity instanceof LivingEntity living && living.getMainHandItem().getItem() instanceof ItemFertilizer) {
+            ItemFertilizer.getOtherForTargeted(entity.getDirection(), pos)
+                    .forEach(p -> {
+                        BlockState state1 = level.getBlockState(p);
+                        if (!state1.isAir() && level.getWorldBorder().isWithinBounds(p))
+                            renderShape(poseStack, consumer, state1.getShape(level, p, CollisionContext.of(entity)), p.getX() - camX, p.getY() - camY, p.getZ() - camZ, 0.0F, 0.0F, 0.0F, 0.4F);
+                    });
+        }
+        return false;
+    }
+
+    /**
+     * From {@link LevelRenderer#renderShape}
+     */
+    private static void renderShape(PoseStack poseStack, VertexConsumer consumer, VoxelShape shape, double x, double y, double z, float red, float green, float blue, float alpha) {
+        PoseStack.Pose pose = poseStack.last();
+        shape.forAllEdges((k, l, m, n, o, p) -> {
+            float q = (float) (n - k);
+            float r = (float) (o - l);
+            float s = (float) (p - m);
+            float t = Mth.sqrt(q * q + r * r + s * s);
+            q /= t;
+            r /= t;
+            s /= t;
+            consumer.vertex(pose.pose(), (float) (k + x), (float) (l + y), (float) (m + z)).color(red, green, blue, alpha).normal(pose.normal(), q, r, s).endVertex();
+            consumer.vertex(pose.pose(), (float) (n + x), (float) (o + y), (float) (p + z)).color(red, green, blue, alpha).normal(pose.normal(), q, r, s).endVertex();
+        });
     }
 }
