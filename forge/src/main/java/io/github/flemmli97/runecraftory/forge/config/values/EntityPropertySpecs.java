@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.forge.config.values;
 
 import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
 import io.github.flemmli97.tenshilib.api.config.SimpleItemStackWrapper;
-import io.github.flemmli97.tenshilib.common.config.CommentedJsonConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.ArrayList;
@@ -56,7 +55,7 @@ public class EntityPropertySpecs {
         if (spec.flying.get())
             builder.setFlying();
         builder.setBarnOccupancy(spec.size.get());
-        if(!spec.needsRoof.get())
+        if (!spec.needsRoof.get())
             builder.doesntNeedBarnRoof();
         return builder.build();
     }

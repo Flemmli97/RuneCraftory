@@ -82,5 +82,7 @@ public class BlockTagGen extends BlockTagsProvider {
         this.tag(ModTags.FARMLAND).add(Blocks.FARMLAND, ModBlocks.farmland.get());
 
         this.tag(ModTags.BARN_GROUND).add(Blocks.HAY_BLOCK);
+
+        this.tag(ModTags.ONSEN_PROVIDER).addTag(BlockTags.CAMPFIRES);
     }
 }

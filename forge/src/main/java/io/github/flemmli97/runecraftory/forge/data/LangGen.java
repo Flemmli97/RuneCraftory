@@ -216,6 +216,7 @@ public class LangGen implements DataProvider {
         this.add(ModEffects.paralysis.get(), "Paralysis");
         this.add(ModEffects.seal.get(), "Sealed");
         this.add(ModEffects.fatigue.get(), "Fatigue");
+        this.add(ModEffects.bath.get(), "Bath");
 
         for (EnumDay day : EnumDay.values()) {
             this.add(day.translation(), day.toString().substring(0, 3));

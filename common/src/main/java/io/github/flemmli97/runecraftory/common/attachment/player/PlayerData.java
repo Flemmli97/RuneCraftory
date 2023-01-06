@@ -22,6 +22,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CRunePoints;
 import io.github.flemmli97.runecraftory.common.network.S2CSkillLevelPkt;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -99,6 +100,8 @@ public class PlayerData {
     public final EntitySelector entitySelector = new EntitySelector();
 
     public final TamedEntityTracker tamedEntity = new TamedEntityTracker();
+
+    private boolean touchedWater;
 
     public PlayerData() {
         for (EnumSkills skill : EnumSkills.values()) {
@@ -578,6 +581,15 @@ public class PlayerData {
                 }
             } else
                 this.entitySelector.reset();
+
+            if (serverPlayer.hasEffect(ModEffects.bath.get())) {
+                if (!this.touchedWater && serverPlayer.isInWater())
+                    this.touchedWater = true;
+                else if (this.touchedWater && !serverPlayer.isInWater()) {
+                    serverPlayer.removeEffect(ModEffects.bath.get());
+                    this.touchedWater = false;
+                }
+            }
         }
         this.getInv().update(player);
         this.foodDuration = Math.max(--this.foodDuration, -1);

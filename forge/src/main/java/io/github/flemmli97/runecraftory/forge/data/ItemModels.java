@@ -113,7 +113,7 @@ public class ItemModels extends ItemModelProvider {
             else if (sup.get() instanceof TieredItem || sup.get() instanceof StaffItem || sup.get() instanceof ItemSpearBase)
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()));
             else if (sup.get() instanceof BlockItem blockItem && (sup.getID().getPath().startsWith("ore_") || sup == ModItems.shippingBin
-            || sup == ModItems.cashRegister || sup == ModItems.monsterBarn))
+                    || sup == ModItems.cashRegister || sup == ModItems.monsterBarn))
                 this.withExistingParent(sup.getID().getPath(), new ResourceLocation(blockItem.getRegistryName().getNamespace(), "block/" + blockItem.getBlock().getRegistryName().getPath()));
             else
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()));
