@@ -1,23 +1,35 @@
 package io.github.flemmli97.runecraftory.common.world;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.api.IDailyUpdate;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class WorldHandler extends SavedData {
 
@@ -29,6 +41,8 @@ public class WorldHandler extends SavedData {
      * Non persistent tracker to update stuff daily
      */
     private final Set<IDailyUpdate> updateTracker = Sets.newConcurrentHashSet();
+    private final Map<UUID, Set<BarnData>> playerBarns = new HashMap<>();
+    private final Long2ObjectMap<BarnData> positionBarnMap = new Long2ObjectOpenHashMap<>();
 
     private int updateDelay, lastUpdateDay;
 
@@ -176,15 +190,76 @@ public class WorldHandler extends SavedData {
         return this.updateTracker.remove(update);
     }
 
+    public BarnData getOrCreateFor(UUID player, BlockPos pos) {
+        BarnData data = this.positionBarnMap
+                .computeIfAbsent(pos.asLong(), l -> new BarnData(pos));
+        this.playerBarns.computeIfAbsent(player, uuid -> new HashSet<>())
+                .add(data);
+        this.setDirty();
+        return data;
+    }
+
+    public Set<BarnData> barnsOf(UUID player) {
+        return ImmutableSet.copyOf(this.playerBarns.getOrDefault(player, Set.of()));
+    }
+
+    @Nullable
+    public BarnData barnAt(BlockPos pos) {
+        return this.positionBarnMap.get(pos.asLong());
+    }
+
+    @Nullable
+    public BarnData findFittingBarn(BaseMonster monster) {
+        if (monster.getOwnerUUID() == null)
+            return null;
+        return this.barnsOf(monster.getOwnerUUID())
+                .stream().filter(b -> b.hasCapacityFor(monster.getProp().getSize(), monster.getProp().needsRoof()))
+                .findFirst().orElse(null);
+    }
+
+    public void removeMonsterFromPlayer(UUID player, BaseMonster monster) {
+        this.playerBarns.getOrDefault(player, Set.of())
+                .forEach(b -> b.removeMonster(monster.getUUID()));
+    }
+
+    public void removeBarn(UUID player, BlockPos pos) {
+        BarnData old = this.positionBarnMap.remove(pos.asLong());
+        this.playerBarns.computeIfAbsent(player, uuid -> new HashSet<>())
+                .remove(old);
+        old.remove();
+        this.setDirty();
+    }
+
     public void load(CompoundTag compoundNBT) {
         this.calendar.read(compoundNBT);
         this.lastUpdateDay = compoundNBT.getInt("LastUpdateDay");
+        CompoundTag barns = compoundNBT.getCompound("PlayerBarns");
+        barns.getAllKeys().forEach(key -> {
+            UUID uuid = UUID.fromString(key);
+            ListTag list = barns.getList(key, Tag.TAG_COMPOUND);
+            Set<BarnData> map = this.playerBarns.computeIfAbsent(uuid, u -> new HashSet<>());
+            list.forEach(t -> {
+                BarnData data = BarnData.fromTag((CompoundTag) t);
+                map.add(data);
+                this.positionBarnMap.put(data.pos.asLong(), data);
+            });
+        });
     }
 
     @Override
     public CompoundTag save(CompoundTag compoundNBT) {
         this.calendar.write(compoundNBT);
         compoundNBT.putInt("LastUpdateDay", this.lastUpdateDay);
+        CompoundTag barns = new CompoundTag();
+        this.playerBarns.forEach((uuid, pB) -> {
+            ListTag pBTag = new ListTag();
+            pB.forEach(b -> {
+                if (!b.isRemoved())
+                    pBTag.add(b.save());
+            });
+            barns.put(uuid.toString(), pBTag);
+        });
+        compoundNBT.put("PlayerBarns", barns);
         return compoundNBT;
     }
 }

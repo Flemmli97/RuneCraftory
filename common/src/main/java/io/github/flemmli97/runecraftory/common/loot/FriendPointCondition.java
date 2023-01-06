@@ -30,7 +30,7 @@ public record FriendPointCondition(int points) implements LootItemCondition {
 
     @Override
     public Set<LootContextParam<?>> getReferencedContextParams() {
-        return ImmutableSet.of(LootContextParams.THIS_ENTITY, LootCtxParameters.INTERACTING_PLAYER);
+        return ImmutableSet.of(LootContextParams.THIS_ENTITY);
     }
 
     @Override

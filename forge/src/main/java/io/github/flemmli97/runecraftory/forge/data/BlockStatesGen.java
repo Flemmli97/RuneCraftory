@@ -96,6 +96,7 @@ public class BlockStatesGen extends BlockStateProvider {
         //this.simpleBlock(ModBlocks.board.get());
         this.simpleBlock(ModBlocks.bossSpawner.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPAWNER.getRegistryName().getPath())));
         this.simpleBlock(ModBlocks.singleSpawnBlock.get(), this.models().getExistingFile(new ResourceLocation("block/" + Blocks.SPAWNER.getRegistryName().getPath())));
+        this.simpleBlock(ModBlocks.monsterBarn.get(), this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/" + ModBlocks.monsterBarn.getID().getPath())));
 
         this.getVariantBuilder(ModBlocks.farmland.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
                         this.models().getExistingFile(state.getValue(FarmBlock.MOISTURE) == 7 ? new ResourceLocation("block/farmland_moist") : new ResourceLocation("block/farmland")))
@@ -107,6 +108,11 @@ public class BlockStatesGen extends BlockStateProvider {
 
         this.getVariantBuilder(ModBlocks.shipping.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
                         this.models().orientableVertical(ModBlocks.shipping.getID().getPath(), this.modLoc("block/shipping_bin"), this.modLoc("block/shipping_bin_top")))
+                .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()) % 360)
+                .build());
+
+        this.getVariantBuilder(ModBlocks.cashRegister.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
+                        this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/" + ModBlocks.cashRegister.getID().getPath())))
                 .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()) % 360)
                 .build());
     }

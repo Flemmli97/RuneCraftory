@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.entities.npc.ShopState;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
+import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.mixin.PoiTypeAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
@@ -25,6 +26,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -140,14 +142,15 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
             this.components = new ArrayList<>();
             this.components.addAll(this.font.split(new TranslatableComponent("gui.npc.bed.no"), 150));
         }
-        if (this.isShopOpen == ShopState.NOWORKPLACE && this.entity.getShop().poiType.get() != null) {
+        if (this.isShopOpen == ShopState.NOWORKPLACE && this.entity.getShop().poiType != null) {
             this.components = new ArrayList<>();
             this.components.addAll(this.font.split(new TranslatableComponent("gui.npc.workplace.no", this.formatShopPoi(this.entity.getShop().poiType.get())), 150));
         }
     }
 
     private Component formatShopPoi(PoiType poiType) {
-        Set<BlockState> set = ((PoiTypeAccessor) poiType).matches();
+        Set<BlockState> set = new HashSet<>(((PoiTypeAccessor) poiType).matches());
+        set.addAll(((PoiTypeAccessor) ModPoiTypes.CASH_REGISTER.get()).matches());
         return set.stream().map(BlockBehaviour.BlockStateBase::getBlock)
                 .distinct()
                 .map(Block::getName)

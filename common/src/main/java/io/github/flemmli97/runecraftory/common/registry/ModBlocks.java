@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.common.blocks.BlockAccessory;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBossSpawner;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
+import io.github.flemmli97.runecraftory.common.blocks.BlockCashRegister;
 import io.github.flemmli97.runecraftory.common.blocks.BlockChemistry;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCooking;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
@@ -14,6 +15,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockForge;
 import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMeltableSnow;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
+import io.github.flemmli97.runecraftory.common.blocks.BlockMonsterBarn;
 import io.github.flemmli97.runecraftory.common.blocks.BlockShippingBin;
 import io.github.flemmli97.runecraftory.common.blocks.BlockSingleTimeSpawner;
 import io.github.flemmli97.runecraftory.common.blocks.tile.AccessoryBlockEntity;
@@ -24,6 +26,7 @@ import io.github.flemmli97.runecraftory.common.blocks.tile.CookingBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.CropBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.FarmBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.ForgingBlockEntity;
+import io.github.flemmli97.runecraftory.common.blocks.tile.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.SingleTimeSpawner;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
@@ -95,6 +98,8 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> board = BLOCKS.register("quest_box", () -> new Block(BlockBehaviour.Properties.of(Material.WOOD).strength(5, 5)));
     public static final RegistryEntrySupplier<Block> shipping = BLOCKS.register("shipping_bin", () -> new BlockShippingBin(BlockBehaviour.Properties.of(Material.WOOD).strength(3, 10)));
     public static final RegistryEntrySupplier<Block> singleSpawnBlock = BLOCKS.register("one_time_spawner", () -> new BlockSingleTimeSpawner(BlockBehaviour.Properties.of(Material.METAL).strength(60, 9999).noOcclusion()));
+    public static final RegistryEntrySupplier<Block> cashRegister = BLOCKS.register("cash_register", () -> new BlockCashRegister(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3, 5)));
+    public static final RegistryEntrySupplier<Block> monsterBarn = BLOCKS.register("monster_barn", () -> new BlockMonsterBarn(BlockBehaviour.Properties.of(Material.GRASS).sound(SoundType.GRASS).noOcclusion().noCollission().strength(1, 3)));
 
     /*public static final RegistryEntrySupplier<Block> hotSpring = new BlockHotSpring();
 
@@ -201,6 +206,7 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<BlockEntityType<CookingBlockEntity>> cookingTile = TILES.register("cooking_tile", () -> Platform.INSTANCE.blockEntityType(CookingBlockEntity::new, cooking.get()));
     public static final RegistryEntrySupplier<BlockEntityType<BossSpawnerBlockEntity>> bossSpawnerTile = TILES.register("spawner_tile", () -> Platform.INSTANCE.blockEntityType(BossSpawnerBlockEntity::new, bossSpawner.get()));
     public static final RegistryEntrySupplier<BlockEntityType<SingleTimeSpawner>> singleSpawnerTile = TILES.register("single_spawner_tile", () -> Platform.INSTANCE.blockEntityType(SingleTimeSpawner::new, singleSpawnBlock.get()));
+    public static final RegistryEntrySupplier<BlockEntityType<MonsterBarnBlockEntity>> monsterBarnBlockEntity = TILES.register("monster_barn_block_entity", () -> Platform.INSTANCE.blockEntityType(MonsterBarnBlockEntity::new, monsterBarn.get()));
 
     public static RegistryEntrySupplier<Block> mineral(EnumMineralTier name) {
         RegistryEntrySupplier<Block> reg = BLOCKS.register("ore_" + name.getSerializedName(), () -> new BlockMineral(name, BlockBehaviour.Properties.of(Material.STONE).strength(5, 10)

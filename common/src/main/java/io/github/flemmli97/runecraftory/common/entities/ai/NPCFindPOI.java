@@ -42,7 +42,7 @@ public class NPCFindPOI extends Goal {
         GlobalPos pos = this.npc.getBedPos();
         ServerLevel serverLevel = (ServerLevel) this.npc.level;
         if (pos == null) {
-            GlobalPos found = this.findAndTakePOI(serverLevel, PoiType.HOME, p -> this.isNearOf(serverLevel, p, this.npc.getWorkPlace()));
+            GlobalPos found = this.findAndTakePOI(serverLevel, PoiType.HOME, PoiType.HOME.getPredicate(), p -> this.isNearOf(serverLevel, p, this.npc.getWorkPlace()));
             if (found != null)
                 this.npc.setBedPos(found);
         } else {
@@ -56,15 +56,15 @@ public class NPCFindPOI extends Goal {
                 DebugPackets.sendPoiTicketCountPacket(poiLevel, blockPos);
             }
         }
-        this.poiCheck(this.npc.getWorkPlace(), this.npc.getShop().poiType.get(), serverLevel, p -> this.isNearOf(serverLevel, p, this.npc.getBedPos()), this.npc::setWorkPlace);
-        this.poiCheck(this.npc.getMeetingPos(), PoiType.MEETING, serverLevel, p -> true, this.npc::setMeetingPos);
+        this.poiCheck(this.npc.getWorkPlace(), this.npc.getShop().poiType.get(), this.npc.getShop().predicate, serverLevel, p -> this.isNearOf(serverLevel, p, this.npc.getBedPos()), this.npc::setWorkPlace);
+        this.poiCheck(this.npc.getMeetingPos(), PoiType.MEETING, PoiType.MEETING.getPredicate(), serverLevel, p -> true, this.npc::setMeetingPos);
         this.cooldown = this.npc.getWorkPlace() != null && this.npc.getBedPos() != null ? 20 : 10;
     }
 
-    private void poiCheck(GlobalPos pos, PoiType poiType, ServerLevel serverLevel, Predicate<BlockPos> pred, Consumer<GlobalPos> set) {
+    private void poiCheck(GlobalPos pos, PoiType poiType, Predicate<PoiType> predicate, ServerLevel serverLevel, Predicate<BlockPos> pred, Consumer<GlobalPos> set) {
         if (pos == null) {
             if (poiType != null) {
-                GlobalPos found = this.findAndTakePOI(serverLevel, poiType, pred);
+                GlobalPos found = this.findAndTakePOI(serverLevel, poiType, predicate, pred);
                 if (found != null)
                     set.accept(found);
             }
@@ -75,22 +75,22 @@ public class NPCFindPOI extends Goal {
                 if (poiLevel != null && poiLevel.getPoiManager().exists(blockPos, t -> true))
                     poiLevel.getPoiManager().release(blockPos);
                 set.accept(null);
-            } else if (poiLevel == null || !poiLevel.getPoiManager().exists(blockPos, poiType.getPredicate())) {
+            } else if (poiLevel == null || !poiLevel.getPoiManager().exists(blockPos, predicate)) {
                 set.accept(null);
             }
         }
     }
 
-    private GlobalPos findAndTakePOI(ServerLevel serverLevel, PoiType poiType, Predicate<BlockPos> pred) {
+    private GlobalPos findAndTakePOI(ServerLevel serverLevel, PoiType poiType, Predicate<PoiType> predicate, Predicate<BlockPos> pred) {
         PoiManager poiManager = serverLevel.getPoiManager();
-        Set<BlockPos> set = poiManager.findAllClosestFirst(poiType.getPredicate(), pred, this.npc.blockPosition(), 48, PoiManager.Occupancy.HAS_SPACE).limit(5L).collect(Collectors.toSet());
+        Set<BlockPos> set = poiManager.findAllClosestFirst(predicate, pred, this.npc.blockPosition(), 48, PoiManager.Occupancy.HAS_SPACE).limit(5L).collect(Collectors.toSet());
         if (set.isEmpty())
             return null;
         Path path = this.npc.getNavigation().createPath(set, poiType.getValidRange());
         if (path != null && path.canReach()) {
             BlockPos blockPos2 = path.getTarget();
             return poiManager.getType(blockPos2).map(type -> {
-                poiManager.take(poiType.getPredicate(), blockPos2::equals, blockPos2, 1);
+                poiManager.take(predicate, blockPos2::equals, blockPos2, 1);
                 DebugPackets.sendPoiTicketCountPacket(serverLevel, blockPos2);
                 return GlobalPos.of(serverLevel.dimension(), blockPos2);
             }).orElse(null);

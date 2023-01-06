@@ -1,3 +1,8 @@
+RuneCraftory 1.5.0
+================
+- Added cash register block serving as a generic shop POI
+- Added barn block entity. Monster now need a barn block assigned. Else they will not do anything
+
 RuneCraftory 1.4.4
 ================
 - Changed how some stuff is updated. (e.g. Weather)

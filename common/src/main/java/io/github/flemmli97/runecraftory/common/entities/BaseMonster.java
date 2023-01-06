@@ -30,6 +30,8 @@ import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
+import io.github.flemmli97.runecraftory.common.world.BarnData;
+import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -199,6 +201,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private final LevelExpPair friendlyPoints = new LevelExpPair();
 
     private final DailyMonsterUpdater updater = new DailyMonsterUpdater(this);
+
+    private BarnData assignedBarn;
 
     /**
      * For movement animation interpolation
@@ -406,6 +410,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.removeFoodEffect();
             }
             this.getAnimationHandler().runIfNotNull(this::handleAttack);
+            if (this.assignedBarn != null && this.assignedBarn.isRemoved())
+                this.assignedBarn = null;
+            if (this.isTamed()) {
+                if (this.assignedBarn == null && this.behaviourState() != Behaviour.STAY)
+                    this.setBehaviour(Behaviour.STAY);
+            }
         } else {
             if (!this.playDeath() && TendCropsGoal.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
                 this.level.addParticle(ParticleTypes.ANGRY_VILLAGER, this.getX(), this.getY() + this.getBbHeight() + 0.3, this.getZ(), 0, 0, 0);
@@ -446,6 +456,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.cropInventory != null) {
             compound.putIntArray("CropInventory", new int[]{this.cropInventory.getX(), this.cropInventory.getY(), this.cropInventory.getZ()});
         }
+        if (this.assignedBarn != null && !this.assignedBarn.isRemoved())
+            compound.putIntArray("AssignedBarnLocation", new int[]{this.assignedBarn.pos.getX(), this.assignedBarn.pos.getY(), this.assignedBarn.pos.getZ()});
         //CompoundTag genes = new CompoundTag();
         //this.attributeRandomizer.forEach((att, val)->genes.putInt(att.getRegistryName().toString(), val));
         //compound.put("Genes", genes);
@@ -482,6 +494,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             int[] arr = compound.getIntArray("CropInventory");
             if (arr.length == 3)
                 this.cropInventory = new BlockPos(arr[0], arr[1], arr[2]);
+        }
+        if (compound.contains("AssignedBarnLocation")) {
+            int[] arr = compound.getIntArray("AssignedBarnLocation");
+            if (arr.length == 3) {
+                BlockPos pos = new BlockPos(arr[0], arr[1], arr[2]);
+                this.assignedBarn = WorldHandler.get(this.getServer())
+                        .barnAt(pos);
+            }
         }
         //CompoundTag genes = compound.getCompound("Genes");
         //genes.keySet().forEach(key->this.attributeRandomizer.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(key)), genes.getInt(key)));
@@ -544,12 +564,18 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (this.level.isClientSide)
-            return InteractionResult.PASS;
+            return InteractionResult.CONSUME;
         ItemStack stack = player.getItemInHand(hand);
         if (this.isTamed()) {
             if (!player.getUUID().equals(this.getOwnerUUID())) {
                 player.sendMessage(new TranslatableComponent("monster.interact.notowner"), Util.NIL_UUID);
                 return InteractionResult.CONSUME;
+            }
+            if (this.assignedBarn == null) {
+                if (!this.assignBarn()) {
+                    player.sendMessage(new TranslatableComponent("monster.interact.no.barn"), Util.NIL_UUID);
+                    return InteractionResult.CONSUME;
+                }
             }
             if (stack.getItem() == ModItems.inspector.get() && hand == InteractionHand.MAIN_HAND) {
                 if (player instanceof ServerPlayer serverPlayer) {
@@ -718,6 +744,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public boolean attackOtherTamedMobs() {
         return false;
+    }
+
+    public EntityProperties getProp() {
+        return this.prop;
     }
 
     //=====Level Handling
@@ -1131,7 +1161,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.isVehicle() || this.playDeath();
+        return super.isImmobile() || this.isVehicle() || this.playDeath() || this.tamingTick > 0;
     }
 
     @Override
@@ -1378,6 +1408,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     protected void tameEntity(Player owner) {
+        if (!this.isAlive())
+            return;
         this.restrictTo(this.blockPosition(), -1);
         this.setOwner(owner);
         this.navigation.stop();
@@ -1400,6 +1432,18 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 LevelCalc.levelSkill(serverPlayer, data, EnumSkills.TAMING, 10);
             });
         }
+        if (this.getServer() != null) {
+            this.assignBarn();
+        }
+    }
+
+    private boolean assignBarn() {
+        this.assignedBarn = WorldHandler.get(this.getServer()).findFittingBarn(this);
+        if (this.assignedBarn != null) {
+            this.assignedBarn.addMonster(this.getUUID(), 1);
+            return true;
+        }
+        return false;
     }
 
     protected void untameEntity() {
@@ -1409,6 +1453,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (e.getLastHurtByMob() == this)
                 e.setLastHurtByMob(null);
         });
+        if (this.getServer() != null && this.getOwnerUUID() != null) {
+            WorldHandler.get(this.getServer())
+                    .removeMonsterFromPlayer(this.getOwnerUUID(), this);
+            this.assignedBarn = null;
+        }
         this.setOwner(null);
         this.setLastHurtByMob(null);
         if (this.playDeath())

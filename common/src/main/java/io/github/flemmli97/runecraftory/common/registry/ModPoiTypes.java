@@ -7,7 +7,6 @@ import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.lang.reflect.Constructor;
@@ -18,14 +17,14 @@ public class ModPoiTypes {
 
     public static final PlatformRegistry<PoiType> POI = PlatformUtils.INSTANCE.of(Registry.POINT_OF_INTEREST_TYPE_REGISTRY, RuneCraftory.MODID);
 
-    public static final RegistryEntrySupplier<PoiType> skills = POI.register("rf4_skill_poi", () -> createPoiType("rf4_skill_poi",
-            ImmutableSet.copyOf(Blocks.ENCHANTING_TABLE.getStateDefinition().getPossibleStates()), 1, 1));
+    public static final RegistryEntrySupplier<PoiType> CASH_REGISTER = POI.register("cash_register", () -> createPoiType("cash_register",
+            ImmutableSet.copyOf(ModBlocks.cashRegister.get().getStateDefinition().getPossibleStates()), 1, 1));
 
     private static PoiType createPoiType(String string, Set<BlockState> set, int i, int j) {
         try {
             Constructor<PoiType> cons = PoiType.class.getDeclaredConstructor(String.class, Set.class, int.class, int.class);
             cons.setAccessible(true);
-            return cons.newInstance(string, set, i, j);
+            return cons.newInstance(RuneCraftory.MODID + ":" + string, set, i, j);
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }

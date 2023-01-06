@@ -16,6 +16,8 @@ public class EntityPropertySpecs {
     public final CommentedJsonConfig.DoubleVal taming;
     public final CommentedJsonConfig.CommentedVal<Boolean> ridable;
     public final CommentedJsonConfig.CommentedVal<Boolean> flying;
+    public final CommentedJsonConfig.IntVal size;
+    public final CommentedJsonConfig.CommentedVal<Boolean> needsRoof;
 
     public EntityPropertySpecs(CommentedJsonConfig.Builder builder, EntityProperties def) {
         this.baseValues = builder.comment("Base Values at level 1 of the mob").define("Base Values", def.attString());
@@ -25,6 +27,8 @@ public class EntityPropertySpecs {
         this.taming = builder.comment("Base chance to tame this mob").defineInRange("Taming Chance", def.tamingChance(), 0, 1);
         this.ridable = builder.define("Ridable", def.ridable());
         this.flying = builder.define("Can Fly", def.flying());
+        this.size = builder.comment("The amount of space this monster takes in a barn").defineInRange("Size", def.getSize(), 1, Integer.MAX_VALUE);
+        this.needsRoof = builder.define("If the monsters barn needs a roof", def.needsRoof());
     }
 
     public static EntityProperties ofSpec(EntityPropertySpecs spec) {
@@ -50,6 +54,9 @@ public class EntityPropertySpecs {
             builder.setRidable();
         if (spec.flying.get())
             builder.setFlying();
+        builder.setBarnOccupancy(spec.size.get());
+        if(!spec.needsRoof.get())
+            builder.doesntNeedBarnRoof();
         return builder.build();
     }
 

@@ -161,6 +161,8 @@ public class ClientRegister {
                 consumer.accept(reg.get(), RenderType.cutout());
             if (reg.get() instanceof BlockCrafting)
                 consumer.accept(reg.get(), RenderType.cutout());
+            if (reg == ModBlocks.monsterBarn)
+                consumer.accept(reg.get(), RenderType.cutout());
         });
 
         consumer.accept(ModBlocks.bossSpawner.get(), RenderType.cutout());

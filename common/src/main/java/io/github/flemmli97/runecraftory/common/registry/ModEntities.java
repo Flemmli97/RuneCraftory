@@ -301,7 +301,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_defence, 1.5).putLevelGains(LibAttributes.rf_defence, 2.1)
                     .putAttributes(LibAttributes.rf_magic, 9).putLevelGains(LibAttributes.rf_magic, 3.1)
                     .putAttributes(LibAttributes.rf_magic_defence, 1.5).putLevelGains(LibAttributes.rf_magic_defence, 2.1)
-                    .xp(130).money(10).tamingChance(0.04f).setFlying().build(),
+                    .xp(130).money(10).tamingChance(0.04f).setBarnOccupancy(2).setFlying().build(),
             new SpawnConfig.SpawnData.Builder(500, 10).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
     public static final RegistryEntrySupplier<EntityType<EntitySpider>> spider = regMonster(EntityType.Builder.of(EntitySpider::new, MobCategory.MONSTER).sized(0.9f, 0.7f).clientTrackingRange(8), LibEntities.spider,
             0x6f6751, 0x404148,
@@ -364,7 +364,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_res_stun, 60)
                     .putAttributes(LibAttributes.rf_res_faint, 95)
                     .putAttributes(LibAttributes.rf_res_drain, 30)
-                    .xp(500).money(50).tamingChance(0.008f).setRidable().setFlying().build());
+                    .xp(500).money(50).tamingChance(0.008f).setBarnOccupancy(2).setRidable().setFlying().build());
     public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> thunderbolt = regMonster(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), LibEntities.thunderbolt,
             0x212121, 0x2f1177,
             new EntityProperties.Builder()
@@ -383,7 +383,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_res_stun, 50)
                     .putAttributes(LibAttributes.rf_res_faint, 95)
                     .putAttributes(LibAttributes.rf_res_drain, 25)
-                    .xp(750).money(75).tamingChance(0.008f).setRidable().build());
+                    .xp(750).money(75).tamingChance(0.008f).setBarnOccupancy(2).setRidable().build());
     public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> marionetta = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.5f).clientTrackingRange(8), LibEntities.marionetta,
             0xb86b13, 0xd8d7d7,
             new EntityProperties.Builder()
@@ -402,7 +402,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.rf_res_stun, 60)
                     .putAttributes(LibAttributes.rf_res_faint, 95)
                     .putAttributes(LibAttributes.rf_res_drain, 20)
-                    .xp(1000).money(75).tamingChance(0.008f).setRidable().build());
+                    .xp(1000).money(75).tamingChance(0.008f).setBarnOccupancy(2).setRidable().build());
 
     public static final RegistryEntrySupplier<EntityType<EntityNPCBase>> npc = npc(EntityType.Builder.of(EntityNPCBase::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), LibEntities.npc);
 
