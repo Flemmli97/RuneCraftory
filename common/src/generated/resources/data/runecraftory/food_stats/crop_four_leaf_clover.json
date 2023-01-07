@@ -1,4 +1,9 @@
 {
+  "duration": 600,
+  "effects": {
+    "runecraftory:rp_gain": 25.0
+  },
+  "effectsPercentage": {},
   "cookingBonus": {},
   "potionApply": [
     {
@@ -8,14 +13,5 @@
     }
   ],
   "potionRemove": [],
-  "duration": 600,
-  "effects": {},
-  "effectsPercentage": {},
-  "rpRegenPercent": 0,
-  "rpIncrease": 0,
-  "rpPercentIncrease": 0,
-  "hpRegen": 0,
-  "rpRegen": 25,
-  "hpRegenPercent": 0,
   "item": "runecraftory:crop_four_leaf_clover"
 }

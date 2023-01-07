@@ -639,7 +639,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         boolean leveledUp = this.friendlyPoints.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> this.entityData.set(friendPointsSync, this.friendlyPoints.getLevel()));
         if (leveledUp) {
             List<Attribute> increasable = List.of(Attributes.MAX_HEALTH, Attributes.ATTACK_DAMAGE,
-                    ModAttributes.RF_DEFENCE.get(), ModAttributes.RF_MAGIC.get(), ModAttributes.RF_MAGIC_DEFENCE.get());
+                    ModAttributes.DEFENCE.get(), ModAttributes.MAGIC.get(), ModAttributes.MAGIC_DEFENCE.get());
             for (Attribute att : increasable) {
                 AttributeInstance inst = this.getAttribute(att);
                 if (inst != null) {
@@ -653,9 +653,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public void onBrushing() {
         Attribute toIncrease = switch (this.random.nextInt(4)) {
-            case 1 -> ModAttributes.RF_DEFENCE.get();
-            case 2 -> ModAttributes.RF_MAGIC.get();
-            case 3 -> ModAttributes.RF_MAGIC_DEFENCE.get();
+            case 1 -> ModAttributes.DEFENCE.get();
+            case 2 -> ModAttributes.MAGIC.get();
+            case 3 -> ModAttributes.MAGIC_DEFENCE.get();
             default -> Attributes.ATTACK_DAMAGE;
         };
         AttributeInstance inst = this.getAttribute(toIncrease);

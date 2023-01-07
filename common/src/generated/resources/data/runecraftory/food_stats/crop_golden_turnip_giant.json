@@ -1,15 +1,15 @@
 {
+  "duration": 600,
+  "effects": {
+    "runecraftory:health_gain": 500.0,
+    "runecraftory:rp_increase": 30.0
+  },
+  "effectsPercentage": {
+    "runecraftory:health_gain": 5.0,
+    "runecraftory:rp_increase": 5.0
+  },
   "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "duration": 600,
-  "effects": {},
-  "effectsPercentage": {},
-  "rpRegenPercent": 0,
-  "rpIncrease": 30,
-  "rpPercentIncrease": 5,
-  "hpRegen": 500,
-  "rpRegen": 0,
-  "hpRegenPercent": 5,
   "item": "runecraftory:crop_golden_turnip_giant"
 }

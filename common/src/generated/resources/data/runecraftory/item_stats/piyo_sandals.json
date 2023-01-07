@@ -3,10 +3,10 @@
   "sellPrice": 35,
   "upgradeDifficulty": 0,
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 5.0,
-    "runecraftory:attribute.rf.dizz": 20.0,
-    "runecraftory:attribute.rf.res_love": 1.0,
-    "runecraftory:attribute.rf.res_dizz": 50.0
+    "runecraftory:defence": 5.0,
+    "runecraftory:dizzy": 20.0,
+    "runecraftory:res_love": 1.0,
+    "runecraftory:res_dizzy": 50.0
   },
   "monsterBonus": {},
   "element": "NONE",

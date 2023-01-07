@@ -1,15 +1,11 @@
 {
+  "duration": 600,
+  "effects": {
+    "runecraftory:rp_gain": 90.0
+  },
+  "effectsPercentage": {},
   "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "duration": 600,
-  "effects": {},
-  "effectsPercentage": {},
-  "rpRegenPercent": 0,
-  "rpIncrease": 0,
-  "rpPercentIncrease": 0,
-  "hpRegen": 0,
-  "rpRegen": 90,
-  "hpRegenPercent": 0,
   "item": "runecraftory:crop_charm_blue_giant"
 }

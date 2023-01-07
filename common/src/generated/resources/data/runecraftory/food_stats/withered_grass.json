@@ -1,4 +1,9 @@
 {
+  "duration": 100,
+  "effects": {},
+  "effectsPercentage": {
+    "runecraftory:rp_gain": -35.0
+  },
   "cookingBonus": {},
   "potionApply": [
     {
@@ -8,14 +13,5 @@
     }
   ],
   "potionRemove": [],
-  "duration": 100,
-  "effects": {},
-  "effectsPercentage": {},
-  "rpRegenPercent": -35,
-  "rpIncrease": 0,
-  "rpPercentIncrease": 0,
-  "hpRegen": 0,
-  "rpRegen": 0,
-  "hpRegenPercent": 0,
   "item": "runecraftory:withered_grass"
 }

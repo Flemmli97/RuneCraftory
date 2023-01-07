@@ -1,4 +1,7 @@
 {
+  "duration": 100,
+  "effects": {},
+  "effectsPercentage": {},
   "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [
@@ -16,14 +19,5 @@
     "runecraftory:fatigue",
     "runecraftory:cold"
   ],
-  "duration": 100,
-  "effects": {},
-  "effectsPercentage": {},
-  "rpRegenPercent": 0,
-  "rpIncrease": 0,
-  "rpPercentIncrease": 0,
-  "hpRegen": 0,
-  "rpRegen": 0,
-  "hpRegenPercent": 0,
   "item": "runecraftory:invinciroid"
 }

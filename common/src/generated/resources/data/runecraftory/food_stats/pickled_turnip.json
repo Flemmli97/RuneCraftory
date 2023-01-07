@@ -1,19 +1,15 @@
 {
-  "cookingBonus": {},
-  "potionApply": [],
-  "potionRemove": [],
   "duration": 4800,
   "effects": {
     "minecraft:generic.attack_damage": 3.0,
-    "runecraftory:attribute.rf.defence": 1.0,
-    "runecraftory:attribute.rf.magic_att": 2.0
+    "runecraftory:health_gain": 150.0,
+    "runecraftory:rp_gain": 90.0,
+    "runecraftory:defence": 1.0,
+    "runecraftory:magic_attack": 2.0
   },
   "effectsPercentage": {},
-  "rpRegenPercent": 0,
-  "rpIncrease": 0,
-  "rpPercentIncrease": 0,
-  "hpRegen": 150,
-  "rpRegen": 90,
-  "hpRegenPercent": 0,
+  "cookingBonus": {},
+  "potionApply": [],
+  "potionRemove": [],
   "item": "runecraftory:pickled_turnip"
 }

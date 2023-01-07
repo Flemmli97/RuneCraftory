@@ -3,13 +3,13 @@
   "sellPrice": 200,
   "upgradeDifficulty": 48,
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 4.0,
-    "runecraftory:attribute.rf.res_paralysis": 10.0,
-    "runecraftory:attribute.rf.res_poison": 10.0,
-    "runecraftory:attribute.rf.res_seal": 10.0,
-    "runecraftory:attribute.rf.res_sleep": 10.0,
-    "runecraftory:attribute.rf.res_fatigue": 10.0,
-    "runecraftory:attribute.rf.res_cold": 10.0
+    "runecraftory:defence": 4.0,
+    "runecraftory:res_paralysis": 10.0,
+    "runecraftory:res_poison": 10.0,
+    "runecraftory:res_seal": 10.0,
+    "runecraftory:res_sleep": 10.0,
+    "runecraftory:res_fatigue": 10.0,
+    "runecraftory:res_cold": 10.0
   },
   "monsterBonus": {},
   "element": "NONE",

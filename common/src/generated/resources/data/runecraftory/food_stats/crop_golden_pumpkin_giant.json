@@ -1,15 +1,13 @@
 {
+  "duration": 600,
+  "effects": {
+    "runecraftory:health_gain": 300.0
+  },
+  "effectsPercentage": {
+    "runecraftory:health_gain": 7.0
+  },
   "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "duration": 600,
-  "effects": {},
-  "effectsPercentage": {},
-  "rpRegenPercent": 0,
-  "rpIncrease": 0,
-  "rpPercentIncrease": 0,
-  "hpRegen": 300,
-  "rpRegen": 0,
-  "hpRegenPercent": 7,
   "item": "runecraftory:crop_golden_pumpkin_giant"
 }

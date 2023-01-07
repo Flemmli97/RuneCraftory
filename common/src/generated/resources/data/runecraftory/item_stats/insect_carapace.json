@@ -3,8 +3,8 @@
   "sellPrice": 11,
   "upgradeDifficulty": 8,
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 1.0,
-    "runecraftory:attribute.rf.res_poison": 15.0
+    "runecraftory:defence": 1.0,
+    "runecraftory:res_poison": 15.0
   },
   "monsterBonus": {},
   "element": "NONE",

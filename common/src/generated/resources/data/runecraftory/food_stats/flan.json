@@ -1,4 +1,13 @@
 {
+  "duration": 4800,
+  "effects": {
+    "runecraftory:health_gain": 100.0,
+    "runecraftory:rp_gain": 90.0,
+    "runecraftory:defence": 1.0,
+    "runecraftory:res_fatigue": 15.0,
+    "runecraftory:res_cold": 15.0
+  },
+  "effectsPercentage": {},
   "cookingBonus": {},
   "potionApply": [
     {
@@ -8,18 +17,5 @@
     }
   ],
   "potionRemove": [],
-  "duration": 4800,
-  "effects": {
-    "runecraftory:attribute.rf.defence": 1.0,
-    "runecraftory:attribute.rf.res_fatigue": 15.0,
-    "runecraftory:attribute.rf.res_cold": 15.0
-  },
-  "effectsPercentage": {},
-  "rpRegenPercent": 0,
-  "rpIncrease": 0,
-  "rpPercentIncrease": 0,
-  "hpRegen": 100,
-  "rpRegen": 90,
-  "hpRegenPercent": 0,
   "item": "runecraftory:flan"
 }

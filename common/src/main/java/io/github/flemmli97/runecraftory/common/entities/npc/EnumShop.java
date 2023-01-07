@@ -17,6 +17,7 @@ public enum EnumShop {
     FOOD(() -> PoiType.BUTCHER, "shop_food"),
     MAGIC(ModPoiTypes.CASH_REGISTER, "shop_magic"),
     RUNESKILL(ModPoiTypes.CASH_REGISTER, "shop_runeskill"),
+    BATHHOUSE(() -> PoiType.FISHERMAN, "shop_bathhouse"),
     RANDOM(() -> null, "shop_random");
 
     public final Supplier<PoiType> poiType;

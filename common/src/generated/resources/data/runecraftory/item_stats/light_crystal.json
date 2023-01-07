@@ -3,9 +3,9 @@
   "sellPrice": 150,
   "upgradeDifficulty": 20,
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 1.5,
-    "runecraftory:attribute.rf.magic_att": 3.0,
-    "runecraftory:attribute.rf.magic_def": 1.5
+    "runecraftory:defence": 1.5,
+    "runecraftory:magic_attack": 3.0,
+    "runecraftory:magic_defence": 1.5
   },
   "monsterBonus": {},
   "element": "LIGHT",

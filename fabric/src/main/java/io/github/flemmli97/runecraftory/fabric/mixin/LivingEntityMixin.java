@@ -35,7 +35,7 @@ public abstract class LivingEntityMixin implements EntityDataGetter {
     @Inject(method = "createLivingAttributes", at = @At("RETURN"))
     private static void addToAttributes(CallbackInfoReturnable<AttributeSupplier.Builder> info) {
         AttributeSupplier.Builder builder = info.getReturnValue();
-        for (RegistryEntrySupplier<Attribute> s : RuneCraftoryFabric.attributes().getEntries()) {
+        for (RegistryEntrySupplier<Attribute> s : RuneCraftoryFabric.attributes()) {
             builder.add(s.get());
         }
     }

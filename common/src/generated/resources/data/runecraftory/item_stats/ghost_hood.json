@@ -3,9 +3,9 @@
   "sellPrice": 650,
   "upgradeDifficulty": 21,
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 2.0,
-    "runecraftory:attribute.rf.magic_def": 2.0,
-    "runecraftory:attribute.rf.res_seal": 25.0
+    "runecraftory:defence": 2.0,
+    "runecraftory:magic_defence": 2.0,
+    "runecraftory:res_seal": 25.0
   },
   "monsterBonus": {},
   "element": "NONE",

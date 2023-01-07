@@ -119,9 +119,9 @@ public class CombatUtils {
             if (!GeneralConfig.vanillaIgnoreDefence || source instanceof CustomDamage) {
                 if (source.isMagic()) {
                     if (!source.isBypassMagic())
-                        reduce = (float) getAttributeValue(entity, ModAttributes.RF_MAGIC_DEFENCE.get());
+                        reduce = (float) getAttributeValue(entity, ModAttributes.MAGIC_DEFENCE.get());
                 } else if (!source.isBypassArmor()) {
-                    reduce = (float) getAttributeValue(entity, ModAttributes.RF_DEFENCE.get());
+                    reduce = (float) getAttributeValue(entity, ModAttributes.DEFENCE.get());
                 }
             }
         }

@@ -36,7 +36,7 @@ public class HealT3Spell extends Spell {
                 LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, true, true, EnumSkills.LOVE)).orElse(false);
         if (!rp)
             return false;
-        float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.RF_MAGIC.get()) * (3f + lvl * 0.3f));
+        float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC.get()) * (3f + lvl * 0.3f));
         entity.heal(healAmount);
         HealT1Spell.spawnHealParticles(entity);
         return true;

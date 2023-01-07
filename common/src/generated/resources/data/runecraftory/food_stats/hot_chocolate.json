@@ -1,4 +1,14 @@
 {
+  "duration": 4800,
+  "effects": {
+    "runecraftory:health_gain": 80.0,
+    "runecraftory:rp_gain": 200.0,
+    "runecraftory:rp_increase": 50.0
+  },
+  "effectsPercentage": {
+    "runecraftory:rp_gain": 3.0,
+    "runecraftory:rp_increase": 5.0
+  },
   "cookingBonus": {},
   "potionApply": [
     {
@@ -8,14 +18,5 @@
     }
   ],
   "potionRemove": [],
-  "duration": 4800,
-  "effects": {},
-  "effectsPercentage": {},
-  "rpRegenPercent": 3,
-  "rpIncrease": 50,
-  "rpPercentIncrease": 5,
-  "hpRegen": 80,
-  "rpRegen": 200,
-  "hpRegenPercent": 0,
   "item": "runecraftory:hot_chocolate"
 }

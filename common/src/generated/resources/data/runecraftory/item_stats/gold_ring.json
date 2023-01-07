@@ -3,10 +3,10 @@
   "sellPrice": 5000,
   "upgradeDifficulty": 0,
   "itemStats": {
-    "runecraftory:attribute.rf.res_water": 15.0,
-    "runecraftory:attribute.rf.res_earth": 15.0,
-    "runecraftory:attribute.rf.res_wind": 15.0,
-    "runecraftory:attribute.rf.res_fire": 15.0
+    "runecraftory:res_water": 15.0,
+    "runecraftory:res_earth": 15.0,
+    "runecraftory:res_wind": 15.0,
+    "runecraftory:res_fire": 15.0
   },
   "monsterBonus": {},
   "element": "NONE",

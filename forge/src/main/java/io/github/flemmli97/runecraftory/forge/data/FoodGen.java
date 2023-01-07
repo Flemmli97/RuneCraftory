@@ -75,9 +75,9 @@ public class FoodGen extends FoodProvider {
         this.addStat(ModItems.formuade.get(), new FoodProperties.Builder(100).setRPIncrease(0, 75)
                 .addEffectPercentage(Attributes.MAX_HEALTH, -50)
                 .addEffect(Attributes.ATTACK_DAMAGE, 70)
-                .addEffect(ModAttributes.RF_MAGIC.get(), 70)
-                .addEffect(ModAttributes.RF_DEFENCE.get(), 35)
-                .addEffect(ModAttributes.RF_MAGIC_DEFENCE.get(), 35)
+                .addEffect(ModAttributes.MAGIC.get(), 70)
+                .addEffect(ModAttributes.DEFENCE.get(), 35)
+                .addEffect(ModAttributes.MAGIC_DEFENCE.get(), 35)
                 .addEffect(ModAttributes.RFRESPOISON.get(), 25)
                 .addEffect(ModAttributes.RFRESPARA.get(), 25)
                 .addEffect(ModAttributes.RFRESSEAL.get(), 25)
@@ -105,13 +105,13 @@ public class FoodGen extends FoodProvider {
                 .setHPRegen(150, 0)
                 .setRPRegen(90, 0)
                 .addEffect(Attributes.ATTACK_DAMAGE, 3)
-                .addEffect(ModAttributes.RF_DEFENCE.get(), 1)
-                .addEffect(ModAttributes.RF_MAGIC.get(), 2));
+                .addEffect(ModAttributes.DEFENCE.get(), 1)
+                .addEffect(ModAttributes.MAGIC.get(), 2));
         this.addStat(ModItems.flan.get(), new FoodProperties.Builder(4800)
                 .setHPRegen(100, 0)
                 .setRPRegen(90, 0)
                 .addPotion(MobEffects.MOVEMENT_SPEED, 200, 1)
-                .addEffect(ModAttributes.RF_DEFENCE.get(), 1)
+                .addEffect(ModAttributes.DEFENCE.get(), 1)
                 .addEffect(ModAttributes.RFRESFAT.get(), 15)
                 .addEffect(ModAttributes.RFRESCOLD.get(), 15));
         this.addStat(ModItems.hotMilk.get(), new FoodProperties.Builder(4800)
@@ -128,30 +128,30 @@ public class FoodGen extends FoodProvider {
                 .setHPRegen(20, 0)
                 .setRPRegen(35, 2)
                 .addEffect(Attributes.ATTACK_DAMAGE, 1)
-                .addEffect(ModAttributes.RF_DEFENCE.get(), 1)
-                .addEffect(ModAttributes.RF_MAGIC.get(), 1)
-                .addEffect(ModAttributes.RF_MAGIC_DEFENCE.get(), 1));
+                .addEffect(ModAttributes.DEFENCE.get(), 1)
+                .addEffect(ModAttributes.MAGIC.get(), 1)
+                .addEffect(ModAttributes.MAGIC_DEFENCE.get(), 1));
         this.addStat(ModItems.friedVeggies.get(), new FoodProperties.Builder(4800)
                 .setHPRegen(300, 30)
                 .setRPRegen(250, 25)
                 .setRPIncrease(0, 20)
                 .addEffectPercentage(Attributes.MAX_HEALTH, 300)
-                .addEffect(ModAttributes.RF_DEFENCE.get(), 1)
-                .addEffect(ModAttributes.RF_MAGIC.get(), 1));
+                .addEffect(ModAttributes.DEFENCE.get(), 1)
+                .addEffect(ModAttributes.MAGIC.get(), 1));
         this.addStat(ModItems.failedDish.get(), new FoodProperties.Builder(7200)
                 .setHPRegen(0, -20)
                 .setRPIncrease(0, -10)
                 .addEffectPercentage(Attributes.ATTACK_DAMAGE, -10)
-                .addEffectPercentage(ModAttributes.RF_DEFENCE.get(), -10)
-                .addEffectPercentage(ModAttributes.RF_MAGIC.get(), -10)
-                .addEffectPercentage(ModAttributes.RF_MAGIC_DEFENCE.get(), -10));
+                .addEffectPercentage(ModAttributes.DEFENCE.get(), -10)
+                .addEffectPercentage(ModAttributes.MAGIC.get(), -10)
+                .addEffectPercentage(ModAttributes.MAGIC_DEFENCE.get(), -10));
         this.addStat(ModItems.disastrousDish.get(), new FoodProperties.Builder(7200)
                 .setHPRegen(0, -60)
                 .setRPIncrease(0, -30)
                 .addEffectPercentage(Attributes.ATTACK_DAMAGE, -25)
-                .addEffectPercentage(ModAttributes.RF_DEFENCE.get(), -25)
-                .addEffectPercentage(ModAttributes.RF_MAGIC.get(), -25)
-                .addEffectPercentage(ModAttributes.RF_MAGIC_DEFENCE.get(), -25));
+                .addEffectPercentage(ModAttributes.DEFENCE.get(), -25)
+                .addEffectPercentage(ModAttributes.MAGIC.get(), -25)
+                .addEffectPercentage(ModAttributes.MAGIC_DEFENCE.get(), -25));
 
         this.addStat(ModItems.turnip.get(), new FoodProperties.Builder(600)
                 .setHPRegen(20, 0)

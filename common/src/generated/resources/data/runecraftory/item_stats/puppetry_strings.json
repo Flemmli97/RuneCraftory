@@ -4,9 +4,9 @@
   "upgradeDifficulty": 37,
   "itemStats": {
     "minecraft:generic.attack_damage": 6.0,
-    "runecraftory:attribute.rf.magic_att": 9.0,
-    "runecraftory:attribute.rf.paralysis": 5.0,
-    "runecraftory:attribute.rf.seal": 15.0
+    "runecraftory:magic_attack": 9.0,
+    "runecraftory:paralysis": 5.0,
+    "runecraftory:seal": 15.0
   },
   "monsterBonus": {},
   "element": "NONE",

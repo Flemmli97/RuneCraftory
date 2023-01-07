@@ -3,7 +3,7 @@
   "sellPrice": 150,
   "upgradeDifficulty": 20,
   "itemStats": {
-    "runecraftory:attribute.rf.drain": 3.0
+    "runecraftory:drain": 3.0
   },
   "monsterBonus": {},
   "element": "LOVE",

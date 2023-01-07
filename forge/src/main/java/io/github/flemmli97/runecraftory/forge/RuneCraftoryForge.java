@@ -132,7 +132,7 @@ public class RuneCraftoryForge {
 
     public void attributesAdd(EntityAttributeModificationEvent event) {
         for (EntityType<? extends LivingEntity> t : event.getTypes()) {
-            for (RegistryEntrySupplier<Attribute> s : ModAttributes.ATTRIBUTES.getEntries()) {
+            for (RegistryEntrySupplier<Attribute> s : ModAttributes.ENTITY_ATTRIBUTES) {
                 if (!event.has(t, s.get()))
                     event.add(t, s.get());
             }

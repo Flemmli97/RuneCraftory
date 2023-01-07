@@ -3,11 +3,11 @@
   "sellPrice": 27000,
   "upgradeDifficulty": 39,
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 4.0,
-    "runecraftory:attribute.rf.magic_def": 7.0,
-    "runecraftory:attribute.rf.res_paralysis": 10.0,
-    "runecraftory:attribute.rf.res_seal": 10.0,
-    "runecraftory:attribute.rf.res_drain": 15.0
+    "runecraftory:defence": 4.0,
+    "runecraftory:magic_defence": 7.0,
+    "runecraftory:res_paralysis": 10.0,
+    "runecraftory:res_seal": 10.0,
+    "runecraftory:res_drain": 15.0
   },
   "monsterBonus": {},
   "element": "NONE",

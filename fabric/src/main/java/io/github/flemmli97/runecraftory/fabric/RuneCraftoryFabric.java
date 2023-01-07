@@ -32,7 +32,7 @@ import io.github.flemmli97.runecraftory.fabric.loot.CropLootModifiers;
 import io.github.flemmli97.runecraftory.fabric.network.ServerPacketHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.fabric.events.AOEAttackEvent;
-import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
+import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;
 import net.fabricmc.fabric.api.biome.v1.BiomeSelectors;
@@ -68,6 +68,7 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicReference;
@@ -242,12 +243,12 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModCriteria.init();
     }
 
-    public static PlatformRegistry<Attribute> attributes() {
+    public static Collection<RegistryEntrySupplier<Attribute>> attributes() {
         if (!initAttributes) {
             ModAttributes.ATTRIBUTES.registerContent();
             initAttributes = true;
         }
-        return ModAttributes.ATTRIBUTES;
+        return ModAttributes.ENTITY_ATTRIBUTES;
     }
 
     private void tweakVanillaAttribute(Attribute attribute, double value) {

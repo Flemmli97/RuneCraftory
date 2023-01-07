@@ -1,20 +1,16 @@
 {
-  "cookingBonus": {},
-  "potionApply": [],
-  "potionRemove": [],
   "duration": 7200,
   "effects": {},
   "effectsPercentage": {
     "minecraft:generic.attack_damage": -25.0,
-    "runecraftory:attribute.rf.defence": -25.0,
-    "runecraftory:attribute.rf.magic_att": -25.0,
-    "runecraftory:attribute.rf.magic_def": -25.0
+    "runecraftory:health_gain": -60.0,
+    "runecraftory:rp_increase": -30.0,
+    "runecraftory:defence": -25.0,
+    "runecraftory:magic_attack": -25.0,
+    "runecraftory:magic_defence": -25.0
   },
-  "rpRegenPercent": 0,
-  "rpIncrease": 0,
-  "rpPercentIncrease": -30,
-  "hpRegen": 0,
-  "rpRegen": 0,
-  "hpRegenPercent": -60,
+  "cookingBonus": {},
+  "potionApply": [],
+  "potionRemove": [],
   "item": "runecraftory:disastrous_dish"
 }

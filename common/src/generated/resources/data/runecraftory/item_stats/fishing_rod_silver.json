@@ -4,7 +4,7 @@
   "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 26.0,
-    "runecraftory:attribute.rf.magic_att": 27.0
+    "runecraftory:magic_attack": 27.0
   },
   "monsterBonus": {},
   "element": "NONE",

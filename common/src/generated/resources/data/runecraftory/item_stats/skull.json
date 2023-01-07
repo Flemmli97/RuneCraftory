@@ -3,9 +3,9 @@
   "sellPrice": 1000,
   "upgradeDifficulty": 35,
   "itemStats": {
-    "runecraftory:attribute.rf.magic_att": 9.0,
-    "runecraftory:attribute.rf.magic_def": 4.0,
-    "runecraftory:attribute.rf.cold": 5.0
+    "runecraftory:magic_attack": 9.0,
+    "runecraftory:magic_defence": 4.0,
+    "runecraftory:cold": 5.0
   },
   "monsterBonus": {},
   "element": "NONE",

@@ -4,8 +4,8 @@
   "upgradeDifficulty": 21,
   "itemStats": {
     "minecraft:generic.attack_damage": 7.0,
-    "runecraftory:attribute.rf.magic_att": 7.0,
-    "runecraftory:attribute.rf.sleep": 10.0
+    "runecraftory:magic_attack": 7.0,
+    "runecraftory:sleep": 10.0
   },
   "monsterBonus": {},
   "element": "NONE",

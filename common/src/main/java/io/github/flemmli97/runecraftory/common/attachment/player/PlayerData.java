@@ -387,11 +387,11 @@ public class PlayerData {
         float vit = this.getVit() + this.vitAdd;
         if (att == Attributes.ATTACK_DAMAGE)
             val += this.getStr() + this.strAdd;
-        if (att == ModAttributes.RF_MAGIC.get())
+        if (att == ModAttributes.MAGIC.get())
             val += this.getIntel() + this.intAdd;
-        if (att == ModAttributes.RF_DEFENCE.get())
+        if (att == ModAttributes.DEFENCE.get())
             val += vit * 0.5;
-        if (att == ModAttributes.RF_MAGIC_DEFENCE.get())
+        if (att == ModAttributes.MAGIC_DEFENCE.get())
             val += vit * 0.5;
         val += this.foodBuffs.getOrDefault(att, 0d);
 
@@ -488,11 +488,11 @@ public class PlayerData {
                 mult += player.getMaxHealth() * percent;
             else if (att == Attributes.ATTACK_DAMAGE)
                 mult += this.str * percent;
-            else if (att == ModAttributes.RF_DEFENCE.get())
+            else if (att == ModAttributes.DEFENCE.get())
                 mult += this.vit * 0.5 * percent;
-            else if (att == ModAttributes.RF_MAGIC.get())
+            else if (att == ModAttributes.MAGIC.get())
                 mult += this.intel * percent;
-            else if (att == ModAttributes.RF_DEFENCE.get())
+            else if (att == ModAttributes.DEFENCE.get())
                 mult += this.vit * 0.5 * percent;
             mult += gain.getOrDefault(att, 0d);
             gain.put(att, mult);

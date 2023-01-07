@@ -1,15 +1,14 @@
 {
+  "duration": 600,
+  "effects": {
+    "runecraftory:health_gain": 300.0,
+    "runecraftory:rp_increase": 40.0
+  },
+  "effectsPercentage": {
+    "runecraftory:health_gain": 5.0
+  },
   "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "duration": 600,
-  "effects": {},
-  "effectsPercentage": {},
-  "rpRegenPercent": 0,
-  "rpIncrease": 40,
-  "rpPercentIncrease": 0,
-  "hpRegen": 300,
-  "rpRegen": 0,
-  "hpRegenPercent": 5,
   "item": "runecraftory:crop_golden_cabbage_giant"
 }

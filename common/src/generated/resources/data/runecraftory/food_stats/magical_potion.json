@@ -1,15 +1,11 @@
 {
+  "duration": 100,
+  "effects": {},
+  "effectsPercentage": {
+    "runecraftory:health_gain": 50.0
+  },
   "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "duration": 100,
-  "effects": {},
-  "effectsPercentage": {},
-  "rpRegenPercent": 0,
-  "rpIncrease": 0,
-  "rpPercentIncrease": 0,
-  "hpRegen": 0,
-  "rpRegen": 0,
-  "hpRegenPercent": 50,
   "item": "runecraftory:magical_potion"
 }

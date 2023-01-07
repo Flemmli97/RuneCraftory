@@ -176,10 +176,13 @@ public class LangGen implements DataProvider {
 
         this.add(ModEntities.treasureChest.get(), "Treasure Chest");
 
-        this.add(ModAttributes.RF_DEFENCE.get().getDescriptionId(), "DEF");
-        this.add(ModAttributes.RF_MAGIC.get().getDescriptionId(), "M. ATT");
-        this.add(ModAttributes.RF_MAGIC_DEFENCE.get().getDescriptionId(), "M. DEF");
+        this.add(ModAttributes.HEALTHGAIN.get().getDescriptionId(), "HP");
+        this.add(ModAttributes.RPGAIN.get().getDescriptionId(), "RP");
+        this.add(ModAttributes.RPINCREASE.get().getDescriptionId(), "RP Max");
 
+        this.add(ModAttributes.DEFENCE.get().getDescriptionId(), "DEF");
+        this.add(ModAttributes.MAGIC.get().getDescriptionId(), "M. ATT");
+        this.add(ModAttributes.MAGIC_DEFENCE.get().getDescriptionId(), "M. DEF");
         this.add(ModAttributes.RFPARA.get().getDescriptionId(), "Para");
         this.add(ModAttributes.RFPOISON.get().getDescriptionId(), "Poison");
         this.add(ModAttributes.RFSEAL.get().getDescriptionId(), "Sealing");
@@ -251,12 +254,7 @@ public class LangGen implements DataProvider {
         this.add("tooltip.item.equipped", "When equipped");
         this.add("tooltip.item.upgrade", "Upgrade");
         this.add("tooltip.item.eaten", "When eaten");
-        this.add("tooltip.food.hp", "HP: %s");
-        this.add("tooltip.food.hp.percent", "HP: %s%%");
-        this.add("tooltip.food.rp", "RP: %s");
-        this.add("tooltip.food.rp.percent", "RP: %s%%");
-        this.add("tooltip.food.rpmax", "RP Max: %s");
-        this.add("tooltip.food.rpmax.percent", "RP Max: %s%%");
+
         this.add("tooltip.item.spawn", "Rename to a number to set level");
         this.add("money", "Money");
         this.add("season", "Season");

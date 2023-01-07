@@ -4,8 +4,8 @@
   "upgradeDifficulty": 22,
   "itemStats": {
     "minecraft:generic.max_health": 7.0,
-    "runecraftory:attribute.rf.defence": 3.0,
-    "runecraftory:attribute.rf.magic_att": 2.0
+    "runecraftory:defence": 3.0,
+    "runecraftory:magic_attack": 2.0
   },
   "monsterBonus": {},
   "element": "NONE",

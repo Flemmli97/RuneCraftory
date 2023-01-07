@@ -3,7 +3,7 @@
   "sellPrice": 150,
   "upgradeDifficulty": 20,
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 5.0
+    "runecraftory:defence": 5.0
   },
   "monsterBonus": {},
   "element": "EARTH",

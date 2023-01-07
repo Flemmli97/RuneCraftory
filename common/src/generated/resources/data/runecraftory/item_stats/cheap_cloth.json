@@ -3,8 +3,8 @@
   "sellPrice": 12,
   "upgradeDifficulty": 4,
   "itemStats": {
-    "runecraftory:attribute.rf.defence": 1.0,
-    "runecraftory:attribute.rf.res_crit": 1.0
+    "runecraftory:defence": 1.0,
+    "runecraftory:res_crit": 1.0
   },
   "monsterBonus": {},
   "element": "NONE",

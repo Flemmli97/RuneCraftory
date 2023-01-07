@@ -3,7 +3,7 @@
   "sellPrice": 150,
   "upgradeDifficulty": 20,
   "itemStats": {
-    "runecraftory:attribute.rf.magic_att": 5.0
+    "runecraftory:magic_attack": 5.0
   },
   "monsterBonus": {},
   "element": "WATER",

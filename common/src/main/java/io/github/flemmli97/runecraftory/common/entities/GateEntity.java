@@ -88,7 +88,7 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Mob.createMobAttributes().add(ModAttributes.RF_DEFENCE.get()).add(ModAttributes.RF_MAGIC_DEFENCE.get())
+        return Mob.createMobAttributes().add(ModAttributes.DEFENCE.get()).add(ModAttributes.MAGIC_DEFENCE.get())
                 .add(ModAttributes.RFRESWATER.get()).add(ModAttributes.RFRESEARTH.get())
                 .add(ModAttributes.RFRESWIND.get()).add(ModAttributes.RFRESFIRE.get())
                 .add(ModAttributes.RFRESDARK.get()).add(ModAttributes.RFRESLIGHT.get())
@@ -153,8 +153,8 @@ public class GateEntity extends Mob implements IBaseMob {
 
     private void updateAttributes() {
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(MobConfig.gateHealth);
-        this.getAttribute(ModAttributes.RF_DEFENCE.get()).setBaseValue(MobConfig.gateDef);
-        this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).setBaseValue(MobConfig.gateMDef);
+        this.getAttribute(ModAttributes.DEFENCE.get()).setBaseValue(MobConfig.gateDef);
+        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).setBaseValue(MobConfig.gateMDef);
         this.setHealth(this.getMaxHealth());
     }
 
@@ -338,9 +338,9 @@ public class GateEntity extends Mob implements IBaseMob {
         float reduce = 0.0f;
         if (!damageSrc.isBypassMagic() && !damageSrc.isBypassArmor()) {
             if (damageSrc.isMagic()) {
-                reduce = (float) this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).getValue();
+                reduce = (float) this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).getValue();
             } else {
-                reduce = (float) this.getAttribute(ModAttributes.RF_DEFENCE.get()).getValue();
+                reduce = (float) this.getAttribute(ModAttributes.DEFENCE.get()).getValue();
             }
         }
         float min = reduce > damageAmount * 2 ? 0 : 0.5f;
@@ -412,10 +412,10 @@ public class GateEntity extends Mob implements IBaseMob {
     private void updateStatsToLevel() {
         this.getAttribute(Attributes.MAX_HEALTH).removeModifier(attributeLevelMod);
         this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateHealthGain, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(ModAttributes.RF_DEFENCE.get()).removeModifier(attributeLevelMod);
-        this.getAttribute(ModAttributes.RF_DEFENCE.get()).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADDITION));
-        this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).removeModifier(attributeLevelMod);
-        this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get()).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.DEFENCE.get()).removeModifier(attributeLevelMod);
+        this.getAttribute(ModAttributes.DEFENCE.get()).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateDefGain, AttributeModifier.Operation.ADDITION));
+        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).removeModifier(attributeLevelMod);
+        this.getAttribute(ModAttributes.MAGIC_DEFENCE.get()).addPermanentModifier(new AttributeModifier(attributeLevelMod, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.gateMDefGain, AttributeModifier.Operation.ADDITION));
         this.setHealth(this.getMaxHealth());
     }
 

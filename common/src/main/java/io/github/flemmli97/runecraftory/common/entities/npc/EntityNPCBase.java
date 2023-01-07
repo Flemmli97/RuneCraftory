@@ -233,15 +233,15 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (inst != null) {
             inst.setBaseValue(MobConfig.npcAttack);
         }
-        inst = this.getAttribute(ModAttributes.RF_DEFENCE.get());
+        inst = this.getAttribute(ModAttributes.DEFENCE.get());
         if (inst != null) {
             inst.setBaseValue(MobConfig.npcDefence);
         }
-        inst = this.getAttribute(ModAttributes.RF_MAGIC.get());
+        inst = this.getAttribute(ModAttributes.MAGIC.get());
         if (inst != null) {
             inst.setBaseValue(MobConfig.npcMagicAttack);
         }
-        inst = this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get());
+        inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.get());
         if (inst != null) {
             inst.setBaseValue(MobConfig.npcMagicDefence);
         }
@@ -486,19 +486,19 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
             inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
         }
-        inst = this.getAttribute(ModAttributes.RF_DEFENCE.get());
+        inst = this.getAttribute(ModAttributes.DEFENCE.get());
         if (inst != null) {
             inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
             inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
         }
-        inst = this.getAttribute(ModAttributes.RF_MAGIC.get());
+        inst = this.getAttribute(ModAttributes.MAGIC.get());
         if (inst != null) {
             inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
             inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcMagicAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
         }
-        inst = this.getAttribute(ModAttributes.RF_MAGIC_DEFENCE.get());
+        inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.get());
         if (inst != null) {
             inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);

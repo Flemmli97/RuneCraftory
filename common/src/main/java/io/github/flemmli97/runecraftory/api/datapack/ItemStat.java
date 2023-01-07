@@ -59,9 +59,9 @@ public class ItemStat {
     private static final Set<ResourceLocation> FLAT_ATTRIBUTES = Sets.newHashSet(
             new ResourceLocation("generic.max_health"),
             LibAttributes.GENERIC_ATTACK_DAMAGE,
-            LibAttributes.rf_defence,
-            LibAttributes.rf_magic,
-            LibAttributes.rf_magic_defence);
+            LibAttributes.defence,
+            LibAttributes.magic,
+            LibAttributes.magic_defence);
 
     private final Map<Attribute, Double> itemStats;
     private Map<Attribute, Double> monsterGiftIncrease = Map.of();
@@ -230,6 +230,8 @@ public class ItemStat {
                 list.add(new TranslatableComponent(prefix).withStyle(ChatFormatting.GRAY));
             }
             for (Map.Entry<Attribute, Double> entry : stats.entrySet()) {
+                if(entry.getKey() == ModAttributes.HEALTHGAIN.get() || entry.getKey() == ModAttributes.RPGAIN.get())
+                    continue;
                 MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(entry.getKey(), entry.getValue())));
                 list.add(comp.withStyle(ChatFormatting.BLUE));
             }

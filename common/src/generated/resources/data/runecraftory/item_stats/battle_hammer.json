@@ -4,7 +4,7 @@
   "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 10.0,
-    "runecraftory:attribute.rf.stun": 5.0
+    "runecraftory:stun": 5.0
   },
   "monsterBonus": {},
   "element": "NONE",

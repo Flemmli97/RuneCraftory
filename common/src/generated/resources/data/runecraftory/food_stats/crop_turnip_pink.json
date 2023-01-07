@@ -1,15 +1,12 @@
 {
+  "duration": 600,
+  "effects": {
+    "runecraftory:health_gain": 25.0,
+    "runecraftory:rp_increase": 5.0
+  },
+  "effectsPercentage": {},
   "cookingBonus": {},
   "potionApply": [],
   "potionRemove": [],
-  "duration": 600,
-  "effects": {},
-  "effectsPercentage": {},
-  "rpRegenPercent": 0,
-  "rpIncrease": 5,
-  "rpPercentIncrease": 0,
-  "hpRegen": 25,
-  "rpRegen": 0,
-  "hpRegenPercent": 0,
   "item": "runecraftory:crop_turnip_pink"
 }

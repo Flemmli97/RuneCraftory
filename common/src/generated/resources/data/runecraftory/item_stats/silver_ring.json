@@ -3,8 +3,8 @@
   "sellPrice": 600,
   "upgradeDifficulty": 0,
   "itemStats": {
-    "runecraftory:attribute.rf.res_dark": 50.0,
-    "runecraftory:attribute.rf.res_light": 50.0
+    "runecraftory:res_dark": 50.0,
+    "runecraftory:res_light": 50.0
   },
   "monsterBonus": {},
   "element": "NONE",
