@@ -26,7 +26,7 @@ public class ModEffects {
     public static final RegistryEntrySupplier<MobEffect> seal = EFFECTS.register("seal", () -> new PermanentEffect(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.Type.SEAL));
     public static final RegistryEntrySupplier<MobEffect> fatigue = EFFECTS.register("fatigue", () -> new PermanentEffect(MobEffectCategory.HARMFUL, 0, S2CEntityDataSync.Type.FATIGUE));
     public static final RegistryEntrySupplier<MobEffect> cold = EFFECTS.register("cold", ColdEffect::new);
-    public static final RegistryEntrySupplier<MobEffect> bath = EFFECTS.register("batth", BathEffect::new);
+    public static final RegistryEntrySupplier<MobEffect> bath = EFFECTS.register("bath", BathEffect::new);
 
     public static final RegistryEntrySupplier<MobEffect> trueInvis = EFFECTS.register("true_invis", TrueInvis::new);
 

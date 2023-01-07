@@ -9,7 +9,6 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class BathEffect extends MobEffect {
@@ -20,17 +19,18 @@ public class BathEffect extends MobEffect {
 
     @Override
     public void applyEffectTick(LivingEntity living, int amplifier) {
-        if (living instanceof ServerPlayer player && player.isInWater()) {
-            BlockState state = player.getFeetBlockState();
+        if (living.isInWater()) {
+            BlockState state = living.getFeetBlockState();
             if (state.getFluidState().is(FluidTags.WATER)) {
-                BlockState under = player.level.getBlockState(player.blockPosition().below());
-                BlockState under2 = player.level.getBlockState(player.blockPosition().below(2));
+                BlockState under = living.level.getBlockState(living.blockPosition().below());
+                BlockState under2 = living.level.getBlockState(living.blockPosition().below(2));
                 if (under.is(ModTags.ONSEN_PROVIDER) || under2.is(ModTags.ONSEN_PROVIDER)) {
-                    player.heal(player.getMaxHealth() * 0.02f);
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                        data.refreshRunePoints(player, Math.max(1, (int) (data.getMaxRunePoints() * 0.02f)));
-                        LevelCalc.levelSkill(player, data, EnumSkills.BATH, 1.5f);
-                    });
+                    living.heal(living.getMaxHealth() * 0.04f);
+                    if (living instanceof ServerPlayer player)
+                        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                            data.refreshRunePoints(player, Math.max(1, (int) (data.getMaxRunePoints() * 0.03f)));
+                            LevelCalc.levelSkill(player, data, EnumSkills.BATH, 2f);
+                        });
                 }
             }
         }
