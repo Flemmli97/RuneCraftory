@@ -14,7 +14,6 @@ import net.minecraft.world.entity.ai.attributes.RangedAttribute;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.function.Supplier;
 
 public class ModAttributes {
 

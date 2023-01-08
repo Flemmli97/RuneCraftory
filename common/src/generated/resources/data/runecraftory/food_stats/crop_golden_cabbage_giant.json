@@ -8,6 +8,7 @@
     "runecraftory:health_gain": 5.0
   },
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],
   "item": "runecraftory:crop_golden_cabbage_giant"

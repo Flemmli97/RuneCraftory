@@ -12,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemFertilizer;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
@@ -148,10 +147,7 @@ public class ClientCalls {
         if (shift) {
             FoodProperties food = DataPackHandler.foodManager().get(stack.getItem());
             if (food != null) {
-                if (stack.getItem() instanceof ItemMedicine)
-                    tooltip.addAll(food.medicineText((ItemMedicine) stack.getItem(), stack));
-                else
-                    tooltip.addAll(food.texts());
+                tooltip.addAll(food.texts(stack));
                 if (flag.isAdvanced())
                     debug.add(new TranslatableComponent("tooltip.debug.food", food.getId().toString()).withStyle(ChatFormatting.GRAY));
             }

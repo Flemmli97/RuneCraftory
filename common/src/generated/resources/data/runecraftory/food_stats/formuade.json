@@ -18,6 +18,7 @@
     "runecraftory:rp_increase": 75.0
   },
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],
   "item": "runecraftory:formuade"

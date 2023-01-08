@@ -7,6 +7,7 @@
   },
   "effectsPercentage": {},
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],
   "item": "runecraftory:onigiri"

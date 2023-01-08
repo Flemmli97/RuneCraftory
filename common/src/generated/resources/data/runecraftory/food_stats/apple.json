@@ -8,6 +8,7 @@
   "cookingBonus": {
     "minecraft:generic.max_health": 30.0
   },
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],
   "item": "minecraft:apple"

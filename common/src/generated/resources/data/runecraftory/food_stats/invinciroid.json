@@ -3,6 +3,7 @@
   "effects": {},
   "effectsPercentage": {},
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [
     "minecraft:poison",

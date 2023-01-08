@@ -12,6 +12,7 @@
     "runecraftory:rp_gain": 2.0
   },
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],
   "item": "runecraftory:baked_apple"

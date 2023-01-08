@@ -5,6 +5,7 @@
   },
   "effectsPercentage": {},
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [
     "runecraftory:seal"

@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.events;
 
 import com.google.common.collect.Sets;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
@@ -14,7 +15,6 @@ import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.ai.DisableGoal;
-import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
@@ -55,6 +55,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -318,14 +319,13 @@ public class EntityCalls {
                     if (data.foodBuffDuration() <= 0)
                         data.getDailyUpdater().onFoodEaten(player);
                     data.applyFoodEffect(player, stack);
-                    data.refreshRunePoints(player, prop.getRPRegen());
-                    data.refreshRunePoints(player, (int) (data.getMaxRunePoints() * prop.getRpPercentRegen() * 0.01));
+                    data.refreshRunePoints(player, prop.getRPRegen() + (int) (data.getMaxRunePoints() * prop.getRpPercentRegen() * 0.01));
                 });
             }
-            boolean medicine = stack.getItem() instanceof ItemMedicine;
-            int healthGain = medicine ? ((ItemMedicine) stack.getItem()).healthRegen(stack, prop) : prop.getHPGain();
+            Pair<Map<Attribute, Double>, Map<Attribute, Double>> map = ItemNBT.foodStats(stack);
+            int healthGain = map.getFirst().getOrDefault(ModAttributes.HEALTHGAIN.get(), 0d).intValue();
             EntityUtils.foodHealing(entity, healthGain);
-            int healthPercent = medicine ? ((ItemMedicine) stack.getItem()).healthRegenPercent(stack, prop) : prop.getHpPercentGain();
+            int healthPercent = map.getSecond().getOrDefault(ModAttributes.HEALTHGAIN.get(), 0d).intValue();
             EntityUtils.foodHealing(entity, entity.getMaxHealth() * healthPercent * 0.01F);
             if (prop.potionHeals() != null)
                 for (MobEffect s : prop.potionHeals()) {

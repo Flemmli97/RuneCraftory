@@ -9,6 +9,7 @@
   },
   "effectsPercentage": {},
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [
     {
       "potion": "minecraft:speed",

@@ -9,6 +9,7 @@
     "runecraftory:rp_increase": 5.0
   },
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],
   "item": "runecraftory:crop_golden_turnip_giant"

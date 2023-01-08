@@ -13,6 +13,7 @@
     "runecraftory:rp_increase": 20.0
   },
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],
   "item": "runecraftory:fried_veggies"

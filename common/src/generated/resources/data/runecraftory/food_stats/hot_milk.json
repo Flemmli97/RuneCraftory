@@ -9,6 +9,7 @@
     "runecraftory:rp_gain": 1.0
   },
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [
     {
       "potion": "minecraft:speed",

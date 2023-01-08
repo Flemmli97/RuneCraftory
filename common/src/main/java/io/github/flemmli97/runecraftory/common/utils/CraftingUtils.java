@@ -140,6 +140,15 @@ public class CraftingUtils {
     }
 
     public static ItemStack getCraftingOutput(ItemStack stack, PlayerContainerInv inv, Pair<NonNullList<ItemStack>, NonNullList<ItemStack>> materials, EnumCrafting type) {
+        if (type == EnumCrafting.COOKING) {
+            for (ItemStack base : materials.getFirst()) {
+                ItemNBT.addFoodBonusItem(stack, base);
+            }
+            for (ItemStack bonus : materials.getSecond()) {
+                ItemNBT.addFoodBonusItem(stack, bonus);
+            }
+            return stack;
+        }
         int i = 0;
         for (ItemStack bonus : materials.getSecond()) {
             i++;

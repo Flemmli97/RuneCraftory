@@ -2,7 +2,9 @@ package io.github.flemmli97.runecraftory.common.utils;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
@@ -116,6 +118,39 @@ public class ItemNBT {
         return map;
     }
 
+    public static Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats(ItemStack stack) {
+        FoodProperties props = DataPackHandler.foodManager().get(stack.getItem());
+        if (props == null)
+            return Pair.of(new TreeMap<>(ModAttributes.SORTED), new TreeMap<>(ModAttributes.SORTED));
+        CompoundTag compound = getItemNBT(stack);
+        if (compound == null) {
+            return Pair.of(props.effects(), props.effectsMultiplier());
+        }
+        Map<Attribute, Double> map;
+        Map<Attribute, Double> mapMulti;
+        if (compound.contains(LibNBT.FoodStats)) {
+            CompoundTag tag = compound.getCompound(LibNBT.FoodStats);
+            map = new TreeMap<>(ModAttributes.SORTED);
+            for (String attName : tag.getAllKeys()) {
+                Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
+                if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(attName))
+                    map.put(att, tag.getDouble(attName));
+            }
+        } else
+            map = props.effects();
+        if (compound.contains(LibNBT.FoodStatsMult)) {
+            CompoundTag tag = compound.getCompound(LibNBT.FoodStatsMult);
+            mapMulti = new TreeMap<>(ModAttributes.SORTED);
+            for (String attName : tag.getAllKeys()) {
+                Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
+                if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(attName))
+                    mapMulti.put(att, tag.getDouble(attName));
+            }
+        } else
+            mapMulti = props.effectsMultiplier();
+        return Pair.of(map, mapMulti);
+    }
+
     public static void setElement(EnumElement element, ItemStack stack) {
         CompoundTag tag = getItemNBT(stack);
         if (tag != null) {
@@ -225,6 +260,57 @@ public class ItemNBT {
                     if (stat.getTier3Spell() != null)
                         data.setTier3Spell(stat.getTier3Spell());
                 });
+            }
+        }
+        CompoundTag stackTag = stack.getOrCreateTag();
+        stackTag.put(RuneCraftory.MODID, tag);
+        return stack;
+    }
+
+    public static ItemStack addFoodBonusItem(ItemStack stack, ItemStack stackToAdd) {
+        if (stackToAdd.isEmpty())
+            return ItemStack.EMPTY;
+        CompoundTag tag = getItemNBT(stack);
+        if (tag == null)
+            tag = new CompoundTag();
+        ListTag bonus = tag.getList(LibNBT.Upgrades, Tag.TAG_COMPOUND);
+        CompoundTag bonusItem = new CompoundTag();
+        bonusItem.putString("Id", PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString());
+        bonusItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
+        bonus.add(bonusItem);
+        tag.put(LibNBT.CraftingBonus, bonus);
+
+        FoodProperties props = DataPackHandler.foodManager().get(stackToAdd.getItem());
+        if (props != null) {
+            if (!tag.contains(LibNBT.FoodStats)) {
+                FoodProperties base = DataPackHandler.foodManager().get(stack.getItem());
+                if (base != null) {
+                    CompoundTag statsTag = new CompoundTag();
+                    for (Map.Entry<Attribute, Double> entry : base.effects().entrySet()) {
+                        statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
+                    }
+                    tag.put(LibNBT.FoodStats, statsTag);
+                    statsTag = new CompoundTag();
+                    for (Map.Entry<Attribute, Double> entry : base.effectsMultiplier().entrySet()) {
+                        statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
+                    }
+                    tag.put(LibNBT.FoodStatsMult, statsTag);
+                }
+            }
+            boolean hasObjectX = tag.getBoolean(LibNBT.ObjectX);
+            if (stackToAdd.getItem() == ModItems.objectX.get())
+                tag.putBoolean(LibNBT.ObjectX, !hasObjectX);
+            for (Map.Entry<Attribute, Double> entry : props.cookingBonus().entrySet()) {
+                double amount = entry.getValue();
+                if (hasObjectX)
+                    amount *= -1;
+                updateStatIncrease(entry.getKey(), amount, tag.getCompound(LibNBT.FoodStats));
+            }
+            for (Map.Entry<Attribute, Double> entry : props.cookingBonusPercent().entrySet()) {
+                double amount = entry.getValue();
+                if (hasObjectX)
+                    amount *= -1;
+                updateStatIncrease(entry.getKey(), amount, tag.getCompound(LibNBT.FoodStatsMult));
             }
         }
         CompoundTag stackTag = stack.getOrCreateTag();

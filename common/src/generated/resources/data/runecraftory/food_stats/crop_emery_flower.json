@@ -6,6 +6,7 @@
     "runecraftory:rp_gain": 5.0
   },
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],
   "item": "runecraftory:crop_emery_flower"

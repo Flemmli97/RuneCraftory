@@ -9,6 +9,7 @@
   },
   "effectsPercentage": {},
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],
   "item": "runecraftory:pickled_turnip"

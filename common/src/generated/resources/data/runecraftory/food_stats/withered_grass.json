@@ -5,6 +5,7 @@
     "runecraftory:rp_gain": -35.0
   },
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [
     {
       "potion": "runecraftory:poison",

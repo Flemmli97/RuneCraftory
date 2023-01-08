@@ -10,6 +10,7 @@
     "runecraftory:magic_defence": -10.0
   },
   "cookingBonus": {},
+  "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],
   "item": "runecraftory:failed_dish"

@@ -230,7 +230,7 @@ public class ItemStat {
                 list.add(new TranslatableComponent(prefix).withStyle(ChatFormatting.GRAY));
             }
             for (Map.Entry<Attribute, Double> entry : stats.entrySet()) {
-                if(entry.getKey() == ModAttributes.HEALTHGAIN.get() || entry.getKey() == ModAttributes.RPGAIN.get())
+                if (entry.getKey() == ModAttributes.HEALTHGAIN.get() || entry.getKey() == ModAttributes.RPGAIN.get())
                     continue;
                 MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(entry.getKey(), entry.getValue())));
                 list.add(comp.withStyle(ChatFormatting.BLUE));

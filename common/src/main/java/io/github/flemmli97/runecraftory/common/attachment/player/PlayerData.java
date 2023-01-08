@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
+import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
@@ -89,7 +90,6 @@ public class PlayerData {
     private final InventoryShippingBin shipping = new InventoryShippingBin();
     //Food buff
     private Item lastFood;
-    private int rpFoodBuff;
     private Map<Attribute, Double> foodBuffs = new HashMap<>();
     private int foodDuration;
 
@@ -130,7 +130,7 @@ public class PlayerData {
     }
 
     public int getMaxRunePoints() {
-        return (int) (this.runePointsMax + this.rpFoodBuff);
+        return (int) (this.runePointsMax + this.foodBuffs.getOrDefault(ModAttributes.RPINCREASE.get(), 0d));
     }
 
     public float getMaxRunePointsRaw() {
@@ -479,13 +479,16 @@ public class PlayerData {
 
     public void applyFoodEffect(Player player, ItemStack stack) {
         this.removeFoodEffect(player);
+        Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
         FoodProperties prop = DataPackHandler.foodManager().get(stack.getItem());
-        Map<Attribute, Double> gain = prop.effects();
-        prop.effectsMultiplier().forEach((att, d) -> {
+        Map<Attribute, Double> gain = foodStats.getFirst();
+        foodStats.getSecond().forEach((att, d) -> {
             float percent = (float) (d * 0.01f);
             double mult = 0;
             if (att == Attributes.MAX_HEALTH)
                 mult += player.getMaxHealth() * percent;
+            else if (att == ModAttributes.RPINCREASE.get())
+                mult += this.runePointsMax * percent;
             else if (att == Attributes.ATTACK_DAMAGE)
                 mult += this.str * percent;
             else if (att == ModAttributes.DEFENCE.get())
@@ -497,7 +500,6 @@ public class PlayerData {
             mult += gain.getOrDefault(att, 0d);
             gain.put(att, mult);
         });
-        this.rpFoodBuff = (int) this.runePointsMax * prop.getRpPercentIncrease() + prop.getRpIncrease();
         this.foodBuffs = gain;
         if (this.foodBuffs.containsKey(Attributes.MAX_HEALTH))
             this.setFoodHealthBonus(player, this.foodBuffs.get(Attributes.MAX_HEALTH));
@@ -511,16 +513,11 @@ public class PlayerData {
     public void removeFoodEffect(Player player) {
         this.foodBuffs = Collections.emptyMap();
         this.foodDuration = -1;
-        this.rpFoodBuff = 0;
         this.lastFood = null;
         this.setFoodHealthBonus(player, 0);
         if (player instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.sendToClient(new S2CFoodPkt(null), serverPlayer);
         }
-    }
-
-    public int rpFoodBuff() {
-        return this.rpFoodBuff;
     }
 
     public Map<Attribute, Double> foodEffects() {
@@ -540,7 +537,6 @@ public class PlayerData {
             compound3.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
         }
         nbt.put("FoodBuffs", compound3);
-        nbt.putInt("FoodBuffRP", this.rpFoodBuff);
         nbt.putInt("FoodBuffDuration", this.foodDuration);
         return nbt;
     }
@@ -554,7 +550,6 @@ public class PlayerData {
                 this.foodBuffs.put(PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(s)), tag.getDouble(s));
             }
         }
-        this.rpFoodBuff = nbt.getInt("FoodBuffRP");
         this.foodDuration = nbt.getInt("FoodBuffDuration");
     }
 

@@ -547,14 +547,15 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             return false;
         }
         this.eat(this.level, stack);
-        for (Map.Entry<Attribute, Double> entry : food.effectsMultiplier().entrySet()) {
+        Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
+        for (Map.Entry<Attribute, Double> entry : foodStats.getSecond().entrySet()) {
             AttributeInstance inst = this.getAttribute(entry.getKey());
             if (inst == null)
                 continue;
             inst.removeModifier(LibConstants.FOOD_UUID_MULTI);
             inst.addPermanentModifier(new AttributeModifier(LibConstants.FOOD_UUID_MULTI, "foodBuffMulti_" + entry.getKey().getDescriptionId(), entry.getValue(), AttributeModifier.Operation.MULTIPLY_BASE));
         }
-        for (Map.Entry<Attribute, Double> entry : food.effects().entrySet()) {
+        for (Map.Entry<Attribute, Double> entry : foodStats.getFirst().entrySet()) {
             AttributeInstance inst = this.getAttribute(entry.getKey());
             if (inst == null)
                 continue;
