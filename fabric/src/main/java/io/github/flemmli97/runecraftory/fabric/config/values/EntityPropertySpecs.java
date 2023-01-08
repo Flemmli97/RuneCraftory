@@ -55,7 +55,7 @@ public class EntityPropertySpecs {
         if (spec.flying.get())
             builder.setFlying();
         builder.setBarnOccupancy(spec.size.get());
-        if(!spec.needsRoof.get())
+        if (!spec.needsRoof.get())
             builder.doesntNeedBarnRoof();
         return builder.build();
     }

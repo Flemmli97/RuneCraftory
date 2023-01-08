@@ -437,7 +437,7 @@ public class PlayerData {
     public void refreshShop(Player player) {
         if (!player.level.isClientSide) {
             for (EnumShop profession : EnumShop.values()) {
-                Collection<ShopItemProperties> datapack = DataPackHandler.shopItemsManager().get(profession);
+                Collection<ShopItemProperties> datapack = DataPackHandler.SERVER_PACK.shopItemsManager().get(profession);
                 List<ItemStack> shopItems = new ArrayList<>();
                 datapack.forEach(item -> {
                     if (!item.needsSpecialUnlocking() && this.shippedItems.containsKey(PlatformUtils.INSTANCE.items().getIDFrom(item.stack().getItem())))
@@ -452,7 +452,7 @@ public class PlayerData {
                             break;
                     }
                 }
-                DataPackHandler.shopItemsManager().getDefaultItems(profession).forEach(item -> shop.add(item.stack().copy()));
+                DataPackHandler.SERVER_PACK.shopItemsManager().getDefaultItems(profession).forEach(item -> shop.add(item.stack().copy()));
                 this.shopItems.put(profession, shop);
             }
         }
@@ -480,7 +480,7 @@ public class PlayerData {
     public void applyFoodEffect(Player player, ItemStack stack) {
         this.removeFoodEffect(player);
         Pair<Map<Attribute, Double>, Map<Attribute, Double>> foodStats = ItemNBT.foodStats(stack);
-        FoodProperties prop = DataPackHandler.foodManager().get(stack.getItem());
+        FoodProperties prop = DataPackHandler.SERVER_PACK.foodManager().get(stack.getItem());
         Map<Attribute, Double> gain = foodStats.getFirst();
         foodStats.getSecond().forEach((att, d) -> {
             float percent = (float) (d * 0.01f);

@@ -1,11 +1,9 @@
 package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 
 public class S2CDataPackSync implements Packet {
 
@@ -25,9 +23,6 @@ public class S2CDataPackSync implements Packet {
     }
 
     public static void handle(S2CDataPackSync pkt) {
-        Player player = ClientHandlers.getPlayer();
-        if (player == null)
-            return;
         DataPackHandler.fromPacket(pkt.buffer);
     }
 

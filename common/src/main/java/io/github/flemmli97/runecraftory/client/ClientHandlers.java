@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.ShopState;
@@ -43,6 +44,8 @@ import java.util.Random;
 public class ClientHandlers {
 
     public static final CalendarImpl clientCalendar = new CalendarImpl();
+
+    public static final DataPackHandler CLIENT_PACK = new DataPackHandler();
 
     public static OverlayGui overlay;
     public static SpellInvOverlayGui spellDisplay;

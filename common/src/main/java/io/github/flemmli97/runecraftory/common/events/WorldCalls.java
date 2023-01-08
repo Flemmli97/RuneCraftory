@@ -64,7 +64,7 @@ public class WorldCalls {
 
     public static boolean disableVanillaCrop(LevelAccessor level, BlockState state, BlockPos pos) {
         if (state.getBlock() instanceof CropBlock crop) {
-            CropProperties prop = DataPackHandler.cropManager().get(crop.getCloneItemStack(level, pos, state).getItem());
+            CropProperties prop = DataPackHandler.SERVER_PACK.cropManager().get(crop.getCloneItemStack(level, pos, state).getItem());
             return prop != null;
         }
         return false;

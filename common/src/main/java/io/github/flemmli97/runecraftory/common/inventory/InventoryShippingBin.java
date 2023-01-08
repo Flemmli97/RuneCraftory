@@ -19,7 +19,7 @@ public class InventoryShippingBin extends SaveItemContainer {
 
     @Override
     public boolean canPlaceItem(int index, ItemStack stack) {
-        return DataPackHandler.itemStatManager().get(stack.getItem()).map(ItemStat::getSell).orElse(0) > 0;
+        return DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).map(ItemStat::getSell).orElse(0) > 0;
     }
 
     public void shipItems(ServerPlayer player) {

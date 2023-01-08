@@ -10,7 +10,6 @@ import io.github.flemmli97.runecraftory.client.gui.widgets.SkillButton;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemFertilizer;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
@@ -133,19 +132,19 @@ public class ClientCalls {
         List<Component> tooltip = new ArrayList<>();
         boolean shift = Screen.hasShiftDown();
         List<Component> debug = new ArrayList<>();
-        DataPackHandler.itemStatManager().get(stack.getItem()).ifPresent(stat -> {
+        ClientHandlers.CLIENT_PACK.itemStatManager().get(stack.getItem()).ifPresent(stat -> {
             tooltip.addAll(stat.texts(stack, shift));
             if (flag.isAdvanced())
                 debug.add(new TranslatableComponent("tooltip.debug.stat", stat.getId().toString()).withStyle(ChatFormatting.GRAY));
         });
-        CropProperties props = DataPackHandler.cropManager().get(stack.getItem());
+        CropProperties props = ClientHandlers.CLIENT_PACK.cropManager().get(stack.getItem());
         if (props != null) {
             tooltip.addAll(props.texts());
             if (flag.isAdvanced())
                 debug.add(new TranslatableComponent("tooltip.debug.crop", props.getId().toString()).withStyle(ChatFormatting.GRAY));
         }
         if (shift) {
-            FoodProperties food = DataPackHandler.foodManager().get(stack.getItem());
+            FoodProperties food = ClientHandlers.CLIENT_PACK.foodManager().get(stack.getItem());
             if (food != null) {
                 tooltip.addAll(food.texts(stack));
                 if (flag.isAdvanced())

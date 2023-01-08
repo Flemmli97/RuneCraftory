@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameAndGiftManager;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 
@@ -16,7 +15,7 @@ import java.util.function.Consumer;
 
 public class DataPackHandler {
 
-    private static final DataPackHandler SERVER_PACK = new DataPackHandler();
+    public static final DataPackHandler SERVER_PACK = new DataPackHandler();
 
     private final ItemStatManager itemStats = new ItemStatManager();
     private final CropManager crops = new CropManager();
@@ -48,34 +47,6 @@ public class DataPackHandler {
         cons.accept(SERVER_PACK.npcLooks);
     }
 
-    public static ItemStatManager itemStatManager() {
-        return SERVER_PACK.itemStats;
-    }
-
-    public static CropManager cropManager() {
-        return SERVER_PACK.crops;
-    }
-
-    public static FoodManager foodManager() {
-        return SERVER_PACK.foods;
-    }
-
-    public static ShopItemsManager shopItemsManager() {
-        return SERVER_PACK.shopItems;
-    }
-
-    public static NameAndGiftManager nameAndGiftManager() {
-        return SERVER_PACK.nameAndGifts;
-    }
-
-    public static NPCDataManager npcDataManager() {
-        return SERVER_PACK.npcData;
-    }
-
-    public static NPCLookManager npcLookManager() {
-        return SERVER_PACK.npcLooks;
-    }
-
     public static void toPacket(FriendlyByteBuf buffer) {
         SERVER_PACK.itemStats.toPacket(buffer);
         SERVER_PACK.crops.toPacket(buffer);
@@ -86,5 +57,33 @@ public class DataPackHandler {
         ClientHandlers.CLIENT_PACK.itemStats.fromPacket(buffer);
         ClientHandlers.CLIENT_PACK.crops.fromPacket(buffer);
         ClientHandlers.CLIENT_PACK.foods.fromPacket(buffer);
+    }
+
+    public ItemStatManager itemStatManager() {
+        return this.itemStats;
+    }
+
+    public CropManager cropManager() {
+        return this.crops;
+    }
+
+    public FoodManager foodManager() {
+        return this.foods;
+    }
+
+    public ShopItemsManager shopItemsManager() {
+        return this.shopItems;
+    }
+
+    public NameAndGiftManager nameAndGiftManager() {
+        return this.nameAndGifts;
+    }
+
+    public NPCDataManager npcDataManager() {
+        return this.npcData;
+    }
+
+    public NPCLookManager npcLookManager() {
+        return this.npcLooks;
     }
 }

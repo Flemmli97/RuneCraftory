@@ -177,7 +177,7 @@ public class FarmBlockEntity extends BlockEntity implements IDailyUpdate {
                 if (crop.isMaxAge(cropState)) {
                     this.age = 0;
                 } else {
-                    CropProperties props = DataPackHandler.cropManager().get(crop.asItem());
+                    CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.asItem());
                     if (props != null) {
                         float season = props.seasonMultiplier(WorldHandler.get(level.getServer()).currentSeason());
                         float runeyBonus = WorldHandler.get(level.getServer()).currentWeather() == EnumWeather.RUNEY ? 5 : 1;

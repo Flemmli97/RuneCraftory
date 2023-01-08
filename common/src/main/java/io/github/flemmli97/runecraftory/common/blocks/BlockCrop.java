@@ -121,7 +121,7 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
     }
 
     public Optional<CropProperties> properties() {
-        return Optional.ofNullable(DataPackHandler.cropManager().get(this.seed.get()));
+        return Optional.ofNullable(DataPackHandler.SERVER_PACK.cropManager().get(this.seed.get()));
     }
 
     @Override

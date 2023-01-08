@@ -536,7 +536,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (stack.getItem() == ModItems.objectX.get())
             ItemObjectX.applyEffect(this, stack);
         this.removeFoodEffect();
-        FoodProperties food = DataPackHandler.foodManager().get(stack.getItem());
+        FoodProperties food = DataPackHandler.SERVER_PACK.foodManager().get(stack.getItem());
         if (food == null) {
             net.minecraft.world.food.FoodProperties mcFood = stack.getItem().getFoodProperties();
             this.eat(this.level, stack);
@@ -681,7 +681,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         compound.putBoolean("Male", this.isMale());
 
         if (this.data != NPCData.DEFAULT_DATA)
-            compound.putString("NPCData", DataPackHandler.npcDataManager().get(this.data).toString());
+            compound.putString("NPCData", DataPackHandler.SERVER_PACK.npcDataManager().get(this.data).toString());
     }
 
     @Override
@@ -705,7 +705,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.schedule.load(compound.getCompound("Schedule"));
         this.stayHere(compound.getBoolean("Staying"));
         if (compound.contains("NPCData"))
-            this.setNPCData(DataPackHandler.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))));
+            this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))));
         if (this.data.gender() == NPCData.Gender.UNDEFINED)
             this.setMale(compound.getBoolean("Male"));
         if (this.data.profession() == null) {
@@ -973,9 +973,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             if (this.data == NPCData.DEFAULT_DATA)
                 this.look = NPCData.NPCLook.DEFAULT_LOOK;
             else if (this.data.look() != null)
-                this.look = DataPackHandler.npcLookManager().get(this.data.look());
+                this.look = DataPackHandler.SERVER_PACK.npcLookManager().get(this.data.look());
             else
-                this.look = DataPackHandler.npcLookManager().getRandom(this.random, this.isMale());
+                this.look = DataPackHandler.SERVER_PACK.npcLookManager().getRandom(this.random, this.isMale());
         }
         return this.look;
     }
@@ -1002,7 +1002,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public NPCData.Gift giftOf(ItemStack stack) {
         for (Map.Entry<String, NPCData.Gift> e : this.data.giftItems().entrySet()) {
-            TagKey<Item> tag = e.getValue().item() == null ? this.gift.computeIfAbsent(e.getKey(), s -> DataPackHandler.nameAndGiftManager().getRandomGift(NPCData.GiftType.ofXP(e.getValue().xp()), this.random)) : e.getValue().item();
+            TagKey<Item> tag = e.getValue().item() == null ? this.gift.computeIfAbsent(e.getKey(), s -> DataPackHandler.SERVER_PACK.nameAndGiftManager().getRandomGift(NPCData.GiftType.ofXP(e.getValue().xp()), this.random)) : e.getValue().item();
             if (tag == null || stack.is(tag))
                 return e.getValue();
         }
@@ -1037,7 +1037,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void randomizeData() {
-        this.setNPCData(DataPackHandler.npcDataManager().getRandom(this.random));
+        this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().getRandom(this.random));
         this.schedule.load(new NPCSchedule(this, this.random).save());
     }
 
@@ -1052,9 +1052,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 name += " " + this.data.surname();
             this.setCustomName(new TextComponent(name));
         } else {
-            name = DataPackHandler.nameAndGiftManager().getRandomName(this.random, this.isMale());
+            name = DataPackHandler.SERVER_PACK.nameAndGiftManager().getRandomName(this.random, this.isMale());
             if (name != null) {
-                String surname = DataPackHandler.nameAndGiftManager().getRandomSurname(this.random);
+                String surname = DataPackHandler.SERVER_PACK.nameAndGiftManager().getRandomSurname(this.random);
                 if (surname != null)
                     name = name + " " + surname;
                 this.setCustomName(new TextComponent(name));
