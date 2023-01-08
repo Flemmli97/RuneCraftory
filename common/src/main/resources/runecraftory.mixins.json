@@ -36,7 +36,8 @@
     "LivingEntityRendererMixin",
     "HumanoidModelMixin",
     "PlayerRendererMixin",
-    "LevelRendererMixin"
+    "LevelRendererMixin",
+    "ItemInHandRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

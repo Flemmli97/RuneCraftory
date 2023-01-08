@@ -99,7 +99,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
     }
 
     public int getWater(ItemStack stack) {
-        return stack.getOrCreateTag().getInt(LibNBT.WateringCanWater);
+        return stack.getOrCreateTag().getInt(LibNBT.WATERING_CAN_WATER);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
         ItemStack itemstack = player.getItemInHand(hand);
         BlockState state = world.getBlockState(ray.getBlockPos());
         if (state.getFluidState().getType() == Fluids.WATER) {
-            itemstack.getOrCreateTag().putInt(LibNBT.WateringCanWater, this.maxWater());
+            itemstack.getOrCreateTag().putInt(LibNBT.WATERING_CAN_WATER, this.maxWater());
             world.setBlock(ray.getBlockPos(), state.getFluidState().createLegacyBlock(), 3);
             player.playSound(SoundEvents.BUCKET_FILL, 1.0f, 1.0f);
             return InteractionResultHolder.success(itemstack);
@@ -227,7 +227,7 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
         if ((creative || water > 0) && state.is(ModBlocks.farmland.get()) && state.getValue(FarmBlock.MOISTURE) != 7) {
             BlockFarm.waterLand(world, pos, state);
             if (!creative) {
-                stack.getTag().putInt(LibNBT.WateringCanWater, water - 1);
+                stack.getTag().putInt(LibNBT.WATERING_CAN_WATER, water - 1);
             }
             return true;
         }

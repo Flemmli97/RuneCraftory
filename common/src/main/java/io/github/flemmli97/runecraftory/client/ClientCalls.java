@@ -117,7 +117,7 @@ public class ClientCalls {
                 CompoundTag tag = stack.getTag();
                 if (tag.contains("HideFlags", 99))
                     showTooltip = (stack.getTag().getInt("HideFlags") & 0x20) == 0x0;
-                if (tag.getCompound(RuneCraftory.MODID).contains(LibNBT.CraftingBonus) && tooltip.get(0) instanceof MutableComponent mut)
+                if (tag.getCompound(RuneCraftory.MODID).contains(LibNBT.CRAFTING_BONUS) && tooltip.get(0) instanceof MutableComponent mut)
                     mut.withStyle(ChatFormatting.AQUA);
             }
             if (showTooltip) {

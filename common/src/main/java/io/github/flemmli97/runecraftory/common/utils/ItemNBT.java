@@ -28,7 +28,10 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 import java.util.List;
 import java.util.Map;
@@ -69,7 +72,7 @@ public class ItemNBT {
 
     public static int itemLevel(ItemStack stack) {
         CompoundTag tag = getItemNBT(stack);
-        return tag != null ? Math.max(1, tag.getInt(LibNBT.Level)) : 1;
+        return tag != null ? Math.max(1, tag.getInt(LibNBT.LEVEL)) : 1;
     }
 
     public static boolean addItemLevel(ItemStack stack) {
@@ -77,7 +80,7 @@ public class ItemNBT {
         if (level < 10) {
             CompoundTag tag = getItemNBT(stack);
             if (tag != null) {
-                tag.putInt(LibNBT.Level, level + 1);
+                tag.putInt(LibNBT.LEVEL, level + 1);
                 return true;
             }
         }
@@ -88,7 +91,7 @@ public class ItemNBT {
         if (shouldHaveLevel(stack)) {
             CompoundTag compound = ItemNBT.getItemNBT(stack);
             if (compound != null) {
-                compound.putInt(LibNBT.Level, Mth.clamp(level, 1, 10));
+                compound.putInt(LibNBT.LEVEL, Mth.clamp(level, 1, 10));
             }
         }
         return stack;
@@ -96,11 +99,17 @@ public class ItemNBT {
 
     public static Map<Attribute, Double> statIncrease(ItemStack stack) {
         CompoundTag compound = getItemNBT(stack);
-        if (compound == null || !compound.contains(LibNBT.Stats)) {
+        if (compound == null || !compound.contains(LibNBT.BASE)) {
             return DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).map(ItemStat::itemStats).orElse(new TreeMap<>(ModAttributes.SORTED));
         }
-        CompoundTag tag = compound.getCompound(LibNBT.Stats);
         Map<Attribute, Double> map = new TreeMap<>(ModAttributes.SORTED);
+        CompoundTag base = compound.getCompound(LibNBT.BASE);
+        for (String attName : base.getAllKeys()) {
+            Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
+            if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(attName))
+                map.put(att, base.getDouble(attName));
+        }
+        CompoundTag tag = compound.getCompound(LibNBT.STATS);
         for (String attName : tag.getAllKeys()) {
             Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
             if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(attName))
@@ -128,8 +137,8 @@ public class ItemNBT {
         }
         Map<Attribute, Double> map;
         Map<Attribute, Double> mapMulti;
-        if (compound.contains(LibNBT.FoodStats)) {
-            CompoundTag tag = compound.getCompound(LibNBT.FoodStats);
+        if (compound.contains(LibNBT.FOOD_STATS)) {
+            CompoundTag tag = compound.getCompound(LibNBT.FOOD_STATS);
             map = new TreeMap<>(ModAttributes.SORTED);
             for (String attName : tag.getAllKeys()) {
                 Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
@@ -138,8 +147,8 @@ public class ItemNBT {
             }
         } else
             map = props.effects();
-        if (compound.contains(LibNBT.FoodStatsMult)) {
-            CompoundTag tag = compound.getCompound(LibNBT.FoodStatsMult);
+        if (compound.contains(LibNBT.FOOD_STATS_MULT)) {
+            CompoundTag tag = compound.getCompound(LibNBT.FOOD_STATS_MULT);
             mapMulti = new TreeMap<>(ModAttributes.SORTED);
             for (String attName : tag.getAllKeys()) {
                 Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
@@ -154,10 +163,10 @@ public class ItemNBT {
     public static void setElement(EnumElement element, ItemStack stack) {
         CompoundTag tag = getItemNBT(stack);
         if (tag != null) {
-            if (EnumElement.valueOf(tag.getString(LibNBT.Element)) == EnumElement.NONE) {
-                tag.putString(LibNBT.Element, element.toString());
+            if (EnumElement.valueOf(tag.getString(LibNBT.ELEMENT)) == EnumElement.NONE) {
+                tag.putString(LibNBT.ELEMENT, element.toString());
             } else {
-                tag.putString(LibNBT.Element, EnumElement.NONE.toString());
+                tag.putString(LibNBT.ELEMENT, EnumElement.NONE.toString());
             }
         }
     }
@@ -166,7 +175,7 @@ public class ItemNBT {
         CompoundTag tag = getItemNBT(stack);
         if (tag != null) {
             try {
-                return EnumElement.valueOf(tag.getString(LibNBT.Element));
+                return EnumElement.valueOf(tag.getString(LibNBT.ELEMENT));
             } catch (IllegalArgumentException e) {
                 return EnumElement.NONE;
             }
@@ -177,16 +186,38 @@ public class ItemNBT {
     public static ItemStack addUpgradeItem(ItemStack stack, ItemStack stackToAdd, boolean crafting, EnumCrafting type) {
         int level = itemLevel(stack);
         if (stackToAdd.isEmpty() || !ItemNBT.shouldHaveStats(stack) || level >= 10)
-            return ItemStack.EMPTY;
+            return stack;
         CompoundTag tag = getItemNBT(stack);
         if (tag == null)
             tag = new CompoundTag();
-        tag.putInt(LibNBT.Level, !crafting ? level + 1 : level);
+        if (ItemNBT.shouldHaveStats(stackToAdd)) {
+            if (!crafting || tag.contains(LibNBT.ORIGINITEM))
+                return stack;
+            boolean lightOreApplied = tag.getBoolean(LibNBT.LIGHTORETAG);
+            if (stack.is(ModTags.EQUIPMENT)) {
+                if (!stackToAdd.is(ModTags.EQUIPMENT))
+                    return stack;
+                if (lightOreApplied)
+                    return changeBaseItemTo(stack, stackToAdd, type);
+                else if (stack.getItem() instanceof ArmorItem armor1 && stackToAdd.getItem() instanceof ArmorItem armor2 && armor1.getSlot() == armor2.getSlot())
+                    return changeBaseItemTo(stack, stackToAdd, type);
+            }
+            if (stack.is(ModTags.UPGRADABLE_HELD)) {
+                if (!stackToAdd.is(ModTags.UPGRADABLE_HELD))
+                    return stack;
+                if (lightOreApplied)
+                    return changeBaseItemTo(stack, stackToAdd, type);
+                else if (stack.getItem() instanceof IItemUsable armor1 && stackToAdd.getItem() instanceof IItemUsable armor2 && armor1.getWeaponType() == armor2.getWeaponType())
+                    return changeBaseItemTo(stack, stackToAdd, type);
+            }
+            return stack;
+        }
+        tag.putInt(LibNBT.LEVEL, !crafting ? level + 1 : level);
 
         float efficiency = 1;
         if (!crafting) {
             int similar = 0;
-            ListTag upgrades = tag.getList(LibNBT.Upgrades, Tag.TAG_COMPOUND);
+            ListTag upgrades = tag.getList(LibNBT.UPGRADES, Tag.TAG_COMPOUND);
             //Searches for items, which are already applied to the itemstack. Reduces the efficiency for each identical item found.
             for (Tag item : upgrades) {
                 CompoundTag nbt = (CompoundTag) item;
@@ -199,56 +230,65 @@ public class ItemNBT {
             upgradeItem.putString("Id", PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString());
             upgradeItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
             upgrades.add(upgradeItem);
-            tag.put(LibNBT.Upgrades, upgrades);
+            tag.put(LibNBT.UPGRADES, upgrades);
         } else {
-            ListTag bonus = tag.getList(LibNBT.Upgrades, Tag.TAG_COMPOUND);
+            ListTag bonus = tag.getList(LibNBT.CRAFTING_BONUS, Tag.TAG_COMPOUND);
             CompoundTag bonusItem = new CompoundTag();
             bonusItem.putString("Id", PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString());
             bonusItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
             bonus.add(bonusItem);
-            tag.put(LibNBT.CraftingBonus, bonus);
+            tag.put(LibNBT.CRAFTING_BONUS, bonus);
         }
+        //Special Item Tags
         if (stackToAdd.getItem() == ModItems.glass.get() && stack.getItem() instanceof IItemUsable)
-            tag.putBoolean(LibNBT.MagnifyingGlass, true);
+            tag.putBoolean(LibNBT.MAGNIFYING_GLASS, true);
         if (stackToAdd.getItem() == ModItems.scrapPlus.get() && stack.getItem() instanceof IItemUsable)
-            tag.putBoolean(LibNBT.ScrapMetalPlus, true);
-        boolean hasObjectX = tag.getBoolean(LibNBT.ObjectX);
+            tag.putBoolean(LibNBT.SCRAP_METAL_PLUS, true);
+        boolean hasObjectX = tag.getBoolean(LibNBT.OBJECT_X);
         if (stackToAdd.getItem() == ModItems.objectX.get())
-            tag.putBoolean(LibNBT.ObjectX, !hasObjectX);
+            tag.putBoolean(LibNBT.OBJECT_X, !hasObjectX);
+        if (type == EnumCrafting.FORGE && stackToAdd.getItem() == ModItems.invisStone.get())
+            tag.putBoolean(LibNBT.INVIS, true);
+        if (crafting && stackToAdd.getItem() == ModItems.lightOre.get() && !tag.contains(LibNBT.ORIGINITEM))
+            tag.putBoolean(LibNBT.LIGHTORETAG, true);
+
         ItemStat stat = DataPackHandler.SERVER_PACK.itemStatManager().get(stackToAdd.getItem()).orElse(null);
         if (stat != null) {
-            if (!tag.contains(LibNBT.Stats) && !stat.itemStats().isEmpty()) {
+            if (!tag.contains(LibNBT.BASE) && !stat.itemStats().isEmpty()) {
                 ItemStat base = DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem()).orElse(null);
                 if (base != null) {
                     CompoundTag statsTag = new CompoundTag();
                     for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {
                         statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
                     }
-                    tag.put(LibNBT.Stats, statsTag);
+                    tag.put(LibNBT.BASE, statsTag);
                 }
             }
+
             List<ResourceLocation> blacklist = List.of();
             if (type == EnumCrafting.FORGE)
                 blacklist = ARMOR_ONLY;
             if (type == EnumCrafting.ARMOR)
                 blacklist = WEAPON_ONLY;
+            CompoundTag statCompound = tag.getCompound(LibNBT.STATS);
             for (Map.Entry<Attribute, Double> entry : stat.itemStats().entrySet()) {
                 if (blacklist.contains(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey())))
                     continue;
                 double amount = entry.getValue() * efficiency;
                 if (hasObjectX)
                     amount *= -1;
-                updateStatIncrease(entry.getKey(), amount, tag.getCompound(LibNBT.Stats));
+                updateStatIncrease(entry.getKey(), amount, statCompound);
             }
-            if (!tag.contains(LibNBT.Element))
-                tag.putString(LibNBT.Element, getElement(stack).toString());
+            tag.put(LibNBT.STATS, statCompound);
+            if (!tag.contains(LibNBT.ELEMENT))
+                tag.putString(LibNBT.ELEMENT, getElement(stack).toString());
             if (isWeapon(stack)) {
                 EnumElement current = getElement(stack);
                 if (stat.element() != EnumElement.NONE) {
                     if (current == EnumElement.NONE) {
-                        tag.putString(LibNBT.Element, stat.element().toString());
+                        tag.putString(LibNBT.ELEMENT, stat.element().toString());
                     } else
-                        tag.putString(LibNBT.Element, EnumElement.NONE.toString());
+                        tag.putString(LibNBT.ELEMENT, EnumElement.NONE.toString());
                 }
             }
             if (stack.getItem() instanceof ItemStaffBase) {
@@ -267,50 +307,94 @@ public class ItemNBT {
         return stack;
     }
 
+    private static ItemStack changeBaseItemTo(ItemStack stack, ItemStack toApply, EnumCrafting crafting) {
+        ItemStat stat = DataPackHandler.SERVER_PACK.itemStatManager().get(toApply.getItem()).orElse(null);
+        CompoundTag tag = new CompoundTag();
+        //Setup base stuff
+        if (stat != null) {
+            if (!stat.itemStats().isEmpty()) {
+                ItemStat base = DataPackHandler.SERVER_PACK.itemStatManager().get(toApply.getItem()).orElse(null);
+                if (base != null) {
+                    CompoundTag statsTag = new CompoundTag();
+                    for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {
+                        statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
+                    }
+                    tag.put(LibNBT.BASE, statsTag);
+                }
+            }
+            tag.putString(LibNBT.ELEMENT, stat.element().toString());
+            if (stack.getItem() instanceof ItemStaffBase) {
+                Platform.INSTANCE.getStaffData(stack).ifPresent(data -> {
+                    if (stat.getTier1Spell() != null)
+                        data.setTier1Spell(stat.getTier1Spell());
+                    if (stat.getTier2Spell() != null)
+                        data.setTier2Spell(stat.getTier2Spell());
+                    if (stat.getTier3Spell() != null)
+                        data.setTier3Spell(stat.getTier3Spell());
+                });
+            }
+        }
+        tag.putString(LibNBT.ORIGINITEM, PlatformUtils.INSTANCE.items().getIDFrom(toApply.getItem()).toString());
+        CompoundTag stackTag = stack.getOrCreateTag();
+        stackTag.put(RuneCraftory.MODID, tag);
+        //Reapply all items used to craft the applied item
+        CompoundTag other = ItemNBT.getItemNBT(toApply);
+        if (other != null) {
+            ListTag bonus = other.getList(LibNBT.CRAFTING_BONUS, Tag.TAG_COMPOUND);
+            bonus.forEach(t -> {
+                CompoundTag nbt = (CompoundTag) t;
+                Item item = PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(nbt.getString("Id")));
+                if (item != Items.AIR)
+                    addUpgradeItem(stack, new ItemStack(item), true, crafting);
+            });
+        }
+        return stack;
+    }
+
     public static ItemStack addFoodBonusItem(ItemStack stack, ItemStack stackToAdd) {
         if (stackToAdd.isEmpty())
-            return ItemStack.EMPTY;
+            return stack;
         CompoundTag tag = getItemNBT(stack);
         if (tag == null)
             tag = new CompoundTag();
-        ListTag bonus = tag.getList(LibNBT.Upgrades, Tag.TAG_COMPOUND);
+        ListTag bonus = tag.getList(LibNBT.CRAFTING_BONUS, Tag.TAG_COMPOUND);
         CompoundTag bonusItem = new CompoundTag();
         bonusItem.putString("Id", PlatformUtils.INSTANCE.items().getIDFrom(stackToAdd.getItem()).toString());
         bonusItem.putInt("Level", ItemNBT.itemLevel(stackToAdd));
         bonus.add(bonusItem);
-        tag.put(LibNBT.CraftingBonus, bonus);
+        tag.put(LibNBT.CRAFTING_BONUS, bonus);
 
         FoodProperties props = DataPackHandler.SERVER_PACK.foodManager().get(stackToAdd.getItem());
         if (props != null) {
-            if (!tag.contains(LibNBT.FoodStats)) {
+            if (!tag.contains(LibNBT.FOOD_STATS)) {
                 FoodProperties base = DataPackHandler.SERVER_PACK.foodManager().get(stack.getItem());
                 if (base != null) {
                     CompoundTag statsTag = new CompoundTag();
                     for (Map.Entry<Attribute, Double> entry : base.effects().entrySet()) {
                         statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
                     }
-                    tag.put(LibNBT.FoodStats, statsTag);
+                    tag.put(LibNBT.FOOD_STATS, statsTag);
                     statsTag = new CompoundTag();
                     for (Map.Entry<Attribute, Double> entry : base.effectsMultiplier().entrySet()) {
                         statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
                     }
-                    tag.put(LibNBT.FoodStatsMult, statsTag);
+                    tag.put(LibNBT.FOOD_STATS_MULT, statsTag);
                 }
             }
-            boolean hasObjectX = tag.getBoolean(LibNBT.ObjectX);
+            boolean hasObjectX = tag.getBoolean(LibNBT.OBJECT_X);
             if (stackToAdd.getItem() == ModItems.objectX.get())
-                tag.putBoolean(LibNBT.ObjectX, !hasObjectX);
+                tag.putBoolean(LibNBT.OBJECT_X, !hasObjectX);
             for (Map.Entry<Attribute, Double> entry : props.cookingBonus().entrySet()) {
                 double amount = entry.getValue();
                 if (hasObjectX)
                     amount *= -1;
-                updateStatIncrease(entry.getKey(), amount, tag.getCompound(LibNBT.FoodStats));
+                updateStatIncrease(entry.getKey(), amount, tag.getCompound(LibNBT.FOOD_STATS));
             }
             for (Map.Entry<Attribute, Double> entry : props.cookingBonusPercent().entrySet()) {
                 double amount = entry.getValue();
                 if (hasObjectX)
                     amount *= -1;
-                updateStatIncrease(entry.getKey(), amount, tag.getCompound(LibNBT.FoodStatsMult));
+                updateStatIncrease(entry.getKey(), amount, tag.getCompound(LibNBT.FOOD_STATS_MULT));
             }
         }
         CompoundTag stackTag = stack.getOrCreateTag();
@@ -348,7 +432,7 @@ public class ItemNBT {
             return true;
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
-            return tag.getBoolean(LibNBT.MagnifyingGlass);
+            return tag.getBoolean(LibNBT.MAGNIFYING_GLASS);
         }
         return false;
     }
@@ -356,7 +440,7 @@ public class ItemNBT {
     public static boolean doesFixedOneDamage(ItemStack stack) {
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
-            return tag.getBoolean(LibNBT.ScrapMetalPlus);
+            return tag.getBoolean(LibNBT.SCRAP_METAL_PLUS);
         }
         return false;
     }
@@ -364,7 +448,15 @@ public class ItemNBT {
     public static boolean reverseStats(ItemStack stack) {
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
-            return tag.getBoolean(LibNBT.ObjectX);
+            return tag.getBoolean(LibNBT.OBJECT_X);
+        }
+        return false;
+    }
+
+    public static boolean isInvis(ItemStack stack) {
+        if (stack.hasTag()) {
+            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
+            return tag.getBoolean(LibNBT.INVIS);
         }
         return false;
     }
