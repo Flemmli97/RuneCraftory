@@ -12,6 +12,7 @@ public class MobConfig {
     public static int farmRadius = 3;
     public static boolean mobAttackNPC;
     public static boolean vanillaGiveXp;
+    public static boolean monsterNeedBarn = true;
 
     public static int bellRadius = 48;
     public static double gateHealth = 100;

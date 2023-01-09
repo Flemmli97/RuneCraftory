@@ -419,7 +419,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (this.assignedBarn != null && this.assignedBarn.isRemoved())
                 this.assignedBarn = null;
             if (this.isTamed()) {
-                if (this.assignedBarn == null && this.behaviourState() != Behaviour.STAY)
+                if (MobConfig.monsterNeedBarn && this.assignedBarn == null && this.behaviourState() != Behaviour.STAY)
                     this.setBehaviour(Behaviour.STAY);
             }
         } else {
@@ -585,7 +585,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     return InteractionResult.SUCCESS;
                 }
             }
-            if (this.assignedBarn == null) {
+            if (MobConfig.monsterNeedBarn && this.assignedBarn == null) {
                 if (!this.assignBarn()) {
                     player.sendMessage(new TranslatableComponent("monster.interact.no.barn"), Util.NIL_UUID);
                     return InteractionResult.CONSUME;

@@ -22,6 +22,7 @@ public class MobConfigSpec {
     public final CommentedJsonConfig.IntVal farmRadius;
     public final CommentedJsonConfig.CommentedVal<Boolean> mobAttackNPC;
     public final CommentedJsonConfig.CommentedVal<Boolean> vanillaGiveXp;
+    public final CommentedJsonConfig.CommentedVal<Boolean> monsterNeedBarn;
 
     public final CommentedJsonConfig.IntVal bellRadius;
     public final CommentedJsonConfig.DoubleVal gateHealth;
@@ -51,6 +52,7 @@ public class MobConfigSpec {
         this.farmRadius = builder.comment("Radius in blocks for mobs to tend crops in", "Chests for seeds and drops can be placed within radius + 2").defineInRange("Farm Radius", MobConfig.farmRadius, 0, Integer.MAX_VALUE);
         this.mobAttackNPC = builder.comment("If monsters should attack npcs/villagers. Note if an npc follows you they will always attack").define("Attack NPC", MobConfig.mobAttackNPC);
         this.vanillaGiveXp = builder.comment("If true other mobs also give xp. The amount is based on the health they have").define("Vanilla mobs give XP", MobConfig.vanillaGiveXp);
+        this.monsterNeedBarn = builder.comment("If true monster need to have a barn assigned or other interactions will not be possible").define("Monster need barn", MobConfig.monsterNeedBarn);
         builder.pop();
 
         builder.comment("Gate Configs").push("gate");

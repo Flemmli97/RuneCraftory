@@ -55,7 +55,7 @@ public class EntityProperties {
             for (String s : this.confAttributes) {
                 String[] sub = s.replace(" ", "").split("-");
                 Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(sub[0]));
-                if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(sub[0]))
+                if (att != null && PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(sub[0]))
                     this.baseValues.put(att, Double.parseDouble(sub[1]));
             }
         }
@@ -72,7 +72,7 @@ public class EntityProperties {
             for (String s : this.confGains) {
                 String[] sub = s.replace(" ", "").split("-");
                 Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(sub[0]));
-                if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(sub[0]))
+                if (att != null && PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(sub[0]))
                     this.levelGains.put(att, Double.parseDouble(sub[1]));
             }
         }

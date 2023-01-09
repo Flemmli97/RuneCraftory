@@ -101,6 +101,7 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         MobConfig.farmRadius = spec.farmRadius.get();
         MobConfig.mobAttackNPC = spec.mobAttackNPC.get();
         MobConfig.vanillaGiveXp = spec.vanillaGiveXp.get();
+        MobConfig.monsterNeedBarn = spec.monsterNeedBarn.get();
         MobConfig.bellRadius = spec.bellRadius.get();
         MobConfig.gateHealth = spec.gateHealth.get();
         MobConfig.gateDef = spec.gateDef.get();
