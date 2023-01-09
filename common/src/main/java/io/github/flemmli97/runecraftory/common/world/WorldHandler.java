@@ -209,12 +209,17 @@ public class WorldHandler extends SavedData {
     }
 
     @Nullable
+    public BarnData findFittingBarn(BaseMonster monster, UUID owner) {
+        return this.barnsOf(owner)
+                .stream().filter(b -> b.hasCapacityFor(monster.getProp().getSize(), monster.getProp().needsRoof()))
+                .findFirst().orElse(null);
+    }
+
+    @Nullable
     public BarnData findFittingBarn(BaseMonster monster) {
         if (monster.getOwnerUUID() == null)
             return null;
-        return this.barnsOf(monster.getOwnerUUID())
-                .stream().filter(b -> b.hasCapacityFor(monster.getProp().getSize(), monster.getProp().needsRoof()))
-                .findFirst().orElse(null);
+        return this.findFittingBarn(monster, monster.getOwnerUUID());
     }
 
     public void removeMonsterFromPlayer(UUID player, BaseMonster monster) {

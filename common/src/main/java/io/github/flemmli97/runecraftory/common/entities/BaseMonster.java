@@ -920,15 +920,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 stack.shrink(1);
             this.tamingTick = 100;
             float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier, this.brushCount, this.loveAttCount);
-            this.delayedTaming = () -> {
-                if (chance == 0)
-                    this.level.broadcastEntityEvent(this, (byte) 34);
-                else if (this.random.nextFloat() < chance) {
-                    this.tameEntity(player);
-                } else {
-                    this.level.broadcastEntityEvent(this, (byte) 11);
-                }
-            };
+            if(this.getServer() != null && WorldHandler.get(this.getServer()).findFittingBarn(this, player.getUUID()) != null)
+                this.delayedTaming = () -> {
+                    if (chance == 0)
+                        this.level.broadcastEntityEvent(this, (byte) 34);
+                    else if (this.random.nextFloat() < chance) {
+                        this.tameEntity(player);
+                    } else {
+                        this.level.broadcastEntityEvent(this, (byte) 11);
+                    }
+                };
             return true;
         }
         return false;
