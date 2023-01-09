@@ -25,7 +25,8 @@
     "LivingRenderMixin",
     "CameraAccessor",
     "GameRendererMixin",
-    "LocalPlayerMixin"
+    "LocalPlayerMixin",
+    "ScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,20 +1,26 @@
 package io.github.flemmli97.runecraftory.forge.client;
 
+import com.mojang.datafixers.util.Either;
 import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
+import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.IItemRenderProperties;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderTooltipEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.client.gui.ForgeIngameGui;
 import net.minecraftforge.client.gui.OverlayRegistry;
@@ -26,6 +32,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class ClientEvents {
@@ -35,6 +43,7 @@ public class ClientEvents {
         modBus.register(ForgeClientRegister.class);
         MinecraftForge.EVENT_BUS.register(ClientEvents.class);
         OverlayRegistry.registerOverlayTop("rf_overlay_bar", (gui, stack, partialTicks, guiX, guiY) -> ClientCalls.renderRunePoints(stack, partialTicks));
+        ClientRegister.registerTooltipComponentFactories(MinecraftForgeClient::registerTooltipComponentFactory);
     }
 
     public static void initClientItemProps(Consumer<IItemRenderProperties> consumer) {
@@ -80,6 +89,13 @@ public class ClientEvents {
     @SubscribeEvent
     public static void tooltipEvent(ItemTooltipEvent event) {
         ClientCalls.tooltipEvent(event.getItemStack(), event.getToolTip(), event.getFlags());
+    }
+
+    @SubscribeEvent
+    public static void tooltipComp(RenderTooltipEvent.GatherComponents event) {
+        List<Either<FormattedText, TooltipComponent>> elements = new ArrayList<>();
+        ClientCalls.tooltipComponentEvent(event.getItemStack(), c -> elements.add(Either.right(c)), event.getScreenWidth(), event.getScreenHeight());
+        event.getTooltipElements().addAll(1, elements);
     }
 
     @SubscribeEvent

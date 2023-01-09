@@ -51,7 +51,7 @@ dependencies {
         exclude(group: "net.fabricmc.fabric-api")
     }
 
-    modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.0-fabric"
+    modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.1-fabric"
 }
 
 processResources {

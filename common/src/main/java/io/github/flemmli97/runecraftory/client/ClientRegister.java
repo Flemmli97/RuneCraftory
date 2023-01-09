@@ -80,6 +80,7 @@ import io.github.flemmli97.runecraftory.client.render.projectiles.RenderStaffBal
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWaterLaser;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWindBlade;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWispFlame;
+import io.github.flemmli97.runecraftory.client.tooltips.UpgradeTooltipComponent;
 import io.github.flemmli97.runecraftory.common.blocks.BlockBrokenMineral;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
@@ -104,6 +105,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.MenuAccess;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
@@ -123,6 +125,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
@@ -361,6 +364,10 @@ public class ClientRegister {
         consumer.register(ModParticles.runey.get(), RuneyParticle.Provider::new);
     }
 
+    public static <T extends TooltipComponent> void registerTooltipComponentFactories(ToolTipComponentRegister register) {
+        register.register(UpgradeTooltipComponent.UpgradeComponent.class, UpgradeTooltipComponent::new);
+    }
+
     public interface EntityRendererRegister {
         <T extends Entity> void register(EntityType<? extends T> type, EntityRendererProvider<T> provider);
     }
@@ -379,5 +386,9 @@ public class ClientRegister {
 
     public interface ScreenConstructor<T extends AbstractContainerMenu, U extends Screen & MenuAccess<T>> {
         U create(T var1, Inventory var2, Component var3);
+    }
+
+    public interface ToolTipComponentRegister {
+        <T extends TooltipComponent> void register(Class<T> clss, Function<? super T, ? extends ClientTooltipComponent> factory);
     }
 }

@@ -36,6 +36,7 @@ import net.minecraft.world.inventory.MenuType;
 import java.util.function.Function;
 
 public class RuneCraftoryFabricClient implements ClientModInitializer {
+
     @Override
     public void onInitializeClient() {
         ClientPacketHandler.registerClientPackets();
@@ -43,6 +44,8 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
                 .reloadConfig();
         //ClientRegister
         ClientRegister.init();
+
+        ClientRegister.registerTooltipComponentFactories(TooltipRegistry::registerFactory);
 
         ClientRegister.registerKeyBinding(KeyBindingHelper::registerKeyBinding);
         ClientRegister.setupRenderLayers(BlockRenderLayerMap.INSTANCE::putBlock);

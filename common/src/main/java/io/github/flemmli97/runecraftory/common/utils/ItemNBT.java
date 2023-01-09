@@ -461,6 +461,17 @@ public class ItemNBT {
         return false;
     }
 
+    public static ItemStack getOriginItem(ItemStack stack) {
+        if (shouldHaveStats(stack) && stack.hasTag()) {
+            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
+            String s = tag.getString(LibNBT.ORIGINITEM);
+            if (s.isEmpty())
+                return ItemStack.EMPTY;
+            return new ItemStack(PlatformUtils.INSTANCE.items().getFromId(new ResourceLocation(s)));
+        }
+        return ItemStack.EMPTY;
+    }
+
     public static int cooldown(Player player, ItemStack stack) {
         return stack.getItem() instanceof IItemUsable usable ? usable.itemCoolDownTicks() : (int) (1 / (player.getAttributeValue(Attributes.ATTACK_SPEED) * 20));
     }

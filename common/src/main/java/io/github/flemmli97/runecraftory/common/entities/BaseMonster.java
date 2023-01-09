@@ -396,6 +396,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.updater.tick();
             if (this.tamingTick > 0) {
                 --this.tamingTick;
+                if (this.getMoveFlag() != 0) {
+                    this.setMoving(false);
+                    this.setDeltaMovement(Vec3.ZERO);
+                }
             }
             if (this.tamingTick == 0) {
                 if (this.delayedTaming != null) {
@@ -573,6 +577,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 player.sendMessage(new TranslatableComponent("monster.interact.notowner"), Util.NIL_UUID);
                 return InteractionResult.CONSUME;
             }
+            if (player.isShiftKeyDown()) {
+                if (stack.getItem() == Items.STICK) {
+                    if (player instanceof ServerPlayer serverPlayer)
+                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 1, 1));
+                    this.untameEntity();
+                    return InteractionResult.SUCCESS;
+                }
+            }
             if (this.assignedBarn == null) {
                 if (!this.assignBarn()) {
                     player.sendMessage(new TranslatableComponent("monster.interact.no.barn"), Util.NIL_UUID);
@@ -597,14 +609,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.level.broadcastEntityEvent(this, (byte) 64);
                 player.swing(hand);
                 return InteractionResult.SUCCESS;
-            }
-            if (player.isShiftKeyDown()) {
-                if (stack.getItem() == Items.STICK) {
-                    if (player instanceof ServerPlayer serverPlayer)
-                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 1, 1));
-                    this.untameEntity();
-                    return InteractionResult.SUCCESS;
-                }
             }
             if (hand == InteractionHand.MAIN_HAND && !this.playDeath()) {
                 if (player.isShiftKeyDown()) {
@@ -920,7 +924,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 stack.shrink(1);
             this.tamingTick = 100;
             float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier, this.brushCount, this.loveAttCount);
-            if(this.getServer() != null && WorldHandler.get(this.getServer()).findFittingBarn(this, player.getUUID()) != null)
+            if (this.getServer() != null && WorldHandler.get(this.getServer()).findFittingBarn(this, player.getUUID()) != null)
                 this.delayedTaming = () -> {
                     if (chance == 0)
                         this.level.broadcastEntityEvent(this, (byte) 34);
@@ -1041,7 +1045,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             double d0 = this.random.nextGaussian() * 0.02;
             double d2 = this.random.nextGaussian() * 0.02;
             double d3 = this.random.nextGaussian() * 0.02;
-            this.level.addParticle(particle, this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), this.getY() + 0.5 + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), d0, d2, d3);
+            this.level.addParticle(particle, true, this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), this.getY() + 0.5 + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), d0, d2, d3);
         }
     }
 

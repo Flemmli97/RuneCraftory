@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SkillButton;
+import io.github.flemmli97.runecraftory.client.tooltips.UpgradeTooltipComponent;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -40,6 +41,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
@@ -152,6 +154,11 @@ public class ClientCalls {
             }
         }
         return Pair.of(tooltip, debug);
+    }
+
+    public static void tooltipComponentEvent(ItemStack stack, Consumer<TooltipComponent> elements, int screenWidth, int screenHeight) {
+        if (UpgradeTooltipComponent.shouldAdd(stack))
+            elements.accept(new UpgradeTooltipComponent.UpgradeComponent(stack));
     }
 
     public static void worldRender(PoseStack stack) {

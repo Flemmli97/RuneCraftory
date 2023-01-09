@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -199,12 +198,6 @@ public class ItemStat {
 
     public List<Component> texts(ItemStack stack, boolean showStat) {
         List<Component> list = new ArrayList<>();
-        if (stack.getItem() instanceof IItemUsable) {
-            EnumElement element = ItemNBT.getElement(stack);
-            if (element != EnumElement.NONE) {
-                list.add(new TranslatableComponent(element.getTranslation()).withStyle(element.getColor()));
-            }
-        }
         MutableComponent price = ItemNBT.shouldHaveLevel(stack) ? new TranslatableComponent("tooltip.item.level", ItemNBT.itemLevel(stack)) : null;
         if (ItemUtils.getBuyPrice(stack, this) > 0) {
             if (price == null)
