@@ -2,7 +2,7 @@
   "parent": "runecraftory:main/fertilizer",
   "display": {
     "icon": {
-      "item": "runecraftory:inspector"
+      "item": "runecraftory:monster_command_staff"
     },
     "title": {
       "translate": "runecraftory.advancements.monster.help.title"

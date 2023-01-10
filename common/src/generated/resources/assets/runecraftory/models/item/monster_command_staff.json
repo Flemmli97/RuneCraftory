@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "runecraftory:item/inspector"
+    "layer0": "runecraftory:item/monster_command_staff"
   }
 }
