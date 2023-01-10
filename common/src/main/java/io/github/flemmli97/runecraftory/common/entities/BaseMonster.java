@@ -1,6 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
 import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
@@ -26,11 +28,13 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.BarnData;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
@@ -43,9 +47,11 @@ import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
@@ -152,6 +158,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public NearestAttackableTargetGoal<Player> targetPlayer = this.createTargetGoalPlayer();//|| player != BaseMonster.this.getOwner());
     public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
     public FloatGoal swimGoal = new FloatGoal(this);
+    public FollowOwnerGoalMonster followOwnerGoal = new FollowOwnerGoalMonster(this, 1.05, 9, 2, 20);
     public RandomStrollGoal wander = new WaterAvoidingRandomStrollGoal(this, 1.0);
     public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
 
@@ -251,7 +258,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
         this.goalSelector.addGoal(0, this.swimGoal);
         this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
-        this.goalSelector.addGoal(1, new FollowOwnerGoalMonster(this, 1.05, 9, 2, 20));
+        this.goalSelector.addGoal(1, this.followOwnerGoal);
         this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
         this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0));
         this.goalSelector.addGoal(6, this.wander);
@@ -269,23 +276,58 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     this.targetSelector.addGoal(2, this.targetMobs);
                     this.targetSelector.addGoal(0, this.hurt);
                 }
-
                 this.goalSelector.removeGoal(this.farm);
             }
             switch (this.behaviourState()) {
+                case WANDER_HOME -> {
+                    if (this.getOwner() != null) {
+                        if (this.assignBarn()) {
+                            this.restrictToBasedOnBehaviour(null);
+                            BlockPos pos = this.assignedBarn.pos.pos();
+                            if (this.level.dimension() == this.assignedBarn.pos.dimension())
+                                TeleportSpell.safeTeleportTo(this, pos.getX(), pos.getY(), pos.getZ());
+                            else {
+                                ServerLevel serverLevel = this.getServer().getLevel(this.assignedBarn.pos.dimension());
+                                if (serverLevel != null)
+                                    TeleportSpell.changeDimension(this, serverLevel, pos.getX(), pos.getY(), pos.getZ());
+                            }
+                        } else {
+                            this.getOwner().sendMessage(new TranslatableComponent("monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition()), Util.NIL_UUID);
+                            this.setBehaviour(Behaviour.WANDER);
+                        }
+                        this.goalSelector.addGoal(6, this.wander);
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.removePartyMember(this));
+                    }
+                }
+                case FOLLOW -> {
+                    boolean party = this.getOwner() == null || Platform.INSTANCE.getPlayerData(this.getOwner())
+                            .map(d -> !d.party.isPartyFull() || d.party.isPartyMember(this)).orElse(false);
+                    if (party) {
+                        this.clearRestriction();
+                        this.goalSelector.removeGoal(this.wander);
+                        if (this.getOwner() != null)
+                            Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.addPartyMember(this));
+                    }
+                }
+                case FOLLOW_DISTANCE -> {
+                    this.clearRestriction();
+                    this.goalSelector.removeGoal(this.wander);
+                    if (this.getOwner() != null)
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.addPartyMember(this));
+                }
                 case STAY -> {
                     this.goalSelector.addGoal(6, this.wander);
                     this.targetSelector.removeGoal(this.targetPlayer);
                     this.targetSelector.removeGoal(this.targetMobs);
                     this.targetSelector.removeGoal(this.hurt);
+                    if (this.getOwner() != null)
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.addPartyMember(this));
                 }
                 case WANDER -> {
                     this.restrictToBasedOnBehaviour(this.blockPosition());
                     this.goalSelector.addGoal(6, this.wander);
-                }
-                case FOLLOW -> {
-                    this.clearRestriction();
-                    this.goalSelector.removeGoal(this.wander);
+                    if (this.getOwner() != null)
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.removePartyMember(this));
                 }
                 case FARM -> {
                     this.restrictToBasedOnBehaviour(this.blockPosition());
@@ -300,12 +342,20 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     BlockPos nearestInv = this.nearestBlockEntityWithInv();
                     this.setSeedInventory(nearestInv);
                     this.setCropInventory(nearestInv);
+                    if (this.getOwner() != null)
+                        Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.removePartyMember(this));
                 }
             }
         }
     }
 
-    public void restrictToBasedOnBehaviour(BlockPos pos) {
+    public void restrictToBasedOnBehaviour(@Nullable BlockPos pos) {
+        if (this.behaviourState() == Behaviour.WANDER_HOME && this.assignBarn()) {
+            if (this.level.dimension() == this.assignedBarn.pos.dimension())
+                this.restrictTo(this.assignedBarn.pos.pos(), this.assignedBarn.getSize());
+        }
+        if (pos == null)
+            return;
         if (this.behaviourState() == Behaviour.FARM)
             this.restrictTo(pos, MobConfig.farmRadius + 3);
         else if (this.behaviourState() == Behaviour.WANDER)
@@ -416,7 +466,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.removeFoodEffect();
             }
             this.getAnimationHandler().runIfNotNull(this::handleAttack);
-            if (this.assignedBarn != null && this.assignedBarn.isRemoved())
+            if (this.assignedBarn != null && this.assignedBarn.isInvalid())
                 this.assignedBarn = null;
             if (this.isTamed()) {
                 if (MobConfig.monsterNeedBarn && this.assignedBarn == null && this.behaviourState() != Behaviour.STAY)
@@ -434,8 +484,19 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.getAnimationHandler().tick();
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);
-            if (!this.level.isClientSide && this.getHealth() > 0.02) {
-                this.setPlayDeath(false);
+            if (!this.level.isClientSide) {
+                if (this.behaviourState().following) {
+                    Player owner = this.getOwner();
+                    if (owner != null && (owner.distanceToSqr(this) > 300)) {
+                        if (owner.level.dimension() != this.level.dimension()) {
+                            TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
+                        } else if (owner.distanceToSqr(this) > 300)
+                            TeleportUtils.tryTeleportAround(this, owner);
+                        this.heal(1);
+                    }
+                }
+                if (this.getHealth() > 0.02)
+                    this.setPlayDeath(false);
             }
         } else {
             this.playDeathTick = Math.max(0, --this.playDeathTick);
@@ -462,8 +523,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.cropInventory != null) {
             compound.putIntArray("CropInventory", new int[]{this.cropInventory.getX(), this.cropInventory.getY(), this.cropInventory.getZ()});
         }
-        if (this.assignedBarn != null && !this.assignedBarn.isRemoved())
-            compound.putIntArray("AssignedBarnLocation", new int[]{this.assignedBarn.pos.getX(), this.assignedBarn.pos.getY(), this.assignedBarn.pos.getZ()});
+        if (this.assignedBarn != null && !this.assignedBarn.isInvalid())
+            GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.assignedBarn.pos).resultOrPartial(RuneCraftory.logger::error)
+                    .ifPresent(t -> compound.put("AssignedBarnLocation", t));
         //CompoundTag genes = new CompoundTag();
         //this.attributeRandomizer.forEach((att, val)->genes.putInt(att.getRegistryName().toString(), val));
         //compound.put("Genes", genes);
@@ -502,12 +564,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.cropInventory = new BlockPos(arr[0], arr[1], arr[2]);
         }
         if (compound.contains("AssignedBarnLocation")) {
-            int[] arr = compound.getIntArray("AssignedBarnLocation");
-            if (arr.length == 3) {
-                BlockPos pos = new BlockPos(arr[0], arr[1], arr[2]);
-                this.assignedBarn = WorldHandler.get(this.getServer())
-                        .barnAt(pos);
-            }
+            GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compound.get("AssignedBarnLocation")))
+                    .resultOrPartial(RuneCraftory.logger::error).ifPresent(p ->
+                            this.assignedBarn = WorldHandler.get(this.getServer()).barnAt(p)
+                    );
         }
         //CompoundTag genes = compound.getCompound("Genes");
         //genes.keySet().forEach(key->this.attributeRandomizer.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(key)), genes.getInt(key)));
@@ -587,20 +647,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             if (MobConfig.monsterNeedBarn && this.assignedBarn == null) {
                 if (!this.assignBarn()) {
-                    player.sendMessage(new TranslatableComponent("monster.interact.no.barn"), Util.NIL_UUID);
+                    player.sendMessage(new TranslatableComponent("monster.interact.barn.no", this.getDisplayName()), Util.NIL_UUID);
                     return InteractionResult.CONSUME;
                 }
             }
-            if (stack.getItem() == ModItems.inspector.get()) {
-                //Command for: Setting center of action for wander and farming
-
-
-                /*if (player instanceof ServerPlayer serverPlayer) {
-                    EntityUtils.sendAttributesTo(this, serverPlayer);
-                    Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this, serverPlayer), serverPlayer);
-                }*/
-                return InteractionResult.SUCCESS;
-            } else if (stack.getItem() == ModItems.brush.get()) {
+            if (stack.getItem() == ModItems.brush.get()) {
                 int day = WorldUtils.day(this.level);
                 if (this.updater.getLastUpdateBrush() == day)
                     return InteractionResult.PASS;
@@ -619,17 +670,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         EntityUtils.sendAttributesTo(this, serverPlayer);
                         Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this, serverPlayer), serverPlayer);
                     }
-
-
-                    //this.setBehaviour(this.behaviourState().next());
-                    //if (player instanceof ServerPlayer serverPlayer)
-                    //    serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.4f, 0.4f));
-                    //player.sendMessage(new TranslatableComponent(this.behaviourState().interactKey), Util.NIL_UUID);
                     return InteractionResult.SUCCESS;
-                }/* else if (this.ridable() && this.behaviourState() != Behaviour.FARM) {
-                    player.startRiding(this);
-                    return InteractionResult.SUCCESS;
-                }*/
+                }
             }
             return InteractionResult.PASS;
         } else if (player.isShiftKeyDown() && !stack.isEmpty()) {
@@ -1412,9 +1454,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return this.behaviour == Behaviour.STAY;
     }
 
-    /**
-     * 0: Move, 1: Follow, 2: Stay
-     */
     public void setBehaviour(Behaviour behaviour) {
         this.entityData.set(behaviourData, behaviour.ordinal());
         this.behaviour = behaviour;
@@ -1422,11 +1461,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.updateAI(false);
     }
 
-    /**
-     * 0: Move, 1: Follow, 2: Stay
-     */
     public Behaviour behaviourState() {
         return this.behaviour;
+    }
+
+    public boolean doStartRide(ServerPlayer player) {
+        if (this.ridable()) {
+            player.startRiding(this);
+            return true;
+        }
+        player.sendMessage(new TranslatableComponent("monster.interact.ride.no"), Util.NIL_UUID);
+        return false;
     }
 
     protected float tamingMultiplier(ItemStack stack) {
@@ -1443,7 +1488,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.setTarget(null);
         this.level.broadcastEntityEvent(this, (byte) 10);
         this.updater.setLastUpdateDay(WorldUtils.day(this.level));
-        this.setBehaviour(Behaviour.FOLLOW);
+        if(Platform.INSTANCE.getPlayerData(owner).map(d -> d.party.isPartyFull()).orElse(true))
+            this.setBehaviour(Behaviour.WANDER);
+        else
+            this.setBehaviour(Behaviour.FOLLOW);
         this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
                 e -> e != this && e instanceof OwnableEntity ownable && this.getOwnerUUID().equals(ownable.getOwnerUUID())
                         && e.getTarget() == this).forEach(e -> {
@@ -1465,7 +1513,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     private boolean assignBarn() {
-        this.assignedBarn = WorldHandler.get(this.getServer()).findFittingBarn(this);
+        if (this.assignedBarn == null || this.assignedBarn.isInvalid())
+            this.assignedBarn = WorldHandler.get(this.getServer()).findFittingBarn(this);
         if (this.assignedBarn != null) {
             this.assignedBarn.addMonster(this.getUUID(), 1);
             return true;
@@ -1559,19 +1608,39 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return true;
     }
 
+    @Override
+    public void remove(RemovalReason reason) {
+        super.remove(reason);
+        if (!this.level.isClientSide && reason == RemovalReason.UNLOADED_TO_CHUNK) {
+            if (this.behaviourState().following) {
+                Player owner = this.getOwner();
+                if (owner != null) {
+                    if (owner.level.dimension() != this.level.dimension()) {
+                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
+                    } else
+                        TeleportUtils.tryTeleportAround(this, owner);
+                } else
+                    WorldHandler.get(this.getServer()).safeUnloadedPartyMembers(this);
+            }
+        }
+    }
+
     public enum Behaviour {
 
-        WANDER_HOME("monster.interact.home"),
-        FOLLOW("monster.interact.follow"),
-        FOLLOW_DISTANCE("monster.interact.follow.distance"),
-        STAY("monster.interact.stay"),
-        WANDER("monster.interact.wander"),
-        FARM("monster.interact.farm");
+        WANDER_HOME("monster.interact.home", false),
+        FOLLOW("monster.interact.follow", true),
+        FOLLOW_DISTANCE("monster.interact.follow.distance", true),
+        STAY("monster.interact.stay", true),
+        WANDER("monster.interact.wander", false),
+        FARM("monster.interact.farm", false);
 
         public final String interactKey;
 
-        Behaviour(String interactKey) {
+        public final boolean following;
+
+        Behaviour(String interactKey, boolean following) {
             this.interactKey = interactKey;
+            this.following = following;
         }
     }
 }

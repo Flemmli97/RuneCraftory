@@ -38,6 +38,7 @@ public class GeneralConfigSpec {
     public final CommentedJsonConfig.DoubleVal witherChance;
     public final CommentedJsonConfig.DoubleVal runeyChance;
     public final CommentedJsonConfig.CommentedVal<Boolean> seasonedSnow;
+    public final CommentedJsonConfig.IntVal maxPartySize;
 
     public final boolean waila = true;
     public final boolean jei = true;
@@ -106,6 +107,7 @@ public class GeneralConfigSpec {
         this.witherChance = builder.comment("Change for a crop to wither if its not been watered", "If crop is already withered it and it doesnt get watered it will turn into withered grass").defineInRange("Wither Chance", GeneralConfig.witherChance, 0, 1);
         this.runeyChance = builder.comment("Chance for a runey to spawn when harvesting fully grown crops").defineInRange("Runey Chance", GeneralConfig.runeyChance, 0, 1);
         this.seasonedSnow = builder.comment("If biome temperature should be adjusted based on current season. Can cause snowfall during winter").define("Seasoned Biome Temp", GeneralConfig.seasonedSnow);
+        this.maxPartySize = builder.comment("Max size of a players party (Entities that follow you). Set to 0 for no limit").defineInRange("Max Party Size", GeneralConfig.maxPartySize, 0, Integer.MAX_VALUE);
         builder.pop();
 
         builder.push("Multipliers");

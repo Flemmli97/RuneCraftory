@@ -132,7 +132,7 @@ public class ShopItemGen extends ShopItemProvider {
         this.addItem(EnumShop.WEAPON, ModItems.fishingRodIron.get());
         this.addItem(EnumShop.WEAPON, ModItems.fishingRodSilver.get());
 
-        this.addItem(EnumShop.WEAPON, ModItems.inspector.get(), true);
+        this.addItem(EnumShop.WEAPON, ModItems.mobStaff.get(), true);
         this.addItem(EnumShop.WEAPON, ModItems.brush.get(), true);
         this.addItem(EnumShop.WEAPON, ModItems.glass.get(), true);
 

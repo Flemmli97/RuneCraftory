@@ -20,7 +20,10 @@ public class StayGoal<T extends Mob> extends Goal {
         if (!monster.isOnGround() && !monster.isNoGravity()) {
             return false;
         }
-        return monster.isStaying();
+        if (monster.isStaying()) {
+            return monster.getOwner() == null || monster.getOwner().distanceToSqr(monster) < 400;
+        }
+        return false;
     };
     public static Function<EntityNPCBase, Boolean> CANSTAYNPC = npc -> {
         if (npc.isInWaterOrBubble()) {

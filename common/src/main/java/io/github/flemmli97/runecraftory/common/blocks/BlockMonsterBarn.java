@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
@@ -66,7 +67,7 @@ public class BlockMonsterBarn extends BaseEntityBlock {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && level instanceof ServerLevel serverLevel)
-            WorldHandler.get(serverLevel.getServer()).removeBarn(barn.getOwner(), pos);
+            WorldHandler.get(serverLevel.getServer()).removeBarn(barn.getOwner(), GlobalPos.of(level.dimension(), pos));
         super.onRemove(state, level, pos, newState, isMoving);
     }
 

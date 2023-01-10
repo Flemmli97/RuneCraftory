@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
@@ -14,6 +15,7 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHoe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolWateringCan;
+import io.github.flemmli97.runecraftory.common.network.C2SSetMonsterBehaviour;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
@@ -267,10 +269,18 @@ public class LangGen implements DataProvider {
         this.add("tooltip.season.best", "Good Season");
         this.add("tooltip.season.bad", "Bad Season");
         this.add("sleep", "Sleep");
-        this.add("monster.interact.sit", "Entity is now staying");
-        this.add("monster.interact.move", "Entity is now moving freely in this area");
-        this.add("monster.interact.follow", "Entity is now following you");
-        this.add("monster.interact.farm", "Entity is now tending the crops");
+
+        this.add(BaseMonster.Behaviour.WANDER_HOME.interactKey, "You send %s home");
+        this.add(BaseMonster.Behaviour.FOLLOW.interactKey, "%s is now following you");
+        this.add(BaseMonster.Behaviour.FOLLOW_DISTANCE.interactKey, "%s is now following you with distance");
+        this.add(BaseMonster.Behaviour.STAY.interactKey, "%s is now staying");
+        this.add(BaseMonster.Behaviour.WANDER.interactKey, "%s is now wandering around in this area");
+        this.add(BaseMonster.Behaviour.FARM.interactKey, "%s is now tending the crops");
+        this.add("monster.interact.party.full", "Your party is full");
+        this.add("monster.interact.ride.no", "You can't ride this monster");
+        this.add("monster.interact.barn.no", "%s has no barn");
+        this.add("monster.interact.barn.no.ext", "%s [%s] has no home to go to.");
+
         this.add("tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
         this.add("tooltip.item.treasure_level", "Chest tier lvl: %s");
         this.add("tooltip.debug.stat", "Itemstat-ID: %s");
@@ -324,13 +334,16 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.recipe_integration.locked", "Unknown Recipe");
         this.add("runecraftory.recipe_integration.crafting_level", "Lvl: %s");
 
-        this.add("gui.companion.behaviour.wander", "Wander");
-        this.add("gui.companion.behaviour.follow", "Follow");
-        this.add("gui.companion.behaviour.stay", "Stay");
-        this.add("gui.companion.behaviour.farm", "Tend the crops");
-        this.add("gui.companion.behaviour.home", "Home");
-        this.add("gui.companion.behaviour.inventory.harvest", "Crop Inventory");
-        this.add("gui.companion.behaviour.inventory.seed", "Seed Inventory");
+        this.add(C2SSetMonsterBehaviour.Type.HOME.translation, "Send home");
+        this.add(C2SSetMonsterBehaviour.Type.FOLLOW.translation, "Follow");
+        this.add(C2SSetMonsterBehaviour.Type.FOLLOW_DISTANCE.translation, "Stay back");
+        this.add(C2SSetMonsterBehaviour.Type.STAY.translation, "Stay");
+        this.add(C2SSetMonsterBehaviour.Type.WANDER.translation, "Wander");
+        this.add(C2SSetMonsterBehaviour.Type.FARM.translation, "Tend the crops");
+        this.add(C2SSetMonsterBehaviour.Type.HARVESTINV.translation, "Crop Inventory");
+        this.add(C2SSetMonsterBehaviour.Type.SEEDINV.translation, "Seed Inventory");
+        this.add(C2SSetMonsterBehaviour.Type.RIDE.translation, "Ride");
+        this.add(C2SSetMonsterBehaviour.Type.CENTER.translation, "Set center");
 
         this.add("behaviour.home.position", "Updated restriction center");
         this.add("behaviour.inventory.harvest", "Updated crop inventory position");

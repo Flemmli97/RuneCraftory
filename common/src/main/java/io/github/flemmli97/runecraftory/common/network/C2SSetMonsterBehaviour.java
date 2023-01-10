@@ -32,31 +32,26 @@ public class C2SSetMonsterBehaviour implements Packet {
             Entity entity = sender.level.getEntity(pkt.id);
             if (entity instanceof BaseMonster monster && sender.getUUID().equals(monster.getOwnerUUID())) {
                 switch (pkt.type) {
-                    case WANDER -> {
-                        monster.setBehaviour(BaseMonster.Behaviour.WANDER);
-                        sender.sendMessage(new TranslatableComponent(monster.behaviourState().interactKey), Util.NIL_UUID);
-                    }
-                    case FOLLOW -> {
-                        monster.setBehaviour(BaseMonster.Behaviour.FOLLOW);
-                        sender.sendMessage(new TranslatableComponent(monster.behaviourState().interactKey), Util.NIL_UUID);
-                    }
-                    case STAY -> {
-                        monster.setBehaviour(BaseMonster.Behaviour.STAY);
-                        sender.sendMessage(new TranslatableComponent(monster.behaviourState().interactKey), Util.NIL_UUID);
+                    case HOME, FOLLOW, FOLLOW_DISTANCE, STAY, WANDER -> {
+                        if (pkt.type == Type.FOLLOW && Platform.INSTANCE.getPlayerData(sender).map(d -> !d.party.isPartyMember(entity) && d.party.isPartyFull()).orElse(true)) {
+                            sender.sendMessage(new TranslatableComponent("monster.interact.party.full"), Util.NIL_UUID);
+                            return;
+                        }
+                        monster.setBehaviour(pkt.type.behaviour);
+                        sender.sendMessage(new TranslatableComponent(monster.behaviourState().interactKey, monster.getDisplayName()), Util.NIL_UUID);
                     }
                     case FARM -> {
                         monster.setBehaviour(BaseMonster.Behaviour.FARM);
-                        sender.sendMessage(new TranslatableComponent(monster.behaviourState().interactKey), Util.NIL_UUID);
+                        sender.sendMessage(new TranslatableComponent(monster.behaviourState().interactKey, monster.getDisplayName()), Util.NIL_UUID);
                         ModCriteria.COMMAND_FARMING.trigger(sender);
                     }
-                    case HOME -> Platform.INSTANCE.getPlayerData(sender)
+                    case CENTER, CENTER_FARM -> Platform.INSTANCE.getPlayerData(sender)
                             .ifPresent(data -> {
                                 data.entitySelector.selectedEntity = monster;
                                 data.entitySelector.poi = monster.getRestrictCenter();
                                 data.entitySelector.apply = (player, pos) -> {
                                     monster.restrictToBasedOnBehaviour(pos);
                                     data.entitySelector.poi = monster.getRestrictCenter();
-                                    player.sendMessage(new TranslatableComponent("behaviour.home.position"), Util.NIL_UUID);
                                 };
                             });
                     case HARVESTINV -> Platform.INSTANCE.getPlayerData(sender)
@@ -85,6 +80,10 @@ public class C2SSetMonsterBehaviour implements Packet {
                                         player.sendMessage(new TranslatableComponent("behaviour.inventory.seed.invalid"), Util.NIL_UUID);
                                 };
                             });
+                    case RIDE -> {
+                        if (monster.behaviourState() == BaseMonster.Behaviour.FOLLOW || monster.behaviourState() == BaseMonster.Behaviour.FOLLOW_DISTANCE || monster.behaviourState() == BaseMonster.Behaviour.STAY)
+                            monster.doStartRide(sender);
+                    }
                 }
             }
         }
@@ -102,12 +101,25 @@ public class C2SSetMonsterBehaviour implements Packet {
     }
 
     public enum Type {
-        WANDER,
-        FOLLOW,
-        STAY,
-        FARM,
-        HOME,
-        HARVESTINV,
-        SEEDINV
+
+        HOME("gui.companion.behaviour.home", BaseMonster.Behaviour.WANDER_HOME),
+        FOLLOW("gui.companion.behaviour.follow", BaseMonster.Behaviour.FOLLOW),
+        FOLLOW_DISTANCE("gui.companion.behaviour.follow_distance", BaseMonster.Behaviour.FOLLOW_DISTANCE),
+        STAY("gui.companion.behaviour.stay", BaseMonster.Behaviour.STAY),
+        WANDER("gui.companion.behaviour.wander", BaseMonster.Behaviour.WANDER),
+        FARM("gui.companion.behaviour.farm", BaseMonster.Behaviour.FARM),
+        HARVESTINV("gui.companion.behaviour.harvest", BaseMonster.Behaviour.FARM),
+        SEEDINV("gui.companion.behaviour.seed", BaseMonster.Behaviour.FARM),
+        RIDE("gui.companion.behaviour.ride", BaseMonster.Behaviour.FOLLOW),
+        CENTER("gui.companion.behaviour.center", BaseMonster.Behaviour.WANDER),
+        CENTER_FARM("gui.companion.behaviour.center", BaseMonster.Behaviour.FARM);
+
+        public final String translation;
+        public final BaseMonster.Behaviour behaviour;
+
+        Type(String translation, BaseMonster.Behaviour behaviour) {
+            this.translation = translation;
+            this.behaviour = behaviour;
+        }
     }
 }

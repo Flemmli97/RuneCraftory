@@ -7,18 +7,31 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class FollowOwnerGoalMonster extends FollowEntityGoal<BaseMonster> {
 
+    private final float originStartDistance, originStopDistance;
+
     public FollowOwnerGoalMonster(BaseMonster mob, double speed, float startDist, float stopDist, float ignoreTargetDist) {
         super(mob, speed, startDist, stopDist, ignoreTargetDist);
+        this.originStartDistance = startDist;
+        this.originStopDistance = stopDist;
     }
 
     @Override
     public LivingEntity getEntityToFollow() {
+        if (this.mob.behaviourState() == BaseMonster.Behaviour.FOLLOW_DISTANCE) {
+            this.startDistance = this.originStartDistance + 6;
+            this.stopDistance = this.originStopDistance + 3;
+            this.tpDistanceSqrt = TP_DISTANCE_SQRT * 2;
+        } else {
+            this.startDistance = this.originStartDistance;
+            this.stopDistance = this.originStopDistance;
+            this.tpDistanceSqrt = TP_DISTANCE_SQRT;
+        }
         return this.mob.getOwner();
     }
 
     @Override
     public boolean canFollow() {
-        return this.mob.behaviourState() == BaseMonster.Behaviour.FOLLOW;
+        return this.mob.behaviourState().following;
     }
 
     @Override

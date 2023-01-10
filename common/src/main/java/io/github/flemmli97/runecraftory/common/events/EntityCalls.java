@@ -38,10 +38,12 @@ import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
@@ -61,6 +63,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -72,6 +75,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public class EntityCalls {
@@ -102,6 +106,19 @@ public class EntityCalls {
                 } else if (data.unlockedRecipes)
                     data.unlockedRecipes = false;
             });
+            //Load the chunks of unloaded party members upon joining. They will then teleport to the player themselves
+            Set<Pair<UUID, GlobalPos>> party = WorldHandler.get(serverPlayer.getServer()).getUnloadedPartyMembersFor(player);
+            if (!party.isEmpty()) {
+                party.forEach(p -> {
+                    GlobalPos pos = p.getSecond();
+                    ServerLevel level = serverPlayer.getLevel();
+                    if (level.dimension() != p.getSecond().dimension())
+                        level = serverPlayer.getServer().getLevel(pos.dimension());
+                    if (level != null)
+                        level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(pos.pos()), 3, pos.pos());
+                });
+                party.clear();
+            }
         }
     }
 

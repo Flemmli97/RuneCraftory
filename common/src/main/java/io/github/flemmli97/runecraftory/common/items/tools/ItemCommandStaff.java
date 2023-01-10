@@ -6,9 +6,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
 
-public class ItemPetInspector extends Item {
+public class ItemCommandStaff extends Item {
 
-    public ItemPetInspector(Item.Properties props) {
+    public ItemCommandStaff(Item.Properties props) {
         super(props);
     }
 

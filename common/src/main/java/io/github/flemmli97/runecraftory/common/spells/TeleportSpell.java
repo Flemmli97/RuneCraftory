@@ -46,7 +46,7 @@ public class TeleportSpell extends Spell {
             if (mob.hasRestriction()) {
                 Vec3 home = Vec3.atCenterOf(mob.getRestrictCenter());
                 if (mob.distanceToSqr(home) > 100) {
-                    this.safeTeleportTo(mob, home.x(), home.y(), home.z());
+                    safeTeleportTo(mob, home.x(), home.y(), home.z());
                     return true;
                 }
             }
@@ -57,11 +57,11 @@ public class TeleportSpell extends Spell {
                 if (mob.level.dimension() != levelKey) {
                     ServerLevel serverLevel = mob.getServer().getLevel(levelKey);
                     if (serverLevel != null) {
-                        this.changeDimension(mob, serverLevel, home.x(), home.y(), home.z());
+                        changeDimension(mob, serverLevel, home.x(), home.y(), home.z());
                         return true;
                     }
                 }
-                this.safeTeleportTo(mob, home.x(), home.y(), home.z());
+                safeTeleportTo(mob, home.x(), home.y(), home.z());
                 return true;
             }
         }
@@ -82,17 +82,17 @@ public class TeleportSpell extends Spell {
             if (player.level.dimension() != levelKey) {
                 ServerLevel serverLevel = player.getServer().getLevel(levelKey);
                 if (serverLevel != null) {
-                    this.changeDimension(player, serverLevel, home.x(), home.y(), home.z());
+                    changeDimension(player, serverLevel, home.x(), home.y(), home.z());
                     return true;
                 }
             }
-            this.safeTeleportTo(player, home.x(), home.y(), home.z());
+            safeTeleportTo(player, home.x(), home.y(), home.z());
             return true;
         }
         return false;
     }
 
-    private void safeTeleportTo(Entity entity, double x, double y, double z) {
+    public static void safeTeleportTo(Entity entity, double x, double y, double z) {
         AABB oldBox = entity.getBoundingBox();
         entity.teleportTo(x, y, z);
         entity.resetFallDistance();
@@ -105,10 +105,10 @@ public class TeleportSpell extends Spell {
                 serverLevel.sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getY() + serverLevel.random.nextDouble() * 2.0, entity.getZ(), 0, serverLevel.random.nextGaussian(), 0.0, serverLevel.random.nextGaussian(), 1);
             }
         if (entity instanceof ServerPlayer player)
-            this.teleportNearbyImportantEntities(player, player.getLevel(), oldBox, x, y, z);
+            teleportNearbyImportantEntities(player, player.getLevel(), oldBox, x, y, z);
     }
 
-    private void changeDimension(Entity entity, ServerLevel newLevel, double x, double y, double z) {
+    public static void changeDimension(Entity entity, ServerLevel newLevel, double x, double y, double z) {
         float yaw = entity.getYRot();
         float pitch = entity.getXRot();
         if (entity instanceof ServerPlayer player) {
@@ -119,7 +119,7 @@ public class TeleportSpell extends Spell {
             if (player.isSleeping()) {
                 player.stopSleepInBed(true, true);
             }
-            this.teleportNearbyImportantEntities(player, oldLvl, oldBB, x, y, z);
+            teleportNearbyImportantEntities(player, oldLvl, oldBB, x, y, z);
         } else {
             entity.unRide();
             Entity old = entity;
@@ -141,7 +141,7 @@ public class TeleportSpell extends Spell {
         }
     }
 
-    private void teleportNearbyImportantEntities(ServerPlayer player, ServerLevel oldLevel, AABB oldBox, double x, double y, double z) {
+    private static void teleportNearbyImportantEntities(ServerPlayer player, ServerLevel oldLevel, AABB oldBox, double x, double y, double z) {
         boolean crossDim = player.getLevel().dimension() != oldLevel.dimension();
         for (Entity e : oldLevel.getEntities(EntityTypeTest.forClass(Mob.class), oldBox.inflate(24), e -> {
             if (e instanceof BaseMonster monster)
@@ -151,9 +151,9 @@ public class TeleportSpell extends Spell {
             return false;
         })) {
             if (crossDim)
-                this.changeDimension(e, player.getLevel(), x + oldLevel.random.nextDouble() * 2 - 1, y, z + oldLevel.random.nextDouble() * 2 - 1);
+                changeDimension(e, player.getLevel(), x + oldLevel.random.nextDouble() * 2 - 1, y, z + oldLevel.random.nextDouble() * 2 - 1);
             else
-                this.safeTeleportTo(e, x + oldLevel.random.nextDouble() * 2 - 1, y, z + oldLevel.random.nextDouble() * 2 - 1);
+                safeTeleportTo(e, x + oldLevel.random.nextDouble() * 2 - 1, y, z + oldLevel.random.nextDouble() * 2 - 1);
         }
     }
 

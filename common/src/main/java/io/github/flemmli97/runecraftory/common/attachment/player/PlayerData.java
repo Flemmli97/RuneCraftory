@@ -101,6 +101,8 @@ public class PlayerData {
 
     public final TamedEntityTracker tamedEntity = new TamedEntityTracker();
 
+    public final Party party = new Party();
+
     private boolean touchedWater;
 
     public PlayerData() {
@@ -565,7 +567,7 @@ public class PlayerData {
                 this.walkingTracker.tickWalkingTracker(serverPlayer);
             ItemStack main = player.getMainHandItem();
             ItemStack off = player.getOffhandItem();
-            if (main.is(ModItems.inspector.get()) || off.is(ModItems.inspector.get())) {
+            if (main.is(ModItems.mobStaff.get()) || off.is(ModItems.mobStaff.get())) {
                 if (this.entitySelector.poi != null) {
                     serverPlayer.getLevel().sendParticles(serverPlayer, ParticleTypes.FLAME, true,
                             this.entitySelector.poi.getX() + 0.5, this.entitySelector.poi.getY() + 1.5, this.entitySelector.poi.getZ() + 0.5,
@@ -642,6 +644,7 @@ public class PlayerData {
             serverPlayer.getServer().tell(new TickTask(1, () -> player.setHealth(f)));
         }
         this.walkingTracker.read(nbt.getCompound("WalkingTracker"));
+        this.party.load(nbt.getCompound("PartyTag"));
     }
 
     public CompoundTag writeToNBTPlain(CompoundTag nbt) {
@@ -697,6 +700,7 @@ public class PlayerData {
         nbt.put("FoodData", this.foodBuffNBT());
         nbt.put("WalkingTracker", this.walkingTracker.save());
         nbt.put("TamedEntityTracker", this.tamedEntity.save());
+        nbt.put("PartyTag", this.party.save());
         return nbt;
     }
 

@@ -2,6 +2,9 @@ package io.github.flemmli97.runecraftory.common.world;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.serialization.Dynamic;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.IDailyUpdate;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
@@ -15,11 +18,16 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -42,7 +50,9 @@ public class WorldHandler extends SavedData {
      */
     private final Set<IDailyUpdate> updateTracker = Sets.newConcurrentHashSet();
     private final Map<UUID, Set<BarnData>> playerBarns = new HashMap<>();
-    private final Long2ObjectMap<BarnData> positionBarnMap = new Long2ObjectOpenHashMap<>();
+    private final Map<ResourceKey<Level>, Long2ObjectMap<BarnData>> positionBarnMap = new HashMap<>();
+
+    private final Map<UUID, Set<Pair<UUID, GlobalPos>>> unloadedPartyMembers = new HashMap<>();
 
     private int updateDelay, lastUpdateDay;
 
@@ -190,9 +200,10 @@ public class WorldHandler extends SavedData {
         return this.updateTracker.remove(update);
     }
 
-    public BarnData getOrCreateFor(UUID player, BlockPos pos) {
-        BarnData data = this.positionBarnMap
-                .computeIfAbsent(pos.asLong(), l -> new BarnData(pos));
+    //========BARNS
+    public BarnData getOrCreateFor(UUID player, Level level, BlockPos pos) {
+        BarnData data = this.positionBarnMap.computeIfAbsent(level.dimension(), k -> new Long2ObjectOpenHashMap<>())
+                .computeIfAbsent(pos.asLong(), l -> new BarnData(GlobalPos.of(level.dimension(), pos)));
         this.playerBarns.computeIfAbsent(player, uuid -> new HashSet<>())
                 .add(data);
         this.setDirty();
@@ -204,8 +215,11 @@ public class WorldHandler extends SavedData {
     }
 
     @Nullable
-    public BarnData barnAt(BlockPos pos) {
-        return this.positionBarnMap.get(pos.asLong());
+    public BarnData barnAt(GlobalPos pos) {
+        Long2ObjectMap<BarnData> map = this.positionBarnMap.get(pos.dimension());
+        if (map != null)
+            return map.get(pos.pos().asLong());
+        return null;
     }
 
     @Nullable
@@ -227,12 +241,27 @@ public class WorldHandler extends SavedData {
                 .forEach(b -> b.removeMonster(monster.getUUID()));
     }
 
-    public void removeBarn(UUID player, BlockPos pos) {
-        BarnData old = this.positionBarnMap.remove(pos.asLong());
-        this.playerBarns.computeIfAbsent(player, uuid -> new HashSet<>())
-                .remove(old);
-        old.remove();
-        this.setDirty();
+    public void removeBarn(UUID player, GlobalPos pos) {
+        Long2ObjectMap<BarnData> map = this.positionBarnMap.get(pos.dimension());
+        if (map != null) {
+            BarnData old = map.remove(pos.pos().asLong());
+            this.playerBarns.computeIfAbsent(player, uuid -> new HashSet<>())
+                    .remove(old);
+            old.remove();
+            this.setDirty();
+        }
+    }
+
+    //===========
+
+    public void safeUnloadedPartyMembers(LivingEntity entity) {
+        if (entity instanceof BaseMonster monster && monster.getOwnerUUID() != null)
+            this.unloadedPartyMembers.computeIfAbsent(monster.getOwnerUUID(), o -> new HashSet<>())
+                    .add(Pair.of(entity.getUUID(), GlobalPos.of(entity.level.dimension(), entity.blockPosition())));
+    }
+
+    public Set<Pair<UUID, GlobalPos>> getUnloadedPartyMembersFor(Player player) {
+        return this.unloadedPartyMembers.computeIfAbsent(player.getUUID(), o -> new HashSet<>());
     }
 
     public void load(CompoundTag compoundNBT) {
@@ -246,7 +275,18 @@ public class WorldHandler extends SavedData {
             list.forEach(t -> {
                 BarnData data = BarnData.fromTag((CompoundTag) t);
                 map.add(data);
-                this.positionBarnMap.put(data.pos.asLong(), data);
+                this.positionBarnMap.computeIfAbsent(data.pos.dimension(), k -> new Long2ObjectOpenHashMap<>()).put(data.pos.pos().asLong(), data);
+            });
+        });
+        CompoundTag unloadedParties = compoundNBT.getCompound("UnloadedParties");
+        unloadedParties.getAllKeys().forEach(key -> {
+            UUID uuid = UUID.fromString(key);
+            ListTag list = unloadedParties.getList(key, Tag.TAG_COMPOUND);
+            Set<Pair<UUID, GlobalPos>> map = this.unloadedPartyMembers.computeIfAbsent(uuid, u -> new HashSet<>());
+            list.forEach(t -> {
+                CompoundTag cTag = (CompoundTag) t;
+                map.add(Pair.of(UUID.fromString(cTag.getString("UUID")), GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, cTag.get("Pos")))
+                        .getOrThrow(false, RuneCraftory.logger::error)));
             });
         });
     }
@@ -259,12 +299,25 @@ public class WorldHandler extends SavedData {
         this.playerBarns.forEach((uuid, pB) -> {
             ListTag pBTag = new ListTag();
             pB.forEach(b -> {
-                if (!b.isRemoved())
+                if (!b.isInvalid())
                     pBTag.add(b.save());
             });
             barns.put(uuid.toString(), pBTag);
         });
         compoundNBT.put("PlayerBarns", barns);
+        CompoundTag unloadedParties = new CompoundTag();
+        this.unloadedPartyMembers.forEach((uuid, pairs) -> {
+            ListTag pTags = new ListTag();
+            pairs.forEach(p -> {
+                CompoundTag pTag = new CompoundTag();
+                pTag.putString("UUID", p.getFirst().toString());
+                GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, p.getSecond()).resultOrPartial(RuneCraftory.logger::error)
+                        .ifPresent(t -> pTag.put("Pos", t));
+                pTags.add(pTag);
+            });
+            unloadedParties.put(uuid.toString(), pTags);
+        });
+        compoundNBT.put("UnloadedParties", unloadedParties);
         return compoundNBT;
     }
 }

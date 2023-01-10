@@ -33,7 +33,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
             return;
         if (blockEntity.barnData == null) {
             blockEntity.barnData = WorldHandler.get(level.getServer())
-                    .getOrCreateFor(blockEntity.owner, blockPos);
+                    .getOrCreateFor(blockEntity.owner, level, blockPos);
         }
         blockEntity.cooldown = 40;
         int size = MAX_SIZE;

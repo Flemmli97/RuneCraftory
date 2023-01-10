@@ -383,7 +383,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 89)
                 .addAttribute(ModAttributes.MAGIC.get(), 98));
 
-        this.addStat(ModItems.inspector.get(), new ItemStat.Builder(1500, 300, 0));
+        this.addStat(ModItems.mobStaff.get(), new ItemStat.Builder(1500, 300, 0));
         this.addStat(ModItems.brush.get(), new ItemStat.Builder(1500, 300, 0));
         this.addStat(ModItems.glass.get(), new ItemStat.Builder(2000, 400, 1));
 

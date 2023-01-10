@@ -23,7 +23,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 
 import java.util.Collection;
 import java.util.Set;
@@ -223,15 +222,15 @@ public class RunecraftoryCommand {
     private static int recalcStats(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         Collection<? extends Entity> entities = EntityArgument.getEntities(ctx, "entities");
         int i = 0;
-        for(Entity e : entities) {
-            if(e instanceof ServerPlayer player) {
+        for (Entity e : entities) {
+            if (e instanceof ServerPlayer player) {
                 Platform.INSTANCE.getPlayerData(player)
                         .ifPresent(d -> d.recalculateStats(player, false));
                 i++;
-            } else if(e instanceof EntityNPCBase npc) {
+            } else if (e instanceof EntityNPCBase npc) {
                 npc.recalcStatsFull();
                 i++;
-            } else if(e instanceof BaseMonster monster) {
+            } else if (e instanceof BaseMonster monster) {
                 monster.recalcStatsFull();
                 i++;
             }

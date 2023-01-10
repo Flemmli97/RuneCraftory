@@ -1,7 +1,11 @@
 package io.github.flemmli97.runecraftory.common.world;
 
-import net.minecraft.core.BlockPos;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.Dynamic;
+import io.github.flemmli97.runecraftory.RuneCraftory;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +13,7 @@ import java.util.UUID;
 
 public class BarnData {
 
-    public final BlockPos pos;
+    public final GlobalPos pos;
     private int size = 0;
     private boolean hasRoof;
 
@@ -17,12 +21,13 @@ public class BarnData {
 
     private boolean removed;
 
-    public BarnData(BlockPos pos) {
+    public BarnData(GlobalPos pos) {
         this.pos = pos;
     }
 
     public static BarnData fromTag(CompoundTag tag) {
-        BarnData data = new BarnData(new BlockPos(tag.getInt("PosX"), tag.getInt("PosY"), tag.getInt("PosZ")));
+        DataResult<GlobalPos> dataResult = GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, tag.get("Pos")));
+        BarnData data = new BarnData(dataResult.getOrThrow(false, RuneCraftory.logger::error));
         data.load(tag);
         return data;
     }
@@ -52,7 +57,7 @@ public class BarnData {
             return 0;
         if (this.getSize() < 4)
             return (this.getSize() - 1) * 2;
-        return (this.getSize() - 3) * 4;
+        return (this.getSize() - 3) * 4 + 2;
     }
 
     public boolean hasRoof() {
@@ -63,8 +68,8 @@ public class BarnData {
         return this.size;
     }
 
-    public boolean isRemoved() {
-        return this.removed;
+    public boolean isInvalid() {
+        return this.removed || this.size < 2;
     }
 
     public void remove() {
@@ -80,9 +85,8 @@ public class BarnData {
 
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
-        tag.putInt("PosX", this.pos.getX());
-        tag.putInt("PosY", this.pos.getY());
-        tag.putInt("PosZ", this.pos.getZ());
+        GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.pos).resultOrPartial(RuneCraftory.logger::error)
+                .ifPresent(t -> tag.put("Pos", t));
         tag.putInt("Size", this.size);
         tag.putBoolean("HasRoof", this.hasRoof);
         CompoundTag monsters = new CompoundTag();
@@ -93,7 +97,7 @@ public class BarnData {
 
     @Override
     public String toString() {
-        return String.format("Barn[x=%d,y=%d,z=%d]; Size: %d, With Roof: %s, Capacity: %d, FreeCapacity: %d", this.pos.getX(), this.pos.getY(), this.pos.getZ(),
+        return String.format("Barn[%s]; Size: %d, With Roof: %s, Capacity: %d, FreeCapacity: %d", this.pos,
                 this.size, this.hasRoof, this.getCapacity(), this.getCapacity() - this.monsters.values().stream().mapToInt(i -> i).sum());
     }
 }

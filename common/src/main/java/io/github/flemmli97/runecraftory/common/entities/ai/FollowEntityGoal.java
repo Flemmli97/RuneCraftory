@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.ai;
 
+import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -11,14 +12,18 @@ import java.util.EnumSet;
 
 public abstract class FollowEntityGoal<T extends Mob> extends Goal {
 
+    public static final double TP_DISTANCE_SQRT = 225;
+
     protected final T mob;
     private final double speedModifier;
-    protected final float stopDistance;
-    protected final float startDistance;
+    protected float stopDistance;
+    protected float startDistance;
     protected final float ignoreTargetDist;
     private LivingEntity owner;
     private int timeToRecalcPath;
     private float oldWaterCost;
+
+    protected double tpDistanceSqrt = TP_DISTANCE_SQRT;
 
     public FollowEntityGoal(T mob, double speed, float startDist, float stopDist, float ignoreTargetDist) {
         this.mob = mob;
@@ -94,7 +99,7 @@ public abstract class FollowEntityGoal<T extends Mob> extends Goal {
         if (this.mob.isLeashed() || this.mob.isPassenger()) {
             return;
         }
-        if (this.mob.distanceToSqr(this.owner) < 225.0 || !this.teleportToOwner()) {
+        if (this.mob.distanceToSqr(this.owner) < this.tpDistanceSqrt || !this.teleportToOwner()) {
             this.mob.getNavigation().moveTo(this.owner, this.speedModifier);
         }
     }
@@ -112,31 +117,15 @@ public abstract class FollowEntityGoal<T extends Mob> extends Goal {
     }
 
     private boolean maybeTeleportTo(int x, int y, int z) {
-        if (Math.abs((double) x - this.owner.getX()) < 2.0 && Math.abs((double) z - this.owner.getZ()) < 2.0) {
+        if (Math.abs(x - this.owner.getX()) < 2.0 && Math.abs(z - this.owner.getZ()) < 2.0) {
             return false;
         }
-        if (!this.canTeleportTo(new BlockPos(x, y, z))) {
+        if (!TeleportUtils.tryTeleportTo(this.mob, new BlockPos(x, y, z), this::canTeleportOn)) {
             return false;
         }
         this.mob.moveTo((double) x + 0.5, y, (double) z + 0.5, this.mob.getYRot(), this.mob.getXRot());
         this.mob.getNavigation().stop();
         return true;
-    }
-
-    private boolean canTeleportTo(BlockPos pos) {
-        BlockPathTypes blockPathTypes = this.mob.getNavigation().getNodeEvaluator().getBlockPathType(this.mob.level, pos.getX(), pos.getY(), pos.getZ());
-        if (blockPathTypes == BlockPathTypes.OPEN) {
-            if (!this.mob.isNoGravity())
-                return false;
-        } else if (blockPathTypes != BlockPathTypes.WALKABLE) {
-            return false;
-        }
-        BlockState blockState = this.mob.level.getBlockState(pos.below());
-        if (!this.canTeleportOn(blockState)) {
-            return false;
-        }
-        BlockPos blockPos = pos.subtract(this.mob.blockPosition());
-        return this.mob.level.noCollision(this.mob, this.mob.getBoundingBox().move(blockPos));
     }
 
     protected abstract boolean canTeleportOn(BlockState state);

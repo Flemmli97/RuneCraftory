@@ -133,12 +133,12 @@ public class ClientHandlers {
         return false;
     }
 
-    public static void openCompanionGui(int id) {
+    public static void openCompanionGui(int id, boolean fullParty) {
         Entity entity = Minecraft.getInstance().level.getEntity(id);
         if (entity instanceof BaseMonster monster) {
             if (!Minecraft.getInstance().player.getUUID().equals(monster.getOwnerUUID()))
                 return;
-            Minecraft.getInstance().setScreen(new MonsterCompanionGui(monster));
+            Minecraft.getInstance().setScreen(new MonsterCompanionGui(monster, fullParty));
         }
     }
 
