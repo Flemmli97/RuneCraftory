@@ -591,11 +591,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     return InteractionResult.CONSUME;
                 }
             }
-            if (stack.getItem() == ModItems.inspector.get() && hand == InteractionHand.MAIN_HAND) {
-                if (player instanceof ServerPlayer serverPlayer) {
+            if (stack.getItem() == ModItems.inspector.get()) {
+                //Command for: Setting center of action for wander and farming
+
+
+                /*if (player instanceof ServerPlayer serverPlayer) {
                     EntityUtils.sendAttributesTo(this, serverPlayer);
-                    Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this), serverPlayer);
-                }
+                    Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this, serverPlayer), serverPlayer);
+                }*/
                 return InteractionResult.SUCCESS;
             } else if (stack.getItem() == ModItems.brush.get()) {
                 int day = WorldUtils.day(this.level);
@@ -612,15 +615,21 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             if (hand == InteractionHand.MAIN_HAND && !this.playDeath()) {
                 if (player.isShiftKeyDown()) {
-                    this.setBehaviour(this.behaviourState().next());
-                    if (player instanceof ServerPlayer serverPlayer)
-                        serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.4f, 0.4f));
-                    player.sendMessage(new TranslatableComponent(this.behaviourState().interactKey), Util.NIL_UUID);
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        EntityUtils.sendAttributesTo(this, serverPlayer);
+                        Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this, serverPlayer), serverPlayer);
+                    }
+
+
+                    //this.setBehaviour(this.behaviourState().next());
+                    //if (player instanceof ServerPlayer serverPlayer)
+                    //    serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, SoundSource.PLAYERS, player.getX(), player.getY(), player.getZ(), 0.4f, 0.4f));
+                    //player.sendMessage(new TranslatableComponent(this.behaviourState().interactKey), Util.NIL_UUID);
                     return InteractionResult.SUCCESS;
-                } else if (this.ridable() && this.behaviourState() != Behaviour.FARM) {
+                }/* else if (this.ridable() && this.behaviourState() != Behaviour.FARM) {
                     player.startRiding(this);
                     return InteractionResult.SUCCESS;
-                }
+                }*/
             }
             return InteractionResult.PASS;
         } else if (player.isShiftKeyDown() && !stack.isEmpty()) {
@@ -644,15 +653,19 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void increaseFriendPoints(int xp) {
         boolean leveledUp = this.friendlyPoints.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> this.entityData.set(friendPointsSync, this.friendlyPoints.getLevel()));
         if (leveledUp) {
-            List<Attribute> increasable = List.of(Attributes.MAX_HEALTH, Attributes.ATTACK_DAMAGE,
-                    ModAttributes.DEFENCE.get(), ModAttributes.MAGIC.get(), ModAttributes.MAGIC_DEFENCE.get());
-            for (Attribute att : increasable) {
-                AttributeInstance inst = this.getAttribute(att);
-                if (inst != null) {
-                    double inc = 1 + (this.friendlyPoints.getLevel() - 1) * 0.03;
-                    inst.removeModifier(LibConstants.ATTRIBUTE_FRIEND_MOD);
-                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_FRIEND_MOD, "rf.friend.mod", inc, AttributeModifier.Operation.MULTIPLY_BASE));
-                }
+            this.updateFriendPointAttributeBonus();
+        }
+    }
+
+    private void updateFriendPointAttributeBonus() {
+        List<Attribute> increasable = List.of(Attributes.MAX_HEALTH, Attributes.ATTACK_DAMAGE,
+                ModAttributes.DEFENCE.get(), ModAttributes.MAGIC.get(), ModAttributes.MAGIC_DEFENCE.get());
+        for (Attribute att : increasable) {
+            AttributeInstance inst = this.getAttribute(att);
+            if (inst != null) {
+                double inc = (this.friendlyPoints.getLevel() - 1) * 0.03;
+                inst.removeModifier(LibConstants.ATTRIBUTE_FRIEND_MOD);
+                inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_FRIEND_MOD, "rf.friend.mod", inc, AttributeModifier.Operation.MULTIPLY_BASE));
             }
         }
     }
@@ -937,6 +950,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             return true;
         }
         return false;
+    }
+
+    public void recalcStatsFull() {
+        this.applyAttributes();
+        this.updateStatsToLevel();
+        this.updateFriendPointAttributeBonus();
     }
 
     public void updateStatsToLevel() {
@@ -1542,32 +1561,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public enum Behaviour {
 
-        WANDER("monster.interact.move"),
+        WANDER_HOME("monster.interact.home"),
         FOLLOW("monster.interact.follow"),
-        STAY("monster.interact.sit"),
+        FOLLOW_DISTANCE("monster.interact.follow.distance"),
+        STAY("monster.interact.stay"),
+        WANDER("monster.interact.wander"),
         FARM("monster.interact.farm");
 
         public final String interactKey;
 
         Behaviour(String interactKey) {
             this.interactKey = interactKey;
-        }
-
-        Behaviour next() {
-            return switch (this) {
-                case WANDER -> FOLLOW;
-                case FOLLOW -> STAY;
-                default -> WANDER;
-            };
-        }
-
-        Behaviour nextAddition() {
-            return switch (this) {
-                case WANDER -> FOLLOW;
-                case FOLLOW -> STAY;
-                case STAY -> FARM;
-                case FARM -> WANDER;
-            };
         }
     }
 }

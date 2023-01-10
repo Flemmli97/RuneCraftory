@@ -1450,6 +1450,7 @@
   "runecraftory.command.reset.recipe": "Locked all crafting recipes for %s again",
   "runecraftory.command.weather.no": "No such weather %s",
   "runecraftory.command.set.weather": "Set current weather to %s",
+  "runecraftory.command.recalc.stats": "Recalculated level stats for %s entities",
   "runecraftory.recipe_integration.locked": "Unknown Recipe",
   "runecraftory.recipe_integration.crafting_level": "Lvl: %s",
   "gui.companion.behaviour.wander": "Wander",

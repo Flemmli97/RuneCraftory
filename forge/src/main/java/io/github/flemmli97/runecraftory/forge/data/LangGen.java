@@ -319,6 +319,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.command.reset.recipe", "Locked all crafting recipes for %s again");
         this.add("runecraftory.command.weather.no", "No such weather %s");
         this.add("runecraftory.command.set.weather", "Set current weather to %s");
+        this.add("runecraftory.command.recalc.stats", "Recalculated level stats for %s entities");
 
         this.add("runecraftory.recipe_integration.locked", "Unknown Recipe");
         this.add("runecraftory.recipe_integration.crafting_level", "Lvl: %s");

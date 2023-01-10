@@ -247,6 +247,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
     }
 
+    public void recalcStatsFull() {
+        this.applyAttributes();
+    }
+
     public void addGoal() {
         this.targetSelector.addGoal(1, this.targetMobs);
         this.targetSelector.addGoal(0, this.hurt);

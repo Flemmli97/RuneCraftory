@@ -9,6 +9,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
@@ -20,7 +22,10 @@ import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -42,6 +47,7 @@ public class RunecraftoryCommand {
                                 .then(Commands.literal("xp").then(Commands.argument("amount", IntegerArgumentType.integer()).executes(RunecraftoryCommand::addLevelXP))))
                 )
                 .then(Commands.literal("unlockRecipes").requires(src -> src.hasPermission(2)).then(Commands.argument("player", EntityArgument.players()).executes(RunecraftoryCommand::unlockRecipes)))
+                .then(Commands.literal("recalcStats").requires(src -> src.hasPermission(2)).then(Commands.argument("entities", EntityArgument.entities()).executes(RunecraftoryCommand::recalcStats)))
                 .then(Commands.literal("weather").requires(src -> src.hasPermission(2)).then(Commands.argument("weather", StringArgumentType.string()).suggests((context, builder) -> SharedSuggestionProvider.suggest(Stream.of(EnumWeather.values()).map(Object::toString), builder)).executes(RunecraftoryCommand::setWeather)))
                 .then(Commands.literal("reset").requires(src -> src.hasPermission(2))
                         .then(Commands.argument("player", EntityArgument.players())
@@ -212,5 +218,25 @@ public class RunecraftoryCommand {
         WorldHandler.get(ctx.getSource().getServer()).updateWeatherTo(ctx.getSource().getLevel(), weather);
         ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.set.weather", weather), false);
         return 1;
+    }
+
+    private static int recalcStats(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        Collection<? extends Entity> entities = EntityArgument.getEntities(ctx, "entities");
+        int i = 0;
+        for(Entity e : entities) {
+            if(e instanceof ServerPlayer player) {
+                Platform.INSTANCE.getPlayerData(player)
+                        .ifPresent(d -> d.recalculateStats(player, false));
+                i++;
+            } else if(e instanceof EntityNPCBase npc) {
+                npc.recalcStatsFull();
+                i++;
+            } else if(e instanceof BaseMonster monster) {
+                monster.recalcStatsFull();
+                i++;
+            }
+        }
+        ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.recalc.stats", i), false);
+        return i;
     }
 }
