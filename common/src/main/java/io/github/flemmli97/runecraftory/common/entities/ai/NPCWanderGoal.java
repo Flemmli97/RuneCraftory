@@ -268,7 +268,9 @@ public class NPCWanderGoal extends Goal {
         if (this.pathFindCooldown <= 0 && this.npc.getNavigation().isDone()) {
             this.npc.getBrain().getMemory(MemoryModuleType.WALK_TARGET).ifPresent(target -> {
                 Path path = this.npc.getNavigation().createPath(target.getTarget().currentBlockPosition(), target.getCloseEnoughDist());
-                if (path == null || !path.canReach()) {
+                boolean canReach = true;
+                //If path = null or if entity should but can't reach target
+                if (path == null || (canReach = !path.canReach() && this.npc.blockPosition().distManhattan(target.getTarget().currentBlockPosition()) < EntityNPCBase.PATH_FIND_LENGTH - 15)) {
                     if (!this.npc.getBrain().hasMemoryValue(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE))
                         this.npc.getBrain().setMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE, this.npc.level.getGameTime());
                     if (path == null) {
@@ -276,7 +278,8 @@ public class NPCWanderGoal extends Goal {
                         return;
                     }
                 }
-                this.npc.getBrain().eraseMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
+                if (canReach)
+                    this.npc.getBrain().eraseMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
                 this.npc.getNavigation().moveTo(path, target.getSpeedModifier());
                 this.pathFindCooldown = this.npc.getRandom().nextInt(15) + 15;
             });

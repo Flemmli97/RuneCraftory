@@ -135,6 +135,8 @@ import java.util.function.Predicate;
 
 public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimated {
 
+    public static final float PATH_FIND_LENGTH = 100;
+
     private static final EntityDataAccessor<Integer> ENTITY_LEVEL = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> LEVEL_XP = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
@@ -306,7 +308,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             @Override
             @Nullable
             protected Path createPath(Set<BlockPos> targets, int regionOffset, boolean offsetUpward, int accuracy) {
-                return this.createPath(targets, regionOffset, offsetUpward, accuracy, 100); //Increased pathfinding range
+                return this.createPath(targets, regionOffset, offsetUpward, accuracy, PATH_FIND_LENGTH); //Increased pathfinding range
             }
 
             @Override
