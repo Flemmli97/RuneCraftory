@@ -41,6 +41,7 @@ public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FOLLOW_DISTANCE);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.STAY);
+                buttonTypes.add(C2SSetMonsterBehaviour.Type.WANDER);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FARM);
             }
             case FOLLOW_DISTANCE -> {
@@ -48,6 +49,7 @@ public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FOLLOW);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.STAY);
+                buttonTypes.add(C2SSetMonsterBehaviour.Type.WANDER);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FARM);
             }
             case STAY -> {
@@ -55,6 +57,7 @@ public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FOLLOW_DISTANCE);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FOLLOW);
+                buttonTypes.add(C2SSetMonsterBehaviour.Type.WANDER);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FARM);
             }
             case WANDER -> {
@@ -67,10 +70,11 @@ public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
                 if (!this.fullParty)
                     buttonTypes.add(C2SSetMonsterBehaviour.Type.FOLLOW);
+                buttonTypes.add(C2SSetMonsterBehaviour.Type.WANDER);
             }
         }
         for (C2SSetMonsterBehaviour.Type type : buttonTypes) {
-            if (buttonTypes.size() == 1 || (buttonIndex == 4 && buttonTypes.size() == 5))
+            if (buttonIndex + 1 == buttonTypes.size() && buttonTypes.size() % 2 == 1)
                 this.addRenderableWidget(new Button(this.leftPos + x + (int) ((xSize + 5) * 0.5), this.topPos + y + (buttonIndex / 2 * 23), xSize, 20, new TranslatableComponent(type.translation), b -> this.handlePress(type)));
             else
                 this.addRenderableWidget(new Button(this.leftPos + x + (buttonIndex % 2 == 0 ? 0 : xSize + 6), this.topPos + y + (buttonIndex / 2 * 23), xSize, 20, new TranslatableComponent(type.translation), b -> this.handlePress(type)));

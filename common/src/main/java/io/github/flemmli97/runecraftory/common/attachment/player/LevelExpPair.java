@@ -29,6 +29,8 @@ public class LevelExpPair {
 
     public boolean addXP(float amount, int maxLevel, Function<Integer, Integer> xpForNext, Runnable onLevelUp) {
         int neededXP = xpForNext.apply(this.level);
+        if (neededXP <= 0)
+            return false;
         float xpToNextLevel = neededXP - this.xp;
         if (amount >= xpToNextLevel) {
             float diff = amount - xpToNextLevel;
