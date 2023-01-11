@@ -20,6 +20,8 @@ import io.github.flemmli97.runecraftory.common.entities.ai.NPCFollowGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NPCWanderGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.RandomLookGoalAlive;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
@@ -33,6 +35,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CUpdateNPCData;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -135,7 +138,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private static final EntityDataAccessor<Integer> ENTITY_LEVEL = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Float> LEVEL_XP = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Byte> SHOP_SYNC = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> SHOP_SYNC = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> MALE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT,
@@ -175,7 +178,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     private final LevelExpPair levelPair = new LevelExpPair();
 
-    private EnumShop shop = EnumShop.NONE;
+    private NPCJob shop = ModNPCJobs.NONE.getSecond();
     private NPCData data = NPCData.DEFAULT_DATA;
     private NPCData.NPCLook look = NPCData.NPCLook.DEFAULT_LOOK;
     private Pair<EnumSeason, Integer> birthday = Pair.of(EnumSeason.SPRING, 1);
@@ -274,7 +277,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.entityData.define(ENTITY_LEVEL, LibConstants.BASE_LEVEL);
         this.entityData.define(LEVEL_XP, 0f);
         this.entityData.define(PLAY_DEATH_STATE, false);
-        this.entityData.define(SHOP_SYNC, (byte) 0);
+        this.entityData.define(SHOP_SYNC, 0);
         this.entityData.define(MALE, false);
     }
 
@@ -284,7 +287,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.level.isClientSide) {
             if (key == SHOP_SYNC) {
                 try {
-                    this.shop = EnumShop.values()[this.entityData.get(SHOP_SYNC)];
+                    this.shop = ModNPCJobs.getFromSyncID(this.entityData.get(SHOP_SYNC));
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
             }
@@ -667,7 +670,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.put("MobLevel", this.level().save());
-        compound.putInt("Shop", this.getShop().ordinal());
+        compound.putString("Shop", ModNPCJobs.getIDFrom(this.getShop()).toString());
         compound.putInt("FoodBuffTick", this.foodBuffTick);
         compound.putBoolean("PlayDeath", this.entityData.get(PLAY_DEATH_STATE));
 
@@ -713,10 +716,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.data.gender() == NPCData.Gender.UNDEFINED)
             this.setMale(compound.getBoolean("Male"));
         if (this.data.profession() == null) {
-            try {
-                this.setShop(EnumShop.values()[compound.getInt("Shop")]);
-            } catch (ArrayIndexOutOfBoundsException ignored) {
-            }
+            this.setShop(ModNPCJobs.getFromID(ModNPCJobs.legacyOfTag(compound.get("Shop"))));
         }
     }
 
@@ -798,14 +798,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return super.hasRestriction() && this.getEntityToFollowUUID() == null;
     }
 
-    public EnumShop getShop() {
+    public NPCJob getShop() {
         return this.shop;
     }
 
-    public void setShop(EnumShop shop) {
+    public void setShop(NPCJob shop) {
         this.shop = shop;
         if (!this.level.isClientSide)
-            this.entityData.set(SHOP_SYNC, (byte) shop.ordinal());
+            this.entityData.set(SHOP_SYNC, ModNPCJobs.getSyncIDFrom(shop));
     }
 
     public boolean isShopDefined() {
@@ -878,9 +878,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public ShopState canTrade() {
-        if (this.shop == EnumShop.NONE)
+        if (!this.shop.hasShop)
             return ShopState.NOTWORKER;
-        if (this.shop == EnumShop.RANDOM)
+        if (!this.shop.hasWorkSchedule)
             return ShopState.OPEN;
         if (this.getWorkPlace() == null)
             return ShopState.NOWORKPLACE;
@@ -1017,14 +1017,14 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.canTrade() == ShopState.OPEN) {
             this.interactingPlayers.add(player);
             Platform.INSTANCE.getPlayerData(player).map(d -> {
-                if (EntityNPCBase.this.getShop() != EnumShop.NONE) {
+                if (EntityNPCBase.this.getShop().hasShop) {
                     return d.getShop(this.getShop());
                 }
                 return null;
             }).ifPresent(shopList -> Platform.INSTANCE.openGuiMenu(player, new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
-                    return new TranslatableComponent(EntityNPCBase.this.getShop().translationKey);
+                    return new TranslatableComponent(EntityNPCBase.this.getShop().getTranslationKey());
                 }
 
                 @Nullable
@@ -1047,7 +1047,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void setNPCData(NPCData data) {
         this.data = data;
-        this.setShop(this.data.profession() != null ? this.data.profession() : EnumShop.values()[this.random.nextInt(EnumShop.values().length)]);
+        this.setShop(this.data.profession() != null ? this.data.profession() : ModNPCJobs.getRandomJob(this.random));
         this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
         String name;
         if (this.data.name() != null) {

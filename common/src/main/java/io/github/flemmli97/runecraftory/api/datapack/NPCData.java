@@ -14,7 +14,8 @@ import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
@@ -44,7 +45,7 @@ import java.util.TreeMap;
 import java.util.function.Function;
 
 public record NPCData(@Nullable String name, @Nullable String surname,
-                      Gender gender, EnumShop profession, @Nullable ResourceLocation look,
+                      Gender gender, NPCJob profession, @Nullable ResourceLocation look,
                       @Nullable Pair<EnumSeason, Integer> birthday,
                       int weight, String neutralGiftResponse,
                       Map<ConversationType, ConversationSet> interactions,
@@ -85,7 +86,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
                     Codec.STRING.fieldOf("neutralGiftResponse").forGetter(d -> d.neutralGiftResponse),
 
-                    CodecHelper.enumCodec(EnumShop.class, null).optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession)),
+                    ModNPCJobs.CODEC.optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession)),
                     ResourceLocation.CODEC.optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look)),
 
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),
@@ -123,7 +124,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final Gender gender;
         private final int weight;
         private String neutralGiftResponse;
-        private EnumShop profession;
+        private NPCJob profession;
         private final Map<ConversationType, ConversationSet> interactions = new TreeMap<>();
         private final Map<String, Gift> giftItems = new LinkedHashMap<>();
         private Pair<EnumSeason, Integer> birthday;
@@ -162,7 +163,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder withProfession(EnumShop profession) {
+        public Builder withProfession(NPCJob profession) {
             this.profession = profession;
             return this;
         }

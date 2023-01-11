@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.registry;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.world.structure.AmbrosiaForestStructure;
 import io.github.flemmli97.runecraftory.common.world.structure.TheaterRuinsStructure;
 import io.github.flemmli97.runecraftory.common.world.structure.ThunderboltRuinsStructure;
@@ -23,7 +22,6 @@ import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfigura
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -41,16 +39,16 @@ public class ModStructures {
     public static final RegistryEntrySupplier<StructureProcessorType<NPCDataProcessor>> NPC_PROCESSOR = STRUCTURESPROCESSORS.register("npc_processor", () -> () -> NPCDataProcessor.CODEC);
     public static final RegistryEntrySupplier<StructureProcessorType<WaterUnlogProcessor>> WATERUNLOG_PROCESSOR = STRUCTURESPROCESSORS.register("water_unlog_processor", () -> () -> WaterUnlogProcessor.CODEC);
 
-    public static final Map<EnumShop, Holder<StructureProcessorList>> NPC_PROCESSOR_LIST = registerNPCProcessorLists();
+    public static final Map<ResourceLocation, Holder<StructureProcessorList>> NPC_PROCESSOR_LIST = registerNPCProcessorLists();
 
     public static <T extends FeatureConfiguration> RegistryEntrySupplier<StructureFeature<T>> register(String name, Supplier<StructureFeature<T>> sup) {
         return STRUCTURES.register(name, sup);
     }
 
-    private static Map<EnumShop, Holder<StructureProcessorList>> registerNPCProcessorLists() {
-        ImmutableMap.Builder<EnumShop, Holder<StructureProcessorList>> map = ImmutableMap.builder();
-        for (EnumShop shop : EnumShop.values()) {
-            Holder<StructureProcessorList> holder = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, new ResourceLocation(RuneCraftory.MODID, "npc_" + shop.name().toLowerCase(Locale.ROOT)),
+    private static Map<ResourceLocation, Holder<StructureProcessorList>> registerNPCProcessorLists() {
+        ImmutableMap.Builder<ResourceLocation, Holder<StructureProcessorList>> map = ImmutableMap.builder();
+        for (ResourceLocation shop : ModNPCJobs.DEFAULT_JOB_ID) {
+            Holder<StructureProcessorList> holder = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, new ResourceLocation(RuneCraftory.MODID, "npc_" + shop.getPath()),
                     new StructureProcessorList(ImmutableList.of(new NPCDataProcessor(shop))));
             map.put(shop, holder);
         }

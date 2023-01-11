@@ -11,6 +11,7 @@ public class DailyPlayerUpdater {
     private int lastUpdateDay;
 
     private boolean gaveMonsterItem, ateFood;
+    private int bathCounter;
 
     private final PlayerData data;
 
@@ -26,6 +27,7 @@ public class DailyPlayerUpdater {
             this.data.refreshShop(player);
             this.gaveMonsterItem = false;
             this.ateFood = false;
+            this.bathCounter = 0;
         }
     }
 
@@ -47,11 +49,20 @@ public class DailyPlayerUpdater {
         }
     }
 
+    public int getBathCounter() {
+        return this.bathCounter;
+    }
+
+    public void increaseBathCounter() {
+        this.bathCounter++;
+    }
+
     public CompoundTag save() {
         CompoundTag compound = new CompoundTag();
         compound.putInt("LastUpdateDay", this.lastUpdateDay);
         compound.putBoolean("GaveMonsterItem", this.gaveMonsterItem);
         compound.putBoolean("AteFood", this.ateFood);
+        compound.putInt("BathCounter", this.bathCounter);
         return compound;
     }
 
@@ -59,5 +70,6 @@ public class DailyPlayerUpdater {
         this.lastUpdateDay = compound.getInt("LastUpdateDay");
         this.gaveMonsterItem = compound.getBoolean("GaveMonsterItem");
         this.ateFood = compound.getBoolean("AteFood");
+        this.bathCounter = compound.getInt("BathCounter");
     }
 }

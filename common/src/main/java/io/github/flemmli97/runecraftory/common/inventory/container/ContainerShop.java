@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.inventory.container;
 
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShopResult;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.EnumShopResult;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.network.S2CShopResponses;
 import io.github.flemmli97.runecraftory.common.registry.ModContainer;

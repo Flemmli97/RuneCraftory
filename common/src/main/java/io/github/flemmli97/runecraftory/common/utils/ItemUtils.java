@@ -4,7 +4,7 @@ import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShopResult;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.EnumShopResult;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.platform.Platform;

@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.ShopState;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

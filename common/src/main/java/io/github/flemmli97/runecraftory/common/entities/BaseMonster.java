@@ -469,8 +469,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (this.assignedBarn != null && this.assignedBarn.isInvalid())
                 this.assignedBarn = null;
             if (this.isTamed()) {
-                if (MobConfig.monsterNeedBarn && this.assignedBarn == null && this.behaviourState() != Behaviour.STAY)
-                    this.setBehaviour(Behaviour.STAY);
+                if (this.assignedBarn == null) {
+                    if (MobConfig.monsterNeedBarn && this.behaviourState() != Behaviour.STAY)
+                        this.setBehaviour(Behaviour.STAY);
+                } else if (this.behaviourState() == Behaviour.WANDER_HOME && this.assignedBarn.getSize() != (int) this.getRestrictRadius())
+                    this.restrictToBasedOnBehaviour(null);
             }
         } else {
             if (!this.playDeath() && TendCropsGoal.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
@@ -1488,7 +1491,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.setTarget(null);
         this.level.broadcastEntityEvent(this, (byte) 10);
         this.updater.setLastUpdateDay(WorldUtils.day(this.level));
-        if(Platform.INSTANCE.getPlayerData(owner).map(d -> d.party.isPartyFull()).orElse(true))
+        if (Platform.INSTANCE.getPlayerData(owner).map(d -> d.party.isPartyFull()).orElse(true))
             this.setBehaviour(Behaviour.WANDER);
         else
             this.setBehaviour(Behaviour.FOLLOW);

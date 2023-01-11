@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
@@ -21,6 +21,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.data.DataGenerator;
@@ -288,15 +289,20 @@ public class LangGen implements DataProvider {
         this.add("tooltip.debug.food", "Fooddata-ID: %s");
 
         this.add("tooltip.item.npc", "Shift-right-click to change profession");
-        this.add(EnumShop.NONE.translationKey, "None");
-        this.add(EnumShop.GENERAL.translationKey, "General Store");
-        this.add(EnumShop.FLOWER.translationKey, "Florist");
-        this.add(EnumShop.WEAPON.translationKey, "Smith");
-        this.add(EnumShop.CLINIC.translationKey, "Doctor");
-        this.add(EnumShop.FOOD.translationKey, "Cook");
-        this.add(EnumShop.MAGIC.translationKey, "Magicskill merchant");
-        this.add(EnumShop.RUNESKILL.translationKey, "Runeskill merchant");
-        this.add(EnumShop.RANDOM.translationKey, "Travelling merchant");
+        this.add(ModNPCJobs.NONE.getSecond().getTranslationKey(), "None");
+        this.add(ModNPCJobs.GENERAL.getSecond().getTranslationKey(), "General Store");
+        this.add(ModNPCJobs.FLOWER.getSecond().getTranslationKey(), "Florist");
+        this.add(ModNPCJobs.WEAPON.getSecond().getTranslationKey(), "Smith");
+        this.add(ModNPCJobs.CLINIC.getSecond().getTranslationKey(), "Doctor");
+        this.add(ModNPCJobs.FOOD.getSecond().getTranslationKey(), "Cook");
+        this.add(ModNPCJobs.MAGIC.getSecond().getTranslationKey(), "Magicskill merchant");
+        this.add(ModNPCJobs.RUNESKILL.getSecond().getTranslationKey(), "Runeskill merchant");
+        this.add(ModNPCJobs.BATHHOUSE.getSecond().getTranslationKey(), "Bathhouse attendant");
+        this.add(ModNPCJobs.RANDOM.getSecond().getTranslationKey(), "Travelling merchant");
+
+        this.add(BathhouseAttendant.BATH_ACTION, "Bath");
+        this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");
+        this.add(BathhouseAttendant.BATH_ACTION_FAIL, "You don't have enough money for that. You need %2$s.");
 
         this.add("crafting.rpMax.missing", "Missing total rp");
 

@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.common.world.structure.processors;
 
 import com.mojang.serialization.Codec;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.LevelReader;
@@ -15,28 +15,25 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
-import java.util.Locale;
-
 public class NPCDataProcessor extends DataStructureBlockProcessor {
 
     /**
      * Lower case looks better in json
      */
-    public static final Codec<NPCDataProcessor> CODEC = Codec.STRING.fieldOf("shop_type")
-            .xmap(s -> EnumShop.valueOf(s.toUpperCase(Locale.ROOT)), e -> e.name().toLowerCase(Locale.ROOT))
-            .xmap(NPCDataProcessor::new, d -> d.shopType).codec();
+    public static final Codec<NPCDataProcessor> CODEC = ResourceLocation.CODEC.fieldOf("shop_type")
+            .xmap(NPCDataProcessor::new, d -> d.jobID).codec();
 
-    protected final EnumShop shopType;
+    protected final ResourceLocation jobID;
 
-    public NPCDataProcessor(EnumShop shopType) {
+    public NPCDataProcessor(ResourceLocation jobID) {
         super("NPC", true);
-        this.shopType = shopType;
+        this.jobID = jobID;
     }
 
     @Override
     protected StructureTemplate.StructureBlockInfo handleDataMarker(String data, StructureTemplate.StructureBlockInfo origin, LevelReader level, StructurePlaceSettings settings) {
         CompoundTag entityTag = new CompoundTag();
-        entityTag.putInt("Shop", this.shopType.ordinal());
+        entityTag.putString("Shop", this.jobID.toString());
         ListTag listTag = new ListTag();
         listTag.add(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 5, true, false).save(new CompoundTag()));
         entityTag.put("ActiveEffects", listTag);

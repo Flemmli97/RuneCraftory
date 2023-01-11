@@ -14,7 +14,8 @@ import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -34,7 +35,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -46,15 +46,15 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
             .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.attributes()))
             .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(ModSpells.SPELLREGISTRY.get())).create();
 
-    private Map<EnumShop, Collection<ShopItemProperties>> shopItems = ImmutableMap.of();
-    private Map<EnumShop, Collection<ShopItemProperties>> shopItemsDefaults = ImmutableMap.of();
+    private Map<NPCJob, Collection<ShopItemProperties>> shopItems = ImmutableMap.of();
+    private Map<NPCJob, Collection<ShopItemProperties>> shopItemsDefaults = ImmutableMap.of();
     private boolean checkedStats;
 
     public ShopItemsManager() {
         super(GSON, "shop_items");
     }
 
-    public Collection<ShopItemProperties> get(EnumShop shop) {
+    public Collection<ShopItemProperties> get(NPCJob shop) {
         if (!this.checkedStats) {
             this.removeNoneBuyable();
             this.checkedStats = true;
@@ -62,7 +62,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
         return this.shopItems.getOrDefault(shop, Collections.emptyList());
     }
 
-    public Collection<ShopItemProperties> getDefaultItems(EnumShop shop) {
+    public Collection<ShopItemProperties> getDefaultItems(NPCJob shop) {
         if (!this.checkedStats) {
             this.removeNoneBuyable();
             this.checkedStats = true;
@@ -71,14 +71,14 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
     }
 
     private void removeNoneBuyable() {
-        ImmutableMap.Builder<EnumShop, Collection<ShopItemProperties>> b = ImmutableMap.builder();
-        ImmutableMap.Builder<EnumShop, Collection<ShopItemProperties>> bD = ImmutableMap.builder();
-        b.put(EnumShop.RANDOM, DataPackHandler.SERVER_PACK.itemStatManager().all()
+        ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> b = ImmutableMap.builder();
+        ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> bD = ImmutableMap.builder();
+        b.put(ModNPCJobs.RANDOM.getSecond(), DataPackHandler.SERVER_PACK.itemStatManager().all()
                 .stream().filter(p -> p.getSecond().getBuy() > 0)
                 .map(p -> new ShopItemProperties(p.getFirst(), false))
                 .toList());
         this.shopItems.forEach((s, c) -> {
-            if (s != EnumShop.RANDOM) {
+            if (s != ModNPCJobs.RANDOM.getSecond()) {
                 Collection<ShopItemProperties> newCollection = new ArrayList<>();
                 c.forEach(stack -> {
                     if (DataPackHandler.SERVER_PACK.itemStatManager().get(stack.stack().getItem()).map(ItemStat::getBuy).orElse(0) > 0)
@@ -101,18 +101,15 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
 
     @Override
     protected void apply(Map<ResourceLocation, JsonElement> data, ResourceManager manager, ProfilerFiller profiler) {
-        HashMap<EnumShop, Collection<ShopItemProperties>> shopBuilder = new HashMap<>();
-        HashMap<EnumShop, Collection<ShopItemProperties>> shopBuilder2 = new HashMap<>();
+        HashMap<NPCJob, Collection<ShopItemProperties>> shopBuilder = new HashMap<>();
+        HashMap<NPCJob, Collection<ShopItemProperties>> shopBuilder2 = new HashMap<>();
         this.checkedStats = false;
         data.forEach((fres, el) -> {
             try {
                 boolean addToDefault = fres.getPath().contains("_defaults");
-                EnumShop shop;
-                try {
-                    shop = EnumShop.valueOf(fres.getPath().replace("_defaults", "").toUpperCase(Locale.ROOT));
-                } catch (IllegalArgumentException ignored) {
+                NPCJob shop = ModNPCJobs.getFromID(new ResourceLocation(fres.getNamespace(), fres.getPath().replace("_defaults", "")));
+                if (!shop.hasShop)
                     return;
-                }
                 JsonObject obj = el.getAsJsonObject();
                 boolean replace = GsonHelper.getAsBoolean(obj, "replace", false);
                 JsonArray array = GsonHelper.getAsJsonArray(obj, "values");
@@ -160,8 +157,8 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
                 ex.fillInStackTrace();
             }
         });
-        ImmutableMap.Builder<EnumShop, Collection<ShopItemProperties>> b = ImmutableMap.builder();
-        ImmutableMap.Builder<EnumShop, Collection<ShopItemProperties>> bD = ImmutableMap.builder();
+        ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> b = ImmutableMap.builder();
+        ImmutableMap.Builder<NPCJob, Collection<ShopItemProperties>> bD = ImmutableMap.builder();
         shopBuilder.forEach((s, c) -> b.put(s, ImmutableList.copyOf(c)));
         shopBuilder2.forEach((s, c) -> bD.put(s, ImmutableList.copyOf(c)));
         this.shopItems = b.build();

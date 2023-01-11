@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.ai;
 
 import com.google.common.base.Suppliers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.SectionPos;
@@ -27,7 +27,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -37,7 +36,8 @@ import java.util.stream.Collectors;
 
 public class NPCWanderGoal extends Goal {
 
-    private static final Supplier<Set<PoiType>> shelterPOIS = Suppliers.memoize(() -> Arrays.stream(EnumShop.values()).map(s -> s.poiType.get()).filter(Objects::nonNull).collect(Collectors.toSet()));
+    private static final Supplier<Set<PoiType>> shelterPOIS = Suppliers.memoize(() ->
+            ModNPCJobs.allJobs().stream().map(s -> s.poiType.get()).filter(Objects::nonNull).collect(Collectors.toSet()));
 
     protected final EntityNPCBase npc;
 

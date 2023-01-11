@@ -13,14 +13,26 @@ public class C2SNPCInteraction implements Packet {
 
     private final int id;
     private final C2SNPCInteraction.Type type;
+    private final String action;
 
     public C2SNPCInteraction(int entityID, C2SNPCInteraction.Type type) {
         this.id = entityID;
         this.type = type;
+        this.action = "";
+    }
+
+    public C2SNPCInteraction(int entityID, String action) {
+        this.id = entityID;
+        this.type = Type.ACTION;
+        this.action = action;
     }
 
     public static C2SNPCInteraction read(FriendlyByteBuf buf) {
-        return new C2SNPCInteraction(buf.readInt(), buf.readEnum(C2SNPCInteraction.Type.class));
+        int id = buf.readInt();
+        Type type = buf.readEnum(C2SNPCInteraction.Type.class);
+        if (type != Type.ACTION)
+            return new C2SNPCInteraction(id, type);
+        return new C2SNPCInteraction(id, buf.readUtf());
     }
 
     public static void handle(C2SNPCInteraction pkt, ServerPlayer sender) {
@@ -47,6 +59,7 @@ public class C2SNPCInteraction implements Packet {
                             npc.followEntity(null);
                     }
                     case SHOP -> npc.openShopForPlayer(sender);
+                    case ACTION -> npc.getShop().handleAction(npc, sender, pkt.action);
                 }
             }
         }
@@ -56,6 +69,8 @@ public class C2SNPCInteraction implements Packet {
     public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.id);
         buf.writeEnum(this.type);
+        if (this.type == Type.ACTION)
+            buf.writeUtf(this.action);
     }
 
     @Override
@@ -70,6 +85,7 @@ public class C2SNPCInteraction implements Packet {
         STAY,
         STOPFOLLOW,
         SHOP,
-        CLOSE
+        CLOSE,
+        ACTION
     }
 }

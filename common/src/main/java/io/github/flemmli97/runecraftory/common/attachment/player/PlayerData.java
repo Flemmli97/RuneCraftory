@@ -7,7 +7,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.values.SkillProperties;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.InventorySpells;
@@ -25,6 +25,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -86,7 +87,7 @@ public class PlayerData {
 
     //private QuestMission quest;
     private final Map<ResourceLocation, Integer> shippedItems = new HashMap<>();
-    private final Map<EnumShop, NonNullList<ItemStack>> shopItems = new HashMap<>();
+    private final Map<NPCJob, NonNullList<ItemStack>> shopItems = new HashMap<>();
     private final InventoryShippingBin shipping = new InventoryShippingBin();
     //Food buff
     private Item lastFood;
@@ -438,7 +439,7 @@ public class PlayerData {
 
     public void refreshShop(Player player) {
         if (!player.level.isClientSide) {
-            for (EnumShop profession : EnumShop.values()) {
+            for (NPCJob profession : ModNPCJobs.allJobs()) {
                 Collection<ShopItemProperties> datapack = DataPackHandler.SERVER_PACK.shopItemsManager().get(profession);
                 List<ItemStack> shopItems = new ArrayList<>();
                 datapack.forEach(item -> {
@@ -450,7 +451,7 @@ public class PlayerData {
                     for (float chance = 1.5f + shopItems.size() * 0.002f; player.level.random.nextFloat() < chance; chance -= 0.1f) {
                         ItemStack stack = shopItems.remove(player.level.random.nextInt(shopItems.size()));
                         shop.add(stack);
-                        if (shopItems.isEmpty() || (profession == EnumShop.RANDOM && shop.size() >= InventoryShop.shopSize))
+                        if (shopItems.isEmpty() || (profession == ModNPCJobs.RANDOM.getSecond() && shop.size() >= InventoryShop.shopSize))
                             break;
                     }
                 }
@@ -460,7 +461,7 @@ public class PlayerData {
         }
     }
 
-    public NonNullList<ItemStack> getShop(EnumShop shop) {
+    public NonNullList<ItemStack> getShop(NPCJob shop) {
         NonNullList<ItemStack> list = NonNullList.create();
         list.addAll(this.shopItems.getOrDefault(shop, NonNullList.withSize(0, ItemStack.EMPTY)));
         return list;
@@ -623,12 +624,12 @@ public class PlayerData {
             this.shippedItems.put(new ResourceLocation(key), shipped.getInt(key));
         }
         CompoundTag shops = nbt.getCompound("ShopItems");
-        for (EnumShop shop : EnumShop.values()) {
+        shops.getAllKeys().forEach(key -> {
             NonNullList<ItemStack> items = NonNullList.create();
-            shops.getList(shop.toString(), Tag.TAG_COMPOUND).forEach(comp ->
+            shops.getList(key, Tag.TAG_COMPOUND).forEach(comp ->
                     items.add(ItemStack.of((CompoundTag) comp)));
-            this.shopItems.put(shop, items);
-        }
+            this.shopItems.put(ModNPCJobs.getFromID(ModNPCJobs.legacyOfString(key)), items);
+        });
         this.keeper.read(nbt.getCompound("Recipes"));
         this.updater.read(nbt.getCompound("DailyUpdater"));
         /*if (nbt.contains("Quest")) {
@@ -685,11 +686,11 @@ public class PlayerData {
         this.shippedItems.forEach((key, value) -> ship.putInt(key.toString(), value));
         nbt.put("ShippedItems", ship);
         CompoundTag shop = new CompoundTag();
-        for (Map.Entry<EnumShop, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
+        for (Map.Entry<NPCJob, NonNullList<ItemStack>> entry : this.shopItems.entrySet()) {
             ListTag l = new ListTag();
             for (ItemStack stack : entry.getValue())
                 l.add(stack.save(new CompoundTag()));
-            shop.put(entry.getKey().toString(), l);
+            shop.put(ModNPCJobs.getIDFrom(entry.getKey()).toString(), l);
         }
         nbt.put("ShopItems", shop);
         nbt.put("Recipes", this.keeper.save());

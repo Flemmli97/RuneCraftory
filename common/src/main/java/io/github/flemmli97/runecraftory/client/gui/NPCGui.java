@@ -5,9 +5,9 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
-import io.github.flemmli97.runecraftory.common.entities.npc.ShopState;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.mixin.PoiTypeAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -66,9 +66,9 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         int posX = 25;
         int posY = 25;
         int texY = 150;
-        if (this.entity.getShop() == EnumShop.NONE)
+        if (!this.entity.getShop().hasShop && !this.entity.getShop().hasWorkSchedule)
             texY = 40;
-        if (this.entity.getShop() == EnumShop.RANDOM)
+        else if (!this.entity.getShop().hasWorkSchedule)
             texY = 60;
         this.blit(stack, posX, posY, 0, 0, 150, texY != 150 ? texY - 5 : texY);
         if (texY != 150)
@@ -84,10 +84,10 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         this.font.draw(stack, "" + this.entity.friendPoints(this.minecraft.player), posX + 65 + 10, txtOffY + 13 * y, 0);
         y += 1;
         MutableComponent shopComp = null;
-        if (this.entity.getShop() == EnumShop.GENERAL)
-            shopComp = new TranslatableComponent("gui.npc.shop.owner", new TranslatableComponent(this.entity.getShop().translationKey));
-        else if (this.entity.getShop() != EnumShop.NONE)
-            shopComp = new TranslatableComponent(this.entity.getShop().translationKey);
+        if (this.entity.getShop() == ModNPCJobs.GENERAL.getSecond())
+            shopComp = new TranslatableComponent("gui.npc.shop.owner", new TranslatableComponent(this.entity.getShop().getTranslationKey()));
+        else if (this.entity.getShop().hasShop)
+            shopComp = new TranslatableComponent(this.entity.getShop().getTranslationKey());
         int shopY = txtOffY + 13 * y;
         int shopSizeY = -5;
         if (shopComp != null) {
@@ -101,7 +101,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
             }
         }
 
-        if (this.entity.getShop() != EnumShop.RANDOM && this.entity.getShop() != EnumShop.NONE) {
+        if (this.entity.getShop().hasWorkSchedule) {
             for (Component comp : this.entity.getSchedule().viewSchedule()) {
                 for (FormattedCharSequence formatted : this.font.split(comp, 140)) {
                     this.font.draw(stack, formatted, txtOffX, txtOffY + 13 * y, 0);
@@ -137,6 +137,13 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
                 Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.SHOP));
                 this.minecraft.setScreen(null);
             }));
+            for (String action : this.entity.getShop().actions()) {
+                y += 30;
+                this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(action), b -> {
+                    Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), action));
+                    this.minecraft.setScreen(null);
+                }));
+            }
         }
         if (this.isShopOpen == ShopState.NOBED) {
             this.components = new ArrayList<>();
@@ -150,11 +157,19 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
 
     private Component formatShopPoi(PoiType poiType) {
         Set<BlockState> set = new HashSet<>(((PoiTypeAccessor) poiType).matches());
-        set.addAll(((PoiTypeAccessor) ModPoiTypes.CASH_REGISTER.get()).matches());
-        return set.stream().map(BlockBehaviour.BlockStateBase::getBlock)
+        if (this.entity.getShop().predicate != null && this.entity.getShop().predicate.test(ModPoiTypes.CASH_REGISTER.get()))
+            set.addAll(((PoiTypeAccessor) ModPoiTypes.CASH_REGISTER.get()).matches());
+        MutableComponent comp = new TextComponent("");
+        set.stream().map(BlockBehaviour.BlockStateBase::getBlock)
                 .distinct()
                 .map(Block::getName)
-                .reduce(new TextComponent(""), MutableComponent::append).withStyle(ChatFormatting.AQUA);
+                .forEach(c -> {
+                    if (comp.getSiblings().isEmpty())
+                        comp.append(c);
+                    else
+                        comp.append(new TextComponent(", ").append(c));
+                });
+        return comp.withStyle(ChatFormatting.AQUA);
     }
 
     @Override

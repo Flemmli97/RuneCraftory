@@ -1,11 +1,13 @@
 package io.github.flemmli97.runecraftory.common.items;
 
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -28,7 +30,7 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         tooltipComponents.add(new TranslatableComponent("tooltip.item.npc").withStyle(ChatFormatting.GOLD));
-        tooltipComponents.add(new TranslatableComponent(EnumShop.values()[this.getTier(stack)].translationKey).withStyle(ChatFormatting.AQUA));
+        tooltipComponents.add(new TranslatableComponent(this.getJob(stack).getTranslationKey()).withStyle(ChatFormatting.AQUA));
         super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
     }
 
@@ -36,7 +38,7 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
     public boolean onEntitySpawned(Entity e, ItemStack stack, Player player) {
         if (e instanceof EntityNPCBase npc) {
             if (!npc.isShopDefined())
-                npc.setShop(EnumShop.values()[this.getTier(stack)]);
+                npc.setShop(this.getJob(stack));
         }
         return super.onEntitySpawned(e, stack, player);
     }
@@ -46,22 +48,24 @@ public class NPCSpawnEgg extends RuneCraftoryEggItem {
         if (player.isShiftKeyDown()) {
             ItemStack stack = player.getItemInHand(hand);
             if (!world.isClientSide)
-                this.increaseTier(stack);
+                this.next(stack);
             return InteractionResultHolder.consume(stack);
         }
         return super.use(world, player, hand);
     }
 
-    protected int getTier(ItemStack stack) {
-        int tier = 0;
+    protected NPCJob getJob(ItemStack stack) {
+        NPCJob job = ModNPCJobs.NONE.getSecond();
         if (stack.hasTag() && stack.getTag().contains("Shop")) {
-            tier = stack.getTag().getInt("Shop");
+            job = ModNPCJobs.getFromID(new ResourceLocation(stack.getTag().getString("Shop")));
         }
-        return Math.min(EnumShop.values().length - 1, tier);
+        return job;
     }
 
-    protected void increaseTier(ItemStack stack) {
+    protected void next(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
-        tag.putInt("Shop", (this.getTier(stack) + 1) % EnumShop.values().length);
+        List<NPCJob> jobs = ModNPCJobs.allJobs();
+        NPCJob current = this.getJob(stack);
+        tag.putString("Shop", ModNPCJobs.getIDFrom(jobs.get((jobs.indexOf(current) + 1) % jobs.size())).toString());
     }
 }

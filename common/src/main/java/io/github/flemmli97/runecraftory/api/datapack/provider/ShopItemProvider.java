@@ -5,7 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.common.entities.npc.EnumShop;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -24,7 +25,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public abstract class ShopItemProvider implements DataProvider {
@@ -84,49 +84,53 @@ public abstract class ShopItemProvider implements DataProvider {
         return "ItemStats";
     }
 
-    public void addItem(EnumShop shop, ItemLike item) {
+    public void addItem(NPCJob shop, ItemLike item) {
         this.addItem(shop, item, false, false);
     }
 
-    public void addItem(EnumShop shop, ItemLike item, boolean defaults) {
+    public void addItem(NPCJob shop, ItemLike item, boolean defaults) {
         this.addItem(shop, item, defaults, false);
     }
 
-    public void addItem(EnumShop shop, ItemLike item, boolean defaults, boolean needsUnlock) {
-        this.items.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toLowerCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
+    public void addItem(NPCJob shop, ItemLike item, boolean defaults, boolean needsUnlock) {
+        ResourceLocation res = ModNPCJobs.getIDFrom(shop);
+        this.items.computeIfAbsent(new ResourceLocation(res.getNamespace(), res.getPath() + (defaults ? "_defaults" : "")),
                         r -> new ArrayList<>())
                 .add(Pair.of(item, needsUnlock));
     }
 
-    public void addItem(EnumShop shop, ItemStack item) {
+    public void addItem(NPCJob shop, ItemStack item) {
         this.addItem(shop, item, false, false);
     }
 
-    public void addItem(EnumShop shop, ItemStack item, boolean defaults) {
+    public void addItem(NPCJob shop, ItemStack item, boolean defaults) {
         this.addItem(shop, item, defaults, false);
     }
 
-    public void addItem(EnumShop shop, ItemStack item, boolean defaults, boolean needsUnlock) {
-        this.ingredients.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toLowerCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
+    public void addItem(NPCJob shop, ItemStack item, boolean defaults, boolean needsUnlock) {
+        ResourceLocation res = ModNPCJobs.getIDFrom(shop);
+        this.ingredients.computeIfAbsent(new ResourceLocation(res.getNamespace(), res.getPath() + (defaults ? "_defaults" : "")),
                         r -> new ArrayList<>())
                 .add(Pair.of(Ingredient.of(item), needsUnlock));
     }
 
-    public void addItem(EnumShop shop, TagKey<Item> tag) {
+    public void addItem(NPCJob shop, TagKey<Item> tag) {
         this.addItem(shop, tag, false);
     }
 
-    public void addItem(EnumShop shop, TagKey<Item> tag, boolean defaults) {
+    public void addItem(NPCJob shop, TagKey<Item> tag, boolean defaults) {
         this.addItem(shop, tag, defaults, false);
     }
 
-    public void addItem(EnumShop shop, TagKey<Item> tag, boolean defaults, boolean needsUnlock) {
-        this.ingredients.computeIfAbsent(new ResourceLocation(this.modid, shop.name().toLowerCase(Locale.ROOT) + (defaults ? "_defaults" : "")),
+    public void addItem(NPCJob shop, TagKey<Item> tag, boolean defaults, boolean needsUnlock) {
+        ResourceLocation res = ModNPCJobs.getIDFrom(shop);
+        this.ingredients.computeIfAbsent(new ResourceLocation(res.getNamespace(), res.getPath() + (defaults ? "_defaults" : "")),
                         r -> new ArrayList<>())
                 .add(Pair.of(Ingredient.of(tag), needsUnlock));
     }
 
-    public void overwrite(EnumShop shop, boolean defaults) {
-        this.overwrite.put(new ResourceLocation(this.modid, shop.name().toLowerCase(Locale.ROOT) + (defaults ? "_defaults" : "")), true);
+    public void overwrite(NPCJob shop, boolean defaults) {
+        ResourceLocation res = ModNPCJobs.getIDFrom(shop);
+        this.overwrite.put(new ResourceLocation(res.getNamespace(), res.getPath() + (defaults ? "_defaults" : "")), true);
     }
 }

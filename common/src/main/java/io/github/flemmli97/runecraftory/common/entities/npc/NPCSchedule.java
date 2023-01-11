@@ -84,13 +84,13 @@ public class NPCSchedule {
     }
 
     public Activity getActivity(ServerLevel level) {
-        if (this.npc.getShop() == EnumShop.RANDOM)
+        if (!this.npc.getShop().hasSchedule)
             return Activity.IDLE;
         int dayTime = WorldUtils.dayTime(level);
         EnumDay day = WorldHandler.get(level.getServer()).currentDay();
         if (dayTime < this.wakeUpTime)
             return Activity.REST;
-        if (this.workDays.contains(day) && this.npc.getShop() != EnumShop.NONE) {
+        if (this.workDays.contains(day) && this.npc.getShop().hasWorkSchedule) {
             if (dayTime < this.workTime)
                 return ModActivities.EARLYIDLE.get();
             if (dayTime < this.breakTime)
@@ -149,7 +149,7 @@ public class NPCSchedule {
 
     public List<Component> viewSchedule() {
         if (this.view == null) {
-            if (this.npc.getShop() == EnumShop.NONE || this.npc.getShop() == EnumShop.RANDOM) {
+            if (!this.npc.getShop().hasSchedule || !this.npc.getShop().hasWorkSchedule) {
                 this.view = ImmutableList.of();
                 return this.view;
             }
