@@ -1042,7 +1042,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void randomizeData() {
         this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().getRandom(this.random));
-        this.schedule.load(new NPCSchedule(this, this.random).save());
     }
 
     public void setNPCData(NPCData data) {
@@ -1068,6 +1067,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.getLook();
         this.birthday = null;
         this.getBirthday();
+        if (data.schedule() == null)
+            this.schedule.load(new NPCSchedule(this, this.random).save());
+        else
+            this.schedule.with(data.schedule());
         Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look), this);
     }
 

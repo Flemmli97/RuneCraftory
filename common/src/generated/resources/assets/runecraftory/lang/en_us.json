@@ -1339,7 +1339,7 @@
   "npc.job.runecraftory:random": "Travelling merchant",
   "npc.action.bath": "Bath",
   "npc.action.bath.success": "Have a relaxing bath.",
-  "npc.action.bath.fail": "You don't have enough money for that. You need 100.",
+  "npc.action.bath.fail": "You don't have enough money for that. You need %2$s.",
   "npc.schedule.work": "From: %s - %s",
   "npc.schedule.work.2": "And: %s - %s",
   "npc.schedule.days.header": "Open on:",

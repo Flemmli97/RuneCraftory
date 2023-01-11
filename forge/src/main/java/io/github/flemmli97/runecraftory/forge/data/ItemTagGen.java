@@ -361,8 +361,6 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(Items.KELP);
         this.tag(ModTags.tamingTag(ModEntities.weagle.get()))
                 .addTag(ModTags.FEATHERS);
-        this.tag(ModTags.tamingTag(ModEntities.weagle.get()))
-                .addTag(ModTags.FEATHERS);
         this.tag(ModTags.tamingTag(ModEntities.goblin.get()))
                 .add(ModItems.oldBandage.get());
         this.tag(ModTags.tamingTag(ModEntities.goblinArcher.get()))
