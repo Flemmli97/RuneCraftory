@@ -15,12 +15,13 @@ import java.util.List;
 public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
 
     private BaseMonster.Behaviour updatedBehaviour = null;
-    private final boolean fullParty;
+    private final boolean fullParty, hasHome;
 
-    public MonsterCompanionGui(BaseMonster entity, boolean fullParty) {
+    public MonsterCompanionGui(BaseMonster entity, boolean fullParty, boolean hasHome) {
         super(entity);
         this.fullParty = fullParty;
         this.updatedBehaviour = this.entity.behaviourState();
+        this.hasHome = hasHome;
     }
 
     @Override
@@ -38,7 +39,8 @@ public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
             }
             case FOLLOW -> {
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.RIDE);
-                buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
+                if (this.hasHome)
+                    buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FOLLOW_DISTANCE);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.STAY);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.WANDER);
@@ -46,7 +48,8 @@ public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
             }
             case FOLLOW_DISTANCE -> {
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.RIDE);
-                buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
+                if (this.hasHome)
+                    buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FOLLOW);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.STAY);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.WANDER);
@@ -54,20 +57,23 @@ public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
             }
             case STAY -> {
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.RIDE);
-                buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
+                if (this.hasHome)
+                    buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FOLLOW_DISTANCE);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FOLLOW);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.WANDER);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FARM);
             }
             case WANDER -> {
-                buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
+                if (this.hasHome)
+                    buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
                 if (!this.fullParty)
                     buttonTypes.add(C2SSetMonsterBehaviour.Type.FOLLOW);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.FARM);
             }
             case FARM -> {
-                buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
+                if (this.hasHome)
+                    buttonTypes.add(C2SSetMonsterBehaviour.Type.HOME);
                 if (!this.fullParty)
                     buttonTypes.add(C2SSetMonsterBehaviour.Type.FOLLOW);
                 buttonTypes.add(C2SSetMonsterBehaviour.Type.WANDER);

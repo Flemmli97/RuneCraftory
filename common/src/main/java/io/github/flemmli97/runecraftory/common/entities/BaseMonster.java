@@ -1525,6 +1525,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return false;
     }
 
+    public BarnData getAssignedBarn() {
+        this.assignBarn();
+        return this.assignedBarn;
+    }
+
     protected void untameEntity() {
         this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32),
                 e -> e != this && e.getTarget() == this).forEach(e -> {
