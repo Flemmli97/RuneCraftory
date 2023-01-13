@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
+import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -113,6 +114,11 @@ public class BlockStatesGen extends BlockStateProvider {
 
         this.getVariantBuilder(ModBlocks.cashRegister.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
                         this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/" + ModBlocks.cashRegister.getID().getPath())))
+                .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()) % 360)
+                .build());
+
+        this.getVariantBuilder(ModBlocks.questBoard.get()).forAllStates(state -> ConfiguredModel.builder().modelFile(
+                        this.models().getExistingFile(new ResourceLocation(RuneCraftory.MODID, "block/" + ModBlocks.questBoard.getID().getPath() + "_" + state.getValue(BlockQuestboard.PART).getSerializedName())))
                 .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot()) % 360)
                 .build());
     }

@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "runecraftory:quest_box",
-    "runecraftory:shipping_bin"
+    "runecraftory:shipping_bin",
+    "runecraftory:quest_board"
   ]
 }

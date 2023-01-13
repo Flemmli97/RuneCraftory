@@ -76,7 +76,7 @@ public class BlockTagGen extends BlockTagsProvider {
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.forge.get(), ModBlocks.cooking.get(), ModBlocks.chemistry.get(), ModBlocks.accessory.get(),
                 ModBlocks.bossSpawner.get(), ModBlocks.cashRegister.get());
         this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.farmland.get());
-        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.board.get(), ModBlocks.shipping.get());
+        this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.board.get(), ModBlocks.shipping.get(), ModBlocks.questBoard.get());
         this.tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.monsterBarn.get());
 
         this.tag(ModTags.FARMLAND).add(Blocks.FARMLAND, ModBlocks.farmland.get());

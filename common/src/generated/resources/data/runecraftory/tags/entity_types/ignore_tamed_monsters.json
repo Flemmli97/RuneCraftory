@@ -6,10 +6,6 @@
     {
       "id": "advancedgolems:golem",
       "required": false
-    },
-    {
-      "id": "minecolonies:citizen",
-      "required": false
     }
   ]
 }

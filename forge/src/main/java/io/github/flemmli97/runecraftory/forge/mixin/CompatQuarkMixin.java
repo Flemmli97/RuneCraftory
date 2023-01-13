@@ -13,6 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(targets = "vazkii/quark/content/client/tooltip/AttributeTooltips")
 public abstract class CompatQuarkMixin {
 
+    /**
+     * Disabling the stat tooltip for matching itemstacks cause this mod handles them
+     */
     @Inject(method = "canStripAttributes", at = @At("TAIL"), remap = false, cancellable = true)
     private static void disableToolTip(ItemStack stack, EquipmentSlot slot, CallbackInfoReturnable<Boolean> info) {
         if (ItemNBT.shouldHaveStats(stack))

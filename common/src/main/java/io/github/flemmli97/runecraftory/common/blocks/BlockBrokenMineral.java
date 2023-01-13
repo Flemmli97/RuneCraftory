@@ -15,6 +15,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
@@ -123,7 +124,7 @@ public class BlockBrokenMineral extends Block implements SimpleWaterloggedBlock,
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         super.playerWillDestroy(level, pos, state, player);
         if (!level.isClientSide)
-            level.levelEvent(null, 2001, pos, Block.getId(state));
+            level.levelEvent(null, LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
     }
 
     @Override

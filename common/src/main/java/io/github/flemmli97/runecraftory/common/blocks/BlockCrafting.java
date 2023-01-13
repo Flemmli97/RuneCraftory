@@ -20,6 +20,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -136,7 +137,7 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
         BlockPos blockpos = ctx.getClickedPos();
-        if (blockpos.getY() < 255 && ctx.getLevel().getBlockState(blockpos).canBeReplaced(ctx)) {
+        if (ctx.getLevel().getBlockState(blockpos).canBeReplaced(ctx)) {
             BlockPos other = blockpos.relative(ctx.getHorizontalDirection().getOpposite().getCounterClockWise());
             if (ctx.getLevel().getBlockState(other).canBeReplaced(ctx))
                 return this.defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite()).setValue(PART, EnumPart.LEFT);
@@ -157,7 +158,7 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
         BlockState other;
         if (!level.isClientSide && player.isCreative() && state.getValue(PART) == EnumPart.RIGHT && (other = level.getBlockState(blockPos)).is(this) && other.getValue(PART) == EnumPart.LEFT) {
             level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
-            level.levelEvent(player, 2001, blockPos, Block.getId(other));
+            level.levelEvent(player, LevelEvent.PARTICLES_DESTROY_BLOCK, blockPos, Block.getId(other));
         }
         super.playerWillDestroy(level, pos, state, player);
     }

@@ -69,6 +69,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -297,7 +298,7 @@ public class EntityCalls {
                         farm.performBonemeal((ServerLevel) level, level.random, below, belowState);
                     }
                     stack.shrink(1);
-                    level.levelEvent(1505, pos, 0);
+                    level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
                 }
                 return true;
             }

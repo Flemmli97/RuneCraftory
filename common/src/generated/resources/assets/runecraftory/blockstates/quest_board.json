@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,part=bottom_left": {
+      "model": "runecraftory:block/quest_board_bottom_left",
+      "y": 180
+    },
+    "facing=south,part=bottom_left": {
+      "model": "runecraftory:block/quest_board_bottom_left"
+    },
+    "facing=west,part=bottom_left": {
+      "model": "runecraftory:block/quest_board_bottom_left",
+      "y": 90
+    },
+    "facing=east,part=bottom_left": {
+      "model": "runecraftory:block/quest_board_bottom_left",
+      "y": 270
+    },
+    "facing=north,part=bottom_right": {
+      "model": "runecraftory:block/quest_board_bottom_right",
+      "y": 180
+    },
+    "facing=south,part=bottom_right": {
+      "model": "runecraftory:block/quest_board_bottom_right"
+    },
+    "facing=west,part=bottom_right": {
+      "model": "runecraftory:block/quest_board_bottom_right",
+      "y": 90
+    },
+    "facing=east,part=bottom_right": {
+      "model": "runecraftory:block/quest_board_bottom_right",
+      "y": 270
+    },
+    "facing=north,part=top_left": {
+      "model": "runecraftory:block/quest_board_top_left",
+      "y": 180
+    },
+    "facing=south,part=top_left": {
+      "model": "runecraftory:block/quest_board_top_left"
+    },
+    "facing=west,part=top_left": {
+      "model": "runecraftory:block/quest_board_top_left",
+      "y": 90
+    },
+    "facing=east,part=top_left": {
+      "model": "runecraftory:block/quest_board_top_left",
+      "y": 270
+    },
+    "facing=north,part=top_right": {
+      "model": "runecraftory:block/quest_board_top_right",
+      "y": 180
+    },
+    "facing=south,part=top_right": {
+      "model": "runecraftory:block/quest_board_top_right"
+    },
+    "facing=west,part=top_right": {
+      "model": "runecraftory:block/quest_board_top_right",
+      "y": 90
+    },
+    "facing=east,part=top_right": {
+      "model": "runecraftory:block/quest_board_top_right",
+      "y": 270
+    }
+  }
+}

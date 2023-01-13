@@ -39,6 +39,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -208,7 +209,7 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
         if (state.is(ModTags.SICKLE_DESTROYABLE)) {
             if (entity instanceof ServerPlayer serverPlayer) {
                 if (serverPlayer.gameMode.destroyBlock(pos)) {
-                    level.levelEvent(2001, pos, Block.getId(state));
+                    level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
                     serverPlayer.connection.send(new ClientboundBlockUpdatePacket(pos, level.getBlockState(pos)));
                     return true;
                 }

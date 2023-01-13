@@ -56,7 +56,7 @@ public class ItemModels extends ItemModelProvider {
 
         for (RegistryEntrySupplier<Item> sup : ModItems.ITEMS.getEntries()) {
             if (sup == ModItems.medicinalHerb || sup == ModItems.itemBlockForge || sup == ModItems.itemBlockAccess
-                    || sup == ModItems.itemBlockChem || sup == ModItems.itemBlockCooking)
+                    || sup == ModItems.itemBlockChem || sup == ModItems.itemBlockCooking || sup == ModItems.questBoard)
                 continue;
             if (ribbons.contains(sup)) {
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))

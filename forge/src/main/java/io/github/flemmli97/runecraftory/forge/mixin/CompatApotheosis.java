@@ -12,6 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(targets = "shadows/apotheosis/adventure/client/AdventureModuleClient")
 public abstract class CompatApotheosis {
 
+    /**
+     * Disabling the stat tooltip for matching itemstacks cause this mod handles them
+     */
     @Inject(method = "getHideFlags", remap = false, at = @At("RETURN"), cancellable = true)
     private static void disableMod(ItemStack stack, CallbackInfoReturnable<Integer> info) {
         if (ItemNBT.shouldHaveStats(stack))

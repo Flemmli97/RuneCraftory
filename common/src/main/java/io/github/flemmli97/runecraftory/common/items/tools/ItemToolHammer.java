@@ -37,6 +37,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
@@ -213,7 +214,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
         if (canHammer && state.is(ModTags.HAMMER_BREAKABLE)) {
             if (entity instanceof ServerPlayer serverPlayer) {
                 if (((ServerPlayer) entity).gameMode.destroyBlock(pos)) {
-                    world.levelEvent(2001, pos, Block.getId(state));
+                    world.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
                     serverPlayer.connection.send(new ClientboundBlockUpdatePacket(pos, world.getBlockState(pos)));
                     return HammerState.BREAK;
                 }

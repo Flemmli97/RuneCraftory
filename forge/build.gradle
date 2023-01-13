@@ -62,6 +62,10 @@ repositories {
         name = "CurseMaven"
         url "https://www.cursemaven.com"
     }
+    maven {
+        name = "minecolonies"
+        url "https://ldtteam.jfrog.io/ldtteam/modding/"
+    }
 }
 
 dependencies {
@@ -75,6 +79,8 @@ dependencies {
     modImplementation patchouli_datagen
     modCompileOnly "${jei_dep}:api"
     modRuntimeOnly jei_dep
+
+    modCompileOnly "com.ldtteam:minecolonies:${rootProject.minecolonies}"
 
     //Mods useful for testing things
     modRuntimeOnly "curse.maven:mobbattle-268746:3952783"

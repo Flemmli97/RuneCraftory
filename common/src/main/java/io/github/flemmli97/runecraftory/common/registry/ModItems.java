@@ -1202,6 +1202,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> farmland = blockItem("farmland", () -> ModBlocks.farmland, null);
     public static final RegistryEntrySupplier<Item> cashRegister = blockItem("cash_register", () -> ModBlocks.cashRegister);
     public static final RegistryEntrySupplier<Item> monsterBarn = blockItem("monster_barn", () -> ModBlocks.monsterBarn);
+    public static final RegistryEntrySupplier<Item> questBoard = blockItem("quest_board", () -> ModBlocks.questBoard);
 
     public static RegistryEntrySupplier<Item> hoe(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));

@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -90,7 +91,7 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
             }
         } else
             dropResources(state, level, pos, tile, entity, stack);
-        level.levelEvent(2001, pos, Block.getId(state));
+        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
         if (tile instanceof CropBlockEntity && this.properties().map(CropProperties::regrowable).orElse(false)) {
             ((CropBlockEntity) tile).onRegrowableHarvest(this);
         } else

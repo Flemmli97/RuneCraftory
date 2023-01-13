@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
+import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.runecraftory.common.loot.ChancedLootingGenerator;
@@ -475,6 +476,8 @@ public class Loottables extends LootTableProvider {
 
             this.dropSelf(ModBlocks.board.get());
             this.dropSelf(ModBlocks.shipping.get());
+
+            this.add(ModBlocks.questBoard.get(), block -> createSinglePropConditionTable(block, BlockQuestboard.PART, BlockQuestboard.Part.BOTTOM_LEFT));
 
             ModBlocks.crops.forEach(reg -> {
                 Block block = reg.get();

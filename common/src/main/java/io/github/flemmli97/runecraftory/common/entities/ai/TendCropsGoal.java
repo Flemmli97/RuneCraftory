@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.entity.EntityTypeTest;
@@ -195,7 +196,7 @@ public class TendCropsGoal extends Goal {
 
     private void breakBlock(ServerLevel level, BlockPos pos, Function<ItemStack, ItemStack> stackConsumer) {
         BlockState state = level.getBlockState(pos);
-        level.levelEvent(2001, pos, Block.getId(state));
+        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
         BlockEntity blockEntity = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
         if (stackConsumer != null) {
             Block.getDrops(state, level, pos, blockEntity, this.entity, ItemStack.EMPTY)
