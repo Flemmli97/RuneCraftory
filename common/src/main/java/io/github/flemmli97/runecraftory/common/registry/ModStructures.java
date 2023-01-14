@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.world.structure.TheaterRuinsStruc
 import io.github.flemmli97.runecraftory.common.world.structure.ThunderboltRuinsStructure;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.BossSpawnerProcessor;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.NPCDataProcessor;
+import io.github.flemmli97.runecraftory.common.world.structure.processors.POIProcessor;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.WaterUnlogProcessor;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
@@ -38,6 +39,7 @@ public class ModStructures {
     public static final RegistryEntrySupplier<StructureProcessorType<BossSpawnerProcessor>> BOSS_PROCESSOR = STRUCTURESPROCESSORS.register("boss_processor", () -> () -> BossSpawnerProcessor.CODEC);
     public static final RegistryEntrySupplier<StructureProcessorType<NPCDataProcessor>> NPC_PROCESSOR = STRUCTURESPROCESSORS.register("npc_processor", () -> () -> NPCDataProcessor.CODEC);
     public static final RegistryEntrySupplier<StructureProcessorType<WaterUnlogProcessor>> WATERUNLOG_PROCESSOR = STRUCTURESPROCESSORS.register("water_unlog_processor", () -> () -> WaterUnlogProcessor.CODEC);
+    public static final RegistryEntrySupplier<StructureProcessorType<POIProcessor>> POI_PROCESSOR = STRUCTURESPROCESSORS.register("poi_processor", () -> () -> POIProcessor.CODEC);
 
     public static final Map<ResourceLocation, Holder<StructureProcessorList>> NPC_PROCESSOR_LIST = registerNPCProcessorLists();
 
@@ -49,7 +51,7 @@ public class ModStructures {
         ImmutableMap.Builder<ResourceLocation, Holder<StructureProcessorList>> map = ImmutableMap.builder();
         for (ResourceLocation shop : ModNPCJobs.DEFAULT_JOB_ID) {
             Holder<StructureProcessorList> holder = BuiltinRegistries.register(BuiltinRegistries.PROCESSOR_LIST, new ResourceLocation(RuneCraftory.MODID, "npc_" + shop.getPath()),
-                    new StructureProcessorList(ImmutableList.of(new NPCDataProcessor(shop))));
+                    new StructureProcessorList(ImmutableList.of(new NPCDataProcessor(shop), new POIProcessor())));
             map.put(shop, holder);
         }
         return map.build();

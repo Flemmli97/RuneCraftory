@@ -69,8 +69,7 @@ public class NPCSchedule {
     }
 
     public CompoundTag save() {
-        return Schedule.CODEC.encodeStart(NbtOps.INSTANCE, this.schedule).resultOrPartial(RuneCraftory.logger::error)
-                .map(t -> (CompoundTag) t).orElse(new CompoundTag());
+        return (CompoundTag) Schedule.CODEC.encodeStart(NbtOps.INSTANCE, this.schedule).getOrThrow(true, RuneCraftory.logger::error);
     }
 
     public void load(CompoundTag tag) {
@@ -136,7 +135,7 @@ public class NPCSchedule {
 
         public static final Codec<Schedule> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        ExtraCodecs.POSITIVE_INT.fieldOf("WakeUpTime").forGetter(d -> d.wakeUpTime),
+                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("WakeUpTime").forGetter(d -> d.wakeUpTime),
                         ExtraCodecs.POSITIVE_INT.fieldOf("WorkTime").forGetter(d -> d.workTime),
                         ExtraCodecs.POSITIVE_INT.fieldOf("BreakTime").forGetter(d -> d.breakTime),
                         ExtraCodecs.POSITIVE_INT.fieldOf("WorkTimeAfter").forGetter(d -> d.workTimeAfter),

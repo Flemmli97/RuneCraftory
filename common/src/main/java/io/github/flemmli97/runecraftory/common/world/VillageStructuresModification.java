@@ -33,10 +33,13 @@ public class VillageStructuresModification {
 
     private static void addHousesTo(String villageType) {
         addNewHouses(BuiltinRegistries.TEMPLATE_POOL.get(new ResourceLocation("village/" + villageType + "/houses")), List.of(
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(ModNPCJobs.GENERAL.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 3),
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(ModNPCJobs.FLOWER.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 3),
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_smith", get(ModNPCJobs.WEAPON.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 3),
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_clinic", get(ModNPCJobs.CLINIC.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 3)
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(ModNPCJobs.GENERAL.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 5),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(ModNPCJobs.FLOWER.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 5),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_smith", get(ModNPCJobs.WEAPON.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 5),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_clinic", get(ModNPCJobs.CLINIC.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 5),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", get(ModNPCJobs.MAGIC.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 2),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", get(ModNPCJobs.RUNESKILL.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 2),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/bath_house", get(ModNPCJobs.BATHHOUSE.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 50)
         ));
     }
 
