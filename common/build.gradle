@@ -15,13 +15,16 @@ loom {
 repositories {
     mavenLocal()
     maven {
-        name = "TenshiLib"
+        name = "Flemmli97"
         url "https://gitlab.com/api/v4/projects/21830712/packages/maven"
     }
 }
 
 dependencies {
     modCompileOnly "${tenshilib_dep}-fabric"
+    modCompileOnly ("${simplequests}-fabric") {
+        transitive = false
+    }
 }
 
 sourceSets.main.resources {

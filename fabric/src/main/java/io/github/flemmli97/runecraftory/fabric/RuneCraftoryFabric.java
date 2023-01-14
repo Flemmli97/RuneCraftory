@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -89,6 +90,8 @@ public class RuneCraftoryFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        RuneCraftory.simpleQuests = FabricLoader.getInstance().isModLoaded("simplequests");
+
         this.initContent();
         ConfigHolder.configs.get(GeneralConfigSpec.spec.getLeft())
                 .reloadConfig();
@@ -210,6 +213,8 @@ public class RuneCraftoryFabric implements ModInitializer {
             }
         });
         CropGrowEvent.EVENT.register((WorldCalls::disableVanillaCrop));
+
+        SimpleQuestIntegration.register();
     }
 
     public void initContent() {

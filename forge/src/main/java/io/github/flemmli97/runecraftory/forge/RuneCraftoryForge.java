@@ -1,8 +1,10 @@
 package io.github.flemmli97.runecraftory.forge;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.SpawnConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
@@ -42,6 +44,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.EntityAttributeModificationEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
@@ -64,6 +67,8 @@ public class RuneCraftoryForge {
     public static Path confDir;
 
     public RuneCraftoryForge() {
+        RuneCraftory.simpleQuests = ModList.get().isLoaded("simplequests");
+
         Path confDir = FMLPaths.CONFIGDIR.get().resolve(MODID);
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
         modBus.addListener(this::common);
@@ -87,6 +92,8 @@ public class RuneCraftoryForge {
         }
 
         SpawnConfig.spawnConfig = new SpawnConfig(confDir);
+
+        SimpleQuestIntegration.register();
     }
 
     public static void registries() {

@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.QuestTasks;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
@@ -638,6 +639,15 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.advancements.monster.help.description", "Command a monster to help you out with farming");
         this.add("runecraftory.advancements.final.tool.title", "The best");
         this.add("runecraftory.advancements.final.tool.description", "Obtain a final tier tool");
+
+        this.add("dependency.simplequest.missing", "Simplequest is needed for quests");
+        this.add(QuestTasks.ShippingEntry.ID + ".single", "Ship %1$s x%2$s");
+        this.add(QuestTasks.ShippingEntry.ID + ".multi", "Ship any of the following x%2$s: %1$s");
+        this.add(QuestTasks.ShippingEntry.ID + ".empty", "<Empty tag/items>");
+        this.add(QuestTasks.LevelEntry.ID.toString(), "Reach level %s");
+        this.add(QuestTasks.SkillLevelEntry.ID.toString(), "Reach level %s in %s");
+        this.add(QuestTasks.TamingEntry.ID.toString(), "%s");
+
     }
 
     private String simpleTranslation(ResourceLocation res) {

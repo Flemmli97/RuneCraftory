@@ -84,6 +84,8 @@ public class BlockQuestboard extends Block {
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return InteractionResult.CONSUME;
         } else {
+            SimpleQuestIntegration.tryComplete(serverPlayer);
+            SimpleQuestIntegration.openGui(serverPlayer);
             return InteractionResult.SUCCESS;
         }
     }

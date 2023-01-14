@@ -1602,5 +1602,12 @@
   "gui.npc.shop": "I want to shop",
   "gui.npc.shop.owner": "Owner of %s",
   "gui.npc.bed.no": "I don't have a bed",
-  "gui.npc.workplace.no": "I don't have a work place. Valid workplaces are [%s]"
+  "gui.npc.workplace.no": "I don't have a work place. Valid workplaces are [%s]",
+  "dependency.simplequest.missing": "Simplequest is needed for quests",
+  "runecraftory:shipping.single": "Ship %1$s x%2$s",
+  "runecraftory:shipping.multi": "Ship any of the following x%2$s: %1$s",
+  "runecraftory:shipping.empty": "<Empty tag/items>",
+  "runecraftory:level": "Reach level %s",
+  "runecraftory:skill_level": "Reach level %s in %s",
+  "runecraftory:taming": "%s"
 }

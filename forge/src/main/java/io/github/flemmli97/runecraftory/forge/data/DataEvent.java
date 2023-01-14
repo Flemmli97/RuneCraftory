@@ -44,6 +44,7 @@ public class DataEvent {
             data.addProvider(new ShopItemGen(data));
             data.addProvider(new AdvancementGen(data));
             data.addProvider(new NPCDataGen(data));
+            data.addProvider(new QuestGen(data));
         }
     }
 

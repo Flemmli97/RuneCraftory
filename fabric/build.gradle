@@ -52,6 +52,10 @@ dependencies {
     }
 
     modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.1-fabric"
+
+    modRuntimeOnly ("${simplequests}-fabric") {
+        transitive = false
+    }
 }
 
 processResources {
