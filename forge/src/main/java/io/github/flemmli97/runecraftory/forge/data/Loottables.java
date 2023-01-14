@@ -66,7 +66,7 @@ import java.util.function.Supplier;
 
 public class Loottables extends LootTableProvider {
 
-    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> loot = ImmutableList.of(Pair.of(EntityLoot::new, LootContextParamSets.ENTITY), Pair.of(BlockLootData::new, LootContextParamSets.BLOCK));
+    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> loot = ImmutableList.of(Pair.of(EntityLoot::new, LootContextParamSets.ENTITY), Pair.of(WoolyShearedEntityLoot::new, LootContextParamSets.FISHING), Pair.of(BlockLootData::new, LootContextParamSets.BLOCK));
 
     public Loottables(DataGenerator gen) {
         super(gen);
@@ -83,9 +83,9 @@ public class Loottables extends LootTableProvider {
 
     static class EntityLoot implements Consumer<BiConsumer<ResourceLocation, LootTable.Builder>> {
 
-        private final Map<ResourceLocation, LootTable.Builder> lootTables = new HashMap<>();
+        protected final Map<ResourceLocation, LootTable.Builder> lootTables = new HashMap<>();
 
-        private void init() {
+        protected void init() {
             this.lootTables.put(EntityWooly.WOOLED_LOOT, this.table(
                             new ItemLootData(ModItems.furSmall.get(), 0.5f, 0.05f, 0.4f, 2),
                             new ItemLootData(Items.SHEARS, 0.05f, 0.01f, 0, 0))
@@ -208,18 +208,6 @@ public class Loottables extends LootTableProvider {
                     new TamedItemLootData(ModItems.furSmall.get(), 1, 0),
                     new TamedItemLootData(ModItems.furMedium.get(), 1, 5),
                     new TamedItemLootData(ModItems.furLarge.get(), 1, 8));
-            LootPoolEntryContainer.Builder<?> b = AlternativesEntry.alternatives();
-            b.otherwise(LootItem.lootTableItem(ModItems.furLarge.get()).when(FriendPointCondition.of(8))
-                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
-                    .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
-            b.otherwise(LootItem.lootTableItem(ModItems.furMedium.get()).when(FriendPointCondition.of(5))
-                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
-                    .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
-            b.otherwise(LootItem.lootTableItem(ModItems.furSmall.get()).when(FriendPointCondition.of(0))
-                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
-                    .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
-
-            this.lootTables.put(EntityWooly.shearedLootTable(EntityWooly.WOOLED_LOOT), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
 
             this.tamedDropTable(ModEntities.ant.get(),
                     new TamedItemLootData(ModItems.carapaceInsect.get(), 1, 0));
@@ -339,6 +327,28 @@ public class Loottables extends LootTableProvider {
         }
 
         record TamedItemLootData(ItemLike item, float chance, int friendPoints) {
+        }
+    }
+
+    /**
+     * Different loot parameter sets
+     */
+    static class WoolyShearedEntityLoot extends EntityLoot {
+
+        @Override
+        protected void init() {
+            LootPoolEntryContainer.Builder<?> b = AlternativesEntry.alternatives();
+            b.otherwise(LootItem.lootTableItem(ModItems.furLarge.get()).when(FriendPointCondition.of(8))
+                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
+                    .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
+            b.otherwise(LootItem.lootTableItem(ModItems.furMedium.get()).when(FriendPointCondition.of(5))
+                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
+                    .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
+            b.otherwise(LootItem.lootTableItem(ModItems.furSmall.get()).when(FriendPointCondition.of(0))
+                    .apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2)))
+                    .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE)));
+
+            this.lootTables.put(EntityWooly.shearedLootTable(EntityWooly.WOOLED_LOOT), LootTable.lootTable().withPool(LootPool.lootPool().add(b)));
         }
     }
 
