@@ -109,9 +109,13 @@ public class EntityMimic extends ChargingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.getID().equals(leap.getID())) {
             if (anim.canAttack()) {
-                Vec3 target = this.getTarget() != null ? this.getTarget().position() : this.getLookAngle();
-                Vec3 vec32 = new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ())
-                        .normalize().scale(1.15);
+                Vec3 vec32;
+                if (this.getTarget() != null) {
+                    Vec3 target = this.getTarget().position();
+                    vec32 = new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ())
+                            .normalize().scale(1.15);
+                } else
+                    vec32 = this.getLookAngle();
                 this.setDeltaMovement(vec32.x, 0.25f, vec32.z);
             }
             if (anim.getTick() >= anim.getAttackTime()) {

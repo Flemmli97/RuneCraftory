@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 public abstract class ChargingMonster extends BaseMonster {
 
-    private static final EntityDataAccessor<Float> lockedYaw = SynchedEntityData.defineId(ChargingMonster.class, EntityDataSerializers.FLOAT);
+    protected static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(ChargingMonster.class, EntityDataSerializers.FLOAT);
     protected List<LivingEntity> hitEntity;
     protected double[] chargeMotion;
     private float prevStepHeight = -1;
@@ -46,7 +46,7 @@ public abstract class ChargingMonster extends BaseMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(lockedYaw, 0f);
+        this.entityData.define(LOCKED_YAW, 0f);
     }
 
     @Override
@@ -95,7 +95,7 @@ public abstract class ChargingMonster extends BaseMonster {
     }
 
     public float chargingYaw() {
-        return this.isVehicle() ? this.getYRot() : this.entityData.get(lockedYaw);
+        return this.isVehicle() ? this.getYRot() : this.entityData.get(LOCKED_YAW);
     }
 
     @Override
@@ -128,7 +128,7 @@ public abstract class ChargingMonster extends BaseMonster {
     }
 
     public void lockYaw(float yaw) {
-        this.entityData.set(lockedYaw, yaw);
+        this.entityData.set(LOCKED_YAW, yaw);
     }
 
     private boolean isChargingAnimation() {

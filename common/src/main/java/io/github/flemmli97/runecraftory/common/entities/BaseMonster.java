@@ -980,7 +980,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.applyFoodEffect(stack);
             if (count == stack.getCount() && !player.isCreative())
                 stack.shrink(1);
-            this.tamingTick = 100;
+            this.tamingTick = 60;
             float chance = EntityUtils.tamingChance(this, player, rightItemMultiplier, this.brushCount, this.loveAttCount);
             if (this.getServer() != null && (!MobConfig.monsterNeedBarn || WorldHandler.get(this.getServer()).findFittingBarn(this, player.getUUID()) != null))
                 this.delayedTaming = () -> {
@@ -1249,7 +1249,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (!this.level.isClientSide) {
                 if (this.adjustRotFromRider(entitylivingbase)) {
                     this.setYRot(this.rotateClamped(this.getYRot(), entitylivingbase.getYRot(), this.getHeadRotSpeed()));
-                    this.setXRot(entitylivingbase.getXRot() * 0.5f);
+                    this.setXRot(this.rotateClamped(this.getXRot(), entitylivingbase.getXRot(), this.getMaxHeadXRot()));
                 }
                 this.yBodyRot = this.getYRot();
                 this.yHeadRot = this.yBodyRot;
@@ -1315,7 +1315,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (!this.level.isClientSide) {
                 if (this.adjustRotFromRider(entitylivingbase)) {
                     this.setYRot(this.rotateClamped(this.getYRot(), entitylivingbase.getYRot(), this.getHeadRotSpeed()));
-                    this.setXRot(entitylivingbase.getXRot() * 0.5f);
+                    this.setXRot(this.rotateClamped(this.getXRot(), entitylivingbase.getXRot(), this.getMaxHeadXRot()));
                 }
                 this.yBodyRot = this.getYRot();
                 this.yHeadRot = this.yBodyRot;

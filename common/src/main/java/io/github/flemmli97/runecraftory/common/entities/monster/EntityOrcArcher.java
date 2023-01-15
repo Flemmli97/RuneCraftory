@@ -11,6 +11,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -46,7 +47,8 @@ public class EntityOrcArcher extends EntityOrc {
             if (anim.canAttack()) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget())) {
                     this.shootArrow(this.getTarget());
-                }
+                } else if (this.getFirstPassenger() instanceof Player)
+                    this.shootArrowFromRotation(this);
                 this.stopUsingItem();
             }
         } else
@@ -87,6 +89,13 @@ public class EntityOrcArcher extends EntityOrc {
     private void shootArrow(LivingEntity target) {
         EntityMobArrow arrow = new EntityMobArrow(this.level, this, 0.8f);
         arrow.shootAtEntity(target, 1.3f, 14 - this.level.getDifficulty().getId() * 4, 0.2f);
+        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level.addFreshEntity(arrow);
+    }
+
+    private void shootArrowFromRotation(LivingEntity shooter) {
+        EntityMobArrow arrow = new EntityMobArrow(this.level, this, 0.8f);
+        arrow.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(arrow);
     }

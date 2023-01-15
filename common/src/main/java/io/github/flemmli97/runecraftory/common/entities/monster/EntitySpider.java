@@ -14,6 +14,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -115,7 +116,7 @@ public class EntitySpider extends BaseMonster {
         if (this.isAnimOfType(anim, AnimationType.RANGED)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
-                if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget())) {
+                if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget()) || this.getFirstPassenger() instanceof Player) {
                     ModSpells.WEBSHOTSPELL.get().use((ServerLevel) this.level, this);
                 }
             }
