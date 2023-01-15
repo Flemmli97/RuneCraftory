@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.ai.AvoidWhenNotFollowing;
 import io.github.flemmli97.runecraftory.common.entities.ai.LookAtAliveGoal;
@@ -41,6 +42,7 @@ import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -142,6 +144,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> SHOP_SYNC = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> MALE = SynchedEntityData.defineId(EntityNPCBase.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> BEHAVIOUR_DATA = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
 
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT,
             MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
@@ -198,12 +201,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private UUIDNameMapper motherUUID;
     private UUIDNameMapper[] childUUIDs;
 
+    private Behaviour behaviour = Behaviour.WANDER;
+
     private LivingEntity entityToFollow;
     private UUID entityToFollowUUID;
 
     private int sleepCooldown;
 
-    private boolean isStaying;
     private final List<ServerPlayer> interactingPlayers = new ArrayList<>();
 
     private final NPCSchedule schedule;
@@ -281,6 +285,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.entityData.define(PLAY_DEATH_STATE, false);
         this.entityData.define(SHOP_SYNC, 0);
         this.entityData.define(MALE, false);
+        this.entityData.define(BEHAVIOUR_DATA, 0);
     }
 
     @Override
@@ -324,7 +329,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public void tick() {
-        this.getAnimationHandler().tick();
         super.tick();
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);
@@ -344,6 +348,32 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             --this.sleepCooldown;
             if (this.getSleepingPos().map(pos -> !pos.closerToCenterThan(this.position(), 1) || this.getActivity() != Activity.REST).orElse(false))
                 this.stopSleeping();
+        }
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        this.getAnimationHandler().tick();
+        if (this.playDeath()) {
+            this.playDeathTick = Math.min(15, ++this.playDeathTick);
+            if (!this.level.isClientSide) {
+                if (this.behaviourState().following) {
+                    LivingEntity follow = this.followEntity();
+                    boolean notSameDim = false;
+                    if (follow != null && (follow.distanceToSqr(this) > 300 || (notSameDim = (follow.level.dimension() != this.level.dimension())))) {
+                        if (notSameDim) {
+                            TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level, follow.blockPosition());
+                        } else
+                            TeleportUtils.tryTeleportAround(this, follow);
+                        this.heal(1);
+                    }
+                }
+                if (this.getHealth() > 0.02)
+                    this.setPlayDeath(false);
+            }
+        } else {
+            this.playDeathTick = Math.max(0, --this.playDeathTick);
         }
     }
 
@@ -620,6 +650,18 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.releasePOI(this.getWorkPlace());
         this.releasePOI(this.getMeetingPos());
         super.remove(reason);
+        if (!this.level.isClientSide && reason == RemovalReason.UNLOADED_TO_CHUNK) {
+            if (this.behaviourState().following) {
+                LivingEntity owner = this.followEntity();
+                if (owner != null) {
+                    if (owner.level.dimension() != this.level.dimension()) {
+                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
+                    } else
+                        TeleportUtils.tryTeleportAround(this, owner);
+                } else
+                    WorldHandler.get(this.getServer()).safeUnloadedPartyMembers(this);
+            }
+        }
     }
 
     @Override
@@ -685,7 +727,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
         compound.put("Schedule", this.schedule.save());
 
-        compound.putBoolean("Staying", this.isStaying);
+        compound.putInt("Behaviour", this.behaviourState().ordinal());
 
         compound.putBoolean("Male", this.isMale());
 
@@ -712,7 +754,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (compound.hasUUID("EntityToFollow"))
             this.entityToFollowUUID = compound.getUUID("EntityToFollow");
         this.schedule.load(compound.getCompound("Schedule"));
-        this.stayHere(compound.getBoolean("Staying"));
         if (compound.contains("NPCData"))
             this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))));
         if (this.data.gender() == NPCData.Gender.UNDEFINED)
@@ -931,7 +972,6 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void followEntity(LivingEntity entity) {
-        this.stayHere(false);
         if (entity != null) {
             if (entity instanceof Player player)
                 this.speak(player, NPCData.ConversationType.FOLLOWYES);
@@ -942,18 +982,42 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.entityToFollowUUID = null;
         }
         this.entityToFollow = entity;
+        this.setBehaviour(entity == null ? Behaviour.WANDER : Behaviour.FOLLOW);
     }
 
     public void followAtDistance(LivingEntity entity) {
-        this.followEntity(entity);
+        if (entity != null) {
+            this.entityToFollowUUID = entity.getUUID();
+        } else {
+            this.entityToFollowUUID = null;
+        }
+        this.entityToFollow = entity;
+        this.setBehaviour(Behaviour.FOLLOW);
+    }
+
+    public void setBehaviour(Behaviour behaviour) {
+        this.entityData.set(BEHAVIOUR_DATA, behaviour.ordinal());
+        this.behaviour = behaviour;
+        if (!this.level.isClientSide)
+            this.onSetBehaviour();
+    }
+
+    private void onSetBehaviour() {
+        if (this.behaviourState().following) {
+            if (this.followEntity() instanceof Player player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.party.addPartyMember(this));
+        } else {
+            if (this.followEntity() instanceof Player player)
+                Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.party.removePartyMember(this));
+        }
+    }
+
+    public Behaviour behaviourState() {
+        return this.behaviour;
     }
 
     public boolean isStaying() {
-        return this.interactingPlayers.size() > 0 || this.isStaying;
-    }
-
-    public void stayHere(boolean flag) {
-        this.isStaying = flag;
+        return this.interactingPlayers.size() > 0 || this.behaviourState() == Behaviour.STAY;
     }
 
     public void decreaseInteractingPlayers(ServerPlayer player) {
@@ -1079,5 +1143,22 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     @Override
     public void startSeenByPlayer(ServerPlayer player) {
         Platform.INSTANCE.sendToClient(new S2CNPCLook(this.getId(), this.look), player);
+    }
+
+    public enum Behaviour {
+
+        WANDER("npc.interact.home", false),
+        FOLLOW("npc.interact.follow", true),
+        FOLLOW_DISTANCE("npc.interact.follow.distance", true),
+        STAY("npc.interact.stay", true);
+
+        public final String interactKey;
+
+        public final boolean following;
+
+        Behaviour(String interactKey, boolean following) {
+            this.interactKey = interactKey;
+            this.following = following;
+        }
     }
 }

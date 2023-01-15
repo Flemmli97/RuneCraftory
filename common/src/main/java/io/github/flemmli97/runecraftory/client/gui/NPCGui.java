@@ -120,20 +120,20 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         int x = 2;
         int xSize = 90;
         int y = 0;
-        this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent("gui.npc.talk"), b -> {
+        this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.TALK.translation), b -> {
             Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.TALK));
             this.minecraft.setScreen(null);
         }));
         if (this.canFollow) {
             y += 30;
-            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent("gui.npc.follow"), b -> {
+            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.FOLLOW.translation), b -> {
                 Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.FOLLOW));
                 this.minecraft.setScreen(null);
             }));
         }
         if (this.isShopOpen == ShopState.OPEN) {
             y += 30;
-            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent("gui.npc.shop"), b -> {
+            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.SHOP.translation), b -> {
                 Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.SHOP));
                 this.minecraft.setScreen(null);
             }));

@@ -307,15 +307,17 @@ public class WorldHandler extends SavedData {
         compoundNBT.put("PlayerBarns", barns);
         CompoundTag unloadedParties = new CompoundTag();
         this.unloadedPartyMembers.forEach((uuid, pairs) -> {
-            ListTag pTags = new ListTag();
-            pairs.forEach(p -> {
-                CompoundTag pTag = new CompoundTag();
-                pTag.putString("UUID", p.getFirst().toString());
-                GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, p.getSecond()).resultOrPartial(RuneCraftory.logger::error)
-                        .ifPresent(t -> pTag.put("Pos", t));
-                pTags.add(pTag);
-            });
-            unloadedParties.put(uuid.toString(), pTags);
+            if (!pairs.isEmpty()) {
+                ListTag pTags = new ListTag();
+                pairs.forEach(p -> {
+                    CompoundTag pTag = new CompoundTag();
+                    pTag.putString("UUID", p.getFirst().toString());
+                    GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, p.getSecond()).resultOrPartial(RuneCraftory.logger::error)
+                            .ifPresent(t -> pTag.put("Pos", t));
+                    pTags.add(pTag);
+                });
+                unloadedParties.put(uuid.toString(), pTags);
+            }
         });
         compoundNBT.put("UnloadedParties", unloadedParties);
         return compoundNBT;

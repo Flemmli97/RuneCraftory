@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +27,7 @@ public class S2COpenNPCGui implements Packet {
         this.entityID = entity.getId();
         this.isShopOpen = entity.canTrade();
         if (entity.getEntityToFollowUUID() == null)
-            this.followState = 0;
+            this.followState = Platform.INSTANCE.getPlayerData(player).map(d -> d.party.isPartyFull()).orElse(true) ? 2 : 0;
         else
             this.followState = entity.getEntityToFollowUUID().equals(player.getUUID()) ? 1 : 2;
     }

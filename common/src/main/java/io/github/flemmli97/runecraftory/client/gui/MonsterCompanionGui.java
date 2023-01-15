@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MonsterCompanionGui extends CompanionGui<BaseMonster> {
 
-    private BaseMonster.Behaviour updatedBehaviour = null;
+    private BaseMonster.Behaviour updatedBehaviour;
     private final boolean fullParty, hasHome;
 
     public MonsterCompanionGui(BaseMonster entity, boolean fullParty, boolean hasHome) {

@@ -2,10 +2,15 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.Util;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+
+import javax.annotation.Nullable;
 
 public class C2SNPCInteraction implements Packet {
 
@@ -43,16 +48,20 @@ public class C2SNPCInteraction implements Packet {
                 switch (pkt.type) {
                     case TALK -> npc.talkTo(sender);
                     case FOLLOW -> {
+                        if (Platform.INSTANCE.getPlayerData(sender).map(d -> !d.party.isPartyMember(entity) && d.party.isPartyFull()).orElse(true)) {
+                            sender.sendMessage(new TranslatableComponent("monster.interact.party.full"), Util.NIL_UUID);
+                            return;
+                        }
                         if (npc.getEntityToFollowUUID() == null)
                             npc.followEntity(sender);
                     }
                     case FOLLOWDISTANCE -> {
                         if (npc.getEntityToFollowUUID() != null && npc.getEntityToFollowUUID().equals(sender.getUUID()))
-                            npc.followEntity(sender);
+                            npc.followAtDistance(sender);
                     }
                     case STAY -> {
                         if (npc.getEntityToFollowUUID() != null && npc.getEntityToFollowUUID().equals(sender.getUUID()))
-                            npc.stayHere(true);
+                            npc.setBehaviour(EntityNPCBase.Behaviour.STAY);
                     }
                     case STOPFOLLOW -> {
                         if (npc.getEntityToFollowUUID() != null && npc.getEntityToFollowUUID().equals(sender.getUUID()))
@@ -79,13 +88,23 @@ public class C2SNPCInteraction implements Packet {
     }
 
     public enum Type {
-        TALK,
-        FOLLOW,
-        FOLLOWDISTANCE,
-        STAY,
-        STOPFOLLOW,
-        SHOP,
-        CLOSE,
-        ACTION
+
+        TALK("gui.npc.talk", null),
+        FOLLOW("gui.npc.follow", EntityNPCBase.Behaviour.FOLLOW),
+        FOLLOWDISTANCE("gui.npc.distance", EntityNPCBase.Behaviour.FOLLOW_DISTANCE),
+        STAY("gui.npc.stay", EntityNPCBase.Behaviour.STAY),
+        STOPFOLLOW("gui.npc.stopFollow", EntityNPCBase.Behaviour.WANDER),
+        SHOP("gui.npc.shop", null),
+        CLOSE("gui.npc.close", null),
+        ACTION("", null);
+
+        public final String translation;
+        @Nullable
+        public final EntityNPCBase.Behaviour behaviour;
+
+        Type(String translation, EntityNPCBase.Behaviour behaviour) {
+            this.translation = translation;
+            this.behaviour = behaviour;
+        }
     }
 }
