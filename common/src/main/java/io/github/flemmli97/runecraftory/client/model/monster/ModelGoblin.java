@@ -95,8 +95,8 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
-        this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.5f;
-        this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.5f;
+        this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD;
+        this.head.xRot += headPitch * Mth.DEG_TO_RAD;
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
