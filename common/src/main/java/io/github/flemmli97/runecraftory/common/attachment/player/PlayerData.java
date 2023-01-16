@@ -85,7 +85,6 @@ public class PlayerData {
 
     private final RecipeKeeper keeper = new RecipeKeeper();
 
-    //private QuestMission quest;
     private final Map<ResourceLocation, Integer> shippedItems = new HashMap<>();
     private final Map<NPCJob, NonNullList<ItemStack>> shopItems = new HashMap<>();
     private final InventoryShippingBin shipping = new InventoryShippingBin();
@@ -107,6 +106,8 @@ public class PlayerData {
     private boolean touchedWater;
 
     private int craftingSeed;
+
+    public final QuestTracker questTracker = new QuestTracker();
 
     public PlayerData() {
         for (EnumSkills skill : EnumSkills.values()) {
@@ -413,32 +414,6 @@ public class PlayerData {
         return this.shipping;
     }
 
-    /*@Override
-    public QuestMission currentMission() {
-        return this.quest;
-    }
-
-    public boolean acceptMission(QuestMission quest) {
-        if (this.quest == null && quest.questObjective()!=null) {
-            this.quest = quest;
-            return true;
-        }
-        return false;
-    }*/
-
-    public boolean finishMission(Player player) {
-        /*if (this.quest != null && this.quest.questObjective().isFinished())
-        {
-            for (ItemStack stack : this.quest.questObjective().rewards()) {
-                ItemUtils.spawnItemAtEntity(player, stack);
-            }
-            this.setMoney(player, this.getMoney() + this.quest.questObjective().moneyReward());
-            this.quest = null;
-            return true;
-        }*/
-        return false;
-    }
-
     public void refreshShop(Player player) {
         if (!player.level.isClientSide) {
             for (NPCJob profession : ModNPCJobs.allJobs()) {
@@ -659,6 +634,7 @@ public class PlayerData {
         this.walkingTracker.read(nbt.getCompound("WalkingTracker"));
         this.party.load(nbt.getCompound("PartyTag"));
         this.craftingSeed = nbt.getInt("CraftingSeed");
+        this.questTracker.load(nbt.getCompound("QuestTracker"));
     }
 
     public CompoundTag writeToNBTPlain(CompoundTag nbt) {
@@ -716,6 +692,7 @@ public class PlayerData {
         nbt.put("TamedEntityTracker", this.tamedEntity.save());
         nbt.put("PartyTag", this.party.save());
         nbt.putInt("CraftingSeed", this.craftingSeed);
+        nbt.put("QuestTracker", this.questTracker.save());
         return nbt;
     }
 

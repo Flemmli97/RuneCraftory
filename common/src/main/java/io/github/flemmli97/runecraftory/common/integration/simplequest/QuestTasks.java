@@ -17,7 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,10 +95,6 @@ public class QuestTasks {
             if (acc.getTag() != null)
                 Registry.ITEM.getTag(acc.getTag()).ifPresent(n -> n.forEach(h -> formattedItems.add(new TranslatableComponent(h.value().getDescriptionId()))));
             return formattedItems;
-        }
-
-        public boolean trigger(ServerPlayer player, int amount, ItemStack stack) {
-            return this.predicate.matches(stack) && amount >= this.amount;
         }
     }
 

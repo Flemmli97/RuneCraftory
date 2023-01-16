@@ -19,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.RandomLookGoalAlive;
 import io.github.flemmli97.runecraftory.common.entities.ai.RiderAttackTargetGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.TendCropsGoal;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
@@ -1510,6 +1511,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 ModCriteria.TAME_MONSTER_TRIGGER.trigger(serverPlayer, this, data.tamedEntity);
                 LevelCalc.levelSkill(serverPlayer, data, EnumSkills.TAMING, 10);
             });
+            SimpleQuestIntegration.triggerTaming(serverPlayer, this);
         }
         if (this.getServer() != null) {
             this.assignBarn();
