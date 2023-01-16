@@ -245,6 +245,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
             itemstack = itemstack1.copy();
             if (slotID == 0) {
                 itemstack1.onCraftedBy(player.level, player, itemstack1.getCount());
+                Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.onCrafted(player));
                 if (!this.moveItemStackTo(itemstack1, 1, 37, false))
                     return ItemStack.EMPTY;
                 slot.onQuickCraft(itemstack1, itemstack);

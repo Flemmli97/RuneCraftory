@@ -4,6 +4,8 @@ import com.google.common.base.Suppliers;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.utils.CraftingUtils;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -19,7 +21,8 @@ public class SpecialSextupleRecipe extends SextupleRecipe {
     public static final Supplier<SpecialSextupleRecipe> scrap = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "scrap_metal"), new ItemStack(ModItems.scrap.get())) {
         @Override
         public RecipeOutput getCraftingOutput(PlayerContainerInv inv) {
-            if (inv.getPlayer().getRandom().nextFloat() < 0.9)
+            Platform.INSTANCE.getPlayerData(inv.getPlayer()).ifPresent(d -> CraftingUtils.RAND.setSeed(d.getCraftingSeed(inv.getPlayer())));
+            if (CraftingUtils.RAND.nextFloat() < 0.9)
                 return super.getCraftingOutput(inv);
             return new RecipeOutput(new ItemStack(ModItems.scrapPlus.get()), new ItemStack(ModItems.unknown.get()), NonNullList.create());
         }
@@ -28,7 +31,8 @@ public class SpecialSextupleRecipe extends SextupleRecipe {
     public static final Supplier<SpecialSextupleRecipe> failedDish = Suppliers.memoize(() -> new SpecialSextupleRecipe(new ResourceLocation(RuneCraftory.MODID, "scrap_metal"), new ItemStack(ModItems.failedDish.get())) {
         @Override
         public RecipeOutput getCraftingOutput(PlayerContainerInv inv) {
-            if (inv.getPlayer().getRandom().nextFloat() < 0.9)
+            Platform.INSTANCE.getPlayerData(inv.getPlayer()).ifPresent(d -> CraftingUtils.RAND.setSeed(d.getCraftingSeed(inv.getPlayer())));
+            if (CraftingUtils.RAND.nextFloat() < 0.9)
                 return super.getCraftingOutput(inv);
             return new RecipeOutput(new ItemStack(ModItems.disastrousDish.get()), new ItemStack(ModItems.unknown.get()), NonNullList.create());
         }

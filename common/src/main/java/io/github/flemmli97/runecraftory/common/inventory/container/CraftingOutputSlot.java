@@ -49,6 +49,7 @@ public class CraftingOutputSlot extends Slot {
         if (this.amountCrafted > 0) {
             stack.onCraftedBy(player.level, player, this.amountCrafted);
             Platform.INSTANCE.craftingEvent(player, stack, this.ingredientInv);
+            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.onCrafted(player));
         }
         this.amountCrafted = 0;
     }

@@ -106,6 +106,8 @@ public class PlayerData {
 
     private boolean touchedWater;
 
+    private int craftingSeed;
+
     public PlayerData() {
         for (EnumSkills skill : EnumSkills.values()) {
             this.skillMapN.put(skill, new LevelExpPair());
@@ -600,6 +602,16 @@ public class PlayerData {
         return this.updater;
     }
 
+    public int getCraftingSeed(Player player) {
+        if (this.craftingSeed == 0)
+            this.craftingSeed = player.getRandom().nextInt();
+        return this.craftingSeed;
+    }
+
+    public void onCrafted(Player player) {
+        this.craftingSeed = player.getRandom().nextInt();
+    }
+
     public void readFromNBT(CompoundTag nbt, Player player) {
         this.starting = nbt.getBoolean("Starting");
         this.unlockedRecipes = nbt.getBoolean("UnlockedRecipes");
@@ -646,6 +658,7 @@ public class PlayerData {
         }
         this.walkingTracker.read(nbt.getCompound("WalkingTracker"));
         this.party.load(nbt.getCompound("PartyTag"));
+        this.craftingSeed = nbt.getInt("CraftingSeed");
     }
 
     public CompoundTag writeToNBTPlain(CompoundTag nbt) {
@@ -702,6 +715,7 @@ public class PlayerData {
         nbt.put("WalkingTracker", this.walkingTracker.save());
         nbt.put("TamedEntityTracker", this.tamedEntity.save());
         nbt.put("PartyTag", this.party.save());
+        nbt.putInt("CraftingSeed", this.craftingSeed);
         return nbt;
     }
 

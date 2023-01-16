@@ -17,7 +17,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 
+import java.util.Random;
+
 public class CraftingUtils {
+
+    public static final Random RAND = new Random();
 
     public static RecipeType<SextupleRecipe> getType(EnumCrafting type) {
         return switch (type) {
@@ -157,9 +161,10 @@ public class CraftingUtils {
                 break;
         }
         NonNullList<ItemStack> recipeStacks = materials.getFirst();
+        Platform.INSTANCE.getPlayerData(inv.getPlayer()).ifPresent(d -> RAND.setSeed(d.getCraftingSeed(inv.getPlayer())));
         if (recipeStacks.size() > 3) {
             while (i < 3) {
-                ItemStack rand = recipeStacks.get(inv.getPlayer().getRandom().nextInt(recipeStacks.size()));
+                ItemStack rand = recipeStacks.get(RAND.nextInt(recipeStacks.size()));
                 if (!rand.isEmpty()) {
                     recipeStacks.remove(rand);
                     ItemNBT.addUpgradeItem(stack, rand, true, type);

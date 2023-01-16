@@ -113,7 +113,7 @@ public class ItemNBT {
         for (String attName : tag.getAllKeys()) {
             Attribute att = PlatformUtils.INSTANCE.attributes().getFromId(new ResourceLocation(attName));
             if (PlatformUtils.INSTANCE.attributes().getIDFrom(att).toString().equals(attName))
-                map.put(att, tag.getDouble(attName));
+                map.compute(att, (key, old) -> old == null ? tag.getDouble(attName) : old + tag.getDouble(attName));
         }
         return map;
     }
