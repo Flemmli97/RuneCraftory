@@ -109,17 +109,20 @@ public class EntityCalls {
             });
             //Load the chunks of unloaded party members upon joining. They will then teleport to the player themselves
             Set<Pair<UUID, GlobalPos>> party = WorldHandler.get(serverPlayer.getServer()).getUnloadedPartyMembersFor(player);
-            if (!party.isEmpty()) {
-                party.forEach(p -> {
-                    GlobalPos pos = p.getSecond();
-                    ServerLevel level = serverPlayer.getLevel();
-                    if (level.dimension() != p.getSecond().dimension())
-                        level = serverPlayer.getServer().getLevel(pos.dimension());
-                    if (level != null)
-                        level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(pos.pos()), 3, pos.pos());
-                });
-                party.clear();
-            }
+            party.forEach(p -> {
+                GlobalPos pos = p.getSecond();
+                ServerLevel level = serverPlayer.getLevel();
+                if (level.dimension() != p.getSecond().dimension())
+                    level = serverPlayer.getServer().getLevel(pos.dimension());
+                if (level != null)
+                    level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(pos.pos()), 3, pos.pos());
+            });
+            party.clear();
+            //If the party member still got killed somehow remove them here
+            Set<UUID> toRemove = WorldHandler.get(serverPlayer.getServer()).removedPartyMembersFor(player);
+            Platform.INSTANCE.getPlayerData(serverPlayer)
+                    .ifPresent(d -> toRemove.forEach(d.party::removePartyMember));
+            toRemove.clear();
         }
     }
 

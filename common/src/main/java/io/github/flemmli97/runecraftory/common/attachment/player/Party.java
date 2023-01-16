@@ -22,7 +22,11 @@ public class Party {
     }
 
     public boolean removePartyMember(Entity entity) {
-        return this.members.remove(entity.getUUID());
+        return this.removePartyMember(entity.getUUID());
+    }
+
+    public boolean removePartyMember(UUID uuid) {
+        return this.members.remove(uuid);
     }
 
     public boolean isPartyMember(Entity entity) {

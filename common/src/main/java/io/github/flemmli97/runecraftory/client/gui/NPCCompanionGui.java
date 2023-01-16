@@ -41,14 +41,14 @@ public class NPCCompanionGui extends CompanionGui<EntityNPCBase> {
                 buttonTypes.add(C2SNPCInteraction.Type.STOPFOLLOW);
             }
             case STAY -> {
-                buttonTypes.add(C2SNPCInteraction.Type.FOLLOW);
                 buttonTypes.add(C2SNPCInteraction.Type.FOLLOWDISTANCE);
+                buttonTypes.add(C2SNPCInteraction.Type.FOLLOW);
                 buttonTypes.add(C2SNPCInteraction.Type.STOPFOLLOW);
             }
         }
 
         for (C2SNPCInteraction.Type type : buttonTypes) {
-            if (buttonIndex + 1 == buttonTypes.size() && buttonTypes.size() % 2 == 1)
+            if (buttonIndex + 1 == buttonTypes.size() && buttonTypes.size() % 2 == 0)
                 this.addRenderableWidget(new Button(this.leftPos + x + (int) ((xSize + 5) * 0.5), this.topPos + y + (buttonIndex / 2 * 23), xSize, 20, new TranslatableComponent(type.translation), b -> this.handlePress(type)));
             else
                 this.addRenderableWidget(new Button(this.leftPos + x + (buttonIndex % 2 == 0 ? 0 : xSize + 6), this.topPos + y + (buttonIndex / 2 * 23), xSize, 20, new TranslatableComponent(type.translation), b -> this.handlePress(type)));

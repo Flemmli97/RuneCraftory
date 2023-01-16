@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
@@ -22,6 +23,7 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
@@ -53,6 +55,7 @@ public class WorldHandler extends SavedData {
     private final Map<ResourceKey<Level>, Long2ObjectMap<BarnData>> positionBarnMap = new HashMap<>();
 
     private final Map<UUID, Set<Pair<UUID, GlobalPos>>> unloadedPartyMembers = new HashMap<>();
+    private final Map<UUID, Set<UUID>> toRemovePartyMembers = new HashMap<>();
 
     private int updateDelay, lastUpdateDay;
 
@@ -258,10 +261,26 @@ public class WorldHandler extends SavedData {
         if (entity instanceof BaseMonster monster && monster.getOwnerUUID() != null)
             this.unloadedPartyMembers.computeIfAbsent(monster.getOwnerUUID(), o -> new HashSet<>())
                     .add(Pair.of(entity.getUUID(), GlobalPos.of(entity.level.dimension(), entity.blockPosition())));
+        else if (entity instanceof EntityNPCBase npc && npc.getEntityToFollowUUID() != null)
+            this.unloadedPartyMembers.computeIfAbsent(npc.getEntityToFollowUUID(), o -> new HashSet<>())
+                    .add(Pair.of(entity.getUUID(), GlobalPos.of(entity.level.dimension(), entity.blockPosition())));
     }
 
     public Set<Pair<UUID, GlobalPos>> getUnloadedPartyMembersFor(Player player) {
         return this.unloadedPartyMembers.computeIfAbsent(player.getUUID(), o -> new HashSet<>());
+    }
+
+    public void toRemovePartyMember(LivingEntity entity) {
+        if (entity instanceof BaseMonster monster && monster.getOwnerUUID() != null)
+            this.toRemovePartyMembers.computeIfAbsent(monster.getOwnerUUID(), o -> new HashSet<>())
+                    .add(entity.getUUID());
+        else if (entity instanceof EntityNPCBase npc && npc.getEntityToFollowUUID() != null)
+            this.toRemovePartyMembers.computeIfAbsent(npc.getEntityToFollowUUID(), o -> new HashSet<>())
+                    .add(entity.getUUID());
+    }
+
+    public Set<UUID> removedPartyMembersFor(Player player) {
+        return this.toRemovePartyMembers.computeIfAbsent(player.getUUID(), o -> new HashSet<>());
     }
 
     public void load(CompoundTag compoundNBT) {
@@ -288,6 +307,13 @@ public class WorldHandler extends SavedData {
                 map.add(Pair.of(UUID.fromString(cTag.getString("UUID")), GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, cTag.get("Pos")))
                         .getOrThrow(false, RuneCraftory.logger::error)));
             });
+        });
+        CompoundTag removedPartyMembers = compoundNBT.getCompound("RemovedPartyMembers");
+        removedPartyMembers.getAllKeys().forEach(key -> {
+            UUID uuid = UUID.fromString(key);
+            ListTag list = removedPartyMembers.getList(key, Tag.TAG_INT_ARRAY);
+            Set<UUID> uuids = this.toRemovePartyMembers.computeIfAbsent(uuid, u -> new HashSet<>());
+            list.forEach(t -> uuids.add(NbtUtils.loadUUID(t)));
         });
     }
 
@@ -320,6 +346,15 @@ public class WorldHandler extends SavedData {
             }
         });
         compoundNBT.put("UnloadedParties", unloadedParties);
+        CompoundTag removedPartyMembers = new CompoundTag();
+        this.toRemovePartyMembers.forEach((uuid, uuids) -> {
+            if (!uuids.isEmpty()) {
+                ListTag pTags = new ListTag();
+                uuids.forEach(member -> pTags.add(NbtUtils.createUUID(member)));
+                removedPartyMembers.put(uuid.toString(), pTags);
+            }
+        });
+        compoundNBT.put("RemovedPartyMembers", removedPartyMembers);
         return compoundNBT;
     }
 }

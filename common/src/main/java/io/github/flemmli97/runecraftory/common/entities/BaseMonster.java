@@ -1622,16 +1622,26 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public void remove(RemovalReason reason) {
         super.remove(reason);
-        if (!this.level.isClientSide && reason == RemovalReason.UNLOADED_TO_CHUNK) {
-            if (this.behaviourState().following) {
-                Player owner = this.getOwner();
-                if (owner != null) {
-                    if (owner.level.dimension() != this.level.dimension()) {
-                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
+        if (!this.level.isClientSide) {
+            if (reason == RemovalReason.UNLOADED_TO_CHUNK) {
+                if (this.behaviourState().following) {
+                    Player owner = this.getOwner();
+                    if (owner != null) {
+                        if (owner.level.dimension() != this.level.dimension()) {
+                            TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
+                        } else
+                            TeleportUtils.tryTeleportAround(this, owner);
                     } else
-                        TeleportUtils.tryTeleportAround(this, owner);
+                        WorldHandler.get(this.getServer()).safeUnloadedPartyMembers(this);
+                }
+            }
+            //Only happens if force killed or something.
+            else if (reason == RemovalReason.DISCARDED || reason == RemovalReason.KILLED) {
+                Player owner = this.getOwner();
+                if (owner instanceof ServerPlayer player) {
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.party.removePartyMember(this));
                 } else
-                    WorldHandler.get(this.getServer()).safeUnloadedPartyMembers(this);
+                    WorldHandler.get(this.getServer()).toRemovePartyMember(this);
             }
         }
     }

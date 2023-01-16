@@ -298,6 +298,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
             }
+            if (key == BEHAVIOUR_DATA) {
+                try {
+                    this.behaviour = Behaviour.values()[this.entityData.get(BEHAVIOUR_DATA)];
+                } catch (ArrayIndexOutOfBoundsException ignored) {
+                }
+            }
         }
     }
 
@@ -650,16 +656,26 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.releasePOI(this.getWorkPlace());
         this.releasePOI(this.getMeetingPos());
         super.remove(reason);
-        if (!this.level.isClientSide && reason == RemovalReason.UNLOADED_TO_CHUNK) {
-            if (this.behaviourState().following) {
-                LivingEntity owner = this.followEntity();
-                if (owner != null) {
-                    if (owner.level.dimension() != this.level.dimension()) {
-                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
+        if (!this.level.isClientSide) {
+            if (reason == RemovalReason.UNLOADED_TO_CHUNK) {
+                if (this.behaviourState().following) {
+                    LivingEntity owner = this.followEntity();
+                    if (owner != null) {
+                        if (owner.level.dimension() != this.level.dimension()) {
+                            TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
+                        } else
+                            TeleportUtils.tryTeleportAround(this, owner);
                     } else
-                        TeleportUtils.tryTeleportAround(this, owner);
+                        WorldHandler.get(this.getServer()).safeUnloadedPartyMembers(this);
+                }
+            }
+            //Only happens if force killed or something.
+            else if (reason == RemovalReason.DISCARDED || reason == RemovalReason.KILLED) {
+                LivingEntity owner = this.followEntity();
+                if (owner instanceof ServerPlayer player) {
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.party.removePartyMember(this));
                 } else
-                    WorldHandler.get(this.getServer()).safeUnloadedPartyMembers(this);
+                    WorldHandler.get(this.getServer()).toRemovePartyMember(this);
             }
         }
     }
@@ -921,7 +937,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public ShopState canTrade() {
-        if (!this.shop.hasShop)
+        if (!this.shop.hasShop && !this.shop.hasWorkSchedule)
             return ShopState.NOTWORKER;
         if (!this.shop.hasWorkSchedule)
             return ShopState.OPEN;
@@ -972,6 +988,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void followEntity(LivingEntity entity) {
+        if (entity == null)
+            this.setBehaviour(Behaviour.WANDER);
         if (entity != null) {
             if (entity instanceof Player player)
                 this.speak(player, NPCData.ConversationType.FOLLOWYES);
@@ -982,17 +1000,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.entityToFollowUUID = null;
         }
         this.entityToFollow = entity;
-        this.setBehaviour(entity == null ? Behaviour.WANDER : Behaviour.FOLLOW);
-    }
-
-    public void followAtDistance(LivingEntity entity) {
-        if (entity != null) {
-            this.entityToFollowUUID = entity.getUUID();
-        } else {
-            this.entityToFollowUUID = null;
-        }
-        this.entityToFollow = entity;
-        this.setBehaviour(Behaviour.FOLLOW);
+        if (entity != null)
+            this.setBehaviour(Behaviour.FOLLOW);
     }
 
     public void setBehaviour(Behaviour behaviour) {

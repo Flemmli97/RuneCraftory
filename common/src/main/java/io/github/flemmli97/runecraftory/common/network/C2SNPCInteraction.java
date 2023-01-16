@@ -57,7 +57,7 @@ public class C2SNPCInteraction implements Packet {
                     }
                     case FOLLOWDISTANCE -> {
                         if (npc.getEntityToFollowUUID() != null && npc.getEntityToFollowUUID().equals(sender.getUUID()))
-                            npc.followAtDistance(sender);
+                            npc.setBehaviour(EntityNPCBase.Behaviour.FOLLOW_DISTANCE);
                     }
                     case STAY -> {
                         if (npc.getEntityToFollowUUID() != null && npc.getEntityToFollowUUID().equals(sender.getUUID()))
