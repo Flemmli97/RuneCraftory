@@ -5,20 +5,15 @@ import io.github.flemmli97.tenshilib.common.config.CommentedJsonConfig;
 
 public class WeaponTypePropertySpecs {
 
-    public final CommentedJsonConfig.DoubleVal range;
     public final CommentedJsonConfig.DoubleVal aoe;
     public final CommentedJsonConfig.IntVal chargeTime;
-    public final CommentedJsonConfig.IntVal cooldown;
 
     public WeaponTypePropertySpecs(CommentedJsonConfig.Builder builder, WeaponTypeProperties def) {
-        this.range = builder.comment("Range of the weapon").defineInRange("Range", def.range(), 0, Double.MAX_VALUE);
         this.aoe = builder.comment("AoE of the weapon").defineInRange("AoE", def.aoe(), 0, Double.MAX_VALUE);
         this.chargeTime = builder.comment("Time for the charge attack to charge up").defineInRange("Charge Time", def.chargeTime(), 0, Integer.MAX_VALUE);
-        this.cooldown = builder.comment("Cooldown time on entity hit").defineInRange("Cooldown", def.cooldown(), 0, Integer.MAX_VALUE);
     }
 
     public static WeaponTypeProperties ofSpec(WeaponTypePropertySpecs specs) {
-        return new WeaponTypeProperties(specs.range.get().floatValue(), specs.aoe.get().floatValue(), specs.chargeTime.get(),
-                specs.cooldown.get());
+        return new WeaponTypeProperties(specs.aoe.get().floatValue(), specs.chargeTime.get());
     }
 }

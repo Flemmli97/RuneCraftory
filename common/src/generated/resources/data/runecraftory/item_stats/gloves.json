@@ -5,7 +5,9 @@
   "itemStats": {
     "minecraft:generic.max_health": 10.0,
     "minecraft:generic.attack_damage": 11.0,
-    "runecraftory:defence": 4.0
+    "runecraftory:defence": 4.0,
+    "runecraftory:attack_speed": 2.0,
+    "runecraftory:attack_range": -0.5
   },
   "monsterBonus": {},
   "element": "NONE",

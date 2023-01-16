@@ -78,11 +78,6 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
-    public int itemCoolDownTicks() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
     }
 

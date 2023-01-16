@@ -84,15 +84,15 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
                 if (!e.equals(this.getOwner()) && (this.pred == null || this.pred.test(e))) {
                     LivingEntity owner = this.getOwner() instanceof LivingEntity living ? living : null;
                     if (owner != null)
-                        CombatUtils.applyTempAttribute(owner, ModAttributes.RFSLEEP.get(), 100);
+                        CombatUtils.applyTempAttribute(owner, ModAttributes.RF_SLEEP.get(), 100);
                     if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
                         this.remove(RemovalReason.KILLED);
                         if (owner != null)
-                            CombatUtils.removeAttribute(owner, ModAttributes.RFSLEEP.get());
+                            CombatUtils.removeAttribute(owner, ModAttributes.RF_SLEEP.get());
                         break;
                     }
                     if (owner != null)
-                        CombatUtils.removeAttribute(owner, ModAttributes.RFSLEEP.get());
+                        CombatUtils.removeAttribute(owner, ModAttributes.RF_SLEEP.get());
                 }
             }
         }

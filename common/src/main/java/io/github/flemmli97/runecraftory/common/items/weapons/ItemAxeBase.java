@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHan
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -77,23 +78,18 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     }
 
     @Override
-    public int itemCoolDownTicks() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player)
                 .ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOGGING, 1));
     }
 
     @Override
-    public float getRange() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).range();
+    public float getRange(LivingEntity entity, ItemStack stack) {
+        return (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
     }
 
     @Override
-    public float getFOV() {
+    public float getFOV(LivingEntity entity, ItemStack stack) {
         return GeneralConfig.weaponProps.get(this.getWeaponType()).aoe();
     }
 
@@ -145,10 +141,10 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
             if (entity instanceof ServerPlayer player) {
-                performRightClickActionPlayer(stack, player, this.getRange());
+                performRightClickActionPlayer(stack, player, this.getRange(entity, stack));
                 return;
             }
-            if (performRightClickAction(stack, entity, this.getRange())) {
+            if (performRightClickAction(stack, entity, this.getRange(entity, stack))) {
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }

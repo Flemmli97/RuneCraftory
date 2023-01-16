@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.tenshilib.api.item.IDualWeapon;
@@ -50,22 +51,17 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     }
 
     @Override
-    public int itemCoolDownTicks() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
 
     }
 
     @Override
-    public float getRange() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).range();
+    public float getRange(LivingEntity entity, ItemStack stack) {
+        return (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
     }
 
     @Override
-    public float getFOV() {
+    public float getFOV(LivingEntity entity, ItemStack stack) {
         return GeneralConfig.weaponProps.get(this.getWeaponType()).aoe();
     }
 

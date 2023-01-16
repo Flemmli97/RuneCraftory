@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
@@ -65,22 +66,17 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
     }
 
     @Override
-    public int itemCoolDownTicks() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
 
     }
 
     @Override
-    public float getRange() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).range();
+    public float getRange(LivingEntity entity, ItemStack stack) {
+        return (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
     }
 
     @Override
-    public float getFOV() {
+    public float getFOV(LivingEntity entity, ItemStack stack) {
         return GeneralConfig.weaponProps.get(this.getWeaponType()).aoe();
     }
 
@@ -123,7 +119,7 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                     Runnable run = () -> {
                         entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
-                        if (performRightClickAction(stack, entity, this.getRange(), this.getFOV())) {
+                        if (performRightClickAction(stack, entity, this.getRange(entity, stack), this.getFOV(entity, stack))) {
                             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
                             LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 3);
                             LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.DUAL);
@@ -133,7 +129,7 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
                 });
                 return;
             }
-            if (performRightClickAction(stack, entity, this.getRange(), this.getFOV())) {
+            if (performRightClickAction(stack, entity, this.getRange(entity, stack), this.getFOV(entity, stack))) {
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }

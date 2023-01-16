@@ -3,7 +3,9 @@
   "sellPrice": 13,
   "upgradeDifficulty": 0,
   "itemStats": {
-    "minecraft:generic.attack_damage": 5.0
+    "minecraft:generic.attack_damage": 5.0,
+    "runecraftory:attack_speed": 2.0,
+    "runecraftory:attack_range": -0.5
   },
   "monsterBonus": {},
   "element": "NONE",

@@ -58,11 +58,6 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
     }
 
     @Override
-    public int itemCoolDownTicks() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOGGING, 1));
     }

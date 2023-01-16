@@ -26,7 +26,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
@@ -40,34 +39,34 @@ import java.util.TreeMap;
 public class ItemNBT {
 
     private static final List<ResourceLocation> WEAPON_ONLY = List.of(
-            ModAttributes.RFPARA.getID(),
-            ModAttributes.RFPOISON.getID(),
-            ModAttributes.RFSEAL.getID(),
-            ModAttributes.RFSLEEP.getID(),
-            ModAttributes.RFFAT.getID(),
-            ModAttributes.RFCOLD.getID(),
-            ModAttributes.RFFAINT.getID(),
-            ModAttributes.RFDRAIN.getID()
+            ModAttributes.RF_PARA.getID(),
+            ModAttributes.RF_POISON.getID(),
+            ModAttributes.RF_SEAL.getID(),
+            ModAttributes.RF_SLEEP.getID(),
+            ModAttributes.RF_FAT.getID(),
+            ModAttributes.RF_COLD.getID(),
+            ModAttributes.RF_FAINT.getID(),
+            ModAttributes.RF_DRAIN.getID()
     );
     private static final List<ResourceLocation> ARMOR_ONLY = List.of(
-            ModAttributes.RFRESWATER.getID(),
-            ModAttributes.RFRESEARTH.getID(),
-            ModAttributes.RFRESWIND.getID(),
-            ModAttributes.RFRESFIRE.getID(),
-            ModAttributes.RFRESDARK.getID(),
-            ModAttributes.RFRESLIGHT.getID(),
-            ModAttributes.RFRESLOVE.getID(),
-            ModAttributes.RFRESPARA.getID(),
-            ModAttributes.RFRESPOISON.getID(),
-            ModAttributes.RFRESSEAL.getID(),
-            ModAttributes.RFRESSLEEP.getID(),
-            ModAttributes.RFRESFAT.getID(),
-            ModAttributes.RFRESCOLD.getID(),
-            ModAttributes.RFRESDIZ.getID(),
-            ModAttributes.RFRESCRIT.getID(),
-            ModAttributes.RFRESSTUN.getID(),
-            ModAttributes.RFRESFAINT.getID(),
-            ModAttributes.RFRESDRAIN.getID()
+            ModAttributes.RF_RES_WATER.getID(),
+            ModAttributes.RF_RES_EARTH.getID(),
+            ModAttributes.RF_RES_WIND.getID(),
+            ModAttributes.RF_RES_FIRE.getID(),
+            ModAttributes.RF_RES_DARK.getID(),
+            ModAttributes.RF_RES_LIGHT.getID(),
+            ModAttributes.RF_RES_LOVE.getID(),
+            ModAttributes.RF_RES_PARA.getID(),
+            ModAttributes.RF_RES_POISON.getID(),
+            ModAttributes.RF_RES_SEAL.getID(),
+            ModAttributes.RF_RES_SLEEP.getID(),
+            ModAttributes.RF_RES_FAT.getID(),
+            ModAttributes.RF_RES_COLD.getID(),
+            ModAttributes.RF_RES_DIZ.getID(),
+            ModAttributes.RF_RES_CRIT.getID(),
+            ModAttributes.RF_RES_STUN.getID(),
+            ModAttributes.RF_RES_FAINT.getID(),
+            ModAttributes.RF_RES_DRAIN.getID()
     );
 
     public static int itemLevel(ItemStack stack) {
@@ -316,8 +315,13 @@ public class ItemNBT {
                 ItemStat base = DataPackHandler.SERVER_PACK.itemStatManager().get(toApply.getItem()).orElse(null);
                 if (base != null) {
                     CompoundTag statsTag = new CompoundTag();
+                    Map<Attribute, Double> origin = DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem())
+                            .map(ItemStat::itemStats).orElse(Map.of());
                     for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {
-                        statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
+                        if (entry.getKey() == ModAttributes.ATTACK_SPEED.get() || entry.getKey() == ModAttributes.ATTACK_RANGE.get()) //Do not copy att speed and range
+                            statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), origin.getOrDefault(entry.getKey(), 5d));
+                        else
+                            statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
                     }
                     tag.put(LibNBT.BASE, statsTag);
                 }
@@ -473,6 +477,6 @@ public class ItemNBT {
     }
 
     public static int cooldown(Player player, ItemStack stack) {
-        return stack.getItem() instanceof IItemUsable usable ? usable.itemCoolDownTicks() : (int) (1 / (player.getAttributeValue(Attributes.ATTACK_SPEED) * 20));
+        return Math.max(1, Mth.ceil(player.getAttributeValue(ModAttributes.ATTACK_SPEED.get())));
     }
 }

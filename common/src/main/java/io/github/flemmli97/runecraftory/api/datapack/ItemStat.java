@@ -25,7 +25,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -56,11 +55,18 @@ public class ItemStat {
                     new ItemStat(buy, sell, upgrade, element, spell.orElse(null), spell2.orElse(null), spell3.orElse(null), atts, monster))));
 
     private static final Set<ResourceLocation> FLAT_ATTRIBUTES = Sets.newHashSet(
-            new ResourceLocation("generic.max_health"),
-            LibAttributes.GENERIC_ATTACK_DAMAGE,
-            LibAttributes.defence,
-            LibAttributes.magic,
-            LibAttributes.magic_defence);
+            LibAttributes.MAX_HEALTH,
+            LibAttributes.ATTACK_DAMAGE,
+            LibAttributes.DEFENCE,
+            LibAttributes.MAGIC,
+            LibAttributes.MAGIC_DEFENCE);
+
+    private static final Set<ResourceLocation> IGNORED = Sets.newHashSet(
+            LibAttributes.ATTACK_SPEED,
+            LibAttributes.ATTACK_RANGE,
+            LibAttributes.HEALTH_GAIN,
+            LibAttributes.RP_GAIN
+    );
 
     private final Map<Attribute, Double> itemStats;
     private Map<Attribute, Double> monsterGiftIncrease = Map.of();
@@ -223,21 +229,22 @@ public class ItemStat {
                 list.add(new TranslatableComponent(prefix).withStyle(ChatFormatting.GRAY));
             }
             for (Map.Entry<Attribute, Double> entry : stats.entrySet()) {
-                if (entry.getKey() == ModAttributes.HEALTHGAIN.get() || entry.getKey() == ModAttributes.RPGAIN.get())
+                ResourceLocation key = PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey());
+                if (IGNORED.contains(key))
                     continue;
-                MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(entry.getKey(), entry.getValue())));
+                MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(key, entry.getValue())));
                 list.add(comp.withStyle(ChatFormatting.BLUE));
             }
         }
         return list;
     }
 
-    private String format(Attribute att, double n) {
-        if (att == Attributes.MOVEMENT_SPEED) {
+    private String format(ResourceLocation att, double n) {
+        if (att.equals(LibAttributes.MOVEMENT_SPEED)) {
             float f = ((int) (n * 100)) / 100f;
             return (f > 0 ? "+" + f : "" + f);
         }
-        boolean flat = FLAT_ATTRIBUTES.contains(PlatformUtils.INSTANCE.attributes().getIDFrom(att));
+        boolean flat = FLAT_ATTRIBUTES.contains(att);
         int val = (int) n;
         return (val > 0 ? "+" + val : "" + val) + (flat ? "" : "%");
     }

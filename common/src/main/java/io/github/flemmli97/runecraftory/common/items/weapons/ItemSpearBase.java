@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -60,22 +61,17 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     }
 
     @Override
-    public int itemCoolDownTicks() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
 
     }
 
     @Override
-    public float getRange() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).range();
+    public float getRange(LivingEntity entity, ItemStack stack) {
+        return (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
     }
 
     @Override
-    public float getFOV() {
+    public float getFOV(LivingEntity entity, ItemStack stack) {
         return GeneralConfig.weaponProps.get(this.getWeaponType()).aoe();
     }
 
@@ -125,7 +121,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
                     if (time >= this.getChargeTime(stack))
                         data.getWeaponHandler().startSpear();
                 } else if (time >= 1) {
-                    this.useSpear(serverPlayer, data);
+                    this.useSpear(serverPlayer, data, stack);
                 }
             });
         }
@@ -141,8 +137,8 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
         return ImmutableMultimap.of();
     }
 
-    private void useSpear(ServerPlayer player, PlayerData data) {
-        List<Entity> list = RayTraceUtils.getEntities(player, this.getRange(), 10);
+    private void useSpear(ServerPlayer player, PlayerData data, ItemStack stack) {
+        List<Entity> list = RayTraceUtils.getEntities(player, this.getRange(player, stack), 10);
         if (!list.isEmpty()) {
             LevelCalc.useRP(player, data, player.getRandom().nextInt(2) + 2, true, false, true, EnumSkills.SPEAR);
             data.getWeaponHandler().onUseSpear();

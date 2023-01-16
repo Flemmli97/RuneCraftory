@@ -89,10 +89,10 @@ public class GateEntity extends Mob implements IBaseMob {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes().add(ModAttributes.DEFENCE.get()).add(ModAttributes.MAGIC_DEFENCE.get())
-                .add(ModAttributes.RFRESWATER.get()).add(ModAttributes.RFRESEARTH.get())
-                .add(ModAttributes.RFRESWIND.get()).add(ModAttributes.RFRESFIRE.get())
-                .add(ModAttributes.RFRESDARK.get()).add(ModAttributes.RFRESLIGHT.get())
-                .add(ModAttributes.RFRESLOVE.get());
+                .add(ModAttributes.RF_RES_WATER.get()).add(ModAttributes.RF_RES_EARTH.get())
+                .add(ModAttributes.RF_RES_WIND.get()).add(ModAttributes.RF_RES_FIRE.get())
+                .add(ModAttributes.RF_RES_DARK.get()).add(ModAttributes.RF_RES_LIGHT.get())
+                .add(ModAttributes.RF_RES_LOVE.get());
     }
 
     public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {

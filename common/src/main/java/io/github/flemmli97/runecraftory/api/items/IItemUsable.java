@@ -7,7 +7,5 @@ public interface IItemUsable {
 
     EnumWeaponType getWeaponType();
 
-    int itemCoolDownTicks();
-
     void onBlockBreak(ServerPlayer player);
 }

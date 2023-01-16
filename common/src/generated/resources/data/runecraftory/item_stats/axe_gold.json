@@ -4,7 +4,9 @@
   "upgradeDifficulty": 0,
   "itemStats": {
     "minecraft:generic.attack_damage": 83.0,
-    "runecraftory:crit": 5.0
+    "runecraftory:crit": 5.0,
+    "runecraftory:attack_speed": 15.0,
+    "runecraftory:attack_range": 0.0
   },
   "monsterBonus": {},
   "element": "NONE",

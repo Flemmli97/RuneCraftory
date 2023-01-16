@@ -41,44 +41,51 @@ public class ModAttributes {
     //For ease of use these are attributes
     //Used for e.g. food
     //RP only applies to players
-    public static final RegistryEntrySupplier<Attribute> HEALTHGAIN = registerAdditional(LibAttributes.health_gain, id++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-    public static final RegistryEntrySupplier<Attribute> RPGAIN = registerAdditional(LibAttributes.rp_gain, id++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
-    public static final RegistryEntrySupplier<Attribute> RPINCREASE = registerAdditional(LibAttributes.rp_increase, id++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    public static final RegistryEntrySupplier<Attribute> HEALTHGAIN = registerAdditional(LibAttributes.HEALTH_GAIN, id++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    public static final RegistryEntrySupplier<Attribute> RPGAIN = registerAdditional(LibAttributes.RP_GAIN, id++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    public static final RegistryEntrySupplier<Attribute> RPINCREASE = registerAdditional(LibAttributes.RP_INCREASE, id++, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
 
-    public static final RegistryEntrySupplier<Attribute> DEFENCE = registerSyncable(LibAttributes.defence, id++, 0, -9999, 9999);
-    public static final RegistryEntrySupplier<Attribute> MAGIC = registerSyncable(LibAttributes.magic, id++, 0, -9999, 9999);
-    public static final RegistryEntrySupplier<Attribute> MAGIC_DEFENCE = registerSyncable(LibAttributes.magic_defence, id++, 0, -9999, 9999);
-    public static final RegistryEntrySupplier<Attribute> RFPARA = register(LibAttributes.para, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFPOISON = register(LibAttributes.poison, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFSEAL = register(LibAttributes.seal, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFSLEEP = register(LibAttributes.sleep, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFFAT = register(LibAttributes.fatigue, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFCOLD = register(LibAttributes.cold, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFDIZ = register(LibAttributes.diz, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFCRIT = register(LibAttributes.crit, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFSTUN = register(LibAttributes.stun, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFFAINT = register(LibAttributes.faint, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFDRAIN = register(LibAttributes.drain, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFKNOCK = register(LibAttributes.knock, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFRESWATER = register(LibAttributes.res_water, id++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute> RFRESEARTH = register(LibAttributes.res_earth, id++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute> RFRESWIND = register(LibAttributes.res_wind, id++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute> RFRESFIRE = register(LibAttributes.res_fire, id++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute> RFRESDARK = register(LibAttributes.res_dark, id++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute> RFRESLIGHT = register(LibAttributes.res_light, id++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute> RFRESLOVE = register(LibAttributes.res_love, id++, 0, -100, 200);
-    public static final RegistryEntrySupplier<Attribute> RFRESPARA = register(LibAttributes.res_para, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFRESPOISON = register(LibAttributes.res_poison, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFRESSEAL = register(LibAttributes.res_seal, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFRESSLEEP = register(LibAttributes.res_sleep, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFRESFAT = register(LibAttributes.res_fatigue, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFRESCOLD = register(LibAttributes.res_cold, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFRESDIZ = register(LibAttributes.res_diz, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFRESCRIT = register(LibAttributes.res_crit, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFRESSTUN = register(LibAttributes.res_stun, id++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> RFRESFAINT = register(LibAttributes.res_faint, id++, 0, -100, 100);
-    //public static final RegistryEntrySupplier<Attribute RFRLUCK;
-    public static final RegistryEntrySupplier<Attribute> RFRESDRAIN = register(LibAttributes.res_drain, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> DEFENCE = registerSyncable(LibAttributes.DEFENCE, id++, 0, -9999, 9999);
+    public static final RegistryEntrySupplier<Attribute> MAGIC = registerSyncable(LibAttributes.MAGIC, id++, 0, -9999, 9999);
+    public static final RegistryEntrySupplier<Attribute> MAGIC_DEFENCE = registerSyncable(LibAttributes.MAGIC_DEFENCE, id++, 0, -9999, 9999);
+    public static final RegistryEntrySupplier<Attribute> RF_PARA = register(LibAttributes.PARA, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_POISON = register(LibAttributes.POISON, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_SEAL = register(LibAttributes.SEAL, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_SLEEP = register(LibAttributes.SLEEP, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_FAT = register(LibAttributes.FATIGUE, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_COLD = register(LibAttributes.COLD, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_DIZ = register(LibAttributes.DIZ, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_CRIT = register(LibAttributes.CRIT, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_STUN = register(LibAttributes.STUN, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_FAINT = register(LibAttributes.FAINT, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_DRAIN = register(LibAttributes.DRAIN, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_KNOCK = register(LibAttributes.KNOCK, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_WATER = register(LibAttributes.RES_WATER, id++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_EARTH = register(LibAttributes.RES_EARTH, id++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_WIND = register(LibAttributes.RES_WIND, id++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_FIRE = register(LibAttributes.RES_FIRE, id++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_DARK = register(LibAttributes.RES_DARK, id++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_LIGHT = register(LibAttributes.RES_LIGHT, id++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_LOVE = register(LibAttributes.RES_LOVE, id++, 0, -100, 200);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_PARA = register(LibAttributes.RES_PARA, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_POISON = register(LibAttributes.RES_POISON, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_SEAL = register(LibAttributes.RES_SEAL, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_SLEEP = register(LibAttributes.RES_SLEEP, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_FAT = register(LibAttributes.RES_FATIGUE, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_COLD = register(LibAttributes.RES_COLD, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_DIZ = register(LibAttributes.RES_DIZZY, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_CRIT = register(LibAttributes.RES_CRIT, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_STUN = register(LibAttributes.RES_STUN, id++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> RF_RES_FAINT = register(LibAttributes.RES_FAINT, id++, 0, -100, 100);
+    //public static final RegistryEntrySupplier<Attribute RF_RLUCK;
+    public static final RegistryEntrySupplier<Attribute> RF_RES_DRAIN = register(LibAttributes.RES_DRAIN, id++, 0, -100, 100);
+
+    /**
+     * We use a custom attribute for this to remove other influences like haste etc.
+     * Attack speed is in ticks
+     */
+    public static final RegistryEntrySupplier<Attribute> ATTACK_SPEED = registerSyncable(LibAttributes.ATTACK_SPEED, id++, 5, 0, 1024);
+    public static final RegistryEntrySupplier<Attribute> ATTACK_RANGE = registerSyncable(LibAttributes.ATTACK_RANGE, id++, 3, 0, 9999);
 
     private static RegistryEntrySupplier<Attribute> register(ResourceLocation reg, int id, double base, double min, double max) {
         RegistryEntrySupplier<Attribute> sup = ATTRIBUTES.register(reg.getPath(), () -> new OrderedAttribute(reg.toString(), id, base, min, max));

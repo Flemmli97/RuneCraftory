@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.ExtendedItem;
@@ -62,17 +63,12 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     }
 
     @Override
-    public int itemCoolDownTicks() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
     }
 
     @Override
-    public float getRange() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).range();
+    public float getRange(LivingEntity entity, ItemStack stack) {
+        return (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
     }
 
     @Override
@@ -149,7 +145,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
             if (!(entity instanceof Player player) || !player.getCooldowns().isOnCooldown(this)) {
                 ModSpells.STAFFCAST.get().use(serverLevel, entity, stack);
                 if (entity instanceof Player player) {
-                    player.getCooldowns().addCooldown(stack.getItem(), this.itemCoolDownTicks());
+                    player.getCooldowns().addCooldown(stack.getItem(), ItemNBT.cooldown(player, stack));
                 }
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
             }

@@ -69,16 +69,16 @@ public class EntityButterfly extends EntityProjectile {
     protected boolean entityRayTraceHit(EntityHitResult result) {
         LivingEntity owner = this.getOwner() instanceof LivingEntity living ? living : null;
         if (owner != null)
-            CombatUtils.applyTempAttribute(owner, ModAttributes.RFDRAIN.get(), 100);
+            CombatUtils.applyTempAttribute(owner, ModAttributes.RF_DRAIN.get(), 100);
         if (CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(3), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
             if (owner != null)
-                CombatUtils.removeAttribute(owner, ModAttributes.RFDRAIN.get());
+                CombatUtils.removeAttribute(owner, ModAttributes.RF_DRAIN.get());
             if (result.getEntity() instanceof LivingEntity)
                 ((LivingEntity) result.getEntity()).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 3));
             return true;
         }
         if (owner != null)
-            CombatUtils.removeAttribute(owner, ModAttributes.RFDRAIN.get());
+            CombatUtils.removeAttribute(owner, ModAttributes.RF_DRAIN.get());
         return false;
     }
 

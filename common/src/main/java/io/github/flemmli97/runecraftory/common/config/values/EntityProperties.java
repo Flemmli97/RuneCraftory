@@ -17,8 +17,8 @@ import java.util.TreeMap;
 public class EntityProperties {
 
     public static final EntityProperties defaultProp = new EntityProperties.Builder()
-            .putAttributes(LibAttributes.GENERIC_MAX_HEALTH, 20)
-            .putAttributes(LibAttributes.GENERIC_ATTACK_DAMAGE, 1)
+            .putAttributes(LibAttributes.MAX_HEALTH, 20)
+            .putAttributes(LibAttributes.ATTACK_DAMAGE, 1)
             .xp(5).money(5).tamingChance(0.3f).build();
 
     private final List<String> confAttributes;

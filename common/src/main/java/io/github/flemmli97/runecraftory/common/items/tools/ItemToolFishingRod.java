@@ -59,11 +59,6 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
     }
 
     @Override
-    public int itemCoolDownTicks() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
 
     }
@@ -133,7 +128,7 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
                 hook = new EntityCustomFishingHook(level, entity, speed + this.tier.getTierLevel(), luck, charge);
                 hook.setElement(ItemNBT.getElement(itemStack));
                 if (entity instanceof Player player)
-                    hook.attackHandlingPlayer(() -> player.getCooldowns().getCooldownPercent(itemStack.getItem(), 0.0f) <= 0, () -> player.getCooldowns().addCooldown(itemStack.getItem(), this.itemCoolDownTicks()));
+                    hook.attackHandlingPlayer(() -> player.getCooldowns().getCooldownPercent(itemStack.getItem(), 0.0f) <= 0, () -> player.getCooldowns().addCooldown(itemStack.getItem(), ItemNBT.cooldown(player, itemStack)));
                 level.addFreshEntity(hook);
             }
             if (entity instanceof Player player)

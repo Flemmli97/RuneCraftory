@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import net.minecraft.core.BlockPos;
@@ -55,21 +56,16 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
-    public int itemCoolDownTicks() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
     }
 
     @Override
-    public float getRange() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).range();
+    public float getRange(LivingEntity entity, ItemStack stack) {
+        return (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get());
     }
 
     @Override
-    public float getFOV() {
+    public float getFOV(LivingEntity entity, ItemStack stack) {
         return GeneralConfig.weaponProps.get(this.getWeaponType()).aoe();
     }
 
@@ -119,10 +115,10 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (!world.isClientSide && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
             if (entity instanceof ServerPlayer player) {
-                ItemAxeBase.performRightClickActionPlayer(stack, player, this.getRange());
+                ItemAxeBase.performRightClickActionPlayer(stack, player, this.getRange(entity, stack));
                 return;
             }
-            if (ItemAxeBase.performRightClickAction(stack, entity, this.getRange())) {
+            if (ItemAxeBase.performRightClickAction(stack, entity, this.getRange(entity, stack))) {
                 entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, entity.getSoundSource(), 1.0f, 1.0f);
             }
         }

@@ -80,11 +80,6 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
     }
 
     @Override
-    public int itemCoolDownTicks() {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).cooldown();
-    }
-
-    @Override
     public void onBlockBreak(ServerPlayer player) {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             LevelCalc.useRP(player, data, 2, true, false, true, EnumSkills.FARMING, EnumSkills.WIND);
