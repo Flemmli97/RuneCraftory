@@ -301,9 +301,10 @@ public class LangGen implements DataProvider {
         this.add(ModNPCJobs.BATHHOUSE.getSecond().getTranslationKey(), "Bathhouse attendant");
         this.add(ModNPCJobs.RANDOM.getSecond().getTranslationKey(), "Travelling merchant");
 
-        this.add(BathhouseAttendant.BATH_ACTION, "Bath");
+        this.add(BathhouseAttendant.BATH_ACTION, "Take a bath");
         this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");
         this.add(BathhouseAttendant.BATH_ACTION_FAIL, "You don't have enough money for that. You need %2$s.");
+        this.add(BathhouseAttendant.BATH_COST, "Cost: %s");
 
         this.add("crafting.rpMax.missing", "Missing total rp");
 

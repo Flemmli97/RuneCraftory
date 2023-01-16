@@ -1,6 +1,6 @@
 {
   "name": "Quests",
   "only_same_category": true,
-  "max_concurrent_quests": 0,
+  "max_concurrent_quests": 1,
   "selectable": false
 }

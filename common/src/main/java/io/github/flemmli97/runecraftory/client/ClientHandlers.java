@@ -39,6 +39,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Random;
 
 public class ClientHandlers {
@@ -142,13 +143,13 @@ public class ClientHandlers {
         }
     }
 
-    public static void openNPCChat(int id, ShopState isShopOpen, int followState) {
+    public static void openNPCChat(int id, ShopState isShopOpen, int followState, Map<String, Component> actions) {
         Entity entity = Minecraft.getInstance().level.getEntity(id);
         if (entity instanceof EntityNPCBase npc) {
             if (followState == 1)
                 Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN));
             else
-                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0));
+                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0, actions));
         }
     }
 

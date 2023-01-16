@@ -28,6 +28,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class NPCGui<T extends EntityNPCBase> extends Screen {
@@ -45,11 +46,16 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
 
     private List<FormattedCharSequence> components;
 
-    public NPCGui(T entity, ShopState isShopOpen, boolean canFollow) {
+    private Map<String, Component> actions;
+
+    private List<ToolTipRenderer> tooltipComponents = new ArrayList<>();
+
+    public NPCGui(T entity, ShopState isShopOpen, boolean canFollow, Map<String, Component> actions) {
         super(entity.getDisplayName());
         this.entity = entity;
         this.isShopOpen = isShopOpen;
         this.canFollow = canFollow;
+        this.actions = actions;
     }
 
     @Override
@@ -86,7 +92,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         MutableComponent shopComp = null;
         if (this.entity.getShop() == ModNPCJobs.GENERAL.getSecond())
             shopComp = new TranslatableComponent("gui.npc.shop.owner", new TranslatableComponent(this.entity.getShop().getTranslationKey()));
-        else if (this.entity.getShop().hasShop)
+        else if (this.entity.getShop().hasWorkSchedule)
             shopComp = new TranslatableComponent(this.entity.getShop().getTranslationKey());
         int shopY = txtOffY + 13 * y;
         int shopSizeY = -5;
@@ -113,6 +119,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
         if (this.components != null && this.isHovering(txtOffX, shopY, 145, shopSizeY, mouseX, mouseY)) {
             this.renderTooltip(stack, this.components, mouseX, mouseY);
         }
+        this.tooltipComponents.forEach(r -> r.render(stack, mouseX, mouseY));
         super.render(stack, mouseX, mouseY, partialTick);
     }
 
@@ -132,17 +139,26 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
             }));
         }
         if (this.isShopOpen == ShopState.OPEN) {
-            y += 30;
-            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.SHOP.translation), b -> {
-                Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.SHOP));
-                this.minecraft.setScreen(null);
-            }));
-            for (String action : this.entity.getShop().actions()) {
+            if (this.entity.getShop().hasShop) {
                 y += 30;
-                this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(action), b -> {
-                    Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), action));
+                this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.SHOP.translation), b -> {
+                    Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.SHOP));
                     this.minecraft.setScreen(null);
                 }));
+            }
+            for (Map.Entry<String, Component> action : this.actions.entrySet()) {
+                y += 30;
+                this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(action.getKey()), b -> {
+                    Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), action.getKey()));
+                    this.minecraft.setScreen(null);
+                }));
+                int tooltipX = this.leftPos + x;
+                int tooltipY = this.topPos + y;
+                this.tooltipComponents.add((stack, mouseX, mouseY) -> {
+                    if (this.isHovering(tooltipX, tooltipY, xSize, 20, mouseX, mouseY)) {
+                        this.renderTooltip(stack, action.getValue(), mouseX, mouseY);
+                    }
+                });
             }
         }
         if (this.isShopOpen == ShopState.NOBED) {
@@ -200,5 +216,11 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
     public void onClose() {
         super.onClose();
         Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.CLOSE));
+    }
+
+    interface ToolTipRenderer {
+
+        void render(PoseStack stack, int mouseX, int mouseY);
+
     }
 }
