@@ -120,7 +120,7 @@ public abstract class FollowEntityGoal<T extends Mob> extends Goal {
         if (Math.abs(x - this.owner.getX()) < 2.0 && Math.abs(z - this.owner.getZ()) < 2.0) {
             return false;
         }
-        if (!TeleportUtils.tryTeleportTo(this.mob, new BlockPos(x, y, z), this::canTeleportOn)) {
+        if (!TeleportUtils.validTeleportPlace(this.mob, new BlockPos(x, y, z), this::canTeleportOn)) {
             return false;
         }
         this.mob.moveTo((double) x + 0.5, y, (double) z + 0.5, this.mob.getYRot(), this.mob.getXRot());

@@ -54,8 +54,12 @@ public class TeleportUtils {
             int x = randomIntInclusive(entity.getRandom(), -3, 3);
             int y = randomIntInclusive(entity.getRandom(), -1, 1);
             int z = randomIntInclusive(entity.getRandom(), -3, 3);
-            if (tryTeleportTo(entity, blockPos.offset(x, y, z), s -> true))
+            BlockPos pos = blockPos.offset(x, y, z);
+            if (validTeleportPlace(entity, pos, s -> true)) {
+                entity.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, entity.getYRot(), entity.getXRot());
+                entity.getNavigation().stop();
                 return true;
+            }
         }
         return false;
     }
@@ -65,13 +69,17 @@ public class TeleportUtils {
             int x = randomIntInclusive(entity.getRandom(), -3, 3);
             int y = randomIntInclusive(entity.getRandom(), -1, 1);
             int z = randomIntInclusive(entity.getRandom(), -3, 3);
-            if (tryTeleportTo(entity, target.offset(x, y, z), s -> true))
+            BlockPos pos = target.offset(x, y, z);
+            if (validTeleportPlace(entity, pos, s -> true)) {
+                entity.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, entity.getYRot(), entity.getXRot());
+                entity.getNavigation().stop();
                 return true;
+            }
         }
         return false;
     }
 
-    public static boolean tryTeleportTo(Mob entity, BlockPos pos, Function<BlockState, Boolean> validPos) {
+    public static boolean validTeleportPlace(Mob entity, BlockPos pos, Function<BlockState, Boolean> validPos) {
         BlockPos safe = isSafePos(entity, pos, validPos);
         if (safe == null)
             return false;

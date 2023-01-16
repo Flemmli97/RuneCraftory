@@ -486,20 +486,26 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void aiStep() {
         super.aiStep();
         this.getAnimationHandler().tick();
+
+        boolean teleported = false;
+        if (!this.level.isClientSide) {
+            if (this.behaviourState().following) {
+                Player owner = this.getOwner();
+                boolean notSameDim = false;
+                if (owner != null && (owner.distanceToSqr(this) > 450 || (notSameDim = (owner.level.dimension() != this.level.dimension())))) {
+                    if (notSameDim) {
+                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
+                    } else
+                        TeleportUtils.tryTeleportAround(this, owner);
+                    teleported = true;
+                }
+            }
+        }
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);
             if (!this.level.isClientSide) {
-                if (this.behaviourState().following) {
-                    Player owner = this.getOwner();
-                    boolean notSameDim = false;
-                    if (owner != null && (owner.distanceToSqr(this) > 300 || (notSameDim = (owner.level.dimension() != this.level.dimension())))) {
-                        if (notSameDim) {
-                            TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
-                        } else
-                            TeleportUtils.tryTeleportAround(this, owner);
-                        this.heal(1);
-                    }
-                }
+                if (teleported)
+                    this.heal(1);
                 if (this.getHealth() > 0.02)
                     this.setPlayDeath(false);
             }

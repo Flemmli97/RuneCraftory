@@ -169,7 +169,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 return true;
             if (this.hasPassenger(e) || !e.canBeSeenAsEnemy())
                 return false;
-            LivingEntity follow = this.followEntity();
+            Player follow = this.followEntity();
             if (follow != null && e instanceof OwnableEntity ownable && follow.getUUID().equals(ownable.getOwnerUUID()))
                 return false;
             return e instanceof Enemy;
@@ -203,7 +203,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     private Behaviour behaviour = Behaviour.WANDER;
 
-    private LivingEntity entityToFollow;
+    private Player entityToFollow;
     private UUID entityToFollowUUID;
 
     private int sleepCooldown;
@@ -361,19 +361,25 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void aiStep() {
         super.aiStep();
         this.getAnimationHandler().tick();
+        boolean teleported = false;
+        if (!this.level.isClientSide) {
+            if (this.behaviourState().following) {
+                Player follow = this.followEntity();
+                boolean notSameDim = false;
+                if (follow != null && (follow.distanceToSqr(this) > 450 || (notSameDim = (follow.level.dimension() != this.level.dimension())))) {
+                    if (notSameDim) {
+                        TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level, follow.blockPosition());
+                    } else
+                        TeleportUtils.tryTeleportAround(this, follow);
+                    teleported = true;
+                }
+            }
+        }
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);
             if (!this.level.isClientSide) {
-                if (this.behaviourState().following) {
-                    LivingEntity follow = this.followEntity();
-                    boolean notSameDim = false;
-                    if (follow != null && (follow.distanceToSqr(this) > 300 || (notSameDim = (follow.level.dimension() != this.level.dimension())))) {
-                        if (notSameDim) {
-                            TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level, follow.blockPosition());
-                        } else
-                            TeleportUtils.tryTeleportAround(this, follow);
-                        this.heal(1);
-                    }
+                if (teleported) {
+                    this.heal(1);
                 }
                 if (this.getHealth() > 0.02)
                     this.setPlayDeath(false);
@@ -659,20 +665,20 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (!this.level.isClientSide) {
             if (reason == RemovalReason.UNLOADED_TO_CHUNK) {
                 if (this.behaviourState().following) {
-                    LivingEntity owner = this.followEntity();
-                    if (owner != null) {
-                        if (owner.level.dimension() != this.level.dimension()) {
-                            TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
+                    Player follow = this.followEntity();
+                    if (follow != null) {
+                        if (follow.level.dimension() != this.level.dimension()) {
+                            TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level, follow.blockPosition());
                         } else
-                            TeleportUtils.tryTeleportAround(this, owner);
+                            TeleportUtils.tryTeleportAround(this, follow);
                     } else
                         WorldHandler.get(this.getServer()).safeUnloadedPartyMembers(this);
                 }
             }
             //Only happens if force killed or something.
             else if (reason == RemovalReason.DISCARDED || reason == RemovalReason.KILLED) {
-                LivingEntity owner = this.followEntity();
-                if (owner instanceof ServerPlayer player) {
+                Player follow = this.followEntity();
+                if (follow instanceof ServerPlayer player) {
                     Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.party.removePartyMember(this));
                 } else
                     WorldHandler.get(this.getServer()).toRemovePartyMember(this);
@@ -740,6 +746,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
         if (this.entityToFollowUUID != null)
             compound.putUUID("EntityToFollow", this.entityToFollowUUID);
+        compound.putInt("Behaviour", this.behaviourState().ordinal());
 
         compound.put("Schedule", this.schedule.save());
 
@@ -769,6 +776,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
         if (compound.hasUUID("EntityToFollow"))
             this.entityToFollowUUID = compound.getUUID("EntityToFollow");
+        try {
+            this.setBehaviour(Behaviour.values()[compound.getInt("Behaviour")]);
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+        }
         this.schedule.load(compound.getCompound("Schedule"));
         if (compound.contains("NPCData"))
             this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))));
@@ -975,10 +986,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
     }
 
-    public LivingEntity followEntity() {
+    public Player followEntity() {
         if (this.entityToFollowUUID != null) {
             if (this.entityToFollow == null || !this.entityToFollow.isAlive())
-                this.entityToFollow = EntityUtil.findFromUUID(LivingEntity.class, this.level, this.entityToFollowUUID);
+                this.entityToFollow = EntityUtil.findFromUUID(Player.class, this.level, this.entityToFollowUUID);
         }
         return this.entityToFollow;
     }
@@ -987,20 +998,19 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return this.entityToFollowUUID;
     }
 
-    public void followEntity(LivingEntity entity) {
-        if (entity == null)
+    public void followEntity(Player player) {
+        if (player == null)
             this.setBehaviour(Behaviour.WANDER);
-        if (entity != null) {
-            if (entity instanceof Player player)
-                this.speak(player, NPCData.ConversationType.FOLLOWYES);
-            this.entityToFollowUUID = entity.getUUID();
+        if (player != null) {
+            this.speak(player, NPCData.ConversationType.FOLLOWYES);
+            this.entityToFollowUUID = player.getUUID();
         } else {
-            if (this.followEntity() instanceof Player player)
-                this.speak(player, NPCData.ConversationType.FOLLOWSTOP);
+            if (this.followEntity() != null)
+                this.speak(this.followEntity(), NPCData.ConversationType.FOLLOWSTOP);
             this.entityToFollowUUID = null;
         }
-        this.entityToFollow = entity;
-        if (entity != null)
+        this.entityToFollow = player;
+        if (player != null)
             this.setBehaviour(Behaviour.FOLLOW);
     }
 
@@ -1013,11 +1023,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     private void onSetBehaviour() {
         if (this.behaviourState().following) {
-            if (this.followEntity() instanceof Player player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.party.addPartyMember(this));
+            if (this.followEntity() != null)
+                Platform.INSTANCE.getPlayerData(this.followEntity()).ifPresent(d -> d.party.addPartyMember(this));
         } else {
-            if (this.followEntity() instanceof Player player)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.party.removePartyMember(this));
+            if (this.followEntity() != null)
+                Platform.INSTANCE.getPlayerData(this.followEntity()).ifPresent(d -> d.party.removePartyMember(this));
         }
     }
 
