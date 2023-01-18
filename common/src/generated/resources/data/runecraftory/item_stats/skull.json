@@ -7,7 +7,10 @@
     "runecraftory:magic_defence": 4.0,
     "runecraftory:cold": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_attack": 1.0,
+    "runecraftory:magic_defence": 0.3
+  },
   "element": "NONE",
   "item": "runecraftory:skull"
 }

@@ -7,7 +7,10 @@
     "runecraftory:defence": 1.0,
     "runecraftory:magic_defence": 1.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 0.3,
+    "runecraftory:magic_attack": 0.3
+  },
   "element": "NONE",
   "item": "runecraftory:glue"
 }

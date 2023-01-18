@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:defence": 1.6
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.5
+  },
   "element": "NONE",
   "tag": "c:copper_ingots"
 }

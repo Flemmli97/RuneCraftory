@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:defence": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.6
+  },
   "element": "NONE",
   "tag": "c:silver_ingots"
 }

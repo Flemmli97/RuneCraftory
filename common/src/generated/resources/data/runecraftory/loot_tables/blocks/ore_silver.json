@@ -29,6 +29,45 @@
             {
               "condition": "runecraftory:skill_check",
               "skill": "MINING",
+              "min_required_level": 5
+            }
+          ],
+          "weight": 2,
+          "quality": 2,
+          "name": "runecraftory:invisible_stone"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:skill_check",
+              "skill": "MINING",
+              "min_required_level": 10
+            }
+          ],
+          "weight": 3,
+          "quality": 2,
+          "name": "runecraftory:invisible_stone"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:skill_check",
+              "skill": "MINING",
+              "min_required_level": 15
+            }
+          ],
+          "weight": 3,
+          "quality": 2,
+          "name": "runecraftory:invisible_stone"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:skill_check",
+              "skill": "MINING",
               "min_required_level": 40
             }
           ],

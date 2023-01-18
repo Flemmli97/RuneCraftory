@@ -1,11 +1,13 @@
 {
   "buyPrice": 263,
   "sellPrice": 21,
-  "upgradeDifficulty": 16,
+  "upgradeDifficulty": 14,
   "itemStats": {
-    "minecraft:generic.attack_damage": 4.0
+    "minecraft:generic.attack_damage": 7.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 0.5
+  },
   "element": "NONE",
   "item": "minecraft:quartz"
 }

@@ -3,10 +3,11 @@
   "sellPrice": 21,
   "upgradeDifficulty": 29,
   "itemStats": {
-    "runecraftory:defence": 12.0,
-    "runecraftory:magic_defence": 12.0
+    "runecraftory:magic_defence": 15.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_defence": 1.0
+  },
   "element": "NONE",
   "item": "minecraft:diamond"
 }

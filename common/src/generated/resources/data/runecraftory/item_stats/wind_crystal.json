@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:magic_defence": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_defence": 0.5
+  },
   "element": "WIND",
   "item": "runecraftory:wind_crystal"
 }

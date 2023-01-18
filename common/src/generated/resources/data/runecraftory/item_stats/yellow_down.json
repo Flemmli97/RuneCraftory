@@ -7,7 +7,9 @@
     "runecraftory:magic_defence": 2.0,
     "runecraftory:res_dizzy": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:yellow_down"
 }

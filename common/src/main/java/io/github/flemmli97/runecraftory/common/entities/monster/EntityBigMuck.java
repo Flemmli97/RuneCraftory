@@ -61,7 +61,7 @@ public class EntityBigMuck extends BaseMonster {
         if (anim.getID().equals(sporeAttack.getID())) {
             this.getNavigation().stop();
             if (this.attackPos == null) {
-                Vec3 look = Vec3.directionFromRotation(0, this.yHeadRot).scale(1.1);
+                Vec3 look = Vec3.directionFromRotation(0, this.yHeadRot).scale(1.3);
                 this.attackPos = RayTraceUtils.rotatedVecs(look, new Vec3(0, 1, 0), -180, 135, 45);
             }
             if (anim.getTick() > anim.getAttackTime()) {

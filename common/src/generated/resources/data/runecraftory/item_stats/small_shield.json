@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:defence": 4.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:small_shield"
 }

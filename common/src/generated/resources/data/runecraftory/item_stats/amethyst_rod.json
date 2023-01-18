@@ -3,12 +3,14 @@
   "sellPrice": 76,
   "upgradeDifficulty": 0,
   "itemStats": {
-    "runecraftory:magic_attack": 9.0,
+    "runecraftory:magic_attack": 13.0,
     "runecraftory:dizzy": 15.0,
     "runecraftory:attack_speed": 10.0,
     "runecraftory:attack_range": 0.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_attack": 0.5
+  },
   "element": "EARTH",
   "item": "runecraftory:amethyst_rod"
 }

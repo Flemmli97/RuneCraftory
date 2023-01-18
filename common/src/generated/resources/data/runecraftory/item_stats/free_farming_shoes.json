@@ -7,7 +7,9 @@
     "runecraftory:res_fatigue": 3.0,
     "runecraftory:res_cold": 3.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:free_farming_shoes"
 }

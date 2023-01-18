@@ -7,7 +7,9 @@
     "runecraftory:magic_attack": 3.0,
     "runecraftory:magic_defence": 1.5
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_attack": 0.5
+  },
   "element": "LIGHT",
   "item": "runecraftory:light_crystal"
 }

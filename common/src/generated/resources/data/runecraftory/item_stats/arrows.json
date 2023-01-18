@@ -1,11 +1,13 @@
 {
   "buyPrice": 45,
-  "sellPrice": 3,
+  "sellPrice": 2,
   "upgradeDifficulty": 2,
   "itemStats": {
     "minecraft:generic.attack_damage": 2.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 0.22
+  },
   "element": "NONE",
   "tier1Spell": "runecraftory:vanilla_arrow",
   "tag": "minecraft:arrows"

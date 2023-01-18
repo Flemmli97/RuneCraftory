@@ -1,8 +1,8 @@
 {
   "duration": 4800,
   "effects": {
-    "runecraftory:health_gain": 100.0,
-    "runecraftory:rp_gain": 90.0,
+    "runecraftory:health_gain": 300.0,
+    "runecraftory:rp_gain": 130.0,
     "runecraftory:defence": 1.0,
     "runecraftory:res_fatigue": 15.0,
     "runecraftory:res_cold": 15.0

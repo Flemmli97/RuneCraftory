@@ -7,7 +7,9 @@
     "runecraftory:defence": 1.5,
     "runecraftory:magic_defence": 1.5
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 0.5
+  },
   "element": "DARK",
   "item": "runecraftory:dark_crystal"
 }

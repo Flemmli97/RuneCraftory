@@ -7,7 +7,10 @@
     "runecraftory:defence": 8.0,
     "runecraftory:magic_attack": 3.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.6,
+    "runecraftory:magic_attack": 0.4
+  },
   "element": "NONE",
   "item": "minecraft:magma_cream"
 }

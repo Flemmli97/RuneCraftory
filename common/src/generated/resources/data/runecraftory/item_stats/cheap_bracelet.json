@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:magic_defence": 1.5
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_defence": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:cheap_bracelet"
 }

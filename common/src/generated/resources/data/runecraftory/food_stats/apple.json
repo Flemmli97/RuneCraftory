@@ -1,12 +1,12 @@
 {
   "duration": 600,
   "effects": {
-    "runecraftory:health_gain": 1.0,
-    "runecraftory:rp_gain": 7.0
+    "runecraftory:health_gain": 3.0,
+    "runecraftory:rp_gain": 10.0
   },
   "effectsPercentage": {},
   "cookingBonus": {
-    "minecraft:generic.max_health": 30.0
+    "runecraftory:health_gain": 45.0
   },
   "cookingBonusPercent": {},
   "potionApply": [],

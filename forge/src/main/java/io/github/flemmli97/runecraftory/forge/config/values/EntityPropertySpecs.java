@@ -21,7 +21,7 @@ public class EntityPropertySpecs {
 
     public EntityPropertySpecs(ForgeConfigSpec.Builder builder, EntityProperties def) {
         this.baseValues = builder.comment("Base Values at level 1 of the mob").define("Base Values", def.attString());
-        this.levelGains = builder.comment("Attribute values gained per level. Actual attributes are always rounded down to the nearest integer so a gain of 0.1 means 1 every 10 levels").define("Level Gains", def.gainString());
+        this.levelGains = builder.comment("Attribute values gained per level").define("Level Gains", def.gainString());
         this.xp = builder.comment("Xp this mob gives").defineInRange("XP", def.getXp(), 0, Integer.MAX_VALUE);
         this.money = builder.comment("Money this mob drops").defineInRange("Money", def.getMoney(), 0, Integer.MAX_VALUE);
         this.taming = builder.comment("Base chance to tame this mob").defineInRange("Taming Chance", def.tamingChance(), 0, 1);

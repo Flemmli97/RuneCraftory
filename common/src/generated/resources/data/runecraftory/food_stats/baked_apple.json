@@ -1,15 +1,14 @@
 {
   "duration": 4800,
   "effects": {
-    "minecraft:generic.attack_damage": 1.0,
-    "runecraftory:health_gain": 20.0,
-    "runecraftory:rp_gain": 35.0,
-    "runecraftory:defence": 1.0,
-    "runecraftory:magic_attack": 1.0,
-    "runecraftory:magic_defence": 1.0
+    "minecraft:generic.attack_damage": 5.0,
+    "runecraftory:health_gain": 130.0,
+    "runecraftory:defence": 2.0,
+    "runecraftory:magic_attack": 5.0,
+    "runecraftory:magic_defence": 2.0
   },
   "effectsPercentage": {
-    "runecraftory:rp_gain": 2.0
+    "minecraft:generic.max_health": 10.0
   },
   "cookingBonus": {},
   "cookingBonusPercent": {},

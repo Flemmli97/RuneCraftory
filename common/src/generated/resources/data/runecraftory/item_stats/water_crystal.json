@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:magic_attack": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_attack": 0.5
+  },
   "element": "WATER",
   "item": "runecraftory:water_crystal"
 }

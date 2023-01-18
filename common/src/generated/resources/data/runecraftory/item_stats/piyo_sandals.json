@@ -8,7 +8,9 @@
     "runecraftory:res_love": 1.0,
     "runecraftory:res_dizzy": 50.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:res_dizzy": 0.7
+  },
   "element": "NONE",
   "item": "runecraftory:piyo_sandals"
 }

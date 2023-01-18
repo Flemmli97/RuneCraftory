@@ -6,7 +6,9 @@
     "runecraftory:magic_attack": 3.0,
     "runecraftory:res_stun": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:res_stun": 0.5
+  },
   "element": "NONE",
   "item": "minecraft:ender_pearl"
 }

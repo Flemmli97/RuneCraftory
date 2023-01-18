@@ -3,12 +3,14 @@
   "sellPrice": 404,
   "upgradeDifficulty": 0,
   "itemStats": {
-    "minecraft:generic.attack_damage": 19.0,
-    "runecraftory:dizzy": 11.0,
+    "minecraft:generic.attack_damage": 41.0,
+    "runecraftory:dizzy": 10.0,
     "runecraftory:attack_speed": 12.0,
     "runecraftory:attack_range": 1.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
   "element": "NONE",
   "item": "runecraftory:sea_cutter"
 }

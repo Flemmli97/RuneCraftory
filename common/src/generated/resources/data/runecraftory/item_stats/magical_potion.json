@@ -3,7 +3,9 @@
   "sellPrice": 500,
   "upgradeDifficulty": 0,
   "itemStats": {},
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.max_health": 7.0
+  },
   "element": "NONE",
   "item": "runecraftory:magical_potion"
 }

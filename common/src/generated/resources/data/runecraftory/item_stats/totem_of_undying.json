@@ -6,7 +6,10 @@
     "runecraftory:defence": 9.0,
     "runecraftory:magic_defence": 9.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.4,
+    "runecraftory:magic_defence": 0.4
+  },
   "element": "NONE",
   "tier1Spell": "runecraftory:vanilla_evoker_fang",
   "item": "minecraft:totem_of_undying"

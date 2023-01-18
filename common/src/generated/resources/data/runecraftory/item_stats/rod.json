@@ -8,7 +8,9 @@
     "runecraftory:attack_speed": 10.0,
     "runecraftory:attack_range": 0.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_attack": 0.5
+  },
   "element": "FIRE",
   "tier1Spell": "runecraftory:fireball",
   "item": "runecraftory:rod"

@@ -1,12 +1,12 @@
 {
-  "buyPrice": 15,
+  "buyPrice": 11,
   "sellPrice": 1,
-  "upgradeDifficulty": 2,
+  "upgradeDifficulty": 1,
   "itemStats": {
     "minecraft:generic.attack_damage": 1.0
   },
   "monsterBonus": {
-    "minecraft:generic.attack_damage": 0.5
+    "minecraft:generic.attack_damage": 0.2
   },
   "element": "NONE",
   "item": "minecraft:stick"

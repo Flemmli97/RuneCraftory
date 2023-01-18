@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:magic_defence": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_defence": 0.33
+  },
   "element": "NONE",
   "item": "runecraftory:fairy_dust"
 }

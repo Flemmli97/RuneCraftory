@@ -18,6 +18,7 @@ RuneCraftory 1.5.0
 - Fix various monster attacks not working when ridden
 - Attack speed and range is now an attribute instead of config based
 - NPC now select 2-3 lines only
+- Tweaked various stats
 
 RuneCraftory 1.4.4
 ================

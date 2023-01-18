@@ -3,12 +3,17 @@
   "sellPrice": 587,
   "upgradeDifficulty": 0,
   "itemStats": {
-    "minecraft:generic.attack_damage": 17.0,
-    "runecraftory:defence": 11.0,
+    "minecraft:generic.attack_damage": 48.0,
+    "runecraftory:defence": 14.0,
+    "runecraftory:magic_attack": 10.0,
+    "runecraftory:magic_defence": 5.0,
+    "runecraftory:dizzy": 3.0,
     "runecraftory:attack_speed": 2.0,
     "runecraftory:attack_range": -0.5
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
   "element": "EARTH",
   "item": "runecraftory:fist_of_earth"
 }

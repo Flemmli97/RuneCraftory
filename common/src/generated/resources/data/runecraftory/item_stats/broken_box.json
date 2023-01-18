@@ -11,7 +11,14 @@
     "runecraftory:res_fatigue": 10.0,
     "runecraftory:res_cold": 10.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:res_paralysis": 0.5,
+    "runecraftory:res_poison": 0.5,
+    "runecraftory:res_seal": 0.5,
+    "runecraftory:res_sleep": 0.5,
+    "runecraftory:res_fatigue": 0.5,
+    "runecraftory:res_cold": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:broken_box"
 }

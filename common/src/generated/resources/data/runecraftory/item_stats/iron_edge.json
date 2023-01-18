@@ -3,11 +3,14 @@
   "sellPrice": 230,
   "upgradeDifficulty": 0,
   "itemStats": {
-    "minecraft:generic.attack_damage": 11.0,
+    "minecraft:generic.attack_damage": 18.0,
+    "runecraftory:dizzy": 3.0,
     "runecraftory:attack_speed": 2.0,
     "runecraftory:attack_range": -0.5
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 1.0
+  },
   "element": "NONE",
   "item": "runecraftory:iron_edge"
 }

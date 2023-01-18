@@ -3,7 +3,9 @@
   "sellPrice": 250,
   "upgradeDifficulty": 0,
   "itemStats": {},
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.max_health": 6.0
+  },
   "element": "NONE",
   "item": "runecraftory:mystery_potion"
 }

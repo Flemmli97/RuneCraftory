@@ -3,7 +3,10 @@
   "sellPrice": 50,
   "upgradeDifficulty": 0,
   "itemStats": {},
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.max_health": 5.0,
+    "runecraftory:res_paralysis": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:para_gone"
 }

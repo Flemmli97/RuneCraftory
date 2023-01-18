@@ -6,7 +6,9 @@
     "runecraftory:defence": 7.0,
     "runecraftory:magic_defence": 2.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:vest"
 }

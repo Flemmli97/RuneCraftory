@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:drain": 3.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:drain": 0.5
+  },
   "element": "LOVE",
   "item": "runecraftory:love_crystal"
 }

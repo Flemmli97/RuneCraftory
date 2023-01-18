@@ -1,11 +1,13 @@
 {
   "buyPrice": 50,
-  "sellPrice": 4,
+  "sellPrice": 5,
   "upgradeDifficulty": 9,
   "itemStats": {
-    "minecraft:generic.max_health": 2.0
+    "minecraft:generic.max_health": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.max_health": 0.5
+  },
   "element": "NONE",
   "item": "minecraft:rotten_flesh"
 }

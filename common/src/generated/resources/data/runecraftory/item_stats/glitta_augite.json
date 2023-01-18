@@ -2,7 +2,9 @@
   "buyPrice": 0,
   "sellPrice": 0,
   "upgradeDifficulty": 0,
-  "itemStats": {},
+  "itemStats": {
+    "runecraftory:attack_range": 1.0
+  },
   "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:glitta_augite"

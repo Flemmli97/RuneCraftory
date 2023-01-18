@@ -1,11 +1,13 @@
 {
-  "buyPrice": 79,
+  "buyPrice": 85,
   "sellPrice": 7,
   "upgradeDifficulty": 11,
   "itemStats": {
     "runecraftory:magic_attack": 2.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_attack": 0.3
+  },
   "element": "NONE",
   "item": "minecraft:feather"
 }

@@ -77,7 +77,7 @@ public class EntitySpore extends EntityDamageCloud {
 
     @Override
     protected AABB damageBoundingBox() {
-        return super.damageBoundingBox().inflate(0, 0.1, 0);
+        return super.damageBoundingBox().inflate(0.2, 0.5, 0.2);
     }
 
     @Override

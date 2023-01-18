@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:magic_attack": 8.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_attack": 0.5
+  },
   "element": "NONE",
   "item": "minecraft:prismarine_crystals"
 }

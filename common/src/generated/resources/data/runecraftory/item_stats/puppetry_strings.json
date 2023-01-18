@@ -8,7 +8,10 @@
     "runecraftory:paralysis": 5.0,
     "runecraftory:seal": 15.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:paralysis": 0.3,
+    "runecraftory:seal": 0.5
+  },
   "element": "NONE",
   "tier1Spell": "runecraftory:dark_beam",
   "tier2Spell": "runecraftory:big_plate",

@@ -5,7 +5,9 @@
   "itemStats": {
     "minecraft:generic.movement_speed": 0.03
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.max_health": 8.0E-4
+  },
   "element": "NONE",
   "item": "minecraft:phantom_membrane"
 }

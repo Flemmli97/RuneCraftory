@@ -3,9 +3,11 @@
   "sellPrice": 13,
   "upgradeDifficulty": 4,
   "itemStats": {
-    "runecraftory:magic_attack": 2.0
+    "runecraftory:magic_attack": 3.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_attack": 0.3
+  },
   "element": "NONE",
   "item": "minecraft:paper"
 }

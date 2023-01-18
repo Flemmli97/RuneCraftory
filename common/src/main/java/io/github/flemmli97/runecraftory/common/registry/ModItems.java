@@ -591,9 +591,9 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> stickThick = mat("thick_stick", Texture.Y);
     public static final RegistryEntrySupplier<Item> hornInsect = mat("insect_horn", Texture.Y);
     public static final RegistryEntrySupplier<Item> hornRigid = mat("rigid_horn", Texture.Y);
-    public static final RegistryEntrySupplier<Item> hornDevil = mat("devil_horn", Texture.Y);
     public static final RegistryEntrySupplier<Item> plantStem = mat("plant_stem", Texture.Y);
     public static final RegistryEntrySupplier<Item> hornBull = mat("bulls_horn", Texture.Y);
+    public static final RegistryEntrySupplier<Item> hornDevil = mat("devil_horn", Texture.Y);
     public static final RegistryEntrySupplier<Item> movingBranch = mat("moving_branch", Rarity.RARE, Texture.Y);
     public static final RegistryEntrySupplier<Item> glue = mat("glue", Texture.Y);
     public static final RegistryEntrySupplier<Item> devilBlood = mat("devil_blood", Texture.Y);

@@ -5,7 +5,9 @@
     "runecraftory:health_gain": 15.0,
     "runecraftory:rp_gain": 10.0
   },
-  "cookingBonus": {},
+  "cookingBonus": {
+    "runecraftory:rp_gain": 50.0
+  },
   "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],

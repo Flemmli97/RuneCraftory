@@ -3,10 +3,11 @@
   "sellPrice": 37,
   "upgradeDifficulty": 24,
   "itemStats": {
-    "runecraftory:defence": 4.0,
-    "runecraftory:magic_defence": 8.0
+    "runecraftory:magic_defence": 7.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_defence": 0.5
+  },
   "element": "NONE",
   "tag": "c:rubies"
 }

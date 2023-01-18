@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:magic_defence": 25.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_defence": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:gold_bracelet"
 }

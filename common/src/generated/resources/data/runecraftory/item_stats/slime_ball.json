@@ -3,10 +3,12 @@
   "sellPrice": 31,
   "upgradeDifficulty": 18,
   "itemStats": {
-    "runecraftory:defence": 9.0,
-    "runecraftory:magic_attack": 4.0
+    "runecraftory:defence": 12.0,
+    "runecraftory:magic_attack": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.6
+  },
   "element": "NONE",
   "item": "minecraft:slime_ball"
 }

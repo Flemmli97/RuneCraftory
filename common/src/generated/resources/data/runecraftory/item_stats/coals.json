@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:magic_defence": 1.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_defence": 0.2
+  },
   "element": "NONE",
   "tag": "minecraft:coals"
 }

@@ -6,7 +6,9 @@
     "runecraftory:defence": 5.0,
     "runecraftory:res_crit": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.3
+  },
   "element": "NONE",
   "item": "runecraftory:quality_cloth"
 }

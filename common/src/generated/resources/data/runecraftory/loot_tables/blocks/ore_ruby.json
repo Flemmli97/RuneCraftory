@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "weight": 100,
+          "weight": 130,
           "quality": 3,
           "name": "runecraftory:scrap"
         },
@@ -19,9 +19,40 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 10,
+          "weight": 15,
           "quality": 17,
           "name": "runecraftory:fire_crystal"
+        },
+        {
+          "type": "minecraft:item",
+          "quality": 3,
+          "name": "runecraftory:light_ore"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:skill_check",
+              "skill": "MINING",
+              "min_required_level": 5
+            }
+          ],
+          "weight": 5,
+          "quality": 3,
+          "name": "runecraftory:light_ore"
+        },
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "runecraftory:skill_check",
+              "skill": "MINING",
+              "min_required_level": 15
+            }
+          ],
+          "weight": 7,
+          "quality": 5,
+          "name": "runecraftory:light_ore"
         }
       ],
       "functions": [

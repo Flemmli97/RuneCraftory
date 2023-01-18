@@ -7,7 +7,9 @@
     "runecraftory:magic_attack": 2.0,
     "runecraftory:paralysis": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:paralysis": 0.3
+  },
   "element": "NONE",
   "item": "runecraftory:spider_thread"
 }

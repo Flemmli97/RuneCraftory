@@ -6,7 +6,9 @@
     "runecraftory:magic_attack": 5.0,
     "runecraftory:magic_defence": 1.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_attack": 1.0
+  },
   "element": "NONE",
   "item": "runecraftory:fish_fossil"
 }

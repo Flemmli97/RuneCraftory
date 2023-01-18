@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:defence": 7.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:iron_shield"
 }

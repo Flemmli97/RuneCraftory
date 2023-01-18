@@ -3,9 +3,11 @@
   "sellPrice": 5,
   "upgradeDifficulty": 6,
   "itemStats": {
-    "runecraftory:defence": 1.0
+    "runecraftory:defence": 2.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.3
+  },
   "element": "NONE",
   "item": "minecraft:bone"
 }

@@ -3,10 +3,12 @@
   "sellPrice": 11,
   "upgradeDifficulty": 8,
   "itemStats": {
-    "runecraftory:defence": 1.0,
+    "runecraftory:defence": 2.0,
     "runecraftory:res_poison": 15.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:res_poison": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:insect_carapace"
 }

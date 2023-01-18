@@ -1,0 +1,15 @@
+{
+  "category": "runecraftory:quests",
+  "task": "Tame a monster",
+  "loot_table": "minecraft:empty",
+  "icon": "runecraftory:wooly_spawn_egg",
+  "repeat_delay": -1,
+  "submission_trigger": "runecraftory_trigger",
+  "entries": {
+    "tame": {
+      "amount": 1,
+      "description": "Tame one monster",
+      "id": "runecraftory:taming"
+    }
+  }
+}

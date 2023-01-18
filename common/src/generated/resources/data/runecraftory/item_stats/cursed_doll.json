@@ -9,7 +9,11 @@
     "runecraftory:res_seal": 10.0,
     "runecraftory:res_drain": 15.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:res_paralysis": 1.0,
+    "runecraftory:res_seal": 1.0,
+    "runecraftory:res_drain": 1.0
+  },
   "element": "NONE",
   "tier1Spell": "runecraftory:card_attack",
   "tier2Spell": "runecraftory:throw_plush",

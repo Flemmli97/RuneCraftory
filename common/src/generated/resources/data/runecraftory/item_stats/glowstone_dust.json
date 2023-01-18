@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:magic_attack": 4.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_attack": 0.3
+  },
   "element": "NONE",
   "item": "minecraft:glowstone_dust"
 }

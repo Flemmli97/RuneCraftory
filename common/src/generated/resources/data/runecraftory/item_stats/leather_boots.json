@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:defence": 2.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:leather_boots"
 }

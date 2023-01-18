@@ -1,8 +1,8 @@
 {
   "duration": 4800,
   "effects": {
-    "runecraftory:health_gain": 80.0,
-    "runecraftory:rp_gain": 200.0,
+    "runecraftory:health_gain": 100.0,
+    "runecraftory:rp_gain": 400.0,
     "runecraftory:rp_increase": 50.0
   },
   "effectsPercentage": {

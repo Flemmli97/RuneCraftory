@@ -3,12 +3,14 @@
   "sellPrice": 297,
   "upgradeDifficulty": 0,
   "itemStats": {
-    "runecraftory:magic_attack": 17.0,
+    "runecraftory:magic_attack": 28.0,
     "runecraftory:dizzy": 15.0,
     "runecraftory:attack_speed": 10.0,
     "runecraftory:attack_range": 0.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_attack": 1.0
+  },
   "element": "LOVE",
   "item": "runecraftory:friendly_rod"
 }

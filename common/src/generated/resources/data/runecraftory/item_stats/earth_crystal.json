@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:defence": 5.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.5
+  },
   "element": "EARTH",
   "item": "runecraftory:earth_crystal"
 }

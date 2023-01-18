@@ -7,7 +7,9 @@
     "runecraftory:magic_defence": 6.0,
     "runecraftory:res_dizzy": 17.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:res_dizzy": 1.0
+  },
   "element": "NONE",
   "tier1Spell": "runecraftory:laser_3",
   "tier2Spell": "runecraftory:laser_5",

@@ -376,18 +376,25 @@ public class Loottables extends LootTableProvider {
                 case IRON -> {
                     build.add(ore(100, 3, ModItems.scrap.get()));
                     build.add(ore(40, 17, Items.IRON_INGOT));
+                    build.add(ore(5, 5, ModItems.invisStone.get()));
+                    build.add(ore(10, 3, ModItems.invisStone.get(), 10));
                     build.add(ore(1, 7, ModItems.crystalSmall.get(), 40));
                 }
                 case BRONZE -> {
                     build.add(ore(100, 3, ModItems.scrap.get()));
                     build.add(ore(40, 15, Items.IRON_INGOT));
                     build.add(ore(25, 24, Items.COPPER_INGOT));
+                    build.add(ore(4, 3, ModItems.invisStone.get(), 5));
+                    build.add(ore(5, 3, ModItems.invisStone.get(), 20));
                     build.add(ore(3, 8, ModItems.crystalSmall.get(), 40));
                 }
                 case SILVER -> {
                     build.add(ore(100, 3, ModItems.scrap.get()));
                     build.add(ore(40, 12, Items.IRON_INGOT));
                     build.add(ore(20, 31, ModItems.silver.get()));
+                    build.add(ore(2, 2, ModItems.invisStone.get(), 5));
+                    build.add(ore(3, 2, ModItems.invisStone.get(), 10));
+                    build.add(ore(3, 2, ModItems.invisStone.get(), 15));
                     build.add(ore(3, 8, ModItems.crystalSmall.get(), 40));
                 }
                 case GOLD -> {
@@ -398,8 +405,8 @@ public class Loottables extends LootTableProvider {
                 }
                 case DIAMOND -> {
                     build.add(ore(100, 3, ModItems.scrap.get()));
-                    build.add(ore(3, 7, Items.DIAMOND));
-                    build.add(ore(10, 27, Items.DIAMOND, 20));
+                    build.add(ore(5, 7, Items.DIAMOND));
+                    build.add(ore(15, 27, Items.DIAMOND, 20));
                     build.add(ore(3, 8, ModItems.crystalSmall.get(), 40));
                 }
                 case PLATINUM -> {
@@ -421,29 +428,44 @@ public class Loottables extends LootTableProvider {
                     build.add(ore(3, 9, ModItems.crystalSmall.get(), 40));
                 }
                 case AMETHYST -> {
-                    build.add(ore(100, 3, ModItems.scrap.get()));
+                    build.add(ore(130, 3, ModItems.scrap.get()));
                     build.add(ore(40, 15, ModItems.amethyst.get()));
-                    build.add(ore(10, 17, ModItems.crystalEarth.get()));
+                    build.add(ore(15, 17, ModItems.crystalEarth.get()));
+                    build.add(ore(1, 3, ModItems.lightOre.get()));
+                    build.add(ore(5, 3, ModItems.lightOre.get(), 5));
+                    build.add(ore(7, 5, ModItems.lightOre.get(), 15));
                 }
                 case AQUAMARINE -> {
-                    build.add(ore(100, 3, ModItems.scrap.get()));
+                    build.add(ore(130, 3, ModItems.scrap.get()));
                     build.add(ore(40, 15, ModItems.aquamarine.get()));
-                    build.add(ore(10, 17, ModItems.crystalWater.get()));
+                    build.add(ore(15, 17, ModItems.crystalWater.get()));
+                    build.add(ore(1, 3, ModItems.lightOre.get()));
+                    build.add(ore(5, 3, ModItems.lightOre.get(), 5));
+                    build.add(ore(7, 5, ModItems.lightOre.get(), 15));
                 }
                 case RUBY -> {
-                    build.add(ore(100, 3, ModItems.scrap.get()));
+                    build.add(ore(130, 3, ModItems.scrap.get()));
                     build.add(ore(40, 15, ModItems.ruby.get()));
-                    build.add(ore(10, 17, ModItems.crystalFire.get()));
+                    build.add(ore(15, 17, ModItems.crystalFire.get()));
+                    build.add(ore(1, 3, ModItems.lightOre.get()));
+                    build.add(ore(5, 3, ModItems.lightOre.get(), 5));
+                    build.add(ore(7, 5, ModItems.lightOre.get(), 15));
                 }
                 case EMERALD -> {
-                    build.add(ore(100, 3, ModItems.scrap.get()));
+                    build.add(ore(130, 3, ModItems.scrap.get()));
                     build.add(ore(40, 15, Items.EMERALD));
-                    build.add(ore(10, 17, ModItems.crystalWind.get()));
+                    build.add(ore(15, 17, ModItems.crystalWind.get()));
+                    build.add(ore(1, 3, ModItems.lightOre.get()));
+                    build.add(ore(5, 3, ModItems.lightOre.get(), 5));
+                    build.add(ore(7, 5, ModItems.lightOre.get(), 15));
                 }
                 case SAPPHIRE -> {
-                    build.add(ore(100, 3, ModItems.scrap.get()));
+                    build.add(ore(130, 3, ModItems.scrap.get()));
                     build.add(ore(50, 15, ModItems.sapphire.get()));
                     build.add(ore(3, 17, ModItems.crystalLove.get()));
+                    build.add(ore(1, 3, ModItems.lightOre.get()));
+                    build.add(ore(5, 3, ModItems.lightOre.get(), 5));
+                    build.add(ore(7, 5, ModItems.lightOre.get(), 15));
                 }
             }
             build.apply(ItemLevelLootFunction.getDef());

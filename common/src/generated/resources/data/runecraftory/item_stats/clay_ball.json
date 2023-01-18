@@ -5,7 +5,9 @@
   "itemStats": {
     "runecraftory:magic_defence": 2.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:magic_defence": 0.1
+  },
   "element": "NONE",
   "item": "minecraft:clay_ball"
 }

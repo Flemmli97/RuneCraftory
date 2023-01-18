@@ -3,7 +3,9 @@
   "sellPrice": 35,
   "upgradeDifficulty": 0,
   "itemStats": {},
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.max_health": 5.0
+  },
   "element": "NONE",
   "item": "runecraftory:healing_potion"
 }

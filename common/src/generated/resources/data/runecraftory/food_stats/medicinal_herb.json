@@ -1,10 +1,12 @@
 {
   "duration": 100,
   "effects": {
-    "runecraftory:health_gain": 25.0
+    "runecraftory:health_gain": 30.0
   },
   "effectsPercentage": {},
-  "cookingBonus": {},
+  "cookingBonus": {
+    "runecraftory:health_gain": 20.0
+  },
   "cookingBonusPercent": {},
   "potionApply": [],
   "potionRemove": [],

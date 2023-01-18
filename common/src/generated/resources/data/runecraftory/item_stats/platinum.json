@@ -3,9 +3,11 @@
   "sellPrice": 111,
   "upgradeDifficulty": 34,
   "itemStats": {
-    "runecraftory:defence": 25.0
+    "runecraftory:defence": 30.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 0.8
+  },
   "element": "NONE",
   "tag": "c:platinum_ingots"
 }

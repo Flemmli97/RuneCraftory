@@ -3,9 +3,11 @@
   "sellPrice": 14,
   "upgradeDifficulty": 23,
   "itemStats": {
-    "runecraftory:defence": 7.0
+    "runecraftory:defence": 9.0
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "runecraftory:defence": 1.0
+  },
   "element": "NONE",
   "item": "minecraft:leather"
 }

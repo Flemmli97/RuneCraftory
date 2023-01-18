@@ -7,7 +7,9 @@
     "runecraftory:attack_speed": 6.0,
     "runecraftory:attack_range": -0.5
   },
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 0.5
+  },
   "element": "NONE",
   "item": "runecraftory:broad_sword"
 }

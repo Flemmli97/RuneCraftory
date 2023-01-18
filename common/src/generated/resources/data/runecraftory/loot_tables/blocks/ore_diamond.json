@@ -13,7 +13,7 @@
         },
         {
           "type": "minecraft:item",
-          "weight": 3,
+          "weight": 5,
           "quality": 7,
           "name": "minecraft:diamond"
         },
@@ -26,7 +26,7 @@
               "min_required_level": 20
             }
           ],
-          "weight": 10,
+          "weight": 15,
           "quality": 27,
           "name": "minecraft:diamond"
         },

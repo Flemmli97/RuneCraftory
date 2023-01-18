@@ -3,7 +3,9 @@
   "sellPrice": 25,
   "upgradeDifficulty": 0,
   "itemStats": {},
-  "monsterBonus": {},
+  "monsterBonus": {
+    "minecraft:generic.max_health": 3.0
+  },
   "element": "NONE",
   "item": "runecraftory:recovery_potion"
 }
