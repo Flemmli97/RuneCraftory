@@ -293,7 +293,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                                     TeleportSpell.changeDimension(this, serverLevel, pos.getX(), pos.getY(), pos.getZ());
                             }
                         } else {
-                            if(this.tickCount > 20)
+                            if (this.tickCount > 20)
                                 this.getOwner().sendMessage(new TranslatableComponent("monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition()), Util.NIL_UUID);
                             this.setBehaviour(Behaviour.WANDER);
                         }

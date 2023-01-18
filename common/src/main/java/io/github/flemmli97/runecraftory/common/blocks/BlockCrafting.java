@@ -20,13 +20,13 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.LevelEvent;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -36,10 +36,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 import java.util.stream.Stream;
 
-public abstract class BlockCrafting extends Block implements EntityBlock {
+public abstract class BlockCrafting extends HorizontalDirectionalBlock implements EntityBlock {
 
     public static final EnumProperty<EnumPart> PART = EnumProperty.create("part", EnumPart.class);
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     private final EnumCrafting type;
 
@@ -185,6 +184,11 @@ public abstract class BlockCrafting extends Block implements EntityBlock {
 
     public boolean hasUpgradeScreen() {
         return this.type == EnumCrafting.ARMOR || this.type == EnumCrafting.FORGE;
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING).getOpposite()));
     }
 
     public enum EnumPart implements StringRepresentable {

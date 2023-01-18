@@ -48,13 +48,13 @@ public abstract class LivingEntityMixin {
      */
     @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
     private void onHurtKnockback(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
-        if(source instanceof CustomDamage customDamage && customDamage.getKnockBackType() == CustomDamage.KnockBackType.NONE)
+        if (source instanceof CustomDamage customDamage && customDamage.getKnockBackType() == CustomDamage.KnockBackType.NONE)
             this.runecraftoryStopKnockback = true;
     }
 
     @Inject(method = "knockback", at = @At("HEAD"), cancellable = true)
     private void knockbackCheck(double strength, double x, double z, CallbackInfo info) {
-        if(this.runecraftoryStopKnockback)
+        if (this.runecraftoryStopKnockback)
             info.cancel();
         this.runecraftoryStopKnockback = false;
     }

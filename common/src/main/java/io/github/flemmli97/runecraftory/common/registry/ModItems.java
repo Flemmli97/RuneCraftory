@@ -7,6 +7,8 @@ import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.common.RFCreativeTabs;
+import io.github.flemmli97.runecraftory.common.items.CraftingBlockItem;
+import io.github.flemmli97.runecraftory.common.items.QuestBoardItem;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemGiantCrops;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMedicine;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemMushroom;
@@ -526,10 +528,10 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> prismShield = shield("prism_shield", Texture.N);
     public static final RegistryEntrySupplier<Item> runeShield = shield("rune_shield", Texture.N);
 
-    public static final RegistryEntrySupplier<Item> itemBlockForge = blockItem("forge", () -> ModBlocks.forge);
-    public static final RegistryEntrySupplier<Item> itemBlockAccess = blockItem("accessory_workbench", () -> ModBlocks.accessory);
-    public static final RegistryEntrySupplier<Item> itemBlockCooking = blockItem("cooking_table", () -> ModBlocks.cooking);
-    public static final RegistryEntrySupplier<Item> itemBlockChem = blockItem("chemistry_set", () -> ModBlocks.chemistry);
+    public static final RegistryEntrySupplier<Item> itemBlockForge = ITEMS.register("forge", () -> new CraftingBlockItem(ModBlocks.forge.get(), new Item.Properties().tab(RFCreativeTabs.blocks)));
+    public static final RegistryEntrySupplier<Item> itemBlockAccess = ITEMS.register("accessory_workbench", () -> new CraftingBlockItem(ModBlocks.accessory.get(), new Item.Properties().tab(RFCreativeTabs.blocks)));
+    public static final RegistryEntrySupplier<Item> itemBlockCooking = ITEMS.register("cooking_table", () -> new CraftingBlockItem(ModBlocks.cooking.get(), new Item.Properties().tab(RFCreativeTabs.blocks)));
+    public static final RegistryEntrySupplier<Item> itemBlockChem = ITEMS.register("chemistry_set", () -> new CraftingBlockItem(ModBlocks.chemistry.get(), new Item.Properties().tab(RFCreativeTabs.blocks)));
 
     public static final RegistryEntrySupplier<Item> mineralIron = mineral(EnumMineralTier.IRON);
     public static final RegistryEntrySupplier<Item> mineralBronze = mineral(EnumMineralTier.BRONZE);
@@ -1202,7 +1204,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> farmland = blockItem("farmland", () -> ModBlocks.farmland, null);
     public static final RegistryEntrySupplier<Item> cashRegister = blockItem("cash_register", () -> ModBlocks.cashRegister);
     public static final RegistryEntrySupplier<Item> monsterBarn = blockItem("monster_barn", () -> ModBlocks.monsterBarn);
-    public static final RegistryEntrySupplier<Item> questBoard = blockItem("quest_board", () -> ModBlocks.questBoard);
+    public static final RegistryEntrySupplier<Item> questBoard = ITEMS.register("quest_board", () -> new QuestBoardItem(ModBlocks.questBoard.get(), new Item.Properties().tab(RFCreativeTabs.blocks)));
 
     public static RegistryEntrySupplier<Item> hoe(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));

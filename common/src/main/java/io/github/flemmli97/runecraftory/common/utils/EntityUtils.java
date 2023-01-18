@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -24,12 +25,22 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Rotation;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
 public class EntityUtils {
+
+    public static Rotation fromDirection(Direction direction) {
+        return switch (direction) {
+            case EAST -> Rotation.CLOCKWISE_90;
+            case SOUTH -> Rotation.CLOCKWISE_180;
+            case WEST -> Rotation.COUNTERCLOCKWISE_90;
+            default -> Rotation.NONE;
+        };
+    }
 
     public static boolean isExhaust(LivingEntity entity) {
         return entity.hasEffect(ModEffects.fatigue.get());

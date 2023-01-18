@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.items.MultiBlockItem;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemFertilizer;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
@@ -32,6 +33,8 @@ import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.Input;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -42,11 +45,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.ArrayList;
@@ -165,6 +174,56 @@ public class ClientCalls {
         if (GeneralConfig.debugAttack) {
             AttackAABBRender.INST.render(stack, Minecraft.getInstance().renderBuffers().crumblingBufferSource());
         }
+        Minecraft minecraft = Minecraft.getInstance();
+        MultiBlockItem item = null;
+        ItemStack main = minecraft.player.getMainHandItem();
+        if (minecraft.player.getOffhandItem().getItem() instanceof MultiBlockItem multiBlockItem && !(main.getItem() instanceof BlockItem))
+            item = multiBlockItem;
+        if (main.getItem() instanceof MultiBlockItem multiBlockItem)
+            item = multiBlockItem;
+        if (item == null)
+            return;
+        BlockPos pos = minecraft.hitResult instanceof BlockHitResult result && result.getType() != HitResult.Type.MISS ? result.getBlockPos().relative(result.getDirection()) : null;
+        if (pos != null) {
+            Vec3 camPos = minecraft.gameRenderer.getMainCamera().getPosition();
+            double x = camPos.x();
+            double y = camPos.y();
+            double z = camPos.z();
+            MultiBufferSource.BufferSource buffer = minecraft.renderBuffers().bufferSource();
+            VertexConsumer consumer = buffer.getBuffer(RenderType.lines());
+            boolean invalid = false;
+            List<Pair<BlockPos, VoxelShape>> list = new ArrayList<>();
+            Rotation rot = EntityUtils.fromDirection(minecraft.player.getDirection());
+            for (Pair<BlockPos, BlockState> p : item.getBlocks()) {
+                BlockPos offset = p.getFirst().rotate(rot)
+                        .offset(pos);
+                BlockState current = minecraft.level.getBlockState(offset);
+                if (!current.getMaterial().isReplaceable()) {
+                    invalid = true;
+                    list.add(Pair.of(offset, Shapes.empty()));
+                } else
+                    list.add(Pair.of(offset, p.getSecond().rotate(rot).getShape(minecraft.level, offset).move(offset.getX(), offset.getY(), offset.getZ())));
+            }
+            float gb = invalid ? 0.3f : 1;
+            for (Pair<BlockPos, VoxelShape> p : list) {
+                if (p.getSecond() == Shapes.empty())
+                    continue;
+                renderBlockAt(stack, consumer, p.getSecond(), x, y, z, 1, gb, gb, 1, invalid);
+            }
+            buffer.endBatch(RenderType.lines());
+        }
+    }
+
+    private static void renderBlockAt(PoseStack stack, VertexConsumer consumer, VoxelShape shape, double camX, double camY, double camZ, float r, float g, float b, float alpha, boolean invalid) {
+        PoseStack.Pose pose = stack.last();
+        shape.forAllEdges((k, l, m, n, o, p) -> {
+            float dX = (float) (n - k);
+            float dY = (float) (o - l);
+            float dZ = (float) (p - m);
+            float len = Mth.sqrt(dX * dX + dY * dY + dZ * dZ);
+            consumer.vertex(pose.pose(), (float) (k - camX), (float) (l - camY), (float) (m - camZ)).color(r, g, b, alpha).normal(pose.normal(), dX /= len, dY /= len, dZ /= len).endVertex();
+            consumer.vertex(pose.pose(), (float) (n - camX), (float) (o - camY), (float) (p - camZ)).color(r, g, b, alpha).normal(pose.normal(), dX, dY, dZ).endVertex();
+        });
     }
 
     public static void tick(LivingEntity entity) {

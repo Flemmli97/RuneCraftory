@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.blocks;
 
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,7 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class BlockQuestboard extends Block {
+public class BlockQuestboard extends HorizontalDirectionalBlock {
 
     public static final VoxelShape[] BOTTOM_LEFT = BlockCrafting.joinedOrDirs(BlockCrafting.ShapeBuilder.of(0, 0, 7, 2, 10, 9),
             BlockCrafting.ShapeBuilder.of(1, 11, 6.5, 16, 16, 9.5),
@@ -131,18 +133,9 @@ public class BlockQuestboard extends Block {
     }
 
     public static List<Pair<Part, BlockPos>> getPosMap(BlockPos from, BlockState state) {
-        Rotation rotation = fromDirection(state.getValue(FACING));
+        Rotation rotation = EntityUtils.fromDirection(state.getValue(FACING));
         BlockPos offset = state.getValue(PART).offset;
         return Arrays.stream(Part.values()).map(p -> Pair.of(p, p.offset.offset(-offset.getX(), -offset.getY(), -offset.getZ()).rotate(rotation).offset(from))).toList();
-    }
-
-    private static Rotation fromDirection(Direction direction) {
-        return switch (direction) {
-            case SOUTH -> Rotation.CLOCKWISE_180;
-            case EAST -> Rotation.CLOCKWISE_90;
-            case WEST -> Rotation.COUNTERCLOCKWISE_90;
-            default -> Rotation.NONE;
-        };
     }
 
     private static Direction rotateBy(Direction direction, Direction rotate) {
