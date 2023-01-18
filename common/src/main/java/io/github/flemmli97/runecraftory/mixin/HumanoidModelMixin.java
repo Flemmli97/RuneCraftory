@@ -14,15 +14,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class HumanoidModelMixin<T extends LivingEntity> {
 
     @Unique
-    private AnimatedAction rf4CurrentAnimation;
+    private AnimatedAction runecraftoryCurrentAnimation;
 
     @Inject(method = "setupAnim", at = @At("HEAD"))
     private void setupModel(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo info) {
-        ClientMixinUtils.transFormPre(entity, (HumanoidModel<?>) (Object) this, a -> this.rf4CurrentAnimation = a);
+        ClientMixinUtils.transFormPre(entity, (HumanoidModel<?>) (Object) this, a -> this.runecraftoryCurrentAnimation = a);
     }
 
     @Inject(method = "setupAnim", at = @At("RETURN"))
     private void modifyModel(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo info) {
-        ClientMixinUtils.transformHumanoidModel(entity, (HumanoidModel<?>) (Object) this, this.rf4CurrentAnimation);
+        ClientMixinUtils.transformHumanoidModel(entity, (HumanoidModel<?>) (Object) this, this.runecraftoryCurrentAnimation);
     }
 }

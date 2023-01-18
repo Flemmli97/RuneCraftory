@@ -293,7 +293,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                                     TeleportSpell.changeDimension(this, serverLevel, pos.getX(), pos.getY(), pos.getZ());
                             }
                         } else {
-                            this.getOwner().sendMessage(new TranslatableComponent("monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition()), Util.NIL_UUID);
+                            if(this.tickCount > 20)
+                                this.getOwner().sendMessage(new TranslatableComponent("monster.interact.barn.no.ext", this.getDisplayName(), this.blockPosition()), Util.NIL_UUID);
                             this.setBehaviour(Behaviour.WANDER);
                         }
                         this.goalSelector.addGoal(6, this.wander);
@@ -550,10 +551,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.entityData.set(levelXP, this.levelPair.getXp());
         if (compound.contains("Owner"))
             this.entityData.set(owner, Optional.of(compound.getUUID("Owner")));
-        try {
-            this.setBehaviour(Behaviour.values()[compound.getInt("Behaviour")]);
-        } catch (ArrayIndexOutOfBoundsException ignored) {
-        }
         this.feedTimeOut = compound.getInt("FeedTime");
         if (compound.contains("Home")) {
             int[] home = compound.getIntArray("Home");
@@ -579,6 +576,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     .resultOrPartial(RuneCraftory.logger::error).ifPresent(p ->
                             this.assignedBarn = WorldHandler.get(this.getServer()).barnAt(p)
                     );
+        }
+        try {
+            this.setBehaviour(Behaviour.values()[compound.getInt("Behaviour")]);
+        } catch (ArrayIndexOutOfBoundsException ignored) {
         }
         //CompoundTag genes = compound.getCompound("Genes");
         //genes.keySet().forEach(key->this.attributeRandomizer.put(ForgeRegistries.ATTRIBUTES.getValue(new ResourceLocation(key)), genes.getInt(key)));

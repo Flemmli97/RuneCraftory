@@ -28,30 +28,30 @@ public abstract class LevelRendererMixin {
     private ClientLevel level;
 
     @Unique
-    private Biome rf4CacheBiome;
+    private Biome runecraftoryCacheBiome;
 
     @ModifyVariable(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;warmEnoughToRain(Lnet/minecraft/core/BlockPos;)Z"))
     private Biome cacheBiomeSnowRain(Biome biome) {
-        this.rf4CacheBiome = biome;
+        this.runecraftoryCacheBiome = biome;
         return biome;
     }
 
     @ModifyVariable(method = "renderSnowAndRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;warmEnoughToRain(Lnet/minecraft/core/BlockPos;)Z"))
     private BlockPos.MutableBlockPos snowRainCheck(BlockPos.MutableBlockPos pos) {
-        if (WorldUtils.coldEnoughForSnow(this.minecraft.level, pos, this.rf4CacheBiome))
+        if (WorldUtils.coldEnoughForSnow(this.minecraft.level, pos, this.runecraftoryCacheBiome))
             pos.set(pos.getX(), 1000, pos.getZ());
         return pos;
     }
 
     @ModifyVariable(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;getY()I", ordinal = 0, shift = At.Shift.BEFORE))
     private Biome cacheBiomeTickRain(Biome biome) {
-        this.rf4CacheBiome = biome;
+        this.runecraftoryCacheBiome = biome;
         return biome;
     }
 
     @ModifyVariable(method = "tickRain", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos;getY()I", ordinal = 0, shift = At.Shift.BEFORE), ordinal = 2)
     private BlockPos rainTickCheck(BlockPos pos) {
-        if (WorldUtils.coldEnoughForSnow(this.minecraft.level, pos, this.rf4CacheBiome))
+        if (WorldUtils.coldEnoughForSnow(this.minecraft.level, pos, this.runecraftoryCacheBiome))
             return new BlockPos(pos.getX(), this.minecraft.level.getMinBuildHeight() - 1, pos.getZ());
         return pos;
     }

@@ -27,22 +27,22 @@ public abstract class ScreenMixin {
     private int height;
 
     @Unique
-    private ItemStack rf4_tooltipStack = ItemStack.EMPTY;
+    private ItemStack runecraftoryTooltipStack = ItemStack.EMPTY;
 
     @Inject(method = "renderTooltip(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemStack;II)V", at = @At("HEAD"))
     private void onItemStackTooltipPre(PoseStack poseStack, ItemStack itemStack, int mouseX, int mouseY, CallbackInfo info) {
-        this.rf4_tooltipStack = itemStack;
+        this.runecraftoryTooltipStack = itemStack;
     }
 
     @Inject(method = "renderTooltip(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/world/item/ItemStack;II)V",
             at = @At(value = "RETURN"))
     private void onItemStackTooltipPost(PoseStack poseStack, ItemStack itemStack, int mouseX, int mouseY, CallbackInfo info) {
-        this.rf4_tooltipStack = ItemStack.EMPTY;
+        this.runecraftoryTooltipStack = ItemStack.EMPTY;
     }
 
     @Inject(method = "renderTooltip(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;Ljava/util/Optional;II)V",
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;renderTooltipInternal(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;II)V"), locals = LocalCapture.CAPTURE_FAILHARD)
     private void onItemStackTooltip(PoseStack poseStack, List<Component> tooltips, Optional<TooltipComponent> visualTooltipComponent, int mouseX, int mouseY, CallbackInfo info, List<ClientTooltipComponent> components) {
-        TooltipHelper.gatherComponents(this.rf4_tooltipStack, this.width, this.height, components);
+        TooltipHelper.gatherComponents(this.runecraftoryTooltipStack, this.width, this.height, components);
     }
 }

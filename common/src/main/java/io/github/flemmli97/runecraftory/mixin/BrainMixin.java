@@ -14,16 +14,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class BrainMixin implements IDisableBrain {
 
     @Unique
-    private boolean rfdisabled;
+    private boolean runecraftoryDisabled;
 
     @Inject(method = "tick", at = @At(value = "HEAD"), cancellable = true)
     private void checkDisabled(ServerLevel world, LivingEntity entity, CallbackInfo info) {
-        if (this.rfdisabled)
+        if (this.runecraftoryDisabled)
             info.cancel();
     }
 
     @Override
     public void disableBrain(boolean disable) {
-        this.rfdisabled = disable;
+        this.runecraftoryDisabled = disable;
     }
 }

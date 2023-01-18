@@ -18,17 +18,17 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public abstract class ServerLevelMixin {
 
     @Unique
-    private Biome rf4BiomeCache;
+    private Biome runecraftoryBiomeCache;
 
     @ModifyVariable(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/biome/Biome;shouldSnow(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z"))
     private Biome cacheBiome(Biome biome) {
-        this.rf4BiomeCache = biome;
+        this.runecraftoryBiomeCache = biome;
         return biome;
     }
 
     @ModifyArg(method = "tickChunk", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/Block;handlePrecipitation(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/biome/Biome$Precipitation;)V"))
     private Biome.Precipitation withSeason(BlockState state, Level level, BlockPos pos, Biome.Precipitation old) {
-        if (GeneralConfig.seasonedSnow && WorldUtils.coldEnoughForSnow(level, pos, this.rf4BiomeCache) && this.rf4BiomeCache.getPrecipitation() != Biome.Precipitation.NONE) {
+        if (GeneralConfig.seasonedSnow && WorldUtils.coldEnoughForSnow(level, pos, this.runecraftoryBiomeCache) && this.runecraftoryBiomeCache.getPrecipitation() != Biome.Precipitation.NONE) {
             BlockPos above = pos.above();
             if (WorldUtils.canPlaceSnowAt(level, above)) {
                 level.setBlockAndUpdate(above, ModBlocks.snow.get().defaultBlockState());
