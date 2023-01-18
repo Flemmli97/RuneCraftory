@@ -1,25 +1,18 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
-import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
 
-public class DailyMonsterUpdater {
+public class DailyMonsterUpdater extends DailyEntityUpdater<BaseMonster> {
 
-    private final BaseMonster monster;
-
-    private int lastUpdateDay;
     private int lastUpdateFood, lastUpdateBrush;
 
     public DailyMonsterUpdater(BaseMonster monster) {
-        this.monster = monster;
+        super(monster);
     }
 
-    public void tick() {
-        int day = WorldUtils.day(this.monster.level);
-        if (this.lastUpdateDay != day) {
-            this.lastUpdateDay = day;
-            this.monster.onDailyUpdate();
-        }
+    @Override
+    protected void onUpdate() {
+        this.entity.onDailyUpdate();
     }
 
     public void setLastUpdateDay(int lastUpdateDay) {
@@ -42,15 +35,18 @@ public class DailyMonsterUpdater {
         return this.lastUpdateBrush;
     }
 
+    @Override
     public CompoundTag save() {
-        CompoundTag compound = new CompoundTag();
+        CompoundTag compound = super.save();
         compound.putInt("LastUpdateDay", this.lastUpdateDay);
         compound.putInt("LastUpdateFood", this.lastUpdateFood);
         compound.putInt("LastUpdateBrush", this.lastUpdateBrush);
         return compound;
     }
 
+    @Override
     public void read(CompoundTag compound) {
+        super.read(compound);
         this.lastUpdateDay = compound.getInt("LastUpdateDay");
         this.lastUpdateFood = compound.getInt("LastUpdateFood");
         this.lastUpdateBrush = compound.getInt("LastUpdateBrush");

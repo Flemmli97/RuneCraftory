@@ -6,12 +6,17 @@ import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.Random;
+
 public class DailyPlayerUpdater {
 
     private int lastUpdateDay;
 
     private boolean gaveMonsterItem, ateFood;
     private int bathCounter;
+
+    private final Random random = new Random();
+    private int dailyRandomSeed;
 
     private final PlayerData data;
 
@@ -20,6 +25,8 @@ public class DailyPlayerUpdater {
     }
 
     public void tick(ServerPlayer player) {
+        if (this.dailyRandomSeed == 0)
+            this.dailyRandomSeed = player.getRandom().nextInt();
         int day = WorldUtils.day(player.level);
         if (this.lastUpdateDay != day) {
             this.lastUpdateDay = day;
@@ -28,6 +35,7 @@ public class DailyPlayerUpdater {
             this.gaveMonsterItem = false;
             this.ateFood = false;
             this.bathCounter = 0;
+            this.dailyRandomSeed = player.getRandom().nextInt();
         }
     }
 
@@ -57,12 +65,22 @@ public class DailyPlayerUpdater {
         this.bathCounter++;
     }
 
+    public int getDailyRandomSeed() {
+        return this.dailyRandomSeed;
+    }
+
+    public Random getDailyRandom() {
+        this.random.setSeed(this.getDailyRandomSeed());
+        return this.random;
+    }
+
     public CompoundTag save() {
         CompoundTag compound = new CompoundTag();
         compound.putInt("LastUpdateDay", this.lastUpdateDay);
         compound.putBoolean("GaveMonsterItem", this.gaveMonsterItem);
         compound.putBoolean("AteFood", this.ateFood);
         compound.putInt("BathCounter", this.bathCounter);
+        compound.putInt("DailyRandomSeed", this.dailyRandomSeed);
         return compound;
     }
 
@@ -71,5 +89,6 @@ public class DailyPlayerUpdater {
         this.gaveMonsterItem = compound.getBoolean("GaveMonsterItem");
         this.ateFood = compound.getBoolean("AteFood");
         this.bathCounter = compound.getInt("BathCounter");
+        this.dailyRandomSeed = compound.getInt("DailyRandomSeed");
     }
 }

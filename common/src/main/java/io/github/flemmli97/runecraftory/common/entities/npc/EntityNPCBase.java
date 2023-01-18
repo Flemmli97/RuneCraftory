@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.DailyEntityUpdater;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.ai.AvoidWhenNotFollowing;
 import io.github.flemmli97.runecraftory.common.entities.ai.LookAtAliveGoal;
@@ -127,6 +128,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -214,6 +216,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     private BlockPos prevRestriction = BlockPos.ZERO;
     private int prevRestrictionRadius = -1;
+
+    private DailyEntityUpdater<EntityNPCBase> updater = new DailyEntityUpdater<>(this);
 
     public EntityNPCBase(EntityType<? extends EntityNPCBase> type, Level level) {
         super(type, level);
@@ -345,6 +349,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.playDeathTick = Math.max(0, --this.playDeathTick);
         }
         if (!this.level.isClientSide) {
+            this.updater.tick();
             this.updateActivity();
             this.foodBuffTick = Math.max(-1, --this.foodBuffTick);
             if (this.foodBuffTick == 0) {
@@ -475,8 +480,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
                 .withLuck(player.getLuck()).create(LootContextParamSets.GIFT);
         List<NPCData.Conversation> filtered = conversations.conversations().stream().filter(c -> c.test(heart, ctx)).toList();
-        if (!filtered.isEmpty()) {
-            NPCData.Conversation randomLine = filtered.get(this.random.nextInt(filtered.size()));
+        Collections.shuffle(filtered, this.updater.getDailyRandom());
+        int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
+        if (size > 0) {
+            NPCData.Conversation randomLine = filtered.get(size);
             player.sendMessage(new TranslatableComponent(randomLine.translationKey(), player.getName()), Util.NIL_UUID);
         } else {
             player.sendMessage(new TranslatableComponent(conversations.fallbackKey(), player.getName()), Util.NIL_UUID);
@@ -756,6 +763,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
         if (this.data != NPCData.DEFAULT_DATA)
             compound.putString("NPCData", DataPackHandler.SERVER_PACK.npcDataManager().get(this.data).toString());
+
+        compound.put("DailyUpdater", this.updater.save());
     }
 
     @Override
@@ -788,6 +797,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.data.profession() == null) {
             this.setShop(ModNPCJobs.getFromID(ModNPCJobs.legacyOfTag(compound.get("Shop"))));
         }
+
+        this.updater.read(compound.getCompound("DailyUpdater"));
     }
 
     @Override
@@ -998,10 +1009,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return this.entityToFollowUUID;
     }
 
-    public void followEntity(Player player) {
+    public boolean followEntity(Player player) {
         if (player == null)
             this.setBehaviour(Behaviour.WANDER);
         if (player != null) {
+            int points = this.friendPoints(player);
+            float denyChance = points < 3 ? -0.1f + 0.1f * points : (0.4f + 0.15f * points);
+            if (Platform.INSTANCE.getPlayerData(player).map(d -> d.getDailyUpdater().getDailyRandom().nextFloat() < denyChance).orElse(true)) {
+                this.speak(player, NPCData.ConversationType.FOLLOWNO);
+                return false;
+            }
             this.speak(player, NPCData.ConversationType.FOLLOWYES);
             this.entityToFollowUUID = player.getUUID();
         } else {
@@ -1012,6 +1029,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.entityToFollow = player;
         if (player != null)
             this.setBehaviour(Behaviour.FOLLOW);
+        return true;
     }
 
     public void setBehaviour(Behaviour behaviour) {
