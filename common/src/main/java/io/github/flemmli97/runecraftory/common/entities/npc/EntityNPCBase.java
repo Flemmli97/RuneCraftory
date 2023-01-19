@@ -44,6 +44,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
+import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -116,6 +117,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.entity.EntityInLevelCallback;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -366,14 +368,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         super.aiStep();
         this.getAnimationHandler().tick();
         boolean teleported = false;
-        if (!this.level.isClientSide) {
+        if (this.level instanceof ServerLevel serverLevel) {
             if (this.behaviourState().following) {
                 Player follow = this.followEntity();
                 if (follow != null) {
+                    serverLevel.getChunkSource().addRegionTicket(WorldUtils.ENTITY_LOADER, this.chunkPosition(), 3, this.chunkPosition());
                     if (follow.level.dimension() != this.level.dimension()) {
                         TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level, follow.blockPosition());
-                    } else if (follow.distanceToSqr(this) > 450)
+                    } else if (follow.distanceToSqr(this) > 450) {
                         TeleportUtils.tryTeleportAround(this, follow);
+                    }
                     teleported = true;
                 }
             }
@@ -662,33 +666,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     @Override
+    public void setLevelCallback(EntityInLevelCallback levelCallback) {
+        super.setLevelCallback(WorldUtils.wrappedCallbackFor(this, this::followEntity, levelCallback));
+    }
+
+    @Override
     public void remove(RemovalReason reason) {
         this.releasePOI(this.getBedPos());
         this.releasePOI(this.getWorkPlace());
         this.releasePOI(this.getMeetingPos());
         super.remove(reason);
-        if (!this.level.isClientSide) {
-            if (reason == RemovalReason.UNLOADED_TO_CHUNK) {
-                if (this.behaviourState().following) {
-                    Player follow = this.followEntity();
-                    if (follow != null) {
-                        if (follow.level.dimension() != this.level.dimension()) {
-                            TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level, follow.blockPosition());
-                        } else
-                            TeleportUtils.tryTeleportAround(this, follow);
-                    } else
-                        WorldHandler.get(this.getServer()).safeUnloadedPartyMembers(this);
-                }
-            }
-            //Only happens if force killed or something.
-            else if (reason == RemovalReason.DISCARDED || reason == RemovalReason.KILLED) {
-                Player follow = this.followEntity();
-                if (follow instanceof ServerPlayer player) {
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.party.removePartyMember(this));
-                } else
-                    WorldHandler.get(this.getServer()).toRemovePartyMember(this);
-            }
-        }
     }
 
     @Override
@@ -1000,7 +987,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             if (this.entityToFollow == null || !this.entityToFollow.isAlive()) {
                 if (this.level.isClientSide)
                     this.entityToFollow = this.level.getPlayerByUUID(this.entityToFollowUUID);
-                this.entityToFollow = this.level.getServer().getPlayerList().getPlayer(this.entityToFollowUUID);
+                else
+                    this.entityToFollow = this.level.getServer().getPlayerList().getPlayer(this.entityToFollowUUID);
             }
         }
         return this.entityToFollow;

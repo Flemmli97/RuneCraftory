@@ -125,13 +125,13 @@ import java.util.function.Predicate;
 
 public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, RandomAttackSelectorMob, ExtendedEntity {
 
-    private static final EntityDataAccessor<Optional<UUID>> owner = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final EntityDataAccessor<Integer> entityLevel = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Float> levelXP = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.FLOAT);
-    private static final EntityDataAccessor<Byte> moveFlags = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Integer> behaviourData = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
-    private static final EntityDataAccessor<Boolean> playDeathState = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Integer> friendPointsSync = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Integer> ENTITY_LEVEL = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Float> LEVEL_XP = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Byte> MOVE_FLAGS = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> BEHAVIOUR_DATA = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> PLAY_DEATH_STATE = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> FRIEND_POINTS_SYNC = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
 
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
@@ -206,6 +206,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     protected int feedTimeOut;
     private boolean doJumping = false;
     private int foodBuffTick;
+    private Player owner;
 
     private Behaviour behaviour = Behaviour.WANDER;
 
@@ -391,28 +392,28 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(owner, Optional.empty());
-        this.entityData.define(entityLevel, LibConstants.BASE_LEVEL);
-        this.entityData.define(levelXP, 0f);
-        this.entityData.define(moveFlags, (byte) 0);
-        this.entityData.define(behaviourData, 0);
-        this.entityData.define(playDeathState, false);
-        this.entityData.define(friendPointsSync, 1);
+        this.entityData.define(OWNER_UUID, Optional.empty());
+        this.entityData.define(ENTITY_LEVEL, LibConstants.BASE_LEVEL);
+        this.entityData.define(LEVEL_XP, 0f);
+        this.entityData.define(MOVE_FLAGS, (byte) 0);
+        this.entityData.define(BEHAVIOUR_DATA, 0);
+        this.entityData.define(PLAY_DEATH_STATE, false);
+        this.entityData.define(FRIEND_POINTS_SYNC, 1);
     }
 
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
         if (this.level.isClientSide) {
-            if (key == behaviourData) {
+            if (key == BEHAVIOUR_DATA) {
                 try {
-                    this.behaviour = Behaviour.values()[this.entityData.get(behaviourData)];
+                    this.behaviour = Behaviour.values()[this.entityData.get(BEHAVIOUR_DATA)];
                 } catch (ArrayIndexOutOfBoundsException ignored) {
                 }
             }
             //This case only happens during load. At that point we want to skip right to the end of the animation
-            if (key == playDeathState) {
-                if (this.entityData.get(playDeathState) && !this.getAnimationHandler().hasAnimation())
+            if (key == PLAY_DEATH_STATE) {
+                if (this.entityData.get(PLAY_DEATH_STATE) && !this.getAnimationHandler().hasAnimation())
                     this.playDeathAnimation(true);
             }
         }
@@ -490,14 +491,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.getAnimationHandler().tick();
 
         boolean teleported = false;
-        if (!this.level.isClientSide) {
+        if (this.level instanceof ServerLevel serverLevel) {
             if (this.behaviourState().following) {
                 Player owner = this.getOwner();
                 if (owner != null) {
+                    serverLevel.getChunkSource().addRegionTicket(WorldUtils.ENTITY_LOADER, this.chunkPosition(), 3, this.chunkPosition());
                     if (owner.level.dimension() != this.level.dimension()) {
                         TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
-                    } else if (owner.distanceToSqr(this) > 450)
+                    } else if (owner.distanceToSqr(this) > 450) {
                         TeleportUtils.tryTeleportAround(this, owner);
+                    }
                     teleported = true;
                 }
             }
@@ -528,7 +531,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         compound.putInt("FoodBuffTick", this.foodBuffTick);
         compound.put("FriendlyPoints", this.friendlyPoints.save());
         compound.put("DailyUpdater", this.updater.save());
-        compound.putBoolean("PlayDeath", this.entityData.get(playDeathState));
+        compound.putBoolean("PlayDeath", this.entityData.get(PLAY_DEATH_STATE));
         if (this.seedInventory != null) {
             compound.putIntArray("SeedInventory", new int[]{this.seedInventory.getX(), this.seedInventory.getY(), this.seedInventory.getZ()});
         }
@@ -547,10 +550,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.levelPair.read(compound.getCompound("MobLevel"));
-        this.entityData.set(entityLevel, this.levelPair.getLevel());
-        this.entityData.set(levelXP, this.levelPair.getXp());
+        this.entityData.set(ENTITY_LEVEL, this.levelPair.getLevel());
+        this.entityData.set(LEVEL_XP, this.levelPair.getXp());
         if (compound.contains("Owner"))
-            this.entityData.set(owner, Optional.of(compound.getUUID("Owner")));
+            this.entityData.set(OWNER_UUID, Optional.of(compound.getUUID("Owner")));
         this.feedTimeOut = compound.getInt("FeedTime");
         if (compound.contains("Home")) {
             int[] home = compound.getIntArray("Home");
@@ -558,7 +561,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
         this.foodBuffTick = compound.getInt("FoodBuffTick");
         this.friendlyPoints.read(compound.getCompound("FriendlyPoints"));
-        this.entityData.set(friendPointsSync, this.friendlyPoints.getLevel());
+        this.entityData.set(FRIEND_POINTS_SYNC, this.friendlyPoints.getLevel());
         this.updater.read(compound.getCompound("DailyUpdater"));
         this.setPlayDeath(compound.getBoolean("PlayDeath"));
         if (compound.contains("SeedInventory")) {
@@ -705,7 +708,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void increaseFriendPoints(int xp) {
-        boolean leveledUp = this.friendlyPoints.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> this.entityData.set(friendPointsSync, this.friendlyPoints.getLevel()));
+        boolean leveledUp = this.friendlyPoints.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> this.entityData.set(FRIEND_POINTS_SYNC, this.friendlyPoints.getLevel()));
         if (leveledUp) {
             this.updateFriendPointAttributeBonus();
         }
@@ -827,25 +830,29 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public UUID getOwnerUUID() {
-        return this.entityData.get(owner).orElse(null);
+        return this.entityData.get(OWNER_UUID).orElse(null);
     }
 
     @Override
     public Player getOwner() {
         UUID uuid = this.getOwnerUUID();
-        if (uuid == null)
-            return null;
-        if (this.level.isClientSide)
-            return this.level.getPlayerByUUID(uuid);
-        return this.level.getServer().getPlayerList().getPlayer(uuid);
+        if (uuid != null) {
+            if (this.owner == null || !this.owner.isAlive()) {
+                if (this.level.isClientSide)
+                    this.owner = this.level.getPlayerByUUID(uuid);
+                else
+                    this.owner = this.level.getServer().getPlayerList().getPlayer(uuid);
+            }
+        }
+        return this.owner;
     }
 
     @Override
     public void setOwner(Player player) {
         if (player != null)
-            this.entityData.set(owner, Optional.of(player.getUUID()));
+            this.entityData.set(OWNER_UUID, Optional.of(player.getUUID()));
         else
-            this.entityData.set(owner, Optional.empty());
+            this.entityData.set(OWNER_UUID, Optional.empty());
     }
 
     @Override
@@ -855,14 +862,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public LevelExpPair level() {
-        this.levelPair.setLevel(this.entityData.get(entityLevel));
-        this.levelPair.setXp(this.entityData.get(levelXP));
+        this.levelPair.setLevel(this.entityData.get(ENTITY_LEVEL));
+        this.levelPair.setXp(this.entityData.get(LEVEL_XP));
         return this.levelPair;
     }
 
     @Override
     public void setLevel(int level) {
-        this.entityData.set(entityLevel, Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL));
+        this.entityData.set(ENTITY_LEVEL, Mth.clamp(level, 1, LibConstants.MAX_MONSTER_LEVEL));
         this.updateStatsToLevel();
     }
 
@@ -1033,7 +1040,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void increaseLevel() {
-        this.entityData.set(entityLevel, Math.min(GeneralConfig.maxLevel, this.level().getLevel() + 1));
+        this.entityData.set(ENTITY_LEVEL, Math.min(GeneralConfig.maxLevel, this.level().getLevel() + 1));
         this.updateStatsToLevel();
     }
 
@@ -1041,8 +1048,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         LevelExpPair pair = this.level();
         boolean res = pair.addXP(amount, LibConstants.MAX_MONSTER_LEVEL, LevelCalc::xpAmountForLevelUp, () -> {
         });
-        this.entityData.set(entityLevel, pair.getLevel());
-        this.entityData.set(levelXP, pair.getXp());
+        this.entityData.set(ENTITY_LEVEL, pair.getLevel());
+        this.entityData.set(LEVEL_XP, pair.getXp());
         if (res)
             this.updateStatsToLevel();
     }
@@ -1057,7 +1064,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public int friendPoints(UUID player) {
         if (player.equals(this.getOwnerUUID()))
-            return this.entityData.get(friendPointsSync);
+            return this.entityData.get(FRIEND_POINTS_SYNC);
         return 0;
     }
 
@@ -1098,11 +1105,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     //=====Combat stuff
 
     public byte getMoveFlag() {
-        return this.entityData.get(moveFlags);
+        return this.entityData.get(MOVE_FLAGS);
     }
 
     public void setMoveFlag(int flag) {
-        this.entityData.set(moveFlags, (byte) flag);
+        this.entityData.set(MOVE_FLAGS, (byte) flag);
     }
 
     public void setDoJumping(boolean jump) {
@@ -1169,11 +1176,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public boolean playDeath() {
-        return this.entityData.get(playDeathState);
+        return this.entityData.get(PLAY_DEATH_STATE);
     }
 
     public void setPlayDeath(boolean flag) {
-        this.entityData.set(playDeathState, flag);
+        this.entityData.set(PLAY_DEATH_STATE, flag);
         if (flag) {
             if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
                 this.getOwner().sendMessage(this.getKnockoutMessage(), Util.NIL_UUID);
@@ -1473,7 +1480,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void setBehaviour(Behaviour behaviour) {
-        this.entityData.set(behaviourData, behaviour.ordinal());
+        this.entityData.set(BEHAVIOUR_DATA, behaviour.ordinal());
         this.behaviour = behaviour;
         if (!this.level.isClientSide)
             this.updateAI(false);
@@ -1633,30 +1640,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     @Override
-    public void remove(RemovalReason reason) {
-        super.remove(reason);
-        if (!this.level.isClientSide) {
-            if (reason == RemovalReason.UNLOADED_TO_CHUNK) {
-                if (this.behaviourState().following) {
-                    Player owner = this.getOwner();
-                    if (owner != null) {
-                        if (owner.level.dimension() != this.level.dimension()) {
-                            TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
-                        } else
-                            TeleportUtils.tryTeleportAround(this, owner);
-                    } else
-                        WorldHandler.get(this.getServer()).safeUnloadedPartyMembers(this);
-                }
-            }
-            //Only happens if force killed or something.
-            else if (reason == RemovalReason.DISCARDED || reason == RemovalReason.KILLED) {
-                Player owner = this.getOwner();
-                if (owner instanceof ServerPlayer player) {
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.party.removePartyMember(this));
-                } else
-                    WorldHandler.get(this.getServer()).toRemovePartyMember(this);
-            }
-        }
+    public void setLevelCallback(EntityInLevelCallback levelCallback) {
+        super.setLevelCallback(WorldUtils.wrappedCallbackFor(this, this::getOwner, levelCallback));
     }
 
     public enum Behaviour {

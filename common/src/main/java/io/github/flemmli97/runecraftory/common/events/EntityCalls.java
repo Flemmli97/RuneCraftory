@@ -41,6 +41,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
@@ -111,17 +112,19 @@ public class EntityCalls {
     }
 
     public static void onPlayerLoad(ServerPlayer serverPlayer) {
-        //Load the chunks of unloaded party members upon joining. They will then teleport to the player themselves
-        Set<WorldHandler.UnloadedPartyMember> party = WorldHandler.get(serverPlayer.getServer()).getUnloadedPartyMembersFor(serverPlayer);
-        party.forEach(p -> {
-            GlobalPos pos = p.pos();
-            ServerLevel level = serverPlayer.getLevel();
-            if (level.dimension() != p.pos().dimension())
-                level = serverPlayer.getServer().getLevel(pos.dimension());
-            if (level != null)
-                level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(pos.pos()), 3, pos.pos());
-        });
-        party.clear();
+        //Load the chunks of unloaded party members. They will then teleport to the player themselves
+        serverPlayer.getServer().tell(new TickTask(2, () -> {
+            Set<WorldHandler.UnloadedPartyMember> party = WorldHandler.get(serverPlayer.getServer()).getUnloadedPartyMembersFor(serverPlayer);
+            party.forEach(p -> {
+                GlobalPos pos = p.pos();
+                ServerLevel level = serverPlayer.getLevel();
+                if (level.dimension() != p.pos().dimension())
+                    level = serverPlayer.getServer().getLevel(pos.dimension());
+                if (level != null)
+                    level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(pos.pos()), 3, pos.pos());
+            });
+            party.clear();
+        }));
         //If the party member still got killed somehow remove them here
         Set<UUID> toRemove = WorldHandler.get(serverPlayer.getServer()).removedPartyMembersFor(serverPlayer);
         Platform.INSTANCE.getPlayerData(serverPlayer)

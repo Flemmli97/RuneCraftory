@@ -4,22 +4,35 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.mixin.BiomeAccessor;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.TicketType;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.entity.EntityInLevelCallback;
 
+import java.util.Comparator;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class WorldUtils {
+
+    public static final TicketType<ChunkPos> ENTITY_LOADER = TicketType.create(RuneCraftory.MODID + "_entity_loader", Comparator.comparingLong(ChunkPos::toLong), 100);
 
     public static final Codec<Pair<EnumSeason, Integer>> DATE = RecordCodecBuilder.create(inst ->
             inst.group(
@@ -87,5 +100,30 @@ public class WorldUtils {
             case WINTER -> temp -= 0.8f;
         }
         return temp;
+    }
+
+    public static <T extends Mob> EntityInLevelCallback wrappedCallbackFor(T member, Supplier<Player> partyOwner, EntityInLevelCallback callback) {
+        return new EntityInLevelCallback() {
+            @Override
+            public void onMove() {
+                callback.onMove();
+            }
+
+            @Override
+            public void onRemove(Entity.RemovalReason reason) {
+                if (member.level instanceof ServerLevel serverLevel) {
+                    if (reason == Entity.RemovalReason.UNLOADED_TO_CHUNK) {
+                        WorldHandler.get(serverLevel.getServer()).safeUnloadedPartyMembers(member);
+                    } else if (reason == Entity.RemovalReason.DISCARDED || reason == Entity.RemovalReason.KILLED) {
+                        Player owner = partyOwner.get();
+                        if (owner instanceof ServerPlayer player) {
+                            Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.party.removePartyMember(member));
+                        } else
+                            WorldHandler.get(serverLevel.getServer()).toRemovePartyMember(member);
+                    }
+                }
+                callback.onRemove(reason);
+            }
+        };
     }
 }

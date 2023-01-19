@@ -104,7 +104,7 @@ public class TeleportUtils {
         if (!validPos.apply(blockState)) {
             return null;
         }
-        return pos.subtract(entity.blockPosition());
+        return pos;
     }
 
     private static int randomIntInclusive(Random random, int min, int max) {
