@@ -2,13 +2,12 @@ RuneCraftory 1.5.0
 ================
 - Due to renaming of attributes you need to delete your mob config and let it regenerate. Else all attributes of the mobs will not get applied
 - Added cash register block serving as a generic shop POI
-- Added barn block entity. Monster now need a barn block assigned. Existing tamed monster will they will not do anything till they get a barn assigned
+- Added barn block entity. Monster now need a barn block assigned. Existing tamed monster will not do anything till they get a barn assigned
 - Add bath effect: Gotten by talking to a bathhouse attendant. Spawns in bathhouses.
   If you have the effect and go into water with campfires below you regen health + rp.
 - Cooking now accepts additional items
 - Add weapon changing mechanic
 - Invis stone makes weapon invisible when used in upgrades
-- Light ore mechanic to change weapon base stats
 - Add a party system: Only a max amount of entities can follow you. default 3
 - Add quest board. Needs simplequests mod
 - Add bath house and magic/runeskill npc house
