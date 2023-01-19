@@ -152,6 +152,14 @@ public class RecipesGen extends RecipeProvider {
                 .define('l', ItemTags.LOGS)
                 .unlockedBy("cooking_recipe", has(Items.SMOKER))
                 .save(consumer);
+        ShapedRecipeBuilder.shaped(ModItems.questBoard.get())
+                .pattern("PPP")
+                .pattern("SSS")
+                .pattern("PPP")
+                .define('S', ItemTags.SIGNS)
+                .define('P', Items.PAPER)
+                .unlockedBy("quest_board", has(ItemTags.SIGNS))
+                .save(consumer);
 
         ShapedRecipeBuilder.shaped(ModItems.teleport.get())
                 .pattern(" e ")
