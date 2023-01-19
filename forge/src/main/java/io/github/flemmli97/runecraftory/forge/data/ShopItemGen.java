@@ -108,79 +108,79 @@ public class ShopItemGen extends ShopItemProvider {
         this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.greenifierPlus.get(), true);
         this.addItem(ModNPCJobs.FLOWER.getSecond(), ModItems.wettablePowder.get(), true);
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.hoeScrap.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.hoeIron.get());
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.hoeSilver.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.hoeScrap.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.hoeIron.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.hoeSilver.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.wateringCanScrap.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.wateringCanIron.get());
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.wateringCanSilver.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.wateringCanScrap.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.wateringCanIron.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.wateringCanSilver.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.sickleScrap.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.sickleIron.get());
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.sickleSilver.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.sickleScrap.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.sickleIron.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.sickleSilver.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.hammerScrap.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.hammerIron.get());
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.hammerSilver.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.hammerScrap.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.hammerIron.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.hammerSilver.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.axeScrap.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.axeIron.get());
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.axeSilver.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.axeScrap.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.axeIron.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.axeSilver.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.fishingRodScrap.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.fishingRodIron.get());
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.fishingRodSilver.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.fishingRodScrap.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.fishingRodIron.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.fishingRodSilver.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.mobStaff.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.brush.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.glass.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.mobStaff.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.brush.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.glass.get(), true);
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.broadSword.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.cutlass.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.broadSword.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.cutlass.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.claymore.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.greatSword.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.claymore.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.greatSword.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.spear.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.needleSpear.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.spear.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.needleSpear.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.battleAxe.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.poleAxe.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.battleAxe.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.poleAxe.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.battleHammer.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.warHammer.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.battleHammer.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.warHammer.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.shortDagger.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.ironEdge.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.shortDagger.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.ironEdge.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.leatherGlove.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.gloves.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.leatherGlove.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.gloves.get());
 
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.rod.get(), true);
-        this.addItem(ModNPCJobs.WEAPON.getSecond(), ModItems.aquamarineRod.get());
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.rod.get(), true);
+        this.addItem(ModNPCJobs.SMITH.getSecond(), ModItems.aquamarineRod.get());
 
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.recoveryPotion.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.healingPotion.get());
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.mysteryPotion.get());
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.magicalPotion.get());
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.roundoff.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.paraGone.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.coldMed.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.antidote.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.recoveryPotion.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.healingPotion.get());
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.mysteryPotion.get());
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.magicalPotion.get());
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.roundoff.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.paraGone.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.coldMed.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.antidote.get(), true);
 
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.elliLeaves.get());
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.whiteGrass.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.indigoGrass.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.purpleGrass.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.greenGrass.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.blueGrass.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.yellowGrass.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.redGrass.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.orangeGrass.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.blackGrass.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.antidoteGrass.get(), true);
-        this.addItem(ModNPCJobs.CLINIC.getSecond(), ModItems.medicinalHerb.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.elliLeaves.get());
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.whiteGrass.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.indigoGrass.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.purpleGrass.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.greenGrass.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.blueGrass.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.yellowGrass.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.redGrass.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.orangeGrass.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.blackGrass.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.antidoteGrass.get(), true);
+        this.addItem(ModNPCJobs.DOCTOR.getSecond(), ModItems.medicinalHerb.get(), true);
 
         this.addItem(ModNPCJobs.MAGIC.getSecond(), ModItems.fireBallSmall.get(), true);
         this.addItem(ModNPCJobs.MAGIC.getSecond(), ModItems.fireBallBig.get());

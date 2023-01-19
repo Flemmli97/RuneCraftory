@@ -9,6 +9,7 @@ import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.entity.player.Player;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -45,7 +46,7 @@ public class NPCJob {
     public void handleAction(EntityNPCBase npc, Player player, String action) {
     }
 
-    public Map<String, Component> actions(EntityNPCBase entity, ServerPlayer player) {
+    public Map<String, List<Component>> actions(EntityNPCBase entity, ServerPlayer player) {
         return Map.of();
     }
 

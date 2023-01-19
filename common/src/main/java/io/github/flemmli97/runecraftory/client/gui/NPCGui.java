@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 public class NPCGui<T extends EntityNPCBase> extends Screen {
@@ -46,11 +47,11 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
 
     private List<FormattedCharSequence> components;
 
-    private Map<String, Component> actions;
+    private Map<String, List<Component>> actions;
 
     private List<ToolTipRenderer> tooltipComponents = new ArrayList<>();
 
-    public NPCGui(T entity, ShopState isShopOpen, boolean canFollow, Map<String, Component> actions) {
+    public NPCGui(T entity, ShopState isShopOpen, boolean canFollow, Map<String, List<Component>> actions) {
         super(entity.getDisplayName());
         this.entity = entity;
         this.isShopOpen = isShopOpen;
@@ -146,7 +147,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
                     this.minecraft.setScreen(null);
                 }));
             }
-            for (Map.Entry<String, Component> action : this.actions.entrySet()) {
+            for (Map.Entry<String, List<Component>> action : this.actions.entrySet()) {
                 y += 30;
                 this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(action.getKey()), b -> {
                     Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), action.getKey()));
@@ -156,7 +157,7 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
                 int tooltipY = this.topPos + y;
                 this.tooltipComponents.add((stack, mouseX, mouseY) -> {
                     if (this.isHovering(tooltipX, tooltipY, xSize, 20, mouseX, mouseY)) {
-                        this.renderTooltip(stack, action.getValue(), mouseX, mouseY);
+                        this.renderTooltip(stack, action.getValue(), Optional.empty(), mouseX, mouseY);
                     }
                 });
             }

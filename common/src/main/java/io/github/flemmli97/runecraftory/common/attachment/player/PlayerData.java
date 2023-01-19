@@ -727,6 +727,7 @@ public class PlayerData {
         newData.shipping.load(this.shipping.save());
         this.readFromNBT(newData.writeToNBTPlain(new CompoundTag()), null);
         this.recalculateStats(player, false);
+        this.refreshShop(player);
         this.starting = false;
         this.tamedEntity.reset();
     }

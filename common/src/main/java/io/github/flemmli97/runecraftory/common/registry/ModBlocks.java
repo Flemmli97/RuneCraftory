@@ -100,7 +100,7 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> shipping = BLOCKS.register("shipping_bin", () -> new BlockShippingBin(BlockBehaviour.Properties.of(Material.WOOD).strength(3, 10)));
     public static final RegistryEntrySupplier<Block> singleSpawnBlock = BLOCKS.register("one_time_spawner", () -> new BlockSingleTimeSpawner(BlockBehaviour.Properties.of(Material.METAL).strength(60, 9999).noOcclusion()));
     public static final RegistryEntrySupplier<Block> cashRegister = BLOCKS.register("cash_register", () -> new BlockCashRegister(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3, 5)));
-    public static final RegistryEntrySupplier<Block> monsterBarn = BLOCKS.register("monster_barn", () -> new BlockMonsterBarn(BlockBehaviour.Properties.of(Material.GRASS).sound(SoundType.GRASS).noOcclusion().noCollission().strength(1, 3)));
+    public static final RegistryEntrySupplier<Block> monsterBarn = BLOCKS.register("monster_barn", () -> new BlockMonsterBarn(BlockBehaviour.Properties.of(Material.GRASS).sound(SoundType.GRASS).noOcclusion().noCollission().strength(1, 10000)));
     public static final RegistryEntrySupplier<Block> questBoard = BLOCKS.register("quest_board", () -> new BlockQuestboard(BlockBehaviour.Properties.of(Material.WOOD).sound(SoundType.WOOD).noOcclusion().strength(2, 5)));
 
     /*public static final RegistryEntrySupplier<Block> hotSpring = new BlockHotSpring();

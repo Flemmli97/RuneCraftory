@@ -73,6 +73,7 @@ public class NPCWanderGoal extends Goal {
         --this.walkCooldown;
         --this.pathFindCooldown;
         if (changed) {
+            this.npc.getNavigation().stop();
             this.npc.getBrain().eraseMemory(MemoryModuleType.WALK_TARGET);
             this.npc.getBrain().eraseMemory(MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
         }

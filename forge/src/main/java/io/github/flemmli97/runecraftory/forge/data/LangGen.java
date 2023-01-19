@@ -303,16 +303,18 @@ public class LangGen implements DataProvider {
         this.add(ModNPCJobs.BATHHOUSE.getSecond().getTranslationKey(), "Bathhouse attendant");
         this.add(ModNPCJobs.RANDOM.getSecond().getTranslationKey(), "Travelling merchant");
 
-        this.add(Smith.BARN_ACTION, "Buy a monster barn");
+        this.add(Smith.BARN_ACTION, "Monster barn");
         this.add(Smith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");
         this.add(Smith.BARN_ACTION_SUCCESS, "Thank you for your purchase.");
         this.add(Smith.BARN_ACTION_FAIL, "You don't have enough materials for that.");
-        this.add(Smith.BARN_COST, "Buying a barn costs %1$s and %2$s of logs and cobblestone");
+        this.add(Smith.BARN_COST, "A barn costs %1$s$ and following materials:");
+        this.add(Smith.BARN_COST_MAT, "Logs x%1$s, Cobblestone x%2$s");
+        this.add(Smith.BARN_COST_FAIL, "Error getting the cost of a barn");
 
         this.add(BathhouseAttendant.BATH_ACTION, "Take a bath");
         this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");
         this.add(BathhouseAttendant.BATH_ACTION_FAIL, "You don't have enough money for that. You need %2$s.");
-        this.add(BathhouseAttendant.BATH_COST, "Cost: %s");
+        this.add(BathhouseAttendant.BATH_COST, "Cost: %s$");
 
         this.add("crafting.rpMax.missing", "Missing total rp");
 

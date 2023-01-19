@@ -137,6 +137,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimated {
 
@@ -481,11 +482,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
                 .withLuck(player.getLuck()).create(LootContextParamSets.GIFT);
-        List<NPCData.Conversation> filtered = conversations.conversations().stream().filter(c -> c.test(heart, ctx)).toList();
+        List<NPCData.Conversation> filtered = conversations.conversations().stream().filter(c -> c.test(heart, ctx))
+                .collect(Collectors.toList());
         Collections.shuffle(filtered, this.updater.getDailyRandom());
         int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
         if (size > 0) {
-            NPCData.Conversation randomLine = filtered.get(size);
+            NPCData.Conversation randomLine = filtered.get(this.random.nextInt(size));
             player.sendMessage(new TranslatableComponent(randomLine.translationKey(), player.getName()), Util.NIL_UUID);
         } else {
             player.sendMessage(new TranslatableComponent(conversations.fallbackKey(), player.getName()), Util.NIL_UUID);
@@ -879,7 +881,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public boolean updateActivity() {
-        if (this.tickCount % 20 == 0 && this.level instanceof ServerLevel serverLevel) {
+        if (this.tickCount % 20 == 0 && this.level instanceof ServerLevel serverLevel && this.interactingPlayers.isEmpty()) {
             Activity prev = this.activity;
             this.activity = this.getActivityForTime(serverLevel);
             if (this.activity == ModActivities.EARLYIDLE.get() && this.getBedPos() != null && this.getBedPos().dimension() == this.level.dimension()) {

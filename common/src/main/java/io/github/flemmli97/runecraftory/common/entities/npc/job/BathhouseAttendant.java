@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 
+import java.util.List;
 import java.util.Map;
 
 public class BathhouseAttendant extends NPCJob {
@@ -43,11 +44,11 @@ public class BathhouseAttendant extends NPCJob {
     }
 
     @Override
-    public Map<String, Component> actions(EntityNPCBase entity, ServerPlayer player) {
-        return Map.of(BATH_ACTION, new TranslatableComponent(BATH_COST, Platform.INSTANCE.getPlayerData(player)
+    public Map<String, List<Component>> actions(EntityNPCBase entity, ServerPlayer player) {
+        return Map.of(BATH_ACTION, List.of(new TranslatableComponent(BATH_COST, Platform.INSTANCE.getPlayerData(player)
                 .map(d -> {
                     int baths = d.getDailyUpdater().getBathCounter() + 1;
                     return 300 * baths + (Math.max(0, baths - 1)) * 100;
-                }).orElse(-1)));
+                }).orElse(-1))));
     }
 }

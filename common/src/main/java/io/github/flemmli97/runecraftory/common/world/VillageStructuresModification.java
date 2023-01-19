@@ -61,10 +61,10 @@ public class VillageStructuresModification {
         add(BuiltinRegistries.TEMPLATE_POOL.get(new ResourceLocation("village/" + villageType + "/houses")), List.of(
                 Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(ModNPCJobs.GENERAL.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 4),
                 Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_generic", get(ModNPCJobs.FLOWER.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 4),
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_smith", get(ModNPCJobs.WEAPON.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 4),
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_clinic", get(ModNPCJobs.CLINIC.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 4),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_smith", get(ModNPCJobs.SMITH.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 4),
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_clinic", get(ModNPCJobs.DOCTOR.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 4),
                 Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", get(ModNPCJobs.MAGIC.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 2),
-                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", get(ModNPCJobs.RUNESKILL.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 2)
+                Pair.of(StructurePoolElement.single(RuneCraftory.MODID + ":npc/npc_house_single", get(ModNPCJobs.RUNE_SKILLS.getFirst())).apply(StructureTemplatePool.Projection.RIGID), 2)
         ));
     }
 

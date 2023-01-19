@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
+import java.util.List;
 import java.util.Map;
 
 public class Cook extends NPCJob {
@@ -21,7 +22,7 @@ public class Cook extends NPCJob {
     }
 
     @Override
-    public Map<String, Component> actions(EntityNPCBase entity, ServerPlayer player) {
+    public Map<String, List<Component>> actions(EntityNPCBase entity, ServerPlayer player) {
         return Map.of();
     }
 }

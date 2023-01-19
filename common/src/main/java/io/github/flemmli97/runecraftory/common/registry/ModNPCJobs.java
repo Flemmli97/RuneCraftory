@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.Smith;
 import net.minecraft.nbt.NumericTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -40,11 +41,11 @@ public class ModNPCJobs {
 
     public static final Pair<ResourceLocation, NPCJob> GENERAL = register("general", new NPCJob(new NPCJob.Builder(() -> PoiType.FARMER)));
     public static final Pair<ResourceLocation, NPCJob> FLOWER = register("flowers", new NPCJob(new NPCJob.Builder(() -> PoiType.FARMER)));
-    public static final Pair<ResourceLocation, NPCJob> WEAPON = register("smith", new NPCJob(new NPCJob.Builder(() -> PoiType.TOOLSMITH)));
-    public static final Pair<ResourceLocation, NPCJob> CLINIC = register("doctor", new NPCJob(new NPCJob.Builder(() -> PoiType.CLERIC)));
-    public static final Pair<ResourceLocation, NPCJob> FOOD = register("cook", new Cook(new NPCJob.Builder(() -> PoiType.BUTCHER)));
+    public static final Pair<ResourceLocation, NPCJob> SMITH = register("smith", new Smith(new NPCJob.Builder(() -> PoiType.TOOLSMITH)));
+    public static final Pair<ResourceLocation, NPCJob> DOCTOR = register("doctor", new NPCJob(new NPCJob.Builder(() -> PoiType.CLERIC)));
+    public static final Pair<ResourceLocation, NPCJob> COOK = register("cook", new Cook(new NPCJob.Builder(() -> PoiType.BUTCHER)));
     public static final Pair<ResourceLocation, NPCJob> MAGIC = register("magic", new NPCJob(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER)));
-    public static final Pair<ResourceLocation, NPCJob> RUNESKILL = register("rune_skills", new NPCJob(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER)));
+    public static final Pair<ResourceLocation, NPCJob> RUNE_SKILLS = register("rune_skills", new NPCJob(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER)));
     public static final Pair<ResourceLocation, NPCJob> BATHHOUSE = register("bath_house", new BathhouseAttendant(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER).noShop()));
     public static final Pair<ResourceLocation, NPCJob> RANDOM = register("random", new NPCJob(new NPCJob.Builder(null).noSchedule()));
 
@@ -123,11 +124,11 @@ public class ModNPCJobs {
             case "NONE" -> NONE.getFirst();
             case "GENERAL" -> GENERAL.getFirst();
             case "FLOWER" -> FLOWER.getFirst();
-            case "WEAPON" -> WEAPON.getFirst();
-            case "CLINIC" -> CLINIC.getFirst();
-            case "FOOD" -> FOOD.getFirst();
+            case "WEAPON" -> SMITH.getFirst();
+            case "CLINIC" -> DOCTOR.getFirst();
+            case "FOOD" -> COOK.getFirst();
             case "MAGIC" -> MAGIC.getFirst();
-            case "RUNESKILL" -> RUNESKILL.getFirst();
+            case "RUNESKILL" -> RUNE_SKILLS.getFirst();
             case "RANDOM" -> RANDOM.getFirst();
             default -> DEFAULT_KEY;
         };
@@ -147,11 +148,11 @@ public class ModNPCJobs {
                 case 0 -> NONE.getFirst();
                 case 1 -> GENERAL.getFirst();
                 case 2 -> FLOWER.getFirst();
-                case 3 -> WEAPON.getFirst();
-                case 4 -> CLINIC.getFirst();
-                case 5 -> FOOD.getFirst();
+                case 3 -> SMITH.getFirst();
+                case 4 -> DOCTOR.getFirst();
+                case 5 -> COOK.getFirst();
                 case 6 -> MAGIC.getFirst();
-                case 7 -> RUNESKILL.getFirst();
+                case 7 -> RUNE_SKILLS.getFirst();
                 case 8 -> RANDOM.getFirst();
                 default -> DEFAULT_KEY;
             };
