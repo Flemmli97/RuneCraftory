@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.world;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.IDailyUpdate;
@@ -54,7 +53,7 @@ public class WorldHandler extends SavedData {
     private final Map<UUID, Set<BarnData>> playerBarns = new HashMap<>();
     private final Map<ResourceKey<Level>, Long2ObjectMap<BarnData>> positionBarnMap = new HashMap<>();
 
-    private final Map<UUID, Set<Pair<UUID, GlobalPos>>> unloadedPartyMembers = new HashMap<>();
+    private final Map<UUID, Set<UnloadedPartyMember>> unloadedPartyMembers = new HashMap<>();
     private final Map<UUID, Set<UUID>> toRemovePartyMembers = new HashMap<>();
 
     private int updateDelay, lastUpdateDay;
@@ -260,13 +259,13 @@ public class WorldHandler extends SavedData {
     public void safeUnloadedPartyMembers(LivingEntity entity) {
         if (entity instanceof BaseMonster monster && monster.getOwnerUUID() != null)
             this.unloadedPartyMembers.computeIfAbsent(monster.getOwnerUUID(), o -> new HashSet<>())
-                    .add(Pair.of(entity.getUUID(), GlobalPos.of(entity.level.dimension(), entity.blockPosition())));
+                    .add(new UnloadedPartyMember(entity.getUUID(), GlobalPos.of(entity.level.dimension(), entity.blockPosition())));
         else if (entity instanceof EntityNPCBase npc && npc.getEntityToFollowUUID() != null)
             this.unloadedPartyMembers.computeIfAbsent(npc.getEntityToFollowUUID(), o -> new HashSet<>())
-                    .add(Pair.of(entity.getUUID(), GlobalPos.of(entity.level.dimension(), entity.blockPosition())));
+                    .add(new UnloadedPartyMember(entity.getUUID(), GlobalPos.of(entity.level.dimension(), entity.blockPosition())));
     }
 
-    public Set<Pair<UUID, GlobalPos>> getUnloadedPartyMembersFor(Player player) {
+    public Set<UnloadedPartyMember> getUnloadedPartyMembersFor(Player player) {
         return this.unloadedPartyMembers.computeIfAbsent(player.getUUID(), o -> new HashSet<>());
     }
 
@@ -301,10 +300,10 @@ public class WorldHandler extends SavedData {
         unloadedParties.getAllKeys().forEach(key -> {
             UUID uuid = UUID.fromString(key);
             ListTag list = unloadedParties.getList(key, Tag.TAG_COMPOUND);
-            Set<Pair<UUID, GlobalPos>> map = this.unloadedPartyMembers.computeIfAbsent(uuid, u -> new HashSet<>());
+            Set<UnloadedPartyMember> map = this.unloadedPartyMembers.computeIfAbsent(uuid, u -> new HashSet<>());
             list.forEach(t -> {
                 CompoundTag cTag = (CompoundTag) t;
-                map.add(Pair.of(UUID.fromString(cTag.getString("UUID")), GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, cTag.get("Pos")))
+                map.add(new UnloadedPartyMember(UUID.fromString(cTag.getString("UUID")), GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, cTag.get("Pos")))
                         .getOrThrow(false, RuneCraftory.logger::error)));
             });
         });
@@ -337,8 +336,8 @@ public class WorldHandler extends SavedData {
                 ListTag pTags = new ListTag();
                 pairs.forEach(p -> {
                     CompoundTag pTag = new CompoundTag();
-                    pTag.putString("UUID", p.getFirst().toString());
-                    GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, p.getSecond()).resultOrPartial(RuneCraftory.logger::error)
+                    pTag.putString("UUID", p.uuid().toString());
+                    GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, p.pos()).resultOrPartial(RuneCraftory.logger::error)
                             .ifPresent(t -> pTag.put("Pos", t));
                     pTags.add(pTag);
                 });
@@ -356,5 +355,22 @@ public class WorldHandler extends SavedData {
         });
         compoundNBT.put("RemovedPartyMembers", removedPartyMembers);
         return compoundNBT;
+    }
+
+    public record UnloadedPartyMember(UUID uuid, GlobalPos pos) {
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this)
+                return true;
+            if (obj instanceof UnloadedPartyMember other)
+                return other.uuid.equals(this.uuid);
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return this.uuid.hashCode();
+        }
     }
 }

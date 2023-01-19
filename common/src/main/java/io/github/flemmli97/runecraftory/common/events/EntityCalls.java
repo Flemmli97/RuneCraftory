@@ -107,28 +107,41 @@ public class EntityCalls {
                 } else if (data.unlockedRecipes)
                     data.unlockedRecipes = false;
             });
-            //Load the chunks of unloaded party members upon joining. They will then teleport to the player themselves
-            Set<Pair<UUID, GlobalPos>> party = WorldHandler.get(serverPlayer.getServer()).getUnloadedPartyMembersFor(player);
-            party.forEach(p -> {
-                GlobalPos pos = p.getSecond();
-                ServerLevel level = serverPlayer.getLevel();
-                if (level.dimension() != p.getSecond().dimension())
-                    level = serverPlayer.getServer().getLevel(pos.dimension());
-                if (level != null)
-                    level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(pos.pos()), 3, pos.pos());
-            });
-            party.clear();
-            //If the party member still got killed somehow remove them here
-            Set<UUID> toRemove = WorldHandler.get(serverPlayer.getServer()).removedPartyMembersFor(player);
-            Platform.INSTANCE.getPlayerData(serverPlayer)
-                    .ifPresent(d -> toRemove.forEach(d.party::removePartyMember));
-            toRemove.clear();
         }
+    }
+
+    public static void onPlayerLoad(ServerPlayer serverPlayer) {
+        //Load the chunks of unloaded party members upon joining. They will then teleport to the player themselves
+        Set<WorldHandler.UnloadedPartyMember> party = WorldHandler.get(serverPlayer.getServer()).getUnloadedPartyMembersFor(serverPlayer);
+        party.forEach(p -> {
+            GlobalPos pos = p.pos();
+            ServerLevel level = serverPlayer.getLevel();
+            if (level.dimension() != p.pos().dimension())
+                level = serverPlayer.getServer().getLevel(pos.dimension());
+            if (level != null)
+                level.getChunkSource().addRegionTicket(TicketType.PORTAL, new ChunkPos(pos.pos()), 3, pos.pos());
+        });
+        party.clear();
+        //If the party member still got killed somehow remove them here
+        Set<UUID> toRemove = WorldHandler.get(serverPlayer.getServer()).removedPartyMembersFor(serverPlayer);
+        Platform.INSTANCE.getPlayerData(serverPlayer)
+                .ifPresent(d -> toRemove.forEach(d.party::removePartyMember));
+        toRemove.clear();
     }
 
     public static void trackEntity(Player player, Entity target) {
         if (player instanceof ServerPlayer serverPlayer && target instanceof LivingEntity living)
             Platform.INSTANCE.sendToClient(new S2CEntityDataSyncAll(living), serverPlayer);
+    }
+
+    public static void onLoadEntity(LivingEntity living) {
+        if (living instanceof Mob mob) {
+            mob.goalSelector.addGoal(-1, new DisableGoal(mob));
+        }
+        if (living instanceof ServerPlayer player) {
+            onPlayerLoad(player);
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> Platform.INSTANCE.sendToClient(new S2CCapSync(data), player));
+        }
     }
 
     /**
@@ -188,7 +201,7 @@ public class EntityCalls {
         });
     }
 
-    public static boolean cancelLivingAttack(DamageSource source, Entity target) {
+    public static boolean cancelLivingAttack(DamageSource source, Entity target, float amount) {
         Entity attacker = source.getEntity();
         if (attacker instanceof Player || source instanceof CustomDamage) {
             return false;
@@ -409,14 +422,6 @@ public class EntityCalls {
                     living.heal(drainPercent * amount);
             }
         }
-    }
-
-    public static void onSpawn(LivingEntity living) {
-        if (living instanceof Mob mob) {
-            mob.goalSelector.addGoal(-1, new DisableGoal(mob));
-        }
-        if (living instanceof ServerPlayer player)
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> Platform.INSTANCE.sendToClient(new S2CCapSync(data), player));
     }
 
     public static void onBlockBreak(ServerPlayer player, BlockState state, BlockPos pos) {

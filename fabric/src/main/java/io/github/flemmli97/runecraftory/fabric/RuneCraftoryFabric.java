@@ -174,7 +174,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         //MobCalls
         ServerEntityEvents.ENTITY_LOAD.register(((entity, world) -> {
             if (entity instanceof LivingEntity living)
-                EntityCalls.onSpawn(living);
+                EntityCalls.onLoadEntity(living);
         }));
 
         //PlayerCalls

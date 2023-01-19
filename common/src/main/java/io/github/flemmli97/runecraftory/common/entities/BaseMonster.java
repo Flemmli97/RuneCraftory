@@ -104,6 +104,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.entity.EntityInLevelCallback;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -492,11 +493,10 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (!this.level.isClientSide) {
             if (this.behaviourState().following) {
                 Player owner = this.getOwner();
-                boolean notSameDim = false;
-                if (owner != null && (owner.distanceToSqr(this) > 450 || (notSameDim = (owner.level.dimension() != this.level.dimension())))) {
-                    if (notSameDim) {
+                if (owner != null) {
+                    if (owner.level.dimension() != this.level.dimension()) {
                         TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
-                    } else
+                    } else if (owner.distanceToSqr(this) > 450)
                         TeleportUtils.tryTeleportAround(this, owner);
                     teleported = true;
                 }
@@ -833,7 +833,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public Player getOwner() {
         UUID uuid = this.getOwnerUUID();
-        return uuid == null ? null : this.level.getPlayerByUUID(uuid);
+        if (uuid == null)
+            return null;
+        if (this.level.isClientSide)
+            return this.level.getPlayerByUUID(uuid);
+        return this.level.getServer().getPlayerList().getPlayer(uuid);
     }
 
     @Override
@@ -932,6 +936,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public boolean onGivingItem(Player player, ItemStack stack) {
         if (this.isTamed()) {
             if (!player.getUUID().equals(this.getOwnerUUID()))
+                return false;
+            if (this.hasPassenger(player))
                 return false;
             if (this.feedTimeOut <= 0) {
                 boolean favorite = stack.is(this.tamingItem());
@@ -1257,7 +1263,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entitylivingbase) {
             if (!this.level.isClientSide) {
                 if (this.adjustRotFromRider(entitylivingbase)) {
-                    this.setYRot(this.rotateClamped(this.getYRot(), entitylivingbase.getYRot(), this.getHeadRotSpeed()));
+                    this.setYRot(this.rotateClamped(this.getYRot(), entitylivingbase.getYRot(), this.getHeadRotSpeed() * 2));
                     this.setXRot(this.rotateClamped(this.getXRot(), entitylivingbase.getXRot(), this.getMaxHeadXRot()));
                 }
                 this.yBodyRot = this.getYRot();
@@ -1323,7 +1329,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 && !this.getAnimationHandler().hasAnimation()) {
             if (!this.level.isClientSide) {
                 if (this.adjustRotFromRider(entitylivingbase)) {
-                    this.setYRot(this.rotateClamped(this.getYRot(), entitylivingbase.getYRot(), this.getHeadRotSpeed()));
+                    this.setYRot(this.rotateClamped(this.getYRot(), entitylivingbase.getYRot(), this.getHeadRotSpeed() * 2));
                     this.setXRot(this.rotateClamped(this.getXRot(), entitylivingbase.getXRot(), this.getMaxHeadXRot()));
                 }
                 this.yBodyRot = this.getYRot();

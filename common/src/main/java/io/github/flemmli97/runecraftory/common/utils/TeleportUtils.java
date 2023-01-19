@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 
@@ -15,21 +16,21 @@ import java.util.function.Function;
 
 public class TeleportUtils {
 
-    public static void safeDimensionTeleport(Mob entity, ServerLevel newLevel, BlockPos target) {
+    public static boolean safeDimensionTeleport(Mob entity, ServerLevel newLevel, BlockPos target) {
         BlockPos blockPos = target;
         BlockPos safe = null;
         for (int i = 0; i < 10; ++i) {
             int x = randomIntInclusive(entity.getRandom(), -3, 3);
             int y = randomIntInclusive(entity.getRandom(), -1, 1);
             int z = randomIntInclusive(entity.getRandom(), -3, 3);
-            BlockPos pos = isSafePos(entity, blockPos.offset(x, y, z), s -> true);
+            BlockPos pos = isSafePos(entity, newLevel, blockPos.offset(x, y, z), s -> true);
             if (pos != null) {
                 safe = pos;
                 break;
             }
         }
         if (safe == null)
-            return;
+            return false;
         float yaw = entity.getYRot();
         float pitch = entity.getXRot();
         entity.unRide();
@@ -41,11 +42,12 @@ public class TeleportUtils {
             old.setRemoved(Entity.RemovalReason.CHANGED_DIMENSION);
             newLevel.addDuringTeleport(entity);
         } else
-            return;
+            return false;
         newLevel.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.MASTER, 1, 1);
         for (int i = 0; i < 32; ++i) {
             newLevel.sendParticles(ParticleTypes.PORTAL, entity.getX(), entity.getY() + newLevel.random.nextDouble() * 2.0, entity.getZ(), 0, newLevel.random.nextGaussian(), 0.0, newLevel.random.nextGaussian(), 1);
         }
+        return true;
     }
 
     public static boolean tryTeleportAround(Mob entity, Entity target) {
@@ -87,14 +89,18 @@ public class TeleportUtils {
     }
 
     public static BlockPos isSafePos(Mob entity, BlockPos pos, Function<BlockState, Boolean> validPos) {
-        BlockPathTypes blockPathTypes = entity.getNavigation().getNodeEvaluator().getBlockPathType(entity.level, pos.getX(), pos.getY(), pos.getZ());
+        return isSafePos(entity, entity.level, pos, validPos);
+    }
+
+    public static BlockPos isSafePos(Mob entity, Level level, BlockPos pos, Function<BlockState, Boolean> validPos) {
+        BlockPathTypes blockPathTypes = entity.getNavigation().getNodeEvaluator().getBlockPathType(level, pos.getX(), pos.getY(), pos.getZ());
         if (blockPathTypes == BlockPathTypes.OPEN) {
             if (!entity.isNoGravity())
                 return null;
         } else if (blockPathTypes != BlockPathTypes.WALKABLE) {
             return null;
         }
-        BlockState blockState = entity.level.getBlockState(pos.below());
+        BlockState blockState = level.getBlockState(pos.below());
         if (!validPos.apply(blockState)) {
             return null;
         }

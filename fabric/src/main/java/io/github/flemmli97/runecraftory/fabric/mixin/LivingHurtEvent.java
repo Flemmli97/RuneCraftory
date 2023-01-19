@@ -15,7 +15,7 @@ public abstract class LivingHurtEvent {
 
     @Inject(method = "hurt", at = @At(value = "HEAD"), cancellable = true)
     private void onAttacked(DamageSource damageSrc, float damageAmount, CallbackInfoReturnable<Boolean> info) {
-        if (EntityCalls.cancelLivingAttack(damageSrc, (LivingEntity) (Object) this))
+        if (EntityCalls.cancelLivingAttack(damageSrc, (LivingEntity) (Object) this, damageAmount))
             info.setReturnValue(false);
     }
 

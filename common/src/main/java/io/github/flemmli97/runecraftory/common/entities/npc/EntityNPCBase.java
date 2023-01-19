@@ -50,7 +50,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
-import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -370,11 +369,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (!this.level.isClientSide) {
             if (this.behaviourState().following) {
                 Player follow = this.followEntity();
-                boolean notSameDim = false;
-                if (follow != null && (follow.distanceToSqr(this) > 450 || (notSameDim = (follow.level.dimension() != this.level.dimension())))) {
-                    if (notSameDim) {
+                if (follow != null) {
+                    if (follow.level.dimension() != this.level.dimension()) {
                         TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level, follow.blockPosition());
-                    } else
+                    } else if (follow.distanceToSqr(this) > 450)
                         TeleportUtils.tryTeleportAround(this, follow);
                     teleported = true;
                 }
@@ -999,8 +997,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public Player followEntity() {
         if (this.entityToFollowUUID != null) {
-            if (this.entityToFollow == null || !this.entityToFollow.isAlive())
-                this.entityToFollow = EntityUtil.findFromUUID(Player.class, this.level, this.entityToFollowUUID);
+            if (this.entityToFollow == null || !this.entityToFollow.isAlive()) {
+                if (this.level.isClientSide)
+                    this.entityToFollow = this.level.getPlayerByUUID(this.entityToFollowUUID);
+                this.entityToFollow = this.level.getServer().getPlayerList().getPlayer(this.entityToFollowUUID);
+            }
         }
         return this.entityToFollow;
     }

@@ -190,7 +190,7 @@ public class QuestTasks {
         }
 
         public static TamingEntry fromJson(JsonObject obj) {
-            return new TamingEntry(EntityPredicate.fromJson(GsonHelper.getAsJsonObject(obj, "entity")),
+            return new TamingEntry(EntityPredicate.fromJson(GsonHelper.getAsJsonObject(obj, "entity", null)),
                     GsonHelper.getAsInt(obj, "amount", 1),
                     GsonHelper.getAsString(obj, "description"));
         }
