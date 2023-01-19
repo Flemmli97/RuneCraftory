@@ -32,6 +32,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -108,6 +109,11 @@ public class PlayerData {
     private int craftingSeed;
 
     public final QuestTracker questTracker = new QuestTracker();
+
+    private int boughtBarns;
+
+    private BlockPos blockBreakPosForMsg;
+    private int breakTick;
 
     public PlayerData() {
         for (EnumSkills skill : EnumSkills.values()) {
@@ -537,12 +543,14 @@ public class PlayerData {
         return this.weaponHandler;
     }
 
-    public void update(Player player) {
+    public void tick(Player player) {
         this.weaponHandler.tick(this, player);
         if (player instanceof ServerPlayer serverPlayer) {
             this.updater.tick(serverPlayer);
             if (serverPlayer.tickCount % 10 == 0)
                 this.walkingTracker.tickWalkingTracker(serverPlayer);
+            if (--this.breakTick <= 0)
+                this.blockBreakPosForMsg = null;
             ItemStack main = player.getMainHandItem();
             ItemStack off = player.getOffhandItem();
             if (main.is(ModItems.mobStaff.get()) || off.is(ModItems.mobStaff.get())) {
@@ -585,6 +593,21 @@ public class PlayerData {
 
     public void onCrafted(Player player) {
         this.craftingSeed = player.getRandom().nextInt();
+    }
+
+    public int getBoughtBarns() {
+        return this.boughtBarns;
+    }
+
+    public void onBuyBarn() {
+        this.boughtBarns++;
+    }
+
+    public boolean onBarnFailMine(BlockPos pos) {
+        boolean start = !pos.equals(this.blockBreakPosForMsg);
+        this.blockBreakPosForMsg = pos;
+        this.breakTick = 20;
+        return start;
     }
 
     public void readFromNBT(CompoundTag nbt, Player player) {
@@ -635,6 +658,7 @@ public class PlayerData {
         this.party.load(nbt.getCompound("PartyTag"));
         this.craftingSeed = nbt.getInt("CraftingSeed");
         this.questTracker.load(nbt.getCompound("QuestTracker"));
+        this.boughtBarns = nbt.getInt("BoughtBarns");
     }
 
     public CompoundTag writeToNBTPlain(CompoundTag nbt) {
@@ -693,6 +717,7 @@ public class PlayerData {
         nbt.put("PartyTag", this.party.save());
         nbt.putInt("CraftingSeed", this.craftingSeed);
         nbt.put("QuestTracker", this.questTracker.save());
+        nbt.putInt("BoughtBarns", this.boughtBarns);
         return nbt;
     }
 

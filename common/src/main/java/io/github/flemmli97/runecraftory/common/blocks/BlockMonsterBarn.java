@@ -3,12 +3,17 @@ package io.github.flemmli97.runecraftory.common.blocks;
 import io.github.flemmli97.runecraftory.common.blocks.tile.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -25,6 +30,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.UUID;
 
 public class BlockMonsterBarn extends BaseEntityBlock {
 
@@ -62,6 +69,23 @@ public class BlockMonsterBarn extends BaseEntityBlock {
         if (placer instanceof ServerPlayer player && level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn)
             barn.setOwner(player.getUUID());
         super.setPlacedBy(level, pos, state, placer, stack);
+    }
+
+    @Override
+    public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+        UUID owner = null;
+        if (player.isCreative() || (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && !player.getUUID().equals(owner = barn.getOwner())))
+            return super.getDestroyProgress(state, player, level, pos);
+        if (!player.level.isClientSide && owner != null) {
+            UUID uuid = owner;
+            Platform.INSTANCE.getPlayerData(player)
+                    .ifPresent(d -> {
+                        if (d.onBarnFailMine(pos))
+                            player.sendMessage(new TranslatableComponent("barn.interact.not.owner", player.getServer()
+                                    .getProfileCache().get(uuid).map(p -> p.getName()).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
+                    });
+        }
+        return 0;
     }
 
     @Override

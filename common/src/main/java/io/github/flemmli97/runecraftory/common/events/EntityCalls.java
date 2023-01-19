@@ -326,7 +326,7 @@ public class EntityCalls {
     }
 
     public static void updateLivingTick(Player player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.update(player));
+        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.tick(player));
         if (GeneralConfig.disableHunger) {
             int food = EntityUtils.paralysed(player) ? 6 : 14;
             player.getFoodData().setFoodLevel(food);

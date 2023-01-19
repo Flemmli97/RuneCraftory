@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.Smith;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.QuestTasks;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
@@ -282,6 +283,7 @@ public class LangGen implements DataProvider {
         this.add("monster.interact.ride.no", "You can't ride this monster");
         this.add("monster.interact.barn.no", "%s has no barn");
         this.add("monster.interact.barn.no.ext", "%s [%s] has no home to go to.");
+        this.add("barn.interact.not.owner", "This barn belongs to %s.");
 
         this.add("tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
         this.add("tooltip.item.treasure_level", "Chest tier lvl: %s");
@@ -293,13 +295,19 @@ public class LangGen implements DataProvider {
         this.add(ModNPCJobs.NONE.getSecond().getTranslationKey(), "None");
         this.add(ModNPCJobs.GENERAL.getSecond().getTranslationKey(), "General Store");
         this.add(ModNPCJobs.FLOWER.getSecond().getTranslationKey(), "Florist");
-        this.add(ModNPCJobs.WEAPON.getSecond().getTranslationKey(), "Smith");
-        this.add(ModNPCJobs.CLINIC.getSecond().getTranslationKey(), "Doctor");
-        this.add(ModNPCJobs.FOOD.getSecond().getTranslationKey(), "Cook");
+        this.add(ModNPCJobs.SMITH.getSecond().getTranslationKey(), "Smith");
+        this.add(ModNPCJobs.DOCTOR.getSecond().getTranslationKey(), "Doctor");
+        this.add(ModNPCJobs.COOK.getSecond().getTranslationKey(), "Cook");
         this.add(ModNPCJobs.MAGIC.getSecond().getTranslationKey(), "Magicskill merchant");
-        this.add(ModNPCJobs.RUNESKILL.getSecond().getTranslationKey(), "Runeskill merchant");
+        this.add(ModNPCJobs.RUNE_SKILLS.getSecond().getTranslationKey(), "Runeskill merchant");
         this.add(ModNPCJobs.BATHHOUSE.getSecond().getTranslationKey(), "Bathhouse attendant");
         this.add(ModNPCJobs.RANDOM.getSecond().getTranslationKey(), "Travelling merchant");
+
+        this.add(Smith.BARN_ACTION, "Buy a monster barn");
+        this.add(Smith.BARN_ACTION_DESCRIPTION, "You can buy a monster barn to house your tamed monsters. Each barn bought increases the costs of the next one");
+        this.add(Smith.BARN_ACTION_SUCCESS, "Thank you for your purchase.");
+        this.add(Smith.BARN_ACTION_FAIL, "You don't have enough materials for that.");
+        this.add(Smith.BARN_COST, "Buying a barn costs %1$s and %2$s of logs and cobblestone");
 
         this.add(BathhouseAttendant.BATH_ACTION, "Take a bath");
         this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");
