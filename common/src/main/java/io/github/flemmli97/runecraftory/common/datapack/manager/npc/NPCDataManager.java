@@ -33,7 +33,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
         return this.keyData.getOrDefault(res, NPCData.DEFAULT_DATA);
     }
 
-    public ResourceLocation get(NPCData data) {
+    public ResourceLocation getId(NPCData data) {
         return this.dataKey.get(data);
     }
 

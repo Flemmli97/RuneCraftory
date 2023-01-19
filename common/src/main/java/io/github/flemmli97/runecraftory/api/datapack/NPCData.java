@@ -13,6 +13,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
@@ -312,35 +313,52 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
-    public record NPCLook(Gender gender, ResourceLocation texture, int weight,
+    public record NPCLook(Gender gender, @Nullable ResourceLocation texture, @Nullable String playerSkin, int weight,
                           List<Pair<ResourceLocation, ResourceLocation>> additionalFeatures) {
 
-        public static final NPCLook DEFAULT_LOOK = new NPCLook(Gender.MALE, new ResourceLocation("textures/entity/steve.png"), 0, List.of());
+        public static final ResourceLocation DEFAULT_LOOK_ID = new ResourceLocation(RuneCraftory.MODID, "default_look");
+        public static final NPCLook DEFAULT_LOOK = new NPCLook(Gender.MALE, new ResourceLocation("textures/entity/steve.png"), null, 0, List.of());
 
         public static final Codec<NPCLook> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
-                        ResourceLocation.CODEC.fieldOf("texture").forGetter(d -> d.texture),
+                        ResourceLocation.CODEC.optionalFieldOf("texture").forGetter(d -> Optional.ofNullable(d.texture)),
+                        Codec.STRING.optionalFieldOf("player_skin").forGetter(d -> Optional.ofNullable(d.playerSkin)),
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
                         Codec.pair(ResourceLocation.CODEC, ResourceLocation.CODEC).listOf().fieldOf("additionalFeatures").forGetter(d -> d.additionalFeatures)
-                ).apply(inst, NPCLook::new));
+                ).apply(inst, (gender, text, skin, weight, features) -> {
+                    if (text.isEmpty() && skin.isEmpty())
+                        throw new IllegalArgumentException("Both texture or skin cant be null");
+                    return new NPCLook(gender, text.orElse(null), skin.orElse(null), weight, features);
+                }));
 
         public static NPCLook fromBuffer(FriendlyByteBuf buf) {
+            ResourceLocation text = null;
+            if (buf.readBoolean())
+                text = buf.readResourceLocation();
+            String skin = null;
+            if (buf.readBoolean())
+                skin = buf.readUtf();
             int size = buf.readInt();
             List<Pair<ResourceLocation, ResourceLocation>> additional = new ArrayList<>();
             for (int i = 0; i < size; i++)
                 additional.add(Pair.of(buf.readResourceLocation(), buf.readResourceLocation()));
-            return new NPCLook(buf.readEnum(Gender.class), buf.readResourceLocation(), buf.readInt(), additional);
+            return new NPCLook(buf.readEnum(Gender.class), text, skin, buf.readInt(), additional);
         }
 
         public void writeToBuffer(FriendlyByteBuf buf) {
+            buf.writeBoolean(this.texture != null);
+            if (this.texture != null)
+                buf.writeResourceLocation(this.texture);
+            buf.writeBoolean(this.playerSkin != null);
+            if (this.playerSkin != null)
+                buf.writeUtf(this.playerSkin);
             buf.writeInt(this.additionalFeatures.size());
             this.additionalFeatures.forEach(p -> {
                 buf.writeResourceLocation(p.getFirst());
                 buf.writeResourceLocation(p.getSecond());
             });
             buf.writeEnum(this.gender());
-            buf.writeResourceLocation(new ResourceLocation(this.texture().getNamespace(), this.texture().getPath()));
             buf.writeInt(this.weight());
         }
     }

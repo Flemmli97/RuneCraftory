@@ -22,7 +22,8 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
 
     private static final Gson GSON = new GsonBuilder().create();
 
-    private Map<ResourceLocation, NPCData.NPCLook> data = ImmutableMap.of();
+    private Map<ResourceLocation, NPCData.NPCLook> keyData = ImmutableMap.of();
+    private Map<NPCData.NPCLook, ResourceLocation> dataKey = ImmutableMap.of();
     private List<NPCData.NPCLook> selectable = ImmutableList.of();
 
     public NPCLookManager() {
@@ -30,7 +31,11 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
     }
 
     public NPCData.NPCLook get(ResourceLocation res) {
-        return this.data.getOrDefault(res, NPCData.NPCLook.DEFAULT_LOOK);
+        return this.keyData.getOrDefault(res, NPCData.NPCLook.DEFAULT_LOOK);
+    }
+
+    public ResourceLocation getId(NPCData.NPCLook data) {
+        return this.dataKey.get(data);
     }
 
     public NPCData.NPCLook getRandom(Random random, boolean male) {
@@ -52,9 +57,13 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
                 ex.fillInStackTrace();
             }
         });
-        this.data = builder.build();
+        builder.put(NPCData.NPCLook.DEFAULT_LOOK_ID, NPCData.NPCLook.DEFAULT_LOOK);
+        this.keyData = builder.build();
+        ImmutableMap.Builder<NPCData.NPCLook, ResourceLocation> reverse = ImmutableMap.builder();
+        this.keyData.forEach((resourceLocation, data) -> reverse.put(data, resourceLocation));
+        this.dataKey = reverse.build();
         ImmutableList.Builder<NPCData.NPCLook> selectable = ImmutableList.builder();
-        this.data.entrySet().stream().filter(e -> e.getValue().weight() > 0)
+        this.keyData.entrySet().stream().filter(e -> e.getValue().weight() > 0)
                 .forEach(e -> selectable.add(e.getValue()));
         this.selectable = selectable.build();
     }

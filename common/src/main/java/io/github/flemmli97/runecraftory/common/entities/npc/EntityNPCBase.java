@@ -747,9 +747,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         compound.putInt("Behaviour", this.behaviourState().ordinal());
 
         compound.putBoolean("Male", this.isMale());
-
+        compound.putString("NPCLook", DataPackHandler.SERVER_PACK.npcLookManager().getId(this.getLook()).toString());
         if (this.data != NPCData.DEFAULT_DATA)
-            compound.putString("NPCData", DataPackHandler.SERVER_PACK.npcDataManager().get(this.data).toString());
+            compound.putString("NPCData", DataPackHandler.SERVER_PACK.npcDataManager().getId(this.data).toString());
 
         compound.put("DailyUpdater", this.updater.save());
     }
@@ -776,14 +776,17 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.setBehaviour(Behaviour.values()[compound.getInt("Behaviour")]);
         } catch (ArrayIndexOutOfBoundsException ignored) {
         }
-        this.schedule.load(compound.getCompound("Schedule"));
         if (compound.contains("NPCData"))
             this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))));
+        if(this.data.schedule() == null)
+            this.schedule.load(compound.getCompound("Schedule"));
         if (this.data.gender() == NPCData.Gender.UNDEFINED)
             this.setMale(compound.getBoolean("Male"));
         if (this.data.profession() == null) {
             this.setShop(ModNPCJobs.getFromID(ModNPCJobs.legacyOfTag(compound.get("Shop"))));
         }
+        if (this.data.look() == null && compound.contains("NPCLook"))
+            this.look = DataPackHandler.SERVER_PACK.npcLookManager().get(new ResourceLocation(compound.getString("NPCLook")));
 
         this.updater.read(compound.getCompound("DailyUpdater"));
     }
