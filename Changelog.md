@@ -18,6 +18,7 @@ RuneCraftory 1.5.0
 - Attack speed and range is now an attribute instead of config based
 - NPC now select 2-3 lines only
 - Tweaked various stats
+- Cook npc now provide recipe breads
 
 RuneCraftory 1.4.4
 ================
