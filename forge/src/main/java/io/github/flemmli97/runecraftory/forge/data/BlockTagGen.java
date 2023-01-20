@@ -84,5 +84,7 @@ public class BlockTagGen extends BlockTagsProvider {
         this.tag(ModTags.BARN_GROUND).add(Blocks.HAY_BLOCK);
 
         this.tag(ModTags.ONSEN_PROVIDER).addTag(BlockTags.CAMPFIRES);
+
+        this.tag(ModTags.MINERAL_GEN_PLACE).addTag(BlockTags.DIRT).addTag(BlockTags.BASE_STONE_OVERWORLD).addTag(BlockTags.BASE_STONE_NETHER).add(Blocks.END_STONE);
     }
 }

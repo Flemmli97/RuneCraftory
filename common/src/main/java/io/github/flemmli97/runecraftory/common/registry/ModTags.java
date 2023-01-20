@@ -135,6 +135,8 @@ public class ModTags {
     public static final TagKey<Block> BARN_GROUND = blockMod("barn_ground");
     public static final TagKey<Block> ONSEN_PROVIDER = blockMod("onsen_provider");
 
+    public static final TagKey<Block> MINERAL_GEN_PLACE = blockMod("mineral_gen_place");
+
     //Entities
     public static final TagKey<EntityType<?>> MONSTERS = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "monsters"));
     public static final TagKey<EntityType<?>> BOSS_MONSTERS = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "boss_monsters"));
