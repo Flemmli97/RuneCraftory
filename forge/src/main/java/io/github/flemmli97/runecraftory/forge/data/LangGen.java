@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Smith;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.QuestTasks;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
@@ -310,6 +311,15 @@ public class LangGen implements DataProvider {
         this.add(Smith.BARN_COST, "A barn costs %1$s$ and following materials:");
         this.add(Smith.BARN_COST_MAT, "Logs x%1$s, Cobblestone x%2$s");
         this.add(Smith.BARN_COST_FAIL, "Error getting the cost of a barn");
+
+        this.add(Cook.FORGE_BREAD_ACTION, "Weapon bread");
+        this.add(Cook.ARMOR_BREAD_DESCRIPTION, "Accessory bread");
+        this.add(Cook.CHEM_BREAD_SUCCESS, "Medicine bread");
+        this.add(Cook.COOKING_BREAD_SUCCESS, "Cooking bread");
+        this.add(Cook.BREAD_ACTION_SUCCESS, "Here you go");
+        this.add(Cook.BREAD_ACTION_SUCCESS_GOOD, "Here you go. This one was made very well.");
+        this.add(Cook.BREAD_ACTION_FAIL, "Seems you don't have enough money");
+        this.add(Cook.BREAD_COST, "One loaf costs: %1$s. %2$s left");
 
         this.add(BathhouseAttendant.BATH_ACTION, "Take a bath");
         this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");

@@ -10,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,7 @@ public class S2COpenNPCGui implements Packet {
 
     public static S2COpenNPCGui read(FriendlyByteBuf buf) {
         return new S2COpenNPCGui(buf.readInt(), buf.readEnum(ShopState.class), buf.readInt(),
-                buf.readMap(FriendlyByteBuf::readUtf, b -> b.readList(FriendlyByteBuf::readComponent)));
+                buf.readMap(LinkedHashMap::new, FriendlyByteBuf::readUtf, b -> b.readList(FriendlyByteBuf::readComponent)));
     }
 
     public static void handle(S2COpenNPCGui pkt) {

@@ -12,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.entities.DailyEntityUpdater;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.ai.AvoidWhenNotFollowing;
 import io.github.flemmli97.runecraftory.common.entities.ai.LookAtAliveGoal;
@@ -219,7 +218,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private BlockPos prevRestriction = BlockPos.ZERO;
     private int prevRestrictionRadius = -1;
 
-    private DailyEntityUpdater<EntityNPCBase> updater = new DailyEntityUpdater<>(this);
+    public final DailyNPCUpdater updater = new DailyNPCUpdater(this);
 
     public EntityNPCBase(EntityType<? extends EntityNPCBase> type, Level level) {
         super(type, level);
@@ -778,7 +777,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         if (compound.contains("NPCData"))
             this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))));
-        if(this.data.schedule() == null)
+        if (this.data.schedule() == null)
             this.schedule.load(compound.getCompound("Schedule"));
         if (this.data.gender() == NPCData.Gender.UNDEFINED)
             this.setMale(compound.getBoolean("Male"));
