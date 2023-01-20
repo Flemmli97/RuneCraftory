@@ -24,6 +24,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Rotation;
 
@@ -154,6 +155,14 @@ public class EntityUtils {
             if ((rand -= tier.getModifiedWeight(spawner.level().getLevel())) >= 0) continue;
             chest.setTier(tier.tier);
         }
+    }
+
+    public static int getRPFromVanillaFood(ItemStack stack) {
+        FoodProperties prop = stack.getItem().getFoodProperties();
+        if (prop != null)
+            return (int) (stack.getItem().getFoodProperties().getNutrition() * 1.5
+                    * (1 + 1.8 * stack.getItem().getFoodProperties().getSaturationModifier()));
+        return 0;
     }
 
     record WeightedChestTier(int tier, int weight, float modifier, int max) {

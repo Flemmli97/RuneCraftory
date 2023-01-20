@@ -18,6 +18,7 @@ import io.github.flemmli97.runecraftory.common.lib.LibNBT;
 import io.github.flemmli97.runecraftory.common.network.C2SOpenInfo;
 import io.github.flemmli97.runecraftory.common.network.C2SRideJump;
 import io.github.flemmli97.runecraftory.common.network.C2SSpellKey;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.mixin.ContainerScreenAccessor;
@@ -39,6 +40,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -160,6 +162,10 @@ public class ClientCalls {
                 tooltip.addAll(food.texts(stack));
                 if (flag.isAdvanced())
                     debug.add(new TranslatableComponent("tooltip.debug.food", food.getId().toString()).withStyle(ChatFormatting.GRAY));
+            } else if (stack.isEdible()) {
+                tooltip.add(new TranslatableComponent("tooltip.item.eaten").withStyle(ChatFormatting.GRAY));
+                MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(ModAttributes.RPGAIN.get().getDescriptionId())).append(new TextComponent(": " + EntityUtils.getRPFromVanillaFood(stack)));
+                tooltip.add(comp.withStyle(ChatFormatting.AQUA));
             }
         }
         return Pair.of(tooltip, debug);

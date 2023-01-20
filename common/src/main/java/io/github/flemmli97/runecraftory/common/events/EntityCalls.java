@@ -347,7 +347,10 @@ public class EntityCalls {
             FoodProperties prop = DataPackHandler.SERVER_PACK.foodManager().get(stack.getItem());
             if (prop == null) {
                 if (entity instanceof ServerPlayer player && stack.isEdible()) {
-                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.EATING, 5));
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
+                        LevelCalc.levelSkill(player, data, EnumSkills.EATING, 5);
+                        data.refreshRunePoints(player, EntityUtils.getRPFromVanillaFood(stack));
+                    });
                 }
                 return;
             }
