@@ -506,7 +506,6 @@ public class Loottables extends LootTableProvider {
             this.add(ModBlocks.chemistry.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
             this.add(ModBlocks.accessory.get(), block -> createSinglePropConditionTable(block, BlockCrafting.PART, BlockCrafting.EnumPart.LEFT));
 
-            this.dropSelf(ModBlocks.board.get());
             this.dropSelf(ModBlocks.shipping.get());
             this.dropSelf(ModBlocks.cashRegister.get());
             this.dropSelf(ModBlocks.monsterBarn.get());

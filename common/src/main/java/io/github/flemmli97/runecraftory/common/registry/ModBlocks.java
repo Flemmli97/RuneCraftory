@@ -96,7 +96,6 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> brokenMineralSapphire = brokenMineral(EnumMineralTier.SAPPHIRE);
 
     public static final RegistryEntrySupplier<Block> bossSpawner = BLOCKS.register("boss_spawner", () -> new BlockBossSpawner(BlockBehaviour.Properties.of(Material.METAL).strength(60, 9999).noOcclusion()));
-    public static final RegistryEntrySupplier<Block> board = BLOCKS.register("quest_box", () -> new Block(BlockBehaviour.Properties.of(Material.WOOD).strength(5, 5)));
     public static final RegistryEntrySupplier<Block> shipping = BLOCKS.register("shipping_bin", () -> new BlockShippingBin(BlockBehaviour.Properties.of(Material.WOOD).strength(3, 10)));
     public static final RegistryEntrySupplier<Block> singleSpawnBlock = BLOCKS.register("one_time_spawner", () -> new BlockSingleTimeSpawner(BlockBehaviour.Properties.of(Material.METAL).strength(60, 9999).noOcclusion()));
     public static final RegistryEntrySupplier<Block> cashRegister = BLOCKS.register("cash_register", () -> new BlockCashRegister(BlockBehaviour.Properties.of(Material.STONE).requiresCorrectToolForDrops().strength(3, 5)));

@@ -1199,7 +1199,6 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> cookingBread = ITEMS.register("cooking_bread", () -> new ItemRecipeBread(EnumCrafting.COOKING, new Item.Properties().tab(RFCreativeTabs.food).stacksTo(16)));
 
     public static final RegistryEntrySupplier<Item> shippingBin = blockItem("shipping_bin", () -> ModBlocks.shipping);
-    public static final RegistryEntrySupplier<Item> requestBoard = noTexblockItem("quest_box", () -> ModBlocks.board);
     public static final RegistryEntrySupplier<Item> spawner = blockItem("boss_spawner", () -> ModBlocks.bossSpawner, RFCreativeTabs.monsters);
     public static final RegistryEntrySupplier<Item> farmland = blockItem("farmland", () -> ModBlocks.farmland, null);
     public static final RegistryEntrySupplier<Item> cashRegister = blockItem("cash_register", () -> ModBlocks.cashRegister);
