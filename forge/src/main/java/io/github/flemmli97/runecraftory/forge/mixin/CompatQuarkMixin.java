@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.forge.mixin;
 
+import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
@@ -18,7 +19,7 @@ public abstract class CompatQuarkMixin {
      */
     @Inject(method = "canStripAttributes", at = @At("TAIL"), remap = false, cancellable = true)
     private static void disableToolTip(ItemStack stack, EquipmentSlot slot, CallbackInfoReturnable<Boolean> info) {
-        if (ItemNBT.shouldHaveStats(stack))
+        if (ItemStat.SHOW_STATS_CUSTOM && ItemNBT.shouldHaveStats(stack))
             info.setReturnValue(false);
     }
 }

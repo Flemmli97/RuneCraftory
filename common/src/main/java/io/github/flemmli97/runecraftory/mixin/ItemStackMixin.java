@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
+import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import net.minecraft.core.BlockPos;
@@ -25,6 +26,6 @@ public abstract class ItemStackMixin {
 
     @ModifyVariable(method = "getTooltipLines", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shouldShowInTooltip(ILnet/minecraft/world/item/ItemStack$TooltipPart;)Z", ordinal = 3, shift = At.Shift.BY, by = -2), ordinal = 0)
     private int hideTooltip(int old) {
-        return ItemNBT.shouldHaveStats((ItemStack) (Object) this) ? old | ItemStack.TooltipPart.MODIFIERS.getMask() : old;
+        return ItemStat.SHOW_STATS_CUSTOM && ItemNBT.shouldHaveStats((ItemStack) (Object) this) ? old | ItemStack.TooltipPart.MODIFIERS.getMask() : old;
     }
 }

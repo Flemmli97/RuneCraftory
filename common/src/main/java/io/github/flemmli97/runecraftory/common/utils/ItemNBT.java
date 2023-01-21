@@ -412,6 +412,32 @@ public class ItemNBT {
         stats.putDouble(att, oldValue + Math.floor(amount));
     }
 
+    private static void addAsAttributeModifier(Attribute attribute, double val, ItemStack stack) {
+        CompoundTag tag = stack.getOrCreateTag();
+        ListTag list = tag.contains("AttributeModifiers", Tag.TAG_LIST) ? tag.getList("AttributeModifiers", Tag.TAG_COMPOUND) : new ListTag();
+        EquipmentSlot slot = ItemUtils.slotOf(stack);
+        CompoundTag attComp = new CompoundTag();
+        String att = PlatformUtils.INSTANCE.attributes().getIDFrom(attribute).toString();
+        for (int i = 0; i < list.size(); ++i) {
+            CompoundTag compoundTag = list.getCompound(i);
+            if (compoundTag.getString("AttributeName").equals(att) && compoundTag.getString("Slot").equals(slot.getName())) {
+                AttributeModifier attributeModifier = AttributeModifier.load(compoundTag);
+                if (attributeModifier != null && attributeModifier.getId().equals(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()])) {
+                    val += attributeModifier.getAmount();
+                    attComp = compoundTag;
+                    break;
+                }
+            }
+        }
+        list.remove(attComp);
+        AttributeModifier mod = new AttributeModifier(LibConstants.EQUIPMENT_MODIFIERS[slot.ordinal()], "rf.stat_increase", val, AttributeModifier.Operation.ADDITION);
+        attComp = mod.save();
+        attComp.putString("AttributeName", att);
+        attComp.putString("Slot", slot.getName());
+        list.add(attComp);
+        tag.put("AttributeModifiers", list);
+    }
+
     public static CompoundTag getItemNBT(ItemStack stack) {
         if (stack.hasTag() && stack.getTag().contains(RuneCraftory.MODID)) {
             return stack.getTag().getCompound(RuneCraftory.MODID);

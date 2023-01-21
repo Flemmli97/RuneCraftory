@@ -1,11 +1,13 @@
 package io.github.flemmli97.runecraftory.api.datapack;
 
 import com.google.common.collect.ImmutableSortedMap;
+import com.google.common.collect.Multimap;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.LibAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -25,6 +27,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -37,6 +41,8 @@ import java.util.Set;
 import java.util.TreeMap;
 
 public class ItemStat {
+
+    public static boolean SHOW_STATS_CUSTOM = true;
 
     public static final Codec<ItemStat> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
@@ -54,12 +60,38 @@ public class ItemStat {
             ).apply(instance, ((element, spell, spell2, spell3, atts, monster, buy, sell, upgrade) ->
                     new ItemStat(buy, sell, upgrade, element, spell.orElse(null), spell2.orElse(null), spell3.orElse(null), atts, monster))));
 
-    private static final Set<ResourceLocation> FLAT_ATTRIBUTES = Sets.newHashSet(
-            LibAttributes.MAX_HEALTH,
-            LibAttributes.ATTACK_DAMAGE,
-            LibAttributes.DEFENCE,
-            LibAttributes.MAGIC,
-            LibAttributes.MAGIC_DEFENCE);
+    private static final Set<ResourceLocation> PERCENT_ATTRIBUTES = Sets.newHashSet(
+            LibAttributes.PARA,
+            LibAttributes.POISON,
+            LibAttributes.SEAL,
+            LibAttributes.SLEEP,
+            LibAttributes.FATIGUE,
+            LibAttributes.COLD,
+            LibAttributes.CRIT,
+            LibAttributes.STUN,
+            LibAttributes.FAINT,
+            LibAttributes.DRAIN,
+            LibAttributes.KNOCK,
+
+            LibAttributes.RES_WATER,
+            LibAttributes.RES_EARTH,
+            LibAttributes.RES_WIND,
+            LibAttributes.RES_FIRE,
+            LibAttributes.RES_DARK,
+            LibAttributes.RES_LIGHT,
+            LibAttributes.RES_LOVE,
+
+            LibAttributes.RES_PARA,
+            LibAttributes.RES_POISON,
+            LibAttributes.RES_SEAL,
+            LibAttributes.RES_SLEEP,
+            LibAttributes.RES_FATIGUE,
+            LibAttributes.RES_COLD,
+            LibAttributes.RES_CRIT,
+            LibAttributes.RES_STUN,
+            LibAttributes.RES_FAINT,
+            LibAttributes.RES_DRAIN,
+            LibAttributes.RES_KNOCK);
 
     private static final Set<ResourceLocation> IGNORED = Sets.newHashSet(
             LibAttributes.ATTACK_SPEED,
@@ -223,30 +255,121 @@ public class ItemStat {
         if (!shouldHaveStats && this.getDiff() > 0)
             list.add(new TranslatableComponent("tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
         if (showStat) {
-            Map<Attribute, Double> stats = ItemNBT.statIncrease(stack);
-            if (!stats.isEmpty()) {
+            AttributeMapDisplay stats = getStatsAttributeMap(stack);
+            if (stats.flat != null || stats.ext != null) {
                 String prefix = shouldHaveStats ? "tooltip.item.equipped" : "tooltip.item.upgrade";
                 list.add(new TranslatableComponent(prefix).withStyle(ChatFormatting.GRAY));
             }
-            for (Map.Entry<Attribute, Double> entry : stats.entrySet()) {
-                ResourceLocation key = PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey());
-                if (IGNORED.contains(key))
-                    continue;
-                MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + this.format(key, entry.getValue())));
-                list.add(comp.withStyle(ChatFormatting.BLUE));
-            }
+            list.addAll(stats.components());
         }
         return list;
     }
 
-    private String format(ResourceLocation att, double n) {
-        if (att.equals(LibAttributes.MOVEMENT_SPEED)) {
-            float f = ((int) (n * 100)) / 100f;
-            return (f > 0 ? "+" + f : "" + f);
+    /**
+     * Attributes and values to display
+     */
+    public static AttributeMapDisplay getStatsAttributeMap(ItemStack stack) {
+        if (!ItemNBT.shouldHaveStats(stack))
+            return DataPackHandler.SERVER_PACK.itemStatManager().get(stack.getItem())
+                    .map(s -> new AttributeMapDisplay(s.itemStats, null)).orElse(new AttributeMapDisplay(null, null));
+        if (!ItemStat.SHOW_STATS_CUSTOM)
+            return new AttributeMapDisplay(null, null);
+        Map<Attribute, AttributeValues> map = new TreeMap<>(ModAttributes.SORTED);
+        Multimap<Attribute, AttributeModifier> multimap = stack.getAttributeModifiers(ItemUtils.slotOf(stack));
+        multimap.forEach((att, mod) -> map.compute(att, (key, old) -> old == null ? AttributeValues.of(mod) : old.add(mod)));
+        return new AttributeMapDisplay(null, map);
+    }
+
+    record AttributeMapDisplay(Map<Attribute, Double> flat, Map<Attribute, AttributeValues> ext) {
+
+        private List<Component> components() {
+            List<Component> list = new ArrayList<>();
+            if (this.flat != null) {
+                for (Map.Entry<Attribute, Double> entry : this.flat.entrySet()) {
+                    ResourceLocation key = PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey());
+                    if (IGNORED.contains(key))
+                        continue;
+                    double d = entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE) ? entry.getValue() * 10 : entry.getValue();
+                    String num = format(key, d, false);
+                    if (num == null)
+                        continue;
+                    MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + num));
+                    list.add(comp.withStyle(ChatFormatting.BLUE));
+                }
+            } else if (this.ext != null) {
+                for (Map.Entry<Attribute, AttributeValues> entry : this.ext.entrySet()) {
+                    ResourceLocation key = PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey());
+                    if (IGNORED.contains(key))
+                        continue;
+                    if (entry.getValue().flat != 0) {
+                        double d = entry.getKey().equals(Attributes.KNOCKBACK_RESISTANCE) ? entry.getValue().flat * 10 : entry.getValue().flat;
+                        String num = format(key, d, false);
+                        if (num == null)
+                            continue;
+                        MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + num));
+                        list.add(comp.withStyle(ChatFormatting.BLUE));
+                    }
+                    if (entry.getValue().multBase != 0) {
+                        String num = format(key, entry.getValue().multBase, true);
+                        if (num == null)
+                            continue;
+                        MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + num));
+                        list.add(comp.withStyle(ChatFormatting.BLUE));
+                    }
+                    if (entry.getValue().multTotal != 0) {
+                        String num = format(key, entry.getValue().multTotal, true);
+                        if (num == null)
+                            continue;
+                        MutableComponent comp = new TextComponent(" ").append(new TranslatableComponent(entry.getKey().getDescriptionId())).append(new TextComponent(": " + num));
+                        list.add(comp.withStyle(ChatFormatting.BLUE));
+                    }
+                }
+            }
+            return list;
         }
-        boolean flat = FLAT_ATTRIBUTES.contains(att);
-        int val = (int) n;
-        return (val > 0 ? "+" + val : "" + val) + (flat ? "" : "%");
+
+        private static String format(ResourceLocation att, double n, boolean percentage) {
+            String sign = n > 0 ? (percentage ? "x" : "+") : "";
+            if (att.equals(LibAttributes.MOVEMENT_SPEED)) {
+                double val = percentage ? n : ((int) (n * 100)) / 100d;
+                if (val == 0)
+                    return null;
+                return (sign + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(val));
+            }
+            boolean percSign = PERCENT_ATTRIBUTES.contains(att);
+            double val = percentage ? n : (int) (n * 2) * 0.5f;
+            if (val == 0)
+                return null;
+            return (sign + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(val)) + (percSign ? "%" : "");
+        }
+    }
+
+    private static class AttributeValues {
+
+        private double flat, multBase, multTotal;
+
+        private AttributeValues(double flat, double multBase, double multTotal) {
+            this.flat = flat;
+            this.multBase = multBase;
+            this.multTotal = multTotal;
+        }
+
+        private static AttributeValues of(AttributeModifier mod) {
+            return switch (mod.getOperation()) {
+                case ADDITION -> new AttributeValues(mod.getAmount(), 0, 0);
+                case MULTIPLY_BASE -> new AttributeValues(0, mod.getAmount(), 0);
+                case MULTIPLY_TOTAL -> new AttributeValues(0, 0, mod.getAmount());
+            };
+        }
+
+        private AttributeValues add(AttributeModifier mod) {
+            switch (mod.getOperation()) {
+                case ADDITION -> this.flat += mod.getAmount();
+                case MULTIPLY_BASE -> this.multBase += mod.getAmount();
+                case MULTIPLY_TOTAL -> this.multTotal += mod.getAmount();
+            }
+            return this;
+        }
     }
 
     @Override
