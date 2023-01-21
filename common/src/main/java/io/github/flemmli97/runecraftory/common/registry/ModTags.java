@@ -135,6 +135,8 @@ public class ModTags {
     public static final TagKey<Block> BARN_GROUND = blockMod("barn_ground");
     public static final TagKey<Block> ONSEN_PROVIDER = blockMod("onsen_provider");
 
+    public static final TagKey<Block> STONE = blockCommon("stone");
+
     public static final TagKey<Block> MINERAL_GEN_PLACE = blockMod("mineral_gen_place");
 
     //Entities

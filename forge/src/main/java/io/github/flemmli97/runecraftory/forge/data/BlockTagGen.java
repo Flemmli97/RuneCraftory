@@ -24,6 +24,9 @@ public class BlockTagGen extends BlockTagsProvider {
         this.tag(ModTags.ENDSTONES)
                 .add(Blocks.END_STONE)
                 .addOptional(Tags.Blocks.END_STONES.location());
+        this.tag(ModTags.STONE)
+                .add(Blocks.ANDESITE, Blocks.DIORITE, Blocks.GRANITE, Blocks.INFESTED_STONE, Blocks.STONE, Blocks.POLISHED_ANDESITE, Blocks.POLISHED_DIORITE, Blocks.POLISHED_GRANITE, Blocks.DEEPSLATE, Blocks.POLISHED_DEEPSLATE, Blocks.INFESTED_DEEPSLATE, Blocks.TUFF)
+                .addOptional(Tags.Blocks.STONE.location());
 
         //Snow
         this.tag(BlockTags.SNOW).add(ModBlocks.snow.get());
@@ -85,6 +88,7 @@ public class BlockTagGen extends BlockTagsProvider {
 
         this.tag(ModTags.ONSEN_PROVIDER).addTag(BlockTags.CAMPFIRES);
 
-        this.tag(ModTags.MINERAL_GEN_PLACE).addTag(BlockTags.DIRT).addTag(BlockTags.BASE_STONE_OVERWORLD).addTag(BlockTags.BASE_STONE_NETHER).add(Blocks.END_STONE);
+        this.tag(ModTags.MINERAL_GEN_PLACE).addTag(BlockTags.DIRT).addTag(BlockTags.BASE_STONE_OVERWORLD).addTag(BlockTags.SAND).addTag(ModTags.STONE)
+                .addTag(BlockTags.BASE_STONE_NETHER).addTag(ModTags.ENDSTONES);
     }
 }

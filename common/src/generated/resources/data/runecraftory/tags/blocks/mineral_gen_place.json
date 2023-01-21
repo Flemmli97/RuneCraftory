@@ -3,7 +3,9 @@
   "values": [
     "#minecraft:dirt",
     "#minecraft:base_stone_overworld",
+    "#minecraft:sand",
+    "#c:stone",
     "#minecraft:base_stone_nether",
-    "minecraft:end_stone"
+    "#c:end_stones"
   ]
 }
