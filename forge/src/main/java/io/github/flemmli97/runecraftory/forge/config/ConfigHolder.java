@@ -121,6 +121,7 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         MobConfig.spawnChance = spec.spawnChance.get();
         MobConfig.minDist = spec.minDist.get();
         MobConfig.maxGroup = spec.maxGroup.get();
+        MobConfig.minNearby = spec.minNearby.get();
         MobConfig.maxNearby = spec.maxNearby.get();
         MobConfig.baseGateLevel = spec.baseGateLevel.get();
         MobConfig.gateLevelType = spec.gateLevelType.get();

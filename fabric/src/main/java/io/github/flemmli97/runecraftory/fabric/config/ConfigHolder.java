@@ -115,6 +115,7 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         MobConfig.spawnChance = spec.spawnChance.get();
         MobConfig.minDist = spec.minDist.get();
         MobConfig.maxGroup = spec.maxGroup.get();
+        MobConfig.minNearby = spec.minNearby.get();
         MobConfig.maxNearby = spec.maxNearby.get();
         MobConfig.baseGateLevel = spec.baseGateLevel.get();
         MobConfig.gateLevelType = spec.gateLevelType.get();

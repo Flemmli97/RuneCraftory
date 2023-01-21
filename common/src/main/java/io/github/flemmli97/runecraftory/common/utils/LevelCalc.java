@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.EntityGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
 
@@ -201,45 +203,65 @@ public class LevelCalc {
     }
 
     public static int levelFromPos(ServerLevel level, Vec3 pos) {
-        return switch (MobConfig.gateLevelType) {
+        return Math.max(1, switch (MobConfig.gateLevelType) {
             case CONSTANT -> MobConfig.baseGateLevel;
-            case DISTANCESPAWN -> {
-                Vec3 spawn = Vec3.atCenterOf(level.getSharedSpawnPos());
-                double dX = spawn.x - pos.x;
-                double dZ = spawn.z - pos.z;
-                double dist = Math.sqrt(dX * dX + dZ * dZ);
-                if (dist < 400)
+            case DISTANCESPAWN -> distanceLevelFrom(level, pos, level.getSharedSpawnPos());
+            case DISTANCESPAWNPLAYER -> {
+                int lvl = MobConfig.baseGateLevel;
+                List<Player> list = playersIn(level, pos, 256);
+                if (list.isEmpty())
                     yield MobConfig.baseGateLevel;
-                if (dist < 1000)
-                    yield randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(0, 20, 1000 - 400, dist));
-                if (dist < 5000)
-                    yield randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(20, 80, 5000 - 1000, dist));
-                yield randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (100 + (dist - 5000) * 0.07));
+                for (Player player : list) {
+                    ServerPlayer serverPlayer = (ServerPlayer) player;
+                    BlockPos center;
+                    if (serverPlayer.getRespawnDimension() != level.dimension() || serverPlayer.getRespawnPosition() == null)
+                        center = level.getSharedSpawnPos();
+                    else
+                        center = serverPlayer.getRespawnPosition();
+                    int pL = distanceLevelFrom(level, pos, center);
+                    if (pL > lvl)
+                        lvl = pL;
+                }
+                yield randomizedLevel(level.random, MobConfig.baseGateLevel + lvl);
             }
             case PLAYERLEVELMAX -> {
-                int diff = MobConfig.baseGateLevel;
+                int lvl = MobConfig.baseGateLevel;
                 List<Player> list = playersIn(level, pos, 256);
                 if (list.isEmpty())
-                    yield MobConfig.baseGateLevel;
+                    yield lvl;
                 for (Player player : list) {
-                    int pD = Platform.INSTANCE.getPlayerData(player).map(data -> data.getPlayerLevel().getLevel()).orElse(1);
-                    if (pD > diff)
-                        diff = pD;
+                    int pL = Platform.INSTANCE.getPlayerData(player).map(data -> data.getPlayerLevel().getLevel()).orElse(1);
+                    if (pL > lvl)
+                        lvl = pL;
                 }
-                yield randomizedLevel(level.random, MobConfig.baseGateLevel + diff);
+                yield randomizedLevel(level.random, MobConfig.baseGateLevel + lvl);
             }
             case PLAYERLEVELMEAN -> {
-                int diff = 0;
+                int lvl = MobConfig.baseGateLevel;
                 List<Player> list = playersIn(level, pos, 256);
                 if (list.isEmpty())
-                    yield MobConfig.baseGateLevel;
+                    yield lvl;
                 for (Player player : list) {
-                    diff += Platform.INSTANCE.getPlayerData(player).map(data -> data.getPlayerLevel().getLevel()).orElse(1);
+                    lvl += Platform.INSTANCE.getPlayerData(player).map(data -> data.getPlayerLevel().getLevel()).orElse(1);
                 }
-                diff = (diff / list.size());
-                yield randomizedLevel(level.random, MobConfig.baseGateLevel + diff);
+                lvl = (lvl / list.size());
+                yield randomizedLevel(level.random, MobConfig.baseGateLevel + lvl);
             }
-        };
+        });
+    }
+
+    private static int distanceLevelFrom(Level level, Vec3 pos, BlockPos center) {
+        Vec3 spawn = Vec3.atCenterOf(center);
+        double dX = spawn.x - pos.x;
+        double dZ = spawn.z - pos.z;
+        double dist = Math.sqrt(dX * dX + dZ * dZ);
+        if (dist < 400)
+            return MobConfig.baseGateLevel;
+        if (dist < 1000)
+            return randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(0, 20, 1000 - 400, dist));
+        if (dist < 5000)
+            return randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(20, 80, 5000 - 1000, dist));
+        return randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (100 + (dist - 5000) * 0.07));
     }
 
     private static int uniformInterpolation(int start, int increase, int len, double x) {

@@ -32,6 +32,7 @@ public class MobConfigSpec {
     public final ForgeConfigSpec.IntValue spawnChance;
     public final ForgeConfigSpec.DoubleValue minDist;
     public final ForgeConfigSpec.IntValue maxGroup;
+    public final ForgeConfigSpec.IntValue minNearby;
     public final ForgeConfigSpec.IntValue maxNearby;
     public final ForgeConfigSpec.IntValue baseGateLevel;
     public final ForgeConfigSpec.EnumValue<MobConfig.GateLevelType> gateLevelType;
@@ -63,11 +64,13 @@ public class MobConfigSpec {
         this.spawnChance = builder.comment("Chance for next spawn (1/x chance per tick)").defineInRange("Spawn", MobConfig.spawnChance, 0, Integer.MAX_VALUE);
         this.minDist = builder.comment("Radius to check for other gates. If more than Max Group gates are in that radius no other gates will spawn").defineInRange("Min Dist", MobConfig.minDist, 0, Double.MAX_VALUE);
         this.maxGroup = builder.comment("Max amount of gates in Min Dist radius that can exist").defineInRange("Max Group", MobConfig.maxGroup, 0, Integer.MAX_VALUE);
-        this.maxNearby = builder.comment("If more than x mobs are near a gate the gate will not spawn more").defineInRange("Max Nearby", MobConfig.maxNearby, 0, Integer.MAX_VALUE);
-        this.baseGateLevel = builder.comment("Base level for gates").defineInRange("Gate Base Level", MobConfig.baseGateLevel, 1, Integer.MAX_VALUE);
+        this.minNearby = builder.comment("See Max Nearby").defineInRange("Min Nearby", MobConfig.minNearby, 0, Integer.MAX_VALUE);
+        this.maxNearby = builder.comment("When spawning gates roll a random number between Min Nearby and this to find the max amount of monsters nearby to stop spawning.").defineInRange("Max Nearby", MobConfig.maxNearby, 0, Integer.MAX_VALUE);
+        this.baseGateLevel = builder.comment("Base level for gates").defineInRange("Gate Base Level", MobConfig.baseGateLevel, Integer.MIN_VALUE, Integer.MAX_VALUE);
         this.gateLevelType = builder.comment("How the level of a gate is calculated.",
                 "CONSTANT: Gate level is simply the value defined in <Gate Base Level>",
                 "DISTANCESPAWN: The further away from spawn a gate is the stronger it gets",
+                "DISTANCESPAWNPLAYER: The further away from a players spawn (or world spawn if not exist) a gate is the stronger it gets. Highest level of nearby player counts",
                 "PLAYERLEVELMAX: The player in a 256 radius with the highest level defines how strong a gate is",
                 "PLAYERLEVELMEAN: Average player level in a 256 radius is considered",
                 "Except for CONSTANT all other types gets also a + <Gate Base Level> addition").defineEnum("Gate Level Calc", MobConfig.gateLevelType);

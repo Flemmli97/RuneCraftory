@@ -24,9 +24,10 @@ public class MobConfig {
     public static int gateXP = 25;
     public static int gateMoney = 5;
     public static int spawnChance = 150;
-    public static double minDist = 48;
-    public static int maxGroup = 2;
-    public static int maxNearby = 4;
+    public static double minDist = 32;
+    public static int maxGroup = 1;
+    public static int minNearby = 2;
+    public static int maxNearby = 6;
     public static int baseGateLevel = 1;
     public static GateLevelType gateLevelType = GateLevelType.DISTANCESPAWN;
     public static float treasureChance = 0.001f;
@@ -49,6 +50,7 @@ public class MobConfig {
     public enum GateLevelType {
         CONSTANT,
         DISTANCESPAWN,
+        DISTANCESPAWNPLAYER,
         PLAYERLEVELMAX,
         PLAYERLEVELMEAN
     }

@@ -36,6 +36,7 @@ public class MobConfigSpec {
     public final CommentedJsonConfig.IntVal spawnChance;
     public final CommentedJsonConfig.DoubleVal minDist;
     public final CommentedJsonConfig.IntVal maxGroup;
+    public final CommentedJsonConfig.IntVal minNearby;
     public final CommentedJsonConfig.IntVal maxNearby;
     public final CommentedJsonConfig.IntVal baseGateLevel;
     public final CommentedJsonConfig.CommentedVal<MobConfig.GateLevelType> gateLevelType;
@@ -68,8 +69,9 @@ public class MobConfigSpec {
         this.spawnChance = builder.comment("Chance for next spawn (1/x chance per tick)").defineInRange("Spawn", MobConfig.spawnChance, 0, Integer.MAX_VALUE);
         this.minDist = builder.comment("Radius to check for other gates. If more than Max Group gates are in that radius no other gates will spawn").defineInRange("Min Dist", MobConfig.minDist, 0, Double.MAX_VALUE);
         this.maxGroup = builder.comment("Max amount of gates in Min Dist radius that can exist").defineInRange("Max Group", MobConfig.maxGroup, 0, Integer.MAX_VALUE);
-        this.maxNearby = builder.comment("If more than x mobs are near a gate the gate will not spawn more").defineInRange("Max Nearby", MobConfig.maxNearby, 0, Integer.MAX_VALUE);
-        this.baseGateLevel = builder.comment("Base level for gates").defineInRange("Gate Base Level", MobConfig.baseGateLevel, 1, Integer.MAX_VALUE);
+        this.minNearby = builder.comment("See Max Nearby").defineInRange("Min Nearby", MobConfig.minNearby, 0, Integer.MAX_VALUE);
+        this.maxNearby = builder.comment("When spawning gates roll a random number between Min Nearby and this to find the max amount of monsters nearby to stop spawning.").defineInRange("Max Nearby", MobConfig.maxNearby, 0, Integer.MAX_VALUE);
+        this.baseGateLevel = builder.comment("Base level for gates. Level will be at least 1").defineInRange("Gate Base Level", MobConfig.baseGateLevel, Integer.MIN_VALUE, Integer.MAX_VALUE);
         this.gateLevelType = builder.comment("How the level of a gate is calculated.",
                 "CONSTANT: Gate level is simply the value defined in <Gate Base Level>",
                 "DISTANCESPAWN: The further away from spawn a gate is the stronger it gets",

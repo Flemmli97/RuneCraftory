@@ -77,6 +77,7 @@ public class GateEntity extends Mob implements IBaseMob {
     private boolean initialSpawn = true;
     private final LevelExpPair expPair = new LevelExpPair();
     private boolean removeCauseEmptyList;
+    private int maxNearby;
 
     public GateEntity(EntityType<? extends GateEntity> type, Level level) {
         super(type, level);
@@ -85,6 +86,7 @@ public class GateEntity extends Mob implements IBaseMob {
         }
         this.updateAttributes();
         this.setNoGravity(true);
+        this.maxNearby = this.getRandom().nextInt(1 + MobConfig.maxNearby - MobConfig.minNearby) + MobConfig.minNearby;
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -208,6 +210,7 @@ public class GateEntity extends Mob implements IBaseMob {
         compound.put("Spawns", list);
         compound.putString("Element", this.type.toString());
         compound.putBoolean("FirstSpawn", this.initialSpawn);
+        compound.putInt("MaxNearby", this.maxNearby);
     }
 
     @Override
@@ -227,6 +230,7 @@ public class GateEntity extends Mob implements IBaseMob {
             RuneCraftory.logger.error("Unable to set element type for gate entity {}", this);
         }
         this.initialSpawn = compound.getBoolean("FirstSpawn");
+        this.maxNearby = compound.getInt("MaxNearby");
     }
 
     @Override
@@ -290,7 +294,7 @@ public class GateEntity extends Mob implements IBaseMob {
                             entity.getType() == ModEntities.monsterBox.get() ||
                             entity.getType() == ModEntities.gobbleBox.get() ||
                             GateEntity.this.spawnList.contains(entity.getType()));
-            if (nearby.size() <= MobConfig.maxNearby) {
+            if (nearby.size() <= this.maxNearby) {
                 for (int amount = 0; amount < randAmount; ++amount) {
                     double x = this.getX() + this.random.nextInt(9) - 4.0;
                     double y = this.getY() + this.random.nextInt(2) - 1.0;
