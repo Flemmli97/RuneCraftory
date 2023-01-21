@@ -219,6 +219,9 @@ public class LangGen implements DataProvider {
         this.add(ModAttributes.RF_RES_FAINT.get().getDescriptionId(), "Faint Res");
         this.add(ModAttributes.RF_RES_DRAIN.get().getDescriptionId(), "Drain Res");
 
+        this.add(ModAttributes.ATTACK_SPEED.get().getDescriptionId(), "Attack Speed");
+        this.add(ModAttributes.ATTACK_RANGE.get().getDescriptionId(), "Attack Range");
+
         this.add(ModEffects.cold.get(), "Cold");
         this.add(ModEffects.sleep.get(), "Sleeping");
         this.add(ModEffects.poison.get(), "Poison");

@@ -1432,6 +1432,8 @@
   "runecraftory:res_stun": "Stun Res",
   "runecraftory:res_faint": "Faint Res",
   "runecraftory:res_drain": "Drain Res",
+  "runecraftory:attack_speed": "Attack Speed",
+  "runecraftory:attack_range": "Attack Range",
   "effect.runecraftory.cold": "Cold",
   "effect.runecraftory.sleep": "Sleeping",
   "effect.runecraftory.poison": "Poison",
