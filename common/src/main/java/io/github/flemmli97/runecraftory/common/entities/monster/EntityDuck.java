@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +13,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class EntityDuck extends ChargingMonster {
 
@@ -23,18 +23,21 @@ public class EntityDuck extends ChargingMonster {
     private static final AnimatedAction[] anims = new AnimatedAction[]{melee, dive, interact};
     public ChargeAttackGoal<EntityDuck> attack = new ChargeAttackGoal<>(this);
     protected List<LivingEntity> hitEntity = new ArrayList<>();
-    private final AnimationHandler<EntityDuck> animationHandler = new AnimationHandler<>(this, anims)
-            .setAnimationChangeFunc(anim -> {
-                System.out.println("TEST");
-                if (!dive.checkID(anim)) {
-                    this.hitEntity.clear();
-                }
-                return false;
-            }); //For some reason using the consumer doesn't work cause its not getting called???
+    private final AnimationHandler<EntityDuck> animationHandler = new AnimationHandler<>(this, anims);
 
     public EntityDuck(EntityType<? extends EntityDuck> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
+    }
+
+    @Override
+    protected Consumer<AnimatedAction> animatedActionConsumer() {
+        return a -> {
+            super.animatedActionConsumer().accept(a);
+            if (!dive.checkID(a)) {
+                this.hitEntity.clear();
+            }
+        };
     }
 
     @Override
@@ -51,12 +54,10 @@ public class EntityDuck extends ChargingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.getID().equals(dive.getID())) {
             if (anim.canAttack()) {
-                Vec3 target = this.getTarget() != null ? this.getTarget().position() : this.getLookAngle();
-                Vec3 vec32 = new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ())
+                Vec3 targetDir = this.chargeMotion != null ? new Vec3(this.chargeMotion[0], this.chargeMotion[1], this.chargeMotion[2]) : this.getLookAngle();
+                Vec3 vec32 = new Vec3(targetDir.x, 0, targetDir.z)
                         .normalize().scale(0.9);
                 this.setDeltaMovement(vec32.x, -0.35f, vec32.z);
-                this.lookAt(EntityAnchorArgument.Anchor.FEET, target);
-                this.lockYaw(this.getYRot());
                 this.getNavigation().stop();
             }
             if (anim.getTick() >= anim.getAttackTime() && !this.onGround) {
@@ -69,8 +70,6 @@ public class EntityDuck extends ChargingMonster {
             } else {
                 Vec3 delta = this.getDeltaMovement();
                 this.setDeltaMovement(delta.x, 0.1f, delta.z);
-                if (this.getTarget() != null)
-                    this.lookAt(this.getTarget(), 20, 20);
             }
         } else
             super.handleAttack(anim);
@@ -89,6 +88,12 @@ public class EntityDuck extends ChargingMonster {
         if (type == AnimationType.CHARGE)
             return anim.getID().equals(dive.getID());
         return false;
+    }
+
+    @Override
+    public double[] getChargeTo(AnimatedAction anim, Vec3 pos) {
+        Vec3 vec = pos.subtract(this.position());
+        return new double[]{vec.x, vec.y, vec.z};
     }
 
     @Override

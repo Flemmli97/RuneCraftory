@@ -20,27 +20,33 @@ public abstract class ChargingMonster extends BaseMonster {
     protected List<LivingEntity> hitEntity;
     protected double[] chargeMotion;
     private float prevStepHeight = -1;
-    private final Consumer<AnimatedAction> chargingAnim = anim -> {
-        if (!this.level.isClientSide) {
-            if (anim != null && this.isAnimOfType(anim, AnimationType.CHARGE)) {
-                this.prevStepHeight = this.maxUpStep;
-                this.maxUpStep = Math.max(1.5f, 1f + this.maxUpStep);
-                if (this.isVehicle()) {
-                    this.setChargeMotion(this.getChargeTo(anim, this.position().add(this.getLookAngle())));
-                }
-            } else if (this.prevStepHeight != -1) {
-                this.maxUpStep = this.prevStepHeight;
-                this.prevStepHeight = -1;
-            }
-            if (this.isChargingAnimation()) {
-                this.hitEntity = null;
-            }
-        }
-    };
+    private final Consumer<AnimatedAction> chargingAnim;
     private boolean initAnim;
 
     public ChargingMonster(EntityType<? extends ChargingMonster> type, Level level) {
         super(type, level);
+        this.chargingAnim = this.animatedActionConsumer();
+    }
+
+    protected Consumer<AnimatedAction> animatedActionConsumer() {
+        return anim -> {
+            if (!this.level.isClientSide) {
+                if (anim != null && this.isAnimOfType(anim, AnimationType.CHARGE)) {
+                    this.prevStepHeight = this.maxUpStep;
+                    this.maxUpStep = Math.max(1.5f, 1f + this.maxUpStep);
+                    if (this.isVehicle()) {
+                        this.lockYaw(this.getControllingPassenger().getYHeadRot());
+                        this.setChargeMotion(this.getChargeTo(anim, this.position().add(this.getControllingPassenger().getLookAngle())));
+                    }
+                } else if (this.prevStepHeight != -1) {
+                    this.maxUpStep = this.prevStepHeight;
+                    this.prevStepHeight = -1;
+                }
+                if (this.isChargingAnimation()) {
+                    this.hitEntity = null;
+                }
+            }
+        };
     }
 
     @Override
