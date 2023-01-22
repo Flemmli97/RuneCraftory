@@ -19,6 +19,7 @@ RuneCraftory 1.5.0
 - NPC now select 2-3 lines only
 - Tweaked various stats
 - Cook npc now provide recipe breads
+- Fix spam using bed increasing xp
 
 RuneCraftory 1.4.4
 ================
