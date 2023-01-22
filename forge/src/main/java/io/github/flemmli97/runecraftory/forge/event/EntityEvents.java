@@ -99,7 +99,8 @@ public class EntityEvents {
 
     @SubscribeEvent
     public void wakeUp(PlayerWakeUpEvent event) {
-        EntityCalls.wakeUp(event.getPlayer());
+        if(!event.wakeImmediately() && !event.updateWorld())
+            EntityCalls.wakeUp(event.getPlayer());
     }
 
     @SubscribeEvent

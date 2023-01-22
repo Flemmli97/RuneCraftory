@@ -41,6 +41,12 @@ public abstract class PlayerMixin implements PlayerDataGetter {
         EntityCalls.postDamage((Player) (Object) this, damageSrc, damageAmount);
     }
 
+    @Inject(method = "stopSleepInBed", at = @At(value = "HEAD"))
+    private void onStopSleeping(boolean wakeImmediatly, boolean updateLevelForSleepingPlayers, CallbackInfo info) {
+        if (!wakeImmediatly && !updateLevelForSleepingPlayers)
+            EntityCalls.wakeUp((Player) (Object) this);
+    }
+
     @Override
     public PlayerData getPlayerData() {
         return this.runecraftoryPlayerData;

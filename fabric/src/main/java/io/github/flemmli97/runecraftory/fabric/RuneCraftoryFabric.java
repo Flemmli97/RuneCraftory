@@ -181,10 +181,6 @@ public class RuneCraftoryFabric implements ModInitializer {
         EntityTrackingEvents.START_TRACKING.register((trackedEntity, player) -> EntityCalls.trackEntity(player, trackedEntity));
         AOEAttackEvent.ATTACK.register(EntityCalls::playerAoeAttack);
         EntitySleepEvents.ALLOW_SLEEP_TIME.register(((player, sleepingPos, vanillaResult) -> GeneralConfig.modifyBed ? InteractionResult.CONSUME : InteractionResult.PASS));
-        EntitySleepEvents.STOP_SLEEPING.register((entity, sleepingPos) -> {
-            if (entity instanceof Player player)
-                EntityCalls.wakeUp(player);
-        });
         ServerPlayerEvents.COPY_FROM.register((old, newPlayer, keepEverything) -> EntityCalls.clone(old, newPlayer, !keepEverything));
         ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) -> EntityCalls.joinPlayer(handler.getPlayer())));
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
