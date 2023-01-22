@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.entities.HealingPredicateEntity;
 import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetHorizontal;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityLightBall;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -75,8 +76,11 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.RANGED)
-            return anim.getID().equals(light.getID()) || anim.getID().equals(wind.getID()) || anim.getID().equals(heal.getID());
+        if (type == AnimationType.RANGED) {
+            if (anim.getID().equals(light.getID()))
+                return this.level.getEntities(this, this.getBoundingBox().inflate(4), e -> e instanceof EntityLightBall light && light.getOwner() == this).size() < 2;
+            return anim.getID().equals(wind.getID()) || this.getRandom().nextFloat() < 0.45f && anim.getID().equals(heal.getID());
+        }
         return false;
     }
 
