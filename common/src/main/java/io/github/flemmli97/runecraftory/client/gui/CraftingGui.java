@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
+import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerCrafting;
@@ -38,10 +39,18 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
     private int scrollValue;
     private boolean isDragging;
 
+    private final EnumSkills skill;
+
     public CraftingGui(ContainerCrafting container, Inventory inv, Component name) {
         super(container, inv, name);
         this.imageWidth = 209;
         this.imageHeight = 166;
+        this.skill = switch (this.menu.craftingType()) {
+            case FORGE -> EnumSkills.FORGING;
+            case ARMOR -> EnumSkills.CRAFTING;
+            case CHEM -> EnumSkills.CHEMISTRY;
+            case COOKING -> EnumSkills.COOKING;
+        };
     }
 
     @Override
@@ -90,6 +99,8 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
             this.blit(stack, 18, 3, 18, 40, runePointsWidth, 9);
             ClientHandlers.drawCenteredScaledString(stack, this.font, data.getRunePoints() + "/" + data.getMaxRunePoints(), 18 + 75 * 0.5f, 5, 0.7f, 0xffffff);
             stack.popPose();
+            this.font.draw(stack, new TranslatableComponent("runecraftory.display.level", data.getSkillLevel(this.skill).getLevel()),
+                    this.leftPos + this.titleLabelX + this.font.width(this.title) + 6, this.topPos + this.titleLabelY, 0x404040);
         }
     }
 

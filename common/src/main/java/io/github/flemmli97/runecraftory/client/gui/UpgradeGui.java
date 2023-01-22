@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerUpgrade;
@@ -21,8 +22,16 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
     private static final ResourceLocation forging = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forgef.png");
     private static final ResourceLocation crafting = new ResourceLocation(RuneCraftory.MODID, "textures/gui/craftingf.png");
 
+    private final EnumSkills skill;
+
     public UpgradeGui(ContainerUpgrade container, Inventory inv, Component name) {
         super(container, inv, name);
+        this.skill = switch (this.menu.craftingType()) {
+            case FORGE -> EnumSkills.FORGING;
+            case ARMOR -> EnumSkills.CRAFTING;
+            case CHEM -> EnumSkills.CHEMISTRY;
+            case COOKING -> EnumSkills.COOKING;
+        };
     }
 
     @Override
@@ -63,6 +72,8 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
             this.blit(stack, 18, 3, 18, 40, runePointsWidth, 9);
             ClientHandlers.drawCenteredScaledString(stack, this.font, data.getRunePoints() + "/" + data.getMaxRunePoints(), 18 + 75 * 0.5f, 5, 0.7f, 0xffffff);
             stack.popPose();
+            this.font.draw(stack, new TranslatableComponent("runecraftory.display.level", data.getSkillLevel(this.skill).getLevel()),
+                    this.leftPos + this.titleLabelX + this.font.width(this.title) + 6, this.topPos + this.titleLabelY, 0x404040);
         }
     }
 }

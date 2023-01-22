@@ -1463,7 +1463,7 @@
   "monster.interact.barn.no.ext": "%s [%s] has no home to go to.",
   "barn.interact.not.owner": "This barn belongs to %s.",
   "crafting.rpMax.missing": "Missing total rp",
-  "level": "Level",
+  "runecraftory.display.level": "Level: %s",
   "runecraftory.keycategory": "Runecraftory",
   "runecraftory.key.spell_1": "Interaction Key 1",
   "runecraftory.key.spell_2": "Interaction Key 2",

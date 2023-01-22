@@ -331,7 +331,7 @@ public class LangGen implements DataProvider {
 
         this.add("crafting.rpMax.missing", "Missing total rp");
 
-        this.add("level", "Level");
+        this.add("runecraftory.display.level", "Level: %s");
         this.add("death.attack.rfExhaust", "%1$s fainted");
         this.add("death.attack.rfAttack", "%1$s was knocked down by %2$s");
         this.add("itemGroup.runecraftory.weapons_tools", "Weapons and Tools");
