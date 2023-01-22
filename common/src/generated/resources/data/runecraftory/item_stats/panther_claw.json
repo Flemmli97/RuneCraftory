@@ -3,9 +3,11 @@
   "sellPrice": 55,
   "upgradeDifficulty": 28,
   "itemStats": {
+    "minecraft:generic.attack_damage": 4.0
+  },
+  "monsterBonus": {
     "minecraft:generic.attack_damage": 0.5
   },
-  "monsterBonus": {},
   "element": "NONE",
   "item": "runecraftory:panther_claw"
 }

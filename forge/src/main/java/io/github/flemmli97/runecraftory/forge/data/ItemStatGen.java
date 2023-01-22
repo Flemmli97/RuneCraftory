@@ -967,7 +967,9 @@ public class ItemStatGen extends ItemStatProvider {
 
         this.addStat(ModItems.featherBlack.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.featherThunder.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.featherYellow.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.featherYellow.get(), new ItemStat.Builder(500, 20, 15)
+                .addAttribute(ModAttributes.MAGIC.get(), 13)
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.7));
         this.addStat(ModItems.dragonFin.get(), new ItemStat.Builder(0, 0, 0));
 
         this.addStat(ModItems.turtleShell.get(), new ItemStat.Builder(160, 30, 16)
@@ -1178,10 +1180,10 @@ public class ItemStatGen extends ItemStatProvider {
 
         this.addStat(ModItems.jawInsect.get(), new ItemStat.Builder(100, 23, 14)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 0.3));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.3));
         this.addStat(ModItems.clawPanther.get(), new ItemStat.Builder(450, 55, 28)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 4)
-                .addAttribute(Attributes.ATTACK_DAMAGE, 0.5));
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.clawMagic.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.fangWolf.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.fangGoldWolf.get(), new ItemStat.Builder(0, 0, 0));

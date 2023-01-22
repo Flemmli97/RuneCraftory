@@ -255,13 +255,13 @@ public class LevelCalc {
         double dX = spawn.x - pos.x;
         double dZ = spawn.z - pos.z;
         double dist = Math.sqrt(dX * dX + dZ * dZ);
-        if (dist < 400)
+        if (dist < 300)
             return MobConfig.baseGateLevel;
-        if (dist < 1000)
-            return randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(0, 20, 1000 - 400, dist));
-        if (dist < 5000)
-            return randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(20, 80, 5000 - 1000, dist));
-        return randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (100 + (dist - 5000) * 0.07));
+        if (dist < 2000)
+            return randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(0, 25, 2000 - 300, dist));
+        if (dist < 7500)
+            return randomizedLevel(level.random, MobConfig.baseGateLevel + uniformInterpolation(25, 80, 7500 - 2000, dist));
+        return randomizedLevel(level.random, MobConfig.baseGateLevel + (int) (80 + (dist - 7500) * 0.07));
     }
 
     private static int uniformInterpolation(int start, int increase, int len, double x) {

@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
+import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -11,6 +12,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public class ItemDebug extends Item {
 
@@ -47,6 +49,9 @@ public class ItemDebug extends Item {
         if (context.getLevel() instanceof ServerLevel serverLevel) {
             int f = serverLevel.getPoiManager().getFreeTickets(context.getClickedPos());
             context.getPlayer().sendMessage(new TextComponent("Free " + f), Util.NIL_UUID);
+            int lvl = LevelCalc.levelFromPos(serverLevel, Vec3.atCenterOf(context.getClickedPos()));
+            context.getPlayer().sendMessage(new TextComponent("GateLevel: " + lvl), Util.NIL_UUID);
+
         }
         return super.useOn(context);
     }
