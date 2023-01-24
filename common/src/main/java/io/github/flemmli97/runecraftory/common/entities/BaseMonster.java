@@ -644,40 +644,42 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if (this.level.isClientSide)
-            return InteractionResult.CONSUME;
+        boolean clientSide = this.level.isClientSide;
         ItemStack stack = player.getItemInHand(hand);
         if (this.isTamed()) {
             if (!player.getUUID().equals(this.getOwnerUUID())) {
-                player.sendMessage(new TranslatableComponent("monster.interact.notowner"), Util.NIL_UUID);
-                return InteractionResult.CONSUME;
+                if (!clientSide)
+                    player.sendMessage(new TranslatableComponent("monster.interact.notowner"), Util.NIL_UUID);
+                return InteractionResult.sidedSuccess(clientSide);
             }
             if (player.isShiftKeyDown()) {
                 if (stack.getItem() == Items.STICK) {
-                    if (player instanceof ServerPlayer serverPlayer)
+                    if (player instanceof ServerPlayer serverPlayer) {
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 1, 1));
-                    this.untameEntity();
-                    return InteractionResult.SUCCESS;
+                        this.untameEntity();
+                    }
+                    return InteractionResult.sidedSuccess(clientSide);
                 }
             }
-            if (MobConfig.monsterNeedBarn && this.assignedBarn == null) {
+            if (!clientSide && MobConfig.monsterNeedBarn && this.assignedBarn == null) {
                 if (!this.assignBarn()) {
                     player.sendMessage(new TranslatableComponent("monster.interact.barn.no", this.getDisplayName()), Util.NIL_UUID);
                     return InteractionResult.CONSUME;
                 }
             }
             if (stack.getItem() == ModItems.brush.get()) {
-                int day = WorldUtils.day(this.level);
-                if (this.updater.getLastUpdateBrush() == day)
-                    return InteractionResult.PASS;
-                if (player instanceof ServerPlayer serverPlayer)
+                if (player instanceof ServerPlayer serverPlayer) {
+                    int day = WorldUtils.day(this.level);
+                    if (this.updater.getLastUpdateBrush() == day)
+                        return InteractionResult.PASS;
                     serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                this.updater.setLastUpdateBrush(day);
-                this.onBrushing();
-                this.increaseFriendPoints(15);
-                this.level.broadcastEntityEvent(this, (byte) 64);
-                player.swing(hand);
-                return InteractionResult.SUCCESS;
+                    this.updater.setLastUpdateBrush(day);
+                    this.onBrushing();
+                    this.increaseFriendPoints(15);
+                    this.level.broadcastEntityEvent(this, (byte) 64);
+                    player.swing(hand);
+                }
+                return InteractionResult.sidedSuccess(clientSide);
             }
             if (hand == InteractionHand.MAIN_HAND && !this.playDeath()) {
                 if (player.isShiftKeyDown()) {
@@ -685,22 +687,26 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         EntityUtils.sendAttributesTo(this, serverPlayer);
                         Platform.INSTANCE.sendToClient(new S2COpenCompanionGui(this, serverPlayer), serverPlayer);
                     }
-                    return InteractionResult.SUCCESS;
+                    return InteractionResult.sidedSuccess(clientSide);
                 }
             }
             return InteractionResult.PASS;
         } else if (player.isShiftKeyDown() && !stack.isEmpty()) {
             if (stack.getItem() == ModItems.tame.get()) {
-                this.tameEntity(player);
-                return InteractionResult.SUCCESS;
+                if (!clientSide)
+                    this.tameEntity(player);
+                return InteractionResult.sidedSuccess(clientSide);
             } else {
-                if (this.tamingTick == -1 && this.isAlive() && stack.getItem() == ModItems.brush.get()) {
-                    if (player instanceof ServerPlayer serverPlayer)
+                if (stack.getItem() == ModItems.brush.get() && this.isAlive()) {
+                    if (player instanceof ServerPlayer serverPlayer) {
+                        if (this.tamingTick == -1)
+                            return InteractionResult.PASS;
                         serverPlayer.connection.send(new ClientboundSoundPacket(SoundEvents.HORSE_SADDLE, SoundSource.NEUTRAL, player.getX(), player.getY(), player.getZ(), 0.7f, 1));
-                    this.brushCount = Math.min(10, this.brushCount + 1);
-                    this.tamingTick = 40;
-                    this.level.broadcastEntityEvent(this, (byte) 64);
-                    return InteractionResult.SUCCESS;
+                        this.brushCount = Math.min(10, this.brushCount + 1);
+                        this.tamingTick = 40;
+                        this.level.broadcastEntityEvent(this, (byte) 64);
+                    }
+                    return InteractionResult.sidedSuccess(clientSide);
                 }
             }
         }
@@ -843,7 +849,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 else
                     this.owner = this.level.getServer().getPlayerList().getPlayer(uuid);
             }
-        }
+        } else
+            this.owner = null;
         return this.owner;
     }
 
@@ -1081,11 +1088,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     protected LootContext.Builder dailyDropContext() {
-        return new LootContext.Builder((ServerLevel) this.level)
+        LootContext.Builder builder = new LootContext.Builder((ServerLevel) this.level)
                 .withRandom(this.random)
                 .withParameter(LootContextParams.THIS_ENTITY, this)
-                .withParameter(LootContextParams.ORIGIN, this.position())
-                .withParameter(LootCtxParameters.UUID_CONTEXT, this.getOwnerUUID());
+                .withParameter(LootContextParams.ORIGIN, this.position());
+        if (this.getOwnerUUID() != null)
+            builder.withParameter(LootCtxParameters.UUID_CONTEXT, this.getOwnerUUID());
+        return builder;
     }
 
     //=====Damage Logic

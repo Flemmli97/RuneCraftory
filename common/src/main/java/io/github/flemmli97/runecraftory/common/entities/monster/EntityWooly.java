@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -181,12 +182,13 @@ public class EntityWooly extends ChargingMonster {
     }
 
     public void shear(Player player, ItemStack used) {
+        LootTable lootTable = this.level.getServer().getLootTables().get(shearedLootTable(this.getDefaultLootTable()));
+        lootTable.getRandomItems(this.dailyDropContext()
+                .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
+                .withParameter(LootContextParams.TOOL, used).create(LootContextParamSets.GIFT), this::spawnAtLocation);
         this.setSheared(true);
         this.playSound(SoundEvents.SHEEP_SHEAR, 1.0f, 1.0f);
         this.gameEvent(GameEvent.SHEAR, player);
-        LootTable lootTable = this.level.getServer().getLootTables().get(shearedLootTable(this.getDefaultLootTable()));
-        lootTable.getRandomItems(this.dailyDropContext()
-                .withParameter(LootContextParams.TOOL, used).create(LootContextParamSets.GIFT), this::spawnAtLocation);
     }
 
     @Override
