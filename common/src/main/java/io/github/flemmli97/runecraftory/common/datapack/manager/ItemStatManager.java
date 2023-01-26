@@ -1,18 +1,14 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.Spell;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
-import io.github.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,7 +17,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -34,15 +29,11 @@ import java.util.Optional;
 
 public class ItemStatManager extends SimpleJsonResourceReloadListener {
 
-    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization()
-            .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.attributes()))
-            .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(ModSpells.SPELLREGISTRY.get())).create();
-
     private Map<ResourceLocation, ItemStat> itemstat = ImmutableMap.of();
     private Map<TagKey<Item>, ItemStat> itemstatTag = ImmutableMap.of();
 
     public ItemStatManager() {
-        super(GSON, "item_stats");
+        super(GsonInstances.ATTRIBUTE_SPELLS, "item_stats");
     }
 
     public Optional<ItemStat> get(Item item) {

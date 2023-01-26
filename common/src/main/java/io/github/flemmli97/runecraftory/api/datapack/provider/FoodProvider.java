@@ -1,20 +1,16 @@
 package io.github.flemmli97.runecraftory.api.datapack.provider;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
-import io.github.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import org.apache.logging.log4j.LogManager;
@@ -29,10 +25,6 @@ import java.util.function.Consumer;
 public abstract class FoodProvider implements DataProvider {
 
     private static final Logger LOGGER = LogManager.getLogger();
-
-    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping()
-            .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.attributes()))
-            .registerTypeAdapter(MobEffect.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.effects())).create();
 
     private final Map<ResourceLocation, FoodProperties.Builder> data = new HashMap<>();
     private final Map<ResourceLocation, Consumer<JsonObject>> item = new HashMap<>();
@@ -57,7 +49,7 @@ public abstract class FoodProvider implements DataProvider {
                         .getOrThrow(false, LOGGER::error);
                 if (obj.isJsonObject())
                     this.item.get(res).accept(obj.getAsJsonObject());
-                DataProvider.save(GSON, cache, obj, path);
+                DataProvider.save(GsonInstances.ATTRIBUTE_EFFECTS, cache, obj, path);
             } catch (IOException e) {
                 LOGGER.error("Couldn't save food properties {}", path, e);
             }

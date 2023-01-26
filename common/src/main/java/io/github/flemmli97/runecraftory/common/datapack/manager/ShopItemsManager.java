@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
@@ -42,9 +43,9 @@ import java.util.Map;
  */
 public class ShopItemsManager extends SimpleJsonResourceReloadListener {
 
-    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization()
-            .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.attributes()))
-            .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(ModSpells.SPELLREGISTRY.get())).create();
+    public static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization()
+            .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(Suppliers.memoize(PlatformUtils.INSTANCE::attributes)))
+            .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(Suppliers.memoize(ModSpells.SPELLREGISTRY::get))).create();
 
     private Map<NPCJob, Collection<ShopItemProperties>> shopItems = ImmutableMap.of();
     private Map<NPCJob, Collection<ShopItemProperties>> shopItemsDefaults = ImmutableMap.of();

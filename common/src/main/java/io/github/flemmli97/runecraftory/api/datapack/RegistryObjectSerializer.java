@@ -11,21 +11,22 @@ import io.github.flemmli97.tenshilib.platform.registry.SimpleRegistryWrapper;
 import net.minecraft.resources.ResourceLocation;
 
 import java.lang.reflect.Type;
+import java.util.function.Supplier;
 
 public record RegistryObjectSerializer<V>(
-        SimpleRegistryWrapper<V> registry) implements JsonDeserializer<V>, JsonSerializer<V> {
+        Supplier<SimpleRegistryWrapper<V>> registry) implements JsonDeserializer<V>, JsonSerializer<V> {
 
     @Override
     public V deserialize(JsonElement el, Type type, JsonDeserializationContext context) throws JsonParseException {
         ResourceLocation res = new ResourceLocation(el.getAsString());
-        V entry = this.registry.getFromId(res);
-        if (!this.registry.getIDFrom(entry).equals(res))
+        V entry = this.registry.get().getFromId(res);
+        if (!this.registry.get().getIDFrom(entry).equals(res))
             throw new JsonParseException("No such registry value: " + res);
         return entry;
     }
 
     @Override
     public JsonElement serialize(V obj, Type type, JsonSerializationContext context) {
-        return new JsonPrimitive(this.registry.getIDFrom(obj).toString());
+        return new JsonPrimitive(this.registry.get().getIDFrom(obj).toString());
     }
 }

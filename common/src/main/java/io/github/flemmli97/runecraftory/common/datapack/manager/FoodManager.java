@@ -1,14 +1,12 @@
 package io.github.flemmli97.runecraftory.common.datapack.manager;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
-import io.github.flemmli97.runecraftory.api.datapack.RegistryObjectSerializer;
+import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.network.FriendlyByteBuf;
@@ -17,8 +15,6 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 
 import javax.annotation.Nullable;
@@ -26,15 +22,11 @@ import java.util.Map;
 
 public class FoodManager extends SimpleJsonResourceReloadListener {
 
-    private static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization()
-            .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.attributes()))
-            .registerTypeAdapter(MobEffect.class, new RegistryObjectSerializer<>(PlatformUtils.INSTANCE.effects())).create();
-
     private Map<ResourceLocation, FoodProperties> food = ImmutableMap.of();
     private Map<TagKey<Item>, FoodProperties> foodTag = ImmutableMap.of();
 
     public FoodManager() {
-        super(GSON, "food_stats");
+        super(GsonInstances.ATTRIBUTE_EFFECTS, "food_stats");
     }
 
     @Nullable
