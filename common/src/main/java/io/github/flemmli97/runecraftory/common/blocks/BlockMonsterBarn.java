@@ -52,19 +52,6 @@ public class BlockMonsterBarn extends BaseEntityBlock {
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
-        if (!state.canSurvive(level, currentPos)) {
-            return Blocks.AIR.defaultBlockState();
-        }
-        return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
-    }
-
-    @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        return !level.isEmptyBlock(pos.below());
-    }
-
-    @Override
     public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
         if (placer instanceof ServerPlayer player && level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn)
             barn.setOwner(player.getUUID());
@@ -74,7 +61,7 @@ public class BlockMonsterBarn extends BaseEntityBlock {
     @Override
     public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
         UUID owner = null;
-        if (player.isCreative() || (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && !player.getUUID().equals(owner = barn.getOwner())))
+        if (player.isCreative() || (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && player.getUUID().equals(owner = barn.getOwner())))
             return super.getDestroyProgress(state, player, level, pos);
         if (!player.level.isClientSide && owner != null) {
             UUID uuid = owner;
