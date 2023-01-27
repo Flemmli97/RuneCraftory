@@ -575,10 +575,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.cropInventory = new BlockPos(arr[0], arr[1], arr[2]);
         }
         if (compound.contains("AssignedBarnLocation")) {
-            GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compound.get("AssignedBarnLocation")))
-                    .resultOrPartial(RuneCraftory.logger::error).ifPresent(p ->
-                            this.assignedBarn = WorldHandler.get(this.getServer()).barnAt(p)
-                    );
+            if (this.getServer() != null)
+                GlobalPos.CODEC.parse(new Dynamic<>(NbtOps.INSTANCE, compound.get("AssignedBarnLocation")))
+                        .resultOrPartial(RuneCraftory.logger::error).ifPresent(p ->
+                                this.assignedBarn = WorldHandler.get(this.getServer()).barnAt(p)
+                        );
         }
         try {
             this.setBehaviour(Behaviour.values()[compound.getInt("Behaviour")]);

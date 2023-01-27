@@ -25,7 +25,8 @@
     "SpreadingSnowyDirtBlockMixin",
     "AbstractContainerMenuAccessor",
     "ItemEntityMixin",
-    "SnowLayerBlockMixin"
+    "SnowLayerBlockMixin",
+    "EntityMixin"
   ],
   "client": [
     "AtlasMixin",
