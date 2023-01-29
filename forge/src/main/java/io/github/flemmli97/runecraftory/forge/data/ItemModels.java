@@ -75,9 +75,7 @@ public class ItemModels extends ItemModelProvider {
                         .transform(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND).rotation(9.25f, 0.37f, 8).translation(-0.5f, -4.25f, 0).end()
                         .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end()
                         .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(55, -47.5f, 0).translation(6, -1.25f, -4).end();
-            } else if (sup == ModItems.farmland)
-                this.withExistingParent(sup.getID().getPath(), "block/farmland");
-            else if (sup == ModItems.spawner)
+            } else if (sup == ModItems.spawner)
                 this.withExistingParent(sup.getID().getPath(), "block/spawner");
             else if (sup == ModItems.cutlass || sup == ModItems.seaCutter)
                 this.singleTexture(sup.getID().getPath(), new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"), "layer0", this.modLoc("item/" + sup.getID().getPath()));

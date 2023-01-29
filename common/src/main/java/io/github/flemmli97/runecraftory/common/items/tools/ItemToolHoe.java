@@ -11,7 +11,6 @@ import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
@@ -177,7 +176,7 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
         if (tille != null && tille.getFirst().test(ctx)) {
             tille.getSecond().accept(ctx);
             if (ctx.getLevel().getBlockState(ctx.getClickedPos()).is(Blocks.FARMLAND))
-                ctx.getLevel().setBlock(ctx.getClickedPos(), ModBlocks.farmland.get().defaultBlockState(), Block.UPDATE_ALL_IMMEDIATE);
+                ctx.getLevel().setBlock(ctx.getClickedPos(), Blocks.FARMLAND.defaultBlockState(), Block.UPDATE_ALL_IMMEDIATE);
             ctx.getLevel().playSound(null, ctx.getClickedPos(), SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0f, 1.1f);
             return true;
         }

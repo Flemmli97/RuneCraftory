@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -79,9 +80,22 @@ public class MixinUtils {
     }
 
     public static void onBlockStateChange(ServerLevel level, BlockPos pos, BlockState blockState, BlockState newState) {
+        //If related to farmblocks notify
         if (FarmlandHandler.isFarmBlock(newState))
             FarmlandHandler.get(level.getServer()).onFarmlandPlace(level, pos);
         else if (FarmlandHandler.isFarmBlock(blockState))
             FarmlandHandler.get(level.getServer()).onFarmlandRemove(level, pos);
+        //Handling crop blockState changes
+        if (blockState.getBlock() instanceof CropBlock pre) {
+            //Crop got broken
+            if (!(newState.getBlock() instanceof CropBlock post)) {
+                FarmlandHandler.get(level.getServer()).getData(level, pos.below())
+                        .ifPresent(d -> d.onCropRemove(level, pos, newState));
+            } else if (blockState.getValue(pre.getAgeProperty()) < newState.getValue(post.getAgeProperty())) {
+                //Crop got reset (e.g. via right click harvesting)
+                FarmlandHandler.get(level.getServer()).getData(level, pos.below())
+                        .ifPresent(d -> d.onRegrowableHarvest(level, pos, newState));
+            }
+        }
     }
 }

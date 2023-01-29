@@ -119,14 +119,14 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> vitalGummi = ITEMS.register("vital_gummi", () -> new ItemStatIncrease(ItemStatIncrease.Stat.VIT, new Item.Properties().tab(RFCreativeTabs.medicine)));
     public static final RegistryEntrySupplier<Item> intelligencer = ITEMS.register("intelligencer", () -> new ItemStatIncrease(ItemStatIncrease.Stat.INT, new Item.Properties().tab(RFCreativeTabs.medicine)));
     public static final RegistryEntrySupplier<Item> protein = ITEMS.register("protein", () -> new ItemStatIncrease(ItemStatIncrease.Stat.STR, new Item.Properties().tab(RFCreativeTabs.medicine)));
-    public static final RegistryEntrySupplier<Item> formularA = ITEMS.register("formular_a", () -> new ItemFertilizer(ItemFertilizer.formularA, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryEntrySupplier<Item> formularB = ITEMS.register("formular_b", () -> new ItemFertilizer(ItemFertilizer.formularB, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryEntrySupplier<Item> formularC = ITEMS.register("formular_c", () -> new ItemFertilizer(ItemFertilizer.formularC, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryEntrySupplier<Item> minimizer = ITEMS.register("minimizer", () -> new ItemFertilizer(ItemFertilizer.minimizer, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryEntrySupplier<Item> giantizer = ITEMS.register("giantizer", () -> new ItemFertilizer(ItemFertilizer.giantizer, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryEntrySupplier<Item> greenifier = ITEMS.register("greenifier", () -> new ItemFertilizer(ItemFertilizer.greenifier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryEntrySupplier<Item> greenifierPlus = ITEMS.register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.greenifierPlus, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-    public static final RegistryEntrySupplier<Item> wettablePowder = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.wettable, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> formularA = ITEMS.register("formular_a", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_A, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> formularB = ITEMS.register("formular_b", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_B, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> formularC = ITEMS.register("formular_c", () -> new ItemFertilizer(ItemFertilizer.FORMULAR_C, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> minimizer = ITEMS.register("minimizer", () -> new ItemFertilizer(ItemFertilizer.MINIMIZER, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> giantizer = ITEMS.register("giantizer", () -> new ItemFertilizer(ItemFertilizer.GIANTIZER, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> greenifier = ITEMS.register("greenifier", () -> new ItemFertilizer(ItemFertilizer.GREENIFIER, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> greenifierPlus = ITEMS.register("greenifier_plus", () -> new ItemFertilizer(ItemFertilizer.GREENIFIER_PLUS, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
+    public static final RegistryEntrySupplier<Item> wettablePowder = ITEMS.register("wettable_powder", () -> new ItemFertilizer(ItemFertilizer.WETTABLE, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
 
     //Weapons
     public static final RegistryEntrySupplier<Item> seedSword = ITEMS.register("seed_sword_item", () -> new ItemSeedSword(new Item.Properties()));
@@ -1200,7 +1200,6 @@ public class ModItems {
 
     public static final RegistryEntrySupplier<Item> shippingBin = blockItem("shipping_bin", () -> ModBlocks.shipping);
     public static final RegistryEntrySupplier<Item> spawner = blockItem("boss_spawner", () -> ModBlocks.bossSpawner, RFCreativeTabs.monsters);
-    public static final RegistryEntrySupplier<Item> farmland = blockItem("farmland", () -> ModBlocks.farmland, null);
     public static final RegistryEntrySupplier<Item> cashRegister = blockItem("cash_register", () -> ModBlocks.cashRegister);
     public static final RegistryEntrySupplier<Item> monsterBarn = blockItem("monster_barn", () -> ModBlocks.monsterBarn);
     public static final RegistryEntrySupplier<Item> questBoard = ITEMS.register("quest_board", () -> new QuestBoardItem(ModBlocks.questBoard.get(), new Item.Properties().tab(RFCreativeTabs.blocks)));

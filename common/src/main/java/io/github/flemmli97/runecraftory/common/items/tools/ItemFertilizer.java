@@ -1,63 +1,64 @@
 package io.github.flemmli97.runecraftory.common.items.tools;
 
-import io.github.flemmli97.runecraftory.common.blocks.tile.FarmBlockEntity;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 public class ItemFertilizer extends Item {
 
-    private static final List<BlockPos> affected = List.of(
+    private static final List<BlockPos> AFFECTED = List.of(
             new BlockPos(1, 0, 0),
             new BlockPos(0, 0, -1),
             new BlockPos(1, 0, -1)
     );
 
-    public static final IFertilizerOnUse formularA = ((stack, world, tile, player) -> {
-        tile.applyGrowthFertilizer(0.4f);
+    public static final IFertilizerOnUse FORMULAR_A = ((stack, level, data, player) -> {
+        data.applyGrowthFertilizer(level, 0.4f);
         return true;
     });
-    public static final IFertilizerOnUse formularB = ((stack, world, tile, player) -> {
-        tile.applyGrowthFertilizer(1);
+    public static final IFertilizerOnUse FORMULAR_B = ((stack, level, data, player) -> {
+        data.applyGrowthFertilizer(level, 1);
         return true;
     });
-    public static final IFertilizerOnUse formularC = ((stack, world, tile, player) -> {
-        tile.applyGrowthFertilizer(2);
+    public static final IFertilizerOnUse FORMULAR_C = ((stack, level, data, player) -> {
+        data.applyGrowthFertilizer(level, 2);
         return true;
     });
-    public static final IFertilizerOnUse greenifier = ((stack, world, tile, player) -> {
-        tile.applyLevelFertilizer(0.2f);
+    public static final IFertilizerOnUse GREENIFIER = ((stack, level, data, player) -> {
+        data.modifyQuality(level, 0.2f);
         return true;
     });
-    public static final IFertilizerOnUse greenifierPlus = ((stack, world, tile, player) -> {
-        tile.applyLevelFertilizer(0.5f);
+    public static final IFertilizerOnUse GREENIFIER_PLUS = ((stack, level, data, player) -> {
+        data.modifyQuality(level, 0.5f);
         return true;
     });
-    public static final IFertilizerOnUse giantizer = ((stack, world, tile, player) -> {
-        tile.applySizeFertilizer(true);
+    public static final IFertilizerOnUse GIANTIZER = ((stack, level, data, player) -> {
+        data.applySizeFertilizer(level, true);
         return true;
     });
-    public static final IFertilizerOnUse minimizer = ((stack, world, tile, player) -> {
-        tile.applySizeFertilizer(false);
+    public static final IFertilizerOnUse MINIMIZER = ((stack, level, data, player) -> {
+        data.applySizeFertilizer(level, false);
         return true;
     });
-    public static final IFertilizerOnUse wettable = ((stack, world, tile, player) -> {
-        tile.applyHealth(50);
+    public static final IFertilizerOnUse WETTABLE = ((stack, level, data, player) -> {
+        data.modifyDefence(level, 48);
         return true;
     });
     private final IFertilizerOnUse use;
@@ -69,8 +70,7 @@ public class ItemFertilizer extends Item {
 
     @Override
     public InteractionResult useOn(UseOnContext ctx) {
-        Level level = ctx.getLevel();
-        if (level.isClientSide)
+        if (!(ctx.getLevel() instanceof ServerLevel level))
             return InteractionResult.SUCCESS;
         InteractionResult res = this.applyTo(level, ctx.getClickedPos(), ctx);
         if (res == InteractionResult.CONSUME) {
@@ -85,24 +85,35 @@ public class ItemFertilizer extends Item {
         return res;
     }
 
-    private InteractionResult applyTo(Level level, BlockPos blockpos, UseOnContext ctx) {
-        BlockEntity blockEntity = level.getBlockEntity(blockpos);
-        if (blockEntity instanceof FarmBlockEntity && this.use.useItemOnFarmland(ctx.getItemInHand(), level, (FarmBlockEntity) blockEntity, ctx.getPlayer())) {
-            Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.Type.FERTILIZER, blockpos), level.getServer());
-            return InteractionResult.CONSUME;
-        } else if (level.getBlockState(blockpos).getBlock() instanceof BushBlock) {
-            blockpos = blockpos.below();
-            blockEntity = level.getBlockEntity(blockpos);
-            if (blockEntity instanceof FarmBlockEntity && this.use.useItemOnFarmland(ctx.getItemInHand(), level, (FarmBlockEntity) blockEntity, ctx.getPlayer())) {
-                Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.Type.FERTILIZER, blockpos), level.getServer());
-                return InteractionResult.CONSUME;
-            }
+    private InteractionResult applyTo(ServerLevel level, BlockPos blockPos, UseOnContext ctx) {
+        BlockState state = level.getBlockState(blockPos);
+        if (FarmlandHandler.isFarmBlock(state)) {
+            return FarmlandHandler.get(level.getServer())
+                    .getData(level, blockPos)
+                    .map(d -> {
+                        if (this.use.useItemOnFarmland(ctx.getItemInHand(), level, d, ctx.getPlayer())) {
+                            Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.Type.FERTILIZER, blockPos), level.getServer());
+                            return InteractionResult.CONSUME;
+                        }
+                        return InteractionResult.PASS;
+                    }).orElse(InteractionResult.PASS);
+        } else if (state.getBlock() instanceof BushBlock) {
+            BlockPos below = blockPos.below();
+            return FarmlandHandler.get(level.getServer())
+                    .getData(level, blockPos)
+                    .map(d -> {
+                        if (this.use.useItemOnFarmland(ctx.getItemInHand(), level, d, ctx.getPlayer())) {
+                            Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.Type.FERTILIZER, below), level.getServer());
+                            return InteractionResult.CONSUME;
+                        }
+                        return InteractionResult.PASS;
+                    }).orElse(InteractionResult.PASS);
         }
         return InteractionResult.PASS;
     }
 
     public interface IFertilizerOnUse {
-        boolean useItemOnFarmland(ItemStack stack, Level world, FarmBlockEntity tile, Player player);
+        boolean useItemOnFarmland(ItemStack stack, ServerLevel level, FarmlandData data, Player player);
     }
 
     public static Stream<BlockPos> getOtherForTargeted(Direction direction, BlockPos ctxPos) {
@@ -112,6 +123,6 @@ public class ItemFertilizer extends Item {
             case WEST -> Rotation.COUNTERCLOCKWISE_90;
             default -> Rotation.NONE;
         };
-        return affected.stream().map(p -> p.rotate(rot).offset(ctxPos));
+        return AFFECTED.stream().map(p -> p.rotate(rot).offset(ctxPos));
     }
 }

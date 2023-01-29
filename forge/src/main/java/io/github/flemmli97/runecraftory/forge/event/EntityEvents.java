@@ -11,7 +11,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -27,7 +26,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -83,12 +81,6 @@ public class EntityEvents {
     @SubscribeEvent
     public void foodHandling(LivingEntityUseItemEvent.Finish event) {
         EntityCalls.foodHandling(event.getEntityLiving(), event.getItem());
-    }
-
-    @SubscribeEvent
-    public void hoeTill(BlockEvent.BlockToolModificationEvent event) {
-        if (event.isSimulated())
-            event.setFinalState(EntityCalls.hoeTill(() -> ToolActions.DEFAULT_HOE_ACTIONS.contains(ToolActions.HOE_DIG), event.getFinalState()));
     }
 
     @SubscribeEvent

@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
-import io.github.flemmli97.runecraftory.common.blocks.BlockFarm;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
@@ -35,6 +34,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -47,7 +47,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -67,7 +66,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.LevelEvent;
@@ -78,7 +76,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 public class EntityCalls {
 
@@ -135,6 +132,10 @@ public class EntityCalls {
     public static void trackEntity(Player player, Entity target) {
         if (player instanceof ServerPlayer serverPlayer && target instanceof LivingEntity living)
             Platform.INSTANCE.sendToClient(new S2CEntityDataSyncAll(living), serverPlayer);
+    }
+
+    public static void chunkLoad(Player player, ChunkPos pos) {
+
     }
 
     public static void onLoadEntity(LivingEntity living) {
@@ -289,36 +290,27 @@ public class EntityCalls {
         if (!player.level.isClientSide && state.getBlock() instanceof CropBlock crop) {
             if (crop.isMaxAge(state)) {
                 CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getCloneItemStack(player.level, pos, state).getItem());
-                if (!player.level.isClientSide) {
-                    crop.playerDestroy(player.level, player, pos, state, null, ItemStack.EMPTY);
-                }
-                if (props != null && props.regrowable()) {
-                    player.level.setBlock(pos, crop.getStateForAge(0), Block.UPDATE_ALL);
-                } else {
-                    player.level.removeBlock(pos, false);
-                }
-                player.swing(InteractionHand.MAIN_HAND, true);
-                if (props != null && player instanceof ServerPlayer serverPlayer) {
-                    BlockCrop.spawnRuney(serverPlayer, pos);
-                    Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.FARMING, 2f));
-                }
+                BlockCrop.harvestCropRightClick(state, player.level, pos, player, player.getMainHandItem(),
+                        props, null);
             }
         }
     }
 
     public static boolean onTryBonemeal(Level level, ItemStack stack, BlockState state, BlockPos pos) {
-        if (!level.isClientSide && state.getBlock() instanceof CropBlock crop) {
+        if (level instanceof ServerLevel serverLevel && state.getBlock() instanceof CropBlock crop) {
             CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getCloneItemStack(level, pos, state).getItem());
             if (props != null) {
                 BlockPos below = pos.below();
                 BlockState belowState = level.getBlockState(below);
-                if (belowState.getBlock() instanceof BlockFarm farm && farm.isValidBonemealTarget(level, below, belowState, false)) {
-                    if (farm.isBonemealSuccess(level, level.random, below, belowState)) {
-                        farm.performBonemeal((ServerLevel) level, level.random, below, belowState);
-                    }
-                    stack.shrink(1);
-                    level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
-                }
+                if (FarmlandHandler.isFarmBlock(belowState))
+                    FarmlandHandler.get(serverLevel.getServer())
+                            .getData(serverLevel, pos).ifPresent(d -> {
+                                if (d.canUseBonemeal()) {
+                                    d.applyBonemeal(serverLevel);
+                                    stack.shrink(1);
+                                    level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
+                                }
+                            });
                 return true;
             }
         }
@@ -376,16 +368,6 @@ public class EntityCalls {
                     entity.addEffect(s.create());
                 }
         }
-    }
-
-    /**
-     * Forge call is also not implemented for hoes so rn this is useless
-     */
-    public static BlockState hoeTill(Supplier<Boolean> match, BlockState state) {
-        /*if (GeneralConfig.disableDatapack && match.get() && state.is(ModTags.farmlandTill)) {
-            return ModBlocks.farmland.get().defaultBlockState();
-        }*/
-        return state;
     }
 
     public static void wakeUp(Player player) {

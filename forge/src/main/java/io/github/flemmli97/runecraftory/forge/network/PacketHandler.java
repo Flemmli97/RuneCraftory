@@ -4,8 +4,13 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.network.PacketRegistrar;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.chunk.ChunkStatus;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
@@ -55,6 +60,12 @@ public class PacketHandler {
 
     public static <T> void sendToTrackingAndSelf(T message, Entity e) {
         dispatcher.send(PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> e), message);
+    }
+
+    public static <T> void sendToTracking(T message, ServerLevel level, ChunkPos pos) {
+        ChunkAccess chunk = level.getChunk(pos.x, pos.z, ChunkStatus.FULL, false);
+        if (chunk instanceof LevelChunk levelChunk)
+            dispatcher.send(PacketDistributor.TRACKING_CHUNK.with(() -> levelChunk), message);
     }
 
     private static <T> BiConsumer<T, Supplier<NetworkEvent.Context>> handlerServer(BiConsumer<T, ServerPlayer> handler) {

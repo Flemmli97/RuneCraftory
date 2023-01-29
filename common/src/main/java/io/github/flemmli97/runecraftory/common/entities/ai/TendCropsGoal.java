@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.BlockPlaceCtxHelper;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
@@ -157,7 +156,7 @@ public class TendCropsGoal extends Goal {
                 }
                 success = true;
             } else if (block instanceof BlockCrop crop && crop.isMaxAge(state)) {
-                crop.harvestCrop(state, this.entity.level, this.selected, this.entity, ItemStack.EMPTY, this.entity.getCropInventory() != null ?
+                BlockCrop.harvestCropRightClick(state, this.entity.level, this.selected, this.entity, ItemStack.EMPTY, crop.properties().orElse(null), this.entity.getCropInventory() != null ?
                         s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
                 this.entity.level.getEntities(EntityTypeTest.forClass(ItemEntity.class), this.entity.getBoundingBox().inflate(0.2), e -> true);
                 success = true;

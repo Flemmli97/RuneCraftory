@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -22,6 +23,7 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +56,7 @@ public class FarmlandData {
     private float cropAge;
     private float cropSize;
     private float cropLevel = 1;
+    private int cropProgress;
 
     private int lastUpdateDay;
     private int scheduledStormTicks, scheduledWatering;
@@ -75,69 +78,82 @@ public class FarmlandData {
         return this.growth;
     }
 
-    public void applyGrowthFertilizer(float amount) {
-        this.applyGrowthFertilizer(amount, true);
-    }
-
-    private void applyGrowthFertilizer(float amount, boolean sendToTracking) {
+    public void applyGrowthFertilizer(@Nullable ServerLevel level, float amount) {
         this.growth = Mth.clamp(this.growth + amount, 0.1f, MAX_SPEED);
+        if (level != null)
+            FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
     public boolean canUseBonemeal() {
         return this.growth < 2.35;
     }
 
-    public void applyBonemeal() {
+    public void applyBonemeal(@Nullable ServerLevel level) {
         if (this.growth < 2.35)
-            this.applyGrowthFertilizer(0.15f);
+            this.applyGrowthFertilizer(level, 0.15f);
     }
 
     public float getQuality() {
         return this.quality;
     }
 
-    public void modifyQuality(float amount) {
-        this.modifyQuality(amount, true);
-    }
-
-    private void modifyQuality(float amount, boolean sendToTracking) {
+    public void modifyQuality(@Nullable ServerLevel level, float amount) {
         this.quality = Mth.clamp(this.quality + amount, 0, MAX_QUALITY);
+        if (level != null)
+            FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
     public float getSize() {
         return this.size;
     }
 
-    public void applySizeFertilizer(boolean growGiant) {
-        this.applySizeFertilizer((growGiant ? 1 : -1), true);
-    }
-
-    private void applySizeFertilizer(float giantMod, boolean sendToTracking) {
-        this.size = Mth.clamp(this.size + giantMod, -2, MAX_SIZE);
+    public void applySizeFertilizer(@Nullable ServerLevel level, boolean growGiant) {
+        float mod = (growGiant ? 1 : -1);
+        this.size = Mth.clamp(this.size + mod, -2, MAX_SIZE);
+        if (level != null)
+            FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
     public int getHealth() {
         return this.health;
     }
 
-    public void modifyHealth(int amount) {
-        this.modifyHealth(amount, true);
-    }
-
-    private void modifyHealth(int amount, boolean sendToTracking) {
+    public void modifyHealth(@Nullable ServerLevel level, int amount) {
         this.health = Mth.clamp(this.health + amount, 0, MAX_HEALTH);
+        if (level != null)
+            FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
     public int getDefence() {
         return this.defence;
     }
 
-    public void modifyDefence(int amount) {
-        this.modifyDefence(amount, true);
+    public void modifyDefence(@Nullable ServerLevel level, int amount) {
+        this.defence = Mth.clamp(this.defence + amount, 0, MAX_DEFENCE);
+        if (level != null)
+            FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
-    private void modifyDefence(int amount, boolean sendToTracking) {
-        this.defence = Mth.clamp(this.defence + amount, 0, MAX_DEFENCE);
+    public float getCropAge() {
+        return (int) this.cropAge;
+    }
+
+    private int growthPercent(BlockState crop) {
+        if (!(crop.getBlock() instanceof CropBlock))
+            return 0;
+        CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getBlock().asItem());
+        if (props != null) {
+            return Math.min((int) (this.cropAge / props.growth() * 100), 100);
+        }
+        return 0;
+    }
+
+    public float getCropSize() {
+        return this.cropSize;
+    }
+
+    public int getCropLevel() {
+        return (int) this.cropLevel;
     }
 
     public boolean hasDefaultStats() {
@@ -162,24 +178,28 @@ public class FarmlandData {
     }
 
     public void onRegrowableHarvest(ServerLevel level, BlockPos pos, BlockState state) {
-        if (!(state.getBlock() instanceof CropBlock crop))
+        if (!(state.getBlock() instanceof CropBlock crop)) {
+            this.resetCrop();
             return;
+        }
         CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.asItem());
-        if (props == null || !props.regrowable())
+        if (props == null || !props.regrowable()) {
+            this.resetCrop();
             return;
+        }
         float max = props.growth();
         this.cropAge = max * 0.5f;
         int maxAge = crop.getMaxAge();
         int stage = Math.round(this.cropAge * maxAge) / props.growth();
         //Update the blockstate according to the growth age
         BlockState newState = crop.getStateForAge(Math.min(stage, maxAge));
-        level.setBlock(pos, newState, Block.UPDATE_ALL);
+        level.getServer().tell(new TickTask(1, () -> level.setBlock(pos, newState, Block.UPDATE_ALL)));
+        FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
-    public void onCropUpdate(ServerLevel level, BlockPos pos, BlockState state) {
-        if (!(state.getBlock() instanceof CropBlock crop)) {
-            this.resetCrop();
-        }
+    public void onCropRemove(ServerLevel level, BlockPos pos, BlockState state) {
+        this.resetCrop();
+        FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
     //===== Update stuff
@@ -216,7 +236,7 @@ public class FarmlandData {
                 state = state == null ? level.getBlockState(cropPos) : state;
                 boolean destroyChance = level.random.nextFloat() < 0.4f;
                 if (destroyChance) {
-                    if (state.getBlock() instanceof CropBlock || state.getBlock() instanceof BlockCrop) {
+                    if (state.getBlock() instanceof CropBlock) {
                         if (level.random.nextFloat() < 0.6f) {
                             state = Blocks.AIR.defaultBlockState();
                             level.destroyBlock(cropPos, true);
@@ -229,6 +249,7 @@ public class FarmlandData {
                 }
             }
         }
+        FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
         if (state != null) {
             if (state.getBlock() == Blocks.DIRT)
                 level.setBlock(this.pos, state, Block.UPDATE_ALL);
@@ -245,6 +266,7 @@ public class FarmlandData {
         if (!this.isFarmBlock) {
             this.regenFarmlandStats();
             this.resetCrop();
+            FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
             return;
         }
         WorldHandler handler = WorldHandler.get(level.getServer());
@@ -334,9 +356,9 @@ public class FarmlandData {
             }
 
             if (didCropGrow) {
-                this.modifyHealth(-1, false);
-                this.applyGrowthFertilizer(-0.1f, false);
-                this.modifyQuality(-0.05f, false);
+                this.modifyHealth(null, -1);
+                this.applyGrowthFertilizer(null, -0.1f);
+                this.modifyQuality(null, -0.05f);
             } else {
                 this.regenFarmlandStats();
             }
@@ -354,11 +376,13 @@ public class FarmlandData {
                 level.setBlock(cropPos, cropState.setValue(BlockCrop.WILTED, true), Block.UPDATE_ALL);
             }
         }
+        this.cropProgress = this.growthPercent(cropState);
+        FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
     private void regenFarmlandStats() {
         this.growth = Math.min(this.growth + 0.1F, DEFAULT_SPEED);
-        this.modifyQuality(-0.1f, false);
+        this.modifyQuality(null, -0.1f);
         this.size = Mth.clamp(this.size - 0.05f, 0, 2);
         this.health = Math.min(DEFAULT_HEALTH, ++this.health);
     }
@@ -367,6 +391,7 @@ public class FarmlandData {
         this.cropAge = 0;
         this.cropLevel = 1;
         this.cropSize = 0;
+        this.cropProgress = 0;
     }
 
     public void onLoad(ServerLevel level) {
@@ -379,6 +404,7 @@ public class FarmlandData {
 
     public void onUnload(ServerLevel level) {
         this.isLoaded = false;
+        FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
     public void load(CompoundTag nbt) {
@@ -409,6 +435,32 @@ public class FarmlandData {
 
         nbt.putInt("LastUpdate", this.lastUpdateDay);
         return nbt;
+    }
+
+    public void writeToBuffer(FriendlyByteBuf buf) {
+        buf.writeBlockPos(this.pos);
+        buf.writeFloat(this.growth);
+        buf.writeFloat(this.quality);
+        buf.writeFloat(this.size);
+        buf.writeInt(this.health);
+        buf.writeInt(this.defence);
+        buf.writeInt(this.cropProgress);
+        buf.writeFloat(this.size);
+        buf.writeFloat(this.cropLevel);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+        if (obj instanceof FarmlandData data)
+            return data.pos.equals(this.pos);
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.pos.hashCode();
     }
 
     protected record ExternalModifiers(EnumSeason season, EnumWeather weather) {

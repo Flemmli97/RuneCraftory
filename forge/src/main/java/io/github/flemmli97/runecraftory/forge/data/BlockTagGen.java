@@ -49,7 +49,7 @@ public class BlockTagGen extends BlockTagsProvider {
                 .add(Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM, Blocks.CRIMSON_FUNGUS, Blocks.WARPED_FUNGUS);
 
         this.tag(ModTags.HAMMER_FLATTENABLE)
-                .add(Blocks.FARMLAND, ModBlocks.farmland.get(), Blocks.DIRT_PATH);
+                .add(Blocks.FARMLAND, Blocks.DIRT_PATH);
 
         this.tag(ModTags.HAMMER_BREAKABLE)
                 .add(ModBlocks.mineralMap.values().stream().map(RegistryEntrySupplier::get).toArray(Block[]::new));
@@ -78,11 +78,10 @@ public class BlockTagGen extends BlockTagsProvider {
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(ModBlocks.forge.get(), ModBlocks.cooking.get(), ModBlocks.chemistry.get(),
                 ModBlocks.bossSpawner.get(), ModBlocks.cashRegister.get());
-        this.tag(BlockTags.MINEABLE_WITH_SHOVEL).add(ModBlocks.farmland.get());
         this.tag(BlockTags.MINEABLE_WITH_AXE).add(ModBlocks.shipping.get(), ModBlocks.accessory.get(), ModBlocks.questBoard.get());
         this.tag(BlockTags.MINEABLE_WITH_HOE).add(ModBlocks.monsterBarn.get());
 
-        this.tag(ModTags.FARMLAND).add(Blocks.FARMLAND, ModBlocks.farmland.get());
+        this.tag(ModTags.FARMLAND).add(Blocks.FARMLAND);
 
         this.tag(ModTags.BARN_GROUND).add(Blocks.HAY_BLOCK);
 
