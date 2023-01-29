@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.mixin;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
+import io.github.flemmli97.runecraftory.mixinhelper.MixinUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -11,8 +12,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerLevel.class)
 public abstract class ServerLevelMixin {
@@ -37,5 +40,10 @@ public abstract class ServerLevelMixin {
                 return Biome.Precipitation.SNOW;
         }
         return old;
+    }
+
+    @Inject(method = "onBlockStateChange", at = @At("RETURN"))
+    private void stateChangeInject(BlockPos pos, BlockState blockState, BlockState newState, CallbackInfo info) {
+        MixinUtils.onBlockStateChange((ServerLevel) (Object) this, pos, blockState, newState);
     }
 }

@@ -4,9 +4,11 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.world.GateSpawning;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.forge.capability.EntityCap;
 import io.github.flemmli97.runecraftory.forge.capability.PlayerCap;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobCategory;
@@ -19,6 +21,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.StructureSpawnListGatherEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -71,5 +74,17 @@ public class WorldEvents {
     public void disableVanillaCrop(BlockEvent.CropGrowEvent.Pre event) {
         if (WorldCalls.disableVanillaCrop(event.getWorld(), event.getState(), event.getPos()))
             event.setResult(Event.Result.DENY);
+    }
+
+    @SubscribeEvent
+    public void onChunkLoad(ChunkEvent.Load event) {
+        if (event.getWorld() instanceof ServerLevel level)
+            FarmlandHandler.get(level.getServer()).onChunkLoad(level, event.getChunk().getPos());
+    }
+
+    @SubscribeEvent
+    public void onChunkUnLoad(ChunkEvent.Unload event) {
+        if (event.getWorld() instanceof ServerLevel level)
+            FarmlandHandler.get(level.getServer()).onChunkLoad(level, event.getChunk().getPos());
     }
 }

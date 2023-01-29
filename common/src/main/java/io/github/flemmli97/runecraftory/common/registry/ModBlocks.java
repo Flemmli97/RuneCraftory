@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.registry;
 
-import com.google.common.collect.Lists;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumMineralTier;
 import io.github.flemmli97.runecraftory.common.blocks.BlockAccessory;
@@ -10,7 +9,6 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockCashRegister;
 import io.github.flemmli97.runecraftory.common.blocks.BlockChemistry;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCooking;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
-import io.github.flemmli97.runecraftory.common.blocks.BlockFarm;
 import io.github.flemmli97.runecraftory.common.blocks.BlockForge;
 import io.github.flemmli97.runecraftory.common.blocks.BlockHerb;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMeltableSnow;
@@ -24,8 +22,6 @@ import io.github.flemmli97.runecraftory.common.blocks.tile.BossSpawnerBlockEntit
 import io.github.flemmli97.runecraftory.common.blocks.tile.BrokenMineralBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.ChemistryBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.CookingBlockEntity;
-import io.github.flemmli97.runecraftory.common.blocks.tile.CropBlockEntity;
-import io.github.flemmli97.runecraftory.common.blocks.tile.FarmBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.ForgingBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.MonsterBarnBlockEntity;
 import io.github.flemmli97.runecraftory.common.blocks.tile.SingleTimeSpawner;
@@ -65,7 +61,6 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> cooking = BLOCKS.register("cooking_table", () -> new BlockCooking(BlockBehaviour.Properties.of(Material.METAL).noOcclusion().strength(3, 100)));
     public static final RegistryEntrySupplier<Block> chemistry = BLOCKS.register("chemistry_set", () -> new BlockChemistry(BlockBehaviour.Properties.of(Material.METAL).noOcclusion().strength(3, 100)));
     public static final RegistryEntrySupplier<Block> accessory = BLOCKS.register("accessory_workbench", () -> new BlockAccessory(BlockBehaviour.Properties.of(Material.METAL).noOcclusion().strength(3, 100)));
-    public static final RegistryEntrySupplier<Block> farmland = BLOCKS.register("farmland", () -> new BlockFarm(BlockBehaviour.Properties.of(Material.DIRT).strength(0.6F).randomTicks().sound(SoundType.GRAVEL).isViewBlocking((state, reader, pos) -> true).isSuffocating((state, reader, pos) -> true)));
 
     public static final RegistryEntrySupplier<Block> mineralIron = mineral(EnumMineralTier.IRON);
     public static final RegistryEntrySupplier<Block> mineralBronze = mineral(EnumMineralTier.BRONZE);
@@ -198,9 +193,7 @@ public class ModBlocks {
     public static final RegistryEntrySupplier<Block> shinyLeaves = new BlockTreeLeaves("shiny_leaves");
     public static final RegistryEntrySupplier<Block> shinySapling = new BlockTreeSapling("shiny_sapling", shinyTree);*/
 
-    public static final RegistryEntrySupplier<BlockEntityType<FarmBlockEntity>> farmTile = TILES.register("farmland_tile", () -> Platform.INSTANCE.blockEntityType(FarmBlockEntity::new, farmland.get()));
     public static final RegistryEntrySupplier<BlockEntityType<BrokenMineralBlockEntity>> brokenMineralTile = brokenMineralTile("broken_mineral_tile", brokenMineralMap.values());
-    public static final RegistryEntrySupplier<BlockEntityType<CropBlockEntity>> cropTile = cropTile("crop_tile", combine(Lists.newArrayList(crops), flowers));
     public static final RegistryEntrySupplier<BlockEntityType<AccessoryBlockEntity>> accessoryTile = TILES.register("accessory_tile", () -> Platform.INSTANCE.blockEntityType(AccessoryBlockEntity::new, accessory.get()));
     public static final RegistryEntrySupplier<BlockEntityType<ForgingBlockEntity>> forgingTile = TILES.register("forge_tile", () -> Platform.INSTANCE.blockEntityType(ForgingBlockEntity::new, forge.get()));
     public static final RegistryEntrySupplier<BlockEntityType<ChemistryBlockEntity>> chemistryTile = TILES.register("chemistry_tile", () -> Platform.INSTANCE.blockEntityType(ChemistryBlockEntity::new, chemistry.get()));
@@ -246,10 +239,6 @@ public class ModBlocks {
     public static <T> Collection<T> combine(Collection<T> one, Collection<T> other) {
         one.addAll(other);
         return one;
-    }
-
-    public static RegistryEntrySupplier<BlockEntityType<CropBlockEntity>> cropTile(String name, Collection<RegistryEntrySupplier<Block>> blocks) {
-        return TILES.register(name, () -> Platform.INSTANCE.blockEntityType(CropBlockEntity::new, blocks.stream().map(RegistryEntrySupplier::get).collect(Collectors.toSet())));
     }
 
     public static RegistryEntrySupplier<BlockEntityType<BrokenMineralBlockEntity>> brokenMineralTile(String name, Collection<RegistryEntrySupplier<Block>> blocks) {

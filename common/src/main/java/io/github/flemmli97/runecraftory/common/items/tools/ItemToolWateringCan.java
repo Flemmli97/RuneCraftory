@@ -8,12 +8,12 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.common.blocks.BlockFarm;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.lib.LibNBT;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -219,8 +219,8 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
         boolean creative = !(entity instanceof Player) || ((Player) entity).isCreative();
         BlockState state = world.getBlockState(pos);
         int water = this.getWater(stack);
-        if ((creative || water > 0) && state.is(ModBlocks.farmland.get()) && state.getValue(FarmBlock.MOISTURE) != 7) {
-            BlockFarm.waterLand(world, pos, state);
+        if ((creative || water > 0) && state.is(ModTags.FARMLAND) && state.getValue(FarmBlock.MOISTURE) != 7) {
+            FarmlandHandler.waterLand(world, pos, state);
             if (!creative) {
                 stack.getTag().putInt(LibNBT.WATERING_CAN_WATER, water - 1);
             }

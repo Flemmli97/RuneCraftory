@@ -3,7 +3,9 @@ package io.github.flemmli97.runecraftory.mixinhelper;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Pose;
@@ -12,6 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
@@ -68,11 +71,17 @@ public class MixinUtils {
         return false;
     }
 
-
     protected static boolean canHitEntity(ItemEntity entity, Entity target) {
         if (target.isSpectator() || !target.isAlive() || !target.isPickable()) {
             return false;
         }
         return !target.getUUID().equals(entity.getThrower());
+    }
+
+    public static void onBlockStateChange(ServerLevel level, BlockPos pos, BlockState blockState, BlockState newState) {
+        if (FarmlandHandler.isFarmBlock(newState))
+            FarmlandHandler.get(level.getServer()).onFarmlandPlace(level, pos);
+        else if (FarmlandHandler.isFarmBlock(blockState))
+            FarmlandHandler.get(level.getServer()).onFarmlandRemove(level, pos);
     }
 }

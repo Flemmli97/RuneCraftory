@@ -86,6 +86,7 @@ dependencies {
     //Mods useful for testing things
     modRuntimeOnly "curse.maven:mobbattle-268746:3952783"
     modRuntimeOnly "curse.maven:dummy-225738:3820503"
+    modRuntimeOnly "curse.maven:spark-361579:3824951"
 
     modRuntimeOnly "io.github.flemmli97:debugutils:1.18.2-1.0.1-forge"
 }

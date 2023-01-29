@@ -15,15 +15,15 @@ public class MobConfig {
     public static boolean monsterNeedBarn = true;
 
     public static int bellRadius = 48;
-    public static double gateHealth = 100;
+    public static double gateHealth = 75;
     public static double gateDef = 0;
     public static double gateMDef = 0;
-    public static double gateHealthGain = 30;
-    public static double gateDefGain = 2.5;
-    public static double gateMDefGain = 2.5;
+    public static double gateHealthGain = 25;
+    public static double gateDefGain = 1.5;
+    public static double gateMDefGain = 1.5;
     public static int gateXP = 25;
     public static int gateMoney = 5;
-    public static int spawnChance = 150;
+    public static int spawnChance = 100;
     public static double minDist = 32;
     public static int maxGroup = 1;
     public static int minNearby = 2;
