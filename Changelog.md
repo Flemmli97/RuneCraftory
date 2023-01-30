@@ -20,6 +20,8 @@ RuneCraftory 1.5.0
 - Tweaked various stats
 - Cook npc now provide recipe breads
 - Fix spam using bed increasing xp
+- Custom farmland block removed: Now uses a global system for farmland.
+  Unloaded farmland now tick etc.
 
 RuneCraftory 1.4.4
 ================
