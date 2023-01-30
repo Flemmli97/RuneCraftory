@@ -66,6 +66,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.LevelEvent;
@@ -132,10 +133,6 @@ public class EntityCalls {
     public static void trackEntity(Player player, Entity target) {
         if (player instanceof ServerPlayer serverPlayer && target instanceof LivingEntity living)
             Platform.INSTANCE.sendToClient(new S2CEntityDataSyncAll(living), serverPlayer);
-    }
-
-    public static void chunkLoad(Player player, ChunkPos pos) {
-
     }
 
     public static void onLoadEntity(LivingEntity living) {
@@ -436,5 +433,9 @@ public class EntityCalls {
         if (player instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 20));
         }
+    }
+
+    public static boolean shouldPreventFarmlandTrample(Entity entity, LevelAccessor world) {
+        return true;
     }
 }

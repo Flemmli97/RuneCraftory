@@ -27,15 +27,16 @@ public record GiantLootCondition(boolean isGiant) implements LootItemCondition {
 
     @Override
     public Set<LootContextParam<?>> getReferencedContextParams() {
-        return ImmutableSet.of(LootContextParams.BLOCK_ENTITY);
+        return ImmutableSet.of(LootContextParams.BLOCK_STATE);
     }
 
     @Override
     public boolean test(LootContext ctx) {
+        //TODO impl properly when doing giant crops
         //BlockState state = ctx.getParamOrNull(LootContextParams.BLOCK_STATE);
         //if (ctx.getParamOrNull(LootContextParams.BLOCK_STATE) instanceof BlockCrop crop)
         //    return state.getValue(BlockCrop)crop.isGiant() == this.isGiant;
-        return false;
+        return !this.isGiant;
     }
 
     public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<GiantLootCondition> {

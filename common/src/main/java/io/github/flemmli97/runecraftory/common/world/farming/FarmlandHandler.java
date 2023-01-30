@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.ChunkPos;
@@ -42,6 +43,7 @@ public class FarmlandHandler extends SavedData {
 
     private final Map<ResourceKey<Level>, Long2ObjectMap<Set<FarmlandData>>> scheduledUpdates = new HashMap<>();
     private final Map<ResourceKey<Level>, Long2ObjectMap<Set<BlockPos>>> scheduledRemoveUpdates = new HashMap<>();
+    private int lastUpdateDay;
 
     public FarmlandHandler() {
     }
@@ -77,7 +79,7 @@ public class FarmlandHandler extends SavedData {
     }
 
     public static void unloadChunk(ServerLevel level, ChunkPos pos) {
-
+        Platform.INSTANCE.sendToTracking(new S2CFarmlandRemovePacket(pos.toLong()), level, pos);
     }
 
     public void onFarmlandPlace(ServerLevel level, BlockPos pos) {
@@ -87,6 +89,8 @@ public class FarmlandHandler extends SavedData {
                 .computeIfAbsent(new ChunkPos(pos).toLong(), old -> new HashSet<>())
                 .add(data);
         data.updateFarmBlock(true);
+        data.onLoad(level, false);
+        this.scheduleUpdate(level, data);
         this.setDirty();
     }
 
@@ -97,6 +101,8 @@ public class FarmlandHandler extends SavedData {
             if (data != null) {
                 data.updateFarmBlock(false);
                 this.scheduleRemoveUpdate(level, data);
+                if (data.shouldBeRemoved())
+                    farms.remove(pos.asLong());
                 this.setDirty();
             }
         }
@@ -107,7 +113,10 @@ public class FarmlandHandler extends SavedData {
         if (chunkFarms != null) {
             Set<FarmlandData> farms = chunkFarms.get(pos.toLong());
             if (farms != null) {
-                farms.forEach(d -> d.onLoad(level));
+                farms.forEach(d -> {
+                    d.onLoad(level, true);
+                    this.scheduleUpdate(level, d);
+                });
                 this.setDirty();
             }
         }
@@ -121,6 +130,7 @@ public class FarmlandHandler extends SavedData {
                 farms.forEach(d -> d.onUnload(level));
                 this.setDirty();
             }
+            unloadChunk(level, pos);
         }
     }
 
@@ -144,12 +154,23 @@ public class FarmlandHandler extends SavedData {
                 .add(data.pos);
     }
 
+    public void sendChangesTo(ServerPlayer player, ChunkPos pos) {
+        Long2ObjectMap<Set<FarmlandData>> chunkFarms = this.farmlandChunks.get(player.getLevel().dimension());
+        if (chunkFarms != null) {
+            Set<FarmlandData> farms = chunkFarms.get(pos.toLong());
+            if (farms != null) {
+                Platform.INSTANCE.sendToTracking(new S2CFarmlandUpdatePacket(pos.toLong(), new ArrayList<>(farms)), player.getLevel(), pos);
+            }
+        }
+    }
+
     public void tick(ServerLevel level) {
-        if (WorldUtils.canUpdateDaily(level, -1)) {
+        if (WorldUtils.canUpdateDaily(level, this.lastUpdateDay)) {
             this.farmland.forEach((dim, m) -> m.values().removeIf(d -> {
                 d.tick(level, false);
                 return d.shouldBeRemoved();
             }));
+            this.lastUpdateDay = WorldUtils.day(level);
         }
         this.scheduledUpdates.forEach((dim, m) -> {
             ServerLevel actualLevel = level.dimension().equals(dim) ? level : level.getServer().getLevel(dim);
@@ -167,9 +188,11 @@ public class FarmlandHandler extends SavedData {
         this.setDirty();
     }
 
-    public void load(CompoundTag compoundNBT) {
-        compoundNBT.getAllKeys().forEach(levelKey -> {
-            CompoundTag levelTag = compoundNBT.getCompound(levelKey);
+    public void load(CompoundTag compoundTag) {
+        this.lastUpdateDay = compoundTag.getInt("LastUpdateDay");
+        CompoundTag farmTag = compoundTag.getCompound("Farms");
+        farmTag.getAllKeys().forEach(levelKey -> {
+            CompoundTag levelTag = farmTag.getCompound(levelKey);
             ResourceKey<Level> key = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(levelKey));
             levelTag.getAllKeys().forEach(l -> {
                 long packedPos = Long.parseLong(l);
@@ -189,11 +212,14 @@ public class FarmlandHandler extends SavedData {
 
     @Override
     public CompoundTag save(CompoundTag compoundTag) {
+        compoundTag.putInt("LastUpdateDay", this.lastUpdateDay);
+        CompoundTag farmTag = new CompoundTag();
         this.farmland.forEach((key, map) -> {
             CompoundTag levelTag = new CompoundTag();
             map.forEach((l, data) -> levelTag.put(l.toString(), data.save()));
-            compoundTag.put(key.location().toString(), levelTag);
+            farmTag.put(key.location().toString(), levelTag);
         });
+        compoundTag.put("Farms", farmTag);
         return compoundTag;
     }
 }

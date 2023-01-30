@@ -13,6 +13,8 @@ import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
@@ -264,7 +266,7 @@ public class FarmlandData {
         this.lastUpdateDay = WorldUtils.day(level);
         //If its not a farm block can do stuff without it being loaded
         if (!this.isFarmBlock) {
-            this.regenFarmlandStats();
+            this.normalizeLand();
             this.resetCrop();
             FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
             return;
@@ -297,7 +299,7 @@ public class FarmlandData {
         for (ExternalModifiers modifiers : this.scheduledData) {
             //Regen stats if unused
             if (!(cropState.getBlock() instanceof CropBlock crop)) {
-                this.regenFarmlandStats();
+                this.normalizeLand();
                 this.resetCrop();
                 if (!growHerb) {
                     if (cropState.isAir())
@@ -357,10 +359,10 @@ public class FarmlandData {
 
             if (didCropGrow) {
                 this.modifyHealth(null, -1);
-                this.applyGrowthFertilizer(null, -0.1f);
+                this.applyGrowthFertilizer(null, this.growth > 1 ? -0.1f : -0.05f);
                 this.modifyQuality(null, -0.05f);
             } else {
-                this.regenFarmlandStats();
+                this.normalizeLand();
             }
             if (maxAgeStop)
                 break;
@@ -380,11 +382,11 @@ public class FarmlandData {
         FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
     }
 
-    private void regenFarmlandStats() {
-        this.growth = Math.min(this.growth + 0.1F, DEFAULT_SPEED);
+    private void normalizeLand() {
+        this.growth = this.growth > DEFAULT_SPEED ? Math.max(this.growth - 0.1F, DEFAULT_SPEED) : Math.min(this.growth + 0.1F, DEFAULT_SPEED);
         this.modifyQuality(null, -0.1f);
         this.size = Mth.clamp(this.size - 0.05f, 0, 2);
-        this.health = Math.min(DEFAULT_HEALTH, ++this.health);
+        this.health = this.health > DEFAULT_HEALTH ? Math.max(this.health - 1, DEFAULT_HEALTH) : Math.min(this.health + 1, DEFAULT_HEALTH);
     }
 
     private void resetCrop() {
@@ -394,9 +396,8 @@ public class FarmlandData {
         this.cropProgress = 0;
     }
 
-    public void onLoad(ServerLevel level) {
-        int day = WorldUtils.day(level);
-        if (this.lastUpdateDay != day) {
+    public void onLoad(ServerLevel level, boolean tick) {
+        if (tick && this.lastUpdateDay != WorldUtils.day(level)) {
             level.getServer().tell(new TickTask(1, () -> this.tick(level, true)));
         }
         this.isLoaded = true;
@@ -417,8 +418,20 @@ public class FarmlandData {
         this.cropAge = nbt.getFloat("CropAge");
         this.cropLevel = nbt.getFloat("CropLevel");
         this.cropSize = nbt.getFloat("CropSize");
+        this.cropProgress = nbt.getInt("CropProgress");
 
         this.lastUpdateDay = nbt.getInt("LastUpdate");
+
+        this.scheduledStormTicks = nbt.getInt("ScheduledStormTicks");
+        this.scheduledWatering = nbt.getInt("ScheduledWaterAmount");
+        ListTag scheduledDataTag = nbt.getList("ScheduledData", Tag.TAG_COMPOUND);
+        scheduledDataTag.forEach(t -> {
+            CompoundTag lT = (CompoundTag) t;
+            this.scheduledData.add(new ExternalModifiers(EnumSeason.valueOf(lT.getString("Season")), EnumWeather.valueOf(lT.getString("Weather"))));
+        });
+
+        this.isLoaded = nbt.getBoolean("IsLoaded");
+        this.isFarmBlock = nbt.getBoolean("IsFarmBlock");
     }
 
     public CompoundTag save() {
@@ -432,11 +445,30 @@ public class FarmlandData {
         nbt.putFloat("CropAge", this.cropAge);
         nbt.putFloat("CropLevel", this.cropLevel);
         nbt.putFloat("CropSize", this.cropSize);
+        nbt.putInt("CropProgress", this.cropProgress);
 
         nbt.putInt("LastUpdate", this.lastUpdateDay);
+
+        nbt.putInt("ScheduledStormTicks", this.scheduledStormTicks);
+        nbt.putInt("LastUpdate", this.scheduledWatering);
+        nbt.putInt("ScheduledWaterAmount", this.lastUpdateDay);
+        ListTag scheduledDataTag = new ListTag();
+        this.scheduledData.forEach(mod -> {
+            CompoundTag lT = new CompoundTag();
+            lT.putString("Season", mod.season.name());
+            lT.putString("Weather", mod.weather.name());
+            scheduledDataTag.add(lT);
+        });
+        nbt.put("ScheduledData", scheduledDataTag);
+
+        nbt.putBoolean("IsLoaded", this.isLoaded);
+        nbt.putBoolean("IsFarmBlock", this.isFarmBlock);
         return nbt;
     }
 
+    /**
+     * Needs to match {@link FarmlandDataContainer#fromBuffer}
+     */
     public void writeToBuffer(FriendlyByteBuf buf) {
         buf.writeBlockPos(this.pos);
         buf.writeFloat(this.growth);
@@ -445,8 +477,20 @@ public class FarmlandData {
         buf.writeInt(this.health);
         buf.writeInt(this.defence);
         buf.writeInt(this.cropProgress);
-        buf.writeFloat(this.size);
+        buf.writeInt(Math.min(100, (int) this.size * 100));
         buf.writeFloat(this.cropLevel);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Farmland[%s, Loaded:%s, IsFarm:%s]",
+                this.pos, this.isLoaded, this.isFarmBlock);
+    }
+
+    public String toStringFull() {
+        return String.format("Farmland[%s, Loaded:%s, IsFarm:%s]: Growth:%s;Quality:%s;Size:%s;Health:%s;Defence:%s - Schedules:[StormTicks:%s;Watering:%s], Data: %s",
+                this.pos, this.isLoaded, this.isFarmBlock, this.growth, this.quality, this.size, this.health, this.defence,
+                this.scheduledStormTicks, this.scheduledWatering, this.scheduledData);
     }
 
     @Override

@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -38,17 +39,18 @@ public class FarmlandInfo extends GuiComponent {
         if (res == null || res.getType() != HitResult.Type.BLOCK)
             return;
         BlockHitResult blockHitResult = (BlockHitResult) res;
-        BlockState blockState = this.mc.level.getBlockState(blockHitResult.getBlockPos());
+        BlockPos pos = blockHitResult.getBlockPos();
+        BlockState blockState = this.mc.level.getBlockState(pos);
         boolean cropBlock = false;
         FarmlandDataContainer data = null;
 
         if (blockState.getBlock() instanceof CropBlock) {
-            blockState = this.mc.level.getBlockState(blockHitResult.getBlockPos().below());
-            data = ClientFarmlandHandler.INSTANCE.getData(blockHitResult.getBlockPos().below());
+            pos = pos.below();
+            blockState = this.mc.level.getBlockState(pos);
             cropBlock = true;
         }
         if (FarmlandHandler.isFarmBlock(blockState))
-            data = ClientFarmlandHandler.INSTANCE.getData(blockHitResult.getBlockPos().below());
+            data = ClientFarmlandHandler.INSTANCE.getData(pos);
         if (data == null)
             return;
 
@@ -56,7 +58,7 @@ public class FarmlandInfo extends GuiComponent {
         RenderSystem.setShaderTexture(0, texturepath);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        int sY = 40 + (cropBlock ? 50 : 0);
+        int sY = 60 + (cropBlock ? 50 : 0);
         int xPos = ClientConfig.farmlandPosition.positionX(this.mc.getWindow().getGuiScaledWidth(), 100, ClientConfig.farmlandX);
         int yPos = ClientConfig.farmlandPosition.positionY(this.mc.getWindow().getGuiScaledHeight(), sY, ClientConfig.farmlandY);
         this.blit(stack, xPos, yPos, 0, 0, 100, sY - 5);
@@ -70,8 +72,8 @@ public class FarmlandInfo extends GuiComponent {
                 growth.withStyle(ChatFormatting.GREEN);
             this.mc.font.draw(stack, new TranslatableComponent("magnifying_glass.view.crop.growth", growth), xPos, yPos, 0x000000);
             this.mc.font.draw(stack, new TranslatableComponent("magnifying_glass.view.crop.level", data.cropLevel()), xPos, yPos + 10, 0x000000);
-            MutableComponent giant = new TextComponent(data.cropSize() + "%");
-            if (data.cropSize() == 100)
+            MutableComponent giant = new TextComponent(data.cropSizeProgress() + "%");
+            if (data.cropSizeProgress() == 100)
                 giant.withStyle(ChatFormatting.GREEN);
             this.mc.font.draw(stack, new TranslatableComponent("magnifying_glass.view.crop.giant", giant), xPos, yPos + 10 * 2, 0x000000);
             yPos += 10 * 4;
@@ -86,6 +88,7 @@ public class FarmlandInfo extends GuiComponent {
         this.mc.font.draw(stack, new TranslatableComponent("magnifying_glass.view.health", health), xPos, yPos + 10, 0x000000);
         this.mc.font.draw(stack, new TranslatableComponent("magnifying_glass.view.level", this.formattedValue(data.quality())), xPos, yPos + 10 * 2, 0x000000);
         this.mc.font.draw(stack, new TranslatableComponent("magnifying_glass.view.giant", this.formattedValue(data.size())), xPos, yPos + 10 * 3, 0x000000);
+        this.mc.font.draw(stack, new TranslatableComponent("magnifying_glass.view.defence", this.formattedValue(data.defence())), xPos, yPos + 10 * 4, 0x000000);
     }
 
     private String formattedValue(float f) {

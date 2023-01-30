@@ -1,8 +1,12 @@
 package io.github.flemmli97.runecraftory.common.items.creative;
 
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -10,14 +14,24 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class ItemDebug extends Item {
 
     public ItemDebug(Item.Properties props) {
         super(props);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+        tooltipComponents.add(new TranslatableComponent("runecraftory.item.creative.tooltip").withStyle(ChatFormatting.DARK_RED));
     }
 
     @Override
@@ -48,11 +62,18 @@ public class ItemDebug extends Item {
     public InteractionResult useOn(UseOnContext context) {
         if (context.getLevel() instanceof ServerLevel serverLevel) {
             int f = serverLevel.getPoiManager().getFreeTickets(context.getClickedPos());
-            context.getPlayer().sendMessage(new TextComponent("Free " + f), Util.NIL_UUID);
+            context.getPlayer().sendMessage(new TextComponent("Free POITickets" + f), Util.NIL_UUID);
             int lvl = LevelCalc.levelFromPos(serverLevel, Vec3.atCenterOf(context.getClickedPos()));
-            context.getPlayer().sendMessage(new TextComponent("GateLevel: " + lvl), Util.NIL_UUID);
+            context.getPlayer().sendMessage(new TextComponent("GateLevel at pos: " + lvl), Util.NIL_UUID);
+            FarmlandHandler.get(serverLevel.getServer()).getData(serverLevel, context.getClickedPos())
+                    .ifPresent(d -> context.getPlayer().sendMessage(new TextComponent(d.toStringFull()), Util.NIL_UUID));
 
         }
         return super.useOn(context);
+    }
+
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return true;
     }
 }

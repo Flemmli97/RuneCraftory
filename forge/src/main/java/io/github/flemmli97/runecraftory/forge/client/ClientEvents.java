@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.forge.client;
 import com.mojang.datafixers.util.Either;
 import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
+import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -15,6 +16,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.IItemRenderProperties;
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -115,5 +117,10 @@ public class ClientEvents {
     @SubscribeEvent
     public static void shaking(EntityViewRenderEvent.CameraSetup event) {
         ClientCalls.renderShaking(event.getCamera(), event.getYaw(), event.getPitch(), event.getRoll(), (float) event.getPartialTicks(), event::setYaw, event::setPitch, event::setRoll);
+    }
+
+    @SubscribeEvent
+    public static void shaking(ClientPlayerNetworkEvent.LoggedOutEvent event) {
+        ClientFarmlandHandler.INSTANCE.onDisconnect();
     }
 }

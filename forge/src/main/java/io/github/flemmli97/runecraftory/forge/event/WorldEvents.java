@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.forge.event;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.world.GateSpawning;
@@ -85,6 +86,8 @@ public class WorldEvents {
     @SubscribeEvent
     public void onChunkUnLoad(ChunkEvent.Unload event) {
         if (event.getWorld() instanceof ServerLevel level)
-            FarmlandHandler.get(level.getServer()).onChunkLoad(level, event.getChunk().getPos());
+            FarmlandHandler.get(level.getServer()).onChunkUnLoad(level, event.getChunk().getPos());
+        else if (event.getWorld().isClientSide())
+            ClientFarmlandHandler.INSTANCE.onChunkUnLoad(event.getChunk().getPos());
     }
 }

@@ -26,6 +26,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerWakeUpEvent;
 import net.minecraftforge.event.entity.player.SleepingTimeCheckEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -142,5 +143,11 @@ public class EntityEvents {
             event.clearModifiers();
             map.forEach(event::addModifier);
         }
+    }
+
+    @SubscribeEvent
+    public void farmlandTrample(BlockEvent.FarmlandTrampleEvent event) {
+        if (EntityCalls.shouldPreventFarmlandTrample(event.getEntity(), event.getWorld()))
+            event.setCanceled(true);
     }
 }

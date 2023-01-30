@@ -26,7 +26,8 @@
     "AbstractContainerMenuAccessor",
     "ItemEntityMixin",
     "SnowLayerBlockMixin",
-    "EntityMixin"
+    "EntityMixin",
+    "FarmBlockMixin"
   ],
   "client": [
     "AtlasMixin",

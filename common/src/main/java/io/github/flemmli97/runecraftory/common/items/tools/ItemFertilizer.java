@@ -72,10 +72,10 @@ public class ItemFertilizer extends Item {
     public InteractionResult useOn(UseOnContext ctx) {
         if (!(ctx.getLevel() instanceof ServerLevel level))
             return InteractionResult.SUCCESS;
-        InteractionResult res = this.applyTo(level, ctx.getClickedPos(), ctx);
+        InteractionResult res = this.applyTo(level, ctx.getClickedPos(), ctx, false);
         if (res == InteractionResult.CONSUME) {
             getOtherForTargeted(ctx.getPlayer() == null ? Direction.NORTH : ctx.getPlayer().getDirection(), ctx.getClickedPos())
-                    .forEach(p -> this.applyTo(level, p, ctx));
+                    .forEach(p -> this.applyTo(level, p, ctx, true));
             if (ctx.getPlayer() instanceof ServerPlayer serverPlayer) {
                 if (!serverPlayer.isCreative())
                     ctx.getItemInHand().shrink(1);
@@ -85,7 +85,7 @@ public class ItemFertilizer extends Item {
         return res;
     }
 
-    private InteractionResult applyTo(ServerLevel level, BlockPos blockPos, UseOnContext ctx) {
+    private InteractionResult applyTo(ServerLevel level, BlockPos blockPos, UseOnContext ctx, boolean consecutive) {
         BlockState state = level.getBlockState(blockPos);
         if (FarmlandHandler.isFarmBlock(state)) {
             return FarmlandHandler.get(level.getServer())
@@ -97,10 +97,10 @@ public class ItemFertilizer extends Item {
                         }
                         return InteractionResult.PASS;
                     }).orElse(InteractionResult.PASS);
-        } else if (state.getBlock() instanceof BushBlock) {
+        } else if (consecutive || state.getBlock() instanceof BushBlock) {
             BlockPos below = blockPos.below();
             return FarmlandHandler.get(level.getServer())
-                    .getData(level, blockPos)
+                    .getData(level, below)
                     .map(d -> {
                         if (this.use.useItemOnFarmland(ctx.getItemInHand(), level, d, ctx.getPlayer())) {
                             Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.Type.FERTILIZER, below), level.getServer());

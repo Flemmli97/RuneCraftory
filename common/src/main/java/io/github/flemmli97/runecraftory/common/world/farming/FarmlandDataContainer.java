@@ -4,11 +4,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 
 public record FarmlandDataContainer(BlockPos pos, float growth, float quality, float size, int health, int defence,
-                                    int ageProgress, float cropSize, float cropLevel) {
+                                    int ageProgress, int cropSizeProgress, float cropLevel) {
 
     public static FarmlandDataContainer fromBuffer(FriendlyByteBuf buf) {
         return new FarmlandDataContainer(buf.readBlockPos(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readInt(), buf.readInt(),
-                buf.readInt(), buf.readFloat(), buf.readFloat());
+                buf.readInt(), buf.readInt(), buf.readFloat());
     }
 
     public void writeToBuffer(FriendlyByteBuf buf) {
@@ -19,7 +19,7 @@ public record FarmlandDataContainer(BlockPos pos, float growth, float quality, f
         buf.writeInt(this.health);
         buf.writeInt(this.defence);
         buf.writeInt(this.ageProgress);
-        buf.writeFloat(this.cropSize);
+        buf.writeInt(this.cropSizeProgress);
         buf.writeFloat(this.cropLevel);
     }
 

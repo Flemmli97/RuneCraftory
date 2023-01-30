@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class ClientFarmlandHandler {
     }
 
     public void updateChunk(long packedChunk, List<FarmlandDataContainer> list) {
-        Set<FarmlandDataContainer> chunkMap = this.farmlandChunks.computeIfAbsent(packedChunk, new Long2ObjectOpenHashMap<>());
+        Set<FarmlandDataContainer> chunkMap = this.farmlandChunks.computeIfAbsent(packedChunk, key -> new HashSet<>());
         list.forEach(d -> {
             this.farmland.put(d.pos().asLong(), d);
             chunkMap.add(d);
