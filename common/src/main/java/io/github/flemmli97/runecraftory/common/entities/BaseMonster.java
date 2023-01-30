@@ -39,6 +39,7 @@ import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import io.github.flemmli97.runecraftory.common.world.BarnData;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -280,6 +281,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     this.targetSelector.addGoal(0, this.hurt);
                 }
                 this.goalSelector.removeGoal(this.farm);
+                if (this.level instanceof ServerLevel serverLevel)
+                    FarmlandHandler.get(serverLevel.getServer()).removeIrrigationPOI(serverLevel, this.getUUID());
             }
             switch (this.behaviourState()) {
                 case WANDER_HOME -> {
@@ -360,9 +363,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
         if (pos == null)
             return;
-        if (this.behaviourState() == Behaviour.FARM)
+        if (this.behaviourState() == Behaviour.FARM) {
             this.restrictTo(pos, MobConfig.farmRadius + 3);
-        else if (this.behaviourState() == Behaviour.WANDER)
+            if (this.level instanceof ServerLevel serverLevel)
+                FarmlandHandler.get(serverLevel.getServer()).addIrrigationPOI(serverLevel, this.getUUID(), this.blockPosition());
+        } else if (this.behaviourState() == Behaviour.WANDER)
             this.restrictTo(pos, 9);
     }
 

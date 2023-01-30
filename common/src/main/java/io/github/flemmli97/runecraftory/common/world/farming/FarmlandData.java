@@ -303,7 +303,9 @@ public class FarmlandData {
                 isWet = true;
             }
         }
-        boolean ignoreWater = !GeneralConfig.unloadedFarmlandCheckWater || (!GeneralConfig.disableFarmlandRandomtick && FarmlandHandler.isNearWater(level, this.pos));
+        boolean ignoreWater = FarmlandHandler.get(level.getServer()).hasWater(level, this.pos);
+        if (ignoreWater)
+            isWet = true;
         BlockPos cropPos = this.pos.above();
         BlockState cropState = level.getBlockState(cropPos);
 
