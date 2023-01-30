@@ -436,6 +436,6 @@ public class EntityCalls {
     }
 
     public static boolean shouldPreventFarmlandTrample(Entity entity, LevelAccessor world) {
-        return true;
+        return GeneralConfig.disableFarmlandTrample;
     }
 }

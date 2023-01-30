@@ -26,10 +26,15 @@ public class GeneralConfig {
     public static boolean disableFoodSystem = false;
     public static boolean disableItemStatSystem = false;
     public static boolean disableCropSystem = false;
-    public static float witherChance = 0.5f;
-    public static float runeyChance = 0.05f;
     public static boolean seasonedSnow = true;
     public static int maxPartySize = 3;
+
+    public static float witherChance = 0.5f;
+    public static float runeyChance = 0.05f;
+    public static boolean disableFarmlandRandomtick = true;
+    public static boolean disableFarmlandTrample = true;
+    public static boolean tickUnloadedFarmland = true;
+    public static boolean unloadedFarmlandCheckWater = true;
 
     public static boolean waila = true;
     public static boolean harvestCraft = true;

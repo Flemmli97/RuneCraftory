@@ -41,10 +41,15 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.disableFoodSystem = spec.disableFoodSystem.get();
         GeneralConfig.disableItemStatSystem = spec.disableItemStatSystem.get();
         GeneralConfig.disableCropSystem = spec.disableCropSystem.get();
-        GeneralConfig.witherChance = spec.witherChance.get().floatValue();
-        GeneralConfig.runeyChance = spec.runeyChance.get().floatValue();
         GeneralConfig.seasonedSnow = spec.seasonedSnow.get();
         GeneralConfig.maxPartySize = spec.maxPartySize.get();
+
+        GeneralConfig.witherChance = spec.witherChance.get().floatValue();
+        GeneralConfig.runeyChance = spec.runeyChance.get().floatValue();
+        GeneralConfig.disableFarmlandRandomtick = spec.disableFarmlandRandomtick.get();
+        GeneralConfig.disableFarmlandTrample = spec.disableFarmlandTrample.get();
+        GeneralConfig.tickUnloadedFarmland = spec.tickUnloadedFarmland.get();
+        GeneralConfig.unloadedFarmlandCheckWater = spec.unloadedFarmlandCheckWater.get();
 
         GeneralConfig.maxLevel = spec.maxLevel.get();
         GeneralConfig.maxSkillLevel = spec.maxSkillLevel.get();

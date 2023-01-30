@@ -264,6 +264,8 @@ public class FarmlandData {
 
     public void tick(ServerLevel level, boolean onLoad) {
         this.lastUpdateDay = WorldUtils.day(level);
+        if (!this.isLoaded && !GeneralConfig.tickUnloadedFarmland)
+            return;
         //If its not a farm block can do stuff without it being loaded
         if (!this.isFarmBlock) {
             this.normalizeLand();
@@ -283,6 +285,7 @@ public class FarmlandData {
             this.doStormingLogic(level, this.scheduledStormTicks);
         BlockState farm = level.getBlockState(this.pos);
         boolean isWet = this.isFarmBlock && farm.getValue(FarmBlock.MOISTURE) > 0;
+        boolean ignoreWater = !GeneralConfig.unloadedFarmlandCheckWater || (!GeneralConfig.disableFarmlandRandomtick && FarmlandHandler.isNearWater(level, this.pos));
         BlockPos cropPos = this.pos.above();
         BlockState cropState = level.getBlockState(cropPos);
 
@@ -317,7 +320,6 @@ public class FarmlandData {
             //Dont do stuff if crop is fully grown.
             //No withering unlike game (for e.g. building purposes)
             if (crop.isMaxAge(cropState)) {
-                this.resetCrop();
                 break;
             }
             //Handle crop growth
@@ -333,9 +335,6 @@ public class FarmlandData {
                             //Update the blockstate according to the growth age
                             BlockState newState = crop.getStateForAge(Math.min(stage, maxAge));
                             level.setBlock(cropPos, newState, Block.UPDATE_ALL);
-                            if (crop.isMaxAge(newState)) {
-                                this.resetCrop();
-                            }
                             Platform.INSTANCE.cropGrowEvent(level, cropPos, level.getBlockState(cropPos));
                         });
                     }
@@ -349,7 +348,8 @@ public class FarmlandData {
                     if (this.cropAge >= props.growth())
                         maxAgeStop = true;
                 }
-                isWet = this.scheduledWatering > 0;
+                if (!ignoreWater)
+                    isWet = this.scheduledWatering > 0;
                 this.scheduledWatering = Math.max(0, --this.scheduledWatering);
             } else if (cropState.getBlock() instanceof BlockCrop) {
                 if (level.random.nextFloat() < GeneralConfig.witherChance) {

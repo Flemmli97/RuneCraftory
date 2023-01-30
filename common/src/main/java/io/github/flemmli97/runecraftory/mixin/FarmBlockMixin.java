@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.mixin;
 
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.FarmBlock;
@@ -16,7 +17,7 @@ public abstract class FarmBlockMixin {
 
     @Inject(method = "randomTick", at = @At("HEAD"), cancellable = true)
     private void onRandomTick(BlockState state, ServerLevel level, BlockPos pos, Random random, CallbackInfo info) {
-        //if config
-        info.cancel();
+        if (GeneralConfig.disableFarmlandRandomtick)
+            info.cancel();
     }
 }

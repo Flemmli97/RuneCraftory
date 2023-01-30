@@ -19,8 +19,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -92,6 +94,17 @@ public class FarmlandHandler extends SavedData {
         data.onLoad(level, false);
         this.scheduleUpdate(level, data);
         this.setDirty();
+    }
+
+    /**
+     * {@link FarmBlock#isNearWater}
+     */
+    public static boolean isNearWater(LevelReader level, BlockPos pos) {
+        for (BlockPos blockPos : BlockPos.betweenClosed(pos.offset(-4, 0, -4), pos.offset(4, 1, 4))) {
+            if (!level.getFluidState(blockPos).is(FluidTags.WATER)) continue;
+            return true;
+        }
+        return false;
     }
 
     public void onFarmlandRemove(ServerLevel level, BlockPos pos) {
@@ -186,6 +199,10 @@ public class FarmlandHandler extends SavedData {
         this.scheduledRemoveUpdates.clear();
 
         this.setDirty();
+    }
+
+    private static void randomTick(ServerLevel level) {
+
     }
 
     public void load(CompoundTag compoundTag) {

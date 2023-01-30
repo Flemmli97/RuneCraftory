@@ -35,10 +35,15 @@ public class GeneralConfigSpec {
     public final CommentedJsonConfig.CommentedVal<Boolean> disableFoodSystem;
     public final CommentedJsonConfig.CommentedVal<Boolean> disableItemStatSystem;
     public final CommentedJsonConfig.CommentedVal<Boolean> disableCropSystem;
-    public final CommentedJsonConfig.DoubleVal witherChance;
-    public final CommentedJsonConfig.DoubleVal runeyChance;
     public final CommentedJsonConfig.CommentedVal<Boolean> seasonedSnow;
     public final CommentedJsonConfig.IntVal maxPartySize;
+
+    public final CommentedJsonConfig.DoubleVal witherChance;
+    public final CommentedJsonConfig.DoubleVal runeyChance;
+    public final CommentedJsonConfig.CommentedVal<Boolean> disableFarmlandRandomtick;
+    public final CommentedJsonConfig.CommentedVal<Boolean> disableFarmlandTrample;
+    public final CommentedJsonConfig.CommentedVal<Boolean> tickUnloadedFarmland;
+    public final CommentedJsonConfig.CommentedVal<Boolean> unloadedFarmlandCheckWater;
 
     public final boolean waila = true;
     public final boolean jei = true;
@@ -104,10 +109,17 @@ public class GeneralConfigSpec {
         this.disableFoodSystem = builder.comment("If true food will not provide benefits such as hp restoration etc defined per datapack.").define("Disable Food System", GeneralConfig.disableFoodSystem);
         this.disableItemStatSystem = builder.comment("If true item get no stats assigned as defined per datapack. ", "Note: Weapons will then do no damage").define("Disable Item Stat System", GeneralConfig.disableItemStatSystem);
         this.disableCropSystem = builder.comment("If true crop data will be disabled.", "Note: Crops from this mod will not function anymore").define("Disable Crop System", GeneralConfig.disableCropSystem);
-        this.witherChance = builder.comment("Change for a crop to wither if its not been watered", "If crop is already withered it and it doesnt get watered it will turn into withered grass").defineInRange("Wither Chance", GeneralConfig.witherChance, 0, 1);
-        this.runeyChance = builder.comment("Chance for a runey to spawn when harvesting fully grown crops").defineInRange("Runey Chance", GeneralConfig.runeyChance, 0, 1);
         this.seasonedSnow = builder.comment("If biome temperature should be adjusted based on current season. Can cause snowfall during winter").define("Seasoned Biome Temp", GeneralConfig.seasonedSnow);
         this.maxPartySize = builder.comment("Max size of a players party (Entities that follow you). Set to 0 for no limit").defineInRange("Max Party Size", GeneralConfig.maxPartySize, 0, Integer.MAX_VALUE);
+        builder.pop();
+
+        builder.push("Farming");
+        this.witherChance = builder.comment("Change for a crop to wither if its not been watered", "If crop is already withered it and it doesnt get watered it will turn into withered grass").defineInRange("Wither Chance", GeneralConfig.witherChance, 0, 1);
+        this.runeyChance = builder.comment("Chance for a runey to spawn when harvesting fully grown crops").defineInRange("Runey Chance", GeneralConfig.runeyChance, 0, 1);
+        this.disableFarmlandRandomtick = builder.comment("If true farmland dont get random ticked. Which means nearby water don't water it and it doesn't turn to dirt if there is no water", "You would need to manually water the farmland").define("Disable farmland random ticks", GeneralConfig.disableFarmlandRandomtick);
+        this.disableFarmlandTrample = builder.comment("If true disables trampling of farmland").define("Disable farmland trample", GeneralConfig.disableFarmlandTrample);
+        this.tickUnloadedFarmland = builder.comment("If true unloaded farmland gets ticked. So crops there will grow without it being loaded", "This also means that without water crops will wilt and die").define("Tick unloaded farmland", GeneralConfig.tickUnloadedFarmland);
+        this.unloadedFarmlandCheckWater = builder.comment("If true when loading farmland it will not check if the farmland had water during all the unloaded time.", "If the farmland is loaded it will still need water").define("Unloaded farmland check water", GeneralConfig.unloadedFarmlandCheckWater);
         builder.pop();
 
         builder.push("Multipliers");
