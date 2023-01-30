@@ -1134,7 +1134,13 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.spore.get(), new ItemStat.Builder(110, 19, 9)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
                 .addMonsterStat(ModAttributes.MAGIC.get(), 0.3));
-        this.addStat(ModItems.powderPoison.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.powderPoison.get(), new ItemStat.Builder(550, 80, 21)
+                .addAttribute(ModAttributes.MAGIC.get(), 2)
+                .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 2)
+                .addAttribute(ModAttributes.RF_POISON.get(), 5)
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.3)
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.3)
+                .addMonsterStat(ModAttributes.RF_POISON.get(), 0.5));
         this.addStat(ModItems.sporeHoly.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.fairyDust.get(), new ItemStat.Builder(300, 40, 19)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 5)
