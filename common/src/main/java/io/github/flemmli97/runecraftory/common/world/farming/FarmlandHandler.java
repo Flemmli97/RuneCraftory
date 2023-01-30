@@ -46,10 +46,14 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+/**
+ * Handler for farmland.
+ * Makes "farmland" not block bound and dependent on if the chunk is loaded or not
+ */
 public class FarmlandHandler extends SavedData {
 
     private static final String ID = "FarmlandData";
-    private static final int CHUNK_SIZE = 16 * 16 * 16;
+    private static final int CHUNK_SECTION_SIZE = 16 * 16 * 16;
 
     private final Map<ResourceKey<Level>, Long2ObjectMap<FarmlandData>> farmland = new HashMap<>();
     private final Map<ResourceKey<Level>, Long2ObjectMap<Set<FarmlandData>>> farmlandChunks = new HashMap<>();
@@ -284,7 +288,7 @@ public class FarmlandHandler extends SavedData {
             List<FarmlandData> list = new ArrayList<>(data);
             if (!list.isEmpty()) {
                 int size = list.size();
-                int chance = Mth.ceil(CHUNK_SIZE / (float) size);
+                int chance = Mth.ceil(CHUNK_SECTION_SIZE / (float) size);
                 for (int l = 0; l < randomTickSpeed; ++l) {
                     if (level.random.nextInt(chance) == 0)
                         finalCons.accept(list.get(level.random.nextInt(size)));

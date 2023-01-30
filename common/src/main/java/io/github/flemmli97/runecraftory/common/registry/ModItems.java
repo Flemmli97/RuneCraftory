@@ -653,7 +653,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> furBlueLion = mat("blue_lion_fur", Rarity.RARE, Texture.Y);
     public static final RegistryEntrySupplier<Item> chestHair = mat("chest_hair", Rarity.RARE, Texture.Y);
     public static final RegistryEntrySupplier<Item> spore = mat("spore", Texture.Y);
-    public static final RegistryEntrySupplier<Item> powderPoison = mat("poison_powder", Texture.N);
+    public static final RegistryEntrySupplier<Item> powderPoison = mat("poison_powder", Texture.Y);
     public static final RegistryEntrySupplier<Item> sporeHoly = mat("holy_spore", Texture.N);
     public static final RegistryEntrySupplier<Item> fairyDust = mat("fairy_dust", Texture.Y);
     public static final RegistryEntrySupplier<Item> fairyElixir = mat("fairy_elixir", Texture.Y);
@@ -710,7 +710,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> steelTen = mat("ten_fold_steel", Texture.N);
     public static final RegistryEntrySupplier<Item> glittaAugite = mat("glitta_augite", Texture.N);
     public static final RegistryEntrySupplier<Item> invisStone = mat("invisible_stone", Texture.Y);
-    public static final RegistryEntrySupplier<Item> lightOre = mat("light_ore", Texture.N);
+    public static final RegistryEntrySupplier<Item> lightOre = mat("light_ore", Texture.Y);
     public static final RegistryEntrySupplier<Item> runeSphereShard = mat("rune_sphere_shard", Rarity.RARE, Texture.N);
     public static final RegistryEntrySupplier<Item> shadeStone = mat("shade_stone", Texture.N);
     public static final RegistryEntrySupplier<Item> racoonLeaf = mat("racoon_leaf", Texture.N);
