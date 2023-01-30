@@ -27,7 +27,9 @@
     "ItemEntityMixin",
     "SnowLayerBlockMixin",
     "EntityMixin",
-    "FarmBlockMixin"
+    "FarmBlockMixin",
+    "CropBlockAccessor",
+    "BlockBehaviourMixin"
   ],
   "client": [
     "AtlasMixin",

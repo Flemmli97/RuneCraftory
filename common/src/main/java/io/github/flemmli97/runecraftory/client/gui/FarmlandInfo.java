@@ -17,6 +17,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -44,10 +45,10 @@ public class FarmlandInfo extends GuiComponent {
         boolean cropBlock = false;
         FarmlandDataContainer data = null;
 
-        if (blockState.getBlock() instanceof CropBlock) {
+        if (blockState.getBlock() instanceof BushBlock) {
             pos = pos.below();
             blockState = this.mc.level.getBlockState(pos);
-            cropBlock = true;
+            cropBlock = blockState.getBlock() instanceof CropBlock;
         }
         if (FarmlandHandler.isFarmBlock(blockState))
             data = ClientFarmlandHandler.INSTANCE.getData(pos);
@@ -58,7 +59,7 @@ public class FarmlandInfo extends GuiComponent {
         RenderSystem.setShaderTexture(0, texturepath);
         RenderSystem.enableBlend();
         RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        int sY = 60 + (cropBlock ? 50 : 0);
+        int sY = 60 + (cropBlock ? 40 : 0);
         int xPos = ClientConfig.farmlandPosition.positionX(this.mc.getWindow().getGuiScaledWidth(), 100, ClientConfig.farmlandX);
         int yPos = ClientConfig.farmlandPosition.positionY(this.mc.getWindow().getGuiScaledHeight(), sY, ClientConfig.farmlandY);
         this.blit(stack, xPos, yPos, 0, 0, 100, sY - 5);

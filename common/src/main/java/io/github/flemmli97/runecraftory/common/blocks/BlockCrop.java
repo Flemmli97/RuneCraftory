@@ -5,7 +5,12 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.mixin.CropBlockAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -25,10 +30,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
@@ -96,6 +105,28 @@ public class BlockCrop extends CropBlock {
 
     public Item getGiantCrop() {
         return this.giant.get();
+    }
+
+    public static void modifyCropDrops(BlockState state, LootContext.Builder builder, CropBlock block, List<ItemStack> list) {
+        CropProperties prop = block instanceof BlockCrop crop ? crop.properties().orElse(null) :
+                DataPackHandler.SERVER_PACK.cropManager().get(((CropBlockAccessor) block).getSeedItem().asItem());
+        if (prop != null) {
+            Vec3 pos = builder.getOptionalParameter(LootContextParams.ORIGIN);
+            int itemLevel = pos != null ? getCropLevel(builder.getLevel(), new BlockPos(pos)) : 1;
+            list.forEach(s -> modifyStack(prop, s, itemLevel));
+        }
+    }
+
+    private static int getCropLevel(ServerLevel level, BlockPos pos) {
+        return FarmlandHandler.get(level.getServer())
+                .getData(level, new BlockPos(pos)).map(FarmlandData::getCropLevel).orElse(1);
+    }
+
+    private static void modifyStack(CropProperties props, ItemStack stack, int level) {
+        if (stack.is(ModTags.SEEDS))
+            return;
+        stack.setCount(props.maxDrops());
+        ItemNBT.getLeveledItem(stack, level);
     }
 
     public static void harvestCropRightClick(BlockState state, Level level, BlockPos pos, Entity entity, ItemStack stack, CropProperties props, Function<ItemStack, ItemStack> stackConsumer) {
