@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.fabric.client;
 
 import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
+import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.client.ClientRegister;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.fabric.config.ClientConfigSpec;
@@ -9,6 +10,7 @@ import io.github.flemmli97.runecraftory.fabric.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.fabric.network.ClientPacketHandler;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
@@ -78,5 +80,6 @@ public class RuneCraftoryFabricClient implements ClientModInitializer {
             if (r != null)
                 ArmorRendererRegistryImpl.register(new ArmorRendererImpl(r, new ResourceLocation(e.getID().getNamespace(), "textures/models/armor/" + e.getID().getPath() + ".png")), e.get());
         });
+        ClientChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> ClientFarmlandHandler.INSTANCE.onChunkUnLoad(chunk.getPos())));
     }
 }

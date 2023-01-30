@@ -2,13 +2,12 @@ package io.github.flemmli97.runecraftory.common.entities.ai;
 
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
-import io.github.flemmli97.runecraftory.common.blocks.BlockFarm;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.BlockPlaceCtxHelper;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -86,10 +85,8 @@ public class TendCropsGoal extends Goal {
         Block block = state.getBlock();
         if (block instanceof CropBlock crop && crop.isMaxAge(state))
             return true;
-        if (block instanceof BlockCrop crop && crop.isMaxAge(state, level, pos))
-            return true;
         BlockState state2 = level.getBlockState(pos.below());
-        if (state2.is(ModBlocks.farmland.get()) && state2.getValue(FarmBlock.MOISTURE) < 7)
+        if (state2.is(ModTags.FARMLAND) && state2.getValue(FarmBlock.MOISTURE) < 7)
             return true;
         if (state2.getBlock() instanceof FarmBlock) {
             if (state.is(ModTags.MONSTER_CLEARABLE))
@@ -158,17 +155,17 @@ public class TendCropsGoal extends Goal {
                     this.entity.level.setBlock(this.selected, crop.getStateForAge(0), Block.UPDATE_ALL);
                 }
                 success = true;
-            } else if (block instanceof BlockCrop crop && crop.isMaxAge(state, this.entity.level, this.selected)) {
-                crop.harvestCrop(state, this.entity.level, this.selected, this.entity, ItemStack.EMPTY, this.entity.getCropInventory() != null ?
+            } else if (block instanceof BlockCrop crop && crop.isMaxAge(state)) {
+                BlockCrop.harvestCropRightClick(state, this.entity.level, this.selected, this.entity, ItemStack.EMPTY, crop.properties().orElse(null), this.entity.getCropInventory() != null ?
                         s -> Platform.INSTANCE.insertInto(this.entity.level.getBlockEntity(this.entity.getCropInventory()), s) : null);
                 this.entity.level.getEntities(EntityTypeTest.forClass(ItemEntity.class), this.entity.getBoundingBox().inflate(0.2), e -> true);
                 success = true;
             } else {
                 BlockPos pos = this.selected.below();
                 BlockState state2 = this.entity.level.getBlockState(pos);
-                if (state2.is(ModBlocks.farmland.get())) {
+                if (state2.is(ModTags.FARMLAND)) {
                     if (state2.getValue(FarmBlock.MOISTURE) < 7) {
-                        BlockFarm.waterLand((ServerLevel) this.entity.level, pos, state2);
+                        FarmlandHandler.waterLand((ServerLevel) this.entity.level, pos, state2);
                         success = true;
                     } else if (state.isAir()) {
                         if (this.entity.getSeedInventory() != null) {

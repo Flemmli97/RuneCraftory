@@ -2,33 +2,28 @@ package io.github.flemmli97.runecraftory.common.blocks;
 
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.blocks.tile.CropBlockEntity;
-import io.github.flemmli97.runecraftory.common.blocks.tile.FarmBlockEntity;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandData;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
+import io.github.flemmli97.runecraftory.mixin.CropBlockAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.BushBlock;
-import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.LevelEvent;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -38,7 +33,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -48,7 +43,7 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlock {
+public class BlockCrop extends CropBlock {
 
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
     public static final BooleanProperty WILTED = BooleanProperty.create("wilted");
@@ -67,58 +62,18 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
-        if (this.isMaxAge(state, level, pos)) {
-            this.harvestCrop(state, level, pos, player, player.getItemInHand(hand), null);
-            if (player instanceof ServerPlayer serverPlayer)
-                Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.FARMING, 2f));
-            return InteractionResult.SUCCESS;
-        }
-        return InteractionResult.PASS;
-    }
-
-    public void harvestCrop(BlockState state, Level level, BlockPos pos, Entity entity, ItemStack stack, Function<ItemStack, ItemStack> stackConsumer) {
-        BlockEntity tile = level.getBlockEntity(pos);
-        if (stackConsumer != null) {
-            if (level instanceof ServerLevel serverLevel) {
-                Block.getDrops(state, serverLevel, pos, tile, entity, stack)
-                        .forEach(s -> {
-                            ItemStack rest = stackConsumer.apply(s);
-                            if (!rest.isEmpty())
-                                Block.popResource(level, pos, rest);
-                        });
-                state.spawnAfterBreak(serverLevel, pos, ItemStack.EMPTY);
-            }
-        } else
-            dropResources(state, level, pos, tile, entity, stack);
-        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
-        if (tile instanceof CropBlockEntity && this.properties().map(CropProperties::regrowable).orElse(false)) {
-            ((CropBlockEntity) tile).onRegrowableHarvest(this);
-        } else
-            level.removeBlock(pos, false);
-        if (this.isMaxAge(state, level, pos) && entity instanceof ServerPlayer player)
-            spawnRuney(player, pos);
-    }
-
-    @Override
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
-        List<ItemStack> list = super.getDrops(state, builder);
-        BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (blockEntity instanceof CropBlockEntity crop && this.properties().map(p -> crop.age() >= p.growth()).orElse(false)
-                && !crop.isWilted())
-            list.forEach(stack -> this.modifyStack(stack, crop));
-        else
-            list.clear();
-        return list;
-    }
-
-    @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return SHAPE_BY_AGE[state.getValue(AGE)];
     }
 
-    public boolean isMaxAge(BlockState state, Level level, BlockPos pos) {
-        return state.getValue(AGE) == 3;
+    @Override
+    public IntegerProperty getAgeProperty() {
+        return AGE;
+    }
+
+    @Override
+    public int getMaxAge() {
+        return 3;
     }
 
     public Optional<CropProperties> properties() {
@@ -126,40 +81,17 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
     }
 
     @Override
-    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-        return state.is(ModTags.FARMLAND);
+    public boolean isRandomlyTicking(BlockState state) {
+        return false;
     }
 
     @Override
-    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        BlockPos blockPos = pos.below();
-        return (level.getRawBrightness(pos, 0) >= 8 || level.canSeeSky(pos)) && this.mayPlaceOn(level.getBlockState(blockPos), level, blockPos);
-    }
-
-    private void modifyStack(ItemStack stack, CropBlockEntity tile) {
-        this.properties().ifPresent(prop -> stack.setCount(prop.maxDrops()));
-        ItemNBT.getLeveledItem(stack, tile.level());
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random) {
     }
 
     @Override
-    public boolean isValidBonemealTarget(BlockGetter level, BlockPos pos, BlockState state, boolean isClient) {
-        return level.getBlockEntity(pos.below()) instanceof FarmBlockEntity farm && farm.canUseBonemeal();
-    }
-
-    @Override
-    public boolean isBonemealSuccess(Level level, Random rand, BlockPos pos, BlockState state) {
-        return true;
-    }
-
-    @Override
-    public void performBonemeal(ServerLevel level, Random rand, BlockPos pos, BlockState state) {
-        if (level.getBlockEntity(pos.below()) instanceof FarmBlockEntity farm)
-            farm.applyBonemeal();
-    }
-
-    @Override
-    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
-        return ItemNBT.getLeveledItem(super.getCloneItemStack(level, pos, state), 1);
+    protected ItemLike getBaseSeedId() {
+        return this.seed.get();
     }
 
     @Override
@@ -175,9 +107,51 @@ public class BlockCrop extends BushBlock implements BonemealableBlock, EntityBlo
         return this.giant.get();
     }
 
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new CropBlockEntity(pos, state);
+    public static void modifyCropDrops(BlockState state, LootContext.Builder builder, CropBlock block, List<ItemStack> list) {
+        CropProperties prop = block instanceof BlockCrop crop ? crop.properties().orElse(null) :
+                DataPackHandler.SERVER_PACK.cropManager().get(((CropBlockAccessor) block).getSeedItem().asItem());
+        if (prop != null) {
+            Vec3 pos = builder.getOptionalParameter(LootContextParams.ORIGIN);
+            int itemLevel = pos != null ? getCropLevel(builder.getLevel(), new BlockPos(pos)) : 1;
+            list.forEach(s -> modifyStack(prop, s, itemLevel));
+        }
+    }
+
+    private static int getCropLevel(ServerLevel level, BlockPos pos) {
+        return FarmlandHandler.get(level.getServer())
+                .getData(level, new BlockPos(pos)).map(FarmlandData::getCropLevel).orElse(1);
+    }
+
+    private static void modifyStack(CropProperties props, ItemStack stack, int level) {
+        if (stack.is(ModTags.SEEDS))
+            return;
+        stack.setCount(props.maxDrops());
+        ItemNBT.getLeveledItem(stack, level);
+    }
+
+    public static void harvestCropRightClick(BlockState state, Level level, BlockPos pos, Entity entity, ItemStack stack, CropProperties props, Function<ItemStack, ItemStack> stackConsumer) {
+        if (!(level instanceof ServerLevel serverLevel) || !(state.getBlock() instanceof CropBlock cropBlock))
+            return;
+        if (stackConsumer != null) {
+            Block.getDrops(state, serverLevel, pos, null, entity, stack)
+                    .forEach(s -> {
+                        ItemStack rest = stackConsumer.apply(s);
+                        if (!rest.isEmpty())
+                            Block.popResource(level, pos, rest);
+                    });
+            state.spawnAfterBreak(serverLevel, pos, ItemStack.EMPTY);
+        } else
+            dropResources(state, level, pos, null, entity, stack);
+        level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, pos, Block.getId(state));
+        if (props != null && props.regrowable()) {
+            //Actually handled at block state change detection
+            level.setBlock(pos, state.setValue(cropBlock.getAgeProperty(), 0), Block.UPDATE_ALL);
+        } else
+            level.removeBlock(pos, false);
+        if (cropBlock.isMaxAge(state) && entity instanceof ServerPlayer player) {
+            spawnRuney(player, pos);
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 2f));
+        }
     }
 
     public static void spawnRuney(ServerPlayer player, BlockPos pos) {

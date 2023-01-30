@@ -18,7 +18,8 @@
     "PhantomSpawnerMixin",
     "PlayerMixin",
     "ServerPlayerGameModeMixin",
-    "BonemealMixin"
+    "BonemealMixin",
+    "FarmBlockMixin"
   ],
   "client": [
     "GuiMixin",

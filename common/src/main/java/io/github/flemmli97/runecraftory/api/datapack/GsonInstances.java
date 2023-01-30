@@ -16,7 +16,7 @@ public class GsonInstances {
             .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(Suppliers.memoize(ModSpells.SPELLREGISTRY::get))).create();
 
 
-    public static final Gson ATTRIBUTE_EFFECTS = new GsonBuilder().enableComplexMapKeySerialization()
+    public static final Gson ATTRIBUTE_EFFECTS = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting()
             .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(Suppliers.memoize(PlatformUtils.INSTANCE::attributes)))
             .registerTypeAdapter(MobEffect.class, new RegistryObjectSerializer<>(Suppliers.memoize(PlatformUtils.INSTANCE::effects))).create();
 }

@@ -141,6 +141,8 @@ public class LangGen implements DataProvider {
                 this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
 
+        this.add("runecraftory.item.creative.tooltip", "Debug item used for testing things");
+
         for (RegistryEntrySupplier<Block> sup : ModBlocks.BLOCKS.getEntries()) {
             if (sup.get() instanceof BlockCrop)
                 this.add(sup.get(), this.simpleTranslation(sup.getID()));
@@ -392,6 +394,7 @@ public class LangGen implements DataProvider {
         this.add("magnifying_glass.view.health", "Health: %s");
         this.add("magnifying_glass.view.level", "Quality: %s");
         this.add("magnifying_glass.view.giant", "Size: %s");
+        this.add("magnifying_glass.view.defence", "Defence: %s");
 
         this.add("runecraftory_book", "Runepedia");
         this.add("runecraftory.patchouli.subtitle", "");

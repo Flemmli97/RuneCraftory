@@ -482,7 +482,6 @@ public class Loottables extends LootTableProvider {
 
         @Override
         public void accept(BiConsumer<ResourceLocation, LootTable.Builder> cons) {
-            this.dropOther(ModBlocks.farmland.get(), Blocks.DIRT);
             this.add(ModBlocks.mushroom.get(), LootTable.lootTable().withPool(herbLoot(ModItems.mushroom.get())));
             this.add(ModBlocks.monarchMushroom.get(), LootTable.lootTable().withPool(herbLoot(ModItems.monarchMushroom.get())));
             this.add(ModBlocks.elliLeaves.get(), LootTable.lootTable().withPool(herbLoot(ModItems.elliLeaves.get())));

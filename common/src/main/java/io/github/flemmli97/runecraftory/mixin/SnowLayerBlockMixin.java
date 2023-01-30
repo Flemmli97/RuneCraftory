@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(SnowLayerBlock.class)
-public class SnowLayerBlockMixin {
+public abstract class SnowLayerBlockMixin {
 
     @Inject(method = "getStateForPlacement", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/state/BlockState;is(Lnet/minecraft/world/level/block/Block;)Z"), cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD)
     private void replace(BlockPlaceContext context, CallbackInfoReturnable<BlockState> info, BlockState state) {

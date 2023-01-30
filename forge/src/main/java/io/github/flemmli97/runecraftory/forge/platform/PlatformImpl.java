@@ -18,6 +18,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
@@ -38,6 +39,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.BaseSpawner;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -114,6 +116,11 @@ public class PlatformImpl implements Platform {
     @Override
     public void sendToTrackingAndSelf(Packet message, Entity e) {
         PacketHandler.sendToTrackingAndSelf(message, e);
+    }
+
+    @Override
+    public void sendToTracking(Packet message, ServerLevel level, ChunkPos pos) {
+        PacketHandler.sendToTracking(message, level, pos);
     }
 
     @Override

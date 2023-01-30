@@ -1,6 +1,6 @@
 {
   "name": "runecraftory.patchouli.category.farming",
   "description": "runecraftory.patchouli.category.farming.desc",
-  "icon": "runecraftory:farmland",
+  "icon": "minecraft:farmland",
   "sortnum": 1
 }

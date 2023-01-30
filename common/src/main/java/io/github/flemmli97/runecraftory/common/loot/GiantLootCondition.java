@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import io.github.flemmli97.runecraftory.common.blocks.tile.CropBlockEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModLootCondition;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -28,14 +27,16 @@ public record GiantLootCondition(boolean isGiant) implements LootItemCondition {
 
     @Override
     public Set<LootContextParam<?>> getReferencedContextParams() {
-        return ImmutableSet.of(LootContextParams.BLOCK_ENTITY);
+        return ImmutableSet.of(LootContextParams.BLOCK_STATE);
     }
 
     @Override
     public boolean test(LootContext ctx) {
-        if (ctx.getParamOrNull(LootContextParams.BLOCK_ENTITY) instanceof CropBlockEntity crop)
-            return crop.isGiant() == this.isGiant;
-        return false;
+        //TODO impl properly when doing giant crops
+        //BlockState state = ctx.getParamOrNull(LootContextParams.BLOCK_STATE);
+        //if (ctx.getParamOrNull(LootContextParams.BLOCK_STATE) instanceof BlockCrop crop)
+        //    return state.getValue(BlockCrop)crop.isGiant() == this.isGiant;
+        return !this.isGiant;
     }
 
     public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<GiantLootCondition> {

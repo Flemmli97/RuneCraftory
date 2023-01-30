@@ -1,7 +1,6 @@
 {
   "replace": false,
   "values": [
-    "minecraft:farmland",
-    "runecraftory:farmland"
+    "minecraft:farmland"
   ]
 }

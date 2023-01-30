@@ -8,6 +8,7 @@ public enum EnumSkills {
     HAMMERAXE("skill.hammer_and_axe", GainType.SLOW),
     DUAL("skill.dual_sword", GainType.SLOW),
     FIST("skill.fists", GainType.SLOW),
+
     FIRE("skill.fire", GainType.SLOW),
     WATER("skill.water", GainType.SLOW),
     EARTH("skill.earth", GainType.SLOW),
@@ -15,25 +16,30 @@ public enum EnumSkills {
     DARK("skill.dark", GainType.SLOW),
     LIGHT("skill.light", GainType.SLOW),
     LOVE("skill.love", GainType.SLOW),
+
     FARMING("skill.farming", GainType.COMMON),
     LOGGING("skill.logging", GainType.COMMON),
     MINING("skill.mining", GainType.COMMON),
     FISHING("skill.fishing", GainType.VERYFAST),
+
     COOKING("skill.cooking", GainType.VERYFAST),
     FORGING("skill.forging", GainType.VERYFAST),
     CHEMISTRY("skill.chemistry", GainType.VERYFAST),
     CRAFTING("skill.crafting", GainType.VERYFAST),
+
     SLEEPING("skill.sleeping", GainType.FAST),
     SEARCHING("skill.searching", GainType.VERYFAST),
     WALKING("skill.walking", GainType.COMMON),
     EATING("skill.eating", GainType.VERYFAST),
     DEFENCE("skill.defence", GainType.COMMON),
+
     RESPOISON("skill.poison_res", GainType.FAST),
     RESSEAL("skill.seal_res", GainType.FAST),
     RESPARA("skill.paralysis_res", GainType.FAST),
     RESSLEEP("skill.sleep_res", GainType.FAST),
     RESFAT("skill.fatigue_res", GainType.FAST),
     RESCOLD("skill.cold_res", GainType.FAST),
+
     BATH("skill.bathing", GainType.FAST),
     TAMING("skill.taming", GainType.FAST),
     LEADER("skill.leadership", GainType.FAST);
@@ -63,6 +69,7 @@ public enum EnumSkills {
         COMMON,
         SLOW,
         FAST,
-        VERYFAST
+        VERYFAST,
+        //CRAFTING;
     }
 }

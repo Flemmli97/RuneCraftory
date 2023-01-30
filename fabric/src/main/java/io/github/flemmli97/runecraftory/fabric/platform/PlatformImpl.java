@@ -27,6 +27,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
@@ -48,6 +49,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.BaseSpawner;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -159,6 +161,13 @@ public class PlatformImpl implements Platform {
         PlayerLookup.tracking(e).forEach(player -> ServerPlayNetworking.send(player, message.getID(), buf));
         if (e instanceof ServerPlayer serverPlayer)
             ServerPlayNetworking.send(serverPlayer, message.getID(), buf);
+    }
+
+    @Override
+    public void sendToTracking(Packet message, ServerLevel level, ChunkPos pos) {
+        FriendlyByteBuf buf = PacketByteBufs.create();
+        message.write(buf);
+        PlayerLookup.tracking(level, pos).forEach(player -> ServerPlayNetworking.send(player, message.getID(), buf));
     }
 
     @Override

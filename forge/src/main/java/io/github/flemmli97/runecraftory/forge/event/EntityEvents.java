@@ -11,7 +11,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.ItemAttributeModifierEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -86,12 +85,6 @@ public class EntityEvents {
     }
 
     @SubscribeEvent
-    public void hoeTill(BlockEvent.BlockToolModificationEvent event) {
-        if (event.isSimulated())
-            event.setFinalState(EntityCalls.hoeTill(() -> ToolActions.DEFAULT_HOE_ACTIONS.contains(ToolActions.HOE_DIG), event.getFinalState()));
-    }
-
-    @SubscribeEvent
     public void sleep(SleepingTimeCheckEvent event) {
         if (GeneralConfig.modifyBed)
             event.setResult(Event.Result.ALLOW);
@@ -150,5 +143,11 @@ public class EntityEvents {
             event.clearModifiers();
             map.forEach(event::addModifier);
         }
+    }
+
+    @SubscribeEvent
+    public void farmlandTrample(BlockEvent.FarmlandTrampleEvent event) {
+        if (EntityCalls.shouldPreventFarmlandTrample(event.getEntity(), event.getWorld()))
+            event.setCanceled(true);
     }
 }

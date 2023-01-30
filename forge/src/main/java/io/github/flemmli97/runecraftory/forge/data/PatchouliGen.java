@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import xyz.brassgoggledcoders.patchouliprovider.BookBuilder;
 import xyz.brassgoggledcoders.patchouliprovider.CategoryBuilder;
 import xyz.brassgoggledcoders.patchouliprovider.PatchouliBookProvider;
@@ -79,7 +80,7 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .build()
                 .build();
 
-        book.addCategory("category.farming", "runecraftory.patchouli.category.farming", "runecraftory.patchouli.category.farming.desc", new ItemStack(ModItems.farmland.get()))
+        book.addCategory("category.farming", "runecraftory.patchouli.category.farming", "runecraftory.patchouli.category.farming.desc", new ItemStack(Blocks.FARMLAND))
                 .setSortnum(1)
 
                 .addEntry("entry.farming", "runecraftory.patchouli.entry.farming", new ItemStack(ModItems.turnipSeeds.get()))

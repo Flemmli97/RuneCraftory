@@ -51,6 +51,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -280,9 +281,14 @@ public class ClientCalls {
 
     public static boolean onBlockHighlightRender(Level level, PoseStack poseStack, VertexConsumer consumer, Entity entity, double camX, double camY, double camZ, BlockPos pos, BlockState state) {
         if (entity instanceof LivingEntity living && living.getMainHandItem().getItem() instanceof ItemFertilizer) {
+            boolean targetingCrop = level.getBlockState(pos).getBlock() instanceof BushBlock;
             ItemFertilizer.getOtherForTargeted(entity.getDirection(), pos)
                     .forEach(p -> {
                         BlockState state1 = level.getBlockState(p);
+                        if (targetingCrop && state1.isAir()) {
+                            p = p.below();
+                            state1 = level.getBlockState(p);
+                        }
                         if (!state1.isAir() && level.getWorldBorder().isWithinBounds(p))
                             renderShape(poseStack, consumer, state1.getShape(level, p, CollisionContext.of(entity)), p.getX() - camX, p.getY() - camY, p.getZ() - camZ, 0.0F, 0.0F, 0.0F, 0.4F);
                     });

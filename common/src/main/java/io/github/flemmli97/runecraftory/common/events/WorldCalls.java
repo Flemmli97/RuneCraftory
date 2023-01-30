@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModFeatures;
 import io.github.flemmli97.runecraftory.common.world.GateSpawning;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
+import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -59,6 +60,7 @@ public class WorldCalls {
     public static void daily(Level level) {
         if (level instanceof ServerLevel serverLevel && level.dimension().equals(Level.OVERWORLD)) {
             WorldHandler.get(serverLevel.getServer()).update(serverLevel);
+            FarmlandHandler.get(serverLevel.getServer()).tick(serverLevel);
         }
     }
 
