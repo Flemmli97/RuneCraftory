@@ -1,10 +1,12 @@
 package io.github.flemmli97.runecraftory.common.world.farming;
 
+import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.network.S2CFarmlandRemovePacket;
 import io.github.flemmli97.runecraftory.common.network.S2CFarmlandUpdatePacket;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
+import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -20,7 +22,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -35,10 +39,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 public class FarmlandHandler extends SavedData {
 
     private static final String ID = "FarmlandData";
+    private static final int CHUNK_SIZE = 16 * 16 * 16;
 
     private final Map<ResourceKey<Level>, Long2ObjectMap<FarmlandData>> farmland = new HashMap<>();
     private final Map<ResourceKey<Level>, Long2ObjectMap<Set<FarmlandData>>> farmlandChunks = new HashMap<>();
@@ -185,6 +191,11 @@ public class FarmlandHandler extends SavedData {
             }));
             this.lastUpdateDay = WorldUtils.day(level);
         }
+        this.farmlandChunks.forEach((dim, m) -> {
+            ServerLevel actualLevel = level.dimension().equals(dim) ? level : level.getServer().getLevel(dim);
+            if (actualLevel != null)
+                this.randomTick(actualLevel, m);
+        });
         this.scheduledUpdates.forEach((dim, m) -> {
             ServerLevel actualLevel = level.dimension().equals(dim) ? level : level.getServer().getLevel(dim);
             if (actualLevel != null)
@@ -201,8 +212,28 @@ public class FarmlandHandler extends SavedData {
         this.setDirty();
     }
 
-    private static void randomTick(ServerLevel level) {
-
+    private void randomTick(ServerLevel level, Long2ObjectMap<Set<FarmlandData>> m) {
+        EnumWeather weather = WorldHandler.get(level.getServer()).currentWeather();
+        Consumer<FarmlandData> cons = null;
+        if (weather == EnumWeather.STORM)
+            cons = d -> d.onStorming(level);
+        else if (level.isRaining())
+            cons = d -> d.onWatering(level);
+        if (cons == null)
+            return;
+        int randomTickSpeed = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
+        Consumer<FarmlandData> finalCons = cons;
+        m.forEach((packedChunk, data) -> {
+            List<FarmlandData> list = new ArrayList<>(data);
+            if (!list.isEmpty()) {
+                int size = list.size();
+                int chance = Mth.ceil(CHUNK_SIZE / (float) size);
+                for (int l = 0; l < randomTickSpeed; ++l) {
+                    if (level.random.nextInt(chance) == 0)
+                        finalCons.accept(list.get(level.random.nextInt(size)));
+                }
+            }
+        });
     }
 
     public void load(CompoundTag compoundTag) {

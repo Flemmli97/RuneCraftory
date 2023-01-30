@@ -61,7 +61,7 @@ public class FarmlandData {
     private int cropProgress;
 
     private int lastUpdateDay;
-    private int scheduledStormTicks, scheduledWatering;
+    private int scheduledStormTicks, scheduledWatering, lastWeatherDay;
     private final List<ExternalModifiers> scheduledData = new ArrayList<>();
 
     private boolean isLoaded, isFarmBlock;
@@ -207,10 +207,20 @@ public class FarmlandData {
     //===== Update stuff
 
     /**
-     * Use when the farmland is not loaded and it gets watered from something (e.g. weather)
+     * Use when the farmland gets watered from something
      */
-    public void scheduleFarmlandWatering(ServerLevel level) {
-        this.scheduledWatering++;
+    public void onWatering(ServerLevel level) {
+        if (!this.isFarmBlock)
+            return;
+        int day = WorldUtils.day(level);
+        if (!this.isLoaded && this.lastWeatherDay != day) {
+            this.scheduledWatering++;
+            this.lastWeatherDay = day;
+            return;
+        }
+        BlockState farm = level.getBlockState(this.pos);
+        if (farm.getValue(FarmBlock.MOISTURE) < 7)
+            level.setBlock(this.pos, farm.setValue(FarmBlock.MOISTURE, 7), Block.UPDATE_ALL);
     }
 
     /**
@@ -219,11 +229,14 @@ public class FarmlandData {
     public void onStorming(ServerLevel level) {
         if (!this.isFarmBlock)
             return;
-        if (!this.isLoaded) {
+        int day = WorldUtils.day(level);
+        if (!this.isLoaded && this.lastWeatherDay != day) {
+            this.onWatering(level);
             this.scheduledStormTicks++;
-            this.scheduleFarmlandWatering(level);
+            this.lastWeatherDay = day;
             return;
         }
+        this.onWatering(level);
         this.doStormingLogic(level, 1);
     }
 
@@ -279,12 +292,17 @@ public class FarmlandData {
             this.scheduledData.add(ext);
             return;
         }
-        if (!onLoad) {
-            this.scheduledData.add(ext);
-        } else //On load perform the missed storms
-            this.doStormingLogic(level, this.scheduledStormTicks);
         BlockState farm = level.getBlockState(this.pos);
         boolean isWet = this.isFarmBlock && farm.getValue(FarmBlock.MOISTURE) > 0;
+        if (!onLoad) {
+            this.scheduledData.add(ext);
+        } else {//On load perform the missed storms
+            this.doStormingLogic(level, this.scheduledStormTicks);
+            if (!isWet && this.scheduledWatering > 0 && farm.getBlock() instanceof FarmBlock) {
+                this.scheduledWatering--;
+                isWet = true;
+            }
+        }
         boolean ignoreWater = !GeneralConfig.unloadedFarmlandCheckWater || (!GeneralConfig.disableFarmlandRandomtick && FarmlandHandler.isNearWater(level, this.pos));
         BlockPos cropPos = this.pos.above();
         BlockState cropState = level.getBlockState(cropPos);
@@ -421,6 +439,7 @@ public class FarmlandData {
         this.cropProgress = nbt.getInt("CropProgress");
 
         this.lastUpdateDay = nbt.getInt("LastUpdate");
+        this.lastWeatherDay = nbt.getInt("LastWeatherDay");
 
         this.scheduledStormTicks = nbt.getInt("ScheduledStormTicks");
         this.scheduledWatering = nbt.getInt("ScheduledWaterAmount");
@@ -448,6 +467,7 @@ public class FarmlandData {
         nbt.putInt("CropProgress", this.cropProgress);
 
         nbt.putInt("LastUpdate", this.lastUpdateDay);
+        nbt.putInt("LastWeatherDay", this.lastWeatherDay);
 
         nbt.putInt("ScheduledStormTicks", this.scheduledStormTicks);
         nbt.putInt("LastUpdate", this.scheduledWatering);
