@@ -17,6 +17,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
+import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
@@ -27,6 +28,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.Deserializers;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -51,10 +53,11 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       @Nullable Pair<EnumSeason, Integer> birthday,
                       int weight, String neutralGiftResponse,
                       Map<ConversationType, ConversationSet> interactions,
-                      Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule) {
+                      Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
+                      @Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease) {
 
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, null, null, null, 1, "npc.default.gift.neutral",
-            buildDefaultInteractionMap(), Map.of(), null);
+            buildDefaultInteractionMap(), Map.of(), null, null, null);
 
     private static Map<ConversationType, ConversationSet> buildDefaultInteractionMap() {
         ImmutableMap.Builder<ConversationType, ConversationSet> builder = new ImmutableMap.Builder<>();
@@ -80,24 +83,25 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
     public static final Codec<NPCData> CODEC = RecordCodecBuilder.create(inst ->
             inst.group(
-                    filledMap(ConversationType.class, Codec.unboundedMap(CodecHelper.enumCodec(ConversationType.class, null), ConversationSet.CODEC))
-                            .fieldOf("interactions").forGetter(d -> d.interactions),
                     NPCSchedule.Schedule.CODEC.optionalFieldOf("schedule").forGetter(d -> Optional.ofNullable(d.schedule)),
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("baseStats").forGetter(d -> Optional.ofNullable(d.baseStats)),
+                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("statIncrease").forGetter(d -> Optional.ofNullable(d.statIncrease)),
 
-                    ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
                     Codec.STRING.fieldOf("neutralGiftResponse").forGetter(d -> d.neutralGiftResponse),
                     Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("giftItems").forGetter(d -> d.giftItems),
+                    filledMap(ConversationType.class, Codec.unboundedMap(CodecHelper.enumCodec(ConversationType.class, null), ConversationSet.CODEC))
+                            .fieldOf("interactions").forGetter(d -> d.interactions),
 
-                    ModNPCJobs.CODEC.optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession)),
                     ResourceLocation.CODEC.optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look)),
                     WorldUtils.DATE.optionalFieldOf("birthday").forGetter(d -> Optional.ofNullable(d.birthday)),
+                    ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
 
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
-                    CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender)
-            ).apply(inst, ((interactions, schedule, weight, neutralGift, giftItems, profession, look, birthday, name, surname, gender) -> new NPCData(name.orElse(null), surname.orElse(null),
-                    gender, profession.orElse(null), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, giftItems, schedule.orElse(null)))));
-
+                    CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
+                    ModNPCJobs.CODEC.optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession))
+            ).apply(inst, ((schedule, baseStats, statIncrease, neutralGift, giftItems, interactions, look, birthday, weight, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
+                    gender, profession.orElse(null), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, giftItems, schedule.orElse(null), baseStats.orElse(null), statIncrease.orElse(null)))));
 
     public enum Gender {
         UNDEFINED,
@@ -133,6 +137,9 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private Pair<EnumSeason, Integer> birthday;
         private NPCSchedule.Schedule schedule;
         private ResourceLocation look;
+
+        private final Map<Attribute, Double> baseStats = new TreeMap<>(ModAttributes.SORTED);
+        private final Map<Attribute, Double> statIncrease = new TreeMap<>(ModAttributes.SORTED);
 
         public Builder(int weight) {
             this(weight, null, null, Gender.UNDEFINED);
@@ -187,6 +194,16 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
+        public Builder setBaseStat(Attribute attribute, double val) {
+            this.baseStats.put(attribute, val);
+            return this;
+        }
+
+        public Builder setStatIncrease(Attribute attribute, double val) {
+            this.statIncrease.put(attribute, val);
+            return this;
+        }
+
         public NPCData build() {
             if (this.neutralGiftResponse == null)
                 throw new IllegalStateException("Neutral gift response not set.");
@@ -194,7 +211,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 if (!this.interactions.containsKey(type))
                     throw new IllegalStateException("Missing interactions for " + type);
             }
-            return new NPCData(this.name, this.surname, this.gender, this.profession, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions, this.giftItems, this.schedule);
+            return new NPCData(this.name, this.surname, this.gender, this.profession, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions, this.giftItems, this.schedule,
+                    this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease);
         }
     }
 
@@ -321,12 +339,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
         public static final Codec<NPCLook> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
-                        CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
+                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
+                        Codec.pair(ResourceLocation.CODEC, ResourceLocation.CODEC).listOf().fieldOf("additionalFeatures").forGetter(d -> d.additionalFeatures),
+
                         ResourceLocation.CODEC.optionalFieldOf("texture").forGetter(d -> Optional.ofNullable(d.texture)),
                         Codec.STRING.optionalFieldOf("player_skin").forGetter(d -> Optional.ofNullable(d.playerSkin)),
-                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
-                        Codec.pair(ResourceLocation.CODEC, ResourceLocation.CODEC).listOf().fieldOf("additionalFeatures").forGetter(d -> d.additionalFeatures)
-                ).apply(inst, (gender, text, skin, weight, features) -> {
+                        CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender)
+                ).apply(inst, (weight, features, text, skin, gender) -> {
                     if (text.isEmpty() && skin.isEmpty())
                         throw new IllegalArgumentException("Both texture or skin cant be null");
                     return new NPCLook(gender, text.orElse(null), skin.orElse(null), weight, features);

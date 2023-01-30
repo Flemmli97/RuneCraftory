@@ -222,7 +222,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public EntityNPCBase(EntityType<? extends EntityNPCBase> type, Level level) {
         super(type, level);
-        this.applyAttributes();
+        this.applyAttributes(true);
         if (!level.isClientSide)
             this.addGoal();
         this.schedule = new NPCSchedule(this, this.getRandom());
@@ -237,11 +237,23 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return map;
     }
 
-    protected void applyAttributes() {
+    protected void applyAttributes(boolean regenHealth) {
+        if (this.data != null && this.data.baseStats() != null) {
+            this.data.baseStats().forEach((att, d) -> {
+                AttributeInstance inst = this.getAttribute(att);
+                if (inst != null) {
+                    inst.setBaseValue(d);
+                    if (regenHealth && att == Attributes.MAX_HEALTH)
+                        this.setHealth(this.getMaxHealth());
+                }
+            });
+            return;
+        }
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
             inst.setBaseValue(MobConfig.npcHealth);
-            this.setHealth(this.getMaxHealth());
+            if (regenHealth)
+                this.setHealth(this.getMaxHealth());
         }
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
@@ -262,7 +274,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void recalcStatsFull() {
-        this.applyAttributes();
+        this.applyAttributes(true);
     }
 
     public void addGoal() {
@@ -534,6 +546,19 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void updateStatsToLevel() {
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
+        if (this.data != null && this.data.statIncrease() != null) {
+            this.data.statIncrease().forEach((att, d) -> {
+                AttributeInstance inst = this.getAttribute(att);
+                if (inst != null) {
+                    inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
+                    float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
+                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * d * multiplier, AttributeModifier.Operation.ADDITION));
+                    if (att == Attributes.MAX_HEALTH)
+                        this.setHealth(this.getMaxHealth() - preHealthDiff);
+                }
+            });
+            return;
+        }
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
             inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
@@ -776,7 +801,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         } catch (ArrayIndexOutOfBoundsException ignored) {
         }
         if (compound.contains("NPCData"))
-            this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))));
+            this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().get(new ResourceLocation(compound.getString("NPCData"))), true);
         if (this.data.schedule() == null)
             this.schedule.load(compound.getCompound("Schedule"));
         if (this.data.gender() == NPCData.Gender.UNDEFINED)
@@ -1137,10 +1162,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void randomizeData() {
-        this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().getRandom(this.random));
+        this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().getRandom(this.random), false);
     }
 
-    public void setNPCData(NPCData data) {
+    public void setNPCData(NPCData data, boolean load) {
         this.data = data;
         this.setShop(this.data.profession() != null ? this.data.profession() : ModNPCJobs.getRandomJob(this.random));
         this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);
@@ -1167,6 +1192,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             this.schedule.load(new NPCSchedule(this, this.random).save());
         else
             this.schedule.with(data.schedule());
+        this.applyAttributes(!load);
         Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look), this);
     }
 

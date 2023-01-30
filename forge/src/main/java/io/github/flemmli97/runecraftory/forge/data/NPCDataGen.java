@@ -42,6 +42,29 @@ public class NPCDataGen extends NPCDataProvider {
                 .addInteraction(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.2.follow.no"))
                 .addInteraction(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.2.follow.stop"))
                 .setNeutralGiftResponse("npc.generic.2.gift.default").build());
+
+        //Test data using all possible fields
+        /*this.addNPCDataWithLook("random_npc_all_test", new NPCData.Builder(50, "Name", "Surname", NPCData.Gender.UNDEFINED)
+                        .setNeutralGiftResponse("npc.generic.2.gift.default")
+                        .withLook(new ResourceLocation(RuneCraftory.MODID, "test_look"))
+                        .withBirthday(Pair.of(EnumSeason.SPRING, 1))
+                        .withProfession(ModNPCJobs.GENERAL.getSecond())
+                        .addInteraction(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default")
+                                .addConversation(new NPCData.Conversation("npc.generic.2.greeting.1", 0, 10))
+                                .addConversation(new NPCData.Conversation("npc.generic.2.greeting.2", 0, 10)))
+                        .addInteraction(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default")
+                                .addConversation(new NPCData.Conversation("npc.generic.2.talk.1", 0, 10))
+                                .addConversation(new NPCData.Conversation("npc.generic.2.talk.2", 0, 10)))
+                        .addInteraction(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.2.follow.yes"))
+                        .addInteraction(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.2.follow.no"))
+                        .addInteraction(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.2.follow.stop"))
+                        .addGiftResponse("gift", new NPCData.Gift(ModTags.SEEDS, "gift.response.test", 1))
+                        .withSchedule(new NPCSchedule.Schedule(0, 1, 1, 1, 1, 1, 1, 1, EnumSet.noneOf(EnumDay.class)))
+                        .setBaseStat(Attributes.MAX_HEALTH, 1)
+                        .setStatIncrease(Attributes.MAX_HEALTH, 1)
+                        .build(),
+                new NPCData.NPCLook(NPCData.Gender.UNDEFINED, new ResourceLocation(RuneCraftory.MODID, "texture"), "Flemmli97", 0, List.of()));
+        */
     }
 
     private static TagKey<Item> giftTag(String tag) {
