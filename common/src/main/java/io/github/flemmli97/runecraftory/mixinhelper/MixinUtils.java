@@ -84,19 +84,27 @@ public class MixinUtils {
         if (FarmlandHandler.isFarmBlock(newState)) {
             if (!FarmlandHandler.isFarmBlock(blockState) || FarmlandHandler.get(level.getServer()).getData(level, pos).isEmpty())
                 FarmlandHandler.get(level.getServer()).onFarmlandPlace(level, pos);
-        } else if (FarmlandHandler.isFarmBlock(blockState))
+        } else if (FarmlandHandler.isFarmBlock(blockState)) {
             FarmlandHandler.get(level.getServer()).onFarmlandRemove(level, pos);
-        //Handling crop blockState changes
-        if (blockState.getBlock() instanceof CropBlock pre) {
-            //Crop got broken
-            if (!(newState.getBlock() instanceof CropBlock post)) {
-                FarmlandHandler.get(level.getServer()).getData(level, pos.below())
-                        .ifPresent(d -> d.onCropRemove(level, pos, newState));
-            } else if (blockState.getValue(pre.getAgeProperty()) > newState.getValue(post.getAgeProperty())) {
-                //Crop got reset (e.g. via right click harvesting)
-                FarmlandHandler.get(level.getServer()).getData(level, pos.below())
-                        .ifPresent(d -> d.onRegrowableHarvest(level, pos, newState));
+        } else {
+            //Handling crop blockState changes
+            if (blockState.getBlock() instanceof CropBlock pre) {
+                //Crop got broken
+                if (!(newState.getBlock() instanceof CropBlock post)) {
+                    FarmlandHandler.get(level.getServer()).getData(level, pos.below())
+                            .ifPresent(d -> d.onCropRemove(level, pos, newState));
+                } else if (blockState.getValue(pre.getAgeProperty()) > newState.getValue(post.getAgeProperty())) {
+                    //Crop got reset (e.g. via right click harvesting)
+                    FarmlandHandler.get(level.getServer()).getData(level, pos.below())
+                            .ifPresent(d -> d.onRegrowableHarvest(level, pos, newState));
+                }
             }
+        }
+    }
+
+    public static void recheckFarmland(ServerLevel level, BlockState state, BlockPos pos) {
+        if (FarmlandHandler.get(level.getServer()).getData(level, pos).map(d -> !d.isFarmBlock()).orElse(true)) {
+            FarmlandHandler.get(level.getServer()).onFarmlandPlace(level, pos);
         }
     }
 }
