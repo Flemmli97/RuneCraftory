@@ -82,7 +82,7 @@ public class MixinUtils {
     public static void onBlockStateChange(ServerLevel level, BlockPos pos, BlockState blockState, BlockState newState) {
         //If related to farmblocks notify
         if (FarmlandHandler.isFarmBlock(newState)) {
-            if (!FarmlandHandler.isFarmBlock(blockState))
+            if (!FarmlandHandler.isFarmBlock(blockState) || FarmlandHandler.get(level.getServer()).getData(level, pos).isEmpty())
                 FarmlandHandler.get(level.getServer()).onFarmlandPlace(level, pos);
         } else if (FarmlandHandler.isFarmBlock(blockState))
             FarmlandHandler.get(level.getServer()).onFarmlandRemove(level, pos);

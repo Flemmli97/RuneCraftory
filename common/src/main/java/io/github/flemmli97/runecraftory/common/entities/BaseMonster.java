@@ -269,7 +269,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.goalSelector.addGoal(7, new RandomLookGoalAlive(this));
     }
 
-    private void updateAI(boolean forced) {
+    private void updateAI(boolean forced, boolean load) {
         if (forced || this.isTamed()) {
             this.getNavigation().stop();
             if (this.behaviourState() != Behaviour.FARM) {
@@ -288,7 +288,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 case WANDER_HOME -> {
                     if (this.getOwner() != null) {
                         if (this.assignBarn()) {
-                            this.restrictToBasedOnBehaviour(null);
+                            this.restrictToBasedOnBehaviour(null, load);
                             BlockPos pos = this.assignedBarn.pos.pos();
                             if (this.level.dimension() == this.assignedBarn.pos.dimension())
                                 TeleportSpell.safeTeleportTo(this, pos.getX(), pos.getY(), pos.getZ());
@@ -331,13 +331,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.addPartyMember(this));
                 }
                 case WANDER -> {
-                    this.restrictToBasedOnBehaviour(this.blockPosition());
+                    this.restrictToBasedOnBehaviour(this.blockPosition(), load);
                     this.goalSelector.addGoal(6, this.wander);
                     if (this.getOwner() != null)
                         Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.removePartyMember(this));
                 }
                 case FARM -> {
-                    this.restrictToBasedOnBehaviour(this.blockPosition());
+                    this.restrictToBasedOnBehaviour(this.blockPosition(), load);
                     this.goalSelector.addGoal(3, this.farm);
 
                     this.targetSelector.removeGoal(this.targetPlayer);
@@ -356,13 +356,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
     }
 
-    public void restrictToBasedOnBehaviour(@Nullable BlockPos pos) {
+    public void restrictToBasedOnBehaviour(@Nullable BlockPos pos, boolean keepPos) {
         if (this.behaviourState() == Behaviour.WANDER_HOME && this.assignBarn()) {
             if (this.level.dimension() == this.assignedBarn.pos.dimension())
                 this.restrictTo(this.assignedBarn.pos.pos(), this.assignedBarn.getSize());
         }
         if (pos == null)
             return;
+        if (keepPos)
+            pos = this.getRestrictCenter();
         if (this.behaviourState() == Behaviour.FARM) {
             this.restrictTo(pos, MobConfig.farmRadius + 3);
             if (this.level instanceof ServerLevel serverLevel)
@@ -482,7 +484,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     if (MobConfig.monsterNeedBarn && this.behaviourState() != Behaviour.STAY)
                         this.setBehaviour(Behaviour.STAY);
                 } else if (this.behaviourState() == Behaviour.WANDER_HOME && this.assignedBarn.getSize() != (int) this.getRestrictRadius())
-                    this.restrictToBasedOnBehaviour(null);
+                    this.restrictToBasedOnBehaviour(null, false);
             }
         } else {
             if (!this.playDeath() && TendCropsGoal.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
@@ -587,7 +589,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                         );
         }
         try {
-            this.setBehaviour(Behaviour.values()[compound.getInt("Behaviour")]);
+            this.setBehaviour(Behaviour.values()[compound.getInt("Behaviour")], true);
         } catch (ArrayIndexOutOfBoundsException ignored) {
         }
         //CompoundTag genes = compound.getCompound("Genes");
@@ -1495,10 +1497,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void setBehaviour(Behaviour behaviour) {
+        this.setBehaviour(behaviour, false);
+    }
+
+    private void setBehaviour(Behaviour behaviour, boolean load) {
         this.entityData.set(BEHAVIOUR_DATA, behaviour.ordinal());
         this.behaviour = behaviour;
         if (!this.level.isClientSide)
-            this.updateAI(false);
+            this.updateAI(false, load);
     }
 
     public Behaviour behaviourState() {
@@ -1585,7 +1591,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.playDeath())
             this.heal(this.getMaxHealth());
         this.setBehaviour(Behaviour.WANDER);
-        this.updateAI(true);
+        this.updateAI(true, false);
         this.setTarget(null);
         this.getNavigation().stop();
     }

@@ -50,7 +50,7 @@ public class C2SSetMonsterBehaviour implements Packet {
                                 data.entitySelector.selectedEntity = monster;
                                 data.entitySelector.poi = monster.getRestrictCenter();
                                 data.entitySelector.apply = (player, pos) -> {
-                                    monster.restrictToBasedOnBehaviour(pos);
+                                    monster.restrictToBasedOnBehaviour(pos, false);
                                     data.entitySelector.poi = monster.getRestrictCenter();
                                 };
                             });
