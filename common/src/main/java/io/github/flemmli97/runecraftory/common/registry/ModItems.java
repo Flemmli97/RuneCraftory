@@ -825,7 +825,12 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> debug = ITEMS.register("debug_item", () -> new ItemDebug(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> level = ITEMS.register("level_item", () -> new ItemLevelUp(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> skill = ITEMS.register("skill_item", () -> new ItemSkillUp(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> tame = ITEMS.register("insta_tame", () -> new ItemDebug(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item> tame = ITEMS.register("insta_tame", () -> new Item(new Item.Properties()) {
+        @Override
+        public boolean isFoil(ItemStack stack) {
+            return true;
+        }
+    });
     public static final RegistryEntrySupplier<Item> entityLevel = ITEMS.register("entity_level_item", () -> new ItemDebug(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> unknown = ITEMS.register("unknown", () -> new Item(new Item.Properties()));
 

@@ -3,12 +3,15 @@ package io.github.flemmli97.runecraftory.common.world;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Dynamic;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class BarnData {
@@ -18,6 +21,7 @@ public class BarnData {
     private boolean hasRoof;
 
     private final Map<UUID, Integer> monsters = new HashMap<>();
+    private final Set<BaseMonster> listeners = new HashSet<>();
 
     private boolean removed;
 
@@ -35,14 +39,23 @@ public class BarnData {
     public void update(int size, boolean hasRoof) {
         this.size = size;
         this.hasRoof = hasRoof;
+        this.listeners.removeIf(m -> {
+            if (m.behaviourState() == BaseMonster.Behaviour.WANDER_HOME) {
+                if (m.level.dimension() == this.pos.dimension())
+                    m.restrictTo(this.pos.pos(), this.getSize());
+            }
+            return m.isRemoved();
+        });
     }
 
-    public void addMonster(UUID uuid, int size) {
-        this.monsters.put(uuid, size);
+    public void addMonster(BaseMonster monster, int size) {
+        this.monsters.put(monster.getUUID(), size);
+        this.listeners.add(monster);
     }
 
-    public void removeMonster(UUID uuid) {
-        this.monsters.remove(uuid);
+    public void removeMonster(BaseMonster monster) {
+        this.monsters.remove(monster.getUUID());
+        this.listeners.remove(monster);
     }
 
     public boolean hasCapacityFor(int size, boolean needsRoof) {

@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.common.entities.ai.FollowOwnerGoalMonste
 import io.github.flemmli97.runecraftory.common.entities.ai.HurtByTargetPredicate;
 import io.github.flemmli97.runecraftory.common.entities.ai.LookAtAliveGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.RandomLookGoalAlive;
+import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.RiderAttackTargetGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.TendCropsGoal;
@@ -94,7 +95,6 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
@@ -162,7 +162,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
     public FloatGoal swimGoal = new FloatGoal(this);
     public FollowOwnerGoalMonster followOwnerGoal = new FollowOwnerGoalMonster(this, 1.05, 9, 2, 20);
-    public RandomStrollGoal wander = new WaterAvoidingRandomStrollGoal(this, 1.0);
+    public RandomStrollGoal wander = new RestrictedWaterAvoidingStrollGoal(this, 1.0);
     public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
 
     public TendCropsGoal farm = new TendCropsGoal(this);
@@ -1563,7 +1563,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.assignedBarn == null || this.assignedBarn.isInvalid())
             this.assignedBarn = WorldHandler.get(this.getServer()).findFittingBarn(this);
         if (this.assignedBarn != null) {
-            this.assignedBarn.addMonster(this.getUUID(), 1);
+            this.assignedBarn.addMonster(this, this.getProp().getSize());
             return true;
         }
         return false;

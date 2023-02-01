@@ -240,7 +240,7 @@ public class WorldHandler extends SavedData {
 
     public void removeMonsterFromPlayer(UUID player, BaseMonster monster) {
         this.playerBarns.getOrDefault(player, Set.of())
-                .forEach(b -> b.removeMonster(monster.getUUID()));
+                .forEach(b -> b.removeMonster(monster));
     }
 
     public void removeBarn(UUID player, GlobalPos pos) {
