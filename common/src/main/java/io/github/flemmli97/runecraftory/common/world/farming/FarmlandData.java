@@ -209,13 +209,12 @@ public class FarmlandData {
     /**
      * Use when the farmland gets watered from something
      */
-    public void onWatering(ServerLevel level) {
-        if (!this.isFarmBlock)
+    public void onWatering(ServerLevel level, int currentDay) {
+        if (!this.isFarmBlock || this.lastWeatherDay == currentDay)
             return;
-        int day = WorldUtils.day(level);
-        if (!this.isLoaded && this.lastWeatherDay != day) {
+        this.lastWeatherDay = currentDay;
+        if (!this.isLoaded) {
             this.scheduledWatering++;
-            this.lastWeatherDay = day;
             return;
         }
         BlockState farm = level.getBlockState(this.pos);
@@ -226,17 +225,15 @@ public class FarmlandData {
     /**
      * Handles the farmland when its storming. Destroying crops etc.
      */
-    public void onStorming(ServerLevel level) {
-        if (!this.isFarmBlock)
+    public void onStorming(ServerLevel level, int currentDay) {
+        if (!this.isFarmBlock || this.lastWeatherDay == currentDay)
             return;
-        int day = WorldUtils.day(level);
-        if (!this.isLoaded && this.lastWeatherDay != day) {
-            this.onWatering(level);
+        if (!this.isLoaded) {
+            this.onWatering(level, currentDay);
             this.scheduledStormTicks++;
-            this.lastWeatherDay = day;
             return;
         }
-        this.onWatering(level);
+        this.onWatering(level, currentDay);
         this.doStormingLogic(level, 1);
     }
 

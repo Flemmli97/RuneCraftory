@@ -132,8 +132,12 @@ public class FarmlandHandler extends SavedData {
             if (data != null) {
                 data.updateFarmBlock(false);
                 this.scheduleRemoveUpdate(level, data);
-                if (data.shouldBeRemoved())
+                if (data.shouldBeRemoved()) {
                     farms.remove(pos.asLong());
+                    this.farmlandChunks.get(level.dimension())
+                            .get(new ChunkPos(pos).toLong())
+                            .remove(data);
+                }
                 this.setDirty();
             }
         }
@@ -276,10 +280,11 @@ public class FarmlandHandler extends SavedData {
     private void randomTick(ServerLevel level, Long2ObjectMap<Set<FarmlandData>> m) {
         EnumWeather weather = WorldHandler.get(level.getServer()).currentWeather();
         Consumer<FarmlandData> cons = null;
+        int day = WorldUtils.day(level);
         if (weather == EnumWeather.STORM)
-            cons = d -> d.onStorming(level);
+            cons = d -> d.onStorming(level, day);
         else if (level.isRaining())
-            cons = d -> d.onWatering(level);
+            cons = d -> d.onWatering(level, day);
         if (cons == null)
             return;
         int randomTickSpeed = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
