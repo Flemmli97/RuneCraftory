@@ -113,7 +113,10 @@ public class BlockCrop extends CropBlock {
         if (prop != null) {
             Vec3 pos = builder.getOptionalParameter(LootContextParams.ORIGIN);
             int itemLevel = pos != null ? getCropLevel(builder.getLevel(), new BlockPos(pos)) : 1;
-            list.forEach(s -> modifyStack(prop, s, itemLevel));
+            if (block.isMaxAge(state))
+                list.forEach(s -> modifyStack(prop, s, itemLevel));
+            else if (block instanceof BlockCrop)
+                list.clear();
         }
     }
 
