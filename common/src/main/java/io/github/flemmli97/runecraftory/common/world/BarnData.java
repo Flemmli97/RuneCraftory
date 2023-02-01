@@ -42,7 +42,7 @@ public class BarnData {
         this.listeners.removeIf(m -> {
             if (m.behaviourState() == BaseMonster.Behaviour.WANDER_HOME) {
                 if (m.level.dimension() == this.pos.dimension())
-                    m.restrictTo(this.pos.pos(), this.getSize());
+                    m.restrictTo(this.pos.pos(), this.getSize() + 1);
             }
             return m.isRemoved();
         });

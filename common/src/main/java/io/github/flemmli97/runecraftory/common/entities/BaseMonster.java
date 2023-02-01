@@ -284,6 +284,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 if (this.level instanceof ServerLevel serverLevel)
                     FarmlandHandler.get(serverLevel.getServer()).removeIrrigationPOI(serverLevel, this.getUUID());
             }
+            this.wander.setInterval(120);
             switch (this.behaviourState()) {
                 case WANDER_HOME -> {
                     if (this.getOwner() != null) {
@@ -303,6 +304,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                             this.setBehaviour(Behaviour.WANDER);
                         }
                         this.goalSelector.addGoal(6, this.wander);
+                        this.wander.setInterval(40);
                         Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.removePartyMember(this));
                     }
                 }
@@ -359,7 +361,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void restrictToBasedOnBehaviour(@Nullable BlockPos pos, boolean keepPos) {
         if (this.behaviourState() == Behaviour.WANDER_HOME && this.assignBarn()) {
             if (this.level.dimension() == this.assignedBarn.pos.dimension())
-                this.restrictTo(this.assignedBarn.pos.pos(), this.assignedBarn.getSize());
+                this.restrictTo(this.assignedBarn.pos.pos(), this.assignedBarn.getSize() + 1);
         }
         if (pos == null)
             return;

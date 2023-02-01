@@ -1,17 +1,20 @@
 package io.github.flemmli97.runecraftory.common.entities.ai;
 
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.phys.Vec3;
 
 public class AirWanderGoal extends RandomStrollGoal {
 
+    protected final BaseMonster monster;
+
     private float prevPrio;
 
-    public AirWanderGoal(PathfinderMob entity) {
+    public AirWanderGoal(BaseMonster entity) {
         super(entity, 1);
+        this.monster = entity;
     }
 
     @Override
@@ -19,7 +22,7 @@ public class AirWanderGoal extends RandomStrollGoal {
         //this.prevPrio = this.creature.getPathPriority(PathNodeType.OPEN);
         //this.creature.setPathPriority(PathNodeType.OPEN, 0);
         int radius = 10;
-        if (this.mob.hasRestriction())
+        if (this.monster.behaviourState() == BaseMonster.Behaviour.WANDER_HOME)
             radius = (int) (this.mob.getRestrictRadius() * 2);
         Vec3 vec = DefaultRandomPos.getPos(this.mob, radius, 7);
         //this.creature.setPathPriority(PathNodeType.OPEN, this.prevPrio);
