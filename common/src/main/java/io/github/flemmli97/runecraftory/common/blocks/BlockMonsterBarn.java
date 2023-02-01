@@ -11,6 +11,8 @@ import net.minecraft.core.GlobalPos;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +25,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
@@ -76,6 +79,28 @@ public class BlockMonsterBarn extends BaseEntityBlock {
         if (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && level instanceof ServerLevel serverLevel)
             WorldHandler.get(serverLevel.getServer()).removeBarn(barn.getOwner(), GlobalPos.of(level.dimension(), pos));
         super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+    @Override
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+        if (!level.isClientSide) {
+            UUID owner = null;
+            if (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && (player.isCreative() || player.getUUID().equals(owner = barn.getOwner()))) {
+                if (barn.getBarnData() != null)
+                    player.sendMessage(new TranslatableComponent("barn.interact.block", barn.getBarnData().hasRoof(), barn.getBarnData().getCapacity())
+                            .withStyle(barn.getBarnData().getCapacity() > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_RED), Util.NIL_UUID);
+            } else if (owner != null) {
+                UUID uuid = owner;
+                Platform.INSTANCE.getPlayerData(player)
+                        .ifPresent(d -> {
+                            if (d.onBarnFailMine(pos))
+                                player.sendMessage(new TranslatableComponent("barn.interact.not.owner", player.getServer()
+                                        .getProfileCache().get(uuid).map(p -> p.getName()).orElse("UNKNOWN")).withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
+                        });
+            }
+            return InteractionResult.CONSUME;
+        }
+        return InteractionResult.SUCCESS;
     }
 
     @Nullable
