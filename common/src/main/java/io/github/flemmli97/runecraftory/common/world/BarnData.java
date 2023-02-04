@@ -85,6 +85,12 @@ public class BarnData {
         return this.removed || this.size < 2;
     }
 
+    public boolean isInvalidFor(BaseMonster monster) {
+        if (this.isInvalid())
+            return true;
+        return !monster.getProp().needsRoof() || this.hasRoof;
+    }
+
     public void remove() {
         this.removed = true;
     }

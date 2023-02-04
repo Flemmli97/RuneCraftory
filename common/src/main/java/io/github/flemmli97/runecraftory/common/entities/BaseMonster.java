@@ -479,14 +479,13 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.removeFoodEffect();
             }
             this.getAnimationHandler().runIfNotNull(this::handleAttack);
-            if (this.assignedBarn != null && this.assignedBarn.isInvalid())
+            if (this.assignedBarn != null && this.assignedBarn.isInvalidFor(this))
                 this.assignedBarn = null;
             if (this.isTamed()) {
                 if (this.assignedBarn == null) {
                     if (MobConfig.monsterNeedBarn && this.behaviourState() != Behaviour.STAY)
                         this.setBehaviour(Behaviour.STAY);
-                } else if (this.behaviourState() == Behaviour.WANDER_HOME && this.assignedBarn.getSize() != (int) this.getRestrictRadius())
-                    this.restrictToBasedOnBehaviour(null, false);
+                }
             }
         } else {
             if (!this.playDeath() && TendCropsGoal.cantTendToCropsAnymore(this) && this.behaviour == Behaviour.FARM && this.tickCount % 20 == 0)
@@ -547,7 +546,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.cropInventory != null) {
             compound.putIntArray("CropInventory", new int[]{this.cropInventory.getX(), this.cropInventory.getY(), this.cropInventory.getZ()});
         }
-        if (this.assignedBarn != null && !this.assignedBarn.isInvalid())
+        if (this.assignedBarn != null && !this.assignedBarn.isInvalidFor(this))
             GlobalPos.CODEC.encodeStart(NbtOps.INSTANCE, this.assignedBarn.pos).resultOrPartial(RuneCraftory.logger::error)
                     .ifPresent(t -> compound.put("AssignedBarnLocation", t));
         //CompoundTag genes = new CompoundTag();
@@ -1562,7 +1561,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     private boolean assignBarn() {
-        if (this.assignedBarn == null || this.assignedBarn.isInvalid())
+        if (this.assignedBarn == null || this.assignedBarn.isInvalidFor(this))
             this.assignedBarn = WorldHandler.get(this.getServer()).findFittingBarn(this);
         if (this.assignedBarn != null) {
             this.assignedBarn.addMonster(this, this.getProp().getSize());
