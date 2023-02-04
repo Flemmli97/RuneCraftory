@@ -72,7 +72,7 @@ public class LevelCalc {
     public static int xpAmountForSkillLevelUp(EnumSkills skill, int level) {
         if (level <= 0)
             return 1;
-        if (level >= GeneralConfig.maxSkillLevel)
+        if (level >= GeneralConfig.skillProps.get(skill).maxLevel())
             return 0;
         return (int) (totalSkillXpForLevel(skill, level + 1) - totalSkillXpForLevel(skill, level));
     }

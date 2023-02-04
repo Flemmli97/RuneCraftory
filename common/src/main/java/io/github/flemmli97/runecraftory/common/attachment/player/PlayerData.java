@@ -307,7 +307,7 @@ public class PlayerData {
     }
 
     public void setSkillLevel(EnumSkills skill, Player player, int level, float xpAmount, boolean recalc) {
-        this.skillMapN.get(skill).setLevel(Mth.clamp(level, 1, GeneralConfig.maxSkillLevel));
+        this.skillMapN.get(skill).setLevel(Mth.clamp(level, 1, GeneralConfig.skillProps.get(skill).maxLevel()));
         this.skillMapN.get(skill).setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
         if (player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
@@ -319,9 +319,9 @@ public class PlayerData {
     }
 
     public void increaseSkill(EnumSkills skill, Player player, float amount) {
-        if (this.skillMapN.get(skill).getLevel() >= GeneralConfig.maxSkillLevel)
+        if (this.skillMapN.get(skill).getLevel() >= GeneralConfig.skillProps.get(skill).maxLevel())
             return;
-        boolean levelUp = this.skillMapN.get(skill).addXP(amount, GeneralConfig.maxSkillLevel, lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, player));
+        boolean levelUp = this.skillMapN.get(skill).addXP(amount, GeneralConfig.skillProps.get(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, player));
         if (levelUp) {
             player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }

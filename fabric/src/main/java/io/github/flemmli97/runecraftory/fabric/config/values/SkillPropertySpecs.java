@@ -5,6 +5,7 @@ import io.github.flemmli97.tenshilib.common.config.CommentedJsonConfig;
 
 public class SkillPropertySpecs {
 
+    public final CommentedJsonConfig.IntVal maxLevel;
     public final CommentedJsonConfig.DoubleVal hp;
     public final CommentedJsonConfig.DoubleVal rp;
     public final CommentedJsonConfig.DoubleVal str;
@@ -13,6 +14,7 @@ public class SkillPropertySpecs {
     public final CommentedJsonConfig.DoubleVal xpMultiplier;
 
     public SkillPropertySpecs(CommentedJsonConfig.Builder builder, SkillProperties def) {
+        this.maxLevel = builder.comment("Max level for this skill").defineInRange("Max Level", def.maxLevel(), 1, Integer.MAX_VALUE);
         this.hp = builder.comment("HP gain per level").defineInRange("HP", def.healthIncrease(), 0, Double.MAX_VALUE);
         this.rp = builder.comment("RP gain per level").defineInRange("RP", def.rpIncrease(), 0, Double.MAX_VALUE);
         this.str = builder.comment("Strength gain per level").defineInRange("Str", def.strIncrease(), 0, Double.MAX_VALUE);
@@ -22,7 +24,7 @@ public class SkillPropertySpecs {
     }
 
     public static SkillProperties ofSpec(SkillPropertySpecs specs) {
-        return new SkillProperties(specs.hp.get().floatValue(), specs.rp.get().floatValue(), specs.str.get().floatValue(),
+        return new SkillProperties(specs.maxLevel.get(), specs.hp.get().floatValue(), specs.rp.get().floatValue(), specs.str.get().floatValue(),
                 specs.vit.get().floatValue(), specs.intel.get().floatValue(), specs.xpMultiplier.get().floatValue());
     }
 }

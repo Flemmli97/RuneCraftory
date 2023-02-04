@@ -52,7 +52,6 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.unloadedFarmlandCheckWater = spec.unloadedFarmlandCheckWater.get();
 
         GeneralConfig.maxLevel = spec.maxLevel.get();
-        GeneralConfig.maxSkillLevel = spec.maxSkillLevel.get();
         GeneralConfig.startingHealth = spec.startingHealth.get();
         GeneralConfig.startingRP = spec.startingRP.get();
         GeneralConfig.startingMoney = spec.startingMoney.get();

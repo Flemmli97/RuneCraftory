@@ -52,7 +52,7 @@ public class GeneralConfig {
     public static float hpPerLevel = 5;
     public static float rpPerLevel = 2;
     public static float strPerLevel = 1;
-    public static float vitPerLevel = 2;
+    public static float vitPerLevel = 1.5f;
     public static float intPerLevel = 1;
     public static EnumMap<EnumSkills, SkillProperties> skillProps = new EnumMap<>(EnumSkills.class);
 
@@ -80,47 +80,47 @@ public class GeneralConfig {
         weaponProps.put(EnumWeaponType.GLOVE, new WeaponTypeProperties(3, 10));
         weaponProps.put(EnumWeaponType.STAFF, new WeaponTypeProperties(0, 20));
 
-        skillProps.put(EnumSkills.SHORTSWORD, new SkillProperties(0, 0.5f, 0.25f, 0, 0, 1));
-        skillProps.put(EnumSkills.LONGSWORD, new SkillProperties(0, 0.5f, 0.25f, 0, 0, 1));
-        skillProps.put(EnumSkills.SPEAR, new SkillProperties(0, 0.5f, 0.25f, 0, 0, 1));
-        skillProps.put(EnumSkills.HAMMERAXE, new SkillProperties(0, 0.5f, 0.5f, 0, 0, 1));
-        skillProps.put(EnumSkills.DUAL, new SkillProperties(0, 0.5f, 0.25f, 0, 0, 1));
-        skillProps.put(EnumSkills.FIST, new SkillProperties(0, 0.5f, 0.25f, 0, 0, 1));
+        skillProps.put(EnumSkills.SHORTSWORD, new SkillProperties(100, 0, 0.5f, 0.25f, 0, 0, 1));
+        skillProps.put(EnumSkills.LONGSWORD, new SkillProperties(100, 0, 0.5f, 0.25f, 0, 0, 1));
+        skillProps.put(EnumSkills.SPEAR, new SkillProperties(100, 0, 0.5f, 0.25f, 0, 0, 1));
+        skillProps.put(EnumSkills.HAMMERAXE, new SkillProperties(100, 0, 0.5f, 0.5f, 0, 0, 1));
+        skillProps.put(EnumSkills.DUAL, new SkillProperties(100, 0, 0.5f, 0.25f, 0, 0, 1));
+        skillProps.put(EnumSkills.FIST, new SkillProperties(100, 0, 0.5f, 0.25f, 0, 0, 1));
 
-        skillProps.put(EnumSkills.FIRE, new SkillProperties(0, 0.5f, 0, 0, 0.25f, 1));
-        skillProps.put(EnumSkills.WATER, new SkillProperties(0, 0.5f, 0, 0, 0.25f, 1));
-        skillProps.put(EnumSkills.EARTH, new SkillProperties(0, 0.5f, 0, 0, 0.25f, 1));
-        skillProps.put(EnumSkills.WIND, new SkillProperties(0, 0.5f, 0, 0, 0.25f, 1));
-        skillProps.put(EnumSkills.DARK, new SkillProperties(0, 0.5f, 0, 0, 0.25f, 1));
-        skillProps.put(EnumSkills.LIGHT, new SkillProperties(0, 0.5f, 0, 0, 0.25f, 1));
-        skillProps.put(EnumSkills.LOVE, new SkillProperties(0.1f, 0.5f, 0, 0, 0.25f, 1));
+        skillProps.put(EnumSkills.FIRE, new SkillProperties(100, 0, 0.5f, 0, 0, 0.25f, 1));
+        skillProps.put(EnumSkills.WATER, new SkillProperties(100, 0, 0.5f, 0, 0, 0.25f, 1));
+        skillProps.put(EnumSkills.EARTH, new SkillProperties(100, 0, 0.5f, 0, 0, 0.25f, 1));
+        skillProps.put(EnumSkills.WIND, new SkillProperties(100, 0, 0.5f, 0, 0, 0.25f, 1));
+        skillProps.put(EnumSkills.DARK, new SkillProperties(100, 0, 0.5f, 0, 0, 0.25f, 1));
+        skillProps.put(EnumSkills.LIGHT, new SkillProperties(100, 0, 0.5f, 0, 0, 0.25f, 1));
+        skillProps.put(EnumSkills.LOVE, new SkillProperties(100, 0.1f, 0.5f, 0, 0, 0.25f, 1));
 
-        skillProps.put(EnumSkills.FARMING, new SkillProperties(1.25f, 1, 0, 0.5f, 0, 1));
-        skillProps.put(EnumSkills.LOGGING, new SkillProperties(1, 1, 0.25f, 0.25f, 0, 1));
-        skillProps.put(EnumSkills.MINING, new SkillProperties(1, 1, 0.1f, 0.4f, 0, 1));
-        skillProps.put(EnumSkills.FISHING, new SkillProperties(0, 0.5f, 0, 0, 0.5f, 1));
+        skillProps.put(EnumSkills.FARMING, new SkillProperties(100, 1.25f, 1, 0, 0.5f, 0, 1));
+        skillProps.put(EnumSkills.LOGGING, new SkillProperties(100, 1, 1, 0.25f, 0.2f, 0, 1));
+        skillProps.put(EnumSkills.MINING, new SkillProperties(100, 1, 1, 0.2f, 0.4f, 0, 1));
+        skillProps.put(EnumSkills.FISHING, new SkillProperties(100, 0, 0.5f, 0, 0, 0.5f, 1));
 
-        skillProps.put(EnumSkills.COOKING, new SkillProperties(0, 0.25f, 0, 0.1f, 0, 1));
-        skillProps.put(EnumSkills.FORGING, new SkillProperties(0, 0.25f, 0.2f, 0.1f, 0, 1));
-        skillProps.put(EnumSkills.CHEMISTRY, new SkillProperties(0, 0.25f, 0, 0.1f, 0.2f, 1));
-        skillProps.put(EnumSkills.CRAFTING, new SkillProperties(0, 0.25f, 0, 0, 0.1f, 1));
+        skillProps.put(EnumSkills.COOKING, new SkillProperties(100, 0, 0.25f, 0, 0.1f, 0, 1));
+        skillProps.put(EnumSkills.FORGING, new SkillProperties(100, 0, 0.25f, 0.25f, 0.1f, 0, 1));
+        skillProps.put(EnumSkills.CHEMISTRY, new SkillProperties(100, 0, 0.25f, 0, 0.1f, 0.2f, 1));
+        skillProps.put(EnumSkills.CRAFTING, new SkillProperties(100, 0, 0.25f, 0, 0, 0.1f, 1));
 
-        skillProps.put(EnumSkills.SEARCHING, new SkillProperties(0, 0.5f, 0, 0, 0.25f, 1));
-        skillProps.put(EnumSkills.WALKING, new SkillProperties(0.3f, 0.125f, 0, 0.1f, 0, 1));
-        skillProps.put(EnumSkills.SLEEPING, new SkillProperties(2f, 2, 0.5f, 1, 0.5f, 1));
-        skillProps.put(EnumSkills.EATING, new SkillProperties(1.5f, 5, 0.5f, 0.5f, 0.2f, 1));
-        skillProps.put(EnumSkills.DEFENCE, new SkillProperties(1.5f, 0.1f, 0, 1.5f, 0, 1));
+        skillProps.put(EnumSkills.SEARCHING, new SkillProperties(100, 0, 0.5f, 0, 0, 0.1f, 1));
+        skillProps.put(EnumSkills.WALKING, new SkillProperties(100, 0.5f, 0.125f, 0, 0.1f, 0, 1));
+        skillProps.put(EnumSkills.SLEEPING, new SkillProperties(100, 2f, 2, 0.5f, 1, 0.5f, 1));
+        skillProps.put(EnumSkills.EATING, new SkillProperties(100, 1.5f, 5, 0.5f, 0.5f, 0.2f, 1));
+        skillProps.put(EnumSkills.DEFENCE, new SkillProperties(100, 1.5f, 0.1f, 0, 1.5f, 0, 1));
 
-        skillProps.put(EnumSkills.RESPOISON, new SkillProperties(0.1f, 0, 0, 0.2f, 0.05f, 1));
-        skillProps.put(EnumSkills.RESSEAL, new SkillProperties(0.1f, 0, 0, 0.2f, 0.05f, 1));
-        skillProps.put(EnumSkills.RESPARA, new SkillProperties(0.1f, 0, 0, 0.2f, 0.05f, 1));
-        skillProps.put(EnumSkills.RESSLEEP, new SkillProperties(0.1f, 0, 0, 0.2f, 0.05f, 1));
-        skillProps.put(EnumSkills.RESFAT, new SkillProperties(0.1f, 0, 0, 0.2f, 0.05f, 1));
-        skillProps.put(EnumSkills.RESCOLD, new SkillProperties(0.1f, 0, 0, 0.2f, 0.05f, 1));
+        skillProps.put(EnumSkills.RESPOISON, new SkillProperties(100, 0.25f, 0, 0, 0.2f, 0, 1));
+        skillProps.put(EnumSkills.RESSEAL, new SkillProperties(100, 0.25f, 0, 0, 0.2f, 0, 1));
+        skillProps.put(EnumSkills.RESPARA, new SkillProperties(100, 0.25f, 0, 0, 0.2f, 0, 1));
+        skillProps.put(EnumSkills.RESSLEEP, new SkillProperties(100, 0.25f, 0, 0, 0.2f, 0, 1));
+        skillProps.put(EnumSkills.RESFAT, new SkillProperties(100, 0.25f, 0, 0, 0.2f, 0, 1));
+        skillProps.put(EnumSkills.RESCOLD, new SkillProperties(100, 0.25f, 0, 0, 0.2f, 0, 1));
 
-        skillProps.put(EnumSkills.BATH, new SkillProperties(0.5f, 1, 0, 0.25f, 0, 1));
-        skillProps.put(EnumSkills.TAMING, new SkillProperties(0, 0.5f, 0, 0.25f, 0.5f, 1));
-        skillProps.put(EnumSkills.LEADER, new SkillProperties(1, 0, 0.25f, 0, 0.1f, 1));
+        skillProps.put(EnumSkills.BATH, new SkillProperties(100, 0.5f, 1, 0, 0.25f, 0, 1));
+        skillProps.put(EnumSkills.TAMING, new SkillProperties(100, 0, 0.5f, 0, 0.25f, 0.25f, 1));
+        skillProps.put(EnumSkills.LEADER, new SkillProperties(100, 1, 0, 0.25f, 0, 0.1f, 1));
     }
 
     public enum RecipeSystem {

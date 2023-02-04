@@ -58,7 +58,6 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         GeneralConfig.unloadedFarmlandCheckWater = spec.unloadedFarmlandCheckWater.get();
 
         GeneralConfig.maxLevel = spec.maxLevel.get();
-        GeneralConfig.maxSkillLevel = spec.maxSkillLevel.get();
         GeneralConfig.startingHealth = spec.startingHealth.get();
         GeneralConfig.startingRP = spec.startingRP.get();
         GeneralConfig.startingMoney = spec.startingMoney.get();

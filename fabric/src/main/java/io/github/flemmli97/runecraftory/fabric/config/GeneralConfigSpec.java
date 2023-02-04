@@ -52,7 +52,6 @@ public class GeneralConfigSpec {
     public final boolean dynamicTrees = true;
 
     public final CommentedJsonConfig.IntVal maxLevel;
-    public final CommentedJsonConfig.IntVal maxSkillLevel;
     public final CommentedJsonConfig.IntVal startingHealth;
     public final CommentedJsonConfig.IntVal startingRP;
     public final CommentedJsonConfig.IntVal startingMoney;
@@ -135,7 +134,6 @@ public class GeneralConfigSpec {
 
         builder.comment("Configs for player stats").push("Player Stats");
         this.maxLevel = builder.defineInRange("Max Level", GeneralConfig.maxLevel, 1, 1000);
-        this.maxSkillLevel = builder.defineInRange("Max Skill Level", GeneralConfig.maxSkillLevel, 1, 1000);
         this.startingHealth = builder.defineInRange("Starting HP", GeneralConfig.startingHealth, 0, Integer.MAX_VALUE);
         this.startingRP = builder.defineInRange("Starting RP", GeneralConfig.startingRP, 0, Integer.MAX_VALUE);
         this.startingMoney = builder.defineInRange("Starting Money", GeneralConfig.startingMoney, 0, Integer.MAX_VALUE);
