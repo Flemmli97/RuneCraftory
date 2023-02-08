@@ -23,22 +23,24 @@ public class EntityProperties {
 
     private final List<String> confAttributes;
     private final List<String> confGains;
-    private final int xp;
-    private final int money;
-    private final float taming;
-    private final boolean ridable;
-    private final boolean flying;
+    public final int minLevel;
+    public final int xp;
+    public final int money;
+    public final float tamingChance;
+    public final boolean ridable;
+    public final boolean flying;
     private Map<Attribute, Double> baseValues;
     private Map<Attribute, Double> levelGains;
-    private final int size;
-    private final boolean needsRoof;
+    public final int size;
+    public final boolean needsRoof;
 
-    private EntityProperties(List<String> baseValues, List<String> gains, int xp, int money, float tamingChance, boolean ridable, boolean flying, int size, boolean needsRoof) {
+    private EntityProperties(List<String> baseValues, List<String> gains, int minLevel, int xp, int money, float tamingChance, boolean ridable, boolean flying, int size, boolean needsRoof) {
         this.confAttributes = baseValues;
         this.confGains = gains;
+        this.minLevel = minLevel;
         this.xp = xp;
         this.money = money;
-        this.taming = tamingChance;
+        this.tamingChance = tamingChance;
         this.ridable = ridable;
         this.flying = flying;
         this.size = size;
@@ -79,34 +81,6 @@ public class EntityProperties {
         return ImmutableMap.copyOf(this.levelGains);
     }
 
-    public boolean ridable() {
-        return this.ridable;
-    }
-
-    public boolean flying() {
-        return this.flying;
-    }
-
-    public int getXp() {
-        return this.xp;
-    }
-
-    public int getMoney() {
-        return this.money;
-    }
-
-    public float tamingChance() {
-        return this.taming;
-    }
-
-    public int getSize() {
-        return this.size;
-    }
-
-    public boolean needsRoof() {
-        return this.needsRoof;
-    }
-
     public static class Builder {
 
         private final Set<String> baseValues = new LinkedHashSet<>();
@@ -118,6 +92,7 @@ public class EntityProperties {
         private boolean flying;
         private int size = 1;
         private boolean needsRoof = true;
+        private int minLevel = 1;
 
         public Builder putAttributes(String att, double val) {
             this.baseValues.add(att + "-" + val);
@@ -172,8 +147,13 @@ public class EntityProperties {
             return this;
         }
 
+        public Builder setMinLevel(int minLevel) {
+            this.minLevel = minLevel;
+            return this;
+        }
+
         public EntityProperties build() {
-            return new EntityProperties(Lists.newArrayList(this.baseValues), Lists.newArrayList(this.gains), this.xp, this.money, this.taming, this.ridable, this.flying, this.size, this.needsRoof);
+            return new EntityProperties(Lists.newArrayList(this.baseValues), Lists.newArrayList(this.gains), this.minLevel, this.xp, this.money, this.taming, this.ridable, this.flying, this.size, this.needsRoof);
         }
     }
 }

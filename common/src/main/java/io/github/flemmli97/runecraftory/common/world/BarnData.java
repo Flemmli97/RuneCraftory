@@ -88,7 +88,7 @@ public class BarnData {
     public boolean isInvalidFor(BaseMonster monster) {
         if (this.isInvalid())
             return true;
-        return !monster.getProp().needsRoof() || !this.hasRoof;
+        return !monster.getProp().needsRoof || !this.hasRoof;
     }
 
     public void remove() {

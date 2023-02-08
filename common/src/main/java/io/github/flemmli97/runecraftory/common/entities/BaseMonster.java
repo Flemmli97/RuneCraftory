@@ -820,7 +820,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public float tamingChance() {
-        return this.prop.tamingChance();
+        return this.prop.tamingChance;
     }
 
     @Override
@@ -830,7 +830,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public boolean ridable() {
-        return this.prop.ridable();
+        return this.prop.ridable;
     }
 
     public boolean attackOtherTamedMobs() {
@@ -873,7 +873,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public boolean isFlyingEntity() {
-        return this.prop.flying();
+        return this.prop.flying;
     }
 
     @Override
@@ -891,12 +891,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public int baseXP() {
-        return this.prop.getXp();
+        return this.prop.xp;
     }
 
     @Override
     public int baseMoney() {
-        return this.prop.getMoney();
+        return this.prop.money;
     }
 
     @Override
@@ -1564,7 +1564,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.assignedBarn == null || this.assignedBarn.isInvalidFor(this))
             this.assignedBarn = WorldHandler.get(this.getServer()).findFittingBarn(this);
         if (this.assignedBarn != null) {
-            this.assignedBarn.addMonster(this, this.getProp().getSize());
+            this.assignedBarn.addMonster(this, this.getProp().size);
             return true;
         }
         return false;

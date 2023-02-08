@@ -227,7 +227,7 @@ public class WorldHandler extends SavedData {
     @Nullable
     public BarnData findFittingBarn(BaseMonster monster, UUID owner) {
         return this.barnsOf(owner)
-                .stream().filter(b -> b.hasCapacityFor(monster.getProp().getSize(), monster.getProp().needsRoof()))
+                .stream().filter(b -> b.hasCapacityFor(monster.getProp().size, monster.getProp().needsRoof))
                 .findFirst().orElse(null);
     }
 

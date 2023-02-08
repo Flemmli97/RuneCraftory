@@ -274,6 +274,7 @@ public class GateEntity extends Mob implements IBaseMob {
         this.spawnList.addAll(GateSpawning.pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(4) + 2, this.blockPosition(), gateLevel));
         this.setPos(this.getX(), this.getY() + 1, this.getZ());
         this.updateStatsToLevel();
+        this.spawnMobs();
         //Cant check during spawn conditions since gate level isnt set there yet
         if (this.spawnList.isEmpty() && reason != MobSpawnType.SPAWN_EGG && reason != MobSpawnType.COMMAND)
             this.removeCauseEmptyList = true;
