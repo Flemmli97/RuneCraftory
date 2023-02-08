@@ -163,7 +163,6 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
                 if (success) {
                     player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
                     LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5);
-                    LevelCalc.useRP(player, data, 10, true, false, true, EnumSkills.HAMMERAXE);
                 }
             };
             data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.HAMMERAXERIGHTCLICK, stack, run);

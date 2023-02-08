@@ -148,7 +148,6 @@ public class PlayerWeaponHandler {
                 }
             }
             if (flag) {
-                LevelCalc.useRP(player, data, 5, true, false, true, EnumSkills.FIST);
                 LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 2);
             }
         }

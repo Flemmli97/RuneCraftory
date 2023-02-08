@@ -121,7 +121,6 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
                         if (performRightClickAction(stack, entity, this.getRange(entity, stack), this.getFOV(entity, stack))) {
                             CombatUtils.hitEntityWithItemPlayer(player, stack);
                             LevelCalc.levelSkill(player, data, EnumSkills.SHORTSWORD, 6);
-                            LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.SHORTSWORD);
                         }
                     };
                     data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.SHORTSWORDRIGHTCLICK, stack, run);

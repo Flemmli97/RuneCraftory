@@ -122,7 +122,6 @@ public class ItemDualBladeBase extends SwordItem implements IItemUsable, ICharge
                         if (performRightClickAction(stack, entity, this.getRange(entity, stack), this.getFOV(entity, stack))) {
                             entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
                             LevelCalc.levelSkill(player, data, EnumSkills.DUAL, 3);
-                            LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.DUAL);
                         }
                     };
                     data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.DUALRIGHTCLICK, stack, run);

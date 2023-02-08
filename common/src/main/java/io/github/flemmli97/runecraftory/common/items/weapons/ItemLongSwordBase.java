@@ -121,7 +121,6 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
                         player.sweepAttack();
                         if (performRightClickAction(stack, entity, this.getRange(entity, stack))) {
                             LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 7);
-                            LevelCalc.useRP(player, data, 12, true, false, true, EnumSkills.LONGSWORD);
                         }
                     };
                     data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.LONGSWORDRIGHTCLICK, stack, run);
