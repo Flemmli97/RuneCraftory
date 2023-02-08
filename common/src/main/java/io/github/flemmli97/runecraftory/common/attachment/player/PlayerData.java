@@ -61,6 +61,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class PlayerData {
@@ -275,8 +276,9 @@ public class PlayerData {
     }
 
     private void onLevelUp(Player player) {
-        this.setMaxHealth(player, player.getMaxHealth() + GeneralConfig.hpPerLevel, false);
-        player.heal(GeneralConfig.hpPerLevel);
+        float health = player.getMaxHealth();
+        this.updateHealth(player);
+        player.heal(player.getMaxHealth() - health);
         this.runePointsMax += GeneralConfig.rpPerLevel;
         this.runePoints = Math.min(this.runePoints + (int) GeneralConfig.rpPerLevel, this.runePoints);
         this.str += GeneralConfig.strPerLevel;
@@ -286,8 +288,8 @@ public class PlayerData {
 
     public void recalculateStats(ServerPlayer player, boolean regen) {
         int lvl = this.level.getLevel() - 1;
-        this.setMaxHealth(player, GeneralConfig.hpPerLevel * lvl + GeneralConfig.startingHealth + this.skillVal(SkillProperties::healthIncrease).intValue(), true);
-        this.runePointsMax = GeneralConfig.rpPerLevel * lvl + GeneralConfig.startingRP + this.skillVal(SkillProperties::rpIncrease).intValue();
+        this.updateHealth(player);
+        this.runePointsMax = GeneralConfig.rpPerLevel * lvl + GeneralConfig.startingRP + this.skillValLevelFunc((skillLvl, prop) -> Math.min(100, skillLvl) * prop.rpIncrease()).intValue();
         if (regen) {
             player.setHealth(player.getMaxHealth());
             this.runePoints = (int) this.runePointsMax;
@@ -300,6 +302,10 @@ public class PlayerData {
 
     private Double skillVal(Function<SkillProperties, Number> func) {
         return Arrays.stream(EnumSkills.values()).mapToDouble(s -> (this.skillMapN.get(s).getLevel() - 1) * func.apply(GeneralConfig.skillProps.get(s)).doubleValue()).sum();
+    }
+
+    private Double skillValLevelFunc(BiFunction<Integer, SkillProperties, Number> func) {
+        return Arrays.stream(EnumSkills.values()).mapToDouble(s -> func.apply(this.skillMapN.get(s).getLevel() - 1, GeneralConfig.skillProps.get(s)).doubleValue()).sum();
     }
 
     public LevelExpPair getSkillLevel(EnumSkills skill) {
@@ -334,13 +340,27 @@ public class PlayerData {
 
     private void onSkillLevelUp(EnumSkills skill, Player player) {
         SkillProperties prop = GeneralConfig.skillProps.get(skill);
-        this.setMaxHealth(player, player.getMaxHealth() + prop.healthIncrease(), false);
-        player.heal(prop.healthIncrease());
-        this.runePointsMax += prop.rpIncrease();
-        this.runePoints += prop.rpIncrease();
+        int level = this.skillMapN.get(skill).getLevel();
+        float health = player.getMaxHealth();
+        this.updateHealth(player);
+        player.heal(player.getMaxHealth() - health);
+        if (level <= 100) {
+            this.runePointsMax += prop.rpIncrease();
+            this.runePoints += prop.rpIncrease();
+        }
         this.str += prop.strIncrease();
         this.vit += prop.vitIncrease();
         this.intel += prop.intelIncrease();
+    }
+
+    private void updateHealth(Player player) {
+        int lvl = this.level.getLevel() - 1;
+        int healthMultiplierLvl = Math.min(20, 1 + (lvl / 10));
+        this.setMaxHealth(player, GeneralConfig.startingHealth + healthMultiplierLvl * GeneralConfig.hpPerLevel * lvl +
+                this.skillValLevelFunc((skillLvl, prop) -> {
+                    int skillHealthMultiplier = 1 + (lvl / 25);
+                    return skillHealthMultiplier * prop.healthIncrease() * skillLvl;
+                }).floatValue(), true);
     }
 
     public void increaseStatBonus(Player player, ItemStatIncrease.Stat type) {
