@@ -15,7 +15,7 @@ public abstract class BonemealMixin {
 
     @Inject(method = "growCrop", at = @At(value = "HEAD"), cancellable = true)
     private static void bonemealCheck(ItemStack stack, Level level, BlockPos pos, CallbackInfoReturnable<Boolean> info) {
-        if (EntityCalls.onTryBonemeal(level, stack, level.getBlockState(pos), pos))
+        if (EntityCalls.onTryBonemeal(level, stack, level.getBlockState(pos), pos, null))
             info.setReturnValue(false);
     }
 }

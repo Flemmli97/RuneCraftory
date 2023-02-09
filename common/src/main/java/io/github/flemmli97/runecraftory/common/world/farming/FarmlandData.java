@@ -87,12 +87,12 @@ public class FarmlandData {
     }
 
     public boolean canUseBonemeal() {
-        return this.growth < 2.35;
+        return this.growth < 2.25;
     }
 
     public void applyBonemeal(@Nullable ServerLevel level) {
-        if (this.growth < 2.35)
-            this.applyGrowthFertilizer(level, 0.15f);
+        if (this.growth < 2.25)
+            this.applyGrowthFertilizer(level, Math.min(2.25f - this.growth, 0.15f));
     }
 
     public float getQuality() {

@@ -22,6 +22,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
 import io.github.flemmli97.runecraftory.common.network.S2CRuneyWeatherData;
+import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
@@ -47,6 +48,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.TicketType;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -69,9 +71,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -293,25 +295,40 @@ public class EntityCalls {
         }
     }
 
-    public static boolean onTryBonemeal(Level level, ItemStack stack, BlockState state, BlockPos pos) {
-        if (level instanceof ServerLevel serverLevel && state.getBlock() instanceof CropBlock crop) {
-            CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getCloneItemStack(level, pos, state).getItem());
-            if (props != null) {
-                BlockPos below = pos.below();
-                BlockState belowState = level.getBlockState(below);
-                if (FarmlandHandler.isFarmBlock(belowState))
-                    FarmlandHandler.get(serverLevel.getServer())
-                            .getData(serverLevel, pos).ifPresent(d -> {
-                                if (d.canUseBonemeal()) {
-                                    d.applyBonemeal(serverLevel);
-                                    stack.shrink(1);
-                                    level.levelEvent(LevelEvent.PARTICLES_AND_SOUND_PLANT_GROWTH, pos, 0);
-                                }
-                            });
+    public static boolean onTryBonemeal(Level level, ItemStack stack, BlockState state, BlockPos pos, @Nullable Player player) {
+        if (level instanceof ServerLevel serverLevel) {
+            BlockPos targetPos = null;
+            boolean swing = false;
+            if (state.getBlock() instanceof CropBlock crop) {
+                CropProperties props = DataPackHandler.SERVER_PACK.cropManager().get(crop.getCloneItemStack(level, pos, state).getItem());
+                if (props != null) {
+                    BlockPos below = pos.below();
+                    if (FarmlandHandler.isFarmBlock(level.getBlockState(below)))
+                        targetPos = below;
+                }
+            } else if (FarmlandHandler.isFarmBlock(state)) {
+                targetPos = pos;
+                swing = true;
+            }
+            if (targetPos != null) {
+                BlockPos target = targetPos;
+                if (player != null) {
+                    if (swing) {
+                        player.swing(player.getOffhandItem().equals(stack) ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND, true);
+                    }
+                }
+                FarmlandHandler.get(serverLevel.getServer())
+                        .getData(serverLevel, target).ifPresent(d -> {
+                            if (d.canUseBonemeal()) {
+                                d.applyBonemeal(serverLevel);
+                                stack.shrink(1);
+                                Platform.INSTANCE.sendToAll(new S2CTriggers(S2CTriggers.Type.FERTILIZER, target), level.getServer());
+                            }
+                        });
                 return true;
             }
         }
-        return false;
+        return player == null && FarmlandHandler.isFarmBlock(state);
     }
 
     public static void updateLivingTick(Player player) {

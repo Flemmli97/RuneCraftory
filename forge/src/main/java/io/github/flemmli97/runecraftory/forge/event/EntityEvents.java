@@ -131,7 +131,7 @@ public class EntityEvents {
 
     @SubscribeEvent
     public void bonemeal(BonemealEvent event) {
-        if (EntityCalls.onTryBonemeal(event.getWorld(), event.getStack(), event.getBlock(), event.getPos())) {
+        if (EntityCalls.onTryBonemeal(event.getWorld(), event.getStack(), event.getBlock(), event.getPos(), event.getPlayer())) {
             event.setCanceled(true);
         }
     }
