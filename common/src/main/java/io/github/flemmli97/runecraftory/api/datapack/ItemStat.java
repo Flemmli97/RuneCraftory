@@ -256,11 +256,12 @@ public class ItemStat {
             list.add(new TranslatableComponent("tooltip.item.difficulty", this.getDiff()).withStyle(ChatFormatting.YELLOW));
         if (showStat) {
             AttributeMapDisplay stats = getStatsAttributeMap(stack);
-            if (stats.flat != null || stats.ext != null) {
+            List<Component> statsTooltip = stats.components();
+            if (!statsTooltip.isEmpty()) {
                 String prefix = shouldHaveStats ? "tooltip.item.equipped" : "tooltip.item.upgrade";
                 list.add(new TranslatableComponent(prefix).withStyle(ChatFormatting.GRAY));
+                list.addAll(statsTooltip);
             }
-            list.addAll(stats.components());
         }
         return list;
     }

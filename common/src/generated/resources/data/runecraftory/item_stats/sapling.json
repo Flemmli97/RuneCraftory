@@ -1,0 +1,13 @@
+{
+  "buyPrice": 0,
+  "sellPrice": 0,
+  "upgradeDifficulty": 5,
+  "itemStats": {
+    "minecraft:generic.max_health": 3.0
+  },
+  "monsterBonus": {
+    "minecraft:generic.max_health": 0.15
+  },
+  "element": "NONE",
+  "tag": "minecraft:saplings"
+}

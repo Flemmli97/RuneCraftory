@@ -1,0 +1,13 @@
+{
+  "buyPrice": 5,
+  "sellPrice": 1,
+  "upgradeDifficulty": 1,
+  "itemStats": {
+    "runecraftory:defence": 1.0
+  },
+  "monsterBonus": {
+    "runecraftory:defence": 0.2
+  },
+  "element": "NONE",
+  "tag": "minecraft:sand"
+}

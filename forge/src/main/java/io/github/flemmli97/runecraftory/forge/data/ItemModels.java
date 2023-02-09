@@ -79,6 +79,8 @@ public class ItemModels extends ItemModelProvider {
                 this.withExistingParent(sup.getID().getPath(), "block/spawner");
             else if (sup == ModItems.debug)
                 this.withExistingParent(sup.getID().getPath(), this.modLoc("item/" + ModItems.unknown.getID().getPath()));
+            else if (sup == ModItems.tame)
+                this.withExistingParent(sup.getID().getPath(), this.mcLoc("item/template_spawn_egg"));
             else if (sup == ModItems.cutlass || sup == ModItems.seaCutter)
                 this.singleTexture(sup.getID().getPath(), new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"), "layer0", this.modLoc("item/" + sup.getID().getPath()));
             else if (sup == ModItems.battleAxe || sup == ModItems.greatAxe)

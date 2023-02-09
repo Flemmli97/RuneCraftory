@@ -1,0 +1,14 @@
+{
+  "buyPrice": 100,
+  "sellPrice": 5,
+  "upgradeDifficulty": 7,
+  "itemStats": {
+    "minecraft:generic.knockback_resistance": 0.2,
+    "runecraftory:defence": 5.0
+  },
+  "monsterBonus": {
+    "runecraftory:defence": 0.5
+  },
+  "element": "NONE",
+  "item": "minecraft:obsidian"
+}

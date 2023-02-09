@@ -21,10 +21,42 @@ public class ItemStatGen extends ItemStatProvider {
 
     @Override
     protected void add() {
-        //Vanilla stuff
+        //=====Vanilla stuff
+        //Blocks
         this.addStat("stone", ItemTags.STONE_CRAFTING_MATERIALS, new ItemStat.Builder(5, 1, 1)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.2));
+        this.addStat("sand", ItemTags.SAND, new ItemStat.Builder(5, 1, 1)
+                .addAttribute(ModAttributes.DEFENCE.get(), 1)
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.2));
+        this.addStat("gravel", Items.GRAVEL, new ItemStat.Builder(5, 1, 1)
+                .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1)
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.2));
+        this.addStat("logs", ItemTags.LOGS, new ItemStat.Builder(10, 2, 3)
+                .addAttribute(Attributes.MAX_HEALTH, 3)
+                .addAttribute(ModAttributes.DEFENCE.get(), 2)
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.25));
+        this.addStat("wool", ItemTags.WOOL, new ItemStat.Builder(25, 3, 5)
+                .addAttribute(ModAttributes.DEFENCE.get(), 2)
+                .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 2)
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.2)
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.2));
+        this.addStat("obsidian", Items.OBSIDIAN, new ItemStat.Builder(100, 5, 7)
+                .addAttribute(ModAttributes.DEFENCE.get(), 5)
+                .addAttribute(Attributes.KNOCKBACK_RESISTANCE, 0.2)
+                .addMonsterStat(ModAttributes.DEFENCE.get(), 0.5));
+
+        //Misc
+        this.addStat("sapling", ItemTags.SAPLINGS, new ItemStat.Builder(0, 0, 5)
+                .addAttribute(Attributes.MAX_HEALTH, 3)
+                .addMonsterStat(Attributes.MAX_HEALTH, 0.15));
+        this.addStat("flowers", ItemTags.FLOWERS, new ItemStat.Builder(0, 0, 3)
+                .addAttribute(Attributes.MAX_HEALTH, 2)
+                .addMonsterStat(Attributes.MAX_HEALTH, 0.1));
+        this.addStat("candles", ItemTags.CANDLES, new ItemStat.Builder(0, 0, 1)
+                .addAttribute(ModAttributes.MAGIC.get(), 1)
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.1));
+
         this.addStat(Items.STICK, new ItemStat.Builder(11, 1, 1)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.2));
@@ -32,6 +64,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.22)
                 .setSpell(ModSpells.ARROW.get(), null, null));
+
         this.addStat("coals", ItemTags.COALS, new ItemStat.Builder(65, 5, 2)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.2));
@@ -179,33 +212,33 @@ public class ItemStatGen extends ItemStatProvider {
 
         this.addStat(ModItems.broadSword.get(), new ItemStat.Builder(100, 16, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 4)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(11))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(shortSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.steelSword.get(), new ItemStat.Builder(1320, 54, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 8)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 5)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(11))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(shortSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.steelSwordPlus.get(), new ItemStat.Builder(2310, 99, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 14)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 5)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(11))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(shortSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.cutlass.get(), new ItemStat.Builder(5240, 210, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 21)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 5)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 2)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(11))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(shortSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.aquaSword.get(), new ItemStat.Builder(7850, 357, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 34)
                 .addAttribute(ModAttributes.MAGIC.get(), 9)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 5)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(11))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(shortSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(EnumElement.WATER));
@@ -213,86 +246,86 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 49)
                 .addAttribute(ModAttributes.MAGIC.get(), 6)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 5)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(11))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(shortSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
 
         this.addStat(ModItems.claymore.get(), new ItemStat.Builder(210, 17, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 6)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 10)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(17))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(longSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.zweihaender.get(), new ItemStat.Builder(1360, 58, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 12)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 10)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(17))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(longSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.zweihaenderPlus.get(), new ItemStat.Builder(2170, 104, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 19)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 10)
                 .addAttribute(ModAttributes.RF_STUN.get(), 15)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(17))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(longSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.greatSword.get(), new ItemStat.Builder(4960, 231, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 27)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 10)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(17))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(longSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.seaCutter.get(), new ItemStat.Builder(9170, 404, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 41)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 10)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(17))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(longSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.cycloneBlade.get(), new ItemStat.Builder(13680, 623, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 53)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 10)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(17))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(longSwordBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
 
         this.addStat(ModItems.spear.get(), new ItemStat.Builder(190, 13, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 5)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 6)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(13))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(spearBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(5.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.woodStaff.get(), new ItemStat.Builder(1270, 56, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 8)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 6)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(13))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(spearBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(5.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.lance.get(), new ItemStat.Builder(2310, 101, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 12)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 6)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(13))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(spearBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(5.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.lancePlus.get(), new ItemStat.Builder(4460, 198, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 20)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 6)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(13))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(spearBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(5.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.needleSpear.get(), new ItemStat.Builder(7770, 333, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 35)
                 .addAttribute(ModAttributes.DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 6)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(13))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(spearBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(5.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.trident.get(), new ItemStat.Builder(13280, 543, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 50)
                 .addAttribute(ModAttributes.DEFENCE.get(), 6)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 6)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(13))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(spearBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(5.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
 
@@ -300,42 +333,42 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 9)
                 .addAttribute(ModAttributes.RF_CRIT.get(), 5)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 2)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(16))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.battleScythe.get(), new ItemStat.Builder(1430, 60, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 15)
                 .addAttribute(ModAttributes.RF_CRIT.get(), 15)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 2)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.poleAxe.get(), new ItemStat.Builder(3250, 147, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 25)
                 .addAttribute(ModAttributes.RF_CRIT.get(), 7)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 2)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.poleAxePlus.get(), new ItemStat.Builder(5430, 245, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 39)
                 .addAttribute(ModAttributes.RF_CRIT.get(), 7)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 2)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.greatAxe.get(), new ItemStat.Builder(9580, 417, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 54)
                 .addAttribute(ModAttributes.RF_CRIT.get(), 11)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 2)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.tomohawk.get(), new ItemStat.Builder(14360, 683, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 70)
                 .addAttribute(ModAttributes.RF_CRIT.get(), 15)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 2)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
 
@@ -343,82 +376,82 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 10)
                 .addAttribute(ModAttributes.RF_STUN.get(), 5)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 20)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.bat.get(), new ItemStat.Builder(1240, 54, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 13)
                 .addAttribute(ModAttributes.RF_STUN.get(), 6)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 20)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.warHammer.get(), new ItemStat.Builder(2960, 138, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 20)
                 .addAttribute(ModAttributes.RF_STUN.get(), 6)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 20)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.warHammerPlus.get(), new ItemStat.Builder(6340, 265, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 30)
                 .addAttribute(ModAttributes.RF_STUN.get(), 7)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 20)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.ironBat.get(), new ItemStat.Builder(9350, 421, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 44)
                 .addAttribute(ModAttributes.RF_STUN.get(), 9)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 20)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.greatHammer.get(), new ItemStat.Builder(14740, 658, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 61)
                 .addAttribute(ModAttributes.RF_STUN.get(), 11)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 20)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(axeHammerBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
 
         this.addStat(ModItems.shortDagger.get(), new ItemStat.Builder(230, 12, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(dualBladeBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.steelEdge.get(), new ItemStat.Builder(950, 44, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 7)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(dualBladeBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.frostEdge.get(), new ItemStat.Builder(2610, 121, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 12)
                 .addAttribute(ModAttributes.MAGIC.get(), 4)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(dualBladeBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.ironEdge.get(), new ItemStat.Builder(4910, 230, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 18)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(dualBladeBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.thiefKnife.get(), new ItemStat.Builder(7940, 384, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 27)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(dualBladeBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.windEdge.get(), new ItemStat.Builder(11600, 568, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 40)
                 .addAttribute(ModAttributes.MAGIC.get(), 9)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(dualBladeBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(EnumElement.WIND));
@@ -426,21 +459,21 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.leatherGlove.get(), new ItemStat.Builder(190, 13, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 5)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(gloveBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.brassKnuckles.get(), new ItemStat.Builder(1580, 74, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 9)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(gloveBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.kote.get(), new ItemStat.Builder(3170, 136, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 16)
                 .addAttribute(ModAttributes.DEFENCE.get(), 3)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(gloveBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
         this.addStat(ModItems.gloves.get(), new ItemStat.Builder(5480, 238, 0)
@@ -448,14 +481,14 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.DEFENCE.get(), 4)
                 .addAttribute(Attributes.MAX_HEALTH, 15)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(gloveBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.bearClaws.get(), new ItemStat.Builder(8140, 394, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 33)
                 .addAttribute(ModAttributes.DEFENCE.get(), 9)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(gloveBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
         this.addStat(ModItems.fistEarth.get(), new ItemStat.Builder(12640, 587, 0)
@@ -464,7 +497,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.DEFENCE.get(), 14)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 5)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(7))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(gloveBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(2.5f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .setElement(EnumElement.EARTH));
@@ -472,7 +505,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.rod.get(), new ItemStat.Builder(281, 32, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 5)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 15)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(staffBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(ModAttributes.MAGIC.get(), 0.5)
                 .setElement(EnumElement.FIRE)
@@ -480,129 +513,129 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.amethystRod.get(), new ItemStat.Builder(1550, 76, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 13)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 15)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(staffBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(ModAttributes.MAGIC.get(), 0.5)
                 .setElement(EnumElement.EARTH));
         this.addStat(ModItems.aquamarineRod.get(), new ItemStat.Builder(3430, 186, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 17)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 15)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(staffBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(ModAttributes.MAGIC.get(), 0.5)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.friendlyRod.get(), new ItemStat.Builder(8670, 297, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 28)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 15)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(staffBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(ModAttributes.MAGIC.get(), 1)
                 .setElement(EnumElement.LOVE));
         this.addStat(ModItems.loveLoveRod.get(), new ItemStat.Builder(10550, 436, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 41)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 15)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(staffBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(ModAttributes.MAGIC.get(), 1)
                 .setElement(EnumElement.LOVE));
         this.addStat(ModItems.staff.get(), new ItemStat.Builder(14110, 599, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 66)
                 .addAttribute(ModAttributes.RF_DIZ.get(), 15)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(15))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(staffBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(ModAttributes.MAGIC.get(), 1)
                 .setElement(EnumElement.EARTH));
 
         this.addStat(ModItems.hoeScrap.get(), new ItemStat.Builder(150, 34, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.hoeIron.get(), new ItemStat.Builder(4500, 121, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 15)
                 .addAttribute(ModAttributes.MAGIC.get(), 3)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.hoeSilver.get(), new ItemStat.Builder(25000, 300, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 34)
                 .addAttribute(ModAttributes.MAGIC.get(), 5)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.EARTH));
         this.addStat(ModItems.hoeGold.get(), new ItemStat.Builder(0, 550, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 76)
                 .addAttribute(ModAttributes.MAGIC.get(), 15)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.EARTH));
         this.addStat(ModItems.hoePlatinum.get(), new ItemStat.Builder(0, 2000, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 111)
                 .addAttribute(ModAttributes.MAGIC.get(), 45)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.EARTH));
 
         this.addStat(ModItems.wateringCanScrap.get(), new ItemStat.Builder(150, 45, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 1)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.wateringCanIron.get(), new ItemStat.Builder(4500, 164, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 7)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.wateringCanSilver.get(), new ItemStat.Builder(25000, 300, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 19)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.wateringCanGold.get(), new ItemStat.Builder(0, 550, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 39)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WATER));
         this.addStat(ModItems.wateringCanPlatinum.get(), new ItemStat.Builder(0, 2000, 0)
                 .addAttribute(ModAttributes.MAGIC.get(), 99)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WATER));
 
         this.addStat(ModItems.sickleScrap.get(), new ItemStat.Builder(150, 24, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.sickleIron.get(), new ItemStat.Builder(4500, 118, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 19)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.sickleSilver.get(), new ItemStat.Builder(25000, 300, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 36)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.sickleGold.get(), new ItemStat.Builder(0, 550, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 79)
                 .addAttribute(ModAttributes.MAGIC.get(), 5)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WIND));
         this.addStat(ModItems.sicklePlatinum.get(), new ItemStat.Builder(0, 2000, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 134)
                 .addAttribute(ModAttributes.MAGIC.get(), 31)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1)
                 .setElement(EnumElement.WIND));
@@ -610,31 +643,31 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.axeScrap.get(), new ItemStat.Builder(150, 37, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
                 .addAttribute(ModAttributes.RF_CRIT.get(), 5)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.axeIron.get(), new ItemStat.Builder(4500, 148, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 22)
                 .addAttribute(ModAttributes.RF_CRIT.get(), 5)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.axeSilver.get(), new ItemStat.Builder(25000, 300, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 39)
                 .addAttribute(ModAttributes.RF_CRIT.get(), 5)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.axeGold.get(), new ItemStat.Builder(0, 550, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 83)
                 .addAttribute(ModAttributes.RF_CRIT.get(), 5)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.axePlatinum.get(), new ItemStat.Builder(0, 2000, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 140)
                 .addAttribute(ModAttributes.RF_CRIT.get(), 15)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
 
@@ -642,66 +675,66 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
                 .addAttribute(ModAttributes.RF_CRIT.get(), -5)
                 .addAttribute(ModAttributes.RF_STUN.get(), 10)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.hammerIron.get(), new ItemStat.Builder(4500, 142, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 23)
                 .addAttribute(ModAttributes.RF_CRIT.get(), -5)
                 .addAttribute(ModAttributes.RF_STUN.get(), 10)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.hammerSilver.get(), new ItemStat.Builder(25000, 300, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 47)
                 .addAttribute(ModAttributes.RF_CRIT.get(), -5)
                 .addAttribute(ModAttributes.RF_STUN.get(), 10)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.hammerGold.get(), new ItemStat.Builder(0, 550, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 85)
                 .addAttribute(ModAttributes.RF_CRIT.get(), -5)
                 .addAttribute(ModAttributes.RF_STUN.get(), 10)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.hammerPlatinum.get(), new ItemStat.Builder(0, 2000, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 145)
                 .addAttribute(ModAttributes.RF_CRIT.get(), -7)
                 .addAttribute(ModAttributes.RF_STUN.get(), 10)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
 
         this.addStat(ModItems.fishingRodScrap.get(), new ItemStat.Builder(150, 35, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
                 .addAttribute(ModAttributes.MAGIC.get(), 5)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.fishingRodIron.get(), new ItemStat.Builder(4500, 135, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 9)
                 .addAttribute(ModAttributes.MAGIC.get(), 14)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.fishingRodSilver.get(), new ItemStat.Builder(25000, 300, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 26)
                 .addAttribute(ModAttributes.MAGIC.get(), 27)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.fishingRodGold.get(), new ItemStat.Builder(0, 550, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 66)
                 .addAttribute(ModAttributes.MAGIC.get(), 72)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
         this.addStat(ModItems.fishingRodPlatinum.get(), new ItemStat.Builder(0, 2000, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 89)
                 .addAttribute(ModAttributes.MAGIC.get(), 98)
-                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(20))
+                .addAttribute(ModAttributes.ATTACK_SPEED.get(), attackSpeedFor(toolsBaseSpeed()))
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(3))
                 .addMonsterStat(Attributes.MAX_HEALTH, 1));
 
@@ -1456,5 +1489,37 @@ public class ItemStatGen extends ItemStatProvider {
 
     private static double attackRangeFor(double range) {
         return range - 3;
+    }
+
+    private static double shortSwordBaseSpeed() {
+        return 11;
+    }
+
+    private static double longSwordBaseSpeed() {
+        return 17;
+    }
+
+    private static double spearBaseSpeed() {
+        return 13;
+    }
+
+    private static double axeHammerBaseSpeed() {
+        return 15;
+    }
+
+    private static double dualBladeBaseSpeed() {
+        return 7;
+    }
+
+    private static double gloveBaseSpeed() {
+        return 7;
+    }
+
+    private static double staffBaseSpeed() {
+        return 15;
+    }
+
+    private static double toolsBaseSpeed() {
+        return 20;
     }
 }
