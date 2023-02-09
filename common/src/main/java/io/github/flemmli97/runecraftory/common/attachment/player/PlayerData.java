@@ -54,7 +54,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -289,23 +288,23 @@ public class PlayerData {
     public void recalculateStats(ServerPlayer player, boolean regen) {
         int lvl = this.level.getLevel() - 1;
         this.updateHealth(player);
-        this.runePointsMax = GeneralConfig.rpPerLevel * lvl + GeneralConfig.startingRP + this.skillValLevelFunc((skillLvl, prop) -> Math.min(100, skillLvl) * prop.rpIncrease()).intValue();
+        this.runePointsMax = GeneralConfig.rpPerLevel * lvl + GeneralConfig.startingRP + (int) this.skillValLevelFunc((skillLvl, prop) -> Math.min(100, skillLvl) * prop.rpIncrease());
         if (regen) {
             player.setHealth(player.getMaxHealth());
             this.runePoints = (int) this.runePointsMax;
         }
-        this.str = GeneralConfig.strPerLevel * lvl + GeneralConfig.startingStr + this.skillVal(SkillProperties::strIncrease).intValue();
-        this.intel = GeneralConfig.intPerLevel * lvl + GeneralConfig.startingIntel + this.skillVal(SkillProperties::intelIncrease).intValue();
-        this.vit = GeneralConfig.vitPerLevel * lvl + GeneralConfig.startingVit + this.skillVal(SkillProperties::vitIncrease).intValue();
+        this.str = GeneralConfig.strPerLevel * lvl + GeneralConfig.startingStr + (float) this.skillVal(SkillProperties::strIncrease);
+        this.intel = GeneralConfig.intPerLevel * lvl + GeneralConfig.startingIntel + (float) this.skillVal(SkillProperties::intelIncrease);
+        this.vit = GeneralConfig.vitPerLevel * lvl + GeneralConfig.startingVit + (float) this.skillVal(SkillProperties::vitIncrease);
         Platform.INSTANCE.sendToClient(new S2CLevelPkt(this), player);
     }
 
-    private Double skillVal(Function<SkillProperties, Number> func) {
-        return Arrays.stream(EnumSkills.values()).mapToDouble(s -> (this.skillMapN.get(s).getLevel() - 1) * func.apply(GeneralConfig.skillProps.get(s)).doubleValue()).sum();
+    private double skillVal(Function<SkillProperties, Number> func) {
+        return this.skillMapN.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1) * func.apply(GeneralConfig.skillProps.get(e.getKey())).doubleValue()).sum();
     }
 
-    private Double skillValLevelFunc(BiFunction<Integer, SkillProperties, Number> func) {
-        return Arrays.stream(EnumSkills.values()).mapToDouble(s -> func.apply(this.skillMapN.get(s).getLevel() - 1, GeneralConfig.skillProps.get(s)).doubleValue()).sum();
+    private double skillValLevelFunc(BiFunction<Integer, SkillProperties, Number> func) {
+        return this.skillMapN.entrySet().stream().mapToDouble(e -> func.apply(e.getValue().getLevel() - 1, GeneralConfig.skillProps.get(e.getKey())).doubleValue()).sum();
     }
 
     public LevelExpPair getSkillLevel(EnumSkills skill) {
@@ -354,13 +353,11 @@ public class PlayerData {
     }
 
     private void updateHealth(Player player) {
-        int lvl = this.level.getLevel() - 1;
-        int healthMultiplierLvl = Math.min(20, 1 + (lvl / 10));
-        this.setMaxHealth(player, GeneralConfig.startingHealth + healthMultiplierLvl * GeneralConfig.hpPerLevel * lvl +
-                this.skillValLevelFunc((skillLvl, prop) -> {
-                    int skillHealthMultiplier = 1 + (lvl / 25);
+        this.setMaxHealth(player, GeneralConfig.startingHealth + LevelCalc.getHealthTotalFor(GeneralConfig.hpPerLevel, this.level.getLevel()) +
+                (float) this.skillValLevelFunc((skillLvl, prop) -> {
+                    int skillHealthMultiplier = 1 + (skillLvl / 25);
                     return skillHealthMultiplier * prop.healthIncrease() * skillLvl;
-                }).floatValue(), true);
+                }), true);
     }
 
     public void increaseStatBonus(Player player, ItemStatIncrease.Stat type) {

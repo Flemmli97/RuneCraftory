@@ -119,7 +119,7 @@ public class RunecraftoryCommand {
 
     private static int setSkillLevel(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         int ret = 0;
-        int amount = IntegerArgumentType.getInteger(ctx, "amount");
+        int amount = Math.max(1, IntegerArgumentType.getInteger(ctx, "amount"));
         String s = StringArgumentType.getString(ctx, "skill");
         if (s.equals("ALL")) {
             for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
@@ -158,7 +158,7 @@ public class RunecraftoryCommand {
 
     private static int setLevel(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
         int ret = 0;
-        int amount = IntegerArgumentType.getInteger(ctx, "amount");
+        int amount = Math.max(1, IntegerArgumentType.getInteger(ctx, "amount"));
         for (ServerPlayer player : EntityArgument.getPlayers(ctx, "player")) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> data.setPlayerLevel(player, amount, 0, true));
             ctx.getSource().sendSuccess(new TranslatableComponent("runecraftory.command.lvl.set", player.getName(), amount), false);
