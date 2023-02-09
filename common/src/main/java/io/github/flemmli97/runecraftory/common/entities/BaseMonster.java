@@ -506,10 +506,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     serverLevel.getChunkSource().addRegionTicket(WorldUtils.ENTITY_LOADER, this.chunkPosition(), 3, this.chunkPosition());
                     if (owner.level.dimension() != this.level.dimension()) {
                         TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
+                        teleported = true;
                     } else if (owner.distanceToSqr(this) > 450) {
                         TeleportUtils.tryTeleportAround(this, owner);
+                        teleported = true;
                     }
-                    teleported = true;
                 }
             }
         }
@@ -1085,7 +1086,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void onDailyUpdate() {
-        if (this.level instanceof ServerLevel && this.isTamed() && !this.playDeath()) {
+        if (this.level instanceof ServerLevel && this.isTamed() && !this.playDeath() && (!MobConfig.monsterNeedBarn || this.assignBarn())) {
             ResourceLocation resourceLocation = this.dailyDropTable();
             this.dropAsDailyDrop(resourceLocation);
         }
