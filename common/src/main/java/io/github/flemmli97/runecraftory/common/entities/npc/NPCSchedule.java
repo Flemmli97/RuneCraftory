@@ -74,7 +74,7 @@ public class NPCSchedule {
 
     public void load(CompoundTag tag) {
         this.schedule = Schedule.CODEC.parse(NbtOps.INSTANCE, tag)
-                .getOrThrow(true, RuneCraftory.logger::error);
+                .resultOrPartial(s -> RuneCraftory.logger.error("Couldn't load schedule for " + this.npc + ". " + s)).orElse(new Schedule(this.npc.getRandom()));
         this.view = null;
     }
 
