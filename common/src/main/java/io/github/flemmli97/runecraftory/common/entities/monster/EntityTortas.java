@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
 import io.github.flemmli97.runecraftory.common.entities.SwimWalkMoveController;
 import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.pathing.AmphibiousNavigator;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.core.BlockPos;
@@ -38,7 +39,7 @@ public class EntityTortas extends ChargingMonster {
         this.goalSelector.addGoal(2, this.ai);
         this.moveControl = new SwimWalkMoveController(this);
         this.goalSelector.removeGoal(this.swimGoal);
-        this.waterNavigator = new WaterBoundPathNavigation(this, world);
+        this.waterNavigator = new AmphibiousNavigator(this, world);
         this.groundNavigator = new GroundPathNavigation(this, world);
         this.wander.setInterval(2);
         this.maxUpStep = 1;
