@@ -290,7 +290,8 @@ public class LangGen implements DataProvider {
         this.add("monster.interact.barn.no", "%s has no barn");
         this.add("monster.interact.barn.no.ext", "%s [%s] has no home to go to.");
         this.add("barn.interact.not.owner", "This barn belongs to %s.");
-        this.add("barn.interact.block", "Barn[Roof:%1$s] with capacity %2$s");
+        this.add("barn.interact.block", "Barn with capacity %1$s");
+        this.add("barn.interact.block.roofed", "Roofed barn with capacity %1$s");
 
         this.add("tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
         this.add("tooltip.item.treasure_level", "Chest tier lvl: %s");
@@ -454,7 +455,7 @@ public class LangGen implements DataProvider {
                 "if too far regardless of where you are.");
 
         this.add("runecraftory.patchouli.entry.quests", "Quests");
-                this.add("runecraftory.patchouli.entry.quests.1", "" +
+        this.add("runecraftory.patchouli.entry.quests.1", "" +
                 "This feature is WIP and there are currently no quests.");
 
         this.add("runecraftory.patchouli.category.farming", "Agriculture");

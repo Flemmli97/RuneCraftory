@@ -45,7 +45,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
             if ((Math.abs(pos.getX() - blockPos.getX()) > size || Math.abs(pos.getZ() - blockPos.getZ()) > size)) // Skip blocks not needing checks
                 continue;
             if (!blockEntity.matches(level, pos, true)) {
-                size = Math.min(Math.abs(pos.getX() - blockPos.getX()), Math.abs(pos.getZ() - blockPos.getZ())) - 1;
+                size = Math.max(Math.abs(pos.getX() - blockPos.getX()), Math.abs(pos.getZ() - blockPos.getZ())) - 1;
                 if (size < 2) {
                     blockEntity.barnData.update(0, false);
                     return;
