@@ -26,6 +26,16 @@
     {
       "type": "patchouli:text",
       "text": "runecraftory.patchouli.entry.entities.6"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "barn",
+      "item": "runecraftory:monster_barn",
+      "text": "runecraftory.patchouli.entry.entities.7"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entities.8"
     }
   ],
   "sortnum": 3

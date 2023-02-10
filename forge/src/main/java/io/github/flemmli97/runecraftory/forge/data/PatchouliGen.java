@@ -77,6 +77,21 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .addSimpleTextPage("runecraftory.patchouli.entry.entities.4")
                 .addSimpleTextPage("runecraftory.patchouli.entry.entities.5")
                 .addSimpleTextPage("runecraftory.patchouli.entry.entities.6")
+                .addSpotlightPage(new ItemStack(ModItems.monsterBarn.get()))
+                .setAnchor("barn")
+                .setText("runecraftory.patchouli.entry.entities.7")
+                .build()
+                .addSimpleTextPage("runecraftory.patchouli.entry.entities.8")
+                .build()
+
+                .addEntry("entry.party", "runecraftory.patchouli.entry.party", new ItemStack(Items.LEAD))
+                .setSortnum(4)
+                .addSimpleTextPage("runecraftory.patchouli.entry.party.1")
+                .build()
+
+                .addEntry("entry.quests", "runecraftory.patchouli.entry.quests", new ItemStack(ModItems.questBoard.get()))
+                .setSortnum(5)
+                .addSimpleTextPage("runecraftory.patchouli.entry.quests.1")
                 .build()
                 .build();
 
@@ -84,14 +99,14 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .setSortnum(1)
 
                 .addEntry("entry.farming", "runecraftory.patchouli.entry.farming", new ItemStack(ModItems.turnipSeeds.get()))
-                .setSortnum(1)
+                .setSortnum(0)
                 .addSimpleTextPage("runecraftory.patchouli.entry.farming.1")
                 .addSimpleTextPage("runecraftory.patchouli.entry.farming.2")
                 .addSimpleTextPage("runecraftory.patchouli.entry.farming.3")
                 .build()
 
                 .addEntry("entry.fertilizer", "runecraftory.patchouli.entry.fertilizer", new ItemStack(ModItems.formularA.get()))
-                .setSortnum(2)
+                .setSortnum(1)
                 .addTextPage("runecraftory.patchouli.entry.fertilizer.1")
                 .setAnchor("p1")
                 .build()
@@ -99,7 +114,7 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .build()
 
                 .addEntry("entry.weather", "runecraftory.patchouli.entry.weather", new ItemStack(Items.SUNFLOWER))
-                .setSortnum(3)
+                .setSortnum(2)
                 .addSimpleTextPage("runecraftory.patchouli.entry.weather.1")
                 .addSimpleTextPage("runecraftory.patchouli.entry.weather.2")
                 .build()
@@ -109,7 +124,7 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .setSortnum(2)
 
                 .addEntry("entry.weapon", "runecraftory.patchouli.entry.weapon", new ItemStack(ModItems.shortDagger.get()))
-                .setSortnum(1)
+                .setSortnum(0)
                 .addSimpleTextPage("runecraftory.patchouli.entry.weapon.1")
                 .addSpotlightPage(new ItemStack(ModItems.broadSword.get()))
                 .setTitle("runecraftory.patchouli.entry.weapon.2.title")
@@ -142,7 +157,7 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .build()
 
                 .addEntry("entry.tools", "runecraftory.patchouli.entry.tools", new ItemStack(ModItems.hoeScrap.get()))
-                .setSortnum(2)
+                .setSortnum(1)
                 .addSimpleTextPage("runecraftory.patchouli.entry.tools.1")
                 .addSpotlightPage(new ItemStack(ModItems.hoeScrap.get()))
                 .setTitle("runecraftory.patchouli.entry.tools.2.title")
@@ -174,7 +189,7 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .build()
 
                 .addEntry("entry.spellskills", "runecraftory.patchouli.entry.spellskills", new ItemStack(ModItems.teleport.get()))
-                .setSortnum(5)
+                .setSortnum(2)
                 .addSimpleTextPage("runecraftory.patchouli.entry.spellskills.1")
                 .addCraftingPage(new ResourceLocation(RuneCraftory.MODID, "fireball"))
                 .setRecipe2(new ResourceLocation(RuneCraftory.MODID, "teleport"))
@@ -185,14 +200,24 @@ public class PatchouliGen extends PatchouliBookProvider {
         book.addCategory("category.npc", "runecraftory.patchouli.category.npc", "runecraftory.patchouli.category.npc.desc", new ItemStack(Items.PLAYER_HEAD))
                 .setSortnum(3)
                 .addEntry("entry.npc", "runecraftory.patchouli.entry.npc", new ItemStack(Items.PLAYER_HEAD))
-                .setSortnum(5)
-                .addSimpleTextPage("runecraftory.patchouli.entry.npc.1")
-                .addSimpleTextPage("runecraftory.patchouli.entry.npc.2")
+                .setSortnum(0)
+                .build()
 
+                .addEntry("entry.npc.jobs", "runecraftory.patchouli.entry.npc.jobs", new ItemStack(Items.PLAYER_HEAD))
+                .setSortnum(1)
+                .addSimpleTextPage("runecraftory.patchouli.entry.npc.jobs.1", "runecraftory.patchouli.entry.npc.jobs.1.title")
+                .addSimpleTextPage("runecraftory.patchouli.entry.npc.jobs.2", "runecraftory.patchouli.entry.npc.jobs.2.title")
+                .addSimpleTextPage("runecraftory.patchouli.entry.npc.jobs.3", "runecraftory.patchouli.entry.npc.jobs.3.title")
+                .addSimpleTextPage("runecraftory.patchouli.entry.npc.jobs.4", "runecraftory.patchouli.entry.npc.jobs.4.title")
+                .addSimpleTextPage("runecraftory.patchouli.entry.npc.jobs.5", "runecraftory.patchouli.entry.npc.jobs.5.title")
+                .addSimpleTextPage("runecraftory.patchouli.entry.npc.jobs.6", "runecraftory.patchouli.entry.npc.jobs.6.title")
+                .addSimpleTextPage("runecraftory.patchouli.entry.npc.jobs.7", "runecraftory.patchouli.entry.npc.jobs.7.title")
+                .addSimpleTextPage("runecraftory.patchouli.entry.npc.jobs.8", "runecraftory.patchouli.entry.npc.jobs.8.title")
+                .addSimpleTextPage("runecraftory.patchouli.entry.npc.jobs.9", "runecraftory.patchouli.entry.npc.jobs.9.title")
                 .build();
 
         CategoryBuilder cat = book.addCategory("category.entities", "runecraftory.patchouli.category.entities", "runecraftory.patchouli.category.entities.desc", new ItemStack(ModItems.spawner.get()))
-                .setSortnum(2);
+                .setSortnum(4);
 
         for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.getMonsters()
                 .stream().sorted(Comparator.comparing(RegistryEntrySupplier::getID)).toList()) {

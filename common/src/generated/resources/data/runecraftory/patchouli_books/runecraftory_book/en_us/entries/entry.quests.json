@@ -1,0 +1,12 @@
+{
+  "name": "runecraftory.patchouli.entry.quests",
+  "category": "runecraftory:category.main",
+  "icon": "runecraftory:quest_board",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.quests.1"
+    }
+  ],
+  "sortnum": 5
+}

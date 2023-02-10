@@ -406,8 +406,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.crafting.1", "This mod adds 4 additional blocks that are used to craft various items. " +
                 "Every crafting process requires a certain amount of rp. Recipes that you haven't unlocked yet will require more rp than those you have." +
                 "You will not be able to craft an item if the required rp is higher than your total rp. " +
-                "Crafting a locked recipe will unlock it. You can also learn new recipes by eating recipe breads which (currently) " +
-                "can be obtain only via treasure chests");
+                "Crafting a locked recipe will unlock it. You can also learn new recipes by eating recipe breads.");
         this.add("runecraftory.patchouli.entry.crafting.2", "Weapon and tools can be upgraded in the forge while armor can be upgraded in the accessory table. " +
                 "Open the upgrade gui by shift right clicking on the crafting device. An item can be upgraded till it reaches level 10. Holding shift while hovering over an item will tell you " +
                 "what stat it gives. Using the same item multiple times causes a diminishing returns effect so try use different items");
@@ -415,7 +414,7 @@ public class LangGen implements DataProvider {
                 "act the same as if you upgraded the weapon/tool with it.");
         this.add("runecraftory.patchouli.entry.crafting.armor", "Use the accessory table to make various armor pieces. Same as the forge you can use up to 3 additional items here " +
                 "to increase the stats.");
-        this.add("runecraftory.patchouli.entry.crafting.cooking", "The cooking table is as the name implies used to make all kinds of food.");
+        this.add("runecraftory.patchouli.entry.crafting.cooking", "The cooking table is as the name implies used to make all kinds of food. Some items can also be used as additional items for a better end product.");
         this.add("runecraftory.patchouli.entry.crafting.chemistry", "A chemistry set allows you to create potions and other pharmacy items.");
         this.add("runecraftory.patchouli.entry.minerals", "Minerals");
         this.add("runecraftory.patchouli.entry.minerals.1", "Cluster of minerals spawn all over the world. These mineral clusters can be mined with an iron pickaxe or above but its best mined with " +
@@ -428,46 +427,58 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.entities.1", "The mobs in this mod don't spawn by themself but through gates that appear through the world. $(br)" +
                 "The type of monster a gate spawns depends on the biome and a gate will continue to spawn monsters till it is destroyed. Gates can drop their corresponding crystals upon destruction. " +
                 "$(br)Bosses spawn in their structures only and can be fought once every day.");
-        this.add("runecraftory.patchouli.entry.entities.2", "Placing a $(thing)bell block$() (or other meeting POI type blocks) will prevent gates from spawning in a 48 block radius around it. " +
-                "$(br)$(br)Monsters are able to be tamed by throwing an item at them. This will consume the item and after a while $(bold)heart$(reset) particles" +
+        this.add("runecraftory.patchouli.entry.entities.2", "Placing a $(item)bell block$() (or other meeting POI type blocks) will prevent gates from spawning in a 48 block radius around it. " +
+                "$(br)$(br)Monsters are able to be tamed by having a $(l:entry.entities#barn)barn$() with enough space and throwing an item at them. This will consume the item and after a while $(bold)heart$(reset) particles" +
                 " appear if the taming was successful and $(bold)smoke$() particles appear if otherwise. Monsters might have one or more favorite items that ");
         this.add("runecraftory.patchouli.entry.entities.3", "doubles the taming chance and bosses can $(#ff0000)only$() be tamed by giving them their favorite items. " +
                 "Other ways to increase taming chance include: Brushing, leveling the taming skill and hitting it with a love attribute weapon." +
                 "$(br)$(br)Tamed monster cannot die. Instead they will simply play death when reaching critical damage and healing them through any means will bring them back up. " +
                 "Shift right click a tamed monster with a vanilla stick will release them again.");
-        this.add("runecraftory.patchouli.entry.entities.4", "You can interact with a tamed monster using the following actions: $(li)S$(thing)hift-right-clicking with an empty hand$() to change the behavior to follow, wander or stay mode." +
-                "$(li)$(thing)Right-click with an empty$() hand to (if possible) ride it." +
+        this.add("runecraftory.patchouli.entry.entities.4", "You can interact with a tamed monster using the following actions: " +
+                "$(li)$(thing)Shift-right-clicking opens up a menu for the monster." +
                 "$(li)While ridden press any of the following keys $(thing)$(k:runecraftory.key.spell_1), $(k:runecraftory.key.spell_2), $(k:runecraftory.key.spell_3), $(k:runecraftory.key.spell_4)$() to perform an attack." +
-                "$(li)$(thing)Right-click$() while holding a food item to feed it. ");
+                "$(li)$(thing)Drop$() an item to it will give it the item similar to the taming process.");
         this.add("runecraftory.patchouli.entry.entities.5", "Food without additional benefits simply heals it while the other apply their benefits like they would to a player." +
                 "$(br)$(br)Tamed monster can also help you with farming crops. Upon setting them into farming mode they will tend the crops in a certain radius around the initial position. " +
                 "The nearest inventory block will also be bound to their action and they will deposit harvested crops into that inventory and if seeds are in it they can also plant them.");
-        this.add("runecraftory.patchouli.entry.entities.6", "Using a pet inspector you can see the stats for your monster and configure additional things like area of actions and inventory for the entity. " +
+        this.add("runecraftory.patchouli.entry.entities.6", "While holding a $(item)monster command staff$() and opening the monster menu you can configure additional things like area of actions and inventory for the entity. " +
                 "Right clicking a block while e.g. configuring the home position will set the home position to that place." +
                 "$(br)Brushing and giving tamed monster items once a day increases your friendship with them.");
+        this.add("runecraftory.patchouli.entry.entities.7", "Barn blocks are needed to tame monsters and can be bought by smiths.");
+        this.add("runecraftory.patchouli.entry.entities.8", "To build a successful barn you would need at least a 5x5 area of hay bales. This area can increase up to 11x11. " +
+                "Most monster also need a roof. All blocks that block skylight count as roofs and needs to leave at least 3 blocks of air between the ground and the roof.");
+
+        this.add("runecraftory.patchouli.entry.party", "Party");
+        this.add("runecraftory.patchouli.entry.party.1", "You might have noticed that sometimes you can't make monsters or npc follow you. " +
+                "This is due to the party system which allows only a max of 3 entities to follow you at the same time. Party members will follow you and teleport " +
+                "if too far regardless of where you are.");
+
+        this.add("runecraftory.patchouli.entry.quests", "Quests");
+                this.add("runecraftory.patchouli.entry.quests.1", "" +
+                "This feature is WIP and there are currently no quests.");
 
         this.add("runecraftory.patchouli.category.farming", "Agriculture");
         this.add("runecraftory.patchouli.category.farming.desc", "An overview and guide about the agricultural aspects");
         this.add("runecraftory.patchouli.entry.farming", "Getting Started");
-        this.add("runecraftory.patchouli.entry.farming.1", "To get started with growing crops you first need a $(item)hoe$(), a $(item)watering can$() and of course $(item)crop seeds$() to plant. The hoe needs to be from this mod, others it will not work. " +
-                "Then simply till the land to turn it into farmland. The farmland will have some additional data compared to vanilla farmland that will influence the growth of crops. You can use a magnifying glass to inspect it.");
+        this.add("runecraftory.patchouli.entry.farming.1", "To get started with growing crops you first need a $(item)hoe$(), a $(item)watering can$() and of course $(item)crop seeds$() to plant. " +
+                "Then simply till the land to turn it into farmland. Using a $(item)magnifying glass$() you can see the stats of the farmland.");
         this.add("runecraftory.patchouli.entry.farming.2", "After that plant the crops on the farmland and water it with a watering can. Unlike vanilla farmland nearby water will not water it. " +
                 "The crops will grow every day and you will also need to keep watering them each day till they are fully grown. Crops can wilt if you forget to water them and by not watering wilted crops they will turn into withered grass so make sure to keep them hydrated. " +
-                "You can use items to increase the soil quality see $(l:entry.fertilizer#p1)here.");
+                "You can use items to increase the soil quality see $(l:entry.fertilizer#p1)here$().");
         this.add("runecraftory.patchouli.entry.farming.3", "Crops will get a growth bonus if they are planted in the correct season and if planted in the wrong season will grow slower. The cropsystem can affect crops not from this mod and if affected you will not be able to grow those the vanilla way. " +
                 "You can see if they are affected by simply look if they have additional info attached to them.");
         this.add("runecraftory.patchouli.entry.fertilizer", "Fertilizer");
         this.add("runecraftory.patchouli.entry.fertilizer.1", "There are various items to improve your farming experience. You can buy them at shops. Vanilla bonemeal will not work like normal and grow the crops, " +
                 "instead it will work as a very weak growth increaser for the soil");
         this.add("runecraftory.patchouli.entry.fertilizer.2", "$(li)Formular a, b and c acts increase the growth rate of the soil with a being the weakest and c the strongest." +
-                "$(li)Wettable powder: Increases the soils health" +
+                "$(li)Wettable powder: Increases the soils defence. If the defence is 0 storms have a chance to destroy the crop." +
                 "$(li)Giantizer/Minimizer are used to grow giant crops (Not implemented $(bold)ATM$())." +
                 "$(li)Greenifier: Increases soil level and as such also crop level (Not implemented $(bold)ATM$()).");
         this.add("runecraftory.patchouli.entry.weather", "Weather");
         this.add("runecraftory.patchouli.entry.weather.1", "There are 4 types of weather conditions in this mod that only changes during certain times of the day: " +
                 "$(li)$(a)Sunny$(): Normal sunny day without any special properties" +
                 "$(li)$(9)Rain$(): Farmland will automatically get watered ");
-        this.add("runecraftory.patchouli.entry.weather.2", "$(li)$(3)Stormy$(): Farmland will automatically get watered but also the health gets reduced over time. If health drops to 0 the crops can get destroyed so pay attention" +
+        this.add("runecraftory.patchouli.entry.weather.2", "$(li)$(3)Stormy$(): Farmland will automatically get watered but also the defence gets reduced over time. If defence drops to 0 the crops can get destroyed so pay attention" +
                 "$(li)$(6)Runey$(): Like sunny days but crops get a boost in growth" +
                 "$(br)$(br)If it gets cold enough it might also snow in places where it normally wouldn't.");
 
@@ -523,6 +534,27 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.patchouli.entry.npc.2", "Hover over the red text (if existent) to see that. Talking daily with a villager increases your friendship. You can also gift them item" +
                 "by throwing it at them. If you give them equipment they will equip it too." +
                 "$(br)$(br)Note: Villagers don't have skins yet.");
+
+        this.add("runecraftory.patchouli.entry.npc.jobs", "Villager jobs");
+        this.add("runecraftory.patchouli.entry.npc.jobs.1.title", "General Store");
+        this.add("runecraftory.patchouli.entry.npc.jobs.1", "The general store sells mostly seeds, vegetables and fruits");
+        this.add("runecraftory.patchouli.entry.npc.jobs.2.title", "Florist");
+        this.add("runecraftory.patchouli.entry.npc.jobs.2", "Here you can buy flowers and seeds an also fertilizer for your crops");
+        this.add("runecraftory.patchouli.entry.npc.jobs.3.title", "Smith");
+        this.add("runecraftory.patchouli.entry.npc.jobs.3", "The smith sells weapons, tools and armor as well as monster barns");
+        this.add("runecraftory.patchouli.entry.npc.jobs.4.title", "Doctor");
+        this.add("runecraftory.patchouli.entry.npc.jobs.4", "You can buy medicine and herbs here");
+        this.add("runecraftory.patchouli.entry.npc.jobs.5.title", "Cook");
+        this.add("runecraftory.patchouli.entry.npc.jobs.5", "Buy food and recipe breads here. The cook only has a certain amount of recipe breads each day");
+        this.add("runecraftory.patchouli.entry.npc.jobs.6.title", "Magic Store");
+        this.add("runecraftory.patchouli.entry.npc.jobs.6", "Sells various spells here. WIP");
+        this.add("runecraftory.patchouli.entry.npc.jobs.7.title", "Rune skill Store");
+        this.add("runecraftory.patchouli.entry.npc.jobs.7", "Sells various rune skills here. WIP");
+        this.add("runecraftory.patchouli.entry.npc.jobs.8.title", "Bath house");
+        this.add("runecraftory.patchouli.entry.npc.jobs.8", "Bath houses offer a way to regen your hp and rp. By talking to the bath house attendant you can obtain an effect " +
+                "which will regen hp+rp if you go into hot water (water with campfire below). Going out of the water will remove the effect immediately!");
+        this.add("runecraftory.patchouli.entry.npc.jobs.9.title", "Travelling merchant");
+        this.add("runecraftory.patchouli.entry.npc.jobs.9", "Sells misc items. WIP");
 
         this.add("runecraftory.patchouli.category.entities", "Monsters");
         this.add("runecraftory.patchouli.category.entities.desc", "List of all monsters");

@@ -1,0 +1,53 @@
+{
+  "name": "runecraftory.patchouli.entry.npc.jobs",
+  "category": "runecraftory:category.npc",
+  "icon": "minecraft:player_head",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.jobs.1",
+      "title": "runecraftory.patchouli.entry.npc.jobs.1.title"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.jobs.2",
+      "title": "runecraftory.patchouli.entry.npc.jobs.2.title"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.jobs.3",
+      "title": "runecraftory.patchouli.entry.npc.jobs.3.title"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.jobs.4",
+      "title": "runecraftory.patchouli.entry.npc.jobs.4.title"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.jobs.5",
+      "title": "runecraftory.patchouli.entry.npc.jobs.5.title"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.jobs.6",
+      "title": "runecraftory.patchouli.entry.npc.jobs.6.title"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.jobs.7",
+      "title": "runecraftory.patchouli.entry.npc.jobs.7.title"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.jobs.8",
+      "title": "runecraftory.patchouli.entry.npc.jobs.8.title"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.npc.jobs.9",
+      "title": "runecraftory.patchouli.entry.npc.jobs.9.title"
+    }
+  ],
+  "sortnum": 1
+}

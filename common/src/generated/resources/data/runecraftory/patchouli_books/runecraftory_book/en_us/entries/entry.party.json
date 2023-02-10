@@ -1,0 +1,12 @@
+{
+  "name": "runecraftory.patchouli.entry.party",
+  "category": "runecraftory:category.main",
+  "icon": "minecraft:lead",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.party.1"
+    }
+  ],
+  "sortnum": 4
+}
