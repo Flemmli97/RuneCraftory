@@ -209,6 +209,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private int foodBuffTick;
     private Player owner;
 
+    private int tpCooldown;
     private Behaviour behaviour = Behaviour.WANDER;
 
     private final LevelExpPair friendlyPoints = new LevelExpPair();
@@ -500,16 +501,18 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
         boolean teleported = false;
         if (this.level instanceof ServerLevel serverLevel) {
-            if (this.behaviourState().following) {
+            if (this.behaviourState().following && --this.tpCooldown <= 0) {
                 Player owner = this.getOwner();
                 if (owner != null) {
                     serverLevel.getChunkSource().addRegionTicket(WorldUtils.ENTITY_LOADER, this.chunkPosition(), 3, this.chunkPosition());
                     if (owner.level.dimension() != this.level.dimension()) {
                         TeleportUtils.safeDimensionTeleport(this, (ServerLevel) owner.level, owner.blockPosition());
                         teleported = true;
+                        this.tpCooldown = 20;
                     } else if (owner.distanceToSqr(this) > 450) {
                         TeleportUtils.tryTeleportAround(this, owner);
                         teleported = true;
+                        this.tpCooldown = 20;
                     }
                 }
             }

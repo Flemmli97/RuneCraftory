@@ -108,7 +108,7 @@ public abstract class FollowEntityGoal<T extends Mob> extends Goal {
         BlockPos blockPos = this.owner.blockPosition();
         for (int i = 0; i < 10; ++i) {
             int j = this.randomIntInclusive(-3, 3);
-            int k = this.randomIntInclusive(-1, 1);
+            int k = this.randomIntInclusive(-1, 2);
             int l = this.randomIntInclusive(-3, 3);
             if (this.maybeTeleportTo(blockPos.getX() + j, blockPos.getY() + k, blockPos.getZ() + l))
                 return true;
@@ -123,7 +123,7 @@ public abstract class FollowEntityGoal<T extends Mob> extends Goal {
         if (!TeleportUtils.validTeleportPlace(this.mob, new BlockPos(x, y, z), this::canTeleportOn)) {
             return false;
         }
-        this.mob.moveTo((double) x + 0.5, y, (double) z + 0.5, this.mob.getYRot(), this.mob.getXRot());
+        this.mob.moveTo(x + 0.5, y, z + 0.5, this.mob.getYRot(), this.mob.getXRot());
         this.mob.getNavigation().stop();
         return true;
     }

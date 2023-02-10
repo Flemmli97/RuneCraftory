@@ -10,6 +10,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Random;
 import java.util.function.Function;
@@ -21,7 +22,7 @@ public class TeleportUtils {
         BlockPos safe = null;
         for (int i = 0; i < 10; ++i) {
             int x = randomIntInclusive(entity.getRandom(), -3, 3);
-            int y = randomIntInclusive(entity.getRandom(), -1, 1);
+            int y = randomIntInclusive(entity.getRandom(), -1, 2);
             int z = randomIntInclusive(entity.getRandom(), -3, 3);
             BlockPos pos = isSafePos(entity, newLevel, blockPos.offset(x, y, z), s -> true);
             if (pos != null) {
@@ -54,7 +55,7 @@ public class TeleportUtils {
         BlockPos blockPos = target.blockPosition();
         for (int i = 0; i < 10; ++i) {
             int x = randomIntInclusive(entity.getRandom(), -3, 3);
-            int y = randomIntInclusive(entity.getRandom(), -1, 1);
+            int y = randomIntInclusive(entity.getRandom(), -1, 2);
             int z = randomIntInclusive(entity.getRandom(), -3, 3);
             BlockPos pos = blockPos.offset(x, y, z);
             if (validTeleportPlace(entity, pos, s -> true)) {
@@ -69,7 +70,7 @@ public class TeleportUtils {
     public static boolean tryTeleportAround(Mob entity, BlockPos target) {
         for (int i = 0; i < 10; ++i) {
             int x = randomIntInclusive(entity.getRandom(), -3, 3);
-            int y = randomIntInclusive(entity.getRandom(), -1, 1);
+            int y = randomIntInclusive(entity.getRandom(), -1, 2);
             int z = randomIntInclusive(entity.getRandom(), -3, 3);
             BlockPos pos = target.offset(x, y, z);
             if (validTeleportPlace(entity, pos, s -> true)) {
@@ -82,10 +83,7 @@ public class TeleportUtils {
     }
 
     public static boolean validTeleportPlace(Mob entity, BlockPos pos, Function<BlockState, Boolean> validPos) {
-        BlockPos safe = isSafePos(entity, pos, validPos);
-        if (safe == null)
-            return false;
-        return entity.level.noCollision(entity, entity.getBoundingBox().move(safe));
+        return isSafePos(entity, pos, validPos) != null;
     }
 
     public static BlockPos isSafePos(Mob entity, BlockPos pos, Function<BlockState, Boolean> validPos) {
@@ -103,6 +101,11 @@ public class TeleportUtils {
         BlockState blockState = level.getBlockState(pos.below());
         if (!validPos.apply(blockState)) {
             return null;
+        }
+        for (VoxelShape voxelShape : level.getBlockCollisions(entity, entity.getBoundingBox()
+                .move(pos.getX() + 0.5 - entity.getX(), pos.getY() - entity.getY(), pos.getZ() + 0.5 - entity.getZ()))) {
+            if (!voxelShape.isEmpty())
+                return null;
         }
         return pos;
     }

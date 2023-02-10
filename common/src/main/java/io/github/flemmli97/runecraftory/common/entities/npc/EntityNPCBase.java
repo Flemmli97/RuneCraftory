@@ -209,7 +209,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private Player entityToFollow;
     private UUID entityToFollowUUID;
 
-    private int sleepCooldown;
+    private int sleepCooldown, tpCooldown;
 
     private final List<ServerPlayer> interactingPlayers = new ArrayList<>();
 
@@ -381,16 +381,19 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.getAnimationHandler().tick();
         boolean teleported = false;
         if (this.level instanceof ServerLevel serverLevel) {
-            if (this.behaviourState().following) {
+            if (this.behaviourState().following && --this.tpCooldown <= 0) {
                 Player follow = this.followEntity();
                 if (follow != null) {
                     serverLevel.getChunkSource().addRegionTicket(WorldUtils.ENTITY_LOADER, this.chunkPosition(), 3, this.chunkPosition());
                     if (follow.level.dimension() != this.level.dimension()) {
                         TeleportUtils.safeDimensionTeleport(this, (ServerLevel) follow.level, follow.blockPosition());
+                        teleported = true;
+                        this.tpCooldown = 20;
                     } else if (follow.distanceToSqr(this) > 450) {
                         TeleportUtils.tryTeleportAround(this, follow);
+                        teleported = true;
+                        this.tpCooldown = 20;
                     }
-                    teleported = true;
                 }
             }
         }
