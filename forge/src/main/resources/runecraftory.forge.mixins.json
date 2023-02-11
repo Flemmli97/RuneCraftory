@@ -4,9 +4,9 @@
   "package": "io.github.flemmli97.runecraftory.forge.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "CompatQuarkMixin",
     "CompatApotheosis",
-    "CompatMinecolonies"
+    "CompatMinecolonies",
+    "CompatQuarkMixin"
   ],
   "client": [
   ],

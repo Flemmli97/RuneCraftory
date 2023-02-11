@@ -4,8 +4,10 @@
   "package": "io.github.flemmli97.runecraftory.fabric.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BonemealMixin",
     "CatSpawnerMixin",
     "DamageSourceAccessor",
+    "FarmBlockMixin",
     "GrowEvent",
     "ItemStackMixin",
     "LivingDeathEvent",
@@ -17,15 +19,13 @@
     "NaturalSpawnerMixin",
     "PhantomSpawnerMixin",
     "PlayerMixin",
-    "ServerPlayerGameModeMixin",
-    "BonemealMixin",
-    "FarmBlockMixin"
+    "ServerPlayerGameModeMixin"
   ],
   "client": [
-    "GuiMixin",
-    "LivingRenderMixin",
     "CameraAccessor",
     "GameRendererMixin",
+    "GuiMixin",
+    "LivingRenderMixin",
     "LocalPlayerMixin",
     "ScreenMixin"
   ],
