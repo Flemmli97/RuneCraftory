@@ -555,43 +555,44 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 if (inst != null) {
                     inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
                     float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * d * multiplier, AttributeModifier.Operation.ADDITION));
+                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - this.data.baseLevel()) * d * multiplier, AttributeModifier.Operation.ADDITION));
                     if (att == Attributes.MAX_HEALTH)
                         this.setHealth(this.getMaxHealth() - preHealthDiff);
                 }
             });
             return;
         }
+        int levelOffset = this.data != null ? this.data.baseLevel() : 1;
         AttributeInstance inst = this.getAttribute(Attributes.MAX_HEALTH);
         if (inst != null) {
             inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcHealthGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcHealthGain * multiplier, AttributeModifier.Operation.ADDITION));
             this.setHealth(this.getMaxHealth() - preHealthDiff);
         }
         inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (inst != null) {
             inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.DEFENCE.get());
         if (inst != null) {
             inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.MAGIC.get());
         if (inst != null) {
             inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcMagicAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcMagicAttackGain * multiplier, AttributeModifier.Operation.ADDITION));
         }
         inst = this.getAttribute(ModAttributes.MAGIC_DEFENCE.get());
         if (inst != null) {
             inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
             float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - 1) * MobConfig.npcMagicDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
+            inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - levelOffset) * MobConfig.npcMagicDefenceGain * multiplier, AttributeModifier.Operation.ADDITION));
         }
     }
 
@@ -1196,6 +1197,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         else
             this.schedule.with(data.schedule());
         this.applyAttributes(!load);
+        if (this.level().getLevel() < this.data.baseLevel()) {
+            this.setLevel(this.data.baseLevel());
+        }
         Platform.INSTANCE.sendToTrackingAndSelf(new S2CNPCLook(this.getId(), this.look), this);
     }
 

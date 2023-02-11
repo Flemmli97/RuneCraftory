@@ -62,6 +62,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .withSchedule(new NPCSchedule.Schedule(0, 1, 1, 1, 1, 1, 1, 1, EnumSet.noneOf(EnumDay.class)))
                         .setBaseStat(Attributes.MAX_HEALTH, 1)
                         .setStatIncrease(Attributes.MAX_HEALTH, 1)
+                        .setBaseLevel(5)
                         .build(),
                 new NPCData.NPCLook(NPCData.Gender.UNDEFINED, new ResourceLocation(RuneCraftory.MODID, "texture"), "Flemmli97", 0, List.of()));
         */
