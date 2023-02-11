@@ -20,17 +20,17 @@ public enum EnumSkills {
     FARMING("skill.farming", GainType.COMMON),
     LOGGING("skill.logging", GainType.COMMON),
     MINING("skill.mining", GainType.COMMON),
-    FISHING("skill.fishing", GainType.VERYFAST),
+    FISHING("skill.fishing", GainType.VERY_FAST),
 
-    COOKING("skill.cooking", GainType.VERYFAST),
-    FORGING("skill.forging", GainType.VERYFAST),
-    CHEMISTRY("skill.chemistry", GainType.VERYFAST),
-    CRAFTING("skill.crafting", GainType.VERYFAST),
+    COOKING("skill.cooking", GainType.CRAFTING),
+    FORGING("skill.forging", GainType.CRAFTING),
+    CHEMISTRY("skill.chemistry", GainType.CRAFTING),
+    CRAFTING("skill.crafting", GainType.CRAFTING),
 
     SLEEPING("skill.sleeping", GainType.FAST),
-    SEARCHING("skill.searching", GainType.VERYFAST),
+    SEARCHING("skill.searching", GainType.VERY_FAST),
     WALKING("skill.walking", GainType.COMMON),
-    EATING("skill.eating", GainType.VERYFAST),
+    EATING("skill.eating", GainType.VERY_FAST),
     DEFENCE("skill.defence", GainType.COMMON),
 
     RESPOISON("skill.poison_res", GainType.FAST),
@@ -69,7 +69,7 @@ public enum EnumSkills {
         COMMON,
         SLOW,
         FAST,
-        VERYFAST,
-        //CRAFTING;
+        VERY_FAST,
+        CRAFTING;
     }
 }

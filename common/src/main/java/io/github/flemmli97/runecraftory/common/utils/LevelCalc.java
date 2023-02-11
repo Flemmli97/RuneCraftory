@@ -33,14 +33,15 @@ public class LevelCalc {
     private static final int MAX_HEALTH_MULTIPLIER = 20;
     private static final int HEALTH_MULTIPLIER_INTERVAL = 10;
 
-    private static long[] levelXPTotal;
+    private static long[] LEVEL_XP_TOTAL;
 
-    private static long[] commonSkillXP;
-    private static long[] fastSkillXP;
-    private static long[] mediumSkillXP;
-    private static long[] slowSkillXP;
+    private static long[] COMMON_SKILL_XP;
+    private static long[] SLOW_SKILL_XP;
+    private static long[] FAST_SKILL_XP;
+    private static long[] VERY_FAST_SKILL_XP;
+    private static long[] CRAFTING_SKILL_XP;
 
-    private static long[] friendXPTotal;
+    private static long[] FRIEND_XP_TOTAL;
 
     /**
      * Experimental calculations
@@ -56,20 +57,22 @@ public class LevelCalc {
     public static long totalXpForLevel(int level) {
         if (level <= 0)
             return 0;
-        if (levelXPTotal == null || levelXPTotal.length < level) {
+        if (LEVEL_XP_TOTAL == null || LEVEL_XP_TOTAL.length < level) {
             int len = 100;
-            if (levelXPTotal != null) {
+            if (LEVEL_XP_TOTAL != null) {
                 len = level + 50;
             }
-            levelXPTotal = new long[len];
-            levelXPTotal[0] = 50;
-            long prev = levelXPTotal[0];
+            LEVEL_XP_TOTAL = new long[len];
+            LEVEL_XP_TOTAL[0] = 50;
+            long prev = LEVEL_XP_TOTAL[0];
             for (int l = 1; l < len; l++) {
-                levelXPTotal[l] = (long) (prev + 170 + 9 * Math.pow(l, 2.455) - 12 * Math.pow(l, 1.549) + (l - 1) * 125L);
-                prev = levelXPTotal[l];
+                LEVEL_XP_TOTAL[l] = (long) (prev + 20 + l * 30L + 15 * Math.pow(l, 1.25) + (l / 10) * 250L + (l / 20) * (l / 20) * 1000L);
+                //Old calc. here for now
+                //levelXPTotal[l] = (long) (prev + 170 + 9 * Math.pow(l, 2.455) - 12 * Math.pow(l, 1.549) + (l - 1) * 125L);
+                prev = LEVEL_XP_TOTAL[l];
             }
         }
-        return levelXPTotal[level - 1];
+        return LEVEL_XP_TOTAL[level - 1];
     }
 
     public static int xpAmountForSkillLevelUp(EnumSkills skill, int level) {
@@ -84,18 +87,22 @@ public class LevelCalc {
         if (level <= 0)
             return 0;
         long[] xps = switch (skill.gainType) {
-            case COMMON -> (commonSkillXP == null || commonSkillXP.length < level) ?
-                    commonSkillXP = calcSkillXPs(commonSkillXP, level, (l, prev) -> (long) (prev + 35 + 9 * Math.pow(l, 2.555) - 12 * Math.pow(l, 2.249) + l * 21))
-                    : commonSkillXP;
-            case SLOW -> (slowSkillXP == null || slowSkillXP.length < level) ?
-                    slowSkillXP = calcSkillXPs(slowSkillXP, level, (l, prev) -> prev + 25 + (l - 1L) * 35 + (int) (Math.pow(l, 2.3) * 0.1) * 10)
-                    : slowSkillXP;
-            case VERYFAST -> (mediumSkillXP == null || mediumSkillXP.length < level) ?
-                    mediumSkillXP = calcSkillXPs(mediumSkillXP, level, (l, prev) -> prev + 50 + (l - 1L) * 30)
-                    : mediumSkillXP;
-            case FAST -> (fastSkillXP == null || fastSkillXP.length < level) ?
-                    fastSkillXP = calcSkillXPs(fastSkillXP, level, (l, prev) -> prev + 40 + l * 30 + (int) (Math.pow(l, 1.75) * 0.125) * 10)
-                    : fastSkillXP;
+            case COMMON -> (COMMON_SKILL_XP == null || COMMON_SKILL_XP.length < level) ?
+                    COMMON_SKILL_XP = calcSkillXPs(COMMON_SKILL_XP, level, (l, prev) -> (long) (prev + 35 + 9 * Math.pow(l, 2.555) - 12 * Math.pow(l, 2.249) + l * 21L))
+                    : COMMON_SKILL_XP;
+            case SLOW -> (SLOW_SKILL_XP == null || SLOW_SKILL_XP.length < level) ?
+                    SLOW_SKILL_XP = calcSkillXPs(SLOW_SKILL_XP, level, (l, prev) -> prev + 25 + (l - 1L) * 15 + (l / 10) * 100L
+                            + (long) (Math.pow(l, 1.2) * 3 + Math.pow(l / 10, 2) * 50 + Math.pow(Math.max(0, l - 50) / 10, 1.235) * 500))
+                    : SLOW_SKILL_XP;
+            case FAST -> (FAST_SKILL_XP == null || FAST_SKILL_XP.length < level) ?
+                    FAST_SKILL_XP = calcSkillXPs(FAST_SKILL_XP, level, (l, prev) -> prev + 40 + l * 30 + (int) (Math.pow(l, 1.75) * 0.125) * 10)
+                    : FAST_SKILL_XP;
+            case VERY_FAST -> (VERY_FAST_SKILL_XP == null || VERY_FAST_SKILL_XP.length < level) ?
+                    VERY_FAST_SKILL_XP = calcSkillXPs(VERY_FAST_SKILL_XP, level, (l, prev) -> prev + 50 + (l - 1L) * 30)
+                    : VERY_FAST_SKILL_XP;
+            case CRAFTING -> (CRAFTING_SKILL_XP == null || CRAFTING_SKILL_XP.length < level) ?
+                    CRAFTING_SKILL_XP = calcSkillXPs(CRAFTING_SKILL_XP, level, (l, prev) -> prev + 50 + (l - 1L) * 15 + (l / 10) * 25L + (l % 10 == 0 ? (l / 10) * 35L : 0))
+                    : CRAFTING_SKILL_XP;
         };
         return xps[level - 1];
     }
@@ -126,16 +133,16 @@ public class LevelCalc {
     public static long totalFriendPointsForLevel(int level) {
         if (level <= 0 || level >= 10)
             return 0;
-        if (friendXPTotal == null) {
-            friendXPTotal = new long[10];
-            friendXPTotal[0] = 30;
-            long prev = friendXPTotal[0];
+        if (FRIEND_XP_TOTAL == null) {
+            FRIEND_XP_TOTAL = new long[10];
+            FRIEND_XP_TOTAL[0] = 30;
+            long prev = FRIEND_XP_TOTAL[0];
             for (int l = 1; l < 10; l++) {
-                friendXPTotal[l] = prev + 45 + l * 5 + l * l * 10;
-                prev = friendXPTotal[l];
+                FRIEND_XP_TOTAL[l] = prev + 45 + l * 5 + l * l * 10;
+                prev = FRIEND_XP_TOTAL[l];
             }
         }
-        return friendXPTotal[level - 1];
+        return FRIEND_XP_TOTAL[level - 1];
     }
 
     public static int getMoney(int base, int level) {

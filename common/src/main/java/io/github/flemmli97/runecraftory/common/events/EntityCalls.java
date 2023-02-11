@@ -264,7 +264,7 @@ public class EntityCalls {
                 }
             }
             if (MobConfig.vanillaGiveXp && entity instanceof Mob m && !(entity instanceof IBaseMob) && source.getEntity() instanceof LivingEntity attacker) {
-                LevelCalc.addXP(attacker, (int) (m.getMaxHealth() * 0.5), 0, 0, false);
+                LevelCalc.addXP(attacker, (int) Math.log(m.getMaxHealth() + 1) * 10, 0, 0, false);
             }
         }
         return false;
@@ -406,7 +406,7 @@ public class EntityCalls {
         if (damage < 0)
             entity.heal(-damage);
         else if (damage > 0 && source != DamageSource.OUT_OF_WORLD && entity instanceof ServerPlayer player) {
-            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DEFENCE, Math.min(5, (float) (0.5 + Math.log(damage * 0.5))) * 2));
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f));
         }
         if (source instanceof CustomDamage)
             entity.invulnerableTime = ((CustomDamage) source).hurtProtection() + 10;

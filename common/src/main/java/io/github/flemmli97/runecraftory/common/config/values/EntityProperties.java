@@ -37,7 +37,7 @@ public class EntityProperties {
     private EntityProperties(List<String> baseValues, List<String> gains, int minLevel, int xp, int money, float tamingChance, boolean ridable, boolean flying, int size, boolean needsRoof) {
         this.confAttributes = baseValues;
         this.confGains = gains;
-        this.minLevel = minLevel;
+        this.minLevel = Math.max(1, minLevel);
         this.xp = xp;
         this.money = money;
         this.tamingChance = tamingChance;
