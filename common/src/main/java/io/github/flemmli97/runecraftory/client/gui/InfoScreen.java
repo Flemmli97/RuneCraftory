@@ -70,7 +70,7 @@ public class InfoScreen extends EffectRenderingInventoryScreen<AbstractContainer
 
         int healthWidth = Math.min(100, (int) (this.minecraft.player.getHealth() / this.minecraft.player.getMaxHealth() * 100.0));
         int runeWidth = Math.min(100, (int) (this.data.getRunePoints() / (float) this.data.getMaxRunePoints() * 100.0f));
-        int exp = (int) (this.data.getPlayerLevel().getXp() / (float) LevelCalc.xpAmountForLevelUp(this.data.getPlayerLevel().getLevel()) * 100.0f);
+        int exp = Math.min(100, (int) (this.data.getPlayerLevel().getXp() / (float) LevelCalc.xpAmountForLevelUp(this.data.getPlayerLevel().getLevel()) * 100.0f));
         RenderSystem.setShaderTexture(0, bars);
         int barX = 117;
         this.blit(stack, this.leftPos + barX, this.topPos + 20, 2, 51, healthWidth, 6);
