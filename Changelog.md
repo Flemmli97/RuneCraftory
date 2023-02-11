@@ -22,6 +22,10 @@ RuneCraftory 1.5.0
 - Fix spam using bed increasing xp
 - Custom farmland block removed: Now uses a global system for farmland.
   Unloaded farmland now tick etc.
+- Removed rp cost for weapon charge attack
+- Add min level config for monsters and npc
+- Max skill level now configurable for individual skills
+- NPC stats now definable for individual npcs
 
 RuneCraftory 1.4.4
 ================
