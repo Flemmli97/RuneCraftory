@@ -20,6 +20,8 @@ public class BarnData {
     private int size = 0;
     private boolean hasRoof;
 
+    private int changeCooldown;
+
     private final Map<UUID, Integer> monsters = new HashMap<>();
     private final Set<BaseMonster> listeners = new HashSet<>();
 
@@ -37,8 +39,11 @@ public class BarnData {
     }
 
     public void update(int size, boolean hasRoof) {
+        if (this.size != size || this.hasRoof != hasRoof)
+            this.changeCooldown = 150;
         this.size = size;
         this.hasRoof = hasRoof;
+        --this.changeCooldown;
         this.listeners.removeIf(m -> {
             if (m.behaviourState() == BaseMonster.Behaviour.WANDER_HOME) {
                 if (m.level.dimension() == this.pos.dimension())
@@ -73,6 +78,11 @@ public class BarnData {
         return (this.getSize() - 3) * 4 + 2;
     }
 
+    public int usedCapacity() {
+        return this.monsters.values().stream().mapToInt(i -> i)
+                .sum();
+    }
+
     public boolean hasRoof() {
         return this.hasRoof;
     }
@@ -88,6 +98,8 @@ public class BarnData {
     public boolean isInvalidFor(BaseMonster monster) {
         if (this.isInvalid())
             return true;
+        if (this.monsters.containsKey(monster.getUUID()) && this.changeCooldown > 0)
+            return false;
         return !monster.getProp().needsRoof || !this.hasRoof;
     }
 
@@ -98,6 +110,7 @@ public class BarnData {
     public void load(CompoundTag tag) {
         this.size = tag.getInt("Size");
         this.hasRoof = tag.getBoolean("HasRoof");
+        this.changeCooldown = tag.getInt("ChangeCooldown");
         CompoundTag monsters = tag.getCompound("Monsters");
         monsters.getAllKeys().forEach(key -> this.monsters.put(UUID.fromString(key), monsters.getInt(key)));
     }
@@ -108,6 +121,7 @@ public class BarnData {
                 .ifPresent(t -> tag.put("Pos", t));
         tag.putInt("Size", this.size);
         tag.putBoolean("HasRoof", this.hasRoof);
+        tag.putInt("ChangeCooldown", this.changeCooldown);
         CompoundTag monsters = new CompoundTag();
         this.monsters.forEach((uuid, integer) -> monsters.putInt(uuid.toString(), integer));
         tag.put("Monsters", monsters);

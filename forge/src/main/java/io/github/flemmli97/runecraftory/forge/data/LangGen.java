@@ -290,8 +290,8 @@ public class LangGen implements DataProvider {
         this.add("monster.interact.barn.no", "%s has no barn");
         this.add("monster.interact.barn.no.ext", "%s [%s] has no home to go to.");
         this.add("barn.interact.not.owner", "This barn belongs to %s.");
-        this.add("barn.interact.block", "Barn with capacity %1$s");
-        this.add("barn.interact.block.roofed", "Roofed barn with capacity %1$s");
+        this.add("barn.interact.block", "Barn with capacity %1$s. %2$s free");
+        this.add("barn.interact.block.roofed", "Roofed barn with capacity %1$s. %2$s free");
 
         this.add("tooltip.item.treasure_chest", "Shift-right-click to cycle through loot tier");
         this.add("tooltip.item.treasure_level", "Chest tier lvl: %s");
@@ -447,7 +447,8 @@ public class LangGen implements DataProvider {
                 "$(br)Brushing and giving tamed monster items once a day increases your friendship with them.");
         this.add("runecraftory.patchouli.entry.entities.7", "Barn blocks are needed to tame monsters and can be bought by smiths.");
         this.add("runecraftory.patchouli.entry.entities.8", "To build a successful barn you would need at least a 5x5 area of hay bales. This area can increase up to 11x11. " +
-                "Most monster also need a roof. All blocks that block skylight count as roofs and needs to leave at least 3 blocks of air between the ground and the roof.");
+                "Most monster also need a roof. All blocks (except blocks without collision) count as roofs and there needs to be at least 3 blocks of air between the ground and the roof. " +
+                "Bigger sized barn also need more air blocks.");
 
         this.add("runecraftory.patchouli.entry.party", "Party");
         this.add("runecraftory.patchouli.entry.party.1", "You might have noticed that sometimes you can't make monsters or npc follow you. " +

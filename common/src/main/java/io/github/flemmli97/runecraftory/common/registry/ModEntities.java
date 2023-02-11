@@ -231,7 +231,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.DEFENCE, 0).putLevelGains(LibAttributes.DEFENCE, 1.2)
                     .putAttributes(LibAttributes.MAGIC, 5).putLevelGains(LibAttributes.MAGIC, 1.5)
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1)
-                    .xp(65).money(4).tamingChance(0.03f).setRidable().setFlying().build(),
+                    .xp(65).money(4).tamingChance(0.03f).setRidable().doesntNeedBarnRoof().setFlying().build(),
             new SpawnConfig.SpawnData.Builder(500, 7).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_HILL));
     public static final RegistryEntrySupplier<EntityType<EntityGoblin>> goblin = regMonster(EntityType.Builder.of(EntityGoblin::new, MobCategory.MONSTER).sized(0.6f, 1.5f).clientTrackingRange(8), LibEntities.goblin,
             0x21b322, 0x462f2a,

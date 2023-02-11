@@ -87,12 +87,9 @@ public class BlockMonsterBarn extends BaseEntityBlock {
             UUID owner = null;
             if (level.getBlockEntity(pos) instanceof MonsterBarnBlockEntity barn && (player.isCreative() || player.getUUID().equals(owner = barn.getOwner()))) {
                 if (barn.getBarnData() != null) {
-                    if (barn.getBarnData().hasRoof())
-                        player.sendMessage(new TranslatableComponent("barn.interact.block.roofed", barn.getBarnData().getCapacity())
-                                .withStyle(barn.getBarnData().getCapacity() > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_RED), Util.NIL_UUID);
-                    else
-                        player.sendMessage(new TranslatableComponent("barn.interact.block", barn.getBarnData().getCapacity())
-                                .withStyle(barn.getBarnData().getCapacity() > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_RED), Util.NIL_UUID);
+                    String key = barn.getBarnData().hasRoof() ? "barn.interact.block.roofed" : "barn.interact.block";
+                    player.sendMessage(new TranslatableComponent(key, barn.getBarnData().getCapacity(), barn.getBarnData().getCapacity() - barn.getBarnData().usedCapacity())
+                            .withStyle(barn.getBarnData().getCapacity() > 0 ? ChatFormatting.GOLD : ChatFormatting.DARK_RED), Util.NIL_UUID);
                 }
             } else if (owner != null) {
                 UUID uuid = owner;

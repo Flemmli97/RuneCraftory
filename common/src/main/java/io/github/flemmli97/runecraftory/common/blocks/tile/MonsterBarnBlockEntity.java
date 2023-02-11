@@ -11,9 +11,9 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 import javax.annotation.Nullable;
 import java.util.UUID;
@@ -44,7 +44,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
                 blockPos.getX() + size, blockPos.getY() - 1, blockPos.getZ() + size)) {
             if ((Math.abs(pos.getX() - blockPos.getX()) > size || Math.abs(pos.getZ() - blockPos.getZ()) > size)) // Skip blocks not needing checks
                 continue;
-            if (!blockEntity.matches(level, pos, true)) {
+            if (!matches(level, pos, true)) {
                 size = Math.max(Math.abs(pos.getX() - blockPos.getX()), Math.abs(pos.getZ() - blockPos.getZ())) - 1;
                 if (size < 2) {
                     blockEntity.barnData.update(0, false);
@@ -55,11 +55,11 @@ public class MonsterBarnBlockEntity extends BlockEntity {
         int airLayers = 5;
         for (BlockPos pos : BlockPos.betweenClosed(blockPos.getX() - size, blockPos.getY(), blockPos.getZ() - size,
                 blockPos.getX() + size, blockPos.getY() + 5, blockPos.getZ() + size)) {
-            if ((Math.abs(pos.getX() - blockPos.getX()) == size && Math.abs(pos.getZ() - blockPos.getZ()) == size)) // Skip already checked corners
+            if ((Math.abs(pos.getY() - blockPos.getY()) > airLayers)) // Skip blocks not needing checks
                 continue;
-            if (pos.equals(blockPos))
+            if (pos.equals(blockPos)) //Barn block position
                 continue;
-            if (!blockEntity.matches(level, pos, false)) {
+            if (!matches(level, pos, false)) {
                 airLayers = pos.getY() - blockPos.getY();
                 break;
             }
@@ -68,7 +68,7 @@ public class MonsterBarnBlockEntity extends BlockEntity {
             boolean hasRoof = true;
             for (BlockPos pos : BlockPos.betweenClosed(blockPos.getX() - size, blockPos.getY() + airLayers, blockPos.getZ() - size,
                     blockPos.getX() + size, blockPos.getY() + airLayers, blockPos.getZ() + size)) {
-                if (level.getBrightness(LightLayer.SKY, pos) == 15) {
+                if (level.getHeight(Heightmap.Types.MOTION_BLOCKING, pos.getX(), pos.getZ()) <= pos.getY()) {
                     hasRoof = false;
                     break;
                 }
@@ -77,20 +77,20 @@ public class MonsterBarnBlockEntity extends BlockEntity {
         }
     }
 
-    private boolean matches(Level level, BlockPos pos, boolean ground) {
+    private static boolean matches(Level level, BlockPos pos, boolean ground) {
         BlockState state = level.getBlockState(pos);
-        return ground ? state.is(ModTags.BARN_GROUND) : state.isAir();
+        return ground ? state.is(ModTags.BARN_GROUND) : !state.is(ModBlocks.monsterBarn.get()) && state.getCollisionShape(level, pos).isEmpty();
     }
 
-    private boolean cornersMatch(int size, Level level, BlockPos center) {
+    private static boolean cornersMatch(int size, Level level, BlockPos center) {
         BlockPos.MutableBlockPos mutable = center.mutable();
-        if (!this.matches(level, mutable.set(center.getX() + size, center.getY(), center.getZ() + size), true))
+        if (!matches(level, mutable.set(center.getX() + size, center.getY(), center.getZ() + size), true))
             return false;
-        if (!this.matches(level, mutable.set(center.getX() - size, center.getY(), center.getZ() + size), true))
+        if (!matches(level, mutable.set(center.getX() - size, center.getY(), center.getZ() + size), true))
             return false;
-        if (!this.matches(level, mutable.set(center.getX() + size, center.getY(), center.getZ() - size), true))
+        if (!matches(level, mutable.set(center.getX() + size, center.getY(), center.getZ() - size), true))
             return false;
-        return this.matches(level, mutable.set(center.getX() - size, center.getY(), center.getZ() - size), true);
+        return matches(level, mutable.set(center.getX() - size, center.getY(), center.getZ() - size), true);
     }
 
     @Nullable
