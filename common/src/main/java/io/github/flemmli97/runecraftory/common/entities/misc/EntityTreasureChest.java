@@ -161,7 +161,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
                 this.getAnimationHandler().setAnimation(open);
                 this.playSound(SoundEvents.CHEST_OPEN, 0.7f, 1);
                 this.openChest = () -> dropRandomItems(serverPlayer, this.random, this.tier(), this::spawnAtLocation);
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 15));
+                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 20));
             }
         }
         return InteractionResult.CONSUME;
