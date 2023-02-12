@@ -32,6 +32,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -228,6 +230,18 @@ public class WorldHandler extends SavedData {
     public BarnData findFittingBarn(BaseMonster monster, UUID owner) {
         return this.barnsOf(owner)
                 .stream().filter(b -> b.hasCapacityFor(monster.getProp().size, monster.getProp().needsRoof))
+                .findFirst().orElse(null);
+    }
+
+    @Nullable
+    public BarnData findNearestFittingBarn(BaseMonster monster, int radius) {
+        if (monster.getOwnerUUID() == null)
+            return null;
+        return this.barnsOf(monster.getOwnerUUID())
+                .stream().filter(b -> b.pos.dimension() == monster.level.dimension() &&
+                        new AABB(monster.blockPosition())
+                                .inflate(radius).contains(Vec3.atCenterOf(b.pos.pos()))
+                        && b.hasCapacityFor(monster.getProp().size, monster.getProp().needsRoof))
                 .findFirst().orElse(null);
     }
 

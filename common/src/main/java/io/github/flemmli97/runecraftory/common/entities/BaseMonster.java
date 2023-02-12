@@ -289,7 +289,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             switch (this.behaviourState()) {
                 case WANDER_HOME -> {
                     if (this.getOwner() != null) {
-                        if (this.assignBarn()) {
+                        if (this.findNearestBarn(load)) {
                             this.restrictToBasedOnBehaviour(null, load);
                             BlockPos pos = this.assignedBarn.pos.pos();
                             if (this.level.dimension() == this.assignedBarn.pos.dimension())
@@ -1562,6 +1562,21 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (this.getServer() != null) {
             this.assignBarn();
         }
+    }
+
+    private boolean findNearestBarn(boolean load) {
+        if (load)
+            return this.assignBarn();
+        BarnData nearest = WorldHandler.get(this.getServer()).findNearestFittingBarn(this, 5);
+        if (nearest != null) {
+            if (this.assignedBarn != null && this.assignedBarn != nearest) {
+                this.assignedBarn.removeMonster(this);
+            }
+            this.assignedBarn = nearest;
+            this.assignedBarn.addMonster(this, this.getProp().size);
+            return true;
+        } else
+            return this.assignBarn();
     }
 
     private boolean assignBarn() {
