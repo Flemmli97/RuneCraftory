@@ -32,11 +32,11 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -47,7 +47,6 @@ public class BlockCrop extends CropBlock {
 
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
     public static final BooleanProperty WILTED = BooleanProperty.create("wilted");
-    private static final AABB[] CROPS_AABB = new AABB[]{new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.25D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.375D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.75D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D), new AABB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
     private static final VoxelShape[] SHAPE_BY_AGE = new VoxelShape[]{Block.box(0.0D, 0.0D, 0.0D, 16.0D, 2.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 6.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 8.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 10.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 12.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 14.0D, 16.0D), Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D)};
     private final Supplier<Item> crop;
     private final Supplier<Item> giant;
@@ -113,9 +112,18 @@ public class BlockCrop extends CropBlock {
         if (prop != null) {
             Vec3 pos = builder.getOptionalParameter(LootContextParams.ORIGIN);
             int itemLevel = pos != null ? getCropLevel(builder.getLevel(), new BlockPos(pos)) : 1;
-            if (block.isMaxAge(state))
+            if (block.isMaxAge(state)) {
+                List<ItemStack> remove = new ArrayList<>();
+                boolean removedSeed = list.size() < 2;
+                for (ItemStack stack : list) {
+                    if (!removedSeed && stack.is(((CropBlockAccessor) block).getSeedItem().asItem())) {
+                        remove.add(stack);
+                        removedSeed = true;
+                    }
+                }
+                list.removeIf(remove::contains);
                 list.forEach(s -> modifyStack(prop, s, itemLevel));
-            else if (block instanceof BlockCrop)
+            } else if (block instanceof BlockCrop)
                 list.clear();
         }
     }
@@ -126,10 +134,10 @@ public class BlockCrop extends CropBlock {
     }
 
     private static void modifyStack(CropProperties props, ItemStack stack, int level) {
-        if (stack.is(ModTags.SEEDS))
-            return;
-        stack.setCount(props.maxDrops());
-        ItemNBT.getLeveledItem(stack, level);
+        if (stack.is(ModTags.CROPS)) {
+            stack.setCount(props.maxDrops());
+            ItemNBT.getLeveledItem(stack, level);
+        }
     }
 
     public static void harvestCropRightClick(BlockState state, Level level, BlockPos pos, Entity entity, ItemStack stack, CropProperties props, Function<ItemStack, ItemStack> stackConsumer) {

@@ -25,7 +25,6 @@ import io.github.flemmli97.runecraftory.forge.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.forge.event.EntityEvents;
 import io.github.flemmli97.runecraftory.forge.event.WorldEvents;
 import io.github.flemmli97.runecraftory.forge.network.PacketHandler;
-import io.github.flemmli97.runecraftory.forge.registry.ModLootModifier;
 import io.github.flemmli97.runecraftory.mixin.AttributeAccessor;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.world.entity.EntityType;
@@ -105,7 +104,7 @@ public class RuneCraftoryForge {
         ModAttributes.ATTRIBUTES.registerContent();
         ModEffects.EFFECTS.registerContent();
         ModCrafting.RECIPESERIALIZER.registerContent();
-        ModLootModifier.SERIALZER.register(FMLJavaModLoadingContext.get().getModEventBus());
+        //ModLootModifier.SERIALZER.register(FMLJavaModLoadingContext.get().getModEventBus());
         ModFeatures.FEATURES.registerContent();
         ModSpells.SPELLS.registerContent();
         ModStructures.STRUCTURES.registerContent();

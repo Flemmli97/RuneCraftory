@@ -78,6 +78,12 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(Items.MELON_SEEDS)
                 .add(Items.PUMPKIN_SEEDS)
                 .addTag(Tags.Items.SEEDS);
+        this.tag(ModTags.CROPS)
+                .add(Items.BEETROOT)
+                .add(Items.CARROT)
+                .add(Items.NETHER_WART)
+                .add(Items.POTATO)
+                .add(Items.WHEAT);
 
         this.forgeAndCommonTag(Tags.Items.SLIMEBALLS, ModTags.SLIME, ModItems.glue.get());
         this.tag(ModTags.SLIME)

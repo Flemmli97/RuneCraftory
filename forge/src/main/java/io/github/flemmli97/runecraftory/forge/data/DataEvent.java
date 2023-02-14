@@ -34,7 +34,7 @@ public class DataEvent {
             data.addProvider(new ItemStatGen(data));
             data.addProvider(new FoodGen(data));
             data.addProvider(new CropGen(data));
-            data.addProvider(new GlobalLootModifierGen(data));
+            //data.addProvider(new GlobalLootModifierGen(data));
             data.addProvider(new RecipesGen(data));
             data.addProvider(new Loottables(data));
             data.addProvider(new BiomeTagGen(data, event.getExistingFileHelper()));

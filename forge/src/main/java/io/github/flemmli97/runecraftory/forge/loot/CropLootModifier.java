@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.forge.loot;
 
 import com.google.gson.JsonObject;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
+import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import net.minecraft.resources.ResourceLocation;
@@ -9,6 +10,8 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraftforge.common.loot.GlobalLootModifierSerializer;
@@ -19,6 +22,9 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Unused. Handled by {@link BlockCrop#modifyCropDrops(BlockState, LootContext.Builder, CropBlock, List)}
+ */
 public class CropLootModifier extends LootModifier {
 
     /**

@@ -1,9 +1,11 @@
 package io.github.flemmli97.runecraftory.fabric.mixin;
 
-import io.github.flemmli97.runecraftory.fabric.loot.CropLootModifiers;
+import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.fabric.mixinhelper.LootTableID;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -19,9 +21,12 @@ public abstract class LootTableMixin implements LootTableID {
     @Unique
     private ResourceLocation lootTableID;
 
+    /**
+     * Unused. Handled by {@link BlockCrop#modifyCropDrops(BlockState, LootContext.Builder, CropBlock, List)}
+     */
     @ModifyVariable(method = "getRandomItems(Lnet/minecraft/world/level/storage/loot/LootContext;)Ljava/util/List;", at = @At("RETURN"))
     private List<ItemStack> modify(List<ItemStack> list, LootContext ctx) {
-        CropLootModifiers.modify((LootTable) (Object) this, list, ctx, this.getLootTableId());
+        //CropLootModifiers.modify((LootTable) (Object) this, list, ctx, this.getLootTableId());
         return list;
     }
 
