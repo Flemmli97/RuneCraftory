@@ -31,10 +31,13 @@ public class Smith extends NPCJob {
     public static final String BARN_COST_FAIL = "npc.shop.barn.cost.fail";
 
     private static final Function<Integer, Integer> COST_FUNC = count -> {
-        int clamped = Math.min(10, count + 1);
+        int clamped = Math.min(20, count + 1);
         return 1000 * clamped * clamped - (Math.max(0, clamped - 1) * 2) * 1000;
     };
-    private static final Function<Integer, Float> COST_FUNC_MAT_MULTIPLIER = count -> 1 + Math.min(10, count) * 0.5f;
+    private static final Function<Integer, Float> COST_FUNC_MAT_MULTIPLIER = count -> {
+        int clamped = Math.min(10, count);
+        return 1 + (int) Math.ceil(clamped * clamped * 0.5) * 0.5f;
+    };
 
     private static final Map<ItemPredicate, Integer> MATERIALS = ImmutableMap.of(
             ItemPredicate.Builder.item().of(ItemTags.LOGS).build(), 32,
