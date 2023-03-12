@@ -43,6 +43,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -50,6 +51,7 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.Rotation;
@@ -184,14 +186,25 @@ public class ClientCalls {
         Minecraft minecraft = Minecraft.getInstance();
         MultiBlockItem item = null;
         ItemStack main = minecraft.player.getMainHandItem();
-        if (minecraft.player.getOffhandItem().getItem() instanceof MultiBlockItem multiBlockItem && !(main.getItem() instanceof BlockItem))
+        ItemStack off = minecraft.player.getMainHandItem();
+        ItemStack toUse = main;
+        InteractionHand hand = InteractionHand.MAIN_HAND;
+        if (off.getItem() instanceof MultiBlockItem multiBlockItem && !(main.getItem() instanceof BlockItem)) {
             item = multiBlockItem;
-        if (main.getItem() instanceof MultiBlockItem multiBlockItem)
+            toUse = off;
+            hand = InteractionHand.OFF_HAND;
+        }
+        if (main.getItem() instanceof MultiBlockItem multiBlockItem) {
             item = multiBlockItem;
+            toUse = main;
+            hand = InteractionHand.OFF_HAND;
+        }
         if (item == null)
             return;
-        BlockPos pos = minecraft.hitResult instanceof BlockHitResult result && result.getType() != HitResult.Type.MISS ? result.getBlockPos().relative(result.getDirection()) : null;
-        if (pos != null) {
+        BlockHitResult hitResult = minecraft.hitResult instanceof BlockHitResult result && result.getType() != HitResult.Type.MISS ? result : null;
+        if (hitResult != null) {
+            BlockPlaceContext ctx = new BlockPlaceContext(minecraft.player, hand, toUse, hitResult);
+            BlockPos pos = ctx.getClickedPos();
             Vec3 camPos = minecraft.gameRenderer.getMainCamera().getPosition();
             double x = camPos.x();
             double y = camPos.y();
@@ -205,7 +218,7 @@ public class ClientCalls {
                 BlockPos offset = p.getFirst().rotate(rot)
                         .offset(pos);
                 BlockState current = minecraft.level.getBlockState(offset);
-                if (!current.getMaterial().isReplaceable()) {
+                if (!current.canBeReplaced(ctx)) {
                     invalid = true;
                     list.add(Pair.of(offset, Shapes.empty()));
                 } else
