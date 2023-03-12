@@ -8,6 +8,7 @@ import com.mojang.serialization.DataResult;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.Doctor;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Smith;
 import net.minecraft.nbt.NumericTag;
@@ -42,7 +43,7 @@ public class ModNPCJobs {
     public static final Pair<ResourceLocation, NPCJob> GENERAL = register("general", new NPCJob(new NPCJob.Builder(() -> PoiType.FARMER)));
     public static final Pair<ResourceLocation, NPCJob> FLOWER = register("flowers", new NPCJob(new NPCJob.Builder(() -> PoiType.FARMER)));
     public static final Pair<ResourceLocation, NPCJob> SMITH = register("smith", new Smith(new NPCJob.Builder(() -> PoiType.TOOLSMITH)));
-    public static final Pair<ResourceLocation, NPCJob> DOCTOR = register("doctor", new NPCJob(new NPCJob.Builder(() -> PoiType.CLERIC)));
+    public static final Pair<ResourceLocation, NPCJob> DOCTOR = register("doctor", new Doctor(new NPCJob.Builder(() -> PoiType.CLERIC)));
     public static final Pair<ResourceLocation, NPCJob> COOK = register("cook", new Cook(new NPCJob.Builder(() -> PoiType.BUTCHER)));
     public static final Pair<ResourceLocation, NPCJob> MAGIC = register("magic", new NPCJob(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER)));
     public static final Pair<ResourceLocation, NPCJob> RUNE_SKILLS = register("rune_skills", new NPCJob(new NPCJob.Builder(ModPoiTypes.CASH_REGISTER)));

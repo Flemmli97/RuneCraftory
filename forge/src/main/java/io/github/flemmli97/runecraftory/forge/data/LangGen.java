@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.BathhouseAttendant;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Cook;
+import io.github.flemmli97.runecraftory.common.entities.npc.job.Doctor;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.Smith;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.QuestTasks;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
@@ -332,6 +333,12 @@ public class LangGen implements DataProvider {
         this.add(BathhouseAttendant.BATH_ACTION_SUCCESS, "Have a relaxing bath.");
         this.add(BathhouseAttendant.BATH_ACTION_FAIL, "You don't have enough money for that. You need %2$s.");
         this.add(BathhouseAttendant.BATH_COST, "Cost: %s$");
+
+        this.add(Doctor.CURE_ACTION, "Cure");
+        this.add(Doctor.CURE_ACTION_DESC, "Cure all negative status effects");
+        this.add(Doctor.CURE_ACTION_SUCCESS, "There you go. Please take more care in the future.");
+        this.add(Doctor.CURE_ACTION_FAIL, "It seems you don't have enough money.");
+        this.add(Doctor.CURE_COST, "Cost: %s$");
 
         this.add("crafting.rpMax.missing", "Missing total rp");
 

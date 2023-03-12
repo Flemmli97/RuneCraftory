@@ -25,7 +25,6 @@ public class Cook extends NPCJob {
     public static final String ARMOR_BREAD_DESCRIPTION = "npc.action.bread.armor";
     public static final String CHEM_BREAD_SUCCESS = "npc.action.bread.chem";
     public static final String COOKING_BREAD_SUCCESS = "npc.action.bread.cooking";
-    ;
     public static final String BREAD_ACTION_SUCCESS = "npc.action.bread.success";
     public static final String BREAD_ACTION_SUCCESS_GOOD = "npc.action.bread.success.good";
     public static final String BREAD_ACTION_FAIL = "npc.action.bread.fail";

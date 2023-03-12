@@ -77,9 +77,8 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
             texY = 40;
         else if (!this.entity.getShop().hasWorkSchedule)
             texY = 60;
-        this.blit(stack, posX, posY, 0, 0, 150, texY != 150 ? texY - 5 : texY);
-        if (texY != 150)
-            this.blit(stack, posX, posY + texY - 5, 0, 150 - 5, 150, 5);
+        this.blit(stack, posX, posY, 0, 0, 150, texY - 5);
+        this.blit(stack, posX, posY + texY - 5, 0, 160 - 5, 160, 5);
         int txtOffX = posX + 5;
         int txtOffY = posY + 5;
 
@@ -125,8 +124,8 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
     }
 
     protected void buttons() {
-        int x = 2;
-        int xSize = 90;
+        int x = -52;
+        int xSize = 150;
         int y = 0;
         this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.TALK.translation), b -> {
             Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.TALK));
