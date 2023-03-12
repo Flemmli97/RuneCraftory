@@ -278,9 +278,7 @@ public class FarmlandData {
             return;
         //If its not a farm block can do stuff without it being loaded
         if (!this.isFarmBlock) {
-            this.normalizeLand();
-            this.resetCrop();
-            FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
+            this.handleNotFarmblock(level);
             return;
         }
         WorldHandler handler = WorldHandler.get(level.getServer());
@@ -291,11 +289,16 @@ public class FarmlandData {
         }
         BlockState farm = level.getBlockState(this.pos);
         boolean isWet = this.isFarmBlock && farm.getValue(FarmBlock.MOISTURE) > 0;
+        boolean canRainAt = FarmlandHandler.canRainingAt(level, this.pos);
         if (!onLoad) {
             this.scheduledData.add(ext);
         } else {//On load perform the missed storms
             this.doStormingLogic(level, this.scheduledStormTicks);
-            if (!isWet && this.scheduledWatering > 0 && farm.getBlock() instanceof FarmBlock) {
+            if (!this.isFarmBlock) { //If storm turned it into dirt
+                this.handleNotFarmblock(level);
+                return;
+            }
+            if (!isWet && canRainAt && this.scheduledWatering > 0 && farm.getBlock() instanceof FarmBlock) {
                 this.scheduledWatering--;
                 isWet = true;
             }
@@ -365,7 +368,7 @@ public class FarmlandData {
                     if (this.cropAge >= props.growth())
                         maxAgeStop = true;
                 }
-                if (!ignoreWater)
+                if (!ignoreWater && canRainAt)
                     isWet = this.scheduledWatering > 0;
                 this.scheduledWatering = Math.max(0, --this.scheduledWatering);
             } else if (cropState.getBlock() instanceof BlockCrop) {
@@ -384,7 +387,7 @@ public class FarmlandData {
             if (maxAgeStop)
                 break;
         }
-        this.scheduledData.clear();
+        this.resetScheduledData();
 
         //Finalize the tick run
         run.forEach(Runnable::run);
@@ -397,6 +400,19 @@ public class FarmlandData {
         }
         this.cropProgress = this.growthPercent(cropState);
         FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
+    }
+
+    private void handleNotFarmblock(ServerLevel level) {
+        this.normalizeLand();
+        this.resetCrop();
+        FarmlandHandler.get(level.getServer()).scheduleUpdate(level, this);
+        this.resetScheduledData();
+    }
+
+    private void resetScheduledData() {
+        this.scheduledData.clear();
+        this.scheduledWatering = 0;
+        this.scheduledStormTicks = 0;
     }
 
     private void normalizeLand() {

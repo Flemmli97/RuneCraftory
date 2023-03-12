@@ -31,9 +31,11 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.saveddata.SavedData;
 
 import java.util.ArrayList;
@@ -88,6 +90,17 @@ public class FarmlandHandler extends SavedData {
         BlockState crop = level.getBlockState(up);
         if (crop.getBlock() instanceof BlockCrop && crop.getValue(BlockCrop.WILTED))
             level.setBlock(up, crop.setValue(BlockCrop.WILTED, false), Block.UPDATE_ALL);
+    }
+
+    public static boolean canRainingAt(Level level, BlockPos position) {
+        if (!level.canSeeSky(position)) {
+            return false;
+        }
+        if (level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, position).getY() > position.getY()) {
+            return false;
+        }
+        Biome biome = level.getBiome(position).value();
+        return biome.getPrecipitation() == Biome.Precipitation.RAIN && biome.warmEnoughToRain(position);
     }
 
     public static void sendChangesTo(ServerLevel level, ChunkPos pos, List<FarmlandData> data) {
@@ -233,6 +246,8 @@ public class FarmlandHandler extends SavedData {
             this.farmlandChunks.forEach((dim, m) -> {
                 ArrayList<FarmlandData> removed = new ArrayList<>();
                 m.values().removeIf(set -> {
+                    if (set == null)
+                        return true;
                     set.removeIf(d -> {
                         d.tick(level, false);
                         boolean remove = d.shouldBeRemoved();
@@ -290,13 +305,15 @@ public class FarmlandHandler extends SavedData {
         int randomTickSpeed = level.getGameRules().getInt(GameRules.RULE_RANDOMTICKING);
         Consumer<FarmlandData> finalCons = cons;
         m.forEach((packedChunk, data) -> {
-            List<FarmlandData> list = new ArrayList<>(data);
-            if (!list.isEmpty()) {
-                int size = list.size();
-                int chance = Mth.ceil(CHUNK_SECTION_SIZE / (float) size);
-                for (int l = 0; l < randomTickSpeed; ++l) {
-                    if (level.random.nextInt(chance) == 0)
-                        finalCons.accept(list.get(level.random.nextInt(size)));
+            if (data != null) {
+                List<FarmlandData> list = new ArrayList<>(data);
+                if (!list.isEmpty()) {
+                    int size = list.size();
+                    int chance = Mth.ceil(CHUNK_SECTION_SIZE / (float) size);
+                    for (int l = 0; l < randomTickSpeed; ++l) {
+                        if (level.random.nextInt(chance) == 0)
+                            finalCons.accept(list.get(level.random.nextInt(size)));
+                    }
                 }
             }
         });
