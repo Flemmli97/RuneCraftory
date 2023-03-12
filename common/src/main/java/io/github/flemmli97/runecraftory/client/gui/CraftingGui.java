@@ -194,7 +194,7 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
         public RecipeSelectButton(int i, int j, int k, OnPress onPress) {
             super(i, j, 22, 20, TextComponent.EMPTY, onPress);
             this.index = k;
-            this.visible = true;
+            this.visible = false;
         }
 
         public int getActualIndex() {
