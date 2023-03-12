@@ -19,8 +19,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
 
-    private static final ResourceLocation forging = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forgef.png");
-    private static final ResourceLocation crafting = new ResourceLocation(RuneCraftory.MODID, "textures/gui/craftingf.png");
+    private static final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/gui/upgrade.png");
 
     private final EnumSkills skill;
 
@@ -43,7 +42,7 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
 
     @Override
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = forging;
+        ResourceLocation texture = tex;
         //if(this.menu.craftingType() == EnumCrafting.ARMOR)
         //    texture = crafting;
         RenderSystem.setShaderTexture(0, texture);
