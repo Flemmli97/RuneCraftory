@@ -32,7 +32,7 @@ public class SextupleRecipeCategory<T extends SextupleRecipe> implements IRecipe
     public static final RecipeType<SextupleRecipe> COOKINGCATEGORY = RecipeType.create(RuneCraftory.MODID, EnumCrafting.COOKING.getId() + "_category", SextupleRecipe.class);
     public static final RecipeType<SextupleRecipe> ARMORCATEGORY = RecipeType.create(RuneCraftory.MODID, EnumCrafting.ARMOR.getId() + "_category", SextupleRecipe.class);
     public static final RecipeType<SextupleRecipe> CHEMISTRYCATEGORY = RecipeType.create(RuneCraftory.MODID, EnumCrafting.CHEM.getId() + "_category", SextupleRecipe.class);
-    public static final ResourceLocation GUI = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forgec.png");
+    public static final ResourceLocation GUI = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting.png");
 
     private final IDrawable icon;
     private final IDrawable background;

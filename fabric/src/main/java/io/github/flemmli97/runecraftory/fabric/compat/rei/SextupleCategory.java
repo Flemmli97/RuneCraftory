@@ -24,7 +24,7 @@ import java.util.List;
 
 public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
 
-    public static final ResourceLocation GUI = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forgec.png");
+    public static final ResourceLocation GUI = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting.png");
     private final EnumCrafting type;
     private final ResourceLocation res;
 
