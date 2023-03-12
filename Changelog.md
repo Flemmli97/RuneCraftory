@@ -1,3 +1,10 @@
+RuneCraftory 1.5.1
+================
+- Removed some unused textures
+- Fix multiblock highlight being wrong when aiming at replaceable blocks like grass
+- Farmland check sky for rain
+- Doctors can cure negative effects
+
 RuneCraftory 1.5.0
 ================
 - Due to renaming of attributes you need to delete your mob config and let it regenerate. Else all attributes of the mobs will not get applied
