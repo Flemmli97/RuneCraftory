@@ -27,7 +27,7 @@ public class EntityDarkBeam extends EntityBeam {
     }
 
     public EntityDarkBeam(Level world, LivingEntity shooter) {
-        super(ModEntities.darkBeam.get(), world, shooter);
+        super(ModEntities.DARK_BEAM.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
     }

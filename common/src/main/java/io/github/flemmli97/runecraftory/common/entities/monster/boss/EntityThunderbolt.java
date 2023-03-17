@@ -35,42 +35,42 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class EntityThunderbolt extends BossMonster {
 
     //Turns and kicks with backlegs
-    private static final AnimatedAction back_kick = new AnimatedAction(13, 7, "back_kick");
+    private static final AnimatedAction BACK_KICK = new AnimatedAction(13, 7, "back_kick");
     //Shoots out 5 wind lazer beams in front
-    private static final AnimatedAction laser_x5 = new AnimatedAction(29, 25, "laser_x5");
+    private static final AnimatedAction LASER_X5 = new AnimatedAction(29, 25, "laser_x5");
     //AOE around thunderbolt, throws player into air. after that tries to kick him away if players staggering
-    private static final AnimatedAction stomp = new AnimatedAction(9, 6, "stomp");
+    private static final AnimatedAction STOMP = new AnimatedAction(9, 6, "stomp");
     //Horn attack: throws player into air and then kicks him away
-    private static final AnimatedAction horn_attack = new AnimatedAction(9, 5, "horn_attack");
-    private static final AnimatedAction back_kick_horn = AnimatedAction.copyOf(back_kick, "back_kick_horn");
+    private static final AnimatedAction HORN_ATTACK = new AnimatedAction(9, 5, "horn_attack");
+    private static final AnimatedAction BACK_KICK_HORN = AnimatedAction.copyOf(BACK_KICK, "back_kick_horn");
 
     //Charges 2 times at the player. 2-3 when enraged
-    private static final AnimatedAction charge = new AnimatedAction(31, 9, "charge");
-    private static final AnimatedAction charge_2 = AnimatedAction.copyOf(charge, "charge_2");
-    private static final AnimatedAction charge_3 = AnimatedAction.copyOf(charge, "charge_3");
+    private static final AnimatedAction CHARGE = new AnimatedAction(31, 9, "charge");
+    private static final AnimatedAction CHARGE_2 = AnimatedAction.copyOf(CHARGE, "charge_2");
+    private static final AnimatedAction CHARGE_3 = AnimatedAction.copyOf(CHARGE, "charge_3");
 
     //Shoots lazers in all directions. only enraged
-    private static final AnimatedAction laser_aoe = AnimatedAction.copyOf(laser_x5, "laser_aoe");
+    private static final AnimatedAction LASER_AOE = AnimatedAction.copyOf(LASER_X5, "laser_aoe");
     //Kicks with backlegs causes wind lazerbeam in looking direction. only enraged
-    private static final AnimatedAction laser_kick = new AnimatedAction(16, 6, "laser_kick");
-    private static final AnimatedAction laser_kick_2 = AnimatedAction.copyOf(laser_kick, "laser_kick_2");
+    private static final AnimatedAction LASER_KICK = new AnimatedAction(16, 6, "laser_kick");
+    private static final AnimatedAction LASER_KICK_2 = AnimatedAction.copyOf(LASER_KICK, "laser_kick_2");
 
     //Shoots 2 slight homing wind blades
-    private static final AnimatedAction wind_blade = new AnimatedAction(15, 8, "wind_blade");
+    private static final AnimatedAction WIND_BLADE = new AnimatedAction(15, 8, "wind_blade");
     //Used after feinting death
-    private static final AnimatedAction laser_kick_3 = AnimatedAction.copyOf(laser_kick, "laser_kick_3");
-    public static final ImmutableList<String> nonChoosableAttacks = ImmutableList.of(charge_2.getID(), charge_3.getID(), laser_kick_2.getID(), laser_kick_3.getID(), back_kick_horn.getID());
-    private static final AnimatedAction feint = new AnimatedAction(40, 2, "feint");
-    private static final AnimatedAction defeat = new AnimatedAction(80, 60, "defeat", "defeat", 1, false);
-    private static final AnimatedAction neigh = new AnimatedAction(24, 9, "neigh");
+    private static final AnimatedAction LASER_KICK_3 = AnimatedAction.copyOf(LASER_KICK, "laser_kick_3");
+    public static final ImmutableList<String> NON_CHOOSABLE_ATTACKS = ImmutableList.of(CHARGE_2.getID(), CHARGE_3.getID(), LASER_KICK_2.getID(), LASER_KICK_3.getID(), BACK_KICK_HORN.getID());
+    private static final AnimatedAction FEINT = new AnimatedAction(40, 2, "feint");
+    private static final AnimatedAction DEFEAT = AnimatedAction.builder(80, "defeat").marker(60).infinite().build();
+    private static final AnimatedAction NEIGH = new AnimatedAction(24, 9, "neigh");
 
-    public static final AnimatedAction interact = AnimatedAction.copyOf(stomp, "interact");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(STOMP, "interact");
 
-    private static final AnimatedAction[] anims = new AnimatedAction[]{back_kick, laser_x5, stomp, horn_attack, back_kick_horn, charge, charge_2, charge_3,
-            laser_aoe, laser_kick, laser_kick_2, wind_blade, laser_kick_3, feint, defeat, neigh, interact};
-    private static final EntityDataAccessor<Float> lockedYaw = SynchedEntityData.defineId(EntityThunderbolt.class, EntityDataSerializers.FLOAT);
+    private static final AnimatedAction[] ANIMATED_ACTIONS = new AnimatedAction[]{BACK_KICK, LASER_X5, STOMP, HORN_ATTACK, BACK_KICK_HORN, CHARGE, CHARGE_2, CHARGE_3,
+            LASER_AOE, LASER_KICK, LASER_KICK_2, WIND_BLADE, LASER_KICK_3, FEINT, DEFEAT, NEIGH, INTERACT};
+    private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityThunderbolt.class, EntityDataSerializers.FLOAT);
     public final ThunderboltAttackGoal<EntityThunderbolt> attack = new ThunderboltAttackGoal<>(this);
-    private final AnimationHandler<EntityThunderbolt> animationHandler = new AnimationHandler<>(this, anims)
+    private final AnimationHandler<EntityThunderbolt> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS)
             .setAnimationChangeCons(anim -> {
                 if (!this.level.isClientSide) {
                     if (this.hornAttackSuccess && anim != null) {
@@ -99,10 +99,10 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(feint.getID()) || anim.getID().equals(defeat.getID()) || anim.getID().equals(neigh.getID()) || anim.getID().equals(interact.getID()))
+        if (anim.getID().equals(FEINT.getID()) || anim.getID().equals(DEFEAT.getID()) || anim.getID().equals(NEIGH.getID()) || anim.getID().equals(INTERACT.getID()))
             return false;
         if (type == AnimationType.GENERICATTACK)
-            return this.isEnraged() ? !anim.getID().equals(laser_x5.getID()) : !anim.getID().equals(laser_aoe.getID()) && !anim.getID().equals(laser_kick.getID());
+            return this.isEnraged() ? !anim.getID().equals(LASER_X5.getID()) : !anim.getID().equals(LASER_AOE.getID()) && !anim.getID().equals(LASER_KICK.getID());
         return false;
     }
 
@@ -123,24 +123,24 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID(), neigh.getID()))) && super.hurt(source, amount);
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(FEINT.getID(), DEFEAT.getID(), NEIGH.getID()))) && super.hurt(source, amount);
     }
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID());
+        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(FEINT.getID(), DEFEAT.getID());
     }
 
     @Override
     public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID()))
+        if (this.getAnimationHandler().isCurrentAnim(FEINT.getID(), DEFEAT.getID()))
             return;
         super.push(x, y, z);
     }
 
     @Override
     public AnimatedAction getDeathAnimation() {
-        return defeat;
+        return DEFEAT;
     }
 
     @Override
@@ -232,7 +232,7 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim.getID().equals(stomp.getID())) {
+        if (anim.getID().equals(STOMP.getID())) {
             return this.getBoundingBox().inflate(1.5, -0.4, 1.5);
         } else
             return super.calculateAttackAABB(anim, target);
@@ -242,11 +242,11 @@ public class EntityThunderbolt extends BossMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(laser_x5);
+                this.getAnimationHandler().setAnimation(LASER_X5);
             else if (command == 1)
-                this.getAnimationHandler().setAnimation(stomp);
+                this.getAnimationHandler().setAnimation(STOMP);
             else
-                this.getAnimationHandler().setAnimation(horn_attack);
+                this.getAnimationHandler().setAnimation(HORN_ATTACK);
         }
     }
 
@@ -258,27 +258,27 @@ public class EntityThunderbolt extends BossMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(lockedYaw, 0f);
+        this.entityData.define(LOCKED_YAW, 0f);
     }
 
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrentAnim(defeat.getID()) && !this.feintedDeath && !this.isTamed()) {
+        if (!this.level.isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrentAnim(DEFEAT.getID()) && !this.feintedDeath && !this.isTamed()) {
             AnimatedAction anim = this.getAnimationHandler().getAnimation();
             if (anim.getTick() > anim.getLength()) {
                 this.feintedDeath = true;
-                this.getAnimationHandler().setAnimation(feint);
+                this.getAnimationHandler().setAnimation(FEINT);
             }
         }
-        if (this.getAnimationHandler().isCurrentAnim(charge.getID(), charge_2.getID(), charge_3.getID())) {
+        if (this.getAnimationHandler().isCurrentAnim(CHARGE.getID(), CHARGE_2.getID(), CHARGE_3.getID())) {
             this.setXRot(0);
-            this.setYRot(this.entityData.get(lockedYaw));
+            this.setYRot(this.entityData.get(LOCKED_YAW));
         }
-        if (this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID()) && !this.isTamed()) {
+        if (this.getAnimationHandler().isCurrentAnim(FEINT.getID(), DEFEAT.getID()) && !this.isTamed()) {
             Vec3 delta = this.getDeltaMovement();
             this.setDeltaMovement(0, delta.y, 0);
-            if (this.getAnimationHandler().getAnimation().checkID(defeat)) {
+            if (this.getAnimationHandler().getAnimation().checkID(DEFEAT)) {
                 int tick = this.getAnimationHandler().getAnimation().getTick();
                 if (tick < 40) {
                     if (tick % 10 == 0)
@@ -330,10 +330,10 @@ public class EntityThunderbolt extends BossMonster {
     public void setEnraged(boolean flag, boolean load) {
         if (flag && !load) {
             if (!this.isEnraged()) {
-                this.getAnimationHandler().setAnimation(neigh);
+                this.getAnimationHandler().setAnimation(NEIGH);
                 this.getNavigation().stop();
             } else {
-                this.getAnimationHandler().setAnimation(defeat);
+                this.getAnimationHandler().setAnimation(DEFEAT);
                 this.getNavigation().stop();
                 this.bossInfo.setProgress(0);
             }
@@ -360,7 +360,7 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public boolean isAlive() {
-        return super.isAlive() && (this.getAnimationHandler() == null || !this.getAnimationHandler().isCurrentAnim(feint.getID(), defeat.getID()));
+        return super.isAlive() && (this.getAnimationHandler() == null || !this.getAnimationHandler().isCurrentAnim(FEINT.getID(), DEFEAT.getID()));
     }
 
     @Override
@@ -404,32 +404,32 @@ public class EntityThunderbolt extends BossMonster {
     public boolean isAnimEqual(String prev, AnimatedAction other) {
         if (other == null)
             return true;
-        if (prev.equals(charge_2.getID()) || prev.equals(charge_3.getID()))
-            return other.getID().equals(charge.getID());
-        if (prev.equals(laser_kick_2.getID()) || prev.equals(laser_kick_3.getID()))
-            return other.getID().equals(laser_kick.getID());
-        if (prev.equals(back_kick_horn.getID()))
-            return other.getID().equals(horn_attack.getID());
+        if (prev.equals(CHARGE_2.getID()) || prev.equals(CHARGE_3.getID()))
+            return other.getID().equals(CHARGE.getID());
+        if (prev.equals(LASER_KICK_2.getID()) || prev.equals(LASER_KICK_3.getID()))
+            return other.getID().equals(LASER_KICK.getID());
+        if (prev.equals(BACK_KICK_HORN.getID()))
+            return other.getID().equals(HORN_ATTACK.getID());
         return prev.equals(other.getID());
     }
 
     public AnimatedAction chainAnim(String prev) {
         return switch (prev) {
-            case "laser_kick" -> laser_kick_2;
-            case "laser_kick_2" -> this.feintedDeath ? laser_kick_3 : null;
-            case "horn_attack" -> this.hornAttackSuccess ? back_kick_horn : null;
-            case "charge" -> this.chargeAttackSuccess ? null : charge_2;
-            case "charge_2" -> this.isEnraged() && !this.chargeAttackSuccess ? charge_3 : null;
+            case "laser_kick" -> LASER_KICK_2;
+            case "laser_kick_2" -> this.feintedDeath ? LASER_KICK_3 : null;
+            case "horn_attack" -> this.hornAttackSuccess ? BACK_KICK_HORN : null;
+            case "charge" -> this.chargeAttackSuccess ? null : CHARGE_2;
+            case "charge_2" -> this.isEnraged() && !this.chargeAttackSuccess ? CHARGE_3 : null;
             default -> null;
         };
     }
 
     public void lockYaw(float yaw) {
-        this.entityData.set(lockedYaw, yaw);
+        this.entityData.set(LOCKED_YAW, yaw);
     }
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
     }
 }

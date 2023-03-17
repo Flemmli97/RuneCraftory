@@ -32,11 +32,11 @@ public class EntityButterfly extends EntityProjectile {
     }
 
     public EntityButterfly(Level level, double x, double y, double z) {
-        super(ModEntities.butterfly.get(), level, x, y, z);
+        super(ModEntities.BUTTERFLY.get(), level, x, y, z);
     }
 
     public EntityButterfly(Level level, LivingEntity thrower) {
-        super(ModEntities.butterfly.get(), level, thrower);
+        super(ModEntities.BUTTERFLY.get(), level, thrower);
         if (thrower instanceof BaseMonster)
             this.pred = ((BaseMonster) thrower).hitPred;
     }

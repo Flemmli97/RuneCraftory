@@ -27,31 +27,31 @@ import java.util.List;
 
 public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     //Tries kicking target 3 times in a row   
-    public static final AnimatedAction kick_1 = new AnimatedAction(12, 6, "kick_1");
-    public static final AnimatedAction kick_2 = new AnimatedAction(12, 6, "kick_2");
-    public static final AnimatedAction kick_3 = new AnimatedAction(16, 6, "kick_3");
+    public static final AnimatedAction KICK_1 = new AnimatedAction(12, 6, "kick_1");
+    public static final AnimatedAction KICK_2 = new AnimatedAction(12, 6, "kick_2");
+    public static final AnimatedAction KICK_3 = new AnimatedAction(16, 6, "kick_3");
 
     //Sends a wave of hp-draining(hard) butterflies at target
-    public static final AnimatedAction butterfly = new AnimatedAction(45, 5, "butterfly");
+    public static final AnimatedAction BUTTERFLY = new AnimatedAction(45, 5, "butterfly");
     //Shockwave kind of attack surrounding ambrosia
-    public static final AnimatedAction wave = new AnimatedAction(45, 5, "wave");
+    public static final AnimatedAction WAVE = new AnimatedAction(45, 5, "wave");
     //Sleep balls
-    public static final AnimatedAction sleep = new AnimatedAction(15, 5, "sleep");
+    public static final AnimatedAction SLEEP = new AnimatedAction(15, 5, "sleep");
     //2 spinning changing direction between them. also scatters earth damage pollen while doing it
-    public static final AnimatedAction pollen = new AnimatedAction(15, 5, "pollen");
-    public static final AnimatedAction pollen2 = AnimatedAction.copyOf(pollen, "pollen_2");
+    public static final AnimatedAction POLLEN = new AnimatedAction(15, 5, "pollen");
+    public static final AnimatedAction POLLEN_2 = AnimatedAction.copyOf(POLLEN, "pollen_2");
 
-    public static final AnimatedAction defeat = new AnimatedAction(204, 150, "defeat", "defeat", 1, false);
-    public static final AnimatedAction angry = new AnimatedAction(48, 0, "angry");
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(204, "defeat").marker(150).infinite().build();
+    public static final AnimatedAction ANGRY = new AnimatedAction(48, 0, "angry");
 
-    public static final AnimatedAction interact = AnimatedAction.copyOf(kick_1, "interact");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK_1, "interact");
 
-    public static final ImmutableList<String> nonChoosableAttacks = ImmutableList.of(pollen2.getID(), kick_2.getID(), kick_3.getID());
-    private static final AnimatedAction[] anims = new AnimatedAction[]{kick_1, butterfly, wave, sleep, pollen, pollen2, kick_2, kick_3, defeat, angry, interact};
+    public static final ImmutableList<String> NON_CHOOSABLE_ATTACKS = ImmutableList.of(POLLEN_2.getID(), KICK_2.getID(), KICK_3.getID());
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{KICK_1, BUTTERFLY, WAVE, SLEEP, POLLEN, POLLEN_2, KICK_2, KICK_3, DEFEAT, ANGRY, INTERACT};
     private static final List<Vector3f> pollenBase = RayTraceUtils.rotatedVecs(new Vec3(1, 0, 0), new Vec3(0, 1, 0), -180, 135, 45);
     private static final List<Vector3f> pollenInd = RayTraceUtils.rotatedVecs(new Vec3(0.04, 0.07, 0), new Vec3(0, 1, 0), -180, 160, 20);
     public final AmbrosiaAttackGoal<EntityAmbrosia> attack = new AmbrosiaAttackGoal<>(this);
-    private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, ANIMS);
     private Vec3 aiVarHelper;
 
     public EntityAmbrosia(EntityType<? extends EntityAmbrosia> type, Level world) {
@@ -68,10 +68,10 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(angry.getID()) || anim.getID().equals(defeat.getID()) || anim.getID().equals(interact.getID()))
+        if (anim.getID().equals(ANGRY.getID()) || anim.getID().equals(DEFEAT.getID()) || anim.getID().equals(INTERACT.getID()))
             return false;
         if (type == AnimationType.GENERICATTACK)
-            return this.isEnraged() || !anim.getID().equals(pollen.getID());
+            return this.isEnraged() || !anim.getID().equals(POLLEN.getID());
         return false;
     }
 
@@ -90,36 +90,36 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(wave.getID(), angry.getID()))) && super.hurt(source, amount);
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(WAVE.getID(), ANGRY.getID()))) && super.hurt(source, amount);
     }
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(angry.getID(), defeat.getID());
+        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(ANGRY.getID(), DEFEAT.getID());
     }
 
     @Override
     public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrentAnim(pollen.getID(), angry.getID(), defeat.getID()))
+        if (this.getAnimationHandler().isCurrentAnim(POLLEN.getID(), ANGRY.getID(), DEFEAT.getID()))
             return;
         super.push(x, y, z);
     }
 
     @Override
     public boolean shouldFreezeTravel() {
-        return this.getAnimationHandler().isCurrentAnim(wave.getID());
+        return this.getAnimationHandler().isCurrentAnim(WAVE.getID());
     }
 
     @Override
     public AnimatedAction getDeathAnimation() {
-        return defeat;
+        return DEFEAT;
     }
 
     @Override
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
         if (target != null) {
-            if (!anim.getID().equals(pollen.getID()))
+            if (!anim.getID().equals(POLLEN.getID()))
                 this.lookAt(target, 180.0f, 50.0f);
         }
         switch (anim.getID()) {
@@ -165,7 +165,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim.getID().equals(pollen.getID())) {
+        if (anim.getID().equals(POLLEN.getID())) {
             return this.getBoundingBox().inflate(2.0);
         }
         return super.calculateAttackAABB(anim, target);
@@ -175,11 +175,11 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(wave);
+                this.getAnimationHandler().setAnimation(WAVE);
             else if (command == 1)
-                this.getAnimationHandler().setAnimation(sleep);
+                this.getAnimationHandler().setAnimation(SLEEP);
             else
-                this.getAnimationHandler().setAnimation(kick_1);
+                this.getAnimationHandler().setAnimation(KICK_1);
         }
     }
 
@@ -192,7 +192,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     public void setEnraged(boolean flag, boolean load) {
         super.setEnraged(flag, load);
         if (flag && !load)
-            this.getAnimationHandler().setAnimation(angry);
+            this.getAnimationHandler().setAnimation(ANGRY);
     }
 
     public void setAiVarHelper(Vec3 aiVarHelper) {
@@ -216,25 +216,25 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     public boolean isAnimEqual(String prev, AnimatedAction other) {
         if (other == null)
             return true;
-        if (prev.equals(pollen2.getID()))
-            return other.getID().equals(pollen.getID());
-        if (prev.equals(kick_3.getID()))
-            return other.getID().equals(kick_1.getID());
+        if (prev.equals(POLLEN_2.getID()))
+            return other.getID().equals(POLLEN.getID());
+        if (prev.equals(KICK_3.getID()))
+            return other.getID().equals(KICK_1.getID());
         return prev.equals(other.getID());
     }
 
     public AnimatedAction chainAnim(String prev) {
         return switch (prev) {
-            case "kick_1" -> kick_2;
-            case "kick_2" -> kick_3;
-            case "pollen" -> pollen2;
+            case "kick_1" -> KICK_2;
+            case "kick_2" -> KICK_3;
+            case "pollen" -> POLLEN_2;
             default -> null;
         };
     }
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
     }
 
     @Override

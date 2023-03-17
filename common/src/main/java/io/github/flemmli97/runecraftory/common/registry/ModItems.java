@@ -833,6 +833,7 @@ public class ModItems {
     });
     public static final RegistryEntrySupplier<Item> entityLevel = ITEMS.register("entity_level_item", () -> new ItemDebug(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> unknown = ITEMS.register("unknown", () -> new Item(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item> orcMaze = ITEMS.register("orc_maze", () -> new Item(new Item.Properties().stacksTo(1)));
 
     //Crop items
     public static final RegistryEntrySupplier<Item> turnipSeeds = seed("turnip", () -> ModBlocks.turnip);

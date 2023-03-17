@@ -31,27 +31,27 @@ import java.util.List;
 
 public class EntityMarionetta extends BossMonster {
 
-    public static final AnimatedAction melee = new AnimatedAction(10, 5, "melee");
-    public static final AnimatedAction spin = new AnimatedAction(31, 6, "spin");
-    public static final AnimatedAction card_attack = new AnimatedAction(13, 9, "card_attack");
-    public static final AnimatedAction chest_attack = new AnimatedAction(24, 6, "chest_attack");
-    public static final AnimatedAction chest_throw = new AnimatedAction(105, 7, "chest_throw");
-    public static final AnimatedAction stuffed_animals = new AnimatedAction(15, 9, "stuffed_animals");
-    public static final AnimatedAction dark_beam = new AnimatedAction(16, 6, "dark_beam");
-    public static final AnimatedAction furniture = new AnimatedAction(24, 8, "furniture");
-    public static final AnimatedAction defeat = new AnimatedAction(204, 150, "defeat", "defeat", 1, false);
-    public static final AnimatedAction angry = new AnimatedAction(28, 0, "angry");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
+    public static final AnimatedAction MELEE = new AnimatedAction(10, 5, "melee");
+    public static final AnimatedAction SPIN = new AnimatedAction(31, 6, "spin");
+    public static final AnimatedAction CARD_ATTACK = new AnimatedAction(13, 9, "card_attack");
+    public static final AnimatedAction CHEST_ATTACK = new AnimatedAction(24, 6, "chest_attack");
+    public static final AnimatedAction CHEST_THROW = new AnimatedAction(105, 7, "chest_throw");
+    public static final AnimatedAction STUFFED_ANIMALS = new AnimatedAction(15, 9, "stuffed_animals");
+    public static final AnimatedAction DARK_BEAM = new AnimatedAction(16, 6, "dark_beam");
+    public static final AnimatedAction FURNITURE = new AnimatedAction(24, 8, "furniture");
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(204, "defeat").marker(150).infinite().build();
+    public static final AnimatedAction ANGRY = new AnimatedAction(28, 0, "angry");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     private static final EntityDataAccessor<Boolean> CAUGHT = SynchedEntityData.defineId(EntityMarionetta.class, EntityDataSerializers.BOOLEAN);
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, spin, card_attack, chest_attack, chest_throw, stuffed_animals, dark_beam, furniture, defeat, angry, interact};
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, SPIN, CARD_ATTACK, CHEST_ATTACK, CHEST_THROW, STUFFED_ANIMALS, DARK_BEAM, FURNITURE, DEFEAT, ANGRY, INTERACT};
     public final MarionettaAttackGoal<EntityMarionetta> attack = new MarionettaAttackGoal<>(this);
     private final List<LivingEntity> caughtEntities = new ArrayList<>();
-    private final AnimationHandler<EntityMarionetta> animationHandler = new AnimationHandler<>(this, anims)
+    private final AnimationHandler<EntityMarionetta> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeFunc(anim -> {
                 if (this.entityData.get(CAUGHT)) {
                     if (!this.level.isClientSide) {
                         this.entityData.set(CAUGHT, false);
-                        this.getAnimationHandler().setAnimation(chest_throw);
+                        this.getAnimationHandler().setAnimation(CHEST_THROW);
                     }
                     return true;
                 }
@@ -75,7 +75,7 @@ public class EntityMarionetta extends BossMonster {
     public void setEnraged(boolean flag, boolean load) {
         super.setEnraged(flag, load);
         if (flag && !load)
-            this.getAnimationHandler().setAnimation(angry);
+            this.getAnimationHandler().setAnimation(ANGRY);
     }
 
     public boolean caughtTarget() {
@@ -90,10 +90,10 @@ public class EntityMarionetta extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(chest_throw.getID()) || anim.getID().equals(defeat.getID()) || anim.getID().equals(angry.getID()) || anim.getID().equals(interact.getID()))
+        if (anim.getID().equals(CHEST_THROW.getID()) || anim.getID().equals(DEFEAT.getID()) || anim.getID().equals(ANGRY.getID()) || anim.getID().equals(INTERACT.getID()))
             return false;
         if (type == AnimationType.GENERICATTACK)
-            return this.isEnraged() || (!anim.getID().equals(dark_beam.getID()) && !anim.getID().equals(furniture.getID()));
+            return this.isEnraged() || (!anim.getID().equals(DARK_BEAM.getID()) && !anim.getID().equals(FURNITURE.getID()));
         return false;
     }
 
@@ -107,31 +107,31 @@ public class EntityMarionetta extends BossMonster {
     public boolean hurt(DamageSource source, float amount) {
         if (this.caughtEntities.contains(source.getEntity()))
             return false;
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(chest_throw.getID(), angry.getID()))) && super.hurt(source, amount);
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(CHEST_THROW.getID(), ANGRY.getID()))) && super.hurt(source, amount);
     }
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(angry.getID(), defeat.getID());
+        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(ANGRY.getID(), DEFEAT.getID());
     }
 
     @Override
     public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrentAnim(angry.getID(), defeat.getID()))
+        if (this.getAnimationHandler().isCurrentAnim(ANGRY.getID(), DEFEAT.getID()))
             return;
         super.push(x, y, z);
     }
 
     @Override
     public AnimatedAction getDeathAnimation() {
-        return defeat;
+        return DEFEAT;
     }
 
     @Override
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
         if (target != null) {
-            if (!anim.getID().equals(spin.getID()))
+            if (!anim.getID().equals(SPIN.getID()))
                 this.lookAt(target, 180.0f, 50.0f);
         }
         switch (anim.getID()) {
@@ -206,10 +206,10 @@ public class EntityMarionetta extends BossMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim.getID().equals(spin.getID())) {
+        if (anim.getID().equals(SPIN.getID())) {
             return this.getBoundingBox().inflate(1.6, 0, 1.6);
         }
-        if (anim.getID().equals(chest_attack.getID())) {
+        if (anim.getID().equals(CHEST_ATTACK.getID())) {
             return this.getBoundingBox().inflate(1.2, 0, 1.2);
         }
         return super.calculateAttackAABB(anim, target);
@@ -219,11 +219,11 @@ public class EntityMarionetta extends BossMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(card_attack);
+                this.getAnimationHandler().setAnimation(CARD_ATTACK);
             else if (command == 1)
-                this.getAnimationHandler().setAnimation(spin);
+                this.getAnimationHandler().setAnimation(SPIN);
             else
-                this.getAnimationHandler().setAnimation(melee);
+                this.getAnimationHandler().setAnimation(MELEE);
         }
     }
 
@@ -256,7 +256,7 @@ public class EntityMarionetta extends BossMonster {
 
     @Override
     public void push(Entity entityIn) {
-        if (this.getAnimationHandler().isCurrentAnim(spin.getID(), chest_attack.getID()))
+        if (this.getAnimationHandler().isCurrentAnim(SPIN.getID(), CHEST_ATTACK.getID()))
             return;
         super.push(entityIn);
     }
@@ -273,6 +273,6 @@ public class EntityMarionetta extends BossMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
     }
 }

@@ -27,20 +27,21 @@ import java.util.List;
 
 public class EntityMimic extends ChargingMonster {
 
-    private static final EntityDataAccessor<Boolean> awake = SynchedEntityData.defineId(EntityMimic.class, EntityDataSerializers.BOOLEAN);
-    private static final AnimatedAction melee = new AnimatedAction(12, 9, "attack");
-    private static final AnimatedAction leap = new AnimatedAction(12, 3, "leap");
-    private static final AnimatedAction close = new AnimatedAction(6, 6, "close");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap, close, interact};
+    private static final EntityDataAccessor<Boolean> AWAKE = SynchedEntityData.defineId(EntityMimic.class, EntityDataSerializers.BOOLEAN);
+    private static final AnimatedAction MELEE = new AnimatedAction(12, 9, "attack");
+    private static final AnimatedAction LEAP = new AnimatedAction(12, 3, "leap");
+    private static final AnimatedAction CLOSE = new AnimatedAction(6, 6, "close");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, CLOSE, INTERACT};
     public ChargeAttackGoal<EntityMimic> attack = new ChargeAttackGoal<>(this);
     protected List<LivingEntity> hitEntity;
-    private final AnimationHandler<EntityMimic> animationHandler = new AnimationHandler<>(this, anims)
+    private final AnimationHandler<EntityMimic> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeCons(a -> {
-                if (!leap.checkID(a))
+                if (!LEAP.checkID(a))
                     this.hitEntity = null;
             });
     private int sleepTick = -1;
+    private boolean sleeping;
 
     public EntityMimic(EntityType<? extends EntityMimic> type, Level world) {
         super(type, world);
@@ -70,16 +71,16 @@ public class EntityMimic extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(melee.getID());
+            return anim.getID().equals(MELEE.getID());
         if (type == AnimationType.CHARGE)
-            return anim.getID().equals(leap.getID());
+            return anim.getID().equals(LEAP.getID());
         return false;
     }
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean ret = super.hurt(source, amount);
-        if (ret)
+        if (ret && !this.sleeping)
             this.setAwake();
         return ret;
     }
@@ -93,21 +94,21 @@ public class EntityMimic extends ChargingMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 1)
-                this.getAnimationHandler().setAnimation(leap);
+                this.getAnimationHandler().setAnimation(LEAP);
             else
-                this.getAnimationHandler().setAnimation(melee);
+                this.getAnimationHandler().setAnimation(MELEE);
         }
     }
 
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(awake, false);
+        this.entityData.define(AWAKE, false);
     }
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(leap.getID())) {
+        if (anim.getID().equals(LEAP.getID())) {
             if (anim.canAttack()) {
                 Vec3 vec32;
                 if (this.getTarget() != null) {
@@ -135,7 +136,7 @@ public class EntityMimic extends ChargingMonster {
     @Override
     public void setTarget(@Nullable LivingEntity livingEntity) {
         super.setTarget(livingEntity);
-        if (livingEntity != null) {
+        if (livingEntity != null && !this.sleeping) {
             this.setAwake();
         }
     }
@@ -148,15 +149,15 @@ public class EntityMimic extends ChargingMonster {
                 this.sleepTick--;
             }
             if (this.sleepTick == 0) {
-                this.entityData.set(awake, false);
-                this.getAnimationHandler().setAnimation(close);
+                this.entityData.set(AWAKE, false);
+                this.getAnimationHandler().setAnimation(CLOSE);
                 this.getNavigation().stop();
             }
         }
     }
 
     public void setAwake() {
-        this.entityData.set(awake, true);
+        this.entityData.set(AWAKE, true);
         this.sleepTick = 200;
     }
 
@@ -173,7 +174,7 @@ public class EntityMimic extends ChargingMonster {
     }
 
     public boolean isAwake() {
-        return this.entityData.get(awake);
+        return this.entityData.get(AWAKE);
     }
 
     @Override
@@ -197,7 +198,25 @@ public class EntityMimic extends ChargingMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public void onSleeping(boolean sleeping) {
+        if (sleeping) {
+            this.sleeping = true;
+            if (this.isAwake()) {
+                this.entityData.set(AWAKE, false);
+                this.getAnimationHandler().setAnimation(CLOSE);
+                this.getNavigation().stop();
+            }
+        } else
+            this.sleeping = false;
+    }
+
+    @Override
+    public boolean hasSleepingAnimation() {
+        return true;
     }
 
     protected static class JumpingMover extends MoveControl {

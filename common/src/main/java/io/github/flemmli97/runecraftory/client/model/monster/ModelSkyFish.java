@@ -30,7 +30,7 @@ public class ModelSkyFish<T extends EntitySkyFish> extends EntityModel<T> implem
 
     public ModelSkyFish(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "body");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "sky_fish"));
     }
 
@@ -39,8 +39,8 @@ public class ModelSkyFish<T extends EntitySkyFish> extends EntityModel<T> implem
         PartDefinition partdefinition = meshdefinition.getRoot();
 
         PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-3.5F, -5.0F, -9.0F, 6.0F, 10.0F, 17.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 27).addBox(2.5F, -3.0F, -8.0F, 1.0F, 6.0F, 16.0F, new CubeDeformation(0.0F))
-                .texOffs(46, 0).addBox(-4.5F, -3.0F, -8.0F, 1.0F, 6.0F, 16.0F, new CubeDeformation(0.0F))
+                .texOffs(2, 28).addBox(2.5F, -3.0F, -7.0F, 1.0F, 6.0F, 15.0F, new CubeDeformation(0.0F))
+                .texOffs(46, 1).addBox(-4.5F, -3.0F, -7.0F, 1.0F, 6.0F, 15.0F, new CubeDeformation(0.0F))
                 .texOffs(34, 27).addBox(-2.5F, -6.0F, -7.0F, 4.0F, 1.0F, 14.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, 18.0F, 1.0F));
 
         PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(44, 72).addBox(-2.0F, -0.5F, -3.0F, 4.0F, 5.0F, 1.0F, new CubeDeformation(0.0F))
@@ -85,7 +85,7 @@ public class ModelSkyFish<T extends EntitySkyFish> extends EntityModel<T> implem
                 this.anim.doAnimation(this, "swim", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         if (anim != null)
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
     }
 
     @Override

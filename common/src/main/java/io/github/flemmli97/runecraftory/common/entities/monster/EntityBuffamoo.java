@@ -15,12 +15,13 @@ import net.minecraft.world.level.Level;
 
 public class EntityBuffamoo extends ChargingMonster {
 
-    public static final AnimatedAction chargeAttack = new AnimatedAction(44, 16, "charge");
-    public static final AnimatedAction stamp = new AnimatedAction(8, 4, "stamp");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(stamp, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{stamp, chargeAttack, interact};
+    public static final AnimatedAction CHARGE_ATTACK = new AnimatedAction(44, 16, "charge");
+    public static final AnimatedAction STAMP = new AnimatedAction(8, 4, "stamp");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(STAMP, "interact");
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{STAMP, CHARGE_ATTACK, INTERACT, SLEEP};
     public final ChargeAttackGoal<EntityBuffamoo> ai = new ChargeAttackGoal<>(this);
-    private final AnimationHandler<EntityBuffamoo> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityBuffamoo> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityBuffamoo(EntityType<? extends EntityBuffamoo> type, Level world) {
         super(type, world);
@@ -36,9 +37,9 @@ public class EntityBuffamoo extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.CHARGE) {
-            return anim.getID().equals(chargeAttack.getID());
+            return anim.getID().equals(CHARGE_ATTACK.getID());
         }
-        return type == AnimationType.MELEE && anim.getID().equals(stamp.getID());
+        return type == AnimationType.MELEE && anim.getID().equals(STAMP.getID());
     }
 
     @Override
@@ -50,9 +51,9 @@ public class EntityBuffamoo extends ChargingMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(chargeAttack);
+                this.getAnimationHandler().setAnimation(CHARGE_ATTACK);
             else
-                this.getAnimationHandler().setAnimation(stamp);
+                this.getAnimationHandler().setAnimation(STAMP);
         }
     }
 
@@ -104,6 +105,11 @@ public class EntityBuffamoo extends ChargingMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 }

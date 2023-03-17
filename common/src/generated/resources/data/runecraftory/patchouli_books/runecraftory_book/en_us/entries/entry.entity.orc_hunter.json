@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.orc_hunter",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:orc_hunter_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:orc_hunter",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:orc_hunter"
+    }
+  ]
+}

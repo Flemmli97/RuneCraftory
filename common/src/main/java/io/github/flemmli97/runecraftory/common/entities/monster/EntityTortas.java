@@ -22,16 +22,15 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntityTortas extends ChargingMonster {
 
-    public static final AnimatedAction bite = new AnimatedAction(11, 6, "bite");
-    public static final AnimatedAction spin = new AnimatedAction(51, 0, "spin");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(bite, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{bite, spin, interact};
-    //public static final AnimatedAction swim = new AnimatedAction(32, 6, "swim");
-    //public static final AnimatedAction walk = new AnimatedAction(21, 5, "walk");
+    public static final AnimatedAction BITE = new AnimatedAction(11, 6, "bite");
+    public static final AnimatedAction SPIN = new AnimatedAction(51, 0, "spin");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(BITE, "interact");
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{BITE, SPIN, INTERACT, SLEEP};
     public final ChargeAttackGoal<EntityTortas> ai = new ChargeAttackGoal<>(this);
     protected final WaterBoundPathNavigation waterNavigator;
     protected final GroundPathNavigation groundNavigator;
-    private final AnimationHandler<EntityTortas> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityTortas> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityTortas(EntityType<? extends EntityTortas> type, Level world) {
         super(type, world);
@@ -54,14 +53,14 @@ public class EntityTortas extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.CHARGE) {
-            return anim.getID().equals(spin.getID());
+            return anim.getID().equals(SPIN.getID());
         }
-        return type == AnimationType.MELEE && anim.getID().equals(bite.getID());
+        return type == AnimationType.MELEE && anim.getID().equals(BITE.getID());
     }
 
     @Override
     public int animationCooldown(AnimatedAction anim) {
-        if (anim != null && anim.getID().equals(spin.getID()))
+        if (anim != null && anim.getID().equals(SPIN.getID()))
             return super.animationCooldown(anim) * 2;
         return super.animationCooldown(anim);
     }
@@ -88,7 +87,7 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim != null && anim.getID().equals(spin.getID()))
+        if (anim != null && anim.getID().equals(SPIN.getID()))
             return this.attackAABB(anim).move(this.getX(), this.getY(), this.getZ());
         return super.calculateAttackAABB(anim, target);
     }
@@ -97,9 +96,9 @@ public class EntityTortas extends ChargingMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(spin);
+                this.getAnimationHandler().setAnimation(SPIN);
             else
-                this.getAnimationHandler().setAnimation(bite);
+                this.getAnimationHandler().setAnimation(BITE);
         }
     }
 
@@ -202,6 +201,11 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 }

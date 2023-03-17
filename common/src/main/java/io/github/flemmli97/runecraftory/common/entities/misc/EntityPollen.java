@@ -35,7 +35,7 @@ public class EntityPollen extends EntityDamageCloud {
     }
 
     public EntityPollen(Level world, LivingEntity shooter) {
-        super(ModEntities.pollen.get(), world, shooter);
+        super(ModEntities.POLLEN.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = (e) -> ((BaseMonster) shooter).hitPred.test(e);
     }

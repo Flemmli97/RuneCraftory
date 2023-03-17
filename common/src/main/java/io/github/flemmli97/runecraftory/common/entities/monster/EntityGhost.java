@@ -28,18 +28,19 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntityGhost extends ChargingMonster {
 
-    public static final AnimatedAction darkBall = new AnimatedAction(13, 5, "darkball");
-    public static final AnimatedAction charge = new AnimatedAction(24, 7, "charge");
-    public static final AnimatedAction swing = new AnimatedAction(11, 6, "swing");
-    public static final AnimatedAction vanish = new AnimatedAction(100, 50, "vanish");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(swing, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{darkBall, charge, swing, vanish, interact};
+    public static final AnimatedAction DARKBALL = new AnimatedAction(13, 5, "darkball");
+    public static final AnimatedAction CHARGE = new AnimatedAction(24, 7, "charge");
+    public static final AnimatedAction SWING = new AnimatedAction(11, 6, "swing");
+    public static final AnimatedAction VANISH = new AnimatedAction(100, 50, "vanish");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SWING, "interact");
+    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DARKBALL, CHARGE, SWING, VANISH, INTERACT, STILL};
     public final GhostAttackGoal<EntityGhost> attack = new GhostAttackGoal<>(this);
     private boolean vanishNext;
 
-    private final AnimationHandler<EntityGhost> animationHandler = new AnimationHandler<>(this, anims)
+    private final AnimationHandler<EntityGhost> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeCons(anim -> {
-                if (anim != null && anim.getID().equals(vanish.getID()))
+                if (anim != null && anim.getID().equals(VANISH.getID()))
                     this.vanishNext = this.getRandom().nextFloat() < 0.6;
             });
 
@@ -77,11 +78,11 @@ public class EntityGhost extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.CHARGE)
-            return anim.getID().equals(charge.getID());
+            return anim.getID().equals(CHARGE.getID());
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(darkBall.getID());
+            return anim.getID().equals(DARKBALL.getID());
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(swing.getID());
+            return anim.getID().equals(SWING.getID());
         return false;
     }
 
@@ -92,7 +93,7 @@ public class EntityGhost extends ChargingMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.getAnimationHandler().isCurrentAnim(vanish.getID()))
+        if (this.getAnimationHandler().isCurrentAnim(VANISH.getID()))
             return false;
         boolean ret = super.hurt(source, amount);
         if (ret)
@@ -109,9 +110,9 @@ public class EntityGhost extends ChargingMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 1)
-                this.getAnimationHandler().setAnimation(darkBall);
+                this.getAnimationHandler().setAnimation(DARKBALL);
             else
-                this.getAnimationHandler().setAnimation(swing);
+                this.getAnimationHandler().setAnimation(SWING);
         }
     }
 
@@ -127,12 +128,12 @@ public class EntityGhost extends ChargingMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(darkBall.getID())) {
+        if (anim.getID().equals(DARKBALL.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.DARKBALL.get().use((ServerLevel) this.level, this);
             }
-        } else if (anim.getID().equals(vanish.getID())) {
+        } else if (anim.getID().equals(VANISH.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 LivingEntity target = this.getTarget();
@@ -190,7 +191,7 @@ public class EntityGhost extends ChargingMonster {
         LivingEntity target = this.getTarget();
         if (target != null && target.distanceToSqr(this) > 140)
             return true;
-        return !prev.equals(vanish.getID()) && this.vanishNext;
+        return !prev.equals(VANISH.getID()) && this.vanishNext;
     }
 
     @Override
@@ -200,6 +201,11 @@ public class EntityGhost extends ChargingMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return STILL;
     }
 }

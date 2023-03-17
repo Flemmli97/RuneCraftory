@@ -29,7 +29,7 @@ public class EntityThiccLightningBolt extends EntityProjectile {
     }
 
     public EntityThiccLightningBolt(Level world, LivingEntity shooter) {
-        super(ModEntities.lightningOrbBolt.get(), world, shooter);
+        super(ModEntities.LIGHTNING_ORB_BOLT.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
     }

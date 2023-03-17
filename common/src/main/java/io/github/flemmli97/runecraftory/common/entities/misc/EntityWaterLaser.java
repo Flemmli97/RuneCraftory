@@ -38,11 +38,11 @@ public class EntityWaterLaser extends EntityBeam {
     }
 
     public EntityWaterLaser(Level level, LivingEntity shooter) {
-        super(ModEntities.waterLaser.get(), level, shooter);
+        super(ModEntities.WATER_LASER.get(), level, shooter);
     }
 
     public EntityWaterLaser(Level level, LivingEntity shooter, float yawMotion) {
-        super(ModEntities.waterLaser.get(), level, shooter);
+        super(ModEntities.WATER_LASER.get(), level, shooter);
         this.entityData.set(yawMotionVal, yawMotion);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;

@@ -21,12 +21,12 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntityGoblinArcher extends EntityGoblin {
 
-    private static final AnimatedAction bow = new AnimatedAction(15, 9, "bow");
-    private static final AnimatedAction triple = AnimatedAction.copyOf(bow, "triple");
-    private static final AnimatedAction kick = new AnimatedAction(11, 7, "kick");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(kick, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{bow, triple, kick, interact};
-    private final AnimationHandler<EntityGoblinArcher> animationHandler = new AnimationHandler<>(this, anims);
+    private static final AnimatedAction BOW = new AnimatedAction(15, 9, "bow");
+    private static final AnimatedAction TRIPLE = AnimatedAction.copyOf(BOW, "triple");
+    private static final AnimatedAction KICK = new AnimatedAction(11, 7, "kick");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK, "interact");
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{BOW, TRIPLE, KICK, INTERACT, SLEEP};
+    private final AnimationHandler<EntityGoblinArcher> animationHandler = new AnimationHandler<>(this, ANIMS);
     public AnimatedRangedGoal<EntityGoblin> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getMainHandItem().getItem() instanceof BowItem);
 
     public EntityGoblinArcher(EntityType<? extends EntityGoblin> type, Level level) {
@@ -44,9 +44,9 @@ public class EntityGoblinArcher extends EntityGoblin {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(bow.getID()) || anim.getID().equals(triple.getID());
+            return anim.getID().equals(BOW.getID()) || anim.getID().equals(TRIPLE.getID());
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(kick.getID());
+            return anim.getID().equals(KICK.getID());
         return false;
     }
 
@@ -54,11 +54,11 @@ public class EntityGoblinArcher extends EntityGoblin {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(triple);
+                this.getAnimationHandler().setAnimation(TRIPLE);
             else if (command == 1)
-                this.getAnimationHandler().setAnimation(bow);
+                this.getAnimationHandler().setAnimation(BOW);
             else
-                this.getAnimationHandler().setAnimation(kick);
+                this.getAnimationHandler().setAnimation(KICK);
         }
     }
 
@@ -82,7 +82,7 @@ public class EntityGoblinArcher extends EntityGoblin {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget())) {
-                    if (anim.getID().equals(bow.getID()))
+                    if (anim.getID().equals(BOW.getID()))
                         this.shootArrow(this.getTarget());
                     else
                         this.shootTripleArrow(this.getTarget());
@@ -126,6 +126,6 @@ public class EntityGoblinArcher extends EntityGoblin {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
     }
 }

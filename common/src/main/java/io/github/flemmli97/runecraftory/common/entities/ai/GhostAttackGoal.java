@@ -14,9 +14,9 @@ public class GhostAttackGoal<T extends EntityGhost> extends AnimatedMeleeGoal<T>
     @Override
     public AnimatedAction randomAttack() {
         if (this.attacker.shouldVanishNext(this.prevAnim) || this.distanceToTargetSq > 100)
-            return EntityGhost.vanish;
+            return EntityGhost.VANISH;
         if (this.attacker.getRandom().nextFloat() < 0.5)
-            return EntityGhost.darkBall;
+            return EntityGhost.DARKBALL;
         if (this.attacker.getRandom().nextFloat() < 0.7f && this.distanceToTargetSq <= (this.attacker.chargingLength() * this.attacker.chargingLength() + 1) && this.attacker.getY() >= this.target.getY())
             return this.attacker.getRandomAnimation(AnimationType.CHARGE);
         AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.MELEE);

@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.attachment;
 
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.common.entities.SleepingEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -14,6 +15,16 @@ public class EntityData {
     public EntityCustomFishingHook fishingHook;
 
     private ItemStack main, off;
+
+    public static SleepState getSleepState(LivingEntity entity) {
+        return Platform.INSTANCE.getEntityData(entity).map(e -> {
+            if (!e.isSleeping())
+                return SleepState.NONE;
+            if (entity instanceof SleepingEntity sleeping && sleeping.hasSleepingAnimation())
+                return SleepState.CUSTOM;
+            return SleepState.VANILLA;
+        }).orElse(SleepState.NONE);
+    }
 
     public void setSleeping(LivingEntity entity, boolean flag) {
         this.sleeping = flag;
@@ -90,5 +101,11 @@ public class EntityData {
             this.off = this.main.copy();
         }
         return this.off;
+    }
+
+    public enum SleepState {
+        NONE,
+        VANILLA,
+        CUSTOM
     }
 }

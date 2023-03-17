@@ -31,7 +31,7 @@ public class ModelButterfly<T extends EntityButterfly> extends EntityModel<T> im
 
     public ModelButterfly(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "body");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "butterfly"));
     }
 

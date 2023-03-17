@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.ignis",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:ignis_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:ignis",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:ignis"
+    }
+  ]
+}

@@ -41,7 +41,7 @@ public class EntityWindBlade extends EntityProjectile {
     }
 
     public EntityWindBlade(Level world, LivingEntity shooter) {
-        super(ModEntities.windBlade.get(), world, shooter);
+        super(ModEntities.WIND_BLADE.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
     }

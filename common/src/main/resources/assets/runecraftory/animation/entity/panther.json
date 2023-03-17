@@ -251,7 +251,7 @@
 				"leftFrontPaw": {
 					"rotation": {
 						"0.0": [0, 0, 0],
-						"0.2": [0, -17.5, 0],
+						"0.2": [0, 0, 0],
 						"0.36": [15, 7.5, 0],
 						"0.44": [15, 7.5, 0],
 						"0.6": [5, 7.5, 22.5],
@@ -287,7 +287,8 @@
 				"rightFrontPaw": {
 					"rotation": {
 						"0.0": [0, 0, 0],
-						"0.44": [0, 17.5, 0],
+						"0.32": [0, -57.27, 0],
+						"0.44": [0, -77.27, 0],
 						"0.6": [0, 17.5, 0],
 						"0.72": [0, 0, 0]
 					}
@@ -481,6 +482,57 @@
 						"0.88": [0, 0, 0],
 						"1.0": [0, 0, 0]
 					}
+				}
+			}
+		},
+		"sleep": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [25, 0, 0],
+					"position": [0, -13, 0]
+				},
+				"head": {
+					"rotation": [10, 37.5, 12.5]
+				},
+				"leftFrontLeg": {
+					"rotation": [32.5, 0, 0]
+				},
+				"leftFrontUpper": {
+					"rotation": [-50, 0, 0]
+				},
+				"leftFrontDown": {
+					"rotation": [0, 0, 45]
+				},
+				"rightFrontLeg": {
+					"rotation": [32.5, 0, 0]
+				},
+				"rightFrontUpper": {
+					"rotation": [-50, 0, 0]
+				},
+				"leftHindLeg": {
+					"rotation": [-62.5, 0, 0]
+				},
+				"leftHindUpper": {
+					"rotation": [-30, 0, 0]
+				},
+				"rightHindLeg": {
+					"rotation": [-62.5, 0, 0]
+				},
+				"rightHindUpper": {
+					"rotation": [-30, 0, 0]
+				},
+				"rightHindDown": {
+					"rotation": [-30, 0, 0]
+				},
+				"tailBase": {
+					"rotation": [-52.5, -45, 0]
+				},
+				"tailMiddle": {
+					"rotation": [0, -70, 0]
+				},
+				"tailTip": {
+					"rotation": [-20, -65, -40]
 				}
 			}
 		}

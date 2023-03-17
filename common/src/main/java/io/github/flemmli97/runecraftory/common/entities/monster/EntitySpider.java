@@ -24,11 +24,12 @@ public class EntitySpider extends BaseMonster {
 
     private static final EntityDataAccessor<Boolean> climbingSync = SynchedEntityData.defineId(EntitySpider.class, EntityDataSerializers.BOOLEAN);
 
-    public static final AnimatedAction melee = new AnimatedAction(13, 9, "attack");
-    public static final AnimatedAction webshot = new AnimatedAction(14, 6, "webshot");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, webshot, interact};
-    private final AnimationHandler<EntitySpider> animationHandler = new AnimationHandler<>(this, anims);
+    public static final AnimatedAction MELEE = new AnimatedAction(13, 9, "attack");
+    public static final AnimatedAction WEBSHOT = new AnimatedAction(14, 6, "webshot");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
+    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, WEBSHOT, INTERACT, STILL};
+    private final AnimationHandler<EntitySpider> animationHandler = new AnimationHandler<>(this, ANIMS);
     public AnimatedRangedGoal<EntitySpider> attack = new AnimatedRangedGoal<>(this, 7, (e) -> true);
 
     public int climbingTicker = -1;
@@ -95,9 +96,9 @@ public class EntitySpider extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(webshot.getID());
+            return anim.getID().equals(WEBSHOT.getID());
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(melee.getID());
+            return anim.getID().equals(MELEE.getID());
         return false;
     }
 
@@ -128,9 +129,9 @@ public class EntitySpider extends BaseMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 1)
-                this.getAnimationHandler().setAnimation(webshot);
+                this.getAnimationHandler().setAnimation(WEBSHOT);
             else
-                this.getAnimationHandler().setAnimation(melee);
+                this.getAnimationHandler().setAnimation(MELEE);
         }
     }
 
@@ -146,6 +147,11 @@ public class EntitySpider extends BaseMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return STILL;
     }
 }

@@ -34,7 +34,7 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
 
     public ModelThunderbolt(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "body");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "thunderbolt"));
         this.head = this.model.getPart("head");
         this.neck = this.model.getPart("neck");

@@ -125,7 +125,7 @@ public class RuneCraftoryForge {
     public void common(FMLCommonSetupEvent event) {
         PacketHandler.register();
         event.enqueueWork(() -> {
-            SpawnPlacements.register(ModEntities.gate.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
+            SpawnPlacements.register(ModEntities.GATE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
             ModFeatures.registerConfiguredMineralFeatures();
         });
         this.tweakVanillaAttribute(Attributes.MAX_HEALTH, Double.MAX_VALUE);

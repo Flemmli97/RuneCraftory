@@ -74,7 +74,7 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
             this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
         }
         if (anim != null) {
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
         }
     }
 

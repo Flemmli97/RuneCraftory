@@ -29,14 +29,16 @@ import java.util.List;
 
 public class EntityWeagle extends BaseMonster {
 
-    public static final AnimatedAction gale = new AnimatedAction(19, 5, "gale");
-    public static final AnimatedAction peck = new AnimatedAction(11, 4, "peck");
-    public static final AnimatedAction swoop = new AnimatedAction(14, 4, "swoop");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(peck, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{gale, peck, swoop, interact};
+    public static final AnimatedAction GALE = new AnimatedAction(19, 5, "gale");
+    public static final AnimatedAction PECK = new AnimatedAction(11, 4, "peck");
+    public static final AnimatedAction SWOOP = new AnimatedAction(14, 4, "swoop");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(PECK, "interact");
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(2, "defeat").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{GALE, PECK, SWOOP, INTERACT, DEFEAT, SLEEP};
     public AnimatedRangedGoal<EntityWeagle> rangedGoal = new AnimatedRangedGoal<>(this, 8, e -> true);
     protected List<LivingEntity> hitEntity;
-    private final AnimationHandler<EntityWeagle> animationHandler = new AnimationHandler<>(this, anims)
+    private final AnimationHandler<EntityWeagle> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeCons(anim -> this.hitEntity = null);
 
     public EntityWeagle(EntityType<? extends BaseMonster> type, Level world) {
@@ -67,9 +69,9 @@ public class EntityWeagle extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED) {
-            return anim.getID().equals(gale.getID());
+            return anim.getID().equals(GALE.getID());
         }
-        return type == AnimationType.MELEE && (anim.getID().equals(peck.getID()) || anim.getID().equals(swoop.getID()));
+        return type == AnimationType.MELEE && (anim.getID().equals(PECK.getID()) || anim.getID().equals(SWOOP.getID()));
     }
 
     @Override
@@ -88,11 +90,11 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(gale.getID())) {
+        if (anim.getID().equals(GALE.getID())) {
             if (anim.canAttack()) {
                 ModSpells.GUSTSPELL.get().use((ServerLevel) this.level, this);
             }
-        } else if (anim.getID().equals(swoop.getID())) {
+        } else if (anim.getID().equals(SWOOP.getID())) {
             if (this.hitEntity == null)
                 this.hitEntity = new ArrayList<>();
             Vec3 dir;
@@ -119,7 +121,7 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim.getID().equals(swoop.getID()))
+        if (anim.getID().equals(SWOOP.getID()))
             return super.calculateAttackAABB(anim, target).move(this.getDeltaMovement());
         return super.calculateAttackAABB(anim, target);
     }
@@ -128,9 +130,9 @@ public class EntityWeagle extends BaseMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             switch (command) {
-                case 2 -> this.getAnimationHandler().setAnimation(gale);
-                case 1 -> this.getAnimationHandler().setAnimation(swoop);
-                default -> this.getAnimationHandler().setAnimation(peck);
+                case 2 -> this.getAnimationHandler().setAnimation(GALE);
+                case 1 -> this.getAnimationHandler().setAnimation(SWOOP);
+                default -> this.getAnimationHandler().setAnimation(PECK);
             }
         }
     }
@@ -160,6 +162,16 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getDeathAnimation() {
+        return DEFEAT;
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 }

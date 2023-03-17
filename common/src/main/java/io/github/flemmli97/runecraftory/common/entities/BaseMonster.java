@@ -124,7 +124,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, RandomAttackSelectorMob, ExtendedEntity {
+public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, RandomAttackSelectorMob, ExtendedEntity, SleepingEntity {
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Integer> ENTITY_LEVEL = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
@@ -223,7 +223,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
      */
     private int moveTick;
 
-    public static final int moveTickMax = 5;
+    public static final int moveTickMax = 3;
 
     public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
         super(type, level);
@@ -1169,7 +1169,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     protected void tickDeath() {
-        if (this.deathTime == 0) {
+        if (!this.level.isClientSide && this.deathTime == 0) {
             this.playDeathAnimation(false);
             this.getNavigation().stop();
         }
@@ -1440,6 +1440,46 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public AnimatedAction getDeathAnimation() {
+        return null;
+    }
+
+    @Override
+    public void setSleepingPos(BlockPos pos) {
+        super.setSleepingPos(pos);
+        this.onSleeping(true);
+    }
+
+    @Override
+    public void clearSleepingPos() {
+        super.clearSleepingPos();
+        this.onSleeping(false);
+    }
+
+    @Override
+    public void setSleeping(boolean sleeping) {
+        this.onSleeping(sleeping);
+    }
+
+    @Override
+    public boolean hasSleepingAnimation() {
+        return this.getSleepAnimation() != null;
+    }
+
+    public void onSleeping(boolean sleeping) {
+        if (sleeping) {
+            if (this.getSleepAnimation() != null) {
+                this.getAnimationHandler().setAnimation(this.getSleepAnimation());
+                if (this.firstTick && this.level.isClientSide) {
+                    AnimatedAction anim = this.getAnimationHandler().getAnimation();
+                    while (anim.getTick() < anim.getLength())
+                        anim.tick();
+                }
+            }
+        } else
+            this.getAnimationHandler().setAnimation(null);
+    }
+
+    public AnimatedAction getSleepAnimation() {
         return null;
     }
 

@@ -17,24 +17,29 @@ import java.util.List;
 
 public class EntityBigMuck extends BaseMonster {
 
-    public static final AnimatedAction slapAttack = new AnimatedAction(24, 7, "slap");
-    public static final AnimatedAction sporeAttack = new AnimatedAction(44, 18, "spore");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(slapAttack, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{slapAttack, sporeAttack, interact};
+    public static final AnimatedAction SLAP = new AnimatedAction(24, 7, "slap");
+    public static final AnimatedAction SPORE = new AnimatedAction(44, 18, "spore");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLAP, "interact");
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, SPORE, INTERACT, SLEEP};
     public final AnimatedMeleeGoal<EntityBigMuck> ai = new AnimatedMeleeGoal<>(this);
-    private final AnimationHandler<EntityBigMuck> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityBigMuck> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private List<Vector3f> attackPos;
 
     public EntityBigMuck(EntityType<? extends EntityBigMuck> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.ai);
-        this.getAnimationHandler().setAnimationChangeCons(a -> this.attackPos = null);
+        this.getOrCreateAnimationHandler().setAnimationChangeCons(a -> this.attackPos = null);
     }
 
     @Override
     public float attackChance(AnimationType type) {
         return 0.9f;
+    }
+
+    protected AnimationHandler<EntityBigMuck> getOrCreateAnimationHandler() {
+        return this.animationHandler;
     }
 
     @Override
@@ -45,20 +50,20 @@ public class EntityBigMuck extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(slapAttack.getID()) || anim.getID().equals(sporeAttack.getID());
+            return anim.getID().equals(SLAP.getID()) || anim.getID().equals(SPORE.getID());
         return false;
     }
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        if (anim.getID().equals(sporeAttack.getID()))
+        if (anim.getID().equals(SPORE.getID()))
             return 1.7;
         return 0.8;
     }
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(sporeAttack.getID())) {
+        if (anim.getID().equals(SPORE.getID())) {
             this.getNavigation().stop();
             if (this.attackPos == null) {
                 Vec3 look = Vec3.directionFromRotation(0, this.yHeadRot).scale(1.3);
@@ -83,14 +88,19 @@ public class EntityBigMuck extends BaseMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(sporeAttack);
+                this.getAnimationHandler().setAnimation(SPORE);
             else
-                this.getAnimationHandler().setAnimation(slapAttack);
+                this.getAnimationHandler().setAnimation(SLAP);
         }
     }
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 }

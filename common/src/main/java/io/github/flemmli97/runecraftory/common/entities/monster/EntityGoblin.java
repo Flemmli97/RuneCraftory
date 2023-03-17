@@ -21,16 +21,17 @@ import java.util.List;
 
 public class EntityGoblin extends ChargingMonster {
 
-    private static final AnimatedAction melee = new AnimatedAction(12, 7, "slash");
-    private static final AnimatedAction leap = new AnimatedAction(19, 6, "leap");
-    private static final AnimatedAction stone = new AnimatedAction(14, 9, "throw");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, leap, stone, interact};
+    private static final AnimatedAction MELEE = new AnimatedAction(12, 7, "slash");
+    private static final AnimatedAction LEAP = new AnimatedAction(19, 6, "leap");
+    private static final AnimatedAction STONE = new AnimatedAction(14, 9, "throw");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, STONE, INTERACT, SLEEP};
     public ChargeAttackGoal<EntityGoblin> attack = new ChargeAttackGoal<>(this);
     protected List<LivingEntity> hitEntity;
-    private final AnimationHandler<EntityGoblin> animationHandler = new AnimationHandler<>(this, anims)
+    private final AnimationHandler<EntityGoblin> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeCons(a -> {
-                if (!leap.checkID(a))
+                if (!LEAP.checkID(a))
                     this.hitEntity = null;
             });
 
@@ -48,15 +49,15 @@ public class EntityGoblin extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(melee.getID()) || anim.getID().equals(stone.getID());
+            return anim.getID().equals(MELEE.getID()) || anim.getID().equals(STONE.getID());
         if (type == AnimationType.CHARGE)
-            return anim.getID().equals(leap.getID());
+            return anim.getID().equals(LEAP.getID());
         return false;
     }
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        if (anim.getID().equals(stone.getID()))
+        if (anim.getID().equals(STONE.getID()))
             return 8;
         return 1;
     }
@@ -65,11 +66,11 @@ public class EntityGoblin extends ChargingMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(stone);
+                this.getAnimationHandler().setAnimation(STONE);
             else if (command == 1)
-                this.getAnimationHandler().setAnimation(leap);
+                this.getAnimationHandler().setAnimation(LEAP);
             else
-                this.getAnimationHandler().setAnimation(melee);
+                this.getAnimationHandler().setAnimation(MELEE);
         }
     }
 
@@ -85,12 +86,12 @@ public class EntityGoblin extends ChargingMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(stone.getID())) {
+        if (anim.getID().equals(STONE.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.STONETHROW.get().use((ServerLevel) this.level, this);
             }
-        } else if (anim.getID().equals(leap.getID())) {
+        } else if (anim.getID().equals(LEAP.getID())) {
             if (anim.canAttack()) {
                 Vec3 vec32;
                 if (this.getTarget() != null) {
@@ -117,6 +118,11 @@ public class EntityGoblin extends ChargingMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 }

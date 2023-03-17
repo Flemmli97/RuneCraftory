@@ -35,7 +35,7 @@ public class EntityDarkBall extends EntityDamageCloud {
     }
 
     public EntityDarkBall(Level level, LivingEntity thrower, Type type) {
-        super(ModEntities.darkBall.get(), level, thrower);
+        super(ModEntities.DARK_BALL.get(), level, thrower);
         this.setPos(this.getX(), this.getY() + thrower.getBbHeight() * 0.5, this.getZ());
         this.type = type;
         if (thrower instanceof BaseMonster)

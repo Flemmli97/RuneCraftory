@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.killer_ant",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:killer_ant_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:killer_ant",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:killer_ant"
+    }
+  ]
+}

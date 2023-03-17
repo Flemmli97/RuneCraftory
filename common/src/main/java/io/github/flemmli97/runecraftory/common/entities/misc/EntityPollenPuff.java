@@ -32,7 +32,7 @@ public class EntityPollenPuff extends EntityProjectile {
     }
 
     public EntityPollenPuff(Level world, LivingEntity shooter) {
-        super(ModEntities.pollenPuff.get(), world, shooter);
+        super(ModEntities.POLLEN_PUFF.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
     }

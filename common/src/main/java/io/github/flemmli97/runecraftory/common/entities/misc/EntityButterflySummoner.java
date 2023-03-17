@@ -12,7 +12,7 @@ public class EntityButterflySummoner extends ProjectileSummonHelperEntity {
     }
 
     public EntityButterflySummoner(Level level, LivingEntity caster) {
-        super(ModEntities.butterflySummoner.get(), level, caster);
+        super(ModEntities.BUTTERFLY_SUMMONER.get(), level, caster);
     }
 
     @Override

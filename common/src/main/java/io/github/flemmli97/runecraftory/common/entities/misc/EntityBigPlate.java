@@ -30,7 +30,7 @@ public class EntityBigPlate extends EntityProjectile {
     }
 
     public EntityBigPlate(Level world, LivingEntity shooter) {
-        super(ModEntities.plate.get(), world, shooter);
+        super(ModEntities.BIG_PLATE.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
     }

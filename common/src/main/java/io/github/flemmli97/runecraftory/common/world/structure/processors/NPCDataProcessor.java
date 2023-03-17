@@ -39,7 +39,7 @@ public class NPCDataProcessor extends DataStructureBlockProcessor {
         entityTag.put("ActiveEffects", listTag);
         BlockState state = ModBlocks.singleSpawnBlock.get().defaultBlockState();
         CompoundTag tag = new CompoundTag();
-        tag.putString("Entity", ModEntities.npc.getID().toString());
+        tag.putString("Entity", ModEntities.NPC.getID().toString());
         tag.put("EntityNBT", entityTag);
         return new StructureTemplate.StructureBlockInfo(origin.pos, state, tag);
     }

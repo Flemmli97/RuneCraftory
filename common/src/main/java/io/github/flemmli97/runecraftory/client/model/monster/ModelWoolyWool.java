@@ -26,7 +26,6 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
     protected final ModelPartHandler model;
     protected final BlockBenchAnimations anim;
 
-    public ModelPartHandler.ModelPartExtended bodyCenter;
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended bodyUp;
     public ModelPartHandler.ModelPartExtended armLeftBase;
@@ -36,9 +35,8 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
 
     public ModelWoolyWool(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root.getChild("bodyCenter"), "bodyCenter");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "wooly_wool"));
-        this.bodyCenter = this.model.getMainPart();
         this.body = this.model.getPart("body");
         this.bodyUp = this.model.getPart("bodyUp");
         this.armLeftBase = this.model.getPart("armLeftBase");
@@ -51,11 +49,9 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition bodyCenter = partdefinition.addOrReplaceChild("bodyCenter", CubeListBuilder.create(), PartPose.offset(0.0F, 17.75F, 0.0F));
-
-        PartDefinition body = bodyCenter.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 31).mirror().addBox(-3.5F, -7.0F, -4.5F, 7.0F, 13.0F, 9.0F, new CubeDeformation(0.0F)).mirror(false)
+        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 31).mirror().addBox(-3.5F, -7.0F, -4.5F, 7.0F, 13.0F, 9.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(32, 30).mirror().addBox(-4.5F, -7.0F, -3.5F, 1.0F, 13.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(32, 30).addBox(3.5F, -7.0F, -3.5F, 1.0F, 13.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+                .texOffs(32, 30).addBox(3.5F, -7.0F, -3.5F, 1.0F, 13.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 17.75F, 0.0F));
 
         PartDefinition bodyUp = body.addOrReplaceChild("bodyUp", CubeListBuilder.create().texOffs(32, 14).mirror().addBox(-2.5F, -1.0F, -3.5F, 5.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(28, 23).addBox(2.5F, -1.0F, -2.5F, 1.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
@@ -99,7 +95,6 @@ public class ModelWoolyWool<T extends EntityWooly> extends EntityModel<T> implem
     }
 
     public void syncModel(ModelWooly<T> model) {
-        this.sync(this.bodyCenter, model.bodyCenter);
         this.sync(this.body, model.body);
         this.sync(this.bodyUp, model.bodyUp);
         this.sync(this.armLeftBase, model.armLeftBase);

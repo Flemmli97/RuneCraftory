@@ -16,7 +16,7 @@ public class WispAttackGoal<T extends EntityWispBase> extends AnimatedMeleeGoal<
     @Override
     public AnimatedAction randomAttack() {
         if (this.attacker.shouldVanishNext(this.prevAnim) || this.distanceToTargetSq > 100)
-            return EntityWispBase.vanish;
+            return EntityWispBase.VANISH;
         AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.RANGED);
         if (this.distanceToTargetSq <= this.reach)
             return anim;

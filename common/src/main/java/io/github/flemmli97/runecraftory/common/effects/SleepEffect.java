@@ -1,12 +1,12 @@
 package io.github.flemmli97.runecraftory.common.effects;
 
+import io.github.flemmli97.runecraftory.common.entities.SleepingEntity;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSync;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -24,7 +24,8 @@ public class SleepEffect extends MobEffect {
     @Override
     public void applyEffectTick(LivingEntity living, int amplifier) {
         if (!(living instanceof Player player) || !player.getAbilities().invulnerable) {
-            living.setDeltaMovement(new Vec3(living.getDeltaMovement().x, -0.08, -living.getDeltaMovement().z));
+            if (!living.noPhysics)
+                living.setDeltaMovement(new Vec3(living.getDeltaMovement().x, -0.08, -living.getDeltaMovement().z));
         }
         MobEffectInstance eff = living.getEffect(this);
         if (eff.getDuration() > 200) {
@@ -40,17 +41,19 @@ public class SleepEffect extends MobEffect {
 
     @Override
     public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
+        if (entity instanceof SleepingEntity sleeping)
+            sleeping.setSleeping(false);
         entity.setSilent(false);
         sendSleepPacket(entity, false);
-        entity.setPose(Pose.STANDING);
         super.removeAttributeModifiers(entity, attributeMap, amplifier);
     }
 
     @Override
     public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
+        if (entity instanceof SleepingEntity sleeping)
+            sleeping.setSleeping(true);
         entity.setSilent(true);
         sendSleepPacket(entity, true);
-        entity.setPose(Pose.SLEEPING);
         super.addAttributeModifiers(entity, attributeMap, amplifier);
     }
 }

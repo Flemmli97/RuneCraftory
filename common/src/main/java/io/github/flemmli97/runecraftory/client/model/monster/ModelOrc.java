@@ -31,8 +31,8 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements Ext
     protected final ModelPartHandler model;
     protected final BlockBenchAnimations anim;
 
+    public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended head;
-    public ModelPartHandler.ModelPartExtended maze;
     public ModelPartHandler.ModelPartExtended handLeftUp;
     public ModelPartHandler.ModelPartExtended handLeftDown;
     public ModelPartHandler.ModelPartExtended handRightUp;
@@ -40,10 +40,10 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements Ext
 
     public ModelOrc(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "body");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "orc"));
+        this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");
-        this.maze = this.model.getPart("mazeStick");
         this.handLeftUp = this.model.getPart("handLeftUp");
         this.handLeftDown = this.model.getPart("handLeftDown");
         this.handRightUp = this.model.getPart("handRightUp");
@@ -54,42 +54,40 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements Ext
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 30).addBox(-5.0F, -9.0F, -4.0F, 9.0F, 18.0F, 9.0F, new CubeDeformation(0.0F))
-                .texOffs(36, 30).addBox(-5.0F, -9.0F, -4.0F, 9.0F, 18.0F, 9.0F, new CubeDeformation(0.2F)), PartPose.offsetAndRotation(0.0F, 6.0F, 0.0F, 0.1745F, 0.0F, 0.0F));
+        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(34, 0).addBox(-5.0F, -11.0F, -4.0F, 10.0F, 18.0F, 7.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 0).addBox(-5.0F, -11.0F, -4.0F, 10.0F, 18.0F, 7.0F, new CubeDeformation(0.2F)), PartPose.offsetAndRotation(0.5F, 6.5F, 1.0F, 0.1745F, 0.0F, 0.0F));
 
-        PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-5.5F, -10.5F, -5.5F, 11.0F, 11.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -9.5F, 0.5F));
+        PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 25).addBox(-4.5F, -9.0F, -4.5F, 9.0F, 9.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -10.0F, -0.5F));
 
-        PartDefinition headFront = head.addOrReplaceChild("headFront", CubeListBuilder.create().texOffs(0, 22).addBox(-3.75F, -3.25F, -4.0F, 7.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.25F, -1.25F, -3.5F));
+        PartDefinition earLeft = head.addOrReplaceChild("earLeft", CubeListBuilder.create().texOffs(8, 64).mirror().addBox(-1.5F, -3.0F, -1.0F, 3.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.0F, -9.0F, -2.5F, 0.0873F, 0.0F, 0.0F));
 
-        PartDefinition snout = headFront.addOrReplaceChild("snout", CubeListBuilder.create().texOffs(18, 22).addBox(-1.5F, -2.5F, -2.5F, 3.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.25F, -0.75F, -2.5F));
+        PartDefinition earRight = head.addOrReplaceChild("earRight", CubeListBuilder.create().texOffs(8, 64).addBox(-1.5F, -3.0F, -1.0F, 3.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, -9.0F, -2.5F, 0.0873F, 0.0F, 0.0F));
 
-        PartDefinition earLeft = headFront.addOrReplaceChild("earLeft", CubeListBuilder.create().texOffs(26, 22).mirror().addBox(-1.5F, -3.0F, -1.0F, 3.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.25F, -9.25F, 0.0F, 0.0873F, 0.0F, 0.0F));
+        PartDefinition headFront = head.addOrReplaceChild("headFront", CubeListBuilder.create().texOffs(32, 54).addBox(-2.75F, -2.25F, -4.0F, 5.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.25F, -1.75F, -2.5F));
 
-        PartDefinition earRight = headFront.addOrReplaceChild("earRight", CubeListBuilder.create().texOffs(26, 22).addBox(-1.5F, -3.0F, -1.0F, 3.0F, 3.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.75F, -9.25F, 0.0F, 0.0873F, 0.0F, 0.0F));
+        PartDefinition handLeftUp = body.addOrReplaceChild("handLeftUp", CubeListBuilder.create().texOffs(16, 43).addBox(0.0F, -2.0F, -3.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(5.0F, -4.0F, 0.5F, -1.0472F, -0.5236F, -0.0873F));
 
-        PartDefinition handLeftUp = body.addOrReplaceChild("handLeftUp", CubeListBuilder.create().texOffs(0, 57).addBox(0.0F, -2.0F, -2.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, -3.0F, 0.0F, -1.0472F, -0.5236F, -0.0873F));
+        PartDefinition handLeftDown = handLeftUp.addOrReplaceChild("handLeftDown", CubeListBuilder.create().texOffs(52, 25).addBox(-4.0F, 0.0F, -4.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.0F, 5.0F, 1.0F, -0.4363F, 0.2618F, 0.2618F));
 
-        PartDefinition handLeftDown = handLeftUp.addOrReplaceChild("handLeftDown", CubeListBuilder.create().texOffs(12, 57).addBox(-3.0F, 0.0F, -1.5F, 3.0F, 9.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 3.0F, -0.5F, -0.4363F, 0.2618F, 0.2618F));
+        PartDefinition leftItem = handLeftDown.addOrReplaceChild("leftItem", CubeListBuilder.create(), PartPose.offsetAndRotation(-1.5F, 9.0F, -3.0F, -1.5708F, 0.0F, 0.0F));
 
-        PartDefinition handRightUp = body.addOrReplaceChild("handRightUp", CubeListBuilder.create().texOffs(0, 57).mirror().addBox(-3.0F, -2.0F, -2.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-5.0F, -3.0F, 0.0F, -1.0472F, 0.5236F, 0.0873F));
+        PartDefinition handRightUp = body.addOrReplaceChild("handRightUp", CubeListBuilder.create().texOffs(0, 43).addBox(-4.0F, -2.0F, -3.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-5.0F, -4.0F, 0.5F, -1.0472F, 0.5236F, 0.0873F));
 
-        PartDefinition handRightDown = handRightUp.addOrReplaceChild("handRightDown", CubeListBuilder.create().texOffs(12, 57).mirror().addBox(0.0F, 0.0F, -1.5F, 3.0F, 9.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.0F, 3.0F, -0.5F, -0.4363F, -0.2618F, -0.5236F));
+        PartDefinition handRightDown = handRightUp.addOrReplaceChild("handRightDown", CubeListBuilder.create().texOffs(36, 25).addBox(0.0F, 0.0F, -4.0F, 4.0F, 9.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.0F, 5.0F, 1.0F, -0.4363F, -0.2618F, -0.2618F));
 
-        PartDefinition mazeStick = handRightDown.addOrReplaceChild("mazeStick", CubeListBuilder.create().texOffs(0, 69).addBox(1.0F, 7.5F, -13.5F, 1.0F, 1.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition rightItem = handRightDown.addOrReplaceChild("rightItem", CubeListBuilder.create(), PartPose.offsetAndRotation(2.5F, 9.0F, -3.0F, -1.5708F, 0.0F, 0.0F));
 
-        PartDefinition mazeHead = mazeStick.addOrReplaceChild("mazeHead", CubeListBuilder.create().texOffs(26, 76).addBox(0.0F, 6.5F, -16.0F, 3.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition legLeftUp = body.addOrReplaceChild("legLeftUp", CubeListBuilder.create().texOffs(16, 54).addBox(-2.0F, 0.0F, -3.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(0, 64).addBox(-2.0F, 2.0F, -3.25F, 4.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.5F, 7.0F, 0.5F, -0.5236F, 0.0F, 0.0F));
 
-        PartDefinition legLeftUp = body.addOrReplaceChild("legLeftUp", CubeListBuilder.create().texOffs(44, 0).addBox(-1.5F, 0.0F, -3.0F, 3.0F, 6.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.4F, 9.0F, 2.0F, -0.5236F, 0.0F, 0.0F));
+        PartDefinition legLeftDown = legLeftUp.addOrReplaceChild("legLeftDown", CubeListBuilder.create().texOffs(0, 54).addBox(-2.6F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.6F, 6.0F, -3.0F, 0.3491F, 0.0F, 0.0F));
 
-        PartDefinition legLeftDown = legLeftUp.addOrReplaceChild("legLeftDown", CubeListBuilder.create().texOffs(44, 11).addBox(-1.6F, 0.0F, 0.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.1F, 6.0F, -3.0F, 0.3491F, 0.0F, 0.0F));
+        PartDefinition legRightUp = body.addOrReplaceChild("legRightUp", CubeListBuilder.create().texOffs(48, 43).addBox(-1.8F, 0.0F, -3.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
+                .texOffs(32, 60).addBox(-1.8F, 2.0F, -3.25F, 4.0F, 4.0F, 0.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.7F, 7.0F, 0.5F, -0.5236F, 0.0F, 0.0F));
 
-        PartDefinition legRightUp = body.addOrReplaceChild("legRightUp", CubeListBuilder.create().texOffs(44, 0).addBox(-1.3F, 0.0F, -3.0F, 3.0F, 6.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.6F, 9.0F, 2.0F, -0.5236F, 0.0F, 0.0F));
+        PartDefinition legRightDown = legRightUp.addOrReplaceChild("legRightDown", CubeListBuilder.create().texOffs(32, 43).addBox(-1.4F, 0.0F, 0.0F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.4F, 6.0F, -3.0F, 0.3491F, 0.0F, 0.0F));
 
-        PartDefinition legRightDown = legRightUp.addOrReplaceChild("legRightDown", CubeListBuilder.create().texOffs(44, 11).addBox(-1.4F, 0.0F, 0.0F, 3.0F, 5.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.1F, 6.0F, -3.0F, 0.3491F, 0.0F, 0.0F));
-
-        PartDefinition floof = body.addOrReplaceChild("floof", CubeListBuilder.create().texOffs(0, 83).addBox(-7.0F, -8.8F, -6.0F, 13.0F, 0.0F, 13.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
-
-        return LayerDefinition.create(meshdefinition, 72, 96);
+        return LayerDefinition.create(meshdefinition, 128, 128);
     }
 
     @Override
@@ -110,7 +108,7 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements Ext
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         if (anim != null)
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
     }
 
     @Override
@@ -120,16 +118,15 @@ public class ModelOrc<T extends EntityOrc> extends EntityModel<T> implements Ext
 
     @Override
     public void transform(HumanoidArm humanoidArm, PoseStack poseStack) {
-        poseStack.translate(0.0, 6 / 16d, 0.0);
-        this.model.getMainPart().translateAndRotate(poseStack);
+        this.body.translateAndRotate(poseStack);
         if (humanoidArm == HumanoidArm.LEFT) {
             this.handLeftUp.translateAndRotate(poseStack);
             this.handLeftDown.translateAndRotate(poseStack);
-            poseStack.translate(-2 / 16d, 9 / 16d, 0 / 16d);
+            poseStack.translate(-2 / 16d, 8 / 16d, -4 / 16d);
         } else {
             this.handRightUp.translateAndRotate(poseStack);
             this.handRightDown.translateAndRotate(poseStack);
-            poseStack.translate(2 / 16d, 9 / 16d, 0 / 16d);
+            poseStack.translate(2 / 16d, 8 / 16d, -4 / 16d);
         }
     }
 

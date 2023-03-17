@@ -396,7 +396,7 @@ public class EntityCalls {
 
     public static boolean disableNatural(MobSpawnType spawnType, EntityType<?> entity) {
         if (MobConfig.disableNaturalSpawn) {
-            return (spawnType == MobSpawnType.CHUNK_GENERATION || spawnType == MobSpawnType.NATURAL) && entity != ModEntities.gate.get();
+            return (spawnType == MobSpawnType.CHUNK_GENERATION || spawnType == MobSpawnType.NATURAL) && entity != ModEntities.GATE.get();
         }
         return false;
     }

@@ -55,7 +55,7 @@ public class WorldEvents {
 
     @SubscribeEvent
     public void biomeLoad(BiomeLoadingEvent event) {
-        event.getSpawns().addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.gate.get(), 100, 1, 1));
+        event.getSpawns().addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.GATE.get(), 100, 1, 1));
         WorldCalls.addFeatures(event.getGeneration()::addFeature, event.getCategory());
     }
 

@@ -33,7 +33,7 @@ public class EntityFireball extends EntityProjectile {
     }
 
     public EntityFireball(Level level, LivingEntity shooter, boolean big) {
-        super(ModEntities.fireBall.get(), level, shooter);
+        super(ModEntities.FIRE_BALL.get(), level, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
         this.entityData.set(BIG, big);

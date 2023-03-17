@@ -47,15 +47,15 @@ import java.util.function.Consumer;
 
 public class EntityTreasureChest extends Entity implements IAnimated {
 
-    public static final int MaxTier = 3;
+    public static final int MAX_TIER = 3;
 
     private static final EntityDataAccessor<Integer> TIER = SynchedEntityData.defineId(EntityTreasureChest.class, EntityDataSerializers.INT);
 
-    private static final AnimatedAction open = new AnimatedAction(12, 12, "open", "open", 1, false);
+    private static final AnimatedAction OPEN = AnimatedAction.builder(12, "open").infinite().build();
 
-    private static final AnimatedAction[] anims = new AnimatedAction[]{open};
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{OPEN};
 
-    private final AnimationHandler<EntityTreasureChest> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityTreasureChest> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     protected Player lastHurtByPlayer;
 
@@ -106,7 +106,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
         super.baseTick();
         this.getAnimationHandler().tick();
         AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        if (!this.isRemoved() && !this.level.isClientSide && anim != null && anim.getID().equals(open.getID()) && anim.canAttack()) {
+        if (!this.isRemoved() && !this.level.isClientSide && anim != null && anim.getID().equals(OPEN.getID()) && anim.canAttack()) {
             if (this.openChest != null)
                 this.openChest.run();
             this.kill();
@@ -157,8 +157,8 @@ public class EntityTreasureChest extends Entity implements IAnimated {
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (player instanceof ServerPlayer serverPlayer) {
-            if (!this.getAnimationHandler().isCurrentAnim(open.getID())) {
-                this.getAnimationHandler().setAnimation(open);
+            if (!this.getAnimationHandler().isCurrentAnim(OPEN.getID())) {
+                this.getAnimationHandler().setAnimation(OPEN);
                 this.playSound(SoundEvents.CHEST_OPEN, 0.7f, 1);
                 this.openChest = () -> dropRandomItems(serverPlayer, this.random, this.tier(), this::spawnAtLocation);
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SEARCHING, 20));
@@ -183,7 +183,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
     }
 
     public void setTier(int tier) {
-        this.entityData.set(TIER, Mth.clamp(tier, 0, MaxTier));
+        this.entityData.set(TIER, Mth.clamp(tier, 0, MAX_TIER));
     }
 
     public int tier() {

@@ -33,7 +33,7 @@ public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttack
         AnimatedAction anim = this.attacker.chainAnim(this.prevAnim);
         if (anim == null) {
             anim = this.attacker.getRandomAnimation(AnimationType.GENERICATTACK);
-            if (EntityAmbrosia.nonChoosableAttacks.contains(anim.getID()))
+            if (EntityAmbrosia.NON_CHOOSABLE_ATTACKS.contains(anim.getID()))
                 return this.randomAttack();
         }
         if (!this.attacker.isAnimEqual(this.prevAnim, anim)) {

@@ -34,7 +34,7 @@ public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> impl
 
     public ModelAmbrosia(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "body");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "ambrosia"));
         this.body = this.model.getPart("body");
         this.head = this.model.getPart("head");

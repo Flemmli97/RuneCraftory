@@ -27,7 +27,7 @@ public class EntityBaseSpellBall extends EntityProjectile {
     }
 
     public EntityBaseSpellBall(Level world, LivingEntity shooter, EnumElement element) {
-        super(ModEntities.staffThrown.get(), world, shooter);
+        super(ModEntities.STAFF_BASE_PROJECTILE.get(), world, shooter);
         this.element = element;
         this.entityData.set(elementData, this.element.ordinal());
     }

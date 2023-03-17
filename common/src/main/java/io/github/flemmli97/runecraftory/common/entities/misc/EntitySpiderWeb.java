@@ -28,7 +28,7 @@ public class EntitySpiderWeb extends EntityProjectile {
     }
 
     public EntitySpiderWeb(Level level, LivingEntity shooter) {
-        super(ModEntities.spiderWeb.get(), level, shooter);
+        super(ModEntities.SPIDER_WEB.get(), level, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
     }

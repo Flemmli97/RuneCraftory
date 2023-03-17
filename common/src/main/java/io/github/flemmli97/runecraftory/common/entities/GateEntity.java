@@ -106,7 +106,7 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     public static ResourceLocation getGateLootLocation(EnumElement element) {
-        ResourceLocation def = ModEntities.gate.get().getDefaultLootTable();
+        ResourceLocation def = ModEntities.GATE.get().getDefaultLootTable();
         return lootRes.computeIfAbsent(element, e -> new ResourceLocation(def.getNamespace(),
                 def.getPath() + "_" + e.getTranslation().replace("element_", "")));
     }
@@ -292,9 +292,9 @@ public class GateEntity extends Mob implements IBaseMob {
         if (!this.spawnList.isEmpty()) {
             int randAmount = this.random.nextInt(2) + 1;
             List<Entity> nearby = this.level.getEntities(this, this.getBoundingBox().inflate(18), entity ->
-                    entity.getType() == ModEntities.treasureChest.get() ||
-                            entity.getType() == ModEntities.monsterBox.get() ||
-                            entity.getType() == ModEntities.gobbleBox.get() ||
+                    entity.getType() == ModEntities.TREASURE_CHEST.get() ||
+                            entity.getType() == ModEntities.MONSTER_BOX.get() ||
+                            entity.getType() == ModEntities.GOBBLE_BOX.get() ||
                             GateEntity.this.spawnList.contains(entity.getType()));
             if (nearby.size() <= this.maxNearby) {
                 for (int amount = 0; amount < randAmount; ++amount) {

@@ -37,7 +37,7 @@ public class QuestGen extends QuestProvider {
 
         this.addQuest(new Quest.Builder(id("tame_monster"), "Tame a monster", BuiltInLootTables.EMPTY)
                 .withCategory(main)
-                .withIcon(new ItemStack(SpawnEgg.fromType(ModEntities.wooly.get()).get()))
+                .withIcon(new ItemStack(SpawnEgg.fromType(ModEntities.WOOLY.get()).get()))
                 .withSubmissionTrigger(SimpleQuestIntegration.QUEST_TRIGGER)
                 .setRepeatDelay(-1)
                 .addTaskEntry("tame", new QuestTasks.TamingEntry(EntityPredicate.ANY, 1, "Tame one monster")));

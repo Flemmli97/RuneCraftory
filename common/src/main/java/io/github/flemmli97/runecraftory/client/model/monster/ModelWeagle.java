@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWeagle;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
@@ -33,7 +34,7 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
 
     public ModelWeagle(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "body");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "weagle"));
         this.head = this.model.getPart("head");
     }
@@ -104,8 +105,9 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
                 } else
                     this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
             }
-        } else
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+        } else {
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks, anim.getID().equals(EntityWeagle.DEFEAT.getID()) ? 7 : AnimationHandler.DEFAULT_ADJUST_TIME));
+        }
     }
 
     @Override

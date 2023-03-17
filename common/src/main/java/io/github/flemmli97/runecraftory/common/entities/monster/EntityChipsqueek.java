@@ -10,12 +10,13 @@ import net.minecraft.world.level.Level;
 
 public class EntityChipsqueek extends ChargingMonster {
 
-    public static final AnimatedAction melee = new AnimatedAction(11, 6, "tail_slap");
-    public static final AnimatedAction roll = new AnimatedAction(12, 2, "roll");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, roll, melee};
+    public static final AnimatedAction MELEE = new AnimatedAction(11, 6, "tail_slap");
+    public static final AnimatedAction ROLL = new AnimatedAction(12, 2, "roll");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, ROLL, MELEE, SLEEP};
     public final ChargeAttackGoal<EntityChipsqueek> attack = new ChargeAttackGoal<>(this);
-    private final AnimationHandler<EntityChipsqueek> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityChipsqueek> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityChipsqueek(EntityType<? extends EntityChipsqueek> type, Level world) {
         super(type, world);
@@ -40,8 +41,8 @@ public class EntityChipsqueek extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         return switch (type) {
-            case MELEE -> anim.getID().equals(melee.getID());
-            case CHARGE -> anim.getID().equals(roll.getID());
+            case MELEE -> anim.getID().equals(MELEE.getID());
+            case CHARGE -> anim.getID().equals(ROLL.getID());
             default -> false;
         };
     }
@@ -55,14 +56,19 @@ public class EntityChipsqueek extends ChargingMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(roll);
+                this.getAnimationHandler().setAnimation(ROLL);
             else
-                this.getAnimationHandler().setAnimation(melee);
+                this.getAnimationHandler().setAnimation(MELEE);
         }
     }
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 }

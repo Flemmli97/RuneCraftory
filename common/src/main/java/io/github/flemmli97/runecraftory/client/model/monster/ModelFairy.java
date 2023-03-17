@@ -33,7 +33,7 @@ public class ModelFairy<T extends EntityFairy> extends EntityModel<T> implements
 
     public ModelFairy(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "body");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "fairy"));
         this.head = this.model.getPart("head");
     }
@@ -98,7 +98,7 @@ public class ModelFairy<T extends EntityFairy> extends EntityModel<T> implements
             this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
         }
         if (anim != null)
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
     }
 
     @Override

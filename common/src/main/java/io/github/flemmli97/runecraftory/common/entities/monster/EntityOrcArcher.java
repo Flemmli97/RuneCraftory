@@ -19,11 +19,11 @@ import net.minecraft.world.level.Level;
 
 public class EntityOrcArcher extends EntityOrc {
 
-    private static final AnimatedAction melee = new AnimatedAction(19, 13, "kick");
-    private static final AnimatedAction ranged = new AnimatedAction(20, 12, "bow");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, ranged, interact};
-    private final AnimationHandler<EntityOrcArcher> animationHandler = new AnimationHandler<>(this, anims);
+    private static final AnimatedAction MELEE = new AnimatedAction(19, 13, "kick");
+    private static final AnimatedAction RANGED = new AnimatedAction(20, 12, "bow");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, RANGED, INTERACT, SLEEP};
+    private final AnimationHandler<EntityOrcArcher> animationHandler = new AnimationHandler<>(this, ANIMS);
     public AnimatedRangedGoal<EntityOrc> rangedGoal = new AnimatedRangedGoal<>(this, 8, (e) -> e.getMainHandItem().getItem() instanceof BowItem);
 
     public EntityOrcArcher(EntityType<? extends EntityOrcArcher> type, Level level) {
@@ -70,9 +70,9 @@ public class EntityOrcArcher extends EntityOrc {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(melee.getID());
+            return anim.getID().equals(MELEE.getID());
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(ranged.getID());
+            return anim.getID().equals(RANGED.getID());
         return false;
     }
 
@@ -80,9 +80,9 @@ public class EntityOrcArcher extends EntityOrc {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(melee);
+                this.getAnimationHandler().setAnimation(MELEE);
             else
-                this.getAnimationHandler().setAnimation(ranged);
+                this.getAnimationHandler().setAnimation(RANGED);
         }
     }
 
@@ -102,6 +102,6 @@ public class EntityOrcArcher extends EntityOrc {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
     }
 }

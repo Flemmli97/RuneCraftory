@@ -26,7 +26,7 @@ public class EntityRockSpear extends EntityBeam {
     }
 
     public EntityRockSpear(Level world, LivingEntity shooter, boolean big) {
-        super(ModEntities.rockSpear.get(), world, shooter);
+        super(ModEntities.ROCK_SPEAR.get(), world, shooter);
         this.setPos(this.getX(), this.getY() - 0.1, this.getZ());
         this.coolDown = 6;
         this.entityData.set(BIG, big);

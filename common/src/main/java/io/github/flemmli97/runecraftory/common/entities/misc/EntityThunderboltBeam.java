@@ -29,7 +29,7 @@ public class EntityThunderboltBeam extends EntityBeam {
     }
 
     public EntityThunderboltBeam(Level world, LivingEntity shooter) {
-        super(ModEntities.lightningBeam.get(), world, shooter);
+        super(ModEntities.LIGHTNING_BEAM.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
     }

@@ -87,7 +87,7 @@ public class ClientMixinUtils {
     }
 
     public static void translateSleepingEntity(LivingEntity entity, PoseStack poseStack, float partialTicks) {
-        if (Platform.INSTANCE.getEntityData(entity).map(EntityData::isSleeping).orElse(false)) {
+        if (EntityData.getSleepState(entity) == EntityData.SleepState.VANILLA) {
             float standOffset = entity.getEyeHeight(Pose.STANDING) - 0.1f;
             float f = Mth.rotLerp(partialTicks, entity.yBodyRotO, entity.yBodyRot);
             float xDir = -Mth.cos(-f * ((float) Math.PI / 180) - (float) Math.PI);

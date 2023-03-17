@@ -27,13 +27,14 @@ import java.util.function.Predicate;
 
 public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
 
-    public static final AnimatedAction light = new AnimatedAction(15, 6, "light");
-    public static final AnimatedAction wind = new AnimatedAction(15, 10, "wind");
-    public static final AnimatedAction heal = AnimatedAction.copyOf(light, "heal");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(light, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{light, wind, heal, interact};
+    public static final AnimatedAction LIGHT = new AnimatedAction(15, 6, "light");
+    public static final AnimatedAction WIND = new AnimatedAction(15, 10, "wind");
+    public static final AnimatedAction HEAL = AnimatedAction.copyOf(LIGHT, "heal");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(LIGHT, "interact");
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{LIGHT, WIND, HEAL, INTERACT, SLEEP};
     public final AnimatedRangedGoal<EntityFairy> attack = new AnimatedRangedGoal<>(this, 8, e -> true);
-    private final AnimationHandler<EntityFairy> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityFairy> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     private final Predicate<LivingEntity> healingPredicate = e -> {
         if (this.getOwnerUUID() == null) {
@@ -77,9 +78,9 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED) {
-            if (anim.getID().equals(light.getID()))
+            if (anim.getID().equals(LIGHT.getID()))
                 return this.level.getEntities(this, this.getBoundingBox().inflate(4), e -> e instanceof EntityLightBall light && light.getOwner() == this).size() < 2;
-            return anim.getID().equals(wind.getID()) || this.getRandom().nextFloat() < 0.45f && anim.getID().equals(heal.getID());
+            return anim.getID().equals(WIND.getID()) || this.getRandom().nextFloat() < 0.45f && anim.getID().equals(HEAL.getID());
         }
         return false;
     }
@@ -96,17 +97,17 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(light.getID())) {
+        if (anim.getID().equals(LIGHT.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.SHINE.get().use((ServerLevel) this.level, this);
             }
-        } else if (anim.getID().equals(wind.getID())) {
+        } else if (anim.getID().equals(WIND.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.DOUBLESONIC.get().use((ServerLevel) this.level, this);
             }
-        } else if (anim.getID().equals(heal.getID())) {
+        } else if (anim.getID().equals(HEAL.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.CUREALL.get().use((ServerLevel) this.level, this);
@@ -118,9 +119,9 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 1)
-                this.getAnimationHandler().setAnimation(light);
+                this.getAnimationHandler().setAnimation(LIGHT);
             else
-                this.getAnimationHandler().setAnimation(wind);
+                this.getAnimationHandler().setAnimation(WIND);
         }
     }
 
@@ -141,6 +142,11 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 }

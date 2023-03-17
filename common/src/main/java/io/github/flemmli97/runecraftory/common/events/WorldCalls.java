@@ -54,7 +54,7 @@ public class WorldCalls {
 
     public static void structureSpawns(StructureFeature<?> structure, BiConsumer<MobCategory, MobSpawnSettings.SpawnerData> consumer) {
         if (GateSpawning.structureShouldSpawn(structure))
-            consumer.accept(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.gate.get(), 100, 1, 1));
+            consumer.accept(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.GATE.get(), 100, 1, 1));
     }
 
     public static void daily(Level level) {

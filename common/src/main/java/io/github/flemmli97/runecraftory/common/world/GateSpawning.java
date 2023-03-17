@@ -116,7 +116,7 @@ public class GateSpawning {
             ConfiguredStructureFeature<?, ?> structure = registry.get(new ResourceLocation(struc));
             if (structure != null) {
                 ((StructureModification) structure).addSpawn(MobCategory.MONSTER, new StructureSpawnOverride(StructureSpawnOverride.BoundingBoxType.STRUCTURE,
-                        WeightedRandomList.create(new MobSpawnSettings.SpawnerData(ModEntities.gate.get(), 100, 1, 1))));
+                        WeightedRandomList.create(new MobSpawnSettings.SpawnerData(ModEntities.GATE.get(), 100, 1, 1))));
                 spawningMappingStructure.put(structure, list);
             }
         });

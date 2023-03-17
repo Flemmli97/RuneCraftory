@@ -33,7 +33,7 @@ public class EntitySpore extends EntityDamageCloud {
     }
 
     public EntitySpore(Level world, LivingEntity shooter) {
-        super(ModEntities.spore.get(), world, shooter);
+        super(ModEntities.SPORE.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = (e) -> ((BaseMonster) shooter).hitPred.test(e);
     }

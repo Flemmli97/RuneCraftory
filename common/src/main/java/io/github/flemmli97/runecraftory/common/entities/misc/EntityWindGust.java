@@ -28,7 +28,7 @@ public class EntityWindGust extends EntityBeam {
     }
 
     public EntityWindGust(Level world, LivingEntity shooter) {
-        super(ModEntities.gust.get(), world, shooter);
+        super(ModEntities.GUST.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = (e) -> ((BaseMonster) shooter).hitPred.test(e);
     }

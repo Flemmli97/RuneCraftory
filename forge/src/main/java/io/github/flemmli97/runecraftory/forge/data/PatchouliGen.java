@@ -69,7 +69,7 @@ public class PatchouliGen extends PatchouliBookProvider {
                 .build()
                 .build()
 
-                .addEntry("entry.entities", "runecraftory.patchouli.entry.entities", SpawnEgg.fromType(ModEntities.wooly.get()).map(ItemStack::new).orElse(ItemStack.EMPTY))
+                .addEntry("entry.entities", "runecraftory.patchouli.entry.entities", SpawnEgg.fromType(ModEntities.WOOLY.get()).map(ItemStack::new).orElse(ItemStack.EMPTY))
                 .setSortnum(3)
                 .addSimpleTextPage("runecraftory.patchouli.entry.entities.1")
                 .addSimpleTextPage("runecraftory.patchouli.entry.entities.2")

@@ -33,7 +33,7 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
 
     public ModelTortas(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "body");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "tortas"));
         this.neck = this.model.getPart("neck");
     }
@@ -63,7 +63,7 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
                 .texOffs(75, 91).addBox(-3.0F, -4.0F, -2.0F, 6.0F, 1.0F, 3.0F, new CubeDeformation(0.0F))
                 .texOffs(93, 76).addBox(-2.0F, -2.5F, -3.25F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -2.0F, -2.0F));
 
-        PartDefinition jaw = head.addOrReplaceChild("jaw", CubeListBuilder.create().texOffs(93, 91).addBox(-2.0F, -0.5F, -5.1F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 0.5F, 2.8F, 0.0436F, 0.0F, 0.0F));
+        PartDefinition jaw = head.addOrReplaceChild("jaw", CubeListBuilder.create().texOffs(93, 91).addBox(-2.0F, -0.5F, -4.1F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 1.45F, 1.8F));
 
         PartDefinition leftLegFrontBase = body.addOrReplaceChild("leftLegFrontBase", CubeListBuilder.create().texOffs(0, 99).addBox(-5.0F, 0.0F, -7.0F, 5.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(8.0F, -2.0F, -7.0F, 0.0F, -0.6545F, 0.0436F));
 
@@ -112,7 +112,7 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
             }
         }
         if (anim != null)
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
     }
 
     @Override

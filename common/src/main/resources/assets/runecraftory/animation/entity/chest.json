@@ -25,6 +25,9 @@
 				}
 			}
 		},
+		"walk": {
+			"loop": true
+		},
 		"open_iddle": {
 			"loop": true,
 			"animation_length": 4,

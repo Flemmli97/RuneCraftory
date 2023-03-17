@@ -34,12 +34,12 @@ public class EntityWispFlame extends EntityDamageCloud {
     }
 
     public EntityWispFlame(Level level, double x, double y, double z) {
-        super(ModEntities.wispFlame.get(), level, x, y, z);
+        super(ModEntities.WISP_FLAME.get(), level, x, y, z);
         this.setRadius(1.5f);
     }
 
     public EntityWispFlame(Level level, LivingEntity thrower, EnumElement element) {
-        super(ModEntities.wispFlame.get(), level, thrower);
+        super(ModEntities.WISP_FLAME.get(), level, thrower);
         this.setPos(this.getX(), this.getY() + thrower.getBbHeight() * 0.5, this.getZ());
         this.setElement(element);
         if (thrower instanceof BaseMonster)

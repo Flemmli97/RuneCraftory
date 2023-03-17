@@ -35,7 +35,7 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
     }
 
     public EntityAmbrosiaSleep(Level world, LivingEntity caster) {
-        this(ModEntities.sleepBall.get(), world);
+        this(ModEntities.SLEEP_BALL.get(), world);
         this.owner = caster;
         this.ownerUUID = caster.getUUID();
         this.setPos(caster.getX(), caster.getY(), caster.getZ());

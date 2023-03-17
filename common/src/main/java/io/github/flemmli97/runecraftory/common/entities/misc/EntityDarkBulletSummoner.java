@@ -12,7 +12,7 @@ public class EntityDarkBulletSummoner extends ProjectileSummonHelperEntity {
     }
 
     public EntityDarkBulletSummoner(Level level, LivingEntity caster) {
-        super(ModEntities.darkBulletSummoner.get(), level, caster);
+        super(ModEntities.DARK_BULLET_SUMMONER.get(), level, caster);
         this.maxLivingTicks = 30;
     }
 

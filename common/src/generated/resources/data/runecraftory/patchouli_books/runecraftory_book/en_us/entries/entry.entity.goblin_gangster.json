@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.goblin_gangster",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:goblin_gangster_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:goblin_gangster",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:goblin_gangster"
+    }
+  ]
+}

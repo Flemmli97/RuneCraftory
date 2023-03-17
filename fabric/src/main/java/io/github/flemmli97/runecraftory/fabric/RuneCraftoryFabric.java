@@ -102,7 +102,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         SpawnConfig.spawnConfig = new SpawnConfig(confDir);
         ServerPacketHandler.registerServer();
 
-        SpawnRestrictionAccessor.callRegister(ModEntities.gate.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
+        SpawnRestrictionAccessor.callRegister(ModEntities.GATE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
 
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
             @Override
@@ -204,7 +204,7 @@ public class RuneCraftoryFabric implements ModInitializer {
                 Biome.BiomeCategory.THEEND);
         WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), d, feature.unwrapKey().get())),
                 Biome.BiomeCategory.NONE);
-        BiomeModifications.addSpawn(t -> true, MobCategory.MONSTER, ModEntities.gate.get(), 100, 1, 1);
+        BiomeModifications.addSpawn(t -> true, MobCategory.MONSTER, ModEntities.GATE.get(), 100, 1, 1);
         ServerTickEvents.END_WORLD_TICK.register(world -> {
             if (world.dimension() == Level.OVERWORLD) {
                 WorldCalls.daily(world);

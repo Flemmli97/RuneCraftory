@@ -11,12 +11,13 @@ import net.minecraft.world.level.Level;
 
 public class EntityPommePomme extends ChargingMonster {
 
-    public static final AnimatedAction chargeAttack = new AnimatedAction(34, 2, "roll");
-    public static final AnimatedAction kick = new AnimatedAction(17, 11, "kick");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(kick, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{kick, chargeAttack, interact};
+    public static final AnimatedAction CHARGE_ATTACK = new AnimatedAction(34, 2, "roll");
+    public static final AnimatedAction KICK = new AnimatedAction(17, 11, "kick");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK, "interact");
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{KICK, CHARGE_ATTACK, INTERACT, SLEEP};
     public final ChargeAttackGoal<EntityPommePomme> ai = new ChargeAttackGoal<>(this);
-    private final AnimationHandler<EntityPommePomme> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityPommePomme> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityPommePomme(EntityType<? extends EntityPommePomme> type, Level world) {
         super(type, world);
@@ -32,9 +33,9 @@ public class EntityPommePomme extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.CHARGE) {
-            return anim.getID().equals(chargeAttack.getID());
+            return anim.getID().equals(CHARGE_ATTACK.getID());
         }
-        return type == AnimationType.MELEE && anim.getID().equals(kick.getID());
+        return type == AnimationType.MELEE && anim.getID().equals(KICK.getID());
     }
 
     @Override
@@ -46,9 +47,9 @@ public class EntityPommePomme extends ChargingMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(chargeAttack);
+                this.getAnimationHandler().setAnimation(CHARGE_ATTACK);
             else
-                this.getAnimationHandler().setAnimation(kick);
+                this.getAnimationHandler().setAnimation(KICK);
         }
     }
 
@@ -69,6 +70,11 @@ public class EntityPommePomme extends ChargingMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 }

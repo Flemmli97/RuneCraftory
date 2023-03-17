@@ -34,7 +34,7 @@ public class ModelCluckadoodle<T extends EntityCluckadoodle> extends EntityModel
 
     public ModelCluckadoodle(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "body");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "cluckadoodle"));
         this.head = this.model.getPart("head");
         this.neck = this.model.getPart("neck");
@@ -96,7 +96,7 @@ public class ModelCluckadoodle<T extends EntityCluckadoodle> extends EntityModel
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         if (anim != null)
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
     }
 
     @Override

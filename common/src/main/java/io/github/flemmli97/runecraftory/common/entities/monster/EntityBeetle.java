@@ -11,12 +11,13 @@ import net.minecraft.world.level.Level;
 
 public class EntityBeetle extends ChargingMonster {
 
-    public static final AnimatedAction chargeAttack = new AnimatedAction(30, 2, "ramm");
-    public static final AnimatedAction melee = new AnimatedAction(15, 8, "attack");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, chargeAttack, interact};
+    public static final AnimatedAction CHARGE_ATTACK = new AnimatedAction(30, 2, "ramm");
+    public static final AnimatedAction MELEE = new AnimatedAction(15, 8, "attack");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, CHARGE_ATTACK, INTERACT, SLEEP};
     public final ChargeAttackGoal<EntityBeetle> ai = new ChargeAttackGoal<>(this);
-    private final AnimationHandler<EntityBeetle> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityBeetle> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityBeetle(EntityType<? extends EntityBeetle> type, Level world) {
         super(type, world);
@@ -41,8 +42,8 @@ public class EntityBeetle extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         return switch (type) {
-            case CHARGE -> anim.getID().equals(chargeAttack.getID()) && this.getRandom().nextFloat() < 0.8;
-            case MELEE -> anim.getID().equals(melee.getID());
+            case CHARGE -> anim.getID().equals(CHARGE_ATTACK.getID()) && this.getRandom().nextFloat() < 0.8;
+            case MELEE -> anim.getID().equals(MELEE.getID());
             default -> false;
         };
     }
@@ -51,9 +52,9 @@ public class EntityBeetle extends ChargingMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(chargeAttack);
+                this.getAnimationHandler().setAnimation(CHARGE_ATTACK);
             else
-                this.getAnimationHandler().setAnimation(melee);
+                this.getAnimationHandler().setAnimation(MELEE);
         }
     }
 
@@ -64,6 +65,11 @@ public class EntityBeetle extends ChargingMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 }

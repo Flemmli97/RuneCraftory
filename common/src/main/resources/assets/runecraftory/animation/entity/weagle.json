@@ -594,6 +594,11 @@
 						"0.2": [-105, 0, 0],
 						"0.52": [-105, 0, 0],
 						"0.6": [-57.5, 0, 0]
+					},
+					"position": {
+						"0.08": [0, 0, 0],
+						"0.2": [0, -1.5, -1],
+						"0.6": [0, 0, 0]
 					}
 				},
 				"rightLeg": {
@@ -603,7 +608,87 @@
 						"0.2": [-105, 0, 0],
 						"0.52": [-105, 0, 0],
 						"0.6": [-57.5, 0, 0]
+					},
+					"position": {
+						"0.08": [0, 0, 0],
+						"0.2": [0, -1.5, -1],
+						"0.6": [0, 0, 0]
 					}
+				}
+			}
+		},
+		"sleep": {
+			"animation_length": 0.6,
+			"bones": {
+				"body": {
+					"rotation": [-60, 0, 0]
+				},
+				"head": {
+					"rotation": [110, 0, 25]
+				},
+				"leftWing": {
+					"rotation": [12.5, -57.5, 87.5],
+					"position": [0.75, -1, -1]
+				},
+				"leftWing2": {
+					"rotation": [0, -5, 0],
+					"position": [-1, 0, 0]
+				},
+				"leftWing3": {
+					"rotation": [-10, -50, 30]
+				},
+				"rightWing": {
+					"rotation": [12.5, 57.5, -87.5],
+					"position": [-0.75, -1, -1]
+				},
+				"rightWing2": {
+					"rotation": [0, 5, 0],
+					"position": [1, 0, 0]
+				},
+				"rightWing3": {
+					"rotation": [-10, 50, -30]
+				},
+				"leftLeg": {
+					"rotation": [-30, 0, 0]
+				},
+				"rightLeg": {
+					"rotation": [-30, 0, 0]
+				}
+			}
+		},
+		"defeat": {
+			"animation_length": 0.2,
+			"bones": {
+				"body": {
+					"rotation": [-180, 0, 0],
+					"position": [0, -14, -1]
+				},
+				"head": {
+					"rotation": [-10, -12.5, 0]
+				},
+				"leftWing": {
+					"rotation": [0, 30, 0]
+				},
+				"leftWing2": {
+					"rotation": [0, 0, -15]
+				},
+				"leftWing3": {
+					"rotation": [0, 0, -15]
+				},
+				"rightWing": {
+					"rotation": [0, 7.5, 5]
+				},
+				"rightWing2": {
+					"rotation": [0, 22.5, 0]
+				},
+				"rightWing3": {
+					"rotation": [0, 40, 0]
+				},
+				"leftLeg": {
+					"rotation": [37.5, 0, 0]
+				},
+				"rightLeg": {
+					"rotation": [37.5, 0, 0]
 				}
 			}
 		}

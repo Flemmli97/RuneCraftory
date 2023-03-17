@@ -11,11 +11,11 @@ import net.minecraft.world.level.Level;
 
 public class EntityAnt extends BaseMonster {
 
-    public static final AnimatedAction melee = new AnimatedAction(23, 12, "attack");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, interact};
+    public static final AnimatedAction MELEE = new AnimatedAction(23, 12, "attack");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, INTERACT};
     public final AnimatedMeleeGoal<EntityAnt> attack = new AnimatedMeleeGoal<>(this);
-    private final AnimationHandler<EntityAnt> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityAnt> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityAnt(EntityType<? extends EntityAnt> type, Level world) {
         super(type, world);
@@ -34,7 +34,7 @@ public class EntityAnt extends BaseMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type == AnimationType.MELEE && anim.getID().equals(melee.getID());
+        return type == AnimationType.MELEE && anim.getID().equals(MELEE.getID());
     }
 
     @Override
@@ -45,7 +45,7 @@ public class EntityAnt extends BaseMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation())
-            this.getAnimationHandler().setAnimation(melee);
+            this.getAnimationHandler().setAnimation(MELEE);
     }
 
     @Override
@@ -55,6 +55,11 @@ public class EntityAnt extends BaseMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public boolean hasSleepingAnimation() {
+        return true;
     }
 }

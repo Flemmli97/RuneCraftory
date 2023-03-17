@@ -21,6 +21,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelAmbrosia;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelAnt;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelBeetle;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelBigMuck;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelBuffaloo;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelBuffamoo;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelChipsqueek;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelCluckadoodle;
@@ -51,15 +52,13 @@ import io.github.flemmli97.runecraftory.client.render.RenderMonster;
 import io.github.flemmli97.runecraftory.client.render.RenderNPC;
 import io.github.flemmli97.runecraftory.client.render.RenderRuney;
 import io.github.flemmli97.runecraftory.client.render.RenderTreasureChest;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderAmbrosia;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderAnt;
+import io.github.flemmli97.runecraftory.client.render.monster.RenderDuck;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGhost;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGhostRay;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGoblin;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderMarionetta;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderOrcArcher;
+import io.github.flemmli97.runecraftory.client.render.monster.RenderOrc;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderSpider;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderThunderbolt;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWisp;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
 import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingHookRenderer;
@@ -199,46 +198,54 @@ public class ClientRegister {
     }
 
     public static <T extends Entity> void registerRenderers(EntityRendererRegister consumer) {
-        consumer.register(ModEntities.gate.get(), RenderGate::new);
+        consumer.register(ModEntities.GATE.get(), RenderGate::new);
 
-        consumer.register(ModEntities.wooly.get(), RenderWooly::new);
-        register(consumer, ModEntities.orc.get(), ModelOrc::new, ModelOrc.LAYER_LOCATION);
-        consumer.register(ModEntities.orcArcher.get(), RenderOrcArcher::new);
-        consumer.register(ModEntities.ant.get(), RenderAnt::new);
-        register(consumer, ModEntities.beetle.get(), ModelBeetle::new, ModelBeetle.LAYER_LOCATION);
-        register(consumer, ModEntities.big_muck.get(), ModelBigMuck::new, ModelBigMuck.LAYER_LOCATION);
-        register(consumer, ModEntities.buffamoo.get(), ModelBuffamoo::new, ModelBuffamoo.LAYER_LOCATION);
-        register(consumer, ModEntities.chipsqueek.get(), ModelChipsqueek::new, ModelChipsqueek.LAYER_LOCATION);
-        register(consumer, ModEntities.cluckadoodle.get(), ModelCluckadoodle::new, ModelCluckadoodle.LAYER_LOCATION);
-        register(consumer, ModEntities.pomme_pomme.get(), ModelPommePomme::new, ModelPommePomme.LAYER_LOCATION);
-        register(consumer, ModEntities.tortas.get(), ModelTortas::new, ModelTortas.LAYER_LOCATION);
-        register(consumer, ModEntities.sky_fish.get(), ModelSkyFish::new, ModelSkyFish.LAYER_LOCATION);
-        register(consumer, ModEntities.weagle.get(), ModelWeagle::new, ModelWeagle.LAYER_LOCATION);
-        register(consumer, ModEntities.duck.get(), ModelDuck::new, ModelDuck.LAYER_LOCATION);
-        register(consumer, ModEntities.fairy.get(), ModelFairy::new, ModelFairy.LAYER_LOCATION);
-        consumer.register(ModEntities.ghost.get(), ctx -> new RenderGhost<>(ctx, mobTexture(ModEntities.ghost.get())));
-        consumer.register(ModEntities.spirit.get(), ctx -> new RenderWisp<>(ctx, mobTexture(ModEntities.spirit.get())));
-        consumer.register(ModEntities.ghostRay.get(), RenderGhostRay::new);
-        consumer.register(ModEntities.spider.get(), RenderSpider::new);
-        register(consumer, ModEntities.shadowPanther.get(), ModelPanther::new, ModelPanther.LAYER_LOCATION, 0);
-        register(consumer, ModEntities.monsterBox.get(), ModelMimic::new, ModelMimic.LAYER_LOCATION, 0);
-        register(consumer, ModEntities.gobbleBox.get(), ModelMimic::new, ModelMimic.LAYER_LOCATION, 0);
+        consumer.register(ModEntities.WOOLY.get(), RenderWooly::new);
+        consumer.register(ModEntities.ORC.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.ORC.get())));
+        consumer.register(ModEntities.ORC_ARCHER.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.ORC.get())));
+        consumer.register(ModEntities.ANT.get(), ctx -> new RenderAnt<>(ctx, mobTexture(ModEntities.ANT.get()), 0.7f));
+        register(consumer, ModEntities.BEETLE.get(), ModelBeetle::new, ModelBeetle.LAYER_LOCATION);
+        register(consumer, ModEntities.BIG_MUCK.get(), ModelBigMuck::new, ModelBigMuck.LAYER_LOCATION);
+        register(consumer, ModEntities.BUFFAMOO.get(), ModelBuffamoo::new, ModelBuffamoo.LAYER_LOCATION);
+        register(consumer, ModEntities.CHIPSQUEEK.get(), ModelChipsqueek::new, ModelChipsqueek.LAYER_LOCATION);
+        register(consumer, ModEntities.CLUCKADOODLE.get(), ModelCluckadoodle::new, ModelCluckadoodle.LAYER_LOCATION);
+        register(consumer, ModEntities.POMME_POMME.get(), ModelPommePomme::new, ModelPommePomme.LAYER_LOCATION);
+        register(consumer, ModEntities.TORTAS.get(), ModelTortas::new, ModelTortas.LAYER_LOCATION);
+        register(consumer, ModEntities.SKY_FISH.get(), ModelSkyFish::new, ModelSkyFish.LAYER_LOCATION);
+        register(consumer, ModEntities.WEAGLE.get(), ModelWeagle::new, ModelWeagle.LAYER_LOCATION);
+        consumer.register(ModEntities.GOBLIN.get(), RenderGoblin::new);
+        consumer.register(ModEntities.GOBLIN_ARCHER.get(), RenderGoblin::new);
+        consumer.register(ModEntities.DUCK.get(), ctx -> new RenderDuck<>(ctx, mobTexture(ModEntities.DUCK.get()), mobTexture(ModEntities.DUCK.get(), "_asleep")));
+        register(consumer, ModEntities.FAIRY.get(), ModelFairy::new, ModelFairy.LAYER_LOCATION);
+        consumer.register(ModEntities.GHOST.get(), ctx -> new RenderGhost<>(ctx, mobTexture(ModEntities.GHOST.get())));
+        consumer.register(ModEntities.SPIRIT.get(), ctx -> new RenderWisp<>(ctx, mobTexture(ModEntities.SPIRIT.get())));
+        consumer.register(ModEntities.GHOST_RAY.get(), RenderGhostRay::new);
+        consumer.register(ModEntities.SPIDER.get(), RenderSpider::new);
+        register(consumer, ModEntities.SHADOW_PANTHER.get(), ModelPanther::new, ModelPanther.LAYER_LOCATION, 0);
+        register(consumer, ModEntities.MONSTER_BOX.get(), ModelMimic::new, ModelMimic.LAYER_LOCATION, 0);
+        register(consumer, ModEntities.GOBBLE_BOX.get(), ModelMimic::new, ModelMimic.LAYER_LOCATION, 0);
+        consumer.register(ModEntities.KILLER_ANT.get(), ctx -> new RenderAnt<>(ctx, mobTexture(ModEntities.KILLER_ANT.get())));
+        register(consumer, ModEntities.TRICKY_MUCK.get(), ModelBigMuck::new, ModelBigMuck.LAYER_LOCATION);
+        register(consumer, ModEntities.BUFFALOO.get(), ModelBuffaloo::new, ModelBuffaloo.LAYER_LOCATION);
+        register(consumer, ModEntities.FURPY.get(), ModelChipsqueek::new, ModelChipsqueek.LAYER_LOCATION);
+        consumer.register(ModEntities.GOBLIN_PIRATE.get(), RenderGoblin::new);
+        consumer.register(ModEntities.GOBLIN_GANGSTER.get(), RenderGoblin::new);
+        consumer.register(ModEntities.IGNIS.get(), ctx -> new RenderWisp<>(ctx, mobTexture(ModEntities.IGNIS.get())));
+        consumer.register(ModEntities.HIGH_ORC.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.HIGH_ORC.get())));
+        consumer.register(ModEntities.ORC_HUNTER.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.HIGH_ORC.get())));
 
-        consumer.register(ModEntities.goblin.get(), RenderGoblin::new);
-        consumer.register(ModEntities.goblinArcher.get(), RenderGoblin::new);
+        register(consumer, ModEntities.AMBROSIA.get(), ModelAmbrosia::new, ModelAmbrosia.LAYER_LOCATION);
+        register(consumer, ModEntities.THUNDERBOLT.get(), ModelThunderbolt::new, ModelThunderbolt.LAYER_LOCATION);
+        register(consumer, ModEntities.MARIONETTA.get(), ModelMarionetta::new, ModelMarionetta.LAYER_LOCATION);
 
-        consumer.register(ModEntities.ambrosia.get(), RenderAmbrosia::new);
-        consumer.register(ModEntities.thunderbolt.get(), RenderThunderbolt::new);
-        consumer.register(ModEntities.marionetta.get(), RenderMarionetta::new);
+        consumer.register(ModEntities.NPC.get(), RenderNPC::new);
 
-        consumer.register(ModEntities.npc.get(), RenderNPC::new);
+        consumer.register(ModEntities.TREASURE_CHEST.get(), RenderTreasureChest::new);
 
-        consumer.register(ModEntities.treasureChest.get(), RenderTreasureChest::new);
-
-        consumer.register(ModEntities.arrow.get(), RenderMobArrow::new);
-        consumer.register(ModEntities.spore.get(), EmptyRender::new);
-        consumer.register(ModEntities.gust.get(), EmptyRender::new);
-        consumer.register(ModEntities.stone.get(), ctx -> new RenderProjectileItem<>(ctx) {
+        consumer.register(ModEntities.ARROW.get(), RenderMobArrow::new);
+        consumer.register(ModEntities.SPORE.get(), EmptyRender::new);
+        consumer.register(ModEntities.GUST.get(), EmptyRender::new);
+        consumer.register(ModEntities.STONE.get(), ctx -> new RenderProjectileItem<>(ctx) {
             private final ItemStack stack = new ItemStack(ModItems.stoneRound.get());
 
             @Override
@@ -251,39 +258,39 @@ public class ClientRegister {
                 return Type.NORMAL;
             }
         });
-        consumer.register(ModEntities.sleepBall.get(), EmptyRender::new);
-        consumer.register(ModEntities.pollenPuff.get(), EmptyRender::new);
-        consumer.register(ModEntities.pollen.get(), EmptyRender::new);
-        consumer.register(ModEntities.ambrosiaWave.get(), EmptyRender::new);
-        consumer.register(ModEntities.butterfly.get(), RenderButterfly::new);
-        consumer.register(ModEntities.lightningOrbBolt.get(), EmptyRender::new);
-        consumer.register(ModEntities.lightningBeam.get(), EmptyRender::new);
-        consumer.register(ModEntities.wispFlame.get(), RenderWispFlame::new);
-        consumer.register(ModEntities.spiderWeb.get(), RenderSpiderWeb::new);
-        consumer.register(ModEntities.darkBeam.get(), RenderDarkBeam::new);
-        consumer.register(ModEntities.cards.get(), RenderCards::new);
-        consumer.register(ModEntities.furniture.get(), RenderFurnitures::new);
-        consumer.register(ModEntities.trapChest.get(), RenderMarionettaTrap::new);
+        consumer.register(ModEntities.SLEEP_BALL.get(), EmptyRender::new);
+        consumer.register(ModEntities.POLLEN_PUFF.get(), EmptyRender::new);
+        consumer.register(ModEntities.POLLEN.get(), EmptyRender::new);
+        consumer.register(ModEntities.AMBROSIA_WAVE.get(), EmptyRender::new);
+        consumer.register(ModEntities.BUTTERFLY.get(), RenderButterfly::new);
+        consumer.register(ModEntities.LIGHTNING_ORB_BOLT.get(), EmptyRender::new);
+        consumer.register(ModEntities.LIGHTNING_BEAM.get(), EmptyRender::new);
+        consumer.register(ModEntities.WISP_FLAME.get(), RenderWispFlame::new);
+        consumer.register(ModEntities.SPIDER_WEB.get(), RenderSpiderWeb::new);
+        consumer.register(ModEntities.DARK_BEAM.get(), RenderDarkBeam::new);
+        consumer.register(ModEntities.CARDS.get(), RenderCards::new);
+        consumer.register(ModEntities.FURNITURE.get(), RenderFurnitures::new);
+        consumer.register(ModEntities.TRAP_CHEST.get(), RenderMarionettaTrap::new);
 
-        consumer.register(ModEntities.staffThrown.get(), RenderStaffBall::new);
-        consumer.register(ModEntities.fireBall.get(), RenderFireball::new);
-        consumer.register(ModEntities.explosion.get(), EmptyRender::new);
-        consumer.register(ModEntities.rockSpear.get(), RenderRockSpear::new);
-        consumer.register(ModEntities.windBlade.get(), RenderWindBlade::new);
-        consumer.register(ModEntities.waterLaser.get(), RenderWaterLaser::new);
-        consumer.register(ModEntities.lightBall.get(), EmptyRender::new);
-        consumer.register(ModEntities.darkBall.get(), EmptyRender::new);
-        consumer.register(ModEntities.darkness.get(), RenderDarkness::new);
-        consumer.register(ModEntities.plate.get(), RenderPlate::new);
-        consumer.register(ModEntities.darkBullet.get(), RenderDarkBullet::new);
+        consumer.register(ModEntities.STAFF_BASE_PROJECTILE.get(), RenderStaffBall::new);
+        consumer.register(ModEntities.FIRE_BALL.get(), RenderFireball::new);
+        consumer.register(ModEntities.EXPLOSION.get(), EmptyRender::new);
+        consumer.register(ModEntities.ROCK_SPEAR.get(), RenderRockSpear::new);
+        consumer.register(ModEntities.WIND_BLADE.get(), RenderWindBlade::new);
+        consumer.register(ModEntities.WATER_LASER.get(), RenderWaterLaser::new);
+        consumer.register(ModEntities.LIGHT_BALL.get(), EmptyRender::new);
+        consumer.register(ModEntities.DARK_BALL.get(), EmptyRender::new);
+        consumer.register(ModEntities.DARKNESS.get(), RenderDarkness::new);
+        consumer.register(ModEntities.BIG_PLATE.get(), RenderPlate::new);
+        consumer.register(ModEntities.DARK_BULLET.get(), RenderDarkBullet::new);
 
-        consumer.register(ModEntities.runey.get(), RenderRuney::new);
-        consumer.register(ModEntities.statBonus.get(), EmptyRender::new);
+        consumer.register(ModEntities.RUNEY.get(), RenderRuney::new);
+        consumer.register(ModEntities.STAT_BONUS.get(), EmptyRender::new);
 
-        consumer.register(ModEntities.butterflySummoner.get(), EmptyRender::new);
-        consumer.register(ModEntities.darkBulletSummoner.get(), EmptyRender::new);
+        consumer.register(ModEntities.BUTTERFLY_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.DARK_BULLET_SUMMONER.get(), EmptyRender::new);
 
-        consumer.register(ModEntities.fishingHook.get(), CustomFishingHookRenderer::new);
+        consumer.register(ModEntities.FISHING_HOOK.get(), CustomFishingHookRenderer::new);
 
     }
 
@@ -299,8 +306,12 @@ public class ClientRegister {
         consumer.register(reg, getMonsterRender(model, layerLocation, mobTexture(reg), shadow));
     }
 
-    public static <T extends Entity> ResourceLocation mobTexture(EntityType<T> reg) {
+    public static ResourceLocation mobTexture(EntityType<?> reg) {
         return new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/" + PlatformUtils.INSTANCE.entities().getIDFrom(reg).getPath() + ".png");
+    }
+
+    public static ResourceLocation mobTexture(EntityType<?> reg, String append) {
+        return new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/" + PlatformUtils.INSTANCE.entities().getIDFrom(reg).getPath() + append + ".png");
     }
 
     public static void layerRegister(BiConsumer<ModelLayerLocation, Supplier<LayerDefinition>> consumer) {

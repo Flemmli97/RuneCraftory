@@ -33,7 +33,7 @@ public class EntityCards extends EntityProjectile {
     }
 
     public EntityCards(Level world, LivingEntity shooter, int type) {
-        super(ModEntities.cards.get(), world, shooter);
+        super(ModEntities.CARDS.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
         this.entityData.set(cardType, Mth.clamp(type, 0, 7));

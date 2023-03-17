@@ -324,76 +324,76 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.milkL.get())
                 .add(Items.MILK_BUCKET);
 
-        this.tag(ModTags.tamingTag(ModEntities.wooly.get()))
+        this.tag(ModTags.tamingTag(ModEntities.WOOLY.get()))
                 .addTag(ModTags.SHEARS)
                 .addTag(ItemTags.WOOL)
                 .add(Items.WHEAT);
-        this.tag(ModTags.tamingTag(ModEntities.orc.get()))
+        this.tag(ModTags.tamingTag(ModEntities.ORC.get()))
                 .add(ModItems.cheapBracelet.get())
                 .add(ModItems.clothCheap.get())
                 .add(ModItems.oldBandage.get());
-        this.tag(ModTags.tamingTag(ModEntities.orcArcher.get()))
-                .addTag(ModTags.tamingTag(ModEntities.orc.get()));
-        this.tag(ModTags.tamingTag(ModEntities.ant.get()))
+        this.tag(ModTags.tamingTag(ModEntities.ORC_ARCHER.get()))
+                .addTag(ModTags.tamingTag(ModEntities.ORC.get()));
+        this.tag(ModTags.tamingTag(ModEntities.ANT.get()))
                 .add(ModItems.carapaceInsect.get())
                 .add(ModItems.carapacePretty.get())
                 .add(ModItems.jawInsect.get())
                 .add(ModItems.jawQueen.get());
-        this.tag(ModTags.tamingTag(ModEntities.beetle.get()))
+        this.tag(ModTags.tamingTag(ModEntities.BEETLE.get()))
                 .add(ModItems.carapaceInsect.get())
                 .add(ModItems.carapacePretty.get())
                 .add(ModItems.hornInsect.get())
                 .add(ModItems.hornRigid.get());
-        this.tag(ModTags.tamingTag(ModEntities.big_muck.get()))
+        this.tag(ModTags.tamingTag(ModEntities.BIG_MUCK.get()))
                 .add(Items.BROWN_MUSHROOM)
                 .add(Items.RED_MUSHROOM)
                 .add(ModItems.mushroom.get())
                 .add(ModItems.monarchMushroom.get())
                 .add(ModItems.spore.get());
-        this.tag(ModTags.tamingTag(ModEntities.buffamoo.get()))
+        this.tag(ModTags.tamingTag(ModEntities.BUFFAMOO.get()))
                 .addTag(ModTags.MILKS)
                 .add(Items.WHEAT);
-        this.tag(ModTags.tamingTag(ModEntities.chipsqueek.get()))
+        this.tag(ModTags.tamingTag(ModEntities.CHIPSQUEEK.get()))
                 .addTag(ModTags.FURS);
-        this.tag(ModTags.tamingTag(ModEntities.cluckadoodle.get()))
+        this.tag(ModTags.tamingTag(ModEntities.CLUCKADOODLE.get()))
                 .addTag(ModTags.EGGS)
                 .addTag(ModTags.SEEDS);
-        this.tag(ModTags.tamingTag(ModEntities.pomme_pomme.get()))
+        this.tag(ModTags.tamingTag(ModEntities.POMME_POMME.get()))
                 .add(Items.APPLE);
-        this.tag(ModTags.tamingTag(ModEntities.tortas.get()))
+        this.tag(ModTags.tamingTag(ModEntities.TORTAS.get()))
                 .add(Items.SEAGRASS)
                 .add(ModItems.tortoiseShell.get());
-        this.tag(ModTags.tamingTag(ModEntities.sky_fish.get()))
+        this.tag(ModTags.tamingTag(ModEntities.SKY_FISH.get()))
                 .add(Items.KELP);
-        this.tag(ModTags.tamingTag(ModEntities.weagle.get()))
+        this.tag(ModTags.tamingTag(ModEntities.WEAGLE.get()))
                 .addTag(ModTags.FEATHERS);
-        this.tag(ModTags.tamingTag(ModEntities.goblin.get()))
+        this.tag(ModTags.tamingTag(ModEntities.GOBLIN.get()))
                 .add(ModItems.oldBandage.get());
-        this.tag(ModTags.tamingTag(ModEntities.goblinArcher.get()))
-                .addTag(ModTags.tamingTag(ModEntities.goblin.get()));
-        this.tag(ModTags.tamingTag(ModEntities.duck.get()))
+        this.tag(ModTags.tamingTag(ModEntities.GOBLIN_ARCHER.get()))
+                .addTag(ModTags.tamingTag(ModEntities.GOBLIN.get()));
+        this.tag(ModTags.tamingTag(ModEntities.DUCK.get()))
                 .add(ModItems.fur.get())
                 .add(Items.FEATHER);
-        this.tag(ModTags.tamingTag(ModEntities.fairy.get()))
+        this.tag(ModTags.tamingTag(ModEntities.FAIRY.get()))
                 .add(ModItems.fairyDust.get());
-        this.tag(ModTags.tamingTag(ModEntities.ghost.get()))
+        this.tag(ModTags.tamingTag(ModEntities.GHOST.get()))
                 .add(ModItems.ghostHood.get());
-        this.tag(ModTags.tamingTag(ModEntities.spirit.get()))
+        this.tag(ModTags.tamingTag(ModEntities.SPIRIT.get()))
                 .add(ModItems.crystalDark.get());
-        this.tag(ModTags.tamingTag(ModEntities.ghostRay.get()))
+        this.tag(ModTags.tamingTag(ModEntities.GHOST_RAY.get()))
                 .add(ModItems.ghostHood.get());
-        this.tag(ModTags.tamingTag(ModEntities.spider.get()))
+        this.tag(ModTags.tamingTag(ModEntities.SPIDER.get()))
                 .add(Items.STRING)
                 .add(ModItems.threadSpider.get());
-        this.tag(ModTags.tamingTag(ModEntities.shadowPanther.get()))
+        this.tag(ModTags.tamingTag(ModEntities.SHADOW_PANTHER.get()))
                 .add(ModItems.fur.get())
                 .add(ModItems.clawPanther.get());
 
-        this.tag(ModTags.tamingTag(ModEntities.ambrosia.get()))
+        this.tag(ModTags.tamingTag(ModEntities.AMBROSIA.get()))
                 .add(ModItems.toyherbGiant.get());
-        this.tag(ModTags.tamingTag(ModEntities.thunderbolt.get()))
+        this.tag(ModTags.tamingTag(ModEntities.THUNDERBOLT.get()))
                 .add(ModItems.carrotGiant.get());
-        this.tag(ModTags.tamingTag(ModEntities.marionetta.get()))
+        this.tag(ModTags.tamingTag(ModEntities.MARIONETTA.get()))
                 .add(Items.CAKE)
                 .add(ModItems.cheesecake.get())
                 .add(ModItems.chocolateCake.get())

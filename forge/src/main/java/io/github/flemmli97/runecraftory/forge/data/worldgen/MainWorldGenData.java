@@ -44,15 +44,15 @@ public class MainWorldGenData implements DataProvider {
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "ambrosia_forest"),
                 new RandomSpreadStructurePlacement(20, 8, RandomSpreadType.LINEAR, 1224466880),
                 ModStructures.AMBROSIA_FOREST.get(), BiomeTags.IS_FOREST, true,
-                this.simple(ModEntities.ambrosia.getID()));
+                this.simple(ModEntities.AMBROSIA.getID()));
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "thunderbolt_ruins"),
                 new RandomSpreadStructurePlacement(32, 16, RandomSpreadType.LINEAR, 1224567480),
                 ModStructures.THUNDERBOLT_RUINS.get(), BiomeTags.IS_OCEAN, true,
-                this.simple(ModEntities.thunderbolt.getID()));
+                this.simple(ModEntities.THUNDERBOLT.getID()));
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "theater_ruins"),
                 new RandomSpreadStructurePlacement(21, 7, RandomSpreadType.LINEAR, 1226867120),
                 ModStructures.THEATER_RUINS.get(), ModTags.IS_SPOOKY, true,
-                new StructureProcessorList(List.of(new BossSpawnerProcessor(ModEntities.marionetta.getID()),
+                new StructureProcessorList(List.of(new BossSpawnerProcessor(ModEntities.MARIONETTA.getID()),
                         WaterUnlogProcessor.INST)));
         this.templatePoolGen.runExternal(cache);
         this.processorListGen.runExternal(cache);

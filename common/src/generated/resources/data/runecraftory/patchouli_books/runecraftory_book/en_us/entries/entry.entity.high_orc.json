@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.high_orc",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:high_orc_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:high_orc",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:high_orc"
+    }
+  ]
+}

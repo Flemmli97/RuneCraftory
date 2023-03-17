@@ -26,17 +26,18 @@ import net.minecraft.world.phys.Vec3;
 
 public abstract class EntityWispBase extends BaseMonster {
 
-    public static final AnimatedAction attackFar = new AnimatedAction(15, 6, "attack");
-    public static final AnimatedAction attackClose = new AnimatedAction(15, 10, "attack");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(attackFar, "interact");
-    public static final AnimatedAction vanish = new AnimatedAction(100, 50, "vanish");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{attackFar, attackClose, interact, vanish};
+    public static final AnimatedAction ATTACK_FAR = new AnimatedAction(15, 6, "attack");
+    public static final AnimatedAction ATTACK_CLOSE = new AnimatedAction(15, 10, "attack");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK_FAR, "interact");
+    public static final AnimatedAction VANISH = new AnimatedAction(100, 50, "vanish");
+    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{ATTACK_FAR, ATTACK_CLOSE, INTERACT, VANISH, STILL};
     public final WispAttackGoal<EntityWispBase> attack = new WispAttackGoal<>(this, 36);
     private boolean vanishNext;
 
-    private final AnimationHandler<EntityWispBase> animationHandler = new AnimationHandler<>(this, anims)
+    private final AnimationHandler<EntityWispBase> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeCons(anim -> {
-                if (anim != null && anim.getID().equals(vanish.getID()))
+                if (anim != null && anim.getID().equals(VANISH.getID()))
                     this.vanishNext = this.getRandom().nextFloat() < 0.6;
             });
 
@@ -74,7 +75,7 @@ public abstract class EntityWispBase extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(attackFar.getID()) || anim.getID().equals(attackClose.getID());
+            return anim.getID().equals(ATTACK_FAR.getID()) || anim.getID().equals(ATTACK_CLOSE.getID());
         return false;
     }
 
@@ -85,7 +86,7 @@ public abstract class EntityWispBase extends BaseMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.getAnimationHandler().isCurrentAnim(vanish.getID()))
+        if (this.getAnimationHandler().isCurrentAnim(VANISH.getID()))
             return false;
         boolean ret = super.hurt(source, amount);
         if (ret)
@@ -96,21 +97,21 @@ public abstract class EntityWispBase extends BaseMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
-        if (anim.getID().equals(attackFar.getID())) {
+        if (anim.getID().equals(ATTACK_FAR.getID())) {
             this.getNavigation().stop();
             if (target != null)
                 this.getLookControl().setLookAt(target, 360, 90);
             if (anim.canAttack()) {
                 this.attackFar(target);
             }
-        } else if (anim.getID().equals(attackClose.getID())) {
+        } else if (anim.getID().equals(ATTACK_CLOSE.getID())) {
             this.getNavigation().stop();
             if (target != null)
                 this.getLookControl().setLookAt(target, 360, 90);
             if (anim.canAttack()) {
                 this.attackClose(target);
             }
-        } else if (anim.getID().equals(vanish.getID())) {
+        } else if (anim.getID().equals(VANISH.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 if (target == null) {
@@ -129,9 +130,9 @@ public abstract class EntityWispBase extends BaseMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 1)
-                this.getAnimationHandler().setAnimation(attackClose);
+                this.getAnimationHandler().setAnimation(ATTACK_CLOSE);
             else
-                this.getAnimationHandler().setAnimation(attackFar);
+                this.getAnimationHandler().setAnimation(ATTACK_FAR);
         }
     }
 
@@ -190,7 +191,7 @@ public abstract class EntityWispBase extends BaseMonster {
         LivingEntity target = this.getTarget();
         if (target != null && target.distanceToSqr(this) > 140)
             return true;
-        return !prev.equals(vanish.getID()) && this.vanishNext;
+        return !prev.equals(VANISH.getID()) && this.vanishNext;
     }
 
     @Override
@@ -200,6 +201,11 @@ public abstract class EntityWispBase extends BaseMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return STILL;
     }
 }

@@ -43,7 +43,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
     }
 
     public EntityMarionettaTrap(Level world, LivingEntity shooter) {
-        this(ModEntities.trapChest.get(), world);
+        this(ModEntities.TRAP_CHEST.get(), world);
         this.shooter = shooter;
         this.shooterUUID = shooter.getUUID();
         this.setPos(shooter.getX(), shooter.getEyeY(), shooter.getZ());

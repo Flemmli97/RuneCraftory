@@ -29,12 +29,13 @@ import net.minecraft.world.phys.Vec3;
 
 public class EntitySkyFish extends BaseMonster {
 
-    public static final AnimatedAction slap = new AnimatedAction(11, 6, "slap");
-    public static final AnimatedAction beam = new AnimatedAction(14, 7, "beam");
-    public static final AnimatedAction swipe = new AnimatedAction(16, 4, "swipe");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(slap, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{slap, beam, swipe, interact};
-    private final AnimationHandler<EntitySkyFish> animationHandler = new AnimationHandler<>(this, anims);
+    public static final AnimatedAction SLAP = new AnimatedAction(11, 6, "slap");
+    public static final AnimatedAction BEAM = new AnimatedAction(14, 7, "beam");
+    public static final AnimatedAction SWIPE = new AnimatedAction(16, 4, "swipe");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLAP, "interact");
+    public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, BEAM, SWIPE, INTERACT, STILL};
+    private final AnimationHandler<EntitySkyFish> animationHandler = new AnimationHandler<>(this, ANIMS);
     public AnimatedRangedGoal<EntitySkyFish> rangedGoal = new AnimatedRangedGoal<>(this, 8, e -> true);
 
     public EntitySkyFish(EntityType<? extends BaseMonster> type, Level world) {
@@ -86,9 +87,9 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED) {
-            return anim.getID().equals(beam.getID()) || anim.getID().equals(swipe.getID());
+            return anim.getID().equals(BEAM.getID()) || anim.getID().equals(SWIPE.getID());
         }
-        return type == AnimationType.MELEE && anim.getID().equals(slap.getID());
+        return type == AnimationType.MELEE && anim.getID().equals(SLAP.getID());
     }
 
     @Override
@@ -98,12 +99,12 @@ public class EntitySkyFish extends BaseMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(beam.getID())) {
+        if (anim.getID().equals(BEAM.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.WATERLASER.get().use((ServerLevel) this.level, this);
             }
-        } else if (anim.getID().equals(swipe.getID())) {
+        } else if (anim.getID().equals(SWIPE.getID())) {
             if (anim.canAttack()) {
                 if (EntityUtils.sealed(this))
                     return;
@@ -125,11 +126,11 @@ public class EntitySkyFish extends BaseMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(swipe);
+                this.getAnimationHandler().setAnimation(SWIPE);
             else if (command == 1)
-                this.getAnimationHandler().setAnimation(beam);
+                this.getAnimationHandler().setAnimation(BEAM);
             else
-                this.getAnimationHandler().setAnimation(slap);
+                this.getAnimationHandler().setAnimation(SLAP);
         }
     }
 
@@ -181,7 +182,12 @@ public class EntitySkyFish extends BaseMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return STILL;
     }
 
     static class FlySwimMoveController extends SwimWalkMoveController {

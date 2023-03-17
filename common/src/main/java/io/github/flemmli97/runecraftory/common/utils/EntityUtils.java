@@ -128,11 +128,11 @@ public class EntityUtils {
         if (spawner.getRandom().nextFloat() < MobConfig.treasureChance) {
             if (spawner.getRandom().nextFloat() < MobConfig.mimicChance) {
                 if (spawner.getRandom().nextFloat() < MobConfig.mimicStrongChance)
-                    return ModEntities.gobbleBox.get();
+                    return ModEntities.GOBBLE_BOX.get();
                 else
-                    return ModEntities.monsterBox.get();
+                    return ModEntities.MONSTER_BOX.get();
             } else
-                return ModEntities.treasureChest.get();
+                return ModEntities.TREASURE_CHEST.get();
         }
         return null;
     }

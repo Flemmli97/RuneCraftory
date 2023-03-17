@@ -30,7 +30,7 @@ public class ModelMarionetta<T extends EntityMarionetta> extends EntityModel<T> 
 
     public ModelMarionetta(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "body");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "marionetta"));
     }
 

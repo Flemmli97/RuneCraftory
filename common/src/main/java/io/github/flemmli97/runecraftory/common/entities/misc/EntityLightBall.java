@@ -33,12 +33,12 @@ public class EntityLightBall extends EntityDamageCloud {
     }
 
     public EntityLightBall(Level level, double x, double y, double z) {
-        super(ModEntities.lightBall.get(), level, x, y, z);
+        super(ModEntities.LIGHT_BALL.get(), level, x, y, z);
         this.setRadius(0.8f);
     }
 
     public EntityLightBall(Level level, LivingEntity thrower) {
-        super(ModEntities.lightBall.get(), level, thrower);
+        super(ModEntities.LIGHT_BALL.get(), level, thrower);
         if (thrower instanceof BaseMonster)
             this.pred = ((BaseMonster) thrower).hitPred;
         this.setRadius(0.8f);

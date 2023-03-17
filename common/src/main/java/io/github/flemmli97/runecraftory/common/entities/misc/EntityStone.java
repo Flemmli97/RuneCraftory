@@ -26,7 +26,7 @@ public class EntityStone extends EntityProjectile {
     }
 
     public EntityStone(Level world, LivingEntity shooter) {
-        super(ModEntities.stone.get(), world, shooter);
+        super(ModEntities.STONE.get(), world, shooter);
         if (shooter instanceof BaseMonster)
             this.pred = ((BaseMonster) shooter).hitPred;
     }

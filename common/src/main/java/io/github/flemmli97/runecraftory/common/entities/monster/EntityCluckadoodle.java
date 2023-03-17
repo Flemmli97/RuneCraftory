@@ -14,11 +14,12 @@ import net.minecraft.world.level.Level;
 
 public class EntityCluckadoodle extends BaseMonster {
 
-    public static final AnimatedAction melee = new AnimatedAction(16, 10, "attack");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(melee, "interact");
-    private static final AnimatedAction[] anims = new AnimatedAction[]{melee, interact};
+    public static final AnimatedAction MELEE = new AnimatedAction(16, 10, "attack");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, INTERACT, SLEEP};
     public final AnimatedMeleeGoal<EntityCluckadoodle> attack = new AnimatedMeleeGoal<>(this);
-    private final AnimationHandler<EntityCluckadoodle> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityCluckadoodle> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityCluckadoodle(EntityType<? extends EntityCluckadoodle> type, Level world) {
         super(type, world);
@@ -33,7 +34,7 @@ public class EntityCluckadoodle extends BaseMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        return type == AnimationType.MELEE && anim.getID().equals(melee.getID());
+        return type == AnimationType.MELEE && anim.getID().equals(MELEE.getID());
     }
 
     @Override
@@ -49,7 +50,7 @@ public class EntityCluckadoodle extends BaseMonster {
     @Override
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
-            this.getAnimationHandler().setAnimation(melee);
+            this.getAnimationHandler().setAnimation(MELEE);
         }
     }
 
@@ -85,6 +86,11 @@ public class EntityCluckadoodle extends BaseMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 }

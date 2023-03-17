@@ -32,15 +32,15 @@ public class EntityWooly extends ChargingMonster {
 
     public static final ResourceLocation WOOLED_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/wooly/white");
 
-    public static final AnimatedAction slap = new AnimatedAction(16, 7, "slap");
-    public static final AnimatedAction kick = new AnimatedAction(20, 3, "kick");
-    public static final AnimatedAction headbutt = new AnimatedAction(16, 7, "headbutt");
-    public static final AnimatedAction interact = AnimatedAction.copyOf(headbutt, "interact");
-
-    public static final AnimatedAction[] anims = new AnimatedAction[]{slap, kick, headbutt, interact};
+    public static final AnimatedAction SLAP = new AnimatedAction(16, 7, "slap");
+    public static final AnimatedAction KICK = new AnimatedAction(20, 3, "kick");
+    public static final AnimatedAction HEADBUTT = new AnimatedAction(16, 7, "headbutt");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(HEADBUTT, "interact");
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, KICK, HEADBUTT, INTERACT, SLEEP};
     private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
-    private final AnimationHandler<EntityWooly> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityWooly> animationHandler = new AnimationHandler<>(this, ANIMS);
     public ChargeAttackGoal<EntityWooly> attack = new ChargeAttackGoal<>(this);
 
     public EntityWooly(EntityType<? extends EntityWooly> type, Level level) {
@@ -99,9 +99,9 @@ public class EntityWooly extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.CHARGE)
-            return anim.getID().equals(kick.getID());
+            return anim.getID().equals(KICK.getID());
         else if (type == AnimationType.MELEE)
-            return anim.getID().equals(slap.getID()) || anim.getID().equals(headbutt.getID());
+            return anim.getID().equals(SLAP.getID()) || anim.getID().equals(HEADBUTT.getID());
         return false;
     }
 
@@ -114,11 +114,11 @@ public class EntityWooly extends ChargingMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 2)
-                this.getAnimationHandler().setAnimation(kick);
+                this.getAnimationHandler().setAnimation(KICK);
             else if (command == 1)
-                this.getAnimationHandler().setAnimation(headbutt);
+                this.getAnimationHandler().setAnimation(HEADBUTT);
             else
-                this.getAnimationHandler().setAnimation(slap);
+                this.getAnimationHandler().setAnimation(SLAP);
         }
     }
 
@@ -193,7 +193,12 @@ public class EntityWooly extends ChargingMonster {
 
     @Override
     public void playInteractionAnimation() {
-        this.getAnimationHandler().setAnimation(interact);
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 
     public static ResourceLocation shearedLootTable(ResourceLocation def) {

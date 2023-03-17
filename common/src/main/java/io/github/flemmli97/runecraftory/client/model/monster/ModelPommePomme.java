@@ -30,7 +30,7 @@ public class ModelPommePomme<T extends EntityPommePomme> extends EntityModel<T> 
 
     public ModelPommePomme(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "body");
+        this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "pomme_pomme"));
     }
 
@@ -82,12 +82,13 @@ public class ModelPommePomme<T extends EntityPommePomme> extends EntityModel<T> 
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
+            if (!EntityPommePomme.SLEEP.checkID(anim))
+                this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0)
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
         if (anim != null)
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
     }
 
     @Override

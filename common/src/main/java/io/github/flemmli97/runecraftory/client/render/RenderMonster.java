@@ -49,4 +49,9 @@ public class RenderMonster<T extends BaseMonster, M extends EntityModel<T>> exte
         }
         return super.shouldRender(entity, camera, camX, camY, camZ);
     }
+
+    @Override
+    protected float getFlipDegrees(T entity) {
+        return entity.getDeathAnimation() != null ? 0 : super.getFlipDegrees(entity);
+    }
 }

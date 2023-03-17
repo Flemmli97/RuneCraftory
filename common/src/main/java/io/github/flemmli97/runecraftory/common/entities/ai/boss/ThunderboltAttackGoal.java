@@ -32,7 +32,7 @@ public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends Animated
         AnimatedAction anim = this.attacker.chainAnim(this.prevAnim);
         if (anim == null) {
             anim = this.attacker.getRandomAnimation(AnimationType.GENERICATTACK);
-            if (EntityThunderbolt.nonChoosableAttacks.contains(anim.getID()))
+            if (EntityThunderbolt.NON_CHOOSABLE_ATTACKS.contains(anim.getID()))
                 return this.randomAttack();
         }
         if (!this.attacker.isAnimEqual(this.prevAnim, anim)) {

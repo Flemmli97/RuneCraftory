@@ -152,38 +152,9 @@ public class LangGen implements DataProvider {
         this.add(ModBlocks.monarchMushroom.get(), "Monach Mushroom");
         this.add(ModBlocks.snow.get(), "Snow");
 
-        this.add(ModEntities.wooly.get(), "Wooly");
-        this.add(ModEntities.gate.get(), "Gate");
-        this.add(ModEntities.orc.get(), "Orc");
-        this.add(ModEntities.orcArcher.get(), "Orc Archer");
-        this.add(ModEntities.ant.get(), "Ant");
-        this.add(ModEntities.big_muck.get(), "Big Muck");
-        this.add(ModEntities.beetle.get(), "Beetle");
-        this.add(ModEntities.ambrosia.get(), "Ambrosia");
-        this.add(ModEntities.thunderbolt.get(), "Thunderbolt");
-        this.add(ModEntities.pomme_pomme.get(), "Pomme Pomme");
-        this.add(ModEntities.cluckadoodle.get(), "Cluckadoodle");
-        this.add(ModEntities.buffamoo.get(), "Buffamoo");
-        this.add(ModEntities.chipsqueek.get(), "Chipsqueek");
-        this.add(ModEntities.tortas.get(), "Tortas");
-        this.add(ModEntities.sky_fish.get(), "Sky Fish");
-        this.add(ModEntities.weagle.get(), "Weagle");
-        this.add(ModEntities.goblin.get(), "Goblin");
-        this.add(ModEntities.goblinArcher.get(), "Goblin Archer");
-        this.add(ModEntities.duck.get(), "Duck");
-        this.add(ModEntities.fairy.get(), "Fairy");
-        this.add(ModEntities.ghost.get(), "Ghost");
-        this.add(ModEntities.spirit.get(), "Spirit");
-        this.add(ModEntities.ghostRay.get(), "Ghost Ray");
-        this.add(ModEntities.spider.get(), "Spider");
-        this.add(ModEntities.shadowPanther.get(), "Shadow Panther");
-        this.add(ModEntities.monsterBox.get(), "Monster Box");
-        this.add(ModEntities.gobbleBox.get(), "Gobble Box");
-        this.add(ModEntities.marionetta.get(), "Marionetta");
-
-        this.add(ModEntities.npc.get(), "NPC");
-
-        this.add(ModEntities.treasureChest.get(), "Treasure Chest");
+        for(RegistryEntrySupplier<EntityType<?>> sup : ModEntities.ENTITIES.getEntries()) {
+            this.add(sup.get(), this.simpleTranslation(sup.getID()));
+        }
 
         this.add(ModAttributes.HEALTHGAIN.get().getDescriptionId(), "HP");
         this.add(ModAttributes.RPGAIN.get().getDescriptionId(), "RP");
@@ -567,34 +538,34 @@ public class LangGen implements DataProvider {
 
         this.add("runecraftory.patchouli.category.entities", "Monsters");
         this.add("runecraftory.patchouli.category.entities.desc", "List of all monsters");
-        this.add(patchouliEntity(ModEntities.wooly.getID()), "Sheep like creature that is rather passive. Shearable.");
-        this.add(patchouliEntity(ModEntities.orc.getID()), "");
-        this.add(patchouliEntity(ModEntities.orcArcher.getID()), "An orc but with a bow");
-        this.add(patchouliEntity(ModEntities.ant.getID()), "");
-        this.add(patchouliEntity(ModEntities.beetle.getID()), "");
-        this.add(patchouliEntity(ModEntities.big_muck.getID()), "Mushroom like create that attacks using spores");
-        this.add(patchouliEntity(ModEntities.buffamoo.getID()), "");
-        this.add(patchouliEntity(ModEntities.chipsqueek.getID()), "");
-        this.add(patchouliEntity(ModEntities.cluckadoodle.getID()), "");
-        this.add(patchouliEntity(ModEntities.pomme_pomme.getID()), "");
-        this.add(patchouliEntity(ModEntities.tortas.getID()), "");
-        this.add(patchouliEntity(ModEntities.sky_fish.getID()), "");
-        this.add(patchouliEntity(ModEntities.weagle.getID()), "");
-        this.add(patchouliEntity(ModEntities.goblin.getID()), "");
-        this.add(patchouliEntity(ModEntities.goblinArcher.getID()), "");
-        this.add(patchouliEntity(ModEntities.duck.getID()), "");
-        this.add(patchouliEntity(ModEntities.fairy.getID()), "");
-        this.add(patchouliEntity(ModEntities.ghost.getID()), "");
-        this.add(patchouliEntity(ModEntities.spirit.getID()), "");
-        this.add(patchouliEntity(ModEntities.ghostRay.getID()), "");
-        this.add(patchouliEntity(ModEntities.spider.getID()), "");
-        this.add(patchouliEntity(ModEntities.shadowPanther.getID()), "");
-        this.add(patchouliEntity(ModEntities.gobbleBox.getID()), "");
-        this.add(patchouliEntity(ModEntities.monsterBox.getID()), "");
+        this.add(patchouliEntity(ModEntities.WOOLY.getID()), "Sheep like creature that is rather passive. Shearable.");
+        this.add(patchouliEntity(ModEntities.ORC.getID()), "");
+        this.add(patchouliEntity(ModEntities.ORC_ARCHER.getID()), "An orc but with a bow");
+        this.add(patchouliEntity(ModEntities.ANT.getID()), "");
+        this.add(patchouliEntity(ModEntities.BEETLE.getID()), "");
+        this.add(patchouliEntity(ModEntities.BIG_MUCK.getID()), "Mushroom like create that attacks using spores");
+        this.add(patchouliEntity(ModEntities.BUFFAMOO.getID()), "");
+        this.add(patchouliEntity(ModEntities.CHIPSQUEEK.getID()), "");
+        this.add(patchouliEntity(ModEntities.CLUCKADOODLE.getID()), "");
+        this.add(patchouliEntity(ModEntities.POMME_POMME.getID()), "");
+        this.add(patchouliEntity(ModEntities.TORTAS.getID()), "");
+        this.add(patchouliEntity(ModEntities.SKY_FISH.getID()), "");
+        this.add(patchouliEntity(ModEntities.WEAGLE.getID()), "");
+        this.add(patchouliEntity(ModEntities.GOBLIN.getID()), "");
+        this.add(patchouliEntity(ModEntities.GOBLIN_ARCHER.getID()), "");
+        this.add(patchouliEntity(ModEntities.DUCK.getID()), "");
+        this.add(patchouliEntity(ModEntities.FAIRY.getID()), "");
+        this.add(patchouliEntity(ModEntities.GHOST.getID()), "");
+        this.add(patchouliEntity(ModEntities.SPIRIT.getID()), "");
+        this.add(patchouliEntity(ModEntities.GHOST_RAY.getID()), "");
+        this.add(patchouliEntity(ModEntities.SPIDER.getID()), "");
+        this.add(patchouliEntity(ModEntities.SHADOW_PANTHER.getID()), "");
+        this.add(patchouliEntity(ModEntities.GOBBLE_BOX.getID()), "");
+        this.add(patchouliEntity(ModEntities.MONSTER_BOX.getID()), "");
 
-        this.add(patchouliEntity(ModEntities.ambrosia.getID()), "Butterfly boss monster. Spawns in forest groves and can be fought once a day");
-        this.add(patchouliEntity(ModEntities.thunderbolt.getID()), "Horse said to be as fast as lightning. Spawns in water ruins");
-        this.add(patchouliEntity(ModEntities.marionetta.getID()), "Spooky old doll that spawns in theater ruins");
+        this.add(patchouliEntity(ModEntities.AMBROSIA.getID()), "Butterfly boss monster. Spawns in forest groves and can be fought once a day");
+        this.add(patchouliEntity(ModEntities.THUNDERBOLT.getID()), "Horse said to be as fast as lightning. Spawns in water ruins");
+        this.add(patchouliEntity(ModEntities.MARIONETTA.getID()), "Spooky old doll that spawns in theater ruins");
 
         for (EnumSkills s : EnumSkills.values())
             this.add(s.getTranslation(),

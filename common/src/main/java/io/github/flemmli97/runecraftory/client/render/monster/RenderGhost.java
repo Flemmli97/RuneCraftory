@@ -17,7 +17,7 @@ public class RenderGhost<T extends EntityGhost> extends RenderMonster<T, ModelGh
     @Override
     public boolean shouldRender(T entity, Frustum camera, double camX, double camY, double camZ) {
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
-        if (anim != null && anim.getID().equals(EntityGhost.vanish.getID())) {
+        if (anim != null && anim.getID().equals(EntityGhost.VANISH.getID())) {
             int tick = anim.getTick();
             if (tick < 10 || tick > 90)
                 return tick % 8 == 0;
