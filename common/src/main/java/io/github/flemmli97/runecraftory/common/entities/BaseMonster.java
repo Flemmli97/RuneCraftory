@@ -616,8 +616,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public void customServerAiStep() {
         super.customServerAiStep();
-        if (!this.isPassenger() && this.getMoveControl().operation != MoveControl.Operation.WAIT
-                && this.getDeltaMovement().lengthSqr() > 0.007) {
+        if (!this.canBeControlledByRider() && this.getMoveControl().operation != MoveControl.Operation.WAIT
+                && this.getDeltaMovement().lengthSqr() > 0.004) {
             this.setMoving(true);
             double d0 = this.getMoveControl().getSpeedModifier();
             if (d0 > 1) {
@@ -652,7 +652,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public boolean canBeControlledByRider() {
-        return this.isTamed() && this.ridable();
+        return this.isTamed() && this.ridable() && this.getControllingPassenger() instanceof Player;
     }
 
     @Override
@@ -1277,7 +1277,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.isVehicle() || this.playDeath() || this.tamingTick > 0;
+        return super.isImmobile() || this.canBeControlledByRider() || this.playDeath() || this.tamingTick > 0;
     }
 
     @Override
@@ -1289,17 +1289,17 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void travel(Vec3 vec) {
         if (this.shouldFreezeTravel())
             return;
-        if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entitylivingbase) {
+        if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player) {
             if (!this.level.isClientSide) {
-                if (this.adjustRotFromRider(entitylivingbase)) {
-                    this.setYRot(this.rotateClamped(this.getYRot(), entitylivingbase.getYRot(), this.getHeadRotSpeed() * 2));
-                    this.setXRot(this.rotateClamped(this.getXRot(), entitylivingbase.getXRot(), this.getMaxHeadXRot()));
+                if (this.adjustRotFromRider(player)) {
+                    this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
+                    this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
                 }
                 this.yBodyRot = this.getYRot();
                 this.yHeadRot = this.yBodyRot;
             }
-            float strafing = entitylivingbase.xxa * 0.5f;
-            float forward = entitylivingbase.zza;
+            double strafing = player.xxa * 0.5f;
+            double forward = player.zza;
             if (forward <= 0.0f) {
                 forward *= 0.25f;
             }
@@ -1336,7 +1336,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 forward *= this.ridingSpeedModifier();
                 strafing *= this.ridingSpeedModifier();
                 super.travel(new Vec3(strafing, vec.y, forward));
-            } else if (entitylivingbase instanceof Player) {
+            } else if (player instanceof Player) {
                 this.setDeltaMovement(Vec3.ZERO);
             }
             if (this.onGround || this.isFlyingEntity()) {
@@ -1354,24 +1354,24 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void handleNoGravTravel(Vec3 vec) {
-        if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof LivingEntity entitylivingbase
+        if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player
                 && !this.getAnimationHandler().hasAnimation()) {
             if (!this.level.isClientSide) {
-                if (this.adjustRotFromRider(entitylivingbase)) {
-                    this.setYRot(this.rotateClamped(this.getYRot(), entitylivingbase.getYRot(), this.getHeadRotSpeed() * 2));
-                    this.setXRot(this.rotateClamped(this.getXRot(), entitylivingbase.getXRot(), this.getMaxHeadXRot()));
+                if (this.adjustRotFromRider(player)) {
+                    this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
+                    this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
                 }
                 this.yBodyRot = this.getYRot();
                 this.yHeadRot = this.yBodyRot;
             }
-            float strafing = entitylivingbase.xxa * 0.5f;
-            float forward = entitylivingbase.zza;
+            float strafing = player.xxa * 0.5f;
+            float forward = player.zza;
             double vert = 0;
             if (forward <= 0.0f) {
                 forward *= 0.25f;
             } else {
-                vert = Math.min(0, entitylivingbase.getLookAngle().y + 0.45);
-                if (entitylivingbase.getXRot() > 85)
+                vert = Math.min(0, player.getLookAngle().y + 0.45);
+                if (player.getXRot() > 85)
                     forward = 0;
                 else if (vert < 0)
                     forward = (float) Math.sqrt(forward * forward - vert * vert);
@@ -1388,7 +1388,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 forward *= this.ridingSpeedModifier();
                 strafing *= this.ridingSpeedModifier();
                 vec = new Vec3(strafing * this.getSpeed(), vec.y, forward * this.getSpeed());
-            } else if (entitylivingbase instanceof Player) {
+            } else if (player instanceof Player) {
                 vec = Vec3.ZERO;
             }
             vec = vec.add(0, vert, 0);
