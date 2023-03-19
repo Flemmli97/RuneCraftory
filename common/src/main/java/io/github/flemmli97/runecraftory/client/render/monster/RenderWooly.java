@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWooly;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWoolyWool;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
+import io.github.flemmli97.runecraftory.client.render.layer.LayerWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;

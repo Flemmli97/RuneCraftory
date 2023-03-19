@@ -601,6 +601,30 @@
 					"rotation": [-15, 0, 0]
 				}
 			}
+		},
+		"sit": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"rotation": [-7.5, 0, 0],
+					"position": [0, -6, 0]
+				},
+				"legLeftUp": {
+					"rotation": [-60, -15, 0],
+					"position": [0, 0, -2]
+				},
+				"legLeftDown": {
+					"rotation": [-15, 0, 0]
+				},
+				"legRightUp": {
+					"rotation": [-60, 15, 0],
+					"position": [0, 0, -2]
+				},
+				"legRightDown": {
+					"rotation": [-15, 0, 0]
+				}
+			}
 		}
-	}
+	},
+	"geckolib_format_version": 2
 }

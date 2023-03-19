@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.client.render.monster;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelGhost;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
+import io.github.flemmli97.runecraftory.client.render.layer.RiderLayerRendererExt;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGhost;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -10,8 +12,16 @@ import net.minecraft.resources.ResourceLocation;
 
 public class RenderGhost<T extends EntityGhost> extends RenderMonster<T, ModelGhost<T>> {
 
-    public RenderGhost(EntityRendererProvider.Context ctx, ResourceLocation tex) {
-        super(ctx, new ModelGhost<>(ctx.bakeLayer(ModelGhost.LAYER_LOCATION)), tex, 0);
+    public final float scale;
+
+    public RenderGhost(EntityRendererProvider.Context ctx, ResourceLocation texture) {
+        this(ctx, texture, 1);
+    }
+
+    public RenderGhost(EntityRendererProvider.Context ctx, ResourceLocation texture, float scale) {
+        super(ctx, new ModelGhost<>(ctx.bakeLayer(ModelGhost.LAYER_LOCATION)), texture, 0.5f, false);
+        this.scale = scale;
+        this.layers.add(new RiderLayerRendererExt<>(this, (stack, entity) -> stack.scale(1 / this.scale, 1 / this.scale, 1 / this.scale)));
     }
 
     @Override
@@ -29,5 +39,12 @@ public class RenderGhost<T extends EntityGhost> extends RenderMonster<T, ModelGh
                 return false;
         }
         return super.shouldRender(entity, camera, camX, camY, camZ);
+    }
+
+
+    @Override
+    protected void scale(T entity, PoseStack stack, float partialTick) {
+        super.scale(entity, stack, partialTick);
+        stack.scale(this.scale, this.scale, this.scale);
     }
 }

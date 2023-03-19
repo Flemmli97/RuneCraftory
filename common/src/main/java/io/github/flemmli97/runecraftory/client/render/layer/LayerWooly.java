@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.client.render.monster;
+package io.github.flemmli97.runecraftory.client.render.layer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;

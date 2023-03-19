@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblin;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
@@ -10,8 +11,11 @@ import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.IItemArmModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
+import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.IllagerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -20,11 +24,14 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 
-public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implements ExtendedModel, IItemArmModel {
+public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implements ExtendedModel, RideableModel<T>, IItemArmModel, SittingModel {
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "goblin"), "main");
 
@@ -54,7 +61,7 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(32, 0).addBox(-3.5F, -5.0F, -1.0F, 9.0F, 12.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, 11.0F, -2.5F));
+        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(32, 0).addBox(-3.5F, -5.0F, -1.0F, 9.0F, 12.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(-1.0F, 11.0F, -1.5F));
 
         PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -7.0F, -4.0F, 8.0F, 7.0F, 8.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 49).addBox(-1.0F, -3.0F, -5.0F, 2.0F, 1.0F, 1.0F, new CubeDeformation(0.0F))
@@ -110,6 +117,8 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
             if (entity.moveTick() > 0)
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
+        if (this.riding)
+            this.anim.doAnimation(this, "sit", entity.tickCount, partialTicks);
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));
     }
@@ -136,5 +145,26 @@ public class ModelGoblin<T extends EntityGoblin> extends EntityModel<T> implemen
 
     @Override
     public void postTransform(boolean leftSide, PoseStack stack) {
+    }
+
+    @Override
+    public boolean transform(T entity, EntityRenderer<T> entityRenderer, Entity rider, EntityRenderer<?> ridingEntityRenderer, PoseStack poseStack, int riderNum) {
+        if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR) {
+            EntityModel<?> model = lR.getModel();
+            if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
+                this.body.translateAndRotate(poseStack);
+                if (model instanceof SittingModel sittingModel)
+                    sittingModel.translateSittingPosition(poseStack);
+                else
+                    poseStack.translate(0, 6 / 16d, 6 / 16d);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void translateSittingPosition(PoseStack stack) {
+        stack.translate(0, 1 / 16d, 6 / 16d);
     }
 }

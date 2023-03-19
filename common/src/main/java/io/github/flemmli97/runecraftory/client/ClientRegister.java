@@ -55,7 +55,6 @@ import io.github.flemmli97.runecraftory.client.render.RenderTreasureChest;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderAnt;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderDuck;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGhost;
-import io.github.flemmli97.runecraftory.client.render.monster.RenderGhostRay;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGoblin;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderOrc;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderSpider;
@@ -96,6 +95,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModContainer;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import io.github.flemmli97.tenshilib.client.particles.ColoredParticle;
 import io.github.flemmli97.tenshilib.client.render.RenderProjectileItem;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
@@ -219,7 +219,7 @@ public class ClientRegister {
         register(consumer, ModEntities.FAIRY.get(), ModelFairy::new, ModelFairy.LAYER_LOCATION);
         consumer.register(ModEntities.GHOST.get(), ctx -> new RenderGhost<>(ctx, mobTexture(ModEntities.GHOST.get())));
         consumer.register(ModEntities.SPIRIT.get(), ctx -> new RenderWisp<>(ctx, mobTexture(ModEntities.SPIRIT.get())));
-        consumer.register(ModEntities.GHOST_RAY.get(), RenderGhostRay::new);
+        consumer.register(ModEntities.GHOST_RAY.get(), ctx -> new RenderGhost<>(ctx, mobTexture(ModEntities.GHOST.get()), 1.4f));
         consumer.register(ModEntities.SPIDER.get(), RenderSpider::new);
         register(consumer, ModEntities.SHADOW_PANTHER.get(), ModelPanther::new, ModelPanther.LAYER_LOCATION, 0);
         register(consumer, ModEntities.MONSTER_BOX.get(), ModelMimic::new, ModelMimic.LAYER_LOCATION, 0);
@@ -294,15 +294,15 @@ public class ClientRegister {
 
     }
 
-    private static <T extends BaseMonster, M extends EntityModel<T>> EntityRendererProvider<? super T> getMonsterRender(Function<ModelPart, M> model, ModelLayerLocation layerLocation, ResourceLocation texture, float shadow) {
+    private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> EntityRendererProvider<? super T> getMonsterRender(Function<ModelPart, M> model, ModelLayerLocation layerLocation, ResourceLocation texture, float shadow) {
         return manager -> new RenderMonster<>(manager, model.apply(manager.bakeLayer(layerLocation)), texture, shadow);
     }
 
-    private static <T extends BaseMonster, M extends EntityModel<T>> void register(EntityRendererRegister consumer, EntityType<T> reg, Function<ModelPart, M> model, ModelLayerLocation layerLocation) {
+    private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> void register(EntityRendererRegister consumer, EntityType<T> reg, Function<ModelPart, M> model, ModelLayerLocation layerLocation) {
         register(consumer, reg, model, layerLocation, 0.5f);
     }
 
-    private static <T extends BaseMonster, M extends EntityModel<T>> void register(EntityRendererRegister consumer, EntityType<T> reg, Function<ModelPart, M> model, ModelLayerLocation layerLocation, float shadow) {
+    private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> void register(EntityRendererRegister consumer, EntityType<T> reg, Function<ModelPart, M> model, ModelLayerLocation layerLocation, float shadow) {
         consumer.register(reg, getMonsterRender(model, layerLocation, mobTexture(reg), shadow));
     }
 

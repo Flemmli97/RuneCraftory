@@ -900,6 +900,23 @@
 					"rotation": [10, 0, 0]
 				}
 			}
+		},
+		"sit": {
+			"loop": true,
+			"bones": {
+				"body": {
+					"position": [0, -2, 0]
+				},
+				"rightLeg": {
+					"rotation": [-87.5, 10, 0],
+					"position": [0, 0.5, -3]
+				},
+				"leftLeg": {
+					"rotation": [-87.5, -10, 0],
+					"position": [0, 0.5, -3]
+				}
+			}
 		}
-	}
+	},
+	"geckolib_format_version": 2
 }

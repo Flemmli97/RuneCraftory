@@ -3,6 +3,8 @@ package io.github.flemmli97.runecraftory.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.tenshilib.client.model.RideableModel;
+import io.github.flemmli97.tenshilib.client.render.RiderLayerRenderer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -10,13 +12,19 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public class RenderMonster<T extends BaseMonster, M extends EntityModel<T>> extends MobRenderer<T, M> {
+public class RenderMonster<T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> extends MobRenderer<T, M> {
 
     private final ResourceLocation tex;
 
     public RenderMonster(EntityRendererProvider.Context ctx, M model, ResourceLocation texture, float shadow) {
+        this(ctx, model, texture, shadow, true);
+    }
+
+    public RenderMonster(EntityRendererProvider.Context ctx, M model, ResourceLocation texture, float shadow, boolean withDefaultRiderLayer) {
         super(ctx, model, shadow);
         this.tex = texture;
+        if (withDefaultRiderLayer)
+            this.layers.add(new RiderLayerRenderer<>(this));
     }
 
     @Override

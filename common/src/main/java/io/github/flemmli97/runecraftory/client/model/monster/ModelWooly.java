@@ -3,14 +3,18 @@ package io.github.flemmli97.runecraftory.client.model.monster;// Made with Block
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.model.SittingModel;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
 import io.github.flemmli97.tenshilib.client.model.BlockBenchAnimations;
 import io.github.flemmli97.tenshilib.client.model.ExtendedModel;
 import io.github.flemmli97.tenshilib.client.model.ModelPartHandler;
+import io.github.flemmli97.tenshilib.client.model.RideableModel;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.IllagerModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -19,16 +23,20 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 
-public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements ExtendedModel {
+public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(RuneCraftory.MODID, "wooly"), "main");
 
     protected final ModelPartHandler model;
     protected final BlockBenchAnimations anim;
 
+    public ModelPartHandler.ModelPartExtended bodyCenter;
     public ModelPartHandler.ModelPartExtended head;
     public ModelPartHandler.ModelPartExtended body;
     public ModelPartHandler.ModelPartExtended bodyUp;
@@ -39,8 +47,9 @@ public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements
 
     public ModelWooly(ModelPart root) {
         super();
-        this.model = new ModelPartHandler(root, "root");
+        this.model = new ModelPartHandler(root.getChild("bodyCenter"), "bodyCenter");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "wooly"));
+        this.bodyCenter = this.model.getMainPart();
         this.head = this.model.getPart("head");
         this.body = this.model.getPart("body");
         this.bodyUp = this.model.getPart("bodyUp");
@@ -54,9 +63,11 @@ public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 31).mirror().addBox(-3.5F, -7.0F, -4.5F, 7.0F, 13.0F, 9.0F, new CubeDeformation(0.0F)).mirror(false)
+        PartDefinition bodyCenter = partdefinition.addOrReplaceChild("bodyCenter", CubeListBuilder.create(), PartPose.offset(0.0F, 17.75F, 0.0F));
+
+        PartDefinition body = bodyCenter.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 31).mirror().addBox(-3.5F, -7.0F, -4.5F, 7.0F, 13.0F, 9.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(32, 30).mirror().addBox(-4.5F, -7.0F, -3.5F, 1.0F, 13.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false)
-                .texOffs(32, 30).addBox(3.5F, -7.0F, -3.5F, 1.0F, 13.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 17.75F, 0.0F));
+                .texOffs(32, 30).addBox(3.5F, -7.0F, -3.5F, 1.0F, 13.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
         PartDefinition bodyUp = body.addOrReplaceChild("bodyUp", CubeListBuilder.create().texOffs(32, 14).mirror().addBox(-2.5F, -1.0F, -3.5F, 5.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(28, 23).addBox(2.5F, -1.0F, -2.5F, 1.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))
@@ -122,5 +133,22 @@ public class ModelWooly<T extends EntityWooly> extends EntityModel<T> implements
     @Override
     public ModelPartHandler getHandler() {
         return this.model;
+    }
+
+    @Override
+    public boolean transform(T entity, EntityRenderer<T> entityRenderer, Entity rider, EntityRenderer<?> ridingEntityRenderer, PoseStack poseStack, int riderNum) {
+        if (ridingEntityRenderer instanceof LivingEntityRenderer<?, ?> lR) {
+            EntityModel<?> model = lR.getModel();
+            if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
+                this.bodyCenter.translateAndRotate(poseStack);
+                this.body.translateAndRotate(poseStack);
+                if (model instanceof SittingModel sittingModel)
+                    sittingModel.translateSittingPosition(poseStack);
+                else
+                    poseStack.translate(0, 2 / 16d, 6 / 16d);
+                return true;
+            }
+        }
+        return false;
     }
 }
