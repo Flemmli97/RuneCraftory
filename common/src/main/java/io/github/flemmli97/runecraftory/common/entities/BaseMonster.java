@@ -1646,6 +1646,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     .removeMonsterFromPlayer(this.getOwnerUUID(), this);
             this.assignedBarn = null;
         }
+        Platform.INSTANCE.getPlayerData(this.getOwner()).ifPresent(d -> d.party.removePartyMember(this));
         this.setOwner(null);
         this.setLastHurtByMob(null);
         if (this.playDeath())
