@@ -125,7 +125,9 @@ public class CombatUtils {
                 }
             }
         }
-        float dmg = Math.max(0.02f * amount, amount - reduce);
+        float dmg = amount - reduce;
+        if (amount - reduce < amount * 0.1)
+            dmg = Math.max(0.02f * amount, amount * amount / (amount + reduce * 11));
         if (source instanceof CustomDamage custom && GeneralConfig.randomDamage && !custom.fixedDamage()) {
             dmg += entity.level.random.nextGaussian() * dmg / 10.0;
         }
