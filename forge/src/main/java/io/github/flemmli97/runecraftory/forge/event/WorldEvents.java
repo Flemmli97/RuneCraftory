@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientFarmlandHandler;
 import io.github.flemmli97.runecraftory.common.events.WorldCalls;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
-import io.github.flemmli97.runecraftory.common.world.GateSpawning;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.forge.capability.EntityCap;
 import io.github.flemmli97.runecraftory.forge.capability.PlayerCap;
@@ -19,11 +18,9 @@ import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.StructureSpawnListGatherEvent;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -32,11 +29,6 @@ public class WorldEvents {
     public static final ResourceLocation PlayerCap = new ResourceLocation(RuneCraftory.MODID, "player_cap");
     public static final ResourceLocation StaffCap = new ResourceLocation(RuneCraftory.MODID, "staff_cap");
     public static final ResourceLocation EntityCap = new ResourceLocation(RuneCraftory.MODID, "entity_cap");
-
-    @SubscribeEvent
-    public void serverStart(ServerStartedEvent event) {
-        GateSpawning.setupStructureSpawns(event.getServer());
-    }
 
     @SubscribeEvent
     public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
@@ -57,11 +49,6 @@ public class WorldEvents {
     public void biomeLoad(BiomeLoadingEvent event) {
         event.getSpawns().addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(ModEntities.GATE.get(), 100, 1, 1));
         WorldCalls.addFeatures(event.getGeneration()::addFeature, event.getCategory());
-    }
-
-    @SubscribeEvent
-    public void structureSpawns(StructureSpawnListGatherEvent event) {
-        WorldCalls.structureSpawns(event.getStructure(), event::addEntitySpawn);
     }
 
     @SubscribeEvent

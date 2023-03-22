@@ -1,0 +1,11 @@
+{
+  "entity": "runecraftory:duck",
+  "min_distance_from_spawn": 0,
+  "min_gate_level": 0,
+  "biomes": {
+    "c:is_plains": 30,
+    "c:is_water": 30,
+    "minecraft:is_beach": 30
+  },
+  "structures": {}
+}

@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.fabric;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientCalls;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.config.SpawnConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.events.EntityCalls;
@@ -24,7 +23,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
-import io.github.flemmli97.runecraftory.common.world.GateSpawning;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.fabric.config.ConfigHolder;
 import io.github.flemmli97.runecraftory.fabric.config.GeneralConfigSpec;
@@ -43,7 +41,6 @@ import net.fabricmc.fabric.api.entity.event.v1.EntitySleepEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
@@ -99,7 +96,6 @@ public class RuneCraftoryFabric implements ModInitializer {
                 .reloadConfig();
         ConfigHolder.configs.get(MobConfigSpec.spec.getLeft())
                 .reloadConfig();
-        SpawnConfig.spawnConfig = new SpawnConfig(confDir);
         ServerPacketHandler.registerServer();
 
         SpawnRestrictionAccessor.callRegister(ModEntities.GATE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, GateEntity::canSpawnAt);
@@ -169,6 +165,19 @@ public class RuneCraftoryFabric implements ModInitializer {
                 return new ResourceLocation(RuneCraftory.MODID, "random_npc_data");
             }
         });
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
+            @Override
+            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
+                DataPackHandler.reloadGateSpawns(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
+                return ret.get();
+            }
+
+            @Override
+            public ResourceLocation getFabricId() {
+                return new ResourceLocation(RuneCraftory.MODID, "gate_spawn_data");
+            }
+        });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(CropLootModifiers.INSTANCE);
 
         ModEntities.registerAttributes(FabricDefaultAttributeRegistry::register);
@@ -196,7 +205,6 @@ public class RuneCraftoryFabric implements ModInitializer {
         }));
 
         //WorldCalls
-        ServerLifecycleEvents.SERVER_STARTED.register(GateSpawning::setupStructureSpawns);
         CommandRegistrationCallback.EVENT.register(((dispatcher, dedicated) -> WorldCalls.command(dispatcher)));
         WorldCalls.addFeatures(((d, feature) -> BiomeModifications.addFeature(BiomeSelectors.foundInTheEnd(), d, feature.unwrapKey().get())),
                 Biome.BiomeCategory.THEEND);

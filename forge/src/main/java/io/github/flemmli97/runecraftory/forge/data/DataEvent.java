@@ -45,6 +45,7 @@ public class DataEvent {
             data.addProvider(new AdvancementGen(data));
             data.addProvider(new NPCDataGen(data));
             data.addProvider(new QuestGen(data));
+            data.addProvider(new GateSpawnGen(data));
         }
     }
 

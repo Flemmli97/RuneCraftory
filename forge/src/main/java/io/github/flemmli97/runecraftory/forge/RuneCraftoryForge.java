@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.forge;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.config.SpawnConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
@@ -89,9 +88,6 @@ public class RuneCraftoryForge {
             ConfigHolder<?> loader = confs.getValue();
             ModLoadingContext.get().registerConfig(loader.configType(), confs.getKey(), loader.configName());
         }
-
-        SpawnConfig.spawnConfig = new SpawnConfig(confDir);
-
         SimpleQuestIntegration.register();
     }
 
@@ -156,6 +152,7 @@ public class RuneCraftoryForge {
         DataPackHandler.reloadCropManager(event::addListener);
         DataPackHandler.reloadFoodManager(event::addListener);
         DataPackHandler.reloadShopItems(event::addListener);
+        DataPackHandler.reloadGateSpawns(event::addListener);
         DataPackHandler.reloadNPCData(event::addListener);
     }
 

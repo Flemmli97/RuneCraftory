@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -11,7 +12,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.common.world.GateSpawning;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.BlockPos;
@@ -99,7 +99,7 @@ public class GateEntity extends Mob implements IBaseMob {
     }
 
     public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
-        return level.getDifficulty() != Difficulty.PEACEFUL && GateSpawning.hasSpawns(level, pos)
+        return level.getDifficulty() != Difficulty.PEACEFUL && DataPackHandler.SERVER_PACK.gateSpawnsManager().hasSpawns(level, pos)
                 && level.getLevel().getPoiManager().find(PoiType.MEETING.getPredicate(), p -> true, pos, MobConfig.bellRadius, PoiManager.Occupancy.ANY).isEmpty()
                 && checkMobSpawnRules(type, level, reason, pos, random)
                 && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
@@ -271,7 +271,7 @@ public class GateEntity extends Mob implements IBaseMob {
         this.entityData.set(mobLevel, gateLevel);
         this.entityData.set(elementType, this.type.getTranslation());
         this.entityData.set(element, this.type.ordinal());
-        this.spawnList.addAll(GateSpawning.pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(4) + 2, this.blockPosition(), gateLevel));
+        this.spawnList.addAll(DataPackHandler.SERVER_PACK.gateSpawnsManager().pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(4) + 2, this.blockPosition(), gateLevel));
         this.setPos(this.getX(), this.getY() + 1, this.getZ());
         this.updateStatsToLevel();
         this.spawnMobs();

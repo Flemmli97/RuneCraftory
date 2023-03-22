@@ -152,7 +152,7 @@ public class LangGen implements DataProvider {
         this.add(ModBlocks.monarchMushroom.get(), "Monach Mushroom");
         this.add(ModBlocks.snow.get(), "Snow");
 
-        for(RegistryEntrySupplier<EntityType<?>> sup : ModEntities.ENTITIES.getEntries()) {
+        for (RegistryEntrySupplier<EntityType<?>> sup : ModEntities.ENTITIES.getEntries()) {
             this.add(sup.get(), this.simpleTranslation(sup.getID()));
         }
 

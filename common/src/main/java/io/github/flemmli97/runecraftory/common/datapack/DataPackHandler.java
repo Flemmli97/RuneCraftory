@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.datapack;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.datapack.manager.CropManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.FoodManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.GateSpawnsManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ItemStatManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
@@ -21,6 +22,7 @@ public class DataPackHandler {
     private final CropManager crops = new CropManager();
     private final FoodManager foods = new FoodManager();
     private final ShopItemsManager shopItems = new ShopItemsManager();
+    private final GateSpawnsManager gateSpawnsManager = new GateSpawnsManager();
     private final NameAndGiftManager nameAndGifts = new NameAndGiftManager();
     private final NPCDataManager npcData = new NPCDataManager();
     private final NPCLookManager npcLooks = new NPCLookManager();
@@ -39,6 +41,10 @@ public class DataPackHandler {
 
     public static void reloadShopItems(Consumer<PreparableReloadListener> cons) {
         cons.accept(SERVER_PACK.shopItems);
+    }
+
+    public static void reloadGateSpawns(Consumer<PreparableReloadListener> cons) {
+        cons.accept(SERVER_PACK.gateSpawnsManager);
     }
 
     public static void reloadNPCData(Consumer<PreparableReloadListener> cons) {
@@ -73,6 +79,10 @@ public class DataPackHandler {
 
     public ShopItemsManager shopItemsManager() {
         return this.shopItems;
+    }
+
+    public GateSpawnsManager gateSpawnsManager() {
+        return this.gateSpawnsManager;
     }
 
     public NameAndGiftManager nameAndGiftManager() {

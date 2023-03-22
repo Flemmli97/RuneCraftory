@@ -1,0 +1,12 @@
+{
+  "entity": "runecraftory:shadow_panther",
+  "min_distance_from_spawn": 500,
+  "min_gate_level": 9,
+  "biomes": {
+    "c:is_slope": 10,
+    "c:is_spooky": 10,
+    "c:is_swamp": 10,
+    "c:is_peak": 10
+  },
+  "structures": {}
+}
