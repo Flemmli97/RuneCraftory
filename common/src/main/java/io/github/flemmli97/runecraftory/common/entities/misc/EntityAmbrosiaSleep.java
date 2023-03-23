@@ -76,7 +76,7 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
             }
         }
         if (this.livingTick > 40) {
-            this.remove(RemovalReason.KILLED);
+            this.discard();
         }
         if (!this.level.isClientSide && this.getOwner() != null) {
             List<LivingEntity> list = this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(0.3), this.pred);
@@ -86,7 +86,7 @@ public class EntityAmbrosiaSleep extends Entity implements OwnableEntity {
                     if (owner != null)
                         CombatUtils.applyTempAttribute(owner, ModAttributes.RF_SLEEP.get(), 100);
                     if (CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
-                        this.remove(RemovalReason.KILLED);
+                        this.discard();
                         if (owner != null)
                             CombatUtils.removeAttribute(owner, ModAttributes.RF_SLEEP.get());
                         break;

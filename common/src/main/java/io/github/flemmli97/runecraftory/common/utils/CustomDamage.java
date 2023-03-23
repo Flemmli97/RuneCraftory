@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.resources.language.I18n;
@@ -9,9 +10,12 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CustomDamage extends EntityDamageSource {
 
@@ -26,7 +30,9 @@ public class CustomDamage extends EntityDamageSource {
     private final boolean faintEntity;
     private final boolean fixedDamage;
 
-    public CustomDamage(Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock, float knockBackAmount, int hurtTimeProtection, boolean faintEntity, boolean fixedDamage) {
+    private final ImmutableMap<Attribute, Double> attributesChange;
+
+    public CustomDamage(Entity attacker, @Nullable Entity cause, EnumElement element, KnockBackType knock, float knockBackAmount, int hurtTimeProtection, boolean faintEntity, boolean fixedDamage, Map<Attribute, Double> attributesChange) {
         super("rfAttack", attacker);
         this.element = element;
         this.knock = knock;
@@ -35,6 +41,7 @@ public class CustomDamage extends EntityDamageSource {
         this.protection = hurtTimeProtection;
         this.faintEntity = faintEntity;
         this.fixedDamage = fixedDamage;
+        this.attributesChange = ImmutableMap.copyOf(attributesChange);
     }
 
     public EnumElement getElement() {
@@ -59,6 +66,10 @@ public class CustomDamage extends EntityDamageSource {
 
     public boolean fixedDamage() {
         return this.fixedDamage;
+    }
+
+    public ImmutableMap<Attribute, Double> getAttributesChange() {
+        return this.attributesChange;
     }
 
     @Override
@@ -106,6 +117,9 @@ public class CustomDamage extends EntityDamageSource {
         private float knockAmount;
         private int protection = 10;
         private DamageType dmg = DamageType.NORMAL;
+        private final Map<Attribute, Double> attributesChange = new HashMap<>();
+
+        private boolean isProjectile;
 
         public Builder(Entity attacker) {
             this.cause = attacker;
@@ -142,8 +156,18 @@ public class CustomDamage extends EntityDamageSource {
             return this;
         }
 
+        public Builder withChangedAttribute(Attribute att, double change) {
+            this.attributesChange.put(att, change);
+            return this;
+        }
+
+        public Builder projectile() {
+            this.isProjectile = true;
+            return this;
+        }
+
         public CustomDamage get() {
-            CustomDamage source = new CustomDamage(this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection, this.dmg == DamageType.FAINT, this.dmg == DamageType.FIXED);
+            CustomDamage source = new CustomDamage(this.cause, this.trueSource, this.element, this.knock, this.knockAmount, this.protection, this.dmg == DamageType.FAINT, this.dmg == DamageType.FIXED, this.attributesChange);
             switch (this.dmg) {
                 case NORMAL:
                     break;
@@ -160,6 +184,8 @@ public class CustomDamage extends EntityDamageSource {
                     source.bypassMagic();
                     break;
             }
+            if (this.isProjectile)
+                source.setProjectile();
             return source;
         }
     }

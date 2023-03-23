@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.EntityBeam;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -15,10 +14,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 
-public class EntityRockSpear extends EntityBeam {
+public class EntityRockSpear extends BaseBeam {
 
     private static final EntityDataAccessor<Boolean> BIG = SynchedEntityData.defineId(EntityRockSpear.class, EntityDataSerializers.BOOLEAN);
-    private float damageMultiplier = 1;
 
     public EntityRockSpear(EntityType<? extends EntityRockSpear> type, Level world) {
         super(type, world);
@@ -34,10 +32,6 @@ public class EntityRockSpear extends EntityBeam {
 
     public boolean bigRock() {
         return this.entityData.get(BIG);
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -74,14 +68,12 @@ public class EntityRockSpear extends EntityBeam {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
         this.entityData.set(BIG, compound.getBoolean("BigRock"));
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
         compound.putBoolean("BigRock", this.bigRock());
     }
 }

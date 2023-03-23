@@ -1,12 +1,10 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.EntityDamageCloud;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -19,15 +17,12 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.function.Predicate;
+public class EntityWispFlame extends BaseDamageCloud {
 
-public class EntityWispFlame extends EntityDamageCloud {
-
-    private static final EntityDataAccessor<Integer> elementData = SynchedEntityData.defineId(EntityWispFlame.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> ELEMENT_DATA = SynchedEntityData.defineId(EntityWispFlame.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Boolean> STATIONARY = SynchedEntityData.defineId(EntityWispFlame.class, EntityDataSerializers.BOOLEAN);
 
     private EnumElement element = EnumElement.NONE;
-    private Predicate<LivingEntity> pred;
-    private float damageMultiplier = 1;
 
     public EntityWispFlame(EntityType<? extends EntityWispFlame> type, Level level) {
         super(type, level);
@@ -42,8 +37,6 @@ public class EntityWispFlame extends EntityDamageCloud {
         super(ModEntities.WISP_FLAME.get(), level, thrower);
         this.setPos(this.getX(), this.getY() + thrower.getBbHeight() * 0.5, this.getZ());
         this.setElement(element);
-        if (thrower instanceof BaseMonster)
-            this.pred = ((BaseMonster) thrower).hitPred;
         this.setRadius(1.5f);
     }
 
@@ -75,21 +68,21 @@ public class EntityWispFlame extends EntityDamageCloud {
 
     protected void setElement(EnumElement element) {
         this.element = element;
-        this.entityData.set(elementData, this.element.ordinal());
+        this.entityData.set(ELEMENT_DATA, this.element.ordinal());
     }
 
     public EnumElement element() {
         return this.element;
     }
 
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
+    public void setStationary(boolean stationary) {
+        this.entityData.set(STATIONARY, stationary);
     }
 
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
-        if (key.equals(elementData)) {
-            this.element = EnumElement.values()[this.entityData.get(elementData)];
+        if (key.equals(ELEMENT_DATA)) {
+            this.element = EnumElement.values()[this.entityData.get(ELEMENT_DATA)];
         }
         super.onSyncedDataUpdated(key);
     }
@@ -102,22 +95,20 @@ public class EntityWispFlame extends EntityDamageCloud {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(elementData, 0);
+        this.entityData.define(ELEMENT_DATA, 0);
+        this.entityData.define(STATIONARY, false);
     }
 
     @Override
     public void tick() {
         super.tick();
-        Vec3 motion = this.getDeltaMovement();
-        double newX = this.getX() + motion.x;
-        double newY = this.getY() + motion.y;
-        double newZ = this.getZ() + motion.z;
-        this.setPos(newX, newY, newZ);
-    }
-
-    @Override
-    protected boolean canHit(LivingEntity entity) {
-        return super.canHit(entity) && (this.pred == null || this.pred.test(entity));
+        if (!this.entityData.get(STATIONARY)) {
+            Vec3 motion = this.getDeltaMovement();
+            double newX = this.getX() + motion.x;
+            double newY = this.getY() + motion.y;
+            double newZ = this.getZ() + motion.z;
+            this.setPos(newX, newY, newZ);
+        }
     }
 
     @Override
@@ -136,21 +127,13 @@ public class EntityWispFlame extends EntityDamageCloud {
             this.setElement(EnumElement.valueOf(compound.getString("Element")));
         } catch (IllegalArgumentException ignored) {
         }
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
+        this.entityData.set(STATIONARY, compound.getBoolean("Stationary"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString("Type", this.element.toString());
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
-    }
-
-    @Override
-    public Entity getOwner() {
-        Entity owner = super.getOwner();
-        if (owner instanceof BaseMonster)
-            this.pred = ((BaseMonster) owner).hitPred;
-        return owner;
+        compound.putBoolean("Stationary", this.entityData.get(STATIONARY));
     }
 }

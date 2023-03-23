@@ -124,7 +124,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, RandomAttackSelectorMob, ExtendedEntity, SleepingEntity {
+public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnimated, IExtendedMob, RandomAttackSelectorMob, ExtendedEntity, SleepingEntity, TargetableOpponent {
 
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UUID = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.OPTIONAL_UUID);
     private static final EntityDataAccessor<Integer> ENTITY_LEVEL = SynchedEntityData.defineId(BaseMonster.class, EntityDataSerializers.INT);
@@ -1728,6 +1728,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public void setLevelCallback(EntityInLevelCallback levelCallback) {
         super.setLevelCallback(WorldUtils.wrappedCallbackFor(this, this::getOwner, levelCallback));
+    }
+
+    @Override
+    public Predicate<LivingEntity> validTargetPredicate() {
+        return this.hitPred;
     }
 
     public enum Behaviour {

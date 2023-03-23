@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -16,11 +15,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
-public class EntityBaseSpellBall extends EntityProjectile {
+public class EntityBaseSpellBall extends BaseProjectile {
 
-    protected static final EntityDataAccessor<Integer> elementData = SynchedEntityData.defineId(EntityBaseSpellBall.class, EntityDataSerializers.INT);
+    protected static final EntityDataAccessor<Integer> ELEMENT_DATA = SynchedEntityData.defineId(EntityBaseSpellBall.class, EntityDataSerializers.INT);
+
     private EnumElement element = EnumElement.NONE;
-    private float damageMultiplier = 0.8f;
 
     public EntityBaseSpellBall(EntityType<? extends EntityBaseSpellBall> type, Level world) {
         super(type, world);
@@ -29,11 +28,8 @@ public class EntityBaseSpellBall extends EntityProjectile {
     public EntityBaseSpellBall(Level world, LivingEntity shooter, EnumElement element) {
         super(ModEntities.STAFF_BASE_PROJECTILE.get(), world, shooter);
         this.element = element;
-        this.entityData.set(elementData, this.element.ordinal());
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
+        this.entityData.set(ELEMENT_DATA, this.element.ordinal());
+        this.damageMultiplier = 0.8f;
     }
 
     public EnumElement getElement() {
@@ -43,8 +39,8 @@ public class EntityBaseSpellBall extends EntityProjectile {
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
-        if (key == elementData) {
-            int i = this.entityData.get(elementData);
+        if (key == ELEMENT_DATA) {
+            int i = this.entityData.get(ELEMENT_DATA);
             if (i < EnumElement.values().length)
                 this.element = EnumElement.values()[i];
         }
@@ -58,7 +54,7 @@ public class EntityBaseSpellBall extends EntityProjectile {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(elementData, 0);
+        this.entityData.define(ELEMENT_DATA, 0);
     }
 
     @Override
@@ -69,29 +65,27 @@ public class EntityBaseSpellBall extends EntityProjectile {
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
         boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).element(this.element).hurtResistant(5), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
-        this.remove(RemovalReason.KILLED);
+        this.discard();
         return att;
     }
 
     @Override
     protected void onBlockHit(BlockHitResult result) {
-        this.remove(RemovalReason.KILLED);
+        this.discard();
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.entityData.set(elementData, compound.getInt("Element"));
-        int i = this.entityData.get(elementData);
+        this.entityData.set(ELEMENT_DATA, compound.getInt("Element"));
+        int i = this.entityData.get(ELEMENT_DATA);
         if (i < EnumElement.values().length)
             this.element = EnumElement.values()[i];
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Element", this.element.ordinal());
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 }

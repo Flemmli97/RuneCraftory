@@ -29,9 +29,10 @@ import java.util.UUID;
 
 public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnimated {
 
-    private static final AnimatedAction[] anims = new AnimatedAction[0];
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[0];
+
     private final List<LivingEntity> caughtEntities = new ArrayList<>();
-    private final AnimationHandler<EntityMarionettaTrap> animationHandler = new AnimationHandler<>(this, anims);
+    private final AnimationHandler<EntityMarionettaTrap> animationHandler = new AnimationHandler<>(this, ANIMS);
     private int tickLeft = 100;
     private LivingEntity shooter;
     private UUID shooterUUID;
@@ -102,7 +103,7 @@ public class EntityMarionettaTrap extends Entity implements OwnableEntity, IAnim
             }
             if (this.tickLeft <= 0) {
                 this.caughtEntities.forEach(e -> Platform.INSTANCE.getEntityData(e).ifPresent(data -> data.setOrthoView(e, false)));
-                this.remove(RemovalReason.KILLED);
+                this.discard();
             }
         }
     }

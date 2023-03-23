@@ -2,13 +2,11 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.EntityDamageCloud;
 import io.github.flemmli97.tenshilib.common.entity.EntityProjectile;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
@@ -20,14 +18,11 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.function.Predicate;
+public class EntityDarkBall extends BaseDamageCloud {
 
-public class EntityDarkBall extends EntityDamageCloud {
+    private static final float[] SIN_POINTS = calcSinPoints();
 
-    private static float[] sinPoints = calcSinPoints();
     private EntityDarkBall.Type type = Type.BALL;
-    private Predicate<LivingEntity> pred;
-    private float damageMultiplier = 1;
     private Vec3 dir, side;
 
     public EntityDarkBall(EntityType<? extends EntityDarkBall> type, Level level) {
@@ -38,8 +33,6 @@ public class EntityDarkBall extends EntityDamageCloud {
         super(ModEntities.DARK_BALL.get(), level, thrower);
         this.setPos(this.getX(), this.getY() + thrower.getBbHeight() * 0.5, this.getZ());
         this.type = type;
-        if (thrower instanceof BaseMonster)
-            this.pred = ((BaseMonster) thrower).hitPred;
         this.setRadius(1.5f);
     }
 
@@ -80,10 +73,6 @@ public class EntityDarkBall extends EntityDamageCloud {
         this.side = new Vec3(RayTraceUtils.rotatedAround(this.dir, new Vector3f(up), 90)).normalize();
     }
 
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
-    }
-
     @Override
     public int livingTickMax() {
         return this.type == Type.BALL ? 100 : 60;
@@ -106,16 +95,11 @@ public class EntityDarkBall extends EntityDamageCloud {
         } else {
             if (this.type == Type.SNAKE && this.dir != null && this.side != null) {
                 int t = this.livingTicks % 16;
-                float sT = sinPoints[t];
+                float sT = SIN_POINTS[t];
                 this.setDeltaMovement(this.dir.x + this.side.x * sT, this.dir.y + this.side.y * sT, this.dir.z + this.side.z * sT);
                 this.hasImpulse = true;
             }
         }
-    }
-
-    @Override
-    protected boolean canHit(LivingEntity entity) {
-        return super.canHit(entity) && (this.pred == null || this.pred.test(entity));
     }
 
     @Override
@@ -131,22 +115,12 @@ public class EntityDarkBall extends EntityDamageCloud {
         } catch (IllegalArgumentException e) {
             this.type = Type.BALL;
         }
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString("Type", this.type.toString());
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
-    }
-
-    @Override
-    public Entity getOwner() {
-        Entity owner = super.getOwner();
-        if (owner instanceof BaseMonster)
-            this.pred = ((BaseMonster) owner).hitPred;
-        return owner;
     }
 
     public enum Type {

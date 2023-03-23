@@ -2,17 +2,13 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.EntityDamageCloud;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -20,15 +16,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
-import java.util.function.Predicate;
 
-public class EntityPollen extends EntityDamageCloud {
+public class EntityPollen extends BaseDamageCloud {
 
-    private static final List<Vector3f> pollenBase = RayTraceUtils.rotatedVecs(new Vec3(1, 0, 0), new Vec3(0, 1, 0), -180, 135, 45);
-    private static final List<Vector3f> pollenInd = RayTraceUtils.rotatedVecs(new Vec3(0.04, 0.07, 0), new Vec3(0, 1, 0), -180, 160, 20);
-
-    private Predicate<LivingEntity> pred;
-    private float damageMultiplier = 1;
+    private static final List<Vector3f> POLLEN_BASE = RayTraceUtils.rotatedVecs(new Vec3(1, 0, 0), new Vec3(0, 1, 0), -180, 135, 45);
+    private static final List<Vector3f> POLLEN_IND = RayTraceUtils.rotatedVecs(new Vec3(0.04, 0.07, 0), new Vec3(0, 1, 0), -180, 160, 20);
 
     public EntityPollen(EntityType<? extends EntityPollen> type, Level world) {
         super(type, world);
@@ -36,17 +28,11 @@ public class EntityPollen extends EntityDamageCloud {
 
     public EntityPollen(Level world, LivingEntity shooter) {
         super(ModEntities.POLLEN.get(), world, shooter);
-        if (shooter instanceof BaseMonster)
-            this.pred = (e) -> ((BaseMonster) shooter).hitPred.test(e);
     }
 
     private double radiusSqWithOffset(double offset) {
         double r = Math.max(0, this.getRadius() + offset);
         return r * r;
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -83,7 +69,7 @@ public class EntityPollen extends EntityDamageCloud {
             return false;
         double distSq = e.distanceToSqr(this);
         double offset = e.getBbWidth() * 0.5 + 0.1;
-        return distSq >= this.radiusSqWithOffset(-offset) && distSq <= this.radiusSqWithOffset(offset) && (this.pred == null || this.pred.test(e));
+        return distSq >= this.radiusSqWithOffset(-offset) && distSq <= this.radiusSqWithOffset(offset);
     }
 
     @Override
@@ -97,35 +83,15 @@ public class EntityPollen extends EntityDamageCloud {
     }
 
     @Override
-    public Entity getOwner() {
-        Entity owner = super.getOwner();
-        if (owner instanceof BaseMonster)
-            this.pred = ((BaseMonster) owner).hitPred;
-        return owner;
-    }
-
-    @Override
     public void handleEntityEvent(byte id) {
         if (id == 64) {
-            for (Vector3f base : pollenBase) {
-                for (Vector3f dir : pollenInd) {
+            for (Vector3f base : POLLEN_BASE) {
+                for (Vector3f dir : POLLEN_IND) {
                     for (int i = 0; i < 3; i++)
                         this.level.addParticle(new ColoredParticleData(ModParticles.sinkingDust.get(), 10 / 255F, 138 / 255F, 12 / 255F, 1), this.getX() + base.x(), this.getY() + 0.05, this.getZ() + base.z(), dir.x() + base.x() * 0.02, dir.y(), dir.z() + base.z() * 0.02);
                 }
             }
         } else
             super.handleEntityEvent(id);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 }

@@ -1,13 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.EntityDamageCloud;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -18,13 +16,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.function.Predicate;
-
-public class EntityLightBall extends EntityDamageCloud {
+public class EntityLightBall extends BaseDamageCloud {
 
     private Type lightType = Type.LONG;
-    private Predicate<LivingEntity> pred;
-    private float damageMultiplier = 1;
     private int angleOffset;
     private int firstDmg = -1;
 
@@ -39,8 +33,6 @@ public class EntityLightBall extends EntityDamageCloud {
 
     public EntityLightBall(Level level, LivingEntity thrower) {
         super(ModEntities.LIGHT_BALL.get(), level, thrower);
-        if (thrower instanceof BaseMonster)
-            this.pred = ((BaseMonster) thrower).hitPred;
         this.setRadius(0.8f);
     }
 
@@ -72,10 +64,6 @@ public class EntityLightBall extends EntityDamageCloud {
         this.angleOffset = angleOffset;
     }
 
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
-    }
-
     @Override
     public int maxHitCount() {
         return this.lightType == Type.FRONT ? 5 : -1;
@@ -103,7 +91,7 @@ public class EntityLightBall extends EntityDamageCloud {
         double newZ = this.getZ() + motion.z;
         this.setPos(newX, newY, newZ);
         if (this.getOwner() == null)
-            this.remove(RemovalReason.KILLED);
+            this.discard();
         if (this.level.isClientSide) {
             for (int i = 0; i < 2; i++)
                 this.level.addParticle(new ColoredParticleData(ModParticles.shortLight.get(), 246 / 255F, 252 / 255F, 197 / 255F, 0.5f, 3f), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
@@ -126,15 +114,10 @@ public class EntityLightBall extends EntityDamageCloud {
     }
 
     @Override
-    protected boolean canHit(LivingEntity entity) {
-        return super.canHit(entity) && (this.pred == null || this.pred.test(entity));
-    }
-
-    @Override
     protected boolean damageEntity(LivingEntity target) {
         if (CombatUtils.damage(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(0).element(EnumElement.LIGHT), true, true, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
             if (this.lightType == Type.LONG)
-                this.remove(RemovalReason.KILLED);
+                this.discard();
             if (this.firstDmg == -1)
                 this.firstDmg = this.livingTicks;
             return true;
@@ -144,7 +127,7 @@ public class EntityLightBall extends EntityDamageCloud {
 
     @Override
     protected void onMaxEntities() {
-        this.remove(RemovalReason.KILLED);
+        this.discard();
     }
 
     @Override
@@ -156,7 +139,6 @@ public class EntityLightBall extends EntityDamageCloud {
             this.lightType = Type.LONG;
         }
         this.angleOffset = compound.getInt("AngleOffset");
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
     }
 
     @Override
@@ -164,15 +146,6 @@ public class EntityLightBall extends EntityDamageCloud {
         super.addAdditionalSaveData(compound);
         compound.putString("LightType", this.lightType.toString());
         compound.putInt("AngleOffset", this.angleOffset);
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
-    }
-
-    @Override
-    public Entity getOwner() {
-        Entity owner = super.getOwner();
-        if (owner instanceof BaseMonster)
-            this.pred = ((BaseMonster) owner).hitPred;
-        return owner;
     }
 
     public enum Type {

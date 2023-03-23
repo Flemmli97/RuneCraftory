@@ -5,16 +5,12 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.EntityDamageCloud;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 
-public class EntityDarkness extends EntityDamageCloud {
-
-    private float damageMultiplier = 1;
+public class EntityDarkness extends BaseDamageCloud {
 
     public EntityDarkness(EntityType<? extends EntityDarkness> type, Level world) {
         super(type, world);
@@ -23,10 +19,6 @@ public class EntityDarkness extends EntityDamageCloud {
     public EntityDarkness(Level world, LivingEntity shooter) {
         super(ModEntities.DARKNESS.get(), world, shooter);
         this.setPos(this.getX(), this.getY() + 0.1, this.getZ());
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
     }
 
     @Override
@@ -58,17 +50,5 @@ public class EntityDarkness extends EntityDamageCloud {
     protected AABB damageBoundingBox() {
         float radius = this.getRadius();
         return this.getBoundingBox().inflate(radius, 0.4, radius);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
-    }
-
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
     }
 }

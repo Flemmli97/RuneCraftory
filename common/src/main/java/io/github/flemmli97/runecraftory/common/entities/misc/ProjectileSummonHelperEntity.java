@@ -47,7 +47,7 @@ public abstract class ProjectileSummonHelperEntity extends Entity implements Own
                 this.summonProjectiles();
             }
             if (this.ticksExisted >= this.maxLivingTicks) {
-                this.remove(RemovalReason.KILLED);
+                this.discard();
             }
         }
     }

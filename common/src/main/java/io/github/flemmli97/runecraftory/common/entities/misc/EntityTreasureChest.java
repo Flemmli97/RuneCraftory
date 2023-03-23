@@ -109,7 +109,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
         if (!this.isRemoved() && !this.level.isClientSide && anim != null && anim.getID().equals(OPEN.getID()) && anim.canAttack()) {
             if (this.openChest != null)
                 this.openChest.run();
-            this.kill();
+            this.discard();
         }
         if (!this.isNoGravity()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0.0, -0.04, 0.0));

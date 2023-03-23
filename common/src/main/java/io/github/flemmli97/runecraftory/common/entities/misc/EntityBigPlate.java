@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -19,29 +18,16 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
-public class EntityBigPlate extends EntityProjectile {
+public class EntityBigPlate extends BaseProjectile {
 
-    private Predicate<LivingEntity> pred;
-    private float damageMultiplier = 1;
     private boolean hitSomething;
 
-    public EntityBigPlate(EntityType<? extends EntityProjectile> type, Level world) {
+    public EntityBigPlate(EntityType<? extends EntityBigPlate> type, Level world) {
         super(type, world);
     }
 
     public EntityBigPlate(Level world, LivingEntity shooter) {
         super(ModEntities.BIG_PLATE.get(), world, shooter);
-        if (shooter instanceof BaseMonster)
-            this.pred = ((BaseMonster) shooter).hitPred;
-    }
-
-    public void setDamageMultiplier(float damageMultiplier) {
-        this.damageMultiplier = damageMultiplier;
-    }
-
-    @Override
-    protected boolean canHit(Entity entity) {
-        return super.canHit(entity) && (this.pred == null || (entity instanceof LivingEntity && this.pred.test((LivingEntity) entity)));
     }
 
     @Override
@@ -82,28 +68,18 @@ public class EntityBigPlate extends EntityProjectile {
         if (!this.hitSomething) {
             this.level.playSound(null, blockHitResult.getBlockPos(), SoundEvents.ANVIL_LAND, this.getSoundSource(), 1.0f, 0.5f);
         }
-        this.kill();
+        this.discard();
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        this.damageMultiplier = compound.getFloat("DamageMultiplier");
         this.hitSomething = compound.getBoolean("HitSomething");
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putFloat("DamageMultiplier", this.damageMultiplier);
         compound.putBoolean("HitSomething", this.hitSomething);
-    }
-
-    @Override
-    public Entity getOwner() {
-        Entity owner = super.getOwner();
-        if (owner instanceof BaseMonster)
-            this.pred = ((BaseMonster) owner).hitPred;
-        return owner;
     }
 }
