@@ -248,6 +248,8 @@ public class ItemNBT {
             tag.putBoolean(LibNBT.OBJECT_X, !hasObjectX);
         if (type == EnumCrafting.FORGE && stackToAdd.getItem() == ModItems.invisStone.get())
             tag.putBoolean(LibNBT.INVIS, true);
+        if (type == EnumCrafting.FORGE && stackToAdd.is(ModTags.SCALES))
+            tag.putBoolean(LibNBT.DRAGON_SCALE, true);
         if (crafting && stackToAdd.getItem() == ModItems.lightOre.get() && !tag.contains(LibNBT.ORIGINITEM))
             tag.putBoolean(LibNBT.LIGHTORETAG, true);
 
@@ -487,6 +489,14 @@ public class ItemNBT {
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
             return tag.getBoolean(LibNBT.INVIS);
+        }
+        return false;
+    }
+
+    public static boolean hasDragonScaleUpgrade(ItemStack stack) {
+        if (stack.hasTag()) {
+            CompoundTag tag = stack.getTag().getCompound(RuneCraftory.MODID);
+            return tag.getBoolean(LibNBT.DRAGON_SCALE);
         }
         return false;
     }

@@ -15,6 +15,7 @@ public class LibNBT {
     public static final String MAGNIFYING_GLASS = "MagnifyingGlass";
     public static final String SCRAP_METAL_PLUS = "ScrapMetalPlus";
     public static final String OBJECT_X = "ObjectX";
+    public static final String DRAGON_SCALE = "DragonScale";
 
     public static final String INVIS = "Invis";
     public static final String LIGHTORETAG = "LightOre";
