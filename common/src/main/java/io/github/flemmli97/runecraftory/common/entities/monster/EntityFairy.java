@@ -127,7 +127,7 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
 
     @Override
     public float attackChance(AnimationType type) {
-        return type != AnimationType.MELEE ? 1f : 0;
+        return type != AnimationType.MELEE ? 1 : 0;
     }
 
     @Override

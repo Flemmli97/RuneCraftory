@@ -26,8 +26,11 @@ public class EntityDuck extends ChargingMonster {
         this.goalSelector.addGoal(2, this.attack);
     }
 
+
     @Override
     public float attackChance(AnimationType type) {
+        if (type == AnimationType.MELEE)
+            return 0.8f;
         return 0.85f;
     }
 

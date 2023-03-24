@@ -27,6 +27,7 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import org.jetbrains.annotations.Nullable;
 
 public class EntityWooly extends LeapingMonster {
 
@@ -151,7 +152,16 @@ public class EntityWooly extends LeapingMonster {
 
     @Override
     public float attackChance(AnimationType type) {
-        return this.entityData.get(SPAWNSHEARED) || this.isTamed() ? 0.8f : 0.03f;
+        if (type == AnimationType.MELEE)
+            return 0.8f;
+        if (this.entityData.get(SPAWNSHEARED))
+            return 0.8f;
+        return this.isTamed() ? 0.7f : 0.03f;
+    }
+
+    @Override
+    public int animationCooldown(@Nullable AnimatedAction anim) {
+        return super.animationCooldown(anim) * 4;
     }
 
     @Override

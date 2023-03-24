@@ -66,7 +66,7 @@ public class EntityGoblinArcher extends EntityGoblin {
     public float attackChance(AnimationType type) {
         if (type == AnimationType.MELEE)
             return 0.6f;
-        return 0.85f;
+        return 0.9f;
     }
 
     @Override

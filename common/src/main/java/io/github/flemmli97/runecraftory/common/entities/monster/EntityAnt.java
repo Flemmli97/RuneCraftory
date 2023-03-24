@@ -24,7 +24,7 @@ public class EntityAnt extends BaseMonster {
 
     @Override
     public float attackChance(AnimationType type) {
-        return 1f;
+        return 1;
     }
 
     @Override

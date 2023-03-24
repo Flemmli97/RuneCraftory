@@ -45,7 +45,7 @@ public class PermanentEffect extends MobEffect implements ExtendedEffect {
 
     @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
-        return duration % this.tickDelay == 0;
+        return duration % this.tickDelay == 1;
     }
 
     @Override

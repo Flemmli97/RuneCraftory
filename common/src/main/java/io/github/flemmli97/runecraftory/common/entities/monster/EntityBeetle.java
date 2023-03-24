@@ -27,7 +27,9 @@ public class EntityBeetle extends ChargingMonster {
 
     @Override
     public float attackChance(AnimationType type) {
-        return 1f;
+        if (type == AnimationType.MELEE)
+            return 0.9f;
+        return 1;
     }
 
     @Override

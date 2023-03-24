@@ -36,13 +36,13 @@ public class ParaHealSpell extends Spell {
         if (!rp)
             return false;
         if (lvl >= 10) {
-            entity.removeEffect(ModEffects.seal.get());
+            entity.removeEffect(ModEffects.SEAL.get());
         }
         if (lvl >= 5) {
-            entity.removeEffect(ModEffects.poison.get());
+            entity.removeEffect(ModEffects.POISON.get());
         }
         entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-        entity.removeEffect(ModEffects.paralysis.get());
+        entity.removeEffect(ModEffects.PARALYSIS.get());
         return true;
     }
 

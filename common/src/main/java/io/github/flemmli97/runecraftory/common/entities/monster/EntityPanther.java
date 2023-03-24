@@ -31,6 +31,8 @@ public class EntityPanther extends LeapingMonster {
 
     @Override
     public float attackChance(AnimationType type) {
+        if (type == AnimationType.MELEE)
+            return 0.8f;
         return 1;
     }
 

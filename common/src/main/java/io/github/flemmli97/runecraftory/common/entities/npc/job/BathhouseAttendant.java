@@ -34,7 +34,7 @@ public class BathhouseAttendant extends NPCJob {
                             int amount = 300 * baths + (Math.max(0, baths - 1)) * 100;
                             if (d.useMoney(player, amount)) {
                                 player.sendMessage(new TranslatableComponent(BATH_ACTION_SUCCESS, player.getName()), Util.NIL_UUID);
-                                player.addEffect(new MobEffectInstance(ModEffects.bath.get(), 1700, 0, false, true, false));
+                                player.addEffect(new MobEffectInstance(ModEffects.BATH.get(), 1700, 0, false, true, false));
                                 d.getDailyUpdater().increaseBathCounter();
                             } else {
                                 player.sendMessage(new TranslatableComponent(BATH_ACTION_FAIL, player.getName(), amount), Util.NIL_UUID);

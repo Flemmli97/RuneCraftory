@@ -110,7 +110,9 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public float attackChance(AnimationType type) {
-        return 0.7f;
+        if (type == AnimationType.MELEE)
+            return 0.85f;
+        return 1;
     }
 
     @Override

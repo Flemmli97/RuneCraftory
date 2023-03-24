@@ -44,7 +44,7 @@ public class ItemObjectX extends Item {
                 MobEffectInstance inst = livingEntity.getEffect(effect);
                 if (inst != null)
                     amp += inst.getAmplifier();
-                int duration = effect == ModEffects.sleep.get() ? 80 : 600;
+                int duration = effect == ModEffects.SLEEP.get() ? 80 : 600;
                 livingEntity.addEffect(new MobEffectInstance(effect, duration, amp));
             }
         }

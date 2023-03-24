@@ -44,19 +44,19 @@ public class EntityUtils {
     }
 
     public static boolean isExhaust(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.fatigue.get());
+        return entity.hasEffect(ModEffects.FATIGUE.get());
     }
 
     public static boolean paralysed(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.paralysis.get());
+        return entity.hasEffect(ModEffects.PARALYSIS.get());
     }
 
     public static boolean sleeping(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.sleep.get());
+        return entity.hasEffect(ModEffects.SLEEP.get());
     }
 
     public static boolean sealed(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.seal.get());
+        return entity.hasEffect(ModEffects.SEAL.get());
     }
 
     public static boolean canMonsterTargetNPC(Entity e) {
@@ -98,7 +98,7 @@ public class EntityUtils {
     }
 
     public static boolean isDisabled(LivingEntity entity) {
-        return entity.hasEffect(ModEffects.sleep.get());
+        return entity.hasEffect(ModEffects.SLEEP.get());
     }
 
     @Nullable

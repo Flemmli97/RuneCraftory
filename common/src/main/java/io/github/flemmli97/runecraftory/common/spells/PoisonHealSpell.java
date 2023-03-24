@@ -36,14 +36,14 @@ public class PoisonHealSpell extends Spell {
         if (!rp)
             return false;
         if (level >= 10) {
-            entity.removeEffect(ModEffects.seal.get());
+            entity.removeEffect(ModEffects.SEAL.get());
         }
         if (level >= 5) {
-            entity.removeEffect(ModEffects.paralysis.get());
+            entity.removeEffect(ModEffects.PARALYSIS.get());
         }
         entity.removeEffect(MobEffects.POISON);
         entity.removeEffect(MobEffects.WITHER);
-        entity.removeEffect(ModEffects.poison.get());
+        entity.removeEffect(ModEffects.POISON.get());
         return true;
     }
 

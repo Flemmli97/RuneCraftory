@@ -38,11 +38,10 @@ public class PoisonNeedleSpell extends Spell {
         EntityPoisonNeedle projectile = new EntityPoisonNeedle(level, entity);
         projectile.setDamageMultiplier(0.7f + lvl * 0.05f);
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            projectile.shootAtEntity(mob.getTarget(), 1.5f, 7 - level.getDifficulty().getId() * 2, 0.2f);
+            projectile.shootAtEntity(mob.getTarget(), 1.2f, 7 - level.getDifficulty().getId() * 2, 0.2f);
         } else {
-            projectile.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 1.5F, 1.0F);
+            projectile.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 1.2F, 1.0F);
         }
-        projectile.setDeltaMovement(projectile.getDeltaMovement().scale(0.1));
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.ARROW_SHOOT, entity.getSoundSource(), 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
         level.addFreshEntity(projectile);
         return true;

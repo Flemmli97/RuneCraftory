@@ -36,13 +36,13 @@ public class UnsealSpell extends Spell {
         if (!rp)
             return false;
         if (lvl >= 10) {
-            entity.removeEffect(ModEffects.poison.get());
+            entity.removeEffect(ModEffects.POISON.get());
         }
         if (lvl >= 5) {
-            entity.removeEffect(ModEffects.paralysis.get());
+            entity.removeEffect(ModEffects.PARALYSIS.get());
         }
         entity.removeEffect(MobEffects.DIG_SLOWDOWN);
-        entity.removeEffect(ModEffects.seal.get());
+        entity.removeEffect(ModEffects.SEAL.get());
         return true;
     }
 

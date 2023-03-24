@@ -136,7 +136,9 @@ public class EntitySkyFish extends BaseMonster {
 
     @Override
     public float attackChance(AnimationType type) {
-        return 0.75f;
+        if (type == AnimationType.MELEE)
+            return 0.6f;
+        return 1;
     }
 
     @Override

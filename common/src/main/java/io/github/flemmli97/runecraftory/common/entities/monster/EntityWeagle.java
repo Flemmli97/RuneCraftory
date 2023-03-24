@@ -144,6 +144,8 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     public float attackChance(AnimationType type) {
+        if (type == AnimationType.MELEE)
+            return 0.8f;
         return 1;
     }
 

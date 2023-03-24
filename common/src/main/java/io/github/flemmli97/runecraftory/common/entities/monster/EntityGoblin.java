@@ -70,7 +70,7 @@ public class EntityGoblin extends LeapingMonster {
 
     @Override
     public float attackChance(AnimationType type) {
-        return 0.85f;
+        return 0.9f;
     }
 
     @Override

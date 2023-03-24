@@ -39,7 +39,7 @@ public class EntityCluckadoodle extends BaseMonster {
 
     @Override
     public int animationCooldown(AnimatedAction anim) {
-        return this.getRandom().nextInt(10) + 30;
+        return this.getRandom().nextInt(15) + 25;
     }
 
     @Override

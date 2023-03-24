@@ -582,11 +582,11 @@ public class PlayerData {
             } else
                 this.entitySelector.reset();
 
-            if (serverPlayer.hasEffect(ModEffects.bath.get())) {
+            if (serverPlayer.hasEffect(ModEffects.BATH.get())) {
                 if (!this.touchedWater && serverPlayer.isInWater())
                     this.touchedWater = true;
                 else if (this.touchedWater && !serverPlayer.isInWater()) {
-                    serverPlayer.removeEffect(ModEffects.bath.get());
+                    serverPlayer.removeEffect(ModEffects.BATH.get());
                     this.touchedWater = false;
                 }
             }

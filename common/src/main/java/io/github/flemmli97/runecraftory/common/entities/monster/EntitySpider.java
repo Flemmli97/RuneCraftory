@@ -85,6 +85,8 @@ public class EntitySpider extends BaseMonster {
 
     @Override
     public float attackChance(AnimationType type) {
+        if (type == AnimationType.MELEE)
+            return 0.7f;
         return 1;
     }
 

@@ -175,7 +175,7 @@ public class EntityMarionetta extends BossMonster {
                             .normalize().scale(1.2).add(0, 0.85, 0);
                     EntityMarionettaTrap trap = new EntityMarionettaTrap(this.level, this);
                     this.caughtEntities.forEach(e -> {
-                        e.addEffect(new MobEffectInstance(ModEffects.trueInvis.get(), 100, 1, true, false, false));
+                        e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.get(), 100, 1, true, false, false));
                         trap.addCaughtEntity(e);
                     });
                     trap.setDeltaMovement(throwVec);

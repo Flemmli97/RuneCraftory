@@ -45,7 +45,7 @@ public class FoodGen extends FoodProvider {
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10));
 
         this.addStat(ModItems.witheredGrass.get(), new FoodProperties.Builder(100)
-                .addPotion(ModEffects.poison.get(), 60, 0).setRPRegen(0, -35)
+                .addPotion(ModEffects.POISON.get(), 60, 0).setRPRegen(0, -35)
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), -10));
         this.addStat(ModItems.weeds.get(), new FoodProperties.Builder(100).setHPRegen(-10, 0)
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), -5));
@@ -77,17 +77,17 @@ public class FoodGen extends FoodProvider {
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10)
                 .addCookingBonus(ModAttributes.RPGAIN.get(), 10));
         this.addStat(ModItems.antidoteGrass.get(), new FoodProperties.Builder(100).setHPRegen(10, 0)
-                .curePotion(ModEffects.poison.get()).curePotion(MobEffects.POISON).curePotion(MobEffects.WITHER)
+                .curePotion(ModEffects.POISON.get()).curePotion(MobEffects.POISON).curePotion(MobEffects.WITHER)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10));
         this.addStat(ModItems.medicinalHerb.get(), new FoodProperties.Builder(100).setHPRegen(30, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 20));
         this.addStat(ModItems.bambooSprout.get(), new FoodProperties.Builder(100).setHPRegen(10, 0).setRPRegen(5, 0)
                 .addCookingBonus(ModAttributes.HEALTHGAIN.get(), 10));
 
-        this.addStat(ModItems.roundoff.get(), new FoodProperties.Builder(100).setHPRegen(500, 0).curePotion(ModEffects.seal.get()));
-        this.addStat(ModItems.paraGone.get(), new FoodProperties.Builder(100).setHPRegen(500, 0).curePotion(MobEffects.MOVEMENT_SLOWDOWN).curePotion(ModEffects.paralysis.get()));
-        this.addStat(ModItems.coldMed.get(), new FoodProperties.Builder(100).setHPRegen(500, 0).curePotion(ModEffects.cold.get()));
-        this.addStat(ModItems.antidote.get(), new FoodProperties.Builder(100).setHPRegen(500, 0).curePotion(MobEffects.POISON).curePotion(ModEffects.poison.get()).curePotion(MobEffects.WITHER));
+        this.addStat(ModItems.roundoff.get(), new FoodProperties.Builder(100).setHPRegen(500, 0).curePotion(ModEffects.SEAL.get()));
+        this.addStat(ModItems.paraGone.get(), new FoodProperties.Builder(100).setHPRegen(500, 0).curePotion(MobEffects.MOVEMENT_SLOWDOWN).curePotion(ModEffects.PARALYSIS.get()));
+        this.addStat(ModItems.coldMed.get(), new FoodProperties.Builder(100).setHPRegen(500, 0).curePotion(ModEffects.COLD.get()));
+        this.addStat(ModItems.antidote.get(), new FoodProperties.Builder(100).setHPRegen(500, 0).curePotion(MobEffects.POISON).curePotion(ModEffects.POISON.get()).curePotion(MobEffects.WITHER));
         this.addStat(ModItems.recoveryPotion.get(), new FoodProperties.Builder(100).setHPRegen(100, 0));
         this.addStat(ModItems.healingPotion.get(), new FoodProperties.Builder(100).setHPRegen(500, 0));
         this.addStat(ModItems.mysteryPotion.get(), new FoodProperties.Builder(100).setHPRegen(2000, 0));
@@ -100,12 +100,12 @@ public class FoodGen extends FoodProvider {
                 .curePotion(MobEffects.BLINDNESS)
                 .curePotion(MobEffects.LEVITATION)
                 .curePotion(MobEffects.CONFUSION)
-                .curePotion(ModEffects.sleep.get())
-                .curePotion(ModEffects.poison.get())
-                .curePotion(ModEffects.paralysis.get())
-                .curePotion(ModEffects.seal.get())
-                .curePotion(ModEffects.fatigue.get())
-                .curePotion(ModEffects.cold.get()));
+                .curePotion(ModEffects.SLEEP.get())
+                .curePotion(ModEffects.POISON.get())
+                .curePotion(ModEffects.PARALYSIS.get())
+                .curePotion(ModEffects.SEAL.get())
+                .curePotion(ModEffects.FATIGUE.get())
+                .curePotion(ModEffects.COLD.get()));
         this.addStat(ModItems.formuade.get(), new FoodProperties.Builder(100).setRPIncrease(0, 75)
                 .addEffectPercentage(Attributes.MAX_HEALTH, -50)
                 .addEffect(Attributes.ATTACK_DAMAGE, 70)

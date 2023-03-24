@@ -63,6 +63,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblinArch
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblinGangster;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblinPirate;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityHornet;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityLeafBall;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityMimic;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrc;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrcArcher;
@@ -409,6 +410,17 @@ public class ModEntities {
                     ModTags.IS_MAGICAL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA));
     public static final RegistryEntrySupplier<EntityType<EntityWolf>> SILVER_WOLF = regMonster(EntityType.Builder.of(EntityWolf::new, MobCategory.MONSTER).sized(0.75f, 1.15f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "silver_wolf"),
             0x9bb9c3, 0x436ea1,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.MAX_HEALTH, 22).putLevelGains(LibAttributes.MAX_HEALTH, 14.5)
+                    .putAttributes(LibAttributes.ATTACK_DAMAGE, 6).putLevelGains(LibAttributes.ATTACK_DAMAGE, 2.2)
+                    .putAttributes(LibAttributes.DEFENCE, 0).putLevelGains(LibAttributes.DEFENCE, 1.3)
+                    .putAttributes(LibAttributes.MAGIC, 3).putLevelGains(LibAttributes.MAGIC, 1)
+                    .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.2)
+                    .xp(35).money(4).tamingChance(0.15f).setRidable().build(),
+            new GateSpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
+                    ModTags.IS_MAGICAL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA));
+    public static final RegistryEntrySupplier<EntityType<EntityLeafBall>> LEAF_BALL = regMonster(EntityType.Builder.of(EntityLeafBall::new, MobCategory.MONSTER).sized(0.75f, 1.15f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "leaf_ball"),
+            0xdcb5f0, 0xb72fd3, true,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 22).putLevelGains(LibAttributes.MAX_HEALTH, 14.5)
                     .putAttributes(LibAttributes.ATTACK_DAMAGE, 6).putLevelGains(LibAttributes.ATTACK_DAMAGE, 2.2)

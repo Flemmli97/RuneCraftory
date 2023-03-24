@@ -196,13 +196,13 @@ public class LangGen implements DataProvider {
         this.add(ModAttributes.ATTACK_SPEED.get().getDescriptionId(), "Attack Speed");
         this.add(ModAttributes.ATTACK_RANGE.get().getDescriptionId(), "Attack Range");
 
-        this.add(ModEffects.cold.get(), "Cold");
-        this.add(ModEffects.sleep.get(), "Sleeping");
-        this.add(ModEffects.poison.get(), "Poison");
-        this.add(ModEffects.paralysis.get(), "Paralysis");
-        this.add(ModEffects.seal.get(), "Sealed");
-        this.add(ModEffects.fatigue.get(), "Fatigue");
-        this.add(ModEffects.bath.get(), "Bath");
+        this.add(ModEffects.COLD.get(), "Cold");
+        this.add(ModEffects.SLEEP.get(), "Sleeping");
+        this.add(ModEffects.POISON.get(), "Poison");
+        this.add(ModEffects.PARALYSIS.get(), "Paralysis");
+        this.add(ModEffects.SEAL.get(), "Sealed");
+        this.add(ModEffects.FATIGUE.get(), "Fatigue");
+        this.add(ModEffects.BATH.get(), "Bath");
 
         for (EnumDay day : EnumDay.values()) {
             this.add(day.translation(), day.toString().substring(0, 3));
