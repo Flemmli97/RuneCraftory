@@ -9,6 +9,7 @@ import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.biome.Biome;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public record GateSpawnData(ResourceLocation entity, int minDistanceFromSpawn,
@@ -26,8 +27,8 @@ public record GateSpawnData(ResourceLocation entity, int minDistanceFromSpawn,
 
     public static class Builder {
 
-        private final Map<TagKey<Biome>, Integer> biomes = new HashMap<>();
-        private final Map<ResourceLocation, Integer> structures = new HashMap<>();
+        private final Map<TagKey<Biome>, Integer> biomes = new LinkedHashMap<>();
+        private final Map<ResourceLocation, Integer> structures = new LinkedHashMap<>();
         private final int minDistanceFromSpawn, minGateLevel;
 
         public Builder(int minDistanceFromSpawn, int minGateLevel) {
