@@ -4,11 +4,11 @@
   "min_gate_level": 0,
   "biomes": {
     "c:is_plains": 40,
-    "c:is_savanna": 40,
-    "minecraft:is_mountain": 40,
-    "minecraft:is_hill": 40,
     "minecraft:is_forest": 40,
-    "c:is_lush": 40
+    "minecraft:is_hill": 40,
+    "minecraft:is_mountain": 40,
+    "c:is_lush": 40,
+    "c:is_savanna": 40
   },
   "structures": {}
 }

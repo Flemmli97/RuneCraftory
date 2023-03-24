@@ -4,8 +4,8 @@
   "min_gate_level": 0,
   "biomes": {
     "c:is_plains": 50,
-    "minecraft:is_hill": 50,
     "minecraft:is_forest": 50,
+    "minecraft:is_hill": 50,
     "c:is_magical": 50
   },
   "structures": {}

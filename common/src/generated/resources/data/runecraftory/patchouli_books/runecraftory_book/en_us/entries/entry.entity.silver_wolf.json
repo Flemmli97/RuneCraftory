@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.silver_wolf",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:silver_wolf_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:silver_wolf",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:silver_wolf"
+    }
+  ]
+}
