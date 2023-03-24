@@ -81,11 +81,17 @@ public class EntityGoblinArcher extends EntityGoblin {
                 this.startUsingItem(InteractionHand.MAIN_HAND);
             this.getNavigation().stop();
             if (anim.canAttack()) {
-                if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget())) {
-                    if (anim.getID().equals(BOW.getID()))
+                boolean withTarget = this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget());
+                if (anim.getID().equals(BOW.getID())) {
+                    if (withTarget)
                         this.shootArrow(this.getTarget());
                     else
+                        this.shootArrowFromRotation(this);
+                } else {
+                    if (withTarget)
                         this.shootTripleArrow(this.getTarget());
+                    else
+                        this.shootTripleArrowFromRotation(this);
                 }
                 this.stopUsingItem();
             }
@@ -99,6 +105,13 @@ public class EntityGoblinArcher extends EntityGoblin {
         double l = Math.sqrt(dir.x * dir.x + dir.z * dir.z);
         dir = dir.add(0, l * 0.2, 0);
         arrow.shoot(dir.x, dir.y, dir.z, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
+        this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+        this.level.addFreshEntity(arrow);
+    }
+
+    private void shootArrowFromRotation(LivingEntity shooter) {
+        EntityMobArrow arrow = new EntityMobArrow(this.level, this, 0.8f);
+        arrow.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot(), 0.0F, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
         this.level.addFreshEntity(arrow);
     }
@@ -122,6 +135,15 @@ public class EntityGoblinArcher extends EntityGoblin {
         }
 
         this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+    }
+
+    private void shootTripleArrowFromRotation(LivingEntity shooter) {
+        for (int i = 0; i < 3; i++) {
+            EntityMobArrow arrow = new EntityMobArrow(this.level, this, 0.8f);
+            arrow.shootFromRotation(shooter, shooter.getXRot(), shooter.getYRot() + (i - 1) * 15, 0.0F, 1.3f, 7 - this.level.getDifficulty().getId() * 2);
+            this.playSound(SoundEvents.SKELETON_SHOOT, 1.0F, 1.0F / (this.getRandom().nextFloat() * 0.4F + 0.8F));
+            this.level.addFreshEntity(arrow);
+        }
     }
 
     @Override

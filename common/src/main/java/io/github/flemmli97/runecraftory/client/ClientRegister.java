@@ -29,6 +29,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelDuck;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelFairy;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelGhost;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelGoblin;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelHornet;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMarionetta;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMimic;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelOrc;
@@ -40,6 +41,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelThunderbolt;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelTortas;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWeagle;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWisp;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelWolf;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWooly;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWoolyWool;
 import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
@@ -62,6 +64,7 @@ import io.github.flemmli97.runecraftory.client.render.monster.RenderWisp;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
 import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingHookRenderer;
 import io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderBullet;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderCards;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkBeam;
@@ -72,9 +75,11 @@ import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFurnitur
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMarionettaTrap;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderPlate;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderPoisonNeedle;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderRockSpear;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSpiderWeb;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderStaffBall;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderThrownItem;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWaterLaser;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWindBlade;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWispFlame;
@@ -233,6 +238,8 @@ public class ClientRegister {
         consumer.register(ModEntities.IGNIS.get(), ctx -> new RenderWisp<>(ctx, mobTexture(ModEntities.IGNIS.get())));
         consumer.register(ModEntities.HIGH_ORC.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.HIGH_ORC.get())));
         consumer.register(ModEntities.ORC_HUNTER.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.HIGH_ORC.get())));
+        register(consumer, ModEntities.HORNET.get(), ModelHornet::new, ModelHornet.LAYER_LOCATION);
+        register(consumer, ModEntities.SILVER_WOLF.get(), ModelWolf::new, ModelWolf.LAYER_LOCATION);
 
         register(consumer, ModEntities.AMBROSIA.get(), ModelAmbrosia::new, ModelAmbrosia.LAYER_LOCATION);
         register(consumer, ModEntities.THUNDERBOLT.get(), ModelThunderbolt::new, ModelThunderbolt.LAYER_LOCATION);
@@ -283,6 +290,12 @@ public class ClientRegister {
         consumer.register(ModEntities.DARKNESS.get(), RenderDarkness::new);
         consumer.register(ModEntities.BIG_PLATE.get(), RenderPlate::new);
         consumer.register(ModEntities.DARK_BULLET.get(), RenderDarkBullet::new);
+        consumer.register(ModEntities.POISON_NEEDLE.get(), RenderPoisonNeedle::new);
+        consumer.register(ModEntities.SLEEP_AURA.get(), EmptyRender::new);
+        consumer.register(ModEntities.CIRCLING_BULLET.get(), ctx -> new RenderBullet(ctx, new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/bullet.png")));
+        consumer.register(ModEntities.THROWN_ITEM.get(), RenderThrownItem::new);
+
+        consumer.register(ModEntities.DARK_BULLET.get(), RenderDarkBullet::new);
 
         consumer.register(ModEntities.RUNEY.get(), RenderRuney::new);
         consumer.register(ModEntities.STAT_BONUS.get(), EmptyRender::new);
@@ -291,7 +304,6 @@ public class ClientRegister {
         consumer.register(ModEntities.DARK_BULLET_SUMMONER.get(), EmptyRender::new);
 
         consumer.register(ModEntities.FISHING_HOOK.get(), CustomFishingHookRenderer::new);
-
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> EntityRendererProvider<? super T> getMonsterRender(Function<ModelPart, M> model, ModelLayerLocation layerLocation, ResourceLocation texture, float shadow) {
@@ -335,6 +347,8 @@ public class ClientRegister {
         consumer.accept(ModelWisp.LAYER_LOCATION, ModelWisp::createBodyLayer);
         consumer.accept(ModelSpider.LAYER_LOCATION, ModelSpider::createBodyLayer);
         consumer.accept(ModelPanther.LAYER_LOCATION, ModelPanther::createBodyLayer);
+        consumer.accept(ModelHornet.LAYER_LOCATION, ModelHornet::createBodyLayer);
+        consumer.accept(ModelWolf.LAYER_LOCATION, ModelWolf::createBodyLayer);
 
         consumer.accept(ModelChest.LAYER_LOCATION, ModelChest::createBodyLayer);
 

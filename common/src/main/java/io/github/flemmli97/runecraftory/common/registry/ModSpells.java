@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.spells.DarkBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.DarkBeamSpell;
 import io.github.flemmli97.runecraftory.common.spells.DarkBulletsSpell;
 import io.github.flemmli97.runecraftory.common.spells.DarknessSpell;
+import io.github.flemmli97.runecraftory.common.spells.DoubleBulletSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWindBladeSpell;
 import io.github.flemmli97.runecraftory.common.spells.EmptySpell;
@@ -31,16 +32,20 @@ import io.github.flemmli97.runecraftory.common.spells.LightBarrierSpell;
 import io.github.flemmli97.runecraftory.common.spells.ParaHealSpell;
 import io.github.flemmli97.runecraftory.common.spells.PenetrateWindBladeSpell;
 import io.github.flemmli97.runecraftory.common.spells.PlushThrowSpell;
+import io.github.flemmli97.runecraftory.common.spells.PoisonBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.PoisonHealSpell;
+import io.github.flemmli97.runecraftory.common.spells.PoisonNeedleSpell;
 import io.github.flemmli97.runecraftory.common.spells.PollenPuffSpell;
 import io.github.flemmli97.runecraftory.common.spells.PrismSpell;
 import io.github.flemmli97.runecraftory.common.spells.RockSpearSpell;
 import io.github.flemmli97.runecraftory.common.spells.ShineSpell;
+import io.github.flemmli97.runecraftory.common.spells.SleepAuraSpell;
 import io.github.flemmli97.runecraftory.common.spells.SleepBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.SnowballSpell;
 import io.github.flemmli97.runecraftory.common.spells.SpiritFlameSpell;
 import io.github.flemmli97.runecraftory.common.spells.StoneThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
+import io.github.flemmli97.runecraftory.common.spells.ThrowHandItemSpell;
 import io.github.flemmli97.runecraftory.common.spells.TripleArrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TripleWaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.UnsealSpell;
@@ -63,6 +68,7 @@ import java.util.function.Supplier;
 public class ModSpells {
 
     public static final ResourceKey<? extends Registry<Spell>> SPELLREGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation(RuneCraftory.MODID, "spells"));
+    public static final Supplier<SimpleRegistryWrapper<Spell>> SPELLREGISTRY = new LazyGetter<>(() -> PlatformUtils.INSTANCE.registry(SPELLREGISTRY_KEY));
 
     public static final PlatformRegistry<Spell> SPELLS = PlatformUtils.INSTANCE.customRegistry(Spell.class, SPELLREGISTRY_KEY, new ResourceLocation(RuneCraftory.MODID, "empty_spell"), true, true);
     public static final RegistryEntrySupplier<Spell> EMPTY = SPELLS.register("empty_spell", EmptySpell::new);
@@ -123,7 +129,9 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> DARKBEAM = SPELLS.register("dark_beam", DarkBeamSpell::new);
     public static final RegistryEntrySupplier<Spell> PLATE = SPELLS.register("big_plate", BigPlateSpell::new);
     public static final RegistryEntrySupplier<Spell> DARKBULLETS = SPELLS.register("dark_bullets", DarkBulletsSpell::new);
-
-    public static final Supplier<SimpleRegistryWrapper<Spell>> SPELLREGISTRY = new LazyGetter<>(() -> PlatformUtils.INSTANCE.registry(SPELLREGISTRY_KEY));
-
+    public static final RegistryEntrySupplier<Spell> POISON_BALL = SPELLS.register("poison_ball", PoisonBallSpell::new);
+    public static final RegistryEntrySupplier<Spell> POISON_NEEDLE = SPELLS.register("poison_needle", PoisonNeedleSpell::new);
+    public static final RegistryEntrySupplier<Spell> SLEEP_AURA = SPELLS.register("sleep_aura", SleepAuraSpell::new);
+    public static final RegistryEntrySupplier<Spell> DOUBLE_BULLET = SPELLS.register("double_bullet", DoubleBulletSpell::new);
+    public static final RegistryEntrySupplier<Spell> THROW_HAND_ITEM = SPELLS.register("throw_held_item", ThrowHandItemSpell::new);
 }

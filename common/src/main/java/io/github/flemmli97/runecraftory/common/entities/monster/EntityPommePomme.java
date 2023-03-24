@@ -16,6 +16,7 @@ public class EntityPommePomme extends ChargingMonster {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{KICK, CHARGE_ATTACK, INTERACT, SLEEP};
+
     public final ChargeAttackGoal<EntityPommePomme> ai = new ChargeAttackGoal<>(this);
     private final AnimationHandler<EntityPommePomme> animationHandler = new AnimationHandler<>(this, ANIMS);
 

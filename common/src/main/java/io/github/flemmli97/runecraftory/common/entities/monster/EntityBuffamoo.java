@@ -20,6 +20,7 @@ public class EntityBuffamoo extends ChargingMonster {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(STAMP, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{STAMP, CHARGE_ATTACK, INTERACT, SLEEP};
+
     public final ChargeAttackGoal<EntityBuffamoo> ai = new ChargeAttackGoal<>(this);
     private final AnimationHandler<EntityBuffamoo> animationHandler = new AnimationHandler<>(this, ANIMS);
 

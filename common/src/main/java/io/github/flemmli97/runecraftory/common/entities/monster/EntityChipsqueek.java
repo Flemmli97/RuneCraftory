@@ -15,6 +15,7 @@ public class EntityChipsqueek extends ChargingMonster {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, ROLL, MELEE, SLEEP};
+
     public final ChargeAttackGoal<EntityChipsqueek> attack = new ChargeAttackGoal<>(this);
     private final AnimationHandler<EntityChipsqueek> animationHandler = new AnimationHandler<>(this, ANIMS);
 

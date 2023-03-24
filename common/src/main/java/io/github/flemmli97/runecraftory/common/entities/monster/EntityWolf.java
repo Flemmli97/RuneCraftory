@@ -3,64 +3,54 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
+public class EntityWolf extends LeapingMonster {
 
-public class EntityPanther extends LeapingMonster {
-
-    private static final AnimatedAction MELEE = new AnimatedAction(16, 9, "attack");
-    private static final AnimatedAction LEAP = new AnimatedAction(23, 6, "leap");
+    private static final AnimatedAction MELEE = new AnimatedAction(36, 10, "attack");
+    private static final AnimatedAction LEAP = new AnimatedAction(23, 7, "leap");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
 
-    public LeapingAttackGoal<EntityPanther> attack = new LeapingAttackGoal<>(this);
-    private final AnimationHandler<EntityPanther> animationHandler = new AnimationHandler<>(this, ANIMS);
+    public LeapingAttackGoal<EntityWolf> attack = new LeapingAttackGoal<>(this);
+    private final AnimationHandler<EntityWolf> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public EntityPanther(EntityType<? extends EntityPanther> type, Level world) {
+    public EntityWolf(EntityType<? extends EntityWolf> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
     }
 
     @Override
     public float attackChance(AnimationType type) {
+        if (type == AnimationType.MELEE)
+            return 0.7f;
         return 1;
     }
 
     @Override
-    public AnimationHandler<? extends EntityPanther> getAnimationHandler() {
+    public AnimationHandler<? extends EntityWolf> getAnimationHandler() {
         return this.animationHandler;
     }
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(LEAP.getID())) {
-            if (anim.canAttack()) {
-                Vec3 vec32;
-                if (this.getTarget() != null) {
-                    Vec3 target = this.getTarget().position();
-                    vec32 = new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ())
-                            .normalize().scale(1.35);
-                } else
-                    vec32 = this.getLookAngle();
-                this.setDeltaMovement(vec32.x, 0.25f, vec32.z);
-            }
-            if (anim.getTick() >= anim.getAttackTime()) {
-                if (this.hitEntity == null)
-                    this.hitEntity = new ArrayList<>();
-                this.mobAttack(anim, null, e -> {
-                    if (!this.hitEntity.contains(e)) {
-                        this.hitEntity.add(e);
-                        this.doHurtTarget(e);
-                    }
-                });
+        if (anim.getID().equals(MELEE.getID())) {
+            this.getNavigation().stop();
+            if (anim.getTick() == 1 && this.getTarget() != null)
+                this.lookAt(this.getTarget(), 360, 90);
+            if (anim.getTick() == 10 || anim.getTick() == 17 || anim.getTick() == 23 || anim.getTick() == 30) {
+                this.mobAttack(anim, this.getTarget(), target -> wolfAttack(this, target));
             }
         } else
             super.handleAttack(anim);
@@ -68,12 +58,18 @@ public class EntityPanther extends LeapingMonster {
 
     @Override
     public Vec3 getLeapVec(@Nullable LivingEntity target) {
-        return super.getLeapVec(target).scale(1.1);
+        return super.getLeapVec(target).scale(1.05);
     }
 
     @Override
     public double leapHeightMotion() {
-        return 0.25f;
+        return 0.2;
+    }
+
+    public static boolean wolfAttack(LivingEntity attacker, Entity target) {
+        CustomDamage.Builder source = new CustomDamage.Builder(attacker).hurtResistant(1);
+        double damagePhys = CombatUtils.getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
+        return CombatUtils.mobAttack(attacker, target, source, damagePhys);
     }
 
     @Override
@@ -88,8 +84,8 @@ public class EntityPanther extends LeapingMonster {
     @Override
     public double maxAttackRange(AnimatedAction anim) {
         if (LEAP.checkID(anim))
-            return 2;
-        return 1.4;
+            return 1.2;
+        return 1;
     }
 
     @Override

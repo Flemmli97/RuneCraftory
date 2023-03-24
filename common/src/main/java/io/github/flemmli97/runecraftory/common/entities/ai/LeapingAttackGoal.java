@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.common.entities.ai;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
-import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
+import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.phys.AABB;
 
-public class ChargeAttackGoal<T extends ChargingMonster> extends AnimatedMeleeGoal<T> {
+public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGoal<T> {
 
-    public ChargeAttackGoal(T entity) {
+    public LeapingAttackGoal(T entity) {
         super(entity);
     }
 
@@ -20,8 +20,8 @@ public class ChargeAttackGoal<T extends ChargingMonster> extends AnimatedMeleeGo
                 if (aabb.intersects(this.target.getBoundingBox()))
                     return anim;
             }
-            if (this.distanceToTargetSq <= (this.attacker.chargingLength() * this.attacker.chargingLength() + 1) && this.attacker.getY() >= this.target.getY())
-                return this.attacker.getRandomAnimation(AnimationType.CHARGE);
+            if (this.distanceToTargetSq <= (this.attacker.maxLeapDistance() * this.attacker.maxLeapDistance() + 1) && this.attacker.getY() >= this.target.getY())
+                return this.attacker.getRandomAnimation(AnimationType.LEAP);
         }
         return this.attacker.getRandomAnimation(AnimationType.IDLE);
     }
@@ -31,9 +31,7 @@ public class ChargeAttackGoal<T extends ChargingMonster> extends AnimatedMeleeGo
         if (this.attacker.isAnimOfType(this.next, AnimationType.MELEE))
             super.handlePreAttack();
         else {
-            this.attacker.setChargeMotion(this.attacker.getChargeTo(this.next, this.target.position()));
             this.attacker.lookAt(this.target, 360, 10);
-            this.attacker.lockYaw(this.attacker.getYRot());
             this.movementDone = true;
         }
     }

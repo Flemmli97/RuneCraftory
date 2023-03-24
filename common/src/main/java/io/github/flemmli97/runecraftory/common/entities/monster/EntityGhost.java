@@ -26,6 +26,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.function.Consumer;
+
 public class EntityGhost extends ChargingMonster {
 
     public static final AnimatedAction DARKBALL = new AnimatedAction(13, 5, "darkball");
@@ -35,14 +37,11 @@ public class EntityGhost extends ChargingMonster {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SWING, "interact");
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{DARKBALL, CHARGE, SWING, VANISH, INTERACT, STILL};
+
     public final GhostAttackGoal<EntityGhost> attack = new GhostAttackGoal<>(this);
     private boolean vanishNext;
 
-    private final AnimationHandler<EntityGhost> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .setAnimationChangeCons(anim -> {
-                if (anim != null && anim.getID().equals(VANISH.getID()))
-                    this.vanishNext = this.getRandom().nextFloat() < 0.6;
-            });
+    private final AnimationHandler<EntityGhost> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityGhost(EntityType<? extends EntityGhost> type, Level world) {
         super(type, world);
@@ -50,6 +49,15 @@ public class EntityGhost extends ChargingMonster {
         this.setNoGravity(true);
         this.noPhysics = true;
         this.moveControl = new NoClipFlyMoveController(this);
+    }
+
+    @Override
+    protected Consumer<AnimatedAction> animatedActionConsumer() {
+        return anim -> {
+            super.animatedActionConsumer().accept(anim);
+            if (anim != null && anim.getID().equals(VANISH.getID()))
+                this.vanishNext = this.getRandom().nextFloat() < 0.6;
+        };
     }
 
     @Override

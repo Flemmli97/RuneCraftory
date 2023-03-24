@@ -7,38 +7,23 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
 public class EntityDuck extends ChargingMonster {
 
-    private static final AnimatedAction melee = new AnimatedAction(15, 8, "slap");
+    private static final AnimatedAction MELEE = new AnimatedAction(15, 8, "slap");
     private static final AnimatedAction DIVE = new AnimatedAction(48, 22, "dive");
-    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(melee, "interact");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
-    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{melee, DIVE, INTERACT, STILL};
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, DIVE, INTERACT, STILL};
+
     public ChargeAttackGoal<EntityDuck> attack = new ChargeAttackGoal<>(this);
-    protected List<LivingEntity> hitEntity = new ArrayList<>();
     private final AnimationHandler<EntityDuck> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityDuck(EntityType<? extends EntityDuck> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
-    }
-
-    @Override
-    protected Consumer<AnimatedAction> animatedActionConsumer() {
-        return a -> {
-            super.animatedActionConsumer().accept(a);
-            if (!DIVE.checkID(a)) {
-                this.hitEntity.clear();
-            }
-        };
     }
 
     @Override
@@ -85,7 +70,7 @@ public class EntityDuck extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(melee.getID());
+            return anim.getID().equals(MELEE.getID());
         if (type == AnimationType.CHARGE)
             return anim.getID().equals(DIVE.getID());
         return false;
@@ -113,7 +98,7 @@ public class EntityDuck extends ChargingMonster {
             if (command == 1)
                 this.getAnimationHandler().setAnimation(DIVE);
             else
-                this.getAnimationHandler().setAnimation(melee);
+                this.getAnimationHandler().setAnimation(MELEE);
         }
     }
 

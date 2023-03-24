@@ -2,8 +2,8 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
-import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -28,7 +28,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-public class EntityWooly extends ChargingMonster {
+public class EntityWooly extends LeapingMonster {
 
     public static final ResourceLocation WOOLED_LOOT = new ResourceLocation(RuneCraftory.MODID, "entities/wooly/white");
 
@@ -40,8 +40,9 @@ public class EntityWooly extends ChargingMonster {
     public static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, KICK, HEADBUTT, INTERACT, SLEEP};
     private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
+
+    public LeapingAttackGoal<EntityWooly> attack = new LeapingAttackGoal<>(this);
     private final AnimationHandler<EntityWooly> animationHandler = new AnimationHandler<>(this, ANIMS);
-    public ChargeAttackGoal<EntityWooly> attack = new ChargeAttackGoal<>(this);
 
     public EntityWooly(EntityType<? extends EntityWooly> type, Level level) {
         super(type, level);
@@ -56,7 +57,7 @@ public class EntityWooly extends ChargingMonster {
     }
 
     @Override
-    public float chargingLength() {
+    public float maxLeapDistance() {
         return 3;
     }
 
@@ -98,7 +99,7 @@ public class EntityWooly extends ChargingMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.CHARGE)
+        if (type == AnimationType.LEAP)
             return anim.getID().equals(KICK.getID());
         else if (type == AnimationType.MELEE)
             return anim.getID().equals(SLAP.getID()) || anim.getID().equals(HEADBUTT.getID());

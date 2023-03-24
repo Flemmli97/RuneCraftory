@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
-import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -15,11 +15,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class EntityGoblin extends ChargingMonster {
+public class EntityGoblin extends LeapingMonster {
 
     private static final AnimatedAction MELEE = new AnimatedAction(12, 7, "slash");
     private static final AnimatedAction LEAP = new AnimatedAction(19, 6, "leap");
@@ -27,13 +25,9 @@ public class EntityGoblin extends ChargingMonster {
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, STONE, INTERACT, SLEEP};
-    public ChargeAttackGoal<EntityGoblin> attack = new ChargeAttackGoal<>(this);
-    protected List<LivingEntity> hitEntity;
-    private final AnimationHandler<EntityGoblin> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .setAnimationChangeCons(a -> {
-                if (!LEAP.checkID(a))
-                    this.hitEntity = null;
-            });
+
+    public LeapingAttackGoal<EntityGoblin> attack = new LeapingAttackGoal<>(this);
+    private final AnimationHandler<EntityGoblin> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityGoblin(EntityType<? extends EntityGoblin> type, Level world) {
         super(type, world);
@@ -50,7 +44,7 @@ public class EntityGoblin extends ChargingMonster {
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
             return anim.getID().equals(MELEE.getID()) || anim.getID().equals(STONE.getID());
-        if (type == AnimationType.CHARGE)
+        if (type == AnimationType.LEAP)
             return anim.getID().equals(LEAP.getID());
         return false;
     }
@@ -91,29 +85,18 @@ public class EntityGoblin extends ChargingMonster {
             if (anim.canAttack()) {
                 ModSpells.STONETHROW.get().use((ServerLevel) this.level, this);
             }
-        } else if (anim.getID().equals(LEAP.getID())) {
-            if (anim.canAttack()) {
-                Vec3 vec32;
-                if (this.getTarget() != null) {
-                    Vec3 target = this.getTarget().position();
-                    vec32 = new Vec3(target.x - this.getX(), 0.0, target.z - this.getZ())
-                            .normalize().scale(1.35);
-                } else
-                    vec32 = this.getLookAngle();
-                this.setDeltaMovement(vec32.x, 0.35f, vec32.z);
-            }
-            if (anim.getTick() >= anim.getAttackTime()) {
-                if (this.hitEntity == null)
-                    this.hitEntity = new ArrayList<>();
-                this.mobAttack(anim, null, e -> {
-                    if (!this.hitEntity.contains(e)) {
-                        this.hitEntity.add(e);
-                        this.doHurtTarget(e);
-                    }
-                });
-            }
         } else
             super.handleAttack(anim);
+    }
+
+    @Override
+    public Vec3 getLeapVec(@Nullable LivingEntity target) {
+        return super.getLeapVec(target).scale(1.25);
+    }
+
+    @Override
+    public double leapHeightMotion() {
+        return 0.3;
     }
 
     @Override

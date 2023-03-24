@@ -3,20 +3,23 @@ package io.github.flemmli97.runecraftory.common.entities.ai;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Predicate;
 
-public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal<T> {
+public class EvadingRangedAttackGoal<T extends BaseMonster> extends AnimatedMeleeGoal<T> {
 
-    private final float reach, reachSq;
+    private final float reach, reachSq, meleeDistSq;
     private final Predicate<T> canRanged;
-    private int rangedMove = 40;
-    private boolean moveTo, clockWise;
+    private boolean moveTo;
     private boolean canSee;
+    private Vec3 posAway;
 
-    public AnimatedRangedGoal(T entity, float rangedReach, Predicate<T> canRangedAttack) {
+    public EvadingRangedAttackGoal(T entity, float meleeDist, float rangedReach, Predicate<T> canRangedAttack) {
         super(entity);
+        this.meleeDistSq = meleeDist * meleeDist;
         this.reach = rangedReach;
         this.reachSq = rangedReach * rangedReach;
         this.canRanged = canRangedAttack;
@@ -48,13 +51,8 @@ public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal
             } else if (this.moveTo) {
                 this.attacker.getNavigation().stop();
                 this.moveTo = false;
-            } else if (--this.rangedMove > 0) {
-                if (this.rangedMove == 39)
-                    this.clockWise = this.attacker.getRandom().nextBoolean();
-                this.circleAroundTargetFacing(this.reach - 2, this.clockWise, 1);
             } else {
                 this.movementDone = true;
-                this.rangedMove = 40;
             }
         }
     }
@@ -62,19 +60,20 @@ public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal
     @Override
     public void handleIddle() {
         if (this.iddleMoveDelay <= 0) {
-            this.iddleMoveFlag = this.canSee ? this.attacker.getRandom().nextInt(5) : 3;
-            this.iddleMoveDelay = this.attacker.getRandom().nextInt(35) + 55 - this.iddleMoveFlag * 10;
-            this.clockWise = this.attacker.getRandom().nextBoolean();
+            if (this.distanceToTargetSq <= this.meleeDistSq) {
+                this.iddleMoveFlag = 2;
+                this.iddleMoveDelay = this.attacker.getRandom().nextInt(35) + 55 - this.iddleMoveFlag * 10;
+                this.posAway = DefaultRandomPos.getPosAway(this.attacker, 7, 4, this.attacker.position());
+            } else {
+                this.iddleMoveFlag = this.attacker.getRandom().nextInt(3) == 0 ? 1 : 0;
+                this.iddleMoveDelay = this.attacker.getRandom().nextInt(20) + 20;
+            }
         }
         switch (this.iddleMoveFlag) {
-            case 0, 1 -> this.circleAroundTargetFacing(this.reach - 2, this.clockWise, 1);
-            case 2 -> this.moveRandomlyAround(36);
-            case 3 -> {
-                this.moveToWithDelay(1);
-                if (this.distanceToTargetSq < this.reachSq * 0.25 && this.canSee) {
-                    this.attacker.getNavigation().stop();
-                    this.iddleMoveDelay = 3;
-                }
+            case 1 -> this.moveRandomlyAround(36);
+            case 2 -> {
+                if (this.posAway != null)
+                    this.moveToWithDelay(this.posAway.x, this.posAway.y, this.posAway.z, 1.1);
             }
         }
     }

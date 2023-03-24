@@ -1,8 +1,8 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
-import io.github.flemmli97.runecraftory.common.entities.ChargingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.ChargeAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.RiderAttackTargetGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -23,9 +23,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class EntityMimic extends ChargingMonster {
+public class EntityMimic extends LeapingMonster {
 
     private static final EntityDataAccessor<Boolean> AWAKE = SynchedEntityData.defineId(EntityMimic.class, EntityDataSerializers.BOOLEAN);
     private static final AnimatedAction MELEE = new AnimatedAction(12, 9, "attack");
@@ -33,13 +32,9 @@ public class EntityMimic extends ChargingMonster {
     private static final AnimatedAction CLOSE = new AnimatedAction(6, 6, "close");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, CLOSE, INTERACT};
-    public ChargeAttackGoal<EntityMimic> attack = new ChargeAttackGoal<>(this);
-    protected List<LivingEntity> hitEntity;
-    private final AnimationHandler<EntityMimic> animationHandler = new AnimationHandler<>(this, ANIMS)
-            .setAnimationChangeCons(a -> {
-                if (!LEAP.checkID(a))
-                    this.hitEntity = null;
-            });
+
+    public LeapingAttackGoal<EntityMimic> attack = new LeapingAttackGoal<>(this);
+    private final AnimationHandler<EntityMimic> animationHandler = new AnimationHandler<>(this, ANIMS);
     private int sleepTick = -1;
     private boolean sleeping;
 
@@ -72,7 +67,7 @@ public class EntityMimic extends ChargingMonster {
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
             return anim.getID().equals(MELEE.getID());
-        if (type == AnimationType.CHARGE)
+        if (type == AnimationType.LEAP)
             return anim.getID().equals(LEAP.getID());
         return false;
     }
@@ -131,6 +126,16 @@ public class EntityMimic extends ChargingMonster {
             }
         } else
             super.handleAttack(anim);
+    }
+
+    @Override
+    public Vec3 getLeapVec(@Nullable LivingEntity target) {
+        return super.getLeapVec(target).scale(1.05);
+    }
+
+    @Override
+    public double leapHeightMotion() {
+        return 0.25;
     }
 
     @Override
@@ -239,6 +244,7 @@ public class EntityMimic extends ChargingMonster {
                 this.mob.setZza(0.0f);
                 return;
             }
+            this.mimic.setAwake();
             this.operation = MoveControl.Operation.WAIT;
             LivingEntity target = this.mob.getTarget();
             double x = target == null ? this.wantedX : target.getX();

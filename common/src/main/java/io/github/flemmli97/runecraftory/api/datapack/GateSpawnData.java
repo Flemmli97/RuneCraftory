@@ -8,7 +8,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.level.biome.Biome;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
