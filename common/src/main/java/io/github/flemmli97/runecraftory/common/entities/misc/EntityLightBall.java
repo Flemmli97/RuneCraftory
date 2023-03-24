@@ -115,7 +115,7 @@ public class EntityLightBall extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        if (CombatUtils.damage(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(0).element(EnumElement.LIGHT), true, true, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).magic().hurtResistant(0).element(EnumElement.LIGHT), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
             if (this.lightType == Type.LONG)
                 this.discard();
             if (this.firstDmg == -1)

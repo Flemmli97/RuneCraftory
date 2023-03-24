@@ -22,11 +22,11 @@ public class CustomDamage extends EntityDamageSource {
     public static final DamageSource EXHAUST = Platform.INSTANCE.createDamageSource("rfExhaust", true, true);
     public static final DamageSource POISON = Platform.INSTANCE.createDamageSource("poison", true, true);
 
-    private EnumElement element;
-    private KnockBackType knock;
-    private Entity trueSourceEntity;
-    private float knockAmount;
-    private int protection;
+    private final EnumElement element;
+    private final KnockBackType knock;
+    private final Entity trueSourceEntity;
+    private final float knockAmount;
+    private final int hurtProtection;
     private final boolean faintEntity;
     private final boolean fixedDamage;
 
@@ -38,7 +38,7 @@ public class CustomDamage extends EntityDamageSource {
         this.knock = knock;
         this.trueSourceEntity = cause;
         this.knockAmount = knockBackAmount;
-        this.protection = hurtTimeProtection;
+        this.hurtProtection = hurtTimeProtection;
         this.faintEntity = faintEntity;
         this.fixedDamage = fixedDamage;
         this.attributesChange = ImmutableMap.copyOf(attributesChange);
@@ -57,7 +57,7 @@ public class CustomDamage extends EntityDamageSource {
     }
 
     public int hurtProtection() {
-        return this.protection;
+        return this.hurtProtection;
     }
 
     public boolean criticalDamage() {
@@ -110,10 +110,11 @@ public class CustomDamage extends EntityDamageSource {
 
     public static class Builder {
 
+        private final Entity cause;
+
         private EnumElement element = EnumElement.NONE;
         private KnockBackType knock = KnockBackType.VANILLA;
         private Entity trueSource;
-        private Entity cause;
         private float knockAmount;
         private int protection = 10;
         private DamageType dmg = DamageType.NORMAL;
@@ -145,8 +146,22 @@ public class CustomDamage extends EntityDamageSource {
             return this;
         }
 
+        public Builder noKnockback() {
+            this.knock = KnockBackType.NONE;
+            return this;
+        }
+
+        public boolean calculateKnockback() {
+            return this.knock == KnockBackType.VANILLA && this.knockAmount == 0;
+        }
+
         public Builder hurtResistant(int time) {
             this.protection = time;
+            return this;
+        }
+
+        public Builder magic() {
+            this.dmg = DamageType.MAGIC;
             return this;
         }
 
@@ -154,6 +169,10 @@ public class CustomDamage extends EntityDamageSource {
             if (this.dmg != DamageType.FAINT)
                 this.dmg = type;
             return this;
+        }
+
+        public DamageType getDamageType() {
+            return this.dmg;
         }
 
         public Builder withChangedAttribute(Attribute att, double change) {
@@ -164,6 +183,10 @@ public class CustomDamage extends EntityDamageSource {
         public Builder projectile() {
             this.isProjectile = true;
             return this;
+        }
+
+        public Map<Attribute, Double> getAttributesChanges() {
+            return this.attributesChange;
         }
 
         public CustomDamage get() {

@@ -41,7 +41,7 @@ import java.util.UUID;
 
 public class CombatUtils {
 
-    private static final UUID attributeMod = UUID.fromString("5c8e5c2d-1eb0-434a-858f-8ab81f51832c");
+    private static final UUID TEMP_ATTRIBUTE_MOD = UUID.fromString("5c8e5c2d-1eb0-434a-858f-8ab81f51832c");
 
     /**
      * For damage calculation target should be null. The damage reduction gets done at the target.
@@ -266,10 +266,10 @@ public class CombatUtils {
                     damageType = CustomDamage.DamageType.FIXED;
                     damagePhys = 1;
                 }
-                CustomDamage source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(damageType).knock(CustomDamage.KnockBackType.VANILLA)
-                        .knockAmount(knockback).hurtResistant(0).get();
+                CustomDamage.Builder source = new CustomDamage.Builder(player).element(ItemNBT.getElement(stack)).damageType(damageType).knock(CustomDamage.KnockBackType.VANILLA)
+                        .knockAmount(knockback).hurtResistant(0);
                 Vec3 targetMot = target.getDeltaMovement();
-                if (damage(player, target, source, damagePhys, stack)) {
+                if (damageWithFaintAndCrit(player, target, source, damagePhys, stack)) {
                     //Level skill on successful attack
                     if (levelSkill && player instanceof ServerPlayer serverPlayer)
                         hitEntityWithItemPlayer(serverPlayer, stack);
@@ -304,8 +304,7 @@ public class CombatUtils {
 
     public static boolean mobAttack(LivingEntity attacker, Entity target) {
         ItemStack stack = attacker.getMainHandItem();
-        CustomDamage.Builder source = build(attacker, target, new CustomDamage.Builder(attacker).hurtResistant(5), false, true)
-                .element(ItemNBT.getElement(stack));
+        CustomDamage.Builder source = new CustomDamage.Builder(attacker).hurtResistant(5).element(ItemNBT.getElement(stack));
         double damagePhys = getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
         if (attacker.level instanceof ServerLevel serverLevel)
             ModSpells.STAFFCAST.get().use(serverLevel, attacker, stack);
@@ -313,49 +312,49 @@ public class CombatUtils {
             source.damageType(CustomDamage.DamageType.FIXED);
             damagePhys = 1;
         }
-        return mobAttack(attacker, target, source.get(), damagePhys);
+        return mobAttack(attacker, target, source, damagePhys);
     }
 
-    public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage source, double dmg) {
+    public static boolean mobAttack(LivingEntity attacker, Entity target, CustomDamage.Builder source, double dmg) {
         if (target.level.getDifficulty() == Difficulty.PEACEFUL && target instanceof Player)
             return false;
         if (dmg > 0) {
-            return damage(attacker, target, source, dmg, null);
+            return damageWithFaintAndCrit(attacker, target, source, dmg, null);
         }
         return false;
     }
 
-    public static CustomDamage.Builder build(Entity entity, Entity target, CustomDamage.Builder builder, boolean magic, boolean withDefaultKnockback) {
-        if (!(entity instanceof LivingEntity attacker)) {
-            return builder.damageType(magic ? CustomDamage.DamageType.MAGIC : CustomDamage.DamageType.NORMAL);
-        }
-        boolean faintChance = attacker.level.random.nextDouble() < statusEffectChance(attacker, ModAttributes.RF_FAINT.get(), target);
-        boolean critChance = attacker.level.random.nextDouble() < statusEffectChance(attacker, ModAttributes.RF_CRIT.get(), target);
-        CustomDamage.DamageType damageType = magic ? CustomDamage.DamageType.MAGIC : CustomDamage.DamageType.NORMAL;
-        if (faintChance)
-            damageType = CustomDamage.DamageType.FAINT;
-        else if (critChance)
-            damageType = magic ? CustomDamage.DamageType.IGNOREMAGICDEF : CustomDamage.DamageType.IGNOREDEF;
-        if (withDefaultKnockback) {
-            boolean knockBackChance = attacker.level.random.nextDouble() < statusEffectChance(attacker, ModAttributes.RF_KNOCK.get(), target);
-            int i = knockBackChance ? 2 : 1;
-            if (attacker.isSprinting()) {
-                ++i;
-            }
-            float knockback = i * 0.5f - 0.1f;
-            if (target instanceof BaseMonster) {
-                knockback *= 0.85f;
-            }
-            builder.knockAmount(knockback);
-        }
-        return builder.damageType(damageType);
+    public static boolean damageWithFaintAndCrit(@Nullable Entity attacker, Entity target, CustomDamage.Builder builder, double damage, @Nullable ItemStack stack) {
+        return damage(attacker, target, builder, damage, stack, true, true);
     }
 
-    public static boolean damage(@Nullable Entity attacker, Entity target, CustomDamage.Builder source, boolean magic, boolean withDefaultKnockback, double damage, @Nullable ItemStack stack) {
-        return damage(attacker, target, build(attacker, target, source, magic, withDefaultKnockback).get(), damage, stack);
-    }
+    public static boolean damage(@Nullable Entity attacker, Entity target, CustomDamage.Builder builder, double damage, @Nullable ItemStack stack, boolean allowCrit, boolean allowFaint) {
+        // Setup some more things
+        if (attacker instanceof LivingEntity livingAttacker) {
+            builder.getAttributesChanges().forEach((att, val) -> CombatUtils.applyTempAttribute(livingAttacker, att, val));
+            if (allowFaint && livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.RF_FAINT.get(), target)) {
+                builder.damageType(CustomDamage.DamageType.FAINT);
+            } else if (allowCrit && livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.RF_CRIT.get(), target)) {
+                switch (builder.getDamageType()) {
+                    case MAGIC -> builder.damageType(CustomDamage.DamageType.IGNOREMAGICDEF);
+                    case NORMAL -> builder.damageType(CustomDamage.DamageType.IGNOREDEF);
+                }
+            }
+            if (builder.calculateKnockback()) {
+                boolean knockBackChance = livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.RF_KNOCK.get(), target);
+                int i = knockBackChance ? 2 : 1;
+                if (livingAttacker.isSprinting()) {
+                    ++i;
+                }
+                float knockback = i * 0.5f - 0.1f;
+                if (target instanceof BaseMonster) {
+                    knockback *= 0.85f;
+                }
+                builder.knockAmount(knockback);
+            }
+        }
 
-    public static boolean damage(@Nullable Entity attacker, Entity target, CustomDamage source, double damage, @Nullable ItemStack stack) {
+        CustomDamage source = builder.get();
         float dmg = (float) damage;
         if (source.criticalDamage())
             dmg = Float.MAX_VALUE;
@@ -383,6 +382,9 @@ public class CombatUtils {
                 }
             }
             elementalEffects(attacker, source.getElement(), target);
+        }
+        if (attacker instanceof LivingEntity livingAttacker) {
+            source.getAttributesChange().forEach((att, val) -> CombatUtils.removeAttribute(livingAttacker, att));
         }
         return success;
     }
@@ -502,14 +504,14 @@ public class CombatUtils {
 
     public static void applyTempAttribute(LivingEntity entity, Attribute att, double val) {
         AttributeInstance inst = entity.getAttribute(att);
-        if (inst != null && inst.getModifier(attributeMod) == null)
-            inst.addTransientModifier(new AttributeModifier(attributeMod, "temp_mod", val, AttributeModifier.Operation.ADDITION));
+        if (inst != null && inst.getModifier(TEMP_ATTRIBUTE_MOD) == null)
+            inst.addTransientModifier(new AttributeModifier(TEMP_ATTRIBUTE_MOD, "temp_mod", val, AttributeModifier.Operation.ADDITION));
     }
 
     public static void removeAttribute(LivingEntity entity, Attribute att) {
         AttributeInstance inst = entity.getAttribute(att);
         if (inst != null)
-            inst.removeModifier(attributeMod);
+            inst.removeModifier(TEMP_ATTRIBUTE_MOD);
     }
 
     public static void hitEntityWithItemPlayer(ServerPlayer player, ItemStack stack) {

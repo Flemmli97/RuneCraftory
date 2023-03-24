@@ -58,7 +58,7 @@ public class EntityFurniture extends BaseProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        boolean att = CombatUtils.damage(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(1).element(EnumElement.DARK), false, true, CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
+        boolean att = CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(1).element(EnumElement.DARK), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null);
         this.discard();
         return att;
     }
@@ -100,8 +100,8 @@ public class EntityFurniture extends BaseProjectile {
         super.onSyncedDataUpdated(key);
         if (key == FURNITURE_TYPE_SYNC) {
             int id = this.entityData.get(FURNITURE_TYPE_SYNC);
-            if (id > 0 && id < Type.values().length)
-                this.furnitureType = Type.values()[this.entityData.get(FURNITURE_TYPE_SYNC)];
+            if (id >= 0 && id < Type.values().length)
+                this.furnitureType = Type.values()[id];
         }
     }
 

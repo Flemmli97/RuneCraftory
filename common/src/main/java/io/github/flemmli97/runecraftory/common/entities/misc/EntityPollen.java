@@ -74,7 +74,7 @@ public class EntityPollen extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity e) {
-        return CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).element(EnumElement.EARTH), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
+        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5).element(EnumElement.EARTH), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
     }
 
     @Override

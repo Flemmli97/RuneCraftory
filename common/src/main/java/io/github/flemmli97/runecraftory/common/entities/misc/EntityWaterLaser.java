@@ -115,7 +115,7 @@ public class EntityWaterLaser extends BaseBeam {
     @Override
     public void onImpact(EntityHitResult res) {
         Entity e = res.getEntity();
-        CombatUtils.damage(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).element(EnumElement.WATER), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
+        CombatUtils.damageWithFaintAndCrit(this.getOwner(), e, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5).magic().noKnockback().element(EnumElement.WATER), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
     }
 
     @Override

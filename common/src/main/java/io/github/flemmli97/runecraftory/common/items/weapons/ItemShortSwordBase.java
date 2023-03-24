@@ -140,7 +140,7 @@ public class ItemShortSwordBase extends SwordItem implements IItemUsable, ICharg
             boolean success = false;
             double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE) * 1.4;
             for (Entity e : list) {
-                if (CombatUtils.damage(entity, e, base.get(), false, false, damagePhys, stack))
+                if (CombatUtils.damageWithFaintAndCrit(entity, e, base.get(), damagePhys, stack))
                     success = true;
             }
             return success;

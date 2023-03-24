@@ -113,7 +113,7 @@ public class EntityWispFlame extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        if (CombatUtils.damage(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(10).element(this.element), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(10).element(this.element), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
             target.knockback(0.5, this.getX() - target.getX(), this.getZ() - target.getZ());
             return true;
         }

@@ -53,7 +53,7 @@ public class EntitySpore extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity livingEntity) {
-        return CombatUtils.damage(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(5), true, false, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
+        return CombatUtils.damageWithFaintAndCrit(this.getOwner(), livingEntity, new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(5), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
     }
 
     @Override

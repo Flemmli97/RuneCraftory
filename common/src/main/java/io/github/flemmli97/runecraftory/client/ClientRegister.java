@@ -258,7 +258,7 @@ public class ClientRegister {
                 return Type.NORMAL;
             }
         });
-        consumer.register(ModEntities.SLEEP_BALL.get(), EmptyRender::new);
+        consumer.register(ModEntities.STATUS_BALL.get(), EmptyRender::new);
         consumer.register(ModEntities.POLLEN_PUFF.get(), EmptyRender::new);
         consumer.register(ModEntities.POLLEN.get(), EmptyRender::new);
         consumer.register(ModEntities.AMBROSIA_WAVE.get(), EmptyRender::new);
