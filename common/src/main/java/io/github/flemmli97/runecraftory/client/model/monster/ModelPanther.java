@@ -53,7 +53,7 @@ public class ModelPanther<T extends EntityPanther> extends EntityModel<T> implem
                 .texOffs(12, 103).addBox(0.0F, -10.0F, -9.0F, 0.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 103).addBox(0.0F, -10.0F, -1.0F, 0.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))
                 .texOffs(84, 94).addBox(0.0F, -10.0F, 8.0F, 0.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))
-                .texOffs(48, 53).addBox(-5.0F, -6.0F, 14.0F, 10.0F, 11.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 3.5F, -1.0F, -0.5236F, 0.0F, 0.0F));
+                .texOffs(48, 53).addBox(-5.0F, -6.0F, 14.0F, 10.0F, 11.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 3.5F, 0.0F, -0.5236F, 0.0F, 0.0F));
 
         PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(74, 0).addBox(-2.5F, -6.0F, -12.0F, 11.0F, 12.0F, 13.0F, new CubeDeformation(0.0F))
                 .texOffs(66, 69).addBox(-1.0F, 3.75F, -15.5F, 8.0F, 2.0F, 5.0F, new CubeDeformation(0.0F))

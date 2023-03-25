@@ -55,7 +55,7 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
 
         PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -1.0F, -4.0F, 8.0F, 8.0F, 14.0F, new CubeDeformation(0.0F))
                 .texOffs(60, 22).addBox(4.0F, 0.0F, -3.0F, 1.0F, 6.0F, 11.0F, new CubeDeformation(0.0F))
-                .texOffs(36, 22).addBox(-5.0F, 0.0F, -3.0F, 1.0F, 6.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 9.0F, 2.0F));
+                .texOffs(36, 22).addBox(-5.0F, 0.0F, -3.0F, 1.0F, 6.0F, 11.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 9.0F, 0.0F));
 
         PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 39).addBox(-3.0F, -2.0F, -6.0F, 6.0F, 6.0F, 7.0F, new CubeDeformation(0.0F))
                 .texOffs(42, 52).addBox(0.0F, -5.0F, -6.0F, 0.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))

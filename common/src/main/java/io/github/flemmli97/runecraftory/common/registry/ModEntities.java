@@ -133,7 +133,7 @@ public class ModEntities {
                     .xp(25).money(3).tamingChance(0.25f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(60, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     ModTags.IS_MAGICAL).addToBiomeTag(44, ModTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN));
-    public static final RegistryEntrySupplier<EntityType<EntityOrc>> ORC = regMonster(EntityType.Builder.of(EntityOrc::new, MobCategory.MONSTER).sized(0.73f, 2.4f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc"),
+    public static final RegistryEntrySupplier<EntityType<EntityOrc>> ORC = regMonster(EntityType.Builder.of(EntityOrc::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc"),
             0x663300, 0xffbf80,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 22).putLevelGains(LibAttributes.MAX_HEALTH, 14)
@@ -144,7 +144,7 @@ public class ModEntities {
                     .xp(35).money(4).tamingChance(0.15f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     ModTags.IS_MAGICAL).addToBiomeTag(44, ModTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN));
-    public static final RegistryEntrySupplier<EntityType<EntityOrcArcher>> ORC_ARCHER = regMonster(EntityType.Builder.of(EntityOrcArcher::new, MobCategory.MONSTER).sized(0.73f, 2.4f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc_archer"),
+    public static final RegistryEntrySupplier<EntityType<EntityOrcArcher>> ORC_ARCHER = regMonster(EntityType.Builder.of(EntityOrcArcher::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc_archer"),
             0x663300, 0xffbf80,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 22).putLevelGains(LibAttributes.MAX_HEALTH, 14.5)
@@ -165,7 +165,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.DEFENCE, 1.2)
                     .xp(35).money(5).tamingChance(0.1f).build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, ModTags.IS_LUSH, ModTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityBeetle>> BEETLE = regMonster(EntityType.Builder.of(EntityBeetle::new, MobCategory.MONSTER).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "beetle"),
+    public static final RegistryEntrySupplier<EntityType<EntityBeetle>> BEETLE = regMonster(EntityType.Builder.of(EntityBeetle::new, MobCategory.MONSTER).sized(0.7f, 1.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "beetle"),
             0x9c6a43, 0x244a69,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 24).putLevelGains(LibAttributes.MAX_HEALTH, 14)
@@ -185,7 +185,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 1).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.4)
                     .xp(40).money(3).tamingChance(0.06f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(40, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, ModTags.IS_LUSH, ModTags.IS_MAGICAL, ModTags.IS_MUSHROOM));
-    public static final RegistryEntrySupplier<EntityType<EntityBuffamoo>> BUFFAMOO = regMonster(EntityType.Builder.of(EntityBuffamoo::new, MobCategory.MONSTER).sized(1.1f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "buffamoo"),
+    public static final RegistryEntrySupplier<EntityType<EntityBuffamoo>> BUFFAMOO = regMonster(EntityType.Builder.of(EntityBuffamoo::new, MobCategory.MONSTER).sized(1.2f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "buffamoo"),
             0xd8d8d0, 0x4e4e4c,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 15).putLevelGains(LibAttributes.MAX_HEALTH, 18)
@@ -195,7 +195,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.4)
                     .xp(40).money(6).tamingChance(0.15f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_LUSH));
-    public static final RegistryEntrySupplier<EntityType<EntityChipsqueek>> CHIPSQUEEK = regMonster(EntityType.Builder.of(EntityChipsqueek::new, MobCategory.MONSTER).sized(0.65f, 1.05f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "chipsqueek"),
+    public static final RegistryEntrySupplier<EntityType<EntityChipsqueek>> CHIPSQUEEK = regMonster(EntityType.Builder.of(EntityChipsqueek::new, MobCategory.MONSTER).sized(0.65f, 0.95f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "chipsqueek"),
             0xff3b5b, 0xf9ffbb,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 18).putLevelGains(LibAttributes.MAX_HEALTH, 10)
@@ -257,7 +257,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1)
                     .xp(65).money(4).tamingChance(0.03f).setRidable().doesntNeedBarnRoof().setFlying().build(),
             new GateSpawnData.Builder(500, 7).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_MOUNTAIN, BiomeTags.IS_HILL));
-    public static final RegistryEntrySupplier<EntityType<EntityGoblin>> GOBLIN = regMonster(EntityType.Builder.of(EntityGoblin::new, MobCategory.MONSTER).sized(0.6f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin"),
+    public static final RegistryEntrySupplier<EntityType<EntityGoblin>> GOBLIN = regMonster(EntityType.Builder.of(EntityGoblin::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin"),
             0x21b322, 0x462f2a,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 21).putLevelGains(LibAttributes.MAX_HEALTH, 13)
@@ -267,7 +267,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.3)
                     .xp(70).money(8).tamingChance(0.08f).setRidable().build(),
             new GateSpawnData.Builder(500, 7).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA, ModTags.IS_SANDY));
-    public static final RegistryEntrySupplier<EntityType<EntityGoblinArcher>> GOBLIN_ARCHER = regMonster(EntityType.Builder.of(EntityGoblinArcher::new, MobCategory.MONSTER).sized(0.6f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_archer"),
+    public static final RegistryEntrySupplier<EntityType<EntityGoblinArcher>> GOBLIN_ARCHER = regMonster(EntityType.Builder.of(EntityGoblinArcher::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_archer"),
             0x21b322, 0x462f2a,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 21).putLevelGains(LibAttributes.MAX_HEALTH, 15)
@@ -307,7 +307,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 2)
                     .xp(70).money(7).tamingChance(0.04f).setFlying().build(),
             new GateSpawnData.Builder(0, 10).addToBiomeTag(60, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
-    public static final RegistryEntrySupplier<EntityType<EntitySpirit>> SPIRIT = regMonster(EntityType.Builder.of(EntitySpirit::new, MobCategory.MONSTER).sized(0.5f, 0.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "spirit"),
+    public static final RegistryEntrySupplier<EntityType<EntitySpirit>> SPIRIT = regMonster(EntityType.Builder.of(EntitySpirit::new, MobCategory.MONSTER).sized(0.5f, 0.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "spirit"),
             0xfdfdfd, 0xc3f8f7, true,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 18).putLevelGains(LibAttributes.MAX_HEALTH, 13)
@@ -327,7 +327,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 1.5).putLevelGains(LibAttributes.MAGIC_DEFENCE, 2.1)
                     .xp(150).money(10).tamingChance(0.04f).setBarnOccupancy(2).setFlying().build(),
             new GateSpawnData.Builder(500, 10).addToBiomeTag(10, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP));
-    public static final RegistryEntrySupplier<EntityType<EntitySpider>> SPIDER = regMonster(EntityType.Builder.of(EntitySpider::new, MobCategory.MONSTER).sized(0.9f, 0.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "spider"),
+    public static final RegistryEntrySupplier<EntityType<EntitySpider>> SPIDER = regMonster(EntityType.Builder.of(EntitySpider::new, MobCategory.MONSTER).sized(1.1f, 0.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "spider"),
             0x6f6751, 0x404148,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 17).putLevelGains(LibAttributes.MAX_HEALTH, 11)
@@ -377,7 +377,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.DEFENCE, 1.2)
                     .xp(35).money(5).tamingChance(0.1f).build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, ModTags.IS_LUSH, ModTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityOrc>> HIGH_ORC = regMonster(EntityType.Builder.of(EntityOrc::new, MobCategory.MONSTER).sized(0.73f, 2.4f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "high_orc"),
+    public static final RegistryEntrySupplier<EntityType<EntityOrc>> HIGH_ORC = regMonster(EntityType.Builder.of(EntityOrc::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "high_orc"),
             0x9f6c4e, 0x333e78,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 22).putLevelGains(LibAttributes.MAX_HEALTH, 14)
@@ -388,7 +388,7 @@ public class ModEntities {
                     .xp(35).money(4).tamingChance(0.15f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     ModTags.IS_MAGICAL).addToBiomeTag(44, ModTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN));
-    public static final RegistryEntrySupplier<EntityType<EntityOrcHunter>> ORC_HUNTER = regMonster(EntityType.Builder.of(EntityOrcHunter::new, MobCategory.MONSTER).sized(0.73f, 2.4f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc_hunter"),
+    public static final RegistryEntrySupplier<EntityType<EntityOrcHunter>> ORC_HUNTER = regMonster(EntityType.Builder.of(EntityOrcHunter::new, MobCategory.MONSTER).sized(0.73f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "orc_hunter"),
             0x9f6c4e, 0x333e78,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 22).putLevelGains(LibAttributes.MAX_HEALTH, 14.5)
@@ -399,7 +399,7 @@ public class ModEntities {
                     .xp(35).money(4).tamingChance(0.15f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     ModTags.IS_MAGICAL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityHornet>> HORNET = regMonster(EntityType.Builder.of(EntityHornet::new, MobCategory.MONSTER).sized(0.7f, 0.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "hornet"),
+    public static final RegistryEntrySupplier<EntityType<EntityHornet>> HORNET = regMonster(EntityType.Builder.of(EntityHornet::new, MobCategory.MONSTER).sized(0.7f, 0.85f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "hornet"),
             0x627d73, 0x20201f, true,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 22).putLevelGains(LibAttributes.MAX_HEALTH, 14.5)
@@ -410,7 +410,7 @@ public class ModEntities {
                     .xp(35).money(4).tamingChance(0.15f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     ModTags.IS_MAGICAL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityWolf>> SILVER_WOLF = regMonster(EntityType.Builder.of(EntityWolf::new, MobCategory.MONSTER).sized(0.75f, 1.15f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "silver_wolf"),
+    public static final RegistryEntrySupplier<EntityType<EntityWolf>> SILVER_WOLF = regMonster(EntityType.Builder.of(EntityWolf::new, MobCategory.MONSTER).sized(0.8f, 1.15f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "silver_wolf"),
             0x9bb9c3, 0x436ea1,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 22).putLevelGains(LibAttributes.MAX_HEALTH, 14.5)
@@ -421,7 +421,7 @@ public class ModEntities {
                     .xp(35).money(4).tamingChance(0.15f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     ModTags.IS_MAGICAL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityLeafBall>> LEAF_BALL = regMonster(EntityType.Builder.of(EntityLeafBall::new, MobCategory.MONSTER).sized(0.75f, 1.15f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "leaf_ball"),
+    public static final RegistryEntrySupplier<EntityType<EntityLeafBall>> LEAF_BALL = regMonster(EntityType.Builder.of(EntityLeafBall::new, MobCategory.MONSTER).sized(0.8f, 1.2f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "leaf_ball"),
             0xdcb5f0, 0xb72fd3, true,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 22).putLevelGains(LibAttributes.MAX_HEALTH, 14.5)
@@ -432,7 +432,7 @@ public class ModEntities {
                     .xp(35).money(4).tamingChance(0.15f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     ModTags.IS_MAGICAL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA));
-    public static final RegistryEntrySupplier<EntityType<EntityChipsqueek>> FURPY = regMonster(EntityType.Builder.of(EntityChipsqueek::new, MobCategory.MONSTER).sized(0.65f, 1.05f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "furpy"),
+    public static final RegistryEntrySupplier<EntityType<EntityChipsqueek>> FURPY = regMonster(EntityType.Builder.of(EntityChipsqueek::new, MobCategory.MONSTER).sized(0.65f, 0.95f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "furpy"),
             0xab8620, 0xf9ffbb,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 18).putLevelGains(LibAttributes.MAX_HEALTH, 10)
@@ -443,7 +443,7 @@ public class ModEntities {
                     .xp(35).money(1).tamingChance(0.12f).build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(40, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_LUSH, ModTags.IS_SAVANNA));
 
-    public static final RegistryEntrySupplier<EntityType<EntityPommePomme>> MINO = regMonster(EntityType.Builder.of(EntityPommePomme::new, MobCategory.MONSTER).sized(1.0f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "mino"),
+    public static final RegistryEntrySupplier<EntityType<EntityPommePomme>> MINO = regMonster(EntityType.Builder.of(EntityPommePomme::new, MobCategory.MONSTER).sized(0.9f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "mino"),
             0x8b573d, 0xc0916d,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 22).putLevelGains(LibAttributes.MAX_HEALTH, 13)
@@ -463,7 +463,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 1).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.4)
                     .xp(40).money(3).tamingChance(0.06f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(40, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, ModTags.IS_LUSH, ModTags.IS_MAGICAL, ModTags.IS_MUSHROOM));
-    public static final RegistryEntrySupplier<EntityType<EntityFlowerLily>> FLOWER_LILY = regMonster(EntityType.Builder.of(EntityFlowerLily::new, MobCategory.MONSTER).sized(0.9f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "flower_lily"),
+    public static final RegistryEntrySupplier<EntityType<EntityFlowerLily>> FLOWER_LILY = regMonster(EntityType.Builder.of(EntityFlowerLily::new, MobCategory.MONSTER).sized(0.75f, 1.65f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "flower_lily"),
             0xe8b3e7, 0x156e12,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 19).putLevelGains(LibAttributes.MAX_HEALTH, 17)
@@ -484,7 +484,7 @@ public class ModEntities {
                     .xp(25).money(3).tamingChance(0.25f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(60, ModTags.IS_PLAINS, ModTags.IS_BEACH, BiomeTags.IS_FOREST, BiomeTags.IS_HILL,
                     ModTags.IS_MAGICAL).addToBiomeTag(44, ModTags.IS_SAVANNA, BiomeTags.IS_MOUNTAIN));
-    public static final RegistryEntrySupplier<EntityType<EntityBuffamoo>> BUFFALOO = regMonster(EntityType.Builder.of(EntityBuffamoo::new, MobCategory.MONSTER).sized(1.1f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "buffaloo"),
+    public static final RegistryEntrySupplier<EntityType<EntityBuffamoo>> BUFFALOO = regMonster(EntityType.Builder.of(EntityBuffamoo::new, MobCategory.MONSTER).sized(1.2f, 1.45f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "buffaloo"),
             0x8a8a5e, 0xb5b489,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 15).putLevelGains(LibAttributes.MAX_HEALTH, 18)
@@ -494,7 +494,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.4)
                     .xp(40).money(6).tamingChance(0.15f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(50, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_LUSH));
-    public static final RegistryEntrySupplier<EntityType<EntityGoblinPirate>> GOBLIN_PIRATE = regMonster(EntityType.Builder.of(EntityGoblinPirate::new, MobCategory.MONSTER).sized(0.6f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_pirate"),
+    public static final RegistryEntrySupplier<EntityType<EntityGoblinPirate>> GOBLIN_PIRATE = regMonster(EntityType.Builder.of(EntityGoblinPirate::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_pirate"),
             0x484209, 0x29307f,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 21).putLevelGains(LibAttributes.MAX_HEALTH, 13)
@@ -504,7 +504,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.3)
                     .xp(70).money(8).tamingChance(0.08f).setRidable().build(),
             new GateSpawnData.Builder(500, 7).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA, ModTags.IS_SANDY));
-    public static final RegistryEntrySupplier<EntityType<EntityGoblinGangster>> GOBLIN_GANGSTER = regMonster(EntityType.Builder.of(EntityGoblinGangster::new, MobCategory.MONSTER).sized(0.6f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_gangster"),
+    public static final RegistryEntrySupplier<EntityType<EntityGoblinGangster>> GOBLIN_GANGSTER = regMonster(EntityType.Builder.of(EntityGoblinGangster::new, MobCategory.MONSTER).sized(0.6f, 1.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "goblin_gangster"),
             0x6e5d2d, 0x316275,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 21).putLevelGains(LibAttributes.MAX_HEALTH, 13)
@@ -514,7 +514,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.3)
                     .xp(70).money(8).tamingChance(0.08f).setRidable().build(),
             new GateSpawnData.Builder(500, 7).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA, ModTags.IS_SANDY));
-    public static final RegistryEntrySupplier<EntityType<EntityIgnis>> IGNIS = regMonster(EntityType.Builder.of(EntityIgnis::new, MobCategory.MONSTER).sized(0.5f, 0.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ignis"),
+    public static final RegistryEntrySupplier<EntityType<EntityIgnis>> IGNIS = regMonster(EntityType.Builder.of(EntityIgnis::new, MobCategory.MONSTER).sized(0.5f, 0.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ignis"),
             0xaa3100, 0x9f5e3f, true,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 18).putLevelGains(LibAttributes.MAX_HEALTH, 13)
@@ -565,7 +565,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.RES_FAINT, 95)
                     .putAttributes(LibAttributes.RES_DRAIN, 25)
                     .xp(650).money(75).tamingChance(0.008f).setBarnOccupancy(2).setRidable().build());
-    public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> MARIONETTA = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "marionetta"),
+    public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> MARIONETTA = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "marionetta"),
             0xb86b13, 0xd8d7d7,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 300).putLevelGains(LibAttributes.MAX_HEALTH, 30.5)

@@ -74,7 +74,7 @@ public class EvadingRangedAttackGoal<T extends BaseMonster> extends AnimatedMele
                 this.iddleMoveDelay = this.attacker.getRandom().nextInt(35) + 55 - this.iddleMoveFlag * 10;
                 this.posAway = DefaultRandomPos.getPosAway(this.attacker, 7, 4, this.target.position());
             } else {
-                this.iddleMoveFlag = this.attacker.getRandom().nextInt(6) == 0 ? 1 : 0;
+                this.iddleMoveFlag = this.attacker.getRandom().nextInt(5) == 0 ? 1 : 0;
                 this.iddleMoveDelay = this.attacker.getRandom().nextInt(20) + 20;
                 this.posAway = null;
             }

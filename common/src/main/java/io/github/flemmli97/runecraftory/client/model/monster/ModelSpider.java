@@ -48,7 +48,7 @@ public class ModelSpider<T extends EntitySpider> extends EntityModel<T> implemen
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 28).addBox(-3.5F, -2.5F, -3.5F, 7.0F, 5.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 17.0F, -2.5F));
+        PartDefinition body = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 28).addBox(-3.5F, -2.5F, -3.5F, 7.0F, 5.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 17.0F, -3.5F));
 
         PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create().texOffs(27, 21).addBox(-4.0F, -2.5F, -7.0F, 8.0F, 7.0F, 7.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 17).addBox(-2.25F, 0.0F, -7.25F, 2.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))

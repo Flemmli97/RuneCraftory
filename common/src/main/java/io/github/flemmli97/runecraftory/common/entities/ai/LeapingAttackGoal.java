@@ -11,6 +11,7 @@ public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGo
 
     private final double meleeDistSq;
     private final boolean keepDistance;
+    private int preDelay = -1;
 
     public LeapingAttackGoal(T entity) {
         this(entity, false, 2);
@@ -42,20 +43,25 @@ public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGo
         if (this.attacker.isAnimOfType(this.next, AnimationType.MELEE))
             super.handlePreAttack();
         else {
-            if (this.keepDistance && this.distanceToTargetSq <= this.meleeDistSq) {
-                Vec3 away = DefaultRandomPos.getPosAway(this.attacker, 4, 4, this.target.position());
-                if (away != null)
+            if (this.preDelay == -1 && this.keepDistance && this.distanceToTargetSq <= this.meleeDistSq) {
+                Vec3 away = DefaultRandomPos.getPosAway(this.attacker, 5, 4, this.target.position());
+                if (away != null) {
                     this.moveToWithDelay(away.x, away.y, away.z, 1.2);
+                    this.preDelay = this.attacker.getRandom().nextInt(10) + 10;
+                }
             }
-            this.attacker.lookAt(this.target, 360, 10);
-            this.movementDone = true;
+            if (--this.preDelay <= 0) {
+                this.attacker.lookAt(this.target, 360, 10);
+                this.movementDone = true;
+                this.preDelay = -1;
+            }
         }
     }
 
     @Override
     public void handleIddle() {
         if (this.keepDistance && this.attacker.getNavigation().isDone() && this.distanceToTargetSq <= this.meleeDistSq) {
-            Vec3 away = DefaultRandomPos.getPosAway(this.attacker, 4, 4, this.target.position());
+            Vec3 away = DefaultRandomPos.getPosAway(this.attacker, 5, 4, this.target.position());
             if (away != null) {
                 this.moveToWithDelay(away.x, away.y, away.z, 1.2);
                 return;

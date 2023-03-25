@@ -50,7 +50,7 @@ public class ModelWisp<T extends EntityWispBase> extends EntityModel<T> implemen
         PartDefinition partdefinition = meshdefinition.getRoot();
 
         PartDefinition main = partdefinition.addOrReplaceChild("main", CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -5.0F, -5.0F, 10.0F, 10.0F, 10.0F, new CubeDeformation(0.0F))
-                .texOffs(0, 20).addBox(-4.5F, -4.5F, -4.5F, 9.0F, 9.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 18.0F, 0.0F));
+                .texOffs(0, 20).addBox(-4.5F, -4.5F, -4.5F, 9.0F, 9.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 18.5F, 0.0F));
 
         PartDefinition floaty = main.addOrReplaceChild("floaty", CubeListBuilder.create().texOffs(4, 23).addBox(9.0F, 2.0F, 0.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 

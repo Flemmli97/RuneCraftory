@@ -60,7 +60,7 @@ public class EntityCirclingBullet extends BaseProjectile {
         if (!this.level.isClientSide) {
             if (this.dir != null && this.side != null) {
                 int t = this.livingTicks % 16;
-                float sT = this.reverse ? -SIN_POINTS[t] : SIN_POINTS[t] * 1.5f;
+                float sT = this.reverse ? -SIN_POINTS[t] : SIN_POINTS[t] * 2f;
                 this.setDeltaMovement(this.dir.x + this.side.x * sT, this.dir.y + this.side.y * sT, this.dir.z + this.side.z * sT);
                 this.hasImpulse = true;
             }

@@ -54,7 +54,7 @@ public class ModelBigMuck<T extends EntityBigMuck> extends EntityModel<T> implem
                 .texOffs(0, 25).addBox(-5.0F, -14.0F, -6.0F, 9.0F, 14.0F, 1.0F, new CubeDeformation(0.0F))
                 .texOffs(44, 0).addBox(5.0F, -14.0F, -4.0F, 1.0F, 14.0F, 9.0F, new CubeDeformation(0.0F))
                 .texOffs(44, 0).addBox(-7.0F, -14.0F, -4.0F, 1.0F, 14.0F, 9.0F, new CubeDeformation(0.0F))
-                .texOffs(20, 25).addBox(-5.0F, -14.0F, 6.0F, 9.0F, 14.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, 0.0F));
+                .texOffs(20, 25).addBox(-5.0F, -14.0F, 6.0F, 9.0F, 14.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, 24.0F, -0.5F));
 
         PartDefinition mushroomCap = body.addOrReplaceChild("mushroomCap", CubeListBuilder.create().texOffs(0, 48).addBox(-10.0F, -2.0F, -9.0F, 19.0F, 2.0F, 19.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 69).addBox(-8.0F, -4.0F, -7.0F, 15.0F, 2.0F, 15.0F, new CubeDeformation(0.0F))
