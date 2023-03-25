@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public abstract class ChargingMonster extends BaseMonster {
                     return;
                 if (this.hitEntity == null)
                     this.hitEntity = new ArrayList<>();
-                this.mobAttack(anim, null, e -> {
+                this.mobAttack(anim, this.getTarget(), e -> {
                     if (!this.hitEntity.contains(e)) {
                         this.hitEntity.add(e);
                         this.doHurtTarget(e);
@@ -89,6 +90,15 @@ public abstract class ChargingMonster extends BaseMonster {
         } else {
             super.handleAttack(anim);
         }
+    }
+
+    @Override
+    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
+        if(!this.isAnimOfType(anim, AnimationType.CHARGE))
+            return super.calculateAttackAABB(anim, target, grow);
+        double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
+        Vec3 attackPos = this.position().add(Vec3.directionFromRotation(0, this.getYRot()).scale(reach));
+        return this.attackAABB(anim).inflate(grow, 0, grow).move(attackPos.x, attackPos.y, attackPos.z);
     }
 
     @Override

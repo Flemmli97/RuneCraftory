@@ -1528,11 +1528,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
         double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
         Vec3 dir;
-        if (target != null && !this.isVehicle()) {
+        if (target != null && !this.canBeControlledByRider()) {
             reach = Math.min(reach, this.distanceTo(target));
             dir = target.position().subtract(this.position()).normalize();
         } else {
-            dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot());
+            if(this.getControllingPassenger() instanceof Player player)
+                dir = player.getLookAngle();
+            else
+                dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot());
         }
         Vec3 attackPos = this.position().add(dir.scale(reach));
         return this.attackAABB(anim).inflate(grow, 0, grow).move(attackPos.x, attackPos.y, attackPos.z);

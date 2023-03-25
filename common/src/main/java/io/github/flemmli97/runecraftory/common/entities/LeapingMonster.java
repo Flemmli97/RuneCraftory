@@ -6,6 +6,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -44,15 +45,16 @@ public abstract class LeapingMonster extends BaseMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         if (this.isAnimOfType(anim, AnimationType.LEAP)) {
+            this.getNavigation().stop();
             if (anim.canAttack()) {
                 Vec3 vec32 = this.getLeapVec(this.getTarget());
                 this.setDeltaMovement(vec32.x, this.leapHeightMotion(), vec32.z);
-                this.lookAt(EntityAnchorArgument.Anchor.EYES, vec32);
+                this.lookAt(EntityAnchorArgument.Anchor.EYES, this.position().add(vec32.x, 0, vec32.z));
             }
             if (anim.getTick() >= anim.getAttackTime()) {
                 if (this.hitEntity == null)
                     this.hitEntity = new ArrayList<>();
-                this.mobAttack(anim, null, e -> {
+                this.mobAttack(anim, this.getTarget(), e -> {
                     if (!this.hitEntity.contains(e)) {
                         this.hitEntity.add(e);
                         this.doHurtTarget(e);
@@ -78,6 +80,15 @@ public abstract class LeapingMonster extends BaseMonster {
 
     public float maxLeapDistance() {
         return 6;
+    }
+
+    @Override
+    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
+        if(!this.isAnimOfType(anim, AnimationType.LEAP))
+            return super.calculateAttackAABB(anim, target, grow);
+        double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
+        Vec3 attackPos = this.position().add(Vec3.directionFromRotation(0, this.getYRot()).scale(reach));
+        return this.attackAABB(anim).inflate(grow, 0, grow).move(attackPos.x, attackPos.y, attackPos.z);
     }
 
     @Override
