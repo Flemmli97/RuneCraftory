@@ -11,15 +11,21 @@ public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal
 
     private final float reach, reachSq;
     private final Predicate<T> canRanged;
+    private final boolean allowStrafing;
     private int rangedMove = 40;
     private boolean moveTo, clockWise;
     private boolean canSee;
 
     public AnimatedRangedGoal(T entity, float rangedReach, Predicate<T> canRangedAttack) {
+        this(entity, rangedReach, true, canRangedAttack);
+    }
+
+    public AnimatedRangedGoal(T entity, float rangedReach, boolean allowStrafing, Predicate<T> canRangedAttack) {
         super(entity);
         this.reach = rangedReach;
         this.reachSq = rangedReach * rangedReach;
         this.canRanged = canRangedAttack;
+        this.allowStrafing = allowStrafing;
     }
 
     @Override
@@ -83,5 +89,12 @@ public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal
     public void setupValues() {
         super.setupValues();
         this.canSee = this.attacker.getSensing().hasLineOfSight(this.target);
+    }
+
+    @Override
+    protected void circleAroundTargetFacing(float radius, boolean clockWise, float speed) {
+        if (!this.allowStrafing)
+            return;
+        super.circleAroundTargetFacing(radius, clockWise, speed);
     }
 }

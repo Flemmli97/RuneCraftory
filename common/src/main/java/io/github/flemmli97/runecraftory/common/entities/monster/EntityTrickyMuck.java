@@ -1,9 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
+import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
@@ -53,7 +55,7 @@ public class EntityTrickyMuck extends EntityBigMuck {
             if (anim.canAttack()) {
                 if (EntityUtils.sealed(this))
                     return;
-
+                ModSpells.POISON_BALL.get().use((ServerLevel) this.level, this);
             }
         } else
             super.handleAttack(anim);

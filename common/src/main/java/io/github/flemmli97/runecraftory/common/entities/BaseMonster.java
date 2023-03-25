@@ -1289,7 +1289,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public void travel(Vec3 vec) {
         if (this.shouldFreezeTravel())
             return;
-        if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player) {
+        if (this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player) {
             if (!this.level.isClientSide) {
                 if (this.adjustRotFromRider(player)) {
                     this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
@@ -1344,6 +1344,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             this.calculateEntityAnimation(this, false);
         } else {
+            if (this.isVehicle())
+                vec = vec.scale(1.15);
             this.handleLandTravel(vec);
         }
     }
@@ -1354,46 +1356,51 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public void handleNoGravTravel(Vec3 vec) {
-        if (this.isVehicle() && this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player
-                && !this.getAnimationHandler().hasAnimation()) {
-            if (!this.level.isClientSide) {
-                if (this.adjustRotFromRider(player)) {
-                    this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
-                    this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
+        if (this.isVehicle()) {
+            if (this.getControllingPassenger() instanceof LivingEntity controller && !(controller instanceof Player)) {
+                vec = vec.scale(1.15);
+            }
+            if (this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player
+                    && !this.getAnimationHandler().hasAnimation()) {
+                if (!this.level.isClientSide) {
+                    if (this.adjustRotFromRider(player)) {
+                        this.setYRot(this.rotateClamped(this.getYRot(), player.getYRot(), this.getHeadRotSpeed() * 2));
+                        this.setXRot(this.rotateClamped(this.getXRot(), player.getXRot(), this.getMaxHeadXRot()));
+                    }
+                    this.yBodyRot = this.getYRot();
+                    this.yHeadRot = this.yBodyRot;
                 }
-                this.yBodyRot = this.getYRot();
-                this.yHeadRot = this.yBodyRot;
+                float strafing = player.xxa * 0.5f;
+                float forward = player.zza;
+                double vert = 0;
+                if (forward <= 0.0f) {
+                    forward *= 0.25f;
+                } else {
+                    vert = Math.min(0, player.getLookAngle().y + 0.45);
+                    if (player.getXRot() > 85)
+                        forward = 0;
+                    else if (vert < 0)
+                        forward = (float) Math.sqrt(forward * forward - vert * vert);
+                }
+                if (this.doJumping()) {
+                    vert += Math.min(this.getDeltaMovement().y + 0.5, this.maxAscensionSpeed());
+                }
+                this.flyingSpeed = this.getSpeed() * 0.1f;
+                if (this.isControlledByLocalInstance()) {
+                    float attVal = (float) (this.getAttribute(Attributes.FLYING_SPEED) != null ? this.getAttribute(Attributes.FLYING_SPEED).getValue() : this.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                    this.setSpeed(attVal * 1.15f);
+                    this.setMoving(forward != 0 || strafing != 0);
+                    this.setSprinting(forward > 0);
+                    forward *= this.ridingSpeedModifier();
+                    strafing *= this.ridingSpeedModifier();
+                    vec = new Vec3(strafing * this.getSpeed(), vec.y, forward * this.getSpeed());
+                } else {
+                    vec = Vec3.ZERO;
+                }
+                vec = vec.add(0, vert, 0);
+                this.setDoJumping(false);
+                this.calculateEntityAnimation(this, false);
             }
-            float strafing = player.xxa * 0.5f;
-            float forward = player.zza;
-            double vert = 0;
-            if (forward <= 0.0f) {
-                forward *= 0.25f;
-            } else {
-                vert = Math.min(0, player.getLookAngle().y + 0.45);
-                if (player.getXRot() > 85)
-                    forward = 0;
-                else if (vert < 0)
-                    forward = (float) Math.sqrt(forward * forward - vert * vert);
-            }
-            if (this.doJumping()) {
-                vert += Math.min(this.getDeltaMovement().y + 0.5, this.maxAscensionSpeed());
-            }
-            this.flyingSpeed = this.getSpeed() * 0.1f;
-            if (this.isControlledByLocalInstance()) {
-                float attVal = (float) (this.getAttribute(Attributes.FLYING_SPEED) != null ? this.getAttribute(Attributes.FLYING_SPEED).getValue() : this.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                this.setSpeed(attVal * 1.15f);
-                this.setMoving(forward != 0 || strafing != 0);
-                this.setSprinting(forward > 0);
-                forward *= this.ridingSpeedModifier();
-                strafing *= this.ridingSpeedModifier();
-                vec = new Vec3(strafing * this.getSpeed(), vec.y, forward * this.getSpeed());
-            } else if (player instanceof Player) {
-                vec = Vec3.ZERO;
-            }
-            vec = vec.add(0, vert, 0);
-            this.setDoJumping(false);
-            this.calculateEntityAnimation(this, false);
         }
 
         this.moveRelative(0.1F, vec);

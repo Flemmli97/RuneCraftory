@@ -39,7 +39,7 @@ public class EntityHornet extends BaseMonster {
         this.goalSelector.removeGoal(this.wander);
         this.goalSelector.addGoal(6, this.wander = new AirWanderGoal(this));
         this.goalSelector.addGoal(2, this.rangedGoal);
-        this.moveControl = new FlyingMoveControl(this, 20, true);
+        this.moveControl = new FlyingMoveControl(this, 50, true);
         this.setNoGravity(true);
     }
 
@@ -89,8 +89,9 @@ public class EntityHornet extends BaseMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.getID().equals(ATTACK.getID())) {
+            this.getNavigation().stop();
             if (this.getTarget() != null)
-                this.lookAt(this.getTarget(), 30, 30);
+                this.lookAt(this.getTarget(), 60, 30);
             if (anim.canAttack()) {
                 ModSpells.POISON_NEEDLE.get().use((ServerLevel) this.level, this);
             }

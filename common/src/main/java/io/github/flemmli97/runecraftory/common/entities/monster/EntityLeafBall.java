@@ -27,7 +27,7 @@ public class EntityLeafBall extends BaseMonster {
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, WIND, SLEEP_ATTACK, INTERACT, STILL};
 
-    public final AnimatedRangedGoal<EntityLeafBall> attack = new AnimatedRangedGoal<>(this, 8, e -> true);
+    public final AnimatedRangedGoal<EntityLeafBall> attack = new AnimatedRangedGoal<>(this, 8, false, e -> true);
     private final AnimationHandler<EntityLeafBall> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityLeafBall(EntityType<? extends EntityLeafBall> type, Level world) {

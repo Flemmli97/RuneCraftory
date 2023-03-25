@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.world.entity.ai.util.DefaultRandomPos;
+import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -11,16 +12,15 @@ import java.util.function.Predicate;
 
 public class EvadingRangedAttackGoal<T extends BaseMonster> extends AnimatedMeleeGoal<T> {
 
-    private final float reach, reachSq, meleeDistSq;
+    private final float reachSq;
+    private final float meleeDistSq;
     private final Predicate<T> canRanged;
-    private boolean moveTo;
-    private boolean canSee;
+    private boolean moveTo, canSee, movingNearer;
     private Vec3 posAway;
 
     public EvadingRangedAttackGoal(T entity, float meleeDist, float rangedReach, Predicate<T> canRangedAttack) {
         super(entity);
         this.meleeDistSq = meleeDist * meleeDist;
-        this.reach = rangedReach;
         this.reachSq = rangedReach * rangedReach;
         this.canRanged = canRangedAttack;
     }
@@ -59,14 +59,24 @@ public class EvadingRangedAttackGoal<T extends BaseMonster> extends AnimatedMele
 
     @Override
     public void handleIddle() {
+        if (!this.canSee || this.distanceToTargetSq > this.reachSq) {
+            this.moveToEntityNearer(this.target, 1);
+            this.movingNearer = true;
+            return;
+        }
+        if (this.movingNearer) {
+            this.movingNearer = false;
+            this.attacker.getNavigation().stop();
+        }
         if (this.iddleMoveDelay <= 0) {
             if (this.distanceToTargetSq <= this.meleeDistSq) {
                 this.iddleMoveFlag = 2;
                 this.iddleMoveDelay = this.attacker.getRandom().nextInt(35) + 55 - this.iddleMoveFlag * 10;
-                this.posAway = DefaultRandomPos.getPosAway(this.attacker, 7, 4, this.attacker.position());
+                this.posAway = DefaultRandomPos.getPosAway(this.attacker, 7, 4, this.target.position());
             } else {
-                this.iddleMoveFlag = this.attacker.getRandom().nextInt(3) == 0 ? 1 : 0;
+                this.iddleMoveFlag = this.attacker.getRandom().nextInt(6) == 0 ? 1 : 0;
                 this.iddleMoveDelay = this.attacker.getRandom().nextInt(20) + 20;
+                this.posAway = null;
             }
         }
         switch (this.iddleMoveFlag) {
@@ -82,5 +92,21 @@ public class EvadingRangedAttackGoal<T extends BaseMonster> extends AnimatedMele
     public void setupValues() {
         super.setupValues();
         this.canSee = this.attacker.getSensing().hasLineOfSight(this.target);
+    }
+
+    @Override
+    protected void moveRandomlyAround(double maxDistSq) {
+        this.attacker.getLookControl().setLookAt(this.target, 30.0f, 30.0f);
+        if (this.attacker.getNavigation().isDone()) {
+            Vec3 rand = DefaultRandomPos.getPos(this.attacker, 5, 4);
+            if (rand != null && rand.distanceToSqr(this.target.position()) > this.meleeDistSq) {
+                this.moveTo(rand.x, rand.y, rand.z, 1);
+            }
+        }
+    }
+
+    private boolean moveTo(double x, double y, double z, double speed) {
+        Path path = this.attacker.getNavigation().createPath(x, y, z, 0);
+        return path != null && this.attacker.getNavigation().moveTo(path, speed);
     }
 }
