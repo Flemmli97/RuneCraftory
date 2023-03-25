@@ -100,17 +100,17 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
         if (anim.getID().equals(LIGHT.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
-                ModSpells.SHINE.get().use((ServerLevel) this.level, this);
+                ModSpells.SHINE.get().use(this);
             }
         } else if (anim.getID().equals(WIND.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
-                ModSpells.DOUBLESONIC.get().use((ServerLevel) this.level, this);
+                ModSpells.DOUBLESONIC.get().use(this);
             }
         } else if (anim.getID().equals(HEAL.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
-                ModSpells.CUREALL.get().use((ServerLevel) this.level, this);
+                ModSpells.CUREALL.get().use(this);
             }
         }
     }

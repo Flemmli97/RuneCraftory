@@ -81,12 +81,12 @@ public class EntityLeafBall extends BaseMonster {
         if (anim.getID().equals(WIND.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
-                ModSpells.DOUBLESONIC.get().use((ServerLevel) this.level, this);
+                ModSpells.DOUBLESONIC.get().use(this);
             }
         } else if (anim.getID().equals(SLEEP_ATTACK.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
-                ModSpells.SLEEP_AURA.get().use((ServerLevel) this.level, this);
+                ModSpells.SLEEP_AURA.get().use(this);
             }
         } else
             super.handleAttack(anim);

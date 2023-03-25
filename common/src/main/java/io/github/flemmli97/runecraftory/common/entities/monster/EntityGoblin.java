@@ -83,7 +83,7 @@ public class EntityGoblin extends LeapingMonster {
         if (anim.getID().equals(STONE.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
-                ModSpells.STONETHROW.get().use((ServerLevel) this.level, this);
+                ModSpells.STONETHROW.get().use(this);
             }
         } else
             super.handleAttack(anim);

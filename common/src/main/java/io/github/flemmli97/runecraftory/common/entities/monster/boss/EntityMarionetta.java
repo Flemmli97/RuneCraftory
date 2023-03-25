@@ -154,7 +154,7 @@ public class EntityMarionetta extends BossMonster {
             case "card_attack" -> {
                 this.getNavigation().stop();
                 if (anim.canAttack())
-                    ModSpells.CARDTHROW.get().use((ServerLevel) this.level, this);
+                    ModSpells.CARDTHROW.get().use(this);
             }
             case "chest_attack" -> {
                 if (this.aiVarHelper == null)
@@ -186,17 +186,17 @@ public class EntityMarionetta extends BossMonster {
             case "stuffed_animals" -> {
                 this.getNavigation().stop();
                 if (anim.canAttack())
-                    ModSpells.PLUSHTHROW.get().use((ServerLevel) this.level, this);
+                    ModSpells.PLUSHTHROW.get().use(this);
             }
             case "dark_beam" -> {
                 this.getNavigation().stop();
                 if (anim.canAttack() && !EntityUtils.sealed(this))
-                    ModSpells.DARKBEAM.get().use((ServerLevel) this.level, this);
+                    ModSpells.DARKBEAM.get().use(this);
             }
             case "furniture" -> {
                 this.getNavigation().stop();
                 if (anim.canAttack() && !EntityUtils.sealed(this))
-                    ModSpells.FURNITURE.get().use((ServerLevel) this.level, this);
+                    ModSpells.FURNITURE.get().use(this);
             }
         }
     }

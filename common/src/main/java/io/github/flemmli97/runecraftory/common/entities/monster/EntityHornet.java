@@ -93,7 +93,7 @@ public class EntityHornet extends BaseMonster {
             if (this.getTarget() != null)
                 this.lookAt(this.getTarget(), 60, 30);
             if (anim.canAttack()) {
-                ModSpells.POISON_NEEDLE.get().use((ServerLevel) this.level, this);
+                ModSpells.POISON_NEEDLE.get().use(this);
             }
         }
     }

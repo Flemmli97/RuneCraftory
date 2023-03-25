@@ -120,7 +120,7 @@ public class EntitySpider extends BaseMonster {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget()) || this.getFirstPassenger() instanceof Player) {
-                    ModSpells.WEBSHOTSPELL.get().use((ServerLevel) this.level, this);
+                    ModSpells.WEBSHOTSPELL.get().use(this);
                 }
             }
         } else

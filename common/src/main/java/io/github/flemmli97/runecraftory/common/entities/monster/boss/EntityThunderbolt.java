@@ -192,24 +192,24 @@ public class EntityThunderbolt extends BossMonster {
                 break;
             case "wind_blade":
                 if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    ModSpells.DOUBLESONIC.get().use((ServerLevel) this.level, this);
+                    ModSpells.DOUBLESONIC.get().use(this);
                 }
                 break;
             case "laser_x5":
                 if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    ModSpells.LASER5.get().use((ServerLevel) this.level, this);
+                    ModSpells.LASER5.get().use(this);
                 }
                 break;
             case "laser_aoe":
                 if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    ModSpells.LASERAOE.get().use((ServerLevel) this.level, this);
+                    ModSpells.LASERAOE.get().use(this);
                 }
                 break;
             case "laser_kick":
             case "laser_kick_2":
             case "laser_kick_3":
                 if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    ModSpells.BIGLIGHTNING.get().use((ServerLevel) this.level, this);
+                    ModSpells.BIGLIGHTNING.get().use(this);
                 }
                 break;
             case "charge":

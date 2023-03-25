@@ -125,7 +125,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
         switch (anim.getID()) {
             case "butterfly":
                 if (anim.canAttack()) {
-                    ModSpells.BUTTERFLY.get().use((ServerLevel) this.level, this);
+                    ModSpells.BUTTERFLY.get().use(this);
                 }
                 break;
             case "kick_1":
@@ -141,12 +141,12 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
             case "sleep":
                 this.getNavigation().stop();
                 if (anim.canAttack() && !EntityUtils.sealed(this))
-                    ModSpells.SLEEPBALLS.get().use((ServerLevel) this.level, this);
+                    ModSpells.SLEEPBALLS.get().use(this);
                 break;
             case "wave":
                 this.getNavigation().stop();
                 if (anim.canAttack() && !EntityUtils.sealed(this))
-                    ModSpells.WAVE.get().use((ServerLevel) this.level, this);
+                    ModSpells.WAVE.get().use(this);
                 break;
             case "pollen":
             case "pollen_2":

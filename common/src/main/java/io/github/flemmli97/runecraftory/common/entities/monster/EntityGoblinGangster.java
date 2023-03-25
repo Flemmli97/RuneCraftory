@@ -86,7 +86,7 @@ public class EntityGoblinGangster extends EntityGoblin {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 if (this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget())) {
-                    ModSpells.THROW_HAND_ITEM.get().use((ServerLevel) this.level, this);
+                    ModSpells.THROW_HAND_ITEM.get().use(this);
                 }
                 this.stopUsingItem();
             }

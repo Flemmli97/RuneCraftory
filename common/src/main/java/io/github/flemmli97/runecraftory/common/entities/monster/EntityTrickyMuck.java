@@ -55,7 +55,7 @@ public class EntityTrickyMuck extends EntityBigMuck {
             if (anim.canAttack()) {
                 if (EntityUtils.sealed(this))
                     return;
-                ModSpells.POISON_BALL.get().use((ServerLevel) this.level, this);
+                ModSpells.POISON_BALL.get().use(this);
             }
         } else
             super.handleAttack(anim);

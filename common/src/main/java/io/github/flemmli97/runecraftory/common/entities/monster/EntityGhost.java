@@ -139,7 +139,7 @@ public class EntityGhost extends ChargingMonster {
         if (anim.getID().equals(DARKBALL.getID())) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
-                ModSpells.DARKBALL.get().use((ServerLevel) this.level, this);
+                ModSpells.DARKBALL.get().use(this);
             }
         } else if (anim.getID().equals(VANISH.getID())) {
             this.getNavigation().stop();
