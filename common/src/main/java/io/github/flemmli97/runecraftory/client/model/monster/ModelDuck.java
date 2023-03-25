@@ -78,7 +78,7 @@ public class ModelDuck<T extends EntityDuck> extends EntityModel<T> implements E
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.scale(0.85f, 0.85f, 0.85f);
         poseStack.translate(0, 0.26, 0);
-        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay);
+        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     @Override

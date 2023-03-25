@@ -92,7 +92,7 @@ public class ModelFairy<T extends EntityFairy> extends EntityModel<T> implements
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.scale(0.75f, 0.75f, 0.75f);
         poseStack.translate(0, 0.5, 0);
-        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay);
+        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     @Override
