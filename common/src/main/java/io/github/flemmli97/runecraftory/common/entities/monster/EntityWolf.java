@@ -67,7 +67,7 @@ public class EntityWolf extends LeapingMonster {
     }
 
     public static boolean wolfAttack(LivingEntity attacker, Entity target) {
-        CustomDamage.Builder source = new CustomDamage.Builder(attacker).hurtResistant(1);
+        CustomDamage.Builder source = new CustomDamage.Builder(attacker).noKnockback().hurtResistant(1);
         double damagePhys = CombatUtils.getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
         return CombatUtils.mobAttack(attacker, target, source, damagePhys);
     }
