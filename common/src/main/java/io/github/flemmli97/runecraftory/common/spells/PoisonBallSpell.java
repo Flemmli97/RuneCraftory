@@ -40,9 +40,9 @@ public class PoisonBallSpell extends Spell {
         ball.setDamageMultiplier(0.65f + lvl * 0.05f);
         ball.setPos(entity.getX(), entity.getY() + 0.4, entity.getZ());
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            ball.shootAtEntity(mob.getTarget(), 0.35f, 7 - level.getDifficulty().getId() * 2, 0.2f);
+            ball.shootAtEntity(mob.getTarget(), 0.1f, 7 - level.getDifficulty().getId() * 2, 0.1f);
         } else {
-            ball.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 0.35f, 1.0F);
+            ball.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 0.1f, 1.0F);
         }
         level.addFreshEntity(ball);
         return true;

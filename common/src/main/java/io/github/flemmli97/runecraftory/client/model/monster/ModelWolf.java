@@ -112,9 +112,9 @@ public class ModelWolf<T extends EntityWolf> extends EntityModel<T> implements E
             this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0) {
                 if (entity.isSprinting())
-                    this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
-                else
                     this.anim.doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
+                else
+                    this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
             }
         }
         if (anim != null)
@@ -135,7 +135,7 @@ public class ModelWolf<T extends EntityWolf> extends EntityModel<T> implements E
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 9 / 16d, 2 / 16d);
+                    poseStack.translate(0, 5 / 16d, 2 / 16d);
                 return true;
             }
         }

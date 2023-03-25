@@ -140,7 +140,7 @@ public class ModelHornet<T extends EntityHornet> extends EntityModel<T> implemen
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 9 / 16d, 2 / 16d);
+                    poseStack.translate(0, 6 / 16d, 7 / 16d);
                 return true;
             }
         }

@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
+import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 
@@ -13,10 +13,14 @@ public class EntityTrickyMuck extends EntityBigMuck {
 
     public static final AnimatedAction SPORE_BALL = AnimatedAction.copyOf(SPORE, "spore_ball");
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, SPORE, SPORE_BALL, INTERACT, SLEEP};
+
+    public final AnimatedRangedGoal<EntityBigMuck> ranged = new AnimatedRangedGoal<>(this, 8, false, e -> true);
     private AnimationHandler<EntityBigMuck> animationHandler;
 
     public EntityTrickyMuck(EntityType<? extends EntityTrickyMuck> type, Level world) {
         super(type, world);
+        this.goalSelector.removeGoal(this.ai);
+        this.goalSelector.addGoal(2, this.ranged);
     }
 
     @Override
@@ -36,16 +40,9 @@ public class EntityTrickyMuck extends EntityBigMuck {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (type == AnimationType.MELEE && anim.getID().equals(SPORE_BALL.getID()))
+        if (type == AnimationType.RANGED && anim.getID().equals(SPORE_BALL.getID()))
             return true;
         return super.isAnimOfType(anim, type);
-    }
-
-    @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        if (anim.getID().equals(SPORE.getID()))
-            return 6;
-        return super.maxAttackRange(anim);
     }
 
     @Override

@@ -101,7 +101,7 @@ public class ModelLeafBall<T extends EntityLeafBall> extends EntityModel<T> impl
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 9 / 16d, 2 / 16d);
+                    poseStack.translate(0, 4 / 16d, 6 / 16d);
                 return true;
             }
         }
