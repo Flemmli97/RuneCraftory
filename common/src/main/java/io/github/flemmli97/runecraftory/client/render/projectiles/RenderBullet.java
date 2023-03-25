@@ -12,7 +12,7 @@ public class RenderBullet extends RenderTexture<EntityCirclingBullet> {
     private final ResourceLocation tex;
 
     public RenderBullet(EntityRendererProvider.Context ctx, ResourceLocation tex) {
-        super(ctx, 1, 1, 1, 1);
+        super(ctx, 0.5f, 0.5f, 1, 1);
         this.tex = tex;
     }
 

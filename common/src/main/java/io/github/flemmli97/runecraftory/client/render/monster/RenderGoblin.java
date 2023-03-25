@@ -11,7 +11,11 @@ import net.minecraft.resources.ResourceLocation;
 public class RenderGoblin<T extends EntityGoblin> extends RenderMonster<T, ModelGoblin<T>> {
 
     public RenderGoblin(EntityRendererProvider.Context ctx) {
-        super(ctx, new ModelGoblin<>(ctx.bakeLayer(ModelGoblin.LAYER_LOCATION)), new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/goblin.png"), 0.5f);
+        this(ctx, new ResourceLocation(RuneCraftory.MODID, "textures/entity/monsters/goblin.png"));
+    }
+
+    public RenderGoblin(EntityRendererProvider.Context ctx, ResourceLocation texture) {
+        super(ctx, new ModelGoblin<>(ctx.bakeLayer(ModelGoblin.LAYER_LOCATION)), texture, 0.5f);
         this.layers.add(new ItemLayer<>(this));
     }
 }

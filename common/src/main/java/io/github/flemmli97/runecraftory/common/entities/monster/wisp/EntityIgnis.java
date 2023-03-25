@@ -32,13 +32,11 @@ public class EntityIgnis extends EntityWispBase {
 
     @Override
     public void attackFar(LivingEntity target) {
-        if (this.level.isClientSide)
-            return;
-        ModSpells.SPIRITFLAME.get().use(this);
+        ModSpells.FIREBALL.get().use(this);
     }
 
     @Override
     public void attackClose(LivingEntity target) {
-
+        ModSpells.IGNISFLAME.get().use(this);
     }
 }

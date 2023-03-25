@@ -1,0 +1,102 @@
+package io.github.flemmli97.runecraftory.common.entities.monster;
+
+import io.github.flemmli97.runecraftory.common.entities.AnimationType;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.EvadingRangedAttackGoal;
+import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
+
+public class EntityFlowerLily extends BaseMonster {
+
+    public static final AnimatedAction LEAP = new AnimatedAction(18, 3, "leap");
+    public static final AnimatedAction ATTACK = new AnimatedAction(12, 6, "attack");
+    public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK, "interact");
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    private static final AnimatedAction[] ANIMS = new AnimatedAction[]{LEAP, ATTACK, INTERACT, SLEEP};
+
+    public final EvadingRangedAttackGoal<EntityFlowerLily> attack = new EvadingRangedAttackGoal<>(this, 2, 8, e -> true);
+    private final AnimationHandler<EntityFlowerLily> animationHandler = new AnimationHandler<>(this, ANIMS);
+
+    public EntityFlowerLily(EntityType<? extends EntityFlowerLily> type, Level world) {
+        super(type, world);
+        this.goalSelector.addGoal(2, this.attack);
+    }
+
+    @Override
+    public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
+        if (type == AnimationType.RANGED) {
+            return anim.getID().equals(ATTACK.getID());
+        }
+        return type == AnimationType.MELEE && anim.getID().equals(LEAP.getID());
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return 1;
+    }
+
+    @Override
+    public void handleAttack(AnimatedAction anim) {
+        if (anim.getID().equals(LEAP.getID())) {
+            this.getNavigation().stop();
+            if (anim.canAttack()) {
+                Vec3 vec32;
+                if (this.getTarget() != null) {
+                    Vec3 targetPos = this.getTarget().position();
+                    vec32 = new Vec3(targetPos.x - this.getX(), 0.0, targetPos.z - this.getZ()).normalize();
+                } else
+                    vec32 = this.getLookAngle();
+                this.setDeltaMovement(vec32.x, 0.1, vec32.z);
+                this.lookAt(EntityAnchorArgument.Anchor.EYES, this.position().add(vec32.x, 0, vec32.z));
+            }
+        } else if (anim.getID().equals(ATTACK.getID())) {
+            this.getNavigation().stop();
+            if (anim.getTick() == 1 && this.getTarget() != null)
+                this.lookAt(this.getTarget(), 360, 90);
+            if (anim.canAttack()) {
+                ModSpells.DOUBLE_BULLET.get().use(this);
+            }
+        }
+    }
+
+    @Override
+    public void handleRidingCommand(int command) {
+        if (!this.getAnimationHandler().hasAnimation()) {
+            if (command == 1)
+                this.getAnimationHandler().setAnimation(LEAP);
+            else
+                this.getAnimationHandler().setAnimation(ATTACK);
+        }
+    }
+
+    @Override
+    public float attackChance(AnimationType type) {
+        return type == AnimationType.MELEE ? 0.4f : 1;
+    }
+
+    @Override
+    public int animationCooldown(@Nullable AnimatedAction anim) {
+        return (int) (super.animationCooldown(anim) * 2.5);
+    }
+
+    @Override
+    public AnimationHandler<EntityFlowerLily> getAnimationHandler() {
+        return this.animationHandler;
+    }
+
+    @Override
+    public void playInteractionAnimation() {
+        this.getAnimationHandler().setAnimation(INTERACT);
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
+    }
+}

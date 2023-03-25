@@ -137,6 +137,8 @@ public class EntityGhost extends ChargingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.getID().equals(DARKBALL.getID())) {
             this.getNavigation().stop();
+            if (anim.getTick() == 1 && this.getTarget() != null)
+                this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
                 ModSpells.DARKBALL.get().use(this);
             }

@@ -18,9 +18,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class EntityGoblin extends LeapingMonster {
 
-    private static final AnimatedAction MELEE = new AnimatedAction(12, 7, "slash");
-    private static final AnimatedAction LEAP = new AnimatedAction(19, 6, "leap");
-    private static final AnimatedAction STONE = new AnimatedAction(14, 9, "throw");
+    protected static final AnimatedAction MELEE = new AnimatedAction(12, 7, "slash");
+    protected static final AnimatedAction LEAP = new AnimatedAction(19, 6, "leap");
+    protected static final AnimatedAction STONE = new AnimatedAction(14, 9, "throw");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, STONE, INTERACT, SLEEP};
@@ -81,6 +81,8 @@ public class EntityGoblin extends LeapingMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.getID().equals(STONE.getID())) {
             this.getNavigation().stop();
+            if (anim.getTick() == 1 && this.getTarget() != null)
+                this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
                 ModSpells.STONETHROW.get().use(this);
             }

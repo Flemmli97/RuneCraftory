@@ -84,7 +84,7 @@ public abstract class LeapingMonster extends BaseMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
-        if(!this.isAnimOfType(anim, AnimationType.LEAP))
+        if (!this.isAnimOfType(anim, AnimationType.LEAP))
             return super.calculateAttackAABB(anim, target, grow);
         double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
         Vec3 attackPos = this.position().add(Vec3.directionFromRotation(0, this.getYRot()).scale(reach));

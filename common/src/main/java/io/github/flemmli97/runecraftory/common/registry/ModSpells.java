@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.Spell;
+import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
 import io.github.flemmli97.runecraftory.common.spells.ArrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.BaseStaffSpell;
@@ -16,6 +17,7 @@ import io.github.flemmli97.runecraftory.common.spells.DarknessSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleBulletSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWindBladeSpell;
+import io.github.flemmli97.runecraftory.common.spells.ElementalSpell;
 import io.github.flemmli97.runecraftory.common.spells.EmptySpell;
 import io.github.flemmli97.runecraftory.common.spells.EvokerFangSpell;
 import io.github.flemmli97.runecraftory.common.spells.ExplosionSpell;
@@ -42,7 +44,6 @@ import io.github.flemmli97.runecraftory.common.spells.ShineSpell;
 import io.github.flemmli97.runecraftory.common.spells.SleepAuraSpell;
 import io.github.flemmli97.runecraftory.common.spells.SleepBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.SnowballSpell;
-import io.github.flemmli97.runecraftory.common.spells.SpiritFlameSpell;
 import io.github.flemmli97.runecraftory.common.spells.StoneThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.spells.ThrowHandItemSpell;
@@ -111,7 +112,8 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> GUSTSPELL = SPELLS.register("gust", GustSpell::new);
     public static final RegistryEntrySupplier<Spell> STONETHROW = SPELLS.register("stone_throw", StoneThrowSpell::new);
     public static final RegistryEntrySupplier<Spell> WEBSHOTSPELL = SPELLS.register("web_shot", WebShotSpell::new);
-    public static final RegistryEntrySupplier<Spell> SPIRITFLAME = SPELLS.register("spirit_flame", SpiritFlameSpell::new);
+    public static final RegistryEntrySupplier<Spell> SPIRITFLAME = SPELLS.register("spirit_flame", () -> new ElementalSpell(EnumElement.DARK));
+    public static final RegistryEntrySupplier<Spell> IGNISFLAME = SPELLS.register("ignis_flame", () -> new ElementalSpell(EnumElement.FIRE));
 
     public static final RegistryEntrySupplier<Spell> POLLENPUFF = SPELLS.register("pollen_puff", PollenPuffSpell::new);
     public static final RegistryEntrySupplier<Spell> SLEEPBALLS = SPELLS.register("sleep_balls", SleepBallSpell::new);

@@ -27,12 +27,14 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelChipsqueek;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelCluckadoodle;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelDuck;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelFairy;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelFlowerLily;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelGhost;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelGoblin;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelHornet;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelLeafBall;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMarionetta;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMimic;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelMino;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelOrc;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPanther;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
@@ -234,14 +236,17 @@ public class ClientRegister {
         register(consumer, ModEntities.TRICKY_MUCK.get(), ModelBigMuck::new, ModelBigMuck.LAYER_LOCATION);
         register(consumer, ModEntities.BUFFALOO.get(), ModelBuffaloo::new, ModelBuffaloo.LAYER_LOCATION);
         register(consumer, ModEntities.FURPY.get(), ModelChipsqueek::new, ModelChipsqueek.LAYER_LOCATION);
-        consumer.register(ModEntities.GOBLIN_PIRATE.get(), RenderGoblin::new);
-        consumer.register(ModEntities.GOBLIN_GANGSTER.get(), RenderGoblin::new);
+        consumer.register(ModEntities.GOBLIN_PIRATE.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_PIRATE.get())));
+        consumer.register(ModEntities.GOBLIN_GANGSTER.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_GANGSTER.get())));
         consumer.register(ModEntities.IGNIS.get(), ctx -> new RenderWisp<>(ctx, mobTexture(ModEntities.IGNIS.get())));
         consumer.register(ModEntities.HIGH_ORC.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.HIGH_ORC.get())));
         consumer.register(ModEntities.ORC_HUNTER.get(), ctx -> new RenderOrc<>(ctx, mobTexture(ModEntities.HIGH_ORC.get())));
         register(consumer, ModEntities.HORNET.get(), ModelHornet::new, ModelHornet.LAYER_LOCATION);
         register(consumer, ModEntities.SILVER_WOLF.get(), ModelWolf::new, ModelWolf.LAYER_LOCATION);
         register(consumer, ModEntities.LEAF_BALL.get(), ModelLeafBall::new, ModelLeafBall.LAYER_LOCATION);
+        register(consumer, ModEntities.MINO.get(), ModelMino::new, ModelMino.LAYER_LOCATION);
+        register(consumer, ModEntities.FLOWER_LILY.get(), ModelFlowerLily::new, ModelFlowerLily.LAYER_LOCATION);
+        consumer.register(ModEntities.KING_WOOLY.get(), ctx -> new RenderWooly<>(ctx, 2.5f));
 
         register(consumer, ModEntities.AMBROSIA.get(), ModelAmbrosia::new, ModelAmbrosia.LAYER_LOCATION);
         register(consumer, ModEntities.THUNDERBOLT.get(), ModelThunderbolt::new, ModelThunderbolt.LAYER_LOCATION);
@@ -352,6 +357,8 @@ public class ClientRegister {
         consumer.accept(ModelHornet.LAYER_LOCATION, ModelHornet::createBodyLayer);
         consumer.accept(ModelWolf.LAYER_LOCATION, ModelWolf::createBodyLayer);
         consumer.accept(ModelLeafBall.LAYER_LOCATION, ModelLeafBall::createBodyLayer);
+        consumer.accept(ModelMino.LAYER_LOCATION, ModelMino::createBodyLayer);
+        consumer.accept(ModelFlowerLily.LAYER_LOCATION, ModelFlowerLily::createBodyLayer);
 
         consumer.accept(ModelChest.LAYER_LOCATION, ModelChest::createBodyLayer);
 

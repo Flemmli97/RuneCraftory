@@ -41,11 +41,11 @@ public class DoubleBulletSpell extends Spell {
         bullet2.setDamageMultiplier(0.8f + lvl * 0.05f);
         bullet2.reverseMovement();
         if (entity instanceof Mob mob && mob.getTarget() != null) {
-            bullet.shootAtEntity(mob.getTarget(), 1.3f, 7 - level.getDifficulty().getId() * 2, 0.2f);
-            bullet2.shootAtEntity(mob.getTarget(), 1.3f, 7 - level.getDifficulty().getId() * 2, 0.2f);
+            bullet.shootAtEntity(mob.getTarget(), 0.3f, 7 - level.getDifficulty().getId() * 2, 0);
+            bullet2.shootAtEntity(mob.getTarget(), 0.3f, 7 - level.getDifficulty().getId() * 2, 0);
         } else {
-            bullet.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 1.5F, 1.0F);
-            bullet2.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 1.5F, 1.0F);
+            bullet.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 0.3f, 1.0F);
+            bullet2.shootFromRotation(entity, entity.getXRot() + 5, entity.getYRot(), 0.0F, 0.3f, 1.0F);
         }
         level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.FISHING_BOBBER_THROW, entity.getSoundSource(), 1.0F, 1.0F / (entity.getRandom().nextFloat() * 0.4F + 0.8F));
         level.addFreshEntity(bullet);

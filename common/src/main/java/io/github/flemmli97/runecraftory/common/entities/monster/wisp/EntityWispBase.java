@@ -27,7 +27,7 @@ import net.minecraft.world.phys.Vec3;
 public abstract class EntityWispBase extends BaseMonster {
 
     public static final AnimatedAction ATTACK_FAR = new AnimatedAction(15, 6, "attack");
-    public static final AnimatedAction ATTACK_CLOSE = new AnimatedAction(15, 10, "attack");
+    public static final AnimatedAction ATTACK_CLOSE = AnimatedAction.builder(15, "attack_close").marker(10).withClientID("attack").build();
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(ATTACK_FAR, "interact");
     public static final AnimatedAction VANISH = new AnimatedAction(100, 50, "vanish");
     public static final AnimatedAction STILL = AnimatedAction.builder(1, "still").infinite().build();

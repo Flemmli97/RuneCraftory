@@ -798,8 +798,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public int animationCooldown(@Nullable AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim == null)
-            return this.getRandom().nextInt(30) + 20 + diffAdd;
-        return this.getRandom().nextInt(20) + 15 + diffAdd;
+            return this.getRandom().nextInt(30) + 25 + diffAdd;
+        return this.getRandom().nextInt(30) + 15 + diffAdd;
     }
 
     public int difficultyCooldown() {
@@ -1532,7 +1532,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             reach = Math.min(reach, this.distanceTo(target));
             dir = target.position().subtract(this.position()).normalize();
         } else {
-            if(this.getControllingPassenger() instanceof Player player)
+            if (this.getControllingPassenger() instanceof Player player)
                 dir = player.getLookAngle();
             else
                 dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot());

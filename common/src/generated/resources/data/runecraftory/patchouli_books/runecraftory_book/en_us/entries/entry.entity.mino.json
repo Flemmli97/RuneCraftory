@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.mino",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:mino_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:mino",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:mino"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.flower_lily",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:flower_lily_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:flower_lily",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:flower_lily"
+    }
+  ]
+}

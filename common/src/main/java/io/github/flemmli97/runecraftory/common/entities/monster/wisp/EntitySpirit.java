@@ -39,6 +39,6 @@ public class EntitySpirit extends EntityWispBase {
 
     @Override
     public void attackClose(LivingEntity target) {
-
+        this.attackFar(target);
     }
 }

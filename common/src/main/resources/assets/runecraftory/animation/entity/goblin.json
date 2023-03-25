@@ -376,7 +376,7 @@
 			}
 		},
 		"double_throw": {
-			"animation_length": 1.04,
+			"animation_length": 0.96,
 			"bones": {
 				"body": {
 					"rotation": {
@@ -917,6 +917,5 @@
 				}
 			}
 		}
-	},
-	"geckolib_format_version": 2
+	}
 }

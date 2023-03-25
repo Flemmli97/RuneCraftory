@@ -716,7 +716,7 @@
 			}
 		},
 		"sleep": {
-			"animation_length": 1.52,
+			"animation_length": 0.2,
 			"bones": {
 				"body": {
 					"rotation": [0, -22.5, 0],

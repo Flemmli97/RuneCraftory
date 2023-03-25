@@ -3,12 +3,23 @@ package io.github.flemmli97.runecraftory.common.entities.ai;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import net.minecraft.world.entity.ai.util.DefaultRandomPos;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGoal<T> {
 
+    private final double meleeDistSq;
+    private final boolean keepDistance;
+
     public LeapingAttackGoal(T entity) {
+        this(entity, false, 2);
+    }
+
+    public LeapingAttackGoal(T entity, boolean keepDistance, double meleeDist) {
         super(entity);
+        this.keepDistance = keepDistance;
+        this.meleeDistSq = meleeDist * meleeDist;
     }
 
     @Override
@@ -31,8 +42,25 @@ public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGo
         if (this.attacker.isAnimOfType(this.next, AnimationType.MELEE))
             super.handlePreAttack();
         else {
+            if (this.keepDistance && this.distanceToTargetSq <= this.meleeDistSq) {
+                Vec3 away = DefaultRandomPos.getPosAway(this.attacker, 4, 4, this.target.position());
+                if (away != null)
+                    this.moveToWithDelay(away.x, away.y, away.z, 1.2);
+            }
             this.attacker.lookAt(this.target, 360, 10);
             this.movementDone = true;
         }
+    }
+
+    @Override
+    public void handleIddle() {
+        if (this.keepDistance && this.attacker.getNavigation().isDone() && this.distanceToTargetSq <= this.meleeDistSq) {
+            Vec3 away = DefaultRandomPos.getPosAway(this.attacker, 4, 4, this.target.position());
+            if (away != null) {
+                this.moveToWithDelay(away.x, away.y, away.z, 1.2);
+                return;
+            }
+        }
+        super.handleIddle();
     }
 }

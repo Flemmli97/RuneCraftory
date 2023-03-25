@@ -13,8 +13,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
-public class SpiritFlameSpell extends Spell {
+public class ElementalSpell extends Spell {
+
+    private final EnumElement element;
+
+    public ElementalSpell(EnumElement element) {
+        this.element = element;
+    }
 
     @Override
     public void update(Player player, ItemStack stack) {
@@ -36,11 +43,18 @@ public class SpiritFlameSpell extends Spell {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.DARK)).orElse(false);
         if (!rp)
             return false;
-        EntityWispFlame flame = new EntityWispFlame(level, entity, EnumElement.DARK);
-        if (entity instanceof Mob mob && mob.getTarget() != null)
-            flame.shootAtEntity(mob.getTarget(), 0.05f, 0, 0, 0.2);
-        else
-            flame.shoot(entity, entity.getXRot(), entity.getYRot(), 0, 0.05f, 0);
+        EntityWispFlame flame = new EntityWispFlame(level, entity, this.element);
+        if (this.element == EnumElement.DARK) {
+            if (entity instanceof Mob mob && mob.getTarget() != null)
+                flame.shootAtEntity(mob.getTarget(), 0.05f, 0, 0, 0.2);
+            else
+                flame.shoot(entity, entity.getXRot(), entity.getYRot(), 0, 0.05f, 0);
+        } else {
+            Vec3 eye = entity.getEyePosition();
+            Vec3 dir = entity instanceof Mob mob && mob.getTarget() != null ? mob.getTarget().getEyePosition().subtract(eye).normalize().scale(1.4)
+                    : entity.getLookAngle().scale(1.4);
+            flame.setPos(eye.x + dir.x, eye.y + dir.y, eye.z + dir.z);
+        }
         level.addFreshEntity(flame);
         return true;
     }

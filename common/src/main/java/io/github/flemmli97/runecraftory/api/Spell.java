@@ -17,7 +17,7 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     public abstract int coolDown();
 
     public boolean use(LivingEntity entity) {
-        if(entity.level instanceof ServerLevel serverLevel)
+        if (entity.level instanceof ServerLevel serverLevel)
             return this.use(serverLevel, entity, ItemStack.EMPTY, 1, 1, 1);
         return false;
     }
