@@ -130,12 +130,17 @@ public class EntityMimic extends LeapingMonster {
 
     @Override
     public Vec3 getLeapVec(@Nullable LivingEntity target) {
-        return super.getLeapVec(target).scale(1.05);
+        return super.getLeapVec(target).scale(1.25);
     }
 
     @Override
     public double leapHeightMotion() {
-        return 0.25;
+        return 0.3;
+    }
+
+    @Override
+    public float maxLeapDistance() {
+        return 5;
     }
 
     @Override

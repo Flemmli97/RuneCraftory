@@ -136,12 +136,12 @@ public class EntityTortas extends ChargingMonster {
         if (this.getTarget() != null) {
             Vec3 pos = this.position();
             Vec3 target = this.getTarget().position();
-            Vec3 mot = target.subtract(pos.x, this.isInWater() ? pos.y : target.y, pos.z).normalize().scale(0.4);
+            Vec3 mot = target.subtract(pos.x, this.isInWater() ? pos.y : target.y, pos.z).normalize().scale(0.3);
             this.setDeltaMovement(mot.x, mot.y, mot.z);
             if (!this.isOnGround() && !this.isInWater())
                 this.setDeltaMovement(this.getDeltaMovement().add(0, prevMotion.y, 0));
         } else {
-            Vec3 look = this.calculateViewVector(this.isInWater() ? this.getXRot() : 0, this.getYRot()).scale(0.4);
+            Vec3 look = this.calculateViewVector(this.isInWater() ? this.getXRot() : 0, this.getYRot()).scale(0.3);
             this.setDeltaMovement(look.x, look.y, look.z);
             if (!this.isOnGround() && !this.isInWater())
                 this.setDeltaMovement(this.getDeltaMovement().add(0, prevMotion.y, 0));
@@ -160,7 +160,7 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public float chargingLength() {
-        return 9;
+        return 10;
     }
 
     @Override

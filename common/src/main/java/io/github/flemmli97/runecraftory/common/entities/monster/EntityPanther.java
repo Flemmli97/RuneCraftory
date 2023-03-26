@@ -70,12 +70,17 @@ public class EntityPanther extends LeapingMonster {
 
     @Override
     public Vec3 getLeapVec(@Nullable LivingEntity target) {
-        return super.getLeapVec(target).scale(1.1);
+        return super.getLeapVec(target).scale(1.15);
     }
 
     @Override
     public double leapHeightMotion() {
         return 0.25f;
+    }
+
+    @Override
+    public float maxLeapDistance() {
+        return 4;
     }
 
     @Override

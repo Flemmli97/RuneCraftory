@@ -58,7 +58,12 @@ public class EntityWolf extends LeapingMonster {
 
     @Override
     public Vec3 getLeapVec(@Nullable LivingEntity target) {
-        return super.getLeapVec(target).scale(1.05);
+        return super.getLeapVec(target).scale(1.1);
+    }
+
+    @Override
+    public float maxLeapDistance() {
+        return 3.5f;
     }
 
     @Override

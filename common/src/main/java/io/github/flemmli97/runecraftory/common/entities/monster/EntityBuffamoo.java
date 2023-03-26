@@ -101,7 +101,7 @@ public class EntityBuffamoo extends ChargingMonster {
 
     @Override
     public float chargingLength() {
-        return 11;
+        return 7;
     }
 
     @Override

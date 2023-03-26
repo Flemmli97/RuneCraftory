@@ -821,20 +821,6 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> squid = fish("squid", Texture.N);
     public static final RegistryEntrySupplier<Item> masuTrout = fish("masu_trout", Texture.N);
 
-    public static final RegistryEntrySupplier<Item> icon0 = ITEMS.register("icon_0", () -> new Item(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> debug = ITEMS.register("debug_item", () -> new ItemDebug(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> level = ITEMS.register("level_item", () -> new ItemLevelUp(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> skill = ITEMS.register("skill_item", () -> new ItemSkillUp(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> tame = ITEMS.register("insta_tame", () -> new Item(new Item.Properties()) {
-        @Override
-        public boolean isFoil(ItemStack stack) {
-            return true;
-        }
-    });
-    public static final RegistryEntrySupplier<Item> entityLevel = ITEMS.register("entity_level_item", () -> new ItemDebug(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> unknown = ITEMS.register("unknown", () -> new Item(new Item.Properties()));
-    public static final RegistryEntrySupplier<Item> orcMaze = ITEMS.register("orc_maze", () -> new Item(new Item.Properties().stacksTo(1)));
-
     //Crop items
     public static final RegistryEntrySupplier<Item> turnipSeeds = seed("turnip", () -> ModBlocks.turnip);
     public static final RegistryEntrySupplier<Item> turnipPinkSeeds = seed("turnip_pink", () -> ModBlocks.turnipPink);
@@ -1209,6 +1195,21 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> cashRegister = blockItem("cash_register", () -> ModBlocks.cashRegister);
     public static final RegistryEntrySupplier<Item> monsterBarn = blockItem("monster_barn", () -> ModBlocks.monsterBarn);
     public static final RegistryEntrySupplier<Item> questBoard = ITEMS.register("quest_board", () -> new QuestBoardItem(ModBlocks.questBoard.get(), new Item.Properties().tab(RFCreativeTabs.blocks)));
+
+
+    public static final RegistryEntrySupplier<Item> icon0 = ITEMS.register("icon_0", () -> new Item(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item> debug = ITEMS.register("debug_item", () -> new ItemDebug(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item> level = ITEMS.register("level_item", () -> new ItemLevelUp(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item> skill = ITEMS.register("skill_item", () -> new ItemSkillUp(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item> tame = ITEMS.register("insta_tame", () -> new Item(new Item.Properties()) {
+        @Override
+        public boolean isFoil(ItemStack stack) {
+            return true;
+        }
+    });
+    public static final RegistryEntrySupplier<Item> entityLevel = ITEMS.register("entity_level_item", () -> new ItemDebug(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item> unknown = ITEMS.register("unknown", () -> new Item(new Item.Properties()));
+    public static final RegistryEntrySupplier<Item> orcMaze = ITEMS.register("orc_maze", () -> new Item(new Item.Properties().stacksTo(1)));
 
     public static RegistryEntrySupplier<Item> hoe(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));

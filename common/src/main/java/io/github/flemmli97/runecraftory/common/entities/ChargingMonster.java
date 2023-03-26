@@ -138,7 +138,7 @@ public abstract class ChargingMonster extends BaseMonster {
     }
 
     public double[] getChargeTo(AnimatedAction anim, Vec3 pos) {
-        int length = anim.getLength();
+        int length = anim.getLength() - anim.getAttackTime();
         Vec3 vec = pos.subtract(this.position()).normalize().scale(this.chargingLength());
         return new double[]{vec.x / length, this.getY(), vec.z / length};
     }

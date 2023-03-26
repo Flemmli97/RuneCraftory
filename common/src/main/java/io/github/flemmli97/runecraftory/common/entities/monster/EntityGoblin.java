@@ -35,7 +35,7 @@ public class EntityGoblin extends LeapingMonster {
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.steelSword.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.steelSwordPlus.get()));
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
     }
 
@@ -98,6 +98,11 @@ public class EntityGoblin extends LeapingMonster {
     @Override
     public double leapHeightMotion() {
         return 0.3;
+    }
+
+    @Override
+    public float maxLeapDistance() {
+        return 5;
     }
 
     @Override

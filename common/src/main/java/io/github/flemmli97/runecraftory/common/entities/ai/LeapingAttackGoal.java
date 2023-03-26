@@ -32,7 +32,8 @@ public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGo
                 if (aabb.intersects(this.target.getBoundingBox()))
                     return anim;
             }
-            if (this.distanceToTargetSq <= (this.attacker.maxLeapDistance() * this.attacker.maxLeapDistance() + 1) && this.attacker.getY() >= this.target.getY())
+            double heightDiff = this.target.getY() - this.attacker.getY();
+            if (this.distanceToTargetSq <= (this.attacker.maxLeapDistance() * this.attacker.maxLeapDistance() + 1) && heightDiff <= 1 && heightDiff >= 0)
                 return this.attacker.getRandomAnimation(AnimationType.LEAP);
         }
         return this.attacker.getRandomAnimation(AnimationType.IDLE);

@@ -117,7 +117,7 @@ public class EntityGhost extends ChargingMonster {
     public void handleRidingCommand(int command) {
         if (!this.getAnimationHandler().hasAnimation()) {
             if (command == 1)
-                this.getAnimationHandler().setAnimation(DARKBALL);
+                this.getAnimationHandler().setAnimation(CHARGE);
             else
                 this.getAnimationHandler().setAnimation(SWING);
         }
@@ -131,6 +131,15 @@ public class EntityGhost extends ChargingMonster {
     @Override
     public AnimationHandler<EntityGhost> getAnimationHandler() {
         return this.animationHandler;
+    }
+
+    @Override
+    public boolean handleChargeMovement() {
+        if (this.chargeMotion != null) {
+            this.setDeltaMovement(this.chargeMotion[0] * 0.98f, this.getDeltaMovement().y, this.chargeMotion[2] * 0.98f);
+            return true;
+        }
+        return false;
     }
 
     @Override

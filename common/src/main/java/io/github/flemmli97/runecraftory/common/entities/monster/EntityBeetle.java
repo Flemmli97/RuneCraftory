@@ -39,7 +39,7 @@ public class EntityBeetle extends ChargingMonster {
 
     @Override
     public float chargingLength() {
-        return 9;
+        return 8;
     }
 
     @Override

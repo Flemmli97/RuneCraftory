@@ -79,7 +79,7 @@ public abstract class LeapingMonster extends BaseMonster {
     }
 
     public float maxLeapDistance() {
-        return 6;
+        return 3;
     }
 
     @Override
