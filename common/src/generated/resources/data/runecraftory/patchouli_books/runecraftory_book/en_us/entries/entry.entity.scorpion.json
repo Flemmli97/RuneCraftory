@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.scorpion",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:scorpion_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:scorpion",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:scorpion"
+    }
+  ]
+}

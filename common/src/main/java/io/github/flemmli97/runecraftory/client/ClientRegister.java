@@ -38,6 +38,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelMino;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelOrc;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPanther;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelScorpion;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSpider;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelThunderbolt;
@@ -247,6 +248,7 @@ public class ClientRegister {
         register(consumer, ModEntities.MINO.get(), ModelMino::new, ModelMino.LAYER_LOCATION);
         register(consumer, ModEntities.FLOWER_LILY.get(), ModelFlowerLily::new, ModelFlowerLily.LAYER_LOCATION);
         consumer.register(ModEntities.KING_WOOLY.get(), ctx -> new RenderWooly<>(ctx, 2.5f));
+        register(consumer, ModEntities.SCORPION.get(), ModelScorpion::new, ModelScorpion.LAYER_LOCATION);
 
         register(consumer, ModEntities.AMBROSIA.get(), ModelAmbrosia::new, ModelAmbrosia.LAYER_LOCATION);
         register(consumer, ModEntities.THUNDERBOLT.get(), ModelThunderbolt::new, ModelThunderbolt.LAYER_LOCATION);
@@ -359,6 +361,7 @@ public class ClientRegister {
         consumer.accept(ModelLeafBall.LAYER_LOCATION, ModelLeafBall::createBodyLayer);
         consumer.accept(ModelMino.LAYER_LOCATION, ModelMino::createBodyLayer);
         consumer.accept(ModelFlowerLily.LAYER_LOCATION, ModelFlowerLily::createBodyLayer);
+        consumer.accept(ModelScorpion.LAYER_LOCATION, ModelScorpion::createBodyLayer);
 
         consumer.accept(ModelChest.LAYER_LOCATION, ModelChest::createBodyLayer);
 

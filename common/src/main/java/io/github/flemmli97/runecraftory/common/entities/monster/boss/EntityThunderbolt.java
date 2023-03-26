@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 import com.google.common.collect.ImmutableList;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
+import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.ThunderboltAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -22,7 +23,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -100,8 +100,9 @@ public class EntityThunderbolt extends BossMonster {
     @Override
     public void addGoal() {
         super.addGoal();
-        this.goalSelector.removeGoal(this.randomMoveGoal);
-        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.6));
+        this.goalSelector.removeGoal(this.wander);
+        this.wander = new RestrictedWaterAvoidingStrollGoal(this, 0.6);
+        this.goalSelector.addGoal(6, this.wander);
     }
 
     @Override

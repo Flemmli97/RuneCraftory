@@ -164,7 +164,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
     public FloatGoal swimGoal = new FloatGoal(this);
     public FollowOwnerGoalMonster followOwnerGoal = new FollowOwnerGoalMonster(this, 1.05, 9, 2, 20);
-    public MoveTowardsRestrictionGoal randomMoveGoal = new MoveTowardsRestrictionGoal(this, 1);
     public RandomStrollGoal wander = new RestrictedWaterAvoidingStrollGoal(this, 1.0);
     public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
 
@@ -268,7 +267,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
         this.goalSelector.addGoal(1, this.followOwnerGoal);
         this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
-        this.goalSelector.addGoal(4, this.randomMoveGoal);
+        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1));
         this.goalSelector.addGoal(6, this.wander);
         this.goalSelector.addGoal(7, new RandomLookGoalAlive(this));
     }

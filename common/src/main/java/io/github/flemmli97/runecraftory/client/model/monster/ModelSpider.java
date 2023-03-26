@@ -26,6 +26,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 
 public class ModelSpider<T extends EntitySpider> extends EntityModel<T> implements ExtendedModel, RideableModel<T> {
@@ -36,12 +37,14 @@ public class ModelSpider<T extends EntitySpider> extends EntityModel<T> implemen
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended head;
 
     public ModelSpider(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "spider"));
         this.body = this.model.getPart("body");
+        this.head = this.model.getPart("head");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -62,41 +65,53 @@ public class ModelSpider<T extends EntitySpider> extends EntityModel<T> implemen
 
         PartDefinition abdomen3 = abdomen2.addOrReplaceChild("abdomen3", CubeListBuilder.create().texOffs(32, 12).addBox(-4.5F, -6.0F, 0.0F, 9.0F, 6.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.0F, 6.0F));
 
-        PartDefinition leg = body.addOrReplaceChild("leg", CubeListBuilder.create().texOffs(27, 39).addBox(0.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 2.0F, -2.0F, 0.0F, 0.3054F, -0.4363F));
+        PartDefinition leg = body.addOrReplaceChild("leg", CubeListBuilder.create().texOffs(27, 39).addBox(0.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 2.0F, -2.25F, 0.0F, 0.3054F, -0.4363F));
 
         PartDefinition legMiddle = leg.addOrReplaceChild("legMiddle", CubeListBuilder.create().texOffs(28, 37).addBox(0.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, -1.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
 
         PartDefinition legTip = legMiddle.addOrReplaceChild("legTip", CubeListBuilder.create().texOffs(28, 4).addBox(0.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.6981F));
 
-        PartDefinition leg2 = body.addOrReplaceChild("leg2", CubeListBuilder.create().texOffs(28, 35).addBox(0.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 2.0F, 0.0F, 0.0F, 0.0F, -0.4363F));
+        PartDefinition leg2 = body.addOrReplaceChild("leg2", CubeListBuilder.create().texOffs(28, 35).addBox(0.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 2.0F, -0.75F, 0.0F, 0.0873F, -0.4363F));
 
-        PartDefinition legMiddle2 = leg2.addOrReplaceChild("legMiddle2", CubeListBuilder.create().texOffs(34, 10).addBox(0.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, -1.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
+        PartDefinition legMiddle2 = leg2.addOrReplaceChild("legMiddle2", CubeListBuilder.create().texOffs(34, 10).addBox(0.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, -1.0F, 0.0F, 0.0F, 0.0436F, 0.7854F));
 
         PartDefinition legTip2 = legMiddle2.addOrReplaceChild("legTip2", CubeListBuilder.create().texOffs(28, 2).addBox(0.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
 
-        PartDefinition leg3 = body.addOrReplaceChild("leg3", CubeListBuilder.create().texOffs(34, 8).addBox(0.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 2.0F, 2.0F, 0.0F, -0.3054F, -0.48F));
+        PartDefinition leg3 = body.addOrReplaceChild("leg3", CubeListBuilder.create().texOffs(27, 39).addBox(0.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 2.0F, 1.0F, 0.0F, -0.0436F, -0.4363F));
 
-        PartDefinition legMiddle3 = leg3.addOrReplaceChild("legMiddle3", CubeListBuilder.create().texOffs(34, 6).addBox(0.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, -1.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
+        PartDefinition legMiddle3 = leg3.addOrReplaceChild("legMiddle3", CubeListBuilder.create().texOffs(28, 37).addBox(0.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, -1.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
 
-        PartDefinition legTip3 = legMiddle3.addOrReplaceChild("legTip3", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.829F));
+        PartDefinition legTip3 = legMiddle3.addOrReplaceChild("legTip3", CubeListBuilder.create().texOffs(28, 4).addBox(0.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.6981F));
 
-        PartDefinition leg4 = body.addOrReplaceChild("leg4", CubeListBuilder.create().texOffs(27, 39).mirror().addBox(-6.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.0F, 2.0F, -2.0F, 0.0F, -0.3054F, 0.4363F));
+        PartDefinition leg4 = body.addOrReplaceChild("leg4", CubeListBuilder.create().texOffs(34, 8).addBox(0.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 2.0F, 2.0F, 0.0F, -0.3054F, -0.48F));
 
-        PartDefinition legMiddle4 = leg4.addOrReplaceChild("legMiddle4", CubeListBuilder.create().texOffs(28, 37).mirror().addBox(-6.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, -1.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
+        PartDefinition legMiddle4 = leg4.addOrReplaceChild("legMiddle4", CubeListBuilder.create().texOffs(34, 6).addBox(0.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, -1.0F, 0.0F, 0.0F, 0.0F, 0.7854F));
 
-        PartDefinition legTip4 = legMiddle4.addOrReplaceChild("legTip4", CubeListBuilder.create().texOffs(28, 4).mirror().addBox(-7.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.6981F));
+        PartDefinition legTip4 = legMiddle4.addOrReplaceChild("legTip4", CubeListBuilder.create().texOffs(28, 0).addBox(0.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(6.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.829F));
 
-        PartDefinition leg5 = body.addOrReplaceChild("leg5", CubeListBuilder.create().texOffs(28, 35).mirror().addBox(-6.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.0F, 2.0F, 0.0F, 0.0F, 0.0F, 0.4363F));
+        PartDefinition leg5 = body.addOrReplaceChild("leg5", CubeListBuilder.create().texOffs(27, 39).mirror().addBox(-6.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.0F, 2.0F, -2.25F, 0.0F, -0.3054F, 0.4363F));
 
-        PartDefinition legMiddle5 = leg5.addOrReplaceChild("legMiddle5", CubeListBuilder.create().texOffs(34, 10).mirror().addBox(-6.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, -1.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
+        PartDefinition legMiddle5 = leg5.addOrReplaceChild("legMiddle5", CubeListBuilder.create().texOffs(28, 37).mirror().addBox(-6.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, -1.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
 
-        PartDefinition legTip5 = legMiddle5.addOrReplaceChild("legTip5", CubeListBuilder.create().texOffs(28, 2).mirror().addBox(-7.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
+        PartDefinition legTip5 = legMiddle5.addOrReplaceChild("legTip5", CubeListBuilder.create().texOffs(28, 4).mirror().addBox(-7.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.6981F));
 
-        PartDefinition leg6 = body.addOrReplaceChild("leg6", CubeListBuilder.create().texOffs(34, 8).mirror().addBox(-6.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.0F, 2.0F, 2.0F, 0.0F, 0.3054F, 0.48F));
+        PartDefinition leg6 = body.addOrReplaceChild("leg6", CubeListBuilder.create().texOffs(28, 35).mirror().addBox(-6.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.0F, 2.0F, -0.75F, 0.0F, -0.0873F, 0.4363F));
 
-        PartDefinition legMiddle6 = leg6.addOrReplaceChild("legMiddle6", CubeListBuilder.create().texOffs(34, 6).mirror().addBox(-6.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, -1.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
+        PartDefinition legMiddle6 = leg6.addOrReplaceChild("legMiddle6", CubeListBuilder.create().texOffs(34, 10).mirror().addBox(-6.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, -1.0F, 0.0F, 0.0F, -0.0873F, -0.7854F));
 
-        PartDefinition legTip6 = legMiddle6.addOrReplaceChild("legTip6", CubeListBuilder.create().texOffs(28, 0).mirror().addBox(-7.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.829F));
+        PartDefinition legTip6 = legMiddle6.addOrReplaceChild("legTip6", CubeListBuilder.create().texOffs(28, 2).mirror().addBox(-7.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
+
+        PartDefinition leg7 = body.addOrReplaceChild("leg7", CubeListBuilder.create().texOffs(27, 39).mirror().addBox(-6.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.0F, 2.0F, 1.0F, 0.0F, 0.0436F, 0.4363F));
+
+        PartDefinition legMiddle7 = leg7.addOrReplaceChild("legMiddle7", CubeListBuilder.create().texOffs(28, 37).mirror().addBox(-6.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, -1.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
+
+        PartDefinition legTip7 = legMiddle7.addOrReplaceChild("legTip7", CubeListBuilder.create().texOffs(28, 4).mirror().addBox(-7.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.6981F));
+
+        PartDefinition leg8 = body.addOrReplaceChild("leg8", CubeListBuilder.create().texOffs(34, 8).mirror().addBox(-6.0F, -1.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-3.0F, 2.0F, 2.0F, 0.0F, 0.3054F, 0.48F));
+
+        PartDefinition legMiddle8 = leg8.addOrReplaceChild("legMiddle8", CubeListBuilder.create().texOffs(34, 6).mirror().addBox(-6.0F, 0.0F, -0.5F, 6.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, -1.0F, 0.0F, 0.0F, 0.0F, -0.7854F));
+
+        PartDefinition legTip8 = legMiddle8.addOrReplaceChild("legTip8", CubeListBuilder.create().texOffs(28, 0).mirror().addBox(-7.0F, 0.0F, -0.5F, 7.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offsetAndRotation(-6.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.829F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
@@ -109,6 +124,8 @@ public class ModelSpider<T extends EntitySpider> extends EntityModel<T> implemen
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.model.resetPoses();
+        this.head.yRot += netHeadYaw * Mth.DEG_TO_RAD * 0.5f;
+        this.head.xRot += headPitch * Mth.DEG_TO_RAD * 0.5f;
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {

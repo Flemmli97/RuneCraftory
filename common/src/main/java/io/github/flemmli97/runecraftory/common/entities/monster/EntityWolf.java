@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -11,7 +12,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -41,8 +41,9 @@ public class EntityWolf extends LeapingMonster {
     @Override
     public void addGoal() {
         super.addGoal();
-        this.goalSelector.removeGoal(this.randomMoveGoal);
-        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.6));
+        this.goalSelector.removeGoal(this.wander);
+        this.wander = new RestrictedWaterAvoidingStrollGoal(this, 0.6);
+        this.goalSelector.addGoal(6, this.wander);
     }
 
     @Override

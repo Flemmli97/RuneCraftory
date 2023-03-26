@@ -72,6 +72,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrcArcher;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrcHunter;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityPanther;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityPommePomme;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityScorpion;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntitySkyFish;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntitySpider;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityTortas;
@@ -516,6 +517,16 @@ public class ModEntities {
             new GateSpawnData.Builder(500, 7).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA, ModTags.IS_SANDY));
     public static final RegistryEntrySupplier<EntityType<EntityIgnis>> IGNIS = regMonster(EntityType.Builder.of(EntityIgnis::new, MobCategory.MONSTER).sized(0.5f, 0.6f).fireImmune().clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ignis"),
             0xaa3100, 0x9f5e3f, true,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.MAX_HEALTH, 18).putLevelGains(LibAttributes.MAX_HEALTH, 13)
+                    .putAttributes(LibAttributes.ATTACK_DAMAGE, 4).putLevelGains(LibAttributes.ATTACK_DAMAGE, 2)
+                    .putAttributes(LibAttributes.DEFENCE, 0).putLevelGains(LibAttributes.DEFENCE, 1.6)
+                    .putAttributes(LibAttributes.MAGIC, 7.1).putLevelGains(LibAttributes.MAGIC, 2.9)
+                    .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 2.1)
+                    .xp(75).money(5).tamingChance(0.02f).setFlying().build(),
+            new GateSpawnData.Builder(500, 3).addToBiomeTag(50, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP, ModTags.IS_MAGICAL, ModTags.IS_END));
+    public static final RegistryEntrySupplier<EntityType<EntityScorpion>> SCORPION = regMonster(EntityType.Builder.of(EntityScorpion::new, MobCategory.MONSTER).sized(1.1f, 0.6f).fireImmune().clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "scorpion"),
+            0x606060, 0xacacac,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 18).putLevelGains(LibAttributes.MAX_HEALTH, 13)
                     .putAttributes(LibAttributes.ATTACK_DAMAGE, 4).putLevelGains(LibAttributes.ATTACK_DAMAGE, 2)
