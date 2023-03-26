@@ -17,7 +17,7 @@ public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends Animated
 
     @Override
     public boolean canUse() {
-        return !this.attacker.isVehicle() && super.canUse();
+        return !this.attacker.canBeControlledByRider() && super.canUse();
     }
 
     @Override

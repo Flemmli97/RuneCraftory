@@ -18,7 +18,7 @@ public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttack
 
     @Override
     public boolean canUse() {
-        return !this.attacker.isVehicle() && super.canUse();
+        return !this.attacker.canBeControlledByRider() && super.canUse();
     }
 
     @Override

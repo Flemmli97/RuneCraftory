@@ -18,7 +18,7 @@ public class MarionettaAttackGoal<T extends EntityMarionetta> extends AnimatedAt
 
     @Override
     public boolean canUse() {
-        return !this.attacker.isVehicle() && super.canUse();
+        return !this.attacker.canBeControlledByRider() && super.canUse();
     }
 
     @Override

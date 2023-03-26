@@ -20,7 +20,7 @@ public class AnimatedMeleeGoal<T extends PathfinderMob & IAnimated & RandomAttac
 
     @Override
     public boolean canUse() {
-        return !this.attacker.isVehicle() && super.canUse();
+        return !this.attacker.canBeControlledByRider() && super.canUse();
     }
 
     @Override

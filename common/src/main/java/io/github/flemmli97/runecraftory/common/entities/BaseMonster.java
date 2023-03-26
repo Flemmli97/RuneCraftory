@@ -93,12 +93,14 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -268,6 +270,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0));
         this.goalSelector.addGoal(6, this.wander);
         this.goalSelector.addGoal(7, new RandomLookGoalAlive(this));
+    }
+
+    @Override
+    protected void updateControlFlags() {
+        boolean flag1 = !(this.getVehicle() instanceof Boat);
+        this.goalSelector.setControlFlag(Goal.Flag.MOVE, true);
+        this.goalSelector.setControlFlag(Goal.Flag.JUMP, flag1);
+        this.goalSelector.setControlFlag(Goal.Flag.LOOK, true);
     }
 
     private void updateAI(boolean forced, boolean load) {
@@ -1715,7 +1725,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Nullable
     @Override
     public Entity getControllingPassenger() {
-        return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
+        return this.getFirstPassenger();
     }
 
     @Override
