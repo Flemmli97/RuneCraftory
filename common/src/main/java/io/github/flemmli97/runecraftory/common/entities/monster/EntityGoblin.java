@@ -11,6 +11,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -31,6 +32,12 @@ public class EntityGoblin extends LeapingMonster {
     public EntityGoblin(EntityType<? extends EntityGoblin> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
+    }
+
+    @Override
+    protected void applyAttributes() {
+        super.applyAttributes();
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25);
     }
 
     @Override

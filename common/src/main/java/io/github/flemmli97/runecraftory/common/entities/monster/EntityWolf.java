@@ -11,6 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -29,6 +30,24 @@ public class EntityWolf extends LeapingMonster {
     public EntityWolf(EntityType<? extends EntityWolf> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
+    }
+
+    @Override
+    protected void applyAttributes() {
+        super.applyAttributes();
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.3);
+    }
+
+    @Override
+    public void addGoal() {
+        super.addGoal();
+        this.goalSelector.removeGoal(this.randomMoveGoal);
+        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.6));
+    }
+
+    @Override
+    public double sprintSpeedThreshold() {
+        return 0.9;
     }
 
     @Override

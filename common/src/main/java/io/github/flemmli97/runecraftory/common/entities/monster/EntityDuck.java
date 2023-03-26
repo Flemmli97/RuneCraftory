@@ -7,6 +7,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -26,6 +27,11 @@ public class EntityDuck extends ChargingMonster {
         this.goalSelector.addGoal(2, this.attack);
     }
 
+    @Override
+    protected void applyAttributes() {
+        super.applyAttributes();
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25);
+    }
 
     @Override
     public float attackChance(AnimationType type) {

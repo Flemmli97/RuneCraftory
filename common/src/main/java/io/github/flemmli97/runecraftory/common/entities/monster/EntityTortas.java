@@ -47,8 +47,8 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.16);
         super.applyAttributes();
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.16);
     }
 
     @Override

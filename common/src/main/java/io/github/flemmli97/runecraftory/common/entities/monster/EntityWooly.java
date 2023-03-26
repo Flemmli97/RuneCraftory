@@ -64,8 +64,8 @@ public class EntityWooly extends LeapingMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2);
         super.applyAttributes();
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.22);
     }
 
     @Override

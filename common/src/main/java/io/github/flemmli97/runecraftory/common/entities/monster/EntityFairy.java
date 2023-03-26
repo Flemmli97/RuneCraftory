@@ -54,14 +54,15 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     }
 
     @Override
-    protected PathNavigation createNavigation(Level level) {
-        return new FloatingFlyNavigator(this, level);
+    protected void applyAttributes() {
+        super.applyAttributes();
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.35);
     }
 
     @Override
-    protected void applyAttributes() {
-        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        super.applyAttributes();
+    protected PathNavigation createNavigation(Level level) {
+        return new FloatingFlyNavigator(this, level);
     }
 
     @Override

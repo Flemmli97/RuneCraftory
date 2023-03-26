@@ -44,8 +44,9 @@ public class EntityHornet extends BaseMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
         super.applyAttributes();
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
+        this.getAttribute(Attributes.FLYING_SPEED).setBaseValue(0.5f);
     }
 
     @Override

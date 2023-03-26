@@ -57,9 +57,9 @@ public class EntitySkyFish extends BaseMonster {
 
     @Override
     protected void applyAttributes() {
+        super.applyAttributes();
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.13);
         this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
-        super.applyAttributes();
     }
 
     @Override

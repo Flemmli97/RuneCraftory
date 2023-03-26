@@ -10,6 +10,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
@@ -31,6 +32,12 @@ public class EntityBigMuck extends BaseMonster {
         super(type, world);
         this.goalSelector.addGoal(2, this.ai);
         this.getOrCreateAnimationHandler().setAnimationChangeCons(a -> this.attackPos = null);
+    }
+
+    @Override
+    protected void applyAttributes() {
+        super.applyAttributes();
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.2);
     }
 
     @Override

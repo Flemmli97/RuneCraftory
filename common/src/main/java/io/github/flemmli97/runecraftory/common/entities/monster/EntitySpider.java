@@ -11,6 +11,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.ai.navigation.WallClimberNavigation;
 import net.minecraft.world.entity.player.Player;
@@ -37,6 +38,12 @@ public class EntitySpider extends BaseMonster {
     public EntitySpider(EntityType<? extends EntitySpider> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
+    }
+
+    @Override
+    protected void applyAttributes() {
+        super.applyAttributes();
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.27);
     }
 
     @Override

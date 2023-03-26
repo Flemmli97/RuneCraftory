@@ -46,8 +46,8 @@ public class EntityMimic extends LeapingMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5);
         super.applyAttributes();
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.5);
     }
 
     @Override

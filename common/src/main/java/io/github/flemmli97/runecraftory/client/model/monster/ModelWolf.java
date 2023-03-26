@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWolf;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
@@ -111,7 +112,7 @@ public class ModelWolf<T extends EntityWolf> extends EntityModel<T> implements E
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0) {
-                if (entity.isSprinting())
+                if (entity.getMoveFlag() == BaseMonster.MoveType.RUN)
                     this.anim.doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
                 else
                     this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));

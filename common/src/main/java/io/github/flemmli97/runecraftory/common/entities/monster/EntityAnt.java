@@ -7,6 +7,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
 public class EntityAnt extends BaseMonster {
@@ -20,6 +21,12 @@ public class EntityAnt extends BaseMonster {
     public EntityAnt(EntityType<? extends EntityAnt> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
+    }
+
+    @Override
+    protected void applyAttributes() {
+        super.applyAttributes();
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25);
     }
 
     @Override

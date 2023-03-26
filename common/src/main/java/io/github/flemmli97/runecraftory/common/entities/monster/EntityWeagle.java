@@ -51,8 +51,8 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     protected void applyAttributes() {
-        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
         super.applyAttributes();
+        this.getAttribute(Attributes.FOLLOW_RANGE).setBaseValue(32);
     }
 
     @Override

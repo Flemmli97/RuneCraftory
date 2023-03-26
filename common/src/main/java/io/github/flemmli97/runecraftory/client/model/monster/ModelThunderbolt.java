@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.model.SittingModel;
+import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.client.AnimationManager;
@@ -132,7 +133,7 @@ public class ModelThunderbolt<T extends EntityThunderbolt> extends EntityModel<T
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (anim == null) {
             if (entity.deathTime <= 0 && !entity.playDeath()) {
-                if (entity.isSprinting())
+                if (entity.getMoveFlag() == BaseMonster.MoveType.RUN)
                     this.anim.doAnimation(this, "run", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
                 else if (entity.moveTick() > 0)
                     this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));

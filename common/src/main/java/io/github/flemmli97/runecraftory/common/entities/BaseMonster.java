@@ -164,6 +164,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public NearestAttackableTargetGoal<Mob> targetMobs = this.createTargetGoalMobs();
     public FloatGoal swimGoal = new FloatGoal(this);
     public FollowOwnerGoalMonster followOwnerGoal = new FollowOwnerGoalMonster(this, 1.05, 9, 2, 20);
+    public MoveTowardsRestrictionGoal randomMoveGoal = new MoveTowardsRestrictionGoal(this, 1);
     public RandomStrollGoal wander = new RestrictedWaterAvoidingStrollGoal(this, 1.0);
     public HurtByTargetPredicate hurt = new HurtByTargetPredicate(this, this.defendPred);
 
@@ -237,7 +238,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {
-        AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.22);
+        AttributeSupplier.Builder map = Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.23);
         if (atts != null)
             for (RegistryEntrySupplier<Attribute> att : atts)
                 map.add(att.get());
@@ -267,7 +268,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.goalSelector.addGoal(0, new StayGoal<>(this, StayGoal.CANSTAYMONSTER));
         this.goalSelector.addGoal(1, this.followOwnerGoal);
         this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
-        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 1.0));
+        this.goalSelector.addGoal(4, this.randomMoveGoal);
         this.goalSelector.addGoal(6, this.wander);
         this.goalSelector.addGoal(7, new RandomLookGoalAlive(this));
     }
@@ -461,7 +462,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     @Override
     public void tick() {
         super.tick();
-        if (this.getMoveFlag() != 0) {
+        if (this.getMoveFlag() != MoveType.NONE) {
             this.moveTick = Math.min(moveTickMax, ++this.moveTick);
         } else {
             this.moveTick = Math.max(0, --this.moveTick);
@@ -470,8 +471,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.updater.tick();
             if (this.tamingTick > 0) {
                 --this.tamingTick;
-                if (this.getMoveFlag() != 0) {
-                    this.setMoving(false);
+                if (this.getMoveFlag() != MoveType.NONE) {
+                    this.setMovingFlag(MoveType.NONE);
                     this.setDeltaMovement(Vec3.ZERO);
                 }
             }
@@ -628,32 +629,27 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         super.customServerAiStep();
         if (!this.canBeControlledByRider() && this.getMoveControl().operation != MoveControl.Operation.WAIT
                 && this.getDeltaMovement().lengthSqr() > 0.004) {
-            this.setMoving(true);
             double d0 = this.getMoveControl().getSpeedModifier();
-            boolean targeting = !this.canBeControlledByRider() && this.getTarget() != null;
-            if (d0 > this.sprintSpeedTreshold() || targeting) {
-                this.setShiftKeyDown(false);
-                this.setSprinting(true);
-            } else if (d0 <= this.crouchSpeedTreshold()) {
-                this.setShiftKeyDown(true);
-                this.setSprinting(false);
+            if (d0 > this.sprintSpeedThreshold()) {
+                this.setMovingFlag(MoveType.RUN);
+            } else if (d0 <= this.crouchSpeedThreshold()) {
+                this.setMovingFlag(MoveType.SNEAK);
             } else {
-                this.setShiftKeyDown(false);
-                this.setSprinting(false);
+                this.setMovingFlag(MoveType.WALK);
             }
             this.updateMoveAnimation();
         } else {
-            this.setMoving(false);
+            this.setMovingFlag(MoveType.NONE);
             this.setShiftKeyDown(false);
             this.setSprinting(false);
         }
     }
 
-    public double crouchSpeedTreshold() {
+    public double crouchSpeedThreshold() {
         return 0.6;
     }
 
-    public double sprintSpeedTreshold() {
+    public double sprintSpeedThreshold() {
         return 1;
     }
 
@@ -1129,28 +1125,22 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         return builder;
     }
 
-    //=====Damage Logic
+    //=====Movement
 
     public int moveTick() {
         return this.moveTick;
     }
 
     public float interpolatedMoveTick(float partialTicks) {
-        return Mth.clamp((this.moveTick + (this.getMoveFlag() != 0 ? partialTicks : -partialTicks)) / (float) moveTickMax, 0, 1);
+        return Mth.clamp((this.moveTick + (this.getMoveFlag() != MoveType.NONE ? partialTicks : -partialTicks)) / (float) moveTickMax, 0, 1);
     }
 
-    public void setMoving(boolean flag) {
-        this.setMoveFlag(flag ? 1 : 0);
+    public void setMovingFlag(MoveType type) {
+        this.entityData.set(MOVE_FLAGS, (byte) type.ordinal());
     }
 
-    //=====Combat stuff
-
-    public byte getMoveFlag() {
-        return this.entityData.get(MOVE_FLAGS);
-    }
-
-    public void setMoveFlag(int flag) {
-        this.entityData.set(MOVE_FLAGS, (byte) flag);
+    public MoveType getMoveFlag() {
+        return MoveType.values()[this.entityData.get(MOVE_FLAGS)];
     }
 
     public void setDoJumping(boolean jump) {
@@ -1175,6 +1165,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.level.addParticle(particle, true, this.getX() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), this.getY() + 0.5 + this.random.nextFloat() * this.getBbHeight(), this.getZ() + this.random.nextFloat() * this.getBbWidth() * 2.0f - this.getBbWidth(), d0, d2, d3);
         }
     }
+
+    //=====Combat stuff
 
     @Override
     public void die(DamageSource cause) {
@@ -1227,7 +1219,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 this.getOwner().sendMessage(this.getKnockoutMessage(), Util.NIL_UUID);
             this.getNavigation().stop();
             this.playDeathAnimation(false);
-            this.setMoving(false);
+            this.setMovingFlag(MoveType.NONE);
             this.setShiftKeyDown(false);
             this.setSprinting(false);
             this.unRide();
@@ -1350,8 +1342,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.flyingSpeed = this.getSpeed() * 0.1f;
             if (this.isControlledByLocalInstance()) {
                 this.setSpeed((float) this.getAttributeValue(Attributes.MOVEMENT_SPEED) * 0.7f);
-                this.setMoving(forward != 0 || strafing != 0);
-                this.setSprinting(forward > 0);
+                MoveType type = forward > 0 ? MoveType.RUN : (forward != 0 || strafing != 0 ? MoveType.WALK : MoveType.NONE);
+                this.setMovingFlag(type);
+                this.setSprinting(type == MoveType.RUN);
                 forward *= this.ridingSpeedModifier();
                 strafing *= this.ridingSpeedModifier();
                 super.travel(new Vec3(strafing, vec.y, forward));
@@ -1363,9 +1356,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             this.calculateEntityAnimation(this, false);
         } else {
-            if (this.isVehicle()) {
-                vec = vec.scale(1.15);
-            }
             this.handleLandTravel(vec);
         }
     }
@@ -1377,9 +1367,6 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     public void handleNoGravTravel(Vec3 vec) {
         if (this.isVehicle()) {
-            if (this.getControllingPassenger() instanceof LivingEntity controller && !(controller instanceof Player)) {
-                vec = vec.scale(1.15);
-            }
             if (this.canBeControlledByRider() && this.getControllingPassenger() instanceof Player player
                     && !this.getAnimationHandler().hasAnimation()) {
                 if (!this.level.isClientSide) {
@@ -1409,8 +1396,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 if (this.isControlledByLocalInstance()) {
                     float attVal = (float) (this.getAttribute(Attributes.FLYING_SPEED) != null ? this.getAttribute(Attributes.FLYING_SPEED).getValue() : this.getAttributeValue(Attributes.MOVEMENT_SPEED));
                     this.setSpeed(attVal * 1.15f);
-                    this.setMoving(forward != 0 || strafing != 0);
-                    this.setSprinting(forward > 0);
+                    MoveType type = forward > 0 ? MoveType.RUN : (forward != 0 || strafing != 0 ? MoveType.WALK : MoveType.NONE);
+                    this.setMovingFlag(type);
+                    this.setSprinting(type == MoveType.RUN);
                     forward *= this.ridingSpeedModifier();
                     strafing *= this.ridingSpeedModifier();
                     vec = new Vec3(strafing * this.getSpeed(), vec.y, forward * this.getSpeed());
@@ -1782,5 +1770,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.interactKey = interactKey;
             this.following = following;
         }
+    }
+
+    public enum MoveType {
+        NONE,
+        WALK,
+        RUN,
+        SNEAK
     }
 }

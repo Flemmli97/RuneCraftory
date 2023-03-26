@@ -22,6 +22,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -94,6 +95,18 @@ public class EntityThunderbolt extends BossMonster {
     protected void applyAttributes() {
         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.31);
         super.applyAttributes();
+    }
+
+    @Override
+    public void addGoal() {
+        super.addGoal();
+        this.goalSelector.removeGoal(this.randomMoveGoal);
+        this.goalSelector.addGoal(4, new MoveTowardsRestrictionGoal(this, 0.6));
+    }
+
+    @Override
+    public double sprintSpeedThreshold() {
+        return 0.9;
     }
 
     @Override
