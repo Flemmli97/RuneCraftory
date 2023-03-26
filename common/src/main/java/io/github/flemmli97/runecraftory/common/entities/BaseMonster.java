@@ -630,10 +630,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 && this.getDeltaMovement().lengthSqr() > 0.004) {
             this.setMoving(true);
             double d0 = this.getMoveControl().getSpeedModifier();
-            if (d0 > 1 || this.getControllingPassenger() instanceof Mob) {
+            boolean targeting = !this.canBeControlledByRider() && this.getTarget() != null;
+            if (d0 > this.sprintSpeedTreshold() || targeting) {
                 this.setShiftKeyDown(false);
                 this.setSprinting(true);
-            } else if (d0 >= 0.6D) {
+            } else if (d0 <= this.crouchSpeedTreshold()) {
                 this.setShiftKeyDown(true);
                 this.setSprinting(false);
             } else {
@@ -646,6 +647,14 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             this.setShiftKeyDown(false);
             this.setSprinting(false);
         }
+    }
+
+    public double crouchSpeedTreshold() {
+        return 0.6;
+    }
+
+    public double sprintSpeedTreshold() {
+        return 1;
     }
 
     @Override
