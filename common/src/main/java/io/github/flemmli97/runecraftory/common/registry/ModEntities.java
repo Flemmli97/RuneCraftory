@@ -514,7 +514,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.3)
                     .xp(70).money(8).tamingChance(0.08f).setRidable().build(),
             new GateSpawnData.Builder(500, 7).addToBiomeTag(30, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_SAVANNA, ModTags.IS_SANDY));
-    public static final RegistryEntrySupplier<EntityType<EntityIgnis>> IGNIS = regMonster(EntityType.Builder.of(EntityIgnis::new, MobCategory.MONSTER).sized(0.5f, 0.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ignis"),
+    public static final RegistryEntrySupplier<EntityType<EntityIgnis>> IGNIS = regMonster(EntityType.Builder.of(EntityIgnis::new, MobCategory.MONSTER).sized(0.5f, 0.6f).fireImmune().clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ignis"),
             0xaa3100, 0x9f5e3f, true,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 18).putLevelGains(LibAttributes.MAX_HEALTH, 13)
