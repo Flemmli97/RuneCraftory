@@ -48,6 +48,8 @@ import io.github.flemmli97.runecraftory.common.spells.StoneThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.spells.ThrowHandItemSpell;
 import io.github.flemmli97.runecraftory.common.spells.TripleArrowSpell;
+import io.github.flemmli97.runecraftory.common.spells.TripleFireBulletSpell;
+import io.github.flemmli97.runecraftory.common.spells.TripleFireballSpell;
 import io.github.flemmli97.runecraftory.common.spells.TripleWaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.UnsealSpell;
 import io.github.flemmli97.runecraftory.common.spells.WaterLaserSpell;
@@ -136,4 +138,6 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> SLEEP_AURA = SPELLS.register("sleep_aura", SleepAuraSpell::new);
     public static final RegistryEntrySupplier<Spell> DOUBLE_BULLET = SPELLS.register("double_bullet", DoubleBulletSpell::new);
     public static final RegistryEntrySupplier<Spell> THROW_HAND_ITEM = SPELLS.register("throw_held_item", ThrowHandItemSpell::new);
+    public static final RegistryEntrySupplier<Spell> TRIPLE_FIRE_BULLET = SPELLS.register("triple_fire_bullet", TripleFireBulletSpell::new);
+    public static final RegistryEntrySupplier<Spell> TRIPLE_FIRE_BALL = SPELLS.register("triple_fire_ball", TripleFireballSpell::new);
 }

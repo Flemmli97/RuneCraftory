@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.palm_cat",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:palm_cat_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:palm_cat",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:palm_cat"
+    }
+  ]
+}

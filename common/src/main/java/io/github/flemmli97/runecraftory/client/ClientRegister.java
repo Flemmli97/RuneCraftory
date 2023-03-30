@@ -36,6 +36,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelMarionetta;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMimic;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelMino;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelOrc;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelPalmCat;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPanther;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelScorpion;
@@ -43,6 +44,8 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSpider;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelThunderbolt;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelTortas;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelTroll;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelVeggieGhost;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWeagle;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWisp;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWolf;
@@ -64,6 +67,7 @@ import io.github.flemmli97.runecraftory.client.render.monster.RenderGhost;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGoblin;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderOrc;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderSpider;
+import io.github.flemmli97.runecraftory.client.render.monster.RenderVeggieGhost;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWisp;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
 import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingHookRenderer;
@@ -237,6 +241,7 @@ public class ClientRegister {
         register(consumer, ModEntities.TRICKY_MUCK.get(), ModelBigMuck::new, ModelBigMuck.LAYER_LOCATION);
         register(consumer, ModEntities.BUFFALOO.get(), ModelBuffaloo::new, ModelBuffaloo.LAYER_LOCATION);
         register(consumer, ModEntities.FURPY.get(), ModelChipsqueek::new, ModelChipsqueek.LAYER_LOCATION);
+        register(consumer, ModEntities.PALM_CAT.get(), ModelPalmCat::new, ModelPalmCat.LAYER_LOCATION);
         consumer.register(ModEntities.GOBLIN_PIRATE.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_PIRATE.get())));
         consumer.register(ModEntities.GOBLIN_GANGSTER.get(), ctx -> new RenderGoblin<>(ctx, mobTexture(ModEntities.GOBLIN_GANGSTER.get())));
         consumer.register(ModEntities.IGNIS.get(), ctx -> new RenderWisp<>(ctx, mobTexture(ModEntities.IGNIS.get())));
@@ -249,6 +254,9 @@ public class ClientRegister {
         register(consumer, ModEntities.FLOWER_LILY.get(), ModelFlowerLily::new, ModelFlowerLily.LAYER_LOCATION);
         consumer.register(ModEntities.KING_WOOLY.get(), ctx -> new RenderWooly<>(ctx, 2.5f));
         register(consumer, ModEntities.SCORPION.get(), ModelScorpion::new, ModelScorpion.LAYER_LOCATION);
+        register(consumer, ModEntities.TROLL.get(), ModelTroll::new, ModelTroll.LAYER_LOCATION);
+        register(consumer, ModEntities.FLOWER_LION.get(), ModelFlowerLily::new, ModelFlowerLily.LAYER_LOCATION);
+        consumer.register(ModEntities.TOMATO_GHOST.get(), ctx -> new RenderVeggieGhost<>(ctx, mobTexture(ModEntities.TOMATO_GHOST.get())));
 
         register(consumer, ModEntities.AMBROSIA.get(), ModelAmbrosia::new, ModelAmbrosia.LAYER_LOCATION);
         register(consumer, ModEntities.THUNDERBOLT.get(), ModelThunderbolt::new, ModelThunderbolt.LAYER_LOCATION);
@@ -362,6 +370,9 @@ public class ClientRegister {
         consumer.accept(ModelMino.LAYER_LOCATION, ModelMino::createBodyLayer);
         consumer.accept(ModelFlowerLily.LAYER_LOCATION, ModelFlowerLily::createBodyLayer);
         consumer.accept(ModelScorpion.LAYER_LOCATION, ModelScorpion::createBodyLayer);
+        consumer.accept(ModelPalmCat.LAYER_LOCATION, ModelPalmCat::createBodyLayer);
+        consumer.accept(ModelTroll.LAYER_LOCATION, ModelTroll::createBodyLayer);
+        consumer.accept(ModelVeggieGhost.LAYER_LOCATION, ModelVeggieGhost::createBodyLayer);
 
         consumer.accept(ModelChest.LAYER_LOCATION, ModelChest::createBodyLayer);
 

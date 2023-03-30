@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.tomato_ghost",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:tomato_ghost_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:tomato_ghost",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:tomato_ghost"
+    }
+  ]
+}

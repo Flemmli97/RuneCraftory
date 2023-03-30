@@ -33,7 +33,7 @@ public class EntityWeagle extends BaseMonster {
     public static final AnimatedAction SWOOP = new AnimatedAction(14, 4, "swoop");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(PECK, "interact");
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(2, "defeat").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{GALE, PECK, SWOOP, INTERACT, DEFEAT, SLEEP};
     public AnimatedRangedGoal<EntityWeagle> rangedGoal = new AnimatedRangedGoal<>(this, 8, e -> true);
     protected List<LivingEntity> hitEntity;

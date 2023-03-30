@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityCirclingBullet;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -35,9 +35,9 @@ public class DoubleBulletSpell extends Spell {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.DARK)).orElse(false);
         if (!rp)
             return false;
-        EntityCirclingBullet bullet = new EntityCirclingBullet(level, entity);
+        EntityBullet bullet = new EntityBullet(level, entity);
         bullet.setDamageMultiplier(0.8f + lvl * 0.05f);
-        EntityCirclingBullet bullet2 = new EntityCirclingBullet(level, entity);
+        EntityBullet bullet2 = new EntityBullet(level, entity);
         bullet2.setDamageMultiplier(0.8f + lvl * 0.05f);
         bullet2.reverseMovement();
         if (entity instanceof Mob mob && mob.getTarget() != null) {

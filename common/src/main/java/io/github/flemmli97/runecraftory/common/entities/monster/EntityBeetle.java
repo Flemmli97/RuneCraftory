@@ -14,7 +14,7 @@ public class EntityBeetle extends ChargingMonster {
     public static final AnimatedAction CHARGE_ATTACK = new AnimatedAction(30, 2, "ramm");
     public static final AnimatedAction MELEE = new AnimatedAction(15, 8, "attack");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, CHARGE_ATTACK, INTERACT, SLEEP};
 
     public final ChargeAttackGoal<EntityBeetle> ai = new ChargeAttackGoal<>(this);

@@ -12,10 +12,10 @@ import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBaseSpellBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigPlate;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterflySummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCards;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityCirclingBullet;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBeam;
@@ -58,6 +58,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityCluckadood
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityDuck;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityFairy;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityFlowerLily;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityFlowerLion;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGhost;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGhostRay;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblin;
@@ -70,6 +71,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityMimic;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrc;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrcArcher;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrcHunter;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityPalmCat;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityPanther;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityPommePomme;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityScorpion;
@@ -77,6 +79,8 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntitySkyFish;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntitySpider;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityTortas;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityTrickyMuck;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityTroll;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityVeggieGhost;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWeagle;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWolf;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
@@ -443,7 +447,16 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.2)
                     .xp(35).money(1).tamingChance(0.12f).build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(40, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_LUSH, ModTags.IS_SAVANNA));
-
+    public static final RegistryEntrySupplier<EntityType<EntityPalmCat>> PALM_CAT = regMonster(EntityType.Builder.of(EntityPalmCat::new, MobCategory.MONSTER).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "palm_cat"),
+            0xc98f2d, 0xb46d28,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.MAX_HEALTH, 18).putLevelGains(LibAttributes.MAX_HEALTH, 10)
+                    .putAttributes(LibAttributes.ATTACK_DAMAGE, 5).putLevelGains(LibAttributes.ATTACK_DAMAGE, 1.25)
+                    .putAttributes(LibAttributes.DEFENCE, 0).putLevelGains(LibAttributes.DEFENCE, 1.2)
+                    .putAttributes(LibAttributes.MAGIC, 5).putLevelGains(LibAttributes.MAGIC, 1.25)
+                    .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.2)
+                    .xp(35).money(1).tamingChance(0.12f).build(),
+            new GateSpawnData.Builder(0, 0).addToBiomeTag(40, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, BiomeTags.IS_MOUNTAIN, ModTags.IS_LUSH, ModTags.IS_SAVANNA));
     public static final RegistryEntrySupplier<EntityType<EntityPommePomme>> MINO = regMonster(EntityType.Builder.of(EntityPommePomme::new, MobCategory.MONSTER).sized(0.9f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "mino"),
             0x8b573d, 0xc0916d,
             new EntityProperties.Builder()
@@ -525,7 +538,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 2.1)
                     .xp(75).money(5).tamingChance(0.02f).setFlying().build(),
             new GateSpawnData.Builder(500, 3).addToBiomeTag(50, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP, ModTags.IS_MAGICAL, ModTags.IS_END));
-    public static final RegistryEntrySupplier<EntityType<EntityScorpion>> SCORPION = regMonster(EntityType.Builder.of(EntityScorpion::new, MobCategory.MONSTER).sized(1.1f, 0.6f).fireImmune().clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "scorpion"),
+    public static final RegistryEntrySupplier<EntityType<EntityScorpion>> SCORPION = regMonster(EntityType.Builder.of(EntityScorpion::new, MobCategory.MONSTER).sized(1.1f, 0.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "scorpion"),
             0x606060, 0xacacac,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 18).putLevelGains(LibAttributes.MAX_HEALTH, 13)
@@ -535,6 +548,36 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 2.1)
                     .xp(75).money(5).tamingChance(0.02f).setFlying().build(),
             new GateSpawnData.Builder(500, 3).addToBiomeTag(50, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP, ModTags.IS_MAGICAL, ModTags.IS_END));
+    public static final RegistryEntrySupplier<EntityType<EntityTroll>> TROLL = regMonster(EntityType.Builder.of(EntityTroll::new, MobCategory.MONSTER).sized(1.5f, 3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "troll"),
+            0xac924b, 0xcfcbbc,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.MAX_HEALTH, 18).putLevelGains(LibAttributes.MAX_HEALTH, 13)
+                    .putAttributes(LibAttributes.ATTACK_DAMAGE, 4).putLevelGains(LibAttributes.ATTACK_DAMAGE, 2)
+                    .putAttributes(LibAttributes.DEFENCE, 0).putLevelGains(LibAttributes.DEFENCE, 1.6)
+                    .putAttributes(LibAttributes.MAGIC, 7.1).putLevelGains(LibAttributes.MAGIC, 2.9)
+                    .putAttributes(LibAttributes.MAGIC_DEFENCE, 0).putLevelGains(LibAttributes.MAGIC_DEFENCE, 2.1)
+                    .xp(75).money(5).tamingChance(0.02f).setFlying().build(),
+            new GateSpawnData.Builder(500, 3).addToBiomeTag(50, ModTags.IS_SPOOKY, ModTags.IS_DEAD, ModTags.IS_SWAMP, ModTags.IS_MAGICAL, ModTags.IS_END));
+    public static final RegistryEntrySupplier<EntityType<EntityFlowerLion>> FLOWER_LION = regMonster(EntityType.Builder.of(EntityFlowerLion::new, MobCategory.MONSTER).sized(0.75f, 1.65f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "flower_lion"),
+            0xf2ad7a, 0x893a1d,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.MAX_HEALTH, 19).putLevelGains(LibAttributes.MAX_HEALTH, 17)
+                    .putAttributes(LibAttributes.ATTACK_DAMAGE, 3).putLevelGains(LibAttributes.ATTACK_DAMAGE, 1.3)
+                    .putAttributes(LibAttributes.DEFENCE, 0).putLevelGains(LibAttributes.DEFENCE, 1.2)
+                    .putAttributes(LibAttributes.MAGIC, 7).putLevelGains(LibAttributes.MAGIC, 2.4)
+                    .putAttributes(LibAttributes.MAGIC_DEFENCE, 1).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.4)
+                    .xp(40).money(3).tamingChance(0.06f).setRidable().build(),
+            new GateSpawnData.Builder(0, 0).addToBiomeTag(40, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, ModTags.IS_LUSH, ModTags.IS_MAGICAL, ModTags.IS_MUSHROOM));
+    public static final RegistryEntrySupplier<EntityType<EntityVeggieGhost>> TOMATO_GHOST = regMonster(EntityType.Builder.of(EntityVeggieGhost::new, MobCategory.MONSTER).sized(0.75f, 1.65f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "tomato_ghost"),
+            0x902323, 0x85268b, true,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.MAX_HEALTH, 19).putLevelGains(LibAttributes.MAX_HEALTH, 17)
+                    .putAttributes(LibAttributes.ATTACK_DAMAGE, 3).putLevelGains(LibAttributes.ATTACK_DAMAGE, 1.3)
+                    .putAttributes(LibAttributes.DEFENCE, 0).putLevelGains(LibAttributes.DEFENCE, 1.2)
+                    .putAttributes(LibAttributes.MAGIC, 7).putLevelGains(LibAttributes.MAGIC, 2.4)
+                    .putAttributes(LibAttributes.MAGIC_DEFENCE, 1).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.4)
+                    .xp(40).money(3).tamingChance(0.06f).setRidable().build(),
+            new GateSpawnData.Builder(0, 0).addToBiomeTag(40, ModTags.IS_PLAINS, BiomeTags.IS_FOREST, BiomeTags.IS_HILL, ModTags.IS_LUSH, ModTags.IS_MAGICAL, ModTags.IS_MUSHROOM));
 
     public static final RegistryEntrySupplier<EntityType<EntityAmbrosia>> AMBROSIA = regMonster(EntityType.Builder.of(EntityAmbrosia::new, MobCategory.MONSTER).sized(0.85f, 2.3f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "ambrosia"),
             0x00ff00, 0xe600e6,
@@ -629,7 +672,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityDarkBullet>> DARK_BULLET = reg(EntityType.Builder.<EntityDarkBullet>of(EntityDarkBullet::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "dark_bullet"));
     public static final RegistryEntrySupplier<EntityType<EntityPoisonNeedle>> POISON_NEEDLE = reg(EntityType.Builder.<EntityPoisonNeedle>of(EntityPoisonNeedle::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "poison_needle"));
     public static final RegistryEntrySupplier<EntityType<EntitySleepAura>> SLEEP_AURA = reg(EntityType.Builder.<EntitySleepAura>of(EntitySleepAura::new, MobCategory.MISC).sized(1.5f, 1).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "sleep_aura"));
-    public static final RegistryEntrySupplier<EntityType<EntityCirclingBullet>> CIRCLING_BULLET = reg(EntityType.Builder.<EntityCirclingBullet>of(EntityCirclingBullet::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "circling_bullet"));
+    public static final RegistryEntrySupplier<EntityType<EntityBullet>> CIRCLING_BULLET = reg(EntityType.Builder.<EntityBullet>of(EntityBullet::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "circling_bullet"));
     public static final RegistryEntrySupplier<EntityType<EntityThrownItem>> THROWN_ITEM = reg(EntityType.Builder.<EntityThrownItem>of(EntityThrownItem::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "thrown_item"));
 
     public static final RegistryEntrySupplier<EntityType<EntityRuney>> RUNEY = reg(EntityType.Builder.of(EntityRuney::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "runey"));

@@ -23,7 +23,7 @@ public class EntityGoblin extends LeapingMonster {
     protected static final AnimatedAction LEAP = new AnimatedAction(19, 6, "leap");
     protected static final AnimatedAction STONE = new AnimatedAction(14, 9, "throw");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, STONE, INTERACT, SLEEP};
 
     public LeapingAttackGoal<EntityGoblin> attack = new LeapingAttackGoal<>(this);

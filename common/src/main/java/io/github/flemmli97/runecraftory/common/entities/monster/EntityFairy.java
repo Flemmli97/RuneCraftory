@@ -30,7 +30,7 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     public static final AnimatedAction WIND = new AnimatedAction(15, 10, "wind");
     public static final AnimatedAction HEAL = AnimatedAction.copyOf(LIGHT, "heal");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(LIGHT, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{LIGHT, WIND, HEAL, INTERACT, SLEEP};
     public final AnimatedRangedGoal<EntityFairy> attack = new AnimatedRangedGoal<>(this, 8, e -> true);
     private final AnimationHandler<EntityFairy> animationHandler = new AnimationHandler<>(this, ANIMS);

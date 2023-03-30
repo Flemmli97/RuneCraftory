@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.LeapingMonster;
-import io.github.flemmli97.runecraftory.common.entities.ai.LeapingAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.PalmCatAttack;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
@@ -16,20 +16,44 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
-public class EntityWolf extends LeapingMonster {
+import java.util.function.Consumer;
 
-    private static final AnimatedAction MELEE = new AnimatedAction(36, 10, "attack");
-    private static final AnimatedAction LEAP = new AnimatedAction(23, 7, "leap");
+public class EntityPalmCat extends LeapingMonster {
+
+    private static final AnimatedAction MELEE = new AnimatedAction(15, 9, "attack");
+    private static final AnimatedAction LEAP = new AnimatedAction(15, 8, "attack_2");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
     public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, LEAP, INTERACT, SLEEP};
 
-    public LeapingAttackGoal<EntityWolf> attack = new LeapingAttackGoal<>(this);
-    private final AnimationHandler<EntityWolf> animationHandler = new AnimationHandler<>(this, ANIMS);
+    public PalmCatAttack<EntityPalmCat> attack = new PalmCatAttack<>(this);
+    private final AnimationHandler<EntityPalmCat> animationHandler = new AnimationHandler<>(this, ANIMS);
 
-    public EntityWolf(EntityType<? extends EntityWolf> type, Level world) {
+    private boolean hitAny;
+    private boolean consecutive;
+
+    public EntityPalmCat(EntityType<? extends EntityPalmCat> type, Level world) {
         super(type, world);
         this.goalSelector.addGoal(2, this.attack);
+    }
+
+    @Override
+    protected Consumer<AnimatedAction> animatedActionConsumer() {
+        return anim -> {
+            super.animatedActionConsumer().accept(anim);
+            if (!this.level.isClientSide) {
+                AnimatedAction current = this.animationHandler.getAnimation();
+                if (MELEE.checkID(current) || LEAP.checkID(current)) {
+                    if (this.hitAny && !this.consecutive) {
+                        this.consecutive = true;
+                        this.attack.resetCooldown();
+                    } else {
+                        this.consecutive = false;
+                    }
+                }
+                this.hitAny = false;
+            }
+        };
     }
 
     @Override
@@ -59,31 +83,25 @@ public class EntityWolf extends LeapingMonster {
     }
 
     @Override
-    public AnimationHandler<? extends EntityWolf> getAnimationHandler() {
+    public AnimationHandler<? extends EntityPalmCat> getAnimationHandler() {
         return this.animationHandler;
     }
 
     @Override
-    public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(MELEE.getID())) {
-            this.getNavigation().stop();
-            if (anim.getTick() == 1 && this.getTarget() != null)
-                this.lookAt(this.getTarget(), 360, 90);
-            if (anim.getTick() == 10 || anim.getTick() == 17 || anim.getTick() == 23 || anim.getTick() == 30) {
-                this.mobAttack(anim, this.getTarget(), target -> wolfAttack(this, target));
-            }
-        } else
-            super.handleAttack(anim);
-    }
-
-    @Override
     public Vec3 getLeapVec(@Nullable LivingEntity target) {
-        return super.getLeapVec(target).scale(1.1);
+        if (target != null) {
+            Vec3 targetPos = target.position();
+            Vec3 leap = new Vec3(targetPos.x - this.getX(), 0.0, targetPos.z - this.getZ());
+            if (leap.lengthSqr() > 4)
+                leap = leap.normalize();
+            return leap;
+        }
+        return super.getLeapVec(null);
     }
 
     @Override
     public float maxLeapDistance() {
-        return 3.5f;
+        return 3;
     }
 
     @Override
@@ -91,10 +109,14 @@ public class EntityWolf extends LeapingMonster {
         return 0.2;
     }
 
-    public static boolean wolfAttack(LivingEntity attacker, Entity target) {
-        CustomDamage.Builder source = new CustomDamage.Builder(attacker).noKnockback().hurtResistant(1);
-        double damagePhys = CombatUtils.getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
-        return CombatUtils.mobAttack(attacker, target, source, damagePhys);
+    @Override
+    public boolean doHurtTarget(Entity entity) {
+        CustomDamage.Builder source = new CustomDamage.Builder(this).noKnockback().hurtResistant(1);
+        double damagePhys = CombatUtils.getAttributeValue(this, Attributes.ATTACK_DAMAGE);
+        boolean hurt = CombatUtils.mobAttack(this, entity, source, damagePhys);
+        if (hurt)
+            this.hitAny = true;
+        return hurt;
     }
 
     @Override

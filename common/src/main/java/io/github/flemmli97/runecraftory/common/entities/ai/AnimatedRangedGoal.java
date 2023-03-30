@@ -3,11 +3,19 @@ package io.github.flemmli97.runecraftory.common.entities.ai;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.phys.AABB;
 
 import java.util.function.Predicate;
 
 public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal<T> {
+
+    private static <T extends BaseMonster> MeleeAttackCheck<T> DEFAULT_CHECK() {
+        return (attacker, target, anim) -> {
+            AABB aabb = attacker.calculateAttackAABB(anim, target, 1);
+            return aabb.intersects(target.getBoundingBox());
+        };
+    }
 
     private final float reach, reachSq;
     private final Predicate<T> canRanged;
@@ -16,12 +24,19 @@ public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal
     private boolean moveTo, clockWise;
     private boolean canSee;
 
+    private final MeleeAttackCheck<T> meleeAttackCheck;
+
     public AnimatedRangedGoal(T entity, float rangedReach, Predicate<T> canRangedAttack) {
         this(entity, rangedReach, true, canRangedAttack);
     }
 
     public AnimatedRangedGoal(T entity, float rangedReach, boolean allowStrafing, Predicate<T> canRangedAttack) {
+        this(entity, rangedReach, allowStrafing, DEFAULT_CHECK(), canRangedAttack);
+    }
+
+    public AnimatedRangedGoal(T entity, float rangedReach, boolean allowStrafing, MeleeAttackCheck<T> meleeAttackCheck, Predicate<T> canRangedAttack) {
         super(entity);
+        this.meleeAttackCheck = meleeAttackCheck;
         this.reach = rangedReach;
         this.reachSq = rangedReach * rangedReach;
         this.canRanged = canRangedAttack;
@@ -33,8 +48,7 @@ public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal
         if (this.attacker.getRandom().nextFloat() < this.attacker.attackChance(AnimationType.GENERICATTACK)) {
             if (this.attacker.getRandom().nextFloat() < this.attacker.attackChance(AnimationType.MELEE)) {
                 AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.MELEE);
-                AABB aabb = this.attacker.calculateAttackAABB(anim, this.target, 1);
-                if (aabb.intersects(this.target.getBoundingBox()))
+                if (this.meleeAttackCheck.inMeleeRange(this.attacker, this.target, anim))
                     return anim;
             }
             if (this.distanceToTargetSq <= this.reachSq && this.canRanged.test(this.attacker))
@@ -96,5 +110,10 @@ public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal
         if (!this.allowStrafing)
             return;
         super.circleAroundTargetFacing(radius, clockWise, speed);
+    }
+
+    public interface MeleeAttackCheck<T extends BaseMonster> {
+
+        boolean inMeleeRange(T attacker, LivingEntity target, AnimatedAction anim);
     }
 }

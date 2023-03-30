@@ -21,7 +21,7 @@ public class EntityBigMuck extends BaseMonster {
     public static final AnimatedAction SLAP = new AnimatedAction(24, 7, "slap");
     public static final AnimatedAction SPORE = new AnimatedAction(44, 18, "spore");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(SLAP, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{SLAP, SPORE, INTERACT, SLEEP};
     public final AnimatedMeleeGoal<EntityBigMuck> ai = new AnimatedMeleeGoal<>(this);
     private final AnimationHandler<EntityBigMuck> animationHandler = new AnimationHandler<>(this, ANIMS);

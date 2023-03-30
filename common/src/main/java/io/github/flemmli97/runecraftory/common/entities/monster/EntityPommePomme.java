@@ -13,7 +13,7 @@ public class EntityPommePomme extends ChargingMonster {
     public static final AnimatedAction CHARGE_ATTACK = new AnimatedAction(34, 2, "roll");
     public static final AnimatedAction KICK = new AnimatedAction(17, 11, "kick");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK, "interact");
-    public static final AnimatedAction SLEEP = AnimatedAction.builder(2, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
+    public static final AnimatedAction SLEEP = AnimatedAction.builder(1, "sleep").infinite().changeDelay(AnimationHandler.DEFAULT_ADJUST_TIME).build();
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{KICK, CHARGE_ATTACK, INTERACT, SLEEP};
 
     public final ChargeAttackGoal<EntityPommePomme> ai = new ChargeAttackGoal<>(this);
