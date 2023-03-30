@@ -206,7 +206,12 @@ public class EntityCalls {
 
     public static boolean cancelLivingAttack(DamageSource source, Entity target, float amount) {
         Entity attacker = source.getEntity();
-        if (attacker instanceof Player || source instanceof CustomDamage) {
+        if (source instanceof CustomDamage customDamage) {
+            if (target.invulnerableTime + customDamage.hurtProtection() <= 20)
+                target.invulnerableTime = 10;
+            return false;
+        }
+        if (attacker instanceof Player) {
             return false;
         }
         if (attacker instanceof LivingEntity living && living.getMainHandItem().is(ModTags.UPGRADABLE_HELD) && !living.getType().is(ModTags.HELD_WEAPON_EXEMPT)) {
@@ -408,8 +413,8 @@ public class EntityCalls {
         else if (damage > 0 && source != DamageSource.OUT_OF_WORLD && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.DEFENCE, Math.min(7, (float) (0.5 + Math.log(damage * 0.25))) * 1.5f));
         }
-        if (source instanceof CustomDamage)
-            entity.invulnerableTime = ((CustomDamage) source).hurtProtection() + 10;
+        //if (source instanceof CustomDamage)
+        //    entity.invulnerableTime = ((CustomDamage) source).hurtProtection() + 10;
         return damage;
     }
 
