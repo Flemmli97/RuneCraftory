@@ -175,6 +175,8 @@ public class EntityGhost extends ChargingMonster {
             this.handleNoGravTravel(vec);
         } else {
             this.noPhysics = !this.playDeath();
+            if (this.getY() < this.level.getMinBuildHeight() + 1)
+                vec = new Vec3(vec.x, 0.006, vec.z);
             super.travel(vec);
         }
     }
@@ -209,7 +211,7 @@ public class EntityGhost extends ChargingMonster {
         LivingEntity target = this.getTarget();
         if (target != null && target.distanceToSqr(this) > 140)
             return true;
-        return !prev.equals(VANISH.getID()) && this.vanishNext;
+        return this.random.nextFloat() < 0.2f || !prev.equals(VANISH.getID()) && this.vanishNext;
     }
 
     @Override

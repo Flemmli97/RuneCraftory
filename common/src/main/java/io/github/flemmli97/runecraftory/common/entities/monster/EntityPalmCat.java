@@ -92,9 +92,9 @@ public class EntityPalmCat extends LeapingMonster {
         if (target != null) {
             Vec3 targetPos = target.position();
             Vec3 leap = new Vec3(targetPos.x - this.getX(), 0.0, targetPos.z - this.getZ());
-            if (leap.lengthSqr() > 4)
-                leap = leap.normalize();
-            return leap;
+            if (leap.lengthSqr() > 7)
+                return leap.normalize();
+            return leap.scale(0.9);
         }
         return super.getLeapVec(null);
     }
