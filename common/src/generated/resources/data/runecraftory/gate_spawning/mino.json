@@ -1,12 +1,11 @@
 {
   "entity": "runecraftory:mino",
   "min_distance_from_spawn": 0,
-  "min_gate_level": 0,
+  "min_gate_level": 5,
   "biomes": {
-    "c:is_plains": 50,
-    "minecraft:is_forest": 50,
-    "minecraft:is_hill": 50,
-    "c:is_magical": 50
+    "minecraft:is_forest": 10,
+    "minecraft:is_taiga": 10,
+    "c:is_magical": 10
   },
   "structures": {}
 }

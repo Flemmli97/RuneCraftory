@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityAppleProjectile;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBaseSpellBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigPlate;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
@@ -85,6 +86,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityWeagle;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWolf;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbrosia;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityDeadTree;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityMarionetta;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntityIgnis;
@@ -596,7 +598,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.RES_STUN, 60)
                     .putAttributes(LibAttributes.RES_FAINT, 95)
                     .putAttributes(LibAttributes.RES_DRAIN, 30)
-                    .xp(500).money(50).tamingChance(0.008f).setBarnOccupancy(2).setRidable().setFlying().build());
+                    .xp(500).money(50).tamingChance(0.005f).setBarnOccupancy(2).setRidable().setFlying().build());
     public static final RegistryEntrySupplier<EntityType<EntityThunderbolt>> THUNDERBOLT = regMonster(EntityType.Builder.of(EntityThunderbolt::new, MobCategory.MONSTER).sized(1.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "thunderbolt"),
             0x212121, 0x2f1177,
             new EntityProperties.Builder()
@@ -615,7 +617,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.RES_STUN, 50)
                     .putAttributes(LibAttributes.RES_FAINT, 95)
                     .putAttributes(LibAttributes.RES_DRAIN, 25)
-                    .xp(650).money(75).tamingChance(0.008f).setBarnOccupancy(2).setRidable().build());
+                    .xp(650).money(75).tamingChance(0.005f).setBarnOccupancy(2).setRidable().build());
     public static final RegistryEntrySupplier<EntityType<EntityMarionetta>> MARIONETTA = regMonster(EntityType.Builder.of(EntityMarionetta::new, MobCategory.MONSTER).sized(0.8f, 2.6f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "marionetta"),
             0xb86b13, 0xd8d7d7,
             new EntityProperties.Builder()
@@ -634,7 +636,26 @@ public class ModEntities {
                     .putAttributes(LibAttributes.RES_STUN, 60)
                     .putAttributes(LibAttributes.RES_FAINT, 95)
                     .putAttributes(LibAttributes.RES_DRAIN, 20)
-                    .xp(900).money(75).tamingChance(0.008f).setBarnOccupancy(2).setRidable().build());
+                    .xp(900).money(75).tamingChance(0.005f).setBarnOccupancy(2).setRidable().build());
+    public static final RegistryEntrySupplier<EntityType<EntityDeadTree>> DEAD_TREE = regMonster(EntityType.Builder.of(EntityDeadTree::new, MobCategory.MONSTER).sized(1.8f, 7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "dead_tree"),
+            0x3e4a40, 0x227904,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.MAX_HEALTH, 300).putLevelGains(LibAttributes.MAX_HEALTH, 30.5)
+                    .putAttributes(LibAttributes.ATTACK_DAMAGE, 18).putLevelGains(LibAttributes.ATTACK_DAMAGE, 3.3)
+                    .putAttributes(LibAttributes.DEFENCE, 5).putLevelGains(LibAttributes.DEFENCE, 2.3)
+                    .putAttributes(LibAttributes.MAGIC, 13.3).putLevelGains(LibAttributes.MAGIC, 3.3)
+                    .putAttributes(LibAttributes.MAGIC_DEFENCE, 3.9).putLevelGains(LibAttributes.MAGIC_DEFENCE, 2.3)
+                    .putAttributes(LibAttributes.RES_DARK, 25)
+                    .putAttributes(LibAttributes.RES_PARA, 75)
+                    .putAttributes(LibAttributes.RES_POISON, 95)
+                    .putAttributes(LibAttributes.RES_SEAL, 90)
+                    .putAttributes(LibAttributes.RES_SLEEP, 100)
+                    .putAttributes(LibAttributes.RES_DIZZY, 65)
+                    .putAttributes(LibAttributes.RES_CRIT, 35)
+                    .putAttributes(LibAttributes.RES_STUN, 60)
+                    .putAttributes(LibAttributes.RES_FAINT, 95)
+                    .putAttributes(LibAttributes.RES_DRAIN, 20)
+                    .xp(900).money(75).tamingChance(0.005f).setBarnOccupancy(2).setRidable().build());
 
     public static final RegistryEntrySupplier<EntityType<EntityNPCBase>> NPC = npc(EntityType.Builder.of(EntityNPCBase::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "npc"));
 
@@ -671,6 +692,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntitySleepAura>> SLEEP_AURA = reg(EntityType.Builder.<EntitySleepAura>of(EntitySleepAura::new, MobCategory.MISC).sized(1.5f, 1).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "sleep_aura"));
     public static final RegistryEntrySupplier<EntityType<EntityBullet>> CIRCLING_BULLET = reg(EntityType.Builder.<EntityBullet>of(EntityBullet::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "circling_bullet"));
     public static final RegistryEntrySupplier<EntityType<EntityThrownItem>> THROWN_ITEM = reg(EntityType.Builder.<EntityThrownItem>of(EntityThrownItem::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "thrown_item"));
+    public static final RegistryEntrySupplier<EntityType<EntityAppleProjectile>> APPLE = reg(EntityType.Builder.<EntityAppleProjectile>of(EntityAppleProjectile::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "apple"));
 
     public static final RegistryEntrySupplier<EntityType<EntityRuney>> RUNEY = reg(EntityType.Builder.of(EntityRuney::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "runey"));
     public static final RegistryEntrySupplier<EntityType<EntityRuneOrb>> STAT_BONUS = reg(EntityType.Builder.of(EntityRuneOrb::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rune_orb"));

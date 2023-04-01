@@ -18,16 +18,22 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
 
     public boolean use(LivingEntity entity) {
         if (entity.level instanceof ServerLevel serverLevel)
-            return this.use(serverLevel, entity, ItemStack.EMPTY, 1, 1, 1);
+            return this.use(serverLevel, entity, ItemStack.EMPTY);
         return false;
     }
 
-    public boolean use(ServerLevel world, LivingEntity entity) {
-        return this.use(world, entity, ItemStack.EMPTY, 1, 1, 1);
+    public boolean use(LivingEntity entity, boolean ignoreSeal) {
+        if (entity.level instanceof ServerLevel serverLevel)
+            return this.use(serverLevel, entity, ItemStack.EMPTY, ignoreSeal);
+        return false;
     }
 
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack) {
-        if (EntityUtils.sealed(entity))
+        return this.use(world, entity, stack, false);
+    }
+
+    public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, boolean ignoreSeal) {
+        if (!ignoreSeal && EntityUtils.sealed(entity))
             return false;
         return this.use(world, entity, stack, 1, 1, 1);
     }

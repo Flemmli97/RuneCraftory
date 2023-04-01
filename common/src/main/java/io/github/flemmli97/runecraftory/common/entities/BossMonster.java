@@ -1,7 +1,9 @@
 package io.github.flemmli97.runecraftory.common.entities;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
+import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IOverlayEntityRender;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.nbt.CompoundTag;
@@ -19,7 +21,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
 
@@ -28,6 +33,12 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
 
     public BossMonster(EntityType<? extends BossMonster> type, Level level) {
         super(type, level);
+    }
+
+    public static <T extends BaseMonster> ImmutableMap<String, BiConsumer<AnimatedAction, T>> createAnimationHandler(Consumer<ImmutableMap.Builder<AnimatedAction, BiConsumer<AnimatedAction, T>>> cons) {
+        ImmutableMap.Builder<AnimatedAction, BiConsumer<AnimatedAction, T>> builder = ImmutableMap.builder();
+        cons.accept(builder);
+        return builder.build().entrySet().stream().collect(ImmutableMap.toImmutableMap(e -> e.getKey().getID(), Map.Entry::getValue));
     }
 
     @Override

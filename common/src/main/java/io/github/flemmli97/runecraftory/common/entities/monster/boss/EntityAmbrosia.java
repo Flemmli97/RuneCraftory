@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.math.Vector3f;
+import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
@@ -11,7 +11,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
-import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -22,33 +21,67 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
+import java.util.function.BiConsumer;
 
 public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
-    //Tries kicking target 3 times in a row   
+
     public static final AnimatedAction KICK_1 = new AnimatedAction(12, 6, "kick_1");
     public static final AnimatedAction KICK_2 = new AnimatedAction(12, 6, "kick_2");
     public static final AnimatedAction KICK_3 = new AnimatedAction(16, 6, "kick_3");
-
-    //Sends a wave of hp-draining(hard) butterflies at target
     public static final AnimatedAction BUTTERFLY = new AnimatedAction(45, 5, "butterfly");
-    //Shockwave kind of attack surrounding ambrosia
     public static final AnimatedAction WAVE = new AnimatedAction(45, 5, "wave");
-    //Sleep balls
     public static final AnimatedAction SLEEP = new AnimatedAction(15, 5, "sleep");
-    //2 spinning changing direction between them. also scatters earth damage pollen while doing it
     public static final AnimatedAction POLLEN = new AnimatedAction(15, 5, "pollen");
     public static final AnimatedAction POLLEN_2 = AnimatedAction.copyOf(POLLEN, "pollen_2");
-
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(204, "defeat").marker(150).infinite().build();
     public static final AnimatedAction ANGRY = new AnimatedAction(48, 0, "angry");
-
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(KICK_1, "interact");
 
     public static final ImmutableList<String> NON_CHOOSABLE_ATTACKS = ImmutableList.of(POLLEN_2.getID(), KICK_2.getID(), KICK_3.getID());
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{KICK_1, BUTTERFLY, WAVE, SLEEP, POLLEN, POLLEN_2, KICK_2, KICK_3, DEFEAT, ANGRY, INTERACT};
-    private static final List<Vector3f> pollenBase = RayTraceUtils.rotatedVecs(new Vec3(1, 0, 0), new Vec3(0, 1, 0), -180, 135, 45);
-    private static final List<Vector3f> pollenInd = RayTraceUtils.rotatedVecs(new Vec3(0.04, 0.07, 0), new Vec3(0, 1, 0), -180, 160, 20);
+    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityAmbrosia>> ATTACK_HANDLER = createAnimationHandler(b -> {
+        b.put(BUTTERFLY, (anim, entity) -> {
+            if (anim.canAttack()) {
+                ModSpells.BUTTERFLY.get().use(entity);
+            }
+        });
+        BiConsumer<AnimatedAction, EntityAmbrosia> kick = (anim, entity) -> {
+            LivingEntity target = entity.getTarget();
+            if (target != null) {
+                entity.getNavigation().moveTo(target, 1.0);
+            }
+            if (anim.canAttack()) {
+                entity.mobAttack(anim, target, entity::doHurtTarget);
+            }
+        };
+        b.put(KICK_1, kick);
+        b.put(KICK_2, kick);
+        b.put(KICK_3, kick);
+        b.put(SLEEP, (anim, entity) -> {
+            entity.getNavigation().stop();
+            if (anim.canAttack())
+                ModSpells.SLEEPBALLS.get().use(entity);
+        });
+        b.put(WAVE, (anim, entity) -> {
+            entity.getNavigation().stop();
+            if (anim.canAttack())
+                ModSpells.WAVE.get().use(entity);
+        });
+        BiConsumer<AnimatedAction, EntityAmbrosia> pollenHandler = (anim, entity) -> {
+            if (entity.aiVarHelper == null)
+                return;
+            entity.setDeltaMovement(new Vec3(entity.aiVarHelper.x(), 0, entity.aiVarHelper.z()));
+            if (anim.canAttack() && !EntityUtils.sealed(entity)) {
+                entity.getNavigation().stop();
+                EntityPollen pollen = new EntityPollen(entity.level, entity);
+                pollen.setPos(pollen.getX(), pollen.getY() + 0.5, pollen.getZ());
+                entity.level.addFreshEntity(pollen);
+            }
+        };
+        b.put(POLLEN, pollenHandler);
+        b.put(POLLEN_2, pollenHandler);
+    });
+
     public final AmbrosiaAttackGoal<EntityAmbrosia> attack = new AmbrosiaAttackGoal<>(this);
     private final AnimationHandler<EntityAmbrosia> animationHandler = new AnimationHandler<>(this, ANIMS);
     private Vec3 aiVarHelper;
@@ -78,12 +111,8 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     public int animationCooldown(AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim != null)
-            switch (anim.getID()) {
-                case "kick_1":
-                case "pollen":
-                case "kick_2":
-                    return 3;
-            }
+            if (anim.getID().equals(KICK_1.getID()) || anim.getID().equals(KICK_2.getID()) || anim.getID().equals(POLLEN.getID()))
+                return 3;
         return 34 + this.getRandom().nextInt(22) - (this.isEnraged() ? 20 : 0) + diffAdd;
     }
 
@@ -121,45 +150,9 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
             if (!anim.getID().equals(POLLEN.getID()))
                 this.lookAt(target, 180.0f, 50.0f);
         }
-        switch (anim.getID()) {
-            case "butterfly":
-                if (anim.canAttack()) {
-                    ModSpells.BUTTERFLY.get().use(this);
-                }
-                break;
-            case "kick_1":
-            case "kick_2":
-            case "kick_3":
-                if (target != null) {
-                    this.getNavigation().moveTo(target, 1.0);
-                }
-                if (anim.canAttack()) {
-                    this.mobAttack(anim, target, this::doHurtTarget);
-                }
-                break;
-            case "sleep":
-                this.getNavigation().stop();
-                if (anim.canAttack() && !EntityUtils.sealed(this))
-                    ModSpells.SLEEPBALLS.get().use(this);
-                break;
-            case "wave":
-                this.getNavigation().stop();
-                if (anim.canAttack() && !EntityUtils.sealed(this))
-                    ModSpells.WAVE.get().use(this);
-                break;
-            case "pollen":
-            case "pollen_2":
-                if (this.aiVarHelper == null)
-                    return;
-                this.setDeltaMovement(new Vec3(this.aiVarHelper.x(), 0, this.aiVarHelper.z()));
-                if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    this.getNavigation().stop();
-                    EntityPollen pollen = new EntityPollen(this.level, this);
-                    pollen.setPos(pollen.getX(), pollen.getY() + 0.5, pollen.getZ());
-                    this.level.addFreshEntity(pollen);
-                }
-                break;
-        }
+        BiConsumer<AnimatedAction, EntityAmbrosia> handler = ATTACK_HANDLER.get(anim.getID());
+        if (handler != null)
+            handler.accept(anim, this);
     }
 
     @Override
@@ -239,5 +232,10 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     @Override
     public Vec3 targetPosition() {
         return this.aiVarHelper;
+    }
+
+    @Override
+    public AnimatedAction getSleepAnimation() {
+        return SLEEP;
     }
 }

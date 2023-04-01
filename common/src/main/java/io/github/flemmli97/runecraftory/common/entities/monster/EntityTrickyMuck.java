@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.common.entities.monster;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.ai.AnimatedRangedGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.world.entity.EntityType;
@@ -52,8 +51,6 @@ public class EntityTrickyMuck extends EntityBigMuck {
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
-                if (EntityUtils.sealed(this))
-                    return;
                 ModSpells.POISON_BALL.get().use(this);
             }
         } else

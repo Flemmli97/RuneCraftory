@@ -4,6 +4,8 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
+import io.github.flemmli97.runecraftory.common.spells.AppleRain;
+import io.github.flemmli97.runecraftory.common.spells.AppleShield;
 import io.github.flemmli97.runecraftory.common.spells.ArrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.BaseStaffSpell;
 import io.github.flemmli97.runecraftory.common.spells.BigLightningBoltSpell;
@@ -140,4 +142,8 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> THROW_HAND_ITEM = SPELLS.register("throw_held_item", ThrowHandItemSpell::new);
     public static final RegistryEntrySupplier<Spell> TRIPLE_FIRE_BULLET = SPELLS.register("triple_fire_bullet", TripleFireBulletSpell::new);
     public static final RegistryEntrySupplier<Spell> TRIPLE_FIRE_BALL = SPELLS.register("triple_fire_ball", TripleFireballSpell::new);
+    public static final RegistryEntrySupplier<Spell> APPLE_SHIELD = SPELLS.register("apple_shield", AppleShield::new);
+    public static final RegistryEntrySupplier<Spell> APPLE_RAIN = SPELLS.register("apple_rain", () -> new AppleRain(AppleRain.Type.NORMAL));
+    public static final RegistryEntrySupplier<Spell> APPLE_RAIN_BIG = SPELLS.register("apple_rain_big", () -> new AppleRain(AppleRain.Type.BIG));
+    public static final RegistryEntrySupplier<Spell> APPLE_RAIN_MORE = SPELLS.register("apple_rain_more", () -> new AppleRain(AppleRain.Type.LOTS));
 }

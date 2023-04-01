@@ -1,13 +1,13 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.ThunderboltAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
-import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -31,44 +31,112 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiConsumer;
 
 public class EntityThunderbolt extends BossMonster {
 
-    //Turns and kicks with backlegs
-    private static final AnimatedAction BACK_KICK = new AnimatedAction(13, 7, "back_kick");
-    //Shoots out 5 wind lazer beams in front
-    private static final AnimatedAction LASER_X5 = new AnimatedAction(29, 25, "laser_x5");
-    //AOE around thunderbolt, throws player into air. after that tries to kick him away if players staggering
-    private static final AnimatedAction STOMP = new AnimatedAction(9, 6, "stomp");
-    //Horn attack: throws player into air and then kicks him away
-    private static final AnimatedAction HORN_ATTACK = new AnimatedAction(9, 5, "horn_attack");
-    private static final AnimatedAction BACK_KICK_HORN = AnimatedAction.copyOf(BACK_KICK, "back_kick_horn");
-
-    //Charges 2 times at the player. 2-3 when enraged
-    private static final AnimatedAction CHARGE = new AnimatedAction(31, 9, "charge");
-    private static final AnimatedAction CHARGE_2 = AnimatedAction.copyOf(CHARGE, "charge_2");
-    private static final AnimatedAction CHARGE_3 = AnimatedAction.copyOf(CHARGE, "charge_3");
-
-    //Shoots lazers in all directions. only enraged
-    private static final AnimatedAction LASER_AOE = AnimatedAction.copyOf(LASER_X5, "laser_aoe");
-    //Kicks with backlegs causes wind lazerbeam in looking direction. only enraged
-    private static final AnimatedAction LASER_KICK = new AnimatedAction(16, 6, "laser_kick");
-    private static final AnimatedAction LASER_KICK_2 = AnimatedAction.copyOf(LASER_KICK, "laser_kick_2");
-
-    //Shoots 2 slight homing wind blades
-    private static final AnimatedAction WIND_BLADE = new AnimatedAction(15, 8, "wind_blade");
-    //Used after feinting death
-    private static final AnimatedAction LASER_KICK_3 = AnimatedAction.copyOf(LASER_KICK, "laser_kick_3");
-    public static final ImmutableList<String> NON_CHOOSABLE_ATTACKS = ImmutableList.of(CHARGE_2.getID(), CHARGE_3.getID(), LASER_KICK_2.getID(), LASER_KICK_3.getID(), BACK_KICK_HORN.getID());
-    private static final AnimatedAction FEINT = new AnimatedAction(40, 2, "feint");
-    private static final AnimatedAction DEFEAT = AnimatedAction.builder(80, "defeat").marker(60).infinite().build();
-    private static final AnimatedAction NEIGH = new AnimatedAction(24, 9, "neigh");
-
+    public static final AnimatedAction BACK_KICK = new AnimatedAction(13, 7, "back_kick");
+    public static final AnimatedAction LASER_X5 = new AnimatedAction(29, 25, "laser_x5");
+    public static final AnimatedAction STOMP = new AnimatedAction(9, 6, "stomp");
+    public static final AnimatedAction HORN_ATTACK = new AnimatedAction(9, 5, "horn_attack");
+    public static final AnimatedAction BACK_KICK_HORN = AnimatedAction.copyOf(BACK_KICK, "back_kick_horn");
+    public static final AnimatedAction CHARGE = new AnimatedAction(31, 9, "charge");
+    public static final AnimatedAction CHARGE_2 = AnimatedAction.copyOf(CHARGE, "charge_2");
+    public static final AnimatedAction CHARGE_3 = AnimatedAction.copyOf(CHARGE, "charge_3");
+    public static final AnimatedAction LASER_AOE = AnimatedAction.copyOf(LASER_X5, "laser_aoe");
+    public static final AnimatedAction LASER_KICK = new AnimatedAction(16, 6, "laser_kick");
+    public static final AnimatedAction LASER_KICK_2 = AnimatedAction.copyOf(LASER_KICK, "laser_kick_2");
+    public static final AnimatedAction WIND_BLADE = new AnimatedAction(15, 8, "wind_blade");
+    public static final AnimatedAction LASER_KICK_3 = AnimatedAction.copyOf(LASER_KICK, "laser_kick_3");
+    public static final AnimatedAction FEINT = new AnimatedAction(40, 2, "feint");
+    public static final AnimatedAction DEFEAT = AnimatedAction.builder(80, "defeat").marker(60).infinite().build();
+    public static final AnimatedAction NEIGH = new AnimatedAction(24, 9, "neigh");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(STOMP, "interact");
 
+    public static final ImmutableList<String> NON_CHOOSABLE_ATTACKS = ImmutableList.of(CHARGE_2.getID(), CHARGE_3.getID(), LASER_KICK_2.getID(), LASER_KICK_3.getID(), BACK_KICK_HORN.getID());
     private static final AnimatedAction[] ANIMATED_ACTIONS = new AnimatedAction[]{BACK_KICK, LASER_X5, STOMP, HORN_ATTACK, BACK_KICK_HORN, CHARGE, CHARGE_2, CHARGE_3,
             LASER_AOE, LASER_KICK, LASER_KICK_2, WIND_BLADE, LASER_KICK_3, FEINT, DEFEAT, NEIGH, INTERACT};
+    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityThunderbolt>> ATTACK_HANDLER = createAnimationHandler(b -> {
+        BiConsumer<AnimatedAction, EntityThunderbolt> kick = (anim, entity) -> {
+            LivingEntity target = entity.getTarget();
+            if (anim.canAttack()) {
+                entity.mobAttack(anim, target, e -> {
+                    if (entity.doHurtTarget(e)) {
+                        e.setDeltaMovement(0, 0.05, 0);
+                        e.hasImpulse = true;
+                        e.knockback(0.8f, entity.getX() - e.getX(), entity.getZ() - e.getZ());
+                    }
+                });
+            }
+        };
+        b.put(BACK_KICK, kick);
+        b.put(BACK_KICK_HORN, kick);
+        b.put(HORN_ATTACK, (anim, entity) -> {
+            LivingEntity target = entity.getTarget();
+            if (anim.canAttack()) {
+                AtomicBoolean bool = new AtomicBoolean(false);
+                entity.mobAttack(anim, target, e -> {
+                    if (entity.doHurtTarget(e)) {
+                        if (!bool.get())
+                            bool.set(true);
+                        e.setDeltaMovement(0, 0.65, 0);
+                        e.hasImpulse = true;
+                    }
+                });
+                if (bool.get() && !entity.isVehicle()) {
+                    entity.hornAttackSuccess = true;
+                    entity.attack.setIddleTime(1);
+                }
+            }
+        });
+        b.put(STOMP, (anim, entity) -> {
+            if (anim.canAttack()) {
+                entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
+            }
+        });
+        b.put(WIND_BLADE, (anim, entity) -> {
+            if (anim.canAttack()) {
+                ModSpells.DOUBLESONIC.get().use(entity);
+            }
+        });
+        b.put(LASER_X5, (anim, entity) -> {
+            if (anim.canAttack()) {
+                ModSpells.LASER5.get().use(entity);
+            }
+        });
+        b.put(LASER_AOE, (anim, entity) -> {
+            if (anim.canAttack()) {
+                ModSpells.LASERAOE.get().use(entity);
+            }
+        });
+        BiConsumer<AnimatedAction, EntityThunderbolt> bigLaser = (anim, entity) -> {
+            if (anim.canAttack()) {
+                ModSpells.BIGLIGHTNING.get().use(entity);
+            }
+        };
+        b.put(LASER_KICK, bigLaser);
+        b.put(LASER_KICK_2, bigLaser);
+        b.put(LASER_KICK_3, bigLaser);
+        BiConsumer<AnimatedAction, EntityThunderbolt> charge = (anim, entity) -> {
+            if ((anim.getTick() < anim.getLength() - 6 && anim.getTick() > anim.getAttackTime()) && !entity.chargeAttackSuccess) {
+                if (entity.chargeMotion != null) {
+                    entity.setDeltaMovement(entity.chargeMotion[0], entity.getDeltaMovement().y, entity.chargeMotion[2]);
+                }
+                entity.mobAttack(anim, null, e -> {
+                    if (entity.doHurtTarget(e)) {
+                        entity.chargeAttackSuccess = true;
+                        entity.attack.setIddleTime(entity.animationCooldown(null));
+                    }
+                });
+            }
+        };
+        b.put(CHARGE, charge);
+        b.put(CHARGE_2, charge);
+        b.put(CHARGE_3, charge);
+    });
+
     private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityThunderbolt.class, EntityDataSerializers.FLOAT);
+
     public final ThunderboltAttackGoal<EntityThunderbolt> attack = new ThunderboltAttackGoal<>(this);
     private final AnimationHandler<EntityThunderbolt> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS)
             .setAnimationChangeCons(anim -> {
@@ -168,79 +236,9 @@ public class EntityThunderbolt extends BossMonster {
             this.getNavigation().stop();
             this.getLookControl().setLookAt(target, 30.0f, 30.0f);
         }
-        switch (anim.getID()) {
-            case "back_kick":
-            case "back_kick_horn":
-                if (anim.canAttack()) {
-                    this.mobAttack(anim, target, e -> {
-                        if (this.doHurtTarget(e)) {
-                            e.setDeltaMovement(0, 0.05, 0);
-                            e.hasImpulse = true;
-                            e.knockback(0.8f, this.getX() - e.getX(), this.getZ() - e.getZ());
-                        }
-                    });
-                }
-                break;
-            case "horn_attack":
-                if (anim.canAttack()) {
-                    AtomicBoolean bool = new AtomicBoolean(false);
-                    this.mobAttack(anim, target, e -> {
-                        if (this.doHurtTarget(e)) {
-                            if (!bool.get())
-                                bool.set(true);
-                            e.setDeltaMovement(0, 0.65, 0);
-                            e.hasImpulse = true;
-                        }
-                    });
-                    if (bool.get() && !this.isVehicle()) {
-                        this.hornAttackSuccess = true;
-                        this.attack.setIddleTime(1);
-                    }
-                }
-                break;
-            case "stomp":
-                if (anim.canAttack()) {
-                    this.mobAttack(anim, target, this::doHurtTarget);
-                }
-                break;
-            case "wind_blade":
-                if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    ModSpells.DOUBLESONIC.get().use(this);
-                }
-                break;
-            case "laser_x5":
-                if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    ModSpells.LASER5.get().use(this);
-                }
-                break;
-            case "laser_aoe":
-                if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    ModSpells.LASERAOE.get().use(this);
-                }
-                break;
-            case "laser_kick":
-            case "laser_kick_2":
-            case "laser_kick_3":
-                if (anim.canAttack() && !EntityUtils.sealed(this)) {
-                    ModSpells.BIGLIGHTNING.get().use(this);
-                }
-                break;
-            case "charge":
-            case "charge_2":
-            case "charge_3":
-                if ((anim.getTick() < anim.getLength() - 6 && anim.getTick() > anim.getAttackTime()) && !this.chargeAttackSuccess) {
-                    if (this.chargeMotion != null) {
-                        this.setDeltaMovement(this.chargeMotion[0], this.getDeltaMovement().y, this.chargeMotion[2]);
-                    }
-                    this.mobAttack(anim, null, e -> {
-                        if (this.doHurtTarget(e)) {
-                            this.chargeAttackSuccess = true;
-                            this.attack.setIddleTime(this.animationCooldown(null));
-                        }
-                    });
-                }
-                break;
-        }
+        BiConsumer<AnimatedAction, EntityThunderbolt> handler = ATTACK_HANDLER.get(anim.getID());
+        if (handler != null)
+            handler.accept(anim, this);
     }
 
     @Override

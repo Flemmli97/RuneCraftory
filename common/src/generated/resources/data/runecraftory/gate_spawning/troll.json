@@ -3,11 +3,9 @@
   "min_distance_from_spawn": 500,
   "min_gate_level": 3,
   "biomes": {
-    "c:is_spooky": 50,
-    "c:is_dead": 50,
-    "c:is_swamp": 50,
-    "c:is_magical": 50,
-    "c:is_end": 50
+    "minecraft:is_mountain": 10,
+    "c:is_sparse": 10,
+    "minecraft:is_hill": 10
   },
   "structures": {}
 }

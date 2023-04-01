@@ -3,12 +3,10 @@
   "min_distance_from_spawn": 500,
   "min_gate_level": 7,
   "biomes": {
-    "c:is_plains": 30,
-    "minecraft:is_forest": 30,
-    "minecraft:is_hill": 30,
-    "minecraft:is_mountain": 30,
+    "c:is_hot": 30,
     "c:is_savanna": 30,
-    "c:is_sandy": 30
+    "c:is_sandy": 30,
+    "minecraft:is_badlands": 30
   },
   "structures": {}
 }

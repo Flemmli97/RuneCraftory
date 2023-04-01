@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.dead_tree",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:dead_tree_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:dead_tree",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:dead_tree"
+    }
+  ]
+}

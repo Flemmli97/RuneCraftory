@@ -1,5 +1,6 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
+import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.MarionettaAttackGoal;
@@ -27,6 +28,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 public class EntityMarionetta extends BossMonster {
 
@@ -41,8 +43,77 @@ public class EntityMarionetta extends BossMonster {
     public static final AnimatedAction DEFEAT = AnimatedAction.builder(204, "defeat").marker(150).infinite().build();
     public static final AnimatedAction ANGRY = new AnimatedAction(28, 0, "angry");
     public static final AnimatedAction INTERACT = AnimatedAction.copyOf(MELEE, "interact");
-    private static final EntityDataAccessor<Boolean> CAUGHT = SynchedEntityData.defineId(EntityMarionetta.class, EntityDataSerializers.BOOLEAN);
+
     private static final AnimatedAction[] ANIMS = new AnimatedAction[]{MELEE, SPIN, CARD_ATTACK, CHEST_ATTACK, CHEST_THROW, STUFFED_ANIMALS, DARK_BEAM, FURNITURE, DEFEAT, ANGRY, INTERACT};
+    private static final ImmutableMap<String, BiConsumer<AnimatedAction, EntityMarionetta>> ATTACK_HANDLER = createAnimationHandler(b -> {
+        b.put(MELEE, (anim, entity) -> {
+            LivingEntity target = entity.getTarget();
+            if (target != null) {
+                entity.getNavigation().moveTo(target, 1.0);
+            }
+            if (anim.canAttack()) {
+                entity.mobAttack(anim, target, entity::doHurtTarget);
+            }
+        });
+        b.put(SPIN, (anim, entity) -> {
+            if (entity.aiVarHelper == null)
+                return;
+            entity.setDeltaMovement(new Vec3(entity.aiVarHelper[0], 0, entity.aiVarHelper[2]));
+            if (anim.getTick() >= anim.getAttackTime()) {
+                entity.mobAttack(anim, null, e -> CombatUtils.mobAttack(entity, e, new CustomDamage.Builder(entity).hurtResistant(8), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE)));
+            }
+        });
+        b.put(CARD_ATTACK, (anim, entity) -> {
+            entity.getNavigation().stop();
+            if (anim.canAttack())
+                ModSpells.CARDTHROW.get().use(entity);
+        });
+        b.put(CHEST_ATTACK, (anim, entity) -> {
+            if (entity.aiVarHelper == null)
+                return;
+            entity.setDeltaMovement(new Vec3(entity.aiVarHelper[0], 0, entity.aiVarHelper[2]));
+            if (anim.getTick() >= anim.getAttackTime()) {
+                entity.mobAttack(anim, null, e -> {
+                    if (!entity.caughtEntities.contains(e)) {
+                        entity.catchEntity(e);
+                    }
+                });
+            }
+        });
+        b.put(CHEST_THROW, (anim, entity) -> {
+            entity.getNavigation().stop();
+            if (anim.canAttack()) {
+                Vec3 throwVec = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z())
+                        .normalize().scale(1.2).add(0, 0.85, 0);
+                EntityMarionettaTrap trap = new EntityMarionettaTrap(entity.level, entity);
+                entity.caughtEntities.forEach(e -> {
+                    e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.get(), 100, 1, true, false, false));
+                    trap.addCaughtEntity(e);
+                });
+                trap.setDeltaMovement(throwVec);
+                entity.level.addFreshEntity(trap);
+                entity.caughtEntities.clear();
+            }
+        });
+        b.put(STUFFED_ANIMALS, (anim, entity) -> {
+            entity.getNavigation().stop();
+            if (anim.canAttack())
+                ModSpells.PLUSHTHROW.get().use(entity);
+        });
+        b.put(DARK_BEAM, (anim, entity) -> {
+            entity.getNavigation().stop();
+            if (anim.canAttack() && !EntityUtils.sealed(entity))
+                ModSpells.DARKBEAM.get().use(entity);
+        });
+        b.put(FURNITURE, (anim, entity) -> {
+            entity.getNavigation().stop();
+            if (anim.canAttack() && !EntityUtils.sealed(entity))
+                ModSpells.FURNITURE.get().use(entity);
+        });
+    });
+
+    private static final EntityDataAccessor<Boolean> CAUGHT = SynchedEntityData.defineId(EntityMarionetta.class, EntityDataSerializers.BOOLEAN);
+
     public final MarionettaAttackGoal<EntityMarionetta> attack = new MarionettaAttackGoal<>(this);
     private final List<LivingEntity> caughtEntities = new ArrayList<>();
     private final AnimationHandler<EntityMarionetta> animationHandler = new AnimationHandler<>(this, ANIMS)
@@ -133,71 +204,9 @@ public class EntityMarionetta extends BossMonster {
             if (!anim.getID().equals(SPIN.getID()))
                 this.lookAt(target, 180.0f, 50.0f);
         }
-        switch (anim.getID()) {
-            case "melee" -> {
-                if (target != null) {
-                    this.getNavigation().moveTo(target, 1.0);
-                }
-                if (anim.canAttack()) {
-                    this.mobAttack(anim, target, this::doHurtTarget);
-                }
-            }
-            case "spin" -> {
-                if (this.aiVarHelper == null)
-                    return;
-                this.setDeltaMovement(new Vec3(this.aiVarHelper[0], 0, this.aiVarHelper[2]));
-                if (anim.getTick() >= anim.getAttackTime()) {
-                    this.mobAttack(anim, null, e -> CombatUtils.mobAttack(this, e, new CustomDamage.Builder(this).hurtResistant(8), CombatUtils.getAttributeValue(this, Attributes.ATTACK_DAMAGE)));
-                }
-            }
-            case "card_attack" -> {
-                this.getNavigation().stop();
-                if (anim.canAttack())
-                    ModSpells.CARDTHROW.get().use(this);
-            }
-            case "chest_attack" -> {
-                if (this.aiVarHelper == null)
-                    return;
-                this.setDeltaMovement(new Vec3(this.aiVarHelper[0], 0, this.aiVarHelper[2]));
-                if (anim.getTick() >= anim.getAttackTime()) {
-                    this.mobAttack(anim, null, e -> {
-                        if (!this.caughtEntities.contains(e)) {
-                            this.catchEntity(e);
-                        }
-                    });
-                }
-            }
-            case "chest_throw" -> {
-                this.getNavigation().stop();
-                if (anim.canAttack()) {
-                    Vec3 throwVec = new Vec3(this.getLookAngle().x(), 0, this.getLookAngle().z())
-                            .normalize().scale(1.2).add(0, 0.85, 0);
-                    EntityMarionettaTrap trap = new EntityMarionettaTrap(this.level, this);
-                    this.caughtEntities.forEach(e -> {
-                        e.addEffect(new MobEffectInstance(ModEffects.TRUE_INVIS.get(), 100, 1, true, false, false));
-                        trap.addCaughtEntity(e);
-                    });
-                    trap.setDeltaMovement(throwVec);
-                    this.level.addFreshEntity(trap);
-                    this.caughtEntities.clear();
-                }
-            }
-            case "stuffed_animals" -> {
-                this.getNavigation().stop();
-                if (anim.canAttack())
-                    ModSpells.PLUSHTHROW.get().use(this);
-            }
-            case "dark_beam" -> {
-                this.getNavigation().stop();
-                if (anim.canAttack() && !EntityUtils.sealed(this))
-                    ModSpells.DARKBEAM.get().use(this);
-            }
-            case "furniture" -> {
-                this.getNavigation().stop();
-                if (anim.canAttack() && !EntityUtils.sealed(this))
-                    ModSpells.FURNITURE.get().use(this);
-            }
-        }
+        BiConsumer<AnimatedAction, EntityMarionetta> handler = ATTACK_HANDLER.get(anim.getID());
+        if (handler != null)
+            handler.accept(anim, this);
     }
 
     @Override
