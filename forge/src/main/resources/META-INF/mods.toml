@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[${loader_version},)"
 license="ARR"
 issueTrackerURL="https://github.com/Flemmli97/RuneCraftory/issues"
 [[mods]]
@@ -13,7 +13,13 @@ description='''A minecrafty Harvest Moon'''
 [[dependencies.runecraftory]]
 modId="minecraft"
 mandatory=true
-versionRange="[1.18.2,)"
+versionRange="[${mcversion},)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.runecraftory]]
+modId="forge"
+mandatory=true
+versionRange="[${forge_version},)"
 ordering="NONE"
 side="BOTH"
 [[dependencies.runecraftory]]

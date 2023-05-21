@@ -8,7 +8,7 @@
     "Flemmli97"
   ],
   "contact": {
-    "homepage": "https://www.curseforge.com/minecraft/mc-mods/runecraftory-fabric",
+    "homepage": "${homepage}",
     "issues": "https://github.com/Flemmli97/RuneCraftory/issues",
     "sources": "https://github.com/Flemmli97/RuneCraftory"
   },
@@ -36,8 +36,8 @@
   ],
   "accessWidener": "runecraftory.accesswidener",
   "depends": {
-    "fabric": ">=0.58.0+1.18.2",
-    "minecraft": ">=1.18.2",
+    "fabric": ">=${fabric_version}",
+    "minecraft": ">=${mcversion}",
     "tenshilib": ">=1.18.2-1.6.15"
   },
   "conflicts": {
