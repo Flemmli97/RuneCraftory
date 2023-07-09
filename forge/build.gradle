@@ -74,7 +74,7 @@ dependencies {
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
-    modImplementation "${tenshilib_dep}-forge"
+    modImplementation "io.github.flemmli97:tenshilib:${tenshilib_version}:forge"
     modImplementation patchouli
     modImplementation patchouli_datagen
     modImplementation "${simplequests}-forge"
