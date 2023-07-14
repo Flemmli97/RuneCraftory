@@ -28,7 +28,10 @@ import java.util.List;
 public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
 
     private static final ResourceLocation bars = new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png");
-    private static final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting.png");
+    private static final ResourceLocation forging = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forging.png");
+    private static final ResourceLocation crafting = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting.png");
+    private static final ResourceLocation cooking = new ResourceLocation(RuneCraftory.MODID, "textures/gui/cooking.png");
+    private static final ResourceLocation chemistry = new ResourceLocation(RuneCraftory.MODID, "textures/gui/chemistry.png");
 
     private Rect scrollBar = new Rect(195, 12, 8, 142);
     private Rect scrollArea = new Rect(172, 12, 31, 142);
@@ -65,13 +68,13 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
 
     @Override
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = tex;
-        /*texture = switch (this.menu.craftingType()) {
+        ResourceLocation texture = forging;
+        texture = switch (this.menu.craftingType()) {
             case ARMOR -> crafting;
             case COOKING -> cooking;
             case FORGE -> forging;
-            case CHEM -> chem;
-        };*/
+            case CHEM -> chemistry;
+        };
         RenderSystem.setShaderTexture(0, texture);
         this.blit(stack, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         PlayerData data = Platform.INSTANCE.getPlayerData(this.minecraft.player).orElse(null);

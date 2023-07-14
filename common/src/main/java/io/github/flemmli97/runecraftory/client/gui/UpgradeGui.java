@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.client.gui;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
@@ -19,7 +20,8 @@ import net.minecraft.world.entity.player.Inventory;
 
 public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
 
-    private static final ResourceLocation tex = new ResourceLocation(RuneCraftory.MODID, "textures/gui/upgrade.png");
+    private static final ResourceLocation forging = new ResourceLocation(RuneCraftory.MODID, "textures/gui/forging_upgrade.png");
+    private static final ResourceLocation crafting = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting_upgrade.png");
 
     private final EnumSkills skill;
 
@@ -42,9 +44,9 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
 
     @Override
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
-        ResourceLocation texture = tex;
-        //if(this.menu.craftingType() == EnumCrafting.ARMOR)
-        //    texture = crafting;
+        ResourceLocation texture = forging;
+        if (this.menu.craftingType() == EnumCrafting.ARMOR)
+            texture = crafting;
         RenderSystem.setShaderTexture(0, texture);
         this.blit(stack, this.leftPos, this.topPos, 0, 0, 176, 166);
         PlayerData data = Platform.INSTANCE.getPlayerData(this.minecraft.player).orElse(null);
