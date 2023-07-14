@@ -23,7 +23,7 @@ public class RestrictedWaterAvoidingStrollGoal extends RandomStrollGoal {
             Vec3 vec3 = LandRandomPos.getPos(this.mob, 15, 7);
             return vec3 == null ? super.getPosition() : vec3;
         }
-        if (this.monster.behaviourState() == BaseMonster.Behaviour.WANDER_HOME)
+        if (this.monster.behaviourState() == BaseMonster.Behaviour.WANDER_HOME && this.mob.getRestrictRadius() > 0)
             return DefaultRandomPos.getPos(this.mob, (int) (this.mob.getRestrictRadius() * 2), 0);
         return super.getPosition();
     }
