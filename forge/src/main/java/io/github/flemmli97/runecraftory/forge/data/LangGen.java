@@ -239,6 +239,8 @@ public class LangGen implements DataProvider {
         this.add("tooltip.item.eaten", "When eaten");
 
         this.add("tooltip.item.spawn", "Rename to a number to set level");
+        this.add("tooltip.item.prop", "A prop item. Takes on the items look when in another entities hand");
+
         this.add("money", "Money");
         this.add("season", "Season");
         this.add("tooltip.growth", "Growth: %sd");

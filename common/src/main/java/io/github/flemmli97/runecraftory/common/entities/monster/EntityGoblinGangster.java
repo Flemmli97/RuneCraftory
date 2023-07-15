@@ -34,9 +34,9 @@ public class EntityGoblinGangster extends EntityGoblin {
 
     @Override
     protected void populateDefaultEquipmentSlots(DifficultyInstance difficulty) {
-        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.cutlass.get()));
+        this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ModItems.cutlassProp.get()));
         this.setDropChance(EquipmentSlot.MAINHAND, 0);
-        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.cutlass.get()));
+        this.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ModItems.cutlassProp.get()));
         this.setDropChance(EquipmentSlot.OFFHAND, 0);
     }
 

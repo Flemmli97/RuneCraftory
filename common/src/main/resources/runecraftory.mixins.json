@@ -43,7 +43,8 @@
     "LivingEntityRendererMixin",
     "MinecraftMixin",
     "MouseHandlerMixin",
-    "PlayerRendererMixin"
+    "PlayerRendererMixin",
+    "ClientPacketListenerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

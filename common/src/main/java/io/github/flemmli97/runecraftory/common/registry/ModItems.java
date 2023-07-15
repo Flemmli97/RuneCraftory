@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemRecipeBread;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemDebug;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemLevelUp;
+import io.github.flemmli97.runecraftory.common.items.creative.ItemProp;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemSkillUp;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemSeedShield;
 import io.github.flemmli97.runecraftory.common.items.equipment.ItemStatShield;
@@ -1210,6 +1211,9 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> entityLevel = ITEMS.register("entity_level_item", () -> new ItemDebug(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> unknown = ITEMS.register("unknown", () -> new Item(new Item.Properties()));
     public static final RegistryEntrySupplier<Item> orcMaze = ITEMS.register("orc_maze", () -> new Item(new Item.Properties().stacksTo(1)));
+    public static final RegistryEntrySupplier<Item> steelSwordProp = ITEMS.register("steel_sword_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), real -> new ItemStack(ModItems.steelSword.get())));
+    public static final RegistryEntrySupplier<Item> cutlassProp = ITEMS.register("cutlass_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), real -> new ItemStack(ModItems.cutlass.get())));
+    public static final RegistryEntrySupplier<Item> thiefKnifeProp = ITEMS.register("thief_knife_prop", () -> new ItemProp(new Item.Properties().stacksTo(1), real -> new ItemStack(ModItems.thiefKnife.get())));
 
     public static RegistryEntrySupplier<Item> hoe(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
