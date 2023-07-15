@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.NearestTargetNoLoS;
 import io.github.flemmli97.runecraftory.common.entities.ai.WispAttackGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.FloatingFlyNavigator;
+import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyEvaluator;
 import io.github.flemmli97.runecraftory.common.entities.ai.pathing.NoClipFlyMoveController;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -22,6 +23,7 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.phys.Vec3;
 
 public abstract class EntityWispBase extends BaseMonster {
@@ -51,7 +53,13 @@ public abstract class EntityWispBase extends BaseMonster {
 
     @Override
     protected PathNavigation createNavigation(Level level) {
-        return new FloatingFlyNavigator(this, level);
+        return new FloatingFlyNavigator(this, level) {
+            @Override
+            protected PathFinder createPathFinder(int maxDist) {
+                this.nodeEvaluator = new NoClipFlyEvaluator();
+                return new PathFinder(this.nodeEvaluator, maxDist);
+            }
+        };
     }
 
     @Override
