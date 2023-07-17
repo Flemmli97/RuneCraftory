@@ -92,7 +92,7 @@ public class ModelPommePomme<T extends EntityPommePomme> extends EntityModel<T> 
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            if (!EntityPommePomme.SLEEP.checkID(anim))
+            if (!EntityPommePomme.SLEEP.is(anim))
                 this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0)
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));

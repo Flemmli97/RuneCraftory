@@ -122,7 +122,7 @@ public class EntityVeggieGhost extends BaseMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.getAnimationHandler().isCurrentAnim(VANISH.getID()))
+        if (this.getAnimationHandler().isCurrent(VANISH))
             return false;
         boolean ret = super.hurt(source, amount);
         if (ret)

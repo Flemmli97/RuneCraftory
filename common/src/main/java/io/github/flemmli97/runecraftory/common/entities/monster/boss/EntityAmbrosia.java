@@ -118,24 +118,24 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(WAVE.getID(), ANGRY.getID()))) && super.hurt(source, amount);
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(WAVE, ANGRY))) && super.hurt(source, amount);
     }
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(ANGRY.getID(), DEFEAT.getID());
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
     }
 
     @Override
     public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrentAnim(POLLEN.getID(), ANGRY.getID(), DEFEAT.getID()))
+        if (this.getAnimationHandler().isCurrent(POLLEN, ANGRY, DEFEAT))
             return;
         super.push(x, y, z);
     }
 
     @Override
     public boolean shouldFreezeTravel() {
-        return this.getAnimationHandler().isCurrentAnim(WAVE.getID());
+        return this.getAnimationHandler().isCurrent(WAVE);
     }
 
     @Override

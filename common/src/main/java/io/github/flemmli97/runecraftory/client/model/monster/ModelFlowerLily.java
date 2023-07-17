@@ -88,7 +88,7 @@ public class ModelFlowerLily<T extends EntityFlowerLily> extends EntityModel<T> 
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            if (!EntityFlowerLily.SLEEP.checkID(anim))
+            if (!EntityFlowerLily.SLEEP.is(anim))
                 this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0)
                 this.anim.doAnimation(this, "move", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));

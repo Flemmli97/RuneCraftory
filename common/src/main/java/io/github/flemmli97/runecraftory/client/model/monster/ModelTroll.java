@@ -104,7 +104,7 @@ public class ModelTroll<T extends EntityTroll> extends EntityModel<T> implements
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            if (!EntityTroll.SLEEP.checkID(anim))
+            if (!EntityTroll.SLEEP.is(anim))
                 this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0)
                 this.anim.doAnimation(this, "walk", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));

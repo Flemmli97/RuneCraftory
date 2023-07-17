@@ -177,17 +177,17 @@ public class EntityMarionetta extends BossMonster {
     public boolean hurt(DamageSource source, float amount) {
         if (this.caughtEntities.contains(source.getEntity()))
             return false;
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(CHEST_THROW.getID(), ANGRY.getID()))) && super.hurt(source, amount);
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(CHEST_THROW, ANGRY))) && super.hurt(source, amount);
     }
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(ANGRY.getID(), DEFEAT.getID());
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
     }
 
     @Override
     public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrentAnim(ANGRY.getID(), DEFEAT.getID()))
+        if (this.getAnimationHandler().isCurrent(ANGRY, DEFEAT))
             return;
         super.push(x, y, z);
     }
@@ -261,7 +261,7 @@ public class EntityMarionetta extends BossMonster {
 
     @Override
     public void push(Entity entityIn) {
-        if (this.getAnimationHandler().isCurrentAnim(SPIN.getID(), CHEST_ATTACK.getID()))
+        if (this.getAnimationHandler().isCurrent(SPIN, CHEST_ATTACK))
             return;
         super.push(entityIn);
     }

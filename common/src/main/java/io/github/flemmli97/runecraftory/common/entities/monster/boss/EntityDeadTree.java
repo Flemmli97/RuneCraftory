@@ -159,17 +159,17 @@ public class EntityDeadTree extends BossMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(ANGRY.getID()))) && super.hurt(source, amount);
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(ANGRY))) && super.hurt(source, amount);
     }
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(ANGRY.getID(), DEFEAT.getID());
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
     }
 
     @Override
     public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrentAnim(ANGRY.getID(), DEFEAT.getID()))
+        if (this.getAnimationHandler().isCurrent(ANGRY, DEFEAT))
             return;
         if (!this.canMove())
             return;

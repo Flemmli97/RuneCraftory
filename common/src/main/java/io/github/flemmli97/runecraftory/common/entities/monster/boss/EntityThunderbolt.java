@@ -204,17 +204,17 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(FEINT.getID(), DEFEAT.getID(), NEIGH.getID()))) && super.hurt(source, amount);
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(FEINT, DEFEAT, NEIGH))) && super.hurt(source, amount);
     }
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(FEINT.getID(), DEFEAT.getID());
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(FEINT, DEFEAT);
     }
 
     @Override
     public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrentAnim(FEINT.getID(), DEFEAT.getID()))
+        if (this.getAnimationHandler().isCurrent(FEINT, DEFEAT))
             return;
         super.push(x, y, z);
     }
@@ -275,21 +275,21 @@ public class EntityThunderbolt extends BossMonster {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrentAnim(DEFEAT.getID()) && !this.feintedDeath && !this.isTamed()) {
+        if (!this.level.isClientSide && this.getHealth() > 0 && this.getAnimationHandler().isCurrent(DEFEAT) && !this.feintedDeath && !this.isTamed()) {
             AnimatedAction anim = this.getAnimationHandler().getAnimation();
             if (anim.getTick() > anim.getLength()) {
                 this.feintedDeath = true;
                 this.getAnimationHandler().setAnimation(FEINT);
             }
         }
-        if (this.getAnimationHandler().isCurrentAnim(CHARGE.getID(), CHARGE_2.getID(), CHARGE_3.getID())) {
+        if (this.getAnimationHandler().isCurrent(CHARGE, CHARGE_2, CHARGE_3)) {
             this.setXRot(0);
             this.setYRot(this.entityData.get(LOCKED_YAW));
         }
-        if (this.getAnimationHandler().isCurrentAnim(FEINT.getID(), DEFEAT.getID()) && !this.isTamed()) {
+        if (this.getAnimationHandler().isCurrent(FEINT, DEFEAT) && !this.isTamed()) {
             Vec3 delta = this.getDeltaMovement();
             this.setDeltaMovement(0, delta.y, 0);
-            if (this.getAnimationHandler().getAnimation().checkID(DEFEAT)) {
+            if (this.getAnimationHandler().getAnimation().is(DEFEAT)) {
                 int tick = this.getAnimationHandler().getAnimation().getTick();
                 if (tick < 40) {
                     if (tick % 10 == 0)
@@ -371,7 +371,7 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public boolean isAlive() {
-        return super.isAlive() && (this.getAnimationHandler() == null || !this.getAnimationHandler().isCurrentAnim(FEINT.getID(), DEFEAT.getID()));
+        return super.isAlive() && (this.getAnimationHandler() == null || !this.getAnimationHandler().isCurrent(FEINT, DEFEAT));
     }
 
     @Override

@@ -43,7 +43,7 @@ public class EntityPalmCat extends LeapingMonster {
             super.animatedActionConsumer().accept(anim);
             if (!this.level.isClientSide) {
                 AnimatedAction current = this.animationHandler.getAnimation();
-                if (MELEE.checkID(current) || LEAP.checkID(current)) {
+                if (MELEE.is(current) || LEAP.is(current)) {
                     if (this.hitAny && !this.consecutive) {
                         this.consecutive = true;
                         this.attack.resetCooldown();
@@ -130,7 +130,7 @@ public class EntityPalmCat extends LeapingMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        if (LEAP.checkID(anim))
+        if (LEAP.is(anim))
             return 1.2;
         return 1;
     }

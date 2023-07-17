@@ -27,6 +27,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -163,6 +164,10 @@ public class EntityUtils {
             return (int) (stack.getItem().getFoodProperties().getNutrition() * 1.5
                     * (1 + 1.8 * stack.getItem().getFoodProperties().getSaturationModifier()));
         return 0;
+    }
+
+    public static Vec3 getStraightProjectileTarget() {
+        return Vec3.ZERO;//TODO
     }
 
     record WeightedChestTier(int tier, int weight, float modifier, int max) {

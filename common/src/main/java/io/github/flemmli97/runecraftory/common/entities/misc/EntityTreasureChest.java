@@ -157,7 +157,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
         if (player instanceof ServerPlayer serverPlayer) {
-            if (!this.getAnimationHandler().isCurrentAnim(OPEN.getID())) {
+            if (!this.getAnimationHandler().isCurrent(OPEN)) {
                 this.getAnimationHandler().setAnimation(OPEN);
                 this.playSound(SoundEvents.CHEST_OPEN, 0.7f, 1);
                 this.openChest = () -> dropRandomItems(serverPlayer, this.random, this.tier(), this::spawnAtLocation);

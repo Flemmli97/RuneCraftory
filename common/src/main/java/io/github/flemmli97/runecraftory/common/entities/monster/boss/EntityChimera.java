@@ -100,7 +100,7 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
                 if (!this.level.isClientSide) {
                     if (this.chargeAttackSuccess && anim != null)
                         this.chargeAttackSuccess = false;
-                    if (this.getAnimationHandler().isCurrentAnim(LEAP.getID()))
+                    if (this.getAnimationHandler().isCurrent(LEAP))
                         this.hitEntity = null;
                 }
             });
@@ -156,17 +156,17 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrentAnim(DEFEAT.getID(), ANGRY.getID()))) && super.hurt(source, amount);
+        return (!this.getAnimationHandler().hasAnimation() || !(this.getAnimationHandler().isCurrent(DEFEAT, ANGRY))) && super.hurt(source, amount);
     }
 
     @Override
     protected boolean isImmobile() {
-        return super.isImmobile() || this.getAnimationHandler().isCurrentAnim(ANGRY.getID(), DEFEAT.getID());
+        return super.isImmobile() || this.getAnimationHandler().isCurrent(ANGRY, DEFEAT);
     }
 
     @Override
     public void push(double x, double y, double z) {
-        if (this.getAnimationHandler().isCurrentAnim(ANGRY.getID(), DEFEAT.getID()))
+        if (this.getAnimationHandler().isCurrent(ANGRY, DEFEAT))
             return;
         super.push(x, y, z);
     }
@@ -240,7 +240,7 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
     @Override
     public void tick() {
         super.tick();
-        if (this.getAnimationHandler().isCurrentAnim(LEAP.getID(), FIRE_BREATH.getID(), FIRE_TAIL_BUBBLE.getID(), BUBBLE_BEAM.getID(), WATER_TAIL_BUBBLE.getID(), WATER_TAIL_BUBBLE.getID())) {
+        if (this.getAnimationHandler().isCurrent(LEAP, FIRE_BREATH, FIRE_TAIL_BUBBLE, BUBBLE_BEAM, WATER_TAIL_BUBBLE, WATER_TAIL_BUBBLE)) {
             this.setXRot(0);
             this.setYRot(this.entityData.get(LOCKED_YAW));
         }

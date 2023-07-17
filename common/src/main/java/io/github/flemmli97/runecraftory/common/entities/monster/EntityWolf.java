@@ -108,7 +108,7 @@ public class EntityWolf extends LeapingMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        if (LEAP.checkID(anim))
+        if (LEAP.is(anim))
             return 1.2;
         return 1;
     }
