@@ -57,20 +57,20 @@ public class EntityBigMuck extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(SLAP.getID()) || anim.getID().equals(SPORE.getID());
+            return anim.is(SLAP, SPORE);
         return false;
     }
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        if (anim.getID().equals(SPORE.getID()))
+        if (anim.is(SPORE))
             return 1.7;
         return 0.8;
     }
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(SPORE.getID())) {
+        if (anim.is(SPORE)) {
             this.getNavigation().stop();
             if (this.attackPos == null) {
                 Vec3 look = Vec3.directionFromRotation(0, this.yHeadRot).scale(1.3);

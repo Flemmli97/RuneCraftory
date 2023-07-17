@@ -38,9 +38,9 @@ public class EntityFlowerLily extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED) {
-            return anim.getID().equals(ATTACK.getID());
+            return anim.is(ATTACK);
         }
-        return type == AnimationType.MELEE && anim.getID().equals(LEAP.getID());
+        return type == AnimationType.MELEE && anim.is(LEAP);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class EntityFlowerLily extends BaseMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(LEAP.getID())) {
+        if (anim.is(LEAP)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 Vec3 vec32;
@@ -62,7 +62,7 @@ public class EntityFlowerLily extends BaseMonster {
                 this.setDeltaMovement(vec32.x, 0.1, vec32.z);
                 this.lookAt(EntityAnchorArgument.Anchor.EYES, this.position().add(vec32.x, 0, vec32.z));
             }
-        } else if (anim.getID().equals(ATTACK.getID())) {
+        } else if (anim.is(ATTACK)) {
             this.getNavigation().stop();
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);

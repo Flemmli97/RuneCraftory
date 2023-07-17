@@ -100,10 +100,10 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(ANGRY.getID()) || anim.getID().equals(DEFEAT.getID()) || anim.getID().equals(INTERACT.getID()))
+        if (anim.is(ANGRY, DEFEAT) || anim.is(INTERACT))
             return false;
         if (type == AnimationType.GENERICATTACK)
-            return this.isEnraged() || !anim.getID().equals(POLLEN.getID());
+            return this.isEnraged() || !anim.is(POLLEN);
         return false;
     }
 
@@ -111,7 +111,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     public int animationCooldown(AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
         if (anim != null)
-            if (anim.getID().equals(KICK_1.getID()) || anim.getID().equals(KICK_2.getID()) || anim.getID().equals(POLLEN.getID()))
+            if (anim.is(KICK_1, KICK_2, POLLEN))
                 return 3;
         return 34 + this.getRandom().nextInt(22) - (this.isEnraged() ? 20 : 0) + diffAdd;
     }
@@ -147,7 +147,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
         if (target != null) {
-            if (!anim.getID().equals(POLLEN.getID()))
+            if (!anim.is(POLLEN))
                 this.lookAt(target, 180.0f, 50.0f);
         }
         BiConsumer<AnimatedAction, EntityAmbrosia> handler = ATTACK_HANDLER.get(anim.getID());
@@ -157,7 +157,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim.getID().equals(POLLEN.getID())) {
+        if (anim.is(POLLEN)) {
             return this.getBoundingBox().inflate(2.0);
         }
         return super.calculateAttackAABB(anim, target);

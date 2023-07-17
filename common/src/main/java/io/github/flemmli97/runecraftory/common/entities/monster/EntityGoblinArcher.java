@@ -44,9 +44,9 @@ public class EntityGoblinArcher extends EntityGoblin {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(BOW.getID()) || anim.getID().equals(TRIPLE.getID());
+            return anim.is(BOW, TRIPLE);
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(KICK.getID());
+            return anim.is(KICK);
         return false;
     }
 
@@ -82,7 +82,7 @@ public class EntityGoblinArcher extends EntityGoblin {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 boolean withTarget = this.getTarget() != null && this.getSensing().hasLineOfSight(this.getTarget());
-                if (anim.getID().equals(BOW.getID())) {
+                if (anim.is(BOW)) {
                     if (withTarget)
                         this.shootArrow(this.getTarget());
                     else

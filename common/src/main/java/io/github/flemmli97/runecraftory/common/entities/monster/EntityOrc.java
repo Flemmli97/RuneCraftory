@@ -47,13 +47,13 @@ public class EntityOrc extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(MELEE_1.getID()) || anim.getID().equals(MELEE_2.getID());
+            return anim.is(MELEE_1, MELEE_2);
         return false;
     }
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        if (anim.getID().equals(MELEE_2.getID()))
+        if (anim.is(MELEE_2))
             return 1.2;
         return 1.1;
     }

@@ -37,7 +37,7 @@ public class EntityVeggieGhost extends BaseMonster {
 
     public VeggieGhostAttackGoal<EntityVeggieGhost> rangedGoal = new VeggieGhostAttackGoal<>(this, 10, false, (attacker, target, anim) -> attacker.distanceToSqr(target) <= 16, e -> true);
     private final AnimationHandler<EntityVeggieGhost> animationHandler = new AnimationHandler<>(this, ANIMS).setAnimationChangeCons(anim -> {
-        if (anim != null && anim.getID().equals(VANISH.getID()))
+        if (anim != null && anim.is(VANISH))
             this.vanishNext = this.getRandom().nextFloat() < 0.6;
     });
     private boolean vanishNext;
@@ -71,9 +71,9 @@ public class EntityVeggieGhost extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED) {
-            return anim.getID().equals(CAST.getID());
+            return anim.is(CAST);
         }
-        return type == AnimationType.MELEE && (anim.getID().equals(ATTACK.getID()) || anim.getID().equals(SPIN.getID()));
+        return type == AnimationType.MELEE && anim.is(ATTACK, SPIN);
     }
 
     @Override
@@ -96,14 +96,14 @@ public class EntityVeggieGhost extends BaseMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(CAST.getID())) {
+        if (anim.is(CAST)) {
             this.getNavigation().stop();
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
                 ModSpells.TRIPLE_FIRE_BALL.get().use(this);
             }
-        } else if (anim.getID().equals(VANISH.getID())) {
+        } else if (anim.is(VANISH)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 LivingEntity target = this.getTarget();

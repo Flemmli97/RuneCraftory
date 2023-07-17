@@ -49,15 +49,15 @@ public class EntityGoblin extends LeapingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(MELEE.getID()) || anim.getID().equals(STONE.getID());
+            return anim.is(MELEE, STONE);
         if (type == AnimationType.LEAP)
-            return anim.getID().equals(LEAP.getID());
+            return anim.is(LEAP);
         return false;
     }
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        if (anim.getID().equals(STONE.getID()))
+        if (anim.is(STONE))
             return 8;
         return 1;
     }
@@ -86,7 +86,7 @@ public class EntityGoblin extends LeapingMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(STONE.getID())) {
+        if (anim.is(STONE)) {
             this.getNavigation().stop();
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);

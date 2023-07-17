@@ -39,7 +39,7 @@ public abstract class EntityWispBase extends BaseMonster {
 
     private final AnimationHandler<EntityWispBase> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeCons(anim -> {
-                if (anim != null && anim.getID().equals(VANISH.getID()))
+                if (anim != null && anim.is(VANISH))
                     this.vanishNext = this.getRandom().nextFloat() < 0.6;
             });
 
@@ -83,7 +83,7 @@ public abstract class EntityWispBase extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(ATTACK_FAR.getID()) || anim.getID().equals(ATTACK_CLOSE.getID());
+            return anim.is(ATTACK_FAR, ATTACK_CLOSE);
         return false;
     }
 
@@ -105,21 +105,21 @@ public abstract class EntityWispBase extends BaseMonster {
     @Override
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
-        if (anim.getID().equals(ATTACK_FAR.getID())) {
+        if (anim.is(ATTACK_FAR)) {
             this.getNavigation().stop();
             if (target != null)
                 this.getLookControl().setLookAt(target, 360, 90);
             if (anim.canAttack()) {
                 this.attackFar(target);
             }
-        } else if (anim.getID().equals(ATTACK_CLOSE.getID())) {
+        } else if (anim.is(ATTACK_CLOSE)) {
             this.getNavigation().stop();
             if (target != null)
                 this.getLookControl().setLookAt(target, 360, 90);
             if (anim.canAttack()) {
                 this.attackClose(target);
             }
-        } else if (anim.getID().equals(VANISH.getID())) {
+        } else if (anim.is(VANISH)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 if (target == null) {

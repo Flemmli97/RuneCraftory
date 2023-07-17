@@ -86,9 +86,9 @@ public class EntitySkyFish extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED) {
-            return anim.getID().equals(BEAM.getID()) || anim.getID().equals(SWIPE.getID());
+            return anim.is(BEAM, SWIPE);
         }
-        return type == AnimationType.MELEE && anim.getID().equals(SLAP.getID());
+        return type == AnimationType.MELEE && anim.is(SLAP);
     }
 
     @Override
@@ -98,12 +98,12 @@ public class EntitySkyFish extends BaseMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(BEAM.getID())) {
+        if (anim.is(BEAM)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.WATERLASER.get().use(this);
             }
-        } else if (anim.getID().equals(SWIPE.getID())) {
+        } else if (anim.is(SWIPE)) {
             if (anim.canAttack()) {
                 if (EntityUtils.sealed(this))
                     return;

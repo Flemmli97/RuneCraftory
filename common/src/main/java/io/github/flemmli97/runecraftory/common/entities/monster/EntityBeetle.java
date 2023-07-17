@@ -45,8 +45,8 @@ public class EntityBeetle extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         return switch (type) {
-            case CHARGE -> anim.getID().equals(CHARGE_ATTACK.getID()) && this.getRandom().nextFloat() < 0.8;
-            case MELEE -> anim.getID().equals(MELEE.getID());
+            case CHARGE -> anim.is(CHARGE_ATTACK) && this.getRandom().nextFloat() < 0.8;
+            case MELEE -> anim.is(MELEE);
             default -> false;
         };
     }

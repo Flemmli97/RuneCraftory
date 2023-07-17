@@ -43,7 +43,7 @@ public class EntityPanther extends LeapingMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(LEAP.getID())) {
+        if (anim.is(LEAP)) {
             if (anim.canAttack()) {
                 Vec3 vec32;
                 if (this.getTarget() != null) {
@@ -86,9 +86,9 @@ public class EntityPanther extends LeapingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(MELEE.getID());
+            return anim.is(MELEE);
         if (type == AnimationType.LEAP)
-            return anim.getID().equals(LEAP.getID());
+            return anim.is(LEAP);
         return false;
     }
 

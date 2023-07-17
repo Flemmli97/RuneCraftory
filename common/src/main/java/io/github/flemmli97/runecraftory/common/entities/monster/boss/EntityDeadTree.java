@@ -102,9 +102,9 @@ public class EntityDeadTree extends BossMonster {
     private final AnimationHandler<EntityDeadTree> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeCons(anim -> {
                 if (!this.level.isClientSide && anim != null) {
-                    if (anim.getID().equals(APPLE_SHIELD.getID()))
+                    if (anim.is(APPLE_SHIELD))
                         this.shieldCooldown = 100;
-                    if (anim.getID().equals(HEAL.getID()))
+                    if (anim.is(HEAL))
                         this.healCooldown = 100;
                     if (SUMMONS.contains(anim.getID())) {
                         int rand = this.random.nextInt(3);
@@ -152,16 +152,16 @@ public class EntityDeadTree extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(ANGRY.getID()) || anim.getID().equals(DEFEAT.getID()) || anim.getID().equals(INTERACT.getID()))
+        if (anim.is(ANGRY, DEFEAT) || anim.is(INTERACT))
             return false;
         if (type == AnimationType.GENERICATTACK) {
-            if (anim.getID().equals(APPLE_SHIELD.getID()) && this.shieldCooldown > 0)
+            if (anim.is(APPLE_SHIELD) && this.shieldCooldown > 0)
                 return false;
-            if (anim.getID().equals(HEAL.getID()) && this.healCooldown > 0 && this.random.nextFloat() < 0.2)
+            if (anim.is(HEAL) && this.healCooldown > 0 && this.random.nextFloat() < 0.2)
                 return false;
             if (!this.isEnraged())
-                return !anim.getID().equals(BIG_FALLING_APPLES.getID()) && !anim.getID().equals(MORE_FALLING_APPLES.getID());
-            return !anim.getID().equals(FALLING_APPLES.getID());
+                return !anim.is(BIG_FALLING_APPLES) && !anim.is(MORE_FALLING_APPLES);
+            return !anim.is(FALLING_APPLES);
         }
         return false;
     }

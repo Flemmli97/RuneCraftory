@@ -180,10 +180,10 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(FEINT.getID()) || anim.getID().equals(DEFEAT.getID()) || anim.getID().equals(NEIGH.getID()) || anim.getID().equals(INTERACT.getID()))
+        if (anim.is(FEINT, DEFEAT) || anim.is(NEIGH, INTERACT))
             return false;
         if (type == AnimationType.GENERICATTACK)
-            return this.isEnraged() ? !anim.getID().equals(LASER_X5.getID()) : !anim.getID().equals(LASER_AOE.getID()) && !anim.getID().equals(LASER_KICK.getID());
+            return this.isEnraged() ? !anim.is(LASER_X5) : !anim.is(LASER_AOE) && !anim.is(LASER_KICK);
         return false;
     }
 
@@ -243,7 +243,7 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim.getID().equals(STOMP.getID())) {
+        if (anim.is(STOMP)) {
             return this.getBoundingBox().inflate(1.5, -0.4, 1.5);
         } else
             return super.calculateAttackAABB(anim, target);

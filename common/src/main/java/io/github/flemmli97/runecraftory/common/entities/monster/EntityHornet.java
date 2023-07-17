@@ -62,7 +62,7 @@ public class EntityHornet extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED) {
-            return anim.getID().equals(ATTACK.getID());
+            return anim.is(ATTACK);
         }
         return false;
     }
@@ -88,7 +88,7 @@ public class EntityHornet extends BaseMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(ATTACK.getID())) {
+        if (anim.is(ATTACK)) {
             this.getNavigation().stop();
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);

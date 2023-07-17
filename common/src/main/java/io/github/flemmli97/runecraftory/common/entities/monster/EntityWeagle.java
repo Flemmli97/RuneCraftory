@@ -68,9 +68,9 @@ public class EntityWeagle extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED) {
-            return anim.getID().equals(GALE.getID());
+            return anim.is(GALE);
         }
-        return type == AnimationType.MELEE && (anim.getID().equals(PECK.getID()) || anim.getID().equals(SWOOP.getID()));
+        return type == AnimationType.MELEE && (anim.is(PECK, SWOOP));
     }
 
     @Override
@@ -89,11 +89,11 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(GALE.getID())) {
+        if (anim.is(GALE)) {
             if (anim.canAttack()) {
                 ModSpells.GUSTSPELL.get().use(this);
             }
-        } else if (anim.getID().equals(SWOOP.getID())) {
+        } else if (anim.is(SWOOP)) {
             if (this.hitEntity == null)
                 this.hitEntity = new ArrayList<>();
             Vec3 dir;
@@ -120,7 +120,7 @@ public class EntityWeagle extends BaseMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim.getID().equals(SWOOP.getID()))
+        if (anim.is(SWOOP))
             return super.calculateAttackAABB(anim, target).move(this.getDeltaMovement());
         return super.calculateAttackAABB(anim, target);
     }

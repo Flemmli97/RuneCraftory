@@ -104,9 +104,9 @@ public class EntitySpider extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(WEBSHOT.getID());
+            return anim.is(WEBSHOT);
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(MELEE.getID());
+            return anim.is(MELEE);
         return false;
     }
 

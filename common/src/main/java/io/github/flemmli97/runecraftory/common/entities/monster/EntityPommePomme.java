@@ -27,9 +27,9 @@ public class EntityPommePomme extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.CHARGE) {
-            return anim.getID().equals(CHARGE_ATTACK.getID());
+            return anim.is(CHARGE_ATTACK);
         }
-        return type == AnimationType.MELEE && anim.getID().equals(KICK.getID());
+        return type == AnimationType.MELEE && anim.is(KICK);
     }
 
     @Override

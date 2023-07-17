@@ -54,14 +54,14 @@ public class EntityTortas extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.CHARGE) {
-            return anim.getID().equals(SPIN.getID());
+            return anim.is(SPIN);
         }
-        return type == AnimationType.MELEE && anim.getID().equals(BITE.getID());
+        return type == AnimationType.MELEE && anim.is(BITE);
     }
 
     @Override
     public int animationCooldown(AnimatedAction anim) {
-        if (anim != null && anim.getID().equals(SPIN.getID()))
+        if (anim != null && anim.is(SPIN))
             return super.animationCooldown(anim) * 2;
         return super.animationCooldown(anim);
     }
@@ -88,7 +88,7 @@ public class EntityTortas extends ChargingMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim != null && anim.getID().equals(SPIN.getID()))
+        if (anim != null && anim.is(SPIN))
             return this.attackAABB(anim).move(this.getX(), this.getY(), this.getZ());
         return super.calculateAttackAABB(anim, target);
     }

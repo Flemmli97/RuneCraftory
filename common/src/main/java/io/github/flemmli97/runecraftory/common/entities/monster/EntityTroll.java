@@ -42,13 +42,13 @@ public class EntityTroll extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(PUNCH.getID()) || anim.getID().equals(DOUBLE_PUNCH.getID()) || anim.getID().equals(SLAM.getID());
+            return anim.is(PUNCH, DOUBLE_PUNCH, SLAM);
         return false;
     }
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        if (anim.getID().equals(SLAM.getID()))
+        if (anim.is(SLAM))
             return this.getBbWidth() + 1;
         return 1.5;
     }
@@ -56,7 +56,7 @@ public class EntityTroll extends BaseMonster {
     @Override
     public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
         super.mobAttack(anim, target, cons);
-        if (anim.getID().equals(SLAM.getID())) {
+        if (anim.is(SLAM)) {
             Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(10, 0.75f), this);
             this.level.playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0f, 1.0f);
         }
@@ -64,7 +64,7 @@ public class EntityTroll extends BaseMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
-        if (anim.getID().equals(SLAM.getID()))
+        if (anim.is(SLAM))
             return this.attackAABB(anim).inflate(grow, 0, grow).move(this.getX(), this.getY(), this.getZ());
         return super.calculateAttackAABB(anim, target, grow);
     }

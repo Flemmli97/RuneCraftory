@@ -106,7 +106,7 @@ public class EntityTreasureChest extends Entity implements IAnimated {
         super.baseTick();
         this.getAnimationHandler().tick();
         AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        if (!this.isRemoved() && !this.level.isClientSide && anim != null && anim.getID().equals(OPEN.getID()) && anim.canAttack()) {
+        if (!this.isRemoved() && !this.level.isClientSide && anim != null && anim.is(OPEN) && anim.canAttack()) {
             if (this.openChest != null)
                 this.openChest.run();
             this.discard();

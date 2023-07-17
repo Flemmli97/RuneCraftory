@@ -65,7 +65,7 @@ public class EntityWolf extends LeapingMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(MELEE.getID())) {
+        if (anim.is(MELEE)) {
             this.getNavigation().stop();
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);
@@ -100,9 +100,9 @@ public class EntityWolf extends LeapingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(MELEE.getID());
+            return anim.is(MELEE);
         if (type == AnimationType.LEAP)
-            return anim.getID().equals(LEAP.getID());
+            return anim.is(LEAP);
         return false;
     }
 

@@ -56,7 +56,7 @@ public class EntityGhost extends ChargingMonster {
     protected Consumer<AnimatedAction> animatedActionConsumer() {
         return anim -> {
             super.animatedActionConsumer().accept(anim);
-            if (anim != null && anim.getID().equals(VANISH.getID()))
+            if (anim != null && anim.is(VANISH))
                 this.vanishNext = this.getRandom().nextFloat() < 0.6;
         };
     }
@@ -93,11 +93,11 @@ public class EntityGhost extends ChargingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.CHARGE)
-            return anim.getID().equals(CHARGE.getID());
+            return anim.is(CHARGE);
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(DARKBALL.getID());
+            return anim.is(DARKBALL);
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(SWING.getID());
+            return anim.is(SWING);
         return false;
     }
 
@@ -152,14 +152,14 @@ public class EntityGhost extends ChargingMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(DARKBALL.getID())) {
+        if (anim.is(DARKBALL)) {
             this.getNavigation().stop();
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
                 ModSpells.DARKBALL.get().use(this);
             }
-        } else if (anim.getID().equals(VANISH.getID())) {
+        } else if (anim.is(VANISH)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 LivingEntity target = this.getTarget();

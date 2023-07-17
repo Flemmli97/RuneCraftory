@@ -71,9 +71,9 @@ public class EntityOrcArcher extends EntityOrc {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(MELEE.getID());
+            return anim.is(MELEE);
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(RANGED.getID());
+            return anim.is(RANGED);
         return false;
     }
 

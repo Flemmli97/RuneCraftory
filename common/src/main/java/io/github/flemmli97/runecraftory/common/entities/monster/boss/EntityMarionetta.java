@@ -160,10 +160,10 @@ public class EntityMarionetta extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(CHEST_THROW.getID()) || anim.getID().equals(DEFEAT.getID()) || anim.getID().equals(ANGRY.getID()) || anim.getID().equals(INTERACT.getID()))
+        if (anim.is(CHEST_THROW, DEFEAT, ANGRY, INTERACT))
             return false;
         if (type == AnimationType.GENERICATTACK)
-            return this.isEnraged() || (!anim.getID().equals(DARK_BEAM.getID()) && !anim.getID().equals(FURNITURE.getID()));
+            return this.isEnraged() || (!anim.is(DARK_BEAM) && !anim.is(FURNITURE));
         return false;
     }
 
@@ -201,7 +201,7 @@ public class EntityMarionetta extends BossMonster {
     public void handleAttack(AnimatedAction anim) {
         LivingEntity target = this.getTarget();
         if (target != null) {
-            if (!anim.getID().equals(SPIN.getID()))
+            if (!anim.is(SPIN))
                 this.lookAt(target, 180.0f, 50.0f);
         }
         BiConsumer<AnimatedAction, EntityMarionetta> handler = ATTACK_HANDLER.get(anim.getID());
@@ -211,10 +211,10 @@ public class EntityMarionetta extends BossMonster {
 
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        if (anim.getID().equals(SPIN.getID())) {
+        if (anim.is(SPIN)) {
             return this.getBoundingBox().inflate(1.6, 0, 1.6);
         }
-        if (anim.getID().equals(CHEST_ATTACK.getID())) {
+        if (anim.is(CHEST_ATTACK)) {
             return this.getBoundingBox().inflate(1.2, 0, 1.2);
         }
         return super.calculateAttackAABB(anim, target);

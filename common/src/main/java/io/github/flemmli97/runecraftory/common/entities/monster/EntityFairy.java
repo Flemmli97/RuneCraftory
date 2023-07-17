@@ -78,9 +78,9 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED) {
-            if (anim.getID().equals(LIGHT.getID()))
+            if (anim.is(LIGHT))
                 return this.level.getEntities(this, this.getBoundingBox().inflate(4), e -> e instanceof EntityLightBall light && light.getOwner() == this).size() < 2;
-            return anim.getID().equals(WIND.getID()) || this.getRandom().nextFloat() < 0.45f && anim.getID().equals(HEAL.getID());
+            return anim.is(WIND) || this.getRandom().nextFloat() < 0.45f && anim.is(HEAL);
         }
         return false;
     }
@@ -97,17 +97,17 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(LIGHT.getID())) {
+        if (anim.is(LIGHT)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.SHINE.get().use(this);
             }
-        } else if (anim.getID().equals(WIND.getID())) {
+        } else if (anim.is(WIND)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.DOUBLESONIC.get().use(this);
             }
-        } else if (anim.getID().equals(HEAL.getID())) {
+        } else if (anim.is(HEAL)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.CUREALL.get().use(this);

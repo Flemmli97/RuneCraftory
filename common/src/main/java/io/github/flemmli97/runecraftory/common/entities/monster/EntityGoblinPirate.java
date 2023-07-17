@@ -39,9 +39,9 @@ public class EntityGoblinPirate extends EntityGoblin {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.LEAP)
-            return anim.getID().equals(LEAP.getID());
+            return anim.is(LEAP);
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(DOUBLE_SLASH.getID());
+            return anim.is(DOUBLE_SLASH);
         return false;
     }
 
@@ -69,7 +69,7 @@ public class EntityGoblinPirate extends EntityGoblin {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(DOUBLE_SLASH.getID())) {
+        if (anim.is(DOUBLE_SLASH)) {
             this.getNavigation().stop();
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);

@@ -43,9 +43,9 @@ public class EntityGoblinGangster extends EntityGoblin {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED)
-            return anim.getID().equals(DOUBLE_THROW.getID());
+            return anim.is(DOUBLE_THROW);
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(DOUBLE_STAB.getID());
+            return anim.is(DOUBLE_STAB);
         return false;
     }
 
@@ -73,7 +73,7 @@ public class EntityGoblinGangster extends EntityGoblin {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(DOUBLE_THROW.getID())) {
+        if (anim.is(DOUBLE_THROW)) {
             this.getNavigation().stop();
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);
@@ -83,7 +83,7 @@ public class EntityGoblinGangster extends EntityGoblin {
                 }
                 this.stopUsingItem();
             }
-        } else if (anim.getID().equals(DOUBLE_STAB.getID())) {
+        } else if (anim.is(DOUBLE_STAB)) {
             this.getNavigation().stop();
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);

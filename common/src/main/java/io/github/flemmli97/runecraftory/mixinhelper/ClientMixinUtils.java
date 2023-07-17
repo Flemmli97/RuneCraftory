@@ -108,7 +108,7 @@ public class ClientMixinUtils {
 
     public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model, AnimatedAction anim) {
         if (entity instanceof Player && ClientHandlers.getAnimatedPlayerModel() != null && anim != null) {
-            ClientHandlers.getAnimatedPlayerModel().copyTo(entity, model, false, anim.getID().equals(PlayerWeaponHandler.dualBladeUse.getID()));
+            ClientHandlers.getAnimatedPlayerModel().copyTo(entity, model, false, anim.is(PlayerWeaponHandler.dualBladeUse));
         }
     }
 

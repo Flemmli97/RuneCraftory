@@ -61,9 +61,9 @@ public class EntityLeafBall extends BaseMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.RANGED) {
-            return anim.getID().equals(WIND.getID()) || (anim.getID().equals(SLEEP_ATTACK.getID()) && this.getRandom().nextFloat() < 0.6f);
+            return anim.is(WIND, SLEEP_ATTACK) && this.getRandom().nextFloat() < 0.6f;
         }
-        return type == AnimationType.MELEE && anim.getID().equals(MELEE.getID());
+        return type == AnimationType.MELEE && anim.is(MELEE);
     }
 
     @Override
@@ -78,14 +78,14 @@ public class EntityLeafBall extends BaseMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(WIND.getID())) {
+        if (anim.is(WIND)) {
             this.getNavigation().stop();
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
                 ModSpells.DOUBLESONIC.get().use(this);
             }
-        } else if (anim.getID().equals(SLEEP_ATTACK.getID())) {
+        } else if (anim.is(SLEEP_ATTACK)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
                 ModSpells.SLEEP_AURA.get().use(this);

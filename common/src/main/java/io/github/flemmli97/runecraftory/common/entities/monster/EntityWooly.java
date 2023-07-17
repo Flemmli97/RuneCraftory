@@ -101,9 +101,9 @@ public class EntityWooly extends LeapingMonster {
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.LEAP)
-            return anim.getID().equals(KICK.getID());
+            return anim.is(KICK);
         else if (type == AnimationType.MELEE)
-            return anim.getID().equals(SLAP.getID()) || anim.getID().equals(HEADBUTT.getID());
+            return anim.is(SLAP, HEADBUTT);
         return false;
     }
 

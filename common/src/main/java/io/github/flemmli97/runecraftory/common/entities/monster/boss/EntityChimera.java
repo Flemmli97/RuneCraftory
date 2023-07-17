@@ -147,11 +147,11 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.getID().equals(DEFEAT.getID()) || anim.getID().equals(INTERACT.getID()) || anim.getID().equals(SLEEP.getID()) || anim.getID().equals(ANGRY.getID()))
+        if (anim.is(DEFEAT, INTERACT, SLEEP, ANGRY))
             return false;
         if (type == AnimationType.GENERICATTACK) {
             if (this.chargeAttackSuccess)
-                return anim.getID().equals(BITE.getID());
+                return anim.is(BITE);
             return true;
         }
         return false;

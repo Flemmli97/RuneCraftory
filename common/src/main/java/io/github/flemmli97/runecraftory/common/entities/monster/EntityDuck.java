@@ -47,7 +47,7 @@ public class EntityDuck extends ChargingMonster {
 
     @Override
     public void handleAttack(AnimatedAction anim) {
-        if (anim.getID().equals(DIVE.getID())) {
+        if (anim.is(DIVE)) {
             if (anim.canAttack()) {
                 Vec3 targetDir = this.chargeMotion != null ? new Vec3(this.chargeMotion[0], this.chargeMotion[1], this.chargeMotion[2]) : this.getLookAngle();
                 Vec3 vec32 = new Vec3(targetDir.x, 0, targetDir.z)
@@ -73,15 +73,15 @@ public class EntityDuck extends ChargingMonster {
     @Override
     public float chargingYaw() {
         AnimatedAction anim = this.getAnimationHandler().getAnimation();
-        return this.isVehicle() || ((anim != null && anim.getID().equals(DIVE.getID()) && anim.getTick() >= anim.getAttackTime())) ? this.getYRot() : this.entityData.get(LOCKED_YAW);
+        return this.isVehicle() || ((anim != null && anim.is(DIVE) && anim.getTick() >= anim.getAttackTime())) ? this.getYRot() : this.entityData.get(LOCKED_YAW);
     }
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
         if (type == AnimationType.MELEE)
-            return anim.getID().equals(MELEE.getID());
+            return anim.is(MELEE);
         if (type == AnimationType.CHARGE)
-            return anim.getID().equals(DIVE.getID());
+            return anim.is(DIVE);
         return false;
     }
 

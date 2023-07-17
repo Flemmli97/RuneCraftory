@@ -20,7 +20,7 @@ public class EntitySpirit extends EntityWispBase {
         super.tick();
         if (this.level.isClientSide) {
             AnimatedAction anim = this.getAnimationHandler().getAnimation();
-            if (anim == null || (anim.getID().equals(VANISH.getID()) && anim.getTick() > 60)) {
+            if (anim == null || (anim.is(VANISH) && anim.getTick() > 60)) {
                 double[] off = MathUtils.rotate2d(0, -3.5 / 16f, MathUtils.degToRad(this.yBodyRot));
                 for (int i = 0; i < 4; i++) {
                     this.level.addParticle(new ColoredParticleData(ModParticles.light.get(), 112 / 255F, 238 / 255F, 236 / 255F, 0.2f, 1.5f), this.getX() + off[0] + this.random.nextGaussian() * 0.2, this.getY() + this.getBbHeight() * 0.4, this.getZ() + off[1] + this.random.nextGaussian() * 0.2, this.random.nextGaussian() * 0.01, Math.abs(this.random.nextGaussian() * 0.03), this.random.nextGaussian() * 0.01);
