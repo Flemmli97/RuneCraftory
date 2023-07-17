@@ -60,7 +60,7 @@ public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGo
     }
 
     @Override
-    public void handleIddle() {
+    public void handleIdle() {
         if (this.keepDistance && this.attacker.getNavigation().isDone() && this.distanceToTargetSq <= this.meleeDistSq) {
             Vec3 away = DefaultRandomPos.getPosAway(this.attacker, 5, 4, this.target.position());
             if (away != null) {
@@ -68,6 +68,6 @@ public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGo
                 return;
             }
         }
-        super.handleIddle();
+        super.handleIdle();
     }
 }

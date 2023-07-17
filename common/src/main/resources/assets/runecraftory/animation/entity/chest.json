@@ -28,7 +28,7 @@
 		"walk": {
 			"loop": true
 		},
-		"open_iddle": {
+		"open_idle": {
 			"loop": true,
 			"animation_length": 4,
 			"bones": {

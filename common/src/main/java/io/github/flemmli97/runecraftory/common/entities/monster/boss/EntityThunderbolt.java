@@ -85,7 +85,7 @@ public class EntityThunderbolt extends BossMonster {
                 });
                 if (bool.get() && !entity.isVehicle()) {
                     entity.hornAttackSuccess = true;
-                    entity.attack.setIddleTime(1);
+                    entity.attack.setIdleTime(1);
                 }
             }
         });
@@ -125,7 +125,7 @@ public class EntityThunderbolt extends BossMonster {
                 entity.mobAttack(anim, null, e -> {
                     if (entity.doHurtTarget(e)) {
                         entity.chargeAttackSuccess = true;
-                        entity.attack.setIddleTime(entity.animationCooldown(null));
+                        entity.attack.setIdleTime(entity.animationCooldown(null));
                     }
                 });
             }

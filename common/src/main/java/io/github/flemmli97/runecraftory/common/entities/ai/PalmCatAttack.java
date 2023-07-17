@@ -9,6 +9,6 @@ public class PalmCatAttack<T extends EntityPalmCat> extends LeapingAttackGoal<T>
     }
 
     public void resetCooldown() {
-        this.iddleTime = 0;
+        this.idleTime = 0;
     }
 }

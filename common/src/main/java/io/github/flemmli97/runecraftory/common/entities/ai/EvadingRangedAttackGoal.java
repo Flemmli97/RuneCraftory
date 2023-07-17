@@ -58,7 +58,7 @@ public class EvadingRangedAttackGoal<T extends BaseMonster> extends AnimatedMele
     }
 
     @Override
-    public void handleIddle() {
+    public void handleIdle() {
         if (!this.canSee || this.distanceToTargetSq > this.reachSq) {
             this.moveToEntityNearer(this.target, 1);
             this.movingNearer = true;
@@ -68,18 +68,18 @@ public class EvadingRangedAttackGoal<T extends BaseMonster> extends AnimatedMele
             this.movingNearer = false;
             this.attacker.getNavigation().stop();
         }
-        if (this.iddleMoveDelay <= 0) {
+        if (this.idleMoveDelay <= 0) {
             if (this.distanceToTargetSq <= this.meleeDistSq) {
-                this.iddleMoveFlag = 2;
-                this.iddleMoveDelay = this.attacker.getRandom().nextInt(35) + 55 - this.iddleMoveFlag * 10;
+                this.idleMoveFlag = 2;
+                this.idleMoveDelay = this.attacker.getRandom().nextInt(35) + 55 - this.idleMoveFlag * 10;
                 this.posAway = DefaultRandomPos.getPosAway(this.attacker, 7, 4, this.target.position());
             } else {
-                this.iddleMoveFlag = this.attacker.getRandom().nextInt(5) == 0 ? 1 : 0;
-                this.iddleMoveDelay = this.attacker.getRandom().nextInt(20) + 20;
+                this.idleMoveFlag = this.attacker.getRandom().nextInt(5) == 0 ? 1 : 0;
+                this.idleMoveDelay = this.attacker.getRandom().nextInt(20) + 20;
                 this.posAway = null;
             }
         }
-        switch (this.iddleMoveFlag) {
+        switch (this.idleMoveFlag) {
             case 1 -> this.moveRandomlyAround(36);
             case 2 -> {
                 if (this.posAway != null)

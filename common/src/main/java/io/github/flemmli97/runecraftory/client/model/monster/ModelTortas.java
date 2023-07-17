@@ -112,7 +112,7 @@ public class ModelTortas<T extends EntityTortas> extends EntityModel<T> implemen
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
+            this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0) {
                 if (entity.isSwimming())
                     this.anim.doAnimation(this, "swim", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));

@@ -81,7 +81,7 @@ public class ModelLeafBall<T extends EntityLeafBall> extends EntityModel<T> impl
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
+            this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
         }
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks));

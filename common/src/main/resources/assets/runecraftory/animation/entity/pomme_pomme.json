@@ -39,7 +39,7 @@
 				}
 			}
 		},
-		"iddle": {
+		"idle": {
 			"loop": true,
 			"animation_length": 0.88,
 			"bones": {

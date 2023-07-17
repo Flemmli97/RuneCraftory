@@ -170,7 +170,7 @@ public class ModelBeetle<T extends EntityBeetle> extends EntityModel<T> implemen
         AnimatedAction anim = entity.getAnimationHandler().getAnimation();
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
-            this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
+            this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (!entity.isOnGround())
                 this.anim.doAnimation(this, "fly", entity.tickCount, partialTicks);
             else if (entity.moveTick() > 0)

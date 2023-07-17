@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttackGoal<T> {
 
     private int moveDelay;
-    private boolean moveFlag, iddleFlag, clockwise;
+    private boolean moveFlag, idleFlag, clockwise;
 
     public AmbrosiaAttackGoal(T entity) {
         super(entity);
@@ -44,7 +44,7 @@ public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttack
 
     @Override
     public void handlePreAttack() {
-        this.iddleFlag = false;
+        this.idleFlag = false;
         switch (this.next.getID()) {
             case "butterfly":
                 if (!this.moveFlag) {
@@ -117,10 +117,10 @@ public class AmbrosiaAttackGoal<T extends EntityAmbrosia> extends AnimatedAttack
     }
 
     @Override
-    public void handleIddle() {
-        if (!this.iddleFlag) {
+    public void handleIdle() {
+        if (!this.idleFlag) {
             this.clockwise = this.attacker.getRandom().nextBoolean();
-            this.iddleFlag = true;
+            this.idleFlag = true;
         }
         this.circleAroundTargetFacing(7, this.clockwise, 1);
     }

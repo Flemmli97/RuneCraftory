@@ -80,20 +80,20 @@ public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal
     }
 
     @Override
-    public void handleIddle() {
-        if (this.iddleMoveDelay <= 0) {
-            this.iddleMoveFlag = this.canSee ? this.attacker.getRandom().nextInt(5) : 3;
-            this.iddleMoveDelay = this.attacker.getRandom().nextInt(35) + 55 - this.iddleMoveFlag * 10;
+    public void handleIdle() {
+        if (this.idleMoveDelay <= 0) {
+            this.idleMoveFlag = this.canSee ? this.attacker.getRandom().nextInt(5) : 3;
+            this.idleMoveDelay = this.attacker.getRandom().nextInt(35) + 55 - this.idleMoveFlag * 10;
             this.clockWise = this.attacker.getRandom().nextBoolean();
         }
-        switch (this.iddleMoveFlag) {
+        switch (this.idleMoveFlag) {
             case 0, 1 -> this.circleAroundTargetFacing(this.reach - 2, this.clockWise, 1);
             case 2 -> this.moveRandomlyAround(36);
             case 3 -> {
                 this.moveToWithDelay(1);
                 if (this.distanceToTargetSq < this.reachSq * 0.25 && this.canSee) {
                     this.attacker.getNavigation().stop();
-                    this.iddleMoveDelay = 3;
+                    this.idleMoveDelay = 3;
                 }
             }
         }

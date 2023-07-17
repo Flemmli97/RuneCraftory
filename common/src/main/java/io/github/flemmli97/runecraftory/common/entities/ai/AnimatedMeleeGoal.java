@@ -12,7 +12,7 @@ import net.minecraft.world.phys.AABB;
 
 public class AnimatedMeleeGoal<T extends PathfinderMob & IAnimated & RandomAttackSelectorMob> extends AnimatedAttackGoal<T> {
 
-    protected int iddleMoveDelay, iddleMoveFlag, attackMoveDelay;
+    protected int idleMoveDelay, idleMoveFlag, attackMoveDelay;
 
     public AnimatedMeleeGoal(T entity) {
         super(entity);
@@ -61,12 +61,12 @@ public class AnimatedMeleeGoal<T extends PathfinderMob & IAnimated & RandomAttac
     }
 
     @Override
-    public void handleIddle() {
-        if (this.iddleMoveDelay <= 0) {
-            this.iddleMoveFlag = this.attacker.getRandom().nextInt(3);
-            this.iddleMoveDelay = this.attacker.getRandom().nextInt(10) + 7 - this.iddleMoveFlag * 10;
+    public void handleIdle() {
+        if (this.idleMoveDelay <= 0) {
+            this.idleMoveFlag = this.attacker.getRandom().nextInt(3);
+            this.idleMoveDelay = this.attacker.getRandom().nextInt(10) + 7 - this.idleMoveFlag * 10;
         }
-        switch (this.iddleMoveFlag) {
+        switch (this.idleMoveFlag) {
             case 0 -> this.moveToWithDelay(1);
             case 1 -> this.moveRandomlyAround(36);
         }
@@ -80,7 +80,7 @@ public class AnimatedMeleeGoal<T extends PathfinderMob & IAnimated & RandomAttac
     @Override
     public void tick() {
         super.tick();
-        this.iddleMoveDelay--;
+        this.idleMoveDelay--;
     }
 
     protected void moveToEntityNearer(LivingEntity target, float speed) {

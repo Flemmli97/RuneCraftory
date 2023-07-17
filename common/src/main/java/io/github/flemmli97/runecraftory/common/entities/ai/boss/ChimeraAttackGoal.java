@@ -65,12 +65,12 @@ public class ChimeraAttackGoal<T extends EntityChimera> extends AnimatedMeleeGoa
     }
 
     public void chargeSuccess(int time) {
-        this.iddleTime = time;
+        this.idleTime = time;
         this.chargeSuccess = true;
     }
 
     @Override
-    public void handleIddle() {
-        super.handleIddle();
+    public void handleIdle() {
+        super.handleIdle();
     }
 }

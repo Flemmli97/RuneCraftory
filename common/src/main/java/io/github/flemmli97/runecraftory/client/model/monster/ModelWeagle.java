@@ -113,7 +113,7 @@ public class ModelWeagle<T extends EntityWeagle> extends EntityModel<T> implemen
                 if (entity.moveTick() > 0) {
                     this.anim.doAnimation(this, "fly", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
                 } else
-                    this.anim.doAnimation(this, "iddle", entity.tickCount, partialTicks);
+                    this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             }
         } else {
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, entity.getAnimationHandler().getInterpolatedAnimationVal(partialTicks, anim.getID().equals(EntityWeagle.DEFEAT.getID()) ? 7 : AnimationHandler.DEFAULT_ADJUST_TIME));

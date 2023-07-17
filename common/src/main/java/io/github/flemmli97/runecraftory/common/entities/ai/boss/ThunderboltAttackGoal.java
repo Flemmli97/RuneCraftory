@@ -8,8 +8,8 @@ import net.minecraft.core.BlockPos;
 
 public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends AnimatedAttackGoal<T> {
 
-    private int moveDelay, iddleData;
-    private boolean moveFlag, iddleFlag;
+    private int moveDelay, idleData;
+    private boolean moveFlag, idleFlag;
 
     public ThunderboltAttackGoal(T entity) {
         super(entity);
@@ -43,8 +43,8 @@ public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends Animated
 
     @Override
     public void handlePreAttack() {
-        this.iddleFlag = false;
-        this.iddleData = 0;
+        this.idleFlag = false;
+        this.idleData = 0;
         switch (this.next.getID()) {
             case "laser_x5":
             case "laser_aoe":
@@ -124,18 +124,18 @@ public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends Animated
     }
 
     @Override
-    public void handleIddle() {
-        if (!this.iddleFlag && this.iddleTime > 2) {
-            this.iddleFlag = true;
+    public void handleIdle() {
+        if (!this.idleFlag && this.idleTime > 2) {
+            this.idleFlag = true;
             if (this.attacker.getRandom().nextBoolean()) {
                 BlockPos pos = this.randomPosAwayFrom(this.target, 5);
                 this.moveToWithDelay(pos.getX(), pos.getY(), pos.getZ(), 1.1);
             } else {
-                this.iddleData = this.attacker.getRandom().nextInt(2) + 1;
+                this.idleData = this.attacker.getRandom().nextInt(2) + 1;
             }
         }
-        if (this.iddleData != 0)
-            this.circleAroundTargetFacing(7, this.iddleData == 1, 1.1f);
+        if (this.idleData != 0)
+            this.circleAroundTargetFacing(7, this.idleData == 1, 1.1f);
     }
 
     @Override
@@ -143,8 +143,8 @@ public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends Animated
         return this.attacker.animationCooldown(this.next);
     }
 
-    public void setIddleTime(int time) {
-        this.iddleTime = time;
+    public void setIdleTime(int time) {
+        this.idleTime = time;
     }
 
 }

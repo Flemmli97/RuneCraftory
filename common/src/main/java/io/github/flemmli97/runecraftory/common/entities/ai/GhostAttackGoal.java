@@ -48,10 +48,10 @@ public class GhostAttackGoal<T extends EntityGhost> extends AnimatedMeleeGoal<T>
     }
 
     @Override
-    public void handleIddle() {
+    public void handleIdle() {
         if (this.attacker.getY() < this.target.getY())
             this.attacker.setDeltaMovement(this.attacker.getDeltaMovement().add(0, 0.03, 0));
-        super.handleIddle();
+        super.handleIdle();
     }
 }
 

@@ -23,7 +23,7 @@ public class ModelMimic<T extends EntityMimic> extends ModelChest<T> implements 
         float partialTicks = Minecraft.getInstance().getFrameTime();
         if (entity.deathTime <= 0 && !entity.playDeath()) {
             if (entity.isAwake())
-                this.anim.doAnimation(this, "open_iddle", entity.tickCount, partialTicks);
+                this.anim.doAnimation(this, "open_idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0)
                 this.anim.doAnimation(this, "move", entity.tickCount, partialTicks, entity.interpolatedMoveTick(partialTicks));
         }
