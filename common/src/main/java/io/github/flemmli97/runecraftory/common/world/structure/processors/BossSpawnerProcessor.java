@@ -3,23 +3,47 @@ package io.github.flemmli97.runecraftory.common.world.structure.processors;
 import com.mojang.serialization.Codec;
 import io.github.flemmli97.runecraftory.common.registry.ModBlocks;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BossSpawnerProcessor extends DataStructureBlockProcessor {
 
-    public static final Codec<BossSpawnerProcessor> CODEC = ResourceLocation.CODEC.fieldOf("boss").xmap(BossSpawnerProcessor::new, d -> d.boss).codec();
+    public static final Codec<BossSpawnerProcessor> CODEC = Codec.STRING.fieldOf("boss").xmap(BossSpawnerProcessor::new, d -> d.tag != null ? "#" + d.tag.location().toString() : d.boss.toString()).codec();
 
     protected final ResourceLocation boss;
+    protected final TagKey<EntityType<?>> tag;
+
+    public BossSpawnerProcessor(String boss) {
+        super("BOSS", false);
+        if (boss.startsWith("#")) {
+            this.boss = new ResourceLocation(boss.substring(1));
+            this.tag = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, this.boss);
+        } else {
+            this.boss = new ResourceLocation(boss);
+            this.tag = null;
+        }
+    }
 
     public BossSpawnerProcessor(ResourceLocation boss) {
+        this(boss.toString());
+    }
+
+    public BossSpawnerProcessor(TagKey<EntityType<?>> boss) {
         super("BOSS", false);
-        this.boss = boss;
+        this.boss = new ResourceLocation(boss.location().toString());
+        this.tag = boss;
     }
 
     @Override
@@ -33,11 +57,19 @@ public class BossSpawnerProcessor extends DataStructureBlockProcessor {
             } catch (NumberFormatException ignored) {
             }
         }
+        ResourceLocation entity = this.boss;
+        BlockPos pos = origin.pos.above(off);
+        if (this.tag != null) {
+            List<ResourceLocation> types = new ArrayList<>();
+            Registry.ENTITY_TYPE.getTagOrEmpty(this.tag).forEach(h -> types.add(Registry.ENTITY_TYPE.getKey(h.value())));
+            if (!types.isEmpty())
+                entity = types.get(settings.getRandom(pos).nextInt(types.size()));
+        }
         BlockState state = ModBlocks.bossSpawner.get().defaultBlockState();
         CompoundTag tag = new CompoundTag();
-        tag.putString("Entity", this.boss.toString());
+        tag.putString("Entity", entity.toString());
         tag.putInt("LastUpdate", -1);
-        return new StructureTemplate.StructureBlockInfo(origin.pos.above(off), state, tag);
+        return new StructureTemplate.StructureBlockInfo(pos, state, tag);
     }
 
     @Override

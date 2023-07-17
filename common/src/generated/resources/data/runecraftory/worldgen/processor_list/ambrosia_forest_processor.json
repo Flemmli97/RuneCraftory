@@ -1,7 +1,7 @@
 {
   "processors": [
     {
-      "boss": "runecraftory:ambrosia",
+      "boss": "#runecraftory:forest_bosses",
       "processor_type": "runecraftory:boss_processor"
     }
   ]

@@ -1,7 +1,7 @@
 {
   "processors": [
     {
-      "boss": "runecraftory:thunderbolt",
+      "boss": "#runecraftory:ocean_ruinbosses",
       "processor_type": "runecraftory:boss_processor"
     }
   ]

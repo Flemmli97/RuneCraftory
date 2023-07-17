@@ -45,6 +45,13 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
         this.tag(ModTags.BOSSES)
                 .addTag(forgeBosses);
 
+        this.tag(ModTags.FOREST_BOSSES)
+                .add(ModEntities.AMBROSIA.get())
+                .add(ModEntities.DEAD_TREE.get());
+        this.tag(ModTags.OCEAN_RUIN_BOSSES)
+                .add(ModEntities.CHIMERA.get())
+                .add(ModEntities.THUNDERBOLT.get());
+
         this.tag(ModTags.TAMED_MONSTER_IGNORE)
                 .add(EntityType.SNOW_GOLEM)
                 .add(EntityType.IRON_GOLEM)

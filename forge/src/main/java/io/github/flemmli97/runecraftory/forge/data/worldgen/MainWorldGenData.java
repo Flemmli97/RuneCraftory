@@ -13,6 +13,7 @@ import net.minecraft.data.HashCache;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
@@ -44,11 +45,11 @@ public class MainWorldGenData implements DataProvider {
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "ambrosia_forest"),
                 new RandomSpreadStructurePlacement(20, 8, RandomSpreadType.LINEAR, 1224466880),
                 ModStructures.AMBROSIA_FOREST.get(), BiomeTags.IS_FOREST, true,
-                this.simple(ModEntities.AMBROSIA.getID()));
+                this.simpleTag(ModTags.FOREST_BOSSES));
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "thunderbolt_ruins"),
                 new RandomSpreadStructurePlacement(32, 16, RandomSpreadType.LINEAR, 1224567480),
                 ModStructures.THUNDERBOLT_RUINS.get(), BiomeTags.IS_OCEAN, true,
-                this.simple(ModEntities.THUNDERBOLT.getID()));
+                this.simpleTag(ModTags.OCEAN_RUIN_BOSSES));
         this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "theater_ruins"),
                 new RandomSpreadStructurePlacement(21, 7, RandomSpreadType.LINEAR, 1226867120),
                 ModStructures.THEATER_RUINS.get(), ModTags.IS_SPOOKY, true,
@@ -78,6 +79,10 @@ public class MainWorldGenData implements DataProvider {
     }
 
     protected StructureProcessorList simple(ResourceLocation boss) {
+        return new StructureProcessorList(List.of(new BossSpawnerProcessor(boss)));
+    }
+
+    protected StructureProcessorList simpleTag(TagKey<EntityType<?>> boss) {
         return new StructureProcessorList(List.of(new BossSpawnerProcessor(boss)));
     }
 }
