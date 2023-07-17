@@ -3,7 +3,8 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.entities.misc.EntityWispFlame;
+import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
+import io.github.flemmli97.runecraftory.common.entities.misc.ElementBallBarrageSummoner;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -15,11 +16,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
-public class ElementalSpell extends Spell {
+public class ElementBallBarrageSpell extends Spell {
 
     private final EnumElement element;
 
-    public ElementalSpell(EnumElement element) {
+    public ElementBallBarrageSpell(EnumElement element) {
         this.element = element;
     }
 
@@ -33,7 +34,7 @@ public class ElementalSpell extends Spell {
         Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
             EnumSkills skill = LevelCalc.getSkillFromElement(this.element);
             if (skill != null)
-                LevelCalc.levelSkill(player, data, skill, 5);
+                LevelCalc.levelSkill(player, data, EnumSkills.DARK, 12);
         });
     }
 
@@ -47,19 +48,22 @@ public class ElementalSpell extends Spell {
         boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.DARK)).orElse(false);
         if (!rp)
             return false;
-        EntityWispFlame flame = new EntityWispFlame(level, entity, this.element);
-        if (this.element == EnumElement.DARK) {
-            if (entity instanceof Mob mob && mob.getTarget() != null)
-                flame.shootAtEntity(mob.getTarget(), 0.05f, 0, 0, 0.2);
-            else
-                flame.shoot(entity, entity.getXRot(), entity.getYRot(), 0, 0.05f, 0);
-        } else {
-            Vec3 eye = entity.getEyePosition();
-            Vec3 dir = entity instanceof Mob mob && mob.getTarget() != null ? mob.getTarget().getEyePosition().subtract(eye).normalize().scale(1.4)
-                    : entity.getLookAngle().scale(1.4);
-            flame.setPos(eye.x + dir.x, eye.y + dir.y, eye.z + dir.z);
-        }
-        level.addFreshEntity(flame);
+        ElementBallBarrageSummoner summoner = new ElementBallBarrageSummoner(level, entity, this.element);
+        Vec3 eye = entity.getEyePosition();
+        Vec3 dir = entity instanceof Mob mob && mob.getTarget() != null ? mob.getTarget().getEyePosition().subtract(eye).normalize().scale(3)
+                : entity.getLookAngle().scale(3);
+        if (entity instanceof Mob mob) {
+            if (mob instanceof DelayedAttacker delayed && delayed.targetPosition() != null) {
+                dir = delayed.targetPosition().subtract(eye).normalize().scale(3);
+            } else if (mob.getTarget() != null) {
+                dir = mob.getTarget().getEyePosition().subtract(eye).normalize().scale(3);
+            }
+        } else
+            dir = entity.getLookAngle().scale(3);
+        Vec3 off = dir.normalize().scale(1);
+        summoner.setPos(eye.x + off.x, eye.y, eye.z + off.z);
+        summoner.setTarget(eye.x + dir.x, eye.y + dir.y, eye.z + dir.z);
+        level.addFreshEntity(summoner);
         return true;
     }
 

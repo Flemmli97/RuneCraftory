@@ -19,6 +19,7 @@ import io.github.flemmli97.runecraftory.common.spells.DarknessSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleBulletSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWindBladeSpell;
+import io.github.flemmli97.runecraftory.common.spells.ElementBallBarrageSpell;
 import io.github.flemmli97.runecraftory.common.spells.ElementalSpell;
 import io.github.flemmli97.runecraftory.common.spells.EmptySpell;
 import io.github.flemmli97.runecraftory.common.spells.EvokerFangSpell;
@@ -43,6 +44,7 @@ import io.github.flemmli97.runecraftory.common.spells.PollenPuffSpell;
 import io.github.flemmli97.runecraftory.common.spells.PrismSpell;
 import io.github.flemmli97.runecraftory.common.spells.RockSpearSpell;
 import io.github.flemmli97.runecraftory.common.spells.ShineSpell;
+import io.github.flemmli97.runecraftory.common.spells.SlashSpell;
 import io.github.flemmli97.runecraftory.common.spells.SleepAuraSpell;
 import io.github.flemmli97.runecraftory.common.spells.SleepBallSpell;
 import io.github.flemmli97.runecraftory.common.spells.SnowballSpell;
@@ -146,4 +148,8 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> APPLE_RAIN = SPELLS.register("apple_rain", () -> new AppleRain(AppleRain.Type.NORMAL));
     public static final RegistryEntrySupplier<Spell> APPLE_RAIN_BIG = SPELLS.register("apple_rain_big", () -> new AppleRain(AppleRain.Type.BIG));
     public static final RegistryEntrySupplier<Spell> APPLE_RAIN_MORE = SPELLS.register("apple_rain_more", () -> new AppleRain(AppleRain.Type.LOTS));
+    public static final RegistryEntrySupplier<Spell> FIREBALL_BARRAGE = SPELLS.register("fireball_barrage", () -> new ElementBallBarrageSpell(EnumElement.FIRE));
+    public static final RegistryEntrySupplier<Spell> BUBBLE_BEAM = SPELLS.register("bubble_beam", () -> new ElementBallBarrageSpell(EnumElement.WATER));
+    public static final RegistryEntrySupplier<Spell> SLASH = SPELLS.register("slash", SlashSpell::new);
+
 }

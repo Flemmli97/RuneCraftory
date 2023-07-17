@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -38,9 +39,13 @@ public class WaterLaserSpell extends Spell {
         EntityWaterLaser laser = new EntityWaterLaser(level, entity);
         laser.setMaxTicks(entity instanceof Player ? 44 : 15);
         laser.setDamageMultiplier(0.95f + lvl * 0.05f);
-        if (entity instanceof Mob mob && mob.getTarget() != null) {
-            LivingEntity target = mob.getTarget();
-            laser.setRotationTo(target.getX(), target.getEyeY(), target.getZ(), 0);
+        if (entity instanceof Mob mob) {
+            if (mob instanceof DelayedAttacker delayed && delayed.targetPosition() != null) {
+                laser.setRotationTo(delayed.targetPosition().x(), delayed.targetPosition().y(), delayed.targetPosition().z(), 0);
+            } else if (mob.getTarget() != null) {
+                LivingEntity target = mob.getTarget();
+                laser.setRotationTo(target.getX(), target.getEyeY(), target.getZ(), 0);
+            }
         }
         level.addFreshEntity(laser);
         return true;

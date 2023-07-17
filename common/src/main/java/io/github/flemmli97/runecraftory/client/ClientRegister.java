@@ -23,6 +23,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelBeetle;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelBigMuck;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelBuffaloo;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelBuffamoo;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelChimera;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelChipsqueek;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelCluckadoodle;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelDeadTree;
@@ -265,6 +266,7 @@ public class ClientRegister {
         register(consumer, ModEntities.THUNDERBOLT.get(), ModelThunderbolt::new, ModelThunderbolt.LAYER_LOCATION);
         register(consumer, ModEntities.MARIONETTA.get(), ModelMarionetta::new, ModelMarionetta.LAYER_LOCATION);
         consumer.register(ModEntities.DEAD_TREE.get(), ctx -> new RenderDeadTree<>(ctx, 2));
+        register(consumer, ModEntities.CHIMERA.get(), ModelChimera::new, ModelChimera.LAYER_LOCATION);
 
         consumer.register(ModEntities.NPC.get(), RenderNPC::new);
 
@@ -316,6 +318,8 @@ public class ClientRegister {
         consumer.register(ModEntities.CIRCLING_BULLET.get(), ctx -> new RenderBullet(ctx, new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/bullet.png")));
         consumer.register(ModEntities.THROWN_ITEM.get(), RenderThrownItem::new);
         consumer.register(ModEntities.APPLE.get(), RenderAppleProjectile::new);
+        consumer.register(ModEntities.ELEMENTAL_BARRAGE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.SLASH_RESIDUE.get(), EmptyRender::new);
 
         consumer.register(ModEntities.DARK_BULLET.get(), RenderDarkBullet::new);
 
@@ -385,6 +389,7 @@ public class ClientRegister {
         consumer.accept(ModelThunderbolt.LAYER_LOCATION, ModelThunderbolt::createBodyLayer);
         consumer.accept(ModelMarionetta.LAYER_LOCATION, ModelMarionetta::createBodyLayer);
         consumer.accept(ModelDeadTree.LAYER_LOCATION, ModelDeadTree::createBodyLayer);
+        consumer.accept(ModelChimera.LAYER_LOCATION, ModelChimera::createBodyLayer);
 
         consumer.accept(ModelButterfly.LAYER_LOCATION, ModelButterfly::createBodyLayer);
         consumer.accept(ModelWoolyWool.LAYER_LOCATION, ModelWoolyWool::createBodyLayer);

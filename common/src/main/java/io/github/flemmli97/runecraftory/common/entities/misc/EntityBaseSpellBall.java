@@ -20,6 +20,7 @@ public class EntityBaseSpellBall extends BaseProjectile {
     protected static final EntityDataAccessor<Integer> ELEMENT_DATA = SynchedEntityData.defineId(EntityBaseSpellBall.class, EntityDataSerializers.INT);
 
     private EnumElement element = EnumElement.NONE;
+    private int maxLivingTicks = 6;
 
     public EntityBaseSpellBall(EntityType<? extends EntityBaseSpellBall> type, Level world) {
         super(type, world);
@@ -36,6 +37,10 @@ public class EntityBaseSpellBall extends BaseProjectile {
         return this.element;
     }
 
+    public void withMaxLivingTicks(int ticks) {
+        this.maxLivingTicks = ticks;
+    }
+
     @Override
     public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
         super.onSyncedDataUpdated(key);
@@ -48,7 +53,7 @@ public class EntityBaseSpellBall extends BaseProjectile {
 
     @Override
     public int livingTickMax() {
-        return 6;
+        return this.maxLivingTicks;
     }
 
     @Override
@@ -78,6 +83,7 @@ public class EntityBaseSpellBall extends BaseProjectile {
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         this.entityData.set(ELEMENT_DATA, compound.getInt("Element"));
+        this.maxLivingTicks = compound.getInt("MaxLivingTicks");
         int i = this.entityData.get(ELEMENT_DATA);
         if (i < EnumElement.values().length)
             this.element = EnumElement.values()[i];
@@ -87,5 +93,6 @@ public class EntityBaseSpellBall extends BaseProjectile {
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Element", this.element.ordinal());
+        compound.putInt("MaxLivingTicks", this.maxLivingTicks);
     }
 }

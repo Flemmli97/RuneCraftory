@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.chimera",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:chimera_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:chimera",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:chimera"
+    }
+  ]
+}

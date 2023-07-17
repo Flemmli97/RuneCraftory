@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
 import com.google.common.collect.Lists;
+import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -21,6 +22,7 @@ import net.minecraft.world.level.EntityGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -333,5 +335,19 @@ public class LevelCalc {
         }
         multiplier += (mod + 1) * Math.min(MAX_HEALTH_MULTIPLIER, (completed + 1));
         return base * multiplier;
+    }
+
+    @Nullable
+    public static EnumSkills getSkillFromElement(EnumElement element) {
+        return switch (element) {
+            case WATER -> EnumSkills.WATER;
+            case EARTH -> EnumSkills.EARTH;
+            case WIND -> EnumSkills.WIND;
+            case FIRE -> EnumSkills.FIRE;
+            case LIGHT -> EnumSkills.LIGHT;
+            case DARK -> EnumSkills.DARK;
+            case LOVE -> EnumSkills.LOVE;
+            default -> null;
+        };
     }
 }
