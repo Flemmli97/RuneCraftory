@@ -50,17 +50,19 @@ public class ElementBallBarrageSpell extends Spell {
             return false;
         ElementBallBarrageSummoner summoner = new ElementBallBarrageSummoner(level, entity, this.element);
         Vec3 eye = entity.getEyePosition();
+        float dirScale = 5;
         Vec3 dir = entity instanceof Mob mob && mob.getTarget() != null ? mob.getTarget().getEyePosition().subtract(eye).normalize().scale(3)
-                : entity.getLookAngle().scale(3);
+                : entity.getLookAngle().scale(dirScale);
         if (entity instanceof Mob mob) {
-            if (mob instanceof DelayedAttacker delayed && delayed.targetPosition() != null) {
-                dir = delayed.targetPosition().subtract(eye).normalize().scale(3);
+            Vec3 delayedPos;
+            if (mob instanceof DelayedAttacker delayed && (delayedPos = delayed.targetPosition(summoner.position())) != null) {
+                dir = delayedPos.subtract(eye.x, delayedPos.y, eye.z).normalize().scale(dirScale);
             } else if (mob.getTarget() != null) {
-                dir = mob.getTarget().getEyePosition().subtract(eye).normalize().scale(3);
+                dir = mob.getTarget().getEyePosition().subtract(eye).normalize().scale(dirScale);
             }
         } else
-            dir = entity.getLookAngle().scale(3);
-        Vec3 off = dir.normalize().scale(1);
+            dir = entity.getLookAngle().scale(dirScale);
+        Vec3 off = dir.normalize().scale(-dirScale + 3);
         summoner.setPos(eye.x + off.x, eye.y, eye.z + off.z);
         summoner.setTarget(eye.x + dir.x, eye.y + dir.y, eye.z + dir.z);
         level.addFreshEntity(summoner);

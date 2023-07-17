@@ -230,7 +230,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
     }
 
     @Override
-    public Vec3 targetPosition() {
+    public Vec3 targetPosition(Vec3 from) {
         return this.aiVarHelper;
     }
 

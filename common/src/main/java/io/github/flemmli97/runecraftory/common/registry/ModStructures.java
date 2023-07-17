@@ -3,9 +3,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.world.structure.AmbrosiaForestStructure;
-import io.github.flemmli97.runecraftory.common.world.structure.TheaterRuinsStructure;
-import io.github.flemmli97.runecraftory.common.world.structure.ThunderboltRuinsStructure;
+import io.github.flemmli97.runecraftory.common.world.structure.SurfaceJigsawStructure;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.BossSpawnerProcessor;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.NPCDataProcessor;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.WaterUnlogProcessor;
@@ -31,9 +29,9 @@ public class ModStructures {
 
     public static final PlatformRegistry<StructureProcessorType<?>> STRUCTURESPROCESSORS = PlatformUtils.INSTANCE.of(Registry.STRUCTURE_PROCESSOR_REGISTRY, RuneCraftory.MODID);
 
-    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> AMBROSIA_FOREST = register("ambrosia_forest", () -> new AmbrosiaForestStructure(JigsawConfiguration.CODEC));
-    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> THUNDERBOLT_RUINS = register("thunderbolt_ruins", () -> new ThunderboltRuinsStructure(JigsawConfiguration.CODEC));
-    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> THEATER_RUINS = register("theater_ruins", () -> new TheaterRuinsStructure(JigsawConfiguration.CODEC));
+    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> AMBROSIA_FOREST = register("ambrosia_forest", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
+    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> THUNDERBOLT_RUINS = register("thunderbolt_ruins", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
+    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> THEATER_RUINS = register("theater_ruins", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
 
     public static final RegistryEntrySupplier<StructureProcessorType<BossSpawnerProcessor>> BOSS_PROCESSOR = STRUCTURESPROCESSORS.register("boss_processor", () -> () -> BossSpawnerProcessor.CODEC);
     public static final RegistryEntrySupplier<StructureProcessorType<NPCDataProcessor>> NPC_PROCESSOR = STRUCTURESPROCESSORS.register("npc_processor", () -> () -> NPCDataProcessor.CODEC);

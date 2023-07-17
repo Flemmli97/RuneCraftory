@@ -16,6 +16,7 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -166,8 +168,9 @@ public class EntityUtils {
         return 0;
     }
 
-    public static Vec3 getStraightProjectileTarget() {
-        return Vec3.ZERO;//TODO
+    public static Vec3 getStraightProjectileTarget(Vec3 from, Entity target) {
+        AABB aabb = target.getBoundingBox().inflate(target.getBbHeight() * 0.1);
+        return new Vec3(target.getX(), Mth.clamp(from.y(), aabb.minY, aabb.maxY), target.getZ());
     }
 
     record WeightedChestTier(int tier, int weight, float modifier, int max) {

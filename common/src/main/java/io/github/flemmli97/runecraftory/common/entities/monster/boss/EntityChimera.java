@@ -7,6 +7,8 @@ import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.ai.RestrictedWaterAvoidingStrollGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.ChimeraAttackGoal;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
@@ -27,6 +29,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public class EntityChimera extends BossMonster implements DelayedAttacker {
 
@@ -72,7 +75,8 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
                     entity.setDeltaMovement(entity.chargeMotion[0], entity.getDeltaMovement().y, entity.chargeMotion[2]);
                 }
                 entity.mobAttack(anim, null, e -> {
-                    if (!entity.hitEntity.contains(e) && entity.doHurtTarget(e)) {
+                    if (!entity.hitEntity.contains(e) && CombatUtils.mobAttack(entity, e,
+                            new CustomDamage.Builder(entity).hurtResistant(5).knock(CustomDamage.KnockBackType.UP), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE))) {
                         entity.chargeAttackSuccess = true;
                         entity.attack.chargeSuccess(0);
                         entity.hitEntity.add(e);
@@ -86,7 +90,12 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
             }
         });
         b.put(BITE, (anim, entity) -> {
-            if (anim.getTick() == anim.getAttackTime() || anim.getTick() == 17) {
+            if (anim.getTick() == anim.getAttackTime()) {
+                entity.mobAttack(anim, entity.getTarget(), e -> {
+                    CombatUtils.mobAttack(entity, e,
+                            new CustomDamage.Builder(entity).hurtResistant(5).knockAmount(0), CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE));
+                });
+            } else if (anim.getTick() == 17) {
                 entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
             }
         });
@@ -107,7 +116,7 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
     protected boolean chargeAttackSuccess;
     private double[] chargeMotion;
     protected List<LivingEntity> hitEntity;
-    private Vec3 aiTargetPosition;
+    private Function<Vec3, Vec3> aiTargetPosition;
 
     public EntityChimera(EntityType<? extends EntityChimera> type, Level world) {
         super(type, world);
@@ -292,12 +301,12 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
         return SLEEP;
     }
 
-    public void setAiTarget(Vec3 aiVarHelper) {
+    public void setAiTarget(Function<Vec3, Vec3> aiVarHelper) {
         this.aiTargetPosition = aiVarHelper;
     }
 
     @Override
-    public Vec3 targetPosition() {
-        return this.aiTargetPosition;
+    public Vec3 targetPosition(Vec3 from) {
+        return this.aiTargetPosition.apply(from);
     }
 }

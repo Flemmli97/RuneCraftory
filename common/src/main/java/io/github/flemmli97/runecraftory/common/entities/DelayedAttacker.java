@@ -4,6 +4,6 @@ import net.minecraft.world.phys.Vec3;
 
 public interface DelayedAttacker {
 
-    Vec3 targetPosition();
+    Vec3 targetPosition(Vec3 from);
 
 }

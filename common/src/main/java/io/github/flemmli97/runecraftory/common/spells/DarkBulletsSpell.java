@@ -38,8 +38,9 @@ public class DarkBulletsSpell extends Spell {
             return false;
         EntityDarkBulletSummoner summoner = new EntityDarkBulletSummoner(level, entity);
         summoner.setDamageMultiplier(0.5f + lvl * 0.05f);
-        if (entity instanceof DelayedAttacker attacker && attacker.targetPosition() != null) {
-            summoner.setTarget(attacker.targetPosition().x(), attacker.targetPosition().y(), attacker.targetPosition().z());
+        Vec3 delayedPos;
+        if (entity instanceof DelayedAttacker attacker && (delayedPos = attacker.targetPosition(summoner.position())) != null) {
+            summoner.setTarget(delayedPos.x(), delayedPos.y(), delayedPos.z());
         } else if (entity instanceof Mob mob && mob.getTarget() != null) {
             summoner.setTarget(mob.getTarget().getX(), mob.getTarget().getY(), mob.getTarget().getZ());
         } else {

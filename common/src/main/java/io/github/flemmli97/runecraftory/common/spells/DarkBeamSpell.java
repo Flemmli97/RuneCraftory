@@ -38,7 +38,7 @@ public class DarkBeamSpell extends Spell {
         EntityDarkBeam beam = new EntityDarkBeam(level, entity);
         beam.setDamageMultiplier(0.95f + 0.05f * lvl);
         if (entity instanceof Mob mob && mob.getTarget() != null)
-            beam.setRotationTo(mob.getTarget().getX(), mob.getTarget().getY() + mob.getTarget().getBbHeight() * 0.5, mob.getTarget().getZ(), 0);
+            beam.setRotationTo(mob.getTarget(), 0);
         else {
             beam.setYRot((entity.yHeadRot - 180) % 360.0F);
             beam.setXRot(entity.getXRot() % 360.0F);

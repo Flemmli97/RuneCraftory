@@ -13,6 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 
 public class WaterLaserSpell extends Spell {
 
@@ -40,11 +41,12 @@ public class WaterLaserSpell extends Spell {
         laser.setMaxTicks(entity instanceof Player ? 44 : 15);
         laser.setDamageMultiplier(0.95f + lvl * 0.05f);
         if (entity instanceof Mob mob) {
-            if (mob instanceof DelayedAttacker delayed && delayed.targetPosition() != null) {
-                laser.setRotationTo(delayed.targetPosition().x(), delayed.targetPosition().y(), delayed.targetPosition().z(), 0);
+            Vec3 delayedPos;
+            if (entity instanceof DelayedAttacker attacker && (delayedPos = attacker.targetPosition(laser.position())) != null) {
+                laser.setRotationTo(delayedPos.x(), delayedPos.y(), delayedPos.z(), 0);
             } else if (mob.getTarget() != null) {
                 LivingEntity target = mob.getTarget();
-                laser.setRotationTo(target.getX(), target.getEyeY(), target.getZ(), 0);
+                laser.setRotationTo(target, 0);
             }
         }
         level.addFreshEntity(laser);
