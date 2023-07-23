@@ -104,7 +104,7 @@ public class OverlayGui extends GuiComponent {
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
             PoseStack poseStack = RenderSystem.getModelViewStack();
             poseStack.pushPose();
-            poseStack.translate(x, y, 100.0f + renderer.blitOffset + 50);
+            poseStack.translate(x, y, -100.0f + renderer.blitOffset + 50);
             poseStack.translate(8.0, 0, 0.0);
             poseStack.scale(1.0f, -1.0f, 1.0f);
             poseStack.scale(32, 32, 32);
