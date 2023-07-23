@@ -1,0 +1,16 @@
+{
+  "name": "entity.runecraftory.raccoon",
+  "category": "runecraftory:category.entities",
+  "icon": "runecraftory:raccoon_spawn_egg",
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "runecraftory:raccoon",
+      "scale": 0.7
+    },
+    {
+      "type": "patchouli:text",
+      "text": "runecraftory.patchouli.entry.entity.runecraftory:raccoon"
+    }
+  ]
+}

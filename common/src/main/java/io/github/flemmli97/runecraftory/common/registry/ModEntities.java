@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAppleProjectile;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBaseSpellBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigPlate;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigRaccoonLeaf;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterflySummoner;
@@ -38,6 +39,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityRuneOrb;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityRuney;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySlashResidue;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySleepAura;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntitySmallRaccoonLeaf;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpiderWeb;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpore;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStatusBall;
@@ -91,6 +93,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityAmbro
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityChimera;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityDeadTree;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityMarionetta;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityRaccoon;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntityIgnis;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntitySpirit;
@@ -679,6 +682,25 @@ public class ModEntities {
                     .putAttributes(LibAttributes.RES_FAINT, 100)
                     .putAttributes(LibAttributes.RES_DRAIN, 10)
                     .xp(950).money(100).tamingChance(0.005f).setBarnOccupancy(2).setRidable().build());
+    public static final RegistryEntrySupplier<EntityType<EntityRaccoon>> RACCOON = regMonster(EntityType.Builder.of(EntityRaccoon::new, MobCategory.MONSTER).sized(0.9f, 1.5f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "raccoon"),
+            0xcb8055, 0x6d4342,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.MAX_HEALTH, 300).putLevelGains(LibAttributes.MAX_HEALTH, 28.5)
+                    .putAttributes(LibAttributes.ATTACK_DAMAGE, 18).putLevelGains(LibAttributes.ATTACK_DAMAGE, 3.3)
+                    .putAttributes(LibAttributes.DEFENCE, 4.7).putLevelGains(LibAttributes.DEFENCE, 2.3)
+                    .putAttributes(LibAttributes.MAGIC, 14.2).putLevelGains(LibAttributes.MAGIC, 3.35)
+                    .putAttributes(LibAttributes.MAGIC_DEFENCE, 3.6).putLevelGains(LibAttributes.MAGIC_DEFENCE, 2.25)
+                    .putAttributes(LibAttributes.RES_LOVE, 25)
+                    .putAttributes(LibAttributes.RES_PARA, 85)
+                    .putAttributes(LibAttributes.RES_POISON, 97)
+                    .putAttributes(LibAttributes.RES_SEAL, 97)
+                    .putAttributes(LibAttributes.RES_SLEEP, 100)
+                    .putAttributes(LibAttributes.RES_DIZZY, 60)
+                    .putAttributes(LibAttributes.RES_CRIT, 25)
+                    .putAttributes(LibAttributes.RES_STUN, 50)
+                    .putAttributes(LibAttributes.RES_FAINT, 100)
+                    .putAttributes(LibAttributes.RES_DRAIN, 10)
+                    .xp(950).money(100).tamingChance(0.005f).setBarnOccupancy(2).setRidable().build());
 
     public static final RegistryEntrySupplier<EntityType<EntityNPCBase>> NPC = npc(EntityType.Builder.of(EntityNPCBase::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "npc"));
 
@@ -717,6 +739,8 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityThrownItem>> THROWN_ITEM = reg(EntityType.Builder.<EntityThrownItem>of(EntityThrownItem::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "thrown_item"));
     public static final RegistryEntrySupplier<EntityType<EntityAppleProjectile>> APPLE = reg(EntityType.Builder.<EntityAppleProjectile>of(EntityAppleProjectile::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "apple"));
     public static final RegistryEntrySupplier<EntityType<EntitySlashResidue>> SLASH_RESIDUE = reg(EntityType.Builder.<EntitySlashResidue>of(EntitySlashResidue::new, MobCategory.MISC).sized(1.2f, 1.2f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "slash_residue"));
+    public static final RegistryEntrySupplier<EntityType<EntitySmallRaccoonLeaf>> SMALL_RACCOON_LEAF = reg(EntityType.Builder.<EntitySmallRaccoonLeaf>of(EntitySmallRaccoonLeaf::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "small_raccoon_leaf"));
+    public static final RegistryEntrySupplier<EntityType<EntityBigRaccoonLeaf>> BIG_RACCOON_LEAF = reg(EntityType.Builder.<EntityBigRaccoonLeaf>of(EntityBigRaccoonLeaf::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "big_raccoon_leaf"));
 
     public static final RegistryEntrySupplier<EntityType<EntityRuney>> RUNEY = reg(EntityType.Builder.of(EntityRuney::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "runey"));
     public static final RegistryEntrySupplier<EntityType<EntityRuneOrb>> STAT_BONUS = reg(EntityType.Builder.of(EntityRuneOrb::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rune_orb"));

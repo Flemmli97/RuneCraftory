@@ -817,12 +817,12 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public int difficultyCooldown() {
-        int diffAdd = 30;
+        int diffAdd = 25;
         Difficulty diff = this.level.getDifficulty();
         if (this.level.getDifficulty() == Difficulty.HARD)
             diffAdd = 0;
         else if (diff == Difficulty.NORMAL)
-            diffAdd = 15;
+            diffAdd = 10;
         return diffAdd;
     }
 

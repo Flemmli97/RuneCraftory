@@ -8,6 +8,7 @@ import io.github.flemmli97.runecraftory.common.spells.AppleRain;
 import io.github.flemmli97.runecraftory.common.spells.AppleShield;
 import io.github.flemmli97.runecraftory.common.spells.ArrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.BaseStaffSpell;
+import io.github.flemmli97.runecraftory.common.spells.BigLeafSpell;
 import io.github.flemmli97.runecraftory.common.spells.BigLightningBoltSpell;
 import io.github.flemmli97.runecraftory.common.spells.BigPlateSpell;
 import io.github.flemmli97.runecraftory.common.spells.ButterflySpell;
@@ -47,6 +48,7 @@ import io.github.flemmli97.runecraftory.common.spells.ShineSpell;
 import io.github.flemmli97.runecraftory.common.spells.SlashSpell;
 import io.github.flemmli97.runecraftory.common.spells.SleepAuraSpell;
 import io.github.flemmli97.runecraftory.common.spells.SleepBallSpell;
+import io.github.flemmli97.runecraftory.common.spells.SmallLeafSpell;
 import io.github.flemmli97.runecraftory.common.spells.SnowballSpell;
 import io.github.flemmli97.runecraftory.common.spells.StoneThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
@@ -151,5 +153,11 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> FIREBALL_BARRAGE = SPELLS.register("fireball_barrage", () -> new ElementBallBarrageSpell(EnumElement.FIRE));
     public static final RegistryEntrySupplier<Spell> BUBBLE_BEAM = SPELLS.register("bubble_beam", () -> new ElementBallBarrageSpell(EnumElement.WATER));
     public static final RegistryEntrySupplier<Spell> SLASH = SPELLS.register("slash", SlashSpell::new);
+
+    public static final RegistryEntrySupplier<Spell> BIG_LEAF_SPELL = SPELLS.register("big_leaf_spell_single", () -> new BigLeafSpell(false));
+    public static final RegistryEntrySupplier<Spell> BIG_LEAF_SPELL_DOUBLE = SPELLS.register("big_leaf_spell_double", () -> new BigLeafSpell(true));
+    public static final RegistryEntrySupplier<Spell> SMALL_LEAF_SPELL_X3 = SPELLS.register("small_leaf_spell_x3", () -> new SmallLeafSpell(3));
+    public static final RegistryEntrySupplier<Spell> SMALL_LEAF_SPELL_X5 = SPELLS.register("small_leaf_spell_x5", () -> new SmallLeafSpell(5));
+    public static final RegistryEntrySupplier<Spell> SMALL_LEAF_SPELL_X7 = SPELLS.register("small_leaf_spell_x7", () -> new SmallLeafSpell(7));
 
 }

@@ -41,6 +41,8 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelOrc;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPalmCat;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPanther;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoon;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoonBerserk;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelScorpion;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSpider;
@@ -69,6 +71,7 @@ import io.github.flemmli97.runecraftory.client.render.monster.RenderDuck;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGhost;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGoblin;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderOrc;
+import io.github.flemmli97.runecraftory.client.render.monster.RenderRaccoon;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderSpider;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderVeggieGhost;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWisp;
@@ -76,6 +79,7 @@ import io.github.flemmli97.runecraftory.client.render.monster.RenderWooly;
 import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingHookRenderer;
 import io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderAppleProjectile;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderBigRaccoonLeaf;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderBullet;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderCards;
@@ -89,6 +93,7 @@ import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMobArrow
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderPlate;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderPoisonNeedle;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderRockSpear;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSmallRaccoonLeaf;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSpiderWeb;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderStaffBall;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderThrownItem;
@@ -267,6 +272,7 @@ public class ClientRegister {
         register(consumer, ModEntities.MARIONETTA.get(), ModelMarionetta::new, ModelMarionetta.LAYER_LOCATION);
         consumer.register(ModEntities.DEAD_TREE.get(), ctx -> new RenderDeadTree<>(ctx, 2));
         register(consumer, ModEntities.CHIMERA.get(), ModelChimera::new, ModelChimera.LAYER_LOCATION);
+        consumer.register(ModEntities.RACCOON.get(), RenderRaccoon::new);
 
         consumer.register(ModEntities.NPC.get(), RenderNPC::new);
 
@@ -320,6 +326,8 @@ public class ClientRegister {
         consumer.register(ModEntities.APPLE.get(), RenderAppleProjectile::new);
         consumer.register(ModEntities.ELEMENTAL_BARRAGE_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.SLASH_RESIDUE.get(), EmptyRender::new);
+        consumer.register(ModEntities.SMALL_RACCOON_LEAF.get(), RenderSmallRaccoonLeaf::new);
+        consumer.register(ModEntities.BIG_RACCOON_LEAF.get(), RenderBigRaccoonLeaf::new);
 
         consumer.register(ModEntities.DARK_BULLET.get(), RenderDarkBullet::new);
 
@@ -390,6 +398,8 @@ public class ClientRegister {
         consumer.accept(ModelMarionetta.LAYER_LOCATION, ModelMarionetta::createBodyLayer);
         consumer.accept(ModelDeadTree.LAYER_LOCATION, ModelDeadTree::createBodyLayer);
         consumer.accept(ModelChimera.LAYER_LOCATION, ModelChimera::createBodyLayer);
+        consumer.accept(ModelRaccoon.LAYER_LOCATION, ModelRaccoon::createBodyLayer);
+        consumer.accept(ModelRaccoonBerserk.LAYER_LOCATION, ModelRaccoonBerserk::createBodyLayer);
 
         consumer.accept(ModelButterfly.LAYER_LOCATION, ModelButterfly::createBodyLayer);
         consumer.accept(ModelWoolyWool.LAYER_LOCATION, ModelWoolyWool::createBodyLayer);
