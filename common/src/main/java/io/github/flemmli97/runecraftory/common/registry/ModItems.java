@@ -714,7 +714,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> lightOre = mat("light_ore", Texture.Y);
     public static final RegistryEntrySupplier<Item> runeSphereShard = mat("rune_sphere_shard", Rarity.RARE, Texture.N);
     public static final RegistryEntrySupplier<Item> shadeStone = mat("shade_stone", Texture.N);
-    public static final RegistryEntrySupplier<Item> racoonLeaf = mat("racoon_leaf", Texture.N);
+    public static final RegistryEntrySupplier<Item> raccoonLeaf = mat("raccoon_leaf", Texture.Y);
     public static final RegistryEntrySupplier<Item> icyNose = mat("icy_nose", Rarity.RARE, Texture.N);
     public static final RegistryEntrySupplier<Item> bigBirdsComb = mat("big_birds_comb", Texture.N);
     public static final RegistryEntrySupplier<Item> rafflesiaPetal = mat("rafflesia_petal", Rarity.RARE, Texture.N);

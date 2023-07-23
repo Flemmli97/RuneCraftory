@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "runecraftory:item/racoon_leaf"
+    "layer0": "runecraftory:item/raccoon_leaf"
   }
 }

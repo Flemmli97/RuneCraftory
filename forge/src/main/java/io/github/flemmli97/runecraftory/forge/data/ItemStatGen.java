@@ -1261,7 +1261,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.lightOre.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.runeSphereShard.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.shadeStone.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.racoonLeaf.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.raccoonLeaf.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.icyNose.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.bigBirdsComb.get(), new ItemStat.Builder(0, 0, 0));
         this.addStat(ModItems.rafflesiaPetal.get(), new ItemStat.Builder(0, 0, 0));

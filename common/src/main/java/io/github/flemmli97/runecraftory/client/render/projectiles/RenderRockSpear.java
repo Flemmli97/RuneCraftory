@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.OwnableEntity;
 
 public class RenderRockSpear extends EntityRenderer<EntityRockSpear> {
@@ -35,6 +36,8 @@ public class RenderRockSpear extends EntityRenderer<EntityRockSpear> {
         stack.pushPose();
         boolean playerView = ((OwnableEntity) entity).getOwner() == Minecraft.getInstance().player
                 && Minecraft.getInstance().options.getCameraType() != CameraType.THIRD_PERSON_BACK;
+        float scale = Mth.lerp(partialTicks, entity.tickCount * (1 / 4.5f), (entity.tickCount + 1) * (1 / 4.5f));
+        stack.scale(Math.min(1, scale), 1, 1);
         stack.translate(size * 0.5, 0, 0);
         if (playerView) {
             stack.mulPose(Vector3f.XP.rotationDegrees(-90));

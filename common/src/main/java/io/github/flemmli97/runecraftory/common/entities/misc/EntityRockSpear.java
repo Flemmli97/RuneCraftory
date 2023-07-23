@@ -20,13 +20,13 @@ public class EntityRockSpear extends BaseBeam {
 
     public EntityRockSpear(EntityType<? extends EntityRockSpear> type, Level world) {
         super(type, world);
-        this.coolDown = 6;
+        this.coolDown = 5;
     }
 
     public EntityRockSpear(Level world, LivingEntity shooter, boolean big) {
         super(ModEntities.ROCK_SPEAR.get(), world, shooter);
         this.setPos(this.getX(), this.getY() - 0.1, this.getZ());
-        this.coolDown = 6;
+        this.coolDown = 5;
         this.entityData.set(BIG, big);
     }
 
