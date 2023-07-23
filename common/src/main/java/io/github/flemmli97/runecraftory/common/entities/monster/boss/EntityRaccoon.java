@@ -49,6 +49,7 @@ public class EntityRaccoon extends BossMonster {
     public static final AnimatedAction STOMP = new AnimatedAction(1.36, 0.56, "stomp");
     public static final AnimatedAction LEAF_SHOOT = new AnimatedAction(0.88, 0.44, "shoot");
     public static final AnimatedAction LEAF_BOOMERANG = AnimatedAction.copyOf(LEAF_SHOOT, "spinning_shoot");
+    public static final AnimatedAction LEAF_SHOT_CLONE = AnimatedAction.copyOf(LEAF_SHOOT, "leaf_clone");
     public static final AnimatedAction BARRAGE = new AnimatedAction(20, 7, "barrage");
     public static final AnimatedAction ROAR = new AnimatedAction(1.24, 1, "roar");
     public static final AnimatedAction ANGRY = AnimatedAction.copyOf(ROAR, "angry");
@@ -121,6 +122,19 @@ public class EntityRaccoon extends BossMonster {
         b.put(LEAF_SHOOT, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.canAttack()) {
+                if (entity.isEnraged())
+                    ModSpells.SMALL_LEAF_SPELL_X7.get().use(entity);
+                else {
+                    if (entity.random.nextFloat() < 0.6)
+                        ModSpells.SMALL_LEAF_SPELL_X3.get().use(entity);
+                    else
+                        ModSpells.SMALL_LEAF_SPELL_X5.get().use(entity);
+                }
+            }
+        });
+        b.put(LEAF_SHOT_CLONE, (anim, entity) -> {
+            entity.getNavigation().stop();
+            if (anim.canAttack() || anim.getTick() > anim.getAttackTime() + 4) {
                 if (entity.isEnraged())
                     ModSpells.SMALL_LEAF_SPELL_X7.get().use(entity);
                 else {
@@ -217,6 +231,10 @@ public class EntityRaccoon extends BossMonster {
             if (anim.is(DOUBLE_PUNCH))
                 return !this.isBerserk();
             else if (this.isBerserk()) {
+                if (anim.is(LEAF_SHOT_CLONE))
+                    return this.clone && this.isEnraged();
+                if (anim.is(DOUBLE_PUNCH))
+                    return !this.isEnraged();
                 if (this.clone)
                     return anim.is(LEAF_SHOOT, LEAF_BOOMERANG);
                 if (anim.is(ROAR))
