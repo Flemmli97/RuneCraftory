@@ -100,7 +100,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.is(ANGRY, DEFEAT) || anim.is(INTERACT))
+        if (anim.is(ANGRY, DEFEAT, INTERACT))
             return false;
         if (type == AnimationType.GENERICATTACK)
             return this.isEnraged() || !anim.is(POLLEN);

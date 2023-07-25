@@ -63,7 +63,7 @@ public class EntityWindBlade extends BaseProjectile {
                 List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(16).expandTowards(this.getDeltaMovement()), e -> {
                     if (!e.isPickable() || !e.isAttackable())
                         return false;
-                    if (e == this.getOwner() || (e instanceof OwnableEntity ownable && ownable.getOwner() == this.getOwner())) {
+                    if (e.equals(this.getOwner()) || (e instanceof OwnableEntity ownable && ownable.getOwner() == this.getOwner())) {
                         return false;
                     }
                     return this.canHit(e);

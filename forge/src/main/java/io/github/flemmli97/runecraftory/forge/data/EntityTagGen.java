@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.forge.data;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
+import io.github.flemmli97.tenshilib.TenshiLib;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -56,6 +57,9 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
                 .add(EntityType.SNOW_GOLEM)
                 .add(EntityType.IRON_GOLEM)
                 .addOptional(new ResourceLocation("advancedgolems", "golem"));
+
+        this.tag(TenshiLib.MULTIPART_ENTITY)
+                .add(ModEntities.MULTIPART.get());
     }
 
     @Override

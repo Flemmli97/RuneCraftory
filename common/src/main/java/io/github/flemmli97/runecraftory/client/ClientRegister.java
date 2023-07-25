@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.client.gui.UpgradeGui;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.client.model.ModelButterfly;
 import io.github.flemmli97.runecraftory.client.model.ModelChest;
+import io.github.flemmli97.runecraftory.client.model.ModelEnergyOrb;
 import io.github.flemmli97.runecraftory.client.model.ModelGate;
 import io.github.flemmli97.runecraftory.client.model.ModelPlate;
 import io.github.flemmli97.runecraftory.client.model.armor.PiyoSandals;
@@ -44,6 +45,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoon;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoonBerserk;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelScorpion;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelSkelefang;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSpider;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelThunderbolt;
@@ -57,8 +59,10 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelWooly;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelWoolyWool;
 import io.github.flemmli97.runecraftory.client.particles.CirclingParticle;
 import io.github.flemmli97.runecraftory.client.particles.LightningParticle;
+import io.github.flemmli97.runecraftory.client.particles.MoveToGoalParticle;
 import io.github.flemmli97.runecraftory.client.particles.RuneyParticle;
 import io.github.flemmli97.runecraftory.client.particles.SinkingParticle;
+import io.github.flemmli97.runecraftory.client.particles.SkelefangParticle;
 import io.github.flemmli97.runecraftory.client.particles.VortexParticle;
 import io.github.flemmli97.runecraftory.client.render.RenderGate;
 import io.github.flemmli97.runecraftory.client.render.RenderMonster;
@@ -72,6 +76,7 @@ import io.github.flemmli97.runecraftory.client.render.monster.RenderGhost;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGoblin;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderOrc;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderRaccoon;
+import io.github.flemmli97.runecraftory.client.render.monster.RenderSkelefang;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderSpider;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderVeggieGhost;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderWisp;
@@ -80,12 +85,14 @@ import io.github.flemmli97.runecraftory.client.render.projectiles.CustomFishingH
 import io.github.flemmli97.runecraftory.client.render.projectiles.EmptyRender;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderAppleProjectile;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderBigRaccoonLeaf;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderBoneNeedle;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderBullet;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderButterfly;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderCards;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkBeam;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkBullet;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderDarkness;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderEnergyOrb;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFireball;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderFurnitures;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderMarionettaTrap;
@@ -130,6 +137,7 @@ import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.particle.HeartParticle;
 import net.minecraft.client.particle.ParticleProvider;
@@ -273,6 +281,7 @@ public class ClientRegister {
         consumer.register(ModEntities.DEAD_TREE.get(), ctx -> new RenderDeadTree<>(ctx, 2));
         register(consumer, ModEntities.CHIMERA.get(), ModelChimera::new, ModelChimera.LAYER_LOCATION);
         consumer.register(ModEntities.RACCOON.get(), RenderRaccoon::new);
+        consumer.register(ModEntities.SKELEFANG.get(), RenderSkelefang::new);
 
         consumer.register(ModEntities.NPC.get(), RenderNPC::new);
 
@@ -328,6 +337,8 @@ public class ClientRegister {
         consumer.register(ModEntities.SLASH_RESIDUE.get(), EmptyRender::new);
         consumer.register(ModEntities.SMALL_RACCOON_LEAF.get(), RenderSmallRaccoonLeaf::new);
         consumer.register(ModEntities.BIG_RACCOON_LEAF.get(), RenderBigRaccoonLeaf::new);
+        consumer.register(ModEntities.BONE_NEEDLE.get(), RenderBoneNeedle::new);
+        consumer.register(ModEntities.ENERGY_ORB.get(), RenderEnergyOrb::new);
 
         consumer.register(ModEntities.DARK_BULLET.get(), RenderDarkBullet::new);
 
@@ -338,6 +349,8 @@ public class ClientRegister {
         consumer.register(ModEntities.DARK_BULLET_SUMMONER.get(), EmptyRender::new);
 
         consumer.register(ModEntities.FISHING_HOOK.get(), CustomFishingHookRenderer::new);
+
+        consumer.register(ModEntities.MULTIPART.get(), EmptyRender::new);
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> EntityRendererProvider<? super T> getMonsterRender(Function<ModelPart, M> model, ModelLayerLocation layerLocation, ResourceLocation texture, float shadow) {
@@ -400,6 +413,7 @@ public class ClientRegister {
         consumer.accept(ModelChimera.LAYER_LOCATION, ModelChimera::createBodyLayer);
         consumer.accept(ModelRaccoon.LAYER_LOCATION, ModelRaccoon::createBodyLayer);
         consumer.accept(ModelRaccoonBerserk.LAYER_LOCATION, ModelRaccoonBerserk::createBodyLayer);
+        consumer.accept(ModelSkelefang.LAYER_LOCATION, ModelSkelefang::createBodyLayer);
 
         consumer.accept(ModelButterfly.LAYER_LOCATION, ModelButterfly::createBodyLayer);
         consumer.accept(ModelWoolyWool.LAYER_LOCATION, ModelWoolyWool::createBodyLayer);
@@ -407,6 +421,9 @@ public class ClientRegister {
         consumer.accept(RenderFurnitures.LOC_CHAIR, RenderFurnitures::chairLayer);
         consumer.accept(RenderFurnitures.LOC_CHIPSQUEEK_PLUSH, RenderFurnitures::chipSqueekPlushLayer);
         consumer.accept(RenderFurnitures.LOC_WOOLY_PLUSH, RenderFurnitures::woolyPlushLayer);
+
+        consumer.accept(ModelEnergyOrb.LAYER_LOCATION, () -> ModelEnergyOrb.createBodyLayer(CubeDeformation.NONE));
+        consumer.accept(ModelEnergyOrb.LAYER_LOCATION_LAYER, () -> ModelEnergyOrb.createBodyLayer(new CubeDeformation(1.5f)));
 
         consumer.accept(AnimatedPlayerModel.LAYER_LOCATION, AnimatedPlayerModel::createBodyLayer);
         consumer.accept(PiyoSandals.LAYER_LOCATION, PiyoSandals::createBodyLayer);
@@ -432,6 +449,9 @@ public class ClientRegister {
         consumer.register(ModParticles.lightning.get(), LightningParticle.Factory::new);
 
         consumer.register(ModParticles.runey.get(), RuneyParticle.Provider::new);
+
+        consumer.register(ModParticles.skelefangBones.get(), SkelefangParticle.SkelefangParticleFactoryBase::new);
+        consumer.register(ModParticles.durationalParticle.get(), MoveToGoalParticle.ParticleFactoryBase::new);
     }
 
     public static <T extends TooltipComponent> void registerTooltipComponentFactories(ToolTipComponentRegister register) {

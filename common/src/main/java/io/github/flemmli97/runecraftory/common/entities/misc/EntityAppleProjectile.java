@@ -84,7 +84,7 @@ public class EntityAppleProjectile extends BaseProjectile {
                     this.hasImpulse = true;
                 } else if (this.circleTime == 0) {
                     if (owner instanceof Mob mob && mob.getTarget() != null) {
-                        this.shootAtEntity(mob.getTarget(), 1, 0, 0.2f);
+                        this.shootAtEntity(mob.getTarget(), 1, 0, 0);
                     } else {
                         this.shoot(owner, owner.getXRot(), owner.getYRot(), 0, 1, 0);
                     }

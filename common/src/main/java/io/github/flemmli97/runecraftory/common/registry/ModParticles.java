@@ -3,6 +3,9 @@ package io.github.flemmli97.runecraftory.common.registry;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticle4fType;
 import io.github.flemmli97.runecraftory.common.particles.ColoredParticleData4f;
+import io.github.flemmli97.runecraftory.common.particles.MovingGoalParticleType;
+import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleData;
+import io.github.flemmli97.runecraftory.common.particles.SkelefangParticleType;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import io.github.flemmli97.tenshilib.common.particle.ColoredParticleType;
@@ -34,6 +37,9 @@ public class ModParticles {
     public static final RegistryEntrySupplier<SimpleParticleType> sleep = PARTICLES.register("sleep", () -> Platform.INSTANCE.simple(false));
     public static final RegistryEntrySupplier<SimpleParticleType> poison = PARTICLES.register("poison", () -> Platform.INSTANCE.simple(false));
     public static final RegistryEntrySupplier<SimpleParticleType> paralysis = PARTICLES.register("paralysis", () -> Platform.INSTANCE.simple(false));
+
+    public static final RegistryEntrySupplier<ParticleType<SkelefangParticleData>> skelefangBones = PARTICLES.register("skelefang_bones", () -> new SkelefangParticleType(false));
+    public static final RegistryEntrySupplier<MovingGoalParticleType> durationalParticle = PARTICLES.register("particle_with_duration", () -> new MovingGoalParticleType(false));
 
     public static RegistryEntrySupplier<ParticleType<ColoredParticleData>> registerColoredParticleType(String name, boolean alwaysShow) {
         return PARTICLES.register(name, () -> new ColoredParticleType(alwaysShow));

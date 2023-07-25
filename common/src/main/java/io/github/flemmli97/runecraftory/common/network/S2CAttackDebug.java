@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.network;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.AttackAABBRender;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.lib.EnumAABBType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -38,7 +39,7 @@ public class S2CAttackDebug implements Packet {
 
     public static void handle(S2CAttackDebug pkt) {
         Player player = ClientHandlers.getPlayer();
-        if (player == null)
+        if (player == null || !GeneralConfig.debugAttack)
             return;
         AttackAABBRender.INST.addNewAABB(pkt.aabb, pkt.duration, pkt.type);
     }

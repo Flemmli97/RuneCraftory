@@ -180,7 +180,7 @@ public class EntityThunderbolt extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.is(FEINT, DEFEAT) || anim.is(NEIGH, INTERACT))
+        if (anim.is(FEINT, DEFEAT, NEIGH, INTERACT))
             return false;
         if (type == AnimationType.GENERICATTACK)
             return this.isEnraged() ? !anim.is(LASER_X5) : !anim.is(LASER_AOE) && !anim.is(LASER_KICK);

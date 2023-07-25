@@ -9,12 +9,14 @@ import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
+import io.github.flemmli97.runecraftory.common.entities.MultiPartEntity;
 import io.github.flemmli97.runecraftory.common.entities.misc.ElementBallBarrageSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAmbrosiaWave;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityAppleProjectile;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBaseSpellBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigPlate;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigRaccoonLeaf;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityBoneNeedle;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterflySummoner;
@@ -28,6 +30,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkness;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityExplosionSpell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFurniture;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityLightBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMarionettaTrap;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityMobArrow;
@@ -94,6 +97,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityChime
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityDeadTree;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityMarionetta;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityRaccoon;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySkelefang;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntityIgnis;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntitySpirit;
@@ -701,6 +705,24 @@ public class ModEntities {
                     .putAttributes(LibAttributes.RES_FAINT, 100)
                     .putAttributes(LibAttributes.RES_DRAIN, 10)
                     .xp(950).money(100).tamingChance(0.005f).setBarnOccupancy(2).setRidable().build());
+    public static final RegistryEntrySupplier<EntityType<EntitySkelefang>> SKELEFANG = regMonster(EntityType.Builder.of(EntitySkelefang::new, MobCategory.MONSTER).sized(1.95f, 3).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "skelefang"),
+            0x615237, 0xc2a982,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.MAX_HEALTH, 230).putLevelGains(LibAttributes.MAX_HEALTH, 27.5)
+                    .putAttributes(LibAttributes.ATTACK_DAMAGE, 20).putLevelGains(LibAttributes.ATTACK_DAMAGE, 3.3)
+                    .putAttributes(LibAttributes.DEFENCE, 4.5).putLevelGains(LibAttributes.DEFENCE, 2.3)
+                    .putAttributes(LibAttributes.MAGIC, 17.5).putLevelGains(LibAttributes.MAGIC, 3.3)
+                    .putAttributes(LibAttributes.MAGIC_DEFENCE, 3.4).putLevelGains(LibAttributes.MAGIC_DEFENCE, 2.25)
+                    .putAttributes(LibAttributes.RES_PARA, 85)
+                    .putAttributes(LibAttributes.RES_POISON, 97)
+                    .putAttributes(LibAttributes.RES_SEAL, 97)
+                    .putAttributes(LibAttributes.RES_SLEEP, 100)
+                    .putAttributes(LibAttributes.RES_DIZZY, 60)
+                    .putAttributes(LibAttributes.RES_CRIT, 25)
+                    .putAttributes(LibAttributes.RES_STUN, 50)
+                    .putAttributes(LibAttributes.RES_FAINT, 100)
+                    .putAttributes(LibAttributes.RES_DRAIN, 10)
+                    .xp(950).money(100).tamingChance(0.005f).setBarnOccupancy(3).setRidable().build());
 
     public static final RegistryEntrySupplier<EntityType<EntityNPCBase>> NPC = npc(EntityType.Builder.of(EntityNPCBase::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "npc"));
 
@@ -741,6 +763,8 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntitySlashResidue>> SLASH_RESIDUE = reg(EntityType.Builder.<EntitySlashResidue>of(EntitySlashResidue::new, MobCategory.MISC).sized(1.2f, 1.2f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "slash_residue"));
     public static final RegistryEntrySupplier<EntityType<EntitySmallRaccoonLeaf>> SMALL_RACCOON_LEAF = reg(EntityType.Builder.<EntitySmallRaccoonLeaf>of(EntitySmallRaccoonLeaf::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "small_raccoon_leaf"));
     public static final RegistryEntrySupplier<EntityType<EntityBigRaccoonLeaf>> BIG_RACCOON_LEAF = reg(EntityType.Builder.<EntityBigRaccoonLeaf>of(EntityBigRaccoonLeaf::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "big_raccoon_leaf"));
+    public static final RegistryEntrySupplier<EntityType<EntityBoneNeedle>> BONE_NEEDLE = reg(EntityType.Builder.<EntityBoneNeedle>of(EntityBoneNeedle::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "bone_needle"));
+    public static final RegistryEntrySupplier<EntityType<EntityHomingEnergyOrb>> ENERGY_ORB = reg(EntityType.Builder.<EntityHomingEnergyOrb>of(EntityHomingEnergyOrb::new, MobCategory.MISC).sized(0.9f, 0.9f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "energy_orb"));
 
     public static final RegistryEntrySupplier<EntityType<EntityRuney>> RUNEY = reg(EntityType.Builder.of(EntityRuney::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "runey"));
     public static final RegistryEntrySupplier<EntityType<EntityRuneOrb>> STAT_BONUS = reg(EntityType.Builder.of(EntityRuneOrb::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rune_orb"));
@@ -750,6 +774,8 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<ElementBallBarrageSummoner>> ELEMENTAL_BARRAGE_SUMMONER = reg(EntityType.Builder.<ElementBallBarrageSummoner>of(ElementBallBarrageSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "elemental_barrage_summoner"));
 
     public static final RegistryEntrySupplier<EntityType<EntityCustomFishingHook>> FISHING_HOOK = reg(EntityType.Builder.<EntityCustomFishingHook>of(EntityCustomFishingHook::new, MobCategory.MISC).noSave().noSummon().sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(5), new ResourceLocation(RuneCraftory.MODID, "fishing_hook"));
+
+    public static final RegistryEntrySupplier<EntityType<MultiPartEntity>> MULTIPART = reg(EntityType.Builder.<MultiPartEntity>of(MultiPartEntity::new, MobCategory.MISC).sized(0.25F, 0.25F), new ResourceLocation(RuneCraftory.MODID, "multipart_entity"));
 
     public static List<RegistryEntrySupplier<EntityType<?>>> getMonsters() {
         return ImmutableList.copyOf(MONSTERS);

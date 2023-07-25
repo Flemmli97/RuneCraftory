@@ -11,6 +11,7 @@ import io.github.flemmli97.runecraftory.common.spells.BaseStaffSpell;
 import io.github.flemmli97.runecraftory.common.spells.BigLeafSpell;
 import io.github.flemmli97.runecraftory.common.spells.BigLightningBoltSpell;
 import io.github.flemmli97.runecraftory.common.spells.BigPlateSpell;
+import io.github.flemmli97.runecraftory.common.spells.BoneNeedleSpell;
 import io.github.flemmli97.runecraftory.common.spells.ButterflySpell;
 import io.github.flemmli97.runecraftory.common.spells.CardThrowSpell;
 import io.github.flemmli97.runecraftory.common.spells.DarkBallSpell;
@@ -23,6 +24,7 @@ import io.github.flemmli97.runecraftory.common.spells.DoubleWindBladeSpell;
 import io.github.flemmli97.runecraftory.common.spells.ElementBallBarrageSpell;
 import io.github.flemmli97.runecraftory.common.spells.ElementalSpell;
 import io.github.flemmli97.runecraftory.common.spells.EmptySpell;
+import io.github.flemmli97.runecraftory.common.spells.EnergyOrbSpell;
 import io.github.flemmli97.runecraftory.common.spells.EvokerFangSpell;
 import io.github.flemmli97.runecraftory.common.spells.ExplosionSpell;
 import io.github.flemmli97.runecraftory.common.spells.FireballSpell;
@@ -160,4 +162,6 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> SMALL_LEAF_SPELL_X5 = SPELLS.register("small_leaf_spell_x5", () -> new SmallLeafSpell(5));
     public static final RegistryEntrySupplier<Spell> SMALL_LEAF_SPELL_X7 = SPELLS.register("small_leaf_spell_x7", () -> new SmallLeafSpell(7));
 
+    public static final RegistryEntrySupplier<Spell> BONE_NEEDLES = SPELLS.register("bone_needles", BoneNeedleSpell::new);
+    public static final RegistryEntrySupplier<Spell> ENERGY_ORB_SPELL = SPELLS.register("energy_orb_spell", EnergyOrbSpell::new);
 }

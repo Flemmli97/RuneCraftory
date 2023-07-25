@@ -62,6 +62,9 @@ public class ParticleGen implements DataProvider {
                 new ResourceLocation(RuneCraftory.MODID, "runey_1"),
                 new ResourceLocation(RuneCraftory.MODID, "runey_2"),
                 new ResourceLocation(RuneCraftory.MODID, "runey_3"));
+
+        this.addTo(ModParticles.skelefangBones.get());
+        this.addTo(ModParticles.durationalParticle.get(), ModParticles.light.getID());
     }
 
     @Override

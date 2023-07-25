@@ -152,7 +152,7 @@ public class EntityDeadTree extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.is(ANGRY, DEFEAT) || anim.is(INTERACT))
+        if (anim.is(ANGRY, DEFEAT, INTERACT))
             return false;
         if (type == AnimationType.GENERICATTACK) {
             if (anim.is(APPLE_SHIELD) && this.shieldCooldown > 0)

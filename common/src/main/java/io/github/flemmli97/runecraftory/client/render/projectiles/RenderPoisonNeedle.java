@@ -44,14 +44,4 @@ public class RenderPoisonNeedle extends RenderCrossedTextureEntity<EntityPoisonN
         }
         stack.popPose();
     }
-
-    @Override
-    public boolean facePlayer() {
-        return false;
-    }
-
-    @Override
-    public float yawOffset() {
-        return -90.0F;
-    }
 }
