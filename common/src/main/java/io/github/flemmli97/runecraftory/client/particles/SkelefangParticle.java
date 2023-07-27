@@ -120,12 +120,11 @@ public class SkelefangParticle extends Particle {
         int block = this.level.getBrightness(LightLayer.BLOCK, pos);
         int light = this.level.getBrightness(LightLayer.SKY, pos);
         MODEL.get().renderAsParticle(stack, consumer, this.boneType, LightTexture.pack(block, light), OverlayTexture.NO_OVERLAY, 1, 1, 1, alpha);
-        Minecraft.getInstance().renderBuffers().bufferSource().endLastBatch();
     }
 
     @Override
     public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return CustomParticleRenderTypes.ENTITY_MODEL_TYPE;
     }
 
     public record SkelefangParticleFactoryBase(
