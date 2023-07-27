@@ -55,6 +55,8 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
     public ModelPartHandler.ModelPartExtended bone1;
     public ModelPartHandler.ModelPartExtended bone2;
 
+    public ModelPartHandler.ModelPartExtended heart;
+
     private int beamTick = -1, entityTick;
     private boolean translucentTail, translucentTailBase, translucentSpineBack, translucentSpineFront, translucentBackRibs, translucentFrontRibs;
 
@@ -75,6 +77,7 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
         this.tail = this.model.getPart("tail");
         this.bone1 = this.model.getPart("randomBone");
         this.bone2 = this.model.getPart("randomBone2");
+        this.heart = this.model.getPart("heartYAxis");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -240,8 +243,15 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        alpha = this.beamTick >= 220 ? Math.min(1, (this.beamTick - 220) / 20f) : alpha;
-        this.body.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        if (this.beamTick >= 220) {
+            float newAlpha = Math.min(1, (this.beamTick - 220) / 20f);
+            this.translateTo(poseStack, this.body);
+            this.heart.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+            this.spineBack.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, newAlpha);
+            this.spineFront.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, newAlpha);
+        } else {
+            this.body.render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
+        }
 
         float translucent = 0.4f + Mth.sin(this.entityTick * 0.3f) * 0.2f;
         poseStack.pushPose();

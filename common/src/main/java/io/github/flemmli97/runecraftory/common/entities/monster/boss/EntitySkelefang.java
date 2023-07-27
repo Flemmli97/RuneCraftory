@@ -186,6 +186,7 @@ public class EntitySkelefang extends BossMonster {
     private final MultiPartContainer rightLeg;
     private final MultiPartContainer leftLeg;
     private int hurtResist;
+    private boolean ignoreHurt;
 
     public EntitySkelefang(EntityType<? extends EntitySkelefang> type, Level world) {
         super(type, world);
@@ -211,6 +212,15 @@ public class EntitySkelefang extends BossMonster {
         this.entityData.define(LEFT_LEG_BONES, 20);
         this.entityData.define(RIGHT_LEG_BONES, 20);
         this.entityData.define(BODY_BONES, 20);
+    }
+
+    @Override
+    public void onSyncedDataUpdated(EntityDataAccessor<?> key) {
+        super.onSyncedDataUpdated(key);
+        if (key == BODY_BONES) {
+            if (!this.hasBones())
+                this.ignoreHurt = true;
+        }
     }
 
     public void restoreDragon() {
@@ -284,6 +294,14 @@ public class EntitySkelefang extends BossMonster {
             this.level.broadcastEntityEvent(this, FRONT_RIBS);
         if (amount <= 0)
             this.level.broadcastEntityEvent(this, FRONT);
+    }
+
+    public boolean checkIgnoreHurtOverlay() {
+        if (this.ignoreHurt) {
+            this.ignoreHurt = false;
+            return true;
+        }
+        return false;
     }
 
     public int remainingBodyBones() {
@@ -451,6 +469,9 @@ public class EntitySkelefang extends BossMonster {
                 }
             }
             default -> super.handleEntityEvent(id);
+        }
+        if(this.hurtDuration == 10 && this.checkIgnoreHurtOverlay()) {
+            this.hurtDuration = 0;
         }
     }
 
