@@ -349,10 +349,19 @@ public class ModelSkelefang<T extends EntitySkelefang> extends EntityModel<T> im
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
-                if (model instanceof SittingModel sittingModel)
-                    sittingModel.translateSittingPosition(poseStack);
-                else
-                    poseStack.translate(0, 10 / 16d, 5 / 16d);
+                if (entity.hasBones()) {
+                    this.spineFront.translateAndRotate(poseStack);
+                    if (model instanceof SittingModel sittingModel)
+                        sittingModel.translateSittingPosition(poseStack);
+                    else
+                        poseStack.translate(0, 6 / 16d, 5 / 16d);
+                } else {
+                    this.heart.translateAndRotate(poseStack);
+                    if (model instanceof SittingModel sittingModel)
+                        sittingModel.translateSittingPosition(poseStack);
+                    else
+                        poseStack.translate(0, 11 / 16d, 3 / 16d);
+                }
                 return true;
             }
         }

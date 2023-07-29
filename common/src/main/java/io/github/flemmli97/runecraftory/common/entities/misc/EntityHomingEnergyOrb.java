@@ -6,7 +6,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
-import io.github.flemmli97.tenshilib.common.entity.EntityDamageCloud;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -37,7 +36,7 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
     private Vec3 spawnPos;
     private LivingEntity targetMob;
 
-    protected static final EntityDataAccessor<Optional<UUID>> TARGET_UUID = SynchedEntityData.defineId(EntityDamageCloud.class, EntityDataSerializers.OPTIONAL_UUID);
+    protected static final EntityDataAccessor<Optional<UUID>> TARGET_UUID = SynchedEntityData.defineId(EntityHomingEnergyOrb.class, EntityDataSerializers.OPTIONAL_UUID);
 
     public EntityHomingEnergyOrb(EntityType<? extends BaseDamageCloud> type, Level world) {
         super(type, world);

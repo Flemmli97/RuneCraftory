@@ -127,7 +127,7 @@ public class ModelRaccoon<T extends EntityRaccoon> extends ModelRaccoonBase<T> {
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
-                    poseStack.translate(0, 10 / 16d, 5 / 16d);
+                    poseStack.translate(0, 5 / 16d, 5 / 16d);
                 return true;
             }
         }

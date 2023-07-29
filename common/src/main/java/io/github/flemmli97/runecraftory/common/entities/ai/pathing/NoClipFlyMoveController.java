@@ -17,7 +17,7 @@ public class NoClipFlyMoveController extends MoveControl {
         Path path = this.mob.getNavigation().getPath();
         if (path != null && this.mob.isVehicle() && path.getEndNode() != null) {
             Vec3 end = path.getEntityPosAtNode(this.mob, path.getNodeCount() - 1);
-            this.setWantedPosition(end.x, end.y, end.z, speed);
+            super.setWantedPosition(end.x, end.y, end.z, speed);
             path.setNextNodeIndex(path.getNodeCount() - 1); //Skip to end of path
         } else
             super.setWantedPosition(x, y, z, speed);

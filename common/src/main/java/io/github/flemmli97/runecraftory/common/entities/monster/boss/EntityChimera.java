@@ -101,7 +101,7 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
         });
     });
 
-    private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityThunderbolt.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> LOCKED_YAW = SynchedEntityData.defineId(EntityChimera.class, EntityDataSerializers.FLOAT);
 
     public final ChimeraAttackGoal<EntityChimera> attack = new ChimeraAttackGoal<>(this);
     private final AnimationHandler<EntityChimera> animationHandler = new AnimationHandler<>(this, ANIMATED_ACTIONS)

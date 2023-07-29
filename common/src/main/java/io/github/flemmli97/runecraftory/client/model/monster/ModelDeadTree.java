@@ -37,12 +37,14 @@ public class ModelDeadTree<T extends EntityDeadTree> extends EntityModel<T> impl
     protected final BlockBenchAnimations anim;
 
     public ModelPartHandler.ModelPartExtended body;
+    public ModelPartHandler.ModelPartExtended leafs;
 
     public ModelDeadTree(ModelPart root) {
         super();
         this.model = new ModelPartHandler(root, "root");
         this.anim = AnimationManager.getInstance().getAnimation(new ResourceLocation(RuneCraftory.MODID, "dead_tree"));
         this.body = this.model.getPart("body");
+        this.leafs = this.model.getPart("leafs");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -134,12 +136,13 @@ public class ModelDeadTree<T extends EntityDeadTree> extends EntityModel<T> impl
             EntityModel<?> model = lR.getModel();
             if (model instanceof HumanoidModel<?> || model instanceof IllagerModel<?> || model instanceof SittingModel) {
                 this.body.translateAndRotate(poseStack);
+                this.leafs.translateAndRotate(poseStack);
                 if (model instanceof SittingModel sittingModel)
                     sittingModel.translateSittingPosition(poseStack);
                 else
                     poseStack.translate(0, -3 / 16d, 3 / 16d);
                 poseStack.scale(1 / scaledRender.scale, 1 / scaledRender.scale, 1 / scaledRender.scale);
-                poseStack.translate(0, 11 / 16d, 0);
+                poseStack.translate(0, -46 / 16d, 0);
                 poseStack.scale(scaledRender.scale, scaledRender.scale, scaledRender.scale);
                 return true;
             }
