@@ -333,7 +333,10 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.clothCheap.get())
                 .add(ModItems.oldBandage.get());
         this.tag(ModTags.tamingTag(ModEntities.ORC_ARCHER.get()))
-                .addTag(ModTags.tamingTag(ModEntities.ORC.get()));
+                .add(Items.GUNPOWDER)
+                .add(Items.ARROW)
+                .add(ModItems.arrowHead.get())
+                .add(ModItems.recoveryPotion.get());
         this.tag(ModTags.tamingTag(ModEntities.ANT.get()))
                 .add(ModItems.carapaceInsect.get())
                 .add(ModItems.carapacePretty.get())
@@ -388,6 +391,59 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(ModTags.tamingTag(ModEntities.SHADOW_PANTHER.get()))
                 .add(ModItems.fur.get())
                 .add(ModItems.clawPanther.get());
+        this.tag(ModTags.tamingTag(ModEntities.MONSTER_BOX.get()))
+                .add(ModItems.failedDish.get())
+                .add(ModItems.disastrousDish.get());
+        this.tag(ModTags.tamingTag(ModEntities.GOBBLE_BOX.get()))
+                .add(ModItems.failedDish.get())
+                .add(ModItems.disastrousDish.get());
+        this.tag(ModTags.tamingTag(ModEntities.KILLER_ANT.get()))
+                .add(ModItems.carapacePretty.get());
+        this.tag(ModTags.tamingTag(ModEntities.HIGH_ORC.get()))
+                .addTag(ModTags.tamingTag(ModEntities.ORC.get()));
+        this.tag(ModTags.tamingTag(ModEntities.ORC_HUNTER.get()))
+                .addTag(ModTags.tamingTag(ModEntities.ORC_ARCHER.get()));
+        this.tag(ModTags.tamingTag(ModEntities.HORNET.get()))
+                .add(Items.HONEY_BOTTLE)
+                .add(Items.HONEYCOMB);
+        this.tag(ModTags.tamingTag(ModEntities.SILVER_WOLF.get()))
+                .add(Items.BONE)
+                .add(ModItems.fangWolf.get());
+        this.tag(ModTags.tamingTag(ModEntities.LEAF_BALL.get()))
+                .addTag(ItemTags.LEAVES);
+        this.tag(ModTags.tamingTag(ModEntities.FURPY.get()))
+                .addTag(ModTags.tamingTag(ModEntities.CHIPSQUEEK.get()));
+        this.tag(ModTags.tamingTag(ModEntities.PALM_CAT.get()))
+                .add(ModItems.fur.get())
+                .add(Items.CAKE)
+                .add(ModItems.cake.get());
+        this.tag(ModTags.tamingTag(ModEntities.MINO.get()))
+                .add(ModItems.grapes.get());
+        this.tag(ModTags.tamingTag(ModEntities.TRICKY_MUCK.get()))
+                .add(ModItems.powderPoison.get());
+        this.tag(ModTags.tamingTag(ModEntities.FLOWER_LILY.get()))
+                .addTag(ItemTags.FLOWERS);
+        this.tag(ModTags.tamingTag(ModEntities.KING_WOOLY.get()))
+                .addTag(ModTags.tamingTag(ModEntities.WOOLY.get()));
+        this.tag(ModTags.tamingTag(ModEntities.BUFFALOO.get()))
+                .add(ModItems.hornBull.get());
+        this.tag(ModTags.tamingTag(ModEntities.GOBLIN_PIRATE.get()))
+                .addTag(ModTags.tamingTag(ModEntities.GOBLIN.get()));
+        this.tag(ModTags.tamingTag(ModEntities.GOBLIN_GANGSTER.get()))
+                .addTag(ModTags.tamingTag(ModEntities.GOBLIN.get()));
+        this.tag(ModTags.tamingTag(ModEntities.IGNIS.get()))
+                .add(ModItems.crystalFire.get())
+                .add(ModItems.crystalMagic.get());
+        this.tag(ModTags.tamingTag(ModEntities.SCORPION.get()))
+                .add(ModItems.tailScorpion.get());
+        this.tag(ModTags.tamingTag(ModEntities.TROLL.get()))
+                .add(ModItems.giantsNail.get())
+                .add(ModItems.gloveGiant.get())
+                .add(ModItems.hammerPiece.get());
+        this.tag(ModTags.tamingTag(ModEntities.FLOWER_LION.get()))
+                .addTag(ModTags.tamingTag(ModEntities.FLOWER_LILY.get()));
+        this.tag(ModTags.tamingTag(ModEntities.TOMATO_GHOST.get()))
+                .addTag(tempKeyFabric("vegetables/tomato"));
 
         this.tag(ModTags.tamingTag(ModEntities.AMBROSIA.get()))
                 .add(ModItems.toyherbGiant.get());
@@ -398,6 +454,17 @@ public class ItemTagGen extends ItemTagsProvider {
                 .add(ModItems.cheesecake.get())
                 .add(ModItems.chocolateCake.get())
                 .add(ModItems.applePie.get());
+        this.tag(ModTags.tamingTag(ModEntities.DEAD_TREE.get()))
+                .add(ModItems.greenifierPlus.get());
+        this.tag(ModTags.tamingTag(ModEntities.CHIMERA.get()))
+                .add(ModItems.royalCurry.get())
+                .add(ModItems.ultimateCurry.get());
+        this.tag(ModTags.tamingTag(ModEntities.RACCOON.get()))
+                .add(ModItems.udon.get())
+                .add(ModItems.tempuraUdon.get())
+                .add(ModItems.curryUdon.get());
+        this.tag(ModTags.tamingTag(ModEntities.SKELEFANG.get()))
+                .add(Items.DRAGON_HEAD);
 
         //Note: Add items to the matching forge tags and make fabric common tag include the corresponding forge tag
         TagKey<Item> forgeParentTag = tempKeyForge("seeds");

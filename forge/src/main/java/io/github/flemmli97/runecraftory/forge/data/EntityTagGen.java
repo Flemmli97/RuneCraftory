@@ -39,7 +39,11 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
         this.tag(ModTags.BOSS_MONSTERS)
                 .add(ModEntities.AMBROSIA.get())
                 .add(ModEntities.THUNDERBOLT.get())
-                .add(ModEntities.MARIONETTA.get());
+                .add(ModEntities.MARIONETTA.get())
+                .add(ModEntities.DEAD_TREE.get())
+                .add(ModEntities.CHIMERA.get())
+                .add(ModEntities.RACCOON.get())
+                .add(ModEntities.SKELEFANG.get());
         TagKey<EntityType<?>> forgeBosses = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("forge", "bosses"));
         this.tag(forgeBosses)
                 .addTag(ModTags.BOSS_MONSTERS);

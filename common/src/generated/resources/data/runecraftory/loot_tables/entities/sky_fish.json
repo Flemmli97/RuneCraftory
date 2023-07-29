@@ -56,7 +56,7 @@
             {
               "condition": "minecraft:random_chance_with_looting",
               "chance": 0.005,
-              "looting_multiplier": 0.0025
+              "looting_multiplier": 0.001
             }
           ],
           "name": "runecraftory:rare_can"

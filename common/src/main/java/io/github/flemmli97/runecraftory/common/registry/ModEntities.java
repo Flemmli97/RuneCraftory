@@ -55,7 +55,6 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindGust;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWispFlame;
-import io.github.flemmli97.runecraftory.common.entities.monster.EntityAggressiveWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityAnt;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBeetle;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBigAnt;
@@ -74,6 +73,7 @@ import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblinArch
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblinGangster;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityGoblinPirate;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityHornet;
+import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityLeafBall;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityMimic;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityOrc;
@@ -496,7 +496,7 @@ public class ModEntities {
                     .putAttributes(LibAttributes.MAGIC_DEFENCE, 1).putLevelGains(LibAttributes.MAGIC_DEFENCE, 1.3)
                     .xp(40).money(3).tamingChance(0.06f).setRidable().build(),
             new GateSpawnData.Builder(0, 0).addToBiomeTag(20, ModTags.IS_LUSH, ModTags.IS_MAGICAL, BiomeTags.IS_JUNGLE));
-    public static final RegistryEntrySupplier<EntityType<EntityAggressiveWooly>> KING_WOOLY = regMonster(EntityType.Builder.of(EntityAggressiveWooly::new, MobCategory.MONSTER).sized(1.8f, 3.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "king_wooly"),
+    public static final RegistryEntrySupplier<EntityType<EntityKingWooly>> KING_WOOLY = regMonster(EntityType.Builder.of(EntityKingWooly::new, MobCategory.MONSTER).sized(1.8f, 3.9f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "king_wooly"),
             0xffffcc, 0xffffff,
             new EntityProperties.Builder()
                     .putAttributes(LibAttributes.MAX_HEALTH, 25).putLevelGains(LibAttributes.MAX_HEALTH, 11)

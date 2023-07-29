@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "#runecraftory:taming/orc"
+    "minecraft:gunpowder",
+    "minecraft:arrow",
+    "runecraftory:arrowhead",
+    "runecraftory:recovery_potion"
   ]
 }

@@ -470,7 +470,7 @@ public class EntitySkelefang extends BossMonster {
             }
             default -> super.handleEntityEvent(id);
         }
-        if(this.hurtDuration == 10 && this.checkIgnoreHurtOverlay()) {
+        if (this.hurtDuration == 10 && this.checkIgnoreHurtOverlay()) {
             this.hurtDuration = 0;
         }
     }
