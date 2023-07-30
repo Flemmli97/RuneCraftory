@@ -4,6 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -104,6 +105,11 @@ public abstract class ProjectileSummonHelperEntity extends Entity implements Own
         this.targetX = x;
         this.targetY = y;
         this.targetZ = z;
+        double dX = x - this.getX();
+        double dY = y - this.getY();
+        double dZ = z - this.getZ();
+        this.setYRot((float) (Mth.atan2(dZ, dX) * Mth.RAD_TO_DEG) - 90);
+        this.setXRot((float) (Mth.atan2(dY, Math.sqrt(dX * dX + dZ * dZ)) * Mth.RAD_TO_DEG));
     }
 
     @Nullable

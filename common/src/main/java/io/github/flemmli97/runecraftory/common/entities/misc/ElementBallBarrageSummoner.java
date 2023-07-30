@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -45,6 +46,22 @@ public class ElementBallBarrageSummoner extends ProjectileSummonHelperEntity {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ELEMENT_DATA, 0);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.entityData.set(ELEMENT_DATA, compound.getInt("Element"));
+        try {
+            this.element = EnumElement.values()[this.entityData.get(ELEMENT_DATA)];
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+        }
+    }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("Element", this.entityData.get(ELEMENT_DATA));
     }
 
     @Override

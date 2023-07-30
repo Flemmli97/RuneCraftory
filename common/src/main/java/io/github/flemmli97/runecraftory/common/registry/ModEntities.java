@@ -55,6 +55,8 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindBlade;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindGust;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWispFlame;
+import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaBreathSummoner;
+import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaCircleSummoner;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityAnt;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBeetle;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBigAnt;
@@ -99,6 +101,11 @@ import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityMario
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityRaccoon;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntitySkelefang;
 import io.github.flemmli97.runecraftory.common.entities.monster.boss.EntityThunderbolt;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesia;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaFlower;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaHorseTail;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPart;
+import io.github.flemmli97.runecraftory.common.entities.monster.boss.rafflesia.EntityRafflesiaPitcher;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntityIgnis;
 import io.github.flemmli97.runecraftory.common.entities.monster.wisp.EntitySpirit;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -723,6 +730,24 @@ public class ModEntities {
                     .putAttributes(LibAttributes.RES_FAINT, 100)
                     .putAttributes(LibAttributes.RES_DRAIN, 10)
                     .xp(950).money(100).tamingChance(0.005f).setBarnOccupancy(3).setRidable().build());
+    public static final RegistryEntrySupplier<EntityType<EntityRafflesia>> RAFFLESIA = regMonster(EntityType.Builder.of(EntityRafflesia::new, MobCategory.MONSTER).sized(1.15f, 2.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "rafflesia"),
+            0x9b58ba, 0x0a8414,
+            new EntityProperties.Builder()
+                    .putAttributes(LibAttributes.MAX_HEALTH, 230).putLevelGains(LibAttributes.MAX_HEALTH, 27.5)
+                    .putAttributes(LibAttributes.ATTACK_DAMAGE, 20).putLevelGains(LibAttributes.ATTACK_DAMAGE, 3.3)
+                    .putAttributes(LibAttributes.DEFENCE, 4.5).putLevelGains(LibAttributes.DEFENCE, 2.3)
+                    .putAttributes(LibAttributes.MAGIC, 17.5).putLevelGains(LibAttributes.MAGIC, 3.3)
+                    .putAttributes(LibAttributes.MAGIC_DEFENCE, 3.4).putLevelGains(LibAttributes.MAGIC_DEFENCE, 2.25)
+                    .putAttributes(LibAttributes.RES_PARA, 85)
+                    .putAttributes(LibAttributes.RES_POISON, 97)
+                    .putAttributes(LibAttributes.RES_SEAL, 97)
+                    .putAttributes(LibAttributes.RES_SLEEP, 100)
+                    .putAttributes(LibAttributes.RES_DIZZY, 60)
+                    .putAttributes(LibAttributes.RES_CRIT, 25)
+                    .putAttributes(LibAttributes.RES_STUN, 50)
+                    .putAttributes(LibAttributes.RES_FAINT, 100)
+                    .putAttributes(LibAttributes.RES_DRAIN, 10)
+                    .xp(950).money(100).tamingChance(0.005f).setBarnOccupancy(3).setRidable().build());
 
     public static final RegistryEntrySupplier<EntityType<EntityNPCBase>> NPC = npc(EntityType.Builder.of(EntityNPCBase::new, MobCategory.MISC).sized(0.6f, 1.8f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "npc"));
 
@@ -731,7 +756,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntitySpore>> SPORE = reg(EntityType.Builder.<EntitySpore>of(EntitySpore::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "spore"));
     public static final RegistryEntrySupplier<EntityType<EntityWindGust>> GUST = reg(EntityType.Builder.<EntityWindGust>of(EntityWindGust::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "gust"));
     public static final RegistryEntrySupplier<EntityType<EntityStone>> STONE = reg(EntityType.Builder.<EntityStone>of(EntityStone::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "stone"));
-    public static final RegistryEntrySupplier<EntityType<EntityStatusBall>> STATUS_BALL = reg(EntityType.Builder.<EntityStatusBall>of(EntityStatusBall::new, MobCategory.MISC).sized(0.4f, 0.6f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "status_ball"));
+    public static final RegistryEntrySupplier<EntityType<EntityStatusBall>> STATUS_BALL = reg(EntityType.Builder.<EntityStatusBall>of(EntityStatusBall::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "status_ball"));
     public static final RegistryEntrySupplier<EntityType<EntityAmbrosiaWave>> AMBROSIA_WAVE = reg(EntityType.Builder.<EntityAmbrosiaWave>of(EntityAmbrosiaWave::new, MobCategory.MISC).sized(0.01f, 0.01f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "ambrosia_wave"));
     public static final RegistryEntrySupplier<EntityType<EntityButterfly>> BUTTERFLY = reg(EntityType.Builder.<EntityButterfly>of(EntityButterfly::new, MobCategory.MISC).sized(0.2f, 0.2f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "butterfly"));
     public static final RegistryEntrySupplier<EntityType<EntityPollenPuff>> POLLEN_PUFF = reg(EntityType.Builder.<EntityPollenPuff>of(EntityPollenPuff::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "pollen_puff"));
@@ -769,13 +794,18 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityRuney>> RUNEY = reg(EntityType.Builder.of(EntityRuney::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "runey"));
     public static final RegistryEntrySupplier<EntityType<EntityRuneOrb>> STAT_BONUS = reg(EntityType.Builder.of(EntityRuneOrb::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rune_orb"));
 
-    public static final RegistryEntrySupplier<EntityType<EntityButterflySummoner>> BUTTERFLY_SUMMONER = reg(EntityType.Builder.<EntityButterflySummoner>of(EntityButterflySummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "butterfly_summoner"));
-    public static final RegistryEntrySupplier<EntityType<EntityDarkBulletSummoner>> DARK_BULLET_SUMMONER = reg(EntityType.Builder.<EntityDarkBulletSummoner>of(EntityDarkBulletSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "dark_bullet_summoner"));
-    public static final RegistryEntrySupplier<EntityType<ElementBallBarrageSummoner>> ELEMENTAL_BARRAGE_SUMMONER = reg(EntityType.Builder.<ElementBallBarrageSummoner>of(ElementBallBarrageSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "elemental_barrage_summoner"));
+    public static final RegistryEntrySupplier<EntityType<EntityButterflySummoner>> BUTTERFLY_SUMMONER = reg(EntityType.Builder.<EntityButterflySummoner>of(EntityButterflySummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "butterfly_summoner"));
+    public static final RegistryEntrySupplier<EntityType<EntityDarkBulletSummoner>> DARK_BULLET_SUMMONER = reg(EntityType.Builder.<EntityDarkBulletSummoner>of(EntityDarkBulletSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "dark_bullet_summoner"));
+    public static final RegistryEntrySupplier<EntityType<ElementBallBarrageSummoner>> ELEMENTAL_BARRAGE_SUMMONER = reg(EntityType.Builder.<ElementBallBarrageSummoner>of(ElementBallBarrageSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "elemental_barrage_summoner"));
+    public static final RegistryEntrySupplier<EntityType<RafflesiaBreathSummoner>> RAFFLESIA_BREATH_SUMMONER = reg(EntityType.Builder.<RafflesiaBreathSummoner>of(RafflesiaBreathSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rafflesia_breath_summoner"));
+    public static final RegistryEntrySupplier<EntityType<RafflesiaCircleSummoner>> RAFFLESIA_CIRCLE_SUMMONER = reg(EntityType.Builder.<RafflesiaCircleSummoner>of(RafflesiaCircleSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rafflesia_circle_summoner"));
 
     public static final RegistryEntrySupplier<EntityType<EntityCustomFishingHook>> FISHING_HOOK = reg(EntityType.Builder.<EntityCustomFishingHook>of(EntityCustomFishingHook::new, MobCategory.MISC).noSave().noSummon().sized(0.25f, 0.25f).clientTrackingRange(4).updateInterval(5), new ResourceLocation(RuneCraftory.MODID, "fishing_hook"));
 
-    public static final RegistryEntrySupplier<EntityType<MultiPartEntity>> MULTIPART = reg(EntityType.Builder.<MultiPartEntity>of(MultiPartEntity::new, MobCategory.MISC).sized(0.25F, 0.25F), new ResourceLocation(RuneCraftory.MODID, "multipart_entity"));
+    public static final RegistryEntrySupplier<EntityType<MultiPartEntity>> MULTIPART = reg(EntityType.Builder.<MultiPartEntity>of(MultiPartEntity::new, MobCategory.MISC).noSave().noSummon().sized(0.25F, 0.25F), new ResourceLocation(RuneCraftory.MODID, "multipart_entity"));
+    public static final RegistryEntrySupplier<EntityType<EntityRafflesiaHorseTail>> RAFFLESIA_HORSETAIL = reg(EntityType.Builder.<EntityRafflesiaHorseTail>of(EntityRafflesiaHorseTail::new, MobCategory.MISC).noSummon().sized(0.5F, 2.1F), new ResourceLocation(RuneCraftory.MODID, "rafflesia_horse_tail"));
+    public static final RegistryEntrySupplier<EntityType<EntityRafflesiaFlower>> RAFFLESIA_FLOWER = reg(EntityType.Builder.<EntityRafflesiaFlower>of(EntityRafflesiaFlower::new, MobCategory.MISC).noSummon().sized(0.5F, 1.2F), new ResourceLocation(RuneCraftory.MODID, "rafflesia_flower"));
+    public static final RegistryEntrySupplier<EntityType<EntityRafflesiaPitcher>> RAFFLESIA_PITCHER = reg(EntityType.Builder.<EntityRafflesiaPitcher>of(EntityRafflesiaPitcher::new, MobCategory.MISC).noSummon().sized(0.5F, 1.8F), new ResourceLocation(RuneCraftory.MODID, "rafflesia_pitcher"));
 
     public static List<RegistryEntrySupplier<EntityType<?>>> getMonsters() {
         return ImmutableList.copyOf(MONSTERS);
@@ -796,6 +826,10 @@ public class ModEntities {
                 cons.accept(type, BaseMonster.createAttributes(ModAttributes.ENTITY_ATTRIBUTES));
         }
         cons.accept(NPC.get(), EntityNPCBase.createAttributes(ModAttributes.ENTITY_ATTRIBUTES));
+
+        cons.accept(RAFFLESIA_HORSETAIL.get(), EntityRafflesiaPart.createAttributes(ModAttributes.ENTITY_ATTRIBUTES));
+        cons.accept(RAFFLESIA_FLOWER.get(), EntityRafflesiaPart.createAttributes(ModAttributes.ENTITY_ATTRIBUTES));
+        cons.accept(RAFFLESIA_PITCHER.get(), EntityRafflesiaPart.createAttributes(ModAttributes.ENTITY_ATTRIBUTES));
     }
 
     public static <V extends Entity> RegistryEntrySupplier<EntityType<V>> reg(EntityType.Builder<V> v, ResourceLocation name) {

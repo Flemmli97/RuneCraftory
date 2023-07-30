@@ -4,6 +4,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBall;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityStatusBall;
 import io.github.flemmli97.runecraftory.common.spells.AppleRain;
 import io.github.flemmli97.runecraftory.common.spells.AppleShield;
 import io.github.flemmli97.runecraftory.common.spells.ArrowSpell;
@@ -45,6 +46,8 @@ import io.github.flemmli97.runecraftory.common.spells.PoisonHealSpell;
 import io.github.flemmli97.runecraftory.common.spells.PoisonNeedleSpell;
 import io.github.flemmli97.runecraftory.common.spells.PollenPuffSpell;
 import io.github.flemmli97.runecraftory.common.spells.PrismSpell;
+import io.github.flemmli97.runecraftory.common.spells.RafflesiaBreathSpell;
+import io.github.flemmli97.runecraftory.common.spells.RafflesiaCircleSpell;
 import io.github.flemmli97.runecraftory.common.spells.RockSpearSpell;
 import io.github.flemmli97.runecraftory.common.spells.ShineSpell;
 import io.github.flemmli97.runecraftory.common.spells.SlashSpell;
@@ -63,6 +66,7 @@ import io.github.flemmli97.runecraftory.common.spells.UnsealSpell;
 import io.github.flemmli97.runecraftory.common.spells.WaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.WaveSpell;
 import io.github.flemmli97.runecraftory.common.spells.WebShotSpell;
+import io.github.flemmli97.runecraftory.common.spells.WindBladeCircle;
 import io.github.flemmli97.runecraftory.common.spells.WindBladeSpell;
 import io.github.flemmli97.runecraftory.common.spells.WitherSkullSpell;
 import io.github.flemmli97.runecraftory.platform.LazyGetter;
@@ -164,4 +168,11 @@ public class ModSpells {
 
     public static final RegistryEntrySupplier<Spell> BONE_NEEDLES = SPELLS.register("bone_needles", BoneNeedleSpell::new);
     public static final RegistryEntrySupplier<Spell> ENERGY_ORB_SPELL = SPELLS.register("energy_orb_spell", EnergyOrbSpell::new);
+
+    public static final RegistryEntrySupplier<Spell> RAFFLESIA_POISON = SPELLS.register("rafflesia_poison", () -> new RafflesiaBreathSpell(EntityStatusBall.Type.RAFFLESIA_POISON));
+    public static final RegistryEntrySupplier<Spell> RAFFLESIA_PARA = SPELLS.register("rafflesia_para", () -> new RafflesiaBreathSpell(EntityStatusBall.Type.RAFFLESIA_PARALYSIS));
+    public static final RegistryEntrySupplier<Spell> RAFFLESIA_SLEEP = SPELLS.register("rafflesia_sleep", () -> new RafflesiaBreathSpell(EntityStatusBall.Type.RAFFLESIA_SLEEP));
+    public static final RegistryEntrySupplier<Spell> RAFFLESIA_CIRCLE = SPELLS.register("rafflesia_cicle", RafflesiaCircleSpell::new);
+    public static final RegistryEntrySupplier<Spell> WIND_CIRCLE_X8 = SPELLS.register("wind_circle_x8", () -> new WindBladeCircle(8));
+    public static final RegistryEntrySupplier<Spell> WIND_CIRCLE_X16 = SPELLS.register("wind_circle_x16", () -> new WindBladeCircle(16));
 }

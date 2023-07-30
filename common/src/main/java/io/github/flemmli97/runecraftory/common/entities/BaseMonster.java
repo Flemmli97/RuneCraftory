@@ -145,7 +145,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             }
             if (e instanceof Mob mob && this == mob.getTarget())
                 return true;
-            return EntityUtils.canMonsterTargetNPC(e) || EntityUtils.tryGetOwner(e) != null;
+            return EntityUtils.canMonsterTargetNPC(e) || (EntityUtils.tryGetOwner(e) != null && EntityUtils.tryGetOwner(e) != this.getUUID());
         }
         return false;
     };

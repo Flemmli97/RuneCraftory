@@ -50,6 +50,11 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
         this.tag(ModTags.BOSSES)
                 .addTag(forgeBosses);
 
+        this.tag(ModTags.RAFFLESIA_SUMMONS)
+                .add(ModEntities.HORNET.get())
+                .add(ModEntities.ANT.get())
+                .add(ModEntities.KILLER_ANT.get());
+
         this.tag(ModTags.FOREST_BOSSES)
                 .add(ModEntities.AMBROSIA.get())
                 .add(ModEntities.DEAD_TREE.get());

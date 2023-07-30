@@ -145,6 +145,8 @@ public class ModTags {
 
     public static final TagKey<EntityType<?>> BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("c", "bosses"));
 
+    public static final TagKey<EntityType<?>> RAFFLESIA_SUMMONS = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "rafflesia_summons"));
+
     public static final TagKey<EntityType<?>> FOREST_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "forest_bosses"));
     public static final TagKey<EntityType<?>> OCEAN_RUIN_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "ocean_ruinbosses"));
 

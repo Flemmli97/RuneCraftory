@@ -44,6 +44,7 @@ import io.github.flemmli97.runecraftory.client.model.monster.ModelPanther;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelPommePomme;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoon;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelRaccoonBerserk;
+import io.github.flemmli97.runecraftory.client.model.monster.ModelRafflesia;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelScorpion;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkelefang;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelSkyFish;
@@ -76,6 +77,7 @@ import io.github.flemmli97.runecraftory.client.render.monster.RenderGhost;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderGoblin;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderOrc;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderRaccoon;
+import io.github.flemmli97.runecraftory.client.render.monster.RenderRafflesia;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderSkelefang;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderSpider;
 import io.github.flemmli97.runecraftory.client.render.monster.RenderVeggieGhost;
@@ -282,6 +284,7 @@ public class ClientRegister {
         register(consumer, ModEntities.CHIMERA.get(), ModelChimera::new, ModelChimera.LAYER_LOCATION);
         consumer.register(ModEntities.RACCOON.get(), RenderRaccoon::new);
         consumer.register(ModEntities.SKELEFANG.get(), RenderSkelefang::new);
+        consumer.register(ModEntities.RAFFLESIA.get(), RenderRafflesia::new);
 
         consumer.register(ModEntities.NPC.get(), RenderNPC::new);
 
@@ -333,7 +336,6 @@ public class ClientRegister {
         consumer.register(ModEntities.CIRCLING_BULLET.get(), ctx -> new RenderBullet(ctx, new ResourceLocation(RuneCraftory.MODID, "textures/entity/projectile/bullet.png")));
         consumer.register(ModEntities.THROWN_ITEM.get(), RenderThrownItem::new);
         consumer.register(ModEntities.APPLE.get(), RenderAppleProjectile::new);
-        consumer.register(ModEntities.ELEMENTAL_BARRAGE_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.SLASH_RESIDUE.get(), EmptyRender::new);
         consumer.register(ModEntities.SMALL_RACCOON_LEAF.get(), RenderSmallRaccoonLeaf::new);
         consumer.register(ModEntities.BIG_RACCOON_LEAF.get(), RenderBigRaccoonLeaf::new);
@@ -347,10 +349,16 @@ public class ClientRegister {
 
         consumer.register(ModEntities.BUTTERFLY_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.DARK_BULLET_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.ELEMENTAL_BARRAGE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.RAFFLESIA_BREATH_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.RAFFLESIA_CIRCLE_SUMMONER.get(), EmptyRender::new);
 
         consumer.register(ModEntities.FISHING_HOOK.get(), CustomFishingHookRenderer::new);
 
         consumer.register(ModEntities.MULTIPART.get(), EmptyRender::new);
+        consumer.register(ModEntities.RAFFLESIA_HORSETAIL.get(), EmptyRender::new);
+        consumer.register(ModEntities.RAFFLESIA_FLOWER.get(), EmptyRender::new);
+        consumer.register(ModEntities.RAFFLESIA_PITCHER.get(), EmptyRender::new);
     }
 
     private static <T extends BaseMonster, M extends EntityModel<T> & RideableModel<T>> EntityRendererProvider<? super T> getMonsterRender(Function<ModelPart, M> model, ModelLayerLocation layerLocation, ResourceLocation texture, float shadow) {
@@ -414,6 +422,7 @@ public class ClientRegister {
         consumer.accept(ModelRaccoon.LAYER_LOCATION, ModelRaccoon::createBodyLayer);
         consumer.accept(ModelRaccoonBerserk.LAYER_LOCATION, ModelRaccoonBerserk::createBodyLayer);
         consumer.accept(ModelSkelefang.LAYER_LOCATION, ModelSkelefang::createBodyLayer);
+        consumer.accept(ModelRafflesia.LAYER_LOCATION, ModelRafflesia::createBodyLayer);
 
         consumer.accept(ModelButterfly.LAYER_LOCATION, ModelButterfly::createBodyLayer);
         consumer.accept(ModelWoolyWool.LAYER_LOCATION, ModelWoolyWool::createBodyLayer);
