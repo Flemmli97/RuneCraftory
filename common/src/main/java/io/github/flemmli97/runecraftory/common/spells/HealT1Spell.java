@@ -4,11 +4,9 @@ import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.HealingPredicateEntity;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.tenshilib.common.particle.ColoredParticleData;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -28,8 +26,8 @@ public class HealT1Spell extends Spell {
             return;
         ServerLevel serverLevel = (ServerLevel) entity.level;
         serverLevel.sendParticles(ParticleTypes.HEART, entity.getX(), entity.getY() + entity.getBbHeight() + 0.5, entity.getZ(), 0, 0, 0.1, 0, 0);
-        for (int i = 0; i < 10; i++) {
-            serverLevel.sendParticles(new ColoredParticleData(ModParticles.light.get(), 63 / 255F, 201 / 255F, 63 / 255F, 0.4f, 2f), entity.getX() + entity.getRandom().nextGaussian() * 0.2, entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.07, entity.getZ() + entity.getRandom().nextGaussian() * 0.2, 1, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, 0);
+        for (int i = 0; i < 16; i++) {
+            serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER, entity.getRandomX(1.2), entity.getY() + entity.getBbHeight() * 0.5 + entity.getRandom().nextGaussian() * 0.5 * entity.getBbHeight() * 0.3, entity.getRandomZ(1.2), 1, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, entity.getRandom().nextGaussian() * 0.03, 0);
         }
     }
 
@@ -59,7 +57,7 @@ public class HealT1Spell extends Spell {
                 return true;
             if (entity instanceof Player player) {
                 return e instanceof OwnableEntity ownable && player.getUUID().equals(ownable.getOwnerUUID())
-                        || e instanceof AbstractVillager || e instanceof Animal;
+                        || e instanceof AbstractVillager || e instanceof Animal || Platform.INSTANCE.getPlayerData(player).map(d -> d.party.isPartyMember(e)).orElse(false);
             } else {
                 if (entity instanceof HealingPredicateEntity healer)
                     return healer.healeableEntities().test(e);
