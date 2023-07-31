@@ -34,6 +34,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class EntityUtils {
 
@@ -109,6 +110,18 @@ public class EntityUtils {
         if (entity instanceof OwnableEntity ownableEntity)
             return ownableEntity.getOwnerUUID();
         return null;
+    }
+
+    public static boolean canAttackOwned(LivingEntity entity, boolean allowUuidOnly, boolean otherwise, Predicate<LivingEntity> pred) {
+        if (entity instanceof OwnableEntity ownableEntity) {
+            if (entity.getUUID().equals(ownableEntity.getOwnerUUID()))
+                return false;
+            Entity owner = ownableEntity.getOwner();
+            if (owner instanceof LivingEntity living)
+                return pred.test(living);
+            return allowUuidOnly && ownableEntity.getOwnerUUID() != null || otherwise;
+        }
+        return otherwise;
     }
 
     public static float tamingChance(BaseMonster monster, Player player, float itemMultiplier, int brushCount, int loveAttackCount) {

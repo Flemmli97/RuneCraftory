@@ -141,11 +141,11 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (this.getControllingPassenger() instanceof Player)
                 return false;
             if (this.isTamed()) {
-                return e instanceof Enemy && EntityUtils.tryGetOwner(e) == null;
+                return e instanceof Enemy && EntityUtils.canAttackOwned(e, false, true, this.targetPred);
             }
             if (e instanceof Mob mob && this == mob.getTarget())
                 return true;
-            return EntityUtils.canMonsterTargetNPC(e) || (EntityUtils.tryGetOwner(e) != null && EntityUtils.tryGetOwner(e) != this.getUUID());
+            return EntityUtils.canMonsterTargetNPC(e) || EntityUtils.canAttackOwned(e, false, false, this.targetPred);
         }
         return false;
     };
@@ -193,7 +193,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                     return baseMonster.hitPred.test(e);
                 riderTarget = controller instanceof Mob mob && e == mob.getTarget();
             }
-            return riderTarget || e == this.getTarget() || EntityUtils.canMonsterTargetNPC(e) || EntityUtils.tryGetOwner(e) != null || e instanceof Player;
+            return riderTarget || e == this.getTarget() || EntityUtils.canMonsterTargetNPC(e) || EntityUtils.canAttackOwned(e, false, false, this.targetPred) || e instanceof Player;
         }
         return false;
     };
