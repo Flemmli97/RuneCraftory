@@ -8,7 +8,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 public class DeadTreeAttackGoal<T extends EntityDeadTree> extends AnimatedMeleeGoal<T> {
 
     private int moveDelay;
-    private boolean moveFlag, idleFlag, clockwise;
+    private boolean moveFlag;
 
     public DeadTreeAttackGoal(T entity) {
         super(entity);
@@ -33,7 +33,6 @@ public class DeadTreeAttackGoal<T extends EntityDeadTree> extends AnimatedMeleeG
 
     @Override
     public void handlePreAttack() {
-        this.idleFlag = false;
         this.moveToWithDelay(1.2);
         if (!this.moveFlag) {
             this.pathFindDelay = 0;

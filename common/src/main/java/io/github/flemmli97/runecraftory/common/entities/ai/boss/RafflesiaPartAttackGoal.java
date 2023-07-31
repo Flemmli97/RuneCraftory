@@ -16,7 +16,7 @@ public class RafflesiaPartAttackGoal extends Goal {
     public RafflesiaPartAttackGoal(EntityRafflesiaPart entity) {
         this.attacker = entity;
         this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-        this.idleTime = this.attacker.getRandom().nextInt(60) + 20;
+        this.idleTime = this.attacker.getRandom().nextInt(120) + 20;
     }
 
     @Override
@@ -33,9 +33,6 @@ public class RafflesiaPartAttackGoal extends Goal {
     @Override
     public void stop() {
         this.target = null;
-        this.attacker.getNavigation().stop();
-        this.attacker.setZza(0);
-        this.attacker.setXxa(0);
     }
 
     @Override

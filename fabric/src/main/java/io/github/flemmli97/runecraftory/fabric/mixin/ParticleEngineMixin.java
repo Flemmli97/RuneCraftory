@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.fabric.mixin;
 
 import com.google.common.collect.ImmutableList;
 import io.github.flemmli97.runecraftory.client.particles.CustomParticleRenderTypes;
-import io.github.flemmli97.tenshilib.client.particles.ParticleRenderTypes;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleRenderType;

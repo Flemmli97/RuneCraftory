@@ -196,6 +196,9 @@ public class EntityRafflesia extends BossMonster implements DelayedAttacker {
             if (target != null && !this.getAnimationHandler().hasAnimation()) {
                 this.getLookControl().setLookAt(target, 30.0f, 30.0f);
             }
+            if (this.summonCooldown < 200 && this.getHorseTail() == null || this.getPitcher() == null || this.getFlower() == null) {
+                this.summonCooldown = this.random.nextInt(200) + 300;
+            }
         }
     }
 
