@@ -4,51 +4,10 @@
   "neutralGiftResponse": "npc.generic.2.gift.default",
   "giftItems": {},
   "interactions": {
-    "GREETING": {
-      "fallbackKey": "npc.generic.2.talk.default",
-      "conversations": [
-        {
-          "translationKey": "npc.generic.2.greeting.1",
-          "minHearts": 0,
-          "maxHearts": 10,
-          "conditions": []
-        },
-        {
-          "translationKey": "npc.generic.2.greeting.2",
-          "minHearts": 0,
-          "maxHearts": 10,
-          "conditions": []
-        }
-      ]
-    },
-    "TALK": {
-      "fallbackKey": "npc.generic.2.talk.default",
-      "conversations": [
-        {
-          "translationKey": "npc.generic.2.talk.1",
-          "minHearts": 0,
-          "maxHearts": 10,
-          "conditions": []
-        },
-        {
-          "translationKey": "npc.generic.2.talk.2",
-          "minHearts": 0,
-          "maxHearts": 10,
-          "conditions": []
-        }
-      ]
-    },
-    "FOLLOWYES": {
-      "fallbackKey": "npc.generic.2.follow.yes",
-      "conversations": []
-    },
-    "FOLLOWNO": {
-      "fallbackKey": "npc.generic.2.follow.no",
-      "conversations": []
-    },
-    "FOLLOWSTOP": {
-      "fallbackKey": "npc.generic.2.follow.stop",
-      "conversations": []
-    }
+    "GREETING": "runecraftory:random_npc_2/greeting",
+    "TALK": "runecraftory:random_npc_2/talk",
+    "FOLLOWYES": "runecraftory:random_npc_2/follow.yes",
+    "FOLLOWNO": "runecraftory:random_npc_2/follow.no",
+    "FOLLOWSTOP": "runecraftory:random_npc_2/follow.stop"
   }
 }

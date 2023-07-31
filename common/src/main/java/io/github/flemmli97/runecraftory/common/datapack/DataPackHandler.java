@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.FoodManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.GateSpawnsManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ItemStatManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameAndGiftManager;
@@ -26,6 +27,7 @@ public class DataPackHandler {
     private final NameAndGiftManager nameAndGifts = new NameAndGiftManager();
     private final NPCDataManager npcData = new NPCDataManager();
     private final NPCLookManager npcLooks = new NPCLookManager();
+    private final NPCConversationManager npcConversations = new NPCConversationManager();
 
     public static void reloadItemStats(Consumer<PreparableReloadListener> cons) {
         cons.accept(SERVER_PACK.itemStats);
@@ -51,6 +53,7 @@ public class DataPackHandler {
         cons.accept(SERVER_PACK.nameAndGifts);
         cons.accept(SERVER_PACK.npcData);
         cons.accept(SERVER_PACK.npcLooks);
+        cons.accept(SERVER_PACK.npcConversations);
     }
 
     public static void toPacket(FriendlyByteBuf buffer) {
@@ -95,5 +98,9 @@ public class DataPackHandler {
 
     public NPCLookManager npcLookManager() {
         return this.npcLooks;
+    }
+
+    public NPCConversationManager npcConversationManager() {
+        return this.npcConversations;
     }
 }

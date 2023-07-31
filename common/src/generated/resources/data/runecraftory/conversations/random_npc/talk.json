@@ -1,0 +1,17 @@
+{
+  "fallbackKey": "npc.generic.talk.default",
+  "conversations": {
+    "npc.generic.talk.1": {
+      "translationKey": "npc.generic.talk.1",
+      "minHearts": 0,
+      "maxHearts": 10,
+      "conditions": []
+    },
+    "npc.generic.talk.2": {
+      "translationKey": "npc.generic.talk.2",
+      "minHearts": 0,
+      "maxHearts": 10,
+      "conditions": []
+    }
+  }
+}

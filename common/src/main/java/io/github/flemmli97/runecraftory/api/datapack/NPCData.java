@@ -15,6 +15,7 @@ import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -52,18 +53,18 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       Gender gender, NPCJob profession, @Nullable ResourceLocation look,
                       @Nullable Pair<EnumSeason, Integer> birthday,
                       int weight, String neutralGiftResponse,
-                      Map<ConversationType, ConversationSet> interactions,
+                      Map<ConversationType, ResourceLocation> interactions,
                       Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
                       @Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
                       int baseLevel, int unique) {
 
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, null, null, null, 1, "npc.default.gift.neutral",
-            buildDefaultInteractionMap(), Map.of(), null, null, null, 1, 0);
+            Map.of(), Map.of(), null, null, null, 1, 0);
 
     private static Map<ConversationType, ConversationSet> buildDefaultInteractionMap() {
         ImmutableMap.Builder<ConversationType, ConversationSet> builder = new ImmutableMap.Builder<>();
         for (ConversationType type : ConversationType.values())
-            builder.put(type, new ConversationSet("npc.default." + type.key + ".default", List.of()));
+            builder.put(type, new ConversationSet("npc.default." + type.key + ".default", Map.of()));
         return builder.build();
     }
 
@@ -90,7 +91,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
                     Codec.STRING.fieldOf("neutralGiftResponse").forGetter(d -> d.neutralGiftResponse),
                     Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("giftItems").forGetter(d -> d.giftItems),
-                    filledMap(ConversationType.class, Codec.unboundedMap(CodecHelper.enumCodec(ConversationType.class, null), ConversationSet.CODEC))
+                    filledMap(ConversationType.class, Codec.unboundedMap(CodecHelper.enumCodec(ConversationType.class, null), ResourceLocation.CODEC))
                             .fieldOf("interactions").forGetter(d -> d.interactions),
                     NPCSchedule.Schedule.CODEC.optionalFieldOf("schedule").forGetter(d -> Optional.ofNullable(d.schedule)),
 
@@ -105,6 +106,11 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     ModNPCJobs.CODEC.optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession))
             ).apply(inst, ((baseLevel, baseStats, statIncrease, neutralGift, giftItems, interactions, schedule, look, birthday, weight, unique, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
                     gender, profession.orElse(null), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, giftItems, schedule.orElse(null), baseStats.orElse(null), statIncrease.orElse(null), baseLevel.orElse(1), unique.orElse(0)))));
+
+    public ConversationSet getConversation(ConversationType type) {
+        ResourceLocation conversationId = this.interactions().get(type);
+        return DataPackHandler.SERVER_PACK.npcConversationManager().get(conversationId, ConversationSet.DEFAULT.get(type));
+    }
 
     public enum Gender {
         UNDEFINED,
@@ -135,7 +141,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final int weight;
         private String neutralGiftResponse;
         private NPCJob profession;
-        private final Map<ConversationType, ConversationSet> interactions = new TreeMap<>();
+        private final Map<ConversationType, ResourceLocation> interactions = new TreeMap<>();
         private final Map<String, Gift> giftItems = new LinkedHashMap<>();
         private Pair<EnumSeason, Integer> birthday;
         private NPCSchedule.Schedule schedule;
@@ -184,8 +190,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder addInteraction(ConversationType type, ConversationSet.Builder set) {
-            this.interactions.put(type, set.build());
+        public Builder addInteraction(ConversationType type, ResourceLocation conversationId) {
+            this.interactions.put(type, conversationId);
+            return this;
+        }
+
+        public Builder addInteractionIfAbsent(ConversationType type, ResourceLocation conversationId) {
+            this.interactions.putIfAbsent(type, conversationId);
             return this;
         }
 
@@ -231,26 +242,32 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
-    public record ConversationSet(String fallbackKey, List<Conversation> conversations) {
+    public record ConversationSet(String fallbackKey, Map<String, Conversation> conversations) {
 
         public static final Codec<ConversationSet> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         Codec.STRING.fieldOf("fallbackKey").forGetter(d -> d.fallbackKey),
-                        Conversation.CODEC.listOf().fieldOf("conversations").forGetter(d -> d.conversations)
+                        Codec.unboundedMap(Codec.STRING, Conversation.CODEC).fieldOf("conversations").forGetter(d -> d.conversations)
                 ).apply(inst, ConversationSet::new));
 
+        public static final Map<ConversationType, ConversationSet> DEFAULT = buildDefaultInteractionMap();
 
         public static class Builder {
 
             private final String fallback;
-            private final List<Conversation> greetings = new ArrayList<>();
+            private final Map<String, Conversation> greetings = new LinkedHashMap<>();
 
             public Builder(String fallback) {
                 this.fallback = fallback;
             }
 
+            public Builder addConversation(String key, Conversation conversation) {
+                this.greetings.put(key, conversation);
+                return this;
+            }
+
             public Builder addConversation(Conversation conversation) {
-                this.greetings.add(conversation);
+                this.greetings.put(conversation.translationKey, conversation);
                 return this;
             }
 
@@ -260,7 +277,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
-    public record Conversation(String translationKey, int minHearts, int maxHearts, LootItemCondition... conditions) {
+    public record Conversation(String translationKey, int minHearts, int maxHearts, boolean startingConversation,
+                               ConversationActionHolder action, LootItemCondition... conditions) {
 
         private static final Gson GSON = Deserializers.createConditionSerializer().create();
         private static final JsonDeserializationContext CTX_DESERIALIZER = GSON::fromJson;
@@ -300,11 +318,22 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
         public static final Codec<Conversation> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
+                        Codec.BOOL.optionalFieldOf("startingConversation").forGetter(d -> d.startingConversation ? Optional.empty() : Optional.of(false)),
+                        ConversationActionHolder.CODEC.optionalFieldOf("action").forGetter(d -> Optional.ofNullable(d.action)),
+                        LOOT_ITEM_CONDITION_CODEC.listOf().fieldOf("conditions").forGetter(d -> Arrays.stream(d.conditions).toList()),
+
                         Codec.STRING.fieldOf("translationKey").forGetter(d -> d.translationKey),
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("minHearts").forGetter(d -> d.minHearts),
-                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("maxHearts").forGetter(d -> d.maxHearts),
-                        LOOT_ITEM_CONDITION_CODEC.listOf().fieldOf("conditions").forGetter(d -> Arrays.stream(d.conditions).toList())
-                ).apply(inst, (key, min, max, cond) -> new Conversation(key, min, max, cond.toArray(new LootItemCondition[0]))));
+                        ExtraCodecs.NON_NEGATIVE_INT.fieldOf("maxHearts").forGetter(d -> d.maxHearts)
+                ).apply(inst, (start, action, cond, key, min, max) -> new Conversation(key, min, max, start.orElse(true), action.orElse(null), cond.toArray(new LootItemCondition[0]))));
+
+        public Conversation(String translationKey, int minHearts, int maxHearts, LootItemCondition... conditions) {
+            this(translationKey, minHearts, maxHearts, true, null, conditions);
+        }
+
+        public Conversation(String translationKey, int minHearts, int maxHearts, boolean start, LootItemCondition... conditions) {
+            this(translationKey, minHearts, maxHearts, start, null, conditions);
+        }
 
         public boolean test(int hearts, LootContext ctx) {
             if (this.minHearts > hearts || this.maxHearts < hearts)
@@ -314,6 +343,22 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     return false;
             return true;
         }
+    }
+
+    public record ConversationActionHolder(String translationKey, ConversationAction action, String actionValue) {
+
+        public static final Codec<ConversationActionHolder> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        Codec.STRING.fieldOf("translationKey").forGetter(d -> d.translationKey),
+                        CodecHelper.enumCodec(ConversationAction.class, null).fieldOf("action").forGetter(d -> d.action),
+                        Codec.STRING.fieldOf("value").forGetter(d -> d.actionValue)
+                ).apply(inst, ConversationActionHolder::new));
+    }
+
+    public enum ConversationAction {
+        ANSWER,
+        QUEST,
+        CONTINUE
     }
 
     public record Gift(TagKey<Item> item, String responseKey, int xp) {

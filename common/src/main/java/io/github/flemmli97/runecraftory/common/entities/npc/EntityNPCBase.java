@@ -493,19 +493,19 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void speak(Player player, NPCData.ConversationType type) {
         int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
-        NPCData.ConversationSet conversations = this.data.interactions().get(type);
+        NPCData.ConversationSet conversations = this.data.getConversation(type);
         LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
                 .withParameter(LootContextParams.THIS_ENTITY, this)
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
                 .withLuck(player.getLuck()).create(LootContextParamSets.GIFT);
-        List<NPCData.Conversation> filtered = conversations.conversations().stream().filter(c -> c.test(heart, ctx))
+        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.conversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, ctx))
                 .collect(Collectors.toList());
         Collections.shuffle(filtered, this.updater.getDailyRandom());
         int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
         if (size > 0) {
-            NPCData.Conversation randomLine = filtered.get(this.random.nextInt(size));
-            player.sendMessage(new TranslatableComponent(randomLine.translationKey(), player.getName()), Util.NIL_UUID);
+            Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
+            player.sendMessage(new TranslatableComponent(randomLine.getValue().translationKey(), player.getName()), Util.NIL_UUID);
         } else {
             player.sendMessage(new TranslatableComponent(conversations.fallbackKey(), player.getName()), Util.NIL_UUID);
         }
