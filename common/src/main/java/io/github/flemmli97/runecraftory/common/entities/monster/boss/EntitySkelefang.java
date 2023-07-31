@@ -121,7 +121,7 @@ public class EntitySkelefang extends BossMonster {
                     slash.setType(EntitySlashResidue.Type.SKELEFANG);
                     slash.setPos(leftPos.x, leftPos.y, leftPos.z);
                     slash.setXRot(0);
-                    slash.setYRot(entity.getYRot());
+                    slash.setYRot(entity.yBodyRot);
                     entity.level.addFreshEntity(slash);
                 }
                 if (entity.remainingRightLegBones() > 0) {
@@ -130,7 +130,7 @@ public class EntitySkelefang extends BossMonster {
                     slash.setType(EntitySlashResidue.Type.SKELEFANG);
                     slash.setPos(rightPos.x, rightPos.y, rightPos.z);
                     slash.setXRot(0);
-                    slash.setYRot(entity.getYRot());
+                    slash.setYRot(entity.yBodyRot);
                     entity.level.addFreshEntity(slash);
                 }
             }

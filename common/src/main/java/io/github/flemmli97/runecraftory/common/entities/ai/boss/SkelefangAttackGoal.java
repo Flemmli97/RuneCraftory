@@ -8,7 +8,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 public class SkelefangAttackGoal<T extends EntitySkelefang> extends AnimatedMeleeGoal<T> {
 
     private int moveDelay;
-    private boolean moveFlag, idleFlag, clockwise;
+    private boolean moveFlag;
 
     public SkelefangAttackGoal(T entity) {
         super(entity);
@@ -33,13 +33,12 @@ public class SkelefangAttackGoal<T extends EntitySkelefang> extends AnimatedMele
 
     @Override
     public void handlePreAttack() {
-        this.idleFlag = false;
         this.moveToWithDelay(1.2);
         if (!this.moveFlag) {
             this.pathFindDelay = 0;
             this.moveDelay = 50 + this.attacker.getRandom().nextInt(10);
             this.moveFlag = true;
-        } else if (this.moveDelay-- <= 0 || this.distanceToTargetSq < 4) {
+        } else if (this.moveDelay-- <= 0 || this.distanceToTargetSq < 5 * 5) {
             this.movementDone = true;
             this.moveFlag = false;
         }
