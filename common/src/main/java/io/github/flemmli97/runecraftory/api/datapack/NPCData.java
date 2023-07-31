@@ -55,10 +55,10 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       Map<ConversationType, ConversationSet> interactions,
                       Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
                       @Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
-                      int baseLevel) {
+                      int baseLevel, int unique) {
 
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, null, null, null, 1, "npc.default.gift.neutral",
-            buildDefaultInteractionMap(), Map.of(), null, null, null, 1);
+            buildDefaultInteractionMap(), Map.of(), null, null, null, 1, 0);
 
     private static Map<ConversationType, ConversationSet> buildDefaultInteractionMap() {
         ImmutableMap.Builder<ConversationType, ConversationSet> builder = new ImmutableMap.Builder<>();
@@ -97,13 +97,14 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     ResourceLocation.CODEC.optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look)),
                     WorldUtils.DATE.optionalFieldOf("birthday").forGetter(d -> Optional.ofNullable(d.birthday)),
                     ExtraCodecs.POSITIVE_INT.fieldOf("weight").forGetter(d -> d.weight),
+                    ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("unique").forGetter(d -> d.unique == 0 ? Optional.empty() : Optional.of(d.unique)),
 
                     Codec.STRING.optionalFieldOf("name").forGetter(d -> Optional.ofNullable(d.name)),
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
                     CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
                     ModNPCJobs.CODEC.optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession))
-            ).apply(inst, ((baseLevel, baseStats, statIncrease, neutralGift, giftItems, interactions, schedule, look, birthday, weight, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
-                    gender, profession.orElse(null), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, giftItems, schedule.orElse(null), baseStats.orElse(null), statIncrease.orElse(null), baseLevel.orElse(1)))));
+            ).apply(inst, ((baseLevel, baseStats, statIncrease, neutralGift, giftItems, interactions, schedule, look, birthday, weight, unique, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
+                    gender, profession.orElse(null), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, giftItems, schedule.orElse(null), baseStats.orElse(null), statIncrease.orElse(null), baseLevel.orElse(1), unique.orElse(0)))));
 
     public enum Gender {
         UNDEFINED,
@@ -143,6 +144,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final Map<Attribute, Double> baseStats = new TreeMap<>(ModAttributes.SORTED);
         private final Map<Attribute, Double> statIncrease = new TreeMap<>(ModAttributes.SORTED);
         private int baseLevel = 1;
+        private int unique;
 
         public Builder(int weight) {
             this(weight, null, null, Gender.UNDEFINED);
@@ -212,6 +214,11 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
+        public Builder setUnique(int amount) {
+            this.unique = amount;
+            return this;
+        }
+
         public NPCData build() {
             if (this.neutralGiftResponse == null)
                 throw new IllegalStateException("Neutral gift response not set.");
@@ -220,7 +227,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     throw new IllegalStateException("Missing interactions for " + type);
             }
             return new NPCData(this.name, this.surname, this.gender, this.profession, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions, this.giftItems, this.schedule,
-                    this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease, this.baseLevel);
+                    this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease, this.baseLevel, this.unique);
         }
     }
 

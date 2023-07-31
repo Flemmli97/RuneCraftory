@@ -16,6 +16,7 @@ import net.minecraft.util.random.WeightedEntry;
 
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class NPCDataManager extends SimpleJsonResourceReloadListener {
 
@@ -37,8 +38,8 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
         return this.dataKey.get(data);
     }
 
-    public NPCData getRandom(Random random) {
-        return this.view.getRandom(random, NPCData.DEFAULT_DATA);
+    public NPCData getRandom(Random random, Predicate<NPCData> func) {
+        return this.view.getRandom(random, NPCData.DEFAULT_DATA, func);
     }
 
     @Override

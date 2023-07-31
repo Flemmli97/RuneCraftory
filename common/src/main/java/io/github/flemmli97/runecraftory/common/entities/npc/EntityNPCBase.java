@@ -44,6 +44,7 @@ import io.github.flemmli97.runecraftory.common.utils.ItemUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.TeleportUtils;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
+import io.github.flemmli97.runecraftory.common.world.NPCHandler;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -198,11 +199,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private int foodBuffTick;
     private int playDeathTick;
 
-    private final Map<UUID, NPCFriendPoints> playerHearts = new HashMap<>();
-    private Pair<UUID, NPCRelation> relation;
-    private UUIDNameMapper fatherUUID;
-    private UUIDNameMapper motherUUID;
-    private UUIDNameMapper[] childUUIDs;
+    private final NPCRelationManager relationManager = new NPCRelationManager();
 
     private Behaviour behaviour = Behaviour.WANDER;
 
@@ -352,6 +349,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public void tick() {
+        if (this.firstTick) {
+            if (this.getServer() != null) {
+                NPCHandler handler = WorldHandler.get(this.getServer()).npcHandler;
+                handler.addNPC(this);
+            }
+        }
         super.tick();
         if (this.playDeath()) {
             this.playDeathTick = Math.min(15, ++this.playDeathTick);
@@ -420,7 +423,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (this.getEntityToFollowUUID() != null && this.getEntityToFollowUUID().equals(serverPlayer.getUUID())) {
             EntityUtils.sendAttributesTo(this, serverPlayer);
         }
-        Platform.INSTANCE.sendToClient(new S2CUpdateNPCData(this, this.getFriendPointData(serverPlayer).save()), serverPlayer);
+        Platform.INSTANCE.sendToClient(new S2CUpdateNPCData(this, this.relationManager.getFriendPointData(player.getUUID()).save()), serverPlayer);
         Platform.INSTANCE.sendToClient(new S2COpenNPCGui(this, serverPlayer), serverPlayer);
         this.interactingPlayers.add(serverPlayer);
         this.lookAt(serverPlayer, 30, 30);
@@ -471,11 +474,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         stack.setCount(count);
         NPCData.Gift gift = this.giftOf(stack);
         if (gift != null) {
-            this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
+            this.relationManager.getFriendPointData(player.getUUID())
                     .giftXP(this.level, (int) (gift.xp() * mult));
             player.sendMessage(new TranslatableComponent(gift.responseKey(), player.getName()), Util.NIL_UUID);
         } else {
-            this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
+            this.relationManager.getFriendPointData(player.getUUID())
                     .giftXP(this.level, (int) (15 * mult));
             player.sendMessage(new TranslatableComponent(this.data.neutralGiftResponse(), player.getName()), Util.NIL_UUID);
         }
@@ -483,13 +486,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void talkTo(Player player) {
-        boolean doGreet = this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints())
+        boolean doGreet = this.relationManager.getFriendPointData(player.getUUID())
                 .talkTo(this.level, 15);
         this.speak(player, doGreet ? NPCData.ConversationType.GREETING : NPCData.ConversationType.TALK);
     }
 
     public void speak(Player player, NPCData.ConversationType type) {
-        int heart = this.getFriendPointData(player).points.getLevel();
+        int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
         NPCData.ConversationSet conversations = this.data.interactions().get(type);
         LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
                 .withParameter(LootContextParams.THIS_ENTITY, this)
@@ -509,9 +512,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public NPCRelation relationFor(Player player) {
-        if (this.relation != null && this.relation.getFirst().equals(player.getUUID()))
-            return this.relation.getSecond();
-        return NPCRelation.NORMAL;
+        return this.relationManager.getRelationFor(player.getUUID());
     }
 
     @Override
@@ -596,17 +597,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
     }
 
-    private NPCFriendPoints getFriendPointData(Player player) {
-        return this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints());
-    }
-
     @Override
     public int friendPoints(UUID uuid) {
-        return this.playerHearts.computeIfAbsent(uuid, u -> new NPCFriendPoints()).points.getLevel();
+        return this.relationManager.getFriendPointData(uuid).points.getLevel();
     }
 
     public void updateFriendPointsFrom(Player player, CompoundTag tag) {
-        this.playerHearts.computeIfAbsent(player.getUUID(), uuid -> new NPCFriendPoints()).load(tag);
+        this.relationManager.getFriendPointData(player.getUUID()).load(tag);
     }
 
     @Override
@@ -706,6 +703,12 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.releasePOI(this.getWorkPlace());
         this.releasePOI(this.getMeetingPos());
         super.remove(reason);
+        if (this.getServer() != null && (reason == RemovalReason.KILLED || reason == RemovalReason.DISCARDED)) {
+            NPCHandler handler = WorldHandler.get(this.getServer()).npcHandler;
+            if (this.data != null && this.data.unique() > 0)
+                WorldHandler.get(this.getServer()).npcHandler.removeUniqueNPC(this.getUUID(), this.data);
+            handler.removeNPC(this);
+        }
     }
 
     @Override
@@ -762,9 +765,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         compound.putInt("FoodBuffTick", this.foodBuffTick);
         compound.putBoolean("PlayDeath", this.entityData.get(PLAY_DEATH_STATE));
 
-        CompoundTag heartsTag = new CompoundTag();
-        this.playerHearts.forEach((uuid, hearts) -> heartsTag.put(uuid.toString(), hearts.save()));
-        compound.put("PlayerHearts", heartsTag);
+        compound.put("RelationManager", this.relationManager.save());
 
         if (this.entityToFollowUUID != null)
             compound.putUUID("EntityToFollow", this.entityToFollowUUID);
@@ -791,12 +792,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.foodBuffTick = compound.getInt("FoodBuffTick");
         this.setPlayDeath(compound.getBoolean("PlayDeath"));
 
-        CompoundTag heartsTag = compound.getCompound("PlayerHearts");
-        heartsTag.getAllKeys().forEach(key -> {
-            NPCFriendPoints points = new NPCFriendPoints();
-            points.load(heartsTag.getCompound(key));
-            this.playerHearts.put(UUID.fromString(key), points);
-        });
+        this.relationManager.load(compound.getCompound("RelationManager"));
 
         if (compound.hasUUID("EntityToFollow"))
             this.entityToFollowUUID = compound.getUUID("EntityToFollow");
@@ -1166,10 +1162,17 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     public void randomizeData() {
-        this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().getRandom(this.random), false);
+        if (this.getServer() != null)
+            this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().getRandom(this.random, d -> WorldHandler.get(this.getServer())
+                    .npcHandler.canAssignNPC(d)), false);
     }
 
     public void setNPCData(NPCData data, boolean load) {
+        if (this.getServer() != null) {
+            if (this.data != null && this.data.unique() > 0)
+                WorldHandler.get(this.getServer()).npcHandler.removeUniqueNPC(this.getUUID(), this.data);
+            WorldHandler.get(this.getServer()).npcHandler.addUniqueNPC(this.getUUID(), data);
+        }
         this.data = data;
         this.setShop(this.data.profession() != null ? this.data.profession() : ModNPCJobs.getRandomJob(this.random));
         this.setMale(this.data.gender() == NPCData.Gender.UNDEFINED ? this.random.nextBoolean() : this.data.gender() != NPCData.Gender.FEMALE);

@@ -3,11 +3,20 @@ package io.github.flemmli97.runecraftory.forge.data;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.provider.NPCDataProvider;
+import io.github.flemmli97.runecraftory.api.enums.EnumDay;
+import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
+import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
+import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
+import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
+
+import java.util.EnumSet;
+import java.util.List;
 
 public class NPCDataGen extends NPCDataProvider {
 
@@ -47,7 +56,8 @@ public class NPCDataGen extends NPCDataProvider {
         /*this.addNPCDataWithLook("random_npc_all_test", new NPCData.Builder(50, "Name", "Surname", NPCData.Gender.UNDEFINED)
                         .setNeutralGiftResponse("npc.generic.2.gift.default")
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "test_look"))
-                        .withBirthday(Pair.of(EnumSeason.SPRING, 1))
+                        .withBirthday(com.mojang.datafixers.util.Pair.of(EnumSeason.SPRING, 1))
+                        .setUnique()
                         .withProfession(ModNPCJobs.GENERAL.getSecond())
                         .addInteraction(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default")
                                 .addConversation(new NPCData.Conversation("npc.generic.2.greeting.1", 0, 10))
@@ -64,8 +74,7 @@ public class NPCDataGen extends NPCDataProvider {
                         .setStatIncrease(Attributes.MAX_HEALTH, 1)
                         .setBaseLevel(5)
                         .build(),
-                new NPCData.NPCLook(NPCData.Gender.UNDEFINED, new ResourceLocation(RuneCraftory.MODID, "texture"), "Flemmli97", 0, List.of()));
-        */
+                new NPCData.NPCLook(NPCData.Gender.UNDEFINED, new ResourceLocation(RuneCraftory.MODID, "texture"), "Flemmli97", 0, List.of()));*/
     }
 
     private static TagKey<Item> giftTag(String tag) {

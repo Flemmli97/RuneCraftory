@@ -58,6 +58,8 @@ public class WorldHandler extends SavedData {
     private final Map<UUID, Set<UnloadedPartyMember>> unloadedPartyMembers = new HashMap<>();
     private final Map<UUID, Set<UUID>> toRemovePartyMembers = new HashMap<>();
 
+    public final NPCHandler npcHandler = new NPCHandler();
+
     private int updateDelay, lastUpdateDay;
 
     public WorldHandler() {
@@ -328,6 +330,7 @@ public class WorldHandler extends SavedData {
             Set<UUID> uuids = this.toRemovePartyMembers.computeIfAbsent(uuid, u -> new HashSet<>());
             list.forEach(t -> uuids.add(NbtUtils.loadUUID(t)));
         });
+        this.npcHandler.load(compoundNBT.getCompound("NPCHandler"));
     }
 
     @Override
@@ -368,6 +371,7 @@ public class WorldHandler extends SavedData {
             }
         });
         compoundNBT.put("RemovedPartyMembers", removedPartyMembers);
+        compoundNBT.put("NPCHandler", this.npcHandler.save());
         return compoundNBT;
     }
 
