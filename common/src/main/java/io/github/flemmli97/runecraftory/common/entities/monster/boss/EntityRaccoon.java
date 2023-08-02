@@ -173,6 +173,9 @@ public class EntityRaccoon extends BossMonster {
     private boolean clone;
     private Vec3 jumpDir;
 
+    private int hit;
+    private int hitCountdown = -1;
+
     private final AnimationHandler<EntityRaccoon> animationHandler = new AnimationHandler<>(this, ANIMS)
             .setAnimationChangeCons(anim -> {
                 if (CLONE.is(anim)) {
@@ -256,13 +259,21 @@ public class EntityRaccoon extends BossMonster {
     }
 
     @Override
+    public void baseTick() {
+        super.baseTick();
+        if (!this.level.isClientSide) {
+            --this.hitCountdown;
+            if (!this.isBerserk() && (this.hitCountdown == 0 || this.hit >= 5)) {
+                this.setBerserk(true, false);
+                this.hit = 0;
+            }
+        }
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.getAnimationHandler().isCurrent(JUMP, DEFEAT, TRANSFORM, DETRANSFORM, ANGRY))
             return false;
-        boolean res = super.hurt(source, amount);
-        if (res && !this.isBerserk()) {
-            this.setBerserk(true, false);
-        }
         return super.hurt(source, amount);
     }
 
@@ -270,8 +281,9 @@ public class EntityRaccoon extends BossMonster {
     protected void actuallyHurt(DamageSource damageSrc, float damageAmount) {
         super.actuallyHurt(damageSrc, damageAmount);
         if (!this.isBerserk()) {
-            this.setBerserk(true, false);
-        } else if (this.getAnimationHandler().isCurrent(CLONE) && this.getAnimationHandler().getAnimation().getTick() > 10) { //TODO: Update time
+            this.hit++;
+            this.hitCountdown = 30;
+        } else if (this.getAnimationHandler().isCurrent(BARRAGE) && this.getAnimationHandler().getAnimation().getTick() > 10) {
             this.setBerserk(false, false);
         }
     }

@@ -7,6 +7,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -60,10 +61,13 @@ public class EntityRafflesiaPitcher extends EntityRafflesiaPart {
                 BlockPos pos = summonPos.offset(part.getRandom().nextInt(8) - 4, part.getRandom().nextInt(2), part.getRandom().nextInt(8) - 4);
                 Optional<EntityType<?>> opt = Registry.ENTITY_TYPE.getTag(ModTags.RAFFLESIA_SUMMONS).flatMap(named -> named.getRandomElement(part.getRandom()).map(Holder::value));
                 opt.ifPresent(type -> {
-                    Entity e = type.create((ServerLevel) part.level, null, null, null, pos, MobSpawnType.MOB_SUMMONED, true, true);
+                    ServerLevel serverLevel = (ServerLevel) part.level;
+                    Entity e = type.create(serverLevel, null, null, null, pos, MobSpawnType.MOB_SUMMONED, true, true);
                     if (e != null) {
                         if (e instanceof Mob mob)
                             mob.setTarget(part.getTarget());
+                        for (int p = 0; p < 5; p++)
+                            serverLevel.sendParticles(ParticleTypes.CLOUD, e.getRandomX(1), e.getRandomY(), e.getRandomZ(1), 1, serverLevel.getRandom().nextGaussian() * 0.1, serverLevel.getRandom().nextGaussian() * 0.1, serverLevel.getRandom().nextGaussian() * 0.1, 0);
                         part.level.addFreshEntity(e);
                     }
                 });
