@@ -19,6 +19,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -28,8 +29,10 @@ import java.util.function.Consumer;
 
 public abstract class BossMonster extends BaseMonster implements IOverlayEntityRender {
 
-    private static final EntityDataAccessor<Boolean> enraged = SynchedEntityData.defineId(BossMonster.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> ENRAGED = SynchedEntityData.defineId(BossMonster.class, EntityDataSerializers.BOOLEAN);
     protected final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), BossEvent.BossBarColor.GREEN, BossEvent.BossBarOverlay.PROGRESS);
+
+    private int noPlayerTick, noPlayerRegenTick;
 
     public BossMonster(EntityType<? extends BossMonster> type, Level level) {
         super(type, level);
@@ -44,16 +47,25 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(enraged, false);
+        this.entityData.define(ENRAGED, false);
     }
 
     @Override
-    public void tick() {
-        super.tick();
+    public void baseTick() {
+        super.baseTick();
         if (!this.level.isClientSide) {
             if (!this.isTamed() && this.isAlive()) {
-                this.updateplayers();
+                this.updatePlayers();
                 this.updateBossBar();
+                if (this.bossInfo.getPlayers().isEmpty() && ++this.noPlayerTick > 200) {
+                    if (++this.noPlayerRegenTick > 40) {
+                        this.heal(this.getMaxHealth() * 0.1f);
+                        this.noPlayerRegenTick = 0;
+                    }
+                } else {
+                    this.noPlayerTick = 0;
+                    this.noPlayerRegenTick = 0;
+                }
             }
         }
     }
@@ -142,11 +154,11 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     }
 
     public boolean isEnraged() {
-        return this.isAlive() && !this.isTamed() && this.entityData.get(enraged);
+        return this.isAlive() && !this.isTamed() && this.entityData.get(ENRAGED);
     }
 
     public void setEnraged(boolean flag, boolean load) {
-        this.entityData.set(enraged, flag);
+        this.entityData.set(ENRAGED, flag);
     }
 
     protected void updateBossBar() {
@@ -165,24 +177,31 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         return this.getHealth() / this.getMaxHealth() < 0.5 && !this.isEnraged();
     }
 
-    private void updateplayers() {
+    private void updatePlayers() {
         Set<ServerPlayer> set = new HashSet<>();
-        for (ServerPlayer entityplayermp : this.level.getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(10.0))) {
-            this.bossInfo.addPlayer(entityplayermp);
-            set.add(entityplayermp);
+        for (ServerPlayer serverPlayer : this.level.getEntitiesOfClass(ServerPlayer.class, this.arenaAABB())) {
+            this.bossInfo.addPlayer(serverPlayer);
+            set.add(serverPlayer);
         }
         Set<ServerPlayer> set2 = Sets.newHashSet(this.bossInfo.getPlayers());
         set2.removeAll(set);
-        for (ServerPlayer entityplayermp2 : set2) {
-            this.bossInfo.removePlayer(entityplayermp2);
+        for (ServerPlayer serverPlayer : set2) {
+            this.bossInfo.removePlayer(serverPlayer);
         }
+    }
+
+    public AABB arenaAABB() {
+        if (this.hasRestriction()) {
+            return new AABB(this.getRestrictCenter()).inflate(this.getRestrictRadius());
+        }
+        return this.getBoundingBox().inflate(12.0);
     }
 
     @Override
     public void remove(Entity.RemovalReason reason) {
         super.remove(reason);
-        for (ServerPlayer entityplayermp1 : this.bossInfo.getPlayers()) {
-            this.stopSeenByPlayer(entityplayermp1);
+        for (ServerPlayer player : this.bossInfo.getPlayers()) {
+            this.stopSeenByPlayer(player);
         }
     }
 
@@ -195,6 +214,10 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
     public void stopSeenByPlayer(ServerPlayer player) {
         super.stopSeenByPlayer(player);
         this.bossInfo.removePlayer(player);
+        // If boss killed all players (or every nearby simply player died) heal it back to full
+        if (player.isRemoved() && this.bossInfo.getPlayers().isEmpty()) {
+            this.heal(this.getMaxHealth());
+        }
     }
 
     @Override

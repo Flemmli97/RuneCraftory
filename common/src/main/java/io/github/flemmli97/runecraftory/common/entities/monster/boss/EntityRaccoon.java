@@ -263,7 +263,7 @@ public class EntityRaccoon extends BossMonster {
         super.baseTick();
         if (!this.level.isClientSide) {
             --this.hitCountdown;
-            if (!this.isBerserk() && (this.hitCountdown == 0 || this.hit >= 5)) {
+            if (this.isAlive() && !this.isBerserk() && (this.hitCountdown == 0 || this.hit >= 5)) {
                 this.setBerserk(true, false);
                 this.hit = 0;
             }
