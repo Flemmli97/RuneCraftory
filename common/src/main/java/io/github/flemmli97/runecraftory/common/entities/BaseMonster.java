@@ -1064,6 +1064,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         this.prop.getAttributeGains().forEach((att, val) -> {
             AttributeInstance inst = this.getAttribute(att);
             if (inst != null) {
+                val *= 0.01;
                 inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
                 float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
                 inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - this.prop.minLevel) * val * multiplier, AttributeModifier.Operation.ADDITION));

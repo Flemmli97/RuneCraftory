@@ -26,7 +26,7 @@ public class LibAttributes {
     public static final ResourceLocation SLEEP = new ResourceLocation(RuneCraftory.MODID, "sleep");
     public static final ResourceLocation FATIGUE = new ResourceLocation(RuneCraftory.MODID, "fatigue");
     public static final ResourceLocation COLD = new ResourceLocation(RuneCraftory.MODID, "cold");
-    public static final ResourceLocation DIZ = new ResourceLocation(RuneCraftory.MODID, "dizzy");
+    public static final ResourceLocation DIZZY = new ResourceLocation(RuneCraftory.MODID, "dizzy");
     public static final ResourceLocation CRIT = new ResourceLocation(RuneCraftory.MODID, "crit");
     public static final ResourceLocation STUN = new ResourceLocation(RuneCraftory.MODID, "stun");
     public static final ResourceLocation FAINT = new ResourceLocation(RuneCraftory.MODID, "faint");

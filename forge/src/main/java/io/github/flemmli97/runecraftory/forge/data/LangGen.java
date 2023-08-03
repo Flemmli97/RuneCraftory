@@ -169,7 +169,7 @@ public class LangGen implements DataProvider {
         this.add(ModAttributes.SLEEP.get().getDescriptionId(), "Sleep");
         this.add(ModAttributes.FATIGUE.get().getDescriptionId(), "Fatigue");
         this.add(ModAttributes.COLD.get().getDescriptionId(), "Cold");
-        this.add(ModAttributes.DIZ.get().getDescriptionId(), "Dizz");
+        this.add(ModAttributes.DIZZY.get().getDescriptionId(), "Dizz");
         this.add(ModAttributes.CRIT.get().getDescriptionId(), "Crit");
         this.add(ModAttributes.STUN.get().getDescriptionId(), "Stun");
         this.add(ModAttributes.FAINT.get().getDescriptionId(), "Faint");

@@ -71,7 +71,7 @@ public class CombatUtils {
             return ModAttributes.RES_FAT.get();
         if (att == ModAttributes.COLD.get())
             return ModAttributes.RES_COLD.get();
-        if (att == ModAttributes.DIZ.get())
+        if (att == ModAttributes.DIZZY.get())
             return ModAttributes.RES_DIZZY.get();
         if (att == ModAttributes.CRIT.get())
             return ModAttributes.RES_CRIT.get();
@@ -425,7 +425,7 @@ public class CombatUtils {
         boolean coldChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.COLD.get(), target);
         boolean paraChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.PARA.get(), target);
         boolean sealChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.SEAL.get(), target);
-        boolean dizzyChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.DIZ.get(), target);
+        boolean dizzyChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.DIZZY.get(), target);
         boolean stunChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.STUN.get(), target);
         if (poisonChance) {
             target.addEffect(new MobEffectInstance(ModEffects.POISON.get(), 5));

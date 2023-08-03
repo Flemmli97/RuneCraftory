@@ -54,7 +54,7 @@ public class ModAttributes {
     public static final RegistryEntrySupplier<Attribute> SLEEP = register(LibAttributes.SLEEP, ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> FATIGUE = register(LibAttributes.FATIGUE, ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> COLD = register(LibAttributes.COLD, ID++, 0, -100, 100);
-    public static final RegistryEntrySupplier<Attribute> DIZ = register(LibAttributes.DIZ, ID++, 0, -100, 100);
+    public static final RegistryEntrySupplier<Attribute> DIZZY = register(LibAttributes.DIZZY, ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> CRIT = register(LibAttributes.CRIT, ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> STUN = register(LibAttributes.STUN, ID++, 0, -100, 100);
     public static final RegistryEntrySupplier<Attribute> FAINT = register(LibAttributes.FAINT, ID++, 0, -100, 100);
