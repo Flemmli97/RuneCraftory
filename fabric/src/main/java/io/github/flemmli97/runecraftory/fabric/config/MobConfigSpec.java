@@ -2,16 +2,10 @@ package io.github.flemmli97.runecraftory.fabric.config;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
-import io.github.flemmli97.runecraftory.fabric.config.values.EntityPropertySpecs;
 import io.github.flemmli97.tenshilib.common.config.CommentedJsonConfig;
 import io.github.flemmli97.tenshilib.common.config.JsonConfig;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class MobConfigSpec {
 
@@ -43,8 +37,6 @@ public class MobConfigSpec {
     public final CommentedJsonConfig.DoubleVal treasureChance;
     public final CommentedJsonConfig.DoubleVal mimicChance;
     public final CommentedJsonConfig.DoubleVal mimicStrongChance;
-
-    public final Map<ResourceLocation, EntityPropertySpecs> mobSpecs = new HashMap<>();
 
     public MobConfigSpec(CommentedJsonConfig.Builder builder) {
 
@@ -82,11 +74,6 @@ public class MobConfigSpec {
         this.mimicChance = builder.comment("Chance for a spawned treasure chest to be a monster box").defineInRange("Mimic Chance", MobConfig.mimicChance, 0, 1f);
         this.mimicStrongChance = builder.comment("Chance for a monster box to be a gobble box").defineInRange("Strong Mimic Chance", MobConfig.mimicStrongChance, 0, 1f);
         builder.pop();
-        for (Map.Entry<ResourceLocation, EntityProperties> e : MobConfig.propertiesMap.entrySet()) {
-            builder.push(e.getKey().toString());
-            this.mobSpecs.put(e.getKey(), new EntityPropertySpecs(builder, e.getValue()));
-            builder.pop();
-        }
         builder.registerReloadHandler(() -> ConfigHolder.loadMobs(this));
     }
 }

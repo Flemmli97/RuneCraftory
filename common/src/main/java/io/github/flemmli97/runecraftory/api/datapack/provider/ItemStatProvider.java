@@ -6,6 +6,7 @@ import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
 import io.github.flemmli97.runecraftory.api.datapack.ItemStat;
+import io.github.flemmli97.runecraftory.common.datapack.manager.ItemStatManager;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -44,7 +45,7 @@ public abstract class ItemStatProvider implements DataProvider {
     public void run(HashCache cache) {
         this.add();
         this.data.forEach((res, builder) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/item_stats/" + res.getPath() + ".json");
+            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + ItemStatManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
                 JsonElement obj = ItemStat.CODEC.encodeStart(JsonOps.INSTANCE, builder.build())
                         .getOrThrow(false, RuneCraftory.logger::error);

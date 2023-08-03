@@ -39,34 +39,34 @@ import java.util.TreeMap;
 public class ItemNBT {
 
     private static final List<ResourceLocation> WEAPON_ONLY = List.of(
-            ModAttributes.RF_PARA.getID(),
-            ModAttributes.RF_POISON.getID(),
-            ModAttributes.RF_SEAL.getID(),
-            ModAttributes.RF_SLEEP.getID(),
-            ModAttributes.RF_FAT.getID(),
-            ModAttributes.RF_COLD.getID(),
-            ModAttributes.RF_FAINT.getID(),
-            ModAttributes.RF_DRAIN.getID()
+            ModAttributes.PARA.getID(),
+            ModAttributes.POISON.getID(),
+            ModAttributes.SEAL.getID(),
+            ModAttributes.SLEEP.getID(),
+            ModAttributes.FATIGUE.getID(),
+            ModAttributes.COLD.getID(),
+            ModAttributes.FAINT.getID(),
+            ModAttributes.DRAIN.getID()
     );
     private static final List<ResourceLocation> ARMOR_ONLY = List.of(
-            ModAttributes.RF_RES_WATER.getID(),
-            ModAttributes.RF_RES_EARTH.getID(),
-            ModAttributes.RF_RES_WIND.getID(),
-            ModAttributes.RF_RES_FIRE.getID(),
-            ModAttributes.RF_RES_DARK.getID(),
-            ModAttributes.RF_RES_LIGHT.getID(),
-            ModAttributes.RF_RES_LOVE.getID(),
-            ModAttributes.RF_RES_PARA.getID(),
-            ModAttributes.RF_RES_POISON.getID(),
-            ModAttributes.RF_RES_SEAL.getID(),
-            ModAttributes.RF_RES_SLEEP.getID(),
-            ModAttributes.RF_RES_FAT.getID(),
-            ModAttributes.RF_RES_COLD.getID(),
-            ModAttributes.RF_RES_DIZ.getID(),
-            ModAttributes.RF_RES_CRIT.getID(),
-            ModAttributes.RF_RES_STUN.getID(),
-            ModAttributes.RF_RES_FAINT.getID(),
-            ModAttributes.RF_RES_DRAIN.getID()
+            ModAttributes.RES_WATER.getID(),
+            ModAttributes.RES_EARTH.getID(),
+            ModAttributes.RES_WIND.getID(),
+            ModAttributes.RES_FIRE.getID(),
+            ModAttributes.RES_DARK.getID(),
+            ModAttributes.RES_LIGHT.getID(),
+            ModAttributes.RES_LOVE.getID(),
+            ModAttributes.RES_PARA.getID(),
+            ModAttributes.RES_POISON.getID(),
+            ModAttributes.RES_SEAL.getID(),
+            ModAttributes.RES_SLEEP.getID(),
+            ModAttributes.RES_FAT.getID(),
+            ModAttributes.RES_COLD.getID(),
+            ModAttributes.RES_DIZZY.getID(),
+            ModAttributes.RES_CRIT.getID(),
+            ModAttributes.RES_STUN.getID(),
+            ModAttributes.RES_FAINT.getID(),
+            ModAttributes.RES_DRAIN.getID()
     );
 
     public static int itemLevel(ItemStack stack) {

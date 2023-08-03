@@ -4,10 +4,8 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.forge.config.values.EntityPropertySpecs;
 import io.github.flemmli97.runecraftory.forge.config.values.SkillPropertySpecs;
 import io.github.flemmli97.runecraftory.forge.config.values.WeaponTypePropertySpecs;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -132,10 +130,6 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         MobConfig.treasureChance = spec.treasureChance.get().floatValue();
         MobConfig.mimicChance = spec.mimicChance.get().floatValue();
         MobConfig.mimicStrongChance = spec.mimicStrongChance.get().floatValue();
-
-        for (Map.Entry<ResourceLocation, EntityPropertySpecs> e : spec.mobSpecs.entrySet()) {
-            MobConfig.propertiesMap.put(e.getKey(), EntityPropertySpecs.ofSpec(e.getValue()));
-        }
     }
 
     public void reloadConfig() {

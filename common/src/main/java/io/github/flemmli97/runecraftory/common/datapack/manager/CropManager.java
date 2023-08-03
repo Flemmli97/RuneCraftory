@@ -23,13 +23,14 @@ import java.util.Map;
 
 public class CropManager extends SimpleJsonResourceReloadListener {
 
+    public static final String DIRECTORY = "crop_properties";
     private static final Gson GSON = new GsonBuilder().create();
 
     private Map<ResourceLocation, CropProperties> crops = ImmutableMap.of();
     private Map<TagKey<Item>, CropProperties> cropTag = ImmutableMap.of();
 
     public CropManager() {
-        super(GSON, "crop_properties");
+        super(GSON, DIRECTORY);
     }
 
     @Nullable

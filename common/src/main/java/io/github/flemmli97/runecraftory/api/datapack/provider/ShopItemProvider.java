@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
@@ -52,7 +53,7 @@ public abstract class ShopItemProvider implements DataProvider {
     public void run(HashCache cache) {
         this.add();
         this.items.forEach((res, builder) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/shop_items/" + res.getPath() + ".json");
+            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + ShopItemsManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
                 JsonObject obj = new JsonObject();
                 if (this.overwrite.getOrDefault(res, false))

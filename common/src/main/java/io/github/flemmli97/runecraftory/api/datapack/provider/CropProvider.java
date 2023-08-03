@@ -6,6 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
+import io.github.flemmli97.runecraftory.common.datapack.manager.CropManager;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -46,7 +47,7 @@ public abstract class CropProvider implements DataProvider {
     public void run(HashCache cache) {
         this.add();
         this.data.forEach((res, builder) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/crop_properties/" + res.getPath() + ".json");
+            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + CropManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
                 JsonElement obj = CropProperties.CODEC.encodeStart(JsonOps.INSTANCE, builder.build())
                         .getOrThrow(false, LOGGER::error);

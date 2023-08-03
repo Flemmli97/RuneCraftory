@@ -22,11 +22,13 @@ import java.util.Map;
 
 public class FoodManager extends SimpleJsonResourceReloadListener {
 
+    public static final String DIRECTORY = "food_stats";
+
     private Map<ResourceLocation, FoodProperties> food = ImmutableMap.of();
     private Map<TagKey<Item>, FoodProperties> foodTag = ImmutableMap.of();
 
     public FoodManager() {
-        super(GsonInstances.ATTRIBUTE_EFFECTS, "food_stats");
+        super(GsonInstances.ATTRIBUTE_EFFECTS, DIRECTORY);
     }
 
     @Nullable

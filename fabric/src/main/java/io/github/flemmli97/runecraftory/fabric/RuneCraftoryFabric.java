@@ -178,6 +178,19 @@ public class RuneCraftoryFabric implements ModInitializer {
                 return new ResourceLocation(RuneCraftory.MODID, "gate_spawn_data");
             }
         });
+        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
+            @Override
+            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
+                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
+                DataPackHandler.reloadMobProperties(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
+                return ret.get();
+            }
+
+            @Override
+            public ResourceLocation getFabricId() {
+                return new ResourceLocation(RuneCraftory.MODID, "mob_properties");
+            }
+        });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(CropLootModifiers.INSTANCE);
 
         ModEntities.registerAttributes(FabricDefaultAttributeRegistry::register);

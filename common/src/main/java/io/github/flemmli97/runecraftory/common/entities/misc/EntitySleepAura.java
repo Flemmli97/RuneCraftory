@@ -46,7 +46,7 @@ public class EntitySleepAura extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(4).magic().element(EnumElement.EARTH).withChangedAttribute(ModAttributes.RF_SLEEP.get(), 100), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, new CustomDamage.Builder(this, this.getOwner()).hurtResistant(4).magic().element(EnumElement.EARTH).withChangedAttribute(ModAttributes.SLEEP.get(), 100), CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
             this.hitEntities.add(target.getUUID());
             return true;
         }

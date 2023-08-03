@@ -112,13 +112,13 @@ public class FoodGen extends FoodProvider {
                 .addEffect(ModAttributes.MAGIC.get(), 70)
                 .addEffect(ModAttributes.DEFENCE.get(), 35)
                 .addEffect(ModAttributes.MAGIC_DEFENCE.get(), 35)
-                .addEffect(ModAttributes.RF_RES_POISON.get(), 25)
-                .addEffect(ModAttributes.RF_RES_PARA.get(), 25)
-                .addEffect(ModAttributes.RF_RES_SEAL.get(), 25)
-                .addEffect(ModAttributes.RF_RES_SLEEP.get(), 25)
-                .addEffect(ModAttributes.RF_RES_FAT.get(), 25)
-                .addEffect(ModAttributes.RF_RES_COLD.get(), 25)
-                .addEffect(ModAttributes.RF_RES_FAINT.get(), 25));
+                .addEffect(ModAttributes.RES_POISON.get(), 25)
+                .addEffect(ModAttributes.RES_PARA.get(), 25)
+                .addEffect(ModAttributes.RES_SEAL.get(), 25)
+                .addEffect(ModAttributes.RES_SLEEP.get(), 25)
+                .addEffect(ModAttributes.RES_FAT.get(), 25)
+                .addEffect(ModAttributes.RES_COLD.get(), 25)
+                .addEffect(ModAttributes.RES_FAINT.get(), 25));
         this.addStat(ModItems.objectX.get(), new FoodProperties.Builder(100).setRPIncrease(0, -50)
                 .addCookingBonusPercent(ModAttributes.HEALTHGAIN.get(), -10)
                 .addCookingBonusPercent(ModAttributes.RPGAIN.get(), -10));
@@ -157,8 +157,8 @@ public class FoodGen extends FoodProvider {
                 .setRPRegen(130, 0)
                 .addPotion(MobEffects.MOVEMENT_SPEED, 200, 1)
                 .addEffect(ModAttributes.DEFENCE.get(), 1)
-                .addEffect(ModAttributes.RF_RES_FAT.get(), 15)
-                .addEffect(ModAttributes.RF_RES_COLD.get(), 15));
+                .addEffect(ModAttributes.RES_FAT.get(), 15)
+                .addEffect(ModAttributes.RES_COLD.get(), 15));
 
         this.addStat(ModItems.hotMilk.get(), new FoodProperties.Builder(4800)
                 .setHPRegen(50, 0)

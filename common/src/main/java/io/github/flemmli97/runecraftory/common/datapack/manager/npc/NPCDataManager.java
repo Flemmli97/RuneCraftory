@@ -20,6 +20,8 @@ import java.util.function.Predicate;
 
 public class NPCDataManager extends SimpleJsonResourceReloadListener {
 
+    public static final String DIRECTORY = "npc_data";
+
     private static final Gson GSON = new GsonBuilder().create();
 
     private Map<ResourceLocation, NPCData> keyData = ImmutableMap.of();
@@ -27,7 +29,7 @@ public class NPCDataManager extends SimpleJsonResourceReloadListener {
     private WeightedList<NPCData> view = new WeightedList<>();
 
     public NPCDataManager() {
-        super(GSON, "npc_data");
+        super(GSON, DIRECTORY);
     }
 
     public NPCData get(ResourceLocation res) {

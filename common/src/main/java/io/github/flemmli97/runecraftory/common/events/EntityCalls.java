@@ -421,7 +421,7 @@ public class EntityCalls {
     public static void postDamage(LivingEntity entity, DamageSource src, float amount) {
         Entity attacker = src.getEntity();
         if (amount > 0 && attacker instanceof LivingEntity living) {
-            float drainPercent = (float) (CombatUtils.statusEffectChance(living, ModAttributes.RF_DRAIN.get(), entity));
+            float drainPercent = (float) (CombatUtils.statusEffectChance(living, ModAttributes.DRAIN.get(), entity));
             if (drainPercent > 0f) {
                 if (attacker instanceof Player player)
                     player.heal(drainPercent * amount);

@@ -13,7 +13,7 @@ public interface IExtendedMob extends IBaseMob, OwnableEntity {
 
     boolean isTamed();
 
-    boolean ridable();
+    boolean rideable();
 
     void setOwner(Player player);
 

@@ -29,11 +29,13 @@ import java.util.Optional;
 
 public class ItemStatManager extends SimpleJsonResourceReloadListener {
 
+    public static final String DIRECTORY = "item_stats";
+
     private Map<ResourceLocation, ItemStat> itemstat = ImmutableMap.of();
     private Map<TagKey<Item>, ItemStat> itemstatTag = ImmutableMap.of();
 
     public ItemStatManager() {
-        super(GsonInstances.ATTRIBUTE_SPELLS, "item_stats");
+        super(GsonInstances.ATTRIBUTE_SPELLS, DIRECTORY);
     }
 
     public Optional<ItemStat> get(Item item) {

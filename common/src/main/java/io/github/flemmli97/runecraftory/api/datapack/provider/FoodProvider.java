@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
+import io.github.flemmli97.runecraftory.common.datapack.manager.FoodManager;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -43,7 +44,7 @@ public abstract class FoodProvider implements DataProvider {
     public void run(HashCache cache) {
         this.add();
         this.data.forEach((res, builder) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/food_stats/" + res.getPath() + ".json");
+            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + FoodManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
                 JsonElement obj = FoodProperties.CODEC.encodeStart(JsonOps.INSTANCE, builder.build())
                         .getOrThrow(false, LOGGER::error);

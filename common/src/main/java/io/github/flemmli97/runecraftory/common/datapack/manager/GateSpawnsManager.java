@@ -36,13 +36,15 @@ import java.util.stream.Collectors;
 
 public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
 
+    public static final String DIRECTORY = "gate_spawning";
+
     private static final Gson GSON = new GsonBuilder().create();
 
     private Map<TagKey<Biome>, List<SpawnResource>> biomeSpawns = new HashMap<>();
     private Map<ConfiguredStructureFeature<?, ?>, List<SpawnResource>> structureSpawns = new HashMap<>();
 
     public GateSpawnsManager() {
-        super(GSON, "gate_spawning");
+        super(GSON, DIRECTORY);
     }
 
     public List<EntityType<?>> pickRandomMobs(ServerLevel world, Holder<Biome> biome, Random rand, int amount, BlockPos pos, int gateLevel) {

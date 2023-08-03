@@ -1,0 +1,24 @@
+{
+  "minLevel": 1,
+  "xp": 100,
+  "money": 3,
+  "tamingChance": 0.05,
+  "rideable": true,
+  "flying": false,
+  "size": 1,
+  "needsRoof": true,
+  "baseValues": {
+    "minecraft:generic.attack_damage": 7.0,
+    "minecraft:generic.max_health": 17.0,
+    "runecraftory:magic_defence": 1.0,
+    "runecraftory:magic_attack": 3.0,
+    "runecraftory:defence": 0.0
+  },
+  "levelGains": {
+    "minecraft:generic.attack_damage": 2.1,
+    "minecraft:generic.max_health": 11.0,
+    "runecraftory:magic_defence": 1.4,
+    "runecraftory:magic_attack": 1.6,
+    "runecraftory:defence": 1.3
+  }
+}

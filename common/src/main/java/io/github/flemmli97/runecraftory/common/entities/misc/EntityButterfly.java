@@ -42,7 +42,7 @@ public class EntityButterfly extends BaseProjectile {
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
         CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).magic().noKnockback().hurtResistant(2)
-                .withChangedAttribute(ModAttributes.RF_DRAIN.get(), 100);
+                .withChangedAttribute(ModAttributes.DRAIN.get(), 100);
         if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null)) {
             if (result.getEntity() instanceof LivingEntity livingTarget)
                 livingTarget.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 3));

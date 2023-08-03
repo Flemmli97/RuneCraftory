@@ -43,6 +43,8 @@ import java.util.Map;
  */
 public class ShopItemsManager extends SimpleJsonResourceReloadListener {
 
+    public static final String DIRECTORY = "shop_items";
+
     public static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization()
             .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(Suppliers.memoize(PlatformUtils.INSTANCE::attributes)))
             .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(Suppliers.memoize(ModSpells.SPELLREGISTRY::get))).create();
@@ -52,7 +54,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
     private boolean checkedStats;
 
     public ShopItemsManager() {
-        super(GSON, "shop_items");
+        super(GSON, DIRECTORY);
     }
 
     public Collection<ShopItemProperties> get(NPCJob shop) {

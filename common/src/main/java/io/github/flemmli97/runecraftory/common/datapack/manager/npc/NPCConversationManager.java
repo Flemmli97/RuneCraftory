@@ -18,13 +18,15 @@ import java.util.Map;
 
 public class NPCConversationManager extends SimpleJsonResourceReloadListener {
 
+    public static final String DIRECTORY = "conversations";
+
     private static final Gson GSON = new GsonBuilder().create();
 
     private Map<ResourceLocation, NPCData.ConversationSet> keyData = ImmutableMap.of();
     private Map<NPCData.ConversationSet, ResourceLocation> dataKey = ImmutableMap.of();
 
     public NPCConversationManager() {
-        super(GSON, "conversations");
+        super(GSON, DIRECTORY);
     }
 
     public NPCData.ConversationSet get(ResourceLocation res, ConversationSet fallback) {

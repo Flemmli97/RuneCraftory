@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Dynamic;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.datapack.EntityProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
@@ -10,7 +11,6 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.ai.FollowOwnerGoalMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.HurtByTargetPredicate;
@@ -46,7 +46,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
-import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -230,7 +229,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     public BaseMonster(EntityType<? extends BaseMonster> type, Level level) {
         super(type, level);
         this.moveControl = new NewMoveController(this);
-        this.prop = MobConfig.propertiesMap.getOrDefault(PlatformUtils.INSTANCE.entities().getIDFrom(type), EntityProperties.defaultProp);
+        //Client will get default value. This is intentional
+        this.prop = DataPackHandler.SERVER_PACK.monsterPropertiesManager().getPropertiesFor(type);
         this.applyAttributes();
         if (!level.isClientSide)
             this.addGoal();
@@ -666,7 +666,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
 
     @Override
     public boolean canBeControlledByRider() {
-        return this.isTamed() && this.ridable() && this.getControllingPassenger() instanceof Player;
+        return this.isTamed() && this.rideable() && this.getControllingPassenger() instanceof Player;
     }
 
     @Override
@@ -847,8 +847,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     @Override
-    public boolean ridable() {
-        return this.prop.ridable;
+    public boolean rideable() {
+        return this.prop.rideable;
     }
 
     public boolean attackOtherTamedMobs() {
@@ -1574,7 +1574,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public boolean doStartRide(ServerPlayer player) {
-        if (this.ridable()) {
+        if (this.rideable()) {
             player.startRiding(this);
             return true;
         }

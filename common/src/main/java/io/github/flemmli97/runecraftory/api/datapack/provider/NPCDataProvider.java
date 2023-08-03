@@ -6,6 +6,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameAndGiftManager;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -50,7 +54,7 @@ public abstract class NPCDataProvider implements DataProvider {
         this.gifts.forEach((type, giftList) -> {
             JsonArray giftArr = new JsonArray();
             giftList.forEach(r -> giftArr.add(r.toString()));
-            Path path1 = this.gen.getOutputFolder().resolve("data/" + this.modid + "/names_and_gifts/" + type.name().toLowerCase(Locale.ROOT) + "_gifts.json");
+            Path path1 = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/" + type.name().toLowerCase(Locale.ROOT) + "_gifts.json");
             try {
                 DataProvider.save(GSON, cache, giftArr, path1);
             } catch (IOException e) {
@@ -59,7 +63,7 @@ public abstract class NPCDataProvider implements DataProvider {
         });
 
         this.data.forEach((res, val) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/npc_data/" + res.getPath() + ".json");
+            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + NPCDataManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
                 JsonElement obj = NPCData.CODEC.encodeStart(JsonOps.INSTANCE, val)
                         .getOrThrow(false, LOGGER::error);
@@ -69,7 +73,7 @@ public abstract class NPCDataProvider implements DataProvider {
             }
         });
         this.looks.forEach((res, val) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/npc_looks/" + res.getPath() + ".json");
+            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + NPCLookManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
                 JsonElement obj = NPCData.NPCLook.CODEC.encodeStart(JsonOps.INSTANCE, val)
                         .getOrThrow(false, LOGGER::error);
@@ -79,7 +83,7 @@ public abstract class NPCDataProvider implements DataProvider {
             }
         });
         this.conversations.forEach((res, val) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/conversations/" + res.getPath() + ".json");
+            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + NPCConversationManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
                 JsonElement obj = NPCData.ConversationSet.CODEC.encodeStart(JsonOps.INSTANCE, val)
                         .getOrThrow(false, LOGGER::error);

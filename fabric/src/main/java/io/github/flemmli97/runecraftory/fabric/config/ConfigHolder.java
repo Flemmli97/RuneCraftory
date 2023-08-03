@@ -3,12 +3,10 @@ package io.github.flemmli97.runecraftory.fabric.config;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.fabric.config.values.EntityPropertySpecs;
 import io.github.flemmli97.runecraftory.fabric.config.values.SkillPropertySpecs;
 import io.github.flemmli97.runecraftory.fabric.config.values.WeaponTypePropertySpecs;
 import io.github.flemmli97.tenshilib.common.config.CommentedJsonConfig;
 import io.github.flemmli97.tenshilib.common.config.JsonConfig;
-import net.minecraft.resources.ResourceLocation;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -126,10 +124,6 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         MobConfig.treasureChance = spec.treasureChance.get().floatValue();
         MobConfig.mimicChance = spec.mimicChance.get().floatValue();
         MobConfig.mimicStrongChance = spec.mimicStrongChance.get().floatValue();
-
-        for (Map.Entry<ResourceLocation, EntityPropertySpecs> e : spec.mobSpecs.entrySet()) {
-            MobConfig.propertiesMap.put(e.getKey(), EntityPropertySpecs.ofSpec(e.getValue()));
-        }
     }
 
     public void reloadConfig() {

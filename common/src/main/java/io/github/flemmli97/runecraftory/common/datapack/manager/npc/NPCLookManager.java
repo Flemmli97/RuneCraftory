@@ -20,6 +20,8 @@ import java.util.Random;
 
 public class NPCLookManager extends SimpleJsonResourceReloadListener {
 
+    public static final String DIRECTORY = "npc_looks";
+
     private static final Gson GSON = new GsonBuilder().create();
 
     private Map<ResourceLocation, NPCData.NPCLook> keyData = ImmutableMap.of();
@@ -27,7 +29,7 @@ public class NPCLookManager extends SimpleJsonResourceReloadListener {
     private List<NPCData.NPCLook> selectable = ImmutableList.of();
 
     public NPCLookManager() {
-        super(GSON, "npc_looks");
+        super(GSON, DIRECTORY);
     }
 
     public NPCData.NPCLook get(ResourceLocation res) {

@@ -59,43 +59,43 @@ public class CombatUtils {
     }
 
     public static Attribute opposing(Attribute att) {
-        if (att == ModAttributes.RF_PARA.get())
-            return ModAttributes.RF_RES_PARA.get();
-        if (att == ModAttributes.RF_POISON.get())
-            return ModAttributes.RF_RES_POISON.get();
-        if (att == ModAttributes.RF_SEAL.get())
-            return ModAttributes.RF_RES_SEAL.get();
-        if (att == ModAttributes.RF_SLEEP.get())
-            return ModAttributes.RF_RES_SLEEP.get();
-        if (att == ModAttributes.RF_FAT.get())
-            return ModAttributes.RF_RES_FAT.get();
-        if (att == ModAttributes.RF_COLD.get())
-            return ModAttributes.RF_RES_COLD.get();
-        if (att == ModAttributes.RF_DIZ.get())
-            return ModAttributes.RF_RES_DIZ.get();
-        if (att == ModAttributes.RF_CRIT.get())
-            return ModAttributes.RF_RES_CRIT.get();
-        if (att == ModAttributes.RF_STUN.get())
-            return ModAttributes.RF_RES_STUN.get();
-        if (att == ModAttributes.RF_FAINT.get())
-            return ModAttributes.RF_RES_FAINT.get();
-        if (att == ModAttributes.RF_DRAIN.get())
-            return ModAttributes.RF_RES_DRAIN.get();
+        if (att == ModAttributes.PARA.get())
+            return ModAttributes.RES_PARA.get();
+        if (att == ModAttributes.POISON.get())
+            return ModAttributes.RES_POISON.get();
+        if (att == ModAttributes.SEAL.get())
+            return ModAttributes.RES_SEAL.get();
+        if (att == ModAttributes.SLEEP.get())
+            return ModAttributes.RES_SLEEP.get();
+        if (att == ModAttributes.FATIGUE.get())
+            return ModAttributes.RES_FAT.get();
+        if (att == ModAttributes.COLD.get())
+            return ModAttributes.RES_COLD.get();
+        if (att == ModAttributes.DIZ.get())
+            return ModAttributes.RES_DIZZY.get();
+        if (att == ModAttributes.CRIT.get())
+            return ModAttributes.RES_CRIT.get();
+        if (att == ModAttributes.STUN.get())
+            return ModAttributes.RES_STUN.get();
+        if (att == ModAttributes.FAINT.get())
+            return ModAttributes.RES_FAINT.get();
+        if (att == ModAttributes.DRAIN.get())
+            return ModAttributes.RES_DRAIN.get();
         return null;
     }
 
     public static EnumSkills matchingSkill(Attribute att) {
-        if (att == ModAttributes.RF_PARA.get())
+        if (att == ModAttributes.PARA.get())
             return EnumSkills.RESPARA;
-        if (att == ModAttributes.RF_POISON.get())
+        if (att == ModAttributes.POISON.get())
             return EnumSkills.RESPOISON;
-        if (att == ModAttributes.RF_SEAL.get())
+        if (att == ModAttributes.SEAL.get())
             return EnumSkills.RESSEAL;
-        if (att == ModAttributes.RF_SLEEP.get())
+        if (att == ModAttributes.SLEEP.get())
             return EnumSkills.RESSLEEP;
-        if (att == ModAttributes.RF_FAT.get())
+        if (att == ModAttributes.FATIGUE.get())
             return EnumSkills.RESFAT;
-        if (att == ModAttributes.RF_COLD.get())
+        if (att == ModAttributes.COLD.get())
             return EnumSkills.RESCOLD;
         return null;
     }
@@ -140,25 +140,25 @@ public class CombatUtils {
             double percent = 0;
             switch (element) {
                 case DARK:
-                    percent = getAttributeValue(entity, ModAttributes.RF_RES_DARK.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_DARK.get());
                     break;
                 case EARTH:
-                    percent = getAttributeValue(entity, ModAttributes.RF_RES_EARTH.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_EARTH.get());
                     break;
                 case FIRE:
-                    percent = getAttributeValue(entity, ModAttributes.RF_RES_FIRE.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_FIRE.get());
                     break;
                 case LIGHT:
-                    percent = getAttributeValue(entity, ModAttributes.RF_RES_LIGHT.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_LIGHT.get());
                     break;
                 case LOVE:
-                    percent = getAttributeValue(entity, ModAttributes.RF_RES_LOVE.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_LOVE.get());
                     break;
                 case WATER:
-                    percent = getAttributeValue(entity, ModAttributes.RF_RES_WATER.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_WATER.get());
                     break;
                 case WIND:
-                    percent = getAttributeValue(entity, ModAttributes.RF_RES_WIND.get());
+                    percent = getAttributeValue(entity, ModAttributes.RES_WIND.get());
                     break;
                 case NONE:
                     break;
@@ -243,14 +243,14 @@ public class CombatUtils {
                 if (resetCooldown) {
                     player.getCooldowns().addCooldown(stack.getItem(), ItemNBT.cooldown(player, stack));
                 }
-                boolean faintChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.RF_FAINT.get(), target);
-                boolean critChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.RF_CRIT.get(), target);
+                boolean faintChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.FAINT.get(), target);
+                boolean critChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.CRIT.get(), target);
                 CustomDamage.DamageType damageType = CustomDamage.DamageType.NORMAL;
                 if (faintChance)
                     damageType = CustomDamage.DamageType.FAINT;
                 else if (critChance)
                     damageType = CustomDamage.DamageType.IGNOREDEF;
-                boolean knockBackChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.RF_KNOCK.get(), target);
+                boolean knockBackChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.KNOCK.get(), target);
                 int i = knockBackChance ? 1 : 0;
                 if (player.isSprinting()) {
                     player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_KNOCKBACK, player.getSoundSource(), 1.0f, 1.0f);
@@ -332,16 +332,16 @@ public class CombatUtils {
         // Setup some more things
         if (attacker instanceof LivingEntity livingAttacker) {
             builder.getAttributesChanges().forEach((att, val) -> CombatUtils.applyTempAttribute(livingAttacker, att, val));
-            if (allowFaint && livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.RF_FAINT.get(), target)) {
+            if (allowFaint && livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.FAINT.get(), target)) {
                 builder.damageType(CustomDamage.DamageType.FAINT);
-            } else if (allowCrit && livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.RF_CRIT.get(), target)) {
+            } else if (allowCrit && livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.CRIT.get(), target)) {
                 switch (builder.getDamageType()) {
                     case MAGIC -> builder.damageType(CustomDamage.DamageType.IGNOREMAGICDEF);
                     case NORMAL -> builder.damageType(CustomDamage.DamageType.IGNOREDEF);
                 }
             }
             if (builder.calculateKnockback()) {
-                boolean knockBackChance = livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.RF_KNOCK.get(), target);
+                boolean knockBackChance = livingAttacker.level.random.nextDouble() < statusEffectChance(livingAttacker, ModAttributes.KNOCK.get(), target);
                 int i = knockBackChance ? 2 : 1;
                 if (livingAttacker.isSprinting()) {
                     ++i;
@@ -419,14 +419,14 @@ public class CombatUtils {
 
     //TODO: Need to look more into stun and dizzy
     public static void applyStatusEffects(LivingEntity attackingEntity, LivingEntity target) {
-        boolean poisonChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RF_POISON.get(), target);
-        boolean sleepChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RF_SLEEP.get(), target);
-        boolean fatigueChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RF_FAT.get(), target);
-        boolean coldChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RF_COLD.get(), target);
-        boolean paraChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RF_PARA.get(), target);
-        boolean sealChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RF_SEAL.get(), target);
-        boolean dizzyChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RF_DIZ.get(), target);
-        boolean stunChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.RF_STUN.get(), target);
+        boolean poisonChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.POISON.get(), target);
+        boolean sleepChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.SLEEP.get(), target);
+        boolean fatigueChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.FATIGUE.get(), target);
+        boolean coldChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.COLD.get(), target);
+        boolean paraChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.PARA.get(), target);
+        boolean sealChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.SEAL.get(), target);
+        boolean dizzyChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.DIZ.get(), target);
+        boolean stunChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.STUN.get(), target);
         if (poisonChance) {
             target.addEffect(new MobEffectInstance(ModEffects.POISON.get(), 5));
             if (attackingEntity instanceof ServerPlayer player)

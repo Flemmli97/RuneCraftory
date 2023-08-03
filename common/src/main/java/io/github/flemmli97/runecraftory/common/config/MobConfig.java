@@ -1,11 +1,5 @@
 package io.github.flemmli97.runecraftory.common.config;
 
-import io.github.flemmli97.runecraftory.common.config.values.EntityProperties;
-import net.minecraft.resources.ResourceLocation;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class MobConfig {
 
     public static boolean disableNaturalSpawn = false;
@@ -44,8 +38,6 @@ public class MobConfig {
     public static double npcDefenceGain = 2;
     public static double npcMagicAttackGain = 2;
     public static double npcMagicDefenceGain = 2;
-
-    public static Map<ResourceLocation, EntityProperties> propertiesMap = new HashMap<>();
 
     public enum GateLevelType {
         CONSTANT,

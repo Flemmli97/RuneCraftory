@@ -39,7 +39,7 @@ public class NameAndGiftManager extends SimplePreparableReloadListener<Map<Resou
             new ResourceLocation(RuneCraftory.MODID, "surnames"),
             new ResourceLocation(RuneCraftory.MODID, "gifts"));
 
-    private static final String directory = "names_and_gifts";
+    public static final String DIRECTORY = "names_and_gifts";
 
     private List<String> surnames;
     private List<String> maleNames;
@@ -75,8 +75,8 @@ public class NameAndGiftManager extends SimplePreparableReloadListener<Map<Resou
     @Override
     protected Map<ResourceLocation, JsonArray> prepare(ResourceManager resourceManager, ProfilerFiller profiler) {
         HashMap<ResourceLocation, JsonArray> map = Maps.newHashMap();
-        int i = directory.length() + 1;
-        for (ResourceLocation fileRes : resourceManager.listResources(directory, string -> string.endsWith(".json"))) {
+        int i = DIRECTORY.length() + 1;
+        for (ResourceLocation fileRes : resourceManager.listResources(DIRECTORY, string -> string.endsWith(".json"))) {
             String path = fileRes.getPath();
             path = path.substring(i, path.length() - 5);
             if (path.equals("male_names") || path.equals("female_names") || path.equals("surnames") || path.endsWith("_gifts")) {

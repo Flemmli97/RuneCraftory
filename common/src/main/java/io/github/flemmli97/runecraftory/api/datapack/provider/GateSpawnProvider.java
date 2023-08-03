@@ -7,6 +7,7 @@ import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.GateSpawnData;
 import io.github.flemmli97.runecraftory.api.datapack.GsonInstances;
+import io.github.flemmli97.runecraftory.common.datapack.manager.GateSpawnsManager;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -41,7 +42,7 @@ public abstract class GateSpawnProvider implements DataProvider {
     public void run(HashCache cache) {
         this.add();
         this.data.forEach((res, spawnData) -> {
-            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/gate_spawning/" + res.getPath() + ".json");
+            Path path = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + GateSpawnsManager.DIRECTORY + "/" + res.getPath() + ".json");
             try {
                 JsonElement obj = GateSpawnData.CODEC.encodeStart(JsonOps.INSTANCE, spawnData)
                         .getOrThrow(false, RuneCraftory.logger::error);
