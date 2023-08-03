@@ -1,7 +1,7 @@
 {
   "minLevel": 1,
   "xp": 950,
-  "money": 100,
+  "money": 150,
   "tamingChance": 0.005,
   "rideable": true,
   "flying": false,
@@ -9,8 +9,9 @@
   "needsRoof": true,
   "baseValues": {
     "runecraftory:res_drain": 10.0,
-    "minecraft:generic.attack_damage": 18.0,
+    "minecraft:generic.attack_damage": 18.2,
     "runecraftory:res_dizzy": 60.0,
+    "runecraftory:res_water": 15.0,
     "runecraftory:res_fire": -15.0,
     "runecraftory:res_seal": 97.0,
     "runecraftory:res_crit": 25.0,
@@ -18,6 +19,7 @@
     "runecraftory:res_stun": 50.0,
     "runecraftory:res_paralysis": 85.0,
     "runecraftory:res_sleep": 100.0,
+    "runecraftory:res_earth": 15.0,
     "runecraftory:magic_defence": 3.9,
     "runecraftory:res_poison": 97.0,
     "runecraftory:magic_attack": 13.3,
@@ -25,10 +27,10 @@
     "runecraftory:defence": 5.0
   },
   "levelGains": {
-    "minecraft:generic.attack_damage": 3.3,
-    "minecraft:generic.max_health": 30.5,
-    "runecraftory:magic_defence": 2.3,
-    "runecraftory:magic_attack": 3.3,
-    "runecraftory:defence": 2.3
+    "minecraft:generic.attack_damage": 250.0,
+    "minecraft:generic.max_health": 233.0,
+    "runecraftory:magic_defence": 215.0,
+    "runecraftory:magic_attack": 230.0,
+    "runecraftory:defence": 220.0
   }
 }

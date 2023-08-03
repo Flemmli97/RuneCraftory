@@ -24,7 +24,7 @@ public class RafflesiaBreathSummoner extends ProjectileSummonHelperEntity {
         super(ModEntities.RAFFLESIA_BREATH_SUMMONER.get(), level, caster);
         this.type = element;
         this.entityData.set(TYPE, this.type.ordinal());
-        this.damageMultiplier = 0.8f;
+        this.damageMultiplier = 0.7f;
         this.maxLivingTicks = 27;
     }
 

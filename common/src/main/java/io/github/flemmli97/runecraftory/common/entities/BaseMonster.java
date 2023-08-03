@@ -232,8 +232,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         //Client will get default value. This is intentional
         this.prop = DataPackHandler.SERVER_PACK.monsterPropertiesManager().getPropertiesFor(type);
         this.applyAttributes();
-        if (!level.isClientSide)
+        if (!level.isClientSide) {
             this.addGoal();
+        }
     }
 
     public static AttributeSupplier.Builder createAttributes(Collection<? extends RegistryEntrySupplier<Attribute>> atts) {

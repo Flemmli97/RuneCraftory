@@ -9,16 +9,21 @@
   "needsRoof": true,
   "baseValues": {
     "minecraft:generic.attack_damage": 14.0,
+    "runecraftory:res_love": -10.0,
+    "runecraftory:crit": 1.0,
+    "runecraftory:res_crit": 5.0,
+    "runecraftory:res_earth": 15.0,
     "minecraft:generic.max_health": 70.0,
     "runecraftory:magic_defence": 8.0,
     "runecraftory:magic_attack": 13.0,
-    "runecraftory:defence": 8.0
+    "runecraftory:defence": 8.0,
+    "runecraftory:dizzy": 3.0
   },
   "levelGains": {
-    "minecraft:generic.attack_damage": 1.3,
-    "minecraft:generic.max_health": 10.0,
-    "runecraftory:magic_defence": 1.2,
-    "runecraftory:magic_attack": 1.3,
-    "runecraftory:defence": 1.2
+    "minecraft:generic.attack_damage": 130.0,
+    "minecraft:generic.max_health": 105.0,
+    "runecraftory:magic_defence": 120.0,
+    "runecraftory:magic_attack": 130.0,
+    "runecraftory:defence": 120.0
   }
 }

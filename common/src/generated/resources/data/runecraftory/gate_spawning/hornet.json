@@ -1,7 +1,7 @@
 {
   "entity": "runecraftory:hornet",
   "min_distance_from_spawn": 0,
-  "min_gate_level": 5,
+  "min_gate_level": 6,
   "biomes": {
     "c:is_plains": 30,
     "minecraft:is_forest": 30
