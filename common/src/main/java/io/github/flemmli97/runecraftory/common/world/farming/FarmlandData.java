@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Chunk independent farmland data
  */
 public class FarmlandData {
 
