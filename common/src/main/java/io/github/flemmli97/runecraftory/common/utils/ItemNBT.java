@@ -252,6 +252,10 @@ public class ItemNBT {
             tag.putBoolean(LibNBT.DRAGON_SCALE, true);
         if (crafting && stackToAdd.getItem() == ModItems.lightOre.get() && !tag.contains(LibNBT.ORIGINITEM))
             tag.putBoolean(LibNBT.LIGHTORETAG, true);
+        if (stackToAdd.getItem() == ModItems.glittaAugite.get())
+            tag.putBoolean(LibNBT.GLITTA_AUGITE, true);
+        if (stackToAdd.getItem() == ModItems.raccoonLeaf.get())
+            tag.putBoolean(LibNBT.RACCOON_LEAF, true);
 
         ItemStat stat = DataPackHandler.SERVER_PACK.itemStatManager().get(stackToAdd.getItem()).orElse(null);
         if (stat != null) {
@@ -260,6 +264,12 @@ public class ItemNBT {
                 if (base != null) {
                     CompoundTag statsTag = new CompoundTag();
                     for (Map.Entry<Attribute, Double> entry : base.itemStats().entrySet()) {
+                        if (entry.getKey() == ModAttributes.ATTACK_RANGE.get()) {
+                            if (stackToAdd.getItem() == ModItems.raccoonLeaf.get() && tag.getBoolean(LibNBT.RACCOON_LEAF))
+                                continue;
+                            if (stackToAdd.getItem() == ModItems.glittaAugite.get() && tag.getBoolean(LibNBT.GLITTA_AUGITE))
+                                continue;
+                        }
                         statsTag.putDouble(PlatformUtils.INSTANCE.attributes().getIDFrom(entry.getKey()).toString(), entry.getValue());
                     }
                     tag.put(LibNBT.BASE, statsTag);
