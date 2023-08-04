@@ -957,36 +957,39 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.DRAIN.get(), 3)
                 .addMonsterStat(ModAttributes.DRAIN.get(), 0.5)
                 .setElement(EnumElement.LOVE));
-        this.addStat(ModItems.crystalSmall.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.crystalBig.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.crystalSmall.get(), 0, 0, 0);
+        this.addStat(ModItems.crystalBig.get(), 0, 0, 0);
         this.addStat(ModItems.crystalMagic.get(), new ItemStat.Builder(45, 400, 25)
                 .addAttribute(ModAttributes.MAGIC.get(), 7)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1));
-        this.addStat(ModItems.crystalRune.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.crystalElectro.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.crystalRune.get(), 0, 0, 0);
+        this.addStat(ModItems.crystalElectro.get(), 0, 0, 0);
 
         this.addStat(ModItems.stickThick.get(), new ItemStat.Builder(1900, 200, 45)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 15));
         this.addStat(ModItems.hornInsect.get(), new ItemStat.Builder(130, 21, 8)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
-        this.addStat(ModItems.hornRigid.get(), new ItemStat.Builder(0, 0, 0)
+        this.addStat(ModItems.hornRigid.get(), new ItemStat.Builder(200, 44, 11)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 10)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
-        this.addStat(ModItems.plantStem.get(), new ItemStat.Builder(0, 0, 0)
+        this.addStat(ModItems.plantStem.get(), new ItemStat.Builder(300, 52, 17)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 3)
                 .addAttribute(ModAttributes.MAGIC.get(), 3)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.4));
-        this.addStat(ModItems.hornBull.get(), new ItemStat.Builder(0, 0, 0)
+        this.addStat(ModItems.hornBull.get(), new ItemStat.Builder(450, 64, 26)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 8)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.7));
-        this.addStat(ModItems.hornDevil.get(), new ItemStat.Builder(0, 0, 0)
+        this.addStat(ModItems.hornDevil.get(), new ItemStat.Builder(850, 91, 43)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 30)
                 .addAttribute(ModAttributes.MAGIC.get(), 30)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .addMonsterStat(ModAttributes.MAGIC.get(), 1));
-        this.addStat(ModItems.movingBranch.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.movingBranch.get(), new ItemStat.Builder(22000, 2300, 77)
+                .addAttribute(Attributes.ATTACK_DAMAGE, -10)
+                .addAttribute(ModAttributes.MAGIC.get(), 150)
+                .setSpell(ModSpells.APPLE_RAIN.get(), null, ModSpells.APPLE_SHIELD.get()));
 
         this.addStat(ModItems.glue.get(), new ItemStat.Builder(380, 41, 13)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
@@ -994,16 +997,16 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 1)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.3)
                 .addMonsterStat(ModAttributes.MAGIC.get(), 0.3));
-        this.addStat(ModItems.devilBlood.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.paraPoison.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.poisonKing.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.devilBlood.get(), 0, 0, 0);
+        this.addStat(ModItems.paraPoison.get(), 0, 0, 0);
+        this.addStat(ModItems.poisonKing.get(), 0, 0, 0);
 
-        this.addStat(ModItems.featherBlack.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.featherThunder.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.featherBlack.get(), 0, 0, 0);
+        this.addStat(ModItems.featherThunder.get(), 0, 0, 0);
         this.addStat(ModItems.featherYellow.get(), new ItemStat.Builder(500, 20, 15)
                 .addAttribute(ModAttributes.MAGIC.get(), 13)
                 .addMonsterStat(ModAttributes.MAGIC.get(), 0.7));
-        this.addStat(ModItems.dragonFin.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.dragonFin.get(), 0, 0, 0);
 
         this.addStat(ModItems.turtleShell.get(), new ItemStat.Builder(160, 30, 16)
                 .addAttribute(ModAttributes.DEFENCE.get(), 5)
@@ -1020,16 +1023,20 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.COLD.get(), 5)
                 .addMonsterStat(ModAttributes.MAGIC.get(), 1)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.3));
-        this.addStat(ModItems.dragonBones.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.tortoiseShell.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.dragonBones.get(), new ItemStat.Builder(0, 0, 52)
+                .addAttribute(ModAttributes.DEFENCE.get(), 13)
+                .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 13)
+                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.5)
+                .setSpell(null, ModSpells.BONE_NEEDLES.get(), ModSpells.ENERGY_ORB_SPELL.get()));
+        this.addStat(ModItems.tortoiseShell.get(), 0, 0, 0);
 
-        this.addStat(ModItems.rock.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.stoneRound.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.stoneTiny.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.stoneGolem.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.tabletGolem.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.stoneSpirit.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.tabletTruth.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.rock.get(), 0, 0, 0);
+        this.addStat(ModItems.stoneRound.get(), 0, 0, 0);
+        this.addStat(ModItems.stoneTiny.get(), 0, 0, 0);
+        this.addStat(ModItems.stoneGolem.get(), 0, 0, 0);
+        this.addStat(ModItems.tabletGolem.get(), 0, 0, 0);
+        this.addStat(ModItems.stoneSpirit.get(), 0, 0, 0);
+        this.addStat(ModItems.tabletTruth.get(), 0, 0, 0);
 
         this.addStat(ModItems.yarn.get(), new ItemStat.Builder(400, 75, 0)
                 .addAttribute(ModAttributes.DEFENCE.get(), 3)
@@ -1060,11 +1067,25 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.SEAL.get(), 0.5)
                 .addMonsterStat(ModAttributes.PARA.get(), 0.3)
                 .setSpell(ModSpells.DARKBEAM.get(), ModSpells.PLATE.get(), ModSpells.DARKBULLETS.get()));
-        this.addStat(ModItems.vine.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.tailScorpion.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.strongVine.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.threadPretty.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.tailChimera.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.vine.get(), new ItemStat.Builder(515, 58, 34)
+                .addAttribute(ModAttributes.MAGIC.get(), 10)
+                .addAttribute(ModAttributes.SEAL.get(), 5)
+                .addMonsterStat(ModAttributes.SEAL.get(), 0.33));
+        this.addStat(ModItems.tailScorpion.get(), new ItemStat.Builder(610, 62, 31)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 5)
+                .addAttribute(ModAttributes.POISON.get(), 2)
+                .addMonsterStat(ModAttributes.POISON.get(), 0.35));
+        this.addStat(ModItems.strongVine.get(), 0, 0, 0);
+        this.addStat(ModItems.threadPretty.get(), 0, 0, 0);
+        this.addStat(ModItems.tailChimera.get(), new ItemStat.Builder(20000, 2600, 87)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 150)
+                .addAttribute(ModAttributes.MAGIC.get(), -10)
+                .addAttribute(ModAttributes.POISON.get(), 50)
+                .addAttribute(ModAttributes.PARA.get(), 50)
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
+                .addMonsterStat(ModAttributes.POISON.get(), 1)
+                .addMonsterStat(ModAttributes.PARA.get(), 1)
+                .setSpell(null, ModSpells.BUBBLE_BEAM.get(), ModSpells.FIREBALL_BARRAGE.get()));
 
         this.addStat(ModItems.arrowHead.get(), new ItemStat.Builder(80, 10, 2)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
@@ -1100,17 +1121,17 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.RES_SLEEP.get(), 0.5)
                 .addMonsterStat(ModAttributes.RES_FAT.get(), 0.5)
                 .addMonsterStat(ModAttributes.RES_COLD.get(), 0.5));
-        this.addStat(ModItems.bladeGlistening.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.greatHammerShard.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.hammerPiece.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.shoulderPiece.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.piratesArmor.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.screwRusty.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.screwShiny.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.rockShardLeft.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.rockShardRight.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.MTGUPlate.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.brokenIceWall.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.bladeGlistening.get(), 0, 0, 0);
+        this.addStat(ModItems.greatHammerShard.get(), 0, 0, 0);
+        this.addStat(ModItems.hammerPiece.get(), 0, 0, 0);
+        this.addStat(ModItems.shoulderPiece.get(), 0, 0, 0);
+        this.addStat(ModItems.piratesArmor.get(), 0, 0, 0);
+        this.addStat(ModItems.screwRusty.get(), 0, 0, 0);
+        this.addStat(ModItems.screwShiny.get(), 0, 0, 0);
+        this.addStat(ModItems.rockShardLeft.get(), 0, 0, 0);
+        this.addStat(ModItems.rockShardRight.get(), 0, 0, 0);
+        this.addStat(ModItems.MTGUPlate.get(), 0, 0, 0);
+        this.addStat(ModItems.brokenIceWall.get(), 0, 0, 0);
 
         this.addStat(ModItems.furSmall.get(), new ItemStat.Builder(35, 7, 1)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
@@ -1160,9 +1181,9 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 17)
                 .addMonsterStat(ModAttributes.RES_DIZZY.get(), 1)
                 .setSpell(ModSpells.LASER3.get(), ModSpells.LASER5.get(), ModSpells.BIGLIGHTNING.get()));
-        this.addStat(ModItems.furRedLion.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.furBlueLion.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.chestHair.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.furRedLion.get(), 0, 0, 0);
+        this.addStat(ModItems.furBlueLion.get(), 0, 0, 0);
+        this.addStat(ModItems.chestHair.get(), 0, 0, 0);
 
         this.addStat(ModItems.spore.get(), new ItemStat.Builder(110, 19, 9)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
@@ -1174,20 +1195,22 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.MAGIC.get(), 0.3)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.3)
                 .addMonsterStat(ModAttributes.POISON.get(), 0.5));
-        this.addStat(ModItems.sporeHoly.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.sporeHoly.get(), 0, 0, 0);
         this.addStat(ModItems.fairyDust.get(), new ItemStat.Builder(300, 40, 19)
-                .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 5)
-                .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.33));
-        this.addStat(ModItems.fairyElixir.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.root.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.powderMagic.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.powderMysterious.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.magic.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.ashEarth.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.ashFire.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.ashWater.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.turnipsMiracle.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.melodyBottle.get(), new ItemStat.Builder(0, 0, 0));
+                .addAttribute(ModAttributes.MAGIC.get(), 5)
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.33));
+        this.addStat(ModItems.fairyElixir.get(), 0, 0, 0);
+        this.addStat(ModItems.root.get(), new ItemStat.Builder(770, 68, 25)
+                .addAttribute(ModAttributes.MAGIC.get(), 8)
+                .addMonsterStat(ModAttributes.MAGIC.get(), 0.4));
+        this.addStat(ModItems.powderMagic.get(), 0, 0, 0);
+        this.addStat(ModItems.powderMysterious.get(), 0, 0, 0);
+        this.addStat(ModItems.magic.get(), 0, 0, 0);
+        this.addStat(ModItems.ashEarth.get(), 0, 0, 0);
+        this.addStat(ModItems.ashFire.get(), 0, 0, 0);
+        this.addStat(ModItems.ashWater.get(), 0, 0, 0);
+        this.addStat(ModItems.turnipsMiracle.get(), 0, 0, 0);
+        this.addStat(ModItems.melodyBottle.get(), 0, 0, 0);
 
         this.addStat(ModItems.clothCheap.get(), new ItemStat.Builder(80, 12, 4)
                 .addAttribute(ModAttributes.DEFENCE.get(), 1)
@@ -1197,15 +1220,19 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.DEFENCE.get(), 5)
                 .addAttribute(ModAttributes.RES_CRIT.get(), 5)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.3));
-        this.addStat(ModItems.clothQualityWorn.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.clothSilk.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.clothQualityWorn.get(), 0, 0, 0);
+        this.addStat(ModItems.clothSilk.get(), 0, 0, 0);
         this.addStat(ModItems.ghostHood.get(), new ItemStat.Builder(70, 650, 21)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.RES_SEAL.get(), 25)
                 .addMonsterStat(ModAttributes.RES_SEAL.get(), 0.5));
-        this.addStat(ModItems.gloveGiant.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.gloveBlueGiant.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.gloveGiant.get(), new ItemStat.Builder(810, 76, 36)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 5)
+                .addAttribute(ModAttributes.DEFENCE.get(), 10)
+                .addAttribute(ModAttributes.RES_CRIT.get(), 5)
+                .addMonsterStat(ModAttributes.RES_CRIT.get(), 0.5));
+        this.addStat(ModItems.gloveBlueGiant.get(), 0, 0, 0);
         this.addStat(ModItems.carapaceInsect.get(), new ItemStat.Builder(75, 11, 8)
                 .addAttribute(ModAttributes.DEFENCE.get(), 2)
                 .addAttribute(ModAttributes.RES_POISON.get(), 15)
@@ -1215,7 +1242,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.RES_SEAL.get(), 5)
                 .addAttribute(ModAttributes.RES_PARA.get(), 20)
                 .addMonsterStat(ModAttributes.RES_PARA.get(), 0.5));
-        this.addStat(ModItems.clothAncientOrc.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.clothAncientOrc.get(), 0, 0, 0);
 
         this.addStat(ModItems.jawInsect.get(), new ItemStat.Builder(100, 23, 14)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
@@ -1223,48 +1250,74 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.clawPanther.get(), new ItemStat.Builder(450, 55, 28)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 4)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.5));
-        this.addStat(ModItems.clawMagic.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.fangWolf.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.fangGoldWolf.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.clawPalm.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.clawMalm.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.giantsNail.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.clawChimera.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.tuskIvory.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.tuskUnbrokenIvory.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.scorpionPincer.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.dangerousScissors.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.propellorCheap.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.propellorQuality.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.fangDragon.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.jawQueen.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.windDragonTooth.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.giantsNailBig.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.clawMagic.get(), 0, 0, 0);
+        this.addStat(ModItems.fangWolf.get(), new ItemStat.Builder(470, 60, 31)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 6)
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.6));
+        this.addStat(ModItems.fangGoldWolf.get(), 0, 0, 0);
+        this.addStat(ModItems.clawPalm.get(), new ItemStat.Builder(640, 74, 37)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 9)
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.8));
+        this.addStat(ModItems.clawMalm.get(), 0, 0, 0);
+        this.addStat(ModItems.giantsNail.get(), new ItemStat.Builder(980, 103, 44)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 11)
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 0.6));
+        this.addStat(ModItems.clawChimera.get(), new ItemStat.Builder(18000, 1500, 50)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 15)
+                .addAttribute(ModAttributes.MAGIC.get(), 2)
+                .addAttribute(ModAttributes.POISON.get(), 5)
+                .addAttribute(ModAttributes.PARA.get(), 5)
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 2)
+                .addMonsterStat(ModAttributes.POISON.get(), 1)
+                .addMonsterStat(ModAttributes.PARA.get(), 1));
+        this.addStat(ModItems.tuskIvory.get(), 0, 0, 0);
+        this.addStat(ModItems.tuskUnbrokenIvory.get(), 0, 0, 0);
+        this.addStat(ModItems.scorpionPincer.get(), new ItemStat.Builder(1470, 138, 55)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 20)
+                .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
+        this.addStat(ModItems.dangerousScissors.get(), 0, 0, 0);
+        this.addStat(ModItems.propellorCheap.get(), 0, 0, 0);
+        this.addStat(ModItems.propellorQuality.get(), 0, 0, 0);
+        this.addStat(ModItems.fangDragon.get(), 0, 0, 0);
+        this.addStat(ModItems.jawQueen.get(), 0, 0, 0);
+        this.addStat(ModItems.windDragonTooth.get(), 0, 0, 0);
+        this.addStat(ModItems.giantsNailBig.get(), 0, 0, 0);
 
-        this.addStat(ModItems.scaleWet.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.scaleGrimoire.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.scaleDragon.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.scaleCrimson.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.scaleBlue.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.scaleGlitter.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.scaleLove.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.scaleBlack.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.scaleFire.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.scaleEarth.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.scaleLegend.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.scaleWet.get(), 0, 0, 0);
+        this.addStat(ModItems.scaleGrimoire.get(), 0, 0, 0);
+        this.addStat(ModItems.scaleDragon.get(), 0, 0, 0);
+        this.addStat(ModItems.scaleCrimson.get(), 0, 0, 0);
+        this.addStat(ModItems.scaleBlue.get(), 0, 0, 0);
+        this.addStat(ModItems.scaleGlitter.get(), 0, 0, 0);
+        this.addStat(ModItems.scaleLove.get(), 0, 0, 0);
+        this.addStat(ModItems.scaleBlack.get(), 0, 0, 0);
+        this.addStat(ModItems.scaleFire.get(), 0, 0, 0);
+        this.addStat(ModItems.scaleEarth.get(), 0, 0, 0);
+        this.addStat(ModItems.scaleLegend.get(), 0, 0, 0);
 
-        this.addStat(ModItems.steelDouble.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.steelTen.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.glittaAugite.get(), new ItemStat.Builder(0, 0, 0)
+        this.addStat(ModItems.steelDouble.get(), new ItemStat.Builder(0, 200, 50));
+        this.addStat(ModItems.steelTen.get(), new ItemStat.Builder(0, 2000, 95));
+        this.addStat(ModItems.glittaAugite.get(), new ItemStat.Builder(0, 1200, 0)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), 1));
         this.addStat(ModItems.invisStone.get(), new ItemStat.Builder(0, 750, 24));
-        this.addStat(ModItems.lightOre.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.runeSphereShard.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.shadeStone.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.raccoonLeaf.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.icyNose.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.bigBirdsComb.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.rafflesiaPetal.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.lightOre.get(), new ItemStat.Builder(0, 7500, 0));
+        this.addStat(ModItems.runeSphereShard.get(), 0, 0, 0);
+        this.addStat(ModItems.shadeStone.get(), 0, 0, 0);
+        this.addStat(ModItems.raccoonLeaf.get(), new ItemStat.Builder(25000, 2100, 60)
+                .addAttribute(ModAttributes.MAGIC.get(), 35)
+                .addAttribute(ModAttributes.ATTACK_RANGE.get(), 1)
+                .setSpell(ModSpells.BIG_LEAF_SPELL.get(), ModSpells.SMALL_LEAF_SPELL_X5.get(), null));
+        this.addStat(ModItems.icyNose.get(), 0, 0, 0);
+        this.addStat(ModItems.bigBirdsComb.get(), 0, 0, 0);
+        this.addStat(ModItems.rafflesiaPetal.get(), new ItemStat.Builder(30000, 3400, 55)
+                .addAttribute(Attributes.ATTACK_DAMAGE, 5)
+                .addAttribute(ModAttributes.MAGIC.get(), 18)
+                .addAttribute(ModAttributes.FATIGUE.get(), 20)
+                .addAttribute(ModAttributes.COLD.get(), 15)
+                .addMonsterStat(ModAttributes.MAGIC.get(), 1)
+                .addMonsterStat(ModAttributes.FATIGUE.get(), 1)
+                .addMonsterStat(ModAttributes.COLD.get(), 1)
+                .setSpell(ModSpells.WIND_CIRCLE_X8.get(), ModSpells.RAFFLESIA_CIRCLE.get(), ModSpells.RAFFLESIA_POISON.get()));
         this.addStat(ModItems.cursedDoll.get(), new ItemStat.Builder(750, 27000, 39)
                 .addAttribute(ModAttributes.DEFENCE.get(), 4)
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 7)
@@ -1275,14 +1328,14 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.RES_PARA.get(), 1)
                 .addMonsterStat(ModAttributes.RES_DRAIN.get(), 1)
                 .setSpell(ModSpells.CARDTHROW.get(), ModSpells.PLUSHTHROW.get(), ModSpells.FURNITURE.get()));
-        this.addStat(ModItems.warriorsProof.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.proofOfRank.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.throneOfEmpire.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.whiteStone.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.rareCan.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.can.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.boots.get(), new ItemStat.Builder(0, 0, 0));
-        this.addStat(ModItems.lawn.get(), new ItemStat.Builder(0, 0, 0));
+        this.addStat(ModItems.warriorsProof.get(), 0, 0, 0);
+        this.addStat(ModItems.proofOfRank.get(), 0, 0, 0);
+        this.addStat(ModItems.throneOfEmpire.get(), 0, 0, 0);
+        this.addStat(ModItems.whiteStone.get(), 0, 0, 0);
+        this.addStat(ModItems.rareCan.get(), 0, 0, 0);
+        this.addStat(ModItems.can.get(), 0, 0, 0);
+        this.addStat(ModItems.boots.get(), 0, 0, 0);
+        this.addStat(ModItems.lawn.get(), 0, 0, 0);
 
         this.addStat(ModItems.fireBallSmall.get(), new ItemStat.Builder(2400, 120, 0));
         this.addStat(ModItems.fireBallBig.get(), new ItemStat.Builder(4800, 240, 0));
@@ -1332,22 +1385,206 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.cookingBread.get(), 600, 100, 1);
         this.addStat(ModItems.chemistryBread.get(), 600, 100, 1);
         this.addStat(ModItems.armorBread.get(), 600, 100, 1);
+
+        this.addStat(ModItems.riceFlour.get(), 0, 0, 0);
+        this.addStat(ModItems.curryPowder.get(), 0, 0, 0);
+        this.addStat(ModItems.oil.get(), 500, 100, 0);
+        this.addStat(ModItems.flour.get(), 0, 0, 0);
+        this.addStat(ModItems.honey.get(), 0, 0, 0);
+        this.addStat(ModItems.yogurt.get(), 0, 0, 0);
+        this.addStat(ModItems.cheese.get(), 0, 0, 0);
+        this.addStat(ModItems.mayonnaise.get(), 0, 0, 0);
         this.addStat(ModItems.eggS.get(), 1250, 250, 1);
         this.addStat(ModItems.eggM.get(), 1500, 300, 1);
         this.addStat(ModItems.eggL.get(), 1700, 400, 1);
         this.addStat(ModItems.milkS.get(), 1250, 250, 1);
         this.addStat(ModItems.milkM.get(), 1500, 300, 1);
         this.addStat(ModItems.milkL.get(), 1700, 400, 1);
+        this.addStat(ModItems.wine.get(), 0, 0, 0);
+        this.addStat(ModItems.chocolate.get(), 0, 0, 0);
+        this.addStat(ModItems.rice.get(), 0, 0, 0);
 
-        this.addStat(ModItems.onigiri.get(), 150, 50, 1);
-        this.addStat(ModItems.pickledTurnip.get(), 300, 45, 1);
-        this.addStat(ModItems.flan.get(), 2700, 800, 1);
-        this.addStat(ModItems.hotMilk.get(), 800, 300, 1);
-        this.addStat(ModItems.hotChocolate.get(), 1000, 200, 1);
-        this.addStat(ModItems.bakedApple.get(), 1700, 200, 1);
-        this.addStat(ModItems.friedVeggies.get(), 5500, 1300, 1);
+        this.addStat(ModItems.turnipHeaven.get(), 0, 0, 0);
+        this.addStat(ModItems.pickleMix.get(), 0, 0, 0);
+        this.addStat(ModItems.salmonOnigiri.get(), 0, 0, 0);
+        this.addStat(ModItems.bread.get(), 0, 0, 0);
+        this.addStat(ModItems.onigiri.get(), 150, 50, 0);
+        this.addStat(ModItems.relaxTeaLeaves.get(), 0, 0, 0);
+        this.addStat(ModItems.iceCream.get(), 0, 0, 0);
+        this.addStat(ModItems.raisinBread.get(), 0, 0, 0);
+        this.addStat(ModItems.bambooRice.get(), 0, 0, 0);
+        this.addStat(ModItems.pickles.get(), 0, 0, 0);
+        this.addStat(ModItems.pickledTurnip.get(), 300, 45, 0);
+        this.addStat(ModItems.fruitSandwich.get(), 0, 0, 0);
+        this.addStat(ModItems.sandwich.get(), 0, 0, 0);
+        this.addStat(ModItems.salad.get(), 0, 0, 0);
+
+        this.addStat(ModItems.dumplings.get(), 0, 0, 0);
+        this.addStat(ModItems.pumpkinFlan.get(), 0, 0, 0);
+        this.addStat(ModItems.flan.get(), 2700, 800, 0);
+        this.addStat(ModItems.chocolateSponge.get(), 0, 0, 0);
+        this.addStat(ModItems.poundCake.get(), 0, 0, 0);
+        this.addStat(ModItems.steamedGyoza.get(), 0, 0, 0);
+        this.addStat(ModItems.curryManju.get(), 0, 0, 0);
+        this.addStat(ModItems.chineseManju.get(), 0, 0, 0);
+        this.addStat(ModItems.meatDumpling.get(), 0, 0, 0);
+        this.addStat(ModItems.cheeseBread.get(), 0, 0, 0);
+        this.addStat(ModItems.steamedBread.get(), 0, 0, 0);
+
+        this.addStat(ModItems.hotJuice.get(), 0, 0, 0);
+        this.addStat(ModItems.preludetoLove.get(), 0, 0, 0);
+        this.addStat(ModItems.goldJuice.get(), 0, 0, 0);
+        this.addStat(ModItems.butter.get(), 0, 0, 0);
+        this.addStat(ModItems.ketchup.get(), 0, 0, 0);
+        this.addStat(ModItems.mixedSmoothie.get(), 0, 0, 0);
+        this.addStat(ModItems.mixedJuice.get(), 0, 0, 0);
+        this.addStat(ModItems.veggieSmoothie.get(), 0, 0, 0);
+        this.addStat(ModItems.vegetableJuice.get(), 0, 0, 0);
+        this.addStat(ModItems.fruitSmoothie.get(), 0, 0, 0);
+        this.addStat(ModItems.fruitJuice.get(), 0, 0, 0);
+        this.addStat(ModItems.strawberryMilk.get(), 0, 0, 0);
+        this.addStat(ModItems.appleJuice.get(), 0, 0, 0);
+        this.addStat(ModItems.orangeJuice.get(), 0, 0, 0);
+        this.addStat(ModItems.grapeJuice.get(), 1200, 130, 0);
+        this.addStat(ModItems.tomatoJuice.get(), 0, 0, 0);
+        this.addStat(ModItems.pineappleJuice.get(), 0, 0, 0);
+
+        this.addStat(ModItems.applePie.get(), 0, 0, 0);
+        this.addStat(ModItems.cheesecake.get(), 0, 0, 0);
+        this.addStat(ModItems.chocolateCake.get(), 0, 0, 0);
+        this.addStat(ModItems.cake.get(), 0, 0, 0);
+        this.addStat(ModItems.chocoCookie.get(), 0, 0, 0);
+        this.addStat(ModItems.cookie.get(), 0, 0, 0);
+        this.addStat(ModItems.yamoftheAges.get(), 0, 0, 0);
+        this.addStat(ModItems.seafoodGratin.get(), 0, 0, 0);
+        this.addStat(ModItems.gratin.get(), 0, 0, 0);
+        this.addStat(ModItems.seafoodDoria.get(), 0, 0, 0);
+        this.addStat(ModItems.doria.get(), 0, 0, 0);
+        this.addStat(ModItems.seafoodPizza.get(), 0, 0, 0);
+        this.addStat(ModItems.pizza.get(), 0, 0, 0);
+        this.addStat(ModItems.butterRoll.get(), 0, 0, 0);
+        this.addStat(ModItems.jamRoll.get(), 0, 0, 0);
+        this.addStat(ModItems.toast.get(), 0, 0, 0);
+        this.addStat(ModItems.sweetPotato.get(), 0, 0, 0);
+        this.addStat(ModItems.bakedOnigiri.get(), 0, 0, 0);
+        this.addStat(ModItems.cornOnTheCob.get(), 0, 0, 0);
+
+        this.addStat(ModItems.rockfishStew.get(), 0, 0, 0);
+        this.addStat(ModItems.unionStew.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledMiso.get(), 0, 0, 0);
+        this.addStat(ModItems.relaxTea.get(), 0, 0, 0);
+        this.addStat(ModItems.royalCurry.get(), 0, 0, 0);
+        this.addStat(ModItems.ultimateCurry.get(), 0, 0, 0);
+        this.addStat(ModItems.curryRice.get(), 0, 0, 0);
+        this.addStat(ModItems.eggBowl.get(), 0, 0, 0);
+        this.addStat(ModItems.tempuraBowl.get(), 0, 0, 0);
+        this.addStat(ModItems.milkPorridge.get(), 0, 0, 0);
+        this.addStat(ModItems.ricePorridge.get(), 0, 0, 0);
+        this.addStat(ModItems.tempuraUdon.get(), 30000, 3500, 0);
+        this.addStat(ModItems.curryUdon.get(), 40000, 5000, 0);
+        this.addStat(ModItems.udon.get(), 860, 140, 0);
+        this.addStat(ModItems.cheeseFondue.get(), 0, 0, 0);
+        this.addStat(ModItems.marmalade.get(), 0, 0, 0);
+        this.addStat(ModItems.grapeJam.get(), 0, 0, 0);
+        this.addStat(ModItems.appleJam.get(), 0, 0, 0);
+        this.addStat(ModItems.strawberryJam.get(), 0, 0, 0);
+        this.addStat(ModItems.boiledGyoza.get(), 0, 0, 0);
+        this.addStat(ModItems.glazedYam.get(), 0, 0, 0);
+        this.addStat(ModItems.boiledEgg.get(), 0, 0, 0);
+        this.addStat(ModItems.boiledSpinach.get(), 0, 0, 0);
+        this.addStat(ModItems.boiledPumpkin.get(), 0, 0, 0);
+        this.addStat(ModItems.grapeLiqueur.get(), 0, 0, 0);
+        this.addStat(ModItems.hotMilk.get(), 800, 300, 0);
+        this.addStat(ModItems.hotChocolate.get(), 1000, 200, 0);
+
+        this.addStat(ModItems.grilledSandFlounder.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledShrimp.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledLobster.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledBlowfish.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledLampSquid.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledSunsquid.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledSquid.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledFallFlounder.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledTurbot.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledFlounder.get(), 0, 0, 0);
+        this.addStat(ModItems.saltedPike.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledNeedlefish.get(), 0, 0, 0);
+        this.addStat(ModItems.driedSardines.get(), 0, 0, 0);
+        this.addStat(ModItems.tunaTeriyaki.get(), 0, 0, 0);
+        this.addStat(ModItems.saltedPondSmelt.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledYellowtail.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledMackerel.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledSkipjack.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledLoverSnapper.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledGlitterSnapper.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledGirella.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledSnapper.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledGibelio.get(), 0, 0, 0);
+        this.addStat(ModItems.grilledCrucianCarp.get(), 0, 0, 0);
+        this.addStat(ModItems.saltedTaimen.get(), 0, 0, 0);
+        this.addStat(ModItems.saltedSalmon.get(), 0, 0, 0);
+        this.addStat(ModItems.saltedChub.get(), 0, 0, 0);
+        this.addStat(ModItems.saltedCherrySalmon.get(), 0, 0, 0);
+        this.addStat(ModItems.saltedRainbowTrout.get(), 0, 0, 0);
+        this.addStat(ModItems.saltedChar.get(), 0, 0, 0);
+        this.addStat(ModItems.saltedMasuTrout.get(), 0, 0, 0);
+        this.addStat(ModItems.dryCurry.get(), 0, 0, 0);
+        this.addStat(ModItems.risotto.get(), 0, 0, 0);
+        this.addStat(ModItems.gyoza.get(), 0, 0, 0);
+        this.addStat(ModItems.pancakes.get(), 0, 0, 0);
+        this.addStat(ModItems.tempura.get(), 0, 0, 0);
+        this.addStat(ModItems.friedUdon.get(), 0, 0, 0);
+        this.addStat(ModItems.donut.get(), 0, 0, 0);
+        this.addStat(ModItems.frenchToast.get(), 0, 0, 0);
+        this.addStat(ModItems.curryBread.get(), 0, 0, 0);
+        this.addStat(ModItems.bakedApple.get(), 1700, 200, 0);
+        this.addStat(ModItems.omeletRice.get(), 0, 0, 0);
+        this.addStat(ModItems.omelet.get(), 0, 0, 0);
+        this.addStat(ModItems.friedEggs.get(), 0, 0, 0);
+        this.addStat(ModItems.misoEggplant.get(), 0, 0, 0);
+        this.addStat(ModItems.cornCereal.get(), 0, 0, 0);
+        this.addStat(ModItems.popcorn.get(), 0, 0, 0);
+        this.addStat(ModItems.croquettes.get(), 0, 0, 0);
+        this.addStat(ModItems.frenchFries.get(), 0, 0, 0);
+        this.addStat(ModItems.cabbageCakes.get(), 0, 0, 0);
+        this.addStat(ModItems.friedRice.get(), 0, 0, 0);
+        this.addStat(ModItems.friedVeggies.get(), 5500, 1300, 0);
+
+        this.addStat(ModItems.shrimpSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.lobsterSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.blowfishSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.lampSquidSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.sunsquidSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.squidSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.fallSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.turbotSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.flounderSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.pikeSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.needlefishSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.sardineSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.tunaSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.yellowtailSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.skipjackSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.girellaSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.loverSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.glitterSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.snapperSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.taimenSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.cherrySashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.salmonSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.rainbowSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.charSashimi.get(), 0, 0, 0);
+        this.addStat(ModItems.troutSashimi.get(), 0, 0, 0);
+
         this.addStat(ModItems.failedDish.get(), 100, 2, 1);
         this.addStat(ModItems.disastrousDish.get(), 1500, 50, 1);
+        this.addStat(ModItems.mixedHerbs.get(), 0, 0, 0);
+        this.addStat(ModItems.sourDrop.get(), 0, 0, 0);
+        this.addStat(ModItems.sweetPowder.get(), 0, 0, 0);
+        this.addStat(ModItems.heavySpice.get(), 0, 0, 0);
+        this.addStat(ModItems.orange.get(), 0, 0, 0);
+        this.addStat(ModItems.grapes.get(), 500, 100, 1);
+        this.addStat(ModItems.mealyApple.get(), 0, 0, 0);
 
         this.addStat(ModItems.turnipSeeds.get(), new ItemStat.Builder(100, 10, 0));
         this.addStat(ModItems.turnipPinkSeeds.get(), new ItemStat.Builder(140, 14, 0));

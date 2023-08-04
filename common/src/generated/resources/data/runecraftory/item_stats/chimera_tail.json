@@ -1,9 +1,20 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buyPrice": 20000,
+  "sellPrice": 2600,
+  "upgradeDifficulty": 87,
+  "itemStats": {
+    "minecraft:generic.attack_damage": 150.0,
+    "runecraftory:magic_attack": -10.0,
+    "runecraftory:paralysis": 50.0,
+    "runecraftory:poison": 50.0
+  },
+  "monsterBonus": {
+    "minecraft:generic.attack_damage": 1.0,
+    "runecraftory:paralysis": 1.0,
+    "runecraftory:poison": 1.0
+  },
   "element": "NONE",
+  "tier2Spell": "runecraftory:bubble_beam",
+  "tier3Spell": "runecraftory:fireball_barrage",
   "item": "runecraftory:chimera_tail"
 }

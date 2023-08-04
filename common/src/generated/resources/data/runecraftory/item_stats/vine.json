@@ -1,9 +1,14 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "buyPrice": 515,
+  "sellPrice": 58,
+  "upgradeDifficulty": 34,
+  "itemStats": {
+    "runecraftory:magic_attack": 10.0,
+    "runecraftory:seal": 5.0
+  },
+  "monsterBonus": {
+    "runecraftory:seal": 0.33
+  },
   "element": "NONE",
   "item": "runecraftory:vine"
 }

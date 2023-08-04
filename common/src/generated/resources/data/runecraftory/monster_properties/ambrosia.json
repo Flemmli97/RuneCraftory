@@ -9,28 +9,28 @@
   "needsRoof": true,
   "baseValues": {
     "runecraftory:res_drain": 10.0,
-    "minecraft:generic.attack_damage": 10.0,
-    "runecraftory:res_dizzy": 60.0,
-    "runecraftory:res_seal": 97.0,
-    "runecraftory:res_crit": 25.0,
-    "minecraft:generic.max_health": 220.0,
-    "runecraftory:res_stun": 50.0,
-    "runecraftory:res_wind": -25.0,
-    "runecraftory:res_paralysis": 85.0,
-    "runecraftory:res_sleep": 100.0,
-    "runecraftory:res_love": -25.0,
-    "runecraftory:res_earth": 25.0,
-    "runecraftory:magic_defence": 4.0,
     "runecraftory:res_poison": 97.0,
-    "runecraftory:magic_attack": 14.0,
+    "runecraftory:res_paralysis": 85.0,
+    "minecraft:generic.max_health": 220.0,
+    "runecraftory:magic_defence": 4.0,
     "runecraftory:res_faint": 100.0,
-    "runecraftory:defence": 4.0
+    "runecraftory:res_stun": 50.0,
+    "runecraftory:res_dizzy": 60.0,
+    "minecraft:generic.attack_damage": 10.0,
+    "runecraftory:res_love": -25.0,
+    "runecraftory:res_crit": 25.0,
+    "runecraftory:res_earth": 25.0,
+    "runecraftory:magic_attack": 14.0,
+    "runecraftory:defence": 4.0,
+    "runecraftory:res_seal": 97.0,
+    "runecraftory:res_sleep": 100.0,
+    "runecraftory:res_wind": -25.0
   },
   "levelGains": {
     "minecraft:generic.attack_damage": 275.0,
     "minecraft:generic.max_health": 230.0,
-    "runecraftory:magic_defence": 245.0,
     "runecraftory:magic_attack": 280.0,
-    "runecraftory:defence": 220.0
+    "runecraftory:defence": 220.0,
+    "runecraftory:magic_defence": 245.0
   }
 }

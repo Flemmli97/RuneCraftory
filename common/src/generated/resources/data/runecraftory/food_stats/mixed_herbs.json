@@ -1,0 +1,12 @@
+{
+  "duration": 1200,
+  "effects": {
+    "runecraftory:res_wind": -30.0
+  },
+  "effectsPercentage": {},
+  "cookingBonus": {},
+  "cookingBonusPercent": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "item": "runecraftory:mixed_herbs"
+}

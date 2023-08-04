@@ -1,0 +1,9 @@
+{
+  "buyPrice": 1200,
+  "sellPrice": 130,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:grape_juice"
+}

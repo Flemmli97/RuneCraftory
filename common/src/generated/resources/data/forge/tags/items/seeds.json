@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
+    "runecraftory:grapes",
+    "#c:grapes",
     "#forge:seeds/turnip",
     "#forge:seeds/turnip_pink",
     "#forge:seeds/cabbage",

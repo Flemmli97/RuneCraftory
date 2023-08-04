@@ -1,9 +1,16 @@
 {
   "buyPrice": 0,
   "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
-  "monsterBonus": {},
+  "upgradeDifficulty": 52,
+  "itemStats": {
+    "runecraftory:defence": 13.0,
+    "runecraftory:magic_defence": 13.0
+  },
+  "monsterBonus": {
+    "runecraftory:magic_defence": 0.5
+  },
   "element": "NONE",
+  "tier2Spell": "runecraftory:bone_needles",
+  "tier3Spell": "runecraftory:energy_orb_spell",
   "item": "runecraftory:dragon_bones"
 }

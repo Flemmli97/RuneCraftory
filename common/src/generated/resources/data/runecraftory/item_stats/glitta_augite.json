@@ -1,6 +1,6 @@
 {
   "buyPrice": 0,
-  "sellPrice": 0,
+  "sellPrice": 1200,
   "upgradeDifficulty": 0,
   "itemStats": {
     "runecraftory:attack_range": 1.0

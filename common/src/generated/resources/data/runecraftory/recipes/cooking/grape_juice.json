@@ -1,0 +1,13 @@
+{
+  "type": "runecraftory:cooking",
+  "level": 5,
+  "cost": 20,
+  "ingredients": [
+    {
+      "tag": "c:grapes"
+    }
+  ],
+  "result": {
+    "item": "runecraftory:grape_juice"
+  }
+}

@@ -1,9 +1,14 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
+  "buyPrice": 22000,
+  "sellPrice": 2300,
+  "upgradeDifficulty": 77,
+  "itemStats": {
+    "minecraft:generic.attack_damage": -10.0,
+    "runecraftory:magic_attack": 150.0
+  },
   "monsterBonus": {},
   "element": "NONE",
+  "tier1Spell": "runecraftory:apple_rain",
+  "tier3Spell": "runecraftory:apple_shield",
   "item": "runecraftory:moving_branch"
 }

@@ -3,10 +3,10 @@
   "sellPrice": 40,
   "upgradeDifficulty": 19,
   "itemStats": {
-    "runecraftory:magic_defence": 5.0
+    "runecraftory:magic_attack": 5.0
   },
   "monsterBonus": {
-    "runecraftory:magic_defence": 0.33
+    "runecraftory:magic_attack": 0.33
   },
   "element": "NONE",
   "item": "runecraftory:fairy_dust"

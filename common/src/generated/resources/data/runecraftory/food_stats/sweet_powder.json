@@ -1,0 +1,12 @@
+{
+  "duration": 1200,
+  "effects": {
+    "runecraftory:res_water": -30.0
+  },
+  "effectsPercentage": {},
+  "cookingBonus": {},
+  "cookingBonusPercent": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "item": "runecraftory:sweet_powder"
+}

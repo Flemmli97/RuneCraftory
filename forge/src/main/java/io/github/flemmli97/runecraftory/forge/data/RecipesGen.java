@@ -458,16 +458,20 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(ModItems.rice.get()).build(consumer);
         RecipeBuilder.create(EnumCrafting.COOKING, ModItems.pickledTurnip.get(), 1, 5, 12)
                 .addIngredient(ModItems.turnip.get()).build(consumer);
-        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.bakedApple.get(), 1, 3, 12)
-                .addIngredient(Items.APPLE).build(consumer);
+
         RecipeBuilder.create(EnumCrafting.COOKING, ModItems.flan.get(), 1, 15, 20)
                 .addIngredient(ModTags.EGGS).addIngredient(ModTags.MILKS).build(consumer);
         RecipeBuilder.create(EnumCrafting.COOKING, ModItems.hotMilk.get(), 1, 5, 20)
                 .addIngredient(ModTags.MILKS).build(consumer);
+
+        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.grapeJuice.get(), 1, 5, 20)
+                .addIngredient(ModTags.GRAPES).build(consumer);
+
         RecipeBuilder.create(EnumCrafting.COOKING, ModItems.friedVeggies.get(), 1, 20, 25)
                 .addIngredient(ModItems.cabbage.get()).build(consumer);
-        //RecipeBuilder.create(EnumCrafting.COOKING, ModItems.squidSashimi.get(), 1, 5, 15)
-        //        .addIngredient(ModItems.squid.get()).build(consumer);
+        RecipeBuilder.create(EnumCrafting.COOKING, ModItems.bakedApple.get(), 1, 3, 12)
+                .addIngredient(Items.APPLE).build(consumer);
+
     }
 
     private FinishedRecipe patchouliShapelessBook(ResourceLocation id, ResourceLocation book, Ingredient... ingredients) {

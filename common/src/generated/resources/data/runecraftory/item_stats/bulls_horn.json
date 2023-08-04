@@ -1,7 +1,7 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
+  "buyPrice": 450,
+  "sellPrice": 64,
+  "upgradeDifficulty": 26,
   "itemStats": {
     "minecraft:generic.attack_damage": 8.0,
     "runecraftory:defence": 1.0

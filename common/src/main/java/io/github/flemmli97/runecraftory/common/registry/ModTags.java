@@ -57,6 +57,8 @@ public class ModTags {
     public static final TagKey<Item> EGGS = tagCommon("eggs");
     public static final TagKey<Item> MILKS = tagCommon("milks");
 
+    public static final TagKey<Item> GRAPES = tagCommon("grapes");
+
     //Runefactory categories
     public static final TagKey<Item> MINERALS = tag("mineral");
     public static final TagKey<Item> JEWELS = tag("jewels");

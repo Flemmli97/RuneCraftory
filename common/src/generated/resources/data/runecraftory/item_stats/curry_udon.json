@@ -1,0 +1,9 @@
+{
+  "buyPrice": 40000,
+  "sellPrice": 5000,
+  "upgradeDifficulty": 0,
+  "itemStats": {},
+  "monsterBonus": {},
+  "element": "NONE",
+  "item": "runecraftory:curry_udon"
+}

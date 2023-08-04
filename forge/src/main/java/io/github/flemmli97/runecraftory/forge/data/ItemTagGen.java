@@ -466,6 +466,14 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(ModTags.tamingTag(ModEntities.SKELEFANG.get()))
                 .add(Items.DRAGON_HEAD);
 
+        TagKey<Item> temp = tempKeyForge("seeds");
+        this.tag(ModTags.GRAPES)
+                .add(ModItems.grapes.get())
+                .addTag(temp);
+        this.tag(temp)
+                .add(ModItems.grapes.get())
+                .addTag(ModTags.GRAPES);
+
         //Note: Add items to the matching forge tags and make fabric common tag include the corresponding forge tag
         TagKey<Item> forgeParentTag = tempKeyForge("seeds");
         //this.tag(Tags.Items.SEEDS).addTag(forgeParentTag); Already done above. Just here in case of confusion

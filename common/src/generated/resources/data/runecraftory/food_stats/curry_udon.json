@@ -1,0 +1,16 @@
+{
+  "duration": 4800,
+  "effects": {
+    "runecraftory:health_gain": 750.0,
+    "runecraftory:rp_gain": 500.0,
+    "runecraftory:res_earth": 15.0
+  },
+  "effectsPercentage": {
+    "runecraftory:health_gain": 50.0
+  },
+  "cookingBonus": {},
+  "cookingBonusPercent": {},
+  "potionApply": [],
+  "potionRemove": [],
+  "item": "runecraftory:curry_udon"
+}

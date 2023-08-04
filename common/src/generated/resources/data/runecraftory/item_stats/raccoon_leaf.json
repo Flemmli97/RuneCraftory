@@ -1,9 +1,14 @@
 {
-  "buyPrice": 0,
-  "sellPrice": 0,
-  "upgradeDifficulty": 0,
-  "itemStats": {},
+  "buyPrice": 25000,
+  "sellPrice": 2100,
+  "upgradeDifficulty": 60,
+  "itemStats": {
+    "runecraftory:magic_attack": 35.0,
+    "runecraftory:attack_range": 1.0
+  },
   "monsterBonus": {},
   "element": "NONE",
+  "tier1Spell": "runecraftory:big_leaf_spell_single",
+  "tier2Spell": "runecraftory:small_leaf_spell_x5",
   "item": "runecraftory:raccoon_leaf"
 }
