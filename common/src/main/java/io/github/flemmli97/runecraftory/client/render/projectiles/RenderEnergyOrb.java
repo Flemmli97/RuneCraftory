@@ -6,7 +6,7 @@ import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.model.ModelEnergyOrb;
+import io.github.flemmli97.runecraftory.client.model.misc.ModelEnergyOrb;
 import io.github.flemmli97.runecraftory.client.render.layer.EnergyOrbSwirlLayer;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
 import io.github.flemmli97.tenshilib.client.render.RenderProjectileModel;
@@ -49,6 +49,7 @@ public class RenderEnergyOrb extends RenderProjectileModel<EntityHomingEnergyOrb
         float beamPitch = (float) Math.acos(dir.y);
         float beamYaw = (float) Math.atan2(dir.z, dir.x);
         stack.pushPose();
+        stack.translate(0, entity.getBbHeight() * 0.5, 0);
         stack.mulPose(Vector3f.YP.rotationDegrees(90 - beamYaw * Mth.RAD_TO_DEG));
         stack.mulPose(Vector3f.XP.rotationDegrees(beamPitch * Mth.RAD_TO_DEG));
 
@@ -111,9 +112,8 @@ public class RenderEnergyOrb extends RenderProjectileModel<EntityHomingEnergyOrb
 
     @Override
     public void translate(EntityHomingEnergyOrb entity, PoseStack stack, float pitch, float yaw, float partialTicks) {
-        float scale = 0.85f + Mth.sin(entity.tickCount * 0.2f) * 0.075f;
-        stack.scale(scale, scale, scale);
         stack.scale(-1.0f, -1.0f, 1.0f);
+        stack.translate(0.0, -1.501f + 1/16d, 0.0);
     }
 
     @Override

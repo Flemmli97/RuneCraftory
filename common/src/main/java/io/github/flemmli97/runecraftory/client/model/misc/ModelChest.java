@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.client.model;// Made with Blockbench 3.5.2
+package io.github.flemmli97.runecraftory.client.model.misc;// Made with Blockbench 3.5.2
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

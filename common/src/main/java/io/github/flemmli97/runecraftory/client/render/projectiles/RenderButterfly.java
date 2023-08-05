@@ -2,7 +2,7 @@ package io.github.flemmli97.runecraftory.client.render.projectiles;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.model.ModelButterfly;
+import io.github.flemmli97.runecraftory.client.model.misc.ModelButterfly;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterfly;
 import io.github.flemmli97.tenshilib.client.render.RenderProjectileModel;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

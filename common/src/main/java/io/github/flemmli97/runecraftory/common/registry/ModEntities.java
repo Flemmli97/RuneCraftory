@@ -43,6 +43,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntitySlashResidue;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySleepAura;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySmallRaccoonLeaf;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpiderWeb;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpike;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySpore;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStatusBall;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStone;
@@ -1016,6 +1017,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityBigRaccoonLeaf>> BIG_RACCOON_LEAF = reg(EntityType.Builder.<EntityBigRaccoonLeaf>of(EntityBigRaccoonLeaf::new, MobCategory.MISC).sized(0.5f, 0.5f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "big_raccoon_leaf"));
     public static final RegistryEntrySupplier<EntityType<EntityBoneNeedle>> BONE_NEEDLE = reg(EntityType.Builder.<EntityBoneNeedle>of(EntityBoneNeedle::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "bone_needle"));
     public static final RegistryEntrySupplier<EntityType<EntityHomingEnergyOrb>> ENERGY_ORB = reg(EntityType.Builder.<EntityHomingEnergyOrb>of(EntityHomingEnergyOrb::new, MobCategory.MISC).sized(0.9f, 0.9f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "energy_orb"));
+    public static final RegistryEntrySupplier<EntityType<EntitySpike>> HOMING_SPIKES = reg(EntityType.Builder.<EntitySpike>of(EntitySpike::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "homing_spikes"));
 
     public static final RegistryEntrySupplier<EntityType<EntityRuney>> RUNEY = reg(EntityType.Builder.of(EntityRuney::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "runey"));
     public static final RegistryEntrySupplier<EntityType<EntityRuneOrb>> STAT_BONUS = reg(EntityType.Builder.of(EntityRuneOrb::new, MobCategory.MISC).sized(0.25f, 0.25f).clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rune_orb"));

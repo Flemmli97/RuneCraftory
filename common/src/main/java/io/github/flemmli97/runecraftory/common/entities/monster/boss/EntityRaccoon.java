@@ -228,7 +228,7 @@ public class EntityRaccoon extends BossMonster {
 
     @Override
     public boolean isAnimOfType(AnimatedAction anim, AnimationType type) {
-        if (anim.is(DEFEAT, TRANSFORM, DETRANSFORM, INTERACT, INTERACT_BERSERK, ANGRY))
+        if (anim.is(DEFEAT, TRANSFORM, DETRANSFORM, INTERACT, INTERACT_BERSERK, ANGRY, BARRAGE))
             return false;
         if (type == AnimationType.GENERICATTACK) {
             if (anim.is(DOUBLE_PUNCH))

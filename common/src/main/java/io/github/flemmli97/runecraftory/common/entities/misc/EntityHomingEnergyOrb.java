@@ -57,7 +57,7 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
 
     @Override
     public int livingTickMax() {
-        return 80;
+        return 400;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
         double newZ = this.getZ() + motion.z;
         this.setPos(newX, newY, newZ);
         if (this.spawnPos == null)
-            this.spawnPos = this.position();
+            this.spawnPos = this.position().add(0, this.getBbHeight() * 0.5, 0);
         if (!this.level.isClientSide) {
             if (this.targetMob == null || this.targetMob.isDeadOrDying()) {
                 Entity owner = this.getOwner();

@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client.render.layer;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.model.ModelEnergyOrb;
+import io.github.flemmli97.runecraftory.client.model.misc.ModelEnergyOrb;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.EntityModelSet;

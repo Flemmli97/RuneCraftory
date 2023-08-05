@@ -1,7 +1,7 @@
 package io.github.flemmli97.runecraftory.client.model.monster;// Made with Blockbench 3.5.2
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import io.github.flemmli97.runecraftory.client.model.ModelChest;
+import io.github.flemmli97.runecraftory.client.model.misc.ModelChest;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityMimic;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.client.model.RideableModel;

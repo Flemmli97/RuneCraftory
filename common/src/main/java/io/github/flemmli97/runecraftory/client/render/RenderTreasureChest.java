@@ -4,7 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.client.model.ModelChest;
+import io.github.flemmli97.runecraftory.client.model.misc.ModelChest;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityTreasureChest;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.MultiBufferSource;
