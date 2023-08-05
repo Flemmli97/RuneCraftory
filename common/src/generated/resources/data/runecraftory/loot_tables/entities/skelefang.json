@@ -6,26 +6,31 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:item",
-          "conditions": [
+          "type": "minecraft:alternatives",
+          "children": [
             {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.5,
-              "looting_multiplier": 0.05
-            }
-          ],
-          "functions": [
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "runecraftory:first_kill"
+                }
+              ],
+              "name": "runecraftory:dragon_bones"
+            },
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 1.0,
-                "chance": 0.33
-              },
-              "add": true
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "runecraftory:luck_and_looting",
+                  "baseChance": 0.4,
+                  "luckBonus": 0.05,
+                  "lootingBonus": 0.2,
+                  "limit": 2
+                }
+              ],
+              "name": "runecraftory:dragon_bones"
             }
-          ],
-          "name": "runecraftory:dragon_bones"
+          ]
         }
       ]
     },
@@ -35,11 +40,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
+          "functions": [
             {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.4,
-              "looting_multiplier": 0.05
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.7,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
             }
           ],
           "name": "runecraftory:fish_fossil"
@@ -52,11 +59,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
+          "functions": [
             {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.4,
-              "looting_multiplier": 0.05
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.55,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
             }
           ],
           "name": "runecraftory:skull"

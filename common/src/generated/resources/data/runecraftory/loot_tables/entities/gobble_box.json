@@ -7,22 +7,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.25,
-              "looting_multiplier": 0.05
-            }
-          ],
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 0.0,
-                "chance": 0.4
-              },
-              "add": true
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.25,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
             }
           ],
           "name": "runecraftory:broken_hilt"
@@ -35,22 +26,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.45,
-              "looting_multiplier": 0.05
-            }
-          ],
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 0.0,
-                "chance": 0.5
-              },
-              "add": true
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.4,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
             }
           ],
           "name": "runecraftory:broken_box"
@@ -63,11 +45,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
+          "functions": [
             {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.15,
-              "looting_multiplier": 0.05
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.15,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 1
             }
           ],
           "name": "runecraftory:failed_dish"
@@ -80,11 +64,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
+          "functions": [
             {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.15,
-              "looting_multiplier": 0.005
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.1,
+              "luckBonus": 0.005,
+              "lootingBonus": 0.2,
+              "limit": 1
             }
           ],
           "name": "runecraftory:disastrous_dish"

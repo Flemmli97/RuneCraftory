@@ -7,22 +7,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.4,
-              "looting_multiplier": 0.05
-            }
-          ],
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 0.0,
-                "chance": 0.4
-              },
-              "add": true
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.4,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
             }
           ],
           "name": "runecraftory:fur"
@@ -35,52 +26,16 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.2,
-              "looting_multiplier": 0.01
-            }
-          ],
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 0.0,
-                "chance": 0.25
-              },
-              "add": true
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.2,
+              "luckBonus": 0.01,
+              "lootingBonus": 0.2,
+              "limit": 0
             }
           ],
           "name": "runecraftory:quality_puffy_fur"
-        }
-      ]
-    },
-    {
-      "rolls": 1.0,
-      "bonus_rolls": 0.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.75,
-              "looting_multiplier": 0.1
-            }
-          ],
-          "functions": [
-            {
-              "function": "minecraft:looting_enchant",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 0.0,
-                "max": 0.4
-              }
-            }
-          ],
-          "name": "minecraft:oak_log"
         }
       ]
     }

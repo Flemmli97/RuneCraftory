@@ -7,22 +7,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.25,
-              "looting_multiplier": 0.1
-            }
-          ],
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 2.0,
-                "chance": 0.35
-              },
-              "add": true
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.25,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 2
             }
           ],
           "name": "runecraftory:fire_crystal"

@@ -16,13 +16,12 @@
           ],
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "function": "minecraft:looting_enchant",
               "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 0.0,
-                "chance": 0.7
-              },
-              "add": true
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 1.0
+              }
             }
           ],
           "name": "minecraft:gunpowder"
@@ -35,22 +34,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.4,
-              "looting_multiplier": 0.05
-            }
-          ],
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 0.0,
-                "chance": 0.4
-              },
-              "add": true
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.4,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
             }
           ],
           "name": "runecraftory:arrowhead"

@@ -16,13 +16,12 @@
           ],
           "functions": [
             {
-              "function": "minecraft:set_count",
+              "function": "minecraft:looting_enchant",
               "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 0.0,
-                "chance": 0.55
-              },
-              "add": true
+                "type": "minecraft:uniform",
+                "min": 0.0,
+                "max": 0.55
+              }
             }
           ],
           "name": "minecraft:feather"

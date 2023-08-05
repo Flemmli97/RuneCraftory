@@ -35,11 +35,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
+          "functions": [
             {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.03,
-              "looting_multiplier": 0.01
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.05,
+              "luckBonus": 0.01,
+              "lootingBonus": 0.2,
+              "limit": 1
             }
           ],
           "name": "runecraftory:baked_apple"

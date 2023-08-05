@@ -7,11 +7,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
+          "functions": [
             {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.05,
-              "looting_multiplier": 0.01
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.05,
+              "luckBonus": 0.01,
+              "lootingBonus": 0.2,
+              "limit": 1
             }
           ],
           "name": "minecraft:shears"
@@ -29,7 +31,7 @@
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": -4.0,
+                "min": -3.0,
                 "max": 1.0
               },
               "add": false

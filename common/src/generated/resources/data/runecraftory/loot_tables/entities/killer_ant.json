@@ -7,22 +7,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.2,
-              "looting_multiplier": 0.05
-            }
-          ],
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 0.0,
-                "chance": 0.3
-              },
-              "add": true
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.2,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
             }
           ],
           "name": "runecraftory:insect_carapace"
@@ -35,22 +26,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.2,
-              "looting_multiplier": 0.05
-            }
-          ],
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 0.0,
-                "chance": 0.2
-              },
-              "add": true
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.15,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
             }
           ],
           "name": "runecraftory:pretty_carapace"
@@ -63,22 +45,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.25,
-              "looting_multiplier": 0.05
-            }
-          ],
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 0.0,
-                "chance": 0.4
-              },
-              "add": true
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.25,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
             }
           ],
           "name": "runecraftory:insect_jaw"
@@ -104,7 +77,7 @@
               "count": {
                 "type": "minecraft:uniform",
                 "min": 0.0,
-                "max": 0.6
+                "max": 0.8
               }
             }
           ],

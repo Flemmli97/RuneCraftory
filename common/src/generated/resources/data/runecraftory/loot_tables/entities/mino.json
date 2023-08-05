@@ -7,22 +7,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.4,
-              "looting_multiplier": 0.05
-            }
-          ],
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 0.0,
-                "chance": 0.4
-              },
-              "add": true
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.4,
+              "luckBonus": 0.05,
+              "lootingBonus": 0.2,
+              "limit": 0
             }
           ],
           "name": "runecraftory:grapes"
@@ -35,22 +26,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
-            {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.05,
-              "looting_multiplier": 0.01
-            }
-          ],
           "functions": [
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 1.0,
-                "chance": 0.2
-              },
-              "add": true
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.05,
+              "luckBonus": 0.01,
+              "lootingBonus": 0.2,
+              "limit": 1
             }
           ],
           "name": "runecraftory:grape_juice"

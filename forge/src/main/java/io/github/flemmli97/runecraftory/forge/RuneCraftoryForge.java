@@ -113,7 +113,6 @@ public class RuneCraftoryForge {
     public void registry(RegistryEvent.Register<GlobalLootModifierSerializer<?>> event) {
         ModLootCondition.LOOTFUNCTION.registerContent();
         ModLootCondition.LOOTCONDITIONS.registerContent();
-        ModLootCondition.LOOTNUMBERS.registerContent();
         ModStructures.STRUCTURESPROCESSORS.registerContent();
         ModCrafting.RECIPETYPE.registerContent();
     }

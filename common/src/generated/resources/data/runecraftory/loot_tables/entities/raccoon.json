@@ -6,26 +6,31 @@
       "bonus_rolls": 0.0,
       "entries": [
         {
-          "type": "minecraft:item",
-          "conditions": [
+          "type": "minecraft:alternatives",
+          "children": [
             {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.65,
-              "looting_multiplier": 0.05
-            }
-          ],
-          "functions": [
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "runecraftory:first_kill"
+                }
+              ],
+              "name": "runecraftory:raccoon_leaf"
+            },
             {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "runecraftory:chanced_looting_number",
-                "max": 1.0,
-                "chance": 0.33
-              },
-              "add": true
+              "type": "minecraft:item",
+              "functions": [
+                {
+                  "function": "runecraftory:luck_and_looting",
+                  "baseChance": 0.65,
+                  "luckBonus": 0.05,
+                  "lootingBonus": 0.2,
+                  "limit": 2
+                }
+              ],
+              "name": "runecraftory:raccoon_leaf"
             }
-          ],
-          "name": "runecraftory:raccoon_leaf"
+          ]
         }
       ]
     },
@@ -35,11 +40,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
+          "functions": [
             {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.05,
-              "looting_multiplier": 0.005
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.05,
+              "luckBonus": 0.005,
+              "lootingBonus": 0.2,
+              "limit": 1
             }
           ],
           "name": "runecraftory:udon"
@@ -52,11 +59,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
+          "functions": [
             {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.05,
-              "looting_multiplier": 0.005
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.02,
+              "luckBonus": 0.005,
+              "lootingBonus": 0.2,
+              "limit": 1
             }
           ],
           "name": "runecraftory:curry_udon"
@@ -69,11 +78,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "conditions": [
+          "functions": [
             {
-              "condition": "minecraft:random_chance_with_looting",
-              "chance": 0.05,
-              "looting_multiplier": 0.005
+              "function": "runecraftory:luck_and_looting",
+              "baseChance": 0.02,
+              "luckBonus": 0.005,
+              "lootingBonus": 0.2,
+              "limit": 1
             }
           ],
           "name": "runecraftory:tempura_udon"

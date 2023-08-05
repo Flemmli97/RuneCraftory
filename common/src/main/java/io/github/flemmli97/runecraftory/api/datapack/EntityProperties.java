@@ -136,11 +136,15 @@ public class EntityProperties {
             return new EntityProperties(this.minLevel, this.xp, this.money, this.taming, this.rideable, this.flying, this.size, this.needsRoof,
                     this.baseValues.entrySet().stream().collect(Collectors.toMap(
                             e -> e.getKey().get(),
-                            Map.Entry::getValue
+                            Map.Entry::getValue,
+                            (e1, e2) -> e1,
+                            LinkedHashMap::new
                     )),
                     this.gains.entrySet().stream().collect(Collectors.toMap(
                             e -> e.getKey().get(),
-                            Map.Entry::getValue
+                            Map.Entry::getValue,
+                            (e1, e2) -> e1,
+                            LinkedHashMap::new
                     )));
         }
     }
