@@ -50,6 +50,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.extensions.IForgeMenuType;
+import net.minecraftforge.data.loading.DatagenModLoader;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -65,6 +66,11 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class PlatformImpl implements Platform {
+
+    @Override
+    public boolean isDatagen() {
+        return DatagenModLoader.isRunningDataGen();
+    }
 
     @Override
     public Optional<PlayerData> getPlayerData(Player player) {

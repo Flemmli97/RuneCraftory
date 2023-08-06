@@ -74,6 +74,7 @@ import io.github.flemmli97.runecraftory.common.spells.WindBladeCircle;
 import io.github.flemmli97.runecraftory.common.spells.WindBladeSpell;
 import io.github.flemmli97.runecraftory.common.spells.WitherSkullSpell;
 import io.github.flemmli97.runecraftory.platform.LazyGetter;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
@@ -181,7 +182,8 @@ public class ModSpells {
 
     private static RegistryEntrySupplier<Spell> registerSpell(String name, Supplier<Spell> sup, SpellProperties.Builder properties) {
         RegistryEntrySupplier<Spell> entry = SPELLS.register(name, sup);
-        DEFAULT_PROPERTIES.put(entry, properties.build());
+        if (Platform.INSTANCE.isDatagen())
+            DEFAULT_PROPERTIES.put(entry, properties.build());
         return entry;
     }
 }

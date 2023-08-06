@@ -112,6 +112,7 @@ import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.items.NPCSpawnEgg;
 import io.github.flemmli97.runecraftory.common.items.RuneCraftoryEggItem;
 import io.github.flemmli97.runecraftory.common.items.TreasureChestSpawnegg;
+import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import io.github.flemmli97.tenshilib.platform.registry.PlatformRegistry;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
@@ -143,6 +144,7 @@ public class ModEntities {
      */
     private static final List<RegistryEntrySupplier<EntityType<?>>> FLYING_MONSTERS = new ArrayList<>();
 
+    // For datagen stuff
     private static final Map<ResourceLocation, GateSpawnData> DEFAULT_SPAWN_DATA = new HashMap<>();
     private static final Map<ResourceLocation, EntityProperties.Builder> DEFAULT_MOB_PROPERTIES = new HashMap<>();
 
@@ -1094,7 +1096,8 @@ public class ModEntities {
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<V>> regMonster(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, boolean flying, EntityProperties.Builder props) {
         RegistryEntrySupplier<EntityType<V>> sup = regWithEgg(v, name, primary, secondary);
         MONSTERS.add((RegistryEntrySupplier) sup);
-        DEFAULT_MOB_PROPERTIES.put(name, props);
+        if (Platform.INSTANCE.isDatagen())
+            DEFAULT_MOB_PROPERTIES.put(name, props);
         if (flying)
             FLYING_MONSTERS.add((RegistryEntrySupplier) sup);
         return sup;
@@ -1105,7 +1108,8 @@ public class ModEntities {
     }
 
     public static <V extends BaseMonster> RegistryEntrySupplier<EntityType<V>> regMonster(EntityType.Builder<V> v, ResourceLocation name, int primary, int secondary, boolean flying, EntityProperties.Builder props, GateSpawnData.Builder builder) {
-        DEFAULT_SPAWN_DATA.put(name, builder.build(name));
+        if (Platform.INSTANCE.isDatagen())
+            DEFAULT_SPAWN_DATA.put(name, builder.build(name));
         return regMonster(v, name, primary, secondary, flying, props);
     }
 }

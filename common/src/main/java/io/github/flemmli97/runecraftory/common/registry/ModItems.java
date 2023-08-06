@@ -68,8 +68,9 @@ public class ModItems {
 
     public static final PlatformRegistry<Item> ITEMS = PlatformUtils.INSTANCE.of(Registry.ITEM_REGISTRY, RuneCraftory.MODID);
 
-    //Those collections are for datagen
+    //Here till all items have textures
     public static final List<RegistryEntrySupplier<Item>> NOTEX = new ArrayList<>();
+    //Those collections are for datagen
     public static final Map<TagKey<Item>, List<RegistryEntrySupplier<Item>>> DATAGENTAGS = new HashMap<>();
     public static final List<RegistryEntrySupplier<Item>> SEEDS = new ArrayList<>();
     public static final List<RegistryEntrySupplier<Item>> VEGGIES = new ArrayList<>();
@@ -1217,37 +1218,43 @@ public class ModItems {
 
     public static RegistryEntrySupplier<Item> hoe(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("hoe_" + tier.getName(), () -> new ItemToolHoe(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.HOES, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.HOES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> wateringCan(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("watering_can_" + tier.getName(), () -> new ItemToolWateringCan(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.WATERINGCANS, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.WATERINGCANS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> sickle(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("sickle_" + tier.getName(), () -> new ItemToolSickle(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.SICKLES, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.SICKLES, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> hammerTool(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("hammer_" + tier.getName(), () -> new ItemToolHammer(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.HAMMER_TOOLS, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.HAMMER_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> axeTool(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("axe_" + tier.getName(), () -> new ItemToolAxe(tier, new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.AXE_TOOLS, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.AXE_TOOLS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> fishingRod(EnumToolTier tier) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("fishing_rod_" + tier.getName(), () -> new ItemToolFishingRod(tier, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.FISHING_RODS, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.FISHING_RODS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1258,8 +1265,10 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemShortSwordBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.SHORTSWORDS, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1270,8 +1279,10 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemLongSwordBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.LONGSWORDS, t -> new ArrayList<>()).add(sup);
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.LONGSWORDS, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1282,8 +1293,10 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemSpearBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.SPEARS, t -> new ArrayList<>()).add(sup);
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.SPEARS, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1294,8 +1307,10 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemAxeBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.AXES, t -> new ArrayList<>()).add(sup);
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.AXES, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1306,8 +1321,10 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemHammerBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.HAMMERS, t -> new ArrayList<>()).add(sup);
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.HAMMERS, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1318,8 +1335,10 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemDualBladeBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.DUALBLADES, t -> new ArrayList<>()).add(sup);
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.DUALBLADES, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1330,8 +1349,10 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemGloveBase(new Item.Properties().tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.FISTS, t -> new ArrayList<>()).add(sup);
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.FISTS, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1342,8 +1363,10 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.staff(starterElement, amount, new Item.Properties().stacksTo(1).tab(RFCreativeTabs.weaponToolTab)));
-        DATAGENTAGS.computeIfAbsent(ModTags.STAFFS, t -> new ArrayList<>()).add(sup);
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.STAFFS, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1358,12 +1381,14 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> Platform.INSTANCE.armor(slot, new Item.Properties().tab(RFCreativeTabs.equipment), new ResourceLocation(RuneCraftory.MODID, name), useItemTexture));
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
-        switch (slot) {
-            case FEET -> DATAGENTAGS.computeIfAbsent(ModTags.BOOTS, t -> new ArrayList<>()).add(sup);
-            case LEGS -> DATAGENTAGS.computeIfAbsent(ModTags.ACCESSORIES, t -> new ArrayList<>()).add(sup);
-            case CHEST -> DATAGENTAGS.computeIfAbsent(ModTags.CHESTPLATE, t -> new ArrayList<>()).add(sup);
-            case HEAD -> DATAGENTAGS.computeIfAbsent(ModTags.HELMET, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen()) {
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+            switch (slot) {
+                case FEET -> DATAGENTAGS.computeIfAbsent(ModTags.BOOTS, t -> new ArrayList<>()).add(sup);
+                case LEGS -> DATAGENTAGS.computeIfAbsent(ModTags.ACCESSORIES, t -> new ArrayList<>()).add(sup);
+                case CHEST -> DATAGENTAGS.computeIfAbsent(ModTags.CHESTPLATE, t -> new ArrayList<>()).add(sup);
+                case HEAD -> DATAGENTAGS.computeIfAbsent(ModTags.HELMET, t -> new ArrayList<>()).add(sup);
+            }
         }
         return sup;
     }
@@ -1375,8 +1400,10 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemStatShield(new Item.Properties().stacksTo(1).tab(RFCreativeTabs.equipment)));
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
-        DATAGENTAGS.computeIfAbsent(ModTags.SHIELDS, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T3, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.SHIELDS, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1416,13 +1443,15 @@ public class ModItems {
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().rarity(rarity).tab(RFCreativeTabs.upgradeItems)));
         if (rarity == Rarity.COMMON)
-            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
+            if (Platform.INSTANCE.isDatagen())
+                DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> medicine(String name, boolean affectStats) {
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new ItemMedicine(affectStats, new Item.Properties().food(foodProp).stacksTo(16).tab(RFCreativeTabs.medicine)));
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1433,14 +1462,17 @@ public class ModItems {
                 return UseAnim.DRINK;
             }
         });
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> spell(Supplier<Supplier<Spell>> sup, String name) {
         RegistryEntrySupplier<Item> ret = ITEMS.register(name, () -> new ItemSpell(sup.get(), new Item.Properties().stacksTo(1).tab(RFCreativeTabs.cast)));
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(ret);
-        DATAGENTAGS.computeIfAbsent(ModTags.SPELLS, t -> new ArrayList<>()).add(ret);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(ret);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.SPELLS, t -> new ArrayList<>()).add(ret);
         return ret;
     }
 
@@ -1451,13 +1483,15 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().tab(RFCreativeTabs.food)));
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> seed(String name, Supplier<Supplier<Block>> block) {
         RegistryEntrySupplier<Item> sup = ITEMS.register("seed_" + name, () -> new ItemNameBlockItem(block.get().get(), new Item.Properties().tab(RFCreativeTabs.crops)));
-        SEEDS.add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            SEEDS.add(sup);
         return sup;
     }
 
@@ -1479,18 +1513,22 @@ public class ModItems {
             sup = ITEMS.register("crop_" + name + "_giant", () -> new ItemGiantCrops(new Item.Properties().food(foodProp).tab(RFCreativeTabs.crops)));
         else
             sup = ITEMS.register("crop_" + name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.crops)));
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
-        switch (type) {
-            case 0 -> VEGGIES.add(sup);
-            case 1 -> FRUITS.add(sup);
-            case 2 -> FLOWERS.add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen()) {
+            switch (type) {
+                case 0 -> VEGGIES.add(sup);
+                case 1 -> FRUITS.add(sup);
+                case 2 -> FLOWERS.add(sup);
+            }
         }
         return sup;
     }
 
     public static RegistryEntrySupplier<Item> herb(String name, Supplier<Supplier<Block>> block) {
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new BlockItem(block.get().get(), new Item.Properties().food(lowFoodProp).tab(RFCreativeTabs.medicine)));
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T1, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1505,7 +1543,8 @@ public class ModItems {
             return sup;
         }
         RegistryEntrySupplier<Item> sup = ITEMS.register(name, () -> new Item(new Item.Properties().food(foodProp).tab(RFCreativeTabs.food)));
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 
@@ -1526,7 +1565,8 @@ public class ModItems {
                 return UseAnim.DRINK;
             }
         });
-        DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
+        if (Platform.INSTANCE.isDatagen())
+            DATAGENTAGS.computeIfAbsent(ModTags.CHEST_T2, t -> new ArrayList<>()).add(sup);
         return sup;
     }
 

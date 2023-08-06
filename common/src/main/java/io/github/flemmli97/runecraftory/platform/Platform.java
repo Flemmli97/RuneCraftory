@@ -57,6 +57,8 @@ public interface Platform {
             "io.github.flemmli97.runecraftory.fabric.platform.PlatformImpl",
             "io.github.flemmli97.runecraftory.forge.platform.PlatformImpl");
 
+    boolean isDatagen();
+
     Optional<PlayerData> getPlayerData(Player player);
 
     Optional<EntityData> getEntityData(LivingEntity living);

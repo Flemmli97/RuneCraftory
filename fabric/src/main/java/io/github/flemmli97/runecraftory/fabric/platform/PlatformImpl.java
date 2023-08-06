@@ -72,6 +72,11 @@ import java.util.function.Supplier;
 public class PlatformImpl implements Platform {
 
     @Override
+    public boolean isDatagen() {
+        return false;
+    }
+
+    @Override
     public Optional<PlayerData> getPlayerData(Player player) {
         return Optional.of(((PlayerDataGetter) player).getPlayerData());
     }
