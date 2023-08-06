@@ -152,6 +152,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private int baseLevel = 1;
         private int unique;
 
+        private final Map<String, String> translations = new LinkedHashMap<>();
+
         public Builder(int weight) {
             this(weight, null, null, Gender.UNDEFINED);
         }
@@ -170,8 +172,9 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             }
         }
 
-        public Builder setNeutralGiftResponse(String neutralGiftResponse) {
+        public Builder setNeutralGiftResponse(String neutralGiftResponse, String translation) {
             this.neutralGiftResponse = neutralGiftResponse;
+            this.translations.put(this.neutralGiftResponse, translation);
             return this;
         }
 
@@ -200,8 +203,9 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
-        public Builder addGiftResponse(String id, Gift gift) {
+        public Builder addGiftResponse(String id, Gift gift, String translation) {
             this.giftItems.put(id, gift);
+            this.translations.put(gift.responseKey, translation);
             return this;
         }
 
@@ -228,6 +232,10 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         public Builder setUnique(int amount) {
             this.unique = amount;
             return this;
+        }
+
+        public Map<String, String> getTranslations() {
+            return this.translations;
         }
 
         public NPCData build() {
@@ -257,18 +265,25 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             private final String fallback;
             private final Map<String, Conversation> greetings = new LinkedHashMap<>();
 
-            public Builder(String fallback) {
+            private final Map<String, String> translations = new LinkedHashMap<>();
+
+            public Builder(String fallback, String enTranslation) {
                 this.fallback = fallback;
+                this.translations.put(this.fallback, enTranslation);
             }
 
-            public Builder addConversation(String key, Conversation conversation) {
+            public Builder addConversation(Conversation conversation, String enTranslation) {
+                return this.addConversation(conversation.translationKey, conversation, enTranslation);
+            }
+
+            public Builder addConversation(String key, Conversation conversation, String enTranslation) {
                 this.greetings.put(key, conversation);
+                this.translations.put(conversation.translationKey, enTranslation);
                 return this;
             }
 
-            public Builder addConversation(Conversation conversation) {
-                this.greetings.put(conversation.translationKey, conversation);
-                return this;
+            public Map<String, String> getTranslations() {
+                return this.translations;
             }
 
             public ConversationSet build() {

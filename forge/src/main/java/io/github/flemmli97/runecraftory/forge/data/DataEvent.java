@@ -21,10 +21,14 @@ public class DataEvent {
     public static void data(GatherDataEvent event) {
         DataGenerator data = event.getGenerator();
         IgnoreFileHelper ignore = new IgnoreFileHelper(event.getExistingFileHelper());
+        NPCDataGen npcDataGen = null;
+        if (event.includeServer()) {
+            data.addProvider(npcDataGen = new NPCDataGen(data));
+        }
         if (event.includeClient()) {
             data.addProvider(new BlockStatesGen(data, ignore));
             data.addProvider(new ItemModels(data, ignore));
-            data.addProvider(new LangGen(data));
+            data.addProvider(new LangGen(data, npcDataGen));
             data.addProvider(new ParticleGen(data));
         }
         if (event.includeServer()) {
@@ -43,7 +47,6 @@ public class DataEvent {
             data.addProvider(new EntityTagGen(data, event.getExistingFileHelper()));
             data.addProvider(new ShopItemGen(data));
             data.addProvider(new AdvancementGen(data));
-            data.addProvider(new NPCDataGen(data));
             data.addProvider(new QuestGen(data));
             data.addProvider(new GateSpawnGen(data));
             data.addProvider(new MobPropertiesgen(data));

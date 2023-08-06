@@ -40,6 +40,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import org.apache.commons.lang3.text.translate.JavaUnicodeEscaper;
 
+import javax.annotation.Nullable;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -65,11 +66,13 @@ public class LangGen implements DataProvider {
     private final DataGenerator gen;
     private final String modid;
     private final String locale;
+    private final NPCDataGen npcDataGen;
 
-    public LangGen(DataGenerator gen) {
+    public LangGen(DataGenerator gen, @Nullable NPCDataGen npcDataGen) {
         this.gen = gen;
         this.modid = RuneCraftory.MODID;
         this.locale = "en_us";
+        this.npcDataGen = npcDataGen;
     }
 
     protected void addTranslations() {
@@ -606,29 +609,8 @@ public class LangGen implements DataProvider {
         this.add("npc.default.follow.stop.default", "Ok.");
         this.add("npc.default.gift.neutral", "Thank you for your gift.");
 
-        this.add("npc.generic.greeting.default", "Hello %s");
-        this.add("npc.generic.greeting.1", "Hello %s");
-        this.add("npc.generic.greeting.2", "Hi. How are you today %s?");
-        this.add("npc.generic.talk.default", "...");
-        this.add("npc.generic.talk.1", "On sunny days I like to go out and walk a lot.");
-        this.add("npc.generic.talk.2", "I don't like working.");
-        this.add("npc.generic.follow.yes", "Ok");
-        this.add("npc.generic.follow.no", "Sorry but I decline.");
-        this.add("npc.generic.follow.stop", "Ok. See you again.");
-        this.add("npc.generic.dislike", "Eh... thanks I guess?");
-        this.add("npc.generic.like", "Thanks %s for the gift. I really like this.");
-        this.add("npc.generic.gift.default", "Thank you for your gift");
-
-        this.add("npc.generic.2.greeting.default", "Hello %s");
-        this.add("npc.generic.2.greeting.1", "Howdy %s");
-        this.add("npc.generic.2.greeting.2", "Hi. Whats up %s?");
-        this.add("npc.generic.2.talk.default", "...");
-        this.add("npc.generic.2.talk.1", "Did you know that upgrading a weapon with scrap metal + makes it do 1 damage?");
-        this.add("npc.generic.2.talk.2", "Those villagers seem strange. Why do they have no hands?");
-        this.add("npc.generic.2.follow.yes", "Where are we going?");
-        this.add("npc.generic.2.follow.no", "Sorry but I'm busy.");
-        this.add("npc.generic.2.follow.stop", "Ok. Bye.");
-        this.add("npc.generic.2.gift.default", "Thanks. I appreciate it");
+        if (this.npcDataGen != null)
+            this.npcDataGen.translations.forEach(this::add);
 
         this.add("runecraftory.advancements.root.title", "Runecraftory");
         this.add("runecraftory.advancements.root.description", "A minecrafty harvest moon");

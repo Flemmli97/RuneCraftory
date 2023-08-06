@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -37,6 +38,9 @@ public abstract class NPCDataProvider implements DataProvider {
     private final Map<ResourceLocation, NPCData> data = new HashMap<>();
     private final Map<ResourceLocation, NPCData.NPCLook> looks = new HashMap<>();
     private final Map<ResourceLocation, NPCData.ConversationSet> conversations = new HashMap<>();
+
+    //Translation for lang
+    public final Map<String, String> translations = new LinkedHashMap<>();
 
     private final DataGenerator gen;
     private final String modid;
@@ -99,10 +103,11 @@ public abstract class NPCDataProvider implements DataProvider {
         return "NPCData";
     }
 
-    public void addNPCData(String id, NPCData data) {
+    public void addNPCData(String id, NPCData.Builder data) {
         //if (data.look() != null && !this.looks.containsKey(data.look()))
         //    throw new IllegalStateException("NPC has look defined but there is no such look registered");
-        this.data.put(new ResourceLocation(this.modid, id), data);
+        this.translations.putAll(data.getTranslations());
+        this.data.put(new ResourceLocation(this.modid, id), data.build());
     }
 
     public void addNPCData(String id, NPCData.Builder data, Map<NPCData.ConversationType, NPCData.ConversationSet.Builder> conversations) {
@@ -110,13 +115,17 @@ public abstract class NPCDataProvider implements DataProvider {
         //    throw new IllegalStateException("NPC has look defined but there is no such look registered");
         conversations.forEach((key, value) -> {
             ResourceLocation conversationId = new ResourceLocation(this.modid, id + "/" + key.key);
+            this.translations.putAll(value.getTranslations());
             this.conversations.put(conversationId, value.build());
             data.addInteractionIfAbsent(key, conversationId);
         });
+        this.translations.putAll(data.getTranslations());
         this.data.put(new ResourceLocation(this.modid, id), data.build());
     }
 
-    public void addNPCDataWithLook(String id, NPCData data, NPCData.NPCLook look) {
+    public void addNPCDataWithLook(String id, NPCData.Builder builder, NPCData.NPCLook look) {
+        this.translations.putAll(builder.getTranslations());
+        NPCData data = builder.build();
         this.data.put(new ResourceLocation(this.modid, id), data);
         this.looks.put(data.look(), look);
     }
@@ -124,9 +133,11 @@ public abstract class NPCDataProvider implements DataProvider {
     public void addNPCDataAll(String id, NPCData.Builder data, Map<NPCData.ConversationType, NPCData.ConversationSet.Builder> conversations, NPCData.NPCLook look) {
         conversations.forEach((key, value) -> {
             ResourceLocation conversationId = new ResourceLocation(this.modid, id + "/" + key.key);
+            this.translations.putAll(value.getTranslations());
             this.conversations.put(conversationId, value.build());
             data.addInteractionIfAbsent(key, conversationId);
         });
+        this.translations.putAll(data.getTranslations());
         NPCData npcData = data.build();
         this.data.put(new ResourceLocation(this.modid, id), npcData);
         this.looks.put(npcData.look(), look);
