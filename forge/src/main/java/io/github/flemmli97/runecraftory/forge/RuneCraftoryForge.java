@@ -153,6 +153,7 @@ public class RuneCraftoryForge {
         DataPackHandler.reloadShopItems(event::addListener);
         DataPackHandler.reloadGateSpawns(event::addListener);
         DataPackHandler.reloadMobProperties(event::addListener);
+        DataPackHandler.reloadSpellProperties(event::addListener);
         DataPackHandler.reloadNPCData(event::addListener);
     }
 
