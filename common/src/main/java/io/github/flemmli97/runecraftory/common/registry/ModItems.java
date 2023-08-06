@@ -589,7 +589,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> crystalBig = mat("big_crystal", Texture.Y);
     public static final RegistryEntrySupplier<Item> crystalMagic = mat("magic_crystal", Texture.Y);
     public static final RegistryEntrySupplier<Item> crystalRune = mat("rune_crystal", Texture.Y);
-    public static final RegistryEntrySupplier<Item> crystalElectro = mat("electro_crystal", Texture.Y);
+    public static final RegistryEntrySupplier<Item> crystalElectro = mat("electro_crystal", Rarity.RARE, Texture.Y);
     public static final RegistryEntrySupplier<Item> stickThick = mat("thick_stick", Texture.Y);
     public static final RegistryEntrySupplier<Item> hornInsect = mat("insect_horn", Texture.Y);
     public static final RegistryEntrySupplier<Item> hornRigid = mat("rigid_horn", Texture.Y);
@@ -608,7 +608,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> turtleShell = mat("turtle_shell", Texture.Y);
     public static final RegistryEntrySupplier<Item> fishFossil = mat("fish_fossil", Texture.Y);
     public static final RegistryEntrySupplier<Item> skull = mat("skull", Texture.Y);
-    public static final RegistryEntrySupplier<Item> dragonBones = mat("dragon_bones", Texture.Y);
+    public static final RegistryEntrySupplier<Item> dragonBones = mat("dragon_bones", Rarity.RARE, Texture.Y);
     public static final RegistryEntrySupplier<Item> tortoiseShell = mat("black_tortoise_shell", Texture.Y);
     public static final RegistryEntrySupplier<Item> rock = mat("rock", Texture.Y);
     public static final RegistryEntrySupplier<Item> stoneRound = mat("round_stone", Texture.Y);
@@ -686,7 +686,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> clawPalm = mat("palm_claw", Texture.Y);
     public static final RegistryEntrySupplier<Item> clawMalm = mat("malm_claw", Texture.Y);
     public static final RegistryEntrySupplier<Item> giantsNail = mat("giants_nail", Texture.Y);
-    public static final RegistryEntrySupplier<Item> clawChimera = mat("chimeras_claw", Texture.Y);
+    public static final RegistryEntrySupplier<Item> clawChimera = mat("chimeras_claw", Rarity.RARE, Texture.Y);
     public static final RegistryEntrySupplier<Item> tuskIvory = mat("ivory_tusk", Texture.N);
     public static final RegistryEntrySupplier<Item> tuskUnbrokenIvory = mat("unbroken_tusk", Texture.N);
     public static final RegistryEntrySupplier<Item> scorpionPincer = mat("scorpion_pincer", Texture.Y);
@@ -715,7 +715,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> lightOre = mat("light_ore", Texture.Y);
     public static final RegistryEntrySupplier<Item> runeSphereShard = mat("rune_sphere_shard", Rarity.RARE, Texture.N);
     public static final RegistryEntrySupplier<Item> shadeStone = mat("shade_stone", Texture.N);
-    public static final RegistryEntrySupplier<Item> raccoonLeaf = mat("raccoon_leaf", Texture.Y);
+    public static final RegistryEntrySupplier<Item> raccoonLeaf = mat("raccoon_leaf", Rarity.RARE, Texture.Y);
     public static final RegistryEntrySupplier<Item> icyNose = mat("icy_nose", Rarity.RARE, Texture.N);
     public static final RegistryEntrySupplier<Item> bigBirdsComb = mat("big_birds_comb", Texture.N);
     public static final RegistryEntrySupplier<Item> rafflesiaPetal = mat("rafflesia_petal", Rarity.RARE, Texture.Y);
