@@ -2,6 +2,6 @@
   "replace": false,
   "values": [
     "runecraftory:grapes",
-    "#forge:seeds"
+    "#forge:fruits/grapes"
   ]
 }

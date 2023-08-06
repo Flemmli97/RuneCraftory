@@ -466,13 +466,12 @@ public class ItemTagGen extends ItemTagsProvider {
         this.tag(ModTags.tamingTag(ModEntities.SKELEFANG.get()))
                 .add(Items.DRAGON_HEAD);
 
-        TagKey<Item> temp = tempKeyForge("seeds");
+        TagKey<Item> temp = tempKeyForge("fruits/grapes");
         this.tag(ModTags.GRAPES)
                 .add(ModItems.grapes.get())
                 .addTag(temp);
         this.tag(temp)
-                .add(ModItems.grapes.get())
-                .addTag(ModTags.GRAPES);
+                .add(ModItems.grapes.get());
 
         //Note: Add items to the matching forge tags and make fabric common tag include the corresponding forge tag
         TagKey<Item> forgeParentTag = tempKeyForge("seeds");
