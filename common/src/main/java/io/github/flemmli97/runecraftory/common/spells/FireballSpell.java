@@ -3,11 +3,8 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
-import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
@@ -22,24 +19,8 @@ public class FireballSpell extends Spell {
     }
 
     @Override
-    public void update(Player player, ItemStack stack) {
-
-    }
-
-    @Override
-    public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.FIRE, this.big ? 4 : 2));
-    }
-
-    @Override
-    public int coolDown() {
-        return 20;
-    }
-
-    @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.FIRE)).orElse(false);
-        if (!rp)
+        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), EnumSkills.FIRE))
             return false;
         EntityFireball ball = new EntityFireball(level, entity, this.big);
         if (entity instanceof Mob mob && mob.getTarget() != null) {
@@ -69,10 +50,5 @@ public class FireballSpell extends Spell {
             return cooldown;
         }
         return true;
-    }
-
-    @Override
-    public int rpCost() {
-        return this.big ? 15 : 10;
     }
 }

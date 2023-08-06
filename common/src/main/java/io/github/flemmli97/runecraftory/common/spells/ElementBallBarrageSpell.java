@@ -2,17 +2,12 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.ElementBallBarrageSummoner;
-import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
@@ -25,28 +20,8 @@ public class ElementBallBarrageSpell extends Spell {
     }
 
     @Override
-    public void update(Player player, ItemStack stack) {
-
-    }
-
-    @Override
-    public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-            EnumSkills skill = LevelCalc.getSkillFromElement(this.element);
-            if (skill != null)
-                LevelCalc.levelSkill(player, data, EnumSkills.DARK, 12);
-        });
-    }
-
-    @Override
-    public int coolDown() {
-        return 10;
-    }
-
-    @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true, EnumSkills.DARK)).orElse(false);
-        if (!rp)
+        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), LevelCalc.getSkillFromElement(this.element)))
             return false;
         ElementBallBarrageSummoner summoner = new ElementBallBarrageSummoner(level, entity, this.element);
         Vec3 eye = entity.getEyePosition();
@@ -65,10 +40,5 @@ public class ElementBallBarrageSpell extends Spell {
         summoner.setTarget(eye.x + dir.x, eye.y + dir.y, eye.z + dir.z);
         level.addFreshEntity(summoner);
         return true;
-    }
-
-    @Override
-    public int rpCost() {
-        return 7;
     }
 }

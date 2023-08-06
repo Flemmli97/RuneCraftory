@@ -1,0 +1,7 @@
+{
+  "cooldown": 40,
+  "rpCost": 20,
+  "skillXP": {
+    "WATER": 8.0
+  }
+}

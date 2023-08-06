@@ -1,0 +1,7 @@
+{
+  "cooldown": 10,
+  "rpCost": 5,
+  "skillXP": {
+    "WIND": 5.0
+  }
+}

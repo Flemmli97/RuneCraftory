@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.GateSpawnsManage
 import io.github.flemmli97.runecraftory.common.datapack.manager.ItemStatManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.MonsterPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.SpellPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
@@ -26,6 +27,7 @@ public class DataPackHandler {
     private final ShopItemsManager shopItems = new ShopItemsManager();
     private final GateSpawnsManager gateSpawnsManager = new GateSpawnsManager();
     private final MonsterPropertiesManager mobProperties = new MonsterPropertiesManager();
+    private final SpellPropertiesManager spellProperties = new SpellPropertiesManager();
     private final NameAndGiftManager nameAndGifts = new NameAndGiftManager();
     private final NPCDataManager npcData = new NPCDataManager();
     private final NPCLookManager npcLooks = new NPCLookManager();
@@ -53,6 +55,10 @@ public class DataPackHandler {
 
     public static void reloadMobProperties(Consumer<PreparableReloadListener> cons) {
         cons.accept(SERVER_PACK.mobProperties);
+    }
+
+    public static void reloadSpellProperties(Consumer<PreparableReloadListener> cons) {
+        cons.accept(SERVER_PACK.spellProperties);
     }
 
     public static void reloadNPCData(Consumer<PreparableReloadListener> cons) {
@@ -96,6 +102,10 @@ public class DataPackHandler {
 
     public MonsterPropertiesManager monsterPropertiesManager() {
         return this.mobProperties;
+    }
+
+    public SpellPropertiesManager spellPropertiesManager() {
+        return this.spellProperties;
     }
 
     public NameAndGiftManager nameAndGiftManager() {

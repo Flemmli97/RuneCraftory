@@ -8,7 +8,6 @@ import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.OwnableEntity;
@@ -23,23 +22,9 @@ import java.util.function.Consumer;
 public class UnsealSpell extends Spell {
 
     @Override
-    public void update(Player player, ItemStack stack) {
-
-    }
-
-    @Override
-    public void levelSkill(ServerPlayer player) {
-        Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.LOVE, 10));
-    }
-
-    @Override
-    public int coolDown() {
-        return 20;
-    }
-
-    @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, true, true, EnumSkills.LOVE)).orElse(false);
+        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data ->
+                LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, true, true, EnumSkills.LOVE)).orElse(false);
         if (!rp)
             return false;
         Consumer<LivingEntity> apply = living -> {
@@ -68,10 +53,5 @@ public class UnsealSpell extends Spell {
         apply.accept(entity);
         entities.forEach(apply);
         return true;
-    }
-
-    @Override
-    public int rpCost() {
-        return 30;
     }
 }

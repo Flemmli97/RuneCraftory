@@ -47,6 +47,7 @@ public class DataEvent {
             data.addProvider(new QuestGen(data));
             data.addProvider(new GateSpawnGen(data));
             data.addProvider(new MobPropertiesgen(data));
+            data.addProvider(new SpellPropertiesgen(data));
         }
     }
 

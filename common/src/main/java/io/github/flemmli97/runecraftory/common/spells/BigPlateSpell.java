@@ -3,11 +3,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBigPlate;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
-import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
-import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.OwnableEntity;
@@ -19,23 +15,8 @@ import net.minecraft.world.phys.Vec3;
 public class BigPlateSpell extends Spell {
 
     @Override
-    public void update(Player player, ItemStack stack) {
-
-    }
-
-    @Override
-    public void levelSkill(ServerPlayer player) {
-    }
-
-    @Override
-    public int coolDown() {
-        return 25;
-    }
-
-    @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        boolean rp = !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, this.rpCost(), stack.getItem() instanceof ItemStaffBase, false, true)).orElse(false);
-        if (!rp)
+        if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
             return false;
         Vec3 pos = null;
         if (entity instanceof Mob mob && mob.getTarget() != null)
@@ -60,10 +41,5 @@ public class BigPlateSpell extends Spell {
         plate.setDamageMultiplier(1.1f + (lvl - 1) * 0.5f);
         level.addFreshEntity(plate);
         return true;
-    }
-
-    @Override
-    public int rpCost() {
-        return 200;
     }
 }

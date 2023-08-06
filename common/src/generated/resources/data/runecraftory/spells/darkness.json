@@ -1,0 +1,7 @@
+{
+  "cooldown": 30,
+  "rpCost": 40,
+  "skillXP": {
+    "DARK": 10.0
+  }
+}

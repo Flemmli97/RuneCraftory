@@ -2,10 +2,8 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.EvokerFangs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -13,22 +11,9 @@ import net.minecraft.world.phys.Vec3;
 public class EvokerFangSpell extends Spell {
 
     @Override
-    public void update(Player player, ItemStack stack) {
-
-    }
-
-    @Override
-    public void levelSkill(ServerPlayer player) {
-
-    }
-
-    @Override
-    public int coolDown() {
-        return 10;
-    }
-
-    @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
+        if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
+            return false;
         Vec3 pos = entity.position();
         Vec3 look;
         if (entity instanceof Mob mob && mob.getTarget() != null)
@@ -41,10 +26,5 @@ public class EvokerFangSpell extends Spell {
             level.addFreshEntity(fang);
         }
         return true;
-    }
-
-    @Override
-    public int rpCost() {
-        return 1;
     }
 }

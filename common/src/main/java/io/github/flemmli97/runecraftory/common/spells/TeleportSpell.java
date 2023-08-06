@@ -14,7 +14,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.entity.EntityTypeTest;
@@ -24,21 +23,6 @@ import net.minecraft.world.phys.Vec3;
 import java.util.Optional;
 
 public class TeleportSpell extends Spell {
-
-    @Override
-    public void update(Player player, ItemStack stack) {
-
-    }
-
-    @Override
-    public void levelSkill(ServerPlayer player) {
-
-    }
-
-    @Override
-    public int coolDown() {
-        return 30;
-    }
 
     @Override
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level) {
@@ -155,10 +139,5 @@ public class TeleportSpell extends Spell {
             else
                 safeTeleportTo(e, x + oldLevel.random.nextDouble() * 2 - 1, y, z + oldLevel.random.nextDouble() * 2 - 1);
         }
-    }
-
-    @Override
-    public int rpCost() {
-        return 0;
     }
 }
