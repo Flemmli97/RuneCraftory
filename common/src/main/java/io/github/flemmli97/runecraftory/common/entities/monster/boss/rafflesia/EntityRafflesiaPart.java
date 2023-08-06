@@ -33,7 +33,7 @@ import java.util.UUID;
 public abstract class EntityRafflesiaPart extends Mob implements IAnimated, OwnableEntity {
 
     private static final EntityDataAccessor<Optional<UUID>> PARENT = SynchedEntityData.defineId(EntityRafflesiaPart.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final EntityDataAccessor<Direction> SPAWN_DIRECTION = SynchedEntityData.defineId(EntityRafflesia.class, EntityDataSerializers.DIRECTION);
+    private static final EntityDataAccessor<Direction> SPAWN_DIRECTION = SynchedEntityData.defineId(EntityRafflesiaPart.class, EntityDataSerializers.DIRECTION);
 
     public static final AnimatedAction HORSE_TAIL_ACTION = new AnimatedAction(1.28, 0.56, "horse_tail_action");
     public static final AnimatedAction FLOWER_ACTION = new AnimatedAction(1, 0.44, "flower_action");
