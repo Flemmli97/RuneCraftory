@@ -1,11 +1,14 @@
 package io.github.flemmli97.runecraftory.common.entities.monster.boss;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.AnimationType;
 import io.github.flemmli97.runecraftory.common.entities.BossMonster;
 import io.github.flemmli97.runecraftory.common.entities.ai.boss.RaccoonAttackGoal;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
+import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
@@ -102,7 +105,9 @@ public class EntityRaccoon extends BossMonster {
                 double d = Math.sin((anim.getTick() - 3) * Math.PI / length * 2) * 0.95;
                 entity.setDeltaMovement(entity.jumpDir.x, d < 0 ? d * 1.65 : d, entity.jumpDir.z);
                 if (anim.canAttack()) {
-                    entity.mobAttack(anim, entity.getTarget(), entity::doHurtTarget);
+                    CustomDamage.Builder source = new CustomDamage.Builder(entity).noKnockback().element(EnumElement.EARTH).hurtResistant(5);
+                    double damagePhys = CombatUtils.getAttributeValue(entity, Attributes.ATTACK_DAMAGE);
+                    entity.mobAttack(anim, entity.getTarget(), e -> CombatUtils.mobAttack(entity, e, source, damagePhys));
                     Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(8, 0.8f), entity);
                     entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
                 }
