@@ -190,7 +190,7 @@ public class EntityUtils {
         return new Vec3(target.getX(), Mth.clamp(from.y(), aabb.minY, aabb.maxY), target.getZ());
     }
 
-    public static LivingEntity ownedProjectileTarget(Entity owner) {
+    public static LivingEntity ownedProjectileTarget(Entity owner, int range) {
         if (owner != null) {
             if (owner instanceof Mob mob && mob.getTarget() != null)
                 return mob.getTarget();
@@ -205,7 +205,7 @@ public class EntityUtils {
                 };
                 Predicate<LivingEntity> pred = owner.getControllingPassenger() instanceof LivingEntity controller ? generator.apply(controller) : generator.apply(livingOwner);
                 return owner.level.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat().ignoreLineOfSight()
-                        .range(10).selector(pred), livingOwner, livingOwner.getX(), livingOwner.getY(), livingOwner.getZ(), new AABB(-10, -10, -10, 10, 10, 10)
+                        .range(range).selector(pred), livingOwner, livingOwner.getX(), livingOwner.getY(), livingOwner.getZ(), new AABB(-10, -10, -10, 10, 10, 10)
                         .move(livingOwner.position()));
             }
         }

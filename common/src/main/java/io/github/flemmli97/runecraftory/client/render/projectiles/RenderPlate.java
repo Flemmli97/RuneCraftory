@@ -18,9 +18,8 @@ public class RenderPlate extends RenderProjectileModel<EntityBigPlate> {
 
     @Override
     public void translate(EntityBigPlate entity, PoseStack stack, float pitch, float yaw, float partialTicks) {
-        stack.scale(-1.0f, -1.0f, 1.0f);
         stack.scale(1.5f, 1.5f, 1.5f);
-        stack.translate(0.0, -1.501f, 0.0);
+        super.translate(entity, stack, 0, 0, partialTicks);
     }
 
     @Override

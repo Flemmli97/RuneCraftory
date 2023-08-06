@@ -68,7 +68,7 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
             this.spawnPos = this.position().add(0, this.getBbHeight() * 0.5, 0);
         if (!this.level.isClientSide) {
             if (this.targetMob == null || this.targetMob.isDeadOrDying()) {
-                this.targetMob = EntityUtils.ownedProjectileTarget(this.getOwner());
+                this.targetMob = EntityUtils.ownedProjectileTarget(this.getOwner(), 10);
                 if (this.targetMob != null)
                     this.entityData.set(TARGET_UUID, Optional.of(this.targetMob.getUUID()));
                 else

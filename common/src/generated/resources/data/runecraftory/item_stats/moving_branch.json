@@ -8,7 +8,7 @@
   },
   "monsterBonus": {},
   "element": "NONE",
-  "tier1Spell": "runecraftory:apple_rain",
-  "tier3Spell": "runecraftory:apple_shield",
+  "tier1Spell": "runecraftory:root_spike",
+  "tier2Spell": "runecraftory:apple_shield",
   "item": "runecraftory:moving_branch"
 }

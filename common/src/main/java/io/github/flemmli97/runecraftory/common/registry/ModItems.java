@@ -736,7 +736,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> parallelLaser = spell(() -> ModSpells.PARALLEL_LASER, "parallel_laser");
     public static final RegistryEntrySupplier<Item> deltaLaser = spell(() -> ModSpells.DELTA_LASER, "delta_laser");
     public static final RegistryEntrySupplier<Item> screwRock = spell(() -> ModSpells.SCREW_ROCK, "screw_rock");
-    public static final RegistryEntrySupplier<Item> earthSpike = spell(() -> ModSpells.EMPTY, "earth_spike");
+    public static final RegistryEntrySupplier<Item> earthSpike = spell(() -> ModSpells.EARTH_SPIKE, "earth_spike");
     public static final RegistryEntrySupplier<Item> avengerRock = spell(() -> ModSpells.AVENGER_ROCK, "avenger_rock");
     public static final RegistryEntrySupplier<Item> sonicWind = spell(() -> ModSpells.SONIC, "sonic_wind");
     public static final RegistryEntrySupplier<Item> doubleSonic = spell(() -> ModSpells.DOUBLE_SONIC, "double_sonic");

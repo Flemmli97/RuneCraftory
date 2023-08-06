@@ -83,6 +83,11 @@ public class EntityDeadTree extends BossMonster {
                 ModSpells.APPLE_RAIN_MORE.get().use(entity);
             }
         });
+        b.put(SPIKE, (anim, entity) -> {
+            if (anim.canAttack() || anim.getTick() == 10 || anim.getTick() == 14) {
+                ModSpells.ROOT_SPIKE.get().use(entity);
+            }
+        });
         b.put(HEAL, (anim, entity) -> {
             if (anim.canAttack()) {
                 float healAmount = (float) (CombatUtils.getAttributeValue(entity, ModAttributes.MAGIC.get()) * (0.6f));

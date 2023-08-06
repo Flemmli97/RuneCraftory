@@ -989,7 +989,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.movingBranch.get(), new ItemStat.Builder(22000, 2300, 77)
                 .addAttribute(Attributes.ATTACK_DAMAGE, -10)
                 .addAttribute(ModAttributes.MAGIC.get(), 150)
-                .setSpell(ModSpells.APPLE_RAIN.get(), ModSpells.APPLE_SHIELD.get(), null));
+                .setSpell(ModSpells.ROOT_SPIKE.get(), ModSpells.APPLE_SHIELD.get(), null));
 
         this.addStat(ModItems.glue.get(), new ItemStat.Builder(380, 41, 13)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
@@ -1344,7 +1344,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.parallelLaser.get(), new ItemStat.Builder(4800, 240, 0));
         this.addStat(ModItems.deltaLaser.get(), new ItemStat.Builder(9600, 480, 0));
         this.addStat(ModItems.screwRock.get(), new ItemStat.Builder(2400, 120, 0));
-        this.addStat(ModItems.earthSpike.get(), new ItemStat.Builder(0, 240, 0));
+        this.addStat(ModItems.earthSpike.get(), new ItemStat.Builder(4800, 240, 0));
         this.addStat(ModItems.avengerRock.get(), new ItemStat.Builder(9600, 480, 0));
         this.addStat(ModItems.sonicWind.get(), new ItemStat.Builder(2400, 120, 0));
         this.addStat(ModItems.doubleSonic.get(), new ItemStat.Builder(4800, 240, 0));

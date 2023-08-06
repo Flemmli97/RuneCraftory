@@ -22,6 +22,7 @@ import io.github.flemmli97.runecraftory.common.spells.DarknessSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleBulletSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWaterLaserSpell;
 import io.github.flemmli97.runecraftory.common.spells.DoubleWindBladeSpell;
+import io.github.flemmli97.runecraftory.common.spells.EarthSpikeSpell;
 import io.github.flemmli97.runecraftory.common.spells.ElementBallBarrageSpell;
 import io.github.flemmli97.runecraftory.common.spells.ElementalSpell;
 import io.github.flemmli97.runecraftory.common.spells.EmptySpell;
@@ -49,6 +50,7 @@ import io.github.flemmli97.runecraftory.common.spells.PrismSpell;
 import io.github.flemmli97.runecraftory.common.spells.RafflesiaBreathSpell;
 import io.github.flemmli97.runecraftory.common.spells.RafflesiaCircleSpell;
 import io.github.flemmli97.runecraftory.common.spells.RockSpearSpell;
+import io.github.flemmli97.runecraftory.common.spells.RootSpike;
 import io.github.flemmli97.runecraftory.common.spells.ShineSpell;
 import io.github.flemmli97.runecraftory.common.spells.SlashSpell;
 import io.github.flemmli97.runecraftory.common.spells.SleepAuraSpell;
@@ -103,7 +105,7 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> PARALLEL_LASER = SPELLS.register("parallel_laser", DoubleWaterLaserSpell::new);
     public static final RegistryEntrySupplier<Spell> DELTA_LASER = SPELLS.register("delta_laser", TripleWaterLaserSpell::new);
     public static final RegistryEntrySupplier<Spell> SCREW_ROCK = SPELLS.register("screw_rock", () -> new RockSpearSpell(false));
-    public static final RegistryEntrySupplier<Spell> EARTH_SPIKE = SPELLS.register("earth_spike", TripleWaterLaserSpell::new);
+    public static final RegistryEntrySupplier<Spell> EARTH_SPIKE = SPELLS.register("earth_spike", EarthSpikeSpell::new);
     public static final RegistryEntrySupplier<Spell> AVENGER_ROCK = SPELLS.register("avenger_rock", () -> new RockSpearSpell(true));
     public static final RegistryEntrySupplier<Spell> SONIC = SPELLS.register("sonic", WindBladeSpell::new);
     public static final RegistryEntrySupplier<Spell> DOUBLE_SONIC = SPELLS.register("double_sonic", DoubleWindBladeSpell::new);
@@ -156,19 +158,17 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> APPLE_RAIN = SPELLS.register("apple_rain", () -> new AppleRain(AppleRain.Type.NORMAL));
     public static final RegistryEntrySupplier<Spell> APPLE_RAIN_BIG = SPELLS.register("apple_rain_big", () -> new AppleRain(AppleRain.Type.BIG));
     public static final RegistryEntrySupplier<Spell> APPLE_RAIN_MORE = SPELLS.register("apple_rain_more", () -> new AppleRain(AppleRain.Type.LOTS));
+    public static final RegistryEntrySupplier<Spell> ROOT_SPIKE = SPELLS.register("root_spike", RootSpike::new);
     public static final RegistryEntrySupplier<Spell> FIREBALL_BARRAGE = SPELLS.register("fireball_barrage", () -> new ElementBallBarrageSpell(EnumElement.FIRE));
     public static final RegistryEntrySupplier<Spell> BUBBLE_BEAM = SPELLS.register("bubble_beam", () -> new ElementBallBarrageSpell(EnumElement.WATER));
     public static final RegistryEntrySupplier<Spell> SLASH = SPELLS.register("slash", SlashSpell::new);
-
     public static final RegistryEntrySupplier<Spell> BIG_LEAF_SPELL = SPELLS.register("big_leaf_spell_single", () -> new BigLeafSpell(false));
     public static final RegistryEntrySupplier<Spell> BIG_LEAF_SPELL_DOUBLE = SPELLS.register("big_leaf_spell_double", () -> new BigLeafSpell(true));
     public static final RegistryEntrySupplier<Spell> SMALL_LEAF_SPELL_X3 = SPELLS.register("small_leaf_spell_x3", () -> new SmallLeafSpell(3));
     public static final RegistryEntrySupplier<Spell> SMALL_LEAF_SPELL_X5 = SPELLS.register("small_leaf_spell_x5", () -> new SmallLeafSpell(5));
     public static final RegistryEntrySupplier<Spell> SMALL_LEAF_SPELL_X7 = SPELLS.register("small_leaf_spell_x7", () -> new SmallLeafSpell(7));
-
     public static final RegistryEntrySupplier<Spell> BONE_NEEDLES = SPELLS.register("bone_needles", BoneNeedleSpell::new);
     public static final RegistryEntrySupplier<Spell> ENERGY_ORB_SPELL = SPELLS.register("energy_orb_spell", EnergyOrbSpell::new);
-
     public static final RegistryEntrySupplier<Spell> RAFFLESIA_POISON = SPELLS.register("rafflesia_poison", () -> new RafflesiaBreathSpell(EntityStatusBall.Type.RAFFLESIA_POISON));
     public static final RegistryEntrySupplier<Spell> RAFFLESIA_PARA = SPELLS.register("rafflesia_para", () -> new RafflesiaBreathSpell(EntityStatusBall.Type.RAFFLESIA_PARALYSIS));
     public static final RegistryEntrySupplier<Spell> RAFFLESIA_SLEEP = SPELLS.register("rafflesia_sleep", () -> new RafflesiaBreathSpell(EntityStatusBall.Type.RAFFLESIA_SLEEP));
