@@ -20,9 +20,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.npc.Npc;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -34,6 +37,7 @@ import net.minecraft.world.phys.Vec3;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class EntityUtils {
@@ -184,6 +188,28 @@ public class EntityUtils {
     public static Vec3 getStraightProjectileTarget(Vec3 from, Entity target) {
         AABB aabb = target.getBoundingBox().inflate(target.getBbHeight() * 0.1);
         return new Vec3(target.getX(), Mth.clamp(from.y(), aabb.minY, aabb.maxY), target.getZ());
+    }
+
+    public static LivingEntity ownedProjectileTarget(Entity owner) {
+        if (owner != null) {
+            if (owner instanceof Mob mob && mob.getTarget() != null)
+                return mob.getTarget();
+            else if (owner instanceof LivingEntity livingOwner) {
+                Function<LivingEntity, Predicate<LivingEntity>> generator = ownerEntity -> ownerEntity instanceof BaseMonster monster ? monster.targetPred : e -> {
+                    if (ownerEntity instanceof Player)
+                        return !(e instanceof Animal || e instanceof Npc || (e instanceof OwnableEntity ownable && ownerEntity.getUUID().equals(ownable.getOwnerUUID())));
+                    if (ownerEntity instanceof Mob mob) {
+                        return e == mob.getTarget();
+                    }
+                    return false;
+                };
+                Predicate<LivingEntity> pred = owner.getControllingPassenger() instanceof LivingEntity controller ? generator.apply(controller) : generator.apply(livingOwner);
+                return owner.level.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat().ignoreLineOfSight()
+                        .range(10).selector(pred), livingOwner, livingOwner.getX(), livingOwner.getY(), livingOwner.getZ(), new AABB(-10, -10, -10, 10, 10, 10)
+                        .move(livingOwner.position()));
+            }
+        }
+        return null;
     }
 
     record WeightedChestTier(int tier, int weight, float modifier, int max) {

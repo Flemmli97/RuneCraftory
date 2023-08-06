@@ -34,7 +34,7 @@ public class EntitySpirit extends EntityWispBase {
     public void attackFar(LivingEntity target) {
         if (this.level.isClientSide)
             return;
-        ModSpells.SPIRITFLAME.get().use(this);
+        ModSpells.SPIRIT_FLAME.get().use(this);
     }
 
     @Override

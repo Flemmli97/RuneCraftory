@@ -37,6 +37,6 @@ public class EntityIgnis extends EntityWispBase {
 
     @Override
     public void attackClose(LivingEntity target) {
-        ModSpells.IGNISFLAME.get().use(this);
+        ModSpells.IGNIS_FLAME.get().use(this);
     }
 }

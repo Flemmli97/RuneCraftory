@@ -64,7 +64,7 @@ public class EntityChimera extends BossMonster implements DelayedAttacker {
         b.put(WATER_TAIL_BUBBLE, summonWater);
         b.put(WATER_TAIL_BEAM, (anim, entity) -> {
             if (anim.canAttack()) {
-                ModSpells.WATERLASER.get().use(entity);
+                ModSpells.WATER_LASER.get().use(entity);
             }
         });
         b.put(LEAP, (anim, entity) -> {

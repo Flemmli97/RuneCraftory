@@ -47,7 +47,7 @@ public class ShopItemsManager extends SimpleJsonResourceReloadListener {
 
     public static final Gson GSON = new GsonBuilder().enableComplexMapKeySerialization()
             .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(Suppliers.memoize(PlatformUtils.INSTANCE::attributes)))
-            .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(Suppliers.memoize(ModSpells.SPELLREGISTRY::get))).create();
+            .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(Suppliers.memoize(ModSpells.SPELL_REGISTRY::get))).create();
 
     private Map<NPCJob, Collection<ShopItemProperties>> shopItems = ImmutableMap.of();
     private Map<NPCJob, Collection<ShopItemProperties>> shopItemsDefaults = ImmutableMap.of();

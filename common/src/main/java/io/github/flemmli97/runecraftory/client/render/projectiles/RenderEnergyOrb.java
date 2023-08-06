@@ -113,7 +113,7 @@ public class RenderEnergyOrb extends RenderProjectileModel<EntityHomingEnergyOrb
     @Override
     public void translate(EntityHomingEnergyOrb entity, PoseStack stack, float pitch, float yaw, float partialTicks) {
         stack.scale(-1.0f, -1.0f, 1.0f);
-        stack.translate(0.0, -1.501f + 1/16d, 0.0);
+        stack.translate(0.0, -1.501f + 1 / 16d, 0.0);
     }
 
     @Override

@@ -91,7 +91,7 @@ public class EntityWeagle extends BaseMonster {
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(GALE)) {
             if (anim.canAttack()) {
-                ModSpells.GUSTSPELL.get().use(this);
+                ModSpells.GUST_SPELL.get().use(this);
             }
         } else if (anim.is(SWOOP)) {
             if (this.hitEntity == null)

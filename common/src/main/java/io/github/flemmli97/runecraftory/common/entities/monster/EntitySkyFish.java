@@ -101,7 +101,7 @@ public class EntitySkyFish extends BaseMonster {
         if (anim.is(BEAM)) {
             this.getNavigation().stop();
             if (anim.canAttack()) {
-                ModSpells.WATERLASER.get().use(this);
+                ModSpells.WATER_LASER.get().use(this);
             }
         } else if (anim.is(SWIPE)) {
             if (anim.canAttack()) {

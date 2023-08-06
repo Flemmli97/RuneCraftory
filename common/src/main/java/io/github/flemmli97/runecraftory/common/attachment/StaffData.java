@@ -38,11 +38,11 @@ public class StaffData {
 
     public void readFromNBT(CompoundTag nbt) {
         if (nbt.contains("Tier_1"))
-            this.tier1 = ModSpells.SPELLREGISTRY.get().getFromId(new ResourceLocation(nbt.getString("Tier_1")));
+            this.tier1 = ModSpells.SPELL_REGISTRY.get().getFromId(new ResourceLocation(nbt.getString("Tier_1")));
         if (nbt.contains("Tier_2"))
-            this.tier2 = ModSpells.SPELLREGISTRY.get().getFromId(new ResourceLocation(nbt.getString("Tier_2")));
+            this.tier2 = ModSpells.SPELL_REGISTRY.get().getFromId(new ResourceLocation(nbt.getString("Tier_2")));
         if (nbt.contains("Tier_3"))
-            this.tier3 = ModSpells.SPELLREGISTRY.get().getFromId(new ResourceLocation(nbt.getString("Tier_3")));
+            this.tier3 = ModSpells.SPELL_REGISTRY.get().getFromId(new ResourceLocation(nbt.getString("Tier_3")));
     }
 
     public CompoundTag writeToNBT(CompoundTag nbt) {

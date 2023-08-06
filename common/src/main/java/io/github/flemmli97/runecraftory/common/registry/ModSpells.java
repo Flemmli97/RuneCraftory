@@ -82,69 +82,69 @@ import java.util.function.Supplier;
 
 public class ModSpells {
 
-    public static final ResourceKey<? extends Registry<Spell>> SPELLREGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation(RuneCraftory.MODID, "spells"));
-    public static final Supplier<SimpleRegistryWrapper<Spell>> SPELLREGISTRY = new LazyGetter<>(() -> PlatformUtils.INSTANCE.registry(SPELLREGISTRY_KEY));
+    public static final ResourceKey<? extends Registry<Spell>> SPELL_REGISTRY_KEY = ResourceKey.createRegistryKey(new ResourceLocation(RuneCraftory.MODID, "spells"));
+    public static final Supplier<SimpleRegistryWrapper<Spell>> SPELL_REGISTRY = new LazyGetter<>(() -> PlatformUtils.INSTANCE.registry(SPELL_REGISTRY_KEY));
 
-    public static final PlatformRegistry<Spell> SPELLS = PlatformUtils.INSTANCE.customRegistry(Spell.class, SPELLREGISTRY_KEY, new ResourceLocation(RuneCraftory.MODID, "empty_spell"), true, true);
+    public static final PlatformRegistry<Spell> SPELLS = PlatformUtils.INSTANCE.customRegistry(Spell.class, SPELL_REGISTRY_KEY, new ResourceLocation(RuneCraftory.MODID, "empty_spell"), true, true);
     public static final RegistryEntrySupplier<Spell> EMPTY = SPELLS.register("empty_spell", EmptySpell::new);
 
-    public static final RegistryEntrySupplier<Spell> STAFFCAST = SPELLS.register("base_staff_spell", BaseStaffSpell::new);
+    public static final RegistryEntrySupplier<Spell> STAFF_CAST = SPELLS.register("base_staff_spell", BaseStaffSpell::new);
 
     public static final RegistryEntrySupplier<Spell> ARROW = SPELLS.register("vanilla_arrow", ArrowSpell::new);
-    public static final RegistryEntrySupplier<Spell> TRIPLEARROW = SPELLS.register("triple_arrow", TripleArrowSpell::new);
-    public static final RegistryEntrySupplier<Spell> WITHERSKULL = SPELLS.register("vanilla_wither_skull", WitherSkullSpell::new);
-    public static final RegistryEntrySupplier<Spell> EVOKERFANG = SPELLS.register("vanilla_evoker_fang", EvokerFangSpell::new);
+    public static final RegistryEntrySupplier<Spell> TRIPLE_ARROW = SPELLS.register("triple_arrow", TripleArrowSpell::new);
+    public static final RegistryEntrySupplier<Spell> WITHER_SKULL = SPELLS.register("vanilla_wither_skull", WitherSkullSpell::new);
+    public static final RegistryEntrySupplier<Spell> EVOKER_FANG = SPELLS.register("vanilla_evoker_fang", EvokerFangSpell::new);
     public static final RegistryEntrySupplier<Spell> SNOWBALL = SPELLS.register("vanilla_snowball", SnowballSpell::new);
 
     public static final RegistryEntrySupplier<Spell> FIREBALL = SPELLS.register("fireball", () -> new FireballSpell(false));
-    public static final RegistryEntrySupplier<Spell> BIGFIREBALL = SPELLS.register("big_fireball", () -> new FireballSpell(true));
+    public static final RegistryEntrySupplier<Spell> BIG_FIREBALL = SPELLS.register("big_fireball", () -> new FireballSpell(true));
     public static final RegistryEntrySupplier<Spell> EXPLOSION = SPELLS.register("explosion", ExplosionSpell::new);
-    public static final RegistryEntrySupplier<Spell> WATERLASER = SPELLS.register("water_laser", WaterLaserSpell::new);
-    public static final RegistryEntrySupplier<Spell> PARALLELLASER = SPELLS.register("parallel_laser", DoubleWaterLaserSpell::new);
-    public static final RegistryEntrySupplier<Spell> DELTALASER = SPELLS.register("delta_laser", TripleWaterLaserSpell::new);
-    public static final RegistryEntrySupplier<Spell> SCREWROCK = SPELLS.register("screw_rock", () -> new RockSpearSpell(false));
-    //public static final RegistryEntrySupplier<Spell> DELTALASER = SPELLS.register("delta_laser", TripleWaterLaserSpell::new);
-    public static final RegistryEntrySupplier<Spell> AVENGERROCK = SPELLS.register("avenger_rock", () -> new RockSpearSpell(true));
+    public static final RegistryEntrySupplier<Spell> WATER_LASER = SPELLS.register("water_laser", WaterLaserSpell::new);
+    public static final RegistryEntrySupplier<Spell> PARALLEL_LASER = SPELLS.register("parallel_laser", DoubleWaterLaserSpell::new);
+    public static final RegistryEntrySupplier<Spell> DELTA_LASER = SPELLS.register("delta_laser", TripleWaterLaserSpell::new);
+    public static final RegistryEntrySupplier<Spell> SCREW_ROCK = SPELLS.register("screw_rock", () -> new RockSpearSpell(false));
+    public static final RegistryEntrySupplier<Spell> EARTH_SPIKE = SPELLS.register("earth_spike", TripleWaterLaserSpell::new);
+    public static final RegistryEntrySupplier<Spell> AVENGER_ROCK = SPELLS.register("avenger_rock", () -> new RockSpearSpell(true));
     public static final RegistryEntrySupplier<Spell> SONIC = SPELLS.register("sonic", WindBladeSpell::new);
-    public static final RegistryEntrySupplier<Spell> DOUBLESONIC = SPELLS.register("double_sonic", DoubleWindBladeSpell::new);
-    public static final RegistryEntrySupplier<Spell> PENETRATESONIC = SPELLS.register("penetrate_sonic", PenetrateWindBladeSpell::new);
-    public static final RegistryEntrySupplier<Spell> LIGHTBARRIER = SPELLS.register("light_barrier", LightBarrierSpell::new);
+    public static final RegistryEntrySupplier<Spell> DOUBLE_SONIC = SPELLS.register("double_sonic", DoubleWindBladeSpell::new);
+    public static final RegistryEntrySupplier<Spell> PENETRATE_SONIC = SPELLS.register("penetrate_sonic", PenetrateWindBladeSpell::new);
+    public static final RegistryEntrySupplier<Spell> LIGHT_BARRIER = SPELLS.register("light_barrier", LightBarrierSpell::new);
     public static final RegistryEntrySupplier<Spell> SHINE = SPELLS.register("shine", ShineSpell::new);
     public static final RegistryEntrySupplier<Spell> PRISM = SPELLS.register("prism", PrismSpell::new);
-    public static final RegistryEntrySupplier<Spell> DARKSNAKE = SPELLS.register("dark_snake", () -> new DarkBallSpell(EntityDarkBall.Type.SNAKE));
-    public static final RegistryEntrySupplier<Spell> DARKBALL = SPELLS.register("dark_ball", () -> new DarkBallSpell(EntityDarkBall.Type.BALL));
+    public static final RegistryEntrySupplier<Spell> DARK_SNAKE = SPELLS.register("dark_snake", () -> new DarkBallSpell(EntityDarkBall.Type.SNAKE));
+    public static final RegistryEntrySupplier<Spell> DARK_BALL = SPELLS.register("dark_ball", () -> new DarkBallSpell(EntityDarkBall.Type.BALL));
     public static final RegistryEntrySupplier<Spell> DARKNESS = SPELLS.register("darkness", DarknessSpell::new);
     public static final RegistryEntrySupplier<Spell> CURE = SPELLS.register("cure", HealT1Spell::new);
-    public static final RegistryEntrySupplier<Spell> CUREALL = SPELLS.register("cure_all", HealT2Spell::new);
-    public static final RegistryEntrySupplier<Spell> MASTERCURE = SPELLS.register("master_cure", HealT3Spell::new);
-    public static final RegistryEntrySupplier<Spell> MEDIPOISON = SPELLS.register("medi_poison", PoisonHealSpell::new);
-    public static final RegistryEntrySupplier<Spell> MEDIPARA = SPELLS.register("medi_paralysis", ParaHealSpell::new);
-    public static final RegistryEntrySupplier<Spell> MEDISEAL = SPELLS.register("medi_seal", UnsealSpell::new);
+    public static final RegistryEntrySupplier<Spell> CURE_ALL = SPELLS.register("cure_all", HealT2Spell::new);
+    public static final RegistryEntrySupplier<Spell> MASTER_CURE = SPELLS.register("master_cure", HealT3Spell::new);
+    public static final RegistryEntrySupplier<Spell> MEDI_POISON = SPELLS.register("medi_poison", PoisonHealSpell::new);
+    public static final RegistryEntrySupplier<Spell> MEDI_PARA = SPELLS.register("medi_paralysis", ParaHealSpell::new);
+    public static final RegistryEntrySupplier<Spell> MEDI_SEAL = SPELLS.register("medi_seal", UnsealSpell::new);
 
     public static final RegistryEntrySupplier<Spell> TELEPORT = SPELLS.register("teleport", TeleportSpell::new);
 
-    public static final RegistryEntrySupplier<Spell> GUSTSPELL = SPELLS.register("gust", GustSpell::new);
-    public static final RegistryEntrySupplier<Spell> STONETHROW = SPELLS.register("stone_throw", StoneThrowSpell::new);
-    public static final RegistryEntrySupplier<Spell> WEBSHOTSPELL = SPELLS.register("web_shot", WebShotSpell::new);
-    public static final RegistryEntrySupplier<Spell> SPIRITFLAME = SPELLS.register("spirit_flame", () -> new ElementalSpell(EnumElement.DARK));
-    public static final RegistryEntrySupplier<Spell> IGNISFLAME = SPELLS.register("ignis_flame", () -> new ElementalSpell(EnumElement.FIRE));
+    public static final RegistryEntrySupplier<Spell> GUST_SPELL = SPELLS.register("gust", GustSpell::new);
+    public static final RegistryEntrySupplier<Spell> STONE_THROW = SPELLS.register("stone_throw", StoneThrowSpell::new);
+    public static final RegistryEntrySupplier<Spell> WEB_SHOT = SPELLS.register("web_shot", WebShotSpell::new);
+    public static final RegistryEntrySupplier<Spell> SPIRIT_FLAME = SPELLS.register("spirit_flame", () -> new ElementalSpell(EnumElement.DARK));
+    public static final RegistryEntrySupplier<Spell> IGNIS_FLAME = SPELLS.register("ignis_flame", () -> new ElementalSpell(EnumElement.FIRE));
 
-    public static final RegistryEntrySupplier<Spell> POLLENPUFF = SPELLS.register("pollen_puff", PollenPuffSpell::new);
-    public static final RegistryEntrySupplier<Spell> SLEEPBALLS = SPELLS.register("sleep_balls", SleepBallSpell::new);
+    public static final RegistryEntrySupplier<Spell> POLLEN_PUFF = SPELLS.register("pollen_puff", PollenPuffSpell::new);
+    public static final RegistryEntrySupplier<Spell> SLEEP_BALLS = SPELLS.register("sleep_balls", SleepBallSpell::new);
     public static final RegistryEntrySupplier<Spell> WAVE = SPELLS.register("wave", WaveSpell::new);
     public static final RegistryEntrySupplier<Spell> BUTTERFLY = SPELLS.register("butterfly", ButterflySpell::new);
 
     public static final RegistryEntrySupplier<Spell> LASER3 = SPELLS.register("laser_3", Laser3Spell::new);
     public static final RegistryEntrySupplier<Spell> LASER5 = SPELLS.register("laser_5", Laser5Spell::new);
-    public static final RegistryEntrySupplier<Spell> LASERAOE = SPELLS.register("laser_aoe", LaserAOESpell::new);
-    public static final RegistryEntrySupplier<Spell> BIGLIGHTNING = SPELLS.register("big_lightning", BigLightningBoltSpell::new);
+    public static final RegistryEntrySupplier<Spell> LASER_AOE = SPELLS.register("laser_aoe", LaserAOESpell::new);
+    public static final RegistryEntrySupplier<Spell> BIG_LIGHTNING = SPELLS.register("big_lightning", BigLightningBoltSpell::new);
 
-    public static final RegistryEntrySupplier<Spell> CARDTHROW = SPELLS.register("card_attack", CardThrowSpell::new);
-    public static final RegistryEntrySupplier<Spell> PLUSHTHROW = SPELLS.register("throw_plush", PlushThrowSpell::new);
+    public static final RegistryEntrySupplier<Spell> CARD_THROW = SPELLS.register("card_attack", CardThrowSpell::new);
+    public static final RegistryEntrySupplier<Spell> PLUSH_THROW = SPELLS.register("throw_plush", PlushThrowSpell::new);
     public static final RegistryEntrySupplier<Spell> FURNITURE = SPELLS.register("furniture_summon", FurnitureThrowSpell::new);
-    public static final RegistryEntrySupplier<Spell> DARKBEAM = SPELLS.register("dark_beam", DarkBeamSpell::new);
+    public static final RegistryEntrySupplier<Spell> DARK_BEAM = SPELLS.register("dark_beam", DarkBeamSpell::new);
     public static final RegistryEntrySupplier<Spell> PLATE = SPELLS.register("big_plate", BigPlateSpell::new);
-    public static final RegistryEntrySupplier<Spell> DARKBULLETS = SPELLS.register("dark_bullets", DarkBulletsSpell::new);
+    public static final RegistryEntrySupplier<Spell> DARK_BULLETS = SPELLS.register("dark_bullets", DarkBulletsSpell::new);
     public static final RegistryEntrySupplier<Spell> POISON_BALL = SPELLS.register("poison_ball", PoisonBallSpell::new);
     public static final RegistryEntrySupplier<Spell> POISON_NEEDLE = SPELLS.register("poison_needle", PoisonNeedleSpell::new);
     public static final RegistryEntrySupplier<Spell> SLEEP_AURA = SPELLS.register("sleep_aura", SleepAuraSpell::new);

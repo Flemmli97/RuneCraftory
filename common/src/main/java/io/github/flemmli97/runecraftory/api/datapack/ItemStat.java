@@ -47,9 +47,9 @@ public class ItemStat {
     public static final Codec<ItemStat> CODEC = RecordCodecBuilder.create((instance) ->
             instance.group(
                     CodecHelper.enumCodec(EnumElement.class, EnumElement.NONE).orElse(EnumElement.NONE).fieldOf("element").forGetter(ItemStat::element),
-                    CodecHelper.ofCustomRegistry(ModSpells.SPELLREGISTRY, ModSpells.SPELLREGISTRY_KEY).optionalFieldOf("tier1Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
-                    CodecHelper.ofCustomRegistry(ModSpells.SPELLREGISTRY, ModSpells.SPELLREGISTRY_KEY).optionalFieldOf("tier2Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
-                    CodecHelper.ofCustomRegistry(ModSpells.SPELLREGISTRY, ModSpells.SPELLREGISTRY_KEY).optionalFieldOf("tier3Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
+                    CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier1Spell").forGetter(s -> Optional.ofNullable(s.getTier1Spell())),
+                    CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier2Spell").forGetter(s -> Optional.ofNullable(s.getTier2Spell())),
+                    CodecHelper.ofCustomRegistry(ModSpells.SPELL_REGISTRY, ModSpells.SPELL_REGISTRY_KEY).optionalFieldOf("tier3Spell").forGetter(s -> Optional.ofNullable(s.getTier3Spell())),
 
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("itemStats").forGetter(ItemStat::itemStats),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("monsterBonus").forGetter(ItemStat::getMonsterGiftIncrease),
@@ -144,7 +144,7 @@ public class ItemStat {
         for (int i = 0; i < size; i++)
             builder.put(PlatformUtils.INSTANCE.attributes().getFromId(buffer.readResourceLocation()), buffer.readDouble());
         stat.monsterGiftIncrease = builder.build();
-        SimpleRegistryWrapper<Spell> spellRegistry = PlatformUtils.INSTANCE.registry(ModSpells.SPELLREGISTRY_KEY);
+        SimpleRegistryWrapper<Spell> spellRegistry = PlatformUtils.INSTANCE.registry(ModSpells.SPELL_REGISTRY_KEY);
         if (buffer.readBoolean())
             stat.tier1Spell = spellRegistry.getFromId(buffer.readResourceLocation());
         if (buffer.readBoolean())

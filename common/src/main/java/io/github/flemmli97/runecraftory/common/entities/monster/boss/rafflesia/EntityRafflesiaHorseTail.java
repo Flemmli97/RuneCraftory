@@ -35,7 +35,7 @@ public class EntityRafflesiaHorseTail extends EntityRafflesiaPart implements Hea
         if (!this.level.isClientSide) {
             this.getAnimationHandler().runIfNotNull(anim -> {
                 if (anim.canAttack()) {
-                    ModSpells.CUREALL.get().use(this);
+                    ModSpells.CURE_ALL.get().use(this);
                 }
             });
         }

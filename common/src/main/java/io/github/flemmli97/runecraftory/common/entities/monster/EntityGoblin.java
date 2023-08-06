@@ -91,7 +91,7 @@ public class EntityGoblin extends LeapingMonster {
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
-                ModSpells.STONETHROW.get().use(this);
+                ModSpells.STONE_THROW.get().use(this);
             }
         } else
             super.handleAttack(anim);

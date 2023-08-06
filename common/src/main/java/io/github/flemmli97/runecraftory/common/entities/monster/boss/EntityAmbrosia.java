@@ -60,7 +60,7 @@ public class EntityAmbrosia extends BossMonster implements DelayedAttacker {
         b.put(SLEEP, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.canAttack())
-                ModSpells.SLEEPBALLS.get().use(entity);
+                ModSpells.SLEEP_BALLS.get().use(entity);
         });
         b.put(WAVE, (anim, entity) -> {
             entity.getNavigation().stop();

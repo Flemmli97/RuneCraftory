@@ -166,12 +166,12 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 9)
                 .addMonsterStat(ModAttributes.DEFENCE.get(), 0.4)
                 .addMonsterStat(ModAttributes.MAGIC_DEFENCE.get(), 0.4)
-                .setSpell(ModSpells.EVOKERFANG.get(), null, null));
+                .setSpell(ModSpells.EVOKER_FANG.get(), null, null));
         this.addStat(Items.WITHER_SKELETON_SKULL, new ItemStat.Builder(5000, 170, 29)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 5)
                 .addAttribute(ModAttributes.MAGIC.get(), 20)
                 .addMonsterStat(ModAttributes.MAGIC.get(), 1)
-                .setSpell(ModSpells.WITHERSKULL.get(), null, null)
+                .setSpell(ModSpells.WITHER_SKULL.get(), null, null)
                 .setElement(EnumElement.DARK));
         this.addStat(Items.NETHER_STAR, new ItemStat.Builder(20000, 600, 45)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 17)
@@ -181,7 +181,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.DRAIN.get(), 5)
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .addMonsterStat(ModAttributes.MAGIC.get(), 3)
-                .setSpell(ModSpells.WITHERSKULL.get(), null, null)
+                .setSpell(ModSpells.WITHER_SKULL.get(), null, null)
                 .setElement(EnumElement.DARK));
 
         //=======
@@ -989,7 +989,7 @@ public class ItemStatGen extends ItemStatProvider {
         this.addStat(ModItems.movingBranch.get(), new ItemStat.Builder(22000, 2300, 77)
                 .addAttribute(Attributes.ATTACK_DAMAGE, -10)
                 .addAttribute(ModAttributes.MAGIC.get(), 150)
-                .setSpell(ModSpells.APPLE_RAIN.get(), null, ModSpells.APPLE_SHIELD.get()));
+                .setSpell(ModSpells.APPLE_RAIN.get(), ModSpells.APPLE_SHIELD.get(), null));
 
         this.addStat(ModItems.glue.get(), new ItemStat.Builder(380, 41, 13)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 1)
@@ -1053,7 +1053,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1)
                 .addMonsterStat(ModAttributes.MAGIC.get(), 1)
                 .addMonsterStat(ModAttributes.SLEEP.get(), 0.4)
-                .setSpell(ModSpells.POLLENPUFF.get(), ModSpells.WAVE.get(), ModSpells.BUTTERFLY.get()));
+                .setSpell(ModSpells.POLLEN_PUFF.get(), ModSpells.WAVE.get(), ModSpells.BUTTERFLY.get()));
         this.addStat(ModItems.threadSpider.get(), new ItemStat.Builder(370, 28, 17)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 2)
                 .addAttribute(ModAttributes.MAGIC.get(), 2)
@@ -1066,7 +1066,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.PARA.get(), 5)
                 .addMonsterStat(ModAttributes.SEAL.get(), 0.5)
                 .addMonsterStat(ModAttributes.PARA.get(), 0.3)
-                .setSpell(ModSpells.DARKBEAM.get(), ModSpells.PLATE.get(), ModSpells.DARKBULLETS.get()));
+                .setSpell(ModSpells.DARK_BEAM.get(), ModSpells.PLATE.get(), ModSpells.DARK_BULLETS.get()));
         this.addStat(ModItems.vine.get(), new ItemStat.Builder(515, 58, 34)
                 .addAttribute(ModAttributes.MAGIC.get(), 10)
                 .addAttribute(ModAttributes.SEAL.get(), 5)
@@ -1180,7 +1180,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.MAGIC_DEFENCE.get(), 6)
                 .addAttribute(ModAttributes.RES_DIZZY.get(), 17)
                 .addMonsterStat(ModAttributes.RES_DIZZY.get(), 1)
-                .setSpell(ModSpells.LASER3.get(), ModSpells.LASER5.get(), ModSpells.BIGLIGHTNING.get()));
+                .setSpell(ModSpells.LASER3.get(), ModSpells.LASER5.get(), ModSpells.BIG_LIGHTNING.get()));
         this.addStat(ModItems.furRedLion.get(), 0, 0, 0);
         this.addStat(ModItems.furBlueLion.get(), 0, 0, 0);
         this.addStat(ModItems.chestHair.get(), 0, 0, 0);
@@ -1327,7 +1327,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addMonsterStat(ModAttributes.RES_SEAL.get(), 1)
                 .addMonsterStat(ModAttributes.RES_PARA.get(), 1)
                 .addMonsterStat(ModAttributes.RES_DRAIN.get(), 1)
-                .setSpell(ModSpells.CARDTHROW.get(), ModSpells.PLUSHTHROW.get(), ModSpells.FURNITURE.get()));
+                .setSpell(ModSpells.CARD_THROW.get(), ModSpells.PLUSH_THROW.get(), ModSpells.FURNITURE.get()));
         this.addStat(ModItems.warriorsProof.get(), 0, 0, 0);
         this.addStat(ModItems.proofOfRank.get(), 0, 0, 0);
         this.addStat(ModItems.throneOfEmpire.get(), 0, 0, 0);

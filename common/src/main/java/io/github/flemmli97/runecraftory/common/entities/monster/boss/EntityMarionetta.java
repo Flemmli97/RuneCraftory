@@ -66,7 +66,7 @@ public class EntityMarionetta extends BossMonster {
         b.put(CARD_ATTACK, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.canAttack())
-                ModSpells.CARDTHROW.get().use(entity);
+                ModSpells.CARD_THROW.get().use(entity);
         });
         b.put(CHEST_ATTACK, (anim, entity) -> {
             if (entity.aiVarHelper == null)
@@ -98,12 +98,12 @@ public class EntityMarionetta extends BossMonster {
         b.put(STUFFED_ANIMALS, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.canAttack())
-                ModSpells.PLUSHTHROW.get().use(entity);
+                ModSpells.PLUSH_THROW.get().use(entity);
         });
         b.put(DARK_BEAM, (anim, entity) -> {
             entity.getNavigation().stop();
             if (anim.canAttack() && !EntityUtils.sealed(entity))
-                ModSpells.DARKBEAM.get().use(entity);
+                ModSpells.DARK_BEAM.get().use(entity);
         });
         b.put(FURNITURE, (anim, entity) -> {
             entity.getNavigation().stop();

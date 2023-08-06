@@ -96,7 +96,7 @@ public class EntityThunderbolt extends BossMonster {
         });
         b.put(WIND_BLADE, (anim, entity) -> {
             if (anim.canAttack()) {
-                ModSpells.DOUBLESONIC.get().use(entity);
+                ModSpells.DOUBLE_SONIC.get().use(entity);
             }
         });
         b.put(LASER_X5, (anim, entity) -> {
@@ -106,12 +106,12 @@ public class EntityThunderbolt extends BossMonster {
         });
         b.put(LASER_AOE, (anim, entity) -> {
             if (anim.canAttack()) {
-                ModSpells.LASERAOE.get().use(entity);
+                ModSpells.LASER_AOE.get().use(entity);
             }
         });
         BiConsumer<AnimatedAction, EntityThunderbolt> bigLaser = (anim, entity) -> {
             if (anim.canAttack()) {
-                ModSpells.BIGLIGHTNING.get().use(entity);
+                ModSpells.BIG_LIGHTNING.get().use(entity);
             }
         };
         b.put(LASER_KICK, bigLaser);

@@ -1,11 +1,11 @@
 package io.github.flemmli97.runecraftory.common.entities.misc;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.CustomDamage;
+import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -15,21 +15,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.PowerableMob;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.npc.Npc;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableMob {
 
@@ -77,29 +68,11 @@ public class EntityHomingEnergyOrb extends BaseDamageCloud implements PowerableM
             this.spawnPos = this.position().add(0, this.getBbHeight() * 0.5, 0);
         if (!this.level.isClientSide) {
             if (this.targetMob == null || this.targetMob.isDeadOrDying()) {
-                Entity owner = this.getOwner();
-                if (owner != null) {
-                    if (owner instanceof Mob mob && mob.getTarget() != null)
-                        this.targetMob = mob.getTarget();
-                    else if (owner instanceof LivingEntity livingOwner) {
-                        Function<LivingEntity, Predicate<LivingEntity>> generator = ownerEntity -> ownerEntity instanceof BaseMonster monster ? monster.targetPred : e -> {
-                            if (ownerEntity instanceof Player)
-                                return !(e instanceof Animal || e instanceof Npc || (e instanceof OwnableEntity ownable && ownerEntity.getUUID().equals(ownable.getOwnerUUID())));
-                            if (ownerEntity instanceof Mob mob) {
-                                return e == mob.getTarget();
-                            }
-                            return false;
-                        };
-                        Predicate<LivingEntity> pred = owner.getControllingPassenger() instanceof LivingEntity controller ? generator.apply(controller) : generator.apply(livingOwner);
-                        this.targetMob = this.level.getNearestEntity(LivingEntity.class, TargetingConditions.forCombat().ignoreLineOfSight()
-                                .range(10).selector(pred), livingOwner, livingOwner.getX(), livingOwner.getY(), livingOwner.getZ(), new AABB(-10, -10, -10, 10, 10, 10)
-                                .move(livingOwner.position()));
-                        if (this.targetMob != null)
-                            this.entityData.set(TARGET_UUID, Optional.of(this.targetMob.getUUID()));
-                        else
-                            this.entityData.set(TARGET_UUID, Optional.empty());
-                    }
-                }
+                this.targetMob = EntityUtils.ownedProjectileTarget(this.getOwner());
+                if (this.targetMob != null)
+                    this.entityData.set(TARGET_UUID, Optional.of(this.targetMob.getUUID()));
+                else
+                    this.entityData.set(TARGET_UUID, Optional.empty());
             } else {
                 Vec3 dir = this.targetMob.position().add(0, this.targetMob.getBbHeight() * 0.5, 0).subtract(this.position());
                 if (dir.lengthSqr() > 0.27 * 0.27)

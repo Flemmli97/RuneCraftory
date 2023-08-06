@@ -13,7 +13,7 @@ public class GsonInstances {
 
     public static final Gson ATTRIBUTE_SPELLS = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting().disableHtmlEscaping()
             .registerTypeAdapter(Attribute.class, new RegistryObjectSerializer<>(Suppliers.memoize(PlatformUtils.INSTANCE::attributes)))
-            .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(Suppliers.memoize(ModSpells.SPELLREGISTRY::get))).create();
+            .registerTypeAdapter(Spell.class, new RegistryObjectSerializer<>(Suppliers.memoize(ModSpells.SPELL_REGISTRY::get))).create();
 
 
     public static final Gson ATTRIBUTE_EFFECTS = new GsonBuilder().enableComplexMapKeySerialization().setPrettyPrinting()

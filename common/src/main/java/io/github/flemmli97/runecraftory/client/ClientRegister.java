@@ -18,6 +18,7 @@ import io.github.flemmli97.runecraftory.client.model.misc.ModelButterfly;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelChest;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelEnergyOrb;
 import io.github.flemmli97.runecraftory.client.model.misc.ModelPlate;
+import io.github.flemmli97.runecraftory.client.model.misc.ModelSpikes;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelAmbrosia;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelAnt;
 import io.github.flemmli97.runecraftory.client.model.monster.ModelBeetle;
@@ -104,6 +105,7 @@ import io.github.flemmli97.runecraftory.client.render.projectiles.RenderPoisonNe
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderRockSpear;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSmallRaccoonLeaf;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSpiderWeb;
+import io.github.flemmli97.runecraftory.client.render.projectiles.RenderSpikes;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderStaffBall;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderThrownItem;
 import io.github.flemmli97.runecraftory.client.render.projectiles.RenderWaterLaser;
@@ -341,6 +343,7 @@ public class ClientRegister {
         consumer.register(ModEntities.BIG_RACCOON_LEAF.get(), RenderBigRaccoonLeaf::new);
         consumer.register(ModEntities.BONE_NEEDLE.get(), RenderBoneNeedle::new);
         consumer.register(ModEntities.ENERGY_ORB.get(), RenderEnergyOrb::new);
+        consumer.register(ModEntities.HOMING_SPIKES.get(), RenderSpikes::new);
 
         consumer.register(ModEntities.DARK_BULLET.get(), RenderDarkBullet::new);
 
@@ -433,6 +436,7 @@ public class ClientRegister {
 
         consumer.accept(ModelEnergyOrb.LAYER_LOCATION, () -> ModelEnergyOrb.createBodyLayer(CubeDeformation.NONE));
         consumer.accept(ModelEnergyOrb.LAYER_LOCATION_LAYER, () -> ModelEnergyOrb.createBodyLayer(new CubeDeformation(1.5f)));
+        consumer.accept(ModelSpikes.LAYER_LOCATION, ModelSpikes::createBodyLayer);
 
         consumer.accept(AnimatedPlayerModel.LAYER_LOCATION, AnimatedPlayerModel::createBodyLayer);
         consumer.accept(PiyoSandals.LAYER_LOCATION, PiyoSandals::createBodyLayer);

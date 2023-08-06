@@ -83,7 +83,7 @@ public class EntityLeafBall extends BaseMonster {
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
-                ModSpells.DOUBLESONIC.get().use(this);
+                ModSpells.DOUBLE_SONIC.get().use(this);
             }
         } else if (anim.is(SLEEP_ATTACK)) {
             this.getNavigation().stop();

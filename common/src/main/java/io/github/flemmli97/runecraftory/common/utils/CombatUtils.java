@@ -261,7 +261,7 @@ public class CombatUtils {
                     knockback *= 0.85f;
                 }
                 if (player.level instanceof ServerLevel serverLevel)
-                    ModSpells.STAFFCAST.get().use(serverLevel, player, stack);
+                    ModSpells.STAFF_CAST.get().use(serverLevel, player, stack);
                 if (ItemNBT.doesFixedOneDamage(stack)) {
                     damageType = CustomDamage.DamageType.FIXED;
                     damagePhys = 1;
@@ -307,7 +307,7 @@ public class CombatUtils {
         CustomDamage.Builder source = new CustomDamage.Builder(attacker).hurtResistant(5).element(ItemNBT.getElement(stack));
         double damagePhys = getAttributeValue(attacker, Attributes.ATTACK_DAMAGE);
         if (attacker.level instanceof ServerLevel serverLevel)
-            ModSpells.STAFFCAST.get().use(serverLevel, attacker, stack);
+            ModSpells.STAFF_CAST.get().use(serverLevel, attacker, stack);
         if (ItemNBT.doesFixedOneDamage(stack)) {
             source.damageType(CustomDamage.DamageType.FIXED);
             damagePhys = 1;

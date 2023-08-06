@@ -157,7 +157,7 @@ public class EntityGhost extends ChargingMonster {
             if (anim.getTick() == 1 && this.getTarget() != null)
                 this.lookAt(this.getTarget(), 360, 90);
             if (anim.canAttack()) {
-                ModSpells.DARKBALL.get().use(this);
+                ModSpells.DARK_BALL.get().use(this);
             }
         } else if (anim.is(VANISH)) {
             this.getNavigation().stop();
