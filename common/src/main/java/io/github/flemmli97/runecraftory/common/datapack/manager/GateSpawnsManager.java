@@ -117,7 +117,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
                     });
                 }, () -> RuneCraftory.logger.error("No such entity " + spawnData.entity() + " for spawn data " + fres));
             } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse spawn data json {}", fres);
+                RuneCraftory.logger.error("Couldnt parse spawn data json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });

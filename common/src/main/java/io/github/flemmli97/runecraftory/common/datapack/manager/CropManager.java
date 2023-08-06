@@ -72,7 +72,7 @@ public class CropManager extends SimpleJsonResourceReloadListener {
                     builder.put(res, props);
                 }
             } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse crop properties json {}", fres);
+                RuneCraftory.logger.error("Couldnt parse crop properties json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });

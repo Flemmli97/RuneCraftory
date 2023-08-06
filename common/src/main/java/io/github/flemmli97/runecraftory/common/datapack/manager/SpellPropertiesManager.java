@@ -43,7 +43,7 @@ public class SpellPropertiesManager extends SimpleJsonResourceReloadListener {
                         .getOrThrow(false, RuneCraftory.logger::error);
                 propertiesBuilder.put(key, props);
             } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse spell properties json {}", key);
+                RuneCraftory.logger.error("Couldnt parse spell properties json {} {}", key, ex);
                 ex.fillInStackTrace();
             }
         });

@@ -70,7 +70,7 @@ public class FoodManager extends SimpleJsonResourceReloadListener {
                     builder.put(res, props);
                 }
             } catch (Exception ex) {
-                RuneCraftory.logger.error("Couldnt parse food stat json {}", fres);
+                RuneCraftory.logger.error("Couldnt parse food stat json {} {}", fres, ex);
                 ex.fillInStackTrace();
             }
         });

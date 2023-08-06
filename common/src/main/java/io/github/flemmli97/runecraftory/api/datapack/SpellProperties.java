@@ -19,12 +19,14 @@ public class SpellProperties {
                     Codec.INT.fieldOf("cooldown").forGetter(d -> d.cooldown),
                     Codec.INT.fieldOf("rpCost").forGetter(d -> d.rpCost),
                     Codec.unboundedMap(CodecHelper.enumCodec(EnumSkills.class, null), Codec.FLOAT).fieldOf("skillXP").forGetter(d -> d.skillXP)
-            ).apply(instance, (cooldown, rpCost, skillXp) -> new SpellProperties(new EnumMap<>(skillXp), cooldown, rpCost)));
+            ).apply(instance, (cooldown, rpCost, skillXp) -> new SpellProperties(skillXp, cooldown, rpCost)));
 
     public static final SpellProperties DEFAULT_PROP = new SpellProperties(new EnumMap<>(EnumSkills.class), 20, 0);
 
-    public SpellProperties(EnumMap<EnumSkills, Float> skillXP, int cooldown, int rpCost) {
-        this.skillXP = Collections.unmodifiableMap(skillXP);
+    public SpellProperties(Map<EnumSkills, Float> skillXP, int cooldown, int rpCost) {
+        EnumMap<EnumSkills, Float> xp = new EnumMap<>(EnumSkills.class);
+        xp.putAll(skillXP);
+        this.skillXP = Collections.unmodifiableMap(xp);
         this.cooldown = cooldown;
         this.rpCost = rpCost;
     }
@@ -34,7 +36,7 @@ public class SpellProperties {
      */
     public static class Builder {
 
-        private final EnumMap<EnumSkills, Float> xp = new EnumMap<>(EnumSkills.class);
+        private final Map<EnumSkills, Float> xp = new EnumMap<>(EnumSkills.class);
 
         private final int cooldown, rpCost;
 
