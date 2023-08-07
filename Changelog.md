@@ -1,3 +1,27 @@
+RuneCraftory 1.6.0
+================
+- Dragon scales providing bonus shield stats (only up to 50%) when used in upgrades
+- Added lots of monsters
+- Added bosses:
+  - Chimera, Dead Tree, Raccoon, Skelefang, Rafflesia
+- Bosses heal rapidly if no nearby players
+- Bosses heal to full if they manage to kill all nearby players
+- Mob stats etc. are now datapack and not config based except a few things
+- New drop chance calculation that incorporates looting and luck. Looting is now multiplicative while luck is additive
+- Add missing eathspike spell
+- Spell stuff (like cooldown etc) are not configurable via datapack
+- Fixes:
+  - Redone a few textures
+  - Fix monster doing nothing when ridden by non players
+  - Make ridden mobs model fit to animations
+  - Fix untaming entities in parties not removing them
+  - Make untaming entities remove from parties
+  - Tweak damage calculations
+  - Gate spawning config moved to datapack
+  - Fix (non player) ridden monsters not attacking
+  - Fix random move ai sometimes crashing
+  - Improve targeting for mobs with owner. Check owner directly instead of just uuid
+
 RuneCraftory 1.5.1
 ================
 - Removed some unused textures
