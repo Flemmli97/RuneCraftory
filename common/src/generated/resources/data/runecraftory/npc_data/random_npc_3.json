@@ -1,0 +1,23 @@
+{
+  "gender": "UNDEFINED",
+  "weight": 50,
+  "romanceable": false,
+  "neutralGiftResponse": "npc.generic.3.gift.default",
+  "giftItems": {
+    "dislike": {
+      "responseKey": "npc.generic.3.dislike",
+      "xp": -10
+    },
+    "like": {
+      "responseKey": "npc.generic.3.like",
+      "xp": 25
+    }
+  },
+  "interactions": {
+    "GREETING": "runecraftory:random_npc_3/greeting",
+    "TALK": "runecraftory:random_npc_3/talk",
+    "FOLLOWYES": "runecraftory:random_npc_3/follow.yes",
+    "FOLLOWNO": "runecraftory:random_npc_3/follow.no",
+    "FOLLOWSTOP": "runecraftory:random_npc_3/follow.stop"
+  }
+}

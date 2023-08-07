@@ -39,6 +39,11 @@ public abstract class NPCDataProvider implements DataProvider {
     private final Map<ResourceLocation, NPCData.NPCLook> looks = new HashMap<>();
     private final Map<ResourceLocation, NPCData.ConversationSet> conversations = new HashMap<>();
 
+    private List<String> surnames = new ArrayList<>();
+    private List<String> maleNames = new ArrayList<>();
+    private List<String> femaleNames = new ArrayList<>();
+    private Map<NPCData.GiftType, List<TagKey<Item>>> giftTags = new LinkedHashMap<>();
+
     //Translation for lang
     public final Map<String, String> translations = new LinkedHashMap<>();
 
@@ -96,6 +101,36 @@ public abstract class NPCDataProvider implements DataProvider {
                 LOGGER.error("Couldn't save npc conversations {}", path, e);
             }
         });
+        Path path = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/female_names.json");
+        try {
+            JsonElement obj = GSON.toJsonTree(this.femaleNames);
+            DataProvider.save(GSON, cache, obj, path);
+        } catch (IOException e) {
+            LOGGER.error("Couldn't save male names {}", path, e);
+        }
+        path = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/male_names.json");
+        try {
+            JsonElement obj = GSON.toJsonTree(this.maleNames);
+            DataProvider.save(GSON, cache, obj, path);
+        } catch (IOException e) {
+            LOGGER.error("Couldn't save female names {}", path, e);
+        }
+        path = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/surnames.json");
+        try {
+            JsonElement obj = GSON.toJsonTree(this.surnames);
+            DataProvider.save(GSON, cache, obj, path);
+        } catch (IOException e) {
+            LOGGER.error("Couldn't save surnames {}", path, e);
+        }
+        this.gifts.forEach((type, list)->{
+            Path path1 = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/" + type.name().toLowerCase() +"_gifts.json");
+            try {
+                JsonElement obj = GSON.toJsonTree(list);
+                DataProvider.save(GSON, cache, obj, path1);
+            } catch (IOException e) {
+                LOGGER.error("Couldn't save gifts {}", path1, e);
+            }
+        });
     }
 
     @Override
@@ -149,5 +184,21 @@ public abstract class NPCDataProvider implements DataProvider {
 
     public void addSelectableGiftTag(NPCData.GiftType type, ResourceLocation tag) {
         this.gifts.computeIfAbsent(type, t -> new ArrayList<>()).add(tag);
+    }
+
+    public void addFemaleName(String name) {
+        this.femaleNames.add(name);
+    }
+
+    public void addMaleName(String name) {
+        this.maleNames.add(name);
+    }
+
+    public void addSurname(String name) {
+        this.surnames.add(name);
+    }
+
+    public void addGenericGift(NPCData.GiftType type, TagKey<Item> tag) {
+        this.gifts.computeIfAbsent(type, r -> new ArrayList<>()).add(tag.location());
     }
 }

@@ -550,12 +550,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void updateStatsToLevel() {
         float preHealthDiff = this.getMaxHealth() - this.getHealth();
         if (this.data != null && this.data.statIncrease() != null) {
-            this.data.statIncrease().forEach((att, d) -> {
+            this.data.statIncrease().forEach((att, val) -> {
+                val *= 0.01;
                 AttributeInstance inst = this.getAttribute(att);
                 if (inst != null) {
                     inst.removeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD);
                     float multiplier = 1;//this.attributeRandomizer.getOrDefault(att, 0);
-                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - this.data.baseLevel()) * d * multiplier, AttributeModifier.Operation.ADDITION));
+                    inst.addPermanentModifier(new AttributeModifier(LibConstants.ATTRIBUTE_LEVEL_MOD, "rf.levelMod", (this.level().getLevel() - this.data.baseLevel()) * val * multiplier, AttributeModifier.Operation.ADDITION));
                     if (att == Attributes.MAX_HEALTH)
                         this.setHealth(this.getMaxHealth() - preHealthDiff);
                 }

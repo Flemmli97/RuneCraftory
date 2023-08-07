@@ -1,6 +1,7 @@
 {
   "gender": "UNDEFINED",
   "weight": 50,
+  "romanceable": false,
   "neutralGiftResponse": "npc.generic.2.gift.default",
   "giftItems": {},
   "interactions": {
