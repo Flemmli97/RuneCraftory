@@ -1,12 +1,12 @@
 {
-  "name": "runecraftory:ambrosia_forest",
+  "name": "runecraftory:water_ruins",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
-        "location": "runecraftory:ambrosia_forest",
-        "processors": "runecraftory:ambrosia_forest_processor",
+        "location": "runecraftory:water_ruins",
+        "processors": "runecraftory:water_ruins_processor",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }

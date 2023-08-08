@@ -150,7 +150,11 @@ public class ModTags {
     public static final TagKey<EntityType<?>> RAFFLESIA_SUMMONS = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "rafflesia_summons"));
 
     public static final TagKey<EntityType<?>> FOREST_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "forest_bosses"));
-    public static final TagKey<EntityType<?>> OCEAN_RUIN_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "ocean_ruinbosses"));
+    public static final TagKey<EntityType<?>> WATER_RUIN_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "water_ruin_bosses"));
+    public static final TagKey<EntityType<?>> THEATER_RUIN_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "ocean_ruin_bosses"));
+    public static final TagKey<EntityType<?>> PLAINS_ARENA_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "plains_arena_bosses"));
+    public static final TagKey<EntityType<?>> DESERT_ARENA_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "desert_arena_bosses"));
+    public static final TagKey<EntityType<?>> NETHER_ARENA_BOSSES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "nether_arena_bosses"));
 
     public static final TagKey<EntityType<?>> HELD_WEAPON_EXEMPT = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation(RuneCraftory.MODID, "held_weapon_exempt"));
 

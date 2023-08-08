@@ -1,0 +1,15 @@
+{
+  "name": "runecraftory:forest_grove",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "runecraftory:forest_grove",
+        "processors": "runecraftory:forest_grove_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

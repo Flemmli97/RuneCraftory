@@ -2,13 +2,13 @@
   "structures": [
     {
       "weight": 1,
-      "structure": "runecraftory:ambrosia_forest"
+      "structure": "runecraftory:plains_arena"
     }
   ],
   "placement": {
-    "salt": 1224466880,
-    "spacing": 20,
-    "separation": 8,
+    "salt": 1226867124,
+    "spacing": 23,
+    "separation": 7,
     "type": "minecraft:random_spread"
   }
 }

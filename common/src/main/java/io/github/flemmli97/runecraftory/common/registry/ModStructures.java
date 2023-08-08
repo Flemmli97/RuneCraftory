@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.registry;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.world.structure.NetherJigsawStructure;
 import io.github.flemmli97.runecraftory.common.world.structure.SurfaceJigsawStructure;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.BossSpawnerProcessor;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.NPCDataProcessor;
@@ -29,9 +30,12 @@ public class ModStructures {
 
     public static final PlatformRegistry<StructureProcessorType<?>> STRUCTURESPROCESSORS = PlatformUtils.INSTANCE.of(Registry.STRUCTURE_PROCESSOR_REGISTRY, RuneCraftory.MODID);
 
-    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> AMBROSIA_FOREST = register("ambrosia_forest", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
-    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> THUNDERBOLT_RUINS = register("thunderbolt_ruins", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
+    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> FOREST_GROVE = register("forest_grove", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
+    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> WATER_RUINS = register("water_ruins", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
     public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> THEATER_RUINS = register("theater_ruins", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
+    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> PLAINS_ARENA = register("plains_arena", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
+    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> DESERT_ARENA = register("desert_arena", () -> new SurfaceJigsawStructure(JigsawConfiguration.CODEC));
+    public static final RegistryEntrySupplier<StructureFeature<JigsawConfiguration>> NETHER_ARENA = register("nether_arena", () -> new NetherJigsawStructure(JigsawConfiguration.CODEC, 40, 80));
 
     public static final RegistryEntrySupplier<StructureProcessorType<BossSpawnerProcessor>> BOSS_PROCESSOR = STRUCTURESPROCESSORS.register("boss_processor", () -> () -> BossSpawnerProcessor.CODEC);
     public static final RegistryEntrySupplier<StructureProcessorType<NPCDataProcessor>> NPC_PROCESSOR = STRUCTURESPROCESSORS.register("npc_processor", () -> () -> NPCDataProcessor.CODEC);

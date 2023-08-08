@@ -1,0 +1,10 @@
+{
+  "config": {
+    "size": 1,
+    "start_pool": "runecraftory:desert_arena"
+  },
+  "biomes": "#c:is_sandy",
+  "adapt_noise": true,
+  "spawn_overrides": {},
+  "type": "runecraftory:desert_arena"
+}

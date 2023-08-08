@@ -58,9 +58,17 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
         this.tag(ModTags.FOREST_BOSSES)
                 .add(ModEntities.AMBROSIA.get())
                 .add(ModEntities.DEAD_TREE.get());
-        this.tag(ModTags.OCEAN_RUIN_BOSSES)
+        this.tag(ModTags.WATER_RUIN_BOSSES)
                 .add(ModEntities.CHIMERA.get())
                 .add(ModEntities.THUNDERBOLT.get());
+        this.tag(ModTags.THEATER_RUIN_BOSSES)
+                .add(ModEntities.MARIONETTA.get());
+        this.tag(ModTags.PLAINS_ARENA_BOSSES)
+                .add(ModEntities.RACCOON.get());
+        this.tag(ModTags.DESERT_ARENA_BOSSES)
+                .add(ModEntities.SKELEFANG.get());
+        this.tag(ModTags.NETHER_ARENA_BOSSES)
+                .add(ModEntities.RAFFLESIA.get());
 
         this.tag(ModTags.TAMED_MONSTER_IGNORE)
                 .add(EntityType.SNOW_GOLEM)

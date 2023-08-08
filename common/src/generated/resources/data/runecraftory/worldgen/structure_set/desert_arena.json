@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "weight": 1,
+      "structure": "runecraftory:desert_arena"
+    }
+  ],
+  "placement": {
+    "salt": 1274867120,
+    "spacing": 21,
+    "separation": 8,
+    "type": "minecraft:random_spread"
+  }
+}

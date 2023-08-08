@@ -1,0 +1,10 @@
+{
+  "config": {
+    "size": 1,
+    "start_pool": "runecraftory:plains_arena"
+  },
+  "biomes": "#c:is_plains",
+  "adapt_noise": true,
+  "spawn_overrides": {},
+  "type": "runecraftory:plains_arena"
+}

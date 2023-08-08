@@ -1,0 +1,15 @@
+{
+  "name": "runecraftory:plains_arena",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "location": "runecraftory:plains_arena",
+        "processors": "runecraftory:plains_arena_processor",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

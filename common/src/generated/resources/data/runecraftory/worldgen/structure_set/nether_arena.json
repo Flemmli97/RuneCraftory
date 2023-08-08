@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "weight": 1,
+      "structure": "runecraftory:nether_arena"
+    }
+  ],
+  "placement": {
+    "salt": 1226869984,
+    "spacing": 20,
+    "separation": 9,
+    "type": "minecraft:random_spread"
+  }
+}

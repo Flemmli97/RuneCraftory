@@ -1,0 +1,10 @@
+{
+  "config": {
+    "size": 1,
+    "start_pool": "runecraftory:nether_arena"
+  },
+  "biomes": "#minecraft:is_nether",
+  "adapt_noise": true,
+  "spawn_overrides": {},
+  "type": "runecraftory:nether_arena"
+}

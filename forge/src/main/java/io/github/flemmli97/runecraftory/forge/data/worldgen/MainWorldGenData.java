@@ -1,8 +1,6 @@
 package io.github.flemmli97.runecraftory.forge.data.worldgen;
 
 import com.mojang.datafixers.util.Pair;
-import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.world.structure.processors.BossSpawnerProcessor;
@@ -22,7 +20,6 @@ import net.minecraft.world.level.levelgen.structure.placement.StructurePlacement
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorList;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -41,20 +38,32 @@ public class MainWorldGenData implements DataProvider {
     }
 
     @Override
-    public void run(HashCache cache) throws IOException {
-        this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "ambrosia_forest"),
+    public void run(HashCache cache) {
+        this.addBossStructure(ModStructures.FOREST_GROVE.getID(),
                 new RandomSpreadStructurePlacement(20, 8, RandomSpreadType.LINEAR, 1224466880),
-                ModStructures.AMBROSIA_FOREST.get(), BiomeTags.IS_FOREST, true,
+                ModStructures.FOREST_GROVE.get(), BiomeTags.IS_FOREST, true,
                 this.simpleTag(ModTags.FOREST_BOSSES));
-        this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "thunderbolt_ruins"),
+        this.addBossStructure(ModStructures.WATER_RUINS.getID(),
                 new RandomSpreadStructurePlacement(32, 16, RandomSpreadType.LINEAR, 1224567480),
-                ModStructures.THUNDERBOLT_RUINS.get(), BiomeTags.IS_OCEAN, true,
-                this.simpleTag(ModTags.OCEAN_RUIN_BOSSES));
-        this.addBossStructure(new ResourceLocation(RuneCraftory.MODID, "theater_ruins"),
+                ModStructures.WATER_RUINS.get(), BiomeTags.IS_OCEAN, true,
+                this.simpleTag(ModTags.WATER_RUIN_BOSSES));
+        this.addBossStructure(ModStructures.THEATER_RUINS.getID(),
                 new RandomSpreadStructurePlacement(21, 7, RandomSpreadType.LINEAR, 1226867120),
                 ModStructures.THEATER_RUINS.get(), ModTags.IS_SPOOKY, true,
-                new StructureProcessorList(List.of(new BossSpawnerProcessor(ModEntities.MARIONETTA.getID()),
+                new StructureProcessorList(List.of(new BossSpawnerProcessor(ModTags.THEATER_RUIN_BOSSES),
                         WaterUnlogProcessor.INST)));
+        this.addBossStructure(ModStructures.PLAINS_ARENA.getID(),
+                new RandomSpreadStructurePlacement(23, 7, RandomSpreadType.LINEAR, 1226867124),
+                ModStructures.PLAINS_ARENA.get(), ModTags.IS_PLAINS, true,
+                this.simpleTag(ModTags.PLAINS_ARENA_BOSSES));
+        this.addBossStructure(ModStructures.DESERT_ARENA.getID(),
+                new RandomSpreadStructurePlacement(21, 8, RandomSpreadType.LINEAR, 1274867120),
+                ModStructures.DESERT_ARENA.get(), ModTags.IS_SANDY, true,
+                this.simpleTag(ModTags.DESERT_ARENA_BOSSES));
+        this.addBossStructure(ModStructures.NETHER_ARENA.getID(),
+                new RandomSpreadStructurePlacement(20, 9, RandomSpreadType.LINEAR, 1226869984),
+                ModStructures.NETHER_ARENA.get(), BiomeTags.IS_NETHER, true,
+                this.simpleTag(ModTags.NETHER_ARENA_BOSSES));
         this.templatePoolGen.runExternal(cache);
         this.processorListGen.runExternal(cache);
         this.configuredStructureFeatureGen.runExternal(cache);

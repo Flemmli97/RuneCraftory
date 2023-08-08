@@ -1,0 +1,8 @@
+{
+  "processors": [
+    {
+      "boss": "#runecraftory:nether_arena_bosses",
+      "processor_type": "runecraftory:boss_processor"
+    }
+  ]
+}

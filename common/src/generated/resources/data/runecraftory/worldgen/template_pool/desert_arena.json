@@ -1,12 +1,12 @@
 {
-  "name": "runecraftory:thunderbolt_ruins",
+  "name": "runecraftory:desert_arena",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
-        "location": "runecraftory:thunderbolt_ruins",
-        "processors": "runecraftory:thunderbolt_ruins_processor",
+        "location": "runecraftory:desert_arena",
+        "processors": "runecraftory:desert_arena_processor",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
