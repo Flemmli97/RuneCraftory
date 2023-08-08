@@ -18,7 +18,6 @@ import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.function.Function;
 
 public class NetherJigsawStructure extends StructureFeature<JigsawConfiguration> {
@@ -48,12 +47,12 @@ public class NetherJigsawStructure extends StructureFeature<JigsawConfiguration>
         BlockPos center = context.chunkPos().getMiddleBlockPosition(0);
         NoiseColumn column = context.chunkGenerator().getBaseColumn(center.getX(), center.getZ(), context.heightAccessor());
         List<BlockPos> matching = new ArrayList<>();
-        for(int i = min; i < max; i++) {
+        for (int i = min; i < max; i++) {
             BlockState state = column.getBlock(i);
-            if(!state.isAir() && column.getBlock(i + 1).isAir())
+            if (!state.isAir() && column.getBlock(i + 1).isAir())
                 matching.add(new BlockPos(center.getX(), i, center.getZ()));
         }
-        if(matching.isEmpty())
+        if (matching.isEmpty())
             return null;
         RANDOM.setLargeFeatureSeed(context.seed(), context.chunkPos().x, context.chunkPos().z);
         return matching.get(RANDOM.nextInt(matching.size()));

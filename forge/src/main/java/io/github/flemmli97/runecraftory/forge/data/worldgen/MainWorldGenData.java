@@ -40,7 +40,7 @@ public class MainWorldGenData implements DataProvider {
     @Override
     public void run(HashCache cache) {
         this.addBossStructure(ModStructures.FOREST_GROVE.getID(),
-                new RandomSpreadStructurePlacement(20, 8, RandomSpreadType.LINEAR, 1224466880),
+                new RandomSpreadStructurePlacement(22, 8, RandomSpreadType.LINEAR, 1224466880),
                 ModStructures.FOREST_GROVE.get(), BiomeTags.IS_FOREST, true,
                 this.simpleTag(ModTags.FOREST_BOSSES));
         this.addBossStructure(ModStructures.WATER_RUINS.getID(),
@@ -57,7 +57,7 @@ public class MainWorldGenData implements DataProvider {
                 ModStructures.PLAINS_ARENA.get(), ModTags.IS_PLAINS, true,
                 this.simpleTag(ModTags.PLAINS_ARENA_BOSSES));
         this.addBossStructure(ModStructures.DESERT_ARENA.getID(),
-                new RandomSpreadStructurePlacement(21, 8, RandomSpreadType.LINEAR, 1274867120),
+                new RandomSpreadStructurePlacement(23, 8, RandomSpreadType.LINEAR, 1274867120),
                 ModStructures.DESERT_ARENA.get(), ModTags.IS_SANDY, true,
                 this.simpleTag(ModTags.DESERT_ARENA_BOSSES));
         this.addBossStructure(ModStructures.NETHER_ARENA.getID(),

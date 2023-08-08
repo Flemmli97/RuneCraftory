@@ -122,8 +122,8 @@ public abstract class NPCDataProvider implements DataProvider {
         } catch (IOException e) {
             LOGGER.error("Couldn't save surnames {}", path, e);
         }
-        this.gifts.forEach((type, list)->{
-            Path path1 = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/" + type.name().toLowerCase() +"_gifts.json");
+        this.gifts.forEach((type, list) -> {
+            Path path1 = this.gen.getOutputFolder().resolve("data/" + this.modid + "/" + NameAndGiftManager.DIRECTORY + "/" + type.name().toLowerCase() + "_gifts.json");
             try {
                 JsonElement obj = GSON.toJsonTree(list);
                 DataProvider.save(GSON, cache, obj, path1);
