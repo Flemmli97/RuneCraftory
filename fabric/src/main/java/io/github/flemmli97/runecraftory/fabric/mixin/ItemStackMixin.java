@@ -65,7 +65,7 @@ public abstract class ItemStackMixin implements StaffDataGetter {
         return this.runecraftoryPlayerData;
     }
 
-    @ModifyVariable(method = "getAttributeModifiers", at = @At(value = "RETURN"))
+    @ModifyVariable(method = "getAttributeModifiers", at = @At(value = "RETURN", shift = At.Shift.BY, by = -2))
     private Multimap<Attribute, AttributeModifier> getStats(Multimap<Attribute, AttributeModifier> old, EquipmentSlot slot) {
         return ItemNBT.getStatsAttributeMap((ItemStack) (Object) this, old, slot);
     }
