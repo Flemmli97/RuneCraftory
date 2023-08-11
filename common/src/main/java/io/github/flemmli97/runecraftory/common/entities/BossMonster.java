@@ -215,7 +215,7 @@ public abstract class BossMonster extends BaseMonster implements IOverlayEntityR
         super.stopSeenByPlayer(player);
         this.bossInfo.removePlayer(player);
         // If boss killed all players (or every nearby simply player died) heal it back to full
-        if (player.isRemoved() && this.bossInfo.getPlayers().isEmpty()) {
+        if (!this.isTamed() && player.isRemoved() && this.bossInfo.getPlayers().isEmpty()) {
             this.heal(this.getMaxHealth());
         }
     }
