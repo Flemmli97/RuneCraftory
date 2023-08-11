@@ -222,13 +222,15 @@ public class GateEntity extends Mob implements IBaseMob {
         }
         compound.getList("Spawns", Tag.TAG_STRING)
                 .forEach(nbt -> this.spawnList.add(PlatformUtils.INSTANCE.entities().getFromId(new ResourceLocation(nbt.getAsString()))));
-        String el = compound.getString("Element");
-        try {
-            this.type = EnumElement.valueOf(el);
-            this.entityData.set(elementType, this.type.getTranslation());
-            this.entityData.set(element, this.type.ordinal());
-        } catch (IllegalArgumentException e) {
-            RuneCraftory.logger.error("Unable to set element type for gate entity {}", this);
+        if (compound.contains("Element")) {
+            String el = compound.getString("Element");
+            try {
+                this.type = EnumElement.valueOf(el);
+                this.entityData.set(elementType, this.type.getTranslation());
+                this.entityData.set(element, this.type.ordinal());
+            } catch (IllegalArgumentException e) {
+                RuneCraftory.logger.error("Unable to set element type for gate entity {}", this);
+            }
         }
         this.initialSpawn = compound.getBoolean("FirstSpawn");
         this.maxNearby = compound.getInt("MaxNearby");
@@ -408,6 +410,12 @@ public class GateEntity extends Mob implements IBaseMob {
     @Override
     public boolean isInWall() {
         return false;
+    }
+
+    @Override
+    public void push(Entity entity) {
+        if (entity instanceof Player)
+            super.push(entity);
     }
 
     @Override
