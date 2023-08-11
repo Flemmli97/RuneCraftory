@@ -9,7 +9,7 @@ RuneCraftory 1.6.0
 - Mob stats etc. are now datapack and not config based except a few things
 - New drop chance calculation that incorporates looting and luck. Looting is now multiplicative while luck is additive
 - Add missing eathspike spell
-- Spell stuff (like cooldown etc) are not configurable via datapack
+- Spell stuff (like cooldown etc) are now configurable via datapack
 - Fixes:
   - Redone a few textures
   - Fix monster doing nothing when ridden by non players
