@@ -67,7 +67,7 @@ dependencies {
     modCompileOnly "com.ldtteam:minecolonies:${rootProject.minecolonies}"
 
     //Mods useful for testing things
-    modRuntimeOnly "curse.maven:mobbattle-268746:3952783"
+    modRuntimeOnly "curse.maven:mobbattle-268746:4697990"
     modRuntimeOnly "curse.maven:dummy-225738:3820503"
     modRuntimeOnly "curse.maven:spark-361579:3824951"
 
