@@ -16,11 +16,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class EntityTagGen extends TagsProvider<EntityType<?>> {
 
-    public static final TagKey<EntityType<?>> IMHeld = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_helditems"));
-    public static final TagKey<EntityType<?>> IMUse = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_useitem"));
-    public static final TagKey<EntityType<?>> IMVillagers = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_villager"));
+    public static final TagKey<EntityType<?>> IM_HELD = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_helditems"));
+    public static final TagKey<EntityType<?>> IM_USE = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_useitem"));
+    public static final TagKey<EntityType<?>> IM_VILLAGERS = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_villager"));
+    public static final TagKey<EntityType<?>> IM_ARMOR = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("improvedmobs", "default_blacklist_armor"));
 
-    public static final TagKey<EntityType<?>> minecolonies = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("minecolonies", "mob_attack_blacklist"));
+    public static final TagKey<EntityType<?>> MINECOLONIES = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("minecolonies", "mob_attack_blacklist"));
 
     @SuppressWarnings("deprecation")
     public EntityTagGen(DataGenerator arg, @Nullable ExistingFileHelper existingFileHelper) {
@@ -30,10 +31,11 @@ public class EntityTagGen extends TagsProvider<EntityType<?>> {
     @Override
     protected void addTags() {
         for (RegistryEntrySupplier<EntityType<?>> type : ModEntities.getMonsters()) {
-            this.tag(IMHeld).add(type.get());
-            this.tag(IMUse).add(type.get());
-            this.tag(IMVillagers).add(type.get());
-            this.tag(minecolonies).add(type.get());
+            this.tag(IM_HELD).add(type.get());
+            this.tag(IM_USE).add(type.get());
+            this.tag(IM_VILLAGERS).add(type.get());
+            this.tag(IM_ARMOR).add(type.get());
+            this.tag(MINECOLONIES).add(type.get());
             this.tag(ModTags.MONSTERS).add(type.get());
         }
         this.tag(ModTags.BOSS_MONSTERS)
