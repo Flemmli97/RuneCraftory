@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.events;
 
-import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
@@ -24,7 +23,6 @@ import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
 import io.github.flemmli97.runecraftory.common.network.S2CRuneyWeatherData;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
-import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
@@ -41,7 +39,6 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -94,19 +91,6 @@ public class EntityCalls {
                     data.setMaxHealth(player, GeneralConfig.startingHealth, true);
                     player.setHealth(player.getMaxHealth());
                 }
-                if (GeneralConfig.recipeSystem == GeneralConfig.RecipeSystem.SKILLNOLOCK ||
-                        GeneralConfig.recipeSystem == GeneralConfig.RecipeSystem.BASENOLOCK) {
-                    if (!data.unlockedRecipes) {
-                        data.unlockedRecipes = true;
-                        Set<ResourceLocation> allRecipes = Sets.newHashSet();
-                        player.level.getRecipeManager().getAllRecipesFor(ModCrafting.FORGE.get()).forEach(r -> allRecipes.add(r.getId()));
-                        player.level.getRecipeManager().getAllRecipesFor(ModCrafting.CHEMISTRY.get()).forEach(r -> allRecipes.add(r.getId()));
-                        player.level.getRecipeManager().getAllRecipesFor(ModCrafting.ARMOR.get()).forEach(r -> allRecipes.add(r.getId()));
-                        player.level.getRecipeManager().getAllRecipesFor(ModCrafting.COOKING.get()).forEach(r -> allRecipes.add(r.getId()));
-                        data.getRecipeKeeper().unlockRecipesRes(player, allRecipes);
-                    }
-                } else if (data.unlockedRecipes)
-                    data.unlockedRecipes = false;
             });
         }
     }

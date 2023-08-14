@@ -172,7 +172,7 @@ public class ContainerCrafting extends AbstractContainerMenu {
         List<Pair<Integer, ItemStack>> clientData = IntStream.range(0, this.matchingRecipes.size())
                 .mapToObj(i -> {
                     SextupleRecipe recipe = this.matchingRecipes.get(i);
-                    return Pair.of(i, data.getRecipeKeeper().isUnlockedForCrafting(recipe) ? this.matchingRecipes.get(i).getResultItem() : new ItemStack(ModItems.unknown.get()));
+                    return Pair.of(i, recipe instanceof SpecialSextupleRecipe || data.getRecipeKeeper().isUnlocked(recipe) ? this.matchingRecipes.get(i).getResultItem() : new ItemStack(ModItems.unknown.get()));
                 }).toList();
         if (!this.init)
             Platform.INSTANCE.sendToClient(new S2CCraftingRecipes(clientData, 0), player);

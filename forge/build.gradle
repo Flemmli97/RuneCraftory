@@ -61,8 +61,8 @@ dependencies {
     modImplementation patchouli
     modImplementation patchouli_datagen
     modImplementation "${simplequests}-forge"
-    modCompileOnly "${jei_dep}:api"
-    modRuntimeOnly jei_dep
+    //modCompileOnly "${jei_dep}:api"
+    modImplementation jei_dep
 
     modCompileOnly "com.ldtteam:minecolonies:${rootProject.minecolonies}"
 

@@ -26,14 +26,14 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
 
     public static final ResourceLocation GUI = new ResourceLocation(RuneCraftory.MODID, "textures/gui/crafting.png");
     private final EnumCrafting type;
-    private final ResourceLocation res;
+    private final CategoryIdentifier<SextupleDisplay> identifier;
 
     private static final int xSize = 119;
     private static final int ySize = 42;
 
-    public SextupleCategory(EnumCrafting type) {
+    public SextupleCategory(EnumCrafting type, CategoryIdentifier<SextupleDisplay> identifier) {
         this.type = type;
-        this.res = new ResourceLocation(RuneCraftory.MODID, this.type.getId() + "_category");
+        this.identifier = identifier;
     }
 
     @Override
@@ -89,6 +89,6 @@ public class SextupleCategory implements DisplayCategory<SextupleDisplay> {
 
     @Override
     public CategoryIdentifier<? extends SextupleDisplay> getCategoryIdentifier() {
-        return CategoryIdentifier.of(this.res);
+        return this.identifier;
     }
 }

@@ -629,7 +629,6 @@ public class PlayerData {
 
     public void readFromNBT(CompoundTag nbt, Player player) {
         this.starting = nbt.getBoolean("Starting");
-        this.unlockedRecipes = nbt.getBoolean("UnlockedRecipes");
         this.runePointsMax = nbt.getFloat("MaxRunePoints");
         this.runePoints = nbt.getInt("RunePoints");
         this.money = nbt.getInt("Money");
@@ -684,7 +683,6 @@ public class PlayerData {
 
     public CompoundTag writeToNBT(CompoundTag nbt, Player player, boolean wasDead) {
         nbt.putBoolean("Starting", this.starting);
-        nbt.putBoolean("UnlockedRecipes", this.unlockedRecipes);
         nbt.putFloat("MaxRunePoints", this.runePointsMax);
         if (player == null) {
             nbt.putInt("RunePoints", this.runePoints);

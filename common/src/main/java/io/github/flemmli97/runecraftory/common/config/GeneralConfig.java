@@ -127,10 +127,10 @@ public class GeneralConfig {
 
         SKILL(false, true, true),
         SKILLIGNORELOCK(false, true, false),
-        SKILLNOLOCK(false, false, false),
+        SKILLBLOCKLOCK(false, false, false),
         BASE(true, true, true),
         BASEIGNORELOCK(true, true, false),
-        BASENOLOCK(true, false, false);
+        BASEBLOCKLOCK(true, false, false);
 
         public final boolean baseCost, allowLocked, lockedCostMore;
 
@@ -138,6 +138,10 @@ public class GeneralConfig {
             this.baseCost = baseCost;
             this.allowLocked = allowLocked;
             this.lockedCostMore = lockedCostMore;
+        }
+
+        public boolean lockIsIgnored() {
+            return this.allowLocked && !this.lockedCostMore;
         }
     }
 }

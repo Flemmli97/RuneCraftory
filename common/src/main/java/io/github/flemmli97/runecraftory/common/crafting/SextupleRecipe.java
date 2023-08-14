@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.enums.EnumCrafting;
-import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.inventory.PlayerContainerInv;
 import io.github.flemmli97.runecraftory.common.registry.ModCrafting;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
@@ -50,7 +49,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
     public boolean checkMatch(PlayerContainerInv inv, Level world, boolean exact) {
         if (inv.getContainerSize() < 6)
             return false;
-        boolean unlocked = GeneralConfig.recipeSystem.allowLocked || Platform.INSTANCE.getPlayerData(inv.getPlayer()).map(cap -> cap.getRecipeKeeper().isUnlocked(this)).orElse(false);
+        boolean unlocked = Platform.INSTANCE.getPlayerData(inv.getPlayer()).map(cap -> cap.getRecipeKeeper().isUnlockedForCrafting(this)).orElse(false);
         if (!unlocked)
             return false;
         NonNullList<ItemStack> stacks = NonNullList.create();
@@ -74,7 +73,7 @@ public abstract class SextupleRecipe implements Recipe<PlayerContainerInv> {
     public RecipeOutput getCraftingOutput(PlayerContainerInv inv) {
         if (inv.getContainerSize() < 6)
             return new RecipeOutput(ItemStack.EMPTY, ItemStack.EMPTY, NonNullList.create());
-        boolean unlocked = Platform.INSTANCE.getPlayerData(inv.getPlayer()).map(cap -> cap.getRecipeKeeper().isUnlockedForCrafting(this)).orElse(false);
+        boolean unlocked = Platform.INSTANCE.getPlayerData(inv.getPlayer()).map(cap -> cap.getRecipeKeeper().isUnlocked(this)).orElse(false);
         NonNullList<ItemStack> stacks = NonNullList.create();
         for (int j = 0; j < 6; ++j) {
             ItemStack itemStack = inv.getItem(j);

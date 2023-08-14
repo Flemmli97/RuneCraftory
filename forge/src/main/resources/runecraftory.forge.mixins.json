@@ -6,7 +6,8 @@
   "mixins": [
     "CompatApotheosis",
     "CompatMinecolonies",
-    "CompatQuarkMixin"
+    "CompatQuarkMixin",
+    "CompatJei"
   ],
   "client": [
   ],

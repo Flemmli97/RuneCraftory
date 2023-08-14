@@ -92,11 +92,11 @@ public class GeneralConfigSpec {
         this.randomDamage = builder.comment("If enabled damage gets a +-10% randomness.").define("Random Damage", GeneralConfig.randomDamage);
         this.recipeSystem = builder.comment("The recipe system to use.",
                         "SKILL = Crafting skill influence the rp cost. Not unlocked recipes will cost more",
-                        "SKILLIGNORELOCK = Crafting skill influence the rp cost and locked recipes cost the same",
-                        "SKILLNOLOCK = Crafting skill influence the rp cost and locked recipes are not craftable at all",
+                        "SKILLIGNORELOCK = Crafting skill influence the rp cost and unlock system is ignored",
+                        "SKILLBLOCKLOCK = Crafting skill influence the rp cost and locked recipes are not craftable at all",
                         "BASE = Rp cost is a fixed base cost but locked recipes cost more",
-                        "BASEIGNORELOCK = Rp cost is a fixed base cost and locked recipes cost the same",
-                        "BASENOLOCK = Base cost and locked recipes are uncraftable")
+                        "BASEIGNORELOCK = Rp cost is a fixed base cost and unlock system is ignored",
+                        "BASEBLOCKLOCK = Base cost and locked recipes are uncraftable")
                 .define("Recipe System", GeneralConfig.recipeSystem);
         this.useRP = builder.comment("If actions consume rune points").define("Use RunePoints", GeneralConfig.useRP);
         this.deathHPPercent = builder.comment("Percent of HP that will be regenerated on death").defineInRange("Death HP Percent", GeneralConfig.deathHPPercent, 0, 1);
