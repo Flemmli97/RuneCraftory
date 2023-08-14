@@ -69,8 +69,8 @@ public class UpgradeGui extends AbstractContainerScreen<ContainerUpgrade> {
             stack.scale(scale, scale, scale);
             RenderSystem.setShaderTexture(0, new ResourceLocation(RuneCraftory.MODID, "textures/gui/bars.png"));
             this.blit(stack, 0, 0, 131, 74, 96, 29);
-            int runePointsWidth = Math.min(75, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * 75.0f));
-            this.blit(stack, 18, 3, 18, 40, runePointsWidth, 9);
+            int runePointsWidth = Math.min(76, (int) (data.getRunePoints() / (float) data.getMaxRunePoints() * 76.0f));
+            this.blit(stack, 17, 3, 18, 40, runePointsWidth, 9);
             ClientHandlers.drawCenteredScaledString(stack, this.font, data.getRunePoints() + "/" + data.getMaxRunePoints(), 18 + 75 * 0.5f, 5, 0.7f, 0xffffff);
             stack.popPose();
             this.font.draw(stack, new TranslatableComponent("runecraftory.display.level", data.getSkillLevel(this.skill).getLevel()),
