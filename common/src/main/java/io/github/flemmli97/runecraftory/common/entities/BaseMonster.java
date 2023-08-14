@@ -1504,7 +1504,15 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     private boolean canAttackFrom(Vec3 pos) {
         if (this.isTamed())
             return true;
-        return this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distToCenterSqr(pos.x(), pos.y(), pos.z()) < (this.getRestrictRadius() * this.getRestrictRadius());
+        boolean result = this.getRestrictRadius() == -1.0f || this.getRestrictCenter().distToCenterSqr(pos.x(), pos.y(), pos.z()) < (this.getRestrictRadius() * this.getRestrictRadius());
+        if (!result) {
+            this.level.playSound(null, this, SoundEvents.ANVIL_PLACE, this.getSoundSource(), 0.7f, 0.9f);
+            if (this.level instanceof ServerLevel serverLevel) {
+                for (int i = 0; i < 6; i++)
+                    serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, this.getRandomX(1.2), this.getRandomY(), this.getRandomZ(1.2), 0, 0, 0, 0, 0);
+            }
+        }
+        return result;
     }
 
     @Override
