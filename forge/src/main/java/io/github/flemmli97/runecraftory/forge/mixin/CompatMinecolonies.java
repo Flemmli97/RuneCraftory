@@ -17,7 +17,7 @@ public abstract class CompatMinecolonies {
      * Disabling targeting of tamed monsters. Needed cause minecolonies uses a custom targeting system
      */
     @Inject(method = "isAttackableTarget", remap = false, at = @At("HEAD"), cancellable = true)
-    private static void checkTamedMonster(AbstractEntityCitizen user, LivingEntity entity, CallbackInfoReturnable<Boolean> info) {
+    private static void runecraftory_checkTamedMonster(AbstractEntityCitizen user, LivingEntity entity, CallbackInfoReturnable<Boolean> info) {
         if (entity instanceof BaseMonster monster && monster.isTamed())
             info.setReturnValue(false);
     }

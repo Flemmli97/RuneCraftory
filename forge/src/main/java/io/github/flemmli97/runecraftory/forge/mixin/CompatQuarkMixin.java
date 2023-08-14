@@ -18,7 +18,7 @@ public abstract class CompatQuarkMixin {
      * Disabling the stat tooltip for matching itemstacks cause this mod handles them
      */
     @Inject(method = "canStripAttributes", at = @At("TAIL"), remap = false, cancellable = true)
-    private static void disableToolTip(ItemStack stack, EquipmentSlot slot, CallbackInfoReturnable<Boolean> info) {
+    private static void runecraftory_disableToolTip(ItemStack stack, EquipmentSlot slot, CallbackInfoReturnable<Boolean> info) {
         if (ItemStat.SHOW_STATS_CUSTOM && ItemNBT.shouldHaveStats(stack))
             info.setReturnValue(false);
     }

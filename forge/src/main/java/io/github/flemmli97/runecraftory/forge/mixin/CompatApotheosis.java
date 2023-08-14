@@ -17,7 +17,7 @@ public abstract class CompatApotheosis {
      * Disabling the stat tooltip for matching itemstacks cause this mod handles them
      */
     @Inject(method = "getHideFlags", remap = false, at = @At("RETURN"), cancellable = true)
-    private static void disableMod(ItemStack stack, CallbackInfoReturnable<Integer> info) {
+    private static void runecraftory_disableMod(ItemStack stack, CallbackInfoReturnable<Integer> info) {
         if (ItemStat.SHOW_STATS_CUSTOM && ItemNBT.shouldHaveStats(stack))
             info.setReturnValue(info.getReturnValue() | ItemStack.TooltipPart.MODIFIERS.getMask());
     }
