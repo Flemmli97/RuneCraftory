@@ -273,7 +273,7 @@ public class GateEntity extends Mob implements IBaseMob {
         this.entityData.set(mobLevel, gateLevel);
         this.entityData.set(elementType, this.type.getTranslation());
         this.entityData.set(element, this.type.ordinal());
-        this.spawnList.addAll(DataPackHandler.SERVER_PACK.gateSpawnsManager().pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(4) + 2, this.blockPosition(), gateLevel));
+        this.spawnList.addAll(DataPackHandler.SERVER_PACK.gateSpawnsManager().pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(3) + 1, this.blockPosition(), gateLevel));
         this.setPos(this.getX(), this.getY() + 1, this.getZ());
         this.updateStatsToLevel();
         this.spawnMobs();
@@ -292,12 +292,13 @@ public class GateEntity extends Mob implements IBaseMob {
         if (!(this.level instanceof ServerLevel serverLevel) || serverLevel.getDifficulty() == Difficulty.PEACEFUL)
             return;
         if (!this.spawnList.isEmpty()) {
-            int randAmount = this.random.nextInt(2) + 1;
             List<Entity> nearby = this.level.getEntities(this, this.getBoundingBox().inflate(18), entity ->
                     entity.getType() == ModEntities.TREASURE_CHEST.get() ||
                             entity.getType() == ModEntities.MONSTER_BOX.get() ||
                             entity.getType() == ModEntities.GOBBLE_BOX.get() ||
                             GateEntity.this.spawnList.contains(entity.getType()));
+            int randAmount = this.random.nextInt(2) + 1;
+            randAmount = Math.min(this.maxNearby - nearby.size(), randAmount);
             if (nearby.size() <= this.maxNearby) {
                 for (int amount = 0; amount < randAmount; ++amount) {
                     double x = this.getX() + this.random.nextInt(9) - 4.0;

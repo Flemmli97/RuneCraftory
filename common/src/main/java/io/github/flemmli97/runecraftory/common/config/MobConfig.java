@@ -21,7 +21,7 @@ public class MobConfig {
     public static double minDist = 32;
     public static int maxGroup = 1;
     public static int minNearby = 2;
-    public static int maxNearby = 6;
+    public static int maxNearby = 5;
     public static int baseGateLevel = 1;
     public static GateLevelType gateLevelType = GateLevelType.DISTANCESPAWN;
     public static float treasureChance = 0.001f;
