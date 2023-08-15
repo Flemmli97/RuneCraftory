@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
@@ -80,7 +81,7 @@ public class LevelCalc {
     public static int xpAmountForSkillLevelUp(EnumSkills skill, int level) {
         if (level <= 0)
             return 1;
-        if (level >= GeneralConfig.skillProps.get(skill).maxLevel())
+        if (level >= DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
             return 0;
         return (int) (totalSkillXpForLevel(skill, level + 1) - totalSkillXpForLevel(skill, level));
     }
@@ -205,7 +206,7 @@ public class LevelCalc {
     }
 
     public static float getSkillXpMultiplier(EnumSkills skill) {
-        return GeneralConfig.skillProps.get(skill).xpMultiplier();
+        return DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill).xpMultiplier();
     }
 
     public static void levelSkill(ServerPlayer player, PlayerData data, EnumSkills skill, float amount) {

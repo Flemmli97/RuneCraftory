@@ -78,7 +78,7 @@ public class NameAndGiftManager extends SimplePreparableReloadListener<Map<Resou
         int i = DIRECTORY.length() + 1;
         for (ResourceLocation fileRes : resourceManager.listResources(DIRECTORY, string -> string.endsWith(".json"))) {
             String path = fileRes.getPath();
-            path = path.substring(i, path.length() - 5);
+            path = path.substring(i, path.length() - ".json".length());
             if (path.equals("male_names") || path.equals("female_names") || path.equals("surnames") || path.endsWith("_gifts")) {
                 ResourceLocation res = new ResourceLocation(fileRes.getNamespace(), path);
                 try {

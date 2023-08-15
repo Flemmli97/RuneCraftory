@@ -33,12 +33,12 @@ public enum EnumSkills {
     EATING("skill.eating", GainType.VERY_FAST),
     DEFENCE("skill.defence", GainType.COMMON),
 
-    RESPOISON("skill.poison_res", GainType.FAST),
-    RESSEAL("skill.seal_res", GainType.FAST),
-    RESPARA("skill.paralysis_res", GainType.FAST),
-    RESSLEEP("skill.sleep_res", GainType.FAST),
-    RESFAT("skill.fatigue_res", GainType.FAST),
-    RESCOLD("skill.cold_res", GainType.FAST),
+    RES_POISON("skill.poison_res", GainType.FAST),
+    RES_SEAL("skill.seal_res", GainType.FAST),
+    RES_PARA("skill.paralysis_res", GainType.FAST),
+    RES_SLEEP("skill.sleep_res", GainType.FAST),
+    RES_FATIGUE("skill.fatigue_res", GainType.FAST),
+    RES_COLD("skill.cold_res", GainType.FAST),
 
     BATH("skill.bathing", GainType.FAST),
     TAMING("skill.taming", GainType.FAST),

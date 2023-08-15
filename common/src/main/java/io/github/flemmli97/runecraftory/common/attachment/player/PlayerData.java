@@ -3,9 +3,9 @@ package io.github.flemmli97.runecraftory.common.attachment.player;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
+import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.common.config.values.SkillProperties;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShippingBin;
@@ -300,11 +300,11 @@ public class PlayerData {
     }
 
     private double skillVal(Function<SkillProperties, Number> func) {
-        return this.skillMapN.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1) * func.apply(GeneralConfig.skillProps.get(e.getKey())).doubleValue()).sum();
+        return this.skillMapN.entrySet().stream().mapToDouble(e -> (e.getValue().getLevel() - 1) * func.apply(DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
     }
 
     private double skillValLevelFunc(BiFunction<Integer, SkillProperties, Number> func) {
-        return this.skillMapN.entrySet().stream().mapToDouble(e -> func.apply(e.getValue().getLevel() - 1, GeneralConfig.skillProps.get(e.getKey())).doubleValue()).sum();
+        return this.skillMapN.entrySet().stream().mapToDouble(e -> func.apply(e.getValue().getLevel() - 1, DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(e.getKey())).doubleValue()).sum();
     }
 
     public LevelExpPair getSkillLevel(EnumSkills skill) {
@@ -312,7 +312,7 @@ public class PlayerData {
     }
 
     public void setSkillLevel(EnumSkills skill, Player player, int level, float xpAmount, boolean recalc) {
-        this.skillMapN.get(skill).setLevel(Mth.clamp(level, 1, GeneralConfig.skillProps.get(skill).maxLevel()));
+        this.skillMapN.get(skill).setLevel(Mth.clamp(level, 1, DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill).maxLevel()));
         this.skillMapN.get(skill).setXp(Mth.clamp(xpAmount, 0, LevelCalc.xpAmountForSkillLevelUp(skill, level)));
         if (player instanceof ServerPlayer serverPlayer) {
             if (recalc) {
@@ -324,9 +324,9 @@ public class PlayerData {
     }
 
     public void increaseSkill(EnumSkills skill, Player player, float amount) {
-        if (this.skillMapN.get(skill).getLevel() >= GeneralConfig.skillProps.get(skill).maxLevel())
+        if (this.skillMapN.get(skill).getLevel() >= DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill).maxLevel())
             return;
-        boolean levelUp = this.skillMapN.get(skill).addXP(amount, GeneralConfig.skillProps.get(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, player));
+        boolean levelUp = this.skillMapN.get(skill).addXP(amount, DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill).maxLevel(), lvl -> LevelCalc.xpAmountForSkillLevelUp(skill, lvl), () -> this.onSkillLevelUp(skill, player));
         if (levelUp) {
             player.level.playSound(null, player.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1, 0.5f);
         }
@@ -338,7 +338,7 @@ public class PlayerData {
     }
 
     private void onSkillLevelUp(EnumSkills skill, Player player) {
-        SkillProperties prop = GeneralConfig.skillProps.get(skill);
+        SkillProperties prop = DataPackHandler.SERVER_PACK.skillPropertiesManager().getPropertiesFor(skill);
         int level = this.skillMapN.get(skill).getLevel();
         float health = player.getMaxHealth();
         this.updateHealth(player);

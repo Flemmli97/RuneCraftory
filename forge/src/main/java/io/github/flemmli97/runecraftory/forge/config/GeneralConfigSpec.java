@@ -1,10 +1,8 @@
 package io.github.flemmli97.runecraftory.forge.config;
 
 
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.forge.config.values.SkillPropertySpecs;
 import io.github.flemmli97.runecraftory.forge.config.values.WeaponTypePropertySpecs;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
@@ -59,7 +57,6 @@ public class GeneralConfigSpec {
     public final ForgeConfigSpec.DoubleValue strPerLevel;
     public final ForgeConfigSpec.DoubleValue vitPerLevel;
     public final ForgeConfigSpec.DoubleValue intPerLevel;
-    public final EnumMap<EnumSkills, SkillPropertySpecs> skillProps = new EnumMap<>(EnumSkills.class);
 
     public final ForgeConfigSpec.DoubleValue platinumChargeTime;
     public final ForgeConfigSpec.IntValue scrapWateringCanWater;
@@ -141,11 +138,6 @@ public class GeneralConfigSpec {
         this.strPerLevel = builder.comment("Strenghth increase per level").defineInRange("Strength Increase", GeneralConfig.strPerLevel, 0, Double.MAX_VALUE);
         this.vitPerLevel = builder.comment("Vitality increase per level").defineInRange("Vit Increase", GeneralConfig.vitPerLevel, 0, Double.MAX_VALUE);
         this.intPerLevel = builder.comment("Intelligence increase per level").defineInRange("Int Increase", GeneralConfig.intPerLevel, 0, Double.MAX_VALUE);
-        GeneralConfig.skillProps.forEach((type, prop) -> {
-            builder.push(type.toString());
-            this.skillProps.put(type, new SkillPropertySpecs(builder, prop));
-            builder.pop();
-        });
         builder.pop();
 
         builder.comment("Configs for weapon and tools").push("Weapon and Tools");

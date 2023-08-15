@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.GateSpawnsManage
 import io.github.flemmli97.runecraftory.common.datapack.manager.ItemStatManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.MonsterPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.SkillPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.SpellPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
@@ -28,6 +29,7 @@ public class DataPackHandler {
     private final GateSpawnsManager gateSpawnsManager = new GateSpawnsManager();
     private final MonsterPropertiesManager mobProperties = new MonsterPropertiesManager();
     private final SpellPropertiesManager spellProperties = new SpellPropertiesManager();
+    private final SkillPropertiesManager skillPropertiesManager = new SkillPropertiesManager();
     private final NameAndGiftManager nameAndGifts = new NameAndGiftManager();
     private final NPCDataManager npcData = new NPCDataManager();
     private final NPCLookManager npcLooks = new NPCLookManager();
@@ -53,12 +55,10 @@ public class DataPackHandler {
         cons.accept(SERVER_PACK.gateSpawnsManager);
     }
 
-    public static void reloadMobProperties(Consumer<PreparableReloadListener> cons) {
+    public static void reloadProperties(Consumer<PreparableReloadListener> cons) {
         cons.accept(SERVER_PACK.mobProperties);
-    }
-
-    public static void reloadSpellProperties(Consumer<PreparableReloadListener> cons) {
         cons.accept(SERVER_PACK.spellProperties);
+        cons.accept(SERVER_PACK.skillPropertiesManager);
     }
 
     public static void reloadNPCData(Consumer<PreparableReloadListener> cons) {
@@ -106,6 +106,10 @@ public class DataPackHandler {
 
     public SpellPropertiesManager spellPropertiesManager() {
         return this.spellProperties;
+    }
+
+    public SkillPropertiesManager skillPropertiesManager() {
+        return this.skillPropertiesManager;
     }
 
     public NameAndGiftManager nameAndGiftManager() {

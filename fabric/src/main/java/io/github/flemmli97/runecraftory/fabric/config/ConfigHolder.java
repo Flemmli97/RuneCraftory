@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.fabric.config;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.fabric.config.values.SkillPropertySpecs;
 import io.github.flemmli97.runecraftory.fabric.config.values.WeaponTypePropertySpecs;
 import io.github.flemmli97.tenshilib.common.config.CommentedJsonConfig;
 import io.github.flemmli97.tenshilib.common.config.JsonConfig;
@@ -61,7 +60,6 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.strPerLevel = spec.strPerLevel.get().floatValue();
         GeneralConfig.vitPerLevel = spec.vitPerLevel.get().floatValue();
         GeneralConfig.intPerLevel = spec.intPerLevel.get().floatValue();
-        spec.skillProps.forEach((type, specs) -> GeneralConfig.skillProps.put(type, SkillPropertySpecs.ofSpec(specs)));
 
         GeneralConfig.platinumChargeTime = spec.platinumChargeTime.get().floatValue();
         GeneralConfig.scrapWateringCanWater = spec.scrapWateringCanWater.get();

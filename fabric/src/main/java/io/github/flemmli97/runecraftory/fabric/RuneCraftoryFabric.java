@@ -182,26 +182,13 @@ public class RuneCraftoryFabric implements ModInitializer {
             @Override
             public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
                 AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
-                DataPackHandler.reloadMobProperties(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
+                DataPackHandler.reloadProperties(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
                 return ret.get();
             }
 
             @Override
             public ResourceLocation getFabricId() {
-                return new ResourceLocation(RuneCraftory.MODID, "mob_properties");
-            }
-        });
-        ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(new IdentifiableResourceReloadListener() {
-            @Override
-            public CompletableFuture<Void> reload(PreparationBarrier preparationBarrier, ResourceManager resourceManager, ProfilerFiller preparationsProfiler, ProfilerFiller reloadProfiler, Executor backgroundExecutor, Executor gameExecutor) {
-                AtomicReference<CompletableFuture<Void>> ret = new AtomicReference<>();
-                DataPackHandler.reloadSpellProperties(l -> ret.set(l.reload(preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor)));
-                return ret.get();
-            }
-
-            @Override
-            public ResourceLocation getFabricId() {
-                return new ResourceLocation(RuneCraftory.MODID, "spell_properties");
+                return new ResourceLocation(RuneCraftory.MODID, "datapack_properties");
             }
         });
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(CropLootModifiers.INSTANCE);

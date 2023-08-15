@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.forge.config.values.SkillPropertySpecs;
 import io.github.flemmli97.runecraftory.forge.config.values.WeaponTypePropertySpecs;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
@@ -67,7 +66,6 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         GeneralConfig.strPerLevel = spec.strPerLevel.get().floatValue();
         GeneralConfig.vitPerLevel = spec.vitPerLevel.get().floatValue();
         GeneralConfig.intPerLevel = spec.intPerLevel.get().floatValue();
-        spec.skillProps.forEach((type, specs) -> GeneralConfig.skillProps.put(type, SkillPropertySpecs.ofSpec(specs)));
 
         GeneralConfig.platinumChargeTime = spec.platinumChargeTime.get().floatValue();
         GeneralConfig.scrapWateringCanWater = spec.scrapWateringCanWater.get();

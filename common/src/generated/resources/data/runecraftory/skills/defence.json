@@ -1,0 +1,9 @@
+{
+  "maxLevel": 100,
+  "healthIncrease": 1.5,
+  "rpIncrease": 0.1,
+  "strIncrease": 0.0,
+  "vitIncrease": 1.5,
+  "intelIncrease": 0.0,
+  "xpMultiplier": 1.0
+}
