@@ -3,7 +3,6 @@ package io.github.flemmli97.runecraftory.fabric.config;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.fabric.config.values.WeaponTypePropertySpecs;
 import io.github.flemmli97.tenshilib.common.config.CommentedJsonConfig;
 import io.github.flemmli97.tenshilib.common.config.JsonConfig;
 
@@ -67,7 +66,6 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.silverWateringCanWater = spec.silverWateringCanWater.get();
         GeneralConfig.goldWateringCanWater = spec.goldWateringCanWater.get();
         GeneralConfig.platinumWateringCanWater = spec.platinumWateringCanWater.get();
-        spec.weaponProps.forEach((type, specs) -> GeneralConfig.weaponProps.put(type, WeaponTypePropertySpecs.ofSpec(specs)));
 
         GeneralConfig.xpMultiplier = spec.xpMultiplier.get().floatValue();
         GeneralConfig.skillXpMultiplier = spec.skillXpMultiplier.get().floatValue();

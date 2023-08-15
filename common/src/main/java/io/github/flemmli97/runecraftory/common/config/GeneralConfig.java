@@ -1,10 +1,5 @@
 package io.github.flemmli97.runecraftory.common.config;
 
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
-import io.github.flemmli97.runecraftory.common.config.values.WeaponTypeProperties;
-
-import java.util.EnumMap;
-
 public class GeneralConfig {
 
     public static boolean disableDefence = false;
@@ -59,24 +54,12 @@ public class GeneralConfig {
     public static int silverWateringCanWater = 100;
     public static int goldWateringCanWater = 150;
     public static int platinumWateringCanWater = 250;
-    public static EnumMap<EnumWeaponType, WeaponTypeProperties> weaponProps = new EnumMap<>(EnumWeaponType.class);
 
     public static float xpMultiplier = 1;
     public static float skillXpMultiplier = 1;
     public static float tamingMultiplier = 1;
 
     public static boolean debugAttack = false;
-
-    static {
-        weaponProps.put(EnumWeaponType.FARM, new WeaponTypeProperties(0, 10));
-        weaponProps.put(EnumWeaponType.SHORTSWORD, new WeaponTypeProperties(7, 13));
-        weaponProps.put(EnumWeaponType.LONGSWORD, new WeaponTypeProperties(40, 17));
-        weaponProps.put(EnumWeaponType.SPEAR, new WeaponTypeProperties(3, 13));
-        weaponProps.put(EnumWeaponType.HAXE, new WeaponTypeProperties(23, 16));
-        weaponProps.put(EnumWeaponType.DUAL, new WeaponTypeProperties(10, 10));
-        weaponProps.put(EnumWeaponType.GLOVE, new WeaponTypeProperties(3, 10));
-        weaponProps.put(EnumWeaponType.STAFF, new WeaponTypeProperties(0, 20));
-    }
 
     public enum RecipeSystem {
 

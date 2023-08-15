@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.config.ClientConfig;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
-import io.github.flemmli97.runecraftory.forge.config.values.WeaponTypePropertySpecs;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -73,7 +72,6 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         GeneralConfig.silverWateringCanWater = spec.silverWateringCanWater.get();
         GeneralConfig.goldWateringCanWater = spec.goldWateringCanWater.get();
         GeneralConfig.platinumWateringCanWater = spec.platinumWateringCanWater.get();
-        spec.weaponProps.forEach((type, specs) -> GeneralConfig.weaponProps.put(type, WeaponTypePropertySpecs.ofSpec(specs)));
 
         GeneralConfig.xpMultiplier = spec.xpMultiplier.get().floatValue();
         GeneralConfig.skillXpMultiplier = spec.skillXpMultiplier.get().floatValue();

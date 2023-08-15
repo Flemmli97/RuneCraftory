@@ -52,6 +52,7 @@ public class DataEvent {
             data.addProvider(new MobPropertiesgen(data));
             data.addProvider(new SpellPropertiesgen(data));
             data.addProvider(new SkillPropertiesgen(data));
+            data.addProvider(new WeaponPropertiesgen(data));
         }
     }
 

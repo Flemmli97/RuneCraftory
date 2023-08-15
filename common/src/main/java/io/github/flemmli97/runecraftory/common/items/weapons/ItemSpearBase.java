@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -42,7 +42,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
 
     @Override
     public int getChargeTime(ItemStack stack) {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
+        return DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
 
     @Override
     public float getFOV(LivingEntity entity, ItemStack stack) {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).aoe();
+        return DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).aoe();
     }
 
     @Override

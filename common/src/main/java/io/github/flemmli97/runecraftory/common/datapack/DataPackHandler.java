@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.datapack.manager.MonsterPropertie
 import io.github.flemmli97.runecraftory.common.datapack.manager.ShopItemsManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.SkillPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.SpellPropertiesManager;
+import io.github.flemmli97.runecraftory.common.datapack.manager.WeaponPropertiesManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
@@ -30,6 +31,7 @@ public class DataPackHandler {
     private final MonsterPropertiesManager mobProperties = new MonsterPropertiesManager();
     private final SpellPropertiesManager spellProperties = new SpellPropertiesManager();
     private final SkillPropertiesManager skillPropertiesManager = new SkillPropertiesManager();
+    private final WeaponPropertiesManager weaponPropertiesManager = new WeaponPropertiesManager();
     private final NameAndGiftManager nameAndGifts = new NameAndGiftManager();
     private final NPCDataManager npcData = new NPCDataManager();
     private final NPCLookManager npcLooks = new NPCLookManager();
@@ -59,6 +61,7 @@ public class DataPackHandler {
         cons.accept(SERVER_PACK.mobProperties);
         cons.accept(SERVER_PACK.spellProperties);
         cons.accept(SERVER_PACK.skillPropertiesManager);
+        cons.accept(SERVER_PACK.weaponPropertiesManager);
     }
 
     public static void reloadNPCData(Consumer<PreparableReloadListener> cons) {
@@ -110,6 +113,10 @@ public class DataPackHandler {
 
     public SkillPropertiesManager skillPropertiesManager() {
         return this.skillPropertiesManager;
+    }
+
+    public WeaponPropertiesManager weaponPropertiesManager() {
+        return this.weaponPropertiesManager;
     }
 
     public NameAndGiftManager nameAndGiftManager() {

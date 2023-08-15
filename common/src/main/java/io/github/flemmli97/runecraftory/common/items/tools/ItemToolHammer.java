@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -58,8 +59,8 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public int getChargeTime(ItemStack stack) {
         if (this.tier == EnumToolTier.PLATINUM)
-            return (int) (GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
+            return (int) (DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime() * GeneralConfig.platinumChargeTime);
+        return DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
     }
 
     @Override

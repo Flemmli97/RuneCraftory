@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
@@ -32,7 +32,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
 
     @Override
     public int getChargeTime(ItemStack stack) {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
+        return DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
 
     @Override
     public float getFOV(LivingEntity entity, ItemStack stack) {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).aoe();
+        return DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).aoe();
     }
 
     @Override

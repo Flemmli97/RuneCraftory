@@ -8,7 +8,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
-import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
+import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -59,7 +59,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
 
     @Override
     public int getChargeTime(ItemStack stack) {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).chargeTime();
+        return DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
     }
 
     @Override
@@ -90,7 +90,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
 
     @Override
     public float getFOV(LivingEntity entity, ItemStack stack) {
-        return GeneralConfig.weaponProps.get(this.getWeaponType()).aoe();
+        return DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).aoe();
     }
 
     @Override

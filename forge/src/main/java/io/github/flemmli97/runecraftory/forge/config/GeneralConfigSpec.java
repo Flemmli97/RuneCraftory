@@ -1,13 +1,9 @@
 package io.github.flemmli97.runecraftory.forge.config;
 
 
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.forge.config.values.WeaponTypePropertySpecs;
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.EnumMap;
 
 public class GeneralConfigSpec {
 
@@ -64,7 +60,6 @@ public class GeneralConfigSpec {
     public final ForgeConfigSpec.IntValue silverWateringCanWater;
     public final ForgeConfigSpec.IntValue goldWateringCanWater;
     public final ForgeConfigSpec.IntValue platinumWateringCanWater;
-    public final EnumMap<EnumWeaponType, WeaponTypePropertySpecs> weaponProps = new EnumMap<>(EnumWeaponType.class);
 
     public final ForgeConfigSpec.DoubleValue xpMultiplier;
     public final ForgeConfigSpec.DoubleValue skillXpMultiplier;
@@ -149,11 +144,6 @@ public class GeneralConfigSpec {
         this.goldWateringCanWater = builder.defineInRange("Gold Watering Can Water", GeneralConfig.goldWateringCanWater, 0, Integer.MAX_VALUE);
         this.platinumWateringCanWater = builder.defineInRange("Platinum Watering Can Water", GeneralConfig.platinumWateringCanWater, 0, Integer.MAX_VALUE);
         builder.pop();
-        GeneralConfig.weaponProps.forEach((type, prop) -> {
-            builder.push(type.toString());
-            this.weaponProps.put(type, new WeaponTypePropertySpecs(builder, prop));
-            builder.pop();
-        });
         builder.pop();
     }
 }

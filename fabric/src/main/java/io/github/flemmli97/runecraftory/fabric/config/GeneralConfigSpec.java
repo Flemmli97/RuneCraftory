@@ -2,15 +2,11 @@ package io.github.flemmli97.runecraftory.fabric.config;
 
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
-import io.github.flemmli97.runecraftory.fabric.config.values.WeaponTypePropertySpecs;
 import io.github.flemmli97.tenshilib.common.config.CommentedJsonConfig;
 import io.github.flemmli97.tenshilib.common.config.JsonConfig;
 import net.fabricmc.loader.api.FabricLoader;
 import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.EnumMap;
 
 public class GeneralConfigSpec {
 
@@ -68,7 +64,6 @@ public class GeneralConfigSpec {
     public final CommentedJsonConfig.IntVal silverWateringCanWater;
     public final CommentedJsonConfig.IntVal goldWateringCanWater;
     public final CommentedJsonConfig.IntVal platinumWateringCanWater;
-    public final EnumMap<EnumWeaponType, WeaponTypePropertySpecs> weaponProps = new EnumMap<>(EnumWeaponType.class);
 
     public final CommentedJsonConfig.DoubleVal xpMultiplier;
     public final CommentedJsonConfig.DoubleVal skillXpMultiplier;
@@ -153,11 +148,6 @@ public class GeneralConfigSpec {
         this.goldWateringCanWater = builder.defineInRange("Gold Watering Can Water", GeneralConfig.goldWateringCanWater, 0, Integer.MAX_VALUE);
         this.platinumWateringCanWater = builder.defineInRange("Platinum Watering Can Water", GeneralConfig.platinumWateringCanWater, 0, Integer.MAX_VALUE);
         builder.pop();
-        GeneralConfig.weaponProps.forEach((type, prop) -> {
-            builder.push(type.toString());
-            this.weaponProps.put(type, new WeaponTypePropertySpecs(builder, prop));
-            builder.pop();
-        });
         builder.pop();
         builder.registerReloadHandler(() -> ConfigHolder.loadGeneral(this));
     }
