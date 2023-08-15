@@ -225,6 +225,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
      * For movement animation interpolation
      */
     private int moveTick;
+    private final int moveRandom = this.random.nextInt(10);
 
     public static final int moveTickMax = 3;
 
@@ -1135,7 +1136,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
     }
 
     public float interpolatedMoveTick(float partialTicks) {
-        return Mth.clamp((this.moveTick + (this.getMoveFlag() != MoveType.NONE ? partialTicks : -partialTicks)) / (float) moveTickMax, 0, 1);
+        return this.moveRandom + Mth.clamp((this.moveTick + (this.getMoveFlag() != MoveType.NONE ? partialTicks : -partialTicks)) / (float) moveTickMax, 0, 1);
     }
 
     public void setMovingFlag(MoveType type) {
