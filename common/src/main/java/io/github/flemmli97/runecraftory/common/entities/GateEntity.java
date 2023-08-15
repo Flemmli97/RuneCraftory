@@ -198,8 +198,8 @@ public class GateEntity extends Mob implements IBaseMob {
         } else if (!this.isEffectiveAi()) {
             this.setDeltaMovement(this.getDeltaMovement().scale(0.98D));
         }
-        if (--this.spawnDelay <= 0 && this.level.getDifficulty() != Difficulty.PEACEFUL) {
-            this.spawnDelay = this.getRandom().nextInt(MobConfig.minSpawnDelay, MobConfig.maxSpawnDelay);
+        if (!this.level.isClientSide && --this.spawnDelay <= 0 && this.level.getDifficulty() != Difficulty.PEACEFUL) {
+            this.spawnDelay = MobConfig.minSpawnDelay >= MobConfig.maxSpawnDelay ? MobConfig.minSpawnDelay : this.getRandom().nextInt(MobConfig.minSpawnDelay, MobConfig.maxSpawnDelay);
             if (this.spawnMobs(1)) {
                 this.spawnDelay *= 0.4;
             }

@@ -54,7 +54,7 @@ public class MobConfigSpec {
         this.gateMDefGain = builder.comment("Magic defence gain per level of gates").defineInRange("Magic Defence Gain", MobConfig.gateMDefGain, 0, Double.MAX_VALUE);
         this.gateXP = builder.comment("Base xp a gate gives").defineInRange("XP", MobConfig.gateXP, 0, Integer.MAX_VALUE);
         this.gateMoney = builder.comment("Money a gate gives").defineInRange("Money", MobConfig.gateMoney, 0, Integer.MAX_VALUE);
-        this.minSpawnDelay = builder.comment("Min delay in ticks for gates to spawn the next mob").defineInRange("MinSpawnDelay", MobConfig.maxSpawnDelay, 0, Integer.MAX_VALUE);
+        this.minSpawnDelay = builder.comment("Min delay in ticks for gates to spawn the next mob").defineInRange("MinSpawnDelay", MobConfig.minSpawnDelay, 0, Integer.MAX_VALUE);
         this.maxSpawnDelay = builder.comment("Max delay in ticks for gates to spawn the next mob").defineInRange("MaxSpawnDelay", MobConfig.maxSpawnDelay, 0, Integer.MAX_VALUE);
         this.minDist = builder.comment("Radius to check for other gates. If more than Max Group gates are in that radius no other gates will spawn").defineInRange("Min Dist", MobConfig.minDist, 0, Double.MAX_VALUE);
         this.maxGroup = builder.comment("Max amount of gates in Min Dist radius that can exist").defineInRange("Max Group", MobConfig.maxGroup, 0, Integer.MAX_VALUE);
