@@ -1,3 +1,14 @@
+RuneCraftory 1.6.1
+================
+- Fix targeting owned entities being incorrect
+- Hide locked recipes in jei and rei
+- Fix rp bar not aligned in crafting gui
+- Tweak max monster around gate
+- Tweak gate spawnrate. Now defined via MaxSpawnDelay and MinSpawnDelay
+- Add indicator for when monster can't be hurt
+- Add random add tick for movement animation so not all mobs have the same
+- Moved skill and weapon config to datapack
+
 RuneCraftory 1.6.0
 ================
 - Dragon scales providing bonus shield stats (only up to 50%) when used in upgrades
