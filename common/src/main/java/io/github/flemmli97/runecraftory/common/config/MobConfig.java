@@ -17,7 +17,8 @@ public class MobConfig {
     public static double gateMDefGain = 1.5;
     public static int gateXP = 25;
     public static int gateMoney = 5;
-    public static int spawnChance = 100;
+    public static int minSpawnDelay = 200;
+    public static int maxSpawnDelay = 400;
     public static double minDist = 32;
     public static int maxGroup = 1;
     public static int minNearby = 2;

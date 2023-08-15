@@ -120,7 +120,8 @@ public record ConfigHolder<T>(ModConfig.Type configType, String configName,
         MobConfig.gateMDefGain = spec.gateMDefGain.get();
         MobConfig.gateXP = spec.gateXP.get();
         MobConfig.gateMoney = spec.gateMoney.get();
-        MobConfig.spawnChance = spec.spawnChance.get();
+        MobConfig.minSpawnDelay = spec.minSpawnDelay.get();
+        MobConfig.maxSpawnDelay = Math.max(MobConfig.minSpawnDelay, spec.maxSpawnDelay.get());
         MobConfig.minDist = spec.minDist.get();
         MobConfig.maxGroup = spec.maxGroup.get();
         MobConfig.minNearby = spec.minNearby.get();

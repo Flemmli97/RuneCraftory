@@ -79,6 +79,7 @@ public class GateEntity extends Mob implements IBaseMob {
     private final LevelExpPair expPair = new LevelExpPair();
     private boolean removeCauseEmptyList;
     private int maxNearby;
+    private int spawnDelay;
 
     public GateEntity(EntityType<? extends GateEntity> type, Level level) {
         super(type, level);
@@ -197,8 +198,11 @@ public class GateEntity extends Mob implements IBaseMob {
         } else if (!this.isEffectiveAi()) {
             this.setDeltaMovement(this.getDeltaMovement().scale(0.98D));
         }
-        if (this.random.nextInt(MobConfig.spawnChance) == 0 && this.level.getDifficulty() != Difficulty.PEACEFUL) {
-            this.spawnMobs();
+        if (--this.spawnDelay <= 0 && this.level.getDifficulty() != Difficulty.PEACEFUL) {
+            this.spawnDelay = this.getRandom().nextInt(MobConfig.minSpawnDelay, MobConfig.maxSpawnDelay);
+            if (this.spawnMobs(1)) {
+                this.spawnDelay *= 0.4;
+            }
         }
     }
 
@@ -212,6 +216,7 @@ public class GateEntity extends Mob implements IBaseMob {
         compound.putString("Element", this.type.toString());
         compound.putBoolean("FirstSpawn", this.initialSpawn);
         compound.putInt("MaxNearby", this.maxNearby);
+        compound.putInt("SpawnDelay", this.spawnDelay);
     }
 
     @Override
@@ -234,6 +239,7 @@ public class GateEntity extends Mob implements IBaseMob {
         }
         this.initialSpawn = compound.getBoolean("FirstSpawn");
         this.maxNearby = compound.getInt("MaxNearby");
+        this.spawnDelay = compound.getInt("SpawnDelay");
     }
 
     @Override
@@ -276,7 +282,8 @@ public class GateEntity extends Mob implements IBaseMob {
         this.spawnList.addAll(DataPackHandler.SERVER_PACK.gateSpawnsManager().pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(3) + 1, this.blockPosition(), gateLevel));
         this.setPos(this.getX(), this.getY() + 1, this.getZ());
         this.updateStatsToLevel();
-        this.spawnMobs();
+        this.spawnMobs(Math.max(1, this.maxNearby - 2));
+        this.spawnDelay = this.getRandom().nextInt(MobConfig.minSpawnDelay, MobConfig.maxSpawnDelay);
         //Cant check during spawn conditions since gate level isnt set there yet
         if (this.spawnList.isEmpty() && reason != MobSpawnType.SPAWN_EGG && reason != MobSpawnType.COMMAND)
             this.removeCauseEmptyList = true;
@@ -288,19 +295,17 @@ public class GateEntity extends Mob implements IBaseMob {
         return HumanoidArm.RIGHT;
     }
 
-    private void spawnMobs() {
+    private boolean spawnMobs(int count) {
         if (!(this.level instanceof ServerLevel serverLevel) || serverLevel.getDifficulty() == Difficulty.PEACEFUL)
-            return;
+            return false;
         if (!this.spawnList.isEmpty()) {
             List<Entity> nearby = this.level.getEntities(this, this.getBoundingBox().inflate(18), entity ->
                     entity.getType() == ModEntities.TREASURE_CHEST.get() ||
                             entity.getType() == ModEntities.MONSTER_BOX.get() ||
                             entity.getType() == ModEntities.GOBBLE_BOX.get() ||
                             GateEntity.this.spawnList.contains(entity.getType()));
-            int randAmount = this.random.nextInt(2) + 1;
-            randAmount = Math.min(this.maxNearby - nearby.size(), randAmount);
             if (nearby.size() <= this.maxNearby) {
-                for (int amount = 0; amount < randAmount; ++amount) {
+                for (int amount = 0; amount < count; ++amount) {
                     double x = this.getX() + this.random.nextInt(9) - 4.0;
                     double y = this.getY() + this.random.nextInt(2) - 1.0;
                     double z = this.getZ() + this.random.nextInt(9) - 4.0;
@@ -339,8 +344,10 @@ public class GateEntity extends Mob implements IBaseMob {
                         }
                     }
                 }
+                return true;
             }
         }
+        return false;
     }
 
     protected float reduceDamage(DamageSource damageSrc, float damageAmount) {
