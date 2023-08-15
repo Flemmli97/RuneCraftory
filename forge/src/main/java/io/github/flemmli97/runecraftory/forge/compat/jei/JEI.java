@@ -11,6 +11,8 @@ import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -110,13 +112,18 @@ public class JEI implements IModPlugin {
         });
     }
 
-    public static <T> Stream<T> filterLocked(Stream<T> recipes, RecipeTypeData<T> recipeTypeData) {
+    public static <T> Stream<T> filterLocked(Stream<T> recipes, RecipeTypeData<T> recipeTypeData, IFocusGroup focusGroup) {
         if (recipeTypeData.getRecipeCategory().getRecipeType().equals(SextupleRecipeCategory.FORGECATEGORY)
                 || recipeTypeData.getRecipeCategory().getRecipeType().equals(SextupleRecipeCategory.ARMORCATEGORY)
                 || recipeTypeData.getRecipeCategory().getRecipeType().equals(SextupleRecipeCategory.CHEMISTRYCATEGORY)
                 || recipeTypeData.getRecipeCategory().getRecipeType().equals(SextupleRecipeCategory.COOKINGCATEGORY)) {
             Player player = Minecraft.getInstance().player;
-            Predicate<T> match = recipe -> Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getRecipeKeeper().isUnlocked((Recipe<?>) recipe)).orElse(false);
+            boolean ingredient = focusGroup.getFocuses(RecipeIngredientRole.INPUT).findAny().isPresent();
+            Predicate<T> match = recipe -> player == null || Platform.INSTANCE.getPlayerData(player).map(cap -> {
+                if (ingredient)
+                    return cap.getRecipeKeeper().isUnlocked((Recipe<?>) recipe);
+                return cap.getRecipeKeeper().isUnlockedForCrafting((Recipe<?>) recipe);
+            }).orElse(false);
             return recipes.filter(match);
         }
         return recipes;

@@ -65,7 +65,7 @@ public class ReiClientPlugin implements REIClientPlugin {
             if (cat.getCategoryIdentifier().equals(FORGING) || cat.getCategoryIdentifier().equals(ARMOR)
                     || cat.getCategoryIdentifier().equals(COOKING) || cat.getCategoryIdentifier().equals(CHEM)) {
                 Player player = Minecraft.getInstance().player;
-                if (Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getRecipeKeeper().isUnlocked(((SextupleDisplay) display).recipe())).orElse(false)) {
+                if (player != null && Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getRecipeKeeper().isUnlockedForCrafting(((SextupleDisplay) display).recipe())).orElse(false)) {
                     return EventResult.pass();
                 }
                 return EventResult.interruptFalse();
