@@ -42,7 +42,7 @@ public class EntityWooly extends LeapingMonster {
     private static final EntityDataAccessor<Boolean> SHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
     protected static final EntityDataAccessor<Boolean> SPAWNSHEARED = SynchedEntityData.defineId(EntityWooly.class, EntityDataSerializers.BOOLEAN);
 
-    public LeapingAttackGoal<EntityWooly> attack = new LeapingAttackGoal<>(this);
+    public LeapingAttackGoal<EntityWooly> attack = new LeapingAttackGoal<>(this, true, 1.5, true);
     private final AnimationHandler<EntityWooly> animationHandler = new AnimationHandler<>(this, ANIMS);
 
     public EntityWooly(EntityType<? extends EntityWooly> type, Level level) {
@@ -53,7 +53,7 @@ public class EntityWooly extends LeapingMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SPAWNSHEARED, this.getRandom().nextFloat() < 0.1);
+        this.entityData.define(SPAWNSHEARED, this.getRandom().nextFloat() < 0.05);
         this.entityData.define(SHEARED, this.entityData.get(SPAWNSHEARED));
     }
 
@@ -154,9 +154,9 @@ public class EntityWooly extends LeapingMonster {
     public float attackChance(AnimationType type) {
         if (type == AnimationType.MELEE)
             return 0.8f;
-        if (this.entityData.get(SPAWNSHEARED))
-            return 0.8f;
-        return this.isTamed() ? 0.7f : 0.03f;
+        if (this.entityData.get(SPAWNSHEARED) || this.isTamed())
+            return 0.9f;
+        return 0;
     }
 
     @Override

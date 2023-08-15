@@ -10,7 +10,7 @@ import net.minecraft.world.phys.Vec3;
 public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGoal<T> {
 
     private final double meleeDistSq;
-    private final boolean keepDistance;
+    private final boolean keepDistance, stayIfClose;
     private int preDelay = -1;
 
     public LeapingAttackGoal(T entity) {
@@ -18,9 +18,14 @@ public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGo
     }
 
     public LeapingAttackGoal(T entity, boolean keepDistance, double meleeDist) {
+        this(entity, keepDistance, meleeDist, false);
+    }
+
+    public LeapingAttackGoal(T entity, boolean keepDistance, double meleeDist, boolean stayIfClose) {
         super(entity);
         this.keepDistance = keepDistance;
         this.meleeDistSq = meleeDist * meleeDist;
+        this.stayIfClose = stayIfClose;
     }
 
     @Override
@@ -61,11 +66,18 @@ public class LeapingAttackGoal<T extends LeapingMonster> extends AnimatedMeleeGo
 
     @Override
     public void handleIdle() {
-        if (this.keepDistance && this.attacker.getNavigation().isDone() && this.distanceToTargetSq <= this.meleeDistSq) {
-            Vec3 away = DefaultRandomPos.getPosAway(this.attacker, 5, 4, this.target.position());
-            if (away != null) {
-                this.moveToWithDelay(away.x, away.y, away.z, 1.2);
+        if (this.keepDistance && this.distanceToTargetSq <= this.meleeDistSq) {
+            if (this.stayIfClose) {
+                this.attacker.getLookControl().setLookAt(this.target, 30, 30);
+                this.attacker.getNavigation().stop();
                 return;
+            }
+            if (this.attacker.getNavigation().isDone()) {
+                Vec3 away = DefaultRandomPos.getPosAway(this.attacker, 5, 4, this.target.position());
+                if (away != null) {
+                    this.moveToWithDelay(away.x, away.y, away.z, 1.2);
+                    return;
+                }
             }
         }
         super.handleIdle();
