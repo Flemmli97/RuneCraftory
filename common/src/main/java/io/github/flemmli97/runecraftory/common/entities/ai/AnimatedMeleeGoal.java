@@ -44,7 +44,7 @@ public class AnimatedMeleeGoal<T extends PathfinderMob & IAnimated & RandomAttac
             this.moveToWithDelay(1);
         if (this.attackMoveDelay <= 0)
             this.attackMoveDelay = this.attacker.getRandom().nextInt(50) + 100;
-        AABB aabb = this.attacker.calculateAttackAABB(this.next, this.target, -0.1);
+        AABB aabb = this.attacker.attackCheckAABB(this.next, this.target, -0.1);
         //PacketHandler.sendToAll(new S2CAttackDebug(aabb, EnumAABBType.ATTEMPT));
         if (aabb.intersects(this.target.getBoundingBox())) {
             this.movementDone = true;

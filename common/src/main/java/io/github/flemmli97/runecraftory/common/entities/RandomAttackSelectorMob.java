@@ -9,6 +9,10 @@ public interface RandomAttackSelectorMob {
 
     AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow);
 
+    default AABB attackCheckAABB(AnimatedAction anim, LivingEntity target, double grow) {
+        return this.calculateAttackAABB(anim, target, grow);
+    }
+
     AnimatedAction getRandomAnimation(AnimationType type);
 
     boolean isAnimOfType(AnimatedAction anim, AnimationType type);
