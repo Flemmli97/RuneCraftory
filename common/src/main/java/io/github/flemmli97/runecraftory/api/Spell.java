@@ -7,8 +7,10 @@ import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.platform.registry.CustomRegistryEntry;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -57,8 +59,12 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     }
 
     public boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, boolean ignoreSeal) {
-        if (!ignoreSeal && EntityUtils.sealed(entity))
+        if (!ignoreSeal && EntityUtils.sealed(entity)) {
+            if (entity instanceof ServerPlayer player) {
+                player.connection.send(new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, entity.getSoundSource(), entity.getX(), entity.getY(), entity.getZ(), 1, 0.7f));
+            }
             return false;
+        }
         return this.use(world, entity, stack, 1, 1, 1);
     }
 
