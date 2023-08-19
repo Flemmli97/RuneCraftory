@@ -77,11 +77,6 @@ public class EntityHornet extends BaseMonster {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1.5;
-    }
-
-    @Override
     public int animationCooldown(@Nullable AnimatedAction anim) {
         return (int) (super.animationCooldown(anim) * 3.5);
     }

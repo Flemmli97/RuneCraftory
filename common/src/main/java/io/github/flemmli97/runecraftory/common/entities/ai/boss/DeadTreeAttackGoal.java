@@ -34,9 +34,13 @@ public class DeadTreeAttackGoal<T extends EntityDeadTree> extends AnimatedMeleeG
     @Override
     public void handlePreAttack() {
         this.moveToWithDelay(1.2);
+        if (this.next.is(EntityDeadTree.APPLE_SHIELD)) {
+            this.movementDone = true;
+            return;
+        }
         if (!this.moveFlag) {
             this.pathFindDelay = 0;
-            this.moveDelay = 50 + this.attacker.getRandom().nextInt(10);
+            this.moveDelay = 35 + this.attacker.getRandom().nextInt(15);
             this.moveFlag = true;
         } else if (this.moveDelay-- <= 0 || this.distanceToTargetSq < 4) {
             this.movementDone = true;

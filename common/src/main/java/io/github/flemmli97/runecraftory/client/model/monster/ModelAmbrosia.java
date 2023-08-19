@@ -111,7 +111,7 @@ public class ModelAmbrosia<T extends EntityAmbrosia> extends EntityModel<T> impl
             this.head.xRot += headPitch * Mth.DEG_TO_RAD;
             this.anim.doAnimation(this, "idle", entity.tickCount, partialTicks);
             if (entity.moveTick() > 0 && anim == null)
-                this.body.xRot += 0.6108652381980154F * entity.interpolatedMoveTick(partialTicks);
+                this.body.xRot += Mth.DEG_TO_RAD * 2 * entity.interpolatedMoveTick(partialTicks);
         }
         if (anim != null)
             this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks);

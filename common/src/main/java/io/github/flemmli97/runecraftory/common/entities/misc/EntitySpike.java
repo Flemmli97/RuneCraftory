@@ -157,7 +157,7 @@ public class EntitySpike extends BaseDamageCloud {
 
     @Override
     protected boolean damageEntity(LivingEntity target) {
-        CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).magic().hurtResistant(0);
+        CustomDamage.Builder builder = new CustomDamage.Builder(this, this.getOwner()).element(EnumElement.EARTH).knock(CustomDamage.KnockBackType.UP).knockAmount(0.6f).magic().hurtResistant(0);
         return CombatUtils.damageWithFaintAndCrit(this.getOwner(), target, builder, CombatUtils.getAttributeValue(this.getOwner(), ModAttributes.MAGIC.get()) * this.damageMultiplier, null);
     }
 

@@ -49,8 +49,6 @@ public class RaccoonAttackGoal<T extends EntityRaccoon> extends AnimatedMeleeGoa
             }
             this.moveFlag = true;
         } else if (this.moveDelay-- <= 0 || (this.attacker.isBerserk() && this.distanceToTargetSq < 4)) {
-            if (!this.attacker.getNavigation().isDone() && this.attacker.isBerserk())
-                return;
             this.movementDone = true;
             this.moveFlag = false;
         }

@@ -30,7 +30,7 @@ public class EvadingRangedAttackGoal<T extends BaseMonster> extends AnimatedMele
         if (this.attacker.getRandom().nextFloat() < this.attacker.attackChance(AnimationType.GENERICATTACK)) {
             if (this.attacker.getRandom().nextFloat() < this.attacker.attackChance(AnimationType.MELEE)) {
                 AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.MELEE);
-                AABB aabb = this.attacker.attackCheckAABB(anim, this.target, 1);
+                AABB aabb = this.attacker.attackCheckAABB(anim, this.target, -0.3);
                 if (aabb.intersects(this.target.getBoundingBox()))
                     return anim;
             }

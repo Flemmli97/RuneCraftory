@@ -12,7 +12,7 @@ public class AnimatedRangedGoal<T extends BaseMonster> extends AnimatedMeleeGoal
 
     private static <T extends BaseMonster> MeleeAttackCheck<T> DEFAULT_CHECK() {
         return (attacker, target, anim) -> {
-            AABB aabb = attacker.attackCheckAABB(anim, target, 1);
+            AABB aabb = attacker.attackCheckAABB(anim, target, -0.3);
             return aabb.intersects(target.getBoundingBox());
         };
     }

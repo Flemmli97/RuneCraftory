@@ -57,6 +57,7 @@ import io.github.flemmli97.runecraftory.common.entities.misc.EntityWindGust;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWispFlame;
 import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaBreathSummoner;
 import io.github.flemmli97.runecraftory.common.entities.misc.RafflesiaCircleSummoner;
+import io.github.flemmli97.runecraftory.common.entities.misc.RootSpikeSummoner;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityAnt;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBeetle;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityBigAnt;
@@ -1027,6 +1028,7 @@ public class ModEntities {
     public static final RegistryEntrySupplier<EntityType<EntityButterflySummoner>> BUTTERFLY_SUMMONER = reg(EntityType.Builder.<EntityButterflySummoner>of(EntityButterflySummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "butterfly_summoner"));
     public static final RegistryEntrySupplier<EntityType<EntityDarkBulletSummoner>> DARK_BULLET_SUMMONER = reg(EntityType.Builder.<EntityDarkBulletSummoner>of(EntityDarkBulletSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "dark_bullet_summoner"));
     public static final RegistryEntrySupplier<EntityType<ElementBallBarrageSummoner>> ELEMENTAL_BARRAGE_SUMMONER = reg(EntityType.Builder.<ElementBallBarrageSummoner>of(ElementBallBarrageSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "elemental_barrage_summoner"));
+    public static final RegistryEntrySupplier<EntityType<RootSpikeSummoner>> ROOT_SPIKE_SUMMONER = reg(EntityType.Builder.<RootSpikeSummoner>of(RootSpikeSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "root_spike_summoner"));
     public static final RegistryEntrySupplier<EntityType<RafflesiaBreathSummoner>> RAFFLESIA_BREATH_SUMMONER = reg(EntityType.Builder.<RafflesiaBreathSummoner>of(RafflesiaBreathSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rafflesia_breath_summoner"));
     public static final RegistryEntrySupplier<EntityType<RafflesiaCircleSummoner>> RAFFLESIA_CIRCLE_SUMMONER = reg(EntityType.Builder.<RafflesiaCircleSummoner>of(RafflesiaCircleSummoner::new, MobCategory.MISC).sized(0.01f, 0.01f).noSummon().clientTrackingRange(4), new ResourceLocation(RuneCraftory.MODID, "rafflesia_circle_summoner"));
 

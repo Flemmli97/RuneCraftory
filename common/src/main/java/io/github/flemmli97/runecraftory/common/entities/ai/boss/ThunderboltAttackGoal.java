@@ -81,7 +81,7 @@ public class ThunderboltAttackGoal<T extends EntityThunderbolt> extends Animated
                 this.moveToWithDelay(1.2);
                 if (!this.moveFlag) {
                     this.pathFindDelay = 0;
-                    this.moveDelay = 55 + this.attacker.getRandom().nextInt(15);
+                    this.moveDelay = 35 + this.attacker.getRandom().nextInt(15);
                     this.moveFlag = true;
                 } else if (this.moveDelay-- <= 0 || this.distanceToTargetSq < 4) {
                     this.movementDone = true;

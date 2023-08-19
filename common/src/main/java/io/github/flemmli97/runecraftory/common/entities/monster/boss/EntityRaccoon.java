@@ -96,9 +96,9 @@ public class EntityRaccoon extends BossMonster {
                     Vec3 targetPos = target.position();
                     jumpDir = new Vec3(targetPos.x - entity.getX(), 0.0, targetPos.z - entity.getZ());
                     if (jumpDir.lengthSqr() > 25) // 14
-                        jumpDir = jumpDir.normalize().scale(5);
+                        jumpDir = jumpDir.normalize().scale(8);
                 } else
-                    jumpDir = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z()).normalize().scale(5);
+                    jumpDir = new Vec3(entity.getLookAngle().x(), 0, entity.getLookAngle().z()).normalize().scale(8);
                 entity.jumpDir = jumpDir.multiply(1 / length, 1, 1 / length);
             }
             if (entity.jumpDir != null && anim.getTick() > 3 && anim.getTick() <= anim.getAttackTime()) {
@@ -111,6 +111,8 @@ public class EntityRaccoon extends BossMonster {
                     Platform.INSTANCE.sendToTrackingAndSelf(new S2CScreenShake(8, 0.8f), entity);
                     entity.level.playSound(null, entity.blockPosition(), SoundEvents.GENERIC_EXPLODE, entity.getSoundSource(), 1.0f, 0.9f);
                 }
+                if (anim.getTick() >= anim.getAttackTime())
+                    entity.setDeltaMovement(Vec3.ZERO);
             }
         });
         b.put(STOMP, (anim, entity) -> {
@@ -359,6 +361,7 @@ public class EntityRaccoon extends BossMonster {
         if (target != null && !anim.is(STOMP)) {
             this.lookAt(target, 180.0f, 50.0f);
         }
+        this.getNavigation().stop();
         BiConsumer<AnimatedAction, EntityRaccoon> handler = ATTACK_HANDLER.get(anim.getID());
         if (handler != null)
             handler.accept(anim, this);
@@ -367,7 +370,8 @@ public class EntityRaccoon extends BossMonster {
     @Override
     public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
         if (anim.is(JUMP)) {
-            return new AABB(this.getBbWidth() - 3.5, -0.5, this.getBbWidth() - 3.5, this.getBbWidth() + 3.5, 2, this.getBbWidth() + 3.5)
+            double attackSize = this.getBbWidth() + 3;
+            return new AABB(-attackSize, -0.5, -attackSize, attackSize, 2, attackSize)
                     .move(this.position());
         }
         if (anim.is(STOMP)) {
@@ -382,6 +386,11 @@ public class EntityRaccoon extends BossMonster {
             return this.attackAABB(anim).move(attackPos.x, attackPos.y, attackPos.z);
         }
         return super.calculateAttackAABB(anim, target);
+    }
+
+    @Override
+    public double maxAttackRange(AnimatedAction anim) {
+        return 2.3;
     }
 
     @Override

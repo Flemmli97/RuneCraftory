@@ -84,8 +84,8 @@ public class EntityDeadTree extends BossMonster {
             }
         });
         b.put(SPIKE, (anim, entity) -> {
-            if (anim.canAttack() || anim.getTick() == 10 || anim.getTick() == 14) {
-                ModSpells.ROOT_SPIKE.get().use(entity);
+            if (anim.canAttack()) {
+                ModSpells.ROOT_SPIKE_TRIPLE.get().use(entity);
             }
         });
         b.put(HEAL, (anim, entity) -> {
@@ -164,8 +164,11 @@ public class EntityDeadTree extends BossMonster {
                 return false;
             if (anim.is(HEAL) && this.healCooldown > 0 && this.random.nextFloat() < 0.2)
                 return false;
-            if (!this.isEnraged())
+            if (!this.isEnraged()) {
+                if (anim.is(ATTACK))
+                    return this.random.nextFloat() < 0.8;
                 return !anim.is(BIG_FALLING_APPLES) && !anim.is(MORE_FALLING_APPLES);
+            }
             return !anim.is(FALLING_APPLES);
         }
         return false;
@@ -183,7 +186,10 @@ public class EntityDeadTree extends BossMonster {
     @Override
     public int animationCooldown(AnimatedAction anim) {
         int diffAdd = this.difficultyCooldown();
-        return 25 + this.getRandom().nextInt(15) - (this.isEnraged() ? 7 : 0) + diffAdd;
+        int cooldown = 25 + this.getRandom().nextInt(15) - (this.isEnraged() ? 7 : 0) + diffAdd;
+        if (anim != null && anim.is(SPIKE))
+            cooldown += 40;
+        return cooldown;
     }
 
     @Override

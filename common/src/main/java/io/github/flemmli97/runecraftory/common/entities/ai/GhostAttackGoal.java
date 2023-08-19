@@ -20,7 +20,7 @@ public class GhostAttackGoal<T extends EntityGhost> extends AnimatedMeleeGoal<T>
         if (this.attacker.getRandom().nextFloat() < 0.7f && this.distanceToTargetSq <= (this.attacker.chargingLength() * this.attacker.chargingLength() + 1) && this.attacker.getY() >= this.target.getY())
             return this.attacker.getRandomAnimation(AnimationType.CHARGE);
         AnimatedAction anim = this.attacker.getRandomAnimation(AnimationType.MELEE);
-        AABB aabb = this.attacker.attackCheckAABB(anim, this.target, 1);
+        AABB aabb = this.attacker.attackCheckAABB(anim, this.target, -0.3);
         if (aabb.intersects(this.target.getBoundingBox()))
             return anim;
         return this.attacker.getRandomAnimation(AnimationType.IDLE);

@@ -353,6 +353,7 @@ public class ClientRegister {
         consumer.register(ModEntities.BUTTERFLY_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.DARK_BULLET_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.ELEMENTAL_BARRAGE_SUMMONER.get(), EmptyRender::new);
+        consumer.register(ModEntities.ROOT_SPIKE_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.RAFFLESIA_BREATH_SUMMONER.get(), EmptyRender::new);
         consumer.register(ModEntities.RAFFLESIA_CIRCLE_SUMMONER.get(), EmptyRender::new);
 

@@ -91,11 +91,6 @@ public class EntityFairy extends BaseMonster implements HealingPredicateEntity {
     }
 
     @Override
-    public double maxAttackRange(AnimatedAction anim) {
-        return 0.8;
-    }
-
-    @Override
     public void handleAttack(AnimatedAction anim) {
         if (anim.is(LIGHT)) {
             this.getNavigation().stop();

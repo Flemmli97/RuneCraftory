@@ -41,11 +41,13 @@ public class ChimeraAttackGoal<T extends EntityChimera> extends AnimatedMeleeGoa
             this.chargeSuccess = false;
             return;
         }
+        double dist = this.next.is(EntityChimera.BUBBLE_BEAM, EntityChimera.WATER_TAIL_BUBBLE, EntityChimera.WATER_TAIL_BEAM,
+                EntityChimera.FIRE_BREATH, EntityChimera.BUBBLE_BEAM) ? 7 : 4;
         if (!this.moveFlag) {
             this.pathFindDelay = 0;
-            this.moveDelay = 50 + this.attacker.getRandom().nextInt(10);
+            this.moveDelay = 30 + this.attacker.getRandom().nextInt(15);
             this.moveFlag = true;
-        } else if (this.moveDelay-- <= 0 || this.distanceToTargetSq < 4) {
+        } else if (this.moveDelay-- <= 0 || this.distanceToTargetSq < dist) {
             this.movementDone = true;
             this.moveFlag = false;
             switch (this.next.getID()) {

@@ -340,7 +340,7 @@ public class EntitySkelefang extends BossMonster {
             return false;
         if (type == AnimationType.GENERICATTACK) {
             if (anim.is(SLASH))
-                return this.remainingRightLegBones() > 0 || this.remainingLeftLegBones() > 0;
+                return (this.remainingRightLegBones() > 0 || this.remainingLeftLegBones() > 0) && this.random.nextFloat() < 0.8;
             if (anim.is(TAIL_SLAM, TAIL_SLAP))
                 return this.remainingTailBones() > 10 || this.isEnraged();
             if (anim.is(CHARGE))
@@ -596,12 +596,13 @@ public class EntitySkelefang extends BossMonster {
                 else
                     dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot());
             }
+            double attackSize = 1.25;
             Vec3 attackPos = this.position().add(dir.scale(this.getBbWidth() + reach + 3));
-            aabbs.add(new AABB(-1.25, -0.02, -1.25, 1.25, 1.8 + 0.02, 1.25).move(attackPos.x, attackPos.y, attackPos.z));
+            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
             attackPos = this.position().add(dir.scale(this.getBbWidth() + reach));
-            aabbs.add(new AABB(-1.25, -0.02, -1.25, 1.25, 1.8 + 0.02, 1.25).move(attackPos.x, attackPos.y, attackPos.z));
+            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
             attackPos = this.position().add(dir.scale(this.getBbWidth()));
-            aabbs.add(new AABB(-1.25, -0.02, -1.25, 1.25, 1.8 + 0.02, 1.25).move(attackPos.x, attackPos.y, attackPos.z));
+            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
         }
         if (anim.is(TAIL_SLAM)) {
             double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
@@ -618,12 +619,13 @@ public class EntitySkelefang extends BossMonster {
                 angle = -30;
             if (angle != 0)
                 offset = MathUtils.rotate(MathUtils.normalY, dir, (float) (Mth.DEG_TO_RAD * angle));
+            double attackSize = 1.25;
             Vec3 attackPos = this.position().add(dir.scale(this.getBbWidth())).add(offset.scale(reach + 3));
-            aabbs.add(new AABB(-1.25, -0.02, -1.25, 1.25, 1.8 + 0.02, 1.25).move(attackPos.x, attackPos.y, attackPos.z));
+            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
             attackPos = this.position().add(dir.scale(this.getBbWidth())).add(offset.scale(reach));
-            aabbs.add(new AABB(-1.25, -0.02, -1.25, 1.25, 1.8 + 0.02, 1.25).move(attackPos.x, attackPos.y, attackPos.z));
+            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
             attackPos = this.position().add(dir.scale(this.getBbWidth()));
-            aabbs.add(new AABB(-1.25, -0.02, -1.25, 1.25, 1.8 + 0.02, 1.25).move(attackPos.x, attackPos.y, attackPos.z));
+            aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(attackPos.x, attackPos.y, attackPos.z));
         }
         if (anim.is(SLASH)) {
             double reach = 1;
@@ -637,13 +639,14 @@ public class EntitySkelefang extends BossMonster {
                 side = Vec3.directionFromRotation(0, this.yBodyRot + 90);
             }
             dir = dir.scale(this.getBbWidth() * 0.5 + reach);
+            double attackSize = 1.65;
             if (this.remainingLeftLegBones() > 0) {
                 Vec3 rightPos = this.position().add(dir).add(side.scale(1.3));
-                aabbs.add(new AABB(-1.6, -0.02, -1.6, 1.6, 1.8 + 0.02, 1.6).move(rightPos.x, rightPos.y, rightPos.z));
+                aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(rightPos.x, rightPos.y, rightPos.z));
             }
             if (this.remainingRightLegBones() > 0) {
                 Vec3 leftPos = this.position().add(dir).add(side.scale(-1.3));
-                aabbs.add(new AABB(-1.6, -0.02, -1.6, 1.6, 1.8 + 0.02, 1.6).move(leftPos.x, leftPos.y, leftPos.z));
+                aabbs.add(new AABB(-attackSize, -0.02, -attackSize, attackSize, 1.8 + 0.02, attackSize).move(leftPos.x, leftPos.y, leftPos.z));
             }
         }
         Set<LivingEntity> targets = new HashSet<>();

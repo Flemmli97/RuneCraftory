@@ -53,6 +53,7 @@ import io.github.flemmli97.runecraftory.common.spells.RafflesiaBreathSpell;
 import io.github.flemmli97.runecraftory.common.spells.RafflesiaCircleSpell;
 import io.github.flemmli97.runecraftory.common.spells.RockSpearSpell;
 import io.github.flemmli97.runecraftory.common.spells.RootSpike;
+import io.github.flemmli97.runecraftory.common.spells.RootSpikeTriple;
 import io.github.flemmli97.runecraftory.common.spells.ShineSpell;
 import io.github.flemmli97.runecraftory.common.spells.SlashSpell;
 import io.github.flemmli97.runecraftory.common.spells.SleepAuraSpell;
@@ -163,6 +164,7 @@ public class ModSpells {
     public static final RegistryEntrySupplier<Spell> APPLE_RAIN_BIG = registerSpell("apple_rain_big", () -> new AppleRain(AppleRain.Type.BIG), new SpellProperties.Builder(25, 90).withXPGain(EnumSkills.EARTH, 5));
     public static final RegistryEntrySupplier<Spell> APPLE_RAIN_MORE = registerSpell("apple_rain_more", () -> new AppleRain(AppleRain.Type.LOTS), new SpellProperties.Builder(25, 120).withXPGain(EnumSkills.EARTH, 5));
     public static final RegistryEntrySupplier<Spell> ROOT_SPIKE = registerSpell("root_spike", RootSpike::new, new SpellProperties.Builder(20, 60).withXPGain(EnumSkills.EARTH, 7));
+    public static final RegistryEntrySupplier<Spell> ROOT_SPIKE_TRIPLE = registerSpell("root_spike_triple", RootSpikeTriple::new, new SpellProperties.Builder(20, 160).withXPGain(EnumSkills.EARTH, 7));
     public static final RegistryEntrySupplier<Spell> FIREBALL_BARRAGE = registerSpell("fireball_barrage", () -> new ElementBallBarrageSpell(EnumElement.FIRE), new SpellProperties.Builder(30, 200).withXPGain(EnumSkills.FIRE, 10));
     public static final RegistryEntrySupplier<Spell> BUBBLE_BEAM = registerSpell("bubble_beam", () -> new ElementBallBarrageSpell(EnumElement.WATER), new SpellProperties.Builder(30, 200).withXPGain(EnumSkills.WATER, 10));
     public static final RegistryEntrySupplier<Spell> SLASH = registerSpell("slash", SlashSpell::new, new SpellProperties.Builder(30, 30));

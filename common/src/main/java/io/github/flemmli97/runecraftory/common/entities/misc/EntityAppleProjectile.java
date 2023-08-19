@@ -95,12 +95,12 @@ public class EntityAppleProjectile extends BaseProjectile {
 
     @Override
     protected float getGravityVelocity() {
-        return this.circling ? 0.015f : super.getGravityVelocity();
+        return this.circling ? 0.005f : super.getGravityVelocity();
     }
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult result) {
-        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).hurtResistant(0), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
+        if (CombatUtils.damageWithFaintAndCrit(this.getOwner(), result.getEntity(), new CustomDamage.Builder(this, this.getOwner()).knock(CustomDamage.KnockBackType.NONE).hurtResistant(0), CombatUtils.getAttributeValue(this.getOwner(), Attributes.ATTACK_DAMAGE) * this.damageMultiplier, null)) {
             this.discard();
             return true;
         }

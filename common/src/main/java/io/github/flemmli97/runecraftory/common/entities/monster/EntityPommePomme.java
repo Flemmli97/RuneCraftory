@@ -34,7 +34,7 @@ public class EntityPommePomme extends ChargingMonster {
 
     @Override
     public double maxAttackRange(AnimatedAction anim) {
-        return 0.8;
+        return 0.9;
     }
 
     @Override
