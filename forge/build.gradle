@@ -41,10 +41,6 @@ repositories {
     maven {
         url "https://maven.blamejared.com"
     }
-    maven {
-        name = "JEI"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
     maven { url "https://maven.shedaniel.me" }
     maven {
         name = "CurseMaven"
@@ -62,7 +58,7 @@ dependencies {
     modImplementation patchouli_datagen
     modImplementation "${simplequests}-forge"
     //modCompileOnly "${jei_dep}:api"
-    modImplementation jei_dep
+    modImplementation "mezz.jei:jei-1.18.2-forge:${jei_version}"
 
     modCompileOnly "com.ldtteam:minecolonies:${rootProject.minecolonies}"
 
