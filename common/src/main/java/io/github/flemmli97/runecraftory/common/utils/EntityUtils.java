@@ -17,6 +17,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ClientboundUpdateAttributesPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -53,6 +55,12 @@ public class EntityUtils {
 
     public static boolean isExhaust(LivingEntity entity) {
         return entity.hasEffect(ModEffects.FATIGUE.get());
+    }
+
+    public static void applyPermanentEffect(LivingEntity entity, MobEffect effect, int amplifier) {
+        if (!entity.hasEffect(effect)) {
+            entity.addEffect(new MobEffectInstance(effect, Integer.MAX_VALUE, amplifier));
+        }
     }
 
     public static boolean paralysed(LivingEntity entity) {

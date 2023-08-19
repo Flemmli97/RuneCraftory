@@ -428,35 +428,35 @@ public class CombatUtils {
         boolean dizzyChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.DIZZY.get(), target);
         boolean stunChance = attackingEntity.level.random.nextDouble() < statusEffectChance(attackingEntity, ModAttributes.STUN.get(), target);
         if (poisonChance) {
-            target.addEffect(new MobEffectInstance(ModEffects.POISON.get(), 5));
+            EntityUtils.applyPermanentEffect(target, ModEffects.POISON.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_POISON, 5));
             if (target instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_POISON, 15));
         }
         if (fatigueChance) {
-            target.addEffect(new MobEffectInstance(ModEffects.FATIGUE.get(), 5));
+            EntityUtils.applyPermanentEffect(target, ModEffects.FATIGUE.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_FATIGUE, 5));
             if (target instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_FATIGUE, 15));
         }
         if (coldChance) {
-            target.addEffect(new MobEffectInstance(ModEffects.COLD.get(), 5));
+            EntityUtils.applyPermanentEffect(target, ModEffects.COLD.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_COLD, 5));
             if (target instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_COLD, 15));
         }
         if (paraChance) {
-            target.addEffect(new MobEffectInstance(ModEffects.PARALYSIS.get(), 5));
+            EntityUtils.applyPermanentEffect(target, ModEffects.PARALYSIS.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_PARA, 5));
             if (target instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_PARA, 15));
         }
         if (sealChance) {
-            target.addEffect(new MobEffectInstance(ModEffects.SEAL.get(), 5));
+            EntityUtils.applyPermanentEffect(target, ModEffects.SEAL.get(), 0);
             if (attackingEntity instanceof ServerPlayer player)
                 Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.RES_SEAL, 5));
             if (target instanceof ServerPlayer player)
