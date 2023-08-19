@@ -1564,6 +1564,7 @@
   "effect.runecraftory.seal": "Sealed",
   "effect.runecraftory.fatigue": "Fatigue",
   "effect.runecraftory.bath": "Bath",
+  "effect.runecraftory.true_invis": "True Invisibility",
   "recipe.eat.unlock": "Unlocked recipe for %s",
   "recipe.eat.fail": "Didn't learn any recipe. Maybe your crafting level is too low",
   "shipping.money": "Earning from shipped items: %s",
