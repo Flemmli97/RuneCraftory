@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.GateSpawnData;
+import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -61,7 +62,7 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
         }
         if (list.isEmpty())
             return new ArrayList<>();
-        list.removeIf(w -> w.distToSpawnSq >= pos.distSqr(world.getSharedSpawnPos()) || w.minGateLevel > gateLevel);
+        list.removeIf(w -> w.distToSpawnSq >= pos.distSqr(world.getSharedSpawnPos()) || (MobConfig.gateLevelType != MobConfig.GateLevelType.CONSTANT && w.minGateLevel > gateLevel));
         List<EntityType<?>> ret = new ArrayList<>();
         if (amount > list.size()) {
             list.forEach(w -> ret.add(w.entity));
