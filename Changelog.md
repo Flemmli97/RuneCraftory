@@ -1,3 +1,11 @@
+RuneCraftory 1.6.2
+================
+- Update jei version and compat
+- Reduce poison needle poison chance
+- Spawning min level is now ignored if gate level config is set to CONSTANT
+- Add missing effect icons
+- Fix and improve various mob ai and attacks
+
 RuneCraftory 1.6.1
 ================
 - Fix targeting owned entities being incorrect
