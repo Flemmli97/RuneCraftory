@@ -12,10 +12,11 @@ public class AppleShield extends Spell {
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
         if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
             return false;
-        for (int i = 0; i < 16; i++) {
+        int apples = 12;
+        for (int i = 0; i < apples; i++) {
             EntityAppleProjectile apple = new EntityAppleProjectile(level, entity);
             apple.setDamageMultiplier(0.8f + lvl * 0.05f);
-            apple.setAngleOffset(20 * i);
+            apple.setAngleOffset(360/apples * i);
             apple.setCircling(true, 80 + i * 3);
             level.addFreshEntity(apple);
         }
