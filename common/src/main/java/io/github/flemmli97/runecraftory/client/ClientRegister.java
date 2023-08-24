@@ -207,11 +207,11 @@ public class ClientRegister {
     public static void registerItemProps(ItemModelPropsRegister register) {
         ModItems.ITEMS.getEntries().forEach(reg -> {
             if (reg.get() instanceof ItemDualBladeBase)
-                register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "held"), ItemModelProps.heldMainProp);
+                register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "held"), ItemModelProps.HELD_MAIN_PROP);
             else if (reg.get() instanceof ItemGloveBase)
-                register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "glove_held"), ItemModelProps.heldMainGlove);
+                register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "glove_held"), ItemModelProps.HELD_MAIN_GLOVE);
             else if (reg.get() instanceof ItemToolFishingRod)
-                register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "fishing"), ItemModelProps.fishingRods);
+                register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "fishing"), ItemModelProps.FISHING_RODS);
             else if (reg.get() instanceof ShieldItem)
                 register.register(reg.get(), new ResourceLocation("blocking"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
         });

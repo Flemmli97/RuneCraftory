@@ -4,8 +4,11 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
+import io.github.flemmli97.runecraftory.client.ItemModelProps;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -14,6 +17,7 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
@@ -122,6 +126,25 @@ public class ClientMixinUtils {
                 }
             }
         }
+    }
+
+    public static void adjustForHeldModel(ItemStack itemStack, ItemTransforms.TransformType transformType) {
+        if (itemStack.getItem() instanceof ItemGloveBase) {
+            ItemModelProps.HELD_TYPE = switch (transformType) {
+                case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND -> 1;
+                case FIRST_PERSON_RIGHT_HAND, THIRD_PERSON_RIGHT_HAND -> 2;
+                default -> 0;
+            };
+        } else if (itemStack.getItem() instanceof ItemDualBladeBase) {
+            ItemModelProps.HELD_TYPE = switch (transformType) {
+                case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND, FIRST_PERSON_RIGHT_HAND, THIRD_PERSON_RIGHT_HAND -> 1;
+                default -> 0;
+            };
+        }
+    }
+
+    public static void resetHeldModel() {
+        ItemModelProps.HELD_TYPE = 0;
     }
 
     record SeasonedTint(int origin, EnumSeason season) {

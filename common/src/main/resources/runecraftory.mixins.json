@@ -36,6 +36,7 @@
   "client": [
     "AtlasMixin",
     "BiomeColorsMixin",
+    "ItemRendererMixin",
     "HumanoidModelMixin",
     "ItemInHandRendererMixin",
     "KeyboardHandlerMixin",
