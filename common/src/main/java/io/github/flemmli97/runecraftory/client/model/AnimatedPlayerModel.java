@@ -21,7 +21,6 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.HumanoidArm;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
 public class AnimatedPlayerModel extends EntityModel<Player> implements ExtendedModel {
@@ -75,27 +74,26 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
     public void setupAnim(Player entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 
-    public void setUpModel(AnimatedAction anim, float partialTicks) {
+    public void setUpModel(Player entity, AnimatedAction anim, float partialTicks) {
         this.model.resetPoses();
         if (anim != null)
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, 1);
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, 1, entity.getMainArm() == HumanoidArm.LEFT);
     }
 
-    public void copyTo(LivingEntity entity, HumanoidModel<?> model, boolean plain, boolean ignoreRiding) {
-        boolean flipped = entity.getMainArm() == HumanoidArm.LEFT;
-        PartPose main = this.flipped(this.model.getMainPart(), flipped);
-        PartPose head = this.flipped(this.head, flipped);
+    public void copyTo(HumanoidModel<?> model, boolean plain, boolean ignoreRiding) {
+        PartPose main = this.model.getMainPart().storePose();
+        PartPose head = this.head.storePose();
         model.head.loadPose(this.withParent(main, head));
         model.body.loadPose(main);
-        this.switched(model.leftArm, main, this.leftArm, this.rightArm, flipped);
-        this.switched(model.rightArm, main, this.rightArm, this.leftArm, flipped);
+        this.apply(model.leftArm, main, this.leftArm);
+        this.apply(model.rightArm, main, this.rightArm);
         if (plain) {
-            this.switched(model.leftLeg, main, this.leftLeg, this.rightLeg, flipped);
-            this.switched(model.rightLeg, main, this.rightLeg, this.leftLeg, flipped);
+            this.apply(model.leftLeg, main, this.leftLeg);
+            this.apply(model.rightLeg, main, this.rightLeg);
         } else {
             if (ignoreRiding || !model.riding) {
-                this.switched(model.leftLeg, main, this.leftLeg, this.rightLeg, flipped);
-                this.switched(model.rightLeg, main, this.rightLeg, this.leftLeg, flipped);
+                this.apply(model.leftLeg, main, this.leftLeg);
+                this.apply(model.rightLeg, main, this.rightLeg);
             }
             model.head.xRot += head.xRot;
             model.head.yRot += head.yRot;
@@ -109,21 +107,8 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
         return this.model;
     }
 
-    private PartPose flipped(ModelPartHandler.ModelPartExtended model, boolean flipped) {
-        if (flipped) {
-            return PartPose.offsetAndRotation(-model.x, model.y, model.z, model.xRot, -model.yRot, -model.zRot);
-        } else {
-            return model.storePose();
-        }
-    }
-
-    private void switched(ModelPart model, PartPose main, ModelPartHandler.ModelPartExtended first, ModelPartHandler.ModelPartExtended second, boolean flipped) {
-        if (flipped) {
-            model.loadPose(this.withParent(main, PartPose.offsetAndRotation(first.defaultPose.x - (second.x - second.defaultPose.x),
-                    second.y, second.z, second.xRot, -second.yRot, -second.zRot)));
-        } else {
-            model.loadPose(this.withParent(main, first.storePose()));
-        }
+    private void apply(ModelPart model, PartPose main, ModelPartHandler.ModelPartExtended first) {
+        model.loadPose(this.withParent(main, first.storePose()));
     }
 
     private PartPose withParent(PartPose parentPose, PartPose child) {

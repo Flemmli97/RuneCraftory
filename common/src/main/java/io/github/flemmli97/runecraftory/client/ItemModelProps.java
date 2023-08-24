@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.client;
 
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.platform.Platform;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.world.entity.HumanoidArm;
@@ -16,9 +17,9 @@ public class ItemModelProps {
             int arm = 0;
             boolean rightHanded = entity.getMainArm() == HumanoidArm.RIGHT;
             if (entity.getMainArm() == HumanoidArm.RIGHT) {
-                if (entity.getMainHandItem() == stack)
+                if (entity.getMainHandItem().equals(stack))
                     arm = rightHanded ? 1 : 2;
-                else if (Platform.INSTANCE.getEntityData(entity).map(d -> d.getGloveOffHand(null)).orElse(null) == stack)
+                else if (stack.equals(Platform.INSTANCE.getEntityData(entity).map(d -> d.getGloveOffHand(null)).orElse(ItemStack.EMPTY)))
                     arm = rightHanded ? 2 : 1;
             }
             if (arm == 0)

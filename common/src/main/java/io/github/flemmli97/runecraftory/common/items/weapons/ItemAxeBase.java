@@ -7,7 +7,8 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
+import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
+import io.github.flemmli97.runecraftory.common.attachment.player.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
@@ -120,7 +121,9 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
         ItemStack itemstack = player.getItemInHand(hand);
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
-        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5).orElse(false)) {
+        boolean canCharge = Platform.INSTANCE.getPlayerData(player)
+                .map(data -> (data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, AttackAction.HAMMER_AXE_USE)).orElse(false);
+        if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
         }
@@ -165,7 +168,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
                     LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5);
                 }
             };
-            data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.HAMMERAXERIGHTCLICK, stack, run);
+            data.getWeaponHandler().doWeaponAttack(player, AttackAction.HAMMER_AXE_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(run));
         });
     }
 

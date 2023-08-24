@@ -46,7 +46,7 @@ public abstract class MouseHandlerMixin {
 
     @Inject(method = "onScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getOverlay()Lnet/minecraft/client/gui/screens/Overlay;"), cancellable = true)
     private void disableMouseScroll(CallbackInfo info) {
-        if (ClientHandlers.disableMouse()) {
+        if (ClientHandlers.disableScrollMouse()) {
             info.cancel();
         }
     }

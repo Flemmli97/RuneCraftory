@@ -98,6 +98,11 @@ public class ClientHandlers {
         return mc.player != null && EntityUtils.isDisabled(mc.player) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
     }
 
+    public static boolean disableScrollMouse() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.player != null && (EntityUtils.isDisabled(mc.player) || Platform.INSTANCE.getPlayerData(mc.player).map(d -> d.getWeaponHandler().isItemSwapBlocked()).orElse(false)) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
+    }
+
     public static boolean disableKeys(int key, int scanCode) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.screen instanceof ChatScreen)

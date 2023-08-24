@@ -67,7 +67,8 @@ public class ClientEvents {
 
     @SubscribeEvent(receiveCanceled = true)
     public static void keyEvent(TickEvent.ClientTickEvent event) {
-        ClientCalls.keyEvent();
+        if (event.phase == TickEvent.Phase.START)
+            ClientCalls.clientTick();
     }
 
     @SubscribeEvent

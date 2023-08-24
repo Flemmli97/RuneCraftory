@@ -240,9 +240,9 @@ public class CombatUtils {
         if (target.isAttackable() && !target.skipAttackInteraction(player) && player.getCooldowns().getCooldownPercent(stack.getItem(), 0.0f) <= 0) {
             double damagePhys = getAttributeValue(player, Attributes.ATTACK_DAMAGE) * damageModifier;
             if (damagePhys > 0) {
-                if (resetCooldown) {
+                /*if (resetCooldown) {
                     player.getCooldowns().addCooldown(stack.getItem(), ItemNBT.cooldown(player, stack));
-                }
+                }*/
                 boolean faintChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.FAINT.get(), target);
                 boolean critChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.CRIT.get(), target);
                 CustomDamage.DamageType damageType = CustomDamage.DamageType.NORMAL;

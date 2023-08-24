@@ -94,7 +94,7 @@ public class PlayerData {
     private Map<Attribute, Double> foodBuffs = new HashMap<>();
     private int foodDuration;
 
-    private final PlayerWeaponHandler weaponHandler = new PlayerWeaponHandler();
+    private final WeaponHandler weaponHandler = new WeaponHandler();
 
     private final WalkingTracker walkingTracker = new WalkingTracker();
 
@@ -556,7 +556,7 @@ public class PlayerData {
         this.foodDuration = nbt.getInt("FoodBuffDuration");
     }
 
-    public PlayerWeaponHandler getWeaponHandler() {
+    public WeaponHandler getWeaponHandler() {
         return this.weaponHandler;
     }
 

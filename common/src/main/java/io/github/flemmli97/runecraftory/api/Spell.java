@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.api;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -69,6 +70,10 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
     }
 
     public abstract boolean use(ServerLevel world, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int level);
+
+    public AttackAction useAction() {
+        return AttackAction.STAFF_USE;
+    }
 
     @Override
     public String toString() {

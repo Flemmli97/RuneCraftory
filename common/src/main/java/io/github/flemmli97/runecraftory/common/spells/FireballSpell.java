@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
@@ -31,24 +32,13 @@ public class FireballSpell extends Spell {
         ball.setDamageMultiplier(0.95f + lvl * 0.05f + (this.big ? 0.1f : 0));
         level.addFreshEntity(ball);
         if (entity instanceof Player player) {
-            boolean cooldown = Platform.INSTANCE.getPlayerData(player).map(cap -> {
-                if (this.big) {
-                    cap.getWeaponHandler().setBigFireballSpellFlag(cap.getWeaponHandler().bigFireballSpellFlag() + 1, this.coolDown());
-                    return cap.getWeaponHandler().bigFireballSpellFlag() >= 2;
-                }
-                cap.getWeaponHandler().setFireballSpellFlag(cap.getWeaponHandler().fireballSpellFlag() + 1, this.coolDown());
-                return cap.getWeaponHandler().fireballSpellFlag() >= 3;
-            }).orElse(false);
-            if (cooldown)
-                Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                    if (this.big) {
-                        data.getWeaponHandler().setBigFireballSpellFlag(0, -1);
-                    } else {
-                        data.getWeaponHandler().setFireballSpellFlag(0, -1);
-                    }
-                });
-            return cooldown;
+            return !Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getWeaponHandler().canConsecutiveExecute(player, this.useAction())).orElse(false);
         }
         return true;
+    }
+
+    @Override
+    public AttackAction useAction() {
+        return this.big ? AttackAction.FIREBALL_BIG_USE : AttackAction.FIREBALL_USE;
     }
 }

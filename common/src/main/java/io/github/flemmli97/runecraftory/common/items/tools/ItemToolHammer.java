@@ -8,6 +8,8 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolTier;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
+import io.github.flemmli97.runecraftory.common.attachment.player.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
@@ -135,7 +137,7 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (this.tier.getTierLevel() != 0 && entity instanceof ServerPlayer player) {
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
-                int useTime = data.getWeaponHandler().getCurrentToolCharge() > 0 ? data.getWeaponHandler().getCurrentToolCharge() : ((this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack));
+                int useTime = data.getWeaponHandler().canConsecutiveExecute(player, AttackAction.TOOL_HAMMER_USE) ? data.getWeaponHandler().getToolCharge() : ((this.getUseDuration(stack) - timeLeft) / this.getChargeTime(stack));
                 int range = Math.min(useTime, this.tier.getTierLevel());
                 BlockHitResult result = getPlayerPOVHitResult(world, player, ClipContext.Fluid.NONE);
                 if (range == 0) {
@@ -143,20 +145,22 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
                         this.useOnBlock(new UseOnContext((Player) entity, entity.getUsedItemHand(), result), false);
                     }
                 } else {
-                    setDontUseRPFlagTemp(stack, true);
-                    BlockPos pos = entity.blockPosition();
-                    if (result != null && result.getType() != HitResult.Type.MISS) {
-                        pos = result.getBlockPos();
-                    }
-                    data.getWeaponHandler().useAxeOrHammer(stack, range);
-                    int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
-                            .filter(p -> this.hammer((ServerLevel) world, p.immutable(), stack, entity, true) != HammerState.FAIL)
-                            .count();
-                    if (amount > 0) {
-                        LevelCalc.useRP(player, data, range * 15, true, false, true, EnumSkills.MINING);
-                        LevelCalc.levelSkill(player, data, EnumSkills.MINING, (range + 1) * 10);
-                    }
-                    setDontUseRPFlagTemp(stack, false);
+                    data.getWeaponHandler().doWeaponAttack(player, AttackAction.TOOL_HAMMER_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(() -> {
+                        setDontUseRPFlagTemp(stack, true);
+                        BlockPos pos = entity.blockPosition();
+                        if (result != null && result.getType() != HitResult.Type.MISS) {
+                            pos = result.getBlockPos();
+                        }
+                        int amount = (int) BlockPos.betweenClosedStream(pos.offset(-range, -1, -range), pos.offset(range, 0, range))
+                                .filter(p -> this.hammer((ServerLevel) world, p.immutable(), stack, entity, true) != HammerState.FAIL)
+                                .count();
+                        if (amount > 0) {
+                            LevelCalc.useRP(player, data, range * 15, true, false, true, EnumSkills.MINING);
+                            LevelCalc.levelSkill(player, data, EnumSkills.MINING, (range + 1) * 10);
+                        }
+                        setDontUseRPFlagTemp(stack, false);
+                    }));
+                    data.getWeaponHandler().updateToolCharge(range);
                 }
             });
         }

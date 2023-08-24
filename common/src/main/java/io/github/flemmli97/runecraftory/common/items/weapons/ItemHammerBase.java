@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -94,7 +95,11 @@ public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargea
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5).orElse(false)) {
+        if (hand == InteractionHand.OFF_HAND)
+            return InteractionResultHolder.pass(itemstack);
+        boolean canCharge = Platform.INSTANCE.getPlayerData(player)
+                .map(data -> (data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, AttackAction.HAMMER_AXE_USE)).orElse(false);
+        if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
         }

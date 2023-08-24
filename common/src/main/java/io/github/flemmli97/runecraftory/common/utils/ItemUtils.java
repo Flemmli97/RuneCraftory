@@ -109,7 +109,7 @@ public class ItemUtils {
 
     public static float getShieldEfficiency(ItemStack stack) {
         if (stack.getItem() instanceof IItemUsable usable) {
-            float eff = usable.getWeaponType().getShieldEfficiency();
+            float eff = usable.getWeaponType().shieldEfficiency;
             if (ItemNBT.hasDragonScaleUpgrade(stack))
                 eff = Math.min(0.5f, eff + 0.5f);
             return eff;

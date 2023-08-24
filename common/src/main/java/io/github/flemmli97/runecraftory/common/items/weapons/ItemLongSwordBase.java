@@ -7,7 +7,8 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
+import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
+import io.github.flemmli97.runecraftory.common.attachment.player.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -47,6 +48,26 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     @Override
     public int getChargeTime(ItemStack stack) {
         return DataPackHandler.SERVER_PACK.weaponPropertiesManager().getPropertiesFor(this.getWeaponType()).chargeTime();
+    }
+
+    @Override
+    public boolean resetAttackStrength(LivingEntity entity, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean swingWeapon(LivingEntity entity, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
+        if (entity instanceof Player player) {
+            Platform.INSTANCE.getPlayerData(player)
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, AttackAction.LONG_SWORD, stack, null));
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -94,7 +115,11 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.LONGSWORD).getLevel() >= 5).orElse(false)) {
+        if (hand == InteractionHand.OFF_HAND)
+            return InteractionResultHolder.pass(itemstack);
+        boolean canCharge = Platform.INSTANCE.getPlayerData(player)
+                .map(data -> (data.getSkillLevel(EnumSkills.LONGSWORD).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, AttackAction.LONGSWORD_USE)).orElse(false);
+        if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
         }
@@ -123,7 +148,7 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
                             LevelCalc.levelSkill(player, data, EnumSkills.LONGSWORD, 7);
                         }
                     };
-                    data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.LONGSWORDRIGHTCLICK, stack, run);
+                    data.getWeaponHandler().doWeaponAttack(player, AttackAction.LONGSWORD_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(run));
                 });
                 return;
             }

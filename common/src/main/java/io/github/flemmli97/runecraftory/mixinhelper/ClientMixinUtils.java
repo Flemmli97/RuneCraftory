@@ -5,7 +5,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ArmorModels;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
+import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
@@ -98,17 +98,18 @@ public class ClientMixinUtils {
 
     public static void transFormPre(LivingEntity entity, HumanoidModel<?> model, Consumer<AnimatedAction> cons) {
         if (entity instanceof Player player && ClientHandlers.getAnimatedPlayerModel() != null) {
-            AnimatedAction anim = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAnim()).orElse(null);
+            AnimatedAction anim = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().noAnimation() ? null : d.getWeaponHandler().getCurrentAnim()).orElse(null);
             cons.accept(anim);
-            ClientHandlers.getAnimatedPlayerModel().setUpModel(anim, Minecraft.getInstance().getFrameTime());
+            ClientHandlers.getAnimatedPlayerModel().setUpModel(player, anim, Minecraft.getInstance().getFrameTime());
             if (anim == null)
-                ClientHandlers.getAnimatedPlayerModel().copyTo(entity, model, true, false);
+                ClientHandlers.getAnimatedPlayerModel().copyTo(model, true, false);
         }
     }
 
     public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model, AnimatedAction anim) {
-        if (entity instanceof Player && ClientHandlers.getAnimatedPlayerModel() != null && anim != null) {
-            ClientHandlers.getAnimatedPlayerModel().copyTo(entity, model, false, anim.is(PlayerWeaponHandler.dualBladeUse));
+        if (entity instanceof Player player && ClientHandlers.getAnimatedPlayerModel() != null && anim != null) {
+            boolean ignoreRiding = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == AttackAction.DUAL_USE).orElse(false);
+            ClientHandlers.getAnimatedPlayerModel().copyTo(model, false, ignoreRiding);
         }
     }
 

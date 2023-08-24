@@ -16,7 +16,7 @@ public class AppleShield extends Spell {
         for (int i = 0; i < apples; i++) {
             EntityAppleProjectile apple = new EntityAppleProjectile(level, entity);
             apple.setDamageMultiplier(0.8f + lvl * 0.05f);
-            apple.setAngleOffset(360/apples * i);
+            apple.setAngleOffset(360 / apples * i);
             apple.setCircling(true, 80 + i * 3);
             level.addFreshEntity(apple);
         }

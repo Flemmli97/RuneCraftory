@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -14,7 +15,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -85,10 +85,10 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
-        if (level.isClientSide)
-            return new InteractionResultHolder<>(InteractionResult.PASS, itemstack);
-        boolean canCharge = hand == InteractionHand.MAIN_HAND && Platform.INSTANCE.getPlayerData(player)
-                .map(data -> (data.getSkillLevel(EnumSkills.FIST).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canStartGlove()).orElse(false);
+        if (hand == InteractionHand.OFF_HAND)
+            return InteractionResultHolder.fail(itemstack);
+        boolean canCharge = Platform.INSTANCE.getPlayerData(player)
+                .map(data -> (data.getSkillLevel(EnumSkills.FIST).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, AttackAction.GLOVE_USE)).orElse(false);
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -110,7 +110,7 @@ public class ItemGloveBase extends Item implements IItemUsable, IChargeable, IDu
     public void releaseUsing(ItemStack stack, Level world, LivingEntity entity, int timeLeft) {
         if (entity instanceof ServerPlayer serverPlayer && this.getUseDuration(stack) - timeLeft >= this.getChargeTime(stack)) {
             Platform.INSTANCE.getPlayerData(serverPlayer)
-                    .ifPresent(d -> d.getWeaponHandler().startGlove(serverPlayer, stack));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(serverPlayer, AttackAction.GLOVE_USE, stack, null));
         }
     }
 

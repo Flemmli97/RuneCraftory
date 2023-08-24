@@ -7,7 +7,8 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.StaffData;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerWeaponHandler;
+import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
+import io.github.flemmli97.runecraftory.common.attachment.player.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
@@ -115,7 +116,7 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
                             if (spell.use(player.getLevel(), entity, stack))
                                 spell.levelSkill(player);
                         };
-                        data.getWeaponHandler().doWeaponAttack(player, PlayerWeaponHandler.WeaponUseState.STAFFRIGHTCLICK, stack, run, true);
+                        data.getWeaponHandler().doWeaponAttack(player, AttackAction.STAFF_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(run));
                     });
                     return;
                 }

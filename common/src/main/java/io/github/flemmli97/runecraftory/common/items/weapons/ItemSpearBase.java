@@ -7,7 +7,9 @@ import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
+import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.attachment.player.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -95,8 +97,21 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
+        if (hand == InteractionHand.OFF_HAND)
+            return InteractionResultHolder.pass(itemstack);
         if (player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(cap -> cap.getSkillLevel(EnumSkills.SPEAR).getLevel() >= 5).orElse(false)) {
-            player.startUsingItem(hand);
+            if (player instanceof ServerPlayer serverPlayer) {
+                if (Platform.INSTANCE.getPlayerData(player).map(data -> {
+                    // Check if insta use is possible
+                    if (data.getWeaponHandler().canConsecutiveExecute(serverPlayer, AttackAction.SPEAR_USE)) {
+                        data.getWeaponHandler().doWeaponAttack(serverPlayer, AttackAction.SPEAR_USE, itemstack, WeaponHandler.simpleServersidedAttackExecuter(() -> this.useSpear(serverPlayer, data, itemstack)));
+                        return false;
+                    }
+                    return data.getWeaponHandler().getCurrentAction() == AttackAction.NONE;
+                }).orElse(true)) {
+                    player.startUsingItem(hand);
+                }
+            }
             return InteractionResultHolder.consume(itemstack);
         }
         return InteractionResultHolder.pass(itemstack);
@@ -117,11 +132,8 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
         if (entity instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 int time = this.getUseDuration(stack) - timeLeft;
-                if (data.getWeaponHandler().canStartSpear()) {
-                    if (time >= this.getChargeTime(stack))
-                        data.getWeaponHandler().startSpear();
-                } else if (time >= 1) {
-                    this.useSpear(serverPlayer, data, stack);
+                if (time >= this.getChargeTime(stack) && data.getWeaponHandler().canExecuteAction(serverPlayer, AttackAction.SPEAR_USE)) {
+                    data.getWeaponHandler().doWeaponAttack(serverPlayer, AttackAction.SPEAR_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(() -> this.useSpear(serverPlayer, data, stack)));
                 }
             });
         }
@@ -140,7 +152,6 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     private void useSpear(ServerPlayer player, PlayerData data, ItemStack stack) {
         List<Entity> list = RayTraceUtils.getEntities(player, this.getRange(player, stack), 10);
         if (!list.isEmpty()) {
-            data.getWeaponHandler().onUseSpear();
             LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 2);
             list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false, false));
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);

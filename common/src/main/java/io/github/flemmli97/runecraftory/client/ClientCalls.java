@@ -26,6 +26,7 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.Options;
 import net.minecraft.client.ParticleStatus;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
@@ -69,7 +70,16 @@ import java.util.function.Consumer;
 
 public class ClientCalls {
 
-    public static void keyEvent() {
+    public static void clientTick() {
+        Player player = Minecraft.getInstance().player;
+        if (player != null && Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().isItemSwapBlocked()).orElse(false)) {
+            Options options = Minecraft.getInstance().options;
+            //Disable changing held item
+            for (int i = 0; i < 9; ++i) {
+                while (options.keyHotbarSlots[i].consumeClick()) ;
+            }
+            while (options.keySwapOffhand.consumeClick()) ;
+        }
         if (Minecraft.getInstance().screen != null)
             return;
         if (ClientHandlers.spell1.onPress()) {
@@ -104,8 +114,7 @@ public class ClientCalls {
     }
 
     public static void handleInputUpdate(Player player, Input input) {
-        if (EntityUtils.isDisabled(player) || Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getGloveTick() > 0).orElse(false)
-                || Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAnim()).orElse(null) != null) {
+        if (EntityUtils.isDisabled(player) || Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().isMovementBlocked()).orElse(false)) {
             input.leftImpulse = 0;
             input.forwardImpulse = 0;
             input.up = false;

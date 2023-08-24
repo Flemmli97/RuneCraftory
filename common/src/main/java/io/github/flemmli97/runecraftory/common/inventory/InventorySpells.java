@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.inventory;
 
-import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.platform.SaveItemContainer;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,12 +20,8 @@ public class InventorySpells extends SaveItemContainer {
 
     public void useSkill(ServerPlayer player, int index) {
         ItemStack stack = this.getItem(index);
-        if (stack.getItem() instanceof ItemSpell && player.getCooldowns().getCooldownPercent(stack.getItem(), 0.0f) <= 0.0f) {
-            Spell spell = ((ItemSpell) stack.getItem()).getSpell();
-            if (spell.use(player.getLevel(), player, stack)) {
-                player.getCooldowns().addCooldown(stack.getItem(), spell.coolDown());
-                spell.levelSkill(player);
-            }
+        if (stack.getItem() instanceof ItemSpell itemSpell) {
+            itemSpell.useSpell(player, stack);
         }
     }
 
