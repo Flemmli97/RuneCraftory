@@ -13,10 +13,12 @@ import java.util.function.BiConsumer;
 
 public class WeaponHandler {
 
+    private static final float FADE_TICK = 3;
+
     private AttackAction currentAction = AttackAction.NONE, chainTrackerAction = AttackAction.NONE;
     private int count, timeFrame;
 
-    private AnimatedAction currentAnim, previousAnim;
+    private AnimatedAction currentAnim, fadingAnim;
     private ItemStack usedWeapon = ItemStack.EMPTY;
     private AttackAction.ActiveActionHandler weaponConsumer;
     private int timeSinceLastChange;
@@ -51,11 +53,11 @@ public class WeaponHandler {
     }
 
     public boolean canExecuteAction(Player player, AttackAction action) {
-        return this.currentAction == AttackAction.NONE || (this.currentAction == action && action.canOverride != null && action.canOverride.apply(player, this));
+        return this.currentAction == AttackAction.NONE;
     }
 
     public boolean canConsecutiveExecute(Player player, AttackAction action) {
-        return this.canExecuteAction(player, action)
+        return (this.canExecuteAction(player, action) || (this.currentAction == action && action.canOverride != null && action.canOverride.apply(player, this)))
                 && this.count < action.maxConsecutive.apply(player)
                 && this.chainTrackerAction == action;
     }
@@ -74,7 +76,8 @@ public class WeaponHandler {
             this.chainTrackerAction = this.currentAction;
         }
         this.weaponConsumer = merged(attack, action.attackExecuter);
-        this.previousAnim = this.currentAnim;
+        if (action == AttackAction.NONE)
+            this.fadingAnim = this.currentAnim;
         this.currentAnim = action.anim.apply(player, this);
         this.timeSinceLastChange = 0;
         if (this.currentAction != AttackAction.NONE) {
@@ -127,11 +130,9 @@ public class WeaponHandler {
                 this.toolCharge = 0;
             }
         }
-        if (this.previousAnim != null) {
-            if (this.previousAnim.tick(1 + this.previousAnim.getFadeTick()))
-                this.previousAnim = null;
-        }
         this.timeSinceLastChange++;
+        if (this.timeSinceLastChange >= FADE_TICK)
+            this.fadingAnim = null;
     }
 
     public AttackAction getCurrentAction() {
@@ -146,8 +147,10 @@ public class WeaponHandler {
         return this.toolCharge;
     }
 
-    public int getTimeSinceLastChange() {
-        return this.timeSinceLastChange;
+    public float interpolatedLastChange() {
+        if (this.fadingAnim == null)
+            return 1;
+        return Math.max(0, 1 - this.timeSinceLastChange / FADE_TICK);
     }
 
     public int getCurrentCount() {
@@ -170,7 +173,8 @@ public class WeaponHandler {
         return this.currentAnim;
     }
 
-    public AnimatedAction getPreviousAnim() {
-        return this.previousAnim;
+    public AnimatedAction getFadingAnim() {
+        return this.fadingAnim;
     }
+
 }

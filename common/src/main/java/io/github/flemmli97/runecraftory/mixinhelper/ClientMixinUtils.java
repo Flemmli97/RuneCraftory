@@ -7,6 +7,7 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.ItemModelProps;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
@@ -102,9 +103,18 @@ public class ClientMixinUtils {
 
     public static void transFormPre(LivingEntity entity, HumanoidModel<?> model, Consumer<AnimatedAction> cons) {
         if (entity instanceof Player player && ClientHandlers.getAnimatedPlayerModel() != null) {
-            AnimatedAction anim = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().noAnimation() ? null : d.getWeaponHandler().getCurrentAnim()).orElse(null);
+            PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
+            AnimatedAction anim = null;
+            AnimatedAction current = null;
+            if (data != null) {
+                current = data.getWeaponHandler().getCurrentAnim();
+                if (data.getWeaponHandler().getCurrentAnim() == null && data.getWeaponHandler().getFadingAnim() != null)
+                    anim = data.getWeaponHandler().getFadingAnim();
+                else if (!data.getWeaponHandler().noAnimation())
+                    anim = data.getWeaponHandler().getCurrentAnim();
+            }
             cons.accept(anim);
-            ClientHandlers.getAnimatedPlayerModel().setUpModel(player, anim, Minecraft.getInstance().getFrameTime());
+            ClientHandlers.getAnimatedPlayerModel().setUpModel(player, anim, Minecraft.getInstance().getFrameTime(), current == null && data != null ? data.getWeaponHandler().interpolatedLastChange() : 1);
             if (anim == null)
                 ClientHandlers.getAnimatedPlayerModel().copyTo(model, true, false);
         }

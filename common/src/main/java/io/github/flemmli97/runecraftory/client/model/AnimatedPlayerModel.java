@@ -74,16 +74,22 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
     public void setupAnim(Player entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
     }
 
-    public void setUpModel(Player entity, AnimatedAction anim, float partialTicks) {
+    public void setUpModel(Player entity, AnimatedAction anim, float partialTicks, float interpolation) {
         this.model.resetPoses();
         if (anim != null)
-            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, 1, entity.getMainArm() == HumanoidArm.LEFT);
+            this.anim.doAnimation(this, anim.getAnimationClient(), anim.getTick(), partialTicks, interpolation, entity.getMainArm() == HumanoidArm.LEFT);
     }
 
     public void copyTo(HumanoidModel<?> model, boolean plain, boolean ignoreRiding) {
         PartPose main = this.model.getMainPart().storePose();
         PartPose head = this.head.storePose();
+        float headXRot = model.head.xRot;
+        float headYRot = model.head.yRot;
+        float headZRot = model.head.zRot;
         model.head.loadPose(this.withParent(main, head));
+        model.head.xRot = headXRot;
+        model.head.yRot = headYRot;
+        model.head.zRot = headZRot;
         model.body.loadPose(main);
         this.apply(model.leftArm, main, this.leftArm);
         this.apply(model.rightArm, main, this.rightArm);
