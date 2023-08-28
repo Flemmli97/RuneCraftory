@@ -4,12 +4,12 @@ public enum EnumWeaponType {
 
     FARM(1, 20),
     SHORTSWORD(1, 11),
-    LONGSWORD(0.5f, 17),
-    SPEAR(0.5f, 13),
-    HAXE(0.5f, 15),
+    LONGSWORD(0.5f, 16),
+    SPEAR(0.5f, 12),
+    HAXE(0.5f, 18),
     DUAL(0, 7),
     GLOVE(0, 7),
-    STAFF(0.5f, 15);
+    STAFF(0.5f, 12);
 
     public final float shieldEfficiency;
 

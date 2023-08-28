@@ -69,6 +69,26 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     }
 
     @Override
+    public boolean resetAttackStrength(LivingEntity entity, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean swingWeapon(LivingEntity entity, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
+        if (entity instanceof Player player) {
+            Platform.INSTANCE.getPlayerData(player)
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, AttackAction.HAMMER_AXE, stack, null));
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public EnumToolCharge chargeType(ItemStack stack) {
         return EnumToolCharge.CHARGEUPWEAPON;
     }

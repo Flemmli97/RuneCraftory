@@ -38,6 +38,7 @@
     "BiomeColorsMixin",
     "ItemRendererMixin",
     "HumanoidModelMixin",
+    "PlayerModelMixin",
     "ItemInHandRendererMixin",
     "KeyboardHandlerMixin",
     "LevelRendererMixin",
@@ -45,7 +46,8 @@
     "MinecraftMixin",
     "MouseHandlerMixin",
     "PlayerRendererMixin",
-    "ClientPacketListenerMixin"
+    "ClientPacketListenerMixin",
+    "Matrix4fMixin"
   ],
   "injectors": {
     "defaultRequire": 1

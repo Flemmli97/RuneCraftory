@@ -51,6 +51,11 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
     }
 
     @Override
+    public int chargeAmount(ItemStack stack) {
+        return 1;
+    }
+
+    @Override
     public boolean resetAttackStrength(LivingEntity entity, ItemStack stack) {
         return false;
     }
@@ -68,11 +73,6 @@ public class ItemLongSwordBase extends SwordItem implements IItemUsable, ICharge
             return false;
         }
         return true;
-    }
-
-    @Override
-    public int chargeAmount(ItemStack stack) {
-        return 1;
     }
 
     @Override

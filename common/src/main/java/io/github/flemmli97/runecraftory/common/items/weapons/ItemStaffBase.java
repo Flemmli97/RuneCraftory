@@ -54,6 +54,26 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
     }
 
     @Override
+    public boolean resetAttackStrength(LivingEntity entity, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean swingWeapon(LivingEntity entity, ItemStack stack) {
+        return false;
+    }
+
+    @Override
+    public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
+        if (entity instanceof Player player) {
+            Platform.INSTANCE.getPlayerData(player)
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, AttackAction.STAFF, stack, null));
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public EnumToolCharge chargeType(ItemStack stack) {
         return EnumToolCharge.CHARGEUPWEAPON;
     }
@@ -140,17 +160,15 @@ public class ItemStaffBase extends Item implements IItemUsable, IChargeable, Ext
         };
     }
 
+    public void castBaseSpell(ItemStack stack, LivingEntity entity) {
+        if (entity.level instanceof ServerLevel serverLevel) {
+            ModSpells.STAFF_CAST.get().use(serverLevel, entity, stack);
+            entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
+        }
+    }
+
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
-        if (entity.level instanceof ServerLevel serverLevel) {
-            if (!(entity instanceof Player player) || !player.getCooldowns().isOnCooldown(this)) {
-                ModSpells.STAFF_CAST.get().use(serverLevel, entity, stack);
-                if (entity instanceof Player player) {
-                    player.getCooldowns().addCooldown(stack.getItem(), ItemNBT.cooldown(player, stack));
-                }
-                entity.level.playSound(null, entity.getX(), entity.getY(), entity.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, entity.getSoundSource(), 1.0f, 1.0f);
-            }
-        }
         return false;
     }
 }

@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.attachment.player;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -10,11 +11,13 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
 import io.github.flemmli97.tenshilib.common.utils.AOEWeaponHandler;
+import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -31,8 +34,159 @@ public class AttackAction {
 
     public static final AttackAction NONE = register("none", new Builder(null));
 
+    //Short sword attack sequence
+    public static final AttackAction SHORT_SWORD = register("short_sword", new Builder((player, data) -> {
+        int count = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentCount()).orElse(1) + 1;
+        int attack = 4;
+        int defaultLength = EnumWeaponType.SHORTSWORD.defaultWeaponSpeed;
+        switch (count) {
+            case 1 -> attack = (int) Math.ceil(0.32 * 20);
+            case 2 -> attack = (int) Math.ceil(0.24 * 20);
+            case 3 -> attack = (int) Math.ceil(0.36 * 20);
+            case 4 -> {
+                defaultLength = (int) Math.ceil(0.6 * 20);
+                attack = (int) Math.ceil(0.2 * 20);
+            }
+            case 5 -> attack = (int) Math.ceil(0.28 * 20);
+            case 6 -> {
+            }
+        }
+        float cooldown = ItemNBT.cooldown(player, player.getMainHandItem());
+        float speed = defaultLength / cooldown;
+        return AnimatedAction.builder(defaultLength + 1, "short_sword_" + count).speed(speed).marker(attack).build();
+    }).allowSelfOverride((p, w) -> switch (w.getCurrentCount()) {
+                case 1 -> w.getCurrentAnim().isPastTick(0.44);
+                case 2, 5 -> w.getCurrentAnim().isPastTick(0.32);
+                case 3 -> w.getCurrentAnim().isPastTick(0.4);
+                case 4 -> w.getCurrentAnim().isPastTick(0.24) && !w.getCurrentAnim().isPastTick(0.48);
+                default -> false;
+            }).doWhileAction(((player, stack, data, anim) -> {
+                if (!player.level.isClientSide) {
+                    if (anim.canAttack() && stack.getItem() instanceof IAOEWeapon weapon) {
+                        AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
+                    }
+                    switch (data.getWeaponHandler().getCurrentCount()) {
+                        case 1 -> {
+                            if (anim.isAtTick(0.28)) {
+                                player.moveRelative(0.4f, new Vec3(0, 0, 1));
+                                player.hurtMarked = true;
+                            }
+                        }
+                        case 2 -> {
+                            if (anim.isAtTick(0.16)) {
+                                player.moveRelative(0.4f, new Vec3(0, 0, 1));
+                                player.hurtMarked = true;
+                            }
+                        }
+                        case 3 -> {
+                            if (anim.isAtTick(0.16)) {
+                                player.moveRelative(0.2f, new Vec3(0, 0, 1));
+                                player.hurtMarked = true;
+                            }
+                        }
+                        case 4 -> {
+                            if (anim.isAtTick(0.2)) {
+                                player.moveRelative(0.8f, new Vec3(0, 2.2, 1.4));
+                                player.hurtMarked = true;
+                            }
+                        }
+                        case 5 -> {
+                            if (anim.isAtTick(0.04)) {
+                                player.setDeltaMovement(new Vec3(0, -0.2, 0));
+                                player.hurtMarked = true;
+                            }
+
+                        }
+                        case 6 -> {
+                        }
+                    }
+                }
+            })).doAtStart(swing(false))
+            .setMaxConsecutive(p -> Platform.INSTANCE.getPlayerData(p).map(d -> d.getSkillLevel(EnumSkills.SHORTSWORD).getLevel() >= 20 ? 6 : 5).orElse(5), p -> 0)
+            .disableItemSwitch().disableMovement());
     public static final AttackAction SHORT_SWORD_USE = register("short_sword_use", new Builder((player, data) -> new AnimatedAction(16 + 1, 6, "short_sword_use")).doAtStart(swing(false)).disableMovement());
+
+    public static final AttackAction LONG_SWORD = register("long_sword", new Builder((player, data) -> {
+        int defaultLength = EnumWeaponType.LONGSWORD.defaultWeaponSpeed;
+        int count = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentCount()).orElse(1) + 1;
+        int attack = (int) Math.ceil(0.48 * 20);
+        if (count == 3)
+            attack = (int) Math.ceil(0.56 * 20);
+        float cooldown = ItemNBT.cooldown(player, player.getMainHandItem());
+        float speed = defaultLength / cooldown;
+        return AnimatedAction.builder(defaultLength + 1, "long_sword_" + count).speed(speed).marker(attack).build();
+    }).allowSelfOverride((p, w) -> switch (w.getCurrentCount()) {
+                case 1 -> w.getCurrentAnim().isPastTick(0.54);
+                case 2 -> w.getCurrentAnim().isPastTick(0.60);
+                case 3 -> w.getCurrentAnim().isPastTick(0.64);
+                default -> false;
+            }).doWhileAction(((player, stack, data, anim) -> {
+                if (!player.level.isClientSide) {
+                    if (anim.canAttack() && stack.getItem() instanceof IAOEWeapon weapon) {
+                        AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
+                    }
+                    switch (data.getWeaponHandler().getCurrentCount()) {
+                        case 2 -> {
+                            if (anim.isAtTick(0.4)) {
+                                player.moveRelative(0.6f, new Vec3(0, 0, 1));
+                                player.hurtMarked = true;
+                            }
+                        }
+                        case 3 -> {
+                            if (anim.isAtTick(0.44)) {
+                                player.moveRelative(0.6f, new Vec3(0, 0, 1));
+                                player.hurtMarked = true;
+                            }
+                        }
+                        case 4 -> {
+                        }
+                    }
+                }
+            })).doAtStart(swing(false))
+            .setMaxConsecutive(p -> Platform.INSTANCE.getPlayerData(p).map(d -> d.getSkillLevel(EnumSkills.LONGSWORD).getLevel() >= 20 ? 4 : 3).orElse(3), p -> 0)
+            .disableItemSwitch().disableMovement());
     public static final AttackAction LONGSWORD_USE = register("long_sword_use", new Builder((player, data) -> new AnimatedAction(16 + 1, 5, "long_sword_use")).doAtStart(swing(false)).disableMovement());
+
+    public static final AttackAction SPEAR = register("spear", new Builder((player, data) -> {
+        int defaultLength = EnumWeaponType.LONGSWORD.defaultWeaponSpeed;
+        int count = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentCount()).orElse(1) + 1;
+        int attack = (int) Math.ceil(0.36 * 20);
+        if (count == 2) {
+            defaultLength = (int) Math.ceil(0.48 * 20);
+            attack = (int) Math.ceil(0.2 * 20);
+        }
+        float cooldown = ItemNBT.cooldown(player, player.getMainHandItem());
+        float speed = defaultLength / cooldown;
+        return AnimatedAction.builder(defaultLength + 1, "spear_" + count).speed(speed).marker(attack).build();
+    }).allowSelfOverride((p, w) -> switch (w.getCurrentCount()) {
+                case 1, 3, 4 -> w.getCurrentAnim().isPastTick(0.36);
+                case 2 -> w.getCurrentAnim().isPastTick(0.32);
+                default -> false;
+            }).doWhileAction(((player, stack, data, anim) -> {
+                if (!player.level.isClientSide) {
+                    if (anim.canAttack() && stack.getItem() instanceof IAOEWeapon weapon) {
+                        AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
+                    }
+                    switch (data.getWeaponHandler().getCurrentCount()) {
+                        case 1, 3, 4 -> {
+                            if (anim.isAtTick(0.28)) {
+                                player.moveRelative(0.2f, new Vec3(0, 0, 1));
+                                player.hurtMarked = true;
+                            }
+                        }
+                        case 2 -> {
+                            if (anim.isAtTick(0.2)) {
+                                player.moveRelative(0.4f, new Vec3(0, 0, 1));
+                                player.hurtMarked = true;
+                            }
+                        }
+                        case 5 -> {
+                        }
+                    }
+                }
+            })).doAtStart(swing(false))
+            .setMaxConsecutive(p -> Platform.INSTANCE.getPlayerData(p).map(d -> d.getSkillLevel(EnumSkills.SPEAR).getLevel() >= 20 ? 5 : 4).orElse(4), p -> 0)
+            .disableItemSwitch().disableMovement());
     //
     public static final AttackAction SPEAR_USE_FINISHER = register("spear_use_finisher", new Builder((player, data) -> new AnimatedAction(10 + 1, 5, "spear_use_finisher")).doAtStart(swing(false)).doWhileAction(simpleSwingAttackExecuter()).noAnimation().disableMovement());
     public static final AttackAction SPEAR_USE = register("spear_use", new Builder((player, data) -> new AnimatedAction(5 + 1, 3, "spear_use")).doAtStart(swing(false)).allowSelfOverride((p, w) -> {
@@ -40,9 +194,58 @@ public class AttackAction {
         return anim == null || anim.isPastTick(5);
     }).setFollowingAnim((p, a) -> SPEAR_USE_FINISHER).noAnimation().setMaxConsecutive(p -> 20, p -> 6).disableMovement());
 
+    public static final AttackAction HAMMER_AXE = register("hammer_axe", new Builder((player, data) -> {
+        int defaultLength = EnumWeaponType.HAXE.defaultWeaponSpeed;
+        int count = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentCount()).orElse(1) + 1;
+        int attack = (int) Math.ceil(0.64 * 20);
+        if (count == 2)
+            attack = (int) Math.ceil(0.48 * 20);
+        float cooldown = ItemNBT.cooldown(player, player.getMainHandItem());
+        float speed = defaultLength / cooldown;
+        return AnimatedAction.builder(defaultLength + 1, "hammer_axe_" + count).speed(speed).marker(attack).build();
+    }).allowSelfOverride((p, w) -> switch (w.getCurrentCount()) {
+                case 1 -> w.getCurrentAnim().isPastTick(0.68);
+                case 2 -> w.getCurrentAnim().isPastTick(0.64);
+                default -> false;
+            }).doWhileAction(((player, stack, data, anim) -> {
+                if (!player.level.isClientSide) {
+                    if (anim.canAttack() && stack.getItem() instanceof IAOEWeapon weapon) {
+                        AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
+                    }
+                    if (data.getWeaponHandler().getCurrentCount() == 3) {
+                        //Ult
+                    }
+                }
+            })).doAtStart(swing(false))
+            .setMaxConsecutive(p -> Platform.INSTANCE.getPlayerData(p).map(d -> d.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 20 ? 3 : 2).orElse(2), p -> 0)
+            .disableItemSwitch().disableMovement());
     public static final AttackAction HAMMER_AXE_USE = register("hammer_axe_use", new Builder((player, data) -> new AnimatedAction(20 + 1, 12, "hammer_axe_use")).doAtStart(swing(false)).disableMovement().doWhileAction((player, stack, data, anim) -> ItemAxeBase.movePlayer(player).accept(anim)));
+
+    public static final AttackAction STAFF = register("staff", new Builder((player, data) -> {
+        int defaultLength = EnumWeaponType.STAFF.defaultWeaponSpeed;
+        float cooldown = ItemNBT.cooldown(player, player.getMainHandItem());
+        float speed = defaultLength / cooldown;
+        return AnimatedAction.builder(defaultLength + 1, "staff").speed(speed).marker(9).build();
+    }).allowSelfOverride((p, w) -> switch (w.getCurrentCount()) {
+                case 1 -> w.getCurrentAnim().isPastTick(0.54);
+                case 2 -> w.getCurrentAnim().isPastTick(0.60);
+                case 3 -> w.getCurrentAnim().isPastTick(0.64);
+                default -> false;
+            }).doWhileAction(((player, stack, data, anim) -> {
+                if (!player.level.isClientSide) {
+                    if (anim.canAttack() && stack.getItem() instanceof ItemStaffBase staff) {
+                        EntityHitResult res = RayTraceUtils.calculateEntityFromLook(player, staff.getRange(player, stack));
+                        if (res != null && res.getEntity() != null)
+                            player.attack(res.getEntity());
+                        staff.castBaseSpell(stack, player);
+                        player.swing(InteractionHand.MAIN_HAND, true);
+                    }
+                }
+            }))
+            .disableItemSwitch().disableMovement());
+
     public static final AttackAction DUAL_USE = register("dual_blade_use", new Builder((player, data) -> new AnimatedAction(19 + 1, 7, "dual_blades_use")).doAtStart(swing(true)).disableMovement());
-    public static final AttackAction GLOVE_USE = register("glove_use", new Builder((player, data) -> new AnimatedAction(50 + 1, 4, "glove_use")).noAnimation().disableMovement().doAtStart(p -> p.maxUpStep += 0.5).doAtEnd(p -> p.maxUpStep -= 0.5).doWhileAction(((player, stack, data, anim) -> {
+    public static final AttackAction GLOVE_USE = register("fist_use", new Builder((player, data) -> new AnimatedAction(50 + 1, 4, "fist_use")).noAnimation().disableMovement().doAtStart(p -> p.maxUpStep += 0.5).doAtEnd(p -> p.maxUpStep -= 0.5).doWhileAction(((player, stack, data, anim) -> {
         if (player instanceof ServerPlayer serverPlayer) {
             Vec3 look = player.getLookAngle();
             Vec3 move = new Vec3(look.x, 0.0, look.z).normalize().scale(player.isOnGround() ? 0.6 : 0.3).add(0, player.getDeltaMovement().y, 0);
@@ -75,73 +278,6 @@ public class AttackAction {
         AnimatedAction anim = w.getCurrentAnim();
         return anim == null || anim.isPastTick(anim.getAttackTime());
     }).disableMovement().setMaxConsecutive(p -> 2, p -> 8));
-
-    public static final AttackAction SHORT_SWORD = register("short_sword", new Builder((player, data) -> {
-        int count = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentCount()).orElse(1) + 1;
-        int defaultLength = switch (count) {
-            case 4 -> (int) Math.ceil(0.6 * 20);
-            default -> EnumWeaponType.SHORTSWORD.defaultWeaponSpeed;
-        };
-        float cooldown = ItemNBT.cooldown(player, player.getMainHandItem());
-        float speed = cooldown / defaultLength;
-        return AnimatedAction.builder(defaultLength + 1, "short_sword_" + count).speed(speed).marker(4).build();
-    }).allowSelfOverride((p, w) -> switch (w.getCurrentCount()) {
-                case 1 -> w.getCurrentAnim().isPastTick(0.36);
-                case 2 -> w.getCurrentAnim().isPastTick(0.32);
-                case 3 -> w.getCurrentAnim().isPastTick(0.40);
-                case 4 -> w.getCurrentAnim().isPastTick(0.24) && !w.getCurrentAnim().isPastTick(0.48);
-                case 5 -> w.getCurrentAnim().isPastTick(0.30);
-                default -> false;
-            }).doWhileAction(((player, stack, data, anim) -> {
-                if (!player.level.isClientSide) {
-                    if (anim.canAttack() && stack.getItem() instanceof IAOEWeapon weapon) {
-                        AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
-                    }
-                    if (anim.isAtTick(2)) {
-                        switch (data.getWeaponHandler().getCurrentCount()) {
-                            case 1, 2 -> player.moveRelative(0.4f, new Vec3(0, 0, 1));
-                            case 4 -> player.moveRelative(0.9f, new Vec3(0, 2.5, 1.4));
-                            case 5 -> player.setDeltaMovement(new Vec3(0, -0.2, 0));
-                            default -> {
-                            }
-                        }
-                        player.hurtMarked = true;
-                    }
-                }
-            })).doAtEnd(p -> {
-                if (Platform.INSTANCE.getPlayerData(p).map(d -> d.getWeaponHandler().getCurrentCount() < 4).orElse(true))
-                    p.setDeltaMovement(new Vec3(0, p.getDeltaMovement().y, 0));
-                p.hurtMarked = true;
-            }).doAtStart(swing(false))
-            .setMaxConsecutive(p -> Platform.INSTANCE.getPlayerData(p).map(d -> d.getSkillLevel(EnumSkills.SHORTSWORD).getLevel() >= 20 ? 6 : 5).orElse(5), p -> 2)
-            .disableItemSwitch().disableMovement());
-    public static final AttackAction LONG_SWORD = register("long_sword", new Builder((player, data) -> {
-        int defaultLength = EnumWeaponType.SHORTSWORD.defaultWeaponSpeed;
-        float cooldown = ItemNBT.cooldown(player, player.getMainHandItem());
-        float speed = cooldown / defaultLength;
-        return AnimatedAction.builder(defaultLength + 1, "long_sword").speed(speed).marker(4).build();
-    }).doWhileAction(((player, stack, data, anim) -> {
-                if (!player.level.isClientSide) {
-                    if (anim.canAttack() && stack.getItem() instanceof IAOEWeapon weapon) {
-                        AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
-                    }
-                    if (anim.getTick() > anim.getAttackTime()) {
-                        switch (data.getWeaponHandler().getCurrentCount()) {
-                            case 1, 2 -> player.moveRelative(0.07f, new Vec3(0, 0, 1));
-                            case 4 -> player.moveRelative(0.16f, new Vec3(0, 2, 1));
-                            default -> {
-                            }
-                        }
-                        player.hurtMarked = true;
-                    }
-                }
-            })).doAtEnd(p -> {
-                if (Platform.INSTANCE.getPlayerData(p).map(d -> d.getWeaponHandler().getCurrentCount() < 4).orElse(true))
-                    p.setDeltaMovement(new Vec3(0, p.getDeltaMovement().y, 0));
-                p.hurtMarked = true;
-            }).doAtStart(swing(false))
-            .setMaxConsecutive(p -> Platform.INSTANCE.getPlayerData(p).map(d -> d.getSkillLevel(EnumSkills.LONGSWORD).getLevel() >= 20 ? 4 : 3).orElse(3), p -> 10)
-            .disableItemSwitch().disableMovement());
 
     public final BiFunction<Player, WeaponHandler, AnimatedAction> anim;
     public final BiFunction<Player, WeaponHandler, AttackAction> nextAction;
