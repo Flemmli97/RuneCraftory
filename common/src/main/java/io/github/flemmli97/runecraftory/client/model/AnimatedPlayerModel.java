@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.TransformationHelper;
 import io.github.flemmli97.runecraftory.mixinhelper.HumanoidMainHand;
@@ -93,10 +92,9 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
     public void copyTo(HumanoidModel<?> model, boolean plain, boolean ignoreRiding) {
         HumanoidMainHand hands = (HumanoidMainHand) model;
         PartPose main = this.model.getMainPart().storePose();
-        PartPose head = this.head.storePose();
         float headXRot = model.head.xRot;
         float headYRot = model.head.yRot;
-        model.head.loadPose(this.withParent(main, head));
+        this.apply(model.head, main, this.head);
         model.body.loadPose(main);
         this.apply(model.leftArm, main, this.leftArm);
         hands.getLeftHandItem().loadPose(this.leftArmItem.storePose());
@@ -122,31 +120,6 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
     }
 
     private void apply(ModelPart model, PartPose main, ModelPartHandler.ModelPartExtended first) {
-        model.loadPose(this.withParent(main, first.storePose()));
-    }
-
-    private PartPose withParent(PartPose parentPose, PartPose child) {
-        Vector3f translatedPos = this.withParentX(parentPose, child.x, child.y, child.z);
-        Vector3f transformedRot = TransformationHelper.localToGlobalRot(parentPose, child);
-        return PartPose.offsetAndRotation((parentPose.x + translatedPos.x()),
-                (parentPose.y + translatedPos.y()),
-                (parentPose.z + translatedPos.z()),
-                transformedRot.x(),
-                transformedRot.y(),
-                transformedRot.z());
-    }
-
-    private Vector3f withParentX(PartPose parentPose, float x, float y, float z) {
-        Vector3f v = new Vector3f(x, y, z);
-        if (parentPose.zRot != 0.0F) {
-            v.transform(Vector3f.ZP.rotation(parentPose.zRot));
-        }
-        if (parentPose.yRot != 0.0F) {
-            v.transform(Vector3f.YP.rotation(parentPose.yRot));
-        }
-        if (parentPose.xRot != 0.0F) {
-            v.transform(Vector3f.XP.rotation(parentPose.xRot));
-        }
-        return v;
+        model.loadPose(TransformationHelper.withParent(main, first.storePose()));
     }
 }

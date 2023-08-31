@@ -7,8 +7,8 @@ public enum EnumWeaponType {
     LONGSWORD(0.5f, 16),
     SPEAR(0.5f, 12),
     HAXE(0.5f, 18),
-    DUAL(0, 7),
-    GLOVE(0, 7),
+    DUAL(0, 10),
+    GLOVE(0, 10),
     STAFF(0.5f, 12);
 
     public final float shieldEfficiency;
