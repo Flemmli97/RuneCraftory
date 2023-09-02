@@ -14,6 +14,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModSpells;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
+import io.github.flemmli97.tenshilib.common.utils.CircleSector;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -34,11 +35,14 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class CombatUtils {
 
@@ -557,5 +561,31 @@ public class CombatUtils {
         if (stack.is(ModTags.HOES) || stack.is(ModTags.WATERINGCANS) || stack.is(ModTags.SICKLES)) {
             LevelCalc.levelSkill(player, data, EnumSkills.FARMING, 1);
         }
+    }
+
+    public static List<Entity> spinAttackHandler(Player player, float minYRot, float maxYRot, Predicate<Entity> pred) {
+        if (player.level.isClientSide)
+            return List.of();
+        float rot = maxYRot - minYRot;
+        Vec3 dir = Vec3.directionFromRotation(0, minYRot + rot * 0.5f);
+        float reach = (float) player.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + 0.5f;
+        CircleSector circ = new CircleSector(player.position(), dir, reach, rot * 0.5f, player);
+        List<Entity> list = player.level.getEntities(player, player.getBoundingBox().inflate(reach + 1),
+                t -> t != player && (pred == null || pred.test(t)) && !t.isAlliedTo(player) && t.isPickable()
+                        && (t.getBoundingBox().minY <= player.getBoundingBox().maxY || t.getBoundingBox().maxY >= player.getBoundingBox().minY)
+                        && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, player.getBbHeight() * 1.5, 0.15)));
+        for (int i = 0; i < list.size(); ++i)
+            CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
+        return list;
+    }
+
+    public static void attackInAABB(Player player, AABB aabb, Predicate<Entity> pred) {
+        if (player.level.isClientSide)
+            return;
+        List<Entity> list = player.level.getEntities(player, aabb,
+                t -> t != player && (pred == null || pred.test(t)) && !t.isAlliedTo(player) && t.isPickable());
+        for (int i = 0; i < list.size(); ++i)
+            CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
+        return;
     }
 }

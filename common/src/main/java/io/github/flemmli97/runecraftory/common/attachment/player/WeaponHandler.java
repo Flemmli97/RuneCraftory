@@ -6,10 +6,14 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 public class WeaponHandler {
@@ -25,6 +29,9 @@ public class WeaponHandler {
     private int timeSinceLastChange;
 
     private int toolCharge;
+
+    private float spinStartRot;
+    private Set<Entity> hitEntityTracker = new HashSet<>();
 
     private static AttackAction.ActiveActionHandler merged(BiConsumer<Player, AnimatedAction> first, AttackAction.ActiveActionHandler second) {
         if (first == null)
@@ -178,5 +185,25 @@ public class WeaponHandler {
 
     public AnimatedAction getFadingAnim() {
         return this.fadingAnim;
+    }
+
+    public void setSpinStartRot(float rot) {
+        this.spinStartRot = rot;
+    }
+
+    public float getSpinStartRot() {
+        return this.spinStartRot;
+    }
+
+    public Set<Entity> getHitEntityTracker() {
+        return this.hitEntityTracker;
+    }
+
+    public void resetHitEntityTracker() {
+        this.hitEntityTracker.clear();
+    }
+
+    public void addHitEntityTracker(List<Entity> list) {
+        this.hitEntityTracker.addAll(list);
     }
 }

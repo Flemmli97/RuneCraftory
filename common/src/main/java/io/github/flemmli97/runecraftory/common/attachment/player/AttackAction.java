@@ -21,6 +21,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -242,12 +243,12 @@ public class AttackAction {
                 default -> false;
             }).doWhileAction(((player, stack, data, anim) -> {
                 if (!player.level.isClientSide) {
-                    if (anim.canAttack() && stack.getItem() instanceof IAOEWeapon weapon) {
+                    if (anim.canAttack() && stack.getItem() instanceof IAOEWeapon weapon && data.getWeaponHandler().getCurrentCount() != 5 && data.getWeaponHandler().getCurrentCount() != 6) {
                         AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
                         player.swing(InteractionHand.MAIN_HAND, true);
                     }
                     switch (data.getWeaponHandler().getCurrentCount()) {
-                        case 1, 5 -> {
+                        case 1 -> {
                             if (anim.isAtTick(0.2)) {
                                 player.moveRelative(0.3f, new Vec3(0, 0, 1));
                                 sendMotionUpdate(player);
@@ -259,10 +260,41 @@ public class AttackAction {
                                 sendMotionUpdate(player);
                             }
                         }
-                        case 6 -> {
-                            if (anim.isAtTick(0.24)) {
-                                player.moveRelative(0.35f, new Vec3(0, 0, 1));
+                        case 5 -> {
+                            if (anim.isAtTick(0.2)) {
+                                player.moveRelative(0.3f, new Vec3(0, 0, 1));
+                                data.getWeaponHandler().setSpinStartRot(player.getYRot() + 20);
+                                data.getWeaponHandler().resetHitEntityTracker();
                                 sendMotionUpdate(player);
+                            }
+                            if (anim.isAtTick(0.4)) {
+                                data.getWeaponHandler().resetHitEntityTracker();
+                            }
+                            if (anim.isPastTick(0.2)) {
+                                float len = (anim.getLength() - ((int) Math.ceil(0.2 * 20.0D))) / anim.getSpeed();
+                                float f = (anim.getTick() - ((int) Math.ceil(0.2 * 20.0D))) / anim.getSpeed();
+                                float angleInc = 360 / len;
+                                float rot = data.getWeaponHandler().getSpinStartRot();
+                                data.getWeaponHandler().addHitEntityTracker(CombatUtils.spinAttackHandler(player, (rot + f * angleInc), (rot + (f + 1) * angleInc), e -> !data.getWeaponHandler().getHitEntityTracker().contains(e)));
+                            }
+                        }
+                        case 6 -> {
+                            if (anim.isAtTick(0.08)) {
+                                data.getWeaponHandler().setSpinStartRot(player.getYRot() + 20);
+                                data.getWeaponHandler().resetHitEntityTracker();
+                            }
+                            if (anim.isAtTick(0.28)) {
+                                player.moveRelative(0.35f, new Vec3(0, 0, 1));
+                                data.getWeaponHandler().resetHitEntityTracker();
+                                sendMotionUpdate(player);
+                            }
+                            if (anim.isPastTick(0.12)) {
+                                float len = (anim.getLength() - ((int) Math.ceil(0.12 * 20.0D))) / anim.getSpeed();
+                                float f = (anim.getTick() - ((int) Math.ceil(0.12 * 20.0D))) / anim.getSpeed();
+                                float angleInc = 360 / len;
+                                float rot = data.getWeaponHandler().getSpinStartRot();
+                                data.getWeaponHandler().addHitEntityTracker(CombatUtils.spinAttackHandler(player, (rot + f * angleInc), (rot + (f + 1) * angleInc), e -> !data.getWeaponHandler().getHitEntityTracker().contains(e)));
+                                data.getWeaponHandler().addHitEntityTracker(CombatUtils.spinAttackHandler(player, (rot + 180 + f * angleInc), (rot + 180 + (f + 1) * angleInc), e -> !data.getWeaponHandler().getHitEntityTracker().contains(e)));
                             }
                         }
                         case 7 -> {
@@ -309,7 +341,10 @@ public class AttackAction {
             }).doWhileAction(((player, stack, data, anim) -> {
                 if (!player.level.isClientSide) {
                     if (anim.canAttack() && stack.getItem() instanceof IAOEWeapon weapon) {
-                        AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
+                        if (data.getWeaponHandler().getCurrentCount() != 4)
+                            AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
+                        else
+                            CombatUtils.attackInAABB(player, new AABB(-1, -1, -1, 1, 1, 1).move(player.position().add(0, 0.2, 0).add(player.getDeltaMovement().normalize().scale(0.4))), null);
                         player.swing(InteractionHand.MAIN_HAND, true);
                     }
                     switch (data.getWeaponHandler().getCurrentCount()) {
