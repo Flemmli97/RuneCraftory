@@ -71,6 +71,11 @@ public class ItemToolSickle extends DiggerItem implements IItemUsable, IChargeab
     }
 
     @Override
+    public boolean hasCooldown() {
+        return true;
+    }
+
+    @Override
     public EnumToolCharge chargeType(ItemStack stack) {
         return EnumToolCharge.CHARGESICKLE;
     }

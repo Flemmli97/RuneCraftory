@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -38,8 +39,10 @@ public class WeaponHandler {
 
     public static BiConsumer<Player, AnimatedAction> simpleServersidedAttackExecuter(Runnable run) {
         return (player, animatedAction) -> {
-            if (!player.level.isClientSide && animatedAction.canAttack())
+            if (!player.level.isClientSide && animatedAction.canAttack()) {
+                player.swing(InteractionHand.MAIN_HAND);
                 run.run();
+            }
         };
     }
 
@@ -176,5 +179,4 @@ public class WeaponHandler {
     public AnimatedAction getFadingAnim() {
         return this.fadingAnim;
     }
-
 }

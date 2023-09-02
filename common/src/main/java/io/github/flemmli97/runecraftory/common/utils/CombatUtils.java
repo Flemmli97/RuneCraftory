@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.utils;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
@@ -240,9 +241,9 @@ public class CombatUtils {
         if (target.isAttackable() && !target.skipAttackInteraction(player) && player.getCooldowns().getCooldownPercent(stack.getItem(), 0.0f) <= 0) {
             double damagePhys = getAttributeValue(player, Attributes.ATTACK_DAMAGE) * damageModifier;
             if (damagePhys > 0) {
-                /*if (resetCooldown) {
-                    player.getCooldowns().addCooldown(stack.getItem(), ItemNBT.cooldown(player, stack));
-                }*/
+                if (resetCooldown && stack.getItem() instanceof IItemUsable usable && usable.hasCooldown()) {
+                    player.getCooldowns().addCooldown(stack.getItem(), Mth.ceil(usable.getWeaponType().defaultWeaponSpeed * ItemNBT.attackSpeedModifier(player)));
+                }
                 boolean faintChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.FAINT.get(), target);
                 boolean critChance = player.level.random.nextDouble() < statusEffectChance(player, ModAttributes.CRIT.get(), target);
                 CustomDamage.DamageType damageType = CustomDamage.DamageType.NORMAL;

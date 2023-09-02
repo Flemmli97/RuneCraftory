@@ -71,6 +71,11 @@ public class ItemToolWateringCan extends TieredItem implements IItemUsable, ICha
     }
 
     @Override
+    public boolean hasCooldown() {
+        return true;
+    }
+
+    @Override
     public EnumWeaponType getWeaponType() {
         return EnumWeaponType.FARM;
     }

@@ -8,4 +8,8 @@ public interface IItemUsable {
     EnumWeaponType getWeaponType();
 
     void onBlockBreak(ServerPlayer player);
+
+    default boolean hasCooldown() {
+        return false;
+    }
 }

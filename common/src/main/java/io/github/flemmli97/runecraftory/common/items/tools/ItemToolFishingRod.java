@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
@@ -47,6 +48,11 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
         if (this.tier == EnumToolTier.PLATINUM)
             return this.tier.getTierLevel();
         return this.tier.getTierLevel() + 1;
+    }
+
+    @Override
+    public boolean hasCooldown() {
+        return true;
     }
 
     @Override
@@ -129,7 +135,7 @@ public class ItemToolFishingRod extends FishingRodItem implements IItemUsable, I
                 hook = new EntityCustomFishingHook(level, entity, speed + this.tier.getTierLevel(), luck, charge);
                 hook.setElement(ItemNBT.getElement(itemStack));
                 if (entity instanceof Player player)
-                    hook.attackHandlingPlayer(() -> player.getCooldowns().getCooldownPercent(itemStack.getItem(), 0.0f) <= 0, () -> player.getCooldowns().addCooldown(itemStack.getItem(), ItemNBT.cooldown(player, itemStack)));
+                    hook.attackHandlingPlayer(() -> player.getCooldowns().getCooldownPercent(itemStack.getItem(), 0.0f) <= 0, () -> player.getCooldowns().addCooldown(itemStack.getItem(), Mth.ceil(EnumWeaponType.FARM.defaultWeaponSpeed * ItemNBT.attackSpeedModifier(player))));
                 level.addFreshEntity(hook);
             }
             if (entity instanceof Player player)

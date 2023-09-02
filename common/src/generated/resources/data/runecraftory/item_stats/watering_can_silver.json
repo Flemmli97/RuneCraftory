@@ -4,7 +4,6 @@
   "upgradeDifficulty": 0,
   "itemStats": {
     "runecraftory:magic_attack": 19.0,
-    "runecraftory:attack_speed": 15.0,
     "runecraftory:attack_range": 0.0
   },
   "monsterBonus": {

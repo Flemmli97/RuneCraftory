@@ -76,6 +76,11 @@ public class ItemToolHammer extends PickaxeItem implements IItemUsable, IChargea
     }
 
     @Override
+    public boolean hasCooldown() {
+        return true;
+    }
+
+    @Override
     public EnumWeaponType getWeaponType() {
         return EnumWeaponType.FARM;
     }

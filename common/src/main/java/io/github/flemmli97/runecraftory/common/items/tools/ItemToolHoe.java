@@ -73,6 +73,11 @@ public class ItemToolHoe extends HoeItem implements IItemUsable, IChargeable {
     }
 
     @Override
+    public boolean hasCooldown() {
+        return true;
+    }
+
+    @Override
     public EnumWeaponType getWeaponType() {
         return EnumWeaponType.FARM;
     }

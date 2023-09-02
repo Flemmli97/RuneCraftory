@@ -13,7 +13,7 @@ public class LibAttributes {
     public static final ResourceLocation RP_GAIN = new ResourceLocation(RuneCraftory.MODID, "rp_gain");
     public static final ResourceLocation RP_INCREASE = new ResourceLocation(RuneCraftory.MODID, "rp_increase");
 
-    public static final ResourceLocation ATTACK_SPEED = new ResourceLocation(RuneCraftory.MODID, "attack_speed");
+    public static final ResourceLocation ATTACK_SPEED = new ResourceLocation(RuneCraftory.MODID, "attack_speed_modifier");
     public static final ResourceLocation ATTACK_RANGE = new ResourceLocation(RuneCraftory.MODID, "attack_range");
 
     public static final ResourceLocation DEFENCE = new ResourceLocation(RuneCraftory.MODID, "defence");

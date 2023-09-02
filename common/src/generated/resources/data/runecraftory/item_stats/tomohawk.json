@@ -6,7 +6,6 @@
     "minecraft:generic.attack_damage": 70.0,
     "runecraftory:dizzy": 2.0,
     "runecraftory:crit": 15.0,
-    "runecraftory:attack_speed": 10.0,
     "runecraftory:attack_range": 1.0
   },
   "monsterBonus": {

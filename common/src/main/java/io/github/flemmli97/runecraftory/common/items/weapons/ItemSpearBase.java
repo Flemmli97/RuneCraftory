@@ -169,7 +169,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
         return ImmutableMultimap.of();
     }
 
-    private void useSpear(ServerPlayer player, PlayerData data, ItemStack stack) {
+    public void useSpear(ServerPlayer player, PlayerData data, ItemStack stack) {
         List<Entity> list = RayTraceUtils.getEntities(player, this.getRange(player, stack), 10);
         if (!list.isEmpty()) {
             LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 2);
