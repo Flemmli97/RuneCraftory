@@ -2,14 +2,13 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import io.github.flemmli97.runecraftory.api.action.AttackActions;
+import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
-import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
-import io.github.flemmli97.runecraftory.common.attachment.player.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -66,7 +65,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, AttackAction.SPEAR, stack, null));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, AttackActions.SPEAR, stack, null));
             return false;
         }
         return true;
@@ -123,11 +122,11 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
             if (player instanceof ServerPlayer serverPlayer) {
                 if (Platform.INSTANCE.getPlayerData(player).map(data -> {
                     // Check if insta use is possible
-                    if (data.getWeaponHandler().canConsecutiveExecute(serverPlayer, AttackAction.SPEAR_USE)) {
-                        data.getWeaponHandler().doWeaponAttack(serverPlayer, AttackAction.SPEAR_USE, itemstack, WeaponHandler.simpleServersidedAttackExecuter(() -> this.useSpear(serverPlayer, data, itemstack)));
+                    if (data.getWeaponHandler().canConsecutiveExecute(serverPlayer, AttackActions.SPEAR_USE)) {
+                        data.getWeaponHandler().doWeaponAttack(serverPlayer, AttackActions.SPEAR_USE, itemstack, WeaponHandler.simpleServersidedAttackExecuter(() -> this.useSpear(serverPlayer, itemstack)));
                         return false;
                     }
-                    return data.getWeaponHandler().getCurrentAction() == AttackAction.NONE;
+                    return data.getWeaponHandler().getCurrentAction() == AttackActions.NONE;
                 }).orElse(true)) {
                     player.startUsingItem(hand);
                 }
@@ -152,8 +151,8 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
         if (entity instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 int time = this.getUseDuration(stack) - timeLeft;
-                if (time >= this.getChargeTime(stack) && data.getWeaponHandler().canExecuteAction(serverPlayer, AttackAction.SPEAR_USE)) {
-                    data.getWeaponHandler().doWeaponAttack(serverPlayer, AttackAction.SPEAR_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(() -> this.useSpear(serverPlayer, data, stack)));
+                if (time >= this.getChargeTime(stack) && data.getWeaponHandler().canExecuteAction(serverPlayer, AttackActions.SPEAR_USE)) {
+                    data.getWeaponHandler().doWeaponAttack(serverPlayer, AttackActions.SPEAR_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(() -> this.useSpear(serverPlayer, stack)));
                 }
             });
         }
@@ -169,10 +168,10 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
         return ImmutableMultimap.of();
     }
 
-    public void useSpear(ServerPlayer player, PlayerData data, ItemStack stack) {
+    public void useSpear(ServerPlayer player, ItemStack stack) {
         List<Entity> list = RayTraceUtils.getEntities(player, this.getRange(player, stack), 10);
         if (!list.isEmpty()) {
-            LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 2);
+            Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.SPEAR, 2));
             list.forEach(e -> CombatUtils.playerAttackWithItem(player, e, player.getMainHandItem(), 0.6f, false, false, false));
             player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, player.getSoundSource(), 1.0f, 1.0f);
         }

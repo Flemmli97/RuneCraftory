@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
 import com.mojang.datafixers.util.Pair;
+import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.ShopItemProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SkillProperties;
@@ -561,7 +562,7 @@ public class PlayerData {
     }
 
     public void tick(Player player) {
-        this.weaponHandler.tick(this, player);
+        this.weaponHandler.tick(player);
         if (player instanceof ServerPlayer serverPlayer) {
             this.updater.tick(serverPlayer);
             if (serverPlayer.tickCount % 10 == 0)

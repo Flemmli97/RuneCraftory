@@ -2,13 +2,13 @@ package io.github.flemmli97.runecraftory.common.items.weapons;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import io.github.flemmli97.runecraftory.api.action.AttackActions;
+import io.github.flemmli97.runecraftory.api.action.WeaponHandler;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumToolCharge;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
-import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
-import io.github.flemmli97.runecraftory.common.attachment.player.WeaponHandler;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
@@ -82,7 +82,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
     public boolean onServerSwing(LivingEntity entity, ItemStack stack) {
         if (entity instanceof Player player) {
             Platform.INSTANCE.getPlayerData(player)
-                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, AttackAction.HAMMER_AXE, stack, null));
+                    .ifPresent(d -> d.getWeaponHandler().doWeaponAttack(player, AttackActions.HAMMER_AXE, stack, null));
             return false;
         }
         return true;
@@ -142,7 +142,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
         if (hand == InteractionHand.OFF_HAND)
             return InteractionResultHolder.pass(itemstack);
         boolean canCharge = Platform.INSTANCE.getPlayerData(player)
-                .map(data -> (data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, AttackAction.HAMMER_AXE_USE)).orElse(false);
+                .map(data -> (data.getSkillLevel(EnumSkills.HAMMERAXE).getLevel() >= 5 || player.isCreative()) && data.getWeaponHandler().canExecuteAction(player, AttackActions.HAMMER_AXE_USE)).orElse(false);
         if (canCharge) {
             player.startUsingItem(hand);
             return InteractionResultHolder.consume(itemstack);
@@ -188,7 +188,7 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
                     LevelCalc.levelSkill(player, data, EnumSkills.HAMMERAXE, 5);
                 }
             };
-            data.getWeaponHandler().doWeaponAttack(player, AttackAction.HAMMER_AXE_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(run));
+            data.getWeaponHandler().doWeaponAttack(player, AttackActions.HAMMER_AXE_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(run));
         });
     }
 
@@ -233,11 +233,11 @@ public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IA
         return dX * dX + dY * dY + dZ * dZ <= reach * reach;
     }
 
-    public static Consumer<AnimatedAction> movePlayer(Player player) {
+    public static Consumer<AnimatedAction> moveEntity(LivingEntity entity) {
         return a -> {
             if (a.getTick() <= 1) {
-                player.setDeltaMovement(0, 0.35, 0);
-                player.hasImpulse = true;
+                entity.setDeltaMovement(0, 0.35, 0);
+                entity.hasImpulse = true;
             }
         };
     }

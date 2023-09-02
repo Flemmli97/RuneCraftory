@@ -1,5 +1,6 @@
-package io.github.flemmli97.runecraftory.common.attachment.player;
+package io.github.flemmli97.runecraftory.api.action;
 
+import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpell;
 import io.github.flemmli97.runecraftory.common.network.S2CWeaponUse;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -7,7 +8,7 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -20,7 +21,7 @@ public class WeaponHandler {
 
     private static final float FADE_TICK = 3;
 
-    private AttackAction currentAction = AttackAction.NONE, chainTrackerAction = AttackAction.NONE;
+    private AttackAction currentAction = AttackActions.NONE, chainTrackerAction = AttackActions.NONE;
     private int count, timeFrame;
 
     private AnimatedAction currentAnim, fadingAnim;
@@ -31,91 +32,92 @@ public class WeaponHandler {
     private int toolCharge;
 
     private float spinStartRot;
-    private Set<Entity> hitEntityTracker = new HashSet<>();
+    private final Set<Entity> hitEntityTracker = new HashSet<>();
 
-    private static AttackAction.ActiveActionHandler merged(BiConsumer<Player, AnimatedAction> first, AttackAction.ActiveActionHandler second) {
+    private static AttackAction.ActiveActionHandler merged(BiConsumer<LivingEntity, AnimatedAction> first, AttackAction.ActiveActionHandler second) {
         if (first == null)
             return second;
         if (second == null)
-            return (player, stack, data, anim) -> first.accept(player, anim);
-        return (player, stack, data, anim) -> {
-            first.accept(player, anim);
-            second.handle(player, stack, data, anim);
+            return (entity, stack, data, anim) -> first.accept(entity, anim);
+        return (entity, stack, data, anim) -> {
+            first.accept(entity, anim);
+            second.handle(entity, stack, data, anim);
         };
     }
 
-    public static BiConsumer<Player, AnimatedAction> simpleServersidedAttackExecuter(Runnable run) {
-        return (player, animatedAction) -> {
-            if (!player.level.isClientSide && animatedAction.canAttack()) {
-                player.swing(InteractionHand.MAIN_HAND);
+    public static BiConsumer<LivingEntity, AnimatedAction> simpleServersidedAttackExecuter(Runnable run) {
+        return (entity, animatedAction) -> {
+            if (!entity.level.isClientSide && animatedAction.canAttack()) {
+                entity.swing(InteractionHand.MAIN_HAND);
                 run.run();
             }
         };
     }
 
-    public boolean doWeaponAttack(Player player, AttackAction action, ItemStack stack, @Nullable BiConsumer<Player, AnimatedAction> attack) {
-        if (this.canExecuteAction(player, action) || this.canConsecutiveExecute(player, action)) {
-            this.setAnimationBasedOnState(player, action, true, attack);
+    public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack, @Nullable BiConsumer<LivingEntity, AnimatedAction> attack) {
+        if (this.canExecuteAction(entity, action) || this.canConsecutiveExecute(entity, action)) {
+            this.setAnimationBasedOnState(entity, action, true, attack);
             this.usedWeapon = stack;
             return true;
         }
         return false;
     }
 
-    public boolean canExecuteAction(Player player, AttackAction action) {
-        return this.currentAction == AttackAction.NONE;
+    public boolean canExecuteAction(LivingEntity entity, AttackAction action) {
+        return this.currentAction == AttackActions.NONE;
     }
 
-    public boolean canConsecutiveExecute(Player player, AttackAction action) {
-        return (this.canExecuteAction(player, action) || (this.currentAction == action && action.canOverride != null && action.canOverride.apply(player, this)))
-                && this.count < action.maxConsecutive.apply(player)
+    public boolean canConsecutiveExecute(LivingEntity entity, AttackAction action) {
+        return (this.canExecuteAction(entity, action) || (this.currentAction == action && action.canOverride != null && action.canOverride.apply(entity, this)))
+                && this.count < action.maxConsecutive.apply(entity)
                 && this.chainTrackerAction == action;
     }
 
-    private void setAnimationBasedOnState(Player player, AttackAction action, boolean packet, @Nullable BiConsumer<Player, AnimatedAction> attack) {
+    private void setAnimationBasedOnState(LivingEntity entity, AttackAction action, boolean packet, @Nullable BiConsumer<LivingEntity, AnimatedAction> attack) {
         if (this.currentAction.onEnd != null)
-            this.currentAction.onEnd.accept(player);
-        if (action == AttackAction.NONE && this.count >= this.currentAction.maxConsecutive.apply(player)) {
+            this.currentAction.onEnd.accept(entity, this);
+        if (action == AttackActions.NONE && this.count >= this.currentAction.maxConsecutive.apply(entity)) {
             this.count = 0;
             if (this.chainTrackerAction.nextAction != null)
-                action = this.chainTrackerAction.nextAction.apply(player, this);
+                action = this.chainTrackerAction.nextAction.apply(entity, this);
             this.chainTrackerAction = action;
         }
         this.currentAction = action;
-        if (action != AttackAction.NONE) {
+        if (action != AttackActions.NONE) {
             this.chainTrackerAction = this.currentAction;
         }
         this.weaponConsumer = merged(attack, action.attackExecuter);
-        if (action == AttackAction.NONE)
+        if (action == AttackActions.NONE)
             this.fadingAnim = this.currentAnim;
-        this.currentAnim = action.anim.apply(player, this);
+        this.currentAnim = action.anim.apply(entity, this);
         this.timeSinceLastChange = 0;
-        if (this.currentAction != AttackAction.NONE) {
+        if (this.currentAction != AttackActions.NONE) {
             this.count++;
             if (action.timeFrame != null && (this.chainTrackerAction != this.currentAction || this.timeFrame <= 0))
-                this.timeFrame = action.timeFrame.apply(player);
+                this.timeFrame = action.timeFrame.apply(entity);
             if (this.chainTrackerAction == this.currentAction) {
                 this.toolCharge = 0;
             }
         }
-        if (action == AttackAction.NONE)
+        if (action == AttackActions.NONE)
             this.usedWeapon = ItemStack.EMPTY;
-        player.yBodyRot = player.yHeadRot;
+        entity.yBodyRot = entity.yHeadRot;
         if (this.currentAction.onStart != null)
-            this.currentAction.onStart.accept(player);
-        if (packet && player instanceof ServerPlayer serverPlayer) {
+            this.currentAction.onStart.accept(entity, this);
+        if (packet && entity instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.sendToClient(new S2CWeaponUse(this.currentAction, this.usedWeapon), serverPlayer);
         }
     }
 
-    public void tick(PlayerData data, Player player) {
+    public void tick(LivingEntity entity) {
         if (this.currentAnim != null) {
             if (this.currentAnim.tick()) {
-                this.setAnimationBasedOnState(player, AttackAction.NONE, false, null);
+                this.setAnimationBasedOnState(entity, AttackActions.NONE, false, null);
             } else {
-                if (!player.level.isClientSide) {
-                    boolean changedItem = player.getMainHandItem() != this.usedWeapon;
-                    if (changedItem && this.usedWeapon.getItem() instanceof ItemSpell) {
+                if (entity instanceof ServerPlayer player) {
+                    PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
+                    boolean changedItem = entity.getMainHandItem() != this.usedWeapon;
+                    if (changedItem && this.usedWeapon.getItem() instanceof ItemSpell && data != null) {
                         for (int i = 0; i < data.getInv().getContainerSize(); i++) {
                             if (data.getInv().getItem(i) == this.usedWeapon) {
                                 changedItem = false;
@@ -124,19 +126,19 @@ public class WeaponHandler {
                         }
                     }
                     if (changedItem) {
-                        this.setAnimationBasedOnState(player, AttackAction.NONE, true, null);
+                        this.setAnimationBasedOnState(entity, AttackActions.NONE, true, null);
                     }
                 }
                 if (this.currentAnim != null && this.weaponConsumer != null)
-                    this.weaponConsumer.handle(player, this.usedWeapon, data, this.currentAnim);
+                    this.weaponConsumer.handle(entity, this.usedWeapon, this, this.currentAnim);
             }
         } else {
             if (--this.timeFrame <= 0) {
                 this.count = 0;
-                if (!player.level.isClientSide && this.chainTrackerAction.nextAction != null)
-                    this.doWeaponAttack(player, this.chainTrackerAction.nextAction.apply(player, this), player.getMainHandItem(), null);
+                if (!entity.level.isClientSide && this.chainTrackerAction.nextAction != null)
+                    this.doWeaponAttack(entity, this.chainTrackerAction.nextAction.apply(entity, this), entity.getMainHandItem(), null);
                 else
-                    this.chainTrackerAction = AttackAction.NONE;
+                    this.chainTrackerAction = AttackActions.NONE;
                 this.toolCharge = 0;
             }
         }
@@ -205,5 +207,9 @@ public class WeaponHandler {
 
     public void addHitEntityTracker(List<Entity> list) {
         this.hitEntityTracker.addAll(list);
+    }
+
+    public boolean isInvulnerable(LivingEntity entity) {
+        return this.currentAction.isInvulnerable != null ? this.currentAction.isInvulnerable.apply(entity, this) : false;
     }
 }

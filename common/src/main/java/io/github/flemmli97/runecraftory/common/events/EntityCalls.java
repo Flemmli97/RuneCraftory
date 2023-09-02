@@ -190,6 +190,8 @@ public class EntityCalls {
 
     public static boolean cancelLivingAttack(DamageSource source, Entity target, float amount) {
         Entity attacker = source.getEntity();
+        if (target instanceof Player player && Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().isInvulnerable(player)).orElse(false))
+            return true;
         if (source instanceof CustomDamage customDamage) {
             if (target.invulnerableTime + customDamage.hurtProtection() <= 20)
                 target.invulnerableTime = 10;

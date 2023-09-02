@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
+import io.github.flemmli97.runecraftory.api.action.AttackAction;
+import io.github.flemmli97.runecraftory.api.action.AttackActions;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.common.attachment.player.AttackAction;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityFireball;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.server.level.ServerLevel;
@@ -39,6 +40,6 @@ public class FireballSpell extends Spell {
 
     @Override
     public AttackAction useAction() {
-        return this.big ? AttackAction.FIREBALL_BIG_USE : AttackAction.FIREBALL_USE;
+        return this.big ? AttackActions.FIREBALL_BIG_USE : AttackActions.FIREBALL_USE;
     }
 }

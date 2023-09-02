@@ -28,6 +28,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -563,29 +564,36 @@ public class CombatUtils {
         }
     }
 
-    public static List<Entity> spinAttackHandler(Player player, float minYRot, float maxYRot, Predicate<Entity> pred) {
-        if (player.level.isClientSide)
+    public static List<Entity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, Predicate<Entity> pred) {
+        if (entity.level.isClientSide)
             return List.of();
         float rot = maxYRot - minYRot;
         Vec3 dir = Vec3.directionFromRotation(0, minYRot + rot * 0.5f);
-        float reach = (float) player.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + 0.5f;
-        CircleSector circ = new CircleSector(player.position(), dir, reach, rot * 0.5f, player);
-        List<Entity> list = player.level.getEntities(player, player.getBoundingBox().inflate(reach + 1),
-                t -> t != player && (pred == null || pred.test(t)) && !t.isAlliedTo(player) && t.isPickable()
-                        && (t.getBoundingBox().minY <= player.getBoundingBox().maxY || t.getBoundingBox().maxY >= player.getBoundingBox().minY)
-                        && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, player.getBbHeight() * 1.5, 0.15)));
-        for (int i = 0; i < list.size(); ++i)
-            CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
+        float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + 0.5f;
+        CircleSector circ = new CircleSector(entity.position(), dir, reach, rot * 0.5f, entity);
+        List<Entity> list = entity.level.getEntities(entity, entity.getBoundingBox().inflate(reach + 1),
+                t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable()
+                        && (t.getBoundingBox().minY <= entity.getBoundingBox().maxY || t.getBoundingBox().maxY >= entity.getBoundingBox().minY)
+                        && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, entity.getBbHeight() * 1.5, 0.15)));
+        for (int i = 0; i < list.size(); ++i) {
+            if (entity instanceof Player player)
+                CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
+            else if (entity instanceof Mob mob)
+                mob.doHurtTarget(list.get(i));
+        }
         return list;
     }
 
-    public static void attackInAABB(Player player, AABB aabb, Predicate<Entity> pred) {
-        if (player.level.isClientSide)
+    public static void attackInAABB(LivingEntity entity, AABB aabb, Predicate<Entity> pred) {
+        if (entity.level.isClientSide)
             return;
-        List<Entity> list = player.level.getEntities(player, aabb,
-                t -> t != player && (pred == null || pred.test(t)) && !t.isAlliedTo(player) && t.isPickable());
-        for (int i = 0; i < list.size(); ++i)
-            CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
-        return;
+        List<Entity> list = entity.level.getEntities(entity, aabb,
+                t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable());
+        for (int i = 0; i < list.size(); ++i) {
+            if (entity instanceof Player player)
+                CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
+            else if (entity instanceof Mob mob)
+                mob.doHurtTarget(list.get(i));
+        }
     }
 }
