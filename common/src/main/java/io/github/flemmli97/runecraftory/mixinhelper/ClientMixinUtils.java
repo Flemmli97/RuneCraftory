@@ -1,6 +1,7 @@
 package io.github.flemmli97.runecraftory.mixinhelper;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.action.AttackActions;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.ArmorModels;
@@ -11,6 +12,7 @@ import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
+import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.client.Minecraft;
@@ -18,9 +20,13 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.entity.player.PlayerRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
@@ -155,6 +161,49 @@ public class ClientMixinUtils {
 
     public static void resetHeldModel() {
         ItemModelProps.HELD_TYPE = 0;
+    }
+
+    public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight) {
+        if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
+            AnimatedAction anim = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAnim()).orElse(null);
+            if (anim != null) {
+                if (leftHand)
+                    return true;
+                poseStack.popPose();
+                poseStack.pushPose();
+                poseStack.scale(-1.0f, -1.0f, 1.0f);
+                poseStack.translate(0, 0.06, 0);
+                poseStack.scale(0.6f, 0.6f, 0.6f);
+                PlayerRenderer playerRenderer = (PlayerRenderer) Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(player);
+                ClientHandlers.getAnimatedPlayerModel().setUpModel(player, anim, Minecraft.getInstance().getFrameTime(), 1);
+                ClientHandlers.getAnimatedPlayerModel().copyTo(playerRenderer.getModel(), false, true);
+                playerRenderer.getModel().leftArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkinTextureLocation())), combinedLight, OverlayTexture.NO_OVERLAY);
+                playerRenderer.getModel().rightArm.render(poseStack, buffer.getBuffer(RenderType.entitySolid(player.getSkinTextureLocation())), combinedLight, OverlayTexture.NO_OVERLAY);
+                if (!ItemNBT.isInvis(itemStack)) {
+                    poseStack.pushPose();
+                    playerRenderer.getModel().translateToHand(HumanoidArm.RIGHT, poseStack);
+                    poseStack.mulPose(Vector3f.XP.rotationDegrees(-90.0f));
+                    poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0f));
+                    poseStack.translate((float) 1 / 16.0f, 0.125, -0.625);
+                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, itemStack, ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND, false, poseStack, buffer, livingEntity.level, combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
+                    poseStack.popPose();
+                }
+                itemStack = player.getOffhandItem();
+                if (!itemStack.isEmpty() && !ItemNBT.isInvis(itemStack)) {
+                    poseStack.pushPose();
+                    playerRenderer.getModel().translateToHand(HumanoidArm.LEFT, poseStack);
+                    poseStack.mulPose(Vector3f.XP.rotationDegrees(-90.0f));
+                    poseStack.mulPose(Vector3f.YP.rotationDegrees(180.0f));
+                    poseStack.translate((float) -1 / 16.0f, 0.125, -0.625);
+                    Minecraft.getInstance().getItemRenderer().renderStatic(livingEntity, itemStack, ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND, true, poseStack, buffer, livingEntity.level, combinedLight, OverlayTexture.NO_OVERLAY, livingEntity.getId() + transformType.ordinal());
+                    poseStack.popPose();
+                }
+                poseStack.popPose();
+                poseStack.pushPose();
+                return true;
+            }
+        }
+        return ItemNBT.isInvis(itemStack);
     }
 
     record SeasonedTint(int origin, EnumSeason season) {

@@ -77,6 +77,9 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        this.leftArmItem.visible = false;
+        this.rightArmItem.visible = false;
+        this.model.getMainPart().render(poseStack, buffer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     @Override
@@ -121,5 +124,15 @@ public class AnimatedPlayerModel extends EntityModel<Player> implements Extended
 
     private void apply(ModelPart model, PartPose main, ModelPartHandler.ModelPartExtended first) {
         model.loadPose(TransformationHelper.withParent(main, first.storePose()));
+    }
+
+    public void renderHand(PoseStack poseStack, VertexConsumer buffer, int packedLight, int packedOverlay, boolean left) {
+        this.leftArmItem.visible = false;
+        this.rightArmItem.visible = false;
+        this.model.getMainPart().translateAndRotate(poseStack);
+        if (left) {
+            this.leftArm.render(poseStack, buffer, packedLight, packedOverlay, 1, 1, 1, 1);
+        } else
+            this.rightArm.render(poseStack, buffer, packedLight, packedOverlay, 1, 1, 1, 1);
     }
 }
