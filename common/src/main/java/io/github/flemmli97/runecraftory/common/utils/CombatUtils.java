@@ -564,13 +564,13 @@ public class CombatUtils {
         }
     }
 
-    public static List<Entity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, Predicate<Entity> pred) {
+    public static List<Entity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, float rangeBonus, Predicate<Entity> pred) {
         if (entity.level.isClientSide)
             return List.of();
-        float rot = maxYRot - minYRot;
-        Vec3 dir = Vec3.directionFromRotation(0, minYRot + rot * 0.5f);
-        float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + 0.5f;
-        CircleSector circ = new CircleSector(entity.position(), dir, reach, rot * 0.5f, entity);
+        float rot = Mth.wrapDegrees(maxYRot - minYRot);
+        Vec3 dir = Vec3.directionFromRotation(0, Mth.wrapDegrees(minYRot + rot * 0.5f));
+        float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
+        CircleSector circ = new CircleSector(entity.position(), dir, reach, Mth.abs(rot * 0.5f), entity);
         List<Entity> list = entity.level.getEntities(entity, entity.getBoundingBox().inflate(reach + 1),
                 t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable()
                         && (t.getBoundingBox().minY <= entity.getBoundingBox().maxY || t.getBoundingBox().maxY >= entity.getBoundingBox().minY)
@@ -584,9 +584,9 @@ public class CombatUtils {
         return list;
     }
 
-    public static void attackInAABB(LivingEntity entity, AABB aabb, Predicate<Entity> pred) {
+    public static List<Entity> attackInAABB(LivingEntity entity, AABB aabb, Predicate<Entity> pred) {
         if (entity.level.isClientSide)
-            return;
+            return List.of();
         List<Entity> list = entity.level.getEntities(entity, aabb,
                 t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable());
         for (int i = 0; i < list.size(); ++i) {
@@ -595,5 +595,6 @@ public class CombatUtils {
             else if (entity instanceof Mob mob)
                 mob.doHurtTarget(list.get(i));
         }
+        return list;
     }
 }

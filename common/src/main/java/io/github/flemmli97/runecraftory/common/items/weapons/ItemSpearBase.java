@@ -152,7 +152,7 @@ public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAO
             Platform.INSTANCE.getPlayerData(serverPlayer).ifPresent(data -> {
                 int time = this.getUseDuration(stack) - timeLeft;
                 if (time >= this.getChargeTime(stack) && data.getWeaponHandler().canExecuteAction(serverPlayer, AttackActions.SPEAR_USE)) {
-                    data.getWeaponHandler().doWeaponAttack(serverPlayer, AttackActions.SPEAR_USE, stack, WeaponHandler.simpleServersidedAttackExecuter(() -> this.useSpear(serverPlayer, stack)));
+                    data.getWeaponHandler().doWeaponAttack(serverPlayer, AttackActions.SPEAR_USE, stack, null);
                 }
             });
         }

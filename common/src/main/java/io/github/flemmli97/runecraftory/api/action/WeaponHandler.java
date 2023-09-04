@@ -33,6 +33,7 @@ public class WeaponHandler {
 
     private float spinStartRot;
     private final Set<Entity> hitEntityTracker = new HashSet<>();
+    private boolean lockLook;
 
     private static AttackAction.ActiveActionHandler merged(BiConsumer<LivingEntity, AnimatedAction> first, AttackAction.ActiveActionHandler second) {
         if (first == null)
@@ -55,7 +56,7 @@ public class WeaponHandler {
     }
 
     public boolean doWeaponAttack(LivingEntity entity, AttackAction action, ItemStack stack, @Nullable BiConsumer<LivingEntity, AnimatedAction> attack) {
-        if (this.canExecuteAction(entity, action) || this.canConsecutiveExecute(entity, action)) {
+        if (entity.level.isClientSide || this.canExecuteAction(entity, action) || this.canConsecutiveExecute(entity, action)) {
             this.setAnimationBasedOnState(entity, action, true, attack);
             this.usedWeapon = stack;
             return true;
@@ -78,8 +79,6 @@ public class WeaponHandler {
             this.currentAction.onEnd.accept(entity, this);
         if (action == AttackActions.NONE && this.count >= this.currentAction.maxConsecutive.apply(entity)) {
             this.count = 0;
-            if (this.chainTrackerAction.nextAction != null)
-                action = this.chainTrackerAction.nextAction.apply(entity, this);
             this.chainTrackerAction = action;
         }
         this.currentAction = action;
@@ -102,6 +101,8 @@ public class WeaponHandler {
         if (action == AttackActions.NONE)
             this.usedWeapon = ItemStack.EMPTY;
         entity.yBodyRot = entity.yHeadRot;
+        this.resetHitEntityTracker();
+        this.lockLook = false;
         if (this.currentAction.onStart != null)
             this.currentAction.onStart.accept(entity, this);
         if (packet && entity instanceof ServerPlayer serverPlayer) {
@@ -135,10 +136,7 @@ public class WeaponHandler {
         } else {
             if (--this.timeFrame <= 0) {
                 this.count = 0;
-                if (!entity.level.isClientSide && this.chainTrackerAction.nextAction != null)
-                    this.doWeaponAttack(entity, this.chainTrackerAction.nextAction.apply(entity, this), entity.getMainHandItem(), null);
-                else
-                    this.chainTrackerAction = AttackActions.NONE;
+                this.chainTrackerAction = AttackActions.NONE;
                 this.toolCharge = 0;
             }
         }
@@ -179,6 +177,14 @@ public class WeaponHandler {
 
     public boolean noAnimation() {
         return this.currentAction.disableAnimation;
+    }
+
+    public boolean lockedLook() {
+        return this.lockLook;
+    }
+
+    public void lockLook(boolean flag) {
+        this.lockLook = flag;
     }
 
     public AnimatedAction getCurrentAnim() {

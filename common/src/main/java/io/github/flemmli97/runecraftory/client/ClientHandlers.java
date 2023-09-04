@@ -93,7 +93,13 @@ public class ClientHandlers {
             Minecraft.getInstance().mouseHandler.grabMouse();
     }
 
-    public static boolean disableMouse() {
+    public static boolean disableMouseMove() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.player != null && (EntityUtils.isDisabled(mc.player) || Platform.INSTANCE.getPlayerData(mc.player)
+                .map(d -> d.getWeaponHandler().lockedLook()).orElse(false)) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
+    }
+
+    public static boolean disableMouseClick() {
         Minecraft mc = Minecraft.getInstance();
         return mc.player != null && EntityUtils.isDisabled(mc.player) && (mc.screen == null || mc.screen instanceof AbstractContainerScreen<?>);
     }

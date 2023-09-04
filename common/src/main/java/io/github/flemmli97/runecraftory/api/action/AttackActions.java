@@ -10,10 +10,18 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -37,8 +45,7 @@ public class AttackActions {
                 attack = (int) Math.ceil(0.2 * 20);
             }
             case 5 -> attack = (int) Math.ceil(0.28 * 20);
-            case 6 -> {
-            }
+            case 6 -> defaultLength = (int) Math.ceil(1.36 * 20);
         }
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return AnimatedAction.builder(defaultLength + 1, "short_sword_" + count).speed(speed).marker(attack).build();
@@ -48,7 +55,7 @@ public class AttackActions {
                 default -> false;
             }).doWhileAction(((entity, stack, handler, anim) -> {
                 if (!entity.level.isClientSide) {
-                    if (anim.canAttack()) {
+                    if (anim.canAttack() && handler.getCurrentCount() != 6) {
                         AttackAction.attack(entity, stack);
                         entity.swing(InteractionHand.MAIN_HAND, true);
                     }
@@ -85,11 +92,30 @@ public class AttackActions {
 
                         }
                         case 6 -> {
+                            if (anim.isAtTick(0.24)) {
+                                handler.setSpinStartRot(entity.getYRot() + 30);
+                                handler.resetHitEntityTracker();
+                            }
+                            if (anim.isAtTick(0.48) || anim.isAtTick(0.72)) {
+                                handler.resetHitEntityTracker();
+                            }
+                            if (anim.isPastTick(0.24) && !anim.isPastTick(0.96)) {
+                                entity.setDeltaMovement(new Vec3(0, 0.09, 0));
+                                AttackAction.sendMotionUpdate(entity);
+                                int start = Mth.ceil(0.24 * 20.0D);
+                                int end = Mth.ceil(1 * 20.0D);
+                                float len = (end - start) / anim.getSpeed();
+                                float f = (anim.getTick() - start) / anim.getSpeed();
+                                float angleInc = -1080 / len;
+                                float rot = handler.getSpinStartRot();
+                                handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0.5f, e -> !handler.getHitEntityTracker().contains(e)));
+                            }
                         }
                     }
                 }
             }))
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.SHORTSWORD, 20) ? 6 : 5, e -> 0)
+            .setInvulnerability((e, w) -> w.getCurrentCount() == 6)
             .disableItemSwitch().disableMovement());
     public static final AttackAction SHORT_SWORD_USE = AttackAction.register("short_sword_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(16 + 1, 6, "short_sword_use")).disableMovement());
 
@@ -99,6 +125,8 @@ public class AttackActions {
         int attack = (int) Math.ceil(0.48 * 20);
         if (count == 3)
             attack = (int) Math.ceil(0.56 * 20);
+        if (count == 4)
+            defaultLength = (int) Math.ceil(1.4 * 20);
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return AnimatedAction.builder(defaultLength + 1, "long_sword_" + count).speed(speed).marker(attack).build();
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
@@ -106,7 +134,7 @@ public class AttackActions {
                 default -> false;
             }).doWhileAction(((entity, stack, handler, anim) -> {
                 if (!entity.level.isClientSide) {
-                    if (anim.canAttack()) {
+                    if (anim.canAttack() && handler.getCurrentCount() != 4) {
                         AttackAction.attack(entity, stack);
                         entity.swing(InteractionHand.MAIN_HAND, true);
                     }
@@ -124,11 +152,28 @@ public class AttackActions {
                             }
                         }
                         case 4 -> {
+                            if (anim.isAtTick(0.2)) {
+                                handler.setSpinStartRot(entity.getYRot() + 150);
+                                handler.resetHitEntityTracker();
+                            }
+                            if (anim.isAtTick(0.68)) {
+                                handler.resetHitEntityTracker();
+                            }
+                            if (anim.isPastTick(0.2)) {
+                                int start = Mth.ceil(0.2 * 20.0D);
+                                int end = Mth.ceil(1.15 * 20.0D);
+                                float len = (end - start) / anim.getSpeed();
+                                float f = (anim.getTick() - start) / anim.getSpeed();
+                                float angleInc = -690 / len;
+                                float rot = handler.getSpinStartRot();
+                                handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0.25f, e -> !handler.getHitEntityTracker().contains(e)));
+                            }
                         }
                     }
                 }
             }))
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.LONGSWORD, 20) ? 4 : 3, entity -> 0)
+            .setInvulnerability((e, w) -> w.getCurrentCount() == 4)
             .disableItemSwitch().disableMovement());
     public static final AttackAction LONGSWORD_USE = AttackAction.register("long_sword_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(16 + 1, 5, "long_sword_use")).disableMovement());
 
@@ -139,6 +184,8 @@ public class AttackActions {
         if (count == 2) {
             defaultLength = (int) Math.ceil(0.52 * 20);
             attack = (int) Math.ceil(0.24 * 20);
+        } else if (count == 5) {
+            defaultLength = (int) Math.ceil(1.84 * 20);
         }
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return AnimatedAction.builder(defaultLength + 1, "spear_" + count).speed(speed).marker(attack).build();
@@ -148,7 +195,7 @@ public class AttackActions {
                 default -> false;
             }).doWhileAction(((entity, stack, handler, anim) -> {
                 if (!entity.level.isClientSide) {
-                    if (anim.canAttack()) {
+                    if (anim.canAttack() && handler.getCurrentCount() != 5) {
                         AttackAction.attack(entity, stack);
                         entity.swing(InteractionHand.MAIN_HAND, true);
                     }
@@ -166,24 +213,61 @@ public class AttackActions {
                             }
                         }
                         case 5 -> {
+                            if (anim.isAtTick(0.12)) {
+                                handler.setSpinStartRot(entity.getYRot() + 180);
+                                handler.resetHitEntityTracker();
+                            }
+                            if (anim.isAtTick(0.6)) {
+                                handler.resetHitEntityTracker();
+                            }
+                            if (anim.isPastTick(0.12)) {
+                                int start = Mth.ceil(0.12 * 20.0D);
+                                int end = Mth.ceil(1.08 * 20.0D);
+                                float len = (end - start) / anim.getSpeed();
+                                float f = (anim.getTick() - start) / anim.getSpeed();
+                                float angleInc = 720 / len;
+                                float rot = handler.getSpinStartRot();
+                                handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0, e -> !handler.getHitEntityTracker().contains(e)));
+                            }
+                            if (anim.isAtTick(1.24)) {
+                                entity.moveRelative(0.95f, new Vec3(0, 0.68, 1.12));
+                                AttackAction.sendMotionUpdate(entity);
+                            }
+                            if (anim.isAtTick(1.63)) {
+                                Vec3 look = entity.getLookAngle();
+                                Vec3 attackPos = entity.position().add(0, 0.2, 0).add(look.x, 0, look.z);
+                                CombatUtils.attackInAABB(entity, new AABB(-1.2, -1.2, -1.2, 1.2, 1.2, 1.2).move(attackPos), null);
+                                /*Vec3 pos = entity.position().add(0, -1, 0);
+                                BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
+                                Vec3 axis = new Vec3(0, 1, 0);
+                                Vec3 dir = new Vec3(0, 0, 1).scale(0.3);
+                                for (int i = -180; i < 180; i += 45) {
+                                    Vec3 scaled = MathUtils.rotate(axis, dir, i);
+                                    mut.set(Mth.floor(pos.x() + dir.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + dir.z()));
+                                    BlockState state = entity.level.getBlockState(mut);
+                                    if (state.getRenderShape() != RenderShape.INVISIBLE)
+                                        ((ServerLevel) entity.getLevel()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), attackPos.x() + dir.x() + entity.getDeltaMovement().x(), entity.getY() + 0.1, attackPos.z() + dir.z() + entity.getDeltaMovement().z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
+                                }*/
+                            }
                         }
                     }
                 }
             }))
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.SPEAR, 20) ? 5 : 4, e -> 0)
+            .setInvulnerability((e, w) -> w.getCurrentCount() == 5)
             .disableItemSwitch().disableMovement());
-    public static final AttackAction SPEAR_USE_FINISHER = AttackAction.register("spear_use_finisher", new AttackAction.Builder((entity, data) -> new AnimatedAction(16 + 1, 10, "spear_use_finisher")).doWhileAction(((entity, stack, handler, anim) -> {
-        if (anim.canAttack() && entity instanceof ServerPlayer serverPlayer && stack.getItem() instanceof ItemSpearBase spear) {
-            spear.useSpear(serverPlayer, stack);
-        }
-    })).disableMovement());
     public static final AttackAction SPEAR_USE = AttackAction.register("spear_use", new AttackAction.Builder((entity, data) -> {
         int count = data.getCurrentCount() + 1;
-        return count > 1 ? new AnimatedAction((int) Math.ceil(0.4 * 20) + 1, 3, "spear_use_continue") : new AnimatedAction((int) Math.ceil(0.48 * 20) + 1, 3, "spear_use");
+        return count > 1 ? new AnimatedAction((int) Math.ceil(1.12 * 20) + 1, 3, "spear_use_continue") : new AnimatedAction((int) Math.ceil(1.2 * 20) + 1, 5, "spear_use");
     }).allowSelfOverride((entity, w) -> {
         AnimatedAction anim = w.getCurrentAnim();
-        return anim == null || (anim.getID().equals("spear_use_continue") ? anim.isPastTick(0.2) : anim.isPastTick(0.28));
-    }).setFollowingAnim((e, a) -> SPEAR_USE_FINISHER).setMaxConsecutive(e -> 20, e -> 6).disableMovement());
+        return anim == null || (anim.getID().equals("spear_use_continue") ? (anim.isPastTick(0.16) && !anim.isPastTick(0.40)) : (anim.isPastTick(0.28) && !anim.isPastTick(0.44)));
+    }).doWhileAction(((entity, stack, handler, anim) -> {
+        boolean canAttack = anim.canAttack() || (anim.getID().equals("spear_use_continue") ? anim.isAtTick(0.88) : anim.isAtTick(0.96));
+        if (canAttack && entity instanceof ServerPlayer serverPlayer && stack.getItem() instanceof ItemSpearBase spear) {
+            spear.useSpear(serverPlayer, stack);
+        }
+    })).setMaxConsecutive(e -> 20, e -> 6).disableMovement());
 
     public static final AttackAction HAMMER_AXE = AttackAction.register("hammer_axe", new AttackAction.Builder((entity, data) -> {
         int defaultLength = EnumWeaponType.HAXE.defaultWeaponSpeed;
@@ -198,16 +282,37 @@ public class AttackActions {
                 default -> false;
             }).doWhileAction(((entity, stack, handler, anim) -> {
                 if (!entity.level.isClientSide) {
-                    if (anim.canAttack()) {
+                    if (anim.canAttack() && handler.getCurrentCount() != 3) {
                         AttackAction.attack(entity, stack);
                         entity.swing(InteractionHand.MAIN_HAND, true);
                     }
                     if (handler.getCurrentCount() == 3) {
-
+                        if (anim.isAtTick(0.12)) {
+                            handler.setSpinStartRot(entity.getYRot());
+                            handler.resetHitEntityTracker();
+                        }
+                        if (anim.isAtTick(0.64)) {
+                            handler.resetHitEntityTracker();
+                        }
+                        if (anim.isPastTick(0.12) && !anim.isPastTick(1.28)) {
+                            Vec3 dir = AttackAction.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1)).scale(6 / ((1.28 - 0.12) * 20 / anim.getSpeed()));
+                            if (!anim.isPastTick(0.56))
+                                dir = dir.add(0, entity.getDeltaMovement().y + 0.12, 0);
+                            else if (anim.isPastTick(0.76))
+                                dir = dir.add(0, entity.getDeltaMovement().y - 0.1, 0);
+                            entity.setDeltaMovement(dir);
+                            AttackAction.sendMotionUpdate(entity);
+                            entity.resetFallDistance();
+                            handler.addHitEntityTracker(CombatUtils.attackInAABB(entity, entity.getBoundingBox().inflate(0.5), e -> !handler.getHitEntityTracker().contains(e)));
+                        }
                     }
+                }
+                if (handler.getCurrentCount() == 3) {
+                    handler.lockLook(anim.isPastTick(0.12) && !anim.isPastTick(1.28));
                 }
             }))
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.HAMMERAXE, 20) ? 3 : 2, e -> 0)
+            .setInvulnerability((e, w) -> w.getCurrentCount() == 3)
             .disableItemSwitch().disableMovement());
     public static final AttackAction HAMMER_AXE_USE = AttackAction.register("hammer_axe_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(20 + 1, 12, "hammer_axe_use")).disableMovement().doWhileAction((entity, stack, handler, anim) -> ItemAxeBase.moveEntity(entity).accept(anim)));
 
@@ -220,11 +325,13 @@ public class AttackActions {
             case 2 -> attack = (int) Math.ceil(0.2 * 20);
             case 3, 4, 5, 6 -> attack = (int) Math.ceil(0.24 * 20);
             case 7 -> attack = (int) Math.ceil(0.4 * 20);
+            case 8 -> defaultLength = (int) Math.ceil(1.44 * 20);
         }
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return AnimatedAction.builder(defaultLength + 1, "dual_blades_" + count).speed(speed).marker(attack).build();
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
                 case 1, 2, 3, 4, 5, 6 -> w.getCurrentAnim().isPastTick(0.28);
+                case 7 -> w.getCurrentAnim().isPastTick(0.40);
                 default -> false;
             }).doWhileAction(((entity, stack, handler, anim) -> {
                 if (!entity.level.isClientSide) {
@@ -256,11 +363,13 @@ public class AttackActions {
                                 handler.resetHitEntityTracker();
                             }
                             if (anim.isPastTick(0.2)) {
-                                float len = (anim.getLength() - ((int) Math.ceil(0.2 * 20.0D))) / anim.getSpeed();
-                                float f = (anim.getTick() - ((int) Math.ceil(0.2 * 20.0D))) / anim.getSpeed();
+                                int start = Mth.ceil(0.2 * 20.0D);
+                                int end = anim.getLength();
+                                float len = (end - start) / anim.getSpeed();
+                                float f = (anim.getTick() - start) / anim.getSpeed();
                                 float angleInc = 360 / len;
                                 float rot = handler.getSpinStartRot();
-                                handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), e -> !handler.getHitEntityTracker().contains(e)));
+                                handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0, e -> !handler.getHitEntityTracker().contains(e)));
                             }
                         }
                         case 6 -> {
@@ -274,12 +383,14 @@ public class AttackActions {
                                 AttackAction.sendMotionUpdate(entity);
                             }
                             if (anim.isPastTick(0.12)) {
-                                float len = (anim.getLength() - ((int) Math.ceil(0.12 * 20.0D))) / anim.getSpeed();
-                                float f = (anim.getTick() - ((int) Math.ceil(0.12 * 20.0D))) / anim.getSpeed();
+                                int start = Mth.ceil(0.12 * 20.0D);
+                                int end = anim.getLength();
+                                float len = (end - start) / anim.getSpeed();
+                                float f = (anim.getTick() - start) / anim.getSpeed();
                                 float angleInc = 360 / len;
                                 float rot = handler.getSpinStartRot();
-                                handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), e -> !handler.getHitEntityTracker().contains(e)));
-                                handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + 180 + f * angleInc), (rot + 180 + (f + 1) * angleInc), e -> !handler.getHitEntityTracker().contains(e)));
+                                handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0, e -> !handler.getHitEntityTracker().contains(e)));
+                                handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + 180 + f * angleInc), (rot + 180 + (f + 1) * angleInc), 0, e -> !handler.getHitEntityTracker().contains(e)));
                             }
                         }
                         case 7 -> {
@@ -298,10 +409,29 @@ public class AttackActions {
                                 entity.resetFallDistance();
                             }
                         }
+                        case 8 -> {
+                            if (anim.isAtTick(0.24)) {
+                                handler.setSpinStartRot(entity.getYRot() + 20);
+                                handler.resetHitEntityTracker();
+                            }
+                            if (anim.isAtTick(0.48) || anim.isAtTick(0.68) || anim.isAtTick(0.92)) {
+                                handler.resetHitEntityTracker();
+                            }
+                            if (anim.isPastTick(0.24) && !anim.isPastTick(1.12)) {
+                                int start = Mth.ceil(0.28 * 20.0D);
+                                int end = Mth.ceil(1.12 * 20.0D);
+                                float len = (end - start) / anim.getSpeed();
+                                float f = (anim.getTick() - start) / anim.getSpeed();
+                                float angleInc = -1440 / len;
+                                float rot = handler.getSpinStartRot();
+                                handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0, e -> !handler.getHitEntityTracker().contains(e)));
+                            }
+                        }
                     }
                 }
             }))
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.DUAL, 20) ? 8 : 7, e -> 0)
+            .setInvulnerability((e, w) -> w.getCurrentCount() == 8)
             .disableItemSwitch().disableMovement());
     public static final AttackAction DUAL_USE = AttackAction.register("dual_blade_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(15 + 1, 7, "dual_blades_use")).disableMovement());
 
@@ -316,6 +446,7 @@ public class AttackActions {
                 attack = (int) Math.ceil(0.4 * 20);
                 defaultLength = (int) Math.ceil(0.64 * 20);
             }
+            case 5 -> defaultLength = (int) Math.ceil(1.32 * 20);
         }
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return AnimatedAction.builder(defaultLength + 1, "glove_" + count).speed(speed).marker(attack).build();
@@ -325,7 +456,7 @@ public class AttackActions {
                 default -> false;
             }).doWhileAction(((entity, stack, handler, anim) -> {
                 if (!entity.level.isClientSide) {
-                    if (anim.canAttack()) {
+                    if (anim.canAttack() && handler.getCurrentCount() != 5) {
                         if (handler.getCurrentCount() != 4)
                             AttackAction.attack(entity, stack);
                         else
@@ -362,10 +493,33 @@ public class AttackActions {
                                 AttackAction.sendMotionUpdate(entity);
                             }
                         }
+                        case 5 -> {
+                            if (anim.isAtTick(0.16)) {
+                                handler.setSpinStartRot(entity.getYRot());
+                                handler.resetHitEntityTracker();
+                            }
+                            if (anim.isPastTick(0.16) && !anim.isPastTick(1.12)) {
+                                Vec3 dir = AttackAction.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1)).scale(6.5 / ((1.12 - 0.16) * 20 / anim.getSpeed()));
+                                if (!anim.isPastTick(0.4))
+                                    dir = dir.add(0, entity.getDeltaMovement().y + 0.2, 0);
+                                else if (anim.isPastTick(1.0))
+                                    dir = dir.add(0, entity.getDeltaMovement().y - 0.15, 0);
+                                entity.setDeltaMovement(dir);
+                                AttackAction.sendMotionUpdate(entity);
+                                entity.resetFallDistance();
+                            }
+                            if (anim.isPastTick(0.2) && !anim.isPastTick(1.08)) {
+                                handler.addHitEntityTracker(CombatUtils.attackInAABB(entity, entity.getBoundingBox().inflate(0.5), e -> !handler.getHitEntityTracker().contains(e)));
+                            }
+                        }
                     }
+                }
+                if (handler.getCurrentCount() == 5) {
+                    handler.lockLook(anim.isPastTick(0.08) && !anim.isPastTick(1.2));
                 }
             }))
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.FIST, 20) ? 5 : 4, e -> 0)
+            .setInvulnerability((e, w) -> w.getCurrentCount() == 5)
             .disableItemSwitch().disableMovement());
     public static final AttackAction GLOVE_USE = AttackAction.register("glove_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(27 + 1, 4, "glove_use")).disableMovement().doAtStart((e, w) -> e.maxUpStep += 0.5).doAtEnd((e, w) -> e.maxUpStep -= 0.5).doWhileAction(((entity, stack, handler, anim) -> {
         if (entity instanceof ServerPlayer serverPlayer) {

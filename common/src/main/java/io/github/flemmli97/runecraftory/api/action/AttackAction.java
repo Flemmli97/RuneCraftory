@@ -26,7 +26,6 @@ public class AttackAction {
     private static final Map<String, AttackAction> MAP = new HashMap<>();
 
     public final BiFunction<LivingEntity, WeaponHandler, AnimatedAction> anim;
-    public final BiFunction<LivingEntity, WeaponHandler, AttackAction> nextAction;
     /**
      * Static handler for this action
      */
@@ -46,7 +45,7 @@ public class AttackAction {
 
     private AttackAction(BiFunction<LivingEntity, WeaponHandler, AnimatedAction> anim, ActiveActionHandler attackExecuter, BiConsumer<LivingEntity, WeaponHandler> onStart, BiConsumer<LivingEntity, WeaponHandler> onEnd,
                          Function<LivingEntity, Integer> maxConsecutive, Function<LivingEntity, Integer> timeFrame, boolean disableItemSwitch, boolean disableMovement, boolean disableAnimation,
-                         BiFunction<LivingEntity, WeaponHandler, Boolean> canOverride, String id, BiFunction<LivingEntity, WeaponHandler, AttackAction> nextAction, BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable) {
+                         BiFunction<LivingEntity, WeaponHandler, Boolean> canOverride, String id, BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable) {
         this.anim = anim == null ? (player, data) -> null : anim;
         this.attackExecuter = attackExecuter;
         this.onStart = onStart;
@@ -58,7 +57,6 @@ public class AttackAction {
         this.disableAnimation = disableAnimation;
         this.canOverride = canOverride;
         this.id = id;
-        this.nextAction = nextAction;
         this.isInvulnerable = isInvulnerable;
     }
 
@@ -74,9 +72,13 @@ public class AttackAction {
     }
 
     public static Vec3 fromRelativeVector(Entity entity, Vec3 relative) {
+        return fromRelativeVector(entity.getYRot(), relative);
+    }
+
+    public static Vec3 fromRelativeVector(float yRot, Vec3 relative) {
         Vec3 vec3 = relative.normalize();
-        float f = Mth.sin(entity.getYRot() * Mth.DEG_TO_RAD);
-        float g = Mth.cos(entity.getYRot() * Mth.DEG_TO_RAD);
+        float f = Mth.sin(yRot * Mth.DEG_TO_RAD);
+        float g = Mth.cos(yRot * Mth.DEG_TO_RAD);
         return new Vec3(vec3.x * g - vec3.z * f, vec3.y, vec3.z * g + vec3.x * f);
     }
 
@@ -88,7 +90,7 @@ public class AttackAction {
     public static boolean canPerform(LivingEntity entity, EnumSkills skill, int requiredLvl) {
         if (!(entity instanceof Player player))
             return false;
-        return Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(skill).getLevel() >= requiredLvl).orElse(false);
+        return player.isCreative() || Platform.INSTANCE.getPlayerData(player).map(d -> d.getSkillLevel(skill).getLevel() >= requiredLvl).orElse(false);
     }
 
     public static void attack(LivingEntity entity, ItemStack stack) {
@@ -115,7 +117,6 @@ public class AttackAction {
     public static class Builder {
 
         private final BiFunction<LivingEntity, WeaponHandler, AnimatedAction> anim;
-        private BiFunction<LivingEntity, WeaponHandler, AttackAction> nextAction;
         private ActiveActionHandler attackExecuter;
         private BiConsumer<LivingEntity, WeaponHandler> onStart;
         private BiConsumer<LivingEntity, WeaponHandler> onEnd;
@@ -170,18 +171,13 @@ public class AttackAction {
             return this;
         }
 
-        public Builder setFollowingAnim(BiFunction<LivingEntity, WeaponHandler, AttackAction> nextAction) {
-            this.nextAction = nextAction;
-            return this;
-        }
-
         public Builder setInvulnerability(BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable) {
             this.isInvulnerable = isInvulnerable;
             return this;
         }
 
         private AttackAction build(String id) {
-            return new AttackAction(this.anim, this.attackExecuter, this.onStart, this.onEnd, this.maxConsecutive, this.timeFrame, this.disableItemSwitch, this.disableMovement, this.disableAnimation, this.canOverride, id, this.nextAction, this.isInvulnerable);
+            return new AttackAction(this.anim, this.attackExecuter, this.onStart, this.onEnd, this.maxConsecutive, this.timeFrame, this.disableItemSwitch, this.disableMovement, this.disableAnimation, this.canOverride, id, this.isInvulnerable);
         }
     }
 }

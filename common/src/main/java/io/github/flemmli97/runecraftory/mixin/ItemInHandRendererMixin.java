@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemInHandRenderer.class)
 public abstract class ItemInHandRendererMixin {
 
-    @Inject(method = "renderItem", at = @At("HEAd"), cancellable = true)
+    @Inject(method = "renderItem", at = @At("HEAD"), cancellable = true)
     private void onRender(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight, CallbackInfo info) {
         if (ItemNBT.isInvis(itemStack))
             info.cancel();
