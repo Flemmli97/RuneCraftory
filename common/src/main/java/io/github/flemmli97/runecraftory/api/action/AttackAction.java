@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -41,11 +42,13 @@ public class AttackAction {
     public final boolean disableAnimation;
     public final BiFunction<LivingEntity, WeaponHandler, Boolean> canOverride;
 
+    public final BiFunction<LivingEntity, WeaponHandler, Pose> withPose;
+
     private final String id;
 
     private AttackAction(BiFunction<LivingEntity, WeaponHandler, AnimatedAction> anim, ActiveActionHandler attackExecuter, BiConsumer<LivingEntity, WeaponHandler> onStart, BiConsumer<LivingEntity, WeaponHandler> onEnd,
                          Function<LivingEntity, Integer> maxConsecutive, Function<LivingEntity, Integer> timeFrame, boolean disableItemSwitch, boolean disableMovement, boolean disableAnimation,
-                         BiFunction<LivingEntity, WeaponHandler, Boolean> canOverride, String id, BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable) {
+                         BiFunction<LivingEntity, WeaponHandler, Boolean> canOverride, String id, BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable, BiFunction<LivingEntity, WeaponHandler, Pose> withPose) {
         this.anim = anim == null ? (player, data) -> null : anim;
         this.attackExecuter = attackExecuter;
         this.onStart = onStart;
@@ -58,6 +61,7 @@ public class AttackAction {
         this.canOverride = canOverride;
         this.id = id;
         this.isInvulnerable = isInvulnerable;
+        this.withPose = withPose;
     }
 
     public static AttackAction register(String id, AttackAction.Builder builder) {
@@ -125,6 +129,7 @@ public class AttackAction {
         private Function<LivingEntity, Integer> timeFrame;
         private boolean disableItemSwitch, disableMovement, disableAnimation;
         private BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable;
+        private BiFunction<LivingEntity, WeaponHandler, Pose> withPose;
 
         public Builder(BiFunction<LivingEntity, WeaponHandler, AnimatedAction> anim) {
             this.anim = anim;
@@ -176,8 +181,13 @@ public class AttackAction {
             return this;
         }
 
+        public Builder withPose(BiFunction<LivingEntity, WeaponHandler, Pose> poseHandler) {
+            this.withPose = poseHandler;
+            return this;
+        }
+
         private AttackAction build(String id) {
-            return new AttackAction(this.anim, this.attackExecuter, this.onStart, this.onEnd, this.maxConsecutive, this.timeFrame, this.disableItemSwitch, this.disableMovement, this.disableAnimation, this.canOverride, id, this.isInvulnerable);
+            return new AttackAction(this.anim, this.attackExecuter, this.onStart, this.onEnd, this.maxConsecutive, this.timeFrame, this.disableItemSwitch, this.disableMovement, this.disableAnimation, this.canOverride, id, this.isInvulnerable, this.withPose);
         }
     }
 }

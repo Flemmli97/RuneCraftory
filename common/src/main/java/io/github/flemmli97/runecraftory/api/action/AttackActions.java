@@ -10,11 +10,19 @@ import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.common.utils.MathUtils;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -222,28 +230,40 @@ public class AttackActions {
                                 float rot = handler.getSpinStartRot();
                                 handler.addHitEntityTracker(CombatUtils.spinAttackHandler(entity, (rot + f * angleInc), (rot + (f + 1) * angleInc), 0, e -> !handler.getHitEntityTracker().contains(e)));
                             }
-                            if (anim.isAtTick(1.24)) {
-                                entity.moveRelative(0.95f, new Vec3(0, 0.68, 1.12));
-                                AttackAction.sendMotionUpdate(entity);
+                            if (!anim.isPastTick(1.52)) {
+                                if (anim.isPastTick(1.4)) {
+                                    entity.setDeltaMovement(AttackAction.fromRelativeVector(entity, new Vec3(0, -0.66, 1.1))
+                                            .scale(2 / ((1.52 - 1.4) * 20 / anim.getSpeed())));
+                                    AttackAction.sendMotionUpdate(entity);
+                                    entity.resetFallDistance();
+                                } else if (anim.isPastTick(1.2)) {
+                                    entity.setDeltaMovement(AttackAction.fromRelativeVector(entity, new Vec3(0, 0.66, 1.15))
+                                            .scale(2 / ((1.4 - 1.2) * 20 / anim.getSpeed())));
+                                    AttackAction.sendMotionUpdate(entity);
+                                }
                             }
                             if (anim.isAtTick(1.63)) {
                                 Vec3 look = entity.getLookAngle();
-                                Vec3 attackPos = entity.position().add(0, 0.2, 0).add(look.x, 0, look.z);
-                                CombatUtils.attackInAABB(entity, new AABB(-1.2, -1.2, -1.2, 1.2, 1.2, 1.2).move(attackPos), null);
-                                /*Vec3 pos = entity.position().add(0, -1, 0);
+                                look = new Vec3(look.x(), 0, look.z()).scale(1.2);
+                                Vec3 attackPos = entity.position().add(0, 0.2, 0).add(look);
+                                CombatUtils.attackInAABB(entity, new AABB(-0.8, -1.2, -0.8, 0.8, 1.2, 0.8).move(attackPos), null);
+                                Vec3 pos = entity.position().add(0, -1, 0);
                                 BlockPos.MutableBlockPos mut = new BlockPos.MutableBlockPos();
                                 Vec3 axis = new Vec3(0, 1, 0);
-                                Vec3 dir = new Vec3(0, 0, 1).scale(0.3);
-                                for (int i = -180; i < 180; i += 45) {
+                                Vec3 dir = new Vec3(0, 0, 1).scale(1);
+                                for (int i = -180; i < 180; i += 15) {
                                     Vec3 scaled = MathUtils.rotate(axis, dir, i);
                                     mut.set(Mth.floor(pos.x() + dir.x()), Mth.floor(pos.y()), Mth.floor(pos.z() + dir.z()));
                                     BlockState state = entity.level.getBlockState(mut);
                                     if (state.getRenderShape() != RenderShape.INVISIBLE)
-                                        ((ServerLevel) entity.getLevel()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), attackPos.x() + dir.x() + entity.getDeltaMovement().x(), entity.getY() + 0.1, attackPos.z() + dir.z() + entity.getDeltaMovement().z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
-                                }*/
+                                        ((ServerLevel) entity.getLevel()).sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state), attackPos.x() + scaled.x() + entity.getDeltaMovement().x(), entity.getY() + 0.1, attackPos.z() + scaled.z() + entity.getDeltaMovement().z(), 0, (float) scaled.x(), 1.5f, (float) scaled.z(), 1);
+                                }
                             }
                         }
                     }
+                }
+                if (handler.getCurrentCount() == 5) {
+                    handler.lockLook(anim.isPastTick(01.16) && !anim.isPastTick(1.6));
                 }
             }))
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.SPEAR, 20) ? 5 : 4, e -> 0)
@@ -494,9 +514,9 @@ public class AttackActions {
                             if (anim.isPastTick(0.16) && !anim.isPastTick(1.12)) {
                                 Vec3 dir = AttackAction.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1)).scale(6.5 / ((1.12 - 0.16) * 20 / anim.getSpeed()));
                                 if (!anim.isPastTick(0.4))
-                                    dir = dir.add(0, entity.getDeltaMovement().y + 0.2, 0);
+                                    dir = dir.add(0, entity.getDeltaMovement().y + 0.25, 0);
                                 else if (anim.isPastTick(1.0))
-                                    dir = dir.add(0, entity.getDeltaMovement().y - 0.15, 0);
+                                    dir = dir.add(0, entity.getDeltaMovement().y - 0.22, 0);
                                 entity.setDeltaMovement(dir);
                                 AttackAction.sendMotionUpdate(entity);
                                 entity.resetFallDistance();
@@ -513,7 +533,12 @@ public class AttackActions {
             }))
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.FIST, 20) ? 5 : 4, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 5)
-            .disableItemSwitch().disableMovement());
+            .disableItemSwitch().disableMovement()
+            .withPose((e, w) -> {
+                if (w.getCurrentCount() == 5 && w.getCurrentAnim().isPastTick(0.24) && !w.getCurrentAnim().isPastTick(1.04))
+                    return Pose.SPIN_ATTACK;
+                return null;
+            }));
     public static final AttackAction GLOVE_USE = AttackAction.register("glove_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(27 + 1, 4, "glove_use")).disableMovement().doAtStart((e, w) -> e.maxUpStep += 0.5).doAtEnd((e, w) -> e.maxUpStep -= 0.5).doWhileAction(((entity, stack, handler, anim) -> {
         if (entity instanceof ServerPlayer serverPlayer) {
             if (!handler.getCurrentAnim().isPastTick(0.16))
@@ -536,7 +561,11 @@ public class AttackActions {
                 }
             }
         }
-    })));
+    })).withPose((e, w) -> {
+        if (w.getCurrentAnim().isPastTick(0.2) && !w.getCurrentAnim().isPastTick(1.16))
+            return Pose.SPIN_ATTACK;
+        return null;
+    }));
 
     public static final AttackAction STAFF = AttackAction.register("staff", new AttackAction.Builder((entity, data) -> {
         int defaultLength = EnumWeaponType.STAFF.defaultWeaponSpeed;
