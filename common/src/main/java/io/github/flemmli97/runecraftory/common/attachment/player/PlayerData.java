@@ -747,23 +747,4 @@ public class PlayerData {
         this.starting = false;
         this.tamedEntity.reset();
     }
-
-    public enum WeaponSwing {
-        SHORT(5),
-        LONG(5),
-        SPEAR(5),
-        HAXE(5),
-        DUAL(5),
-        GLOVE(5);
-
-        private final int swingAmount;
-
-        WeaponSwing(int swingAmount) {
-            this.swingAmount = swingAmount;
-        }
-
-        int getMaxSwing() {
-            return this.swingAmount;
-        }
-    }
 }
