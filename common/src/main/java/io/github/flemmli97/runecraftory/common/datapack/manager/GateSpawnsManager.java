@@ -8,7 +8,9 @@ import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.GateSpawnData;
 import io.github.flemmli97.runecraftory.common.config.MobConfig;
+import io.github.flemmli97.runecraftory.common.entities.GateEntity;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
@@ -17,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.util.random.WeightedEntry;
@@ -24,6 +27,7 @@ import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 
 import java.util.ArrayList;
@@ -48,8 +52,8 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
         super(GSON, DIRECTORY);
     }
 
-    public List<EntityType<?>> pickRandomMobs(ServerLevel world, Holder<Biome> biome, Random rand, int amount, BlockPos pos, int gateLevel) {
-        List<SpawnResource> list = world.structureFeatureManager().startsForFeature(SectionPos.of(pos), this.structureSpawns::containsKey)
+    public List<EntityType<?>> pickRandomMobs(ServerLevel level, GateEntity gate, Holder<Biome> biome, Random rand, int amount, BlockPos pos) {
+        List<SpawnResource> list = level.structureFeatureManager().startsForFeature(SectionPos.of(pos), this.structureSpawns::containsKey)
                 .stream().filter(start -> start.getBoundingBox().isInside(pos))
                 .map(start -> this.structureSpawns.get(start.getFeature()))
                 .flatMap(List::stream).collect(Collectors.toList());
@@ -62,7 +66,8 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
         }
         if (list.isEmpty())
             return new ArrayList<>();
-        list.removeIf(w -> w.distToSpawnSq >= pos.distSqr(world.getSharedSpawnPos()) || (MobConfig.gateLevelType != MobConfig.GateLevelType.CONSTANT && w.minGateLevel > gateLevel));
+        double dist = pos.distSqr(level.getSharedSpawnPos());
+        list.removeIf(w -> !w.matches(level, dist, gate));
         List<EntityType<?>> ret = new ArrayList<>();
         if (amount > list.size()) {
             list.forEach(w -> ret.add(w.entity));
@@ -79,10 +84,10 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
         return ret;
     }
 
-    public boolean hasSpawns(ServerLevelAccessor level, BlockPos pos) {
+    public boolean hasSpawns(ServerLevelAccessor level, BlockPos pos, BlockState state) {
         if (level.getBiome(pos).tags().anyMatch(t -> {
             List<SpawnResource> l = this.biomeSpawns.get(t);
-            return l != null && l.stream().anyMatch(r -> r.canSpawn(level.getLevel(), pos));
+            return l != null && l.stream().anyMatch(r -> r.canSpawn(level.getLevel(), pos, state));
         }))
             return true;
         return this.hasStructureSpawns(level.getLevel(), pos);
@@ -104,14 +109,14 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
                 Optional<EntityType<?>> optType = PlatformUtils.INSTANCE.entities().getOptionalFromId(spawnData.entity());
                 optType.ifPresentOrElse(type -> {
                     spawnData.biomes().forEach((key, weight) -> {
-                        SpawnResource resource = new SpawnResource(type, spawnData.minDistanceFromSpawn(), spawnData.minGateLevel(), weight);
+                        SpawnResource resource = new SpawnResource(type, spawnData, weight);
                         biomeSpawns.computeIfAbsent(key, o -> new ArrayList<>())
                                 .add(resource);
                     });
                     spawnData.structures().forEach((key, weight) -> {
                         Optional<ConfiguredStructureFeature<?, ?>> optFeat = BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE.getOptional(key);
                         optFeat.ifPresentOrElse(feat -> {
-                            SpawnResource resource = new SpawnResource(type, spawnData.minDistanceFromSpawn(), spawnData.minGateLevel(), weight);
+                            SpawnResource resource = new SpawnResource(type, spawnData, weight);
                             structureSpawns.computeIfAbsent(feat, o -> new ArrayList<>())
                                     .add(resource);
                         }, () -> RuneCraftory.logger.error("No such feature " + key + " for spawn data " + fres));
@@ -131,16 +136,26 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
         private final EntityType<?> entity;
         private final int distToSpawnSq;
         private final int minGateLevel;
+        private final boolean allowWater;
+        private final EntityPredicate gatePredicate;
 
-        public SpawnResource(EntityType<?> entity, int distToSpawn, int minGateLevel, int weight) {
+        public SpawnResource(EntityType<?> entity, GateSpawnData spawnData, int weight) {
             super(weight);
             this.entity = entity;
-            this.distToSpawnSq = distToSpawn * distToSpawn;
-            this.minGateLevel = minGateLevel;
+            this.distToSpawnSq = spawnData.minDistanceFromSpawn() * spawnData.minDistanceFromSpawn();
+            this.minGateLevel = spawnData.minGateLevel();
+            this.allowWater = spawnData.canSpawnInWater();
+            this.gatePredicate = spawnData.gatePredicate();
         }
 
-        public boolean canSpawn(ServerLevel world, BlockPos pos) {
-            return pos.distSqr(world.getSharedSpawnPos()) >= this.distToSpawnSq;
+        public boolean canSpawn(ServerLevel serverLevel, BlockPos pos, BlockState state) {
+            return pos.distSqr(serverLevel.getSharedSpawnPos()) >= this.distToSpawnSq && (state.getFluidState().isEmpty() || (this.allowWater && state.getFluidState().is(FluidTags.WATER) && serverLevel.canSeeSkyFromBelowWater(pos)));
+        }
+
+        public boolean matches(ServerLevel serverLevel, double dist, GateEntity gate) {
+            return dist >= this.distToSpawnSq
+                    && (MobConfig.gateLevelType == MobConfig.GateLevelType.CONSTANT || gate.level().getLevel() >= this.minGateLevel)
+                    && this.gatePredicate.matches(serverLevel, gate.position(), gate);
         }
 
         @Override

@@ -13,6 +13,7 @@
     "ChunkMapMixin",
     "ConfiguredStructureMixin",
     "ContainerScreenAccessor",
+    "CombatTrackerAccessor",
     "CropBlockAccessor",
     "CropBlockMixin",
     "EntityMixin",

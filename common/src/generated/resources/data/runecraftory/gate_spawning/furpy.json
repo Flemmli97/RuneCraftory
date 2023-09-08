@@ -2,6 +2,7 @@
   "entity": "runecraftory:furpy",
   "min_distance_from_spawn": 0,
   "min_gate_level": 5,
+  "allowUnderwater": false,
   "biomes": {
     "minecraft:is_forest": 40,
     "c:is_sandy": 40,

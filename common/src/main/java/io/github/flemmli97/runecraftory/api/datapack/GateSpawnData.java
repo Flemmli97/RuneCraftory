@@ -2,6 +2,8 @@ package io.github.flemmli97.runecraftory.api.datapack;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -10,25 +12,32 @@ import net.minecraft.world.level.biome.Biome;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public record GateSpawnData(ResourceLocation entity, int minDistanceFromSpawn,
-                            int minGateLevel,
+                            int minGateLevel, boolean canSpawnInWater,
                             Map<TagKey<Biome>, Integer> biomes,
-                            Map<ResourceLocation, Integer> structures) {
+                            Map<ResourceLocation, Integer> structures,
+                            EntityPredicate gatePredicate) {
 
     public static final Codec<GateSpawnData> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
             Codec.unboundedMap(TagKey.codec(Registry.BIOME_REGISTRY), ExtraCodecs.POSITIVE_INT).fieldOf("biomes").forGetter(GateSpawnData::biomes),
             Codec.unboundedMap(ResourceLocation.CODEC, ExtraCodecs.POSITIVE_INT).fieldOf("structures").forGetter(GateSpawnData::structures),
+            CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.gatePredicate == EntityPredicate.ANY ? null : d.gatePredicate)),
+
             ResourceLocation.CODEC.fieldOf("entity").forGetter(GateSpawnData::entity),
             ExtraCodecs.NON_NEGATIVE_INT.fieldOf("min_distance_from_spawn").orElse(0).forGetter(GateSpawnData::minDistanceFromSpawn),
-            ExtraCodecs.NON_NEGATIVE_INT.fieldOf("min_gate_level").orElse(0).forGetter(GateSpawnData::minGateLevel)
-    ).apply(instance, (biomes, structures, entity, dist, lvl) -> new GateSpawnData(entity, dist, lvl, biomes, structures)));
+            ExtraCodecs.NON_NEGATIVE_INT.fieldOf("min_gate_level").orElse(0).forGetter(GateSpawnData::minGateLevel),
+            Codec.BOOL.fieldOf("allowUnderwater").forGetter(GateSpawnData::canSpawnInWater)
+    ).apply(instance, (biomes, structures, predicate, entity, dist, lvl, underwater) -> new GateSpawnData(entity, dist, lvl, underwater, biomes, structures, predicate.orElse(EntityPredicate.ANY))));
 
     public static class Builder {
 
         private final Map<TagKey<Biome>, Integer> biomes = new LinkedHashMap<>();
         private final Map<ResourceLocation, Integer> structures = new LinkedHashMap<>();
         private final int minDistanceFromSpawn, minGateLevel;
+        private boolean allowUnderwater;
+        private EntityPredicate gatePredicate;
 
         public Builder(int minDistanceFromSpawn, int minGateLevel) {
             this.minDistanceFromSpawn = minDistanceFromSpawn;
@@ -48,8 +57,18 @@ public record GateSpawnData(ResourceLocation entity, int minDistanceFromSpawn,
             return this;
         }
 
+        public GateSpawnData.Builder canSpawnUnderwater() {
+            this.allowUnderwater = true;
+            return this;
+        }
+
+        public GateSpawnData.Builder withGatePredicate(EntityPredicate.Builder builder) {
+            this.gatePredicate = builder.build();
+            return this;
+        }
+
         public GateSpawnData build(ResourceLocation name) {
-            return new GateSpawnData(name, this.minDistanceFromSpawn, this.minGateLevel, this.biomes, this.structures);
+            return new GateSpawnData(name, this.minDistanceFromSpawn, this.minGateLevel, this.allowUnderwater, this.biomes, this.structures, this.gatePredicate);
         }
     }
 }

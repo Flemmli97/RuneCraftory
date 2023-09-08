@@ -29,6 +29,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
@@ -50,8 +51,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
@@ -99,10 +102,16 @@ public class GateEntity extends Mob implements IBaseMob {
                 .add(ModAttributes.RES_LOVE.get());
     }
 
+    public static boolean gateSpawnRules(EntityType<? extends Mob> type, LevelAccessor level, MobSpawnType spawnType, BlockPos pos, BlockState state, Random random) {
+        BlockPos blockPos = pos.below();
+        return spawnType == MobSpawnType.SPAWNER || level.getBlockState(blockPos).isValidSpawn(level, blockPos, type) || (level.getSeaLevel() - 5 > pos.getY() && state.getFluidState().is(FluidTags.WATER));
+    }
+
     public static boolean canSpawnAt(EntityType<? extends GateEntity> type, ServerLevelAccessor level, MobSpawnType reason, BlockPos pos, Random random) {
-        return level.getDifficulty() != Difficulty.PEACEFUL && DataPackHandler.SERVER_PACK.gateSpawnsManager().hasSpawns(level, pos)
+        BlockState state = level.getBlockState(pos);
+        return level.getDifficulty() != Difficulty.PEACEFUL && DataPackHandler.SERVER_PACK.gateSpawnsManager().hasSpawns(level, pos, state)
                 && level.getLevel().getPoiManager().find(PoiType.MEETING.getPredicate(), p -> true, pos, MobConfig.bellRadius, PoiManager.Occupancy.ANY).isEmpty()
-                && checkMobSpawnRules(type, level, reason, pos, random)
+                && gateSpawnRules(type, level, reason, pos, state, random)
                 && level.getEntitiesOfClass(GateEntity.class, new AABB(pos).inflate(MobConfig.minDist)).size() < MobConfig.maxGroup;
     }
 
@@ -110,6 +119,11 @@ public class GateEntity extends Mob implements IBaseMob {
         ResourceLocation def = ModEntities.GATE.get().getDefaultLootTable();
         return lootRes.computeIfAbsent(element, e -> new ResourceLocation(def.getNamespace(),
                 def.getPath() + "_" + e.getTranslation().replace("element_", "")));
+    }
+
+    @Override
+    public boolean checkSpawnObstruction(LevelReader level) {
+        return level.isUnobstructed(this);
     }
 
     @Override
@@ -279,7 +293,7 @@ public class GateEntity extends Mob implements IBaseMob {
         this.entityData.set(mobLevel, gateLevel);
         this.entityData.set(elementType, this.type.getTranslation());
         this.entityData.set(element, this.type.ordinal());
-        this.spawnList.addAll(DataPackHandler.SERVER_PACK.gateSpawnsManager().pickRandomMobs(level.getLevel(), biome, this.random, this.random.nextInt(3) + 1, this.blockPosition(), gateLevel));
+        this.spawnList.addAll(DataPackHandler.SERVER_PACK.gateSpawnsManager().pickRandomMobs(level.getLevel(), this, biome, this.random, this.random.nextInt(3) + 1, this.blockPosition()));
         this.setPos(this.getX(), this.getY() + 1, this.getZ());
         this.updateStatsToLevel();
         this.spawnMobs(Math.max(1, this.maxNearby - 2));
@@ -328,7 +342,8 @@ public class GateEntity extends Mob implements IBaseMob {
                     } else if (entity instanceof Mob mob) {
                         BlockPos pos = new BlockPos(x, y, z);
                         boolean notSolid;
-                        while ((notSolid = !this.level.getBlockState(pos.below()).entityCanStandOnFace(this.level, pos, entity, Direction.UP)) && pos.distToCenterSqr(x, y, z) < 16)
+                        BlockState state;
+                        while ((notSolid = !(state = this.level.getBlockState(pos.below())).entityCanStandOnFace(this.level, pos, entity, Direction.UP) && !state.getFluidState().is(FluidTags.WATER)) && pos.distToCenterSqr(x, y, z) < 16)
                             pos = pos.below();
                         if (!notSolid) {
                             if (mob instanceof BaseMonster)

@@ -2,6 +2,7 @@
   "entity": "runecraftory:troll",
   "min_distance_from_spawn": 500,
   "min_gate_level": 3,
+  "allowUnderwater": false,
   "biomes": {
     "minecraft:is_mountain": 10,
     "c:is_sparse": 10,

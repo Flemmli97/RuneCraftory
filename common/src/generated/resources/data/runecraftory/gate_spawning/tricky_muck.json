@@ -2,6 +2,7 @@
   "entity": "runecraftory:tricky_muck",
   "min_distance_from_spawn": 0,
   "min_gate_level": 0,
+  "allowUnderwater": false,
   "biomes": {
     "minecraft:is_forest": 5,
     "c:is_lush": 5,

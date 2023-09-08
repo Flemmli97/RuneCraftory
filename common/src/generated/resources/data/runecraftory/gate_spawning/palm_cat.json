@@ -2,6 +2,7 @@
   "entity": "runecraftory:palm_cat",
   "min_distance_from_spawn": 0,
   "min_gate_level": 0,
+  "allowUnderwater": false,
   "biomes": {
     "minecraft:is_forest": 10,
     "minecraft:is_taiga": 10

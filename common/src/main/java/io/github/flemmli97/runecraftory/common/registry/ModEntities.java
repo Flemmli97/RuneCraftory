@@ -309,7 +309,7 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FIRE, -25)
                     .putAttributes(ModAttributes.RES_WATER, 15)
                     .xp(50).money(10).tamingChance(0.05f).setRideable().setMinLevel(5),
-            new GateSpawnData.Builder(0, 4).addToBiomeTag(50, ModTags.IS_BEACH, ModTags.IS_WATER));
+            new GateSpawnData.Builder(0, 4).canSpawnUnderwater().addToBiomeTag(50, ModTags.IS_BEACH, ModTags.IS_WATER));
     public static final RegistryEntrySupplier<EntityType<EntitySkyFish>> SKY_FISH = regMonster(EntityType.Builder.of(EntitySkyFish::new, MobCategory.MONSTER).sized(1.2f, 0.7f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "sky_fish"),
             0x8fa4c5, 0x5a3536,
             new EntityProperties.Builder()
@@ -324,7 +324,7 @@ public class ModEntities {
                     .putAttributes(ModAttributes.RES_FIRE, -25)
                     .putAttributes(ModAttributes.RES_WATER, 15)
                     .xp(50).money(6).tamingChance(0.05f).setRideable().setFlying(),
-            new GateSpawnData.Builder(0, 5).addToBiomeTag(40, ModTags.IS_BEACH, ModTags.IS_WATER));
+            new GateSpawnData.Builder(0, 5).canSpawnUnderwater().addToBiomeTag(40, ModTags.IS_BEACH, ModTags.IS_WATER));
     public static final RegistryEntrySupplier<EntityType<EntityWeagle>> WEAGLE = regMonster(EntityType.Builder.of(EntityWeagle::new, MobCategory.MONSTER).sized(0.8f, 1.1f).clientTrackingRange(8), new ResourceLocation(RuneCraftory.MODID, "weagle"),
             0x8e127b, 0xdb9dd2, true,
             new EntityProperties.Builder()
