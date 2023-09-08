@@ -67,7 +67,8 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
         if (list.isEmpty())
             return new ArrayList<>();
         double dist = pos.distSqr(level.getSharedSpawnPos());
-        list.removeIf(w -> !w.matches(level, dist, gate));
+        BlockState state = level.getBlockState(pos);
+        list.removeIf(w -> !w.matches(level, pos, state, dist, gate));
         List<EntityType<?>> ret = new ArrayList<>();
         if (amount > list.size()) {
             list.forEach(w -> ret.add(w.entity));
@@ -152,8 +153,8 @@ public class GateSpawnsManager extends SimpleJsonResourceReloadListener {
             return pos.distSqr(serverLevel.getSharedSpawnPos()) >= this.distToSpawnSq && (state.getFluidState().isEmpty() || (this.allowWater && state.getFluidState().is(FluidTags.WATER) && serverLevel.canSeeSkyFromBelowWater(pos)));
         }
 
-        public boolean matches(ServerLevel serverLevel, double dist, GateEntity gate) {
-            return dist >= this.distToSpawnSq
+        public boolean matches(ServerLevel serverLevel, BlockPos pos, BlockState state, double dist, GateEntity gate) {
+            return dist >= this.distToSpawnSq && (state.getFluidState().isEmpty() || (this.allowWater && state.getFluidState().is(FluidTags.WATER) && serverLevel.canSeeSkyFromBelowWater(pos)))
                     && (MobConfig.gateLevelType == MobConfig.GateLevelType.CONSTANT || gate.level().getLevel() >= this.minGateLevel)
                     && this.gatePredicate.matches(serverLevel, gate.position(), gate);
         }
