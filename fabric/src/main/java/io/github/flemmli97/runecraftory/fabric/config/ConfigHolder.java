@@ -118,6 +118,7 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         MobConfig.maxNearby = spec.maxNearby.get();
         MobConfig.baseGateLevel = spec.baseGateLevel.get();
         MobConfig.gateLevelType = spec.gateLevelType.get();
+        MobConfig.playerLevelType = spec.playerLevelType.get();
         MobConfig.treasureChance = spec.treasureChance.get().floatValue();
         MobConfig.mimicChance = spec.mimicChance.get().floatValue();
         MobConfig.mimicStrongChance = spec.mimicStrongChance.get().floatValue();

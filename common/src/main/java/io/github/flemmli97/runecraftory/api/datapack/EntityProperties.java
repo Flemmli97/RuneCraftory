@@ -3,13 +3,21 @@ package io.github.flemmli97.runecraftory.api.datapack;
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
+import io.github.flemmli97.tenshilib.common.utils.SearchUtils;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -25,17 +33,19 @@ public class EntityProperties {
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("baseValues").forGetter(d -> d.baseValues),
                     Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).fieldOf("levelGains").forGetter(d -> d.levelGains),
 
-                    Codec.BOOL.fieldOf("flying").forGetter(d -> d.flying),
                     ExtraCodecs.POSITIVE_INT.fieldOf("size").forGetter(d -> d.size),
                     Codec.BOOL.fieldOf("needsRoof").forGetter(d -> d.needsRoof),
+                    OnKilledIncrease.CODEC.listOf().optionalFieldOf("levelIncreaseOnKill").forGetter(d -> d.levelIncreaseOnKill.isEmpty() ? Optional.empty() : Optional.of(d.levelIncreaseOnKill)),
 
                     Codec.FLOAT.fieldOf("tamingChance").forGetter(d -> d.tamingChance),
                     Codec.BOOL.fieldOf("rideable").forGetter(d -> d.rideable),
+                    Codec.BOOL.fieldOf("flying").forGetter(d -> d.flying),
 
                     ExtraCodecs.POSITIVE_INT.fieldOf("minLevel").forGetter(d -> d.minLevel),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("xp").forGetter(d -> d.xp),
                     ExtraCodecs.NON_NEGATIVE_INT.fieldOf("money").forGetter(d -> d.money)
-            ).apply(instance, (baseValues, levelGains, flying, size, needsRoof, tamingChance, rideable, minLevel, xp, money) -> new EntityProperties(minLevel, xp, money, tamingChance, rideable, flying, size, needsRoof, baseValues, levelGains)));
+            ).apply(instance, (baseValues, levelGains, size, needsRoof, levelIncreaseOnKill, tamingChance, rideable, flying, minLevel, xp, money) ->
+                    new EntityProperties(minLevel, xp, money, tamingChance, rideable, flying, size, needsRoof, baseValues, levelGains, levelIncreaseOnKill.orElse(List.of()))));
 
     public final int minLevel;
     public final int xp;
@@ -48,7 +58,9 @@ public class EntityProperties {
     private final Map<Attribute, Double> baseValues;
     private final Map<Attribute, Double> levelGains;
 
-    private EntityProperties(int minLevel, int xp, int money, float tamingChance, boolean rideable, boolean flying, int size, boolean needsRoof, Map<Attribute, Double> baseValues, Map<Attribute, Double> levelGains) {
+    private final List<OnKilledIncrease> levelIncreaseOnKill;
+
+    private EntityProperties(int minLevel, int xp, int money, float tamingChance, boolean rideable, boolean flying, int size, boolean needsRoof, Map<Attribute, Double> baseValues, Map<Attribute, Double> levelGains, List<OnKilledIncrease> levelIncreaseOnKill) {
         this.minLevel = Math.max(1, minLevel);
         this.xp = xp;
         this.money = money;
@@ -59,6 +71,7 @@ public class EntityProperties {
         this.needsRoof = needsRoof;
         this.baseValues = baseValues;
         this.levelGains = levelGains;
+        this.levelIncreaseOnKill = levelIncreaseOnKill.stream().sorted().toList();
     }
 
     public Map<Attribute, Double> getBaseValues() {
@@ -67,6 +80,29 @@ public class EntityProperties {
 
     public Map<Attribute, Double> getAttributeGains() {
         return ImmutableMap.copyOf(this.levelGains);
+    }
+
+    public int levelIncreaseFromKill(int killed, ServerPlayer player) {
+        return SearchUtils.searchInfFunc(this.levelIncreaseOnKill.stream().filter(c -> c.condition.matches(player, player)).toList(),
+                p -> Integer.compare(p.minKilled(), killed), OnKilledIncrease.DEFAULT).increase();
+    }
+
+    private record OnKilledIncrease(int minKilled, int increase,
+                                    EntityPredicate condition) implements Comparable<OnKilledIncrease> {
+
+        private static final OnKilledIncrease DEFAULT = new OnKilledIncrease(0, 0, null);
+
+        public static final Codec<OnKilledIncrease> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        Codec.INT.fieldOf("minKilled").forGetter(d -> d.minKilled),
+                        Codec.INT.fieldOf("increase").forGetter(d -> d.increase),
+                        CodecHelper.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> Optional.ofNullable(d.condition == EntityPredicate.ANY ? null : d.condition))
+                ).apply(inst, (minKilled, increase, predicate) -> new OnKilledIncrease(minKilled, increase, predicate.orElse(EntityPredicate.ANY))));
+
+        @Override
+        public int compareTo(@NotNull EntityProperties.OnKilledIncrease o) {
+            return Integer.compare(this.minKilled, o.minKilled);
+        }
     }
 
     public static class Builder {
@@ -81,6 +117,7 @@ public class EntityProperties {
         private int size = 1;
         private boolean needsRoof = true;
         private int minLevel = 1;
+        private final List<OnKilledIncrease> levelIncreaseOnKill = new ArrayList<>();
 
         public Builder putAttributes(Supplier<Attribute> att, double val) {
             this.baseValues.put(att, val);
@@ -132,6 +169,16 @@ public class EntityProperties {
             return this;
         }
 
+        public Builder withLevelIncrease(int minKilled, int increase) {
+            this.levelIncreaseOnKill.add(new OnKilledIncrease(minKilled, increase, EntityPredicate.ANY));
+            return this;
+        }
+
+        public Builder withLevelIncrease(int minKilled, int increase, EntityPredicate pred) {
+            this.levelIncreaseOnKill.add(new OnKilledIncrease(minKilled, increase, pred));
+            return this;
+        }
+
         public EntityProperties build() {
             return new EntityProperties(this.minLevel, this.xp, this.money, this.taming, this.rideable, this.flying, this.size, this.needsRoof,
                     this.baseValues.entrySet().stream().collect(Collectors.toMap(
@@ -145,7 +192,7 @@ public class EntityProperties {
                             Map.Entry::getValue,
                             (e1, e2) -> e1,
                             LinkedHashMap::new
-                    )));
+                    )), this.levelIncreaseOnKill);
         }
     }
 }

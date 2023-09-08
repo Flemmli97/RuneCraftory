@@ -116,6 +116,8 @@ public class PlayerData {
     private BlockPos blockBreakPosForMsg;
     private int breakTick;
 
+    private int mobLevelIncrease;
+
     public PlayerData() {
         for (EnumSkills skill : EnumSkills.values()) {
             this.skillMapN.put(skill, new LevelExpPair());
@@ -628,6 +630,14 @@ public class PlayerData {
         return start;
     }
 
+    public void increaseMobLevel(int increase) {
+        this.mobLevelIncrease += increase;
+    }
+
+    public int getMobLevelIncrease() {
+        return this.mobLevelIncrease;
+    }
+
     public void readFromNBT(CompoundTag nbt, Player player) {
         this.starting = nbt.getBoolean("Starting");
         this.runePointsMax = nbt.getFloat("MaxRunePoints");
@@ -676,6 +686,7 @@ public class PlayerData {
         this.craftingSeed = nbt.getInt("CraftingSeed");
         this.questTracker.load(nbt.getCompound("QuestTracker"));
         this.boughtBarns = nbt.getInt("BoughtBarns");
+        this.mobLevelIncrease = nbt.getInt("MobLevelIncrease");
     }
 
     public CompoundTag writeToNBTPlain(CompoundTag nbt) {
@@ -734,6 +745,7 @@ public class PlayerData {
         nbt.putInt("CraftingSeed", this.craftingSeed);
         nbt.put("QuestTracker", this.questTracker.save());
         nbt.putInt("BoughtBarns", this.boughtBarns);
+        nbt.putInt("MobLevelIncrease", this.mobLevelIncrease);
         return nbt;
     }
 
@@ -746,5 +758,6 @@ public class PlayerData {
         this.refreshShop(player);
         this.starting = false;
         this.tamedEntity.reset();
+        this.mobLevelIncrease = 0;
     }
 }

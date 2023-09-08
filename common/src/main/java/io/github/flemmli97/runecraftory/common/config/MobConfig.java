@@ -25,6 +25,7 @@ public class MobConfig {
     public static int maxNearby = 5;
     public static int baseGateLevel = 1;
     public static GateLevelType gateLevelType = GateLevelType.DISTANCESPAWN;
+    public static PlayerLevelType playerLevelType = PlayerLevelType.MEAN;
     public static float treasureChance = 0.001f;
     public static float mimicChance = 0.4f;
     public static float mimicStrongChance = 0.3f;
@@ -44,7 +45,20 @@ public class MobConfig {
         CONSTANT,
         DISTANCESPAWN,
         DISTANCESPAWNPLAYER,
-        PLAYERLEVELMAX,
-        PLAYERLEVELMEAN
+        PLAYERLEVEL,
+    }
+
+    public enum PlayerLevelType {
+        MEAN(true, false),
+        MEANINCREASED(true, true),
+        MAX(false, false),
+        MAXINCREASED(false, true);
+
+        public final boolean mean, increased;
+
+        PlayerLevelType(boolean mean, boolean increased) {
+            this.mean = mean;
+            this.increased = increased;
+        }
     }
 }

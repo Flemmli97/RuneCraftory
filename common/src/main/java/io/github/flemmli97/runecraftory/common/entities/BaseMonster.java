@@ -29,6 +29,7 @@ import io.github.flemmli97.runecraftory.common.network.S2COpenCompanionGui;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModCriteria;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.runecraftory.common.registry.ModStats;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
 import io.github.flemmli97.runecraftory.common.spells.TeleportSpell;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -42,6 +43,7 @@ import io.github.flemmli97.runecraftory.common.world.BarnData;
 import io.github.flemmli97.runecraftory.common.world.WorldHandler;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.mixin.AttributeMapAccessor;
+import io.github.flemmli97.runecraftory.mixin.CombatTrackerAccessor;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
@@ -72,6 +74,7 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.CombatEntry;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.EntityDamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -1178,6 +1181,16 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
             if (this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
                 this.getOwner().sendMessage(this.getCombatTracker().getDeathMessage(), Util.NIL_UUID);
             this.getAnimationHandler().setAnimation(null);
+            List<CombatEntry> entries = ((CombatTrackerAccessor) this.getCombatTracker()).getEntries();
+            entries.forEach(e -> {
+                if (e.getAttacker() instanceof ServerPlayer player && e.getDamage() > this.getMaxHealth() * 0.05) {
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> {
+                        player.getStats().increment(player, ModStats.COMBINED_KILLS.get().get(this.getType()), 1);
+                        int killed = player.getStats().getValue(ModStats.COMBINED_KILLS.get().get(this.getType()));
+                        d.increaseMobLevel(this.getProp().levelIncreaseFromKill(killed, player));
+                    });
+                }
+            });
         }
         super.die(cause);
     }
@@ -1190,8 +1203,9 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         }
         ++this.deathTime;
         if (this.deathTime == (this.maxDeathTime() - 5)) {
-            if (!this.level.isClientSide && this.getLastHurtByMob() != null)
+            if (!this.level.isClientSide && this.getLastHurtByMob() != null) {
                 LevelCalc.addXP(this.getLastHurtByMob(), this.baseXP(), this.baseMoney(), this.level().getLevel());
+            }
         }
         if (this.deathTime >= this.maxDeathTime()) {
             if (!this.level.isClientSide)

@@ -35,6 +35,7 @@ public class MobConfigSpec {
     public final CommentedJsonConfig.IntVal maxNearby;
     public final CommentedJsonConfig.IntVal baseGateLevel;
     public final CommentedJsonConfig.CommentedVal<MobConfig.GateLevelType> gateLevelType;
+    public final CommentedJsonConfig.CommentedVal<MobConfig.PlayerLevelType> playerLevelType;
     public final CommentedJsonConfig.DoubleVal treasureChance;
     public final CommentedJsonConfig.DoubleVal mimicChance;
     public final CommentedJsonConfig.DoubleVal mimicStrongChance;
@@ -67,11 +68,18 @@ public class MobConfigSpec {
         this.maxNearby = builder.comment("When spawning gates roll a random number between Min Nearby and this to find the max amount of monsters nearby to stop spawning.").defineInRange("Max Nearby", MobConfig.maxNearby, 0, Integer.MAX_VALUE);
         this.baseGateLevel = builder.comment("Base level for gates. Level will be at least 1").defineInRange("Gate Base Level", MobConfig.baseGateLevel, Integer.MIN_VALUE, Integer.MAX_VALUE);
         this.gateLevelType = builder.comment("How the level of a gate is calculated.",
+                "Also see -Player Level Type- config",
                 "CONSTANT: Gate level is simply the value defined in <Gate Base Level>",
                 "DISTANCESPAWN: The further away from spawn a gate is the stronger it gets",
-                "PLAYERLEVELMAX: The player in a 256 radius with the highest level defines how strong a gate is",
-                "PLAYERLEVELMEAN: Average player level in a 256 radius is considered",
-                "Except for CONSTANT all other types gets also a + <Gate Base Level> addition").define("Gate Level Calc", MobConfig.gateLevelType);
+                "DISTANCESPAWNPLAYER: The further away from a players spawn (or world spawn if not exist) a gate is the stronger it gets. Highest level of nearby player counts",
+                "PLAYERLEVEL: The players level will be used to calculate the gates level",
+                "The final gate level gets a 10% randomizer").define("Gate Level Calc", MobConfig.gateLevelType);
+        this.playerLevelType = builder.comment("How players in a 256 radius influence the calculation of a gates level",
+                "For INCREASED an internal player specific value will be added on. That value is increased e.g. by defeating bosses so monsters get stronger the more bosses are defeated.",
+                "MEAN: The mean of all players will be used. Does nothing if Gate Level Calc is CONSTANT or DISTANCESPAWN",
+                "MEANINCREASED: The mean of all players will be used.",
+                "MAX: The max of all players will be used. Does nothing if Gate Level Calc is CONSTANT or DISTANCESPAWN",
+                "MAXINCREASED: The max of all players will be used.").define("Player Level Type", MobConfig.playerLevelType);
         this.treasureChance = builder.comment("Chance for a gate to spawn a treasure chest upon first try").defineInRange("Treasure Chest Chance", MobConfig.treasureChance, 0, 1f);
         this.mimicChance = builder.comment("Chance for a spawned treasure chest to be a monster box").defineInRange("Mimic Chance", MobConfig.mimicChance, 0, 1f);
         this.mimicStrongChance = builder.comment("Chance for a monster box to be a gobble box").defineInRange("Strong Mimic Chance", MobConfig.mimicStrongChance, 0, 1f);

@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -217,50 +218,41 @@ public class LevelCalc {
 
     public static int levelFromPos(ServerLevel level, Vec3 pos) {
         return Math.max(1, switch (MobConfig.gateLevelType) {
-            case CONSTANT -> MobConfig.baseGateLevel;
-            case DISTANCESPAWN -> distanceLevelFrom(level, pos, level.getSharedSpawnPos());
-            case DISTANCESPAWNPLAYER -> {
-                int lvl = MobConfig.baseGateLevel;
-                List<Player> list = playersIn(level, pos, 256);
-                if (list.isEmpty())
-                    yield MobConfig.baseGateLevel;
-                for (Player player : list) {
-                    ServerPlayer serverPlayer = (ServerPlayer) player;
-                    BlockPos center;
-                    if (serverPlayer.getRespawnDimension() != level.dimension() || serverPlayer.getRespawnPosition() == null)
-                        center = level.getSharedSpawnPos();
-                    else
-                        center = serverPlayer.getRespawnPosition();
-                    int pL = distanceLevelFrom(level, pos, center);
-                    if (pL > lvl)
-                        lvl = pL;
-                }
-                yield randomizedLevel(level.random, MobConfig.baseGateLevel + lvl);
-            }
-            case PLAYERLEVELMAX -> {
-                int lvl = MobConfig.baseGateLevel;
-                List<Player> list = playersIn(level, pos, 256);
-                if (list.isEmpty())
-                    yield lvl;
-                for (Player player : list) {
-                    int pL = Platform.INSTANCE.getPlayerData(player).map(data -> data.getPlayerLevel().getLevel()).orElse(1);
-                    if (pL > lvl)
-                        lvl = pL;
-                }
-                yield randomizedLevel(level.random, MobConfig.baseGateLevel + lvl);
-            }
-            case PLAYERLEVELMEAN -> {
-                int lvl = MobConfig.baseGateLevel;
-                List<Player> list = playersIn(level, pos, 256);
-                if (list.isEmpty())
-                    yield lvl;
-                for (Player player : list) {
-                    lvl += Platform.INSTANCE.getPlayerData(player).map(data -> data.getPlayerLevel().getLevel()).orElse(1);
-                }
-                lvl = (lvl / list.size());
-                yield randomizedLevel(level.random, MobConfig.baseGateLevel + lvl);
-            }
+            case CONSTANT -> randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, null));
+            case DISTANCESPAWN -> randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel + distanceLevelFrom(level, pos, level.getSharedSpawnPos()), null));
+            case DISTANCESPAWNPLAYER -> randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, (player, d) -> {
+                ServerPlayer serverPlayer = (ServerPlayer) player;
+                BlockPos center;
+                if (serverPlayer.getRespawnDimension() != level.dimension() || serverPlayer.getRespawnPosition() == null)
+                    center = level.getSharedSpawnPos();
+                else
+                    center = serverPlayer.getRespawnPosition();
+                return distanceLevelFrom(level, pos, center);
+            }));
+            case PLAYERLEVEL -> randomizedLevel(level.random, getLevelFor(level, pos, MobConfig.baseGateLevel, (p, d) -> d.map(data -> data.getPlayerLevel().getLevel()).orElse(1)));
         });
+    }
+
+    private static int getLevelFor(ServerLevel level, Vec3 pos, int base, BiFunction<Player, Optional<PlayerData>, Integer> levelFunc) {
+        if (levelFunc == null && !MobConfig.playerLevelType.increased)
+            return base;
+        List<Player> list = playersIn(level, pos, 256);
+        if (list.isEmpty())
+            return base;
+        int lvl = 0;
+        boolean mean = MobConfig.playerLevelType.mean;
+        for (Player player : list) {
+            Optional<PlayerData> data = Platform.INSTANCE.getPlayerData(player);
+            int pL = levelFunc != null ? levelFunc.apply(player, data) : 0;
+            if (MobConfig.playerLevelType.increased)
+                pL += data.map(PlayerData::getMobLevelIncrease).orElse(0);
+            if (mean)
+                lvl += pL;
+            else if (pL > lvl)
+                lvl = pL;
+        }
+        lvl = mean ? (lvl / list.size()) : lvl;
+        return base + lvl;
     }
 
     private static int distanceLevelFrom(Level level, Vec3 pos, BlockPos center) {
