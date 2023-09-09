@@ -19,6 +19,7 @@
     "EntityMixin",
     "FarmBlockMixin",
     "FishingRodHookTriggerMixin",
+    "HoeItemMixin",
     "ItemEntityMixin",
     "ItemStackMixin",
     "LivingEntityMixin",
