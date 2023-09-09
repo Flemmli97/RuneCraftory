@@ -23,6 +23,7 @@ import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
 import io.github.flemmli97.runecraftory.common.network.S2CRuneyWeatherData;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
+import io.github.flemmli97.runecraftory.common.registry.ModEffects;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.common.registry.ModTags;
@@ -382,6 +383,7 @@ public class EntityCalls {
                 data.refreshRunePoints(player, data.getMaxRunePoints());
                 LevelCalc.levelSkill(serverPlayer, data, EnumSkills.SLEEPING, 75);
             });
+            player.removeEffect(ModEffects.FATIGUE.get());
         }
     }
 
