@@ -334,6 +334,13 @@ public class PlatformImpl implements Platform {
         return 0;
     }
 
+    @Override
+    public int getLootingFromEntity(Entity entity, Entity killer, DamageSource source) {
+        if (killer instanceof LivingEntity living)
+            return EnchantmentHelper.getMobLooting(living);
+        return 0;
+    }
+
     public static class CustomDamageSource extends DamageSource {
 
         public CustomDamageSource(String string) {

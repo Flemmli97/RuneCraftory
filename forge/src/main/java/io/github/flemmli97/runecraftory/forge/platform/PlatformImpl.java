@@ -275,4 +275,9 @@ public class PlatformImpl implements Platform {
     public int getLootingFromCtx(LootContext ctx) {
         return ctx.getLootingModifier();
     }
+
+    @Override
+    public int getLootingFromEntity(Entity entity, Entity killer, DamageSource source) {
+        return ForgeHooks.getLootingLevel(entity, killer, source);
+    }
 }

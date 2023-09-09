@@ -136,4 +136,6 @@ public interface Platform {
     float onLivingHurt(LivingEntity entity, DamageSource damageSrc, float damageAmount);
 
     int getLootingFromCtx(LootContext ctx);
+
+    int getLootingFromEntity(Entity entity, Entity killer, DamageSource source);
 }
