@@ -30,12 +30,16 @@ public class NPCDataGen extends NPCDataProvider {
                         .setNeutralGiftResponse("npc.generic.gift.default", "Thank you for your gift"),
                 of(m -> {
                     m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.greeting.default", "Hello %s.")
-                            .addConversation(new NPCData.Conversation("npc.generic.greeting.1", 0, 10, TimeCheck.time(IntRange.range(0, 12000)).build()), "Good day %s.")
-                            .addConversation(new NPCData.Conversation("npc.generic.greeting.2", 0, 10, TimeCheck.time(IntRange.range(12000, 14000)).build()), "Good evening %s.")
-                            .addConversation(new NPCData.Conversation("npc.generic.greeting.3", 0, 10), "Hi. How are you today %s?"));
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.1", 0, 10).addCondition(TimeCheck.time(IntRange.range(0, 12000)).build()), "Good day %s.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.2", 0, 10).addCondition(TimeCheck.time(IntRange.range(12000, 14000)).build()), "Good evening %s.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.3", 0, 10), "Hi. How are you today %s?"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.talk.default", "...")
-                            .addConversation(new NPCData.Conversation("npc.generic.talk.1", 0, 10), "On sunny days I like to go out and walk a lot.")
-                            .addConversation(new NPCData.Conversation("npc.generic.talk.2", 0, 10), "I don't like working."));
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.1", 0, 10)
+                                    .addAction(new NPCData.ConversationActionHolder("npc.generic.talk.1.answer.same", NPCData.ConversationAction.ANSWER, "npc.generic.talk.1.response.same", 0), "Same")
+                                    .addAction(new NPCData.ConversationActionHolder("npc.generic.talk.1.answer.ok", NPCData.ConversationAction.ANSWER, "npc.generic.talk.1.response.ok", 0), "Ok..."), "On sunny days I like to go out and walk a lot.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.1.response.same", 0, 10).setAnswer(), "It's nice right?")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.1.response.ok", 0, 10).setAnswer(), "You don't?")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.talk.2", 0, 10), "I don't like working."));
                     m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.follow.yes", "Ok"));
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.follow.no", "Sorry but I am busy right now."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.follow.stop", "Ok. See you again."));
@@ -45,11 +49,11 @@ public class NPCDataGen extends NPCDataProvider {
                         .setNeutralGiftResponse("npc.generic.2.gift.default", "Thanks. I appreciate it"),
                 of(m -> {
                     m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.2.greeting.default", "Hello %s.")
-                            .addConversation(new NPCData.Conversation("npc.generic.2.greeting.1", 0, 10), "Howdy %s")
-                            .addConversation(new NPCData.Conversation("npc.generic.2.greeting.2", 0, 10), "Hi. Whats up %s?"));
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.2.greeting.1", 0, 10), "Howdy %s")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.2.greeting.2", 0, 10), "Hi. Whats up %s?"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default", "...")
-                            .addConversation(new NPCData.Conversation("npc.generic.2.talk.1", 0, 10), "Did you know that upgrading a weapon with scrap metal + makes it do 1 damage?")
-                            .addConversation(new NPCData.Conversation("npc.generic.2.talk.2", 0, 10), "Those villagers seem strange. Why do they have no hands?"));
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.2.talk.1", 0, 10), "Did you know that upgrading a weapon with scrap metal + makes it do 1 damage?")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.2.talk.2", 0, 10), "Those villagers seem strange. Why do they have no hands?"));
                     m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.2.follow.yes", "Where are we going?"));
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.2.follow.no", "Sorry but I'm have something to take care of."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.2.follow.stop", "Ok. Cya."));
@@ -61,11 +65,11 @@ public class NPCDataGen extends NPCDataProvider {
                         .setNeutralGiftResponse("npc.generic.3.gift.default", "Thank you for your gift"),
                 of(m -> {
                     m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.3.greeting.default", "Hi %s. How are you doing today?")
-                            .addConversation(new NPCData.Conversation("npc.generic.3.greeting.1", 0, 10), "Nice to see you"));
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.3.greeting.1", 0, 10), "Nice to see you"));
                     m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.3.talk.default", "...")
-                            .addConversation(new NPCData.Conversation("npc.generic.3.talk.2", 0, 10), "A forge will allow you to craft your own weapons.")
-                            .addConversation(new NPCData.Conversation("npc.generic.3.talk.1", 0, 10, WeatherCheck.weather().setRaining(true).build()), "I don't like the rain.")
-                            .addConversation(new NPCData.Conversation("npc.generic.3.talk.2", 0, 10), "I've heard that there are places in this world where very strong monster appear."));
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.3.talk.2", 0, 10), "A forge will allow you to craft your own weapons.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.3.talk.1", 0, 10).addCondition(WeatherCheck.weather().setRaining(true).build()), "I don't like the rain.")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.3.talk.2", 0, 10), "I've heard that there are places in this world where very strong monster appear."));
                     m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.3.follow.yes", "Sure. Where do you want to go?"));
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.3.follow.no", "I think I still have some things to do first."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.3.follow.stop", "Oh ok. Well then later."));

@@ -120,8 +120,8 @@ public class NPCShopGui extends AbstractContainerScreen<ContainerShop> {
     }
 
     @Override
-    public void onClose() {
-        super.onClose();
+    public void removed() {
+        super.removed();
         Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.menu.getShopOwner().getId(), C2SNPCInteraction.Type.CLOSE));
     }
 

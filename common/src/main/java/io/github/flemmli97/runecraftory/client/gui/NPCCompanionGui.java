@@ -65,8 +65,8 @@ public class NPCCompanionGui extends CompanionGui<EntityNPCBase> {
     }
 
     @Override
-    public void onClose() {
-        super.onClose();
+    public void removed() {
+        super.removed();
         Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.CLOSE));
     }
 }

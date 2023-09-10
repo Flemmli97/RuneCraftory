@@ -4,11 +4,18 @@ import io.github.flemmli97.runecraftory.common.attachment.player.LevelExpPair;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.common.utils.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.Level;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class NPCFriendPoints {
 
     private int lastUpdateTalk = -1, lastUpdateGift = -1;
+    private Set<String> answeredConversations = new HashSet<>();
     public final LevelExpPair points = new LevelExpPair();
 
     public boolean talkTo(Level level, int xp) {
@@ -17,6 +24,7 @@ public class NPCFriendPoints {
             this.points.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> {
             });
             this.lastUpdateTalk = day;
+            this.answeredConversations.clear();
             return true;
         }
         return false;
@@ -33,11 +41,24 @@ public class NPCFriendPoints {
         return false;
     }
 
+    public boolean answer(String conversation, int xp) {
+        if (!this.answeredConversations.contains(conversation)) {
+            this.points.addXP(xp, 10, LevelCalc::friendPointsForNext, () -> {
+            });
+            this.answeredConversations.add(conversation);
+            return true;
+        }
+        return false;
+    }
+
     public CompoundTag save() {
         CompoundTag tag = new CompoundTag();
         tag.put("FriendPoints", this.points.save());
         tag.putInt("LastTalk", this.lastUpdateTalk);
         tag.putInt("LastGift", this.lastUpdateGift);
+        ListTag answers = new ListTag();
+        this.answeredConversations.forEach(s -> answers.add(StringTag.valueOf(s)));
+        tag.put("Answered", answers);
         return tag;
     }
 
@@ -45,5 +66,7 @@ public class NPCFriendPoints {
         this.points.read(tag.getCompound("FriendPoints"));
         this.lastUpdateTalk = tag.getInt("LastTalk");
         this.lastUpdateGift = tag.getInt("LastGift");
+        ListTag answers = tag.getList("Answered", Tag.TAG_STRING);
+        answers.forEach(t -> this.answeredConversations.add(t.getAsString()));
     }
 }

@@ -5,6 +5,32 @@
       "translationKey": "npc.generic.talk.1",
       "minHearts": 0,
       "maxHearts": 10,
+      "actions": [
+        {
+          "translationKey": "npc.generic.talk.1.answer.same",
+          "actions": "ANSWER",
+          "value": "npc.generic.talk.1.response.same"
+        },
+        {
+          "translationKey": "npc.generic.talk.1.answer.ok",
+          "actions": "ANSWER",
+          "value": "npc.generic.talk.1.response.ok"
+        }
+      ],
+      "conditions": []
+    },
+    "npc.generic.talk.1.response.same": {
+      "translationKey": "npc.generic.talk.1.response.same",
+      "minHearts": 0,
+      "maxHearts": 10,
+      "startingConversation": false,
+      "conditions": []
+    },
+    "npc.generic.talk.1.response.ok": {
+      "translationKey": "npc.generic.talk.1.response.ok",
+      "minHearts": 0,
+      "maxHearts": 10,
+      "startingConversation": false,
       "conditions": []
     },
     "npc.generic.talk.2": {

@@ -30,6 +30,7 @@ import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
 import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CNPCLook;
+import io.github.flemmli97.runecraftory.common.network.S2CNpcDialogue;
 import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
 import io.github.flemmli97.runecraftory.common.network.S2CUpdateNPCData;
 import io.github.flemmli97.runecraftory.common.registry.ModActivities;
@@ -51,7 +52,6 @@ import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.particles.ParticleOptions;
@@ -471,15 +471,17 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         boolean food = this.applyFoodEffect(stack);
         stack.setCount(count);
-        NPCData.Gift gift = this.giftOf(stack);
-        if (gift != null) {
-            this.relationManager.getFriendPointData(player.getUUID())
-                    .giftXP(this.level, (int) (gift.xp() * mult));
-            player.sendMessage(new TranslatableComponent(gift.responseKey(), player.getName()), Util.NIL_UUID);
-        } else {
-            this.relationManager.getFriendPointData(player.getUUID())
-                    .giftXP(this.level, (int) (15 * mult));
-            player.sendMessage(new TranslatableComponent(this.data.neutralGiftResponse(), player.getName()), Util.NIL_UUID);
+        if (player instanceof ServerPlayer serverPlayer) {
+            NPCData.Gift gift = this.giftOf(stack);
+            if (gift != null) {
+                this.relationManager.getFriendPointData(player.getUUID())
+                        .giftXP(this.level, (int) (gift.xp() * mult));
+                this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(gift.responseKey(), player.getName()), List.of());
+            } else {
+                this.relationManager.getFriendPointData(player.getUUID())
+                        .giftXP(this.level, (int) (15 * mult));
+                this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(this.data.neutralGiftResponse(), player.getName()), List.of());
+            }
         }
         stack.shrink(1);
     }
@@ -502,11 +504,46 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 .collect(Collectors.toList());
         Collections.shuffle(filtered, this.updater.getDailyRandom());
         int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
-        if (size > 0) {
-            Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
-            player.sendMessage(new TranslatableComponent(randomLine.getValue().translationKey(), player.getName()), Util.NIL_UUID);
-        } else {
-            player.sendMessage(new TranslatableComponent(conversations.fallbackKey(), player.getName()), Util.NIL_UUID);
+        if (player instanceof ServerPlayer serverPlayer) {
+            if (size > 0) {
+                Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
+                this.tellDialogue(serverPlayer, type, randomLine.getKey(), randomLine.getValue());
+            } else {
+                this.tellDialogue(serverPlayer, type, null, new TranslatableComponent(conversations.fallbackKey(), player.getName()), List.of());
+            }
+        }
+    }
+
+    private void tellDialogue(ServerPlayer player, NPCData.ConversationType type, String conversationID, NPCData.Conversation conversation) {
+        List<Component> actions = conversation.actions().stream().map(e -> (Component) new TranslatableComponent(e.translationKey(), player.getName())).toList();
+        this.tellDialogue(player, type, conversationID, new TranslatableComponent(conversation.translationKey(), player.getName()), actions);
+    }
+
+    private void tellDialogue(ServerPlayer player, NPCData.ConversationType type, String conversationID, Component component, List<Component> actions) {
+        this.interactingPlayers.add(player);
+        Platform.INSTANCE.sendToClient(new S2CNpcDialogue(this.getId(), type, conversationID, component, actions), player);
+    }
+
+    public void handleDialogueAction(ServerPlayer sender, NPCData.ConversationType type, String conversationID, int actionIdx) {
+        NPCData.ConversationSet conversations = this.data.getConversation(type);
+        NPCData.Conversation conversation = conversations.conversations().get(conversationID);
+        if (conversation != null && actionIdx < conversation.actions().size()) {
+            NPCData.ConversationActionHolder action = conversation.actions().get(actionIdx);
+            if (action != null) {
+                switch (action.action()) {
+                    case ANSWER -> {
+                        NPCData.Conversation answer = conversations.conversations().get(action.actionValue());
+                        if (answer != null) {
+                            this.relationManager.getFriendPointData(sender.getUUID())
+                                    .answer(conversationID, action.friendXP());
+                            this.tellDialogue(sender, type, action.actionValue(), answer);
+                        }
+                    }
+                    case QUEST -> {
+                        //TODO
+                    }
+                }
+            }
         }
     }
 

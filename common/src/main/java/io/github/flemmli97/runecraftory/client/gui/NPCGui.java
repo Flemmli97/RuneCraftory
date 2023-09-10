@@ -213,8 +213,8 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
     }
 
     @Override
-    public void onClose() {
-        super.onClose();
+    public void removed() {
+        super.removed();
         Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.CLOSE));
     }
 

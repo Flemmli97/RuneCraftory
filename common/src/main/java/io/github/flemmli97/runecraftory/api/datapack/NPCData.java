@@ -279,13 +279,14 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 this.translations.put(this.fallback, enTranslation);
             }
 
-            public Builder addConversation(Conversation conversation, String enTranslation) {
+            public Builder addConversation(Conversation.Builder conversation, String enTranslation) {
                 return this.addConversation(conversation.translationKey, conversation, enTranslation);
             }
 
-            public Builder addConversation(String key, Conversation conversation, String enTranslation) {
-                this.greetings.put(key, conversation);
+            public Builder addConversation(String key, Conversation.Builder conversation, String enTranslation) {
+                this.greetings.put(key, conversation.build());
                 this.translations.put(conversation.translationKey, enTranslation);
+                this.translations.putAll(conversation.actionTranslation);
                 return this;
             }
 
@@ -300,7 +301,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
     }
 
     public record Conversation(String translationKey, int minHearts, int maxHearts, boolean startingConversation,
-                               ConversationActionHolder action, LootItemCondition... conditions) {
+                               List<ConversationActionHolder> actions, LootItemCondition... conditions) {
 
         private static final Gson GSON = Deserializers.createConditionSerializer().create();
         private static final JsonDeserializationContext CTX_DESERIALIZER = GSON::fromJson;
@@ -341,21 +342,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         public static final Codec<Conversation> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         Codec.BOOL.optionalFieldOf("startingConversation").forGetter(d -> d.startingConversation ? Optional.empty() : Optional.of(false)),
-                        ConversationActionHolder.CODEC.optionalFieldOf("action").forGetter(d -> Optional.ofNullable(d.action)),
+                        ConversationActionHolder.CODEC.listOf().optionalFieldOf("actions").forGetter(d -> d.actions.isEmpty() ? Optional.empty() : Optional.of(d.actions)),
                         LOOT_ITEM_CONDITION_CODEC.listOf().fieldOf("conditions").forGetter(d -> Arrays.stream(d.conditions).toList()),
 
                         Codec.STRING.fieldOf("translationKey").forGetter(d -> d.translationKey),
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("minHearts").forGetter(d -> d.minHearts),
                         ExtraCodecs.NON_NEGATIVE_INT.fieldOf("maxHearts").forGetter(d -> d.maxHearts)
-                ).apply(inst, (start, action, cond, key, min, max) -> new Conversation(key, min, max, start.orElse(true), action.orElse(null), cond.toArray(new LootItemCondition[0]))));
-
-        public Conversation(String translationKey, int minHearts, int maxHearts, LootItemCondition... conditions) {
-            this(translationKey, minHearts, maxHearts, true, null, conditions);
-        }
-
-        public Conversation(String translationKey, int minHearts, int maxHearts, boolean start, LootItemCondition... conditions) {
-            this(translationKey, minHearts, maxHearts, start, null, conditions);
-        }
+                ).apply(inst, (start, action, cond, key, min, max) -> new Conversation(key, min, max, start.orElse(true), action.orElse(List.of()), cond.toArray(new LootItemCondition[0]))));
 
         public boolean test(int hearts, LootContext ctx) {
             if (this.minHearts > hearts || this.maxHearts < hearts)
@@ -365,22 +358,59 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     return false;
             return true;
         }
+
+        public static class Builder {
+
+            private final String translationKey;
+            private final int minHearts, maxHearts;
+            private boolean startingConversation = true;
+            private final List<ConversationActionHolder> action = new ArrayList<>();
+            private final Map<String, String> actionTranslation = new LinkedHashMap<>();
+            private final List<LootItemCondition> conditions = new ArrayList<>();
+
+            public Builder(String translationKey, int minHearts, int maxHearts) {
+                this.translationKey = translationKey;
+                this.minHearts = minHearts;
+                this.maxHearts = maxHearts;
+            }
+
+            public Builder setAnswer() {
+                this.startingConversation = false;
+                return this;
+            }
+
+            public Builder addAction(ConversationActionHolder action, String enTranslation) {
+                this.action.add(action);
+                this.actionTranslation.put(action.translationKey, enTranslation);
+                return this;
+            }
+
+            public Builder addCondition(LootItemCondition condition) {
+                this.conditions.add(condition);
+                return this;
+            }
+
+            public Conversation build() {
+                return new Conversation(this.translationKey, this.minHearts, this.maxHearts, this.startingConversation, this.action, this.conditions.toArray(new LootItemCondition[0]));
+            }
+        }
     }
 
-    public record ConversationActionHolder(String translationKey, ConversationAction action, String actionValue) {
+    public record ConversationActionHolder(String translationKey, ConversationAction action, String actionValue,
+                                           int friendXP) {
 
         public static final Codec<ConversationActionHolder> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
                         Codec.STRING.fieldOf("translationKey").forGetter(d -> d.translationKey),
-                        CodecHelper.enumCodec(ConversationAction.class, null).fieldOf("action").forGetter(d -> d.action),
-                        Codec.STRING.fieldOf("value").forGetter(d -> d.actionValue)
-                ).apply(inst, ConversationActionHolder::new));
+                        CodecHelper.enumCodec(ConversationAction.class, null).fieldOf("actions").forGetter(d -> d.action),
+                        Codec.STRING.fieldOf("value").forGetter(d -> d.actionValue),
+                        Codec.INT.optionalFieldOf("friendXP").forGetter(d -> d.friendXP != 0 ? Optional.of(d.friendXP) : Optional.empty())
+                ).apply(inst, (key, action, value, xp) -> new ConversationActionHolder(key, action, value, xp.orElse(0))));
     }
 
     public enum ConversationAction {
         ANSWER,
-        QUEST,
-        CONTINUE
+        QUEST
     }
 
     public record Gift(TagKey<Item> item, String responseKey, int xp) {

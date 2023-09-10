@@ -18,6 +18,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, C2SNPCInteraction.ID, C2SNPCInteraction.class, C2SNPCInteraction::write, C2SNPCInteraction::read, C2SNPCInteraction::handle);
         register.registerMessage(id++, C2SShopButton.ID, C2SShopButton.class, C2SShopButton::write, C2SShopButton::read, C2SShopButton::handle);
         register.registerMessage(id++, C2SSelectRecipeCrafting.ID, C2SSelectRecipeCrafting.class, C2SSelectRecipeCrafting::write, C2SSelectRecipeCrafting::read, C2SSelectRecipeCrafting::handle);
+        register.registerMessage(id++, C2SDialogueAction.ID, C2SDialogueAction.class, C2SDialogueAction::write, C2SDialogueAction::read, C2SDialogueAction::handle);
         return id;
     }
 
@@ -50,6 +51,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CTriggers.ID, S2CTriggers.class, S2CTriggers::write, S2CTriggers::read, S2CTriggers::handle);
         register.registerMessage(id++, S2CFarmlandUpdatePacket.ID, S2CFarmlandUpdatePacket.class, S2CFarmlandUpdatePacket::write, S2CFarmlandUpdatePacket::read, S2CFarmlandUpdatePacket::handle);
         register.registerMessage(id++, S2CFarmlandRemovePacket.ID, S2CFarmlandRemovePacket.class, S2CFarmlandRemovePacket::write, S2CFarmlandRemovePacket::read, S2CFarmlandRemovePacket::handle);
+        register.registerMessage(id++, S2CNpcDialogue.ID, S2CNpcDialogue.class, S2CNpcDialogue::write, S2CNpcDialogue::read, S2CNpcDialogue::handle);
         return id;
     }
 

@@ -1,12 +1,14 @@
 package io.github.flemmli97.runecraftory.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.client.gui.CraftingGui;
 import io.github.flemmli97.runecraftory.client.gui.FarmlandInfo;
 import io.github.flemmli97.runecraftory.client.gui.InfoScreen;
 import io.github.flemmli97.runecraftory.client.gui.MonsterCompanionGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCCompanionGui;
+import io.github.flemmli97.runecraftory.client.gui.NPCDialogueGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
@@ -269,6 +271,16 @@ public class ClientHandlers {
                     }
                 }
             }
+        }
+    }
+
+    public static void updateNPCDialogue(EntityNPCBase npc, NPCData.ConversationType type, String conversationID, Component component, List<Component> actions) {
+        if (Minecraft.getInstance().screen instanceof NPCDialogueGui<?> gui) {
+            gui.updateConversation(Minecraft.getInstance(), type, conversationID, component, actions);
+        } else {
+            NPCDialogueGui<EntityNPCBase> gui = new NPCDialogueGui<>(npc);
+            gui.updateConversation(Minecraft.getInstance(), type, conversationID, component, actions);
+            Minecraft.getInstance().setScreen(gui);
         }
     }
 }
