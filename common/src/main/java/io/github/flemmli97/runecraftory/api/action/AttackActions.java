@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.api.action;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
+import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemStaffBase;
@@ -115,6 +116,10 @@ public class AttackActions {
                     }
                 }
             }))
+            .doAtStart((e, w) -> {
+                if (w.getCurrentCount() == 6 && e instanceof ServerPlayer player)
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.shortSwordUltimate, true, false, false));
+            })
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.SHORTSWORD, 20) ? 6 : 5, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 6)
             .disableItemSwitch().disableMovement());
@@ -173,6 +178,10 @@ public class AttackActions {
                     }
                 }
             }))
+            .doAtStart((e, w) -> {
+                if (w.getCurrentCount() == 4 && e instanceof ServerPlayer player)
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.longSwordUltimate, true, false, false));
+            })
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.LONGSWORD, 20) ? 4 : 3, entity -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 4)
             .disableItemSwitch().disableMovement());
@@ -266,6 +275,10 @@ public class AttackActions {
                     handler.lockLook(anim.isPastTick(01.16) && !anim.isPastTick(1.6));
                 }
             }))
+            .doAtStart((e, w) -> {
+                if (w.getCurrentCount() == 5 && e instanceof ServerPlayer player)
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.spearUltimate, true, false, false));
+            })
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.SPEAR, 20) ? 5 : 4, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 5)
             .disableItemSwitch().disableMovement());
@@ -288,6 +301,8 @@ public class AttackActions {
         int attack = (int) Math.ceil(0.6 * 20);
         if (count == 2)
             attack = (int) Math.ceil(0.48 * 20);
+        else if (count == 3)
+            defaultLength = (int) Math.ceil(1.48 * 20);
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
         return AnimatedAction.builder(defaultLength + 1, "hammer_axe_" + count).speed(speed).marker(attack).build();
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
@@ -310,7 +325,7 @@ public class AttackActions {
                         if (anim.isPastTick(0.12) && !anim.isPastTick(1.28)) {
                             Vec3 dir = AttackAction.fromRelativeVector(handler.getSpinStartRot(), new Vec3(0, 0, 1)).scale(6 / ((1.28 - 0.12) * 20 / anim.getSpeed()));
                             if (!anim.isPastTick(0.56))
-                                dir = dir.add(0, entity.getDeltaMovement().y + 0.12, 0);
+                                dir = dir.add(0, entity.getDeltaMovement().y + 0.14, 0);
                             else if (anim.isPastTick(0.76))
                                 dir = dir.add(0, entity.getDeltaMovement().y - 0.1, 0);
                             entity.setDeltaMovement(dir);
@@ -324,6 +339,10 @@ public class AttackActions {
                     handler.lockLook(anim.isPastTick(0.12) && !anim.isPastTick(1.28));
                 }
             }))
+            .doAtStart((e, w) -> {
+                if (w.getCurrentCount() == 3 && e instanceof ServerPlayer player)
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.hammerAxeUltimate, true, false, false));
+            })
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.HAMMERAXE, 20) ? 3 : 2, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 3)
             .disableItemSwitch().disableMovement());
@@ -443,6 +462,10 @@ public class AttackActions {
                     }
                 }
             }))
+            .doAtStart((e, w) -> {
+                if (w.getCurrentCount() == 8 && e instanceof ServerPlayer player)
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.dualBladeUltimate, true, false, false));
+            })
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.DUAL, 20) ? 8 : 7, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 8)
             .disableItemSwitch().disableMovement());
@@ -531,6 +554,10 @@ public class AttackActions {
                     handler.lockLook(anim.isPastTick(0.08) && !anim.isPastTick(1.2));
                 }
             }))
+            .doAtStart((e, w) -> {
+                if (w.getCurrentCount() == 5 && e instanceof ServerPlayer player)
+                    Platform.INSTANCE.getPlayerData(player).ifPresent(d -> LevelCalc.useRP(player, d, GeneralConfig.gloveUltimate, true, false, false));
+            })
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.FIST, 20) ? 5 : 4, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 5)
             .disableItemSwitch().disableMovement()

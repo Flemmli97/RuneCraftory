@@ -47,6 +47,12 @@ public class GeneralConfig {
     public static float strPerLevel = 1;
     public static float vitPerLevel = 1.5f;
     public static float intPerLevel = 1;
+    public static float shortSwordUltimate = 7;
+    public static float longSwordUltimate = 7;
+    public static float spearUltimate = 7;
+    public static float hammerAxeUltimate = 7;
+    public static float dualBladeUltimate = 7;
+    public static float gloveUltimate = 7;
 
     public static float platinumChargeTime = 0.5f;
     public static int scrapWateringCanWater = 25;

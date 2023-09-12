@@ -59,6 +59,12 @@ public record ConfigHolder<T>(T configSpec, Consumer<T> loader) {
         GeneralConfig.strPerLevel = spec.strPerLevel.get().floatValue();
         GeneralConfig.vitPerLevel = spec.vitPerLevel.get().floatValue();
         GeneralConfig.intPerLevel = spec.intPerLevel.get().floatValue();
+        GeneralConfig.shortSwordUltimate = spec.shortSwordUltimate.get().floatValue();
+        GeneralConfig.longSwordUltimate = spec.longSwordUltimate.get().floatValue();
+        GeneralConfig.spearUltimate = spec.spearUltimate.get().floatValue();
+        GeneralConfig.hammerAxeUltimate = spec.hammerAxeUltimate.get().floatValue();
+        GeneralConfig.dualBladeUltimate = spec.dualBladeUltimate.get().floatValue();
+        GeneralConfig.gloveUltimate = spec.gloveUltimate.get().floatValue();
 
         GeneralConfig.platinumChargeTime = spec.platinumChargeTime.get().floatValue();
         GeneralConfig.scrapWateringCanWater = spec.scrapWateringCanWater.get();

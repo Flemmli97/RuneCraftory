@@ -53,6 +53,12 @@ public class GeneralConfigSpec {
     public final ForgeConfigSpec.DoubleValue strPerLevel;
     public final ForgeConfigSpec.DoubleValue vitPerLevel;
     public final ForgeConfigSpec.DoubleValue intPerLevel;
+    public final ForgeConfigSpec.DoubleValue shortSwordUltimate;
+    public final ForgeConfigSpec.DoubleValue longSwordUltimate;
+    public final ForgeConfigSpec.DoubleValue spearUltimate;
+    public final ForgeConfigSpec.DoubleValue hammerAxeUltimate;
+    public final ForgeConfigSpec.DoubleValue dualBladeUltimate;
+    public final ForgeConfigSpec.DoubleValue gloveUltimate;
 
     public final ForgeConfigSpec.DoubleValue platinumChargeTime;
     public final ForgeConfigSpec.IntValue scrapWateringCanWater;
@@ -133,6 +139,12 @@ public class GeneralConfigSpec {
         this.strPerLevel = builder.comment("Strenghth increase per level").defineInRange("Strength Increase", GeneralConfig.strPerLevel, 0, Double.MAX_VALUE);
         this.vitPerLevel = builder.comment("Vitality increase per level").defineInRange("Vit Increase", GeneralConfig.vitPerLevel, 0, Double.MAX_VALUE);
         this.intPerLevel = builder.comment("Intelligence increase per level").defineInRange("Int Increase", GeneralConfig.intPerLevel, 0, Double.MAX_VALUE);
+        this.shortSwordUltimate = builder.comment("RP Cost of shortsword ultimate").defineInRange("Shortsword Ultimate", GeneralConfig.shortSwordUltimate, 0, Double.MAX_VALUE);
+        this.longSwordUltimate = builder.comment("RP Cost of longsword ultimate").defineInRange("Longsword Ultimate", GeneralConfig.longSwordUltimate, 0, Double.MAX_VALUE);
+        this.spearUltimate = builder.comment("RP Cost of spear ultimate").defineInRange("Spear Ultimate", GeneralConfig.spearUltimate, 0, Double.MAX_VALUE);
+        this.hammerAxeUltimate = builder.comment("RP Cost of hammer and axe ultimate").defineInRange("Hammer & Axe Ultimatee", GeneralConfig.hammerAxeUltimate, 0, Double.MAX_VALUE);
+        this.dualBladeUltimate = builder.comment("RP Cost of dual blades ultimate").defineInRange("Dualblade Ultimate", GeneralConfig.dualBladeUltimate, 0, Double.MAX_VALUE);
+        this.gloveUltimate = builder.comment("RP Cost of fist weapon ultimate").defineInRange("Glove Ultimate", GeneralConfig.gloveUltimate, 0, Double.MAX_VALUE);
         builder.pop();
 
         builder.comment("Configs for weapon and tools").push("Weapon and Tools");
