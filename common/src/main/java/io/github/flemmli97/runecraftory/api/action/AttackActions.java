@@ -241,13 +241,13 @@ public class AttackActions {
                             }
                             if (!anim.isPastTick(1.52)) {
                                 if (anim.isPastTick(1.4)) {
-                                    entity.setDeltaMovement(AttackAction.fromRelativeVector(entity, new Vec3(0, -0.66, 1.1))
-                                            .scale(2 / ((1.52 - 1.4) * 20 / anim.getSpeed())));
+                                    entity.setDeltaMovement(AttackAction.fromRelativeVector(entity, new Vec3(0, -0.8, 1.1))
+                                            .scale(1.9 / ((1.52 - 1.4) * 20 / anim.getSpeed())));
                                     AttackAction.sendMotionUpdate(entity);
                                     entity.resetFallDistance();
                                 } else if (anim.isPastTick(1.2)) {
-                                    entity.setDeltaMovement(AttackAction.fromRelativeVector(entity, new Vec3(0, 0.66, 1.15))
-                                            .scale(2 / ((1.4 - 1.2) * 20 / anim.getSpeed())));
+                                    entity.setDeltaMovement(AttackAction.fromRelativeVector(entity, new Vec3(0, 0.8, 1.15))
+                                            .scale(1.9 / ((1.4 - 1.2) * 20 / anim.getSpeed())));
                                     AttackAction.sendMotionUpdate(entity);
                                 }
                             }

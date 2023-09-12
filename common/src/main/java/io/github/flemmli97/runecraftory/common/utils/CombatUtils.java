@@ -570,7 +570,7 @@ public class CombatUtils {
         float rot = Mth.wrapDegrees(maxYRot - minYRot);
         Vec3 dir = Vec3.directionFromRotation(0, Mth.wrapDegrees(minYRot + rot * 0.5f));
         float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
-        CircleSector circ = new CircleSector(entity.position(), dir, reach, Mth.abs(rot * 0.5f), entity);
+        CircleSector circ = new CircleSector(entity.position().add(0, entity.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(rot * 0.5f), entity);
         List<Entity> list = entity.level.getEntities(entity, entity.getBoundingBox().inflate(reach + 1),
                 t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable()
                         && (t.getBoundingBox().minY <= entity.getBoundingBox().maxY || t.getBoundingBox().maxY >= entity.getBoundingBox().minY)
