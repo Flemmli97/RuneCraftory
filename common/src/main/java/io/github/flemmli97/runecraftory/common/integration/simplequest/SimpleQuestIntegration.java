@@ -8,7 +8,7 @@ import io.github.flemmli97.simplequests.api.SimpleQuestAPI;
 import io.github.flemmli97.simplequests.datapack.QuestEntryRegistry;
 import io.github.flemmli97.simplequests.datapack.QuestsManager;
 import io.github.flemmli97.simplequests.gui.QuestGui;
-import io.github.flemmli97.simplequests.quest.Quest;
+import io.github.flemmli97.simplequests.quest.QuestBase;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -28,10 +28,10 @@ public class SimpleQuestIntegration {
         if (!RuneCraftory.simpleQuests) {
             return;
         }
-        QuestEntryRegistry.registerSerializer(QuestTasks.ShippingEntry.ID, QuestTasks.ShippingEntry::fromJson);
-        QuestEntryRegistry.registerSerializer(QuestTasks.LevelEntry.ID, QuestTasks.LevelEntry::fromJson);
-        QuestEntryRegistry.registerSerializer(QuestTasks.SkillLevelEntry.ID, QuestTasks.SkillLevelEntry::fromJson);
-        QuestEntryRegistry.registerSerializer(QuestTasks.TamingEntry.ID, QuestTasks.TamingEntry::fromJson);
+        QuestEntryRegistry.registerSerializer(QuestTasks.ShippingEntry.ID, QuestTasks.ShippingEntry.CODEC);
+        QuestEntryRegistry.registerSerializer(QuestTasks.LevelEntry.ID, QuestTasks.LevelEntry.CODEC);
+        QuestEntryRegistry.registerSerializer(QuestTasks.SkillLevelEntry.ID, QuestTasks.SkillLevelEntry.CODEC);
+        QuestEntryRegistry.registerSerializer(QuestTasks.TamingEntry.ID, QuestTasks.TamingEntry.CODEC);
     }
 
     public static void openGui(ServerPlayer player) {
@@ -40,7 +40,7 @@ public class SimpleQuestIntegration {
             return;
         }
         //TODO Custom gui
-        QuestGui.openGui(player, QuestsManager.instance().getQuestCategory(QUEST_CATEGORY), false);
+        QuestGui.openGui(player, QuestsManager.instance().getQuestCategory(QUEST_CATEGORY), false, 0);
     }
 
     public static void tryComplete(ServerPlayer player) {
@@ -50,7 +50,7 @@ public class SimpleQuestIntegration {
         SimpleQuestAPI.submit(player, QUEST_TRIGGER, false);
     }
 
-    public static Map<ResourceLocation, Quest> getQuests() {
+    public static Map<ResourceLocation, QuestBase> getQuests() {
         if (!RuneCraftory.simpleQuests) {
             return Map.of();
         }

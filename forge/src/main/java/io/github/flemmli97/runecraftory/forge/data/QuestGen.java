@@ -24,8 +24,9 @@ public class QuestGen extends QuestProvider {
 
     @Override
     protected void add() {
-        QuestCategory main = new QuestCategory.Builder(SimpleQuestIntegration.QUEST_CATEGORY, "Quests")
+        QuestCategory main = new QuestCategory.Builder(SimpleQuestIntegration.QUEST_CATEGORY, RuneCraftory.MODID + ".quests.category")
                 .unselectable()
+                .setHidden()
                 .countSameCategoryOnly()
                 .setMaxConcurrent(1).build();
         this.addQuest(new Quest.Builder(id("ship_turnip"), "Ship a turnip", BuiltInLootTables.EMPTY)
