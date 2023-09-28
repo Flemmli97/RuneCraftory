@@ -100,8 +100,12 @@ public abstract class FollowEntityGoal<T extends Mob> extends Goal {
             return;
         }
         if (this.mob.distanceToSqr(this.owner) < this.tpDistanceSqrt || !this.teleportToOwner()) {
-            this.mob.getNavigation().moveTo(this.owner, this.speedModifier);
+            this.moveToFollower(this.owner, this.speedModifier);
         }
+    }
+
+    protected void moveToFollower(LivingEntity follower, double speed) {
+        this.mob.getNavigation().moveTo(follower, speed);
     }
 
     private boolean teleportToOwner() {

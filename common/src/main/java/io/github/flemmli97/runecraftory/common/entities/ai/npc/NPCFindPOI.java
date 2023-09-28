@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities.ai;
+package io.github.flemmli97.runecraftory.common.entities.ai.npc;
 
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import net.minecraft.core.BlockPos;
@@ -89,6 +89,8 @@ public class NPCFindPOI extends Goal {
         Path path = this.npc.getNavigation().createPath(set, poiType.getValidRange());
         if (path != null && path.canReach()) {
             BlockPos blockPos2 = path.getTarget();
+            if (this.bedIsOccupied(serverLevel, blockPos2))
+                return null;
             return poiManager.getType(blockPos2).map(type -> {
                 poiManager.take(predicate, blockPos2::equals, blockPos2, 1);
                 DebugPackets.sendPoiTicketCountPacket(serverLevel, blockPos2);

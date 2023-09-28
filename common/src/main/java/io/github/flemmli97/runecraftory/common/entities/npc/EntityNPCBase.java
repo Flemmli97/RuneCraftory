@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.common.entities.npc;
 import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.api.action.PlayerModelAnimations;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
@@ -15,11 +16,13 @@ import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.ai.AvoidWhenNotFollowing;
 import io.github.flemmli97.runecraftory.common.entities.ai.LookAtAliveGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.LookAtInteractingPlayerGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.NPCFindPOI;
-import io.github.flemmli97.runecraftory.common.entities.ai.NPCFollowGoal;
-import io.github.flemmli97.runecraftory.common.entities.ai.NPCWanderGoal;
 import io.github.flemmli97.runecraftory.common.entities.ai.RandomLookGoalAlive;
 import io.github.flemmli97.runecraftory.common.entities.ai.StayGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCAttackGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCFindPOI;
+import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCFollowGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.npc.NPCWanderGoal;
+import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
@@ -28,7 +31,6 @@ import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
 import io.github.flemmli97.runecraftory.common.loot.LootCtxParameters;
-import io.github.flemmli97.runecraftory.common.network.S2CAttackDebug;
 import io.github.flemmli97.runecraftory.common.network.S2CNPCLook;
 import io.github.flemmli97.runecraftory.common.network.S2CNpcDialogue;
 import io.github.flemmli97.runecraftory.common.network.S2COpenNPCGui;
@@ -51,6 +53,8 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import io.github.flemmli97.tenshilib.api.entity.AnimationHandler;
 import io.github.flemmli97.tenshilib.api.entity.IAnimated;
+import io.github.flemmli97.tenshilib.api.item.IAOEWeapon;
+import io.github.flemmli97.tenshilib.api.item.IExtendedWeapon;
 import io.github.flemmli97.tenshilib.platform.registry.RegistryEntrySupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -95,7 +99,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
@@ -122,8 +125,6 @@ import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -152,7 +153,10 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private static final ImmutableList<MemoryModuleType<?>> MEMORY_TYPES = ImmutableList.of(MemoryModuleType.HOME, MemoryModuleType.JOB_SITE, MemoryModuleType.MEETING_POINT,
             MemoryModuleType.DOORS_TO_CLOSE, MemoryModuleType.HIDING_PLACE, MemoryModuleType.WALK_TARGET, MemoryModuleType.CANT_REACH_WALK_TARGET_SINCE);
 
-    private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, AnimatedAction.vanillaAttackOnly);
+    public static final AnimatedAction[] ANIMS = PlayerModelAnimations.getAll().toArray(new AnimatedAction[0]);
+    private final AnimationHandler<EntityNPCBase> animationHandler = new AnimationHandler<>(this, ANIMS);
+
+    private Runnable delayedAttack = null;
 
     public final Predicate<LivingEntity> targetPred = (e) -> {
         if (e != this) {
@@ -189,6 +193,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     private NPCJob shop = ModNPCJobs.NONE.getSecond();
     private NPCData data = NPCData.DEFAULT_DATA;
     private NPCData.NPCLook look = NPCData.NPCLook.DEFAULT_LOOK;
+    private NPCAttackActions attackActions = NPCAttackActions.DEFAULT;
     private Pair<EnumSeason, Integer> birthday = Pair.of(EnumSeason.SPRING, 1);
     //Will be used if data returns null for these values
     private Map<String, TagKey<Item>> gift = new HashMap<>();
@@ -285,7 +290,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         this.goalSelector.addGoal(1, new LookAtInteractingPlayerGoal(this));
         this.goalSelector.addGoal(2, new LookAtAliveGoal(this, Player.class, 8.0f));
         this.goalSelector.addGoal(3, new RandomLookGoalAlive(this));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, true));
+        this.goalSelector.addGoal(2, new NPCAttackGoal<>(this));
         this.goalSelector.addGoal(3, new NPCFollowGoal(this, 1.15, 9, 3, 20));
         this.goalSelector.addGoal(4, this.wander);
     }
@@ -379,6 +384,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     @Override
     public void aiStep() {
+        this.updateSwingTime();
         super.aiStep();
         this.getAnimationHandler().tick();
         boolean teleported = false;
@@ -474,13 +480,11 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (player instanceof ServerPlayer serverPlayer) {
             NPCData.Gift gift = this.giftOf(stack);
             if (gift != null) {
-                this.relationManager.getFriendPointData(player.getUUID())
-                        .giftXP(this.level, (int) (gift.xp() * mult));
-                this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(gift.responseKey(), player.getName()), List.of());
+                if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level, (int) (gift.xp() * mult)))
+                    this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(gift.responseKey(), player.getName()), List.of());
             } else {
-                this.relationManager.getFriendPointData(player.getUUID())
-                        .giftXP(this.level, (int) (15 * mult));
-                this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(this.data.neutralGiftResponse(), player.getName()), List.of());
+                if (this.relationManager.getFriendPointData(player.getUUID()).giftXP(this.level, (int) (15 * mult)))
+                    this.tellDialogue(serverPlayer, null, null, new TranslatableComponent(this.data.neutralGiftResponse(), player.getName()), List.of());
             }
         }
         stack.shrink(1);
@@ -500,7 +504,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 .withParameter(LootContextParams.ORIGIN, this.position())
                 .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
                 .withLuck(player.getLuck()).create(LootContextParamSets.GIFT);
-        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.conversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, ctx))
+        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.getConversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, ctx))
                 .collect(Collectors.toList());
         Collections.shuffle(filtered, this.updater.getDailyRandom());
         int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
@@ -509,7 +513,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
                 this.tellDialogue(serverPlayer, type, randomLine.getKey(), randomLine.getValue());
             } else {
-                this.tellDialogue(serverPlayer, type, null, new TranslatableComponent(conversations.fallbackKey(), player.getName()), List.of());
+                this.tellDialogue(serverPlayer, type, null, new TranslatableComponent(conversations.getFallbackKey(), player.getName()), List.of());
             }
         }
     }
@@ -526,13 +530,13 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
 
     public void handleDialogueAction(ServerPlayer sender, NPCData.ConversationType type, String conversationID, int actionIdx) {
         NPCData.ConversationSet conversations = this.data.getConversation(type);
-        NPCData.Conversation conversation = conversations.conversations().get(conversationID);
+        NPCData.Conversation conversation = conversations.getConversations().get(conversationID);
         if (conversation != null && actionIdx < conversation.actions().size()) {
             NPCData.ConversationActionHolder action = conversation.actions().get(actionIdx);
             if (action != null) {
                 switch (action.action()) {
                     case ANSWER -> {
-                        NPCData.Conversation answer = conversations.conversations().get(action.actionValue());
+                        NPCData.Conversation answer = conversations.getConversations().get(action.actionValue());
                         if (answer != null) {
                             this.relationManager.getFriendPointData(sender.getUUID())
                                     .answer(conversationID, action.friendXP());
@@ -860,46 +864,44 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
+    public void useDelayedAttack(Runnable runnable) {
+        if (this.delayedAttack == null)
+            this.delayedAttack = runnable;
+    }
+
     public void handleAttack(AnimatedAction anim) {
         this.getNavigation().stop();
         if (anim.getTick() == 1 && this.getTarget() != null)
             this.lookAt(this.getTarget(), 360, 90);
         if (anim.canAttack()) {
-            this.mobAttack(anim, this.getTarget(), this::doHurtTarget);
+            if (this.delayedAttack != null) {
+                this.delayedAttack.run();
+                this.delayedAttack = null;
+            }
+            this.npcAttack(this::doHurtTarget);
         }
     }
 
-    public void mobAttack(AnimatedAction anim, LivingEntity target, Consumer<LivingEntity> cons) {
-        AABB aabb = this.calculateAttackAABB(anim, target);
-        this.level.getEntitiesOfClass(LivingEntity.class, aabb, this.hitPred).forEach(cons);
-        if (this.getServer() != null)
-            Platform.INSTANCE.sendToAll(new S2CAttackDebug(aabb), this.getServer());
+    public void npcAttack(Consumer<LivingEntity> cons) {
+        this.attackableEntites().forEach(cons);
     }
 
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target) {
-        return this.calculateAttackAABB(anim, target, 0.2);
-    }
-
-    public AABB calculateAttackAABB(AnimatedAction anim, LivingEntity target, double grow) {
-        double reach = this.maxAttackRange(anim) * 0.5 + this.getBbWidth() * 0.5;
-        Vec3 dir;
-        if (target != null && !this.isVehicle()) {
-            reach = Math.min(reach, this.distanceTo(target));
-            dir = target.position().subtract(this.position()).normalize();
-        } else {
-            dir = Vec3.directionFromRotation(this.getXRot(), this.getYRot());
+    public List<LivingEntity> attackableEntites() {
+        ItemStack held = this.getMainHandItem();
+        if (held.getItem() instanceof IAOEWeapon weapon) {
+            return CombatUtils.spinAttackHandler(this, this.getLookAngle(), weapon.getFOV(this, held), 0, this.hitPred);
         }
-        Vec3 attackPos = this.position().add(dir.scale(reach));
-        return this.attackAABB(anim).inflate(grow, 0, grow).move(attackPos.x, attackPos.y, attackPos.z);
-    }
-
-    public AABB attackAABB(AnimatedAction anim) {
-        double range = this.maxAttackRange(anim) * 0.5;
-        return new AABB(-range, -0.02, -range, range, this.getBbHeight() + 0.02, range);
-    }
-
-    public double maxAttackRange(AnimatedAction anim) {
-        return 1;
+        LivingEntity target = this.getTarget();
+        if (target == null)
+            return List.of();
+        double range = this.getMeleeAttackRangeSqr(target);
+        if (this.getMainHandItem().getItem() instanceof IExtendedWeapon weapon) {
+            float weaponRange = weapon.getRange(this, held);
+            range = weaponRange * weaponRange;
+        }
+        if (this.distanceToSqr(target.getX(), target.getY(), target.getZ()) <= range)
+            return List.of(target);
+        return List.of();
     }
 
     @Override
@@ -1070,7 +1072,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         if (player != null) {
             int points = this.friendPoints(player);
             float denyChance = points < 3 ? -0.1f + 0.1f * points : (0.4f + 0.15f * points);
-            if (Platform.INSTANCE.getPlayerData(player).map(d -> d.getDailyUpdater().getDailyRandom().nextFloat() < denyChance).orElse(true)) {
+            if (!player.isCreative() && Platform.INSTANCE.getPlayerData(player).map(d -> d.getDailyUpdater().getDailyRandom().nextFloat() < denyChance).orElse(true)) {
                 this.speak(player, NPCData.ConversationType.FOLLOWNO);
                 return false;
             }
@@ -1140,6 +1142,16 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                 this.look = DataPackHandler.SERVER_PACK.npcLookManager().getRandom(this.random, this.isMale());
         }
         return this.look;
+    }
+
+    public NPCAttackActions getAttackActions() {
+        if (this.attackActions == null) {
+            if (this.data == NPCData.DEFAULT_DATA)
+                this.attackActions = NPCAttackActions.DEFAULT;
+            else
+                this.attackActions = DataPackHandler.SERVER_PACK.npcActionsManager().get(this.data.combatActions());
+        }
+        return this.attackActions;
     }
 
     public Pair<EnumSeason, Integer> getBirthday() {
@@ -1230,6 +1242,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
         this.look = null;
         this.getLook();
+        this.attackActions = null;
         this.birthday = null;
         this.getBirthday();
         if (data.schedule() == null)

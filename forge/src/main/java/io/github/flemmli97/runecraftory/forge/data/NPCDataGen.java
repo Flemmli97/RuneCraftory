@@ -3,6 +3,8 @@ package io.github.flemmli97.runecraftory.forge.data;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
 import io.github.flemmli97.runecraftory.api.datapack.provider.NPCDataProvider;
+import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.AttackMeleeAction;
+import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
 import io.github.flemmli97.tenshilib.platform.PlatformUtils;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -11,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.storage.loot.IntRange;
 import net.minecraft.world.level.storage.loot.predicates.TimeCheck;
 import net.minecraft.world.level.storage.loot.predicates.WeatherCheck;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -24,10 +27,15 @@ public class NPCDataGen extends NPCDataProvider {
 
     @Override
     protected void add() {
+        ResourceLocation genericAttack = this.addAttackActions(new ResourceLocation(RuneCraftory.MODID, "generic_melee_attack"), new NPCAttackActions.Builder()
+                .addAction(new NPCAttackActions.ActionBuilder(1)
+                        .action(new AttackMeleeAction(UniformGenerator.between(30, 70)))));
+
         this.addNPCData("random_npc", new NPCData.Builder(50)
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.dislike", -10), "Eh... thanks I guess?")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.like", 25), "Thanks %s for the gift. I really like this.")
-                        .setNeutralGiftResponse("npc.generic.gift.default", "Thank you for your gift"),
+                        .setNeutralGiftResponse("npc.generic.gift.default", "Thank you for your gift")
+                        .withCombatAction(genericAttack),
                 of(m -> {
                     m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.greeting.default", "Hello %s.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.greeting.1", 0, 10).addCondition(TimeCheck.time(IntRange.range(0, 12000)).build()), "Good day %s.")
@@ -46,7 +54,8 @@ public class NPCDataGen extends NPCDataProvider {
                 }));
 
         this.addNPCData("random_npc_2", new NPCData.Builder(50)
-                        .setNeutralGiftResponse("npc.generic.2.gift.default", "Thanks. I appreciate it"),
+                        .setNeutralGiftResponse("npc.generic.2.gift.default", "Thanks. I appreciate it")
+                        .withCombatAction(genericAttack),
                 of(m -> {
                     m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.2.greeting.default", "Hello %s.")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.2.greeting.1", 0, 10), "Howdy %s")
@@ -62,7 +71,8 @@ public class NPCDataGen extends NPCDataProvider {
         this.addNPCData("random_npc_3", new NPCData.Builder(50)
                         .addGiftResponse("dislike", new NPCData.Gift(null, "npc.generic.3.dislike", -10), "What is this... Sorry but im not a fan of this")
                         .addGiftResponse("like", new NPCData.Gift(null, "npc.generic.3.like", 25), "Wow %s. Thanks for the gift. This is a nice present!")
-                        .setNeutralGiftResponse("npc.generic.3.gift.default", "Thank you for your gift"),
+                        .setNeutralGiftResponse("npc.generic.3.gift.default", "Thank you for your gift")
+                        .withCombatAction(genericAttack),
                 of(m -> {
                     m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.3.greeting.default", "Hi %s. How are you doing today?")
                             .addConversation(new NPCData.Conversation.Builder("npc.generic.3.greeting.1", 0, 10), "Nice to see you"));
@@ -76,8 +86,20 @@ public class NPCDataGen extends NPCDataProvider {
                 }));
 
         //Test data using all possible fields
-        /*this.addNPCDataAll("random_npc_all_test", new NPCData.Builder(50, "Name", "Surname", NPCData.Gender.UNDEFINED)
-                        .setNeutralGiftResponse("npc.generic.2.gift.default", "Test")
+        /*ResourceLocation attackAll = this.addAttackActions(new ResourceLocation(RuneCraftory.MODID, "attack_all"), new NPCAttackActions.Builder()
+        .addAction(new NPCAttackActions.ActionBuilder(1)
+                .action(new AttackMeleeAction(ConstantValue.exactly(40), ConstantValue.exactly(0)))
+                .action(new RunToLeadAction(ConstantValue.exactly(40), ConstantValue.exactly(0))))
+        .addAction(new NPCAttackActions.ActionBuilder(1)
+                .action(new FoodThrowAction(List.of(new ItemStack(Items.APPLE)), ConstantValue.exactly(40), ConstantValue.exactly(0))))
+        .addAction(new NPCAttackActions.ActionBuilder(1)
+                .action(new RunAwayAction(ConstantValue.exactly(40), ConstantValue.exactly(0))))
+        .addAction(new NPCAttackActions.ActionBuilder(1)
+                .action(new SpellAttackAction(ModSpells.FIREBALL.get(), 8, false, ConstantValue.exactly(40), ConstantValue.exactly(0))))
+        .addAction(new NPCAttackActions.ActionBuilder(1)
+                .action(new PartyTargetAction(ModSpells.CURE_ALL.get(), false, ConstantValue.exactly(0)))));
+        this.addNPCDataAll("random_npc_all_test", new NPCData.Builder(50, "Name", "Surname", NPCData.Gender.UNDEFINED)
+                        .setNeutralGiftResponse("npc.generic.all.gift.default", "Test")
                         .withLook(new ResourceLocation(RuneCraftory.MODID, "test_look"))
                         .withBirthday(com.mojang.datafixers.util.Pair.of(EnumSeason.SPRING, 1))
                         .setUnique(1)
@@ -86,16 +108,18 @@ public class NPCDataGen extends NPCDataProvider {
                         .withSchedule(new NPCSchedule.Schedule(0, 1, 1, 1, 1, 1, 1, 1, EnumSet.noneOf(EnumDay.class)))
                         .setBaseStat(Attributes.MAX_HEALTH, 1)
                         .setStatIncrease(Attributes.MAX_HEALTH, 1)
-                        .setBaseLevel(5),
-                Map.of(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default", "Test")
-                                .addConversation(new NPCData.Conversation("npc.generic.2.greeting.1", 0, 10), "Test")
-                                .addConversation(new NPCData.Conversation("npc.generic.2.greeting.2", 0, 10), "Test"),
-                        NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default", "Test")
-                                .addConversation(new NPCData.Conversation("npc.generic.2.talk.1", 0, 10), "Test")
-                                .addConversation(new NPCData.Conversation("npc.generic.2.talk.2", 0, 10), "Test"),
-                        NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.2.follow.yes", "Test"),
-                        NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.2.follow.no", "Test"),
-                        NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.2.follow.stop", "Test")),
+                        .setBaseLevel(5).withCombatAction(attackAll),
+                of(m -> {
+                    m.put(NPCData.ConversationType.GREETING, new NPCData.ConversationSet.Builder("npc.generic.all.talk.default", "Test")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.all.greeting.1", 0, 10), "Test")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.all.greeting.2", 0, 10), "Test"));
+                    m.put(NPCData.ConversationType.TALK, new NPCData.ConversationSet.Builder("npc.generic.2.talk.default", "Test")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.all.talk.1", 0, 10), "Test")
+                            .addConversation(new NPCData.Conversation.Builder("npc.generic.all.talk.2", 0, 10), "Test"));
+                    m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.all.follow.yes", "Test"));
+                    m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.all.follow.no", "Test"));
+                    m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.all.follow.stop", "Test"));
+                }),
                 new NPCData.NPCLook(NPCData.Gender.UNDEFINED, new ResourceLocation(RuneCraftory.MODID, "texture"), "Flemmli97", 0, List.of()));*/
     }
 

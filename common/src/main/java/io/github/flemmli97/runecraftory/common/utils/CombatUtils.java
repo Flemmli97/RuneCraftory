@@ -36,6 +36,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -564,14 +565,12 @@ public class CombatUtils {
         }
     }
 
-    public static List<Entity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, float rangeBonus, Predicate<Entity> pred) {
+    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, Vec3 dir, float aoe, float rangeBonus, Predicate<LivingEntity> pred) {
         if (entity.level.isClientSide)
             return List.of();
-        float rot = Mth.wrapDegrees(maxYRot - minYRot);
-        Vec3 dir = Vec3.directionFromRotation(0, Mth.wrapDegrees(minYRot + rot * 0.5f));
         float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
-        CircleSector circ = new CircleSector(entity.position().add(0, entity.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(rot * 0.5f), entity);
-        List<Entity> list = entity.level.getEntities(entity, entity.getBoundingBox().inflate(reach + 1),
+        CircleSector circ = new CircleSector(entity.position().add(0, entity.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(aoe * 0.5f), entity);
+        List<LivingEntity> list = entity.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), entity.getBoundingBox().inflate(reach + 1),
                 t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable()
                         && (t.getBoundingBox().minY <= entity.getBoundingBox().maxY || t.getBoundingBox().maxY >= entity.getBoundingBox().minY)
                         && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, entity.getBbHeight() * 1.5, 0.15)));
@@ -584,10 +583,30 @@ public class CombatUtils {
         return list;
     }
 
-    public static List<Entity> attackInAABB(LivingEntity entity, AABB aabb, Predicate<Entity> pred) {
+    public static List<LivingEntity> spinAttackHandler(LivingEntity entity, float minYRot, float maxYRot, float rangeBonus, Predicate<LivingEntity> pred) {
         if (entity.level.isClientSide)
             return List.of();
-        List<Entity> list = entity.level.getEntities(entity, aabb,
+        float rot = Mth.wrapDegrees(maxYRot - minYRot);
+        Vec3 dir = Vec3.directionFromRotation(0, Mth.wrapDegrees(minYRot + rot * 0.5f));
+        float reach = (float) entity.getAttributeValue(ModAttributes.ATTACK_RANGE.get()) + rangeBonus;
+        CircleSector circ = new CircleSector(entity.position().add(0, entity.getBbHeight() * 0.6, 0), dir, reach, Mth.abs(rot * 0.5f), entity);
+        List<LivingEntity> list = entity.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), entity.getBoundingBox().inflate(reach + 1),
+                t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable()
+                        && (t.getBoundingBox().minY <= entity.getBoundingBox().maxY || t.getBoundingBox().maxY >= entity.getBoundingBox().minY)
+                        && circ.intersects(t.level, t.getBoundingBox().inflate(0.15, entity.getBbHeight() * 1.5, 0.15)));
+        for (int i = 0; i < list.size(); ++i) {
+            if (entity instanceof Player player)
+                CombatUtils.playerAttackWithItem(player, list.get(i), i == list.size() - 1, true, i == list.size() - 1);
+            else if (entity instanceof Mob mob)
+                mob.doHurtTarget(list.get(i));
+        }
+        return list;
+    }
+
+    public static List<LivingEntity> attackInAABB(LivingEntity entity, AABB aabb, Predicate<LivingEntity> pred) {
+        if (entity.level.isClientSide)
+            return List.of();
+        List<LivingEntity> list = entity.level.getEntities(EntityTypeTest.forClass(LivingEntity.class), aabb,
                 t -> t != entity && (pred == null || pred.test(t)) && !t.isAlliedTo(entity) && t.isPickable());
         for (int i = 0; i < list.size(); ++i) {
             if (entity instanceof Player player)

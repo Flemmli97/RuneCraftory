@@ -6,10 +6,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.JsonOps;
 import io.github.flemmli97.runecraftory.api.datapack.NPCData;
+import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCActionManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCConversationManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCDataManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NPCLookManager;
 import io.github.flemmli97.runecraftory.common.datapack.manager.npc.NameAndGiftManager;
+import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttackActions;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.HashCache;
@@ -38,6 +40,7 @@ public abstract class NPCDataProvider implements DataProvider {
     private final Map<ResourceLocation, NPCData> data = new HashMap<>();
     private final Map<ResourceLocation, NPCData.NPCLook> looks = new HashMap<>();
     private final Map<ResourceLocation, NPCData.ConversationSet> conversations = new HashMap<>();
+    private final Map<ResourceLocation, NPCAttackActions> actions = new HashMap<>();
 
     private List<String> surnames = new ArrayList<>();
     private List<String> maleNames = new ArrayList<>();
@@ -131,6 +134,16 @@ public abstract class NPCDataProvider implements DataProvider {
                 LOGGER.error("Couldn't save gifts {}", path1, e);
             }
         });
+        this.actions.forEach((res, val) -> {
+            Path path1 = this.gen.getOutputFolder().resolve("data/" + res.getNamespace() + "/" + NPCActionManager.DIRECTORY + "/" + res.getPath() + ".json");
+            try {
+                JsonElement obj = NPCAttackActions.CODEC.encodeStart(JsonOps.INSTANCE, val)
+                        .getOrThrow(false, LOGGER::error);
+                DataProvider.save(GSON, cache, obj, path1);
+            } catch (IOException e) {
+                LOGGER.error("Couldn't combat action {}", path1, e);
+            }
+        });
     }
 
     @Override
@@ -200,5 +213,10 @@ public abstract class NPCDataProvider implements DataProvider {
 
     public void addGenericGift(NPCData.GiftType type, TagKey<Item> tag) {
         this.gifts.computeIfAbsent(type, r -> new ArrayList<>()).add(tag.location());
+    }
+
+    public ResourceLocation addAttackActions(ResourceLocation id, NPCAttackActions.Builder actions) {
+        this.actions.put(id, actions.build());
+        return id;
     }
 }

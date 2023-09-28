@@ -15,6 +15,7 @@ import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.ItemNBT;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
+import io.github.flemmli97.tenshilib.api.entity.IAnimated;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.PlayerModel;
@@ -107,28 +108,40 @@ public class ClientMixinUtils {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static void transFormPre(LivingEntity entity, HumanoidModel<?> model, Consumer<AnimatedAction> cons) {
-        if (entity instanceof Player player && ClientHandlers.getAnimatedPlayerModel() != null) {
-            PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
+        if (ClientHandlers.getAnimatedPlayerModel() != null) {
             AnimatedAction anim = null;
-            AnimatedAction current = null;
-            if (data != null) {
-                current = data.getWeaponHandler().getCurrentAnim();
-                if (data.getWeaponHandler().getCurrentAnim() == null && data.getWeaponHandler().getFadingAnim() != null)
-                    anim = data.getWeaponHandler().getFadingAnim();
-                else if (!data.getWeaponHandler().noAnimation())
-                    anim = data.getWeaponHandler().getCurrentAnim();
+            float interpolation = 1;
+            if (entity instanceof Player player) {
+                PlayerData data = Platform.INSTANCE.getPlayerData(player).orElse(null);
+                AnimatedAction current = null;
+                if (data != null) {
+                    current = data.getWeaponHandler().getCurrentAnim();
+                    if (data.getWeaponHandler().getCurrentAnim() == null && data.getWeaponHandler().getFadingAnim() != null)
+                        anim = data.getWeaponHandler().getFadingAnim();
+                    else if (!data.getWeaponHandler().noAnimation())
+                        anim = data.getWeaponHandler().getCurrentAnim();
+                }
+                if (current == null && data != null)
+                    interpolation = data.getWeaponHandler().interpolatedLastChange();
+            } else if (entity instanceof IAnimated animated) {
+                anim = animated.getAnimationHandler().getAnimation();
+                interpolation = animated.getAnimationHandler().getInterpolatedAnimationVal(1);
             }
             cons.accept(anim);
-            ClientHandlers.getAnimatedPlayerModel().setUpModel(player, anim, Minecraft.getInstance().getFrameTime(), current == null && data != null ? data.getWeaponHandler().interpolatedLastChange() : 1);
+            ClientHandlers.getAnimatedPlayerModel().setUpModel(entity, anim, Minecraft.getInstance().getFrameTime(), interpolation);
             if (anim == null)
                 ClientHandlers.getAnimatedPlayerModel().copyTo(model, true, false);
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static void transformHumanoidModel(LivingEntity entity, HumanoidModel<?> model, AnimatedAction anim) {
-        if (entity instanceof Player player && ClientHandlers.getAnimatedPlayerModel() != null && anim != null) {
-            boolean ignoreRiding = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == AttackActions.DUAL_USE).orElse(false);
+        if (ClientHandlers.getAnimatedPlayerModel() != null && anim != null) {
+            boolean ignoreRiding = false;
+            if (entity instanceof Player player)
+                ignoreRiding = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAction() == AttackActions.DUAL_USE).orElse(false);
             ClientHandlers.getAnimatedPlayerModel().copyTo(model, false, ignoreRiding);
         }
     }
@@ -163,6 +176,7 @@ public class ClientMixinUtils {
         ItemModelProps.HELD_TYPE = 0;
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean onRenderHeldItem(LivingEntity livingEntity, ItemStack itemStack, ItemTransforms.TransformType transformType, boolean leftHand, PoseStack poseStack, MultiBufferSource buffer, int combinedLight) {
         if (livingEntity instanceof AbstractClientPlayer player && transformType.firstPerson()) {
             AnimatedAction anim = Platform.INSTANCE.getPlayerData(player).map(d -> d.getWeaponHandler().getCurrentAnim()).orElse(null);

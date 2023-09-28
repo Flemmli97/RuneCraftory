@@ -56,10 +56,10 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       Map<ConversationType, ResourceLocation> interactions,
                       Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
                       @Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
-                      int baseLevel, int unique, boolean romanceable) {
+                      int baseLevel, @Nullable ResourceLocation combatActions, int unique, boolean romanceable) {
 
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, null, null, null, 1, "npc.default.gift.neutral",
-            Map.of(), Map.of(), null, null, null, 1, 0, false);
+            Map.of(), Map.of(), null, null, null, 1, null, 0, false);
 
     private static Map<ConversationType, ConversationSet> buildDefaultInteractionMap() {
         ImmutableMap.Builder<ConversationType, ConversationSet> builder = new ImmutableMap.Builder<>();
@@ -85,16 +85,19 @@ public record NPCData(@Nullable String name, @Nullable String surname,
 
     public static final Codec<NPCData> CODEC = RecordCodecBuilder.create(inst ->
             inst.group(
+                    filledMap(ConversationType.class, Codec.unboundedMap(CodecHelper.enumCodec(ConversationType.class, null), ResourceLocation.CODEC))
+                            .fieldOf("interactions").forGetter(d -> d.interactions),
                     NPCSchedule.Schedule.CODEC.optionalFieldOf("schedule").forGetter(d -> Optional.ofNullable(d.schedule)),
-                    ExtraCodecs.POSITIVE_INT.optionalFieldOf("baseLevel").forGetter(d -> d.baseLevel != 1 ? Optional.of(d.baseLevel) : Optional.empty()),
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("baseStats").forGetter(d -> Optional.ofNullable(d.baseStats)),
-                    Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("statIncrease").forGetter(d -> Optional.ofNullable(d.statIncrease)),
+                    NPCCombat.CODEC.optionalFieldOf("combat").forGetter(d -> {
+                        NPCCombat combat = new NPCCombat(d.baseStats, d.statIncrease, d.baseLevel, d.combatActions);
+                        if (combat.isNone())
+                            return Optional.empty();
+                        return Optional.of(combat);
+                    }),
 
                     Codec.BOOL.optionalFieldOf("romanceable").forGetter(d -> Optional.of(d.romanceable)),
                     Codec.STRING.fieldOf("neutralGiftResponse").forGetter(d -> d.neutralGiftResponse),
                     Codec.unboundedMap(Codec.STRING, Gift.CODEC).fieldOf("giftItems").forGetter(d -> d.giftItems),
-                    filledMap(ConversationType.class, Codec.unboundedMap(CodecHelper.enumCodec(ConversationType.class, null), ResourceLocation.CODEC))
-                            .fieldOf("interactions").forGetter(d -> d.interactions),
 
                     ResourceLocation.CODEC.optionalFieldOf("look").forGetter(d -> Optional.ofNullable(d.look)),
                     WorldUtils.DATE.optionalFieldOf("birthday").forGetter(d -> Optional.ofNullable(d.birthday)),
@@ -105,8 +108,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
                     CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
                     ModNPCJobs.CODEC.optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession))
-            ).apply(inst, (schedule, baseLevel, baseStats, statIncrease, romanceable, neutralGift, giftItems, interactions, look, birthday, weight, unique, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
-                    gender, profession.orElse(null), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, giftItems, schedule.orElse(null), baseStats.orElse(null), statIncrease.orElse(null), baseLevel.orElse(1), unique.orElse(0), romanceable.orElse(false))));
+            ).apply(inst, (interactions, schedule, combat, romanceable, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
+                    gender, profession.orElse(null), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null), combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null), unique.orElse(0), romanceable.orElse(false))));
 
     public ConversationSet getConversation(ConversationType type) {
         ResourceLocation conversationId = this.interactions().get(type);
@@ -134,6 +137,22 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
+    record NPCCombat(@Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
+                     int baseLevel, @Nullable ResourceLocation npcAction) {
+
+        public static final Codec<NPCCombat> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        ExtraCodecs.POSITIVE_INT.optionalFieldOf("baseLevel").forGetter(d -> d.baseLevel != 1 ? Optional.of(d.baseLevel) : Optional.empty()),
+                        ResourceLocation.CODEC.optionalFieldOf("combatActions").forGetter(d -> Optional.ofNullable(d.npcAction)),
+                        Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("baseStats").forGetter(d -> Optional.ofNullable(d.baseStats)),
+                        Codec.unboundedMap(Registry.ATTRIBUTE.byNameCodec(), Codec.DOUBLE).optionalFieldOf("statIncrease").forGetter(d -> Optional.ofNullable(d.statIncrease))
+                ).apply(inst, (lvl, action, stats, inc) -> new NPCCombat(stats.orElse(null), inc.orElse(null), lvl.orElse(1), action.orElse(null))));
+
+        public boolean isNone() {
+            return this.baseLevel == 1 && this.baseStats == null && this.statIncrease == null && this.npcAction == null;
+        }
+    }
+
     public static class Builder {
 
         private final String name;
@@ -146,7 +165,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private final Map<String, Gift> giftItems = new LinkedHashMap<>();
         private Pair<EnumSeason, Integer> birthday;
         private NPCSchedule.Schedule schedule;
-        private ResourceLocation look;
+        private ResourceLocation look, combatAction;
 
         private final Map<Attribute, Double> baseStats = new TreeMap<>(ModAttributes.SORTED);
         private final Map<Attribute, Double> statIncrease = new TreeMap<>(ModAttributes.SORTED);
@@ -241,6 +260,11 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
+        public Builder withCombatAction(ResourceLocation action) {
+            this.combatAction = action;
+            return this;
+        }
+
         public Map<String, String> getTranslations() {
             return this.translations;
         }
@@ -253,11 +277,11 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     throw new IllegalStateException("Missing interactions for " + type);
             }
             return new NPCData(this.name, this.surname, this.gender, this.profession, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions, this.giftItems, this.schedule,
-                    this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease, this.baseLevel, this.unique, this.romanceable);
+                    this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease, this.baseLevel, this.combatAction, this.unique, this.romanceable);
         }
     }
 
-    public record ConversationSet(String fallbackKey, Map<String, Conversation> conversations) {
+    public static class ConversationSet {
 
         public static final Codec<ConversationSet> CODEC = RecordCodecBuilder.create(inst ->
                 inst.group(
@@ -266,6 +290,22 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 ).apply(inst, ConversationSet::new));
 
         public static final Map<ConversationType, ConversationSet> DEFAULT = buildDefaultInteractionMap();
+
+        private final String fallbackKey;
+        private final Map<String, Conversation> conversations;
+
+        public ConversationSet(String fallbackKey, Map<String, Conversation> conversations) {
+            this.fallbackKey = fallbackKey;
+            this.conversations = conversations;
+        }
+
+        public String getFallbackKey() {
+            return this.fallbackKey;
+        }
+
+        public Map<String, Conversation> getConversations() {
+            return this.conversations;
+        }
 
         public static class Builder {
 

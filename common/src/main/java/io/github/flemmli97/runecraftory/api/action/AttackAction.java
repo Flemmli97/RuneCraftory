@@ -26,7 +26,7 @@ public class AttackAction {
 
     private static final Map<String, AttackAction> MAP = new HashMap<>();
 
-    public final BiFunction<LivingEntity, WeaponHandler, AnimatedAction> anim;
+    public final BiFunction<LivingEntity, Integer, AnimatedAction> anim;
     /**
      * Static handler for this action
      */
@@ -46,7 +46,7 @@ public class AttackAction {
 
     private final String id;
 
-    private AttackAction(BiFunction<LivingEntity, WeaponHandler, AnimatedAction> anim, ActiveActionHandler attackExecuter, BiConsumer<LivingEntity, WeaponHandler> onStart, BiConsumer<LivingEntity, WeaponHandler> onEnd,
+    private AttackAction(BiFunction<LivingEntity, Integer, AnimatedAction> anim, ActiveActionHandler attackExecuter, BiConsumer<LivingEntity, WeaponHandler> onStart, BiConsumer<LivingEntity, WeaponHandler> onEnd,
                          Function<LivingEntity, Integer> maxConsecutive, Function<LivingEntity, Integer> timeFrame, boolean disableItemSwitch, boolean disableMovement, boolean disableAnimation,
                          BiFunction<LivingEntity, WeaponHandler, Boolean> canOverride, String id, BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable, BiFunction<LivingEntity, WeaponHandler, Pose> withPose) {
         this.anim = anim == null ? (player, data) -> null : anim;
@@ -120,7 +120,7 @@ public class AttackAction {
 
     public static class Builder {
 
-        private final BiFunction<LivingEntity, WeaponHandler, AnimatedAction> anim;
+        private final BiFunction<LivingEntity, Integer, AnimatedAction> anim;
         private ActiveActionHandler attackExecuter;
         private BiConsumer<LivingEntity, WeaponHandler> onStart;
         private BiConsumer<LivingEntity, WeaponHandler> onEnd;
@@ -131,7 +131,7 @@ public class AttackAction {
         private BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable;
         private BiFunction<LivingEntity, WeaponHandler, Pose> withPose;
 
-        public Builder(BiFunction<LivingEntity, WeaponHandler, AnimatedAction> anim) {
+        public Builder(BiFunction<LivingEntity, Integer, AnimatedAction> anim) {
             this.anim = anim;
         }
 

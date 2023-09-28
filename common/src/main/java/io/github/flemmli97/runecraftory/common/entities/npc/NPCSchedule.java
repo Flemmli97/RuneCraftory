@@ -169,7 +169,7 @@ public class NPCSchedule {
         }
 
         private Schedule(int wakeUpTime, int workTime, int breakTime, int workTimeAfter, int doneWorkTime, int sleepTime, int meetTimeOffday, int meetTimeAfterOffday, List<EnumDay> workDays) {
-            this(wakeUpTime, workTime, breakTime, workTimeAfter, doneWorkTime, sleepTime, meetTimeOffday, meetTimeAfterOffday, EnumSet.copyOf(workDays));
+            this(wakeUpTime, workTime, breakTime, workTimeAfter, doneWorkTime, sleepTime, meetTimeOffday, meetTimeAfterOffday, workDays.isEmpty() ? EnumSet.noneOf(EnumDay.class) : EnumSet.copyOf(workDays));
         }
 
         public Schedule(Random random) {

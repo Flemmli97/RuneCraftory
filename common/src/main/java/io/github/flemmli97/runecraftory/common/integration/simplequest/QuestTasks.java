@@ -156,10 +156,10 @@ public class QuestTasks {
 
         public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "taming");
         public static final Codec<TamingEntry> CODEC = RecordCodecBuilder.create((instance) ->
-                instance.group(JsonCodecs.ENTITY_PREDICATE_CODEC.fieldOf("predicate").forGetter(d -> d.predicate),
+                instance.group(JsonCodecs.ENTITY_PREDICATE_CODEC.optionalFieldOf("predicate").forGetter(d -> d.predicate == EntityPredicate.ANY ? Optional.empty() : Optional.of(d.predicate)),
                         ExtraCodecs.POSITIVE_INT.fieldOf("amount").forGetter(d -> d.amount),
                         Codec.STRING.optionalFieldOf("description").forGetter(d -> d.description.isEmpty() ? Optional.empty() : Optional.of(d.description))
-                ).apply(instance, (pred, amount, desc) -> new TamingEntry(pred, amount, desc.orElse(""))));
+                ).apply(instance, (pred, amount, desc) -> new TamingEntry(pred.orElse(EntityPredicate.ANY), amount, desc.orElse(""))));
 
         @Override
         public boolean submit(ServerPlayer player) {

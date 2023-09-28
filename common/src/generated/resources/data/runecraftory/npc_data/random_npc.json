@@ -19,5 +19,8 @@
     "FOLLOWYES": "runecraftory:random_npc/follow.yes",
     "FOLLOWNO": "runecraftory:random_npc/follow.no",
     "FOLLOWSTOP": "runecraftory:random_npc/follow.stop"
+  },
+  "combat": {
+    "combatActions": "runecraftory:generic_melee_attack"
   }
 }

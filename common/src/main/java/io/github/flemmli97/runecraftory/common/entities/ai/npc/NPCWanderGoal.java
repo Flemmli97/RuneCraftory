@@ -1,4 +1,4 @@
-package io.github.flemmli97.runecraftory.common.entities.ai;
+package io.github.flemmli97.runecraftory.common.entities.ai.npc;
 
 import com.google.common.base.Suppliers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;

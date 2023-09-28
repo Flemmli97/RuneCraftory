@@ -7,7 +7,6 @@ import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.tenshilib.api.entity.AnimatedAction;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
@@ -32,7 +31,7 @@ public class WeaponHandler {
     private int toolCharge;
 
     private float spinStartRot;
-    private final Set<Entity> hitEntityTracker = new HashSet<>();
+    private final Set<LivingEntity> hitEntityTracker = new HashSet<>();
     private boolean lockLook;
 
     private static AttackAction.ActiveActionHandler merged(BiConsumer<LivingEntity, AnimatedAction> first, AttackAction.ActiveActionHandler second) {
@@ -88,7 +87,7 @@ public class WeaponHandler {
         this.weaponConsumer = merged(attack, action.attackExecuter);
         if (action == AttackActions.NONE)
             this.fadingAnim = this.currentAnim;
-        this.currentAnim = action.anim.apply(entity, this);
+        this.currentAnim = action.anim.apply(entity, this.getCurrentCount());
         this.timeSinceLastChange = 0;
         if (this.currentAction != AttackActions.NONE) {
             this.count++;
@@ -203,7 +202,7 @@ public class WeaponHandler {
         return this.spinStartRot;
     }
 
-    public Set<Entity> getHitEntityTracker() {
+    public Set<LivingEntity> getHitEntityTracker() {
         return this.hitEntityTracker;
     }
 
@@ -211,7 +210,7 @@ public class WeaponHandler {
         this.hitEntityTracker.clear();
     }
 
-    public void addHitEntityTracker(List<Entity> list) {
+    public void addHitEntityTracker(List<LivingEntity> list) {
         this.hitEntityTracker.addAll(list);
     }
 

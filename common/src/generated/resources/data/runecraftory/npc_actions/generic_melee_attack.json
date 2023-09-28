@@ -1,0 +1,17 @@
+{
+  "actions": [
+    {
+      "weight": 1,
+      "concurrent_actions": [
+        {
+          "walkTime": {
+            "type": "minecraft:uniform",
+            "min": 30,
+            "max": 70
+          },
+          "type": "runecraftory:melee_attack"
+        }
+      ]
+    }
+  ]
+}

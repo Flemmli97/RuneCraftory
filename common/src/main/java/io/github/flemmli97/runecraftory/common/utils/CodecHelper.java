@@ -1,8 +1,9 @@
 package io.github.flemmli97.runecraftory.common.utils;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
@@ -14,39 +15,20 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.Deserializers;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class CodecHelper {
 
-    public static Codec<EntityPredicate> ENTITY_PREDICATE_CODEC = new Codec<>() {
+    private static final Gson GSON = Deserializers.createConditionSerializer().create();
 
-        @Override
-        public <T> DataResult<T> encode(EntityPredicate input, DynamicOps<T> ops, T prefix) {
-            JsonElement e = input.serializeToJson();
-            if (e instanceof JsonObject) {
-                DataResult<Stream<Pair<JsonPrimitive, JsonElement>>> mapLike = DataResult.success(e.getAsJsonObject().entrySet().stream()
-                        .filter(entry -> !(entry.getValue() instanceof JsonNull))
-                        .map(entry -> Pair.of(new JsonPrimitive(entry.getKey()), entry.getValue())));
-                return ops.mergeToPrimitive(prefix, ops.createMap(mapLike.result().orElse(Stream.empty()).map(entry ->
-                        Pair.of(JsonOps.INSTANCE.convertTo(ops, entry.getFirst()), JsonOps.INSTANCE.convertTo(ops, entry.getSecond()))
-                )));
-            }
-            return ops.mergeToPrimitive(prefix, JsonOps.INSTANCE.convertTo(ops, input.serializeToJson()));
-        }
-
-        @Override
-        public <T> DataResult<Pair<EntityPredicate, T>> decode(DynamicOps<T> ops, T input) {
-            return DataResult.success(Pair.of(EntityPredicate.fromJson(ops.convertTo(JsonOps.INSTANCE, input)), input));
-        }
-
-        @Override
-        public String toString() {
-            return "EntityPredicate";
-        }
-    };
+    public static Codec<EntityPredicate> ENTITY_PREDICATE_CODEC = jsonCodecBuilder(EntityPredicate::serializeToJson, EntityPredicate::fromJson, "EntityPredicate");
+    public static Codec<NumberProvider> NUMER_PROVIDER_CODEC = jsonCodecBuilder(GSON::toJsonTree, e -> GSON.fromJson(e, NumberProvider.class), "NumberProvider");
 
     public static <T extends Enum<T>> Codec<T> enumCodec(Class<T> clss, T fallback) {
         return Codec.STRING.flatXmap(s -> {
@@ -68,5 +50,56 @@ public class CodecHelper {
             return DataResult.success(entry);
         }, val -> Optional.ofNullable(registry.get().getIDFrom(val))
                 .map(DataResult::success).orElseGet(() -> DataResult.error("Unknown registry element in " + key + ":" + val)));
+    }
+
+    public static <E> Codec<E> jsonCodecBuilder(Function<E, JsonElement> encode, Function<JsonElement, E> decode, String name) {
+        return new Codec<>() {
+            @Override
+            public <T> DataResult<T> encode(E input, DynamicOps<T> ops, T prefix) {
+                try {
+                    JsonElement e = encode.apply(input);
+                    return DataResult.success(NullableJsonOps.INSTANCE.convertTo(ops, e));
+                } catch (JsonParseException err) {
+                    return DataResult.error("Couldn't encode value " + input + " error: " + err);
+                }
+            }
+
+            @Override
+            public <T> DataResult<Pair<E, T>> decode(DynamicOps<T> ops, T input) {
+                JsonElement element = ops.convertTo(JsonOps.INSTANCE, input);
+                try {
+                    E result = decode.apply(element);
+                    return DataResult.success(Pair.of(result, input));
+                } catch (JsonParseException err) {
+                    return DataResult.error("Couldn't decode value " + err);
+                }
+            }
+
+            @Override
+            public String toString() {
+                return name;
+            }
+        };
+    }
+
+
+    public static class NullableJsonOps extends JsonOps {
+
+        public static final JsonOps INSTANCE = new NullableJsonOps(false);
+
+        protected NullableJsonOps(boolean compressed) {
+            super(compressed);
+        }
+
+        @Override
+        public <U> U convertMap(final DynamicOps<U> ops, JsonElement e) {
+            DataResult<Stream<Pair<JsonPrimitive, JsonElement>>> mapLike = DataResult.success(e.getAsJsonObject().entrySet().stream()
+                    .filter(entry -> !(entry.getValue() instanceof JsonNull))
+                    .map(entry -> Pair.of(new JsonPrimitive(entry.getKey()), entry.getValue())));
+            return ops.createMap(mapLike.result().orElse(Stream.empty()).map(entry ->
+                    Pair.of(this.convertTo(ops, entry.getFirst()),
+                            this.convertTo(ops, entry.getSecond()))
+            ));
+        }
     }
 }

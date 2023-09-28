@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.api.action;
 
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
@@ -35,22 +34,9 @@ public class AttackActions {
     public static final AttackAction NONE = AttackAction.register("none", new AttackAction.Builder(null));
 
     //Short sword attack sequence
-    public static final AttackAction SHORT_SWORD = AttackAction.register("short_sword", new AttackAction.Builder((entity, data) -> {
-        int count = data.getCurrentCount() + 1;
-        int attack = 4;
-        int defaultLength = EnumWeaponType.SHORTSWORD.defaultWeaponSpeed;
-        switch (count) {
-            case 1, 3 -> attack = (int) Math.ceil(0.32 * 20);
-            case 2 -> attack = (int) Math.ceil(0.24 * 20);
-            case 4 -> {
-                defaultLength = (int) Math.ceil(0.6 * 20);
-                attack = (int) Math.ceil(0.2 * 20);
-            }
-            case 5 -> attack = (int) Math.ceil(0.28 * 20);
-            case 6 -> defaultLength = (int) Math.ceil(1.36 * 20);
-        }
+    public static final AttackAction SHORT_SWORD = AttackAction.register("short_sword", new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return AnimatedAction.builder(defaultLength + 1, "short_sword_" + count).speed(speed).marker(attack).build();
+        return PlayerModelAnimations.SHORT_SWORD.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
                 case 1, 2, 5, 3 -> w.getCurrentAnim().isPastTick(0.32);
                 case 4 -> w.getCurrentAnim().isPastTick(0.24) && !w.getCurrentAnim().isPastTick(0.48);
@@ -123,18 +109,11 @@ public class AttackActions {
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.SHORTSWORD, 20) ? 6 : 5, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 6)
             .disableItemSwitch().disableMovement());
-    public static final AttackAction SHORT_SWORD_USE = AttackAction.register("short_sword_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(16 + 1, 6, "short_sword_use")).disableMovement());
+    public static final AttackAction SHORT_SWORD_USE = AttackAction.register("short_sword_use", new AttackAction.Builder((entity, count) -> new AnimatedAction(16 + 1, 6, "short_sword_use")).disableMovement());
 
-    public static final AttackAction LONG_SWORD = AttackAction.register("long_sword", new AttackAction.Builder((entity, data) -> {
-        int defaultLength = EnumWeaponType.LONGSWORD.defaultWeaponSpeed;
-        int count = data.getCurrentCount() + 1;
-        int attack = (int) Math.ceil(0.48 * 20);
-        if (count == 3)
-            attack = (int) Math.ceil(0.56 * 20);
-        if (count == 4)
-            defaultLength = (int) Math.ceil(1.4 * 20);
+    public static final AttackAction LONG_SWORD = AttackAction.register("long_sword", new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return AnimatedAction.builder(defaultLength + 1, "long_sword_" + count).speed(speed).marker(attack).build();
+        return PlayerModelAnimations.LONG_SWORD.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
                 case 1, 2, 3 -> w.getCurrentAnim().isPastTick(0.56);
                 default -> false;
@@ -185,20 +164,11 @@ public class AttackActions {
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.LONGSWORD, 20) ? 4 : 3, entity -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 4)
             .disableItemSwitch().disableMovement());
-    public static final AttackAction LONGSWORD_USE = AttackAction.register("long_sword_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(16 + 1, 5, "long_sword_use")).disableMovement());
+    public static final AttackAction LONGSWORD_USE = AttackAction.register("long_sword_use", new AttackAction.Builder((entity, count) -> new AnimatedAction(16 + 1, 5, "long_sword_use")).disableMovement());
 
-    public static final AttackAction SPEAR = AttackAction.register("spear", new AttackAction.Builder((entity, data) -> {
-        int defaultLength = EnumWeaponType.LONGSWORD.defaultWeaponSpeed;
-        int count = data.getCurrentCount() + 1;
-        int attack = (int) Math.ceil(0.36 * 20);
-        if (count == 2) {
-            defaultLength = (int) Math.ceil(0.52 * 20);
-            attack = (int) Math.ceil(0.24 * 20);
-        } else if (count == 5) {
-            defaultLength = (int) Math.ceil(1.84 * 20);
-        }
+    public static final AttackAction SPEAR = AttackAction.register("spear", new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return AnimatedAction.builder(defaultLength + 1, "spear_" + count).speed(speed).marker(attack).build();
+        return PlayerModelAnimations.SPEAR.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
                 case 1, 3, 4 -> w.getCurrentAnim().isPastTick(0.36);
                 case 2 -> w.getCurrentAnim().isPastTick(0.32);
@@ -282,10 +252,7 @@ public class AttackActions {
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.SPEAR, 20) ? 5 : 4, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 5)
             .disableItemSwitch().disableMovement());
-    public static final AttackAction SPEAR_USE = AttackAction.register("spear_use", new AttackAction.Builder((entity, data) -> {
-        int count = data.getCurrentCount() + 1;
-        return count > 1 ? new AnimatedAction((int) Math.ceil(1.12 * 20) + 1, 3, "spear_use_continue") : new AnimatedAction((int) Math.ceil(1.2 * 20) + 1, 5, "spear_use");
-    }).allowSelfOverride((entity, w) -> {
+    public static final AttackAction SPEAR_USE = AttackAction.register("spear_use", new AttackAction.Builder((entity, count) -> count > 1 ? new AnimatedAction((int) Math.ceil(1.12 * 20) + 1, 3, "spear_use_continue") : new AnimatedAction((int) Math.ceil(1.2 * 20) + 1, 5, "spear_use")).allowSelfOverride((entity, w) -> {
         AnimatedAction anim = w.getCurrentAnim();
         return anim == null || (anim.getID().equals("spear_use_continue") ? (anim.isPastTick(0.16) && !anim.isPastTick(0.40)) : (anim.isPastTick(0.28) && !anim.isPastTick(0.44)));
     }).doWhileAction(((entity, stack, handler, anim) -> {
@@ -295,16 +262,9 @@ public class AttackActions {
         }
     })).setMaxConsecutive(e -> 20, e -> 6).disableMovement());
 
-    public static final AttackAction HAMMER_AXE = AttackAction.register("hammer_axe", new AttackAction.Builder((entity, data) -> {
-        int defaultLength = EnumWeaponType.HAXE.defaultWeaponSpeed;
-        int count = data.getCurrentCount() + 1;
-        int attack = (int) Math.ceil(0.6 * 20);
-        if (count == 2)
-            attack = (int) Math.ceil(0.48 * 20);
-        else if (count == 3)
-            defaultLength = (int) Math.ceil(1.48 * 20);
+    public static final AttackAction HAMMER_AXE = AttackAction.register("hammer_axe", new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return AnimatedAction.builder(defaultLength + 1, "hammer_axe_" + count).speed(speed).marker(attack).build();
+        return PlayerModelAnimations.HAMMER_AXE.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
                 case 1, 2 -> w.getCurrentAnim().isPastTick(0.64);
                 default -> false;
@@ -346,21 +306,11 @@ public class AttackActions {
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.HAMMERAXE, 20) ? 3 : 2, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 3)
             .disableItemSwitch().disableMovement());
-    public static final AttackAction HAMMER_AXE_USE = AttackAction.register("hammer_axe_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(20 + 1, 12, "hammer_axe_use")).disableMovement().doWhileAction((entity, stack, handler, anim) -> ItemAxeBase.moveEntity(entity).accept(anim)));
+    public static final AttackAction HAMMER_AXE_USE = AttackAction.register("hammer_axe_use", new AttackAction.Builder((entity, count) -> new AnimatedAction(20 + 1, 12, "hammer_axe_use")).disableMovement().doWhileAction((entity, stack, handler, anim) -> ItemAxeBase.moveEntity(entity).accept(anim)));
 
-    public static final AttackAction DUAL_BLADES = AttackAction.register("dual_blades", new AttackAction.Builder((entity, data) -> {
-        int defaultLength = EnumWeaponType.DUAL.defaultWeaponSpeed;
-        int count = data.getCurrentCount() + 1;
-        int attack = (int) Math.ceil(0.4 * 20);
-        switch (count) {
-            case 1 -> attack = (int) Math.ceil(0.16 * 20);
-            case 2 -> attack = (int) Math.ceil(0.2 * 20);
-            case 3, 4, 5, 6 -> attack = (int) Math.ceil(0.24 * 20);
-            case 7 -> attack = (int) Math.ceil(0.4 * 20);
-            case 8 -> defaultLength = (int) Math.ceil(1.44 * 20);
-        }
+    public static final AttackAction DUAL_BLADES = AttackAction.register("dual_blades", new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return AnimatedAction.builder(defaultLength + 1, "dual_blades_" + count).speed(speed).marker(attack).build();
+        return PlayerModelAnimations.DUAL_BLADES.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
                 case 1, 2, 3, 4, 5, 6 -> w.getCurrentAnim().isPastTick(0.28);
                 case 7 -> w.getCurrentAnim().isPastTick(0.40);
@@ -469,23 +419,11 @@ public class AttackActions {
             .setMaxConsecutive(entity -> AttackAction.canPerform(entity, EnumSkills.DUAL, 20) ? 8 : 7, e -> 0)
             .setInvulnerability((e, w) -> w.getCurrentCount() == 8)
             .disableItemSwitch().disableMovement());
-    public static final AttackAction DUAL_USE = AttackAction.register("dual_blade_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(15 + 1, 7, "dual_blades_use")).disableMovement());
+    public static final AttackAction DUAL_USE = AttackAction.register("dual_blade_use", new AttackAction.Builder((entity, count) -> new AnimatedAction(15 + 1, 7, "dual_blades_use")).disableMovement());
 
-    public static final AttackAction GLOVES = AttackAction.register("gloves", new AttackAction.Builder((entity, data) -> {
-        int defaultLength = EnumWeaponType.GLOVE.defaultWeaponSpeed;
-        int count = data.getCurrentCount() + 1;
-        int attack = (int) Math.ceil(0.4 * 20);
-        switch (count) {
-            case 1 -> attack = (int) Math.ceil(0.28 * 20);
-            case 2, 3 -> attack = (int) Math.ceil(0.24 * 20);
-            case 4 -> {
-                attack = (int) Math.ceil(0.4 * 20);
-                defaultLength = (int) Math.ceil(0.64 * 20);
-            }
-            case 5 -> defaultLength = (int) Math.ceil(1.32 * 20);
-        }
+    public static final AttackAction GLOVES = AttackAction.register("gloves", new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return AnimatedAction.builder(defaultLength + 1, "glove_" + count).speed(speed).marker(attack).build();
+        return PlayerModelAnimations.GLOVES.get(count).create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
                 case 1, 2, 3 -> w.getCurrentAnim().isPastTick(0.28);
                 case 4 -> w.getCurrentAnim().isPastTick(0.48);
@@ -566,7 +504,7 @@ public class AttackActions {
                     return Pose.SPIN_ATTACK;
                 return null;
             }));
-    public static final AttackAction GLOVE_USE = AttackAction.register("glove_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(27 + 1, 4, "glove_use")).disableMovement().doAtStart((e, w) -> e.maxUpStep += 0.5).doAtEnd((e, w) -> e.maxUpStep -= 0.5).doWhileAction(((entity, stack, handler, anim) -> {
+    public static final AttackAction GLOVE_USE = AttackAction.register("glove_use", new AttackAction.Builder((entity, count) -> new AnimatedAction(27 + 1, 4, "glove_use")).disableMovement().doAtStart((e, w) -> e.maxUpStep += 0.5).doAtEnd((e, w) -> e.maxUpStep -= 0.5).doWhileAction(((entity, stack, handler, anim) -> {
         if (entity instanceof ServerPlayer serverPlayer) {
             if (!handler.getCurrentAnim().isPastTick(0.16))
                 return;
@@ -594,10 +532,9 @@ public class AttackActions {
         return null;
     }));
 
-    public static final AttackAction STAFF = AttackAction.register("staff", new AttackAction.Builder((entity, data) -> {
-        int defaultLength = EnumWeaponType.STAFF.defaultWeaponSpeed;
+    public static final AttackAction STAFF = AttackAction.register("staff", new AttackAction.Builder((entity, count) -> {
         float speed = (float) (ItemNBT.attackSpeedModifier(entity));
-        return AnimatedAction.builder(defaultLength + 1, "staff").speed(speed).marker(9).build();
+        return PlayerModelAnimations.STAFF.create(speed);
     }).allowSelfOverride((entity, w) -> switch (w.getCurrentCount()) {
                 case 1 -> w.getCurrentAnim().isPastTick(0.54);
                 case 2 -> w.getCurrentAnim().isPastTick(0.60);
@@ -616,18 +553,18 @@ public class AttackActions {
             }))
             .disableItemSwitch().disableMovement());
 
-    public static final AttackAction STAFF_USE = AttackAction.register("staff_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(16 + 1, 4, "staff_use")).disableMovement());
+    public static final AttackAction STAFF_USE = AttackAction.register("staff_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE).disableMovement());
 
-    public static final AttackAction TOOL_AXE_USE = AttackAction.register("tool_axe", new AttackAction.Builder((entity, data) -> new AnimatedAction(10 + 1, 2, "hammer_axe_use")).noAnimation().disableMovement().setMaxConsecutive(p -> 3, p -> 15));
-    public static final AttackAction TOOL_HAMMER_USE = AttackAction.register("tool_hammer", new AttackAction.Builder((entity, data) -> new AnimatedAction(10 + 1, 2, "hammer_axe_use")).noAnimation().disableMovement().setMaxConsecutive(p -> 3, p -> 15));
-    public static final AttackAction FIREBALL_USE = AttackAction.register("fireball_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(16 + 1, 4, "staff_use")).allowSelfOverride((e, w) -> {
+    public static final AttackAction TOOL_AXE_USE = AttackAction.register("tool_axe", new AttackAction.Builder((entity, count) -> new AnimatedAction(10 + 1, 2, "hammer_axe_use")).noAnimation().disableMovement().setMaxConsecutive(p -> 3, p -> 15));
+    public static final AttackAction TOOL_HAMMER_USE = AttackAction.register("tool_hammer", new AttackAction.Builder((entity, count) -> new AnimatedAction(10 + 1, 2, "hammer_axe_use")).noAnimation().disableMovement().setMaxConsecutive(p -> 3, p -> 15));
+    public static final AttackAction FIREBALL_USE = AttackAction.register("fireball_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE).allowSelfOverride((e, w) -> {
         AnimatedAction anim = w.getCurrentAnim();
         return anim == null || anim.isPastTick(anim.getAttackTime());
     }).disableMovement().setMaxConsecutive(p -> 3, p -> 8));
-    public static final AttackAction FIREBALL_BIG_USE = AttackAction.register("fireball_big_use", new AttackAction.Builder((entity, data) -> new AnimatedAction(16 + 1, 4, "staff_use")).allowSelfOverride((e, w) -> {
+    public static final AttackAction FIREBALL_BIG_USE = AttackAction.register("fireball_big_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE).allowSelfOverride((e, w) -> {
         AnimatedAction anim = w.getCurrentAnim();
         return anim == null || anim.isPastTick(anim.getAttackTime());
     }).disableMovement().setMaxConsecutive(p -> 2, p -> 8));
 
-    public static final AttackAction TOOL_ATTACK = AttackAction.register("tool_attack", new AttackAction.Builder((entity, data) -> new AnimatedAction(20, 1, "tool_attack")));
+    public static final AttackAction TOOL_ATTACK = AttackAction.register("tool_attack", new AttackAction.Builder((entity, count) -> new AnimatedAction(20, 1, "tool_attack")));
 }

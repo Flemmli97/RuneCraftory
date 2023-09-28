@@ -18,6 +18,12 @@ import net.minecraft.client.renderer.entity.layers.ItemInHandLayer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,7 +56,51 @@ public class RenderNPC<T extends EntityNPCBase> extends MobRenderer<T, PlayerMod
                 this.model = this.def;
         } else
             this.model = this.def;
+        this.setModelProperties(entity);
         super.render(entity, entityYaw, partialTicks, matrixStack, buffer, packedLight);
+    }
+
+    private void setModelProperties(EntityNPCBase npc) {
+        PlayerModel<T> playerModel = this.getModel();
+        playerModel.setAllVisible(true);
+        playerModel.crouching = npc.isCrouching();
+        HumanoidModel.ArmPose main = getArmPose(npc, InteractionHand.MAIN_HAND);
+        HumanoidModel.ArmPose off = getArmPose(npc, InteractionHand.OFF_HAND);
+        if (npc.getMainArm() == HumanoidArm.RIGHT) {
+            playerModel.rightArmPose = main;
+            playerModel.leftArmPose = off;
+        } else {
+            playerModel.rightArmPose = off;
+            playerModel.leftArmPose = main;
+        }
+    }
+
+    private static HumanoidModel.ArmPose getArmPose(EntityNPCBase npc, InteractionHand hand) {
+        ItemStack itemStack = npc.getItemInHand(hand);
+        if (itemStack.isEmpty()) {
+            return HumanoidModel.ArmPose.EMPTY;
+        }
+        if (npc.getUsedItemHand() == hand && npc.getUseItemRemainingTicks() > 0) {
+            UseAnim useAnim = itemStack.getUseAnimation();
+            if (useAnim == UseAnim.BLOCK) {
+                return HumanoidModel.ArmPose.BLOCK;
+            }
+            if (useAnim == UseAnim.BOW) {
+                return HumanoidModel.ArmPose.BOW_AND_ARROW;
+            }
+            if (useAnim == UseAnim.SPEAR) {
+                return HumanoidModel.ArmPose.THROW_SPEAR;
+            }
+            if (useAnim == UseAnim.CROSSBOW && hand == npc.getUsedItemHand()) {
+                return HumanoidModel.ArmPose.CROSSBOW_CHARGE;
+            }
+            if (useAnim == UseAnim.SPYGLASS) {
+                return HumanoidModel.ArmPose.SPYGLASS;
+            }
+        } else if (!npc.swinging && itemStack.is(Items.CROSSBOW) && CrossbowItem.isCharged(itemStack)) {
+            return HumanoidModel.ArmPose.CROSSBOW_HOLD;
+        }
+        return HumanoidModel.ArmPose.ITEM;
     }
 
     @Override
