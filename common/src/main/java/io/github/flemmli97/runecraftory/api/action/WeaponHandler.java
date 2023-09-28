@@ -87,7 +87,7 @@ public class WeaponHandler {
         this.weaponConsumer = merged(attack, action.attackExecuter);
         if (action == AttackActions.NONE)
             this.fadingAnim = this.currentAnim;
-        this.currentAnim = action.anim.apply(entity, this.getCurrentCount());
+        this.currentAnim = action.getAnimation(entity, this.getCurrentCount());
         this.timeSinceLastChange = 0;
         if (this.currentAction != AttackActions.NONE) {
             this.count++;

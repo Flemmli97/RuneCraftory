@@ -84,6 +84,7 @@ public class PlayerData {
     private final InventorySpells spells = new InventorySpells();
 
     private final DailyPlayerUpdater updater = new DailyPlayerUpdater(this);
+    private int rpStillRegen;
 
     private final RecipeKeeper keeper = new RecipeKeeper();
 
@@ -170,6 +171,7 @@ public class PlayerData {
                 }
             } else
                 return false;
+            this.rpStillRegen = 200;
             if (player instanceof ServerPlayer serverPlayer)
                 Platform.INSTANCE.sendToClient(new S2CRunePoints(this), serverPlayer);
             return true;
@@ -567,8 +569,13 @@ public class PlayerData {
         this.weaponHandler.tick(player);
         if (player instanceof ServerPlayer serverPlayer) {
             this.updater.tick(serverPlayer);
-            if (serverPlayer.tickCount % 10 == 0)
-                this.walkingTracker.tickWalkingTracker(serverPlayer);
+            if (serverPlayer.tickCount % 10 == 0) {
+                if (this.walkingTracker.tickWalkingTracker(serverPlayer))
+                    this.rpStillRegen = 200;
+            }
+            if (--this.rpStillRegen < 0 && serverPlayer.tickCount % 20 == 0) {
+                this.refreshRunePoints(player, 1);
+            }
             if (--this.breakTick <= 0)
                 this.blockBreakPosForMsg = null;
             ItemStack main = player.getMainHandItem();

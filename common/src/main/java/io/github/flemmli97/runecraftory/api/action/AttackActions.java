@@ -553,15 +553,15 @@ public class AttackActions {
             }))
             .disableItemSwitch().disableMovement());
 
-    public static final AttackAction STAFF_USE = AttackAction.register("staff_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE).disableMovement());
+    public static final AttackAction STAFF_USE = AttackAction.register("staff_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE.create()).disableMovement());
 
     public static final AttackAction TOOL_AXE_USE = AttackAction.register("tool_axe", new AttackAction.Builder((entity, count) -> new AnimatedAction(10 + 1, 2, "hammer_axe_use")).noAnimation().disableMovement().setMaxConsecutive(p -> 3, p -> 15));
     public static final AttackAction TOOL_HAMMER_USE = AttackAction.register("tool_hammer", new AttackAction.Builder((entity, count) -> new AnimatedAction(10 + 1, 2, "hammer_axe_use")).noAnimation().disableMovement().setMaxConsecutive(p -> 3, p -> 15));
-    public static final AttackAction FIREBALL_USE = AttackAction.register("fireball_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE).allowSelfOverride((e, w) -> {
+    public static final AttackAction FIREBALL_USE = AttackAction.register("fireball_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE.create()).allowSelfOverride((e, w) -> {
         AnimatedAction anim = w.getCurrentAnim();
         return anim == null || anim.isPastTick(anim.getAttackTime());
     }).disableMovement().setMaxConsecutive(p -> 3, p -> 8));
-    public static final AttackAction FIREBALL_BIG_USE = AttackAction.register("fireball_big_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE).allowSelfOverride((e, w) -> {
+    public static final AttackAction FIREBALL_BIG_USE = AttackAction.register("fireball_big_use", new AttackAction.Builder((entity, count) -> PlayerModelAnimations.STAFF_USE.create()).allowSelfOverride((e, w) -> {
         AnimatedAction anim = w.getCurrentAnim();
         return anim == null || anim.isPastTick(anim.getAttackTime());
     }).disableMovement().setMaxConsecutive(p -> 2, p -> 8));

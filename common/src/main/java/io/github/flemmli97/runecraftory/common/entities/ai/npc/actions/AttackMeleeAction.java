@@ -68,13 +68,13 @@ public class AttackMeleeAction implements NPCAction {
         if (hand.getItem() instanceof IItemUsable usabe) {
             return switch (usabe.getWeaponType()) {
                 case FARM -> null;
-                case SHORTSWORD -> AttackActions.SHORT_SWORD.anim.apply(npc, npc.getRandom().nextInt(2));
-                case LONGSWORD -> AttackActions.LONG_SWORD.anim.apply(npc, npc.getRandom().nextInt(2));
-                case SPEAR -> AttackActions.SPEAR.anim.apply(npc, npc.getRandom().nextInt(2));
-                case HAXE -> AttackActions.HAMMER_AXE.anim.apply(npc, npc.getRandom().nextInt(2));
-                case DUAL -> AttackActions.DUAL_BLADES.anim.apply(npc, npc.getRandom().nextInt(2));
-                case GLOVE -> AttackActions.GLOVES.anim.apply(npc, npc.getRandom().nextInt(2));
-                case STAFF -> AttackActions.STAFF.anim.apply(npc, 0);
+                case SHORTSWORD -> AttackActions.SHORT_SWORD.getAnimation(npc, npc.getRandom().nextInt(2));
+                case LONGSWORD -> AttackActions.LONG_SWORD.getAnimation(npc, npc.getRandom().nextInt(2));
+                case SPEAR -> AttackActions.SPEAR.getAnimation(npc, npc.getRandom().nextInt(2));
+                case HAXE -> AttackActions.HAMMER_AXE.getAnimation(npc, npc.getRandom().nextInt(2));
+                case DUAL -> AttackActions.DUAL_BLADES.getAnimation(npc, npc.getRandom().nextInt(2));
+                case GLOVE -> AttackActions.GLOVES.getAnimation(npc, npc.getRandom().nextInt(2));
+                case STAFF -> AttackActions.STAFF.getAnimation(npc, 0);
             };
         }
         return null;

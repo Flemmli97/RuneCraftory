@@ -31,7 +31,7 @@ public class WalkingTracker {
         return map;
     }
 
-    public void tickWalkingTracker(ServerPlayer player) {
+    public boolean tickWalkingTracker(ServerPlayer player) {
         ServerStatsCounter counter = player.getStats();
         float mult = 0;
         for (Map.Entry<ResourceLocation, Float> e : relevantStats.entrySet()) {
@@ -41,12 +41,13 @@ public class WalkingTracker {
             float finalMult = mult * 0.5f;
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> LevelCalc.levelSkill(player, data, EnumSkills.WALKING, finalMult));
         }
+        return mult != 0;
     }
 
     private float calcMultiplier(ResourceLocation res, ServerStatsCounter counter, float weight) {
         int last = this.lastCheck.getOrDefault(res, 0);
         int current = counter.getValue(Stats.CUSTOM.get(res));
-        if (current > last) {
+        if (Math.abs(current - last) > 0) {
             float m = Math.min(current - last, 1000) * weight * 0.005f;
             this.lastCheck.put(res, current);
             return m;

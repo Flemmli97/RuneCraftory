@@ -27,7 +27,7 @@ public class AttackAction {
 
     private static final Map<String, AttackAction> MAP = new HashMap<>();
 
-    public final BiFunction<LivingEntity, Integer, AnimatedAction> anim;
+    private final BiFunction<LivingEntity, Integer, AnimatedAction> anim;
     /**
      * Static handler for this action
      */
@@ -103,6 +103,11 @@ public class AttackAction {
             if (stack.getItem() instanceof IAOEWeapon weapon)
                 AOEWeaponHandler.onAOEWeaponSwing(player, stack, weapon);
         }
+    }
+
+    public AnimatedAction getAnimation(LivingEntity entity, int count) {
+        AnimatedAction anim = this.anim.apply(entity, count);
+        return anim != null ? anim.create() : null;
     }
 
     public String getId() {
