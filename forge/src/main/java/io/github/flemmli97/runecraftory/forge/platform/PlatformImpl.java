@@ -62,7 +62,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class PlatformImpl implements Platform {
@@ -205,13 +205,13 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public boolean matchingInventory(BlockEntity blockEntity, Function<ItemStack, Boolean> func) {
+    public boolean matchingInventory(BlockEntity blockEntity, Predicate<ItemStack> func) {
         if (blockEntity == null)
             return false;
         if (blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).isPresent())
             return blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(cap -> {
                 for (int i = 0; i < cap.getSlots(); i++)
-                    if (func.apply(cap.getStackInSlot(i)))
+                    if (func.test(cap.getStackInSlot(i)))
                         return true;
                 return false;
             }).orElse(false);
@@ -219,13 +219,13 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public ItemStack findMatchingItem(BlockEntity blockEntity, Function<ItemStack, Boolean> func, int amount) {
+    public ItemStack findMatchingItem(BlockEntity blockEntity, Predicate<ItemStack> func, int amount) {
         if (blockEntity == null)
             return ItemStack.EMPTY;
         return blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
                 .map(cap -> {
                     for (int i = 0; i < cap.getSlots(); i++)
-                        if (func.apply(cap.getStackInSlot(i))) {
+                        if (func.test(cap.getStackInSlot(i))) {
                             return cap.extractItem(i, amount, false);
                         }
                     return ItemStack.EMPTY;

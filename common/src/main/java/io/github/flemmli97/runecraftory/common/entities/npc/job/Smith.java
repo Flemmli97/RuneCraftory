@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.IntUnaryOperator;
 
 public class Smith extends NPCJob {
 
@@ -30,7 +31,7 @@ public class Smith extends NPCJob {
     public static final String BARN_COST_MAT = "npc.shop.barn.cost.mat";
     public static final String BARN_COST_FAIL = "npc.shop.barn.cost.fail";
 
-    private static final Function<Integer, Integer> COST_FUNC = count -> {
+    private static final IntUnaryOperator COST_FUNC = count -> {
         int clamped = Math.min(20, count + 1);
         return 1000 * clamped * clamped - (Math.max(0, clamped - 1) * 2) * 1000;
     };
@@ -54,7 +55,7 @@ public class Smith extends NPCJob {
             if (action.equals(BARN_ACTION)) {
                 Platform.INSTANCE.getPlayerData(player)
                         .ifPresent(d -> {
-                            int amount = COST_FUNC.apply(d.getBoughtBarns());
+                            int amount = COST_FUNC.applyAsInt(d.getBoughtBarns());
                             Map<ItemPredicate, List<ItemStack>> stacks = new HashMap<>();
                             for (ItemStack stack : player.getInventory().items) {
                                 for (ItemPredicate pred : MATERIALS.keySet()) {
@@ -104,7 +105,7 @@ public class Smith extends NPCJob {
                 obj[i] = (int) (e.getValue() * COST_FUNC_MAT_MULTIPLIER.apply(d.getBoughtBarns()));
                 i++;
             }
-            return List.of((Component) new TranslatableComponent(BARN_COST, COST_FUNC.apply(d.getBoughtBarns())),
+            return List.of((Component) new TranslatableComponent(BARN_COST, COST_FUNC.applyAsInt(d.getBoughtBarns())),
                     new TranslatableComponent(BARN_COST_MAT, obj));
         }).orElse(List.of(new TranslatableComponent(BARN_ACTION_FAIL)));
     }

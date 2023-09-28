@@ -4,7 +4,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.Tag;
 
-import java.util.function.Function;
+import java.util.function.IntUnaryOperator;
 
 public class LevelExpPair {
 
@@ -27,8 +27,8 @@ public class LevelExpPair {
         return this.xp;
     }
 
-    public boolean addXP(float amount, int maxLevel, Function<Integer, Integer> xpForNext, Runnable onLevelUp) {
-        int neededXP = xpForNext.apply(this.level);
+    public boolean addXP(float amount, int maxLevel, IntUnaryOperator xpForNext, Runnable onLevelUp) {
+        int neededXP = xpForNext.applyAsInt(this.level);
         if (neededXP <= 0)
             return false;
         float xpToNextLevel = neededXP - this.xp;

@@ -48,7 +48,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public interface Platform {
@@ -115,9 +115,9 @@ public interface Platform {
 
     CreativeModeTab tab(String label, Supplier<ItemStack> icon);
 
-    boolean matchingInventory(BlockEntity blockEntity, Function<ItemStack, Boolean> func);
+    boolean matchingInventory(BlockEntity blockEntity, Predicate<ItemStack> func);
 
-    ItemStack findMatchingItem(BlockEntity blockEntity, Function<ItemStack, Boolean> func, int amount);
+    ItemStack findMatchingItem(BlockEntity blockEntity, Predicate<ItemStack> func, int amount);
 
     ItemStack insertInto(BlockEntity blockEntity, ItemStack stack);
 

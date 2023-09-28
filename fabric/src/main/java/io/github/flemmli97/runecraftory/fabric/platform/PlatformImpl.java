@@ -66,7 +66,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public class PlatformImpl implements Platform {
@@ -246,24 +246,24 @@ public class PlatformImpl implements Platform {
     }
 
     @Override
-    public boolean matchingInventory(BlockEntity blockEntity, Function<ItemStack, Boolean> func) {
+    public boolean matchingInventory(BlockEntity blockEntity, Predicate<ItemStack> func) {
         if (blockEntity == null)
             return false;
         if (blockEntity instanceof Container container) {
             for (int i = 0; i < container.getContainerSize(); i++)
-                if (func.apply(container.getItem(i)))
+                if (func.test(container.getItem(i)))
                     return true;
         }
         return false;
     }
 
     @Override
-    public ItemStack findMatchingItem(BlockEntity blockEntity, Function<ItemStack, Boolean> func, int amount) {
+    public ItemStack findMatchingItem(BlockEntity blockEntity, Predicate<ItemStack> func, int amount) {
         if (blockEntity == null)
             return ItemStack.EMPTY;
         if (blockEntity instanceof Container container) {
             for (int i = 0; i < container.getContainerSize(); i++)
-                if (func.apply(container.getItem(i)))
+                if (func.test(container.getItem(i)))
                     return container.removeItem(i, amount);
         }
         return ItemStack.EMPTY;

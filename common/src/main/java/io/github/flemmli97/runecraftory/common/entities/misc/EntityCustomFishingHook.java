@@ -45,7 +45,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.function.BooleanSupplier;
 
 /**
  * The vanilla fishing hook has too much hardcoded stuff in it
@@ -66,7 +66,7 @@ public class EntityCustomFishingHook extends EntityProjectile {
     private final int nibbleBonus;
     private int difficultyBonus;
 
-    private Supplier<Boolean> canAttack;
+    private BooleanSupplier canAttack;
     private Runnable setOnCooldown;
 
     public EntityCustomFishingHook(EntityType<? extends EntityCustomFishingHook> entityType, Level level) {
@@ -89,7 +89,7 @@ public class EntityCustomFishingHook extends EntityProjectile {
         this.element = element;
     }
 
-    public void attackHandlingPlayer(Supplier<Boolean> canAttack, Runnable runnable) {
+    public void attackHandlingPlayer(BooleanSupplier canAttack, Runnable runnable) {
         this.canAttack = canAttack;
         this.setOnCooldown = runnable;
     }
@@ -167,7 +167,7 @@ public class EntityCustomFishingHook extends EntityProjectile {
 
     @Override
     protected boolean entityRayTraceHit(EntityHitResult entityHitResult) {
-        if (this.canAttack != null && !this.canAttack.get()) {
+        if (this.canAttack != null && !this.canAttack.getAsBoolean()) {
             this.discard();
             return false;
         }

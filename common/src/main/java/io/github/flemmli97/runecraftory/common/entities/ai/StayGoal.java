@@ -6,11 +6,11 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 
 import java.util.EnumSet;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class StayGoal<T extends Mob> extends Goal {
 
-    public static Function<BaseMonster, Boolean> CANSTAYMONSTER = monster -> {
+    public static Predicate<BaseMonster> CANSTAYMONSTER = monster -> {
         if (!monster.isTamed()) {
             return false;
         }
@@ -22,7 +22,7 @@ public class StayGoal<T extends Mob> extends Goal {
         }
         return monster.isStaying();
     };
-    public static Function<EntityNPCBase, Boolean> CANSTAYNPC = npc -> {
+    public static Predicate<EntityNPCBase> CANSTAYNPC = npc -> {
         if (npc.isInWaterOrBubble()) {
             return false;
         }
@@ -33,9 +33,9 @@ public class StayGoal<T extends Mob> extends Goal {
     };
 
     private final T mob;
-    private final Function<T, Boolean> canStay;
+    private final Predicate<T> canStay;
 
-    public StayGoal(T mob, Function<T, Boolean> canStay) {
+    public StayGoal(T mob, Predicate<T> canStay) {
         this.mob = mob;
         this.setFlags(EnumSet.of(Goal.Flag.JUMP, Goal.Flag.MOVE));
         this.canStay = canStay;
@@ -43,7 +43,7 @@ public class StayGoal<T extends Mob> extends Goal {
 
     @Override
     public boolean canUse() {
-        return this.canStay.apply(this.mob);
+        return this.canStay.test(this.mob);
     }
 
     @Override

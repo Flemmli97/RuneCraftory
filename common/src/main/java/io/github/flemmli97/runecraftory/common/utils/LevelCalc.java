@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.ToIntBiFunction;
 
 public class LevelCalc {
 
@@ -233,7 +234,7 @@ public class LevelCalc {
         });
     }
 
-    private static int getLevelFor(ServerLevel level, Vec3 pos, int base, BiFunction<Player, Optional<PlayerData>, Integer> levelFunc) {
+    private static int getLevelFor(ServerLevel level, Vec3 pos, int base, ToIntBiFunction<Player, Optional<PlayerData>> levelFunc) {
         if (levelFunc == null && !MobConfig.playerLevelType.increased)
             return base;
         List<Player> list = playersIn(level, pos, 256);
@@ -243,7 +244,7 @@ public class LevelCalc {
         boolean mean = MobConfig.playerLevelType.mean;
         for (Player player : list) {
             Optional<PlayerData> data = Platform.INSTANCE.getPlayerData(player);
-            int pL = levelFunc != null ? levelFunc.apply(player, data) : 0;
+            int pL = levelFunc != null ? levelFunc.applyAsInt(player, data) : 0;
             if (MobConfig.playerLevelType.increased)
                 pL += data.map(PlayerData::getMobLevelIncrease).orElse(0);
             if (mean)

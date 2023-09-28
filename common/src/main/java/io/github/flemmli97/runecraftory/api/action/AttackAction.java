@@ -20,7 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.function.BiPredicate;
+import java.util.function.ToIntFunction;
 
 public class AttackAction {
 
@@ -34,21 +35,21 @@ public class AttackAction {
     public final BiConsumer<LivingEntity, WeaponHandler> onStart;
     public final BiConsumer<LivingEntity, WeaponHandler> onEnd;
 
-    public final BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable;
+    public final BiPredicate<LivingEntity, WeaponHandler> isInvulnerable;
 
-    public final Function<LivingEntity, Integer> maxConsecutive, timeFrame;
+    public final ToIntFunction<LivingEntity> maxConsecutive, timeFrame;
     public final boolean disableItemSwitch, disableMovement;
     //Here for now till all have animations
     public final boolean disableAnimation;
-    public final BiFunction<LivingEntity, WeaponHandler, Boolean> canOverride;
+    public final BiPredicate<LivingEntity, WeaponHandler> canOverride;
 
     public final BiFunction<LivingEntity, WeaponHandler, Pose> withPose;
 
     private final String id;
 
     private AttackAction(BiFunction<LivingEntity, Integer, AnimatedAction> anim, ActiveActionHandler attackExecuter, BiConsumer<LivingEntity, WeaponHandler> onStart, BiConsumer<LivingEntity, WeaponHandler> onEnd,
-                         Function<LivingEntity, Integer> maxConsecutive, Function<LivingEntity, Integer> timeFrame, boolean disableItemSwitch, boolean disableMovement, boolean disableAnimation,
-                         BiFunction<LivingEntity, WeaponHandler, Boolean> canOverride, String id, BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable, BiFunction<LivingEntity, WeaponHandler, Pose> withPose) {
+                         ToIntFunction<LivingEntity> maxConsecutive, ToIntFunction<LivingEntity> timeFrame, boolean disableItemSwitch, boolean disableMovement, boolean disableAnimation,
+                         BiPredicate<LivingEntity, WeaponHandler> canOverride, String id, BiPredicate<LivingEntity, WeaponHandler> isInvulnerable, BiFunction<LivingEntity, WeaponHandler, Pose> withPose) {
         this.anim = anim == null ? (player, data) -> null : anim;
         this.attackExecuter = attackExecuter;
         this.onStart = onStart;
@@ -124,11 +125,11 @@ public class AttackAction {
         private ActiveActionHandler attackExecuter;
         private BiConsumer<LivingEntity, WeaponHandler> onStart;
         private BiConsumer<LivingEntity, WeaponHandler> onEnd;
-        private BiFunction<LivingEntity, WeaponHandler, Boolean> canOverride;
-        private Function<LivingEntity, Integer> maxConsecutive;
-        private Function<LivingEntity, Integer> timeFrame;
+        private BiPredicate<LivingEntity, WeaponHandler> canOverride;
+        private ToIntFunction<LivingEntity> maxConsecutive;
+        private ToIntFunction<LivingEntity> timeFrame;
         private boolean disableItemSwitch, disableMovement, disableAnimation;
-        private BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable;
+        private BiPredicate<LivingEntity, WeaponHandler> isInvulnerable;
         private BiFunction<LivingEntity, WeaponHandler, Pose> withPose;
 
         public Builder(BiFunction<LivingEntity, Integer, AnimatedAction> anim) {
@@ -150,7 +151,7 @@ public class AttackAction {
             return this;
         }
 
-        public Builder setMaxConsecutive(Function<LivingEntity, Integer> amount, Function<LivingEntity, Integer> timeFrame) {
+        public Builder setMaxConsecutive(ToIntFunction<LivingEntity> amount, ToIntFunction<LivingEntity> timeFrame) {
             this.maxConsecutive = amount;
             this.timeFrame = timeFrame;
             return this;
@@ -171,12 +172,12 @@ public class AttackAction {
             return this;
         }
 
-        public Builder allowSelfOverride(BiFunction<LivingEntity, WeaponHandler, Boolean> canOverride) {
+        public Builder allowSelfOverride(BiPredicate<LivingEntity, WeaponHandler> canOverride) {
             this.canOverride = canOverride;
             return this;
         }
 
-        public Builder setInvulnerability(BiFunction<LivingEntity, WeaponHandler, Boolean> isInvulnerable) {
+        public Builder setInvulnerability(BiPredicate<LivingEntity, WeaponHandler> isInvulnerable) {
             this.isInvulnerable = isInvulnerable;
             return this;
         }

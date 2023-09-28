@@ -13,7 +13,7 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.Random;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class TeleportUtils {
 
@@ -82,15 +82,15 @@ public class TeleportUtils {
         return false;
     }
 
-    public static boolean validTeleportPlace(Mob entity, BlockPos pos, Function<BlockState, Boolean> validPos) {
+    public static boolean validTeleportPlace(Mob entity, BlockPos pos, Predicate<BlockState> validPos) {
         return isSafePos(entity, pos, validPos) != null;
     }
 
-    public static BlockPos isSafePos(Mob entity, BlockPos pos, Function<BlockState, Boolean> validPos) {
+    public static BlockPos isSafePos(Mob entity, BlockPos pos, Predicate<BlockState> validPos) {
         return isSafePos(entity, entity.level, pos, validPos);
     }
 
-    public static BlockPos isSafePos(Mob entity, Level level, BlockPos pos, Function<BlockState, Boolean> validPos) {
+    public static BlockPos isSafePos(Mob entity, Level level, BlockPos pos, Predicate<BlockState> validPos) {
         BlockPathTypes blockPathTypes = entity.getNavigation().getNodeEvaluator().getBlockPathType(level, pos.getX(), pos.getY(), pos.getZ());
         if (blockPathTypes == BlockPathTypes.OPEN) {
             if (!entity.isNoGravity())
@@ -99,7 +99,7 @@ public class TeleportUtils {
             return null;
         }
         BlockState blockState = level.getBlockState(pos.below());
-        if (!validPos.apply(blockState)) {
+        if (!validPos.test(blockState)) {
             return null;
         }
         for (VoxelShape voxelShape : level.getBlockCollisions(entity, entity.getBoundingBox()

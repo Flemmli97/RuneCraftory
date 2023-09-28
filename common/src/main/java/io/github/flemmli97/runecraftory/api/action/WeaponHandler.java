@@ -68,15 +68,15 @@ public class WeaponHandler {
     }
 
     public boolean canConsecutiveExecute(LivingEntity entity, AttackAction action) {
-        return (this.canExecuteAction(entity, action) || (this.currentAction == action && action.canOverride != null && action.canOverride.apply(entity, this)))
-                && this.count < action.maxConsecutive.apply(entity)
+        return (this.canExecuteAction(entity, action) || (this.currentAction == action && action.canOverride != null && action.canOverride.test(entity, this)))
+                && this.count < action.maxConsecutive.applyAsInt(entity)
                 && this.chainTrackerAction == action;
     }
 
     private void setAnimationBasedOnState(LivingEntity entity, AttackAction action, boolean packet, @Nullable BiConsumer<LivingEntity, AnimatedAction> attack) {
         if (this.currentAction.onEnd != null)
             this.currentAction.onEnd.accept(entity, this);
-        if (action == AttackActions.NONE && this.count >= this.currentAction.maxConsecutive.apply(entity)) {
+        if (action == AttackActions.NONE && this.count >= this.currentAction.maxConsecutive.applyAsInt(entity)) {
             this.count = 0;
             this.chainTrackerAction = action;
         }
@@ -92,7 +92,7 @@ public class WeaponHandler {
         if (this.currentAction != AttackActions.NONE) {
             this.count++;
             if (action.timeFrame != null && (this.chainTrackerAction != this.currentAction || this.timeFrame <= 0))
-                this.timeFrame = action.timeFrame.apply(entity);
+                this.timeFrame = action.timeFrame.applyAsInt(entity);
             if (this.chainTrackerAction == this.currentAction) {
                 this.toolCharge = 0;
             }
@@ -215,6 +215,6 @@ public class WeaponHandler {
     }
 
     public boolean isInvulnerable(LivingEntity entity) {
-        return this.currentAction.isInvulnerable != null ? this.currentAction.isInvulnerable.apply(entity, this) : false;
+        return this.currentAction.isInvulnerable != null && this.currentAction.isInvulnerable.test(entity, this);
     }
 }

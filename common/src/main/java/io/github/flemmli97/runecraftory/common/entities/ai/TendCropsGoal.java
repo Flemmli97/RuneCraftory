@@ -33,10 +33,11 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class TendCropsGoal extends Goal {
 
-    private static final Function<ItemStack, Boolean> seedItem = s -> !s.isEmpty() && s.getItem() instanceof BlockItem
+    private static final Predicate<ItemStack> seedItem = s -> !s.isEmpty() && s.getItem() instanceof BlockItem
             && (s.is(ModTags.SEEDS) || s.getItem() == Items.POTATO || s.getItem() == Items.CARROT);
 
     private final List<BlockPos> toTend = new ArrayList<>();
