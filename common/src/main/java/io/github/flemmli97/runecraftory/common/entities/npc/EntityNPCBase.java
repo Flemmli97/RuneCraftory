@@ -120,6 +120,7 @@ import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.entity.EntityInLevelCallback;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.PathFinder;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -764,6 +765,8 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public void setPlayDeath(boolean flag) {
         this.entityData.set(PLAY_DEATH_STATE, flag);
         if (flag) {
+            this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32), e -> this.equals(e.getTarget()))
+                    .forEach(m -> m.setTarget(null));
             this.getNavigation().stop();
             this.setShiftKeyDown(false);
             this.setSprinting(false);
@@ -778,9 +781,19 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     }
 
     @Override
+    public boolean canBeSeenAsEnemy() {
+        return super.canBeSeenAsEnemy() && !this.playDeath();
+    }
+
+    @Override
     public boolean hurt(DamageSource source, float amount) {
         if (this.playDeath() && source != DamageSource.OUT_OF_WORLD)
             return false;
+        if (this.followEntity() != null && source.getEntity() != null) {
+            Player follow = this.followEntity();
+            if (follow.equals(source.getEntity()) || Platform.INSTANCE.getPlayerData(follow).map(d -> d.party.isPartyMember(source.getEntity())).orElse(false))
+                return false;
+        }
         return super.hurt(source, amount);
     }
 
@@ -889,7 +902,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
     public List<LivingEntity> attackableEntites() {
         ItemStack held = this.getMainHandItem();
         if (held.getItem() instanceof IAOEWeapon weapon) {
-            return CombatUtils.spinAttackHandler(this, this.getLookAngle(), weapon.getFOV(this, held), 0, this.hitPred);
+            return CombatUtils.spinAttackHandler(this, this.getLookAngle(), Math.max(0, weapon.getFOV(this, held) - 20), 0, this.hitPred);
         }
         LivingEntity target = this.getTarget();
         if (target == null)
@@ -1103,7 +1116,9 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         } else {
             if (this.followEntity() != null)
                 Platform.INSTANCE.getPlayerData(this.followEntity()).ifPresent(d -> d.party.removePartyMember(this));
+            this.setTarget(null);
         }
+        this.getNavigation().stop();
     }
 
     public Behaviour behaviourState() {

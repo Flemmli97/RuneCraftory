@@ -1235,6 +1235,8 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
         if (flag) {
             if (!this.level.isClientSide && this.level.getGameRules().getBoolean(GameRules.RULE_SHOWDEATHMESSAGES) && this.getOwner() instanceof ServerPlayer)
                 this.getOwner().sendMessage(this.getKnockoutMessage(), Util.NIL_UUID);
+            this.level.getEntities(EntityTypeTest.forClass(Mob.class), this.getBoundingBox().inflate(32), e -> this.equals(e.getTarget()))
+                    .forEach(m -> m.setTarget(null));
             this.getNavigation().stop();
             this.playDeathAnimation(false);
             this.setMovingFlag(MoveType.NONE);

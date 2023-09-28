@@ -57,7 +57,7 @@ public class AttackMeleeAction implements NPCAction {
         int cooldown = 15;
         ItemStack hand = npc.getMainHandItem();
         if (hand.getItem() instanceof IItemUsable usabe && usabe.getWeaponType() != EnumWeaponType.FARM) {
-            cooldown = 3;
+            cooldown = 10;
         }
         return cooldown + this.cooldown.getInt(NPCAction.createLootContext(npc));
     }
