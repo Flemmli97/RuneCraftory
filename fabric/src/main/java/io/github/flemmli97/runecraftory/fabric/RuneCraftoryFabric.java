@@ -23,6 +23,7 @@ import io.github.flemmli97.runecraftory.common.registry.ModNPCActions;
 import io.github.flemmli97.runecraftory.common.registry.ModParticles;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
 import io.github.flemmli97.runecraftory.common.registry.ModSpells;
+import io.github.flemmli97.runecraftory.common.registry.ModStats;
 import io.github.flemmli97.runecraftory.common.registry.ModStructures;
 import io.github.flemmli97.runecraftory.common.world.farming.FarmlandHandler;
 import io.github.flemmli97.runecraftory.fabric.config.ConfigHolder;
@@ -257,6 +258,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ModParticles.PARTICLES.registerContent();
         ModActivities.ACTIVITIES.registerContent();
         ModPoiTypes.POI.registerContent();
+        ModStats.STATS.registerContent();
         ModNPCActions.ACTIONS.registerContent();
 
         ModLootCondition.LOOTFUNCTION.registerContent();
