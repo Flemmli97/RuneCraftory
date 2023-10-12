@@ -1787,6 +1787,7 @@
   "runecraftory.gui.quests.accept.yes": "Yes",
   "runecraftory.gui.quests.accept.no": "No",
   "runecraftory.quest.gui.button": "Requests",
+  "runecraftory.quest.npc.none": "The NPC for this quest doesn't exist anymore!",
   "runecraftory.dependency.simplequest.missing": "Simplequest is needed for quests",
   "runecraftory:shipping.single": "Ship %1$s x%2$s",
   "runecraftory:shipping.multi": "Ship any of the following x%2$s: %1$s",

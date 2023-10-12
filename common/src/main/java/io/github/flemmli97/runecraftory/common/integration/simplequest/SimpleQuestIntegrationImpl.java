@@ -14,6 +14,9 @@ import io.github.flemmli97.simplequests.datapack.QuestsManager;
 import io.github.flemmli97.simplequests.player.PlayerData;
 import io.github.flemmli97.simplequests.player.QuestProgress;
 import io.github.flemmli97.simplequests.quest.types.QuestBase;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -56,7 +59,10 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
             return;
         QuestBase quest = ((SimpleQuestData) data).getQuestboardQuests().get(res);
         if (quest != null) {
-            data.acceptQuest(quest, 0);
+            if (!(quest instanceof NPCQuest npcQuest) || WorldHandler.get(player.getServer()).npcHandler.doesNPCExist(npcQuest.getNpcUuid()))
+                data.acceptQuest(quest, 0);
+            else
+                player.sendMessage(new TranslatableComponent("runecraftory.quest.npc.none").withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
         }
     }
 

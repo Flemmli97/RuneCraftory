@@ -593,6 +593,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.gui.quests.accept.yes", "Yes");
         this.add("runecraftory.gui.quests.accept.no", "No");
         this.add("runecraftory.quest.gui.button", "Requests");
+        this.add("runecraftory.quest.npc.none", "The NPC for this quest doesn't exist anymore!");
 
         this.add("npc.schedule.work", "From: %s - %s");
         this.add("npc.schedule.work.2", "And: %s - %s");
