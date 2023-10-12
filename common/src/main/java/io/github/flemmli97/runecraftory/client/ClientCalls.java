@@ -6,6 +6,7 @@ import com.mojang.datafixers.util.Pair;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
+import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.client.gui.widgets.SkillButton;
 import io.github.flemmli97.runecraftory.client.tooltips.UpgradeTooltipComponent;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
@@ -276,7 +277,7 @@ public class ClientCalls {
             Platform.INSTANCE.sendToServer(new C2SRideJump());
         if (entity == Minecraft.getInstance().cameraEntity) {
             ShakeHandler.shakeTick--;
-            if (ClientHandlers.isRuneyWeather) {
+            if (ClientHandlers.clientCalendar.currentWeather() == EnumWeather.RUNEY) {
                 int tries = Minecraft.getInstance().options.particles != ParticleStatus.ALL ? 1 : 2;
                 for (int i = 0; i < tries; i++)
                     entity.level.addParticle(ModParticles.runey.get(),

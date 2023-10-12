@@ -62,8 +62,6 @@ public class ClientHandlers {
     public static TriggerKeyBind spell3;
     public static TriggerKeyBind spell4;
 
-    public static boolean isRuneyWeather;
-
     private static AnimatedPlayerModel animatedPlayerModel;
 
     private static CameraType pastType = CameraType.FIRST_PERSON;
@@ -86,10 +84,6 @@ public class ClientHandlers {
                             mc.levelRenderer.setSectionDirty(x, y, z);
             }
         }
-    }
-
-    public static void setRuneyWeather(boolean runeyWeather) {
-        isRuneyWeather = runeyWeather;
     }
 
     public static void grabMouse(LivingEntity entity) {

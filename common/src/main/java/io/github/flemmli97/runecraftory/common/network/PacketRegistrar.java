@@ -39,7 +39,6 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CRecipe.ID, S2CRecipe.class, S2CRecipe::write, S2CRecipe::read, S2CRecipe::handle);
         register.registerMessage(id++, S2CRunePoints.ID, S2CRunePoints.class, S2CRunePoints::write, S2CRunePoints::read, S2CRunePoints::handle);
         register.registerMessage(id++, S2CSkillLevelPkt.ID, S2CSkillLevelPkt.class, S2CSkillLevelPkt::write, S2CSkillLevelPkt::read, S2CSkillLevelPkt::handle);
-        register.registerMessage(id++, S2CRuneyWeatherData.ID, S2CRuneyWeatherData.class, S2CRuneyWeatherData::write, S2CRuneyWeatherData::read, S2CRuneyWeatherData::handle);
         register.registerMessage(id++, S2COpenCompanionGui.ID, S2COpenCompanionGui.class, S2COpenCompanionGui::write, S2COpenCompanionGui::read, S2COpenCompanionGui::handle);
         register.registerMessage(id++, S2COpenNPCGui.ID, S2COpenNPCGui.class, S2COpenNPCGui::write, S2COpenNPCGui::read, S2COpenNPCGui::handle);
         register.registerMessage(id++, S2CUpdateNPCData.ID, S2CUpdateNPCData.class, S2CUpdateNPCData::write, S2CUpdateNPCData::read, S2CUpdateNPCData::handle);

@@ -3,7 +3,7 @@ package io.github.flemmli97.runecraftory.common.utils;
 import io.github.flemmli97.runecraftory.api.enums.EnumDay;
 import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
-import io.github.flemmli97.runecraftory.common.network.S2CRuneyWeatherData;
+import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -68,7 +68,7 @@ public class CalendarImpl {
 
     public void setWeather(MinecraftServer server, EnumWeather weather) {
         this.currentWeather = weather;
-        Platform.INSTANCE.sendToAll(new S2CRuneyWeatherData(this.currentWeather == EnumWeather.RUNEY), server);
+        Platform.INSTANCE.sendToAll(new S2CCalendar(this), server);
     }
 
     public void updateWeathers(EnumWeather[] nextDays) {

@@ -5,7 +5,6 @@ import io.github.flemmli97.runecraftory.api.datapack.CropProperties;
 import io.github.flemmli97.runecraftory.api.datapack.FoodProperties;
 import io.github.flemmli97.runecraftory.api.datapack.SimpleEffect;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
-import io.github.flemmli97.runecraftory.api.enums.EnumWeather;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.config.GeneralConfig;
@@ -21,7 +20,6 @@ import io.github.flemmli97.runecraftory.common.network.S2CCalendar;
 import io.github.flemmli97.runecraftory.common.network.S2CCapSync;
 import io.github.flemmli97.runecraftory.common.network.S2CDataPackSync;
 import io.github.flemmli97.runecraftory.common.network.S2CEntityDataSyncAll;
-import io.github.flemmli97.runecraftory.common.network.S2CRuneyWeatherData;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModEffects;
@@ -85,7 +83,6 @@ public class EntityCalls {
         if (player instanceof ServerPlayer serverPlayer) {
             Platform.INSTANCE.sendToClient(new S2CDataPackSync(), serverPlayer);
             Platform.INSTANCE.sendToClient(new S2CCalendar(WorldHandler.get(serverPlayer.getServer()).getCalendar()), serverPlayer);
-            Platform.INSTANCE.sendToClient(new S2CRuneyWeatherData(WorldHandler.get(serverPlayer.getServer()).currentWeather() == EnumWeather.RUNEY), serverPlayer);
             Platform.INSTANCE.getPlayerData(player).ifPresent(data -> {
                 data.recalculateStats(serverPlayer, false);
                 if (!data.starting) {
