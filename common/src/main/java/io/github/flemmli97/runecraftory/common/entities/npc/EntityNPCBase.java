@@ -26,6 +26,9 @@ import io.github.flemmli97.runecraftory.common.entities.ai.npc.actions.NPCAttack
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
 import io.github.flemmli97.runecraftory.common.entities.pathing.NPCWalkNodeEvaluator;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.NPCQuest;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.NPCQuestState;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.inventory.InventoryShop;
 import io.github.flemmli97.runecraftory.common.inventory.container.ContainerShop;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemObjectX;
@@ -358,6 +361,7 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
             if (this.getServer() != null) {
                 NPCHandler handler = WorldHandler.get(this.getServer()).npcHandler;
                 handler.addNPC(this);
+                handler.playersToReset(this.getUUID()).forEach(pair -> this.relationManager.resetQuest(pair.getFirst(), pair.getSecond()));
             }
         }
         super.tick();
@@ -519,6 +523,39 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
     }
 
+    public void respondToQuest(ServerPlayer player, ResourceLocation quest) {
+        NPCQuestState questState = this.relationManager.questStateFor(player.getUUID(), quest);
+        boolean result;
+        if (questState != NPCQuestState.NOT_STARTED) {
+            SimpleQuestIntegration.INST().triggerNPCTalk(player, this);
+            result = SimpleQuestIntegration.INST().checkCompletionQuest(player, this);
+            if (result) {
+                if (questState != NPCQuestState.END)
+                    this.relationManager.advanceQuest(player.getUUID(), quest);
+                questState = NPCQuestState.END;
+            }
+        }
+        int heart = this.relationManager.getFriendPointData(player.getUUID()).points.getLevel();
+        NPCData.ConversationSet conversations = this.data.getFromQuest(quest, questState);
+        LootContext ctx = new LootContext.Builder((ServerLevel) this.level).withRandom(this.random)
+                .withParameter(LootContextParams.THIS_ENTITY, this)
+                .withParameter(LootContextParams.ORIGIN, this.position())
+                .withParameter(LootCtxParameters.INTERACTING_PLAYER, player)
+                .withLuck(player.getLuck()).create(LootContextParamSets.GIFT);
+        List<Map.Entry<String, NPCData.Conversation>> filtered = conversations.getConversations().entrySet().stream().filter(c -> c.getValue().startingConversation() && c.getValue().test(heart, ctx))
+                .collect(Collectors.toList());
+        Collections.shuffle(filtered, this.updater.getDailyRandom());
+        int size = Math.min(filtered.size(), 2 + this.updater.getDailyRandom().nextInt(2)); //Select 2-3 random lines
+        if (size > 0) {
+            Map.Entry<String, NPCData.Conversation> randomLine = filtered.get(this.random.nextInt(size));
+            this.tellDialogue(player, null, randomLine.getKey(), randomLine.getValue());
+        } else {
+            this.tellDialogue(player, null, null, new TranslatableComponent(conversations.getFallbackKey(), player.getName()), List.of());
+        }
+        if (questState == NPCQuestState.NOT_STARTED)
+            this.relationManager.advanceQuest(player.getUUID(), quest);
+    }
+
     private void tellDialogue(ServerPlayer player, NPCData.ConversationType type, String conversationID, NPCData.Conversation conversation) {
         List<Component> actions = conversation.actions().stream().map(e -> (Component) new TranslatableComponent(e.translationKey(), player.getName())).toList();
         this.tellDialogue(player, type, conversationID, new TranslatableComponent(conversation.translationKey(), player.getName()), actions);
@@ -544,12 +581,24 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
                             this.tellDialogue(sender, type, action.actionValue(), answer);
                         }
                     }
-                    case QUEST -> {
-                        //TODO
-                    }
+                    case QUEST -> SimpleQuestIntegration.INST().acceptQuestRandom(sender, this, new ResourceLocation(action.actionValue()));
                 }
             }
         }
+    }
+
+    public void closedDialogue(ServerPlayer sender) {
+    }
+
+    public void closedQuestDialogue(ServerPlayer sender) {
+        this.closedDialogue(sender);
+        ResourceLocation quest = SimpleQuestIntegration.INST().questForExists(sender, this);
+        if (quest != null && this.relationManager.questStateFor(sender.getUUID(), quest) == NPCQuestState.END)
+            SimpleQuestIntegration.INST().submit(sender, this);
+    }
+
+    public void resetQuestProcess(ServerPlayer player, ResourceLocation quest) {
+        this.relationManager.resetQuest(player.getUUID(), quest);
     }
 
     public NPCRelation relationFor(Player player) {
@@ -1225,10 +1274,18 @@ public class EntityNPCBase extends AgeableMob implements Npc, IBaseMob, IAnimate
         }
     }
 
+    public boolean canAcceptNPCQuest(ServerPlayer player, NPCQuest quest) {
+        return this.relationManager.getCompletedQuests(player.getUUID()).containsAll(quest.parentQuests);
+    }
+
     public void randomizeData() {
         if (this.getServer() != null)
             this.setNPCData(DataPackHandler.SERVER_PACK.npcDataManager().getRandom(this.random, d -> WorldHandler.get(this.getServer())
                     .npcHandler.canAssignNPC(d)), false);
+    }
+
+    public ResourceLocation getDataID() {
+        return DataPackHandler.SERVER_PACK.npcDataManager().getId(this.data);
     }
 
     public void setNPCData(NPCData data, boolean load) {

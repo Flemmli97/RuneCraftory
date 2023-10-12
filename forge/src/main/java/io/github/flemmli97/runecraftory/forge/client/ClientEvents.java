@@ -96,6 +96,8 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void tooltipComp(RenderTooltipEvent.GatherComponents event) {
+        if (event.getItemStack().isEmpty())
+            return;
         List<Either<FormattedText, TooltipComponent>> elements = new ArrayList<>();
         ClientCalls.tooltipComponentEvent(event.getItemStack(), c -> elements.add(Either.right(c)), event.getScreenWidth(), event.getScreenHeight());
         event.getTooltipElements().addAll(1, elements);

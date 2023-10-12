@@ -1,13 +1,15 @@
 package io.github.flemmli97.runecraftory.forge.data;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.NPCQuest;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.QuestTasks;
 import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.registry.ModEntities;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
+import io.github.flemmli97.simplequests.api.QuestEntry;
 import io.github.flemmli97.simplequests.datapack.provider.QuestProvider;
-import io.github.flemmli97.simplequests.quest.Quest;
 import io.github.flemmli97.simplequests.quest.QuestCategory;
+import io.github.flemmli97.simplequests.quest.types.Quest;
 import io.github.flemmli97.tenshilib.common.item.SpawnEgg;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -16,7 +18,22 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Consumer;
+
 public class QuestGen extends QuestProvider {
+
+    private final QuestCategory main = new QuestCategory.Builder(SimpleQuestIntegration.QUEST_CATEGORY, RuneCraftory.MODID + ".quests.category")
+            .unselectable()
+            .setHidden()
+            .countSameCategoryOnly()
+            .setMaxConcurrent(1).build();
+    private final QuestCategory hidden = new QuestCategory.Builder(id("hidden_quests"), RuneCraftory.MODID + ".quests.category.hidden")
+            .unselectable()
+            .setHidden()
+            .countSameCategoryOnly()
+            .setMaxConcurrent(1).build();
 
     public QuestGen(DataGenerator gen) {
         super(gen, false);
@@ -24,24 +41,34 @@ public class QuestGen extends QuestProvider {
 
     @Override
     protected void add() {
-        QuestCategory main = new QuestCategory.Builder(SimpleQuestIntegration.QUEST_CATEGORY, RuneCraftory.MODID + ".quests.category")
-                .unselectable()
-                .setHidden()
-                .countSameCategoryOnly()
-                .setMaxConcurrent(1).build();
         this.addQuest(new Quest.Builder(id("ship_turnip"), "Ship a turnip", BuiltInLootTables.EMPTY)
-                .withCategory(main)
+                .withCategory(this.main)
                 .withIcon(new ItemStack(ModItems.turnip.get()))
-                .withSubmissionTrigger(SimpleQuestIntegration.QUEST_TRIGGER)
+                .withSubmissionTrigger(SimpleQuestIntegration.QUEST_BOARD_TRIGGER)
                 .setRepeatDelay(-1)
                 .addTaskEntry("turnip", new QuestTasks.ShippingEntry(ItemPredicate.Builder.item().of(ModItems.turnip.get()).build(), 1)));
 
-        this.addQuest(new Quest.Builder(id("tame_monster"), "Tame a monster", BuiltInLootTables.EMPTY)
-                .withCategory(main)
+        this.createNPCQuest(new NPCQuest.Builder(id("tame_monster"), "runecraftory.quest.tame_monster",
+                id("random_npc"), new ResourceLocation("chests/abandoned_mineshaft"))
+                .addDescription("runecraftory.quest.tame_monster_description")
+                .withCategory(this.main)
                 .withIcon(new ItemStack(SpawnEgg.fromType(ModEntities.WOOLY.get()).get()))
-                .withSubmissionTrigger(SimpleQuestIntegration.QUEST_TRIGGER)
-                .setRepeatDelay(-1)
-                .addTaskEntry("tame", new QuestTasks.TamingEntry(EntityPredicate.ANY, 1, "Tame one monster")));
+                .setRepeatDelay(-1), of(m -> m.put("tame", new QuestTasks.TamingEntry(EntityPredicate.ANY, 1, "Tame one monster"))));
+    }
+
+    private void createNPCQuest(NPCQuest.Builder builder, Map<String, QuestEntry> entries) {
+        ResourceLocation questID = new ResourceLocation(builder.getID().getNamespace(), builder.getID().getPath() + "_ref");
+        Quest.Builder questBuilder = new Quest.Builder(questID, "NPC_SUBQUEST", BuiltInLootTables.EMPTY)
+                .withCategory(this.hidden);
+        entries.forEach(questBuilder::addTaskEntry);
+        this.addQuest(questBuilder);
+        this.addQuest(builder.withQuest(questID));
+    }
+
+    private static <K, V> Map<K, V> of(Consumer<Map<K, V>> cons) {
+        Map<K, V> map = new LinkedHashMap<>();
+        cons.accept(map);
+        return map;
     }
 
     private static ResourceLocation id(String name) {

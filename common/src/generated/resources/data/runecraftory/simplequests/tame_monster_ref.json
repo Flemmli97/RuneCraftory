@@ -1,0 +1,13 @@
+{
+  "category": "runecraftory:hidden_quests",
+  "task": "NPC_SUBQUEST",
+  "loot_table": "minecraft:empty",
+  "entries": {
+    "tame": {
+      "amount": 1,
+      "description": "Tame one monster",
+      "id": "runecraftory:taming"
+    }
+  },
+  "type": "simplequests:quest"
+}

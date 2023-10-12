@@ -18,6 +18,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumSeason;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.npc.NPCSchedule;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.NPCJob;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.NPCQuestState;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
@@ -42,10 +43,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
 
@@ -54,12 +57,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                       @Nullable Pair<EnumSeason, Integer> birthday,
                       int weight, String neutralGiftResponse,
                       Map<ConversationType, ResourceLocation> interactions,
+                      QuestHandler questHandler,
                       Map<String, Gift> giftItems, @Nullable NPCSchedule.Schedule schedule,
                       @Nullable Map<Attribute, Double> baseStats, @Nullable Map<Attribute, Double> statIncrease,
                       int baseLevel, @Nullable ResourceLocation combatActions, int unique, boolean romanceable) {
 
     public static final NPCData DEFAULT_DATA = new NPCData(null, null, Gender.UNDEFINED, null, null, null, 1, "npc.default.gift.neutral",
-            Map.of(), Map.of(), null, null, null, 1, null, 0, false);
+            Map.of(), new QuestHandler(Map.of(), Set.of()), Map.of(), null, null, null, 1, null, 0, false);
 
     private static Map<ConversationType, ConversationSet> buildDefaultInteractionMap() {
         ImmutableMap.Builder<ConversationType, ConversationSet> builder = new ImmutableMap.Builder<>();
@@ -87,6 +91,7 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             inst.group(
                     filledMap(ConversationType.class, Codec.unboundedMap(CodecHelper.enumCodec(ConversationType.class, null), ResourceLocation.CODEC))
                             .fieldOf("interactions").forGetter(d -> d.interactions),
+                    QuestHandler.CODEC.fieldOf("questHandler").forGetter(d -> d.questHandler),
                     NPCSchedule.Schedule.CODEC.optionalFieldOf("schedule").forGetter(d -> Optional.ofNullable(d.schedule)),
                     NPCCombat.CODEC.optionalFieldOf("combat").forGetter(d -> {
                         NPCCombat combat = new NPCCombat(d.baseStats, d.statIncrease, d.baseLevel, d.combatActions);
@@ -108,12 +113,25 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                     Codec.STRING.optionalFieldOf("surname").forGetter(d -> Optional.ofNullable(d.surname)),
                     CodecHelper.enumCodec(Gender.class, Gender.UNDEFINED).fieldOf("gender").forGetter(d -> d.gender),
                     ModNPCJobs.CODEC.optionalFieldOf("profession").forGetter(d -> Optional.ofNullable(d.profession))
-            ).apply(inst, (interactions, schedule, combat, romanceable, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
-                    gender, profession.orElse(null), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null), combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null), unique.orElse(0), romanceable.orElse(false))));
+            ).apply(inst, (interactions, questHandler, schedule, combat, romanceable, neutralGift, giftItems, look, birthday, weight, unique, name, surname, gender, profession) -> new NPCData(name.orElse(null), surname.orElse(null),
+                    gender, profession.orElse(null), look.orElse(null), birthday.orElse(null), weight, neutralGift, interactions, questHandler, giftItems, schedule.orElse(null), combat.map(d -> d.baseStats).orElse(null), combat.map(d -> d.statIncrease).orElse(null), combat.map(d -> d.baseLevel).orElse(1), combat.map(d -> d.npcAction).orElse(null), unique.orElse(0), romanceable.orElse(false))));
 
     public ConversationSet getConversation(ConversationType type) {
         ResourceLocation conversationId = this.interactions().get(type);
         return DataPackHandler.SERVER_PACK.npcConversationManager().get(conversationId, ConversationSet.DEFAULT.get(type));
+    }
+
+    public ConversationSet getFromQuest(ResourceLocation quest, NPCQuestState state) {
+        QuestResponses responses = this.questHandler().responses().get(quest);
+        ConversationSet fallback = new ConversationSet("npc.default.quest.response.default", Map.of());
+        if (responses == null)
+            return fallback;
+        ResourceLocation conversationId = switch (state) {
+            case NOT_STARTED -> responses.startID;
+            case STARTED -> responses.activeID;
+            case END -> responses.endID;
+        };
+        return DataPackHandler.SERVER_PACK.npcConversationManager().get(conversationId, fallback);
     }
 
     public enum Gender {
@@ -153,6 +171,23 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         }
     }
 
+    public record QuestHandler(Map<ResourceLocation, QuestResponses> responses, Set<ResourceLocation> requiredQuests) {
+        public static final Codec<QuestHandler> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        Codec.unboundedMap(ResourceLocation.CODEC, QuestResponses.CODEC).fieldOf("responses").forGetter(d -> d.responses),
+                        ResourceLocation.CODEC.listOf().fieldOf("requiredQuests").forGetter(d -> List.copyOf(d.requiredQuests))
+                ).apply(inst, (responses, required) -> new QuestHandler(responses, Set.copyOf(required))));
+    }
+
+    public record QuestResponses(ResourceLocation startID, ResourceLocation activeID, ResourceLocation endID) {
+        public static final Codec<QuestResponses> CODEC = RecordCodecBuilder.create(inst ->
+                inst.group(
+                        ResourceLocation.CODEC.fieldOf("startID").forGetter(d -> d.startID),
+                        ResourceLocation.CODEC.fieldOf("activeID").forGetter(d -> d.activeID),
+                        ResourceLocation.CODEC.fieldOf("endID").forGetter(d -> d.endID)
+                ).apply(inst, QuestResponses::new));
+    }
+
     public static class Builder {
 
         private final String name;
@@ -172,6 +207,9 @@ public record NPCData(@Nullable String name, @Nullable String surname,
         private int baseLevel = 1;
         private int unique;
         private boolean romanceable;
+
+        private Map<ResourceLocation, QuestResponses> responses = new LinkedHashMap<>();
+        private Set<ResourceLocation> requiredQuests = new LinkedHashSet<>();
 
         private final Map<String, String> translations = new LinkedHashMap<>();
 
@@ -230,6 +268,13 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
+        public Builder addTranslation(String questID, String first, String running, String end) {
+            this.translations.put(questID + ".start", first);
+            this.translations.put(questID + ".active", running);
+            this.translations.put(questID + ".end", end);
+            return this;
+        }
+
         public Builder withSchedule(NPCSchedule.Schedule schedule) {
             this.schedule = schedule;
             return this;
@@ -265,6 +310,16 @@ public record NPCData(@Nullable String name, @Nullable String surname,
             return this;
         }
 
+        public Builder requiresQuest(ResourceLocation quest) {
+            this.requiredQuests.add(quest);
+            return this;
+        }
+
+        public Builder addQuestResponse(ResourceLocation quest, ResourceLocation startingID, ResourceLocation activeID, ResourceLocation endID) {
+            this.responses.put(quest, new QuestResponses(startingID, activeID, endID));
+            return this;
+        }
+
         public Map<String, String> getTranslations() {
             return this.translations;
         }
@@ -276,7 +331,8 @@ public record NPCData(@Nullable String name, @Nullable String surname,
                 if (!this.interactions.containsKey(type))
                     throw new IllegalStateException("Missing interactions for " + type);
             }
-            return new NPCData(this.name, this.surname, this.gender, this.profession, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions, this.giftItems, this.schedule,
+            return new NPCData(this.name, this.surname, this.gender, this.profession, this.look, this.birthday, this.weight, this.neutralGiftResponse, this.interactions,
+                    new QuestHandler(this.responses, this.requiredQuests), this.giftItems, this.schedule,
                     this.baseStats.isEmpty() ? null : this.baseStats, this.statIncrease.isEmpty() ? null : this.statIncrease, this.baseLevel, this.combatAction, this.unique, this.romanceable);
         }
     }

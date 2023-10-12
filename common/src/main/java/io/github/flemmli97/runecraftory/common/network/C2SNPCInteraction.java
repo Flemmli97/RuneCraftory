@@ -2,6 +2,7 @@ package io.github.flemmli97.runecraftory.common.network;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.Util;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,23 +22,21 @@ public class C2SNPCInteraction implements Packet {
     private final String action;
 
     public C2SNPCInteraction(int entityID, C2SNPCInteraction.Type type) {
-        this.id = entityID;
-        this.type = type;
-        this.action = "";
+        this(entityID, type, "");
     }
 
     public C2SNPCInteraction(int entityID, String action) {
+        this(entityID, Type.ACTION, action);
+    }
+
+    public C2SNPCInteraction(int entityID, C2SNPCInteraction.Type type, String action) {
         this.id = entityID;
-        this.type = Type.ACTION;
-        this.action = action;
+        this.type = type;
+        this.action = action == null ? "" : action;
     }
 
     public static C2SNPCInteraction read(FriendlyByteBuf buf) {
-        int id = buf.readInt();
-        Type type = buf.readEnum(C2SNPCInteraction.Type.class);
-        if (type != Type.ACTION)
-            return new C2SNPCInteraction(id, type);
-        return new C2SNPCInteraction(id, buf.readUtf());
+        return new C2SNPCInteraction(buf.readInt(), buf.readEnum(C2SNPCInteraction.Type.class), buf.readUtf());
     }
 
     public static void handle(C2SNPCInteraction pkt, ServerPlayer sender) {
@@ -68,6 +67,9 @@ public class C2SNPCInteraction implements Packet {
                             npc.followEntity(null);
                     }
                     case SHOP -> npc.openShopForPlayer(sender);
+                    case QUEST -> npc.respondToQuest(sender, new ResourceLocation(pkt.action));
+                    case CLOSE -> npc.closedDialogue(sender);
+                    case CLOSE_QUEST -> npc.closedQuestDialogue(sender);
                     case ACTION -> npc.getShop().handleAction(npc, sender, pkt.action);
                 }
             }
@@ -78,8 +80,7 @@ public class C2SNPCInteraction implements Packet {
     public void write(FriendlyByteBuf buf) {
         buf.writeInt(this.id);
         buf.writeEnum(this.type);
-        if (this.type == Type.ACTION)
-            buf.writeUtf(this.action);
+        buf.writeUtf(this.action);
     }
 
     @Override
@@ -96,6 +97,8 @@ public class C2SNPCInteraction implements Packet {
         STOPFOLLOW("gui.npc.stopFollow", EntityNPCBase.Behaviour.WANDER),
         SHOP("gui.npc.shop", null),
         CLOSE("gui.npc.close", null),
+        CLOSE_QUEST("gui.npc.close.quest", null),
+        QUEST(SimpleQuestIntegration.QUEST_GUI_KEY, null),
         ACTION("", null);
 
         public final String translation;

@@ -6,6 +6,7 @@ import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.common.registry.ModNPCJobs;
 import io.github.flemmli97.runecraftory.common.registry.ModPoiTypes;
@@ -49,14 +50,17 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
 
     private Map<String, List<Component>> actions;
 
+    private final ResourceLocation quest;
+
     private List<ToolTipRenderer> tooltipComponents = new ArrayList<>();
 
-    public NPCGui(T entity, ShopState isShopOpen, boolean canFollow, Map<String, List<Component>> actions) {
+    public NPCGui(T entity, ShopState isShopOpen, boolean canFollow, Map<String, List<Component>> actions, ResourceLocation quest) {
         super(entity.getDisplayName());
         this.entity = entity;
         this.isShopOpen = isShopOpen;
         this.canFollow = canFollow;
         this.actions = actions;
+        this.quest = quest;
     }
 
     @Override
@@ -160,6 +164,13 @@ public class NPCGui<T extends EntityNPCBase> extends Screen {
                     }
                 });
             }
+        }
+        if (this.quest != null) {
+            y += 30;
+            this.addRenderableWidget(new Button(this.leftPos + x, this.topPos + y, xSize, 20, new TranslatableComponent(SimpleQuestIntegration.QUEST_GUI_KEY), b -> {
+                Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.QUEST, this.quest.toString()));
+                this.minecraft.setScreen(null);
+            }));
         }
         if (this.isShopOpen == ShopState.NOBED) {
             this.components = new ArrayList<>();

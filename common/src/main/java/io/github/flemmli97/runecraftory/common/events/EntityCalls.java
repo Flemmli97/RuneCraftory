@@ -13,6 +13,7 @@ import io.github.flemmli97.runecraftory.common.config.MobConfig;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.IBaseMob;
 import io.github.flemmli97.runecraftory.common.entities.ai.DisableGoal;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.lib.LibConstants;
@@ -93,6 +94,7 @@ public class EntityCalls {
                     player.setHealth(player.getMaxHealth());
                 }
             });
+            SimpleQuestIntegration.INST().removeNPCQuestsFor(serverPlayer);
         }
     }
 

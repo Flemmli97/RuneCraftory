@@ -51,6 +51,13 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.follow.yes", "Ok"));
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.follow.no", "Sorry but I am busy right now."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.follow.stop", "Ok. See you again."));
+                }),
+                of(m -> {
+                    m.put(new ResourceLocation(RuneCraftory.MODID, "tame_monster"), new QuestResponseBuilder(
+                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.start", "Please tame a monster."),
+                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.active", "You still need to tame a monster."),
+                            new NPCData.ConversationSet.Builder("npc.generic.quest.tame_monster.end", "Thank you for taming a monster.")
+                    ));
                 }));
 
         this.addNPCData("random_npc_2", new NPCData.Builder(50)
@@ -66,6 +73,9 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.2.follow.yes", "Where are we going?"));
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.2.follow.no", "Sorry but I'm have something to take care of."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.2.follow.stop", "Ok. Cya."));
+                }),
+                of(m -> {
+
                 }));
 
         this.addNPCData("random_npc_3", new NPCData.Builder(50)
@@ -83,6 +93,9 @@ public class NPCDataGen extends NPCDataProvider {
                     m.put(NPCData.ConversationType.FOLLOWYES, new NPCData.ConversationSet.Builder("npc.generic.3.follow.yes", "Sure. Where do you want to go?"));
                     m.put(NPCData.ConversationType.FOLLOWNO, new NPCData.ConversationSet.Builder("npc.generic.3.follow.no", "I think I still have some things to do first."));
                     m.put(NPCData.ConversationType.FOLLOWSTOP, new NPCData.ConversationSet.Builder("npc.generic.3.follow.stop", "Oh ok. Well then later."));
+                }),
+                of(m -> {
+
                 }));
 
         //Test data using all possible fields

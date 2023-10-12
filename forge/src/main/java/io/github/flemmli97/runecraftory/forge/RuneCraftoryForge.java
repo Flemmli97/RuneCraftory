@@ -90,7 +90,7 @@ public class RuneCraftoryForge {
             ConfigHolder<?> loader = confs.getValue();
             ModLoadingContext.get().registerConfig(loader.configType(), confs.getKey(), loader.configName());
         }
-        SimpleQuestIntegration.register();
+        SimpleQuestIntegration.INST().register();
     }
 
     public static void registries() {

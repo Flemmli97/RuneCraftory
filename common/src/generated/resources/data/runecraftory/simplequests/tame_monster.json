@@ -1,16 +1,13 @@
 {
   "category": "runecraftory:quests",
-  "task": "Tame a monster",
-  "icon": "runecraftory:wooly_spawn_egg",
-  "repeat_delay": -1,
-  "loot_table": "minecraft:empty",
-  "submission_trigger": "runecraftory_trigger",
-  "entries": {
-    "tame": {
-      "amount": 1,
-      "description": "Tame one monster",
-      "id": "runecraftory:taming"
-    }
+  "task": "runecraftory.quest.tame_monster",
+  "description": "runecraftory.quest.tame_monster_description",
+  "icon": {
+    "item": "minecraft:air",
+    "count": 0
   },
-  "type": "simplequests:quest"
+  "npc_id": "runecraftory:random_npc",
+  "quest": "runecraftory:tame_monster_ref",
+  "loot_table": "minecraft:chests/abandoned_mineshaft",
+  "type": "runecraftory:npc_quest"
 }

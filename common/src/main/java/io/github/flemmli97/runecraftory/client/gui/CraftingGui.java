@@ -62,8 +62,8 @@ public class CraftingGui extends AbstractContainerScreen<ContainerCrafting> {
                     Platform.INSTANCE.sendToServer(new C2SSelectRecipeCrafting(but.getActualIndex()));
             }));
         }
-        this.scrollBar = new Rect(this.leftPos + 195, this.topPos + 12, 8, 142);
-        this.scrollArea = new Rect(this.leftPos + 172, this.topPos + 12, 31, 142);
+        this.scrollBar = new Rect(this.leftPos + this.scrollBar.x, this.topPos + this.scrollBar.y, this.scrollBar.width, this.scrollBar.height);
+        this.scrollArea = new Rect(this.leftPos + this.scrollArea.x, this.topPos + this.scrollArea.y, this.scrollArea.width, this.scrollArea.height);
     }
 
     @Override

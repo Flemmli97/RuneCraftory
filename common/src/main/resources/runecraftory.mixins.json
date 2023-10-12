@@ -4,6 +4,7 @@
   "package": "io.github.flemmli97.runecraftory.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "compat.SimpleQuestDataMixin",
     "AbstractContainerMenuAccessor",
     "AttributeAccessor",
     "AttributeMapAccessor",

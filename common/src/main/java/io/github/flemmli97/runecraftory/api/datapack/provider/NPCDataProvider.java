@@ -158,7 +158,8 @@ public abstract class NPCDataProvider implements DataProvider {
         this.data.put(new ResourceLocation(this.modid, id), data.build());
     }
 
-    public void addNPCData(String id, NPCData.Builder data, Map<NPCData.ConversationType, NPCData.ConversationSet.Builder> conversations) {
+    public void addNPCData(String id, NPCData.Builder data, Map<NPCData.ConversationType, NPCData.ConversationSet.Builder> conversations,
+                           Map<ResourceLocation, QuestResponseBuilder> questConversations) {
         //if (data.look() != null && !this.looks.containsKey(data.look()))
         //    throw new IllegalStateException("NPC has look defined but there is no such look registered");
         conversations.forEach((key, value) -> {
@@ -166,6 +167,18 @@ public abstract class NPCDataProvider implements DataProvider {
             this.translations.putAll(value.getTranslations());
             this.conversations.put(conversationId, value.build());
             data.addInteractionIfAbsent(key, conversationId);
+        });
+        questConversations.forEach((key, value) -> {
+            ResourceLocation startId = new ResourceLocation(this.modid, id + "/quest_start_" + key.getPath());
+            this.translations.putAll(value.start.getTranslations());
+            this.conversations.put(startId, value.start.build());
+            ResourceLocation runId = new ResourceLocation(this.modid, id + "/quest_active_" + key.getPath());
+            this.translations.putAll(value.active.getTranslations());
+            this.conversations.put(runId, value.active.build());
+            ResourceLocation endId = new ResourceLocation(this.modid, id + "/quest_end_" + key.getPath());
+            this.translations.putAll(value.end.getTranslations());
+            this.conversations.put(endId, value.end.build());
+            data.addQuestResponse(key, startId, runId, endId);
         });
         this.translations.putAll(data.getTranslations());
         this.data.put(new ResourceLocation(this.modid, id), data.build());
@@ -218,5 +231,9 @@ public abstract class NPCDataProvider implements DataProvider {
     public ResourceLocation addAttackActions(ResourceLocation id, NPCAttackActions.Builder actions) {
         this.actions.put(id, actions.build());
         return id;
+    }
+
+    public record QuestResponseBuilder(NPCData.ConversationSet.Builder start, NPCData.ConversationSet.Builder active,
+                                       NPCData.ConversationSet.Builder end) {
     }
 }

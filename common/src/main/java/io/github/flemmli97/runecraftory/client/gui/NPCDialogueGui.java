@@ -168,7 +168,7 @@ public class NPCDialogueGui<T extends EntityNPCBase> extends Screen {
         super.removed();
         Minecraft.getInstance().options.keyUse.consumeClick();
         Minecraft.getInstance().options.keyUse.setDown(false);
-        Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.CLOSE));
+        Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), this.type == null ? C2SNPCInteraction.Type.CLOSE_QUEST : C2SNPCInteraction.Type.CLOSE, this.conversationID));
     }
 
     public void updateConversation(Minecraft mc, NPCData.ConversationType type, String conversationID, Component conversation, List<Component> actions) {

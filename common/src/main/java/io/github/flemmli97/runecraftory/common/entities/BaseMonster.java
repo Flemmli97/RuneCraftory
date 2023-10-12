@@ -1643,7 +1643,7 @@ public abstract class BaseMonster extends PathfinderMob implements Enemy, IAnima
                 ModCriteria.TAME_MONSTER_TRIGGER.trigger(serverPlayer, this, data.tamedEntity);
                 LevelCalc.levelSkill(serverPlayer, data, EnumSkills.TAMING, 10);
             });
-            SimpleQuestIntegration.triggerTaming(serverPlayer, this);
+            SimpleQuestIntegration.INST().triggerTaming(serverPlayer, this);
         }
         if (this.getServer() != null) {
             this.assignBarn();

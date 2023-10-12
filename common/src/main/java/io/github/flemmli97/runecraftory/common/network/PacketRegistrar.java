@@ -19,6 +19,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, C2SShopButton.ID, C2SShopButton.class, C2SShopButton::write, C2SShopButton::read, C2SShopButton::handle);
         register.registerMessage(id++, C2SSelectRecipeCrafting.ID, C2SSelectRecipeCrafting.class, C2SSelectRecipeCrafting::write, C2SSelectRecipeCrafting::read, C2SSelectRecipeCrafting::handle);
         register.registerMessage(id++, C2SDialogueAction.ID, C2SDialogueAction.class, C2SDialogueAction::write, C2SDialogueAction::read, C2SDialogueAction::handle);
+        register.registerMessage(id++, C2SQuestSelect.ID, C2SQuestSelect.class, C2SQuestSelect::write, C2SQuestSelect::read, C2SQuestSelect::handle);
         return id;
     }
 
@@ -52,6 +53,7 @@ public class PacketRegistrar {
         register.registerMessage(id++, S2CFarmlandUpdatePacket.ID, S2CFarmlandUpdatePacket.class, S2CFarmlandUpdatePacket::write, S2CFarmlandUpdatePacket::read, S2CFarmlandUpdatePacket::handle);
         register.registerMessage(id++, S2CFarmlandRemovePacket.ID, S2CFarmlandRemovePacket.class, S2CFarmlandRemovePacket::write, S2CFarmlandRemovePacket::read, S2CFarmlandRemovePacket::handle);
         register.registerMessage(id++, S2CNpcDialogue.ID, S2CNpcDialogue.class, S2CNpcDialogue::write, S2CNpcDialogue::read, S2CNpcDialogue::handle);
+        register.registerMessage(id++, S2COpenQuestGui.ID, S2COpenQuestGui.class, S2COpenQuestGui::write, S2COpenQuestGui::read, S2COpenQuestGui::handle);
         return id;
     }
 

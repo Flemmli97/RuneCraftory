@@ -1,14 +1,10 @@
 package io.github.flemmli97.runecraftory.common.integration.simplequest;
 
 import io.github.flemmli97.runecraftory.RuneCraftory;
-import io.github.flemmli97.runecraftory.common.attachment.player.QuestTracker;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
-import io.github.flemmli97.runecraftory.platform.Platform;
-import io.github.flemmli97.simplequests.api.SimpleQuestAPI;
-import io.github.flemmli97.simplequests.datapack.QuestEntryRegistry;
-import io.github.flemmli97.simplequests.datapack.QuestsManager;
-import io.github.flemmli97.simplequests.gui.QuestGui;
-import io.github.flemmli97.simplequests.quest.QuestBase;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
+import io.github.flemmli97.simplequests.api.QuestCompletionState;
+import io.github.flemmli97.simplequests.quest.types.QuestBase;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -16,76 +12,81 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Map;
-import java.util.Set;
 
 public class SimpleQuestIntegration {
 
+    private static SimpleQuestIntegration INST;
+
     public static final ResourceLocation QUEST_CATEGORY = new ResourceLocation(RuneCraftory.MODID, "quests");
 
-    public static final String QUEST_TRIGGER = RuneCraftory.MODID + "_trigger";
+    public static final String QUEST_BOARD_TRIGGER = RuneCraftory.MODID + "_quest_board_trigger";
 
-    public static void register() {
-        if (!RuneCraftory.simpleQuests) {
-            return;
+    public static final String QUEST_GUI_KEY = RuneCraftory.MODID + ".quest.gui.button";
+
+    public static SimpleQuestIntegration INST() {
+        if (INST == null) {
+            if (RuneCraftory.simpleQuests)
+                INST = new SimpleQuestIntegrationImpl();
+            else
+                INST = new SimpleQuestIntegration();
         }
-        QuestEntryRegistry.registerSerializer(QuestTasks.ShippingEntry.ID, QuestTasks.ShippingEntry.CODEC);
-        QuestEntryRegistry.registerSerializer(QuestTasks.LevelEntry.ID, QuestTasks.LevelEntry.CODEC);
-        QuestEntryRegistry.registerSerializer(QuestTasks.SkillLevelEntry.ID, QuestTasks.SkillLevelEntry.CODEC);
-        QuestEntryRegistry.registerSerializer(QuestTasks.TamingEntry.ID, QuestTasks.TamingEntry.CODEC);
+        return INST;
     }
 
-    public static void openGui(ServerPlayer player) {
-        if (!RuneCraftory.simpleQuests) {
-            player.sendMessage(new TranslatableComponent("dependency.simplequest.missing"), Util.NIL_UUID);
-            return;
-        }
-        //TODO Custom gui
-        QuestGui.openGui(player, QuestsManager.instance().getQuestCategory(QUEST_CATEGORY), false, 0);
+    SimpleQuestIntegration() {
     }
 
-    public static void tryComplete(ServerPlayer player) {
-        if (!RuneCraftory.simpleQuests) {
-            return;
-        }
-        SimpleQuestAPI.submit(player, QUEST_TRIGGER, false);
+    public void register() {
     }
 
-    public static Map<ResourceLocation, QuestBase> getQuests() {
-        if (!RuneCraftory.simpleQuests) {
-            return Map.of();
-        }
-        return QuestsManager.instance().getQuestsForCategoryID(QUEST_CATEGORY);
+    public void openGui(ServerPlayer player) {
+        player.sendMessage(new TranslatableComponent("runecraftory.dependency.simplequest.missing"), Util.NIL_UUID);
     }
 
-    public static Set<ResourceLocation> getQuestIds() {
-        return getQuests().keySet();
+    public void acceptQuest(ServerPlayer player, ResourceLocation res) {
     }
 
-    public static void triggerShipping(ServerPlayer player, ItemStack stack) {
-        if (!RuneCraftory.simpleQuests) {
-            return;
-        }
-        SimpleQuestAPI.trigger(player, QuestTasks.ShippingEntry.class, (name, e, prog) -> Platform.INSTANCE.getPlayerData(player)
-                        .map(d -> e.predicate.matches(stack) && d.questTracker.getTrackedAndIncrease(prog.getQuest().id, name, QuestTracker.TrackedTypes.SHIPPING, stack.getCount()) >= e.amount)
-                        .orElse(false),
-                (prog, pair) -> Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.questTracker.onComplete(prog.getQuest().id, pair.getFirst(), QuestTracker.TrackedTypes.SHIPPING)));
+    public void resetQuest(ServerPlayer player, ResourceLocation res) {
     }
 
-    public static void triggerTaming(ServerPlayer player, BaseMonster monster) {
-        if (!RuneCraftory.simpleQuests) {
-            return;
-        }
-        SimpleQuestAPI.trigger(player, QuestTasks.TamingEntry.class, (name, e, prog) -> Platform.INSTANCE.getPlayerData(player)
-                        .map(d -> e.predicate().matches(player, monster) &&
-                                d.questTracker.getTrackedAndIncrease(prog.getQuest().id, name, QuestTracker.TrackedTypes.SHIPPING, 1) >= e.amount())
-                        .orElse(false),
-                (prog, pair) -> Platform.INSTANCE.getPlayerData(player).ifPresent(d -> d.questTracker.onComplete(prog.getQuest().id, pair.getFirst(), QuestTracker.TrackedTypes.TAMING)));
+    public void resetQuestData(ServerPlayer player) {
     }
 
-    public static boolean questExists(ResourceLocation id) {
-        if (!RuneCraftory.simpleQuests) {
-            return false;
-        }
-        return QuestsManager.instance().getAllQuests().containsKey(id);
+    public void acceptQuestRandom(ServerPlayer player, EntityNPCBase npc, ResourceLocation res) {
+    }
+
+    public Map<ResourceLocation, QuestBase> getQuestsFor(ServerPlayer player) {
+        return Map.of();
+    }
+
+    public void questBoardComplete(ServerPlayer player) {
+    }
+
+    public Map<ResourceLocation, QuestCompletionState> triggerNPCTalk(ServerPlayer player, EntityNPCBase npc) {
+        return Map.of();
+
+    }
+
+    public void triggerShipping(ServerPlayer player, ItemStack stack) {
+    }
+
+    public void triggerTaming(ServerPlayer player, BaseMonster monster) {
+    }
+
+    public boolean checkCompletionQuest(ServerPlayer player, EntityNPCBase npc) {
+        return false;
+    }
+
+    public void submit(ServerPlayer player, EntityNPCBase npc) {
+    }
+
+    public void removeQuestFor(ServerPlayer player, EntityNPCBase npc) {
+    }
+
+    public void removeNPCQuestsFor(ServerPlayer player) {
+    }
+
+    public ResourceLocation questForExists(ServerPlayer player, EntityNPCBase npc) {
+        return null;
     }
 }

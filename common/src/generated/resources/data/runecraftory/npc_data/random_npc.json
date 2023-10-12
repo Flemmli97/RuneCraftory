@@ -1,6 +1,9 @@
 {
   "gender": "UNDEFINED",
   "weight": 50,
+  "combat": {
+    "combatActions": "runecraftory:generic_melee_attack"
+  },
   "romanceable": false,
   "neutralGiftResponse": "npc.generic.gift.default",
   "giftItems": {
@@ -20,7 +23,14 @@
     "FOLLOWNO": "runecraftory:random_npc/follow.no",
     "FOLLOWSTOP": "runecraftory:random_npc/follow.stop"
   },
-  "combat": {
-    "combatActions": "runecraftory:generic_melee_attack"
+  "questHandler": {
+    "responses": {
+      "runecraftory:tame_monster": {
+        "startID": "runecraftory:random_npc/quest_start_tame_monster",
+        "activeID": "runecraftory:random_npc/quest_active_tame_monster",
+        "endID": "runecraftory:random_npc/quest_end_tame_monster"
+      }
+    },
+    "requiredQuests": []
   }
 }

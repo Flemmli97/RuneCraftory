@@ -237,7 +237,7 @@ public class RuneCraftoryFabric implements ModInitializer {
         ServerChunkEvents.CHUNK_LOAD.register(((world, chunk) -> FarmlandHandler.get(world.getServer()).onChunkLoad(world, chunk.getPos())));
         ServerChunkEvents.CHUNK_UNLOAD.register(((world, chunk) -> FarmlandHandler.get(world.getServer()).onChunkUnLoad(world, chunk.getPos())));
 
-        SimpleQuestIntegration.register();
+        SimpleQuestIntegration.INST().register();
     }
 
     public void initContent() {

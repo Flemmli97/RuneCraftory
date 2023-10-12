@@ -1,6 +1,5 @@
 package io.github.flemmli97.runecraftory.common.attachment.player;
 
-import io.github.flemmli97.runecraftory.common.integration.simplequest.SimpleQuestIntegration;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 
@@ -46,22 +45,18 @@ public class QuestTracker {
         CompoundTag shipping = tag.getCompound("ShippingTracker");
         shipping.getAllKeys().forEach(key -> {
             ResourceLocation quest = new ResourceLocation(key);
-            if (SimpleQuestIntegration.questExists(quest)) {
-                Map<String, Integer> map = new HashMap<>();
-                CompoundTag tasks = shipping.getCompound(key);
-                tasks.getAllKeys().forEach(taskName -> map.put(taskName, tasks.getInt(taskName)));
-                this.shippingCounter.put(quest, map);
-            }
+            Map<String, Integer> map = new HashMap<>();
+            CompoundTag tasks = shipping.getCompound(key);
+            tasks.getAllKeys().forEach(taskName -> map.put(taskName, tasks.getInt(taskName)));
+            this.shippingCounter.put(quest, map);
         });
         CompoundTag taming = tag.getCompound("TamingTracker");
         taming.getAllKeys().forEach(key -> {
             ResourceLocation quest = new ResourceLocation(key);
-            if (SimpleQuestIntegration.questExists(quest)) {
-                Map<String, Integer> map = new HashMap<>();
-                CompoundTag tasks = taming.getCompound(key);
-                tasks.getAllKeys().forEach(taskName -> map.put(taskName, tasks.getInt(taskName)));
-                this.tamingCounter.put(quest, map);
-            }
+            Map<String, Integer> map = new HashMap<>();
+            CompoundTag tasks = taming.getCompound(key);
+            tasks.getAllKeys().forEach(taskName -> map.put(taskName, tasks.getInt(taskName)));
+            this.tamingCounter.put(quest, map);
         });
     }
 

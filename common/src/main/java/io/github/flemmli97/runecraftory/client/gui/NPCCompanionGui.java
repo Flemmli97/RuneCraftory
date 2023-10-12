@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.network.C2SNPCInteraction;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +13,12 @@ import java.util.List;
 public class NPCCompanionGui extends CompanionGui<EntityNPCBase> {
 
     private final boolean isShopOpen;
+    private final ResourceLocation quest;
 
-    public NPCCompanionGui(EntityNPCBase entity, boolean isShopOpen) {
+    public NPCCompanionGui(EntityNPCBase entity, boolean isShopOpen, ResourceLocation quest) {
         super(entity);
         this.isShopOpen = isShopOpen;
+        this.quest = quest;
     }
 
     @Override
@@ -28,6 +31,13 @@ public class NPCCompanionGui extends CompanionGui<EntityNPCBase> {
             this.minecraft.setScreen(null);
         }));
         int buttonIndex = 1;
+        if (this.quest != null) {
+            this.addRenderableWidget(new Button(this.leftPos + x + xSize + 6, this.topPos + y, xSize, 20, new TranslatableComponent(C2SNPCInteraction.Type.QUEST.translation), b -> {
+                Platform.INSTANCE.sendToServer(new C2SNPCInteraction(this.entity.getId(), C2SNPCInteraction.Type.QUEST, this.quest.toString()));
+                this.minecraft.setScreen(null);
+            }));
+            buttonIndex++;
+        }
         List<C2SNPCInteraction.Type> buttonTypes = new ArrayList<>();
         switch (this.entity.behaviourState()) {
             case FOLLOW -> {

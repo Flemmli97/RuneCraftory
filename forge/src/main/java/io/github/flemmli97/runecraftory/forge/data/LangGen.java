@@ -588,6 +588,12 @@ public class LangGen implements DataProvider {
         this.add("gui.npc.bed.no", "I don't have a bed");
         this.add("gui.npc.workplace.no", "I don't have a work place. Valid workplaces are [%s]");
 
+        this.add("runecraftory.gui.quests.accept", "Accept");
+        this.add("runecraftory.gui.quests.reset", "Cancel");
+        this.add("runecraftory.gui.quests.accept.yes", "Yes");
+        this.add("runecraftory.gui.quests.accept.no", "No");
+        this.add("runecraftory.quest.gui.button", "Requests");
+
         this.add("npc.schedule.work", "From: %s - %s");
         this.add("npc.schedule.work.2", "And: %s - %s");
         this.add("npc.schedule.days.header", "Open on:");
@@ -609,6 +615,7 @@ public class LangGen implements DataProvider {
         this.add("npc.default.follow.no.default", "Sorry but im busy right now.");
         this.add("npc.default.follow.stop.default", "Ok.");
         this.add("npc.default.gift.neutral", "Thank you for your gift.");
+        this.add("npc.default.quest.response.default", "Placeholder text for quest response");
 
         if (this.npcDataGen != null)
             this.npcDataGen.translations.forEach(this::add);
@@ -665,7 +672,7 @@ public class LangGen implements DataProvider {
         this.add("runecraftory.advancements.final.tool.title", "The best");
         this.add("runecraftory.advancements.final.tool.description", "Obtain a final tier tool");
 
-        this.add("dependency.simplequest.missing", "Simplequest is needed for quests");
+        this.add("runecraftory.dependency.simplequest.missing", "Simplequest is needed for quests");
         this.add(QuestTasks.ShippingEntry.ID + ".single", "Ship %1$s x%2$s");
         this.add(QuestTasks.ShippingEntry.ID + ".multi", "Ship any of the following x%2$s: %1$s");
         this.add(QuestTasks.ShippingEntry.ID + ".empty", "<Empty tag/items>");
@@ -673,6 +680,8 @@ public class LangGen implements DataProvider {
         this.add(QuestTasks.SkillLevelEntry.ID.toString(), "Reach level %s in %s");
         this.add(QuestTasks.TamingEntry.ID.toString(), "%s");
 
+        this.add("runecraftory.quest.tame_monster", "Tame a monster");
+        this.add("runecraftory.quest.tame_monster_description", "I need you to tame a monster");
     }
 
     private String simpleTranslation(ResourceLocation res) {

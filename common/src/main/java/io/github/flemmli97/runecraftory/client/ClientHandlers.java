@@ -12,6 +12,7 @@ import io.github.flemmli97.runecraftory.client.gui.NPCDialogueGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCGui;
 import io.github.flemmli97.runecraftory.client.gui.NPCShopGui;
 import io.github.flemmli97.runecraftory.client.gui.OverlayGui;
+import io.github.flemmli97.runecraftory.client.gui.QuestGui;
 import io.github.flemmli97.runecraftory.client.gui.SpellInvOverlayGui;
 import io.github.flemmli97.runecraftory.client.model.AnimatedPlayerModel;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
@@ -19,6 +20,7 @@ import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.entities.npc.job.ShopState;
+import io.github.flemmli97.runecraftory.common.integration.simplequest.ClientSideQuestDisplay;
 import io.github.flemmli97.runecraftory.common.network.S2CTriggers;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
 import io.github.flemmli97.runecraftory.common.utils.EntityUtils;
@@ -157,13 +159,13 @@ public class ClientHandlers {
         }
     }
 
-    public static void openNPCChat(int id, ShopState isShopOpen, int followState, Map<String, List<Component>> actions) {
+    public static void openNPCChat(int id, ShopState isShopOpen, int followState, Map<String, List<Component>> actions, ResourceLocation quest) {
         Entity entity = Minecraft.getInstance().level.getEntity(id);
         if (entity instanceof EntityNPCBase npc) {
             if (followState == 1)
-                Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN));
+                Minecraft.getInstance().setScreen(new NPCCompanionGui(npc, isShopOpen == ShopState.OPEN, quest));
             else
-                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0, actions));
+                Minecraft.getInstance().setScreen(new NPCGui<>(npc, isShopOpen, followState == 0, actions, quest));
         }
     }
 
@@ -282,5 +284,9 @@ public class ClientHandlers {
             gui.updateConversation(Minecraft.getInstance(), type, conversationID, component, actions);
             Minecraft.getInstance().setScreen(gui);
         }
+    }
+
+    public static void openQuestGui(List<ClientSideQuestDisplay> quests) {
+        Minecraft.getInstance().setScreen(new QuestGui(quests));
     }
 }

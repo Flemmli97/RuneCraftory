@@ -1,15 +1,17 @@
 package io.github.flemmli97.runecraftory.common.integration.simplequest;
 
-import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
+import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.runecraftory.common.utils.CodecHelper;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import io.github.flemmli97.simplequests.JsonCodecs;
 import io.github.flemmli97.simplequests.api.QuestEntry;
 import io.github.flemmli97.simplequests.mixin.ItemPredicateAccessor;
+import io.github.flemmli97.simplequests.quest.types.QuestBase;
+import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -20,11 +22,11 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.util.GsonHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public class QuestTasks {
 
@@ -82,11 +84,6 @@ public class QuestTasks {
             return new TranslatableComponent(this.getId().toString() + ".multi", items.withStyle(ChatFormatting.AQUA), this.amount);
         }
 
-        public static ShippingEntry fromJson(JsonObject obj) {
-            return new ShippingEntry(ItemPredicate.fromJson(GsonHelper.getAsJsonObject(obj, "predicate")), obj.get("amount").getAsInt(),
-                    GsonHelper.getAsString(obj, "description", ""));
-        }
-
         public static List<MutableComponent> itemComponents(ItemPredicate predicate) {
             ItemPredicateAccessor acc = (ItemPredicateAccessor) predicate;
             List<MutableComponent> formattedItems = new ArrayList<>();
@@ -118,10 +115,6 @@ public class QuestTasks {
         public MutableComponent translation(ServerPlayer player) {
             return new TranslatableComponent(this.getId().toString(), this.level);
         }
-
-        public static LevelEntry fromJson(JsonObject obj) {
-            return new LevelEntry(GsonHelper.getAsInt(obj, "level"));
-        }
     }
 
     public record SkillLevelEntry(EnumSkills skill, int level) implements QuestEntry {
@@ -145,10 +138,6 @@ public class QuestTasks {
         @Override
         public MutableComponent translation(ServerPlayer player) {
             return new TranslatableComponent(this.getId().toString(), this.skill, this.level);
-        }
-
-        public static SkillLevelEntry fromJson(JsonObject obj) {
-            return new SkillLevelEntry(EnumSkills.valueOf(GsonHelper.getAsString(obj, "skill")), GsonHelper.getAsInt(obj, "level"));
         }
     }
 
@@ -175,11 +164,61 @@ public class QuestTasks {
         public MutableComponent translation(ServerPlayer player) {
             return new TranslatableComponent(this.getId().toString(), this.description);
         }
+    }
 
-        public static TamingEntry fromJson(JsonObject obj) {
-            return new TamingEntry(EntityPredicate.fromJson(GsonHelper.getAsJsonObject(obj, "entity", null)),
-                    GsonHelper.getAsInt(obj, "amount", 1),
-                    GsonHelper.getAsString(obj, "description"));
+    public static class NPCTalk implements QuestEntry {
+
+        public static final ResourceLocation ID = new ResourceLocation(RuneCraftory.MODID, "npc_talk");
+        public static final Codec<NPCTalk> CODEC = RecordCodecBuilder.create((instance) ->
+                instance.group(Codec.STRING.fieldOf("translationKey").forGetter(d -> d.translationKey),
+                                Codec.BOOL.fieldOf("generic").forGetter(d -> d.generic),
+                                Codec.STRING.optionalFieldOf("targetNPC").forGetter(d -> d.targetNPC != null ? Optional.of(d.targetNPC.toString()) : Optional.empty()))
+                        .apply(instance, (key, generic, target) -> new NPCTalk(key, generic, target.map(UUID::fromString).orElse(null))));
+
+        private final String translationKey;
+        private final boolean generic;
+
+        public final UUID targetNPC;
+        private EntityNPCBase npc;
+
+        public NPCTalk(String translationKey, boolean generic) {
+            this(translationKey, generic, null);
+        }
+
+        protected NPCTalk(String translationKey, boolean generic, UUID targetNPC) {
+            this.translationKey = translationKey;
+            this.generic = generic;
+            this.targetNPC = targetNPC;
+        }
+
+        @Override
+        public boolean submit(ServerPlayer player) {
+            return false;
+        }
+
+        @Override
+        public ResourceLocation getId() {
+            return ID;
+        }
+
+        @Override
+        public MutableComponent translation(ServerPlayer player) {
+            if (this.npc == null || !this.npc.isAlive()) {
+                if (this.targetNPC == null)
+                    this.npc = null;
+                else
+                    this.npc = EntityUtil.findFromUUID(EntityNPCBase.class, player.getLevel(), this.targetNPC);
+            }
+            if (this.npc != null)
+                return new TranslatableComponent(this.getId().toString(), this.npc.getCustomName());
+            return new TranslatableComponent(this.getId().toString());
+        }
+
+        @Override
+        public QuestEntry resolve(ServerPlayer player, QuestBase quest) {
+            if (quest instanceof NPCQuest npcQuest)
+                return new NPCTalk(this.translationKey, this.generic, npcQuest.getNpcUuid());
+            return new NPCTalk(this.translationKey, this.generic, this.targetNPC);
         }
     }
 }

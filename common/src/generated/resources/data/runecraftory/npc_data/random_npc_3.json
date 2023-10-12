@@ -1,6 +1,9 @@
 {
   "gender": "UNDEFINED",
   "weight": 50,
+  "combat": {
+    "combatActions": "runecraftory:generic_melee_attack"
+  },
   "romanceable": false,
   "neutralGiftResponse": "npc.generic.3.gift.default",
   "giftItems": {
@@ -20,7 +23,8 @@
     "FOLLOWNO": "runecraftory:random_npc_3/follow.no",
     "FOLLOWSTOP": "runecraftory:random_npc_3/follow.stop"
   },
-  "combat": {
-    "combatActions": "runecraftory:generic_melee_attack"
+  "questHandler": {
+    "responses": {},
+    "requiredQuests": []
   }
 }
