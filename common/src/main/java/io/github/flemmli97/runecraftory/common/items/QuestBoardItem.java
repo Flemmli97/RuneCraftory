@@ -30,12 +30,6 @@ public class QuestBoardItem extends BlockItem implements MultiBlockItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        tooltipComponents.add(new TextComponent("WIP").withStyle(ChatFormatting.DARK_RED));
-        super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
-    }
-
-    @Override
     public List<Pair<BlockPos, BlockState>> getBlocks() {
         return this.states.get();
     }
