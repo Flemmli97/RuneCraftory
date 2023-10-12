@@ -19,7 +19,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,10 +47,7 @@ public class QuestGui extends Screen {
 
     public QuestGui(List<ClientSideQuestDisplay> quests) {
         super(new TextComponent(""));
-        List<ClientSideQuestDisplay> q = new ArrayList<>();
-        q.addAll(quests);
-        q.addAll(quests);
-        this.quests = q;
+        this.quests = quests;
     }
 
     @Override
@@ -219,7 +215,7 @@ public class QuestGui extends Screen {
         public void renderToolTip(PoseStack poseStack, int relativeMouseX, int relativeMouseY) {
             if (this.isHovered && this.getActualIndex() < QuestGui.this.quests.size() && QuestGui.this.selectedQuest == null) {
                 List<? extends Component> description = QuestGui.this.quests.get(this.getActualIndex()).description();
-                if(!description.isEmpty())
+                if (!description.isEmpty())
                     QuestGui.this.renderTooltip(poseStack, (List<Component>) description, Optional.empty(), relativeMouseX, relativeMouseY + 24);
             }
         }
@@ -243,7 +239,7 @@ public class QuestGui extends Screen {
          * Needs to render on top of selection background
          */
         public void renderButtonSelect(PoseStack poseStack) {
-            if(!this.visible)
+            if (!this.visible)
                 return;
             Minecraft minecraft = Minecraft.getInstance();
             Font font = minecraft.font;

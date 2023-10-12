@@ -10,7 +10,6 @@ import io.github.flemmli97.simplequests.datapack.QuestsManager;
 import io.github.flemmli97.simplequests.quest.QuestCategory;
 import io.github.flemmli97.simplequests.quest.types.QuestBase;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
-import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -84,9 +83,9 @@ public class NPCQuest extends QuestBase {
 
     @Override
     public List<MutableComponent> getDescription(ServerPlayer player) {
-        if(this.npcUuid != null) {
+        if (this.npcUuid != null) {
             EntityNPCBase npc = EntityUtil.findFromUUID(EntityNPCBase.class, player.getLevel(), this.npcUuid);
-            if(npc != null)
+            if (npc != null)
                 return this.questTaskDesc.stream().map(s -> new TranslatableComponent(s, npc.getCustomName(), npc.getX(), npc.getY(), npc.getZ())).collect(Collectors.toList());
         }
         return super.getDescription(player);
@@ -201,7 +200,7 @@ public class NPCQuest extends QuestBase {
 
         @Override
         public NPCQuest build() {
-            if(this.quest == null)
+            if (this.quest == null)
                 throw new IllegalStateException("Quest is not defined");
             return new NPCQuest(this.id, this.category, this.questTaskString, this.questDesc, this.neededParentQuests, this.redoParent, this.sortingId,
                     this.unlockCondition, this.npcDataID, this.quest, this.loot);

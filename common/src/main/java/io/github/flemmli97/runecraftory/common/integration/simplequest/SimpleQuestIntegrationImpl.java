@@ -85,13 +85,13 @@ public class SimpleQuestIntegrationImpl extends SimpleQuestIntegration {
     public Map<ResourceLocation, QuestBase> getQuestsFor(ServerPlayer player) {
         PlayerData data = PlayerData.get(player);
         return Stream.concat(QuestsManager.instance().getQuestsForCategoryID(SimpleQuestIntegration.QUEST_CATEGORY)
-                .entrySet().stream().filter(e -> data.canAcceptQuest(e.getValue()) == PlayerData.AcceptType.ACCEPT && e.getValue().isUnlocked(player)) //TODO
-                .flatMap(e -> {
-                    if (e.getValue() instanceof NPCQuest npcQuest) {
-                        return NPCQuest.of(npcQuest, player).stream();
-                    }
-                    return Stream.of(e.getValue());
-                }), data.getCurrentQuest().stream().map(QuestProgress::getQuest).filter(quest -> quest.category.id.equals(SimpleQuestIntegration.QUEST_CATEGORY)))
+                        .entrySet().stream().filter(e -> data.canAcceptQuest(e.getValue()) == PlayerData.AcceptType.ACCEPT && e.getValue().isUnlocked(player)) //TODO
+                        .flatMap(e -> {
+                            if (e.getValue() instanceof NPCQuest npcQuest) {
+                                return NPCQuest.of(npcQuest, player).stream();
+                            }
+                            return Stream.of(e.getValue());
+                        }), data.getCurrentQuest().stream().map(QuestProgress::getQuest).filter(quest -> quest.category.id.equals(SimpleQuestIntegration.QUEST_CATEGORY)))
                 .collect(Collectors.toMap(
                         q -> q.id,
                         q -> q,
