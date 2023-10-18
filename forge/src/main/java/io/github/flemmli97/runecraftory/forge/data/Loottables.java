@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockCrafting;
 import io.github.flemmli97.runecraftory.common.blocks.BlockCrop;
 import io.github.flemmli97.runecraftory.common.blocks.BlockQuestboard;
 import io.github.flemmli97.runecraftory.common.entities.GateEntity;
+import io.github.flemmli97.runecraftory.common.entities.misc.EntityCustomFishingHook;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityKingWooly;
 import io.github.flemmli97.runecraftory.common.entities.monster.EntityWooly;
 import io.github.flemmli97.runecraftory.common.loot.FirstKillCondition;
@@ -26,6 +27,7 @@ import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.loot.BlockLoot;
+import net.minecraft.data.loot.FishingLoot;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -35,6 +37,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -77,7 +80,7 @@ public class Loottables extends LootTableProvider {
     private static final float LOOTING_BONUS = 0.2f;
     private static final float RARE_LOOTING_BONUS = 0.1f;
 
-    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> loot = ImmutableList.of(Pair.of(EntityLoot::new, LootContextParamSets.ENTITY), Pair.of(WoolyShearedEntityLoot::new, LootContextParamSets.FISHING), Pair.of(BlockLootData::new, LootContextParamSets.BLOCK));
+    private final List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> loot = ImmutableList.of(Pair.of(EntityLoot::new, LootContextParamSets.ENTITY), Pair.of(WoolyShearedEntityLoot::new, LootContextParamSets.FISHING), Pair.of(BlockLootData::new, LootContextParamSets.BLOCK), Pair.of(FishingLootData::new, LootContextParamSets.FISHING));
 
     public Loottables(DataGenerator gen) {
         super(gen);
@@ -665,6 +668,18 @@ public class Loottables extends LootTableProvider {
 
         protected void registerLootTable(ResourceLocation s, LootTable.Builder builder) {
             this.loots.put(s, builder);
+        }
+    }
+
+    static class FishingLootData extends FishingLoot {
+
+        @Override
+        public void accept(BiConsumer<ResourceLocation, LootTable.Builder> biConsumer) {
+            //For now delegate to default table till fish get textures
+            biConsumer.accept(EntityCustomFishingHook.FISHING, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                    .add(LootTableReference.lootTableReference(BuiltInLootTables.FISHING))));
+            biConsumer.accept(EntityCustomFishingHook.SAND_FISHING, LootTable.lootTable().withPool(LootPool.lootPool().setRolls(ConstantValue.exactly(1))
+                    .add(LootItem.lootTableItem(Items.SAND))));
         }
     }
 }
