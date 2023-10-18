@@ -2,5 +2,13 @@
   "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "runecraftory:item/dancing_dicer"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "runecraftory:held": 1.0
+      },
+      "model": "runecraftory:item/dancing_dicer_held"
+    }
+  ]
 }

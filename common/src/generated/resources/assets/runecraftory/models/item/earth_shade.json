@@ -2,5 +2,13 @@
   "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "runecraftory:item/earth_shade"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "runecraftory:held": 1.0
+      },
+      "model": "runecraftory:item/earth_shade_held"
+    }
+  ]
 }

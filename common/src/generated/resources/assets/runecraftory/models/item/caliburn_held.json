@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/handheld_long_sword",
+  "textures": {
+    "layer0": "runecraftory:item/caliburn_held"
+  }
+}

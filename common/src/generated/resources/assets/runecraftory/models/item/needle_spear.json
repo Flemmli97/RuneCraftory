@@ -2,5 +2,13 @@
   "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "runecraftory:item/needle_spear"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "runecraftory:held": 1.0
+      },
+      "model": "runecraftory:item/needle_spear_held"
+    }
+  ]
 }

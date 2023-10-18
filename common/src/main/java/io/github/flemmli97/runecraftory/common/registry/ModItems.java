@@ -240,7 +240,7 @@ public class ModItems {
     public static final RegistryEntrySupplier<Item> poleAxe = axe("pole_axe", Texture.Y);
     public static final RegistryEntrySupplier<Item> poleAxePlus = axe("pole_axe_plus", Texture.Y);
     public static final RegistryEntrySupplier<Item> greatAxe = axe("great_axe", Texture.Y);
-    public static final RegistryEntrySupplier<Item> tomohawk = axe("tomohawk", Texture.Y);
+    public static final RegistryEntrySupplier<Item> tomahawk = axe("tomahawk", Texture.Y);
     public static final RegistryEntrySupplier<Item> basiliskFang = axe("basilisk_fang", Texture.N);
     public static final RegistryEntrySupplier<Item> rockAxe = axe("rock_axe", Texture.N);
     public static final RegistryEntrySupplier<Item> demonAxe = axe("demon_axe", Texture.N);

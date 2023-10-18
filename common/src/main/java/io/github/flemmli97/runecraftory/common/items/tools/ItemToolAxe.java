@@ -54,6 +54,11 @@ public class ItemToolAxe extends AxeItem implements IItemUsable, IChargeable {
     }
 
     @Override
+    public boolean hasCooldown() {
+        return true;
+    }
+
+    @Override
     public EnumWeaponType getWeaponType() {
         return EnumWeaponType.FARM;
     }

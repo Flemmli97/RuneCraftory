@@ -2,5 +2,13 @@
   "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "runecraftory:item/grand_smasher"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "runecraftory:held": 1.0
+      },
+      "model": "runecraftory:item/grand_smasher_held"
+    }
+  ]
 }

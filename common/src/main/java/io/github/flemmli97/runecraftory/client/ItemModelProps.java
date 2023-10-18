@@ -1,12 +1,18 @@
 package io.github.flemmli97.runecraftory.client;
 
+import io.github.flemmli97.runecraftory.RuneCraftory;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemModelProps {
+
+    public static final ResourceLocation HELD_ID = new ResourceLocation(RuneCraftory.MODID, "held");
+    public static final ResourceLocation GLOVE_HELD_ID = new ResourceLocation(RuneCraftory.MODID, "glove_held");
+    public static final ResourceLocation FISHING_ROD_ID = new ResourceLocation(RuneCraftory.MODID, "fishing");
 
     public static int HELD_TYPE;
 

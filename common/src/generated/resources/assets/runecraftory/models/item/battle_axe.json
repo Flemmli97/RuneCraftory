@@ -1,6 +1,14 @@
 {
-  "parent": "runecraftory:item/axe_mid",
+  "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "runecraftory:item/battle_axe"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "runecraftory:held": 1.0
+      },
+      "model": "runecraftory:item/battle_axe_held"
+    }
+  ]
 }

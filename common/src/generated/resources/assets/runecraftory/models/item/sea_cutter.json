@@ -1,6 +1,14 @@
 {
-  "parent": "runecraftory:item/handheld_reverse",
+  "parent": "minecraft:item/handheld",
   "textures": {
     "layer0": "runecraftory:item/sea_cutter"
-  }
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "runecraftory:held": 1.0
+      },
+      "model": "runecraftory:item/sea_cutter_held"
+    }
+  ]
 }

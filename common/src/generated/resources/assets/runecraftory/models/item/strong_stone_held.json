@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/handheld_big",
+  "textures": {
+    "layer0": "runecraftory:item/strong_stone_held"
+  }
+}

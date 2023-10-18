@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.platform.Platform;
@@ -30,7 +31,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargeable, IAOEWeapon {
+public class ItemHammerBase extends PickaxeItem implements IItemUsable, IChargeable, IAOEWeapon, BigWeapon {
 
     public ItemHammerBase(Item.Properties props) {
         super(ItemTiers.tier, 0, 0, props);

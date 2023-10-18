@@ -341,7 +341,7 @@ public class ItemStatGen extends ItemStatProvider {
                 .addAttribute(ModAttributes.DIZZY.get(), 2)
                 .addAttribute(ModAttributes.ATTACK_RANGE.get(), attackRangeFor(4.0f))
                 .addMonsterStat(Attributes.ATTACK_DAMAGE, 1));
-        this.addStat(ModItems.tomohawk.get(), new ItemStat.Builder(14360, 683, 0)
+        this.addStat(ModItems.tomahawk.get(), new ItemStat.Builder(14360, 683, 0)
                 .addAttribute(Attributes.ATTACK_DAMAGE, 70)
                 .addAttribute(ModAttributes.CRIT.get(), 15)
                 .addAttribute(ModAttributes.DIZZY.get(), 2)

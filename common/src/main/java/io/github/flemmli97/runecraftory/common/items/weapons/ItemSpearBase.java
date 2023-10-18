@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
 import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
@@ -35,7 +36,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAOEWeapon {
+public class ItemSpearBase extends Item implements IItemUsable, IChargeable, IAOEWeapon, BigWeapon {
 
     public ItemSpearBase(Item.Properties props) {
         super(props.stacksTo(1));

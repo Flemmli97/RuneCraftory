@@ -1,0 +1,14 @@
+{
+	"parent": "runecraftory:item/handheld_big",
+	"display": {
+		"gui": {
+			"translation": [3.75, 3.75, 0],
+			"scale": [1.4, 1.4, 0.5]
+		},
+		"fixed": {
+			"rotation": [0, 180, 0],
+			"translation": [-3.75, 3.75, 0],
+			"scale": [1.7, 1.7, 0.5]
+		}
+	}
+}

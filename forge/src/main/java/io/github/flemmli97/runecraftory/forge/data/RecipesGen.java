@@ -333,7 +333,7 @@ public class RecipesGen extends RecipeProvider {
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.greatAxe.get(), 1, 24, 40)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
-        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.tomohawk.get(), 1, 28, 40)
+        RecipeBuilder.create(EnumCrafting.FORGE, ModItems.tomahawk.get(), 1, 28, 40)
                 .addIngredient(ModTags.MINERALS).addIngredient(ModTags.CLAWS_FANGS).build(consumer);
 
         RecipeBuilder.create(EnumCrafting.FORGE, ModItems.battleHammer.get(), 1, 3, 25)

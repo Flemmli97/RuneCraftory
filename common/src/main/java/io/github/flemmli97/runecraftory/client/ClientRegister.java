@@ -120,6 +120,7 @@ import io.github.flemmli97.runecraftory.common.blocks.BlockMineral;
 import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityStone;
 import io.github.flemmli97.runecraftory.common.inventory.container.ShippingContainer;
+import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolFishingRod;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
@@ -206,12 +207,12 @@ public class ClientRegister {
 
     public static void registerItemProps(ItemModelPropsRegister register) {
         ModItems.ITEMS.getEntries().forEach(reg -> {
-            if (reg.get() instanceof ItemDualBladeBase)
-                register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "held"), ItemModelProps.HELD_MAIN_PROP);
+            if (reg.get() instanceof ItemDualBladeBase || reg.get() instanceof BigWeapon)
+                register.register(reg.get(), ItemModelProps.HELD_ID, ItemModelProps.HELD_MAIN_PROP);
             else if (reg.get() instanceof ItemGloveBase)
-                register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "glove_held"), ItemModelProps.HELD_MAIN_GLOVE);
+                register.register(reg.get(), ItemModelProps.GLOVE_HELD_ID, ItemModelProps.HELD_MAIN_GLOVE);
             else if (reg.get() instanceof ItemToolFishingRod)
-                register.register(reg.get(), new ResourceLocation(RuneCraftory.MODID, "fishing"), ItemModelProps.FISHING_RODS);
+                register.register(reg.get(), ItemModelProps.FISHING_ROD_ID, ItemModelProps.FISHING_RODS);
             else if (reg.get() instanceof ShieldItem)
                 register.register(reg.get(), new ResourceLocation("blocking"), (itemStack, clientLevel, livingEntity, i) -> livingEntity != null && livingEntity.isUsingItem() && livingEntity.getUseItem() == itemStack ? 1.0f : 0.0f);
         });

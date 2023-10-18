@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.forge.data;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import io.github.flemmli97.runecraftory.RuneCraftory;
+import io.github.flemmli97.runecraftory.client.ItemModelProps;
 import io.github.flemmli97.runecraftory.common.items.consumables.ItemRecipeBread;
 import io.github.flemmli97.runecraftory.common.items.creative.ItemProp;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolAxe;
@@ -11,7 +12,10 @@ import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHammer;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolHoe;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolSickle;
 import io.github.flemmli97.runecraftory.common.items.tools.ItemToolWateringCan;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemAxeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemHammerBase;
+import io.github.flemmli97.runecraftory.common.items.weapons.ItemLongSwordBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemSpearBase;
 import io.github.flemmli97.runecraftory.common.registry.ModItems;
 import io.github.flemmli97.runecraftory.forge.item.StaffItem;
@@ -83,17 +87,17 @@ public class ItemModels extends ItemModelProvider {
                 this.withExistingParent(sup.getID().getPath(), this.modLoc("item/" + ModItems.unknown.getID().getPath()));
             else if (sup == ModItems.tame)
                 this.withExistingParent(sup.getID().getPath(), this.mcLoc("item/template_spawn_egg"));
-            else if (sup == ModItems.cutlass || sup == ModItems.seaCutter)
+            else if (sup == ModItems.seaCutter)
+                this.createBigWeaponModel(sup, new ResourceLocation(RuneCraftory.MODID, "item/handheld_long_sword_reverse"));
+            else if (sup == ModItems.cutlass)
                 this.singleTexture(sup.getID().getPath(), new ResourceLocation(RuneCraftory.MODID, "item/handheld_reverse"), "layer0", this.modLoc("item/" + sup.getID().getPath()));
-            else if (sup == ModItems.battleAxe || sup == ModItems.greatAxe)
-                this.singleTexture(sup.getID().getPath(), new ResourceLocation(RuneCraftory.MODID, "item/axe_mid"), "layer0", this.modLoc("item/" + sup.getID().getPath()));
             else if (this.dualItemGenMapping.containsKey(sup)) {
                 this.dualItemGenMapping.get(sup).get();
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
-                        .override().predicate(this.modLoc("held"), 1).model(this.getExistingFile(new ResourceLocation(sup.getID().getNamespace(), sup.getID().getPath() + "_single")));
+                        .override().predicate(ItemModelProps.HELD_ID, 1).model(this.getExistingFile(new ResourceLocation(sup.getID().getNamespace(), sup.getID().getPath() + "_single")));
             } else if (this.dualItemMapping.containsKey(sup))
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
-                        .override().predicate(this.modLoc("held"), 1).model(this.getExistingFile(this.dualItemMapping.get(sup)));
+                        .override().predicate(ItemModelProps.HELD_ID, 1).model(this.getExistingFile(this.dualItemMapping.get(sup)));
             else if (sup.get() instanceof ItemGloveBase)
                 this.createGloveModels(sup);
             else if (sup.get() instanceof ItemToolHammer)
@@ -114,7 +118,13 @@ public class ItemModels extends ItemModelProvider {
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", this.mcLoc("item/bread"));
             else if (sup.get() instanceof SpawnEgg)
                 this.withExistingParent(sup.getID().getPath(), ModelLocationUtils.decorateItemModelLocation("template_spawn_egg"));
-            else if (sup.get() instanceof TieredItem || sup.get() instanceof StaffItem || sup.get() instanceof ItemSpearBase)
+            else if (sup.get() instanceof ItemLongSwordBase)
+                this.createBigWeaponModel(sup, this.modLoc("item/handheld_long_sword"));
+            else if (sup.get() instanceof ItemAxeBase || sup.get() instanceof ItemHammerBase)
+                this.createBigWeaponModel(sup, this.modLoc("item/handheld_big"));
+            else if (sup.get() instanceof ItemSpearBase)
+                this.createBigWeaponModel(sup, this.modLoc("item/handheld_big"));
+            else if (sup.get() instanceof TieredItem || sup.get() instanceof StaffItem)
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()));
             else if (sup.get() instanceof BlockItem blockItem && (sup.getID().getPath().startsWith("ore_") || sup == ModItems.shippingBin
                     || sup == ModItems.cashRegister || sup == ModItems.monsterBarn))
@@ -124,6 +134,14 @@ public class ItemModels extends ItemModelProvider {
             else
                 this.singleTexture(sup.getID().getPath(), this.mcLoc("item/generated"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()));
         }
+    }
+
+    private void createBigWeaponModel(RegistryEntrySupplier<Item> sup, ResourceLocation heldModel) {
+        this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
+                .override()
+                .predicate(ItemModelProps.HELD_ID, 1)
+                .model(this.singleTexture(sup.getID().getPath() + "_held", heldModel, "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_held")))
+                .end();
     }
 
     private Map<RegistryEntrySupplier<Item>, ResourceLocation> getDualItemMapping() {
@@ -155,27 +173,27 @@ public class ItemModels extends ItemModelProvider {
         if (this.existingSameGloveItems.contains(sup)) {
             ResourceLocation modelFile = this.modLoc("item/" + sup.getID().getPath() + "_held");
             this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
-                    .override().predicate(this.modLoc("glove_held"), 0.25f)
+                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.25f)
                     .model(this.getExistingFile(modelFile)).end()
-                    .override().predicate(this.modLoc("glove_held"), 0.5f)
+                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.5f)
                     .model(this.withExistingParent(sup.getID().getPath() + "_held_left", modelFile)).end()
-                    .override().predicate(this.modLoc("glove_held"), 0.75f)
+                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.75f)
                     .model(this.withExistingParent(sup.getID().getPath() + "_held_s", modelFile).transforms()
                             .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
                             .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end().end()).end()
-                    .override().predicate(this.modLoc("glove_held"), 1)
+                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 1)
                     .model(this.withExistingParent(sup.getID().getPath() + "_held_s_left", modelFile).transforms()
                             .transform(ItemTransforms.TransformType.THIRD_PERSON_LEFT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end()
                             .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(-2.5f, 0, 0).scale(0.25f, 0.3f, 0.3f).translation(0, -1.86f, 1.6f).end().end()).end();
         } else
             this.singleTexture(sup.getID().getPath(), this.mcLoc("item/handheld"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath()))
-                    .override().predicate(this.modLoc("glove_held"), 0.25f)
+                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.25f)
                     .model(this.singleTexture(sup.getID().getPath() + "_held", this.modLoc("item/fist"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_held"))).end()
-                    .override().predicate(this.modLoc("glove_held"), 0.5f)
+                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.5f)
                     .model(this.singleTexture(sup.getID().getPath() + "_held_left", this.modLoc("item/fist_left"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_held"))).end()
-                    .override().predicate(this.modLoc("glove_held"), 0.75f)
+                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 0.75f)
                     .model(this.singleTexture(sup.getID().getPath() + "_held_s", this.modLoc("item/fist_s"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_held"))).end()
-                    .override().predicate(this.modLoc("glove_held"), 1)
+                    .override().predicate(ItemModelProps.GLOVE_HELD_ID, 1)
                     .model(this.singleTexture(sup.getID().getPath() + "_held_s_left", this.modLoc("item/fist_s_left"), "layer0", new ResourceLocation(RuneCraftory.MODID, "item/" + sup.getID().getPath() + "_held"))).end();
     }
 }

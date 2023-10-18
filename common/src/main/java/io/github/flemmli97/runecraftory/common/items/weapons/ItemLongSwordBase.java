@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
 import io.github.flemmli97.runecraftory.common.utils.CombatUtils;
@@ -39,7 +40,7 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ItemLongSwordBase extends SwordItem implements IItemUsable, IChargeable, IAOEWeapon {
+public class ItemLongSwordBase extends SwordItem implements IItemUsable, IChargeable, IAOEWeapon, BigWeapon {
 
     public ItemLongSwordBase(Item.Properties props) {
         super(ItemTiers.tier, 0, 0, props);

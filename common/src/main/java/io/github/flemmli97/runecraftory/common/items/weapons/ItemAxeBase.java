@@ -10,6 +10,7 @@ import io.github.flemmli97.runecraftory.api.enums.EnumWeaponType;
 import io.github.flemmli97.runecraftory.api.items.IChargeable;
 import io.github.flemmli97.runecraftory.api.items.IItemUsable;
 import io.github.flemmli97.runecraftory.common.datapack.DataPackHandler;
+import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.lib.ItemTiers;
 import io.github.flemmli97.runecraftory.common.network.S2CScreenShake;
 import io.github.flemmli97.runecraftory.common.registry.ModAttributes;
@@ -50,7 +51,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IAOEWeapon {
+public class ItemAxeBase extends AxeItem implements IItemUsable, IChargeable, IAOEWeapon, BigWeapon {
 
     private static final Vec3[] particleDirection = generateParticleDir(2);
 

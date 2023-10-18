@@ -1,0 +1,6 @@
+{
+  "parent": "runecraftory:item/handheld_long_sword_reverse",
+  "textures": {
+    "layer0": "runecraftory:item/sea_cutter_held"
+  }
+}

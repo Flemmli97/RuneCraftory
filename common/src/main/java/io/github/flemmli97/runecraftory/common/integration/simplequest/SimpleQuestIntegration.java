@@ -5,6 +5,7 @@ import io.github.flemmli97.runecraftory.common.entities.BaseMonster;
 import io.github.flemmli97.runecraftory.common.entities.npc.EntityNPCBase;
 import io.github.flemmli97.simplequests.api.QuestCompletionState;
 import io.github.flemmli97.simplequests.quest.types.QuestBase;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -40,7 +41,7 @@ public class SimpleQuestIntegration {
     }
 
     public void openGui(ServerPlayer player) {
-        player.sendMessage(new TranslatableComponent("runecraftory.dependency.simplequest.missing"), Util.NIL_UUID);
+        player.sendMessage(new TranslatableComponent("runecraftory.dependency.simplequest.missing").withStyle(ChatFormatting.DARK_RED), Util.NIL_UUID);
     }
 
     public void acceptQuest(ServerPlayer player, ResourceLocation res) {

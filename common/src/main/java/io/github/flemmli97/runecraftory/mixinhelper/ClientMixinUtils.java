@@ -9,6 +9,7 @@ import io.github.flemmli97.runecraftory.client.ClientHandlers;
 import io.github.flemmli97.runecraftory.client.ItemModelProps;
 import io.github.flemmli97.runecraftory.common.attachment.EntityData;
 import io.github.flemmli97.runecraftory.common.attachment.player.PlayerData;
+import io.github.flemmli97.runecraftory.common.items.BigWeapon;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemDualBladeBase;
 import io.github.flemmli97.runecraftory.common.items.weapons.ItemGloveBase;
 import io.github.flemmli97.runecraftory.common.utils.CalendarImpl;
@@ -158,7 +159,7 @@ public class ClientMixinUtils {
     }
 
     public static void adjustForHeldModel(ItemStack itemStack, ItemTransforms.TransformType transformType) {
-        if (itemStack.getItem() instanceof ItemGloveBase) {
+        if (itemStack.getItem() instanceof ItemGloveBase || itemStack.getItem() instanceof BigWeapon) {
             ItemModelProps.HELD_TYPE = switch (transformType) {
                 case FIRST_PERSON_LEFT_HAND, THIRD_PERSON_LEFT_HAND -> 1;
                 case FIRST_PERSON_RIGHT_HAND, THIRD_PERSON_RIGHT_HAND -> 2;
