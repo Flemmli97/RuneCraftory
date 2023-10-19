@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntitySmallRaccoonLeaf;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.common.utils.MathUtils;
@@ -24,7 +23,7 @@ public class SmallLeafSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), EnumSkills.EARTH))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         Vec3 direct;
         if (entity instanceof Mob mob && mob.getTarget() != null) {

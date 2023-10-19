@@ -12,7 +12,7 @@ public class EvokerFangSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         Vec3 pos = entity.position();
         Vec3 look;

@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityDarkBulletSummoner;
 import net.minecraft.server.level.ServerLevel;
@@ -14,7 +13,7 @@ public class DarkBulletsSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), EnumSkills.DARK))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityDarkBulletSummoner summoner = new EntityDarkBulletSummoner(level, entity);
         summoner.setDamageMultiplier(0.5f + lvl * 0.05f);

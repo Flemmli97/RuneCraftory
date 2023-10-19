@@ -3,5 +3,6 @@
   "rpCost": 5,
   "skillXP": {
     "WIND": 5.0
-  }
+  },
+  "percentage": false
 }

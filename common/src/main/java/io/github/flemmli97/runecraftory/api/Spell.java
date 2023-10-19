@@ -21,8 +21,13 @@ import java.util.Map;
 
 public abstract class Spell extends CustomRegistryEntry<Spell> {
 
-    public static boolean tryUseWithCost(LivingEntity entity, ItemStack stack, int cost, EnumSkills... skills) {
-        return !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player).map(data -> LevelCalc.useRP(player, data, cost, stack.getItem() instanceof ItemStaffBase, false, true, skills)).orElse(false);
+    public static boolean tryUseWithCost(LivingEntity entity, ItemStack stack, Spell spell) {
+        return tryUseWithCost(entity, stack, spell, 1);
+    }
+
+    public static boolean tryUseWithCost(LivingEntity entity, ItemStack stack, Spell spell, float costMultiplier) {
+        return !(entity instanceof Player player) || Platform.INSTANCE.getPlayerData(player)
+                .map(data -> LevelCalc.useRP(player, data, spell.rpCost() * costMultiplier, stack.getItem() instanceof ItemStaffBase, spell.percentageCost(), true, spell.costReductionSkills())).orElse(false);
     }
 
     public void update(Player player, ItemStack stack) {
@@ -42,6 +47,14 @@ public abstract class Spell extends CustomRegistryEntry<Spell> {
 
     public int rpCost() {
         return DataPackHandler.SERVER_PACK.spellPropertiesManager().getPropertiesFor(this).rpCost;
+    }
+
+    public boolean percentageCost() {
+        return DataPackHandler.SERVER_PACK.spellPropertiesManager().getPropertiesFor(this).percentage;
+    }
+
+    public EnumSkills[] costReductionSkills() {
+        return DataPackHandler.SERVER_PACK.spellPropertiesManager().getPropertiesFor(this).skills.toArray(EnumSkills[]::new);
     }
 
     public boolean use(LivingEntity entity) {

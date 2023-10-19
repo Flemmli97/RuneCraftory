@@ -4,7 +4,6 @@ import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.ElementBallBarrageSummoner;
-import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -21,7 +20,7 @@ public class ElementBallBarrageSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), LevelCalc.getSkillFromElement(this.element)))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         ElementBallBarrageSummoner summoner = new ElementBallBarrageSummoner(level, entity, this.element);
         Vec3 eye = entity.getEyePosition();

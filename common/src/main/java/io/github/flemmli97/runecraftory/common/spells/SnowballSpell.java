@@ -10,7 +10,7 @@ public class SnowballSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         Snowball snowball = new Snowball(level, entity);
         snowball.shootFromRotation(entity, entity.getXRot(), entity.getYRot(), 0.0F, 2.0F, 1.0F);

@@ -12,7 +12,7 @@ public class GustSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityWindGust gust = new EntityWindGust(level, entity);
         gust.setPos(gust.getX(), gust.getY() + 1.5, gust.getZ());

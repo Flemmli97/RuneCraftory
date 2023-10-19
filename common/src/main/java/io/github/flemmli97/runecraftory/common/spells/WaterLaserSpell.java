@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +14,7 @@ public class WaterLaserSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), EnumSkills.WATER))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityWaterLaser laser = new EntityWaterLaser(level, entity);
         laser.setMaxTicks(entity instanceof Player ? 44 : 15);

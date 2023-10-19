@@ -4,7 +4,6 @@ import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
 import io.github.flemmli97.runecraftory.api.enums.EnumElement;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityBullet;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,7 +15,7 @@ public class TripleFireBulletSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), EnumSkills.FIRE))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityBullet projectile = new EntityBullet(level, entity);
         Vec3 dir;

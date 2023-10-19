@@ -3,5 +3,9 @@
   "rpCost": 200,
   "skillXP": {
     "WATER": 10.0
-  }
+  },
+  "percentage": false,
+  "skills": [
+    "WATER"
+  ]
 }

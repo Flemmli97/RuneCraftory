@@ -12,7 +12,7 @@ public class PlushThrowSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         int plushAmount = entity.getRandom().nextInt(8) + 12;
         for (int i = 0; i < plushAmount; ++i) {

@@ -25,7 +25,7 @@ public class ExplosionSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), EnumSkills.FIRE))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityExplosionSpell spell = new EntityExplosionSpell(level, entity);
         spell.setDamageMultiplier(1.1f + (lvl - 1) * 0.05f);

@@ -3,5 +3,6 @@
   "rpCost": 120,
   "skillXP": {
     "EARTH": 5.0
-  }
+  },
+  "percentage": false
 }

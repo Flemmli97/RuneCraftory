@@ -3,5 +3,9 @@
   "rpCost": 15,
   "skillXP": {
     "LOVE": 16.0
-  }
+  },
+  "percentage": true,
+  "skills": [
+    "LOVE"
+  ]
 }

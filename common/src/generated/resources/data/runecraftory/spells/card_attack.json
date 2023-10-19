@@ -3,5 +3,9 @@
   "rpCost": 50,
   "skillXP": {
     "LIGHT": 5.0
-  }
+  },
+  "percentage": false,
+  "skills": [
+    "LIGHT"
+  ]
 }

@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityHomingEnergyOrb;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,7 +20,7 @@ public class EnergyOrbSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), EnumSkills.LIGHT))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityHomingEnergyOrb orb = new EntityHomingEnergyOrb(level, entity);
         level.addFreshEntity(orb);

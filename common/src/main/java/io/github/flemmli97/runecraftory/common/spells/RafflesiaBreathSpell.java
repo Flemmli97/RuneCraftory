@@ -21,7 +21,7 @@ public class RafflesiaBreathSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         RafflesiaBreathSummoner summoner = new RafflesiaBreathSummoner(level, entity, this.type);
         Vec3 position = entity.position().add(0, entity.getBbHeight() * 0.5, 0);

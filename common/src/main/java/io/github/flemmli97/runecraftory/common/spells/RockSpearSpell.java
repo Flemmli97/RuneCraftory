@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityRockSpear;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +16,7 @@ public class RockSpearSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), EnumSkills.EARTH))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityRockSpear spear = new EntityRockSpear(level, entity, this.big);
         spear.setDamageMultiplier(0.95f + lvl * 0.05f + (this.big ? 0.1f : 0));

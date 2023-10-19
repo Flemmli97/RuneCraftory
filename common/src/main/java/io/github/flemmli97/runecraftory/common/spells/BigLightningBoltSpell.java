@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityThiccLightningBolt;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,7 +11,7 @@ public class BigLightningBoltSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), EnumSkills.WIND))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityThiccLightningBolt bolt = new EntityThiccLightningBolt(level, entity);
         bolt.setDamageMultiplier(0.95f + lvl * 0.05f);

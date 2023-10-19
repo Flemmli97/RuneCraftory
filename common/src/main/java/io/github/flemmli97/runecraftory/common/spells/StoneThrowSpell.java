@@ -12,7 +12,7 @@ public class StoneThrowSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityStone stone = new EntityStone(level, entity);
         stone.setDamageMultiplier(0.9f + lvl * 0.05f);

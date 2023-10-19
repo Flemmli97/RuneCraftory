@@ -2,7 +2,6 @@ package io.github.flemmli97.runecraftory.common.spells;
 
 import com.mojang.math.Vector3f;
 import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityWaterLaser;
 import io.github.flemmli97.tenshilib.common.entity.EntityUtil;
 import io.github.flemmli97.tenshilib.common.utils.RayTraceUtils;
@@ -17,7 +16,7 @@ public class DoubleWaterLaserSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), EnumSkills.WATER))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         for (int i = 0; i < 2; i++) {
             float posYawOff = (i == 0 ? -1 : 1) * 30;

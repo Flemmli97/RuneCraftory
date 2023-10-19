@@ -12,7 +12,7 @@ public class DoubleBulletSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityBullet bullet = new EntityBullet(level, entity);
         bullet.setDamageMultiplier(0.8f + lvl * 0.05f);

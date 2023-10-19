@@ -1,7 +1,6 @@
 package io.github.flemmli97.runecraftory.common.spells;
 
 import io.github.flemmli97.runecraftory.api.Spell;
-import io.github.flemmli97.runecraftory.api.enums.EnumSkills;
 import io.github.flemmli97.runecraftory.common.entities.DelayedAttacker;
 import io.github.flemmli97.runecraftory.common.entities.misc.EntityButterflySummoner;
 import net.minecraft.server.level.ServerLevel;
@@ -15,7 +14,7 @@ public class ButterflySpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost(), EnumSkills.EARTH))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityButterflySummoner summoner = new EntityButterflySummoner(level, entity);
         summoner.setDamageMultiplier(0.1f + lvl * 0.05f);

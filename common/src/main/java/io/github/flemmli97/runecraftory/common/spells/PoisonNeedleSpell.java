@@ -12,7 +12,7 @@ public class PoisonNeedleSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityPoisonNeedle projectile = new EntityPoisonNeedle(level, entity);
         projectile.setDamageMultiplier(0.7f + lvl * 0.05f);

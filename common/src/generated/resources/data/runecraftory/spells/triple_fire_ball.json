@@ -3,5 +3,9 @@
   "rpCost": 30,
   "skillXP": {
     "FIRE": 5.0
-  }
+  },
+  "percentage": false,
+  "skills": [
+    "FIRE"
+  ]
 }

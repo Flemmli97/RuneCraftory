@@ -10,7 +10,7 @@ public class WaveSpell extends Spell {
 
     @Override
     public boolean use(ServerLevel level, LivingEntity entity, ItemStack stack, float rpUseMultiplier, int amount, int lvl) {
-        if (!Spell.tryUseWithCost(entity, stack, this.rpCost()))
+        if (!Spell.tryUseWithCost(entity, stack, this))
             return false;
         EntityAmbrosiaWave wave = new EntityAmbrosiaWave(level, entity, 40);
         wave.setDamageMultiplier(0.25f + lvl * 0.05f);
