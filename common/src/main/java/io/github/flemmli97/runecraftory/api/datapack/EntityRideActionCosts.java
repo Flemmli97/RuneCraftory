@@ -3,6 +3,7 @@ package io.github.flemmli97.runecraftory.api.datapack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.flemmli97.runecraftory.api.Spell;
+import io.github.flemmli97.runecraftory.common.utils.LevelCalc;
 import io.github.flemmli97.runecraftory.platform.Platform;
 import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,7 +25,7 @@ public class EntityRideActionCosts {
                     RideActionCost.CODEC.optionalFieldOf("command_4").forGetter(d -> Optional.ofNullable(d.command4))
             ).apply(instance, (c1, c2, c3, c4) -> new EntityRideActionCosts(c1, c2.orElse(null), c3.orElse(null), c4.orElse(null))));
 
-    public static final EntityRideActionCosts DEFAULT = new EntityRideActionCosts.Builder(1, 0, true).build();
+    public static final EntityRideActionCosts DEFAULT = new EntityRideActionCosts.Builder(0, false).build();
 
     private final RideActionCost command1;
     private final RideActionCost command2;
@@ -42,16 +43,15 @@ public class EntityRideActionCosts {
         RideActionCost cost = this.getCost(command);
         return !(entity instanceof ServerPlayer player) || Platform.INSTANCE.getPlayerData(player)
                 .map(data -> {
-
-                    if (spell == null) {
-                        if (!data.decreaseRunePoints(player, cost.cost, false)) {
+                    if (spell == null || !cost.multiplier) {
+                        if (!LevelCalc.useRP(player, data, cost.cost, false, false, false)) {
                             player.connection.send(
                                     new ClientboundSoundPacket(SoundEvents.VILLAGER_NO, SoundSource.PLAYERS, player.position().x, player.position().y, player.position().z, 1, 1));
                             return false;
                         }
                         return true;
                     }
-                    return Spell.tryUseWithCost(player, ItemStack.EMPTY, spell, cost.multiplier);
+                    return Spell.tryUseWithCost(player, ItemStack.EMPTY, spell, cost.cost);
                 }).orElse(false);
     }
 
@@ -67,12 +67,11 @@ public class EntityRideActionCosts {
         return cost;
     }
 
-    record RideActionCost(float multiplier, int cost, boolean fixed) {
+    record RideActionCost(float cost, boolean multiplier) {
         public static final Codec<RideActionCost> CODEC = RecordCodecBuilder.create((instance) ->
                 instance.group(
-                        Codec.FLOAT.fieldOf("multiplier").forGetter(d -> d.multiplier),
-                        Codec.INT.fieldOf("cost").forGetter(d -> d.cost),
-                        Codec.BOOL.fieldOf("fixed").forGetter(d -> d.fixed)
+                        Codec.FLOAT.fieldOf("cost").forGetter(d -> d.cost),
+                        Codec.BOOL.fieldOf("multiplier").forGetter(d -> d.multiplier)
                 ).apply(instance, RideActionCost::new));
     }
 
@@ -84,25 +83,25 @@ public class EntityRideActionCosts {
         private RideActionCost command4;
 
         public Builder() {
-            this(1, 0, true);
+            this(0, false);
         }
 
-        public Builder(float multiplier, int cost, boolean fixed) {
-            this.command1 = new RideActionCost(multiplier, cost, fixed);
+        public Builder(float cost, boolean multiplier) {
+            this.command1 = new RideActionCost(cost, multiplier);
         }
 
-        public Builder secondCost(float multiplier, int cost, boolean fixed) {
-            this.command2 = new RideActionCost(multiplier, cost, fixed);
+        public Builder secondCost(float cost, boolean multiplier) {
+            this.command2 = new RideActionCost(cost, multiplier);
             return this;
         }
 
-        public Builder thirdCost(float multiplier, int cost, boolean fixed) {
-            this.command3 = new RideActionCost(multiplier, cost, fixed);
+        public Builder thirdCost(float cost, boolean multiplier) {
+            this.command3 = new RideActionCost(cost, multiplier);
             return this;
         }
 
-        public Builder fourthCost(float multiplier, int cost, boolean fixed) {
-            this.command4 = new RideActionCost(multiplier, cost, fixed);
+        public Builder fourthCost(float cost, boolean multiplier) {
+            this.command4 = new RideActionCost(cost, multiplier);
             return this;
         }
 

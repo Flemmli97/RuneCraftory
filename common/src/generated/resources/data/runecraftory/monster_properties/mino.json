@@ -9,9 +9,8 @@
   "needsRoof": true,
   "rideActionCosts": {
     "command_1": {
-      "multiplier": 1.0,
-      "cost": 0,
-      "fixed": true
+      "cost": 0.0,
+      "multiplier": false
     }
   },
   "baseValues": {
